@@ -74,14 +74,22 @@ Don't set the span status description if the reason can be inferred from `http.s
 | `http.response_content_length` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
 | `http.response_content_length_uncompressed` | int | The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used. | `5493` | Recommended |
 | `http.retry_count` | int | The ordinal number of request re-sending attempt. | `3` | Recommended: If and only if a request was retried. |
-| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Recommended |
-| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Recommended |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [4] |
+| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
+| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [5] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [6] |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
 **[2]:** When the header is present but empty the attribute SHOULD be set to the empty string. Note that this is a valid situation that is expected in certain cases, according the aforementioned [section of RFC 7230](https://tools.ietf.org/html/rfc7230#section-5.4). When the header is not set the attribute MUST NOT be set.
 
 **[3]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+
+**[4]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr` without `net.sock.family` coming from instrumentations that follow previous versions of this document.
+
+**[5]:** If available and different than `net.peer.name` and if `net.sock.peer.addr` is set.
+
+**[6]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
 `http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -101,11 +109,9 @@ Following attributes MUST be provided **at span creation time** (when provided a
 * `http.target`
 * `http.host`
 * `http.scheme`
-* [`net.peer.ip`](span-general.md)
-* [`net.peer.port`](span-general.md)
 <!-- endsemconv -->
 
-It is recommended to also use the general [network attributes][], especially `net.peer.ip`. If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+It is recommended to also use the general [socket-level attributes][] - `net.sock.peer.addr` when available,  `net.sock.peer.name` and `net.sock.peer.port` when don't match `net.peer.name` and `net.peer.port` (if [intermediary](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.7) is detected).
 
 ### HTTP request and response headers
 
@@ -122,7 +128,7 @@ Users MAY explicitly configure instrumentations to capture them even though it i
 
 **[2]:** The attribute value MUST consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the HTTP library provides access to headers.
 
-[network attributes]: span-general.md#general-network-connection-attributes
+[socket-level attributes]: span-general.md#netsock-attributes
 
 ### HTTP request retries and redirects
 
@@ -147,25 +153,31 @@ before any HTTP-redirects that may happen when executing the request.
 <!-- semconv http.client -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [1] | `example.com` | See below |
+| [`net.peer.name`](span-general.md) | string | Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. [1] | `example.com` | See below |
+| [`net.peer.port`](span-general.md) | int | Port identifier of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. [2] | `80`; `8080`; `443` | Conditionally Required: if not default for request scheme. |
 
-**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
+**[1]:** When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set `net.peer.name` to the provided host component. When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` SHOULD match URI host component, otherwise `Host` header host component SHOULD be used.
+
+**[2]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match URI port component, otherwise it MUST match `Host` header port component.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
 * `http.url`
 * `http.scheme`, `http.host`, `http.target`
 * `http.scheme`, [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
-* `http.scheme`, [`net.peer.ip`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+* `http.scheme`, [`net.sock.peer.addr`](span-general.md), [`net.sock.peer.port`](span-general.md), `http.target`
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
 * [`net.peer.name`](span-general.md)
+* [`net.peer.port`](span-general.md)
 <!-- endsemconv -->
+
+It is recommended to also use the general [socket-level attributes][] - `net.sock.host.addr` when available, `net.sock.host.port` when it doesn't match `net.host.port` (if [intermediary](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.7) is detected).
 
 Note that in some cases `http.host` might be different
 from the `net.peer.name`
-used to look up the `net.peer.ip` that is actually connected to.
+used to look up the `net.sock.peer.addr` that is actually connected to.
 In that case it is strongly recommended to set the `net.peer.name` attribute in addition to `http.host`.
 
 ## HTTP server
@@ -234,20 +246,30 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.server_name` | string | The primary server name of the matched virtual host. This should be obtained via configuration. If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead). [1] | `example.com` | See below |
 | `http.route` | string | The matched route (path template). | `/users/:userID?` | Recommended |
 | `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | Recommended |
+| [`net.host.name`](span-general.md) | string | Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. [3] | `localhost` | See below |
+| [`net.host.port`](span-general.md) | int | Port component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. [4] | `8080` | See below |
+| [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host.' | `192.168.0.1` | Recommended |
+| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [5] |
 
 **[1]:** `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148). It is thus preferred to supply the raw data that is available.
 
-**[2]:** This is not necessarily the same as `net.peer.ip`, which would
+**[2]:** This is not necessarily the same as `net.sock.peer.addr`, which would
 identify the network-level peer, which may be a proxy.
 
 This attribute should be set when a source of information different
-from the one used for `net.peer.ip`, is available even if that other
-source just confirms the same value as `net.peer.ip`.
-Rationale: For `net.peer.ip`, one typically does not know if it
+from the one used for `net.sock.peer.addr`, is available even if that other
+source just confirms the same value as `net.sock.peer.addr`.
+Rationale: For `net.sock.peer.addr`, one typically does not know if it
 comes from a proxy, reverse proxy, or the actual client. Setting
-`http.client_ip` when it's the same as `net.peer.ip` means that
+`http.client_ip` when it's the same as `net.sock.peer.addr` means that
 one is at least somewhat confident that the address is not that of
 the closest proxy.
+
+**[3]:** When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set `net.host.name` to the IP address provided in the host component. When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.host.name` SHOULD match URI host component, otherwise `Host` header host component SHOULD be used.
+
+**[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.host.port` SHOULD match URI port component, otherwise `Host` header port component SHOULD be used.
+
+**[5]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
@@ -255,6 +277,11 @@ the closest proxy.
 * `http.scheme`, `http.server_name`, [`net.host.port`](span-general.md), `http.target`
 * `http.scheme`, [`net.host.name`](span-general.md), [`net.host.port`](span-general.md), `http.target`
 * `http.url`
+
+Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
+
+* [`net.host.name`](span-general.md)
+* [`net.host.port`](span-general.md)
 <!-- endsemconv -->
 
 Of course, more than the required attributes can be supplied, but this is recommended only if they cannot be inferred from the sent ones.
@@ -268,32 +295,32 @@ As an example, if a browser request for `https://example.com:8080/webshop/articl
 
 Span name: `HTTP GET`
 
-|   Attribute name   |                                       Value             |
-| :----------------- | :-------------------------------------------------------|
-| `http.method`      | `"GET"`                                                 |
-| `http.flavor`      | `"1.1"`                                                 |
-| `http.url`         | `"https://example.com:8080/webshop/articles/4?s=1"`     |
-| `net.peer.ip`      | `"192.0.2.5"`                                           |
-| `http.status_code` | `200`                                                   |
+|   Attribute name     |                                       Value             |
+| :------------------- | :-------------------------------------------------------|
+| `http.method`        | `"GET"`                                                 |
+| `http.flavor`        | `"1.1"`                                                 |
+| `http.url`           | `"https://example.com:8080/webshop/articles/4?s=1"`     |
+| `net.sock.peer.addr` | `"192.0.2.5"`                                           |
+| `http.status_code`   | `200`                                                   |
 
 The corresponding server Span may look like this:
 
 Span name: `/webshop/articles/:article_id`.
 
-|   Attribute name   |                      Value                      |
-| :----------------- | :---------------------------------------------- |
-| `http.method`      | `"GET"`                                         |
-| `http.flavor`      | `"1.1"`                                         |
-| `http.target`      | `"/webshop/articles/4?s=1"`                     |
-| `http.host`        | `"example.com:8080"`                            |
-| `http.server_name` | `"example.com"`                                 |
-| `net.host.port`    | `8080`                                          |
-| `http.scheme`      | `"https"`                                       |
-| `http.route`       | `"/webshop/articles/:article_id"`               |
-| `http.status_code` | `200`                                           |
-| `http.client_ip`   | `"192.0.2.4"`                                   |
-| `net.peer.ip`      | `"192.0.2.5"` (the client goes through a proxy) |
-| `http.user_agent`  | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
+|   Attribute name     |                      Value                      |
+| :------------------- | :---------------------------------------------- |
+| `http.method`        | `"GET"`                                         |
+| `http.flavor`        | `"1.1"`                                         |
+| `http.target`        | `"/webshop/articles/4?s=1"`                     |
+| `http.host`          | `"example.com:8080"`                            |
+| `http.server_name`   | `"example.com"`                                 |
+| `net.host.port`      | `8080`                                          |
+| `http.scheme`        | `"https"`                                       |
+| `http.route`         | `"/webshop/articles/:article_id"`               |
+| `http.status_code`   | `200`                                           |
+| `http.client_ip`     | `"192.0.2.4"`                                   |
+| `net.sock.peer.addr` | `"192.0.2.5"` (the client goes through a proxy) |
+| `http.user_agent`    | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
 
 Note that following the recommendations above, `http.url` is not set in the above example.
 If set, it would be

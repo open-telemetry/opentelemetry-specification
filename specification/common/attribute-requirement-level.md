@@ -48,7 +48,7 @@ All instrumentations MUST add the attribute when given condition is satisfied. S
 
 When the condition on `Conditionally Required` attribute is not satisfied and there is no requirement to populate attribute, semantic conventions MAY provide special instructions on how to handle it. If no instructions are given and if instrumentation can populate the attribute, instrumentation SHOULD use the `Optional` requirement level on the attribute.
 
-For example, `net.peer.name` is `Conditionally Required` by [Database convention](../trace/semantic_conventions/database.md) when available. When only `net.peer.ip` is available,  instrumentation can do a DNS lookup, cache and populate `net.peer.name` but only if user explicitly enables instrumentation to do so, considering performance issues the DNS lookup introduces.
+For example, `net.peer.name` is `Conditionally Required` by [Database convention](../trace/semantic_conventions/database.md) when available. When only `net.sock.peer.addr` is available,  instrumentation can do a DNS lookup, cache and populate `net.sock.peer.name` but only if user explicitly enables instrumentation to do so, considering performance issues the DNS lookup introduces.
 
 ## Recommended
 
