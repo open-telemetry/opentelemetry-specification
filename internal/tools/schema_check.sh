@@ -6,7 +6,7 @@
 
 set -e
 
-BUILD_TOOL_SCHEMAS_VERSION=0.12.0
+BUILD_TOOL_SCHEMAS_VERSION=0.12.1
 
 # List of vesions that do not require or have a schema.
 declare -a skip_versions=("1.0.0" "1.0.1" "1.1.0" "1.2.0" "1.3.0" "1.6.0")

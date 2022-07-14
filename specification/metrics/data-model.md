@@ -1259,7 +1259,7 @@ The following Prometheus types MUST be dropped:
 
 #### Start Time
 
-Prometheus Cumulative metrics do not include the start time of the metric. When converting Prometheus Counters to OTLP, conversion MUST follow [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
+Prometheus Cumulative metrics can include the start time using the [`_created` metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter-1) as specified in OpenMetrics. When converting Prometheus Counters to OTLP, conversion SHOULD use `_created` where available. When no `_created` metric is available, conversion MUST follow [Cumulative streams: handling unknown start time](#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
 
 #### Exemplars
 
@@ -1341,7 +1341,8 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
   - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues].(#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
 
-Monotonic sum metric points MUST have `_total` added as a suffix to the metric name.
+Monotonic Sum metric points MUST have `_total` added as a suffix to the metric name.
+Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_created` metric as well.
 
 #### Histograms
 
@@ -1350,6 +1351,7 @@ An [OpenTelemetry Histogram](#histogram) with a cumulative aggregation temporali
 - A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
 - `{name}_sum` metric denoting the sum field of the histogram, reported only if the sum is positive and monotonic. The sum is positive and monotonic when all buckets are positive. All attributes of the histogram point are converted to Prometheus labels.
 - A series of `{name}` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up the the boundary reported in the `le` label. These points will include a single exemplar that falls within `le` label and no other `le` labelled point.  The final bucket metric MUST have an `+Inf` threshold.
+- Histograms with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
 
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
 
@@ -1368,6 +1370,7 @@ An [OpenTelemetry Summary](#summary-legacy) MUST be converted to a Prometheus me
   be the stringified floating point value of quantiles (between 0.0 and 1.0),
   starting from lowest to highest, and all being non-negative.  The value of
   each point is the computed value of the quantile point.
+- Summaries with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
 
 #### Dropped Data Points
 
