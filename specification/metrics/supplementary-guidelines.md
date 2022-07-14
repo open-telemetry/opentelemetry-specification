@@ -72,9 +72,9 @@ Here is one way of choosing the correct instrument:
 * I want to **record** or **time** something, and the **statistics** about this
   thing are likely to be meaningful - use a [Histogram](./api.md#histogram).
 * I want to **measure** something (by reporting an absolute value):
-  * If it makes NO sense to add up the values across different sets of attributes, use
+  * If the measurement values are [non-additive](#additive-property), use
     an [Asynchronous Gauge](./api.md#asynchronous-gauge).
-  * If it makes sense to add up the values across different sets of attributes:
+  * If the measurement values are [additive](#additive-property):
     * If the value is monotonically increasing - use an [Asynchronous
       Counter](./api.md#asynchronous-counter).
     * If the value is NOT monotonically increasing - use an [Asynchronous

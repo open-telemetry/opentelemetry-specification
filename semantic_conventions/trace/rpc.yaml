@@ -45,8 +45,24 @@ groups:
           (e.g., method actually executing the call on the server side,
           RPC client stub method on the client side).
         examples: "exampleMethod"
-      - ref: net.peer.ip
+      - ref: net.sock.peer.addr
+      - ref: net.sock.peer.port
+        requirement_level:
+          recommended: If different than `net.peer.port` and if `net.sock.peer.addr` is set.
+      - ref: net.sock.family
+        requirement_level:
+          conditionally_required: If and only if `net.sock.peer.addr` is set.
+      - ref: net.sock.peer.name
+        requirement_level:
+          recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
       - ref: net.peer.name
+        requirement_level: required
+        brief: >
+          RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html).
+        note: >
+          May contain server IP address, DNS name, or local socket name. When host component is an IP address,
+          instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set
+          `net.peer.name` to the IP address provided in the host component.
       - ref: net.peer.port
         requirement_level:
           conditionally_required: See below
@@ -55,7 +71,7 @@ groups:
           conditionally_required: See below
     constraints:
       - any_of:
-          - net.peer.ip
+          - net.sock.peer.addr
           - net.peer.name
       - include: network
 
@@ -66,7 +82,9 @@ groups:
     brief: 'Semantic Convention for RPC server spans'
     attributes:
       - ref: net.host.name
-      - ref: net.host.ip
+      - ref: net.sock.host.addr
+      - ref: net.sock.host.port
+      - ref: net.sock.family
 
   - id: rpc.grpc
     prefix: rpc.grpc

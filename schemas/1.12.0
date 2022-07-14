@@ -2,6 +2,12 @@ file_format: 1.0.0
 schema_url: https://opentelemetry.io/schemas/1.12.0
 versions:
   1.12.0:
+    spans:
+      changes:
+        - rename_attributes:
+            attribute_map:
+              net.peer.ip: net.sock.peer.addr
+              net.host.ip: net.sock.host.addr
   1.11.0:
   1.10.0:
   1.9.0:
