@@ -330,7 +330,7 @@ Note: Support for environment variables is optional.
 | **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |      |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | +    |    | +           | -    | -      | -   |      | -   | -    | -     |
-| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | -     |
+| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | -    |    | +           | +    | -      | +   | +    | +   | +    | -     |
 | Service name mapping                                                           |          | +  | +    |    | +           | +    | -      | +   |      | +   | +    | +     |
 | Resource to Process mapping                                                    |          | +  | +    |    | +           | +    | -      | +   | +    | -   | +    | -     |
 | InstrumentationLibrary mapping                                                 |          | +  | +    |    | +           | +    | -      | +   | +    | -   | +    | -     |
