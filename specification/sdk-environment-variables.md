@@ -237,7 +237,7 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 ## Metrics SDK Configuration
 
-**Status**: [Mixed](../../document-status.md)
+**Status**: [Mixed](document-status.md)
 
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
