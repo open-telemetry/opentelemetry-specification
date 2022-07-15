@@ -43,7 +43,6 @@ Below is a table of HTTP client metric instruments.
 Below is a table of the attributes that SHOULD be included on `duration` and `size` metric events
 and whether they should be on server, client, or both types of HTTP metric events:
 
-<<<<<<< HEAD
 | Name               | Type                | Requirement Level                                            | Notes and examples                                                                                                                                                                                                  |
 |----------------------|---------------------|--------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `http.method`        | `client` & `server` | Required                                                                     | The HTTP request method. E.g. `"GET"`                                                                                                                                |
