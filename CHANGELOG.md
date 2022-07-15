@@ -62,6 +62,10 @@ release.
 
 ### SDK Configuration
 
+- Mark `OTEL_METRIC_EXPORT_INTERVAL`, `OTEL_METRIC_EXPORT_TIMEOUT`
+  environment variables as Stable
+  ([#2658](https://github.com/open-telemetry/opentelemetry-specification/pull/2658))
+
 ### Telemetry Schemas
 
 ### Common
