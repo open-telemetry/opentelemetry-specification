@@ -237,7 +237,7 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 ## Metrics SDK Configuration
 
-**Status**: [Experimental](document-status.md)
+**Status**: [Mixed](document-status.md)
 
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
@@ -250,6 +250,11 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 - `"with_sampled_trace"`: Only allow measurements with a sampled parent span in context.
 
 ### Periodic exporting MetricReader
+
+**Status**: [Stable](document-status.md)
+
+Environment variables specific for the push metrics exporters (OTLP, stdout, in-memory)
+that use [periodic exporting MetricReader](metrics/sdk.md#periodic-exporting-metricreader).
 
 | Name                          | Description                                                                   | Default | Notes |
 | ----------------------------- | ----------------------------------------------------------------------------- | ------- | ----- |

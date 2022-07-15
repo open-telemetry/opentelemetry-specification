@@ -288,6 +288,8 @@ Note: Support for environment variables is optional.
 |OTEL_TRACES_SAMPLER_ARG                           | + | +    |   | +    | +  | +    |   | -  | - | -  |     |
 |OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 | + | -    |   | +    | +  | -    |   |    |   | -  |     |
 |OTEL_ATTRIBUTE_COUNT_LIMIT                        | + | -    |   | +    | +  | -    |   |    |   | -  |     |
+|OTEL_METRIC_EXPORT_INTERVAL                       | - | +    |   |      |    |      | + |    |   | -  |     |
+|OTEL_METRIC_EXPORT_TIMEOUT                        | - | -    |   |      |    |      | + |    |   | -  |     |
 |OTEL_METRICS_EXEMPLAR_FILTER                      | - | +    |   |      |    |      |   |    |   | -  |     |
 |OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | - | +    |   | +    |    |      |   |    |   | -  |     |
 
