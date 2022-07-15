@@ -155,6 +155,17 @@ Following attributes MUST be provided **at span creation time** (when provided a
 
 Note that in some cases `Host` header might be different from the `net.peer.name` and `net.peer.port`, in this case instrumentation MAY populate `Host` header on  `http.request.header.host` attribute even if it's not enabled by user.
 
+### HTTP request retries and redirects
+
+Retries and redirects cause more than one physical HTTP request to be sent.
+A CLIENT span SHOULD be created for each one of these physical requests.
+No span is created corresponding to the "logical" (encompassing) request.
+
+For retries, `http.retry_count` attribute SHOULD be added to each retry span
+with the value that reflects the ordinal number of request retry attempt.
+
+See [examples](#http-retries-examples) for more details.
+
 ## HTTP server
 
 To understand the attributes defined in this section, it is helpful to read the "Definitions" subsection.
@@ -224,7 +235,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | Recommended |
 | [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `localhost` | Required |
 | [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
-| [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host.' | `192.168.0.1` | Recommended |
+| [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host.' | `192.168.0.1` | Optional |
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
 
 **[1]:** 'http.route' MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
@@ -242,18 +253,21 @@ one is at least somewhat confident that the address is not that of
 the closest proxy.
 
 **[3]:** Determined by using the first of the following that applies
+
 - The [primary server name](#http-server-definitions) of the matched virtual host. SHOULD only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
-  if it's sent in absolute-form. 
+  if it's sent in absolute-form.
 - Host identifier of the `Host` header
+
 SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
 **[4]:** Determined by using the first of the following that applies
+
 - The [primary server port](#http-server-definitions) of the matched virtual host. SHOULD only
   include port identifier.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
-  if it's sent in absolute-form. 
+  if it's sent in absolute-form.
 - Port identifier of the `Host` header
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).

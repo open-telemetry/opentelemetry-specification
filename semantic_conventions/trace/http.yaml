@@ -168,7 +168,7 @@ groups:
         sampling_relevant: true
         brief: >
           Name of the local HTTP server that received the request.
-        note: >
+        note: |
           Determined by using the first of the following that applies
 
           - The [primary server name](#http-server-definitions) of the matched virtual host. SHOULD only
@@ -185,7 +185,7 @@ groups:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
         brief: >
           Port of the local HTTP server that received the request.
-        note: >
+        note: |
           Determined by using the first of the following that applies
 
           - The [primary server port](#http-server-definitions) of the matched virtual host. SHOULD only
