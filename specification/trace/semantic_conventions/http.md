@@ -98,6 +98,8 @@ Following attributes MUST be provided **at span creation time** (when provided a
 
 It is recommended to also use the general [socket-level attributes][] - `net.sock.peer.addr` when available,  `net.sock.peer.name` and `net.sock.peer.port` when don't match `net.peer.name` and `net.peer.port` (if [intermediary](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.7) is detected).
 
+[socket-level attributes]: span-general.md#netsock-attributes
+
 ### HTTP request and response headers
 
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -113,8 +115,6 @@ Users MAY explicitly configure instrumentations to capture them even though it i
 
 **[2]:** The attribute value MUST consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the HTTP library provides access to headers.
 
-[socket-level attributes]: span-general.md#netsock-attributes
-
 ## HTTP client
 
 This span type represents an outbound HTTP request.
@@ -129,22 +129,22 @@ before any HTTP-redirects that may happen when executing the request.
 |---|---|---|---|---|
 | `http.url` | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [1] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Required |
 | `http.retry_count` | int | The ordinal number of request re-sending attempt. | `3` | Recommended: if and only if request was retried. |
-| [`net.peer.name`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) server HTTP request is sent to. [2] | `example.com` | Required |
-| [`net.peer.port`](span-general.md) | int | Port identifier of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: if not default for request scheme. |
+| [`net.peer.name`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
+| [`net.peer.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
-**[2]:** Determined by using the first of the following that is known:
+**[2]:** Determined by using the first of the following that applies
 
-- Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#section-7.1) if it's sent in absolute-form
+- Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+  if it's sent in absolute-form
 - Host identifier of the `Host` header
 
 SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[3]:** Best known HTTP remote port is identified according to the following order:
+**[3]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
-- Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#section-7.1) if it's sent in absolute-form
-- Port identifier of the `Host` header
+**[4]:** If not default (`80` for `http` scheme, `443` for `https`).
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
@@ -152,6 +152,8 @@ Following attributes MUST be provided **at span creation time** (when provided a
 * [`net.peer.name`](span-general.md)
 * [`net.peer.port`](span-general.md)
 <!-- endsemconv -->
+
+Note that in some cases `Host` header might be different from the `net.peer.name` and `net.peer.port`, in this case instrumentation MAY populate `Host` header on  `http.request.header.host` attribute even if it's not enabled by user.
 
 ## HTTP server
 
@@ -220,8 +222,8 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/path/12314/?q=ddds` | Required |
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
 | `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | Recommended |
-| [`net.host.name`](span-general.md) | string | Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. [3] | `localhost` | Required |
-| [`net.host.port`](span-general.md) | int | Port component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. [4] | `8080` | Conditionally Required: [5] |
+| [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `localhost` | Required |
+| [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host.' | `192.168.0.1` | Recommended |
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
 
@@ -239,18 +241,20 @@ comes from a proxy, reverse proxy, or the actual client. Setting
 one is at least somewhat confident that the address is not that of
 the closest proxy.
 
-**[3]:** Determined by using the first of the following that is known:
+**[3]:** Determined by using the first of the following that applies
+- The [primary server name](#http-server-definitions) of the matched virtual host. SHOULD only
+  include host identifier.
+- Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+  if it's sent in absolute-form. 
+- Host identifier of the `Host` header
+SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-- The primary server name of the matched virtual host. This should be obtained via configuration.
-- Host component of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#section-7.1) if it's sent in absolute-form
-- Host component of the `Host` header
-
-SHOULD NOT be set if capturing it would require an reverse DNS lookup.
-
-**[4]:** Determined by using the first of the following that is known:
-
-- Port component of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#section-7.1) if it's sent in absolute-form
-- Port component of the `Host` header
+**[4]:** Determined by using the first of the following that applies
+- The [primary server port](#http-server-definitions) of the matched virtual host. SHOULD only
+  include port identifier.
+- Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+  if it's sent in absolute-form. 
+- Port identifier of the `Host` header
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
@@ -265,6 +269,8 @@ Following attributes MUST be provided **at span creation time** (when provided a
 <!-- endsemconv -->
 
 `http.route` MUST be provided at span creation time if and only if it's already available. If it becomes available after span starts, instrumentation MUST populate it anytime before span ends.
+
+Note that in some cases `Host` header might be different from the `net.host.name` and `net.host.port`, in this case instrumentation MAY populate `Host` header on  `http.request.header.host` attribute even if it's not enabled by user.
 
 ## HTTP client-server example
 

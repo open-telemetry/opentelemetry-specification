@@ -92,25 +92,24 @@ groups:
         requirement_level: required
         sampling_relevant: true
         brief: >
-          Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) server HTTP request is sent to.
+          Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
         note: |
-          Determined by using the first of the following that is known:
+          Determined by using the first of the following that applies
 
-          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#section-7.1) if it's sent in absolute-form
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form
           - Host identifier of the `Host` header
 
           SHOULD NOT be set if capturing it would require an extra DNS lookup.
       - ref: net.peer.port
         sampling_relevant: true
         requirement_level:
-          conditionally_required: if not default for request scheme.
+          conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
         brief: >
-          Port identifier of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
-        note: |
-          Best known HTTP remote port is identified according to the following order:
-
-          - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#section-7.1) if it's sent in absolute-form
-          - Port identifier of the `Host` header
+          Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+        note: >
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
+          URI port identifier, otherwise it MUST match `Host` header port identifier.
       - id: retry_count
         type: int
         brief: >
@@ -131,29 +130,6 @@ groups:
         requirement_level: required
         sampling_relevant: true
         examples: ["http", "https"]
-      - ref: net.host.name
-        requirement_level: required
-        sampling_relevant: true
-        brief: Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
-        note: |
-          Determined by using the first of the following that is known:
-
-          - The primary server name of the matched virtual host. This should be obtained via configuration.
-          - Host component of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#section-7.1) if it's sent in absolute-form
-          - Host component of the `Host` header
-          
-          SHOULD NOT be set if capturing it would require an reverse DNS lookup.
-      - ref: net.host.port
-        brief: Port component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
-        note: |
-          Determined by using the first of the following that is known:
-
-          - Port component of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#section-7.1) if it's sent in absolute-form
-          - Port component of the `Host` header
-        requirement_level:
-          conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
-
-        sampling_relevant: true
       - id: target
         type: string
         brief: 'The full request target as passed in a HTTP request line or equivalent.'
@@ -187,5 +163,37 @@ groups:
             one is at least somewhat confident that the address is not that of
             the closest proxy.
         examples: '83.164.160.102'
+      - ref: net.host.name
+        requirement_level: required
+        sampling_relevant: true
+        brief: >
+          Name of the local HTTP server that received the request.
+        note: >
+          Determined by using the first of the following that applies
+
+          - The [primary server name](#http-server-definitions) of the matched virtual host. SHOULD only
+            include host identifier.
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
+
+      - ref: net.host.port
+        sampling_relevant: true
+        requirement_level:
+          conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
+        brief: >
+          Port of the local HTTP server that received the request.
+        note: >
+          Determined by using the first of the following that applies
+
+          - The [primary server port](#http-server-definitions) of the matched virtual host. SHOULD only
+            include port identifier.
+          - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Port identifier of the `Host` header
+
       - ref: net.sock.host.addr
+        requirement_level: optional
       - ref: net.sock.host.port

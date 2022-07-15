@@ -46,20 +46,15 @@ and whether they should be on server, client, or both types of HTTP metric event
 <<<<<<< HEAD
 | Name               | Type                | Requirement Level                                            | Notes and examples                                                                                                                                                                                                  |
 |----------------------|---------------------|--------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `http.method`        | `client` & `server` | Required                                                     | The HTTP request method. E.g. `"GET"`                                                                                                                                                                               |
-| `http.scheme`        | `client` & `server` | see [attribute alternatives](#attribute-alternatives)        | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"`                                                                                                                                    |
-| `http.status_code`   | `client` & `server` | Conditionally Required: if and only if one was received/sent.| [HTTP response status code][]. E.g. `200` (String)                                                                                                                                                                  |
-| `http.flavor`        | `client` & `server` | Recommended                                                  | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`.                                                                                                                                          |
-| `net.peer.name`      | `client`            | Required                                                     | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
-| `net.peer.port`      | `client`            | Conditionally Required                                       | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
-| `net.sock.peer.addr` | `client`            | Recommended                                                  | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
-| `net.host.name`      | `server`            | Required                                                     | Best known HTTP server name. See note [1] below                                                                                                                     |
-| `net.host.port`      | `server`            | Conditionally Required                                       | See [general network connection attributes](../../trace/semantic_conventions/span-general.
-**[1]:** Best known HTTP server name is identified according with the following order:
-
-- The primary server name of the matched [virtual host](../../trace/semantic_conventions/http.md#http-server-definitions)
-- [HTTP host header][]
-- Host component of the absolute [HTTP request target][]
+| `http.method`        | `client` & `server` | Required                                                                     | The HTTP request method. E.g. `"GET"`                                                                                                                                |
+| `http.scheme`        | `server`            | Required                                                                     | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"`                                                                                                                              |
+| `http.status_code`   | `client` & `server` | Conditionally Required: if and only if one was received/sent.                | [HTTP response status code][]. E.g. `200` (String)                                                                                                                               |
+| `http.flavor`        | `client` & `server` | Recommended                                                                  | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`.                                                                                                                              |
+| `net.peer.name`      | `client`            | Required                                                                     | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.                                                                                         |
+| `net.peer.port`      | `client`            | Conditionally Required: If not default (`80` for `http`, `443` for `https`). | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.                                                                                         |
+| `net.sock.peer.addr` | `client`            | Recommended                                                                  | See [general network connection attributes](../../trace/semantic_conventions/span-general.md#general-network-connection-attributes)                                                                                 |
+| `net.host.name`      | `server`            | Required                                                                     | Host of the local HTTP server that received the request.                                                                                                                               |
+| `net.host.port`      | `server`            | Conditionally Required: If not default (`80` for `http`, `443` for `https`). | Port of the local HTTP server that received the request. |
 
 The following attributes SHOULD be included in the `http.server.active_requests` observation:
 
@@ -68,7 +63,7 @@ The following attributes SHOULD be included in the `http.server.active_requests`
 | `http.method`      | Required          | The HTTP request method. E.g. `"GET"`                                            |
 | `http.scheme`      | Required          | The URI scheme identifying the used protocol in lowercase: `"http"` or `"https"` |
 | `http.flavor`      | Recommended       | Kind of HTTP protocol used: `"1.0"`, `"1.1"`, `"2"`, `"SPDY"` or `"QUIC"`        |
-| `net.host.name`    | Required          | Best known HTTP server name. See note [1] above                                  |
+| `net.host.name`    | Required          | Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to. |
 
 [HTTP host header]: https://www.rfc-editor.org/rfc/rfc9110.html#name-host-and-authority
 [HTTP response status code]: https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes
