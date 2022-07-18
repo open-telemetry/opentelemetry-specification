@@ -284,3 +284,9 @@ groups:
         brief: >
           The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`.
         examples: 42
+      - id: url
+        type: string
+        brief: >
+          A valid Url that points to the code that generated the span. It SHOULD contain the file and line number references
+        examples: https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/span-general.md
+        requirement_level: optional
