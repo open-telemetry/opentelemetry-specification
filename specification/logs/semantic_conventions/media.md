@@ -21,7 +21,7 @@ This document describes attributes for log media in OpenTelemetry. Log media are
 
 ## Log Media
 
-**Note:** The OpenTelemetry specification defines a [Resource](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/resource/sdk.md#resource-sdk) as `an immutable representation of the entity producing telemetry`.
+**Note:** The OpenTelemetry specification defines a [Resource](../../resource/sdk.md#resource-sdk) as `an immutable representation of the entity producing telemetry`.
 The following attributes do not describe entities that produce telemetry. Rather, they describe mechanisms of log transmission.
 As such, these should be recorded as Log Record attributes when applicable. They should not be recorded as Resource attributes.
 
