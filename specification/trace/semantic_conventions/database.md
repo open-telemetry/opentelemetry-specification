@@ -42,21 +42,27 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `db.system` | string | An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Required |
 | `db.connection_string` | string | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | Recommended |
 | `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | Recommended |
-| [`net.peer.ip`](span-general.md) | string | Remote address of the peer (dotted decimal for IPv4 or [RFC5952](https://tools.ietf.org/html/rfc5952) for IPv6) | `127.0.0.1` | Conditionally Required: See alternative attributes below. |
-| [`net.peer.name`](span-general.md) | string | Remote hostname or similar, see note below. [1] | `example.com` | Conditionally Required: See alternative attributes below. |
-| [`net.peer.port`](span-general.md) | int | Remote port number. | `80`; `8080`; `443` | Conditionally Required: [2] |
-| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [3] |
+| [`net.peer.name`](span-general.md) | string | Name of the database host. [1] | `example.com` | Conditionally Required: See alternative attributes below. |
+| [`net.peer.port`](span-general.md) | int | Logical remote port number | `80`; `8080`; `443` | Conditionally Required: [2] |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [3] |
+| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | See below |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [4] |
+| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [5] |
 
 **[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[2]:** If using a port other than the default port for this DBMS.
+**[2]:** If using a port other than the default port for this DBMS and if `net.peer.name` is set.
 
-**[3]:** If database type is in-process (`"inproc"`), recommended for other database types.
+**[3]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr` without `net.sock.family` coming from instrumentations that follow previous versions of this document.
+
+**[4]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
+
+**[5]:** If database type is in-process (`"inproc"`), recommended for other database types.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
 * [`net.peer.name`](span-general.md)
-* [`net.peer.ip`](span-general.md)
+* [`net.sock.peer.addr`](span-general.md)
 
 `db.system` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -216,7 +222,7 @@ Separated for clarity.
 | `db.connection_string`  | `"Server=shopdb.example.com;Database=ShopDb;Uid=billing_user;TableCache=true;UseCompression=True;MinimumPoolSize=10;MaximumPoolSize=50;"` |
 | `db.user`               | `"billing_user"` |
 | `net.peer.name`         | `"shopdb.example.com"` |
-| `net.peer.ip`           | `"192.0.2.12"` |
+| `net.sock.peer.addr`    | `"192.0.2.12"` |
 | `net.peer.port`         | `3306` |
 | `net.transport`         | `"IP.TCP"` |
 | `db.name`               | `"ShopDb"` |
@@ -226,7 +232,7 @@ Separated for clarity.
 
 ### Redis
 
-In this example, Redis is connected using a unix domain socket and therefore the connection string and `net.peer.ip` are left out.
+In this example, Redis is connected using a unix domain socket and therefore the connection string and `net.sock.peer.addr` are left out.
 Furthermore, `db.name` is not specified as there is no database name in Redis and `db.redis.database_index` is set instead.
 
 | Key | Value |
@@ -251,7 +257,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.connection_string`  | not set |
 | `db.user`               | `"the_user"` |
 | `net.peer.name`         | `"mongodb0.example.com"` |
-| `net.peer.ip`           | `"192.0.2.14"` |
+| `net.sock.peer.addr`    | `"192.0.2.14"` |
 | `net.peer.port`         | `27017` |
 | `net.transport`         | `"IP.TCP"` |
 | `db.name`               | `"shopDb"` |
