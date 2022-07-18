@@ -57,6 +57,8 @@ release.
   ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
 - Add semantic conventions for JVM buffer pool usage
   ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650)).
+- Improve the definition of `state` attribute for metric `system.network.connections`
+  ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
 
 ### Compatibility
 
