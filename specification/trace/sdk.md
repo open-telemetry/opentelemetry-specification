@@ -602,8 +602,8 @@ primarily a simple telemetry data encoder and transmitter.
 
 ### Interface Definition
 
-The exporter must support two functions: **Export** and **Shutdown**. In
-strongly typed languages typically there will be 2 separate `Exporter`
+The exporter MUST support three functions: **Export**, **Shutdown**, and **ForceFlush**.
+In strongly typed languages typically there will be 2 separate `Exporter`
 interfaces, one that accepts spans (SpanExporter) and one that accepts metrics
 (MetricsExporter).
 
