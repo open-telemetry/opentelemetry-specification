@@ -14,6 +14,8 @@ release.
 - Clarify the return of `Export(batch)` in the Batch Span Processor and exporter
   concurrency ([#2452](https://github.com/open-telemetry/opentelemetry-specification/pull/2452))
 - Clarify that Context should not be mutable when setting a span ([#2637](https://github.com/open-telemetry/opentelemetry-specification/pull/2637))
+- Clarify that `ForceFlush` is a required method on `SpanExporter` interface.
+  ([#2654](https://github.com/open-telemetry/opentelemetry-specification/pull/2654)).
 
 ### Metrics
 
