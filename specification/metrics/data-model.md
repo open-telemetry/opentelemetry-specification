@@ -835,7 +835,7 @@ calculate the exactly corect bucket index.  Since it is relatively
 simple to check for exact powers of two, implementations SHOULD
 apply such a special case:
 
-```
+```golang
 // MapToIndex for any scale, exact for powers of two.
 func MapToIndex(value float64) int {
     // Special case for power-of-two values.
