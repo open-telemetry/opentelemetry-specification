@@ -25,7 +25,7 @@ Notwithstanding any global LoggerProvider, some applications may want to or have
 
 The LoggerProvider MUST provide the following functions:
 
-* Get an Logger
+* Get a Logger
 
 ##### Get an Logger
 
