@@ -75,7 +75,7 @@ groups:
             If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set.
             Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr`
             if `net.sock.family` is not set. This is to support instrumentations that follow previous versions
-            of this document. 
+            of this document.
         brief: >
           Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication.
         examples: ['inet6', 'bluetooth']
