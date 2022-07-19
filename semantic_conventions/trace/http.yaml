@@ -114,10 +114,11 @@ groups:
         requirement_level:
           recommended: If and only if a request was retried.
         examples: 3
-      - ref: net.peer.ip
-        sampling_relevant: true
-      - ref: net.peer.port
-        sampling_relevant: true
+      - ref: net.sock.peer.addr
+      - ref: net.sock.peer.port
+      - ref: net.sock.peer.name
+      - ref: net.sock.family
+
     constraints:
       - include: network
 
@@ -129,13 +130,29 @@ groups:
     attributes:
       - ref: net.peer.name
         sampling_relevant: true
+        brief: >
+          Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
+        note: >
+          When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set
+          `net.peer.name` to the provided host component.
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` SHOULD match
+          URI host component, otherwise `Host` header host component SHOULD be used.
+      - ref: net.peer.port
+        sampling_relevant: true
+        requirement_level:
+          conditionally_required: if not default for request scheme.
+        brief: >
+          Port identifier of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
+        note: >
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
+          URI port component, otherwise it MUST match `Host` header port component.
+
     constraints:
       - any_of:
           - [http.url]
           - [http.scheme, http.host, http.target]
           - [http.scheme, net.peer.name, net.peer.port, http.target]
-          - [http.scheme, net.peer.ip, net.peer.port, http.target]
-
+          - [http.scheme, net.sock.peer.addr, net.sock.peer.port, http.target]
   - id: http.server
     prefix: http
     extends: http
@@ -163,18 +180,36 @@ groups:
             The IP address of the original client behind all proxies, if
             known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)).
         note: |
-            This is not necessarily the same as `net.peer.ip`, which would
+            This is not necessarily the same as `net.sock.peer.addr`, which would
             identify the network-level peer, which may be a proxy.
 
             This attribute should be set when a source of information different
-            from the one used for `net.peer.ip`, is available even if that other
-            source just confirms the same value as `net.peer.ip`.
-            Rationale: For `net.peer.ip`, one typically does not know if it
+            from the one used for `net.sock.peer.addr`, is available even if that other
+            source just confirms the same value as `net.sock.peer.addr`.
+            Rationale: For `net.sock.peer.addr`, one typically does not know if it
             comes from a proxy, reverse proxy, or the actual client. Setting
-            `http.client_ip` when it's the same as `net.peer.ip` means that
+            `http.client_ip` when it's the same as `net.sock.peer.addr` means that
             one is at least somewhat confident that the address is not that of
             the closest proxy.
         examples: '83.164.160.102'
+      - ref: net.host.name
+        sampling_relevant: true
+        brief: >
+          Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
+        note: >
+          When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set
+          `net.host.name` to the IP address provided in the host component.
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.host.name` SHOULD match
+          URI host component, otherwise `Host` header host component SHOULD be used.
+      - ref: net.host.port
+        sampling_relevant: true
+        brief: >
+          Port component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
+        note: >
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.host.port` SHOULD match
+          URI port component, otherwise `Host` header port component SHOULD be used.
+      - ref: net.sock.host.addr
+      - ref: net.sock.host.port
     constraints:
       - any_of:
           - [http.scheme, http.host, http.target]

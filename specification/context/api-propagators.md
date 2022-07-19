@@ -133,7 +133,7 @@ avoid runtime allocations.
 ### Fields
 
 The predefined propagation fields. If your carrier is reused, you should delete the fields here
-before calling [inject](#inject).
+before calling [Inject](#inject).
 
 Fields are defined as string keys identifying format-specific components in a carrier.
 
