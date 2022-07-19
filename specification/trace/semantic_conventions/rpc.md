@@ -123,7 +123,7 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host.' | `192.168.0.1` | Recommended |
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [2] |
 
-**[1]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr` without `net.sock.family` coming from instrumentations that follow previous versions of this document.
+**[1]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 **[2]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
 <!-- endsemconv -->

@@ -68,6 +68,7 @@ groups:
       - ref: net.sock.peer.port
       - ref: net.sock.peer.name
       - ref: net.sock.family
+        examples: ['inet', 'inet6']
     constraints:
       - include: network
 
