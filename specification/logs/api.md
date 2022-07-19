@@ -27,7 +27,7 @@ The LoggerProvider MUST provide the following functions:
 
 * Get a Logger
 
-##### Get an Logger
+##### Get a Logger
 
 This API MUST accept the following parameters that determine the scope for the `Logger` returned. Most of these are common with the scope parameters for `Tracer` and `Meter`, except for `event_domain` and `include_trace_context` which is specific to `Logger`.
 
