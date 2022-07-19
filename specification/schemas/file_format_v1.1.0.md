@@ -170,8 +170,8 @@ applicable only to Span's Event data type. It must contain a sub-section named
 "changes" that defines a sequence of actions to be applied to convert events
 from the previous version to this version.
 
-Three transformations are supported for section "spans_events": "rename_events",
-"rename_attributes" and "split".
+Two transformations are supported for section "spans_events": "rename_events" and
+"rename_attributes".
 
 #### rename_events Transformation
 
@@ -218,8 +218,8 @@ only to Metric data type. It must contain a sub-section named "changes" that
 defines a sequence of actions to be applied to convert metrics from the previous
 version to this version.
 
-Two transformations are supported for section "metrics": "rename_metrics" and
-"rename_attributes".
+Three transformations are supported for section "metrics": "rename_metrics",
+"rename_attributes" and "split".
 
 #### rename_metrics Transformation
 
