@@ -170,8 +170,8 @@ applicable only to Span's Event data type. It must contain a sub-section named
 "changes" that defines a sequence of actions to be applied to convert events
 from the previous version to this version.
 
-Two transformations are supported for section "spans_events": "rename_events"
-and "rename_attributes".
+Three transformations are supported for section "spans_events": "rename_events",
+"rename_attributes" and "split".
 
 #### rename_events Transformation
 
@@ -271,7 +271,7 @@ Here is the structure:
             # eliminated, the new metric will not have it.
             by_attribute: 
             # Names of new metrics to create, one for each possible value of attribute.
-            attributes_to_metrics:
+            metrics_from_attributes:
               # map of key/values. The keys are the new metric name starting from this
               # version, the values are the old attribute value used in the previous version.
 ```
@@ -558,7 +558,7 @@ versions:
             # eliminated, the new metric will not have it.
             by_attribute: direction
             # Names of new metrics to create, one for each possible value of attribute.
-            attributes_to_metrics:
+            metrics_from_attributes:
               # If "direction" attribute equals "in" create a new metric called "system.paging.operations.in".
               system.paging.operations.in: in
               # If "direction" attribute equals "out" create a new metric called "system.paging.operations.out".
