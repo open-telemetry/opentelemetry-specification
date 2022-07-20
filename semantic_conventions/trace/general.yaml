@@ -99,7 +99,7 @@ groups:
         examples: 8080
       - id: sock.host.addr
         type: string
-        brief: Local socket address. Useful in case of a multi-IP host.'
+        brief: Local socket address. Useful in case of a multi-IP host.
         examples: '192.168.0.1'
       - id: sock.host.port
         type: int
