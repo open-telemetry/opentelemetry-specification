@@ -72,6 +72,9 @@ release.
 
 ### Telemetry Schemas
 
+- Introduce "split" metric schema transformation
+  ([#2653](https://github.com/open-telemetry/opentelemetry-specification/pull/2653)).
+
 ### Common
 
 - Introduce Instrumentation Scope Attributes
