@@ -73,6 +73,8 @@ release.
 
 - Add support for partial success in an OTLP export response
   ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696)).
+- Add user agent to OTLP exporter specification
+  ([#2684](https://github.com/open-telemetry/opentelemetry-specification/pull/2684))
 
 ### SDK Configuration
 
