@@ -29,6 +29,9 @@ release.
 
 ### Resource
 
+- Add parent process pid (process.parent_pid) to semantic convention constants
+  ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/)).
+
 ### Semantic Conventions
 
 - Add `net.app.protocol.*` attributes
