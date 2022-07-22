@@ -60,7 +60,7 @@ release.
 - Improve the definition of `state` attribute for metric `system.network.connections`
   ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
 - Add `process.parent_pid` attribute for use in reporting parent process id (PID)
-  ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
+  ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
 
 ### Compatibility
 
