@@ -33,9 +33,10 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e., it MUST NOT contain values of different types.
-  - It MAY also contain another valid Attribute value resulting in `nested` Attributes
+  - It MAY (see [Nested Attribute Support](#nested-attribute-support)) also
+    contain another valid Attribute value resulting in `nested` Attributes
     and the referenced Attribute MUST not be recursive. i.e. The value of the
-    key-value pair will itself be a key-value pair. See [Nested Attribute Support](#nested-attribute-support).
+    key-value pair will itself be a key-value pair.
 
 For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
@@ -135,7 +136,7 @@ a strategy to handle how nested Attributes are stored or transmitted, like using
 a JSON-encoded string value as highlighted for protocols above. The depth of the
 any resulting hierarchy SHOULD be limited and MUST not include recursive references.
 
-While the at the ProtoBuf protocol level the [`AnyValue`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/common/v1/common.proto#L28-L67)
+While the at the ProtoBuf protocol level the [`AnyValue`](https://github.com/open-telemetry/opentelemetry-proto/blob/157bedf2d42bd2c2c9a35e355839a48f99ce06ee/opentelemetry/proto/common/v1/common.proto#L28-L67)
 supports `nested` attributes via the `KeyValueList` at the specification level
 this does not infer that `nested` attributes are or should be fully supported for
 every protocol, signal, language, SDK or Exporter due to different environment,
@@ -144,18 +145,16 @@ runtime and storage concerns.
 #### Nested Attribute Support
 
 This section provides a single compliance lookup of current `nested` attribute
-support as defined by the specification using the same annotations as defined
-on the [Specification Compliance Matrix](../../spec-compliance-matrix.md).
+support.
 
 This should be used as a guide only, when a specific area is not listed
 it does not infer that `nested` attributes are or MUST be supported.
 
 | Area                 | Optional  |
 |----------------------|-----------|
-| Span                 | -         |
-| Metrics              | -         |
-| Logs                 |           |
-| ProtoBuf (AnyValue)  |           |
+| Span                 | no        |
+| Metrics              | no        |
+| Logs                 | yes       |
 
 ## Attribute Collections
 
