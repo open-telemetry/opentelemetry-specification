@@ -287,6 +287,6 @@ groups:
       - id: url
         type: string
         brief: >
-          A valid Url that points to the code that generated the span. It SHOULD contain the file and line number references
-        examples: https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/span-general.md
+          A valid Url that points to the code that generated the span. If the Url points to a VCS, the link SHOULD contain the file and line number references, and SHOULD point to the individual revision of the code.
+        examples: https://github.com/open-telemetry/opentelemetry-specification/blob/afc47a5a7d41b3f468d2fb3fc2ddb0c7ad52fadc/specification/trace/semantic_conventions/span-general.md#L259
         requirement_level: optional
