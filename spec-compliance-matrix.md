@@ -114,7 +114,7 @@ formats is required. Implementing more than one format is optional.
 | Instruments have kind.                                                                                                                                                       |          | +  | +    | +  |    +   |      |        |     |      |     |   +  |       |
 | Instruments have an optional unit of measure.                                                                                                                                |          | +  | +    | +  |    +   |      |        |     |      |  +  |   +  |       |
 | Instruments have an optional description.                                                                                                                                    |          | +  | +    | +  |    +   |      |        |     |      |  +  |   +  |       |
-| An error is returned when multiple instruments are registered under the same `Meter` using the same `name`.                                                                  |          | +  | +    | -  |    -   |      |        |     |      |     |   +  |       |
+| A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`.                      |          |    | +    | +  |    +   |      |        |     |      |     |      |       |
 | It is possible to register two instruments with same `name` under different `Meter`s.                                                                                        |          | +  | +    | +  |    +   |      |        |     |      |     |   +  |       |
 | Instrument names conform to the specified syntax.                                                                                                                            |          | -  | +    |    |    +   |      |        |     |      |     |   +  |       |
 | Instrument units conform to the specified syntax.                                                                                                                            |          | -  | +    |    |    +   |      |        |     |      |     |   +  |       |
@@ -288,6 +288,8 @@ Note: Support for environment variables is optional.
 |OTEL_TRACES_SAMPLER_ARG                           | + | +    |   | +    | +  | +    |   | -  | - | -  |     |
 |OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                 | + | -    |   | +    | +  | -    |   |    |   | -  |     |
 |OTEL_ATTRIBUTE_COUNT_LIMIT                        | + | -    |   | +    | +  | -    |   |    |   | -  |     |
+|OTEL_METRIC_EXPORT_INTERVAL                       | - | +    |   |      |    |      | + |    |   | -  |     |
+|OTEL_METRIC_EXPORT_TIMEOUT                        | - | -    |   |      |    |      | + |    |   | -  |     |
 |OTEL_METRICS_EXEMPLAR_FILTER                      | - | +    |   |      |    |      |   |    |   | -  |     |
 |OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | - | +    |   | +    |    |      |   |    |   | -  |     |
 
@@ -330,7 +332,7 @@ Note: Support for environment variables is optional.
 | **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |      |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | +    |    | +           | -    | -      | -   |      | -   | -    | -     |
-| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | -     |
+| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | -    |    | +           | +    | -      | +   | +    | +   | +    | -     |
 | Service name mapping                                                           |          | +  | +    |    | +           | +    | -      | +   |      | +   | +    | +     |
 | Resource to Process mapping                                                    |          | +  | +    |    | +           | +    | -      | +   | +    | -   | +    | -     |
 | InstrumentationLibrary mapping                                                 |          | +  | +    |    | +           | +    | -      | +   | +    | -   | +    | -     |
