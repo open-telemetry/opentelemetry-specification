@@ -1,6 +1,7 @@
 groups:
   - id: rpc
     prefix: rpc
+    type: span
     brief: 'This document defines semantic conventions for remote procedure calls.'
     events: [rpc.message]
     attributes:
@@ -77,6 +78,7 @@ groups:
 
   - id: rpc.server
     prefix: rpc
+    type: span
     extends: rpc
     span_kind: server
     brief: 'Semantic Convention for RPC server spans'
@@ -88,6 +90,7 @@ groups:
 
   - id: rpc.grpc
     prefix: rpc.grpc
+    type: span
     extends: rpc
     brief: 'Tech-specific attributes for gRPC.'
     attributes:
@@ -150,6 +153,7 @@ groups:
 
   - id: rpc.jsonrpc
     prefix: rpc.jsonrpc
+    type: span
     extends: rpc
     brief: 'Tech-specific attributes for [JSON RPC](https://www.jsonrpc.org/).'
     attributes:

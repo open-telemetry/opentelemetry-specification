@@ -1,6 +1,7 @@
 groups:
   - id: network
     prefix: net
+    type: span
     brief: >
         These attributes may be used for any network related operation.
     attributes:
@@ -210,6 +211,7 @@ groups:
         examples: "DE"
   - id: peer
     prefix: peer
+    type: span
     brief: "Operations that access some remote service."
     attributes:
       - id: service
@@ -221,6 +223,7 @@ groups:
         examples: "AuthTokenCache"
   - id: identity
     prefix: enduser
+    type: span
     brief: >
         These attributes may be used for any operation with an authenticated and/or authorized enduser.
     attributes:
@@ -245,6 +248,7 @@ groups:
         examples: 'read:message, write:files'
   - id: thread
     prefix: thread
+    type: span
     brief: >
       These attributes may be used for any operation to store information about a thread that started a span.
     attributes:
@@ -260,6 +264,7 @@ groups:
         examples: main
   - id: code
     prefix: code
+    type: span
     brief: >
       These attributes allow to report this unit of code and therefore to provide more context about the span.
     attributes:
