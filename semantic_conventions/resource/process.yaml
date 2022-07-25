@@ -13,7 +13,7 @@ groups:
         type: int
         brief: >
           Parent Process identifier (PID).
-        examples: [5678]
+        examples: [111]
       - id: executable.name
         type: string
         requirement_level:
