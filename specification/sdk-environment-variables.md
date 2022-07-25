@@ -47,8 +47,6 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 | OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
 | OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.  |
 
-Setting `OTEL_SDK_ENABLED` to `"false"` will configure Noop SDK implementation providers for Tracing, Metrics and Logs. Propagators will also be a Noop implementation (Equivalent to `OTEL_PROPAGATORS` to `"none"`).
-
 Known values for `OTEL_PROPAGATORS` are:
 
 - `"tracecontext"`: [W3C Trace Context](https://www.w3.org/TR/trace-context/)
