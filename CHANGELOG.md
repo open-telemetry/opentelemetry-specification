@@ -6,6 +6,7 @@ content of "Unreleased" section content will generate release notes for the
 release.
 
 ## Unreleased
+
 - Add the OTEL_SDK_ENABLED environmental variable to the SDK configuration.
   ([2679](https://github.com/open-telemetry/opentelemetry-specification/pull/2679))
 
