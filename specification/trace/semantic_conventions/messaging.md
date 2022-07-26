@@ -274,7 +274,7 @@ Specific attributes for Apache Pulsar are defined below.
 | `messaging.pulsar.producer_name` | string | Globally unique producer name. | `myProducer` | Required |
 | `messaging.pulsar.consumer_name` | string | The name of consumer. | `myConsumer` | Required |
 | `messaging.pulsar.subscription` | string | Subscription name of Pulsar consumer. | `mySubscription` | Required |
-| `messaging.pulsar.subscription_mode` | string | subscription_mode | `Durable` | Required |
+| `messaging.pulsar.subscription_mode` | string | subscription_mode | `Durable` | Recommended~~~~ |
 | `messaging.pulsar.message_type` | string | Type of message. | `normal` | Recommended |
 | `messaging.pulsar.message_key` | string | The key of the message for routing policy. | `myKey` | Recommended |
 | `messaging.pulsar.subscription_type` | string | Types of subscription supported by Pulsar. | `Exclusive` | Recommended |

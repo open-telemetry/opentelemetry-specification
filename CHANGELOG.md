@@ -59,6 +59,8 @@ release.
   ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650)).
 - Improve the definition of `state` attribute for metric `system.network.connections`
   ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
+- Add attributes of Apache Pulsar
+  ([#2697](https://github.com/open-telemetry/opentelemetry-specification/pull/2697))
 
 ### Compatibility
 
