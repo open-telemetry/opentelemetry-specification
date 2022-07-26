@@ -20,6 +20,7 @@
     + [RabbitMQ](#rabbitmq)
     + [Apache Kafka](#apache-kafka)
     + [Apache RocketMQ](#apache-rocketmq)
+    + [Apache Pulsar](#apache-pulsar)
 - [Examples](#examples)
   * [Topic with multiple consumers](#topic-with-multiple-consumers)
   * [Apache Kafka with Quarkus or Spring Boot Example](#apache-kafka-with-quarkus-or-spring-boot-example)
@@ -261,6 +262,46 @@ Specific attributes for Apache RocketMQ are defined below.
 |---|---|
 | `clustering` | Clustering consumption model |
 | `broadcasting` | Broadcasting consumption model |
+<!-- endsemconv -->
+
+#### Apache Pulsar
+
+Specific attributes for Apache Pulsar are defined below.
+
+<!-- semconv messaging.pulsar -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `messaging.pulsar.producer_name` | string | Globally unique producer name. | `myProducer` | Required |
+| `messaging.pulsar.consumer_name` | string | The name of consumer. | `myConsumer` | Required |
+| `messaging.pulsar.subscription` | string | Subscription name of Pulsar consumer. | `mySubscription` | Required |
+| `messaging.pulsar.subscription_mode` | string | subscription_mode | `Durable` | Required |
+| `messaging.pulsar.message_type` | string | Type of message. | `normal` | Recommended |
+| `messaging.pulsar.message_key` | string | The key of the message for routing policy. | `myKey` | Recommended |
+| `messaging.pulsar.subscription_type` | string | Types of subscription supported by Pulsar. | `Exclusive` | Recommended |
+
+`messaging.pulsar.message_type` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `normal` | Normal message |
+| `delay` | Delay message |
+| `transaction` | Transaction message |
+
+`messaging.pulsar.subscription_type` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `Exclusive` | Exclusive consumption type |
+| `Shared` | Shared consumption type |
+| `Failover` | Failover consumption type |
+| `Key_Shared` | Key_Shared consumption type |
+
+`messaging.pulsar.subscription_mode` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `Durable` | Make the subscription to be backed by a durable cursor that will retain messages and persist the current position |
+| `NonDurable` | Lightweight subscription mode that does not have a durable cursor associated |
 <!-- endsemconv -->
 
 ## Examples

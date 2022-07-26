@@ -262,7 +262,7 @@ groups:
       - id: producer_name
         type: string
         brief: >
-          Globally unique producer name which could have been assigned by the system or specified by the client.
+          Globally unique producer name.
         example: 'myProducer'
       - id: consumer_name
         type: string
