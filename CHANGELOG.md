@@ -64,6 +64,9 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Add support for partial success in an OTLP export response
+  ([#???](https://github.com/open-telemetry/opentelemetry-specification/pull/???)).
+
 ### SDK Configuration
 
 - Mark `OTEL_METRIC_EXPORT_INTERVAL`, `OTEL_METRIC_EXPORT_TIMEOUT`
