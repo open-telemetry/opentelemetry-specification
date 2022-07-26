@@ -508,7 +508,7 @@ causally related. The reference information itself consists of a
 
 OpenTracing defines two types of references:
 
-* **Child Of**: The parent `Span` depends o the child `Span`
+* **Child Of**: The parent `Span` depends on the child `Span`
   in some capacity.
 * **Follows From**: The parent `Span` does not depend in any
   way on the result of their child `Span`s.
