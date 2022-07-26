@@ -261,19 +261,18 @@ groups:
     attributes:
       - id: producer_name
         type: string
-        requirement_level: required
         brief: >
           Globally unique producer name.
         example: 'myProducer'
       - id: consumer_name
         type: string
-        requirement_level: required
         brief: >
           The name of consumer.
         example: 'myConsumer'
       - id: subscription
         type: string
-        requirement_level: required
+        requirement_level:
+          conditionally_required: If `consumer_name` has been set.
         brief: >
           Subscription name of Pulsar consumer.
         example: 'mySubscription'

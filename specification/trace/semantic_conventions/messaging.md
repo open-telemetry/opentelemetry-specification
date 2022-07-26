@@ -271,10 +271,10 @@ Specific attributes for Apache Pulsar are defined below.
 <!-- semconv messaging.pulsar -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.pulsar.producer_name` | string | Globally unique producer name. | `myProducer` | Required |
-| `messaging.pulsar.consumer_name` | string | The name of consumer. | `myConsumer` | Required |
-| `messaging.pulsar.subscription` | string | Subscription name of Pulsar consumer. | `mySubscription` | Required |
-| `messaging.pulsar.subscription_mode` | string | subscription_mode | `Durable` | Recommended~~~~ |
+| `messaging.pulsar.producer_name` | string | Globally unique producer name. | `myProducer` | Recommended |
+| `messaging.pulsar.consumer_name` | string | The name of consumer. | `myConsumer` | Recommended |
+| `messaging.pulsar.subscription` | string | Subscription name of Pulsar consumer. | `mySubscription` | Conditionally Required: [1] |
+| `messaging.pulsar.subscription_mode` | string | Types of subscription mode supported by Pulsar. | `Durable` | Recommended |
 | `messaging.pulsar.message_type` | string | Type of message. | `normal` | Recommended |
 | `messaging.pulsar.message_key` | string | The key of the message for routing policy. | `myKey` | Recommended |
 | `messaging.pulsar.subscription_type` | string | Types of subscription supported by Pulsar. | `Exclusive` | Recommended |
@@ -302,6 +302,8 @@ Specific attributes for Apache Pulsar are defined below.
 |---|---|
 | `Durable` | Make the subscription to be backed by a durable cursor that will retain messages and persist the current position |
 | `NonDurable` | Lightweight subscription mode that does not have a durable cursor associated |
+
+**[1]:** If `consumer_name` has been set.
 <!-- endsemconv -->
 
 ## Examples
