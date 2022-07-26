@@ -9,7 +9,7 @@ groups:
         type: string
         requirement_level: required
         brief: 'A string identifying the messaging system.'
-        examples: ['kafka', 'rabbitmq', 'rocketmq', 'activemq', 'AmazonSQS']
+        examples: ['kafka', 'rabbitmq', 'rocketmq', 'activemq', 'AmazonSQS', 'pulsar']
       - id: destination
         type: string
         requirement_level: required
@@ -46,7 +46,7 @@ groups:
       - id: url
         type: string
         brief: 'Connection string.'
-        examples: ['tibjmsnaming://localhost:7222', 'https://queue.amazonaws.com/80398EXAMPLE/MyQueue']
+        examples: ['tibjmsnaming://localhost:7222', 'https://queue.amazonaws.com/80398EXAMPLE/MyQueue', 'pulsar://localhost:6650']
       - id: message_id
         type: string
         brief: 'A value used by the messaging system as an identifier for the message, represented as a string.'
@@ -252,3 +252,76 @@ groups:
               brief: 'Broadcasting consumption model'
         brief: >
           Model of message consumption. This only applies to consumer spans.
+
+  - id: messaging.pulsar
+    prefix: messaging.pulsar
+    extends: messaging
+    brief: >
+      Attributes for Apache Pulsar
+    attributes:
+      - id: producer_name
+        type: string
+        brief: >
+          Globally unique producer name which could have been assigned by the system or specified by the client.
+        example: 'myProducer'
+      - id: consumer_name
+        type: string
+        brief: >
+          The name of consumer.
+        example: 'myConsumer'
+      - id: subscription
+        type: string
+        brief: >
+          Subscription name of Pulsar consumer.
+        example: 'mySubscription'
+      - id: subscription_mode
+        type:
+          allow_custom_values: false
+          members:
+            - id: Durable
+              value: 'Durable'
+              brief: 'Make the subscription to be backed by a durable cursor that will retain messages and persist the
+              current position'
+            - id: NonDurable
+              value: 'NonDurable'
+              brief: 'Lightweight subscription mode that does not have a durable cursor associated'
+        brief: >
+          Types of subscription mode supported by Pulsar.
+      - id: message_type
+        type:
+          allow_custom_values: false
+          members:
+            - id: normal
+              value: 'normal'
+              brief: "Normal message"
+            - id: delay
+              value: 'delay'
+              brief: 'Delay message'
+            - id: transaction
+              value: 'transaction'
+              brief: 'Transaction message'
+          brief: >
+            Type of message.
+      - id: message_key
+        type: string
+        brief: >
+          The key of the message for routing policy.
+        example: 'myKey'
+      - id: subscription_type
+        type:
+          allow_custom_values: false
+          members:
+            - id: Exclusive
+              value: 'Exclusive'
+              brief: 'Exclusive consumption type'
+            - id: Shared
+              value: 'Shared'
+              brief: 'Shared consumption type'
+            - id: Failover
+              value: 'Failover'
+              brief: 'Failover consumption type'
+            - id: Key_Shared
+              value: 'Key_Shared'
+              brief: 'Key_Shared consumption type'
+        brief: >
+          Types of subscription supported by Pulsar.
