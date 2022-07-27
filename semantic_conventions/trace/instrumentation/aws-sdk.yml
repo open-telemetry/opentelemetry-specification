@@ -1,6 +1,7 @@
 groups:
   - id: aws
     prefix: aws
+    type: span
     brief: >
       The `aws` conventions apply to operations using the AWS SDK. They map request or response parameters
       in AWS SDK API calls to attributes on a Span. The conventions have been collected over time based
@@ -27,6 +28,7 @@ groups:
           - PutItem
 
   - id: dynamodb.all
+    type: span
     brief: "Attributes always filled for all DynamoDB request types."
     attributes:
       - ref: db.system
@@ -38,6 +40,7 @@ groups:
   - id: dynamodb.shared
     extends: aws
     prefix: aws.dynamodb
+    type: span
     brief: "Attributes that exist for multiple DynamoDB request types."
     attributes:
       - ref: db.operation
@@ -158,6 +161,7 @@ groups:
     brief: DynamoDB.BatchGetItem
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - ref: aws.dynamodb.table_names
       - ref: aws.dynamodb.consumed_capacity
@@ -166,6 +170,7 @@ groups:
     brief: DynamoDB.BatchWriteItem
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - ref: aws.dynamodb.table_names
       - ref: aws.dynamodb.consumed_capacity
@@ -175,6 +180,7 @@ groups:
     brief: DynamoDB.CreateTable
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - id: global_secondary_indexes
         type: string[]
@@ -230,6 +236,7 @@ groups:
     brief: DynamoDB.DeleteItem
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
@@ -242,6 +249,7 @@ groups:
     brief: DynamoDB.DeleteTable
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
@@ -252,6 +260,7 @@ groups:
     brief: DynamoDB.DescribeTable
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
@@ -262,6 +271,7 @@ groups:
     brief: DynamoDB.GetItem
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
@@ -275,6 +285,7 @@ groups:
     brief: DynamoDB.ListTables
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - id: exclusive_start_table
         type: string
@@ -293,6 +304,7 @@ groups:
     brief: DynamoDB.PutItem
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - ref: aws.dynamodb.table_names
       - ref: aws.dynamodb.consumed_capacity
@@ -302,6 +314,7 @@ groups:
     brief: DynamoDB.Query
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - id: scan_forward
         type: boolean
@@ -322,6 +335,7 @@ groups:
     brief: DynamoDB.Scan
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - id: segment
         type: int
@@ -359,6 +373,7 @@ groups:
     brief: DynamoDB.UpdateItem
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - ref: aws.dynamodb.table_names
         brief: "A single-element array with the value of the TableName request parameter."
@@ -371,6 +386,7 @@ groups:
     brief: DynamoDB.UpdateTable
     extends: aws
     prefix: aws.dynamodb
+    type: span
     attributes:
       - id: attribute_definitions
         type: string[]
