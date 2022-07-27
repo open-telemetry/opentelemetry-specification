@@ -1,6 +1,7 @@
 groups:
   - id: messaging
     prefix: messaging
+    type: span
     brief: >
         This document defines the attributes used in
         messaging systems.
@@ -72,21 +73,30 @@ groups:
           This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
         requirement_level:
           conditionally_required: If available.
-      - ref: net.peer.ip
+      - ref: net.sock.peer.addr
+        tag: connection-level
+      - ref: net.sock.peer.port
+        tag: connection-level
+      - ref: net.sock.family
+        tag: connection-level
+      - ref: net.sock.peer.name
         tag: connection-level
         requirement_level:
-          conditionally_required: If available.
+          recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+
     constraints:
       - include: network
 
   - id: messaging.producer
     prefix: messaging
+    type: span
     extends: messaging
     span_kind: producer
     brief: 'Semantic convention for producers of messages sent to a messaging systems.'
 
   - id: messaging.producer.synchronous
     prefix: messaging
+    type: span
     extends: messaging
     span_kind: client
     brief: >
@@ -95,6 +105,7 @@ groups:
 
   - id: messaging.consumer
     prefix: messaging
+    type: span
     extends: messaging
     span_kind: consumer
     brief: 'Semantic convention for a consumer of messages received from a messaging system'
@@ -123,6 +134,7 @@ groups:
 
   - id: messaging.consumer.synchronous
     prefix: messaging
+    type: span
     extends: messaging.consumer
     span_kind: server
     brief: >
@@ -131,6 +143,7 @@ groups:
 
   - id: messaging.rabbitmq
     prefix: messaging.rabbitmq
+    type: span
     extends: messaging
     brief: >
       Attributes for RabbitMQ
@@ -145,6 +158,7 @@ groups:
 
   - id: messaging.kafka
     prefix: messaging.kafka
+    type: span
     extends: messaging
     brief: >
       Attributes for Apache Kafka
@@ -183,6 +197,7 @@ groups:
 
   - id: messaging.rocketmq
     prefix: messaging.rocketmq
+    type: span
     extends: messaging
     brief: >
       Attributes for Apache RocketMQ

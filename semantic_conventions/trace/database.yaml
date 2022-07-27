@@ -1,6 +1,7 @@
 groups:
   - id: db
     prefix: db
+    type: span
     brief: >
       This document defines the attributes used to perform database client calls.
     span_kind: client
@@ -217,14 +218,21 @@ groups:
         tag: connection-level
         requirement_level:
           conditionally_required: See alternative attributes below.
-      - ref: net.peer.ip
-        tag: connection-level
-        requirement_level:
-          conditionally_required: See alternative attributes below.
+        brief: >
+          Name of the database host.
       - ref: net.peer.port
         tag: connection-level
         requirement_level:
-          conditionally_required: If using a port other than the default port for this DBMS.
+          conditionally_required: If using a port other than the default port for this DBMS and if `net.peer.name` is set.
+      - ref: net.sock.peer.addr
+        tag: connection-level
+      - ref: net.sock.peer.port
+        tag: connection-level
+      - ref: net.sock.family
+        tag: connection-level
+      - ref: net.sock.peer.name
+        requirement_level:
+          recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
       - ref: net.transport
         tag: connection-level
         requirement_level:
@@ -232,10 +240,11 @@ groups:
     constraints:
       - any_of:
           - 'net.peer.name'
-          - 'net.peer.ip'
+          - 'net.sock.peer.addr'
 
   - id: db.mssql
     prefix: db.mssql
+    type: span
     extends: db
     brief: >
       Connection-level attributes for Microsoft SQL Server
@@ -253,6 +262,7 @@ groups:
 
   - id: db.cassandra
     prefix: db.cassandra
+    type: span
     extends: db
     brief: >
       Call-level attributes for Cassandra
@@ -330,6 +340,7 @@ groups:
 
   - id: db.redis
     prefix: db.redis
+    type: span
     extends: db
     brief: >
       Call-level attributes for Redis
@@ -346,6 +357,7 @@ groups:
 
   - id: db.mongodb
     prefix: db.mongodb
+    type: span
     extends: db
     brief: >
       Call-level attributes for MongoDB
@@ -360,6 +372,7 @@ groups:
 
   - id: db.sql
     prefix: 'db.sql'
+    type: span
     extends: 'db'
     brief: >
       Call-level attributes for SQL databases
@@ -378,6 +391,7 @@ groups:
         examples: ['public.users', 'customers']
 
   - id: db.tech
+    type: span
     brief: "Semantic convention group for specific technologies"
     constraints:
       - include: 'db.cassandra'

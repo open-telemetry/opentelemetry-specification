@@ -1,6 +1,7 @@
 groups:
   - id: host
     prefix: host
+    type: resource
     brief: >
         A host is defined as a general computing instance.
     attributes:
