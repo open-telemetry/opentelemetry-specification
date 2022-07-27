@@ -1,6 +1,7 @@
 groups:
   - id: http
     prefix: http
+    type: span
     brief: 'This document defines semantic conventions for HTTP client and server Spans.'
     note: >
         These conventions can be used for http and https schemes
@@ -74,6 +75,7 @@ groups:
 
   - id: http.client
     prefix: http
+    type: span
     extends: http
     span_kind: client
     brief: 'Semantic Convention for HTTP Client'
@@ -121,6 +123,7 @@ groups:
 
   - id: http.server
     prefix: http
+    type: span
     extends: http
     span_kind: server
     brief: 'Semantic Convention for HTTP Server'
