@@ -44,7 +44,7 @@ groups:
         type: string
         brief: Remote socket peer name.
         requirement_level:
-          recommended: If available and different than `net.peer.name` and if `net.sock.peer.addr` is set.
+          recommended: If available and different from `net.peer.name` and if `net.sock.peer.addr` is set.
         examples: proxy.example.com
       - id: sock.peer.addr
         type: string
@@ -74,8 +74,8 @@ groups:
         requirement_level:
           conditionally_required: >
             If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set.
-            Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr`
-            without `net.sock.family` coming from instrumentations that follow previous versions
+            Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr`
+            if `net.sock.family` is not set. This is to support instrumentations that follow previous versions
             of this document.
         brief: >
           Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication.
@@ -100,7 +100,7 @@ groups:
         examples: 8080
       - id: sock.host.addr
         type: string
-        brief: Local socket address. Useful in case of a multi-IP host.'
+        brief: Local socket address. Useful in case of a multi-IP host.
         examples: '192.168.0.1'
       - id: sock.host.port
         type: int

@@ -13,39 +13,6 @@ groups:
         brief: 'HTTP request method.'
         sampling_relevant: true
         examples: ["GET", "POST", "HEAD"]
-      - id: url
-        type: string
-        brief: >
-            Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`.
-            Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
-        note: >
-          `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
-          In such case the attribute's value should be `https://www.example.com/`.
-        sampling_relevant: true
-        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
-      - id: target
-        type: string
-        brief: 'The full request target as passed in a HTTP request line or equivalent.'
-        sampling_relevant: true
-        examples: ['/path/12314/?q=ddds#123']
-      - id: host
-        type: string
-        brief: >
-            The value of the [HTTP host header](https://tools.ietf.org/html/rfc7230#section-5.4).
-            An empty Host header should also be reported, see note.
-        note: >
-          When the header is present but empty the attribute SHOULD be set to
-          the empty string. Note that this is a valid situation that is expected
-          in certain cases, according the aforementioned
-          [section of RFC 7230](https://tools.ietf.org/html/rfc7230#section-5.4).
-          When the header is not set the attribute MUST NOT be set.
-        sampling_relevant: true
-        examples: ['www.example.org']
-      - id: scheme
-        type: string
-        brief: 'The URI scheme identifying the used protocol.'
-        sampling_relevant: true
-        examples: ["http", "https"]
       - id: status_code
         type: int
         requirement_level:
@@ -82,44 +49,27 @@ groups:
           is `QUIC`, in which case `IP.UDP` is assumed.
       - id: user_agent
         type: string
-        brief: 'Value of the [HTTP User-Agent](https://tools.ietf.org/html/rfc7231#section-5.5.3) header sent by the client.'
+        brief: 'Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client.'
         examples: ['CERN-LineMode/2.15 libwww/2.17b3']
       - id: request_content_length
         type: int
         brief: >
           The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and
-          is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2)
+          is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
-      - id: request_content_length_uncompressed
-        type: int
-        brief: >
-          The size of the uncompressed request payload body after transport decoding. Not set if transport encoding not used.
-        examples: 5493
       - id: response_content_length
         type: int
         brief: >
           The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and
-          is often, but not always, present as the [Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2)
+          is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
-      - id: response_content_length_uncompressed
-        type: int
-        brief: >
-          The size of the uncompressed response payload body after transport decoding. Not set if transport encoding not used.
-        examples: 5493
-      - id: retry_count
-        type: int
-        brief: >
-          The ordinal number of request re-sending attempt.
-        requirement_level:
-          recommended: If and only if a request was retried.
-        examples: 3
       - ref: net.sock.peer.addr
       - ref: net.sock.peer.port
       - ref: net.sock.peer.name
       - ref: net.sock.family
-
+        examples: ['inet', 'inet6']
     constraints:
       - include: network
 
@@ -130,31 +80,47 @@ groups:
     span_kind: client
     brief: 'Semantic Convention for HTTP Client'
     attributes:
+      - id: url
+        type: string
+        requirement_level: required
+        brief: >
+            Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`.
+            Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
+        note: >
+          `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
+          In such case the attribute's value should be `https://www.example.com/`.
+        sampling_relevant: true
+        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
       - ref: net.peer.name
+        requirement_level: required
         sampling_relevant: true
         brief: >
-          Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
-        note: >
-          When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set
-          `net.peer.name` to the provided host component.
-          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` SHOULD match
-          URI host component, otherwise `Host` header host component SHOULD be used.
+          Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+        note: |
+          Determined by using the first of the following that applies
+
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if capturing it would require an extra DNS lookup.
       - ref: net.peer.port
         sampling_relevant: true
         requirement_level:
-          conditionally_required: if not default for request scheme.
+          conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
         brief: >
-          Port identifier of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
+          Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
         note: >
           When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
-          URI port component, otherwise it MUST match `Host` header port component.
+          URI port identifier, otherwise it MUST match `Host` header port identifier.
+      - id: retry_count
+        type: int
+        brief: >
+          The ordinal number of request re-sending attempt.
+        requirement_level:
+          recommended: if and only if request was retried.
+        examples: 3
 
-    constraints:
-      - any_of:
-          - [http.url]
-          - [http.scheme, http.host, http.target]
-          - [http.scheme, net.peer.name, net.peer.port, http.target]
-          - [http.scheme, net.sock.peer.addr, net.sock.peer.port, http.target]
   - id: http.server
     prefix: http
     type: span
@@ -162,21 +128,27 @@ groups:
     span_kind: server
     brief: 'Semantic Convention for HTTP Server'
     attributes:
-      - id: server_name
+      - id: scheme
         type: string
-        brief: >
-            The primary server name of the matched virtual host. This should be obtained via configuration.
-            If no such configuration can be obtained, this attribute MUST NOT be set ( `net.host.name` should be used instead).
-        note: >
-            `http.url` is usually not readily available on the server side but would have to be assembled in a cumbersome and
-            sometimes lossy process from other information (see e.g. open-telemetry/opentelemetry-python/pull/148).
-            It is thus preferred to supply the raw data that is available.
-        examples: ['example.com']
+        brief: 'The URI scheme identifying the used protocol.'
+        requirement_level: required
+        sampling_relevant: true
+        examples: ["http", "https"]
+      - id: target
+        type: string
+        brief: 'The full request target as passed in a HTTP request line or equivalent.'
+        requirement_level: required
+        sampling_relevant: true
+        examples: ['/path/12314/?q=ddds']
       - id: route
         type: string
+        requirement_level:
+          conditionally_required: If and only if it's available
         brief: >
-            The matched route (path template).
-        examples: '/users/:userID?'
+            The matched route (path template in the format used by the respective server framework). See note below
+        examples: ['/users/:userID?', '{controller}/{action}/{id?}']
+        note: >
+          'http.route' MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
       - id: client_ip
         type: string
         brief: >
@@ -196,26 +168,35 @@ groups:
             the closest proxy.
         examples: '83.164.160.102'
       - ref: net.host.name
+        requirement_level: required
         sampling_relevant: true
         brief: >
-          Host component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
-        note: >
-          When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set
-          `net.host.name` to the IP address provided in the host component.
-          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.host.name` SHOULD match
-          URI host component, otherwise `Host` header host component SHOULD be used.
+          Name of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+            include host identifier.
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
+
       - ref: net.host.port
         sampling_relevant: true
+        requirement_level:
+          conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
         brief: >
-          Port component of the ["origin"](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.6) server HTTP request is sent to.
-        note: >
-          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.host.port` SHOULD match
-          URI port component, otherwise `Host` header port component SHOULD be used.
+          Port of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+          - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Port identifier of the `Host` header
+
       - ref: net.sock.host.addr
+        requirement_level: optional
       - ref: net.sock.host.port
-    constraints:
-      - any_of:
-          - [http.scheme, http.host, http.target]
-          - [http.scheme, http.server_name, net.host.port, http.target]
-          - [http.scheme, net.host.name, net.host.port, http.target]
-          - [http.url]
