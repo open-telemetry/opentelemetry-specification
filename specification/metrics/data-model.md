@@ -720,15 +720,21 @@ double-width floating point values have indices in the range
 // MapToIndexScale0 computes a bucket index at scale 0.
 func MapToIndexScale0(value float64) int32 {
     rawBits := math.Float64bits(value)
+	// rawExponent is a biased representation of the base-2 exponent: 
+	// - value 0 indicates a subnormal representation or a zero value
+	// - value 2047 indicates an Inf or NaN value
+	// - value [1, 2046] are offset by ExponentBias (1023)
     rawExponent := (int64(rawBits) & ExponentMask) >> SignificandWidth
-    rawSignificand := rawBits & SignificandMask
+	// rawFragment represents (significand-1) for normal numbers,
+	// where significand is in the range [1, 2).
+    rawFragment := rawBits & SignificandMask
     if rawExponent == 0 {
-        // Handle subnormal values: rawSignificand cannot be zero
+        // Handle subnormal values: rawFragment cannot be zero
         // unless value is zero.
-        rawExponent -= int64(bits.LeadingZeros64(rawSignificand) - 12)
+        rawExponent -= int64(bits.LeadingZeros64(rawFragment - 1) - 12)
     }
     ieeeExponent := int32(rawExponent - ExponentBias)
-    if rawSignificand == 0 {
+    if rawFragment == 0 {
         // Special case for power-of-two boundary: subtract one.
         return ieeeExponent - 1
     }
