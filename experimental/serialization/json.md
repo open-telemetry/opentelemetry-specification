@@ -39,7 +39,7 @@ There is no guarantee in particular that timestamps will be monotically increasi
 
 This defines the first version of the serialization scheme.
 
-The data must be encoded according to the format specified in the [OTLP/HTTP standard](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/otlp.md#otlphttp).
+The data must be encoded according to the format specified in the [OTLP/HTTP standard](../../specification/protocol/otlp.md#otlphttp).
 
 Only top-level objects, `ExportTraceServiceRequest`, `ExportMetricsServiceRequest`, and `ExportLogsServiceRequest` are supported.
 

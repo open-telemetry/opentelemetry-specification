@@ -1,6 +1,7 @@
 groups:
   - id: browser
     prefix: browser
+    type: resource
     brief: >
         The web browser in which the application represented by the resource is running.
         The `browser.*` attributes MUST be used only for resources that represent applications

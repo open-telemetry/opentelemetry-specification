@@ -13,12 +13,17 @@ release.
 
 - Clarify the return of `Export(batch)` in the Batch Span Processor and exporter
   concurrency ([#2452](https://github.com/open-telemetry/opentelemetry-specification/pull/2452))
+- Clarify that Context should not be mutable when setting a span ([#2637](https://github.com/open-telemetry/opentelemetry-specification/pull/2637))
+- Clarify that `ForceFlush` is a required method on `SpanExporter` interface.
+  ([#2654](https://github.com/open-telemetry/opentelemetry-specification/pull/2654)).
 
 ### Metrics
 
 - Add experimental `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable for
   configuring default histogram aggregation of OTLP metric exporter
   ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619)).
+- Clarify async instrument callback identity.
+  ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538)).
 
 ### Logs
 
@@ -46,6 +51,14 @@ release.
 - Add `http.*.*.size` metric semantic conventions for tracking size of requests
   / responses for http servers / clients
   ([#2588](https://github.com/open-telemetry/opentelemetry-specification/pull/2588)).
+- BREAKING: rename `net.peer.ip` to `net.sock.peer.addr`, `net.host.ip` to `net.sock.host.addr`,
+  `net.peer.name` to `net.sock.peer.name` for socket-level instrumentation.
+  Define socket-level attributes and clarify logical peer and host attributes meaning.
+  ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
+- Add semantic conventions for JVM buffer pool usage
+  ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650)).
+- Improve the definition of `state` attribute for metric `system.network.connections`
+  ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
 
 ### Compatibility
 
@@ -53,7 +66,14 @@ release.
 
 ### SDK Configuration
 
+- Mark `OTEL_METRIC_EXPORT_INTERVAL`, `OTEL_METRIC_EXPORT_TIMEOUT`
+  environment variables as Stable
+  ([#2658](https://github.com/open-telemetry/opentelemetry-specification/pull/2658))
+
 ### Telemetry Schemas
+
+- Introduce "split" metric schema transformation
+  ([#2653](https://github.com/open-telemetry/opentelemetry-specification/pull/2653)).
 
 ### Common
 

@@ -1,4 +1,4 @@
-<!---
+<!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Runtime Environment
 --->
 
@@ -78,7 +78,11 @@ All JVM metric attributes are required unless otherwise indicated.
 | process.runtime.jvm.cpu.utilization        | Recent cpu utilization for the process [2]               | 1       | 1                                         | Asynchronous Gauge                                | Double     |               |                       |
 | process.runtime.jvm.system.cpu.utilization | Recent cpu utilization for the whole system [2]          | 1       | 1                                         | Asynchronous Gauge                                | Double     |               |                       |
 | process.runtime.jvm.system.cpu.load_1m     | Average CPU load of the whole system for the last minute | 1       | 1                                         | Asynchronous Gauge                                | Double     |               |                       |
+| process.runtime.jvm.buffer.usage           | Measure of memory used by buffers                        | Bytes   | `By`                                      | UpDownCounter                                     | Int64      | pool          | Name of pool[3]       |
+| process.runtime.jvm.buffer.limit           | Measure of total memory capacity of buffers              | Bytes   | `By`                                      | UpDownCounter                                     | Int64      | pool          | Name of pool[3]       |
+| process.runtime.jvm.buffer.count           | Number of buffers in the pool                            | buffers | `{buffers}`                               | UpDownCounter                                     | Int64      | pool          | Name of pool[3]       |
 
 **[1]**: Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 Examples include `G1 Old Gen`, `G1 Eden space`, `G1 Survivor Space`, `Metaspace`, etc.
 **[2]**: These utilizations are not defined as being for the specific interval since last measurement (unlike `system.cpu.utilization`).
+**[3]**: Pool names are generally obtained via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
