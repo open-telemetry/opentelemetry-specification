@@ -10,6 +10,11 @@ groups:
         brief: >
           Process identifier (PID).
         examples: [1234]
+      - id: parent_pid
+        type: int
+        brief: >
+          Parent Process identifier (PID).
+        examples: [111]
       - id: executable.name
         type: string
         requirement_level:
