@@ -862,7 +862,7 @@ apply such a special case:
 func MapToIndex(value float64) int {
     // Special case for power-of-two values.
     if frac, exp := math.Frexp(value); frac == 0.5 {
-        return ((exp-1) << scale) - 1
+        return ((exp - 1) << scale) - 1
     }
     scaleFactor := math.Ldexp(math.Log2E, scale)
     // Note: math.Floor(value) equals math.Ceil(value)-1 when value 
