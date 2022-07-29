@@ -1,6 +1,7 @@
 groups:
   - id: webengine_resource
     prefix: webengine
+    type: resource
     brief: >
        Resource describing the packaged software running the application code. Web engines are typically executed using process.runtime.
     attributes:

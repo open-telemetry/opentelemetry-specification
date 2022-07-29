@@ -1,6 +1,7 @@
 groups:
   - id: telemetry
     prefix: telemetry
+    type: resource
     brief: >
       The telemetry SDK used to capture data recorded by the instrumentation libraries.
     attributes:

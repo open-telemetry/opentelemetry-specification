@@ -1,6 +1,7 @@
 groups:
   - id: cloud
     prefix: cloud
+    type: resource
     brief: >
       A cloud environment (e.g. GCP, Azure, AWS)
     attributes:
