@@ -2,7 +2,7 @@
 
 **Status**: [Experimental](../document-status.md)
 
-This document defines standard attributes for the instrumentation scope.
+This document defines standard attributes for the [instrumentation scope](../glossary.md#instrumentation-scope).
 
 <!-- semconv scope -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
