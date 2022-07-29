@@ -2,7 +2,7 @@
 
 **Status**: [Experimental](../../document-status.md)
 
-This document describes the attributes of standalone Events that are represented by `LogRecord`s. All standalone Events have a name and a domain. The Event domain is used as a mechanism to avoid conflicts with event names.
+This document describes the attributes of standalone Events that are represented by `LogRecord`s. All standalone Events have a name and a domain. The Event domain is a namespace for event names and is used as a mechanism to avoid conflicts of event names.
 
 **type:** `event`
 
