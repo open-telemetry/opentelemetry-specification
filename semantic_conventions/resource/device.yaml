@@ -1,6 +1,7 @@
 groups:
   - id: device
     prefix: device
+    type: resource
     brief: >
         The device on which the process represented by this resource is running.
     attributes:
