@@ -21,15 +21,19 @@ The Events and Logs API consist of these main classes:
 
 LoggerProvider/Logger are analogous to TracerProvider/Tracer.
 
-![Events and Logs API classes](img/events-and-logs-api.png)
+```mermaid
+graph TD
+    A[LoggerProvider] -->|Get| B(Logger)
+    B --> C(Event)
+    B --> D(Log)
+```
 
 ## LoggerProvider
 
 `Logger`s can be accessed with a `LoggerProvider`.
 
 In implementations of the API, the LoggerProvider is expected to be the stateful
-object that holds any configuration. (Note: The SDK implementation of this is
-what we currently call the [LogEmitterProvider](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/logging-library-sdk.md#logemitterprovider))
+object that holds any configuration.
 
 Normally, the LoggerProvider is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
