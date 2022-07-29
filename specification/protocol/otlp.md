@@ -187,7 +187,7 @@ the number of spans/data points/log records it rejected.
 A `partial_success` with the `rejected_<signal>` field holding a `0` value
 is an invalid result. In such cases, senders MUST ignore the `partial_success`
 field and handle such response from a server in the same way as defined in the
-[Success](#success) section.
+[Success](#full-success) section.
 
 The server SHOULD populate the `error_message` field with a human-readable
 error message in English. The message should explain why the
@@ -476,7 +476,7 @@ the number of spans/data points/log records it rejected.
 A `partial_success` with the `rejected_<signal>` field holding a `0` value
 is an invalid result. In such cases, senders MUST ignore the `partial_success`
 field and handle such response from a server in the same way as defined in the
-[Success](#success-1) section.
+[Success](#full-success-1) section.
 
 The server SHOULD populate the `error_message` field with a human-readable
 error message in English. The message should explain why the
