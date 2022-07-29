@@ -36,7 +36,7 @@ This API MUST accept the following parameters that determine the scope for the `
 - `version` (optional): Specifies the version of the instrumentation scope if the scope has a version (e.g. a library version). Example value: 1.0.0.
 - `schema_url` (optional): Specifies the Schema URL that should be recorded in the emitted telemetry
 - `event_domain` (optional): Specifies the domain for the events created, which should be added in the attribute `event.domain` in the instrumentation scope.
-- `include_trace_context` (optional): Specifies whether the Trace Context should automatically be passed on to the events and logs created by the Logger. This SHOULD be false by default.
+- `include_trace_context` (optional): Specifies whether the Trace Context should automatically be passed on to the events and logs created by the Logger. This SHOULD be true by default.
 - `attributes` (optional): Specifies the instrumentation scope attributes to associate with emitted telemetry.
 
 Implementations MUST return different `Logger` instances when called repeatedly with different values of parameters. Note that always returning a new `Logger` instance is a valid implementation. The only exception to this rule is the no-op `Logger`: implementations MAY return the same instance regardless of parameter values.
