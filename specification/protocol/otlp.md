@@ -16,7 +16,7 @@ nodes such as collectors and telemetry backends.
   * [OTLP/gRPC](#otlpgrpc)
     + [OTLP/gRPC Concurrent Requests](#otlpgrpc-concurrent-requests)
     + [OTLP/gRPC Response](#otlpgrpc-response)
-      - [Success](#success)
+      - [Full Success](#full-success)
       - [Partial Success](#partial-success)
       - [Failures](#failures)
     + [OTLP/gRPC Throttling](#otlpgrpc-throttling)
@@ -25,7 +25,7 @@ nodes such as collectors and telemetry backends.
   * [OTLP/HTTP](#otlphttp)
     + [OTLP/HTTP Request](#otlphttp-request)
     + [OTLP/HTTP Response](#otlphttp-response)
-      - [Success](#success-1)
+      - [Full Success](#full-success-1)
       - [Partial Success](#partial-success-1)
       - [Failures](#failures-1)
       - [Bad Data](#bad-data)
@@ -39,7 +39,6 @@ nodes such as collectors and telemetry backends.
 - [Known Limitations](#known-limitations)
   * [Request Acknowledgements](#request-acknowledgements)
     + [Duplicate Data](#duplicate-data)
-    + [Partial Success Retry](#partial-success-retry)
 - [Future Versions and Interoperability](#future-versions-and-interoperability)
 - [Glossary](#glossary)
 - [References](#references)
@@ -149,11 +148,11 @@ was not delivered.
 
 #### OTLP/gRPC Response
 
-The response MUST be the appropriate serialized Protobuf message (see below for
-the specific message to use in the [Success](#success),
+The response MUST be the appropriate serialized message (see below for
+the specific message to use in the [Full Success](#full-success),
 [Partial Success](#partial-success) and [Failure](#failures) cases).
 
-##### Success
+##### Full Success
 
 The success response indicates telemetry data is successfully accepted by the
 server.
@@ -161,8 +160,8 @@ server.
 If the server receives an empty request (a request that does not carry
 any telemetry data) the server SHOULD respond with success.
 
-On success, the server response MUST be a Protobuf-encoded
-[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
+On success, the server response MUST be a
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
 message (`ExportTraceServiceResponse` for traces,
 `ExportMetricsServiceResponse` for metrics and
 `ExportLogsServiceResponse` for logs).
@@ -174,11 +173,9 @@ in case of a successful response.
 
 If the request is only partially accepted
 (i.e. when the server accepts only parts of the data and rejects the rest), the
-server response MUST be a Protobuf-encoded
-[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
-message (`ExportTraceServiceResponse` for traces,
-`ExportMetricsServiceResponse` for metrics and
-`ExportLogsServiceResponse` for logs).
+server response MUST be the same
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
+message as in the [Full Success](#full-success) case.
 
 Additionally, the server MUST initialize the `partial_success` field
 (`ExportTracePartialSuccess` message for traces,
@@ -430,7 +427,7 @@ numbers or strings are accepted when decoding.
 #### OTLP/HTTP Response
 
 The response body MUST be the appropriate serialized Protobuf message (see below for
-the specific message to use in the [Success](#success-1),
+the specific message to use in the [Full Success](#full-success-1),
 [Partial Success](#partial-success-1) and [Failure](#failures-1) cases).
 
 The server MUST set "Content-Type: application/x-protobuf" header if the
@@ -443,7 +440,7 @@ If the request header "Accept-Encoding: gzip" is present in the request the
 server MAY gzip-encode the response and set "Content-Encoding: gzip" response
 header.
 
-##### Success
+##### Full Success
 
 The success response indicates telemetry data is successfully accepted by the
 server.
@@ -452,7 +449,8 @@ If the server receives an empty request (a request that does not carry
 any telemetry data) the server SHOULD respond with success.
 
 On success, the server MUST respond with `HTTP 200 OK`. The response body MUST be
-a Protobuf-encoded [Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
+a Protobuf-encoded
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
 message (`ExportTraceServiceResponse` for traces,
 `ExportMetricsServiceResponse` for metrics and
 `ExportLogsServiceResponse` for logs).
@@ -464,11 +462,9 @@ in case of a successful response.
 
 If the request is only partially accepted
 (i.e. when the server accepts only parts of the data and rejects the rest), the
-server MUST respond with `HTTP 200 OK`. The response body MUST be
-a Protobuf-encoded [Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
-message (`ExportTraceServiceResponse` for traces,
-`ExportMetricsServiceResponse` for metrics and
-`ExportLogsServiceResponse` for logs).
+server MUST respond with `HTTP 200 OK`. The response body MUST be the same
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
+message as in the [Full Success](#full-success-1) case.
 
 Additionally, the server MUST initialize the `partial_success` field
 (`ExportTracePartialSuccess` message for traces,
@@ -605,20 +601,6 @@ no way of knowing if recently sent data was delivered if no acknowledgement was
 received yet. The client will typically choose to re-send such data to guarantee
 delivery, which may result in duplicate data on the server side. This is a
 deliberate choice and is considered to be the right tradeoff for telemetry data.
-
-#### Partial Success Retry
-
-The partial success defined by the protocol is neither designed nor intended
-to be used as a mechanism for clients to automatically retry an export request.
-
-Servers should return a partial success response when they fully understand that
-resending the same bundle of telemetry would lead to the same error again,
-thus preventing retry loops.
-
-The protocol does not attempt to define how clients should automatically retry
-a partially successful request.
-Attempting to do so would complicate the protocol and implementations
-significantly and is left out as a possible future area of work.
 
 ## Future Versions and Interoperability
 
