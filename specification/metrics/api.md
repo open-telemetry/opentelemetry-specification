@@ -709,7 +709,7 @@ API](../overview.md#api) authors might consider:
 # Python
 
 http_server_duration.Record(50, {"http.method": "POST", "http.scheme": "https"})
-http_server_duration.Record(100, http_method="GET", http_scheme="http"})
+http_server_duration.Record(100, http_method="GET", http_scheme="http")
 ```
 
 ```csharp
