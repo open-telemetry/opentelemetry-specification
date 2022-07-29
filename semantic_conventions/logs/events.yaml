@@ -15,3 +15,8 @@ groups:
         brief: >
           The domain identifies the context in which an event happened. An event name is unique only within a domain.
         examples: ['browser', 'mobile', 'kubernetes']
+        note: |
+          An `event.name` is supposed to be unique only in the context of an
+          `event.domain`, so this allows for two events in different domains to
+          have same `event.name`, yet be unrelated events. No claim is made
+          about the uniqueness of `event.name`s in the absence of `event.domain`.
