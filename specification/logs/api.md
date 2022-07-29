@@ -13,7 +13,7 @@ LoggerProvider/Logger are analogous to TracerProvider/Tracer.
 
 ### LoggerProvider
 
-Logger can be accessed with an LoggerProvider.
+`Logger`s can be accessed with a `LoggerProvider`.
 
 In implementations of the API, the LoggerProvider is expected to be the stateful object that holds any configuration. (Note: The SDK implementation of this is what we currently call the [LogEmitterProvider](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/logging-library-sdk.md#logemitterprovider))
 
@@ -29,13 +29,12 @@ The LoggerProvider MUST provide the following functions:
 
 ##### Get a Logger
 
-This API MUST accept the following parameters that determine the scope for the `Logger` returned. Most of these are common with the scope parameters for `Tracer` and `Meter`, except for `event_domain` and `include_trace_context` which is specific to `Logger`.
+This API MUST accept the following parameters:
 
 - `name` (required): This name SHOULD uniquely identify the [instrumentation scope](../glossary.md#instrumentation-scope), such as the [instrumentation library](../glossary.md#instrumentation-library) (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.  If an application or library has built-in OpenTelemetry instrumentation, both [Instrumented library](../glossary.md#instrumented-library) and [Instrumentation library](../glossary.md#instrumentation-library) may refer to the same library. In that scenario, the `name` denotes a module name or component name within that library or application. In case an invalid name (null or empty string) is specified, a working Logger implementation MUST be returned as a fallback rather than returning null or throwing an exception, its `name` property SHOULD be set to an empty string, and a message reporting that the specified value is invalid SHOULD be logged. A library implementing the OpenTelemetry API may also ignore this name and return a default instance for all calls, if it does not support "named" functionality (e.g. an implementation which is not even observability-related). A LoggerProvider could also return a no-op Logger here if application owners configure the SDK to suppress telemetry produced by this library.
-
 - `version` (optional): Specifies the version of the instrumentation scope if the scope has a version (e.g. a library version). Example value: 1.0.0.
-- `schema_url` (optional): Specifies the Schema URL that should be recorded in the emitted telemetry
-- `event_domain` (optional): Specifies the domain for the events created, which should be added in the attribute `event.domain` in the instrumentation scope.
+- `schema_url` (optional): Specifies the Schema URL that should be recorded in the emitted telemetry.
+- `event_domain` (optional): Specifies the domain for the events created, which should be added as `event.domain`  attribute of the instrumentation scope.
 - `include_trace_context` (optional): Specifies whether the Trace Context should automatically be passed on to the events and logs created by the Logger. This SHOULD be true by default.
 - `attributes` (optional): Specifies the instrumentation scope attributes to associate with emitted telemetry.
 
@@ -57,9 +56,9 @@ Note that Loggers should not be responsible for configuration. This should be th
 
 The Logger MUST provide functions to:
 
-- Create an `Event` and emit it to the processing pipeline.
-  - The API MUST accept an event name as a parameter. The event name provided should be inserted as an attribute with key `event.name`. Care MUST be taken to not override or delete this attribute while the `Event` is created.  This function MAY be named `logEvent`.
-- Create a `Log Record` and emit it to the processing pipeline.
+- Create a `LogRecord`, representing an `Event` and emit it to the processing pipeline.
+  - The API MUST accept an event name as a parameter. The event name provided should be recorded as an attribute with key `event.name`. Care MUST be taken to not override or delete this attribute while the `Event` is created.  This function MAY be named `logEvent`.
+- Create a `LogRecord` and emit it to the processing pipeline.
   - This function MAY be named `logRecord`.
   - The intended users of this API is Log Appenders.
 
