@@ -120,9 +120,9 @@ The Logger MUST provide functions to:
 pipeline.
   - The API MUST accept an event name as a parameter. The event name provided
   should be recorded as an attribute with key `event.name`. Care MUST be taken
-  to not override or delete this attribute while the `Event` is created.
+  by the implementation to not override or delete this attribute while the
+  `Event` is created to preserve its identity.
   This function MAY be named `logEvent`.
 - Create a `LogRecord` and emit it to the processing pipeline.
   - This function MAY be named `logRecord`.
   - The intended users of this API is Log Appenders.
-
