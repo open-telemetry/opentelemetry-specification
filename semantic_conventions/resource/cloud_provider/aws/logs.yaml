@@ -1,6 +1,7 @@
 groups:
   - id: aws.log
     prefix: aws.log
+    type: resource
     brief: >
       Resources specific to Amazon Web Services.
     attributes:
