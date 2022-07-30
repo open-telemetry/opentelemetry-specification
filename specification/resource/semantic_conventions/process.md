@@ -28,6 +28,7 @@
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `process.pid` | int | Process identifier (PID). | `1234` | Recommended |
+| `process.parent_pid` | int | Parent Process identifier (PID). | `111` | Recommended |
 | `process.executable.name` | string | The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`. | `otelcol` | Conditionally Required: See alternative attributes below. |
 | `process.executable.path` | string | The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`. | `/usr/bin/cmd/otelcol` | Conditionally Required: See alternative attributes below. |
 | `process.command` | string | The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`. | `cmd/otelcol` | Conditionally Required: See alternative attributes below. |
