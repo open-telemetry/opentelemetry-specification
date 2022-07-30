@@ -1,11 +1,12 @@
 # Project Management
 
-Some specification changes are small enough in scope such that they can be resolved with a single PR or an OTEP written by a single person. However, this is rarely the case for large, meaningful changes. Most spec work ends up being organized into projects. 
+Some specification changes are small enough in scope such that they can be resolved with a single PR or an OTEP written by a single person. However, this is rarely the case for large, meaningful changes. Most spec work ends up being organized into projects.
 
 At minimum, specification projects require the following resources to be successful:
+
 * A group of designers and subject matter experts need to dedicate a significant amount of their work time to the project. These participants are needed to design the spec, write a set of OTEPs, and create multiple prototypes. This group needs to meet with each other (and  with TC members) on a regular basis to develop a  successful set of  proposals.
 * A portion of the TC needs to be aware of and participate in the development of the project, to review the proposals and help guide the participants through the specification process.
-* Spec approvers and the broader community need to be aware of progress being made on the project, so they can be prepared to participate when proposals are ready for review. 
+* Spec approvers and the broader community need to be aware of progress being made on the project, so they can be prepared to participate when proposals are ready for review.
 
 ## Project Tracking Issue
 
@@ -37,6 +38,7 @@ Who is currently planning to work on the project? If a project requires speciali
 #### Required staffing
 
 Projects cannot be started until the following participants have been identified:
+
 * Every project needs a project lead, who is willing to bottom line the project and address any issues which are not handled by other project members.
 * At least two sponsoring TC members. TC sponsors are dedicated to attending meetings, reviewing proposals, and in general being aware of the state of the project and it’s technical details. TC sponsors guide the project through the spec process, keep the tracking issue up to date, and help to ensure that relevant community members provide input at the appropriate times.
 * Engineers willing to write prototypes in at least two languages (if relevant to project). Languages should be fairly different from each other (for example. Java and Python).
@@ -56,14 +58,15 @@ The tracking issue should be properly labeled to indicate what parts of the spec
 
 ### Linked Issues and PRs
 
-All PRs, Issues, and OTEPs related to the project should link back to the tracking issue, so that they can be easily found. 
+All PRs, Issues, and OTEPs related to the project should link back to the tracking issue, so that they can be easily found.
 
 ## Specification Project Lifecycle
-All specification projects have the same lifecycle, and are tracked on the Specification Project Board, which the community can use to get a high level view of the specification roadmap. 
+
+All specification projects have the same lifecycle, and are tracked on the Specification Project Board, which the community can use to get a high-level view of the specification roadmap.
 
 The project lifecycle is as follows:
 
-* A **Project Tracking Issue** is created. The tracking issue includes all the necessary information for the TC and spec community to evaluate the breadth and depth of the work being proposed. 
+* A **Project Tracking Issue** is created. The tracking issue includes all the necessary information for the TC and spec community to evaluate the breadth and depth of the work being proposed.
 * If a project is approved, it is added to the list of **Potential Projects**. This list is roughly ordered in the order we expect we will start the project.
 * Potential projects are moved to the list of **Scheduled Projects** once they have a planned start date. Having a planned start date lets potential contributors know when they need to make themselves available, and get prepared to begin their work. Subject matter experts and participants who plan to do a lot of work – such as building prototypes – benefit greatly from having a start date, as they can plan for their participantion with their employers and coworkers.
 * Once a project is begun, it is moved to the list of **Current Projects**. Projects are only started when the necessary resources are available to move them quickly to completion. This means that the necessary subject matter experts have been identified, and at least two TC members are committed to review and guide the project through the specification process.
@@ -79,7 +82,7 @@ Projects that are actively being moved to completion. Projects may be in one of 
 
 ### Scheduled Projects
 
-Many projects require people (such as subject matter experts) and other resources whose participation/availability must be planned out in advance. In general, projects may be able to move faster when their start date is scheduled and known in advance, so participants can prepare their schedules and do preliminary research. 
+Many projects require people (such as subject matter experts) and other resources whose participation/availability must be planned out in advance. In general, projects may be able to move faster when their start date is scheduled and known in advance, so participants can prepare their schedules and do preliminary research.
 
 Scheduled projects are projects which have not started yet, but have a scheduled start date.
 
