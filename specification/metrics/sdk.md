@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: SDK
+--->
+
 # Metrics SDK
 
 **Status**: [Mixed](../document-status.md)
@@ -17,13 +21,13 @@
     + [Default Aggregation](#default-aggregation)
     + [Sum Aggregation](#sum-aggregation)
     + [Last Value Aggregation](#last-value-aggregation)
-      - [Histogram Aggregation common behavior](#histogram-aggregation-common-behavior)
-    + [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
-    + [Exponential Histogram Aggregation](#exponential-histogram-aggregation)
-      - [Exponential Histogram Aggregation: Handle all normal values](#exponential-histogram-aggregation-handle-all-normal-values)
-      - [Exponential Histogram Aggregation: Support a minimum and maximum scale](#exponential-histogram-aggregation-support-a-minimum-and-maximum-scale)
-      - [Exponential Histogram Aggregation: Use the maximum scale for single measurements](#exponential-histogram-aggregation-use-the-maximum-scale-for-single-measurements)
-      - [Exponential Histogram Aggregation: Maintain the ideal scale](#exponential-histogram-aggregation-maintain-the-ideal-scale)
+    + [Histogram Aggregations](#histogram-aggregations)
+      - [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
+      - [Exponential Bucket Histogram Aggregation](#exponential-bucket-histogram-aggregation)
+        * [Handle all normal values](#handle-all-normal-values)
+        * [Support a minimum and maximum scale](#support-a-minimum-and-maximum-scale)
+        * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
+        * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
 - [Attribute limits](#attribute-limits)
@@ -346,7 +350,7 @@ The SDK MUST provide the following `Aggregation` to support the
 
 The SDK MAY provide the following `Aggregation`:
 
-- [Exponential Histogram Aggregation](./sdk.md#exponential-histogram-aggregation)
+- [Exponential Bucket Histogram Aggregation](./sdk.md#exponential-bucket-histogram-aggregation)
 
 #### Drop Aggregation
 
@@ -406,7 +410,7 @@ This Aggregation informs the SDK to collect:
 - The last `Measurement`.
 - The timestamp of the last `Measurement`.
 
-##### Histogram Aggregation common behavior
+#### Histogram Aggregations
 
 All histogram Aggregations inform the SDK to collect:
 
@@ -416,7 +420,7 @@ instruments that record negative measurements (e.g. `UpDownCounter` or `Observab
 - Min (optional) `Measurement` value in population.
 - Max (optional) `Measurement` value in population.
 
-#### Explicit Bucket Histogram Aggregation
+##### Explicit Bucket Histogram Aggregation
 
 The Explicit Bucket Histogram Aggregation informs the SDK to collect data for
 the [Histogram Metric Point](./data-model.md#histogram) using a set of
@@ -435,7 +439,9 @@ bound (except at positive infinity).  A measurement is defined to fall
 into the greatest-numbered bucket with boundary that is greater than
 or equal to the measurement.
 
-#### Exponential Histogram Aggregation
+##### Exponential Bucket Histogram Aggregation
+
+**Status**: [Experimental](../document-status.md)
 
 The Exponential Histogram Aggregation informs the SDK to collect data
 for the [Exponential Histogram Metric
@@ -487,7 +493,7 @@ either:
 1. The maximum supported scale, generally used for single-value histogram Aggregations where scale is not otherwise constrained
 2. The largest value of scale such that no more than the maximum number of buckets are needed to represent the full range of input data in either of the positive or negative ranges.
 
-##### Exponential Histogram Aggregation: Handle all normal values
+###### Handle all normal values
 
 Implementations are REQUIRED to accept the entire normal range of IEEE
 floating point values (i.e., all values except for +Inf, -Inf and NaN
@@ -500,18 +506,18 @@ values do not map into a valid bucket.
 Implementations MAY round subnormal values away from zero to the
 nearest normal value.
 
-##### Exponential Histogram Aggregation: Support a minimum and maximum scale
+###### Support a minimum and maximum scale
 
 The implementation MUST maintain reasonable minimum and maximum scale
 parameters that the automatic scale parameter will not exceed.
 
-##### Exponential Histogram Aggregation: Use the maximum scale for single measurements
+###### Use the maximum scale for single measurements
 
 When the histogram contains not more than one value in either of the
 positive or negative ranges, the implementation SHOULD use the maximum
 scale.
 
-##### Exponential Histogram Aggregation: Maintain the ideal scale
+###### Maintain the ideal scale
 
 Implementations SHOULD adjust the histogram scale as necessary to
 maintain the best resolution possible, within the constraint of

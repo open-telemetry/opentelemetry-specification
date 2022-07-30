@@ -1,6 +1,7 @@
 groups:
   - id: faas_span
     prefix: faas
+    type: span
     brief: >
         This semantic convention describes an instance of a function that
         runs without provisioning or managing of servers (also known as
@@ -43,6 +44,7 @@ groups:
 
   - id: faas_span.datasource
     prefix: faas.document
+    type: span
     extends: faas_span
     brief: >
       Semantic Convention for FaaS triggered as a response to some data
@@ -73,7 +75,6 @@ groups:
         brief: 'Describes the type of the operation that was performed on the data.'
       - id: time
         type: string
-        requirement_level: required
         brief: >
           A string containing the time when the data was accessed in the
           [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)
@@ -88,6 +89,7 @@ groups:
         examples: ["myFile.txt", "myTableName"]
 
   - id: faas_span.http
+    type: span
     extends: faas_span
     brief: >
       Semantic Convention for FaaS triggered as a response to some data
@@ -96,6 +98,7 @@ groups:
       - include: http.server
 
   - id: faas_span.pubsub
+    type: span
     extends: faas_span
     brief: >
       Semantic Convention for FaaS set to be executed when messages are
@@ -106,12 +109,12 @@ groups:
   - id: faas_span.timer
     extends: faas_span
     prefix: faas
+    type: span
     brief: >
       Semantic Convention for FaaS scheduled to be executed regularly.
     attributes:
       - id: time
         type: string
-        requirement_level: required
         brief: >
           A string containing the function invocation time in the
           [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)
@@ -128,6 +131,7 @@ groups:
     extends: faas_span
     span_kind: server
     prefix: faas
+    type: span
     brief: >
       Contains additional attributes for incoming FaaS spans.
     attributes:
@@ -143,6 +147,7 @@ groups:
     extends: faas_span
     span_kind: client
     prefix: faas
+    type: span
     brief: >
       Contains additional attributes for outgoing FaaS spans.
     attributes:

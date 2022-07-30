@@ -1,6 +1,7 @@
 groups:
   - id: aws.eks
     prefix: aws.eks
+    type: resource
     brief: >
       Resources used by AWS Elastic Kubernetes Service (EKS).
     attributes:

@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Prometheus
+--->
+
 # OpenTelemetry Metrics Exporter - Prometheus
 
 **Status**: [Experimental](../../document-status.md)
