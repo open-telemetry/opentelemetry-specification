@@ -597,6 +597,8 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 
 - Exempt Resource from attribute limits.
   ([#1892](https://github.com/open-telemetry/opentelemetry-specification/pull/1892))
+- Update the version of the W3C Baggage specification used for `OTEL_RESOURCE_ATTRIBUTES`.
+  ([#2670](https://github.com/open-telemetry/opentelemetry-specification/pull/2670))
 
 ### Semantic Conventions
 
