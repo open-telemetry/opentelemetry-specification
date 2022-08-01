@@ -190,11 +190,10 @@ server rejected parts of the data, and might offer guidance on how users
 can address the issues.
 The protocol does not attempt to define the structure of the error message.
 
-A `partial_success` with the `rejected_<signal>` field holding a `0` value
-indicates that the whole request was accepted, as in the
-[Full Success](#full-success-1) case. In such cases, the server MAY still make
-use of the `error_message` field, for example, to convey warnings/suggestions
-to clients.
+Servers MAY also make use of the `partial_success` field to convey
+warnings/suggestions to clients when the request was fully accepted.
+In such cases, the `rejected_<signal>` field MUST have a value of `0` and
+the `error_message` field MUST be non-empty.
 
 The client MUST NOT retry the request when it receives a partial success
 response where the `partial_success` is populated.
@@ -480,11 +479,10 @@ server rejected parts of the data, and might offer guidance on how users
 can address the issues.
 The protocol does not attempt to define the structure of the error message.
 
-A `partial_success` with the `rejected_<signal>` field holding a `0` value
-indicates that the whole request was accepted, as in the
-[Full Success](#full-success-1) case. In such cases, the server MAY still make
-use of the `error_message` field, for example, to convey warnings/suggestions
-to clients.
+Servers MAY also make use of the `partial_success` field to convey
+warnings/suggestions to clients when the request was fully accepted.
+In such cases, the `rejected_<signal>` field MUST have a value of `0` and
+the `error_message` field MUST be non-empty.
 
 The client MUST NOT retry the request when it receives a partial success
 response where the `partial_success` is populated.
