@@ -148,7 +148,7 @@ was not delivered.
 
 #### OTLP/gRPC Response
 
-The response MUST be the appropriate serialized message (see below for
+The response MUST be the appropriate message (see below for
 the specific message to use in the [Full Success](#full-success),
 [Partial Success](#partial-success) and [Failure](#failures) cases).
 
@@ -191,7 +191,7 @@ can address the issues.
 The protocol does not attempt to define the structure of the error message.
 
 Servers MAY also make use of the `partial_success` field to convey
-warnings/suggestions to clients when the request was fully accepted.
+warnings/suggestions to clients even when the request was fully accepted.
 In such cases, the `rejected_<signal>` field MUST have a value of `0` and
 the `error_message` field MUST be non-empty.
 
@@ -480,7 +480,7 @@ can address the issues.
 The protocol does not attempt to define the structure of the error message.
 
 Servers MAY also make use of the `partial_success` field to convey
-warnings/suggestions to clients when the request was fully accepted.
+warnings/suggestions to clients even when the request was fully accepted.
 In such cases, the `rejected_<signal>` field MUST have a value of `0` and
 the `error_message` field MUST be non-empty.
 
