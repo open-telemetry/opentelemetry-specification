@@ -660,7 +660,7 @@ lower buckets of Histograms with a smaller `zero_threshold` into the common
 wider zero bucket. If a merged `zero_threshold` is in the middle of a populated
 bucket, it needs to be increased to match the upper boundary of the bucket.
 
-In special cases, a wider zero bucket could be used to limit the total number 
+In special cases, a wider zero bucket could be used to limit the total number
 of populated buckets.
 
 #### Producer Expectations
