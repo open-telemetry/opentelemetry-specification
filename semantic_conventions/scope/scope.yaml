@@ -1,6 +1,7 @@
 groups:
   - id: scope
-    prefix: scope
+    prefix:
+    type: scope
     brief: >
        Scope attributes
     attributes:
@@ -12,5 +13,6 @@ groups:
          characters, and generally consist of a single word. It is not required to be globally
          unique, but should be unique enough to make it very unlikely to collide with other short
          names.  An example use is as the [namespace](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metric-naming-and-namespaces)
-         (prefix) for OpenMetrics metric names.
-        examples: ['mylibrary', 'otelhttp']
+         (prefix) for OpenMetrics metric names. It is recommended for the short_name to be
+         related to the name of the scope.
+        examples: ['mylibrary', 'otelmacaron']
