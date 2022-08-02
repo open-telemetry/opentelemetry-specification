@@ -150,11 +150,11 @@ support.
 This should be used as a guide only, when a specific area is not listed
 it does not infer that `nested` attributes are or MUST be supported.
 
-| Area                 | Optional  |
-|----------------------|-----------|
-| Span                 | no        |
-| Metrics              | no        |
-| Logs                 | yes       |
+| Area                 | Supported  |
+|----------------------|------------|
+| Span                 | no         |
+| Metrics              | no         |
+| Logs                 | yes        |
 
 ## Attribute Collections
 
