@@ -25,7 +25,7 @@ release.
 - Clarify async instrument callback identity.
   ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538)).
 - Add `process.threads` host metric semantic convention.
-  ([#2705](https://github.com/open-telemetry/opentelemetry-specification/pull/2705)). 
+  ([#2705](https://github.com/open-telemetry/opentelemetry-specification/pull/2705)).
 
 ### Logs
 
