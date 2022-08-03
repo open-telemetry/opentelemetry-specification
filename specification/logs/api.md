@@ -126,7 +126,9 @@ pipeline.
   should be recorded as an attribute with key `event.name`. Care MUST be taken
   by the implementation to not override or delete this attribute while the
   `Event` is created to preserve its identity.
-  This function MAY be named `logEvent`.
+  - Events require the `event.domain` attribute. The API MUST not allow creating
+  an event if the Logger instance doesn't have `event.domain` scope attribute.
+  - This function MAY be named `logEvent`.
 - Create a `LogRecord` and emit it to the processing pipeline.
   - This function MAY be named `logRecord`.
   - The intended users of this API is Log Appenders.

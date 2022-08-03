@@ -19,14 +19,14 @@ groups:
             - id: browser
               value: 'browser'
               brief: 'Evens from browser apps'
-            - id: mobile
-              value: 'mobile'
+            - id: device
+              value: 'device'
               brief: 'Events from mobile apps'
-            - id: kubernetes
-              value: 'kubernetes'
+            - id: k8s
+              value: 'k8s'
               brief: 'Events from Kubernetes'
+        requirement_level: required
         note: |
           An `event.name` is supposed to be unique only in the context of an
           `event.domain`, so this allows for two events in different domains to
-          have same `event.name`, yet be unrelated events. No claim is made
-          about the uniqueness of `event.name`s in the absence of `event.domain`.
+          have same `event.name`, yet be unrelated events.
