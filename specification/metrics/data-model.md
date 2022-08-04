@@ -1221,7 +1221,7 @@ A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/
 
 #### Info
 
-An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the "target" info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.  If it has an `_info` suffix, the suffix MUST be removed from the metric name.
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the target_info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.  If it has an `_info` suffix, the suffix MUST be removed from the metric name.
 
 #### StateSet
 
@@ -1300,10 +1300,10 @@ attributes, and MUST NOT be added as metric attributes:
 | `http.scheme` | `http` or `https` |
 
 In addition to the attributes above, the
-["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
-metric family is used to supply additional resource attributes. If present,
-"target" info MUST be dropped from the batch of metrics, and all labels from
-the "target" info metric family MUST be converted to resource attributes
+[target_info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+metric is used to supply additional resource attributes. If present,
+target_info MUST be dropped from the batch of metrics, and all labels from
+the target_info metric MUST be converted to resource attributes
 attached to all other metrics which are part of the scrape. By default, label
 keys and values MUST NOT be altered (such as replacing `_` with `.` characters
 in keys).
@@ -1400,7 +1400,7 @@ OpenMetrics exemplar unless they would exceed the OpenMetrics
 
 #### Resource Attributes
 
-In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to the ["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems) metric family; otherwise, they MUST be dropped, and MUST NOT be attached as labels to other metric families. The "target" info metric family MUST be an info-typed metric family whose labels MUST include the resource attributes, and MUST NOT include any other labels. There MUST be at most one "target" info metric family exposed on a Prometheus endpoint.
+In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to a single [`target_info` metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems); otherwise, they MUST be dropped, and MUST NOT be attached as labels to other metric families. The target_info metric MUST be an info-typed metric  whose labels MUST include the resource attributes, and MUST NOT include any other labels. There MUST be at most one target_info metric exposed on an SDK Prometheus endpoint.
 
 In the Collector's Prometheus pull and push (remote-write) exporters, it is
 possible for metrics from multiple targets to be sent together, so targets must
@@ -1420,13 +1420,13 @@ attributes MUST be combined as `<service.namespace>/<service.name>`, or
 `service.instance.id` attribute, if present, MUST be converted to the
 `instance` label; otherwise, `instance` should be added with an empty value.
 Other resource attributes SHOULD be converted to a
-["target" info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
-metric family, or MUST be dropped. The "target" info metric family is an info-typed metric family
+[target_info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+metric, or MUST be dropped. The target_info metric is an info-typed metric
 whose labels MUST include the resource attributes, and MUST NOT include any
 other labels other than `job` and `instance`.  There MUST be at most one
-"target" info metric point exported for each unique combination of `job` and `instance`.
+target_info metric exported for each unique combination of `job` and `instance`.
 
-If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named "target" info with a constant value of 1 MUST be used instead.
+If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named target_info with a constant value of 1 MUST be used instead.
 
 To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](../common/README.md#attribute).
 
