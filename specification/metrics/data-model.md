@@ -30,7 +30,7 @@ linkTitle: Data Model
   * [ExponentialHistogram](#exponentialhistogram)
     + [Exponential Scale](#exponential-scale)
     + [Exponential Buckets](#exponential-buckets)
-    + [Zero Count](#zero-count)
+    + [Zero Count and Zero Threshold](#zero-count-and-zero-threshold)
     + [Producer Expectations](#producer-expectations)
       - [Scale Zero: Extract the Exponent](#scale-zero-extract-the-exponent)
       - [Negative Scale: Extract and Shift the Exponent](#negative-scale-extract-and-shift-the-exponent)
@@ -643,14 +643,25 @@ perfect subsetting.
 | 6                      | 1.68179        | 2**(6/8)                     |
 | 7                      | 1.83401        | 2**(7/8)                     |
 
-#### Zero Count
+#### Zero Count and Zero Threshold
 
-The ExponentialHistogram contains a special `zero_count` field
-containing the count of values that are either exactly zero or within
-the region considered zero by the instrumentation at the tolerated
-level of precision.  This bucket stores values that cannot be
-expressed using the standard exponential formula as well as values
-that have been rounded to zero.
+The ExponentialHistogram contains a special `zero_count` bucket and an optional
+`zero_threshold` field where `zero_count` contains the count of values whose
+absolute value is less than or equal to `zero_threshold`. The precise value
+for the `zero_threshold` is arbitrary and not related to the scale.
+
+When `zero_threshold` is unset or `0`, this bucket stores values that cannot
+be expressed using the standard exponential formula as well as values that
+have been rounded to zero.
+
+Histograms with different `zero_threshold` can still be merged easily by
+taking the largest `zero_threshold` of all involved Histograms and merge the
+lower buckets of Histograms with a smaller `zero_threshold` into the common
+wider zero bucket. If a merged `zero_threshold` is in the middle of a populated
+bucket, it needs to be increased to match the upper boundary of the bucket.
+
+In special cases, a wider zero bucket could be used to limit the total number
+of populated buckets.
 
 #### Producer Expectations
 
