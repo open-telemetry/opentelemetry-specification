@@ -1,6 +1,7 @@
 groups:
   - id: deployment
     prefix: deployment
+    type: resource
     brief: >
       The software deployment.
     attributes:

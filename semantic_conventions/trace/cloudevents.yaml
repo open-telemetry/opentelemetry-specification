@@ -1,6 +1,7 @@
 groups:
   - id: cloudevents
     prefix: cloudevents
+    type: span
     brief: >
         This document defines attributes for CloudEvents.
         CloudEvents is a specification on how to define event data in a standard way.
