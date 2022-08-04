@@ -21,7 +21,7 @@ have same `event.name`, yet be unrelated events.
 
 | Value  | Description |
 |---|---|
-| `browser` | Events from browser apps |
+| `browser` | Evens from browser apps |
 | `device` | Events from mobile apps |
 | `k8s` | Events from Kubernetes |
 <!-- endsemconv -->
