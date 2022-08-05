@@ -81,6 +81,13 @@ versions:
             metrics_from_attributes:
                 process.network.io.receive: receive
                 process.network.io.transmit: transmit
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/2675
+        - split:
+            apply_to_metric: system.network.connections
+            by_attribute: protocol
+            metrics_from_attributes:
+                system.network.tcp.connections: tcp
+                system.network.udp.connections: udp
 
   1.12.0:
     spans:
