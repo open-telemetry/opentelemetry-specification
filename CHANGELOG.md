@@ -61,10 +61,15 @@ release.
   ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
 - Add `process.parent_pid` attribute for use in reporting parent process id (PID)
   ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
+- Separate tcp/udp protocols for metric `system.network.connections`.
+  ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Add support for partial success in an OTLP export response
+  ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696)).
 
 ### SDK Configuration
 
