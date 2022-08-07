@@ -40,7 +40,7 @@ below attributes:
 
 | Attribute Key | Description                                                                                                   | Example                             | Requirement Level |
 | ------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ----------------- |
-| `id`          | A unique identifier for the hardware component in the monitored host                                          | `win32battery_battery_testsysa33_1` | Required          |
+| `id`          | An identifier for the hardware component, unique within the monitored host                                    | `win32battery_battery_testsysa33_1` | Required          |
 | `name`        | An easily-recognizable name for the hardware component                                                        | `eth0`                              | Recommended       |
 | `parent`      | Unique identifier of the parent component (typically the `id` attribute of the enclosure, or disk controller) | `dellStorage_perc_0`                | Optional          |
 
@@ -53,7 +53,7 @@ The below metrics apply to any type of hardware component.
 | Name        | Description                                                                        | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key(s)   | Attribute Values           |
 | ----------- | ---------------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ---------- | ------------------ | -------------------------- |
 | `hw.energy` | Energy consumed by the component, in joules                                        | J        | Counter                                           | Int64      |                    |                            |
-| `hw.errors` | Errors encountered by the component                                                | {errors} | Counter                                           | Int64      | `type` (optional)  |                            |
+| `hw.errors` | Number of errors encountered by the component                                      | {errors} | Counter                                           | Int64      | `type` (optional)  |                            |
 | `hw.power`  | Instantaneous power consumed by the component, in Watts (`hw.energy` is preferred) | W        | Gauge                                             | Double     |                    |                            |
 | `hw.status` | Operational status: `1` (true) or `0` (false) for each of the possible states      |          | UpDownCounter                                     | Int        | `state` (required) | `ok`, `degraded`, `failed` |
 
@@ -76,12 +76,12 @@ Examples: physical server, switch or disk array.
 | Name                          | Description                                                                                                                                           | Units | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key(s) | Attribute Values |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------------- | ---------- | ---------------- | ---------------- |
 | `hw.host.ambient_temperature` | Ambient (external) temperature of the physical host                                                                                                   | Cel   | Gauge                                             | Double     |                  |                  |
-| `hw.host.energy`              | Total energy consumed by the physical host, in joules                                                                                                 | J     | Counter                                           | Int64      |                  |                  |
+| `hw.host.energy`              | Total energy consumed by the entire physical host, in joules                                                                                          | J     | Counter                                           | Int64      |                  |                  |
 | `hw.host.heating_margin`      | By how many degrees Celsius the temperature of the physical host can be increased, before reaching a warning threshold on one of the internal sensors | Cel   | Gauge                                             | Double     |                  |                  |
-| `hw.host.power`               | Instantaneous power consumed by the physical host in Watts (`hw.host.energy` is preferred)                                                            | W     | Gauge                                             | Double     |                  |                  |
+| `hw.host.power`               | Instantaneous power consumed by the entire physical host in Watts (`hw.host.energy` is preferred)                                                     | W     | Gauge                                             | Double     |                  |                  |
 
 > **Note**
-> Host energy usage must be reported using the specific `hw.host.energy` and `hw.host.power` metrics instead of the generic `hw.energy` and `hw.power` described above, to avoid the risk of summing up overlapping values.
+> Host energy usage MUST be reported using the specific `hw.host.energy` and `hw.host.power` metrics only, instead of the generic `hw.energy` and `hw.power` described in the previous section, to prevent summing up overlapping values.
 
 ### `hw.battery.` - Battery metrics
 
@@ -238,12 +238,12 @@ Additional **optional** attributes:
 
 **Description:** A memory module in a computer system.
 
-| Name              | Description                                                                   | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key        | Attribute Values                                |
-| ----------------- | ----------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ---------- | -------------------- | ----------------------------------------------- |
-| `hw.errors`       | Number of errors encountered on this memory module                            | {errors} | Counter                                           | Int64      | `hw.type` (required) | `memory`                                        |
-| `hw.memory.limit` | Size of the memory module                                                     | By       | UpDownCounter                                     | Int64      |                      |                                                 |
-| `hw.status`       | Operational status: `1` (true) or `0` (false) for each of the possible states |          | UpDownCounter                                     | Int        | `state` (required)   | `ok`, `degraded`, `failed`, `predicted_failure` |
-|                   |                                                                               |          |                                                   |            | `hw.type` (required) | `memory`                                        |
+| Name             | Description                                                                   | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key        | Attribute Values                                |
+| ---------------- | ----------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ---------- | -------------------- | ----------------------------------------------- |
+| `hw.errors`      | Number of errors encountered on this memory module                            | {errors} | Counter                                           | Int64      | `hw.type` (required) | `memory`                                        |
+| `hw.memory.size` | Size of the memory module                                                     | By       | UpDownCounter                                     | Int64      |                      |                                                 |
+| `hw.status`      | Operational status: `1` (true) or `0` (false) for each of the possible states |          | UpDownCounter                                     | Int        | `state` (required)   | `ok`, `degraded`, `failed`, `predicted_failure` |
+|                  |                                                                               |          |                                                   |            | `hw.type` (required) | `memory`                                        |
 
 Additional **optional** attributes:
 
@@ -262,14 +262,14 @@ an HBA, an fiber channel port or a Wi-Fi adapter.
 
 | Name                               | Description                                                                                                  | Units     | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key        | Attribute Values            |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------- | ------------------------------------------------- | ---------- | -------------------- | --------------------------- |
-| `hw.network.bandwidth.limit`       | Link speed                                                                                                   | By        | UpDownCounter                                     | Int64      |                      |                             |
-| `hw.network.bandwidth.utilization` | Utilization of the network bandwidth as a fraction                                                           | 1         | Gauge                                             | Double     |                      |                             |
 | `hw.errors`                        | Number of errors encountered by the network adapter                                                          | {errors}  | Counter                                           | Int64      | `type` (recommended) | `all`, `zero_buffer_credit` |
 |                                    |                                                                                                              |           |                                                   |            | `hw.type` (required) | `network`                   |
-| `hw.network.io.receive`            | Network traffic in bytes                                                                                     | By        | Counter                                           | Int64      |                      |                             |
-| `hw.network.io.transmit`           | Network traffic in bytes                                                                                     | By        | Counter                                           | Int64      |                      |                             |
-| `hw.network.packets.receive`       | Network traffic in packets (or frames)                                                                       | {packets} | Counter                                           | Int64      |                      |                             |
-| `hw.network.packets.transmit`      | Network traffic in packets (or frames)                                                                       | {packets} | Counter                                           | Int64      |                      |                             |
+| `hw.network.bandwidth.limit`       | Link speed                                                                                                   | By        | UpDownCounter                                     | Int64      |                      |                             |
+| `hw.network.bandwidth.utilization` | Utilization of the network bandwidth as a fraction                                                           | 1         | Gauge                                             | Double     |                      |                             |
+| `hw.network.io.receive`            | Received network traffic in bytes                                                                            | By        | Counter                                           | Int64      |                      |                             |
+| `hw.network.io.transmit`           | Transmitted network traffic in bytes                                                                         | By        | Counter                                           | Int64      |                      |                             |
+| `hw.network.packets.receive`       | Received network traffic in packets (or frames)                                                              | {packets} | Counter                                           | Int64      |                      |                             |
+| `hw.network.packets.transmit`      | Transmitted network traffic in packets (or frames)                                                           | {packets} | Counter                                           | Int64      |                      |                             |
 | `hw.network.up`                    | Link status: `1` (up) or `0` (down)                                                                          |           | UpDownCounter                                     | Int        |                      |                             |
 | `hw.status`                        | Operational status, regardless of the link status: `1` (true) or `0` (false) for each of the possible states |           | UpDownCounter                                     | Int        | `state` (required)   | `ok`, `degraded`, `failed`  |
 |                                    |                                                                                                              |           |                                                   |            | `hw.type` (required) | `network`                   |
