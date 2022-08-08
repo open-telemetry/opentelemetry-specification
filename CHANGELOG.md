@@ -6,8 +6,6 @@ content of "Unreleased" section content will generate release notes for the
 release.
 
 ## Unreleased
-- Add the OTEL_SDK_ENABLED environmental variable to the SDK configuration.
-  ([2679](https://github.com/open-telemetry/opentelemetry-specification/pull/2679))
 
 ### Context
 
@@ -77,6 +75,9 @@ release.
   ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696)).
 
 ### SDK Configuration
+
+- Add the OTEL_SDK_ENABLED environment variable to the SDK configuration.
+  ([2679](https://github.com/open-telemetry/opentelemetry-specification/pull/2679))
 
 - Mark `OTEL_METRIC_EXPORT_INTERVAL`, `OTEL_METRIC_EXPORT_TIMEOUT`
   environment variables as Stable
