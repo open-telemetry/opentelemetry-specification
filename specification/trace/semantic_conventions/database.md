@@ -53,7 +53,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 
 **[2]:** If using a port other than the default port for this DBMS and if `net.peer.name` is set.
 
-**[3]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr` without `net.sock.family` coming from instrumentations that follow previous versions of this document.
+**[3]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 **[4]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 

@@ -51,7 +51,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.peer.port` | int | Logical remote port number | `80`; `8080`; `443` | Recommended |
 | `net.host.name` | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
 | `net.host.port` | int | Logical local port number, preferably the one that the peer used to connect | `8080` | Recommended |
-| `net.sock.host.addr` | string | Local socket address. Useful in case of a multi-IP host.' | `192.168.0.1` | Recommended |
+| `net.sock.host.addr` | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
 | `net.sock.host.port` | int | Local socket port number. | `35555` | Recommended: [6] |
 | `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
 | `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
@@ -62,11 +62,11 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 **[1]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[2]:** If available and different than `net.peer.name` and if `net.sock.peer.addr` is set.
+**[2]:** If available and different from `net.peer.name` and if `net.sock.peer.addr` is set.
 
 **[3]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
-**[4]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr` without `net.sock.family` coming from instrumentations that follow previous versions of this document.
+**[4]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 **[5]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 

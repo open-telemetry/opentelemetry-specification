@@ -14,6 +14,8 @@ release.
 - Clarify the return of `Export(batch)` in the Batch Span Processor and exporter
   concurrency ([#2452](https://github.com/open-telemetry/opentelemetry-specification/pull/2452))
 - Clarify that Context should not be mutable when setting a span ([#2637](https://github.com/open-telemetry/opentelemetry-specification/pull/2637))
+- Clarify that `ForceFlush` is a required method on `SpanExporter` interface.
+  ([#2654](https://github.com/open-telemetry/opentelemetry-specification/pull/2654)).
 
 ### Metrics
 
@@ -58,10 +60,19 @@ release.
   ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
 - Add semantic conventions for JVM buffer pool usage
   ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650)).
+- Improve the definition of `state` attribute for metric `system.network.connections`
+  ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
+- Add `process.parent_pid` attribute for use in reporting parent process id (PID)
+  ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
+- Separate tcp/udp protocols for metric `system.network.connections`.
+  ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Add support for partial success in an OTLP export response
+  ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696)).
 
 ### SDK Configuration
 
@@ -70,6 +81,9 @@ release.
   ([#2658](https://github.com/open-telemetry/opentelemetry-specification/pull/2658))
 
 ### Telemetry Schemas
+
+- Introduce "split" metric schema transformation
+  ([#2653](https://github.com/open-telemetry/opentelemetry-specification/pull/2653)).
 
 ### Common
 
