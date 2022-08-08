@@ -16,14 +16,18 @@ nodes such as collectors and telemetry backends.
   * [OTLP/gRPC](#otlpgrpc)
     + [OTLP/gRPC Concurrent Requests](#otlpgrpc-concurrent-requests)
     + [OTLP/gRPC Response](#otlpgrpc-response)
+      - [Full Success](#full-success)
+      - [Partial Success](#partial-success)
+      - [Failures](#failures)
     + [OTLP/gRPC Throttling](#otlpgrpc-throttling)
     + [OTLP/gRPC Service and Protobuf Definitions](#otlpgrpc-service-and-protobuf-definitions)
     + [OTLP/gRPC Default Port](#otlpgrpc-default-port)
   * [OTLP/HTTP](#otlphttp)
     + [OTLP/HTTP Request](#otlphttp-request)
     + [OTLP/HTTP Response](#otlphttp-response)
-      - [Success](#success)
-      - [Failures](#failures)
+      - [Full Success](#full-success-1)
+      - [Partial Success](#partial-success-1)
+      - [Failures](#failures-1)
       - [Bad Data](#bad-data)
       - [OTLP/HTTP Throttling](#otlphttp-throttling)
       - [All Other Responses](#all-other-responses)
@@ -35,7 +39,6 @@ nodes such as collectors and telemetry backends.
 - [Known Limitations](#known-limitations)
   * [Request Acknowledgements](#request-acknowledgements)
     + [Duplicate Data](#duplicate-data)
-  * [Partial Success](#partial-success)
 - [Future Versions and Interoperability](#future-versions-and-interoperability)
 - [Glossary](#glossary)
 - [References](#references)
@@ -145,16 +148,57 @@ was not delivered.
 
 #### OTLP/gRPC Response
 
-The server may respond with either a success or an error to the requests.
+The response MUST be the appropriate message (see below for
+the specific message to use in the [Full Success](#full-success),
+[Partial Success](#partial-success) and [Failure](#failures) cases).
 
-The success response indicates telemetry data is successfully processed by the
-server. If the server receives an empty request (a request that does not carry
+##### Full Success
+
+The success response indicates telemetry data is successfully accepted by the
+server.
+
+If the server receives an empty request (a request that does not carry
 any telemetry data) the server SHOULD respond with success.
 
-Success response is returned via
-[Export*ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto)
-message (`ExportTraceServiceResponse` for traces, `ExportMetricsServiceResponse`
-for metrics, `ExportLogsServiceResponse` for logs).
+On success, the server response MUST be a
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
+message (`ExportTraceServiceResponse` for traces,
+`ExportMetricsServiceResponse` for metrics and
+`ExportLogsServiceResponse` for logs).
+
+The server MUST leave the `partial_success` field unset
+in case of a successful response.
+
+##### Partial Success
+
+If the request is only partially accepted
+(i.e. when the server accepts only parts of the data and rejects the rest), the
+server response MUST be the same
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
+message as in the [Full Success](#full-success) case.
+
+Additionally, the server MUST initialize the `partial_success` field
+(`ExportTracePartialSuccess` message for traces,
+`ExportMetricsPartialSuccess` message for metrics and
+`ExportLogsPartialSuccess` message for logs), and it MUST set the respective
+`rejected_spans`, `rejected_data_points` or `rejected_log_records` field with
+the number of spans/data points/log records it rejected.
+
+The server SHOULD populate the `error_message` field with a human-readable
+error message in English. The message should explain why the
+server rejected parts of the data, and might offer guidance on how users
+can address the issues.
+The protocol does not attempt to define the structure of the error message.
+
+Servers MAY also make use of the `partial_success` field to convey
+warnings/suggestions to clients even when the request was fully accepted.
+In such cases, the `rejected_<signal>` field MUST have a value of `0` and
+the `error_message` field MUST be non-empty.
+
+The client MUST NOT retry the request when it receives a partial success
+response where the `partial_success` is populated.
+
+##### Failures
 
 When an error is returned by the server it falls into 2 broad categories:
 retryable and not-retryable:
@@ -382,8 +426,9 @@ numbers or strings are accepted when decoding.
 
 #### OTLP/HTTP Response
 
-Response body MUST be the appropriate serialized Protobuf message (see below for
-the specific message to use in the Success and Failure cases).
+The response body MUST be the appropriate serialized Protobuf message (see below for
+the specific message to use in the [Full Success](#full-success-1),
+[Partial Success](#partial-success-1) and [Failure](#failures-1) cases).
 
 The server MUST set "Content-Type: application/x-protobuf" header if the
 response body is binary-encoded Protobuf payload. The server MUST set
@@ -395,15 +440,52 @@ If the request header "Accept-Encoding: gzip" is present in the request the
 server MAY gzip-encode the response and set "Content-Encoding: gzip" response
 header.
 
-##### Success
+##### Full Success
 
-On success the server MUST respond with `HTTP 200 OK`. Response body MUST be
-Protobuf-encoded `ExportTraceServiceResponse` message for traces,
-`ExportMetricsServiceResponse` message for metrics and
-`ExportLogsServiceResponse` message for logs.
+The success response indicates telemetry data is successfully accepted by the
+server.
 
-The server SHOULD respond with success no sooner than after successfully
-decoding and validating the request.
+If the server receives an empty request (a request that does not carry
+any telemetry data) the server SHOULD respond with success.
+
+On success, the server MUST respond with `HTTP 200 OK`. The response body MUST be
+a Protobuf-encoded
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
+message (`ExportTraceServiceResponse` for traces,
+`ExportMetricsServiceResponse` for metrics and
+`ExportLogsServiceResponse` for logs).
+
+The server MUST leave the `partial_success` field unset
+in case of a successful response.
+
+##### Partial Success
+
+If the request is only partially accepted
+(i.e. when the server accepts only parts of the data and rejects the rest), the
+server MUST respond with `HTTP 200 OK`. The response body MUST be the same
+[Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
+message as in the [Full Success](#full-success-1) case.
+
+Additionally, the server MUST initialize the `partial_success` field
+(`ExportTracePartialSuccess` message for traces,
+`ExportMetricsPartialSuccess` message for metrics and
+`ExportLogsPartialSuccess` message for logs), and it MUST set the respective
+`rejected_spans`, `rejected_data_points` or `rejected_log_records` field with
+the number of spans/data points/log records it rejected.
+
+The server SHOULD populate the `error_message` field with a human-readable
+error message in English. The message should explain why the
+server rejected parts of the data, and might offer guidance on how users
+can address the issues.
+The protocol does not attempt to define the structure of the error message.
+
+Servers MAY also make use of the `partial_success` field to convey
+warnings/suggestions to clients even when the request was fully accepted.
+In such cases, the `rejected_<signal>` field MUST have a value of `0` and
+the `error_message` field MUST be non-empty.
+
+The client MUST NOT retry the request when it receives a partial success
+response where the `partial_success` is populated.
 
 ##### Failures
 
@@ -519,13 +601,6 @@ no way of knowing if recently sent data was delivered if no acknowledgement was
 received yet. The client will typically choose to re-send such data to guarantee
 delivery, which may result in duplicate data on the server side. This is a
 deliberate choice and is considered to be the right tradeoff for telemetry data.
-
-### Partial Success
-
-The protocol does not attempt to communicate partial reception success from the
-server to the client (i.e. when part of the data can be received by the server
-and part of it cannot). Attempting to do so would complicate the protocol and
-implementations significantly and is left out as a possible future area of work.
 
 ## Future Versions and Interoperability
 
