@@ -148,6 +148,9 @@ groups:
             - id: elasticsearch
               value: 'elasticsearch'
               brief: 'Elasticsearch'
+            - id: opensearch
+              value: 'opensearch'
+              brief: 'OpenSearch'
             - id: memcached
               value: 'memcached'
               brief: 'Memcached'

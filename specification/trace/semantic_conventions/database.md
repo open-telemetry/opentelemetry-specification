@@ -113,6 +113,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `neo4j` | Neo4j |
 | `geode` | Apache Geode |
 | `elasticsearch` | Elasticsearch |
+| `opensearch` | OpenSearch |
 | `memcached` | Memcached |
 | `cockroachdb` | CockroachDB |
 <!-- endsemconv -->
