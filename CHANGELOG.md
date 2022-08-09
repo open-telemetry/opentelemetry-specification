@@ -29,6 +29,9 @@ release.
 
 ### Resource
 
+- Update the version of the W3C Baggage specification used for `OTEL_RESOURCE_ATTRIBUTES`.
+  ([#2670](https://github.com/open-telemetry/opentelemetry-specification/pull/2670))
+
 ### Semantic Conventions
 
 - Add `net.app.protocol.*` attributes
@@ -59,10 +62,17 @@ release.
   ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650)).
 - Improve the definition of `state` attribute for metric `system.network.connections`
   ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
+- Add `process.parent_pid` attribute for use in reporting parent process id (PID)
+  ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
+- Separate tcp/udp protocols for metric `system.network.connections`.
+  ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Add support for partial success in an OTLP export response
+  ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696)).
 
 ### SDK Configuration
 
