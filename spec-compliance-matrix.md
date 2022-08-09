@@ -267,7 +267,7 @@ Note: Support for environment variables is optional.
 
 |Feature                                           |Go | Java |JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
 |--------------------------------------------------|--|------|---|------|----|------|---|----|---|----|-----|
-|OTEL_SDK_ENABLED                                  | - |      | - | -    | -  | -    | - | -  | - | -  | -   |
+|OTEL_SDK_ENABLED                                  | - | -    | - | -    | -  | -    | - | -  | - | -  | -   |
 |OTEL_RESOURCE_ATTRIBUTES                          | + | +    | + | +    | +  | +    | + | +  | + | +  | -   |
 |OTEL_SERVICE_NAME                                 | + | +    | + | +    | +  | +    | + |    |   | +  |     |
 |OTEL_LOG_LEVEL                                    | - | -    | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
