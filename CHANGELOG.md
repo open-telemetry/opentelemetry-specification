@@ -220,6 +220,8 @@ release.
   ([#2507](https://github.com/open-telemetry/opentelemetry-specification/pull/2507))
 - Map SunOS to solaris for os.type resource attribute
   ([#2509](https://github.com/open-telemetry/opentelemetry-specification/pull/2509))
+- Add semantic conventions for hardware metrics
+  ([#2518](https://github.com/open-telemetry/opentelemetry-specification/pull/2518))
 
 ### Compatibility
 
