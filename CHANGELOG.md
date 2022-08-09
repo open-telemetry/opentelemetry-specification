@@ -147,7 +147,9 @@ release.
   ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
 - Change JVM runtime metric `process.runtime.jvm.memory.max`
   to `process.runtime.jvm.memory.limit`
-- ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).
+  ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).  
+- Add semantic conventions for hardware metrics
+  ([#2518](https://github.com/open-telemetry/opentelemetry-specification/pull/2518)).
 
 ### Compatibility
 
@@ -220,8 +222,6 @@ release.
   ([#2507](https://github.com/open-telemetry/opentelemetry-specification/pull/2507))
 - Map SunOS to solaris for os.type resource attribute
   ([#2509](https://github.com/open-telemetry/opentelemetry-specification/pull/2509))
-- Add semantic conventions for hardware metrics
-  ([#2518](https://github.com/open-telemetry/opentelemetry-specification/pull/2518))
 
 ### Compatibility
 
