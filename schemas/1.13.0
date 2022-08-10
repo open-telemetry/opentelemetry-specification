@@ -88,14 +88,14 @@ versions:
             metrics_from_attributes:
                 system.network.tcp.connections: tcp
                 system.network.udp.connections: udp
-
-  1.12.0:
     spans:
       changes:
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/2614
         - rename_attributes:
             attribute_map:
               net.peer.ip: net.sock.peer.addr
               net.host.ip: net.sock.host.addr
+  1.12.0:
   1.11.0:
   1.10.0:
   1.9.0:
