@@ -66,6 +66,8 @@ release.
   ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
 - Separate tcp/udp protocols for metric `system.network.connections`.
   ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
+- Add OpenSearch to db.system semantic conventions
+  ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718)).
 
 ### Compatibility
 
