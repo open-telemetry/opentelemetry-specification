@@ -35,7 +35,6 @@ linkTitle: Data Model
       - [Scale Zero: Extract the Exponent](#scale-zero-extract-the-exponent)
       - [Negative Scale: Extract and Shift the Exponent](#negative-scale-extract-and-shift-the-exponent)
       - [All Scales: Use the Logarithm Function](#all-scales-use-the-logarithm-function)
-      - [Positive Scale: Use a Lookup Table](#positive-scale-use-a-lookup-table)
     + [ExponentialHistogram: Producer Recommendations](#exponentialhistogram-producer-recommendations)
     + [ExponentialHistogram: Consumer Recommendations](#exponentialhistogram-consumer-recommendations)
     + [ExponentialHistogram: Bucket inclusivity](#exponentialhistogram-bucket-inclusivity)
@@ -603,14 +602,14 @@ downscale) without introducing error.
 #### Exponential Buckets
 
 The ExponentialHistogram bucket identified by `index`, a signed
-integer, represents values in the population that are greater than or
-equal to `base**index` and less than `base**(index+1)`.  Note that the
-ExponentialHistogram specifies a lower-inclusive bound while the
-explicit-boundary Histogram specifies an upper-inclusive bound.
+integer, represents values in the population that are greater than
+`base**index` and less than or equal to `base**(index+1)`.
 
 The positive and negative ranges of the histogram are expressed
-separately.  Negative values are mapped by their absolute value
-into the negative range using the same scale as the positive range.
+separately.  Negative values are mapped by their absolute value into
+the negative range using the same scale as the positive range.  Note
+that in the negative range, therefore, histogram buckets use
+lower-inclusive boundaries.
 
 Each range of the ExponentialHistogram data point uses a dense
 representation of the buckets, where a range of buckets is expressed
@@ -620,9 +619,9 @@ index `offset+i`.
 
 For a given range, positive or negative:
 
-- Bucket index `0` counts measurements in the range `[1, base)`
-- Positive indexes correspond with absolute values greater or equal to `base`
-- Negative indexes correspond with absolute values less than 1
+- Bucket index `0` counts measurements in the range `(1, base]`
+- Positive indexes correspond with absolute values greater than `base`
+- Negative indexes correspond with absolute values less than or equal to 1
 - There are `2**scale` buckets between successive powers of 2.
 
 For example, with `scale=3` there are `2**3` buckets between 1 and 2.
@@ -664,6 +663,15 @@ In special cases, a wider zero bucket could be used to limit the total number
 of populated buckets.
 
 #### Producer Expectations
+
+Producers MAY use an inexact mapping function because in the general
+case:
+
+1. Exact mapping functions are substantially more complex to implement.
+2. Boundaries cannot be exactly represented as floating point numbers for all scales.
+
+Generally, producers SHOULD use a mapping function with an expected
+difference of at most 1 from the correct result for all inputs.
 
 The ExponentialHistogram design makes it possible to express values
 that are too large or small to be represented in the 64 bit "double"
@@ -719,19 +727,45 @@ double-width floating point values have indices in the range
 `[-1074, -1023]`.  This may be written as:
 
 ```golang
-// GetExponent extracts the normalized base-2 fractional exponent.
-// Let the value be represented as `1.significand x 2**exponent`,
-// this returns `exponent`.  Not defined for 0, Inf, or NaN values.
-func GetExponent(value float64) int32 {
+// MapToIndexScale0 computes a bucket index at scale 0.
+func MapToIndexScale0(value float64) int32 {
     rawBits := math.Float64bits(value)
+
+    // rawExponent is an 11-bit biased representation of the base-2 
+    // exponent: 
+    // - value 0 indicates a subnormal representation or a zero value
+    // - value 2047 indicates an Inf or NaN value
+    // - value [1, 2046] are offset by ExponentBias (1023)
     rawExponent := (int64(rawBits) & ExponentMask) >> SignificandWidth
-    rawSignificand := rawBits & SignificandMask
+
+    // rawFragment represents (significand-1) for normal numbers,
+    // where significand is in the range [1, 2).
+    rawFragment := rawBits & SignificandMask
+
+    // Check for subnormal values:
     if rawExponent == 0 {
-        // Handle subnormal values: rawSignificand cannot be zero
-        // unless value is zero.
-        rawExponent -= int64(bits.LeadingZeros64(rawSignificand) - 12)
+        // Handle subnormal values: rawFragment cannot be zero
+        // unless value is zero.  Subnormal values have up to 52 bits
+        // set, so for example greatest subnormal power of two, 0x1p-1023, has
+        // rawFragment = 0x8000000000000.  Expressed in 64 bits, the value
+        // (rawFragment-1) = 0x0007ffffffffffff has 13 leading zeros.
+        rawExponent -= int64(bits.LeadingZeros64(rawFragment - 1) - 12)
+
+        // In the example with 0x1p-1023, the preceding expression subtracts
+        // (13-12)=1, leaving the rawExponent equal to -1.  The next statement 
+        // below subtracts `ExponentBias` (1023), leaving `ieeeExponent` equal 
+        // to -1024, which is the correct upper-inclusive bucket index for
+        // the value 0x1p-1023.
     }
-    return int32(rawExponent - ExponentBias)
+    ieeeExponent := int32(rawExponent - ExponentBias)
+    // Note that rawFragment and rawExponent cannot both be zero, 
+    // or else the value is exactly zero, in which case the the ZeroCount
+    // bucket is used.
+    if rawFragment == 0 {
+        // Special case for normal power-of-two values: subtract one.
+        return ieeeExponent - 1
+    }
+    return ieeeExponent
 }
 ```
 
@@ -739,32 +773,46 @@ Implementations are permitted to round subnormal values up to the
 smallest normal value, which may permit the use of a built-in function:
 
 ```golang
-
-func GetExponent(value float64) int {
+// MapToIndexScale0 computes a bucket index at scale 0.
+func MapToIndexScale0(value float64) int {
     // Note: Frexp() rounds submnormal values to the smallest normal
     // value and returns an exponent corresponding to fractions in the
-    // range [0.5, 1), whereas we want [1, 2), so subtract 1 from the
-    // exponent.
-    _, exp := math.Frexp(value)
-    return exp - 1
+    // range [0.5, 1), whereas an exponent for the range [1, 2), so 
+    // subtract 1 from the exponent immediately.
+    frac, exp := math.Frexp(value)
+    exp--
+
+    if frac == 0.5 {
+        // Special case for powers of two: they fall into the bucket
+        // numbered one less.
+        exp--
+    }
+    return exp
 }
 ```
 
 ##### Negative Scale: Extract and Shift the Exponent
 
 For negative scales, the index of a value equals the normalized
-base-2 exponent (as by `GetExponent()` above) shifted to the right
+base-2 exponent (as by `MapToIndexScale0()` above) shifted to the right
 by `-scale`.  Note that because of sign extension, this shift performs
 correct rounding for the negative indices.  This may be written as:
 
 ```golang
-  return GetExponent(value) >> -scale
+// MapToIndexNegativeScale computes a bucket index for scales <= 0.
+func MapToIndexNegativeScale(value float64) int {
+    return MapToIndexScale0(value) >> -scale
+}
 ```
 
 The reverse mapping function is:
 
 ```golang
+// LowerBoundaryNegativeScale computes the lower boundary for index
+// with scales <= 0.
+func LowerBoundaryNegativeScale(index int) {
     return math.Ldexp(1, index << -scale)
+}
 ```
 
 Note that the reverse mapping function is expected to produce
@@ -776,50 +824,99 @@ boundary `0x1p-1024`.
 
 ##### All Scales: Use the Logarithm Function
 
-For any scale, the built-in natural logarithm function can be used to
-compute the bucket index.  A multiplicative factor equal to `2**scale
-/ ln(2)` proves useful (where `ln()` is the natural logarithm), for
-example:
+The mapping and reverse-mapping functions for scale zero and negative
+scales above are recommended because they are exact.  At these scales,
+`math.Log()` could be inaccurate and more expensive than directly
+calculating the bucket index.  The methods in this section MAY be used
+at all scales, although they are definitely useful for positive
+scales.
+
+The built-in natural logarithm function can be used to compute the
+bucket index by applying a scaling factor, derived as follows.
+
+1. The exponential base is defined as `base == 2**(2**(-scale))`
+2. We want `index` where `base**index < value <= base**(index+1)`.
+3. Apply the base-`base` logarithm, i.e.,
+   `log_base(base**index) < log_base(value) <= log_base(base**(index+1))` (where `log_X(Y)` indicates the base-`X` logarithm of `Y`)
+4. Rewrite using `log_X(X**Y) == Y`:
+5. Thus, `index < log_base(value) <= index+1`
+6. Using the `Ceiling()` function to simplify the equation: `Ceiling(log_base(value)) == index+1`
+7. Subtract one from each side: `index == Ceiling(log_base(value)) - 1`
+8. Rewrite using `log_X(Y) == log_N(Y) / log_N(X)` to allow use of the natural logarithm
+9. Thus, `index == Ceiling(log(value)/log(base)) - 1`
+10. The scaling factor `1/log(base)` can be derived using the formulas in (1), (4), and (8).
+
+The scaling factor equals `2**scale / log(2)` can be written as
+`math.Ldexp(math.Log2E, scale)` since the constant `math.Log2E` is
+defined as `1/log(2)`.  Putting this together:
 
 ```golang
+// MapToIndex for any scale.
+func MapToIndex(value float64) int {
     scaleFactor := math.Ldexp(math.Log2E, scale)
-    return math.Floor(math.Log(value) * scaleFactor)
+    return math.Ceil(math.Log(value) * scaleFactor) - 1
+}
 ```
 
-Note that in the example Golang code above, the built-in `math.Log2E`
-is defined as the inverse of the natural logarithm of 2, i.e., `1 / ln(2)`.
+The use of `math.Log()` to calculate the bucket index is not
+guaranteed to be exactly correct near powers of two.  Values near a
+boundary could be mapped into the incorrect bucket due to inaccuracy.
+Defining an exact mapping function is out of scope for this document.
 
-The reverse mapping function is:
+However, when inputs are an exact power of two, it is possible to
+calculate the exactly corect bucket index.  Since it is relatively
+simple to check for exact powers of two, implementations SHOULD
+apply such a special case:
 
 ```golang
+// MapToIndex for any scale, exact for powers of two.
+func MapToIndex(value float64) int {
+    // Special case for power-of-two values.
+    if frac, exp := math.Frexp(value); frac == 0.5 {
+        return ((exp - 1) << scale) - 1
+    }
+    scaleFactor := math.Ldexp(math.Log2E, scale)
+    // Note: math.Floor(value) equals math.Ceil(value)-1 when value 
+    // is not a power of two, which is checked above.
+    return math.Floor(math.Log(value) * scaleFactor)
+}
+```
+
+The reverse mapping function for positive scales is:
+
+```golang
+// LowerBoundary computes the bucket boundary for positive scales.
+func LowerBoundary(index int) float64 {
     inverseFactor := math.Ldexp(math.Ln2, -scale)
     return math.Exp(index * inverseFactor), nil
+}
 ```
 
 Implementations are expected to verify that their mapping function and
 inverse mapping function are correct near the lowest and highest IEEE
 floating point values.  A mathematically correct formula may produce
-wrong result, because of accumulated floating point calculation error
+the wrong result, because of accumulated floating point calculation error
 or underflow/overflow of intermediate results.  In the Golang
 reference implementation, for example, the above formula computes
 `+Inf` for the maximum-index bucket.  In this case, it is appropriate
 to subtract `1<<scale` from the index and multiply the result by `2`.
 
 ```golang
+func LowerBoundary(index int) float64 {
     // Use this form in case the equation above computes +Inf
     // as the lower boundary of a valid bucket.
     inverseFactor := math.Ldexp(math.Ln2, -scale)
     return 2.0 * math.Exp((index - (1 << scale)) * inverseFactor), nil
+}
 ```
+
+In the Golang reference implementation, for example, the above formula
+does not accurately compute the lower boundary of the minimum-index
+bucket (it is a subnormal value).  In this case, it is appropriate to
+add `1<<scale` to the index and divide the result by `2`.
 
 *Note that floating-point to integer type conversions have been
 omitted from the code fragments above, to improve readability.*
-
-##### Positive Scale: Use a Lookup Table
-
-For positive scales, lookup table methods have been demonstrated
-that are able to exactly compute the index in constant time from a
-lookup table with `O(2**scale)` entries.
 
 #### ExponentialHistogram: Producer Recommendations
 
