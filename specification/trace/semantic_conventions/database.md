@@ -115,6 +115,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `elasticsearch` | Elasticsearch |
 | `memcached` | Memcached |
 | `cockroachdb` | CockroachDB |
+| `opensearch` | OpenSearch |
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
