@@ -2,16 +2,18 @@
 
 **Status**: [Experimental](../document-status.md), Unless otherwise specified.
 
-## Abstract
-
 The OpenTelemetry project aims to provide backwards compatibility with the
 [OpenCensus](https://opencensus.io) project in order to ease migration of
 instrumented codebases.
 
-This functionality will be provided as a bridge layer implementing the
-[OpenCensus API](https://github.com/census-instrumentation/opencensus-specs)
-using the OpenTelemetry API. This layer MUST NOT rely on implementation specific
-details of the OpenTelemetry SDK.
+## Trace Bridge
+
+**Status**: [Experimental, Feature Freeze](../document-status.md)
+
+The trace bridge is provided as a shim layer implementing the
+[OpenCensus Trace API](https://github.com/census-instrumentation/opencensus-specs)
+using the OpenTelemetry Trace API. This layer MUST NOT rely on implementation
+specific details of the OpenTelemetry SDK.
 
 More specifically, the intention is to allow OpenCensus instrumentation to be
 recorded using OpenTelemetry. This Shim Layer MUST NOT publicly expose any
@@ -63,32 +65,18 @@ Finally, the Application would update all usages of OpenCensus to OpenTelemetry.
       |--  Application -> Using OpenTelemetry to generate a sub Trace B-- |
 ```
 
-OpenCensus supports two primary types of telemetry: Traces and Stats (Metrics).
-Compatibility for these is defined separately.
+### Requirements
 
-> The overriding philosophy for compatibility is that OpenCensus instrumented
-> libraries and applications need make *no change* to their API usage in order
-> to use OpenTelemetry. All changes should be solely configuration / setup.
-
-## Goals
-
-OpenTelemetry<->OpenCensus compatibility has the following goals:
+OpenTelemetry<->OpenCensus compatibility has the following requirements:
 
 1. OpenCensus has no hard dependency on OpenTelemetry
 2. Minimal changes to OpenCensus for implementation
 3. Easy for users to use, ideally no change to their code
 
-Additionally, for tracing there are the following goals:
+Additionally, for tracing there are the following requirements:
 
 1. Maintain parent-child span relationship between applications and libraries
 2. Maintain span link relationships between applications and libraries
-
-## Trace
-
-**Status**: [Experimental, Feature Freeze](../document-status.md)
-
-OpenTelemetry will provide an OpenCensus-Trace-Shim component that can be
-added as a dependency to ensure compatibility with OpenCensus.
 
 This component MUST be an optional dependency.
 
@@ -104,6 +92,15 @@ and auto injection of dependencies.
 
 All specified methods in OpenCensus will delegate to the underlying `Span` of
 OpenTelemetry.
+
+### Span Attributes
+
+Span attributes SHOULD be mapped following
+[semantic convention mappings](#semantic-convention-mappings) described below.
+
+### Resources
+
+Note: resources appear not to be usable in the "API" section of OpenCensus.
 
 #### Known Incompatibilities
 
@@ -131,12 +128,12 @@ using the OpenCensus <-> OpenTelemetry bridge.
    "sampled".  In this case, the OpenCensus bridge will do its best to support
    and translate unspecified flags into the closest OpenTelemetry equivalent.
 
-### Context Propagation
+## OpenCensus Context Propagation
 
 The shim will provide an OpenCensus `PropagationComponent` implementation which
 maps OpenCenus binary and text propagation to OpenTelemetry context.
 
-#### Text Context
+### Text Context
 
 This adapter MUST use an OpenTelemetry `TextMapPropagator` to implement the
 OpenCensus `TextFormat`.
@@ -148,30 +145,37 @@ This adapter MUST provide a default `W3CTraceContextPropagator`.  If
 OpenTelemetry defines a global TextMapPropogator, OpenCensus SHOULD use this
 for OpenCensus `traceContextFormat` propagation.
 
-#### B3 Context
+### B3 Context
 
 This adapter SHOULD use a contributed OpenTelemetry `B3Propagator` for the
 B3 text format.
 
-#### OpenCensus Binary Context
+### OpenCensus Binary Context
 
 This adapter MUST provide an implementation of OpenCensus `BinaryPropogator` to
 write OpenCensus binary format using OpenTelemetry's context.  This
 implementation may be drawn from OpenCensus if applicable.
 
-### Resources
+## Metrics / Stats
 
-Note: resources appear not to be usable in the "API" section of OpenCensus.
+Metric compatibility with OpenCensus remains unspecified as the OpenTelemetry
+metrics specification solidifies for GA.   Once GA on metrics is declared,
+this section will be filled out.
 
-### Semantic Convention Mappings
+> Philosophically, this should follow the same principles as Trace.
+> Specifically: Metric names/attributes should be converted to OTel semantic
+> conventions, All API surface area should map to the closest relevant OTel
+> API and no SDK usage of OpenCensus will be compatible.
 
-Where possible, the tracing shim should provide mappings of labels to attributes
-defined within the OpenTelemetry semantic convetions.
+## Semantic Convention Mappings
+
+Where possible, the tracing and metrics shims SHOULD provide mappings of labels
+to attributes defined within the OpenTelemetry semantic convetions.
 
 > The principle is to ensure OpenTelemetry exporters, which use these semantic
 > conventions, are likely to export the correct data.
 
-#### HTTP Attributes
+### HTTP Attributes
 
 OpenCensus specifies the following [HTTP Attributes](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#attributes):
 
@@ -184,14 +188,3 @@ OpenCensus specifies the following [HTTP Attributes](https://github.com/census-i
 | `http.url`         | `http.url`         |                      |
 | `http.path`        | `http.target`      | key-name change only |
 | `http.route`       | N/A                | Pass through ok      |
-
-## Metrics / Stats
-
-Metric compatibility with OpenCensus remains unspecified as the OpenTelemetry
-metrics specification solidifies for GA.   Once GA on metrics is declared,
-this section will be filled out.
-
-> Philosophically, this should follow the same principles as Trace.
-> Specifically: Metric names/attributes should be converted to OTel semantic
-> conventions, All API surface area should map to the closest relevant OTel
-> API and no SDK usage of OpenCensus will be compatible.
