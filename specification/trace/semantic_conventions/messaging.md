@@ -151,7 +151,7 @@ The following operations related to messages are defined for these semantic conv
 
 **[3]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
-**[4]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD expect to receive IPv6 address in `net.sock.peer.addr` without `net.sock.family` coming from instrumentations that follow previous versions of this document.
+**[4]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 **[5]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
 
