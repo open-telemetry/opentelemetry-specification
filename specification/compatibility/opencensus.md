@@ -187,11 +187,51 @@ OpenCensus specifies the following [HTTP Attributes](https://github.com/census-i
 
 ## Metrics / Stats
 
-Metric compatibility with OpenCensus remains unspecified as the OpenTelemetry
-metrics specification solidifies for GA.   Once GA on metrics is declared,
-this section will be filled out.
+OpenTelemetry will provide an OpenCensus-Metrics-Shim component which
+implements the OpenTelemetry MetricProducer interface. When Produce() is
+invoked, the shim collects metrics from the OpenCensus global state, converts
+the metrics to an OpenTelemetry metrics batch, and returns.
 
-> Philosophically, this should follow the same principles as Trace.
-> Specifically: Metric names/attributes should be converted to OTel semantic
-> conventions, All API surface area should map to the closest relevant OTel
-> API and no SDK usage of OpenCensus will be compatible.
+To construct a shim, the caller MUST be able to provide the following:
+
+* A resource (optional) to attach to metrics batches. If not provided, the
+default resource is used.
+
+### Requirements
+
+* This component MUST be an optional dependency.
+* MUST NOT require OpenCensus to depend on OpenTelemetry
+* MUST require few or no changes to OpenCensus
+* MUST be compatible with push and pull exporters
+* MUST support Gauges, Counters, Cumulative Histograms, and Summaries
+* are NOT REQUIRED to support Gauge Histograms
+* MUST support exemplars
+
+### Resource
+
+The shim MUST discard the resource attached to OpenCensus metrics, and insert
+the resource provided during initialization, or fall back to the the default
+OpenTelemetry resource.
+
+### Metric Attributes
+
+Metric attributes SHOULD be mapped following
+[semantic convention mappings](#semantic-convention-mappings).
+
+### Instrumentation Scope
+
+The shim MUST add an instrumentation scope name and version which identifies
+the shim.
+
+### Usage
+
+The shim can be passed as an option to an OpenTelemetry
+[MetricReader](../metrics/sdk.md#metricreader) when configuring the
+OpenTelemetry SDK. This enables the bridge to work with both push and pull
+metric exporters.
+
+#### Known Incompatibilities
+
+* OpenTelemetry does not support OpenCensus' GaugeHistogram type; these metrics
+  MUST be dropped when using the bridge.
+* OpenTelemetry does not currently support context-based attributes (tags).
