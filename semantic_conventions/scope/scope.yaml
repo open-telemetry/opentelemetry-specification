@@ -1,6 +1,6 @@
 groups:
   - id: scope
-    prefix:
+    prefix: ""
     type: scope
     brief: >
        Scope attributes
