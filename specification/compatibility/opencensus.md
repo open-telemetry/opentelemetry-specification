@@ -6,6 +6,77 @@ The OpenTelemetry project aims to provide backwards compatibility with the
 [OpenCensus](https://opencensus.io) project in order to ease migration of
 instrumented codebases.
 
+## Migration Path
+
+### Breaking Changes when migrating to OpenTelemetry
+
+Migrating from OpenCensus to OpenTelemetry may require breaking changes to the telemetry produced
+because of:
+
+* Different or new semantic conventions for names and attributes (e.g. [`grpc.test.EchoService/Echo`](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/gRPC.md#grpc-trace) vs [`rpc.server.duration`](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.12.0/semantic_conventions/trace/rpc.yaml#L64))
+* Data model differences (e.g. OpenCensus supports [SumOfSquaredDeviations](https://github.com/census-instrumentation/opencensus-proto/blob/v0.3.0/src/opencensus/proto/metrics/v1/metrics.proto#L195), OTLP does not)
+* Instrumentation API feature differences (e.g. OpenCensus supports [context-based attributes](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/Record.md#recording-stats)), OTel does not)
+* Differences between equivalent OC and OTel exporters (e.g. the OpenTelemetry Prometheus exporter [adds type and unit suffixes](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/data-model.md#metric-metadata-1); OpenCensus [does not](https://github.com/census-ecosystem/opencensus-go-exporter-prometheus/blob/v0.4.1/prometheus.go#L227))
+
+This migration path groups most breaking changes into the installation of bridges. This gives
+users control over introducing the initial breaking change, and makes subsequent migrations of
+instrumentation (including in third-party libraries) non-breaking.
+
+### Migration Plans
+
+#### Migrating from the OpenCensus Agent and Protocol
+
+Starting with a deployment of the OC agent, using the OC protocol, migrate by:
+
+1. Deploy the OpenTelemetry collector with OpenCensus and OTLP receivers and equivalent processors and exporters.
+2. **breaking**: For each workload sending the OC protocol, change to sending to the OpenTelemetry collector's OpenCensus receiver.
+3. Remove the deployment of the OC Agent
+4. For each workload, migrate the application from OpenCensus to OpenTelemetry, following the guidance below, and use the OTLP exporter
+
+#### Migrating an Application using Bridges
+
+Starting with an application using entirely OpenCensus instrumention for traces and metrics, it can be migrated by:
+
+1. Migrate the exporters (SDK)
+    1. Install the OpenTelemetry SDK, with an equivalent exporter
+        1. If using an OpenCensus exporter, switch to using an OTLP exporter
+    2. Install equivalent OpenTelemetry resource detectors
+    3. Install OpenTelemetry propagators for OpenCensus' `TextFormat` and `BinaryPropagator` formats.
+    4. **breaking**: Install the metrics and trace bridges
+    5. Remove initialization of OpenCensus exporters
+2. Migrate the instrumentation (API)
+    1. **breaking**: For OpenCensus instrumentation packages, migrate to the OpenTelemetry equivalent.
+    2. For external dependencies, wait for it to migrate to OpenTelemetry, and update the dependency.
+    3. For instrumentation which is part of the application, migrate it following the "library" guidance below.
+3. Clean up: Remove the metrics and trace bridges
+
+#### Migrating Libraries using OC Instrumentation
+
+##### In-place Migration
+
+Libraries which want a simple migration can choose to replace instrumentation in-place.
+
+Starting with a library using OpenCensus Instrumentation:
+
+1. Annouce to users the library's transition from OpenCensus to OpenTelemetry, and recommend users adopt OC bridges.
+2. Change unit tests to use the OC bridges, and use OpenTelemetry unit testing frameworks.
+3. After a notification period, migrate instrumentation line-by-line to OpenTelemetry. The notification period should be long for popular libraries.
+4. Remove the OC bridge from unit tests.
+
+##### Migration via Config
+
+Libraries which are eager to add native OpenTelemetry instrumentation sooner, and/or want to
+provide extended support for OpenCensus may choose to provide users the option to use OpenCensus
+instrumentation _or_ OpenTelemetry instrumentation.
+
+Starting with a library using OpenCensus Instrumentation:
+
+1. Change unit tests to use the OC bridges, and use OpenTelemetry unit testing frameworks.
+2. Add configuration allowing users to enable OpenTelemetry instrumentation and disable OpenCensus instrumentation.
+3. Add OpenTelemetry instrumentation gated by the configuration, and tested using the same sets of unit tests.
+4. After a notification period, switch to using OpenTelemetry instrumentation by default.
+5. After a deprecation period, remove the option to use OpenCensus instrumentation.
+
 ## Trace Bridge
 
 **Status**: [Experimental, Feature Freeze](../document-status.md)
@@ -67,18 +138,14 @@ Finally, the Application would update all usages of OpenCensus to OpenTelemetry.
 
 ### Requirements
 
-OpenTelemetry<->OpenCensus compatibility has the following requirements:
+The OpenTelemetry<->OpenCensus trace bridge has the following requirements:
 
-1. OpenCensus has no hard dependency on OpenTelemetry
-2. Minimal changes to OpenCensus for implementation
-3. Easy for users to use, ideally no change to their code
-
-Additionally, for tracing there are the following requirements:
-
-1. Maintain parent-child span relationship between applications and libraries
-2. Maintain span link relationships between applications and libraries
-
-This component MUST be an optional dependency.
+* OpenCensus has no hard dependency on OpenTelemetry
+* Minimal changes to OpenCensus for implementation
+* Easy for users to use, ideally no change to their code
+* Maintain parent-child span relationship between applications and libraries
+* Maintain span link relationships between applications and libraries
+* This component MUST be an optional dependency.
 
 ### Creating Spans in OpenCensus
 
@@ -105,8 +172,8 @@ Note: resources appear not to be usable in the "API" section of OpenCensus.
 #### Known Incompatibilities
 
 Below are listed known incompatibilities between OpenTelemetry and OpenCensus
-specifications.   Applications leveraging unspecified behavior from OpenCensus
-that *is* specified incompatibly within OpenTelemetry are not eligible for
+specifications. Applications leveraging unspecified behavior from OpenCensus
+that _is_ specified incompatibly within OpenTelemetry are not eligible for
 using the OpenCensus <-> OpenTelemetry bridge.
 
 1. In OpenCensus, there is [no specification](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/Span.md#span-creation)
