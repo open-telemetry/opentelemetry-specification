@@ -137,18 +137,14 @@ Finally, the Application would update all usages of OpenCensus to OpenTelemetry.
 
 ### Requirements
 
-OpenTelemetry<->OpenCensus compatibility has the following requirements:
+The OpenTelemetry<->OpenCensus trace bridge has the following requirements:
 
-1. OpenCensus has no hard dependency on OpenTelemetry
-2. Minimal changes to OpenCensus for implementation
-3. Easy for users to use, ideally no change to their code
-
-Additionally, for tracing there are the following requirements:
-
-1. Maintain parent-child span relationship between applications and libraries
-2. Maintain span link relationships between applications and libraries
-
-This component MUST be an optional dependency.
+* OpenCensus has no hard dependency on OpenTelemetry
+* Minimal changes to OpenCensus for implementation
+* Easy for users to use, ideally no change to their code
+* Maintain parent-child span relationship between applications and libraries
+* Maintain span link relationships between applications and libraries
+* This component MUST be an optional dependency.
 
 ### Creating Spans in OpenCensus
 
