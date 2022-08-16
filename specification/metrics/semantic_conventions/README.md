@@ -2,6 +2,7 @@
 linkTitle: Semantic Conventions
 --->
 
+<!-- omit in toc -->
 # Metrics Semantic Conventions
 
 **Status**: [Experimental](../../document-status.md)
@@ -28,6 +29,7 @@ The following semantic conventions surrounding metrics are defined:
 * [Process](process-metrics.md): For standard process metrics.
 * [Runtime Environment](runtime-environment-metrics.md): For runtime environment metrics.
 * [FaaS](faas-metrics.md): For [Function as a Service](https://en.wikipedia.org/wiki/Function_as_a_service) metrics.
+* [Hardware](hardware-metrics.md): For hardware-related metrics.
 
 Apart from semantic conventions for metrics and
 [traces](../../trace/semantic_conventions/README.md), OpenTelemetry also
