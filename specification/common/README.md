@@ -59,6 +59,10 @@ See [Requirement Level](attribute-requirement-level.md) for requirement levels g
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
 
+See [Attribute precedence for non-OTLP exporters](attribute-precedence.md) to
+find out how to transform a structured representation like OTLP to a flat set of
+unique attributes.
+
 ### Attribute Limits
 
 Execution of erroneous code can result in unintended attributes. If there are no
