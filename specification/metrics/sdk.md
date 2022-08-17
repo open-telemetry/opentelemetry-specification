@@ -797,7 +797,7 @@ to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
 
 The SDK MUST NOT allow a `MetricReader` instance to be registered on more than
 one `MeterProvider` instance. The SDK MUST NOT allow a `MetricReader`
-configured with a `MetricProducer` to be registered with a `MeterProvider`.
+configured with a non-SDK `MetricProducer` to be registered with `MeterProvider`.
 
 ```text
 +-----------------+            +--------------+
