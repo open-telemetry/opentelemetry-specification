@@ -78,7 +78,7 @@ release.
 
 ### SDK Configuration
 
-- Add the OTEL_SDK_ENABLED environment variable to the SDK configuration.
+- Add the OTEL_SDK_DISABLED environment variable to the SDK configuration.
   ([2679](https://github.com/open-telemetry/opentelemetry-specification/pull/2679))
 
 - Mark `OTEL_METRIC_EXPORT_INTERVAL`, `OTEL_METRIC_EXPORT_TIMEOUT`
