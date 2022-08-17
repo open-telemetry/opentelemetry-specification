@@ -37,6 +37,7 @@ linkTitle: SDK
   * [Exemplar defaults](#exemplar-defaults)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
+    + [Register(MetricProducer)](#registermetricproducer)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
@@ -755,7 +756,9 @@ measurements using the equivalent of the following naive algorithm:
 common configurable aspects of the OpenTelemetry Metrics SDK and
 determines the following capabilities:
 
-* Collecting metrics from the SDK or a [MetricProducer](#metricproducer) on demand.
+* Registering a [MetricProducer](#metricproducer)
+* Collecting metrics from the registered [MetricProducer](#metricproducer) on
+  demand.
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
@@ -763,7 +766,6 @@ To construct a `MetricReader` when setting up an SDK, the caller
 SHOULD provide at least the following:
 
 * The `exporter` to use, which is a `MetricExporter` instance.
-* A [MetricProducer](#metricproducer) (optional) to collect metrics from instead of collecting from the SDK.
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 
@@ -797,7 +799,7 @@ to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
 
 The SDK MUST NOT allow a `MetricReader` instance to be registered on more than
 one `MeterProvider` instance. The SDK MUST NOT allow a `MetricReader`
-configured with a non-SDK `MetricProducer` to be registered with `MeterProvider`.
+registered with a non-SDK `MetricProducer` to be registered with `MeterProvider`.
 
 ```text
 +-----------------+            +--------------+
@@ -820,6 +822,18 @@ idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
 ### MetricReader operations
+
+#### Register(MetricProducer)
+
+Register causes the MetricReader to use the provided
+[MetricProducer](#metricproducer) for as a source of aggregated metric data in
+subsequent invokations of Collect. It MUST NOT allow more than one
+[MetricProducer](#metricproducer) or [MeterProvider](#meterprovider) instance
+to be registered with the [MetricReader](#metricreader).
+
+If the [MeterProvider](#meterprovider) is an instance of of
+[MetricProducer](#metricproducer), this MAY be used to register the
+MeterProvider.
 
 #### Collect
 
@@ -1060,10 +1074,11 @@ scraper, and `ForceFlush` would not make sense.
 Implementors MAY choose the best idiomatic design for their language. For
 example, they could generalize the [Push Metric Exporter
 interface](#push-metric-exporter) design and use that for consistency, they
-could model the pull exporter as [MetricReader](#metricreader), or they could
-design a completely different pull exporter interface. If the pull exporter is
-modeled as MetricReader, implementors MAY name the MetricExporter interface as
-PushMetricExporter to prevent naming confusion.
+could model the pull exporter as [MetricReader](#metricreader) or
+[MetricProducer](#metricproducer), or they could design a completely different
+pull exporter interface. If the pull exporter is modeled as MetricReader,
+implementors MAY name the MetricExporter interface as PushMetricExporter to
+prevent naming confusion.
 
 The following diagram gives some examples on how `Pull Metric Exporter` can be
 modeled to interact with other components in the SDK:
