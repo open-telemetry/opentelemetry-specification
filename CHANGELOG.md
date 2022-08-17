@@ -84,6 +84,8 @@ release.
 
 - Introduce Instrumentation Scope Attributes
   ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
+- Add supplementary guidance on attribute precedence when flattening out OTLP
+  ([#2736](https://github.com/open-telemetry/opentelemetry-specification/pull/2736))
 
 ## v1.12.0 (2022-06-10)
 
