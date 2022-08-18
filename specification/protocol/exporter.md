@@ -168,7 +168,7 @@ OpenTelemetry protocol exporters SHOULD emit a User-Agent header to at a minimum
 OpenTelemetry OTLP Exporter Python/1.2.3
 ```
 
-The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the language and version are available in the [Resource semantic conventions][resource-semconv].
+The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
 
 [resource-semconv]: ../resource/semantic_conventions/README.md#telemetry-sdk
 [otlphttp-req]: otlp.md#otlphttp-request
