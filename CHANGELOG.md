@@ -24,10 +24,15 @@ release.
   ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619)).
 - Clarify async instrument callback identity.
   ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538)).
+- Add `process.threads` host metric semantic convention.
+  ([#2705](https://github.com/open-telemetry/opentelemetry-specification/pull/2705)).
 
 ### Logs
 
 ### Resource
+
+- Update the version of the W3C Baggage specification used for `OTEL_RESOURCE_ATTRIBUTES`.
+  ([#2670](https://github.com/open-telemetry/opentelemetry-specification/pull/2670))
 
 ### Semantic Conventions
 
@@ -59,12 +64,21 @@ release.
   ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650)).
 - Improve the definition of `state` attribute for metric `system.network.connections`
   ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
+- Add `process.parent_pid` attribute for use in reporting parent process id (PID)
+  ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
+- Separate tcp/udp protocols for metric `system.network.connections`.
+  ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
+- Add OpenSearch to db.system semantic conventions
+  ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718)).
 - Add attributes of Apache Pulsar
   ([#2697](https://github.com/open-telemetry/opentelemetry-specification/pull/2697))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Add support for partial success in an OTLP export response
+  ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696)).
 
 ### SDK Configuration
 
@@ -139,7 +153,9 @@ release.
   ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
 - Change JVM runtime metric `process.runtime.jvm.memory.max`
   to `process.runtime.jvm.memory.limit`
-- ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).
+  ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).  
+- Add semantic conventions for hardware metrics
+  ([#2518](https://github.com/open-telemetry/opentelemetry-specification/pull/2518)).
 
 ### Compatibility
 

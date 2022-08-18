@@ -1,6 +1,7 @@
 groups:
   - id: process
     prefix: process
+    type: resource
     brief: >
         An operating system process.
     attributes:
@@ -9,6 +10,11 @@ groups:
         brief: >
           Process identifier (PID).
         examples: [1234]
+      - id: parent_pid
+        type: int
+        brief: >
+          Parent Process identifier (PID).
+        examples: [111]
       - id: executable.name
         type: string
         requirement_level:
@@ -72,6 +78,7 @@ groups:
 
   - id: process.runtime
     prefix: process.runtime
+    type: resource
     brief: >
       The single (language) runtime instance which is monitored.
     attributes:
