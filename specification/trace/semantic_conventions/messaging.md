@@ -373,6 +373,42 @@ Process CB:                           | Span Rcv2 |
 | `messaging.kafka.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
 | `messaging.kafka.partition` |  | `"1"` | `"1"` |  | `"3"` |
 
+### Apache Pulsar Example
+
+Given is a process P, that publishes a message to a topic T1 on Apache Pulsar.
+One process, CA, receives the message and publishes a new message to a topic T2 that is then received and processed by CB.
+
+```
+Process P:  | Span Prod1 |
+--
+Process CA:              | Span Rcv1 |
+                                | Span Proc1 |
+                                  | Span Prod2 |
+--
+Process CB:                           | Span Rcv2 |
+```
+
+| Field or Attribute | Span Prod1 | Span Rcv1 | Span Proc1 | Span Prod2 | Span Rcv2
+|-|-|-|-|-|-|
+| Span name | `"T1 send"` | `"T1 receive"` | `"T1 process"` | `"T2 send"` | `"T2 receive`" |
+| Parent |  | Span Prod1 | Span Rcv1 | Span Rcv1 | Span Prod2 |
+| Links |  |  | |  |  |
+| SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` | `PRODUCER` | `CONSUMER` |
+| Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
+| `peer.service` | `"myPulsar"` |  |  | `"myPulsar"` |  |
+| `service.name` |  | `"myConsumer1"` | `"myConsumer1"` |  | `"myConsumer2"` |
+| `messaging.system` | `"pulsar"` | `"pulsar"` | `"pulsar"` | `"pulsar"` | `"pulsar"` |
+| `messaging.destination` | `"T1"` | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
+| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
+| `messaging.operation` |  |  | `"process"` |  | `"receive"` |
+| `messaging.pulsar.producer_name` | `"myProducer"` | | | `"anotherProducer"` | |
+| `messaging.pulsar.consumer_name` | | `"myConsumer"` | `"myConsumer"` | | `"anotherConsumer"` |
+| `messaging.pulsar.message_type` | `"normal"` | `"normal"` | `"normal"` | `"normal"` | `"normal"` |
+| `messaging.pulsar.message_key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
+| `messaging.pulsar.subscription` |  | `"mySubscription"` | `"mySubscription"` |  | `"anotherSubscription"` |
+| `messaging.pulsar.subscription_mode` |  | `"Durable"` | `"Durable"` |  | `"Durable"` |
+| `messaging.pulsar.subscription_type` |  | `"Exclusive"` | `"Exclusive"` |  | `"Exclusive"` |
+
 ### Batch receiving
 
 Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span Recv1) and processes each message separately (Spans Proc1 and Proc2).
