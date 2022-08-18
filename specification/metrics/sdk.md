@@ -37,7 +37,6 @@ linkTitle: SDK
   * [Exemplar defaults](#exemplar-defaults)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
-    + [Register(MetricProducer)](#registermetricproducer)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
@@ -50,7 +49,8 @@ linkTitle: SDK
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
   * [Interface Definition](#interface-definition-1)
-    + [Produce() batch](#produce-batch)
+    + [Produce() metrics](#produce-metrics)
+    + [InstrumentationScope() InstrumentationScope](#instrumentationscope-instrumentationscope)
 - [Defaults and configuration](#defaults-and-configuration)
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
@@ -80,10 +80,10 @@ an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
 
 Configuration (i.e., [MetricExporters](#metricexporter),
-[MetricReaders](#metricreader) and [Views](#view)) MUST be managed solely by the
-`MeterProvider` and the SDK MUST provide a way to configure all options that are
-implemented by the SDK. This MAY be done at the time of MeterProvider creation
-if appropriate.
+[MetricReaders](#metricreader), [MetricProducers](#metricproducer) and
+[Views](#view)) MUST be managed solely by the `MeterProvider` and the SDK MUST
+provide a way to configure all options that are implemented by the SDK. This
+MAY be done at the time of MeterProvider creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MetricReader`), the updated
@@ -756,9 +756,7 @@ measurements using the equivalent of the following naive algorithm:
 common configurable aspects of the OpenTelemetry Metrics SDK and
 determines the following capabilities:
 
-* Registering a [MetricProducer](#metricproducer)
-* Collecting metrics from the registered [MetricProducer](#metricproducer) on
-  demand.
+* Collecting metrics from the SDK on demand.
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
@@ -775,8 +773,8 @@ used with pull-based metrics collection.  A common sub-class of
 `MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
 to be used typically with push-based metrics collection.
 
-The `MetricReader` MUST ensure that data points from the SDK are output in the
-configured aggregation temporality for each instrument kind.  For
+The `MetricReader` MUST ensure that data points from OTel instruments are
+output in the configured aggregation temporality for each instrument kind. For
 synchronous instruments being output with Cumulative temporality, this
 means converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
 aggregation temporality.  For asynchronous instruments being output
@@ -784,7 +782,7 @@ with Delta temporality, this means converting [Cumulative to
 Delta](supplementary-guidelines.md#asynchronous-example-delta-temporality) aggregation
 temporality.
 
-The `MetricReader` is not required to ensure data points from a non-SDK
+The `MetricReader` is not required to ensure data points from a
 [MetricProducer](#metricproducer) are output in the configured aggregation
 temporality.
 
@@ -798,8 +796,7 @@ to (T<sub>n+1</sub>, T<sub>n+2</sub>] - **ONLY** for this particular
 `MetricReader` instance.
 
 The SDK MUST NOT allow a `MetricReader` instance to be registered on more than
-one `MeterProvider` instance. The SDK MUST NOT allow a `MetricReader`
-registered with a non-SDK `MetricProducer` to be registered with `MeterProvider`.
+one `MeterProvider` instance.
 
 ```text
 +-----------------+            +--------------+
@@ -823,22 +820,10 @@ functions.
 
 ### MetricReader operations
 
-#### Register(MetricProducer)
-
-Register causes the MetricReader to use the provided
-[MetricProducer](#metricproducer) for as a source of aggregated metric data in
-subsequent invocations of Collect. It MUST NOT allow more than one
-[MetricProducer](#metricproducer) or [MeterProvider](#meterprovider) instance
-to be registered with the [MetricReader](#metricreader).
-
-If the [MeterProvider](#meterprovider) is an instance of a
-[MetricProducer](#metricproducer), this MAY be used to register the
-MeterProvider.
-
 #### Collect
 
-Collects the metrics from the SDK or the [MetricProducer](#metricproducer). If
-there are [asynchronous SDK Instruments](./api.md#asynchronous-instrument-api)
+Collects the metrics from the SDK and its [MetricProducers](#metricproducer).
+If there are [asynchronous SDK Instruments](./api.md#asynchronous-instrument-api)
 involved, their callback functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
@@ -1074,11 +1059,10 @@ scraper, and `ForceFlush` would not make sense.
 Implementors MAY choose the best idiomatic design for their language. For
 example, they could generalize the [Push Metric Exporter
 interface](#push-metric-exporter) design and use that for consistency, they
-could model the pull exporter as [MetricReader](#metricreader) or
-[MetricProducer](#metricproducer), or they could design a completely different
-pull exporter interface. If the pull exporter is modeled as MetricReader,
-implementors MAY name the MetricExporter interface as PushMetricExporter to
-prevent naming confusion.
+could model the pull exporter as [MetricReader](#metricreader), or they could
+design a completely different pull exporter interface. If the pull exporter is
+modeled as MetricReader, implementors MAY name the MetricExporter interface as
+PushMetricExporter to prevent naming confusion.
 
 The following diagram gives some examples on how `Pull Metric Exporter` can be
 modeled to interact with other components in the SDK:
@@ -1116,38 +1100,41 @@ modeled to interact with other components in the SDK:
 
 `MetricProducer` defines the interface which bridges to third-party metric
 sources MUST implement so they can be plugged into an OpenTelemetry
-[MetricReader](#metricreader) as a source of aggregated metric data. The SDK's
-in-memory state MAY implement the `MetricProducer` interface for convenience.
+[MetricReader](#metricreader) as a source of aggregated metric data.
 
 ```text
 +-----------------+            +--------------+
 |                 | Metrics... |              |
-| In-memory state +------------> MetricReader |
+| MeterProvider   +------------> MetricReader |
 |                 |            |              |
-+-----------------+            +--------------+
-
-+-----------------+            +--------------+
-|                 | Metrics... |              |
-| MetricProducer  +------------> MetricReader |
-|                 |            |              |
-+-----------------+            +--------------+
++---------------^^+            +--------------+
+|  MetricProducer |
++-----------------+
 ```
 
 ### Interface Definition
 
 A `MetricProducer` MUST support the following functions:
 
-#### Produce() batch
+#### Produce() metrics
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
-MUST return a batch of [Metric points](./data-model.md#metric-points).
-`Produce` does not have any required parameters, however, [OpenTelemetry
-SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
+MUST return a batch of [Metrics](./data-model.md#metric-points), which MUST NOT
+include resource or scope information. `Produce` does not have any required
+parameters, however, [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose
+to add parameters (e.g. timeout).
 
 `Produce` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Produce` operation fails, the `MetricProducer`
 MAY return successfully collected results and a failed reasons list to the
 caller.
+
+#### InstrumentationScope() InstrumentationScope
+
+`InstrumentationScope` provides the
+[InstrumentationScope](../glossary.md#instrumentation-scope) associated with
+the MetricProducer. A MetricProducer instance MUST return the same
+instrumentation scope for each invocation of InstrumentationScope().
 
 ## Defaults and configuration
 
