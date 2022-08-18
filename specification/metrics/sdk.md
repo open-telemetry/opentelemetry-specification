@@ -827,11 +827,11 @@ functions.
 
 Register causes the MetricReader to use the provided
 [MetricProducer](#metricproducer) for as a source of aggregated metric data in
-subsequent invokations of Collect. It MUST NOT allow more than one
+subsequent invocations of Collect. It MUST NOT allow more than one
 [MetricProducer](#metricproducer) or [MeterProvider](#meterprovider) instance
 to be registered with the [MetricReader](#metricreader).
 
-If the [MeterProvider](#meterprovider) is an instance of of
+If the [MeterProvider](#meterprovider) is an instance of a
 [MetricProducer](#metricproducer), this MAY be used to register the
 MeterProvider.
 
