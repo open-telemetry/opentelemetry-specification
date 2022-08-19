@@ -1100,7 +1100,7 @@ modeled to interact with other components in the SDK:
 
 `MetricProducer` defines the interface which bridges to third-party metric
 sources MUST implement so they can be plugged into an OpenTelemetry
-[MetricReader](#metricreader) as a source of aggregated metric data.
+[MeterProvider](#meterprovider) as a source of aggregated metric data.
 
 ```text
 +-----------------+            +--------------+
