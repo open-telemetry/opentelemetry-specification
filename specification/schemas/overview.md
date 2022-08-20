@@ -74,7 +74,7 @@ work together.
 Telemetry Schemas are central to how we make this possible. Here is a summary of
 how the schemas work:
 
-- OpenTelemetry defines a [file format](file_format_v1.0.0.md) for defining
+- OpenTelemetry defines a [file format](file_format_v1.1.0.md) for defining
   telemetry schemas.
 
 - Telemetry schemas are versioned. Over time the schema may evolve and telemetry
@@ -182,7 +182,7 @@ passes through the Collector is converted to that target schema:
 ## Schema URL
 
 Schema URL is an identifier of a Schema. The URL specifies a location of a
-[Schema File](file_format_v1.0.0.md) that can be retrieved (so it is a URL and
+[Schema File](file_format_v1.1.0.md) that can be retrieved (so it is a URL and
 not just a URI) using HTTP or HTTPS protocol.
 
 Fetching the specified URL may return an HTTP redirect status code. The fetcher
@@ -215,7 +215,7 @@ Version number follows the MAJOR.MINOR.PATCH format, similar to semver 2.0.
 
 Version numbers use the [ordering rules](https://semver.org/#spec-item-11)
 defined by semver 2.0 specification. See how ordering is used in the
-[Order of Transformations](file_format_v1.0.0.md#order-of-transformations). Other than the ordering
+[Order of Transformations](file_format_v1.1.0.md#order-of-transformations). Other than the ordering
 rules the schema version numbers do not carry any other semantic meaning.
 
 OpenTelemetry schema version numbers match OpenTelemetry specification version

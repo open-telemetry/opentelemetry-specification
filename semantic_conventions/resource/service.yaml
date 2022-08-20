@@ -1,6 +1,7 @@
 groups:
   - id: service
     prefix: service
+    type: resource
     brief: >
       A service instance.
     attributes:

@@ -105,7 +105,8 @@ Coding against the OpenTelemetry API such as the [Tracing API](trace/api.md), [M
 
 ### Automatic Instrumentation
 
-Refers to telemetry collection methods that do not require the end-user to write or access application code to use the OpenTelemetry APIs. Methods vary by programming language, and examples include bytecode injection or monkey patching.
+Refers to telemetry collection methods that do not require the end-user to modify application's source code.
+Methods vary by programming language, and examples include bytecode injection or monkey patching.
 
 Synonym: *Auto-instrumentation*.
 

@@ -170,7 +170,7 @@ currently described and are allowed:
 - Renaming of span events.
 
 All such changes MUST be described in the OpenTelemetry
-[Schema File Format](schemas/file_format_v1.0.0.md) and published in this repository.
+[Schema File Format](schemas/file_format_v1.1.0.md) and published in this repository.
 For details see [how OpenTelemetry Schemas are published](schemas/overview.md#opentelemetry-schema).
 
 See the [Telemetry Stability](telemetry-stability.md) document for details on how
