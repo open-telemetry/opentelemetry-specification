@@ -2,6 +2,9 @@
 
 **Status**: [Experimental](../document-status.md)
 
+<details>
+<summary>Table of Contents</summary>
+
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
@@ -13,6 +16,7 @@
   * [Logger operations](#logger-operations)
 
 <!-- tocstop -->
+</details>
 
 The Events and Logs API consist of these main classes:
 
@@ -41,7 +45,7 @@ LoggerProvider.
 
 Notwithstanding any global LoggerProvider, some applications may want to or have
 to use multiple LoggerProvider instances, e.g. to have different configuration
-(like LogRecordProcessors) for each (and consequently for the Loggers obtained
+(like LogProcessors) for each (and consequently for the Loggers obtained
 from them), or because it's easier with dependency injection frameworks. Thus,
 implementations of LoggerProvider SHOULD allow creating an arbitrary number of
 instances.
@@ -131,4 +135,5 @@ pipeline.
   - This function MAY be named `logEvent`.
 - Create a `LogRecord` and emit it to the processing pipeline.
   - This function MAY be named `logRecord`.
-  - The intended users of this API is Log Appenders.
+  - This API is intended for use by Log Appenders, and SHOULD not be used by end
+  users or other instrumentation.
