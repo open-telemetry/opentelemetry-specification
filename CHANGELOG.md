@@ -24,6 +24,8 @@ release.
   ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619)).
 - Clarify async instrument callback identity.
   ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538)).
+- Add `process.threads` host metric semantic convention.
+  ([#2705](https://github.com/open-telemetry/opentelemetry-specification/pull/2705)).
 
 ### Logs
 
@@ -66,6 +68,8 @@ release.
   ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
 - Separate tcp/udp protocols for metric `system.network.connections`.
   ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
+- Add OpenSearch to db.system semantic conventions
+  ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718)).
 
 ### Compatibility
 

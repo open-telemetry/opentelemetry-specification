@@ -87,10 +87,11 @@ All server components MUST support the following transport compression options:
 After establishing the underlying gRPC transport the client starts sending
 telemetry data using unary requests using
 [Export*ServiceRequest](https://github.com/open-telemetry/opentelemetry-proto)
-messages (`ExportTraceServiceRequest` for traces, `ExportMetricsServiceRequest`
-for metrics, `ExportLogsServiceRequest` for logs). The client continuously sends
-a sequence of requests to the server and expects to receive a response to each
-request:
+messages ([ExportLogsServiceRequest](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/collector/logs/v1/logs_service.proto) for logs,
+[ExportMetricsServiceRequest](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/collector/metrics/v1/metrics_service.proto) for metrics,
+[ExportTraceServiceRequest](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/collector/trace/v1/trace_service.proto) for traces).
+The client continuously sends a sequence of requests to the server and expects
+to receive a response to each request:
 
 ![Request-Response](img/otlp-request-response.png)
 

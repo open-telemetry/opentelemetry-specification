@@ -154,6 +154,9 @@ groups:
             - id: cockroachdb
               value: 'cockroachdb'
               brief: 'CockroachDB'
+            - id: opensearch
+              value: 'opensearch'
+              brief: 'OpenSearch'
       - id: connection_string
         tag: connection-level
         type: string
