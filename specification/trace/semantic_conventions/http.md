@@ -165,8 +165,8 @@ Retries and redirects cause more than one physical HTTP request to be sent.
 A CLIENT span SHOULD be created for each one of these physical requests.
 No span is created corresponding to the "logical" (encompassing) request.
 
-For each re-sent HTTP request, `http.retry_count` attribute SHOULD be added to each retry span
-with the value that reflects the ordinal number of request re-send attempt.
+For each time a HTTP request is re-sent, the `http.retry_count` attribute SHOULD be added to each retry span
+set to the ordinal number of the request re-send attempt.
 
 See [examples](#http-client-retries-examples) for more details.
 
@@ -363,7 +363,7 @@ GET / - 200 (CLIENT, trace=t3, span=s1, http.retry_count=2)
 
 ### HTTP client authorization retry examples
 
-Example of redirects in the presence of a trace started by an inbound request:
+Example of retries in the presence of a trace started by an inbound request:
 
 ```
 request (SERVER, trace=t1, span=s1)
@@ -377,7 +377,7 @@ request (SERVER, trace=t1, span=s1)
       --- server (SERVER, trace=t1, span=s5)
 ```
 
-Example of redirects with no trace started upfront:
+Example of retries with no trace started upfront:
 
 ```
 GET / - 401 (CLIENT, trace=t1, span=s1)
