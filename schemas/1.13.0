@@ -9,6 +9,10 @@ versions:
             attribute_map:
               net.peer.ip: net.sock.peer.addr
               net.host.ip: net.sock.host.addr
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/2743
+        - rename_attributes:
+            attribute_map:
+              http.retry_count: http.resend_count
   1.12.0:
   1.11.0:
   1.10.0:

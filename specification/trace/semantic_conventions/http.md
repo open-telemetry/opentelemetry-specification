@@ -130,13 +130,13 @@ before any HTTP-redirects that may happen when executing the request.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `http.url` | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [1] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Required |
-| `http.retry_count` | int | The ordinal number of request re-sending attempt (for any reason, including redirects). [2] | `3` | Recommended: if and only if request was retried. |
+| `http.resend_count` | int | The ordinal number of request resending attempt (for any reason, including redirects). [2] | `3` | Recommended: if and only if request was retried. |
 | [`net.peer.name`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `example.com` | Required |
 | [`net.peer.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
-**[2]:** The retry count SHOULD be updated each time an HTTP request gets re-sent by the client, regardless of what was the cause of the re-sending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues, or any other).
+**[2]:** The resend count SHOULD be updated each time an HTTP request gets resent by the client, regardless of what was the cause of the resending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues, or any other).
 
 **[3]:** Determined by using the first of the following that applies
 
@@ -165,8 +165,8 @@ Retries and redirects cause more than one physical HTTP request to be sent.
 A CLIENT span SHOULD be created for each one of these physical requests.
 No span is created corresponding to the "logical" (encompassing) request.
 
-For each time an HTTP request is re-sent, the `http.retry_count` attribute SHOULD be added to each retry span
-and set to the ordinal number of the request re-send attempt.
+Each time an HTTP request is resent, the `http.resend_count` attribute SHOULD be added to each repeated span
+and set to the ordinal number of the request resend attempt.
 
 See [examples](#http-client-retries-examples) for more details.
 
@@ -336,11 +336,11 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
-  -- GET / - 500 (CLIENT, trace=t1, span=s4, http.retry_count=1)
+  -- GET / - 500 (CLIENT, trace=t1, span=s4, http.resend_count=1)
   |   |
   |   --- server (SERVER, trace=t1, span=s5)
   |
-  -- GET / - 200 (CLIENT, trace=t1, span=s6, http.retry_count=2)
+  -- GET / - 200 (CLIENT, trace=t1, span=s6, http.resend_count=2)
       |
       --- server (SERVER, trace=t1, span=s7)
 ```
@@ -352,11 +352,11 @@ GET / - 500 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET / - 500 (CLIENT, trace=t2, span=s1, http.retry_count=1)
+GET / - 500 (CLIENT, trace=t2, span=s1, http.resend_count=1)
  |
  --- server (SERVER, trace=t2, span=s2)
 
-GET / - 200 (CLIENT, trace=t3, span=s1, http.retry_count=2)
+GET / - 200 (CLIENT, trace=t3, span=s1, http.resend_count=2)
  |
  --- server (SERVER, trace=t3, span=s1)
 ```
@@ -372,7 +372,7 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
-  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, http.retry_count=1)
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, http.resend_count=1)
       |
       --- server (SERVER, trace=t1, span=s5)
 ```
@@ -384,7 +384,7 @@ GET / - 401 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET /hello - 200 (CLIENT, trace=t2, span=s1, http.retry_count=1)
+GET /hello - 200 (CLIENT, trace=t2, span=s1, http.resend_count=1)
  |
  --- server (SERVER, trace=t2, span=s2)
 ```
@@ -400,7 +400,7 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
-  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, http.retry_count=1)
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, http.resend_count=1)
       |
       --- server (SERVER, trace=t1, span=s5)
 ```
@@ -412,7 +412,7 @@ GET / - 302 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET /hello - 200 (CLIENT, trace=t2, span=s1, http.retry_count=1)
+GET /hello - 200 (CLIENT, trace=t2, span=s1, http.resend_count=1)
  |
  --- server (SERVER, trace=t2, span=s2)
 ```
