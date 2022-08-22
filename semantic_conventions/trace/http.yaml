@@ -118,7 +118,7 @@ groups:
         brief: >
           The ordinal number of request re-sending attempt (for any reason, including redirects).
         note: >
-          The retry counter SHOULD be updated each time an HTTP request gets re-sent by the client, regardless of what
+          The retry count SHOULD be updated each time an HTTP request gets re-sent by the client, regardless of what
           was the cause of the re-sending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues,
           or any other).
         requirement_level:
