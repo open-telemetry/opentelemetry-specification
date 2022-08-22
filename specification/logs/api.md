@@ -16,6 +16,7 @@
   * [Logger operations](#logger-operations)
 
 <!-- tocstop -->
+
 </details>
 
 The Events and Logs API consist of these main classes:
@@ -31,6 +32,10 @@ graph TD
     B --> C(Event)
     B --> D(Log)
 ```
+
+## Data Model
+
+The API creates Events and Logs using the `LogRecord` data model. See `LogRecord` [data model](data-model.md) for the list of fields.
 
 ## LoggerProvider
 
