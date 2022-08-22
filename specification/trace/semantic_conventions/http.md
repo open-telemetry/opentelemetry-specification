@@ -130,13 +130,13 @@ before any HTTP-redirects that may happen when executing the request.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `http.url` | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [1] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Required |
-| `http.retry_count` | int | The ordinal number of request re-sending attempt. [2] | `3` | Recommended: if and only if request was retried. |
+| `http.retry_count` | int | The ordinal number of request re-sending attempt (for any reason, including redirects). [2] | `3` | Recommended: if and only if request was retried. |
 | [`net.peer.name`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `example.com` | Required |
 | [`net.peer.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
-**[2]:** The retry counter SHOULD be updated each time an HTTP request gets re-sent by the client, regardless of what was the cause of a retry (e.g. redirection, authorization failure, 503 Server Unavailable, network issues, or any other).
+**[2]:** The retry count SHOULD be updated each time an HTTP request gets re-sent by the client, regardless of what was the cause of the re-sending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues, or any other).
 
 **[3]:** Determined by using the first of the following that applies
 
