@@ -61,7 +61,9 @@ release.
   ([#2665](https://github.com/open-telemetry/opentelemetry-specification/pull/2665))
 - Change the inclusivity of exponential histogram bounds
   ([#2633](https://github.com/open-telemetry/opentelemetry-specification/pull/2633))
-  
+- Add `process.threads` host metric semantic convention.
+  ([#2705](https://github.com/open-telemetry/opentelemetry-specification/pull/2705)).
+
 ### Logs
 
 - No changes.
