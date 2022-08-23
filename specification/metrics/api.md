@@ -641,7 +641,7 @@ def pf_callback(result):
     result.Observe(37741921, ("pid", 4),   ("bitness", 64))
     result.Observe(10465,    ("pid", 880), ("bitness", 32))
 
-meter.create_observable_counter(name="PF", description="process page faults", pf_callback)
+meter.create_observable_counter(name="PF", description="process page faults", max_accumulations=1000, pf_callback)
 ```
 
 ```csharp
@@ -656,7 +656,7 @@ interface IAtomicClock
 
 IAtomicClock clock = AtomicClock.Connect();
 
-meter.CreateObservableCounter<UInt64>("caesium_oscillates", () => clock.GetCaesiumOscillates());
+meter.CreateObservableCounter<UInt64>("caesium_oscillates", 1000, () => clock.GetCaesiumOscillates());
 ```
 
 #### Asynchronous Counter operations
@@ -677,7 +677,7 @@ class Device:
 
     def __init__(self, meter, x):
         self.x = x
-        counter = meter.create_observable_counter(name="usage", description="count of items used")
+        self.counter = meter.create_observable_counter(name="usage", description="count of items used", max_accumulations=1000)
         self.cb = counter.register_callback(self.counter_callback)
 
     def counter_callback(self, result):
@@ -685,6 +685,9 @@ class Device:
 
     def read_counter(self):
         return 100  # ...
+    
+    def remove(self):
+        self.counter.remove({'x', self.x})
 
     def stop(self):
         self.cb.unregister()
@@ -856,6 +859,7 @@ def cpu_frequency_callback():
 meter.create_observable_gauge(
     name="cpu.frequency",
     description="the real-time CPU clock speed",
+    max_accumulations=1000,
     callback=cpu_frequency_callback,
     unit="GHz",
     value_type=float)
@@ -874,6 +878,7 @@ def cpu_frequency_callback(result):
 meter.create_observable_gauge(
     name="cpu.frequency",
     description="the real-time CPU clock speed",
+    max_accumulations=1000,
     callback=cpu_frequency_callback,
     unit="GHz",
     value_type=float)
@@ -884,7 +889,7 @@ meter.create_observable_gauge(
 
 // A simple scenario where only one value is reported
 
-meter.CreateObservableGauge<double>("temperature", () => sensor.GetTemperature());
+meter.CreateObservableGauge<double>("temperature", 1000, () => sensor.GetTemperature());
 ```
 
 #### Asynchronous Gauge operations
@@ -905,7 +910,7 @@ class Device:
 
     def __init__(self, meter, x):
         self.x = x
-        gauge = meter.create_observable_gauge(name="pressure", description="force/area")
+        sefl.gauge = meter.create_observable_gauge(name="pressure", description="force/area", max_accumulations=1000)
         self.cb = gauge.register_callback(self.gauge_callback)
 
     def gauge_callback(self, result):
@@ -913,6 +918,9 @@ class Device:
 
     def read_gauge(self):
         return 100  # ...
+   
+    def remove(self):
+        self.gauge.remove({'x', self.x})
 
     def stop(self):
         self.cb.unregister()
@@ -956,7 +964,8 @@ properties as they are added and removed.
 
 items_counter = meter.create_up_down_counter(
     name="store.inventory",
-    description="the number of the items available")
+    description="the number of the items available",
+    max_accumulations=1000)
 
 def restock_item(color, material):
     inventory.add_item(color=color, material=material)
@@ -968,6 +977,9 @@ def sell_item(color, material):
     if succeeded:
         items_counter.add(-1, {"color": color, "material": material})
     return succeeded
+
+def remove(color, material):
+    item_counter.remove({"color": color, "material": material})
 ```
 
 #### UpDownCounter creation
@@ -1057,8 +1069,8 @@ API](../overview.md#api) authors might consider:
 
 ```python
 # Python
-customers_in_store.Remove({"account.type": "commercial"})
-customers_in_store.Remove(account_type="residential")
+customers_in_store.remove({"account.type": "commercial"})
+customers_in_store.remove(account_type="residential")
 ```
 
 ```csharp
@@ -1126,6 +1138,7 @@ def ws_callback():
 meter.create_observable_updowncounter(
     name="process.workingset",
     description="process working set",
+    max_accumulations=1000,
     callback=ws_callback,
     unit="kB",
     value_type=int)
@@ -1143,6 +1156,7 @@ def ws_callback(result):
 meter.create_observable_updowncounter(
     name="process.workingset",
     description="process working set",
+    max_accumulations=1000,
     callback=ws_callback,
     unit="kB",
     value_type=int)
@@ -1153,7 +1167,7 @@ meter.create_observable_updowncounter(
 
 // A simple scenario where only one value is reported
 
-meter.CreateObservableUpDownCounter<UInt64>("memory.physical.free", () => WMI.Query("FreePhysicalMemory"));
+meter.CreateObservableUpDownCounter<UInt64>("memory.physical.free", 1000, () => WMI.Query("FreePhysicalMemory"));
 ```
 
 #### Asynchronous UpDownCounter operations
@@ -1174,7 +1188,7 @@ class Device:
 
     def __init__(self, meter, x):
         self.x = x
-        updowncounter = meter.create_observable_updowncounter(name="queue_size", description="items in process")
+        self.updowncounter = meter.create_observable_updowncounter(name="queue_size", description="items in process")
         self.cb = updowncounter.register_callback(self.updowncounter_callback)
 
     def updowncounter_callback(self, result):
@@ -1182,7 +1196,10 @@ class Device:
 
     def read_updowncounter(self):
         return 100  # ...
-
+    
+    def remove(self):
+        self.updowncounter.remove({'x', self.x})
+    
     def stop(self):
         self.cb.unregister()
 ```
