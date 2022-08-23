@@ -24,6 +24,7 @@ linkTitle: API
     + [Instrument naming rule](#instrument-naming-rule)
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
+    + [Instrument max_accumulations](#instrument-max_accumulations)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
     + [Synchronous Instrument API](#synchronous-instrument-api)
     + [Asynchronous Instrument API](#asynchronous-instrument-api)
@@ -300,6 +301,13 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 * It MUST support at least 1023 characters. [OpenTelemetry
   API](../overview.md#api) authors MAY decide if they want to support more.
 
+#### Instrument max_accumulations
+
+The `max_accumulations` is an optional free-form integer provided by the author of the
+instrument, default value is 2000.
+
+* It MUST greater than 0.
+
 Instruments are categorized on whether they are synchronous or
 asynchronous:
 
@@ -333,6 +341,8 @@ The API to construct synchronous instruments MUST accept the following parameter
   rule](#instrument-unit).
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
+* An optional `max_accumulations`, following the [Instrument max_accumulations
+  rule](#instrument-max_accumulations).
 
 #### Asynchronous Instrument API
 
@@ -351,6 +361,8 @@ The API to construct asynchronous instruments MUST accept the following paramete
   rule](#instrument-description).
 * Zero or more `callback` functions, responsible for reporting
   [Measurement](#measurement) values of the created instrument.
+* An optional `max_accumulations`, following the [Instrument max_accumulations
+  rule](#instrument-max_accumulations).
 
 The API MUST support creation of asynchronous instruments by passing
 zero or more `callback` functions to be permanently registered to the
@@ -446,13 +458,13 @@ might consider:
 ```python
 # Python
 
-exception_counter = meter.create_counter(name="exceptions", description="number of exceptions caught", value_type=int)
+exception_counter = meter.create_counter(name="exceptions", description="number of exceptions caught", value_type=int, max_accumulations=1000)
 ```
 
 ```csharp
 // C#
 
-var counterExceptions = meter.CreateCounter<UInt64>("exceptions", description="number of exceptions caught");
+var counterExceptions = meter.CreateCounter<UInt64>("exceptions", description="number of exceptions caught",  max_accumulations=1000);
 
 readonly struct PowerConsumption
 {
@@ -460,7 +472,7 @@ readonly struct PowerConsumption
     string customer;
 };
 
-var counterPowerUsed = meter.CreateCounter<double, PowerConsumption>("power_consumption", unit="kWh");
+var counterPowerUsed = meter.CreateCounter<double, PowerConsumption>("power_consumption", unit="kWh",  max_accumulations=1000);
 ```
 
 #### Counter operations
@@ -502,6 +514,44 @@ counterExceptions.Add(1, ("exception_type", "FileLoadException"), ("handled_by_u
 
 counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
+```
+
+##### Remove
+
+Remove the accumulation with the specified attributes.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+Required parameters:
+
+* [attributes](../common/README.md#attribute).
+
+The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
+[attributes](../common/README.md#attribute) to be passed in as arguments. If
+the attribute names and types are provided during the [counter
+creation](#counter-creation), the [OpenTelemetry API](../overview.md#api)
+authors MAY allow attribute values to be passed in using a more efficient way
+(e.g. strong typed struct allocated on the callstack, tuple). The API MUST allow
+callers to provide flexible attributes at invocation time rather than having to
+register all the possible attribute names during the instrument creation. Here
+are some examples that [OpenTelemetry API](../overview.md#api) authors might
+consider:
+
+```python
+# Python
+
+exception_counter.remove({"exception_type": "IOError", "handled_by_user": True})
+exception_counter.remove(exception_type="IOError", handled_by_user=True)
+```
+
+```csharp
+// C#
+
+counterExceptions.Remove(("exception_type", "FileLoadException"), ("handled_by_user", true));
+
+counterPowerUsed.Remove(new PowerConsumption { customer = "Tom" });
+counterPowerUsed.Remove(new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
 
 ### Asynchronous Counter
@@ -671,7 +721,8 @@ http_server_duration = meter.create_histogram(
     name="http.server.duration",
     description="measures the duration of the inbound HTTP request",
     unit="milliseconds",
-    value_type=float)
+    value_type=float,
+    max_accumulations=1000)
 ```
 
 ```csharp
@@ -680,7 +731,8 @@ http_server_duration = meter.create_histogram(
 var httpServerDuration = meter.CreateHistogram<double>(
     "http.server.duration",
     description: "measures the duration of the inbound HTTP request",
-    unit: "milliseconds"
+    unit: "milliseconds",
+    maxAccumulations=1000
     );
 ```
 
@@ -717,6 +769,38 @@ http_server_duration.Record(100, http_method="GET", http_scheme="http")
 
 httpServerDuration.Record(50, ("http.method", "POST"), ("http.scheme", "https"));
 httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
+```
+
+##### Remove
+
+Remove the accumulation with the specified attributes.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+Parameters:
+
+* [attributes](../common/README.md#attribute).
+
+[OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
+[attributes](../common/README.md#attribute) to be passed in as individual
+arguments. [OpenTelemetry API](../overview.md#api) authors MAY allow attribute
+values to be passed in using a more efficient way (e.g. strong typed struct
+allocated on the callstack, tuple). Here are some examples that [OpenTelemetry
+API](../overview.md#api) authors might consider:
+
+```python
+# Python
+
+http_server_duration.Remove({"http.method": "POST", "http.scheme": "https"})
+http_server_duration.Remove(http_method="GET", http_scheme="http")
+```
+
+```csharp
+// C#
+
+httpServerDuration.Remove(("http.method", "POST"), ("http.scheme", "https"));
+httpServerDuration.Remove(new HttpRequestAttributes { method = "GET", scheme = "http" });
 ```
 
 ### Asynchronous Gauge
@@ -906,7 +990,8 @@ might consider:
 customers_in_store = meter.create_up_down_counter(
     name="grocery.customers",
     description="measures the current customers in the grocery store",
-    value_type=int)
+    value_type=int,
+    max_accumulations=1000)
 ```
 
 ```csharp
@@ -915,6 +1000,7 @@ customers_in_store = meter.create_up_down_counter(
 var customersInStore = meter.CreateUpDownCounter<int>(
     "grocery.customers",
     description: "measures the current customers in the grocery store",
+    max_accumulations=1000
     );
 ```
 
@@ -949,6 +1035,36 @@ customers_in_store.add(-1, account_type="residential")
 // C#
 customersInStore.Add(1, ("account.type", "commercial"));
 customersInStore.Add(-1, new Account { Type = "residential" });
+```
+
+##### Remove
+
+Remove the accumulation with the specified attributes.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+Parameters:
+
+* [attributes](../common/README.md#attribute).
+
+[OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
+[attributes](../common/README.md#attribute) to be passed in as individual
+arguments. [OpenTelemetry API](../overview.md#api) authors MAY allow attribute
+values to be passed in using a more efficient way (e.g. strong typed struct
+allocated on the callstack, tuple). Here are some examples that [OpenTelemetry
+API](../overview.md#api) authors might consider:
+
+```python
+# Python
+customers_in_store.Remove({"account.type": "commercial"})
+customers_in_store.Remove(account_type="residential")
+```
+
+```csharp
+// C#
+customersInStore.Remove(("account.type", "commercial"));
+customersInStore.Remove(new Account { Type = "residential" });
 ```
 
 ### Asynchronous UpDownCounter
