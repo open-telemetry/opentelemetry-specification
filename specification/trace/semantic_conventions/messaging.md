@@ -24,6 +24,7 @@
 - [Examples](#examples)
   * [Topic with multiple consumers](#topic-with-multiple-consumers)
   * [Apache Kafka with Quarkus or Spring Boot Example](#apache-kafka-with-quarkus-or-spring-boot-example)
+  * [Apache Pulsar Example](#apache-pulsar-example)
   * [Batch receiving](#batch-receiving)
   * [Batch processing](#batch-processing)
 
