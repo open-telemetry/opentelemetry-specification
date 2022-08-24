@@ -9,6 +9,7 @@
 
 <!-- toc -->
 
+- [Data Model](#data-model)
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider operations](#loggerprovider-operations)
     + [Get a Logger](#get-a-logger)
