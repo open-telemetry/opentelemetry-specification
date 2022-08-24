@@ -29,7 +29,7 @@ release.
 
 ### Logs
 
- - Add experimental Events and Logs API specification
+- Add experimental Events and Logs API specification
   ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
 
 ### Resource
