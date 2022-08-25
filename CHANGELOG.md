@@ -70,8 +70,8 @@ release.
   ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
 - Add OpenSearch to db.system semantic conventions
   ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718)).
-- Make context propagation requirements explict for messaging semantic conventions
-  ([#xyz](https://github.com/open-telemetry/opentelemetry-specification/pull/xyz)).
+- Make context propagation requirements explicit for messaging semantic conventions
+  ([#2750](https://github.com/open-telemetry/opentelemetry-specification/pull/2750)).
 
 ### Compatibility
 
