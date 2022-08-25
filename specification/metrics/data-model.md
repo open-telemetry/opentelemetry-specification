@@ -1446,7 +1446,7 @@ An [OpenTelemetry Gauge](#gauge) MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum. The following behaviors are expected:
   - The new data point type must be the same as the accumulated data point type.
-  - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues].(#sums-detecting-alignment-issues).
+  - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues](#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
 
 Monotonic Sum metric points MUST have `_total` added as a suffix to the metric name.
