@@ -108,23 +108,23 @@ work with an outdated configuration or by ensuring that new configuration
 applies also to previously returned Loggers.
 
 Note: This could, for example, be implemented by storing any mutable
-configuration in the LoggerProvider and having Logger implementation objects
-have a reference to the LoggerProvider from which they were obtained.
-If configuration must be stored per-Logger (such as disabling a certain Logger),
-the Logger could, for example, do a look-up with its name+version+schema_url+event_domain+include_trace_context+attributes
-in a map in the LoggerProvider, or the LoggerProvider could maintain a registry
-of all returned Loggers and actively update their configuration if it changes.
+configuration in the `LoggerProvider` and having `Logger` implementation objects
+have a reference to the `LoggerProvider` from which they were obtained.
+If configuration must be stored per-Logger (such as disabling a certain `Logger`),
+the `Logger` could, for example, do a look-up with its name+version+schema_url+event_domain+include_trace_context+attributes
+in a map in the `LoggerProvider`, or the `LoggerProvider` could maintain a registry
+of all returned `Logger`s and actively update their configuration if it changes.
 
-The effect of associating a Schema URL with a Logger MUST be that the telemetry
-emitted using the Logger will be associated with the Schema URL, provided that
+The effect of associating a Schema URL with a `Logger` MUST be that the telemetry
+emitted using the `Logger` will be associated with the Schema URL, provided that
 the emitted data format is capable of representing such association.
 
 ## Logger
 
-The Logger is responsible for creating Events and Logs.
+The `Logger` is responsible for creating Events and Logs.
 
-Note that Loggers should not be responsible for configuration. This should be
-the responsibility of the LoggerProvider instead.
+Note that `Logger`s should not be responsible for configuration. This should be
+the responsibility of the `LoggerProvider` instead.
 
 ### Logger operations
 
