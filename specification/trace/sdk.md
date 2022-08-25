@@ -492,7 +492,7 @@ exceptions.
   For example, this is useful for creating a SpanProcessor that periodically
   evaluates/prints information about all active span from a background thread.
   When a reference is kept, the span MUST be treated as a readonly object,
-  trying to modify the Span is undefined behavior.
+  trying to modify the Span after `OnStart` method returns is undefined behavior.
 * `parentContext` - the parent `Context` of the span that the SDK determined
   (the explicitly passed `Context`, the current `Context` or an empty `Context`
   if that was explicitly requested).
