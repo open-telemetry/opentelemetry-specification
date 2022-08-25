@@ -12,6 +12,7 @@
   * [Conversations](#conversations)
   * [Temporary destinations](#temporary-destinations)
 - [Conventions](#conventions)
+  * [Context propagation](#context-propagation)
   * [Span name](#span-name)
   * [Span kind](#span-kind)
   * [Operation names](#operation-names)
@@ -79,6 +80,46 @@ Often such destinations are unnamed or have an auto-generated name.
 ## Conventions
 
 Given these definitions, the remainder of this section describes the semantic conventions for Spans describing interactions with messaging systems.
+
+### Context propagation
+
+A message may traverse many different components and layers in one or more intermediaries
+when it is propagated from the producer to the consumer(s). To be able to correlate
+consumer traces with producer traces using the existing context propagation mechanisms,
+all components must propagate context down the chain.
+
+Due to the complex nature of messaging systems, it cannot be assumed
+that all components are instrumented and propagate context accordingly.
+For example, an application using a messaging system offered via
+software as a service (SaaS) that does not propagate context will lead to incomplete traces.
+
+To be able to correlate consumer traces with producer traces without requiring
+intermediary instrumentation, the context needs to be propagated on a
+*per-message* basis instead of on a *per-request* basis. This allows all components
+to have access to the same per-message context information, making it possible
+to correlate all stages involved in processing a message with the message's
+creation.
+
+A message *creation context* allows correlating producers with consumers
+of a message and model the dependencies between them,
+regardless of the underlying messaging transport mechanism and its instrumentation.
+
+The message creation context is created by the producer and should be propagated
+to the consumer(s).
+
+Consumer traces cannot be directly correlated to producer traces if the message
+creation context is not attached and propagated with the message.
+
+A producer SHOULD attach a message creation context to each message.
+The message creation context SHOULD be attached in such a way that it is
+not possible to be changed by intermediaries.
+
+> This document does not specify the exact mechanisms on how the creation context
+> is attached/extracted to/from messages. Future versions of these conventions
+> will give clear recommendations, following industry standards including, but not limited to
+> [Trace Context: AMQP protocol](https://w3c.github.io/trace-context-amqp/) and
+> [Trace Context: MQTT protocol](https://w3c.github.io/trace-context-mqtt/)
+> once those standards reach a stable state.
 
 ### Span name
 
