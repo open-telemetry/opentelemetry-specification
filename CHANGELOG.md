@@ -66,7 +66,8 @@ release.
 
 ### Logs
 
-- No changes.
+- Update log SDK to allow log processors to mutate log records
+  ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
 
 ### Resource
 
