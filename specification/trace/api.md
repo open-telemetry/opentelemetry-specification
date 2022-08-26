@@ -436,7 +436,7 @@ Links SHOULD preserve the order in which they're set.
 ### Span operations
 
 With the exception of the function to retrieve the `Span`'s `SpanContext` and
-the `IsRecording` status, none of the below may be called after the `Span` is
+`IsRecording`, none of the below may be called after the `Span` is
 finished.
 
 #### Get Context
