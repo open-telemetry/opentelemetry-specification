@@ -93,3 +93,12 @@ This key-value pair should only be recorded when it contains a non-zero value.
 Exporters to formats that don't have a concept that is equivalent to the Scope
 SHOULD record the attributes at the most suitable place in their corresponding format,
 typically at the Span, Metric or LogRecord equivalent.
+
+### Nested Attributes
+
+Only certain protocols, languages, SDKs or Exporter support the storing or sending
+of a hierarchy of Attributes. When not supported in those cases they SHOULD
+implement a strategy to handle how nested Attributes are stored or transmitted,
+like using a JSON-encoded string value as highlighted for protocols above. The
+depth of the any resulting hierarchy SHOULD be limited and MUST not include
+recursive references.
