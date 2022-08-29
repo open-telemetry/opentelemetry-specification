@@ -267,16 +267,6 @@ groups:
     brief: >
       Attributes for Apache Pulsar
     attributes:
-      - id: producer_name
-        type: string
-        brief: >
-          Globally unique producer name.
-        example: 'myProducer'
-      - id: consumer_name
-        type: string
-        brief: >
-          The name of consumer.
-        example: 'myConsumer'
       - id: subscription
         type: string
         requirement_level:
