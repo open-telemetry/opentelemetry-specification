@@ -32,7 +32,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e., it MUST NOT contain values of different types.
-  - When specified via semantic conventions it MAY (see [Nested Attribute](#nested-attribute))
+  - When specified via semantic conventions it MAY (see [Nested Attributes](#nested-attributes))
     contain another valid Attribute value resulting in `nested` Attributes. Any
     referenced Attribute MUST not be recursive. i.e. The value of the
     key-value pair will itself be a key-value pair.
