@@ -135,6 +135,8 @@ release.
 
 ### SDK Configuration
 
+- Add the definition of a Boolean environment variable
+
 - Mark `OTEL_METRIC_EXPORT_INTERVAL`, `OTEL_METRIC_EXPORT_TIMEOUT`
   environment variables as Stable
   ([#2658](https://github.com/open-telemetry/opentelemetry-specification/pull/2658))
