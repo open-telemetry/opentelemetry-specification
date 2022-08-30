@@ -2,6 +2,38 @@
 
 **Status**: [Experimental](../document-status.md)
 
+<!-- toc -->
+
+- [Specification](#specification)
+  * [LogEmitterProvider](#logemitterprovider)
+    + [Get LogEmitter](#get-logemitter)
+    + [Shutdown](#shutdown)
+    + [ForceFlush](#forceflush)
+  * [LogRecord Interfaces](#logrecord-interfaces)
+    + [LogRecord](#logrecord)
+    + [Readable LogRecord](#readable-logrecord)
+    + [Read/write LogRecord](#readwrite-logrecord)
+  * [LogEmitter](#logemitter)
+    + [Emit](#emit)
+  * [LogProcessor](#logprocessor)
+    + [OnEmit](#onemit)
+    + [ShutDown](#shutdown)
+    + [ForceFlush](#forceflush-1)
+  * [LogExporter](#logexporter)
+    + [Export(batch)](#exportbatch)
+    + [Shutdown](#shutdown-1)
+    + [ForceFlush](#forceflush-2)
+- [Usage](#usage)
+  * [How to Create Log4J Style Appender](#how-to-create-log4j-style-appender)
+  * [Logging to File](#logging-to-file)
+  * [Logging Directly to OTLP Network Destination](#logging-directly-to-otlp-network-destination)
+  * [Implicit Context Injection](#implicit-context-injection)
+  * [Explicit Context](#explicit-context)
+  * [Custom LogExporter](#custom-logexporter)
+  * [Custom LogProcessor](#custom-logprocessor)
+
+<!-- tocstop -->
+
 This document contains the first cut from the
 [OTEP0150](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
 
@@ -62,45 +94,99 @@ TBD
 LogEmitterProvider can be configured at startup time, to be associated with a
 Resource and with LogProcessor/LogExporter pipeline.
 
+### LogRecord Interfaces
+
+#### LogRecord
+
+A function receiving this as an argument MUST be able to set the following
+fields:
+
+- [Timestamp](./data-model.md#field-timestamp)
+- [Observed Timestamp](./data-model.md#field-observedtimestamp)
+- [Trace Context](./data-model.md#trace-context-fields)
+- [Severity Number](./data-model.md#field-severitynumber)
+- [Severity Text](./data-model.md#field-severitytext)
+- [Body](./data-model.md#field-body)
+- [Attributes](./data-model.md#field-attributes)
+
+#### Readable LogRecord
+
+A function receiving this as an argument MUST be able to access all the
+information added to [LogRecord](#logrecord). It MUST also be able to access
+the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
+and [Resource](./data-model.md#field-resource) information (implicitly)
+associated with the LogRecord.
+
+Counts for attributes due to collection limits MUST be available for exporters
+to report as described in the
+[transformation to non-OTLP formats](../common/mapping-to-non-otlp.md#dropped-attributes-count)
+specification.
+
+Note: Typically this will be implemented with a new interface or (immutable)
+value type. In some languages LogProcessors may have a different Readable
+LogRecord type than exporters (e.g. a `LogData` type might contain an immutable
+snapshot and a `ReadableLogRecord` interface might read information directly
+from the same underlying data structure that the LogRecord interface
+manipulates).
+
+#### Read/write LogRecord
+
+A function receiving this as an argument MUST have access to both the
+full [LogRecord](#logrecord) and additionally MUST
+be able to retrieve all information that was added to the LogRecord (as
+with [Readable LogRecord](#readable-logrecord))
+
 ### LogEmitter
 
 Methods:
 
-- Emit(LogRecord). Emits a log record. The LogRecord and the Resource and
-  Instrumentation library associated with the LogEmitter will be converted into
-  a readable LogData and will be pushed through the SDK and the configured
-  LogProcessors and LogExporter. It is expected that the caller will populate
-  trace context related fields (TraceId,SpanId,TraceFlags) if applicable before
-  making the call. Open Question: do we need to also pass the Baggage so that
-  log processors and exporters can use it if they see the need (see e.g.
-  [Java issue](https://github.com/open-telemetry/opentelemetry-java/issues/4147))?
+#### Emit
 
+Emits a log record to the SDK for processing.
+
+It is expected that the caller will
+populate [trace context](./data-model.md#trace-context-fields) if applicable
+before making the call.
+
+**Parameters:**
+
+* `logRecord` - a [LogRecord](#logrecord).
   Note: some languages may opt to avoid having a LogRecord data type and instead
   use a more idiomatic builder pattern to prepare and emit a log record (see
   e.g.
-  [Java discussion](https://github.com/open-telemetry/opentelemetry-java/pull/3759#discussion_r738019425))
+  [Java discussion](https://github.com/open-telemetry/opentelemetry-java/pull/3759#discussion_r738019425)).
 
-### LogRecord
-
-See LogRecord [data model](data-model.md) for the list of fields.
+Open Question: do we need to also pass the Baggage so
+that log processors and exporters can use it if they see the need (see
+e.g.[Java issue](https://github.com/open-telemetry/opentelemetry-java/issues/4147)).
 
 ### LogProcessor
 
-Plugin interface. Analog of SpanProcessor. Interface to hook the log record
-emitting action.
-
-Methods:
-
-- Emit(LogData). Call when a log record is ready to be processed and exported.
-- Shutdown.
-- ForceFlush.
+Plugin interface. Analog of SpanProcessor. Interface to hook into the [log record
+emitting](#emit) action.
 
 Built-in implementations: SimpleLogProcessor, BatchLogProcessor.
 
-### LogData
+Methods:
 
-Readable LogRecord data plus associated Resource and InstrumentationLibrary.
-Analog of SpanData.
+#### OnEmit
+
+`OnEmit` is called when a log record is [emitted](#emit). This
+method is called synchronously on the thread that emitted the log record,
+therefore it should not block or throw exceptions.
+
+**Parameters:**
+
+* `logRecord` - a [Read/write LogRecord](#readwrite-logrecord) for the
+  emitted log record.
+
+#### ShutDown
+
+TODO
+
+#### ForceFlush
+
+TODO
 
 ### LogExporter
 
@@ -110,8 +196,23 @@ of log data.
 
 Methods:
 
-- Export(batch). Exports a batch of LogData.
-- Shutdown.
+#### Export(batch)
+
+Export a batch of [Readable LogRecords](#readable-logrecord).
+
+**Parameters:**
+
+* `batch` - a batch of [Readable LogRecords](#readable-logrecord). The exact
+  data type of the batch is language specific, typically it is some kind of
+  list, e.g. for logs in Java it is `Collection<LogData>`.
+
+#### Shutdown
+
+TODO
+
+#### ForceFlush
+
+TODO
 
 ## Usage
 
