@@ -57,4 +57,4 @@ groups:
         note: >
           This value is intended to be taken from the Navigator API
           `navigator.language`.
-        examples: ["en", "en-US", "fr", "fr-FR"]        
+        examples: ["en", "en-US", "fr", "fr-FR"]
