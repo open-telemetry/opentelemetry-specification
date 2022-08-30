@@ -2,15 +2,6 @@ file_format: 1.1.0
 schema_url: https://opentelemetry.io/schemas/1.13.0
 versions:
   1.13.0:
-    metrics:
-      changes:
-        # https://github.com/open-telemetry/opentelemetry-specification/pull/2675
-        - split:
-            apply_to_metric: system.network.connections
-            by_attribute: protocol
-            metrics_from_attributes:
-                system.network.tcp.connections: tcp
-                system.network.udp.connections: udp
     spans:
       changes:
         # https://github.com/open-telemetry/opentelemetry-specification/pull/2614
