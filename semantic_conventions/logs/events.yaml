@@ -18,7 +18,7 @@ groups:
           members:
             - id: browser
               value: 'browser'
-              brief: 'Evens from browser apps'
+              brief: 'Events from browser apps'
             - id: device
               value: 'device'
               brief: 'Events from mobile apps'
