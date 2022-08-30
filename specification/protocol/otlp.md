@@ -402,20 +402,20 @@ JSON Protobuf encoded payloads use proto3 standard defined
 for mapping between Protobuf and JSON, with the following deviations from that mapping:
 
 - The `trace_id` and `span_id` byte arrays are represented as
-  [case-insensitive hex-encoded strings](https://tools.ietf.org/html/rfc4648#section-8),
+  [case-insensitive hex-encoded strings](https://tools.ietf.org/html/rfc4648#section-8);
   they are not base64-encoded like as it is defined in the standard
   [Protobuf JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json).
   The hex encoding is used for `trace_id` and `span_id` fields in all OTLP
   Protobuf messages, e.g. the `Span`, `Link`, `LogRecord`, etc. messages.
-  For example the `trace_id` field in a Span can be represented like this:
+  For example, the `trace_id` field in a Span can be represented like this:
   { "trace_id": "5B8EFFF798038103D269B633813FC60C", ... }
 
 - Values of enum fields MUST be encoded as integer values. Unlike the standard
-  [Protobuf JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json)
+  [Protobuf JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json),
   which allows values of enum fields to be encoded as either integer values or as enum
-  name strings, only integer enum values are allowed in OTLP JSON Protobuf Encoding,
+  name strings, only integer enum values are allowed in OTLP JSON Protobuf Encoding;
   the enum name strings MUST NOT be used.
-  For example the `kind` field with a value of SPAN_KIND_SERVER in a Span can be
+  For example, the `kind` field with a value of SPAN_KIND_SERVER in a Span can be
   represented like this:
   { "kind": 2, ... }
 
