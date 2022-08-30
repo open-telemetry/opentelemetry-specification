@@ -1,4 +1,45 @@
 groups:
+  - id: messaging.message
+    prefix: messaging
+    # todo (https://github.com/open-telemetry/build-tools/issues/123)
+    type: span
+    brief: 'Semantic convention describing per-message attributes populated on messaging spans or links.'
+    attributes:
+      - id: destination.name
+        type: string
+        brief: 'The message destination name'
+        note: |
+          Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
+          broker does not have such notion, destination name SHOULD uniquely identify broker.
+        examples: ['MyQueue', 'MyTopic']
+      - id: source.name
+        type: string
+        brief: 'The message source name'
+        note: |
+          Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
+          broker does not have such notion, source name SHOULD uniquely identify broker.
+        examples: ['MyQueue', 'MyTopic']
+      - id: message.id
+        type: string
+        brief: 'A value used by the messaging system as an identifier for the message, represented as a string.'
+        examples: '452a7c7c7c7048c2f887f61572b18fc2'
+      - id: message.conversation_id
+        type: string
+        brief: >
+          The [conversation ID](#conversations) identifying the conversation to which the message belongs,
+          represented as a string. Sometimes called "Correlation ID".
+        examples: 'MyConversationId'
+      - id: message.payload_size_bytes
+        type: int
+        brief: >
+          The (uncompressed) size of the message payload in bytes.
+          Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported.
+        examples: 2738
+      - id: message.payload_compressed_size_bytes
+        type: int
+        brief: 'The compressed size of the message payload in bytes.'
+        examples: 2048
+
   - id: messaging
     prefix: messaging
     type: span
@@ -11,63 +52,43 @@ groups:
         requirement_level: required
         brief: 'A string identifying the messaging system.'
         examples: ['kafka', 'rabbitmq', 'rocketmq', 'activemq', 'AmazonSQS']
-      - id: destination
-        type: string
+      - id: operation
+        type:
+          allow_custom_values: true
+          members:
+            - id: publish
+              value: "publish"
+            - id: receive
+              value: "receive"
+            - id: process
+              value: "process"
         requirement_level: required
         brief: >
-          The message destination name. This might be equal to the span name
-          but is required nevertheless.
-        examples: ['MyQueue', 'MyTopic']
-      - id: destination_kind
-        type:
-          allow_custom_values: false
-          members:
-            - id: queue
-              value: "queue"
-              brief: "A message sent to a queue"
-            - id: topic
-              value: "topic"
-              brief: "A message sent to a topic"
-        requirement_level:
-          conditionally_required: If the message destination is either a `queue` or `topic`.
-        brief: 'The kind of message destination'
-      - id: temp_destination
-        type: boolean
-        requirement_level:
-          conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
-        brief: 'A boolean that is true if the message destination is temporary.'
-      - id: protocol
-        type: string
-        brief: 'The name of the transport protocol.'
-        examples: ['AMQP', 'MQTT']
-      - id: protocol_version
-        type: string
-        brief: 'The version of the transport protocol.'
-        examples: '0.9.1'
-      - id: url
-        type: string
-        brief: 'Connection string.'
-        examples: ['tibjmsnaming://localhost:7222', 'https://queue.amazonaws.com/80398EXAMPLE/MyQueue']
-      - id: message_id
-        type: string
-        brief: 'A value used by the messaging system as an identifier for the message, represented as a string.'
-        examples: '452a7c7c7c7048c2f887f61572b18fc2'
-      - id: conversation_id
-        type: string
-        brief: >
-          The [conversation ID](#conversations) identifying the conversation to which the message belongs,
-          represented as a string. Sometimes called "Correlation ID".
-        examples: 'MyConversationId'
-      - id: message_payload_size_bytes
+          A string identifying the kind of messaging operation as defined in the
+          [Operation names](#operation-names) section above.
+        note: If custom value is used, it MUST known to be of low cardinality.
+      - id: batch.size
         type: int
-        brief: >
-          The (uncompressed) size of the message payload in bytes.
-          Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported.
-        examples: 2738
-      - id: message_payload_compressed_size_bytes
-        type: int
-        brief: 'The compressed size of the message payload in bytes.'
-        examples: 2048
+        brief: The number of messages sent, received, or processed in the scope of the batching operation.
+        requirement_level:
+          conditionally_required: If the span describes operation on a batch of messages.
+        note: >
+            Instrumentations SHOULD NOT set `messaging.batch.size` on spans that operate with a single message.
+            When client library supports batch and single-message API for the same operation, instrumentations SHOULD
+            use `messaging.batch.size` for batching APIs and SHOULD NOT use it for single-message APIs.
+        examples: [0, 1, 2]
+      - ref: messaging.message.id
+        requirement_level:
+          recommended: Only if span represents operation on a single message.
+      - ref: messaging.message.conversation_id
+        requirement_level:
+          recommended: Only if span represents operation on a single message.
+      - ref: messaging.message.payload_size_bytes
+        requirement_level:
+          recommended: Only if span represents operation on a single message.
+      - ref: messaging.message.payload_compressed_size_bytes
+        requirement_level:
+          recommended: Only if span represents operation on a single message.
       - ref: net.peer.name
         note: >
           This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
@@ -83,7 +104,9 @@ groups:
         tag: connection-level
         requirement_level:
           recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
-
+      - ref: net.app.protocol.name
+        examples: ['amqp', 'mqtt']
+      - ref: net.app.protocol.version
     constraints:
       - include: network
 
@@ -93,7 +116,47 @@ groups:
     extends: messaging
     span_kind: producer
     brief: 'Semantic convention for producers of messages sent to a messaging systems.'
-
+    attributes:
+      - ref: messaging.destination.name
+        requirement_level:
+          conditionally_required: If one message is being published or if the value applies to all messages in the batch.
+      - id: destination.kind
+        type:
+          allow_custom_values: false
+          members:
+            - id: queue
+              value: "queue"
+              brief: "A message sent to a queue"
+            - id: topic
+              value: "topic"
+              brief: "A message sent to a topic"
+        requirement_level:
+          conditionally_required: If the message destination is either a `queue` or `topic`.
+        brief: 'The kind of message destination'
+      - id: destination.template
+        type: string
+        requirement_level:
+          conditionally_required: >
+            If available. Instrumentations MUST NOT use `messaging.destination.name` as template
+            unless low-cardinality of destination name is guaranteed.
+        brief: Low cardinality field representing messaging destination
+        note: >
+          Destination names could be constructed from templates.
+          An example would be a destination name involving a user name or product id.
+          Although the destination name in this case is of high cardinality,
+          the underlying template is of low cardinality and can be effectively
+          used for grouping and aggregation.
+        examples: ['/customers/{customerId}']
+      - id: destination.temporary
+        type: boolean
+        requirement_level:
+          conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
+        brief: 'A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed.'
+      - id: destination.anonymous
+        type: boolean
+        requirement_level:
+          conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
+        brief: 'A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name).'
   - id: messaging.producer.synchronous
     prefix: messaging
     type: span
@@ -110,19 +173,6 @@ groups:
     span_kind: consumer
     brief: 'Semantic convention for a consumer of messages received from a messaging system'
     attributes:
-      - id: operation
-        type:
-          allow_custom_values: false
-          members:
-            - id: receive
-              value: "receive"
-            - id: process
-              value: "process"
-        brief: >
-          A string identifying the kind of message consumption as defined in the
-          [Operation names](#operation-names) section above.
-          If the operation is "send", this attribute MUST NOT be set, since the
-          operation can be inferred from the span kind in that case.
       - id: consumer_id
         type: string
         brief: >
@@ -131,6 +181,46 @@ groups:
           `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id`
           of the client consuming the message.
         examples: 'mygroup - client-6'
+      - ref: messaging.source.name
+        requirement_level:
+          conditionally_required: If the value applies to all messages in the batch.
+      - id: source.kind
+        type:
+          allow_custom_values: true
+          members:
+            - id: queue
+              value: "queue"
+              brief: "A message received from a queue"
+            - id: topic
+              value: "topic"
+              brief: "A message received from a topic"
+        requirement_level:
+          conditionally_required: If the message source is either a `queue` or `topic`.
+        brief: 'The kind of message source'
+      - id: source.template
+        type: string
+        brief: 'Low cardinality field representing messaging source'
+        requirement_level:
+          conditionally_required: >
+            If available. Instrumentations MUST NOT use `messaging.source.name` as template
+            unless low-cardinality of source name is guaranteed.
+        examples: ['/customers/{customerId}']
+        note: >
+          Source names could be constructed from templates.
+          An example would be a source name involving a user name or product id.
+          Although the source name in this case is of high cardinality,
+          the underlying template is of low cardinality and can be effectively
+          used for grouping and aggregation.
+      - id: source.temporary
+        type: boolean
+        requirement_level:
+          recommended: when supported by messaging system and only if the source is temporary. If missing, assumed to be false.
+        brief: 'A boolean that is true if the message source is temporary and might not exist anymore after messages are processed.'
+      - id: source.anonymous
+        type: boolean
+        requirement_level:
+          recommended: when supported by messaging system and only if the source is anonymous. If missing, assumed to be false.
+        brief: 'A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name).'
 
   - id: messaging.consumer.synchronous
     prefix: messaging
@@ -148,7 +238,7 @@ groups:
     brief: >
       Attributes for RabbitMQ
     attributes:
-      - id: routing_key
+      - id: message.routing_key
         type: string
         requirement_level:
           conditionally_required: If not empty.
@@ -163,11 +253,11 @@ groups:
     brief: >
       Attributes for Apache Kafka
     attributes:
-      - id: message_key
+      - id: message.key
         type: string
         brief: >
           Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition.
-          They differ from `messaging.message_id` in that they're not unique.
+          They differ from `messaging.message.id` in that they're not unique.
           If the key is `null`, the attribute MUST NOT be set.
         note: >
           If the key type is not string, it's string representation has to be supplied for the attribute.
@@ -184,7 +274,7 @@ groups:
         brief: >
           Client Id for the Consumer or Producer that is handling the message.
         examples: 'client-5'
-      - id: partition
+      - id: message.partition
         type: int
         brief: >
           Partition the message is sent to.
@@ -194,7 +284,7 @@ groups:
         brief: >
           The offset of a record in the corresponding Kafka partition.
         examples: 42
-      - id: tombstone
+      - id: message.tombstone
         type: boolean
         requirement_level:
           conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
@@ -225,28 +315,28 @@ groups:
         brief: >
           The unique identifier for each client.
         examples: 'myhost@8742@s8083jm'
-      - id: delivery_timestamp
+      - id: message.delivery_timestamp
         type: int
         requirement_level:
           conditionally_required: If the message type is delay and delay time level is not specified.
         brief: >
           The timestamp in milliseconds that the delay message is expected to be delivered to consumer.
         examples: 1665987217045
-      - id: delay_time_level
+      - id: message.delay_time_level
         type: int
         requirement_level:
           conditionally_required: If the message type is delay and delivery timestamp is not specified.
         brief: >
           The delay time level for delay message, which determines the message delay time.
         examples: 3
-      - id: message_group
+      - id: message.group
         type: string
         requirement_level:
           conditionally_required: If the message type is FIFO.
         brief: >
           It is essential for FIFO message. Messages that belong to the same message group are always processed one by one within the same consumer group.
         examples: 'myMessageGroup'
-      - id: message_type
+      - id: message.type
         type:
           allow_custom_values: false
           members:
@@ -264,12 +354,12 @@ groups:
               brief: 'Transaction message'
         brief: >
           Type of message.
-      - id: message_tag
+      - id: message.tag
         type: string
         brief: >
           The secondary classifier of message besides topic.
         examples: tagA
-      - id: message_keys
+      - id: message.keys
         type: string[]
         brief: >
           Key(s) of message, another way to mark message besides message id.
