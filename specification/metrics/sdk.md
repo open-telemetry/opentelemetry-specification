@@ -66,7 +66,8 @@ linkTitle: SDK
 
 A `MeterProvider` MUST provide a way to allow a [Resource](../resource/sdk.md) to
 be specified. If a `Resource` is specified, it SHOULD be associated with all the
-metrics produced by any `Meter` from the `MeterProvider`. The [tracing SDK
+metrics produced by any `Meter` from the `MeterProvider` or produced by any
+`MetricProducer`. The [tracing SDK
 specification](../trace/sdk.md#additional-span-interfaces) has provided some
 suggestions regarding how to implement this efficiently.
 
@@ -140,7 +141,9 @@ instances.
 ### View
 
 A `View` provides SDK users with the flexibility to customize the metrics that
-are output by the SDK. Here are some examples when a `View` might be needed:
+are output by the SDK from Measurements made by OpenTelemetry
+[Instruments](./api.md#instrument). Here are some examples when a `View` might
+be needed:
 
 * Customize which [Instruments](./api.md#instrument) are to be
   processed/ignored. For example, an [instrumented
@@ -823,7 +826,8 @@ functions.
 #### Collect
 
 Collects the metrics from the SDK and its [MetricProducers](#metricproducer).
-If there are [asynchronous SDK Instruments](./api.md#asynchronous-instrument-api)
+It retrieves a batch of metric points from MetricProducers by invoking
+`Produce()`. If there are [asynchronous SDK Instruments](./api.md#asynchronous-instrument-api)
 involved, their callback functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
@@ -835,6 +839,11 @@ and a failed reasons list to the caller.
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. callback,
 filter, timeout). [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose the
 return value type, or do not return anything.
+
+The `MetricReader` MUST ensure the batch of metric points from
+`MetricProducers` are associated with the `MetricProducer`'s
+`InstrumentationScope()`, and with the `MeterProvider`'s configured resource if
+it is possible for those to conflict.
 
 Note: it is expected that the `MetricReader.Collect` implementations will be
 provided by the SDK, so it is RECOMMENDED to prevent the user from accidentally
@@ -906,8 +915,12 @@ primarily a simple telemetry data encoder and transmitter.
 Metric Exporter has access to the [aggregated metrics
 data](./data-model.md#timeseries-model).  Metric Exporters SHOULD
 report an error condition for data output by the `MetricReader` with
-unsupported Aggregation or Aggregation Temporality, as this condition
-can be corrected by a change of `MetricReader` configuration.
+unsupported Aggregation or Aggregation Temporality. For data originating from
+OpenTelemetry Instruments, this condition can be corrected by a change of
+`MetricReader` configuration. For metric data from a `MetricProducer`, it is an
+indication to the user that metric data is being dropped. The presence of data
+with an unsupported Aggregation or Aggregation Temporality SHOULD NOT prevent
+the exporter from sending other metric data.
 
 There could be multiple [Push Metric Exporters](#push-metric-exporter) or [Pull
 Metric Exporters](#pull-metric-exporter) or even a mixture of both configured at
@@ -1119,10 +1132,12 @@ A `MetricProducer` MUST support the following functions:
 #### Produce() metrics
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
-MUST return a batch of [Metrics](./data-model.md#metric-points), which MUST NOT
-include resource or scope information. `Produce` does not have any required
-parameters, however, [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose
-to add parameters (e.g. timeout).
+MUST return a batch of [Metrics](./data-model.md#metric-points). If the batch
+of Metrics includes an Instrumentation Scope, it MUST be the same as the
+InstrumentationScope returned by InstrumentationScope(). The batch of metrics
+SHOULD NOT include resource. `Produce` does not have any required parameters,
+however, [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose to add
+parameters (e.g. timeout).
 
 `Produce` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Produce` operation fails, the `MetricProducer`
