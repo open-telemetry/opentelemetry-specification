@@ -72,7 +72,7 @@ New `Meter` instances are always created through a `MeterProvider`
 (see [API](./api.md#meterprovider)). The `name`, `version` (optional),
 `schema_url` (optional), and `attributes` (optional) arguments supplied to
 the `MeterProvider` MUST be used to create
-an [`InstrumentationScope`](../glossary.md#instrumentation-scope)instance which
+an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
 
 Configuration (i.e., [MetricExporters](#metricexporter),
