@@ -1,4 +1,40 @@
 groups:
+  - id: messaging.message
+    prefix: messaging
+    type: span
+    brief: 'Semantic convention describing per-message attributes populated on messaging spans or links.'
+    attributes:
+      - id: destination.name
+        type: string
+        brief: 'The message destination name'
+        note: |
+          Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
+          broker does not have such notion, destination name SHOULD uniquely identify broker.
+
+          If destination name is the same for all messages being published, 
+          it MUST be set on corresponding publish, receive, process or other span.
+        examples: ['MyQueue', 'MyTopic']
+      - id: message.id
+        type: string
+        brief: 'A value used by the messaging system as an identifier for the message, represented as a string.'
+        examples: '452a7c7c7c7048c2f887f61572b18fc2'
+      - id: message.conversation_id
+        type: string
+        brief: >
+          The [conversation ID](#conversations) identifying the conversation to which the message belongs,
+          represented as a string. Sometimes called "Correlation ID".
+        examples: 'MyConversationId'
+      - id: message.payload_size_bytes
+        type: int
+        brief: >
+          The (uncompressed) size of the message payload in bytes.
+          Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported.
+        examples: 2738
+      - id: message.payload_compressed_size_bytes
+        type: int
+        brief: 'The compressed size of the message payload in bytes.'
+        examples: 2048
+
   - id: messaging
     prefix: messaging
     type: span
@@ -11,13 +47,6 @@ groups:
         requirement_level: required
         brief: 'A string identifying the messaging system.'
         examples: ['kafka', 'rabbitmq', 'rocketmq', 'activemq', 'AmazonSQS']
-      - id: destination
-        type: string
-        requirement_level: required
-        brief: >
-          The message destination name. This might be equal to the span name
-          but is required nevertheless.
-        examples: ['MyQueue', 'MyTopic']
       - id: destination_kind
         type:
           allow_custom_values: false
@@ -48,26 +77,31 @@ groups:
         type: string
         brief: 'Connection string.'
         examples: ['tibjmsnaming://localhost:7222', 'https://queue.amazonaws.com/80398EXAMPLE/MyQueue']
-      - id: message_id
-        type: string
-        brief: 'A value used by the messaging system as an identifier for the message, represented as a string.'
-        examples: '452a7c7c7c7048c2f887f61572b18fc2'
-      - id: conversation_id
-        type: string
-        brief: >
-          The [conversation ID](#conversations) identifying the conversation to which the message belongs,
-          represented as a string. Sometimes called "Correlation ID".
-        examples: 'MyConversationId'
-      - id: message_payload_size_bytes
+      - id: batch.size
         type: int
-        brief: >
-          The (uncompressed) size of the message payload in bytes.
-          Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported.
-        examples: 2738
-      - id: message_payload_compressed_size_bytes
-        type: int
-        brief: 'The compressed size of the message payload in bytes.'
-        examples: 2048
+        brief: The number of messages sent, received, or processed in the scope of the batching operation.
+        requirement_level:
+          conditionally_required: >
+            If available within the messaging system, and only if the span describes operations that operate with message batches.
+        note: >
+            Instrumentation SHOULD always set it on batch `receive` operations regardless
+            of the actual number of received messages (e.g. 0, 1, or more).
+        examples: [0, 1, 2]
+      - ref: messaging.destination.name
+        requirement_level:
+          conditionally_required: if available and if the value applies to all messages in the batch.
+      - ref: messaging.message.id
+        requirement_level:
+          recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
+      - ref: messaging.message.conversation_id
+        requirement_level:
+          recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
+      - ref: messaging.message.payload_size_bytes
+        requirement_level:
+          recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
+      - ref: messaging.message.payload_compressed_size_bytes
+        requirement_level:
+          recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
       - ref: net.peer.name
         note: >
           This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
@@ -163,11 +197,11 @@ groups:
     brief: >
       Attributes for Apache Kafka
     attributes:
-      - id: message_key
+      - id: message.key
         type: string
         brief: >
           Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition.
-          They differ from `messaging.message_id` in that they're not unique.
+          They differ from `messaging.message.id` in that they're not unique.
           If the key is `null`, the attribute MUST NOT be set.
         note: >
           If the key type is not string, it's string representation has to be supplied for the attribute.
@@ -220,28 +254,28 @@ groups:
         brief: >
           The unique identifier for each client.
         examples: 'myhost@8742@s8083jm'
-      - id: delivery_timestamp
+      - id: message.delivery_timestamp
         type: int
         requirement_level:
           conditionally_required: If the message type is delay and delay time level is not specified.
         brief: >
           The timestamp in milliseconds that the delay message is expected to be delivered to consumer.
         examples: 1665987217045
-      - id: delay_time_level
+      - id: message.delay_time_level
         type: int
         requirement_level:
           conditionally_required: If the message type is delay and delivery timestamp is not specified.
         brief: >
           The delay time level for delay message, which determines the message delay time.
         examples: 3
-      - id: message_group
+      - id: message.group
         type: string
         requirement_level:
           conditionally_required: If the message type is FIFO.
         brief: >
           It is essential for FIFO message. Messages that belong to the same message group are always processed one by one within the same consumer group.
         examples: 'myMessageGroup'
-      - id: message_type
+      - id: message.type
         type:
           allow_custom_values: false
           members:
@@ -259,12 +293,12 @@ groups:
               brief: 'Transaction message'
         brief: >
           Type of message.
-      - id: message_tag
+      - id: message.tag
         type: string
         brief: >
           The secondary classifier of message besides topic.
         examples: tagA
-      - id: message_keys
+      - id: message.keys
         type: string[]
         brief: >
           Key(s) of message, another way to mark message besides message id.

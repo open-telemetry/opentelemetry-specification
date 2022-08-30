@@ -8,6 +8,18 @@ versions:
         - rename_attributes:
             attribute_map:
               http.retry_count: http.resend_count
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/2763
+        - rename_attributes:
+            attribute_map:
+              messaging.destination: messaging.destination.name
+              messaging.message_id: messaging.message.id
+              messaging.conversation_id: messaging.message.conversation_id
+              messaging.message_payload_size_bytes: messaging.message.payload_size_bytes
+              messaging.message_payload_compressed_size_bytes: messaging.message.payload_compressed_size_bytes
+              messaging.kafka.message_key: messaging.kafka.message.key
+              messaging.rocketmq.message_type: messaging.rocketmq.message.type
+              messaging.rocketmq.message_tag: messaging.rocketmq.message.tag
+              messaging.rocketmq.message_keys: messaging.rocketmq.message.keys 
   1.14.0:
   1.13.0:
     spans:

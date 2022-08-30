@@ -222,7 +222,7 @@ Function F:                      | Span ProcBatch |
 | `messaging.destination` | `Q` | `Q` | `Q` | `Q` | `Q` |
 | `messaging.destination_kind` | `queue` | `queue` | `queue` | `queue` | `queue` |
 | `messaging.operation` |  |  | `process` | `process` | `process` |
-| `messaging.message_id` | | | | `"a1"` | `"a2"` |
+| `messaging.message.id` | | | | `"a1"` | `"a2"` |
 
 Note that if Span Prod1 and Span Prod2 were sent to different queues, Span ProcBatch would not have
 `messaging.destination` set as it would correspond to multiple destinations.
