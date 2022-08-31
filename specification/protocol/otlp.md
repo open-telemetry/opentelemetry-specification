@@ -23,6 +23,8 @@ nodes such as collectors and telemetry backends.
     + [OTLP/gRPC Service and Protobuf Definitions](#otlpgrpc-service-and-protobuf-definitions)
     + [OTLP/gRPC Default Port](#otlpgrpc-default-port)
   * [OTLP/HTTP](#otlphttp)
+    + [Binary Protobuf Encoding](#binary-protobuf-encoding)
+    + [JSON Protobuf Encoding](#json-protobuf-encoding)
     + [OTLP/HTTP Request](#otlphttp-request)
     + [OTLP/HTTP Response](#otlphttp-response)
       - [Full Success](#full-success-1)
@@ -370,17 +372,48 @@ The default network port for OTLP/gRPC is 4317.
 
 ### OTLP/HTTP
 
-**Status**: Binary format is [Stable](../document-status.md),
-  JSON format is [Experimental](../document-status.md)
-
-OTLP/HTTP uses Protobuf payloads encoded either in binary format or in JSON
-format. The Protobuf schema of the messages is the same for OTLP/HTTP and
-OTLP/gRPC.
+OTLP/HTTP uses Protobuf payloads encoded either in
+[binary format](#binary-protobuf-encoding) or in [JSON format](#json-protobuf-encoding).
+Regardless of the encoding the Protobuf schema of the messages is the same for
+OTLP/HTTP and OTLP/gRPC as
+[defined here](https://github.com/open-telemetry/opentelemetry-proto/tree/master/opentelemetry/proto).
 
 OTLP/HTTP uses HTTP POST requests to send telemetry data from clients to
 servers. Implementations MAY use HTTP/1.1 or HTTP/2 transports. Implementations
 that use HTTP/2 transport SHOULD fallback to HTTP/1.1 transport if HTTP/2
 connection cannot be established.
+
+#### Binary Protobuf Encoding
+
+**Status**: [Stable](../document-status.md)
+
+Binary Protobuf encoded payloads use proto3
+[encoding standard](https://developers.google.com/protocol-buffers/docs/encoding).
+
+The client and the server MUST set "Content-Type: application/x-protobuf" request and
+response headers when sending binary Protobuf encoded payload.
+
+#### JSON Protobuf Encoding
+
+**Status**: [Experimental](../document-status.md)
+
+JSON Protobuf encoded payloads use proto3 standard defined
+[JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json)
+for mapping between Protobuf and JSON, with one deviation from that mapping: the
+`trace_id` and `span_id` byte arrays are represented as
+[case-insensitive hex-encoded strings](https://tools.ietf.org/html/rfc4648#section-8),
+they are not base64-encoded like it is defined in the standard
+[JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json).
+The hex encoding is used for `trace_id` and `span_id` fields in all OTLP
+Protobuf messages, e.g. the `Span`, `Link`, `LogRecord`, etc. messages.
+
+Note that according to [Protobuf specs](
+https://developers.google.com/protocol-buffers/docs/proto3#json) 64-bit integer
+numbers in JSON-encoded payloads are encoded as decimal strings, and either
+numbers or strings are accepted when decoding.
+
+The client and the server MUST set "Content-Type: application/json" request and
+response headers when sending JSON Protobuf encoded payload.
 
 #### OTLP/HTTP Request
 
@@ -399,31 +432,12 @@ the request body is a Protobuf-encoded `ExportMetricsServiceRequest` message.
 The default URL path for requests that carry log data is `/v1/logs` and the
 request body is a Protobuf-encoded `ExportLogsServiceRequest` message.
 
-The client MUST set "Content-Type: application/x-protobuf" request header when
-sending binary-encoded Protobuf or "Content-Type: application/json" request
-header when sending JSON encoded Protobuf payload.
-
 The client MAY gzip the content and in that case MUST include
 "Content-Encoding: gzip" request header. The client MAY include
 "Accept-Encoding: gzip" request header if it can receive gzip-encoded responses.
 
 Non-default URL paths for requests MAY be configured on the client and server
 sides.
-
-JSON-encoded Protobuf payloads use proto3 standard defined
-[JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json)
-for mapping between Protobuf and JSON, with one deviation from that mapping: the
-`trace_id` and `span_id` byte arrays are represented as
-[case-insensitive hex-encoded strings](https://tools.ietf.org/html/rfc4648#section-8),
-they are not base64-encoded like it is defined in the standard
-[JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json).
-The hex encoding is used for `trace_id` and `span_id` fields in all OTLP
-Protobuf messages, e.g. the `Span`, `Link`, `LogRecord`, etc. messages.
-
-Note that according to [Protobuf specs](
-https://developers.google.com/protocol-buffers/docs/proto3#json) 64-bit integer
-numbers in JSON-encoded payloads are encoded as decimal strings, and either
-numbers or strings are accepted when decoding.
 
 #### OTLP/HTTP Response
 
