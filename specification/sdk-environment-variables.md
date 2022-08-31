@@ -16,10 +16,11 @@ The SDK MUST interpret an empty value of an environment variable the same way as
 
 ### Boolean value
 
-Any value that represents a boolean MUST only interpret the string `"true"` as meaning true.
-An SDK MAY NOT extend this definition and define additional values that are interpreted as true.
+Any value that represents a boolean MUST interpret only the case-insensitive string "true", meaning "True" or "TRUE" are also accepted as "true".
+An SDK MUST NOT extend this definition and define additional values that are interpreted as true.
 Any value not explicitly defined here or by the SDK as a true value, including unset and empty values, MUST be interpreted as false.
-All boolean environment variables should be named such that false is the expected safe default behavior.
+If any value other than a true value, `"false"`, empty, or unset is used, a warning SHOULD be logged to inform users about the fallback to false being applied.
+All boolean environment variables SHOULD be named and defined such that false is the expected safe default behavior.
 
 ### Numeric value
 
