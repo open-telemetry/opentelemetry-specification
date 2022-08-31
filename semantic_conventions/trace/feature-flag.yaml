@@ -1,0 +1,35 @@
+groups:
+  - id: feature_flag
+    prefix: feature_flag
+    brief: >
+      This semantic convention defines the attributes used to represent a
+      feature flag evaluation as a span.
+    span_kind: internal
+    attributes:
+      - id: flag_key
+        type: string
+        requirement_level: required
+        brief: The unique identifier of the feature flag.
+        examples: ["logo-color"]
+      - id: provider_name
+        type: string
+        requirement_level: recommended
+        brief: The name of the service that performs the flag evaluation.
+        examples: ["Flag Manager"]
+      - id: evaluated_variant
+        type: string
+        brief: The human readable name that identifies the evaluated value.
+        examples: ["red", "blue", "green"]
+        requirement_level:
+          conditionally_required: >
+            A variant should be used if it is available. If the variant is
+            present, feature_flag.evaluated_value should be omitted.
+      - id: evaluated_value
+        type: string
+        brief: A string representation of the evaluated value.
+        examples: ["ff0000", "0000ff", "00ff00"]
+        requirement_level:
+          conditionally_required: >
+            The value should only be used if the variant is not available. How
+            the value is represented as a string should be determined by the
+            implementer.
