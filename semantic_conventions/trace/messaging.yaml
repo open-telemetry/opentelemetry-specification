@@ -282,7 +282,7 @@ groups:
               current position'
             - id: NonDurable
               value: 'NonDurable'
-              brief: 'Lightweight subscription mode that does not have a durable cursor associated'
+              brief: 'A lightweight subscription mode that does not have a durable cursor associated'
         brief: >
           Types of subscription mode supported by Pulsar.
       - id: message_type
