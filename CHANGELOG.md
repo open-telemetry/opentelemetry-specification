@@ -70,7 +70,7 @@ release.
   ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
 - Add OpenSearch to db.system semantic conventions
   ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718)).
-- Add attributes of Apache Pulsar
+- Add messaging semantic conventions for Apache Pulsar
   ([#2697](https://github.com/open-telemetry/opentelemetry-specification/pull/2697))
 
 ### Compatibility

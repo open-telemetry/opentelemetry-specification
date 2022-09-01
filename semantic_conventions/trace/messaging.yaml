@@ -269,8 +269,6 @@ groups:
     attributes:
       - id: subscription
         type: string
-        requirement_level:
-          conditionally_required: If `consumer_name` has been set.
         brief: >
           Subscription name of Pulsar consumer.
         example: 'mySubscription'
@@ -280,7 +278,7 @@ groups:
           members:
             - id: Durable
               value: 'Durable'
-              brief: 'Make the subscription to be backed by a durable cursor that will retain messages and persist the
+              brief: 'A subscription backed by a durable cursor that will retain messages and persist the
               current position'
             - id: NonDurable
               value: 'NonDurable'
