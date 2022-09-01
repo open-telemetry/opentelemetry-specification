@@ -299,7 +299,7 @@ groups:
               value: 'transaction'
               brief: 'Transaction message'
           brief: >
-            Type of message.
+            The message type.
       - id: message_key
         type: string
         brief: >
