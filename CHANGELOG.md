@@ -29,6 +29,11 @@ release.
 
 ### Logs
 
+- Update log SDK to allow log processors to mutate log records
+  ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
+- Add experimental Events and Logs API specification
+  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
+
 ### Resource
 
 - Update the version of the W3C Baggage specification used for `OTEL_RESOURCE_ATTRIBUTES`.

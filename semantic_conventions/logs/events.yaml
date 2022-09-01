@@ -1,0 +1,32 @@
+groups:
+  - id: event
+    prefix: event
+    brief: >
+        This document defines attributes for Events represented using Log Records.
+    attributes:
+      - id: name
+        type: string
+        requirement_level: required
+        brief: >
+          The name identifies the event.
+        examples: ['click', 'exception']
+      - id: domain
+        brief: >
+          The domain identifies the context in which an event happened. An event name is unique only within a domain.
+        type:
+          allow_custom_values: true
+          members:
+            - id: browser
+              value: 'browser'
+              brief: 'Events from browser apps'
+            - id: device
+              value: 'device'
+              brief: 'Events from mobile apps'
+            - id: k8s
+              value: 'k8s'
+              brief: 'Events from Kubernetes'
+        requirement_level: required
+        note: |
+          An `event.name` is supposed to be unique only in the context of an
+          `event.domain`, so this allows for two events in different domains to
+          have same `event.name`, yet be unrelated events.
