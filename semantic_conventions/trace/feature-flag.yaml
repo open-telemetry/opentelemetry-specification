@@ -1,6 +1,7 @@
 groups:
   - id: feature_flag
     prefix: feature_flag
+    type: span
     brief: >
       This semantic convention defines the attributes used to represent a
       feature flag evaluation as a span.
