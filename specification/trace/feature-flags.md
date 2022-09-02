@@ -20,7 +20,7 @@ releases from deployments. Many feature flagging tools support the ability to
 update flag configurations in near real-time. They also commonly allow rulesets
 to be defined that return value based on contextual information. For example, a
 feature could be enabled only for a specific subset of users based on context
-(e.g. users email domain, IP address, country).
+(e.g. users email domain, membership tier, country).
 
 Since feature flags are dynamic and affect runtime behavior, it's important to
 collect relevant feature flag telemetry signals. This can be used to determine
