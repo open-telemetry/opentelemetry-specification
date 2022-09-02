@@ -23,7 +23,7 @@ If an SDK chooses to support an integer-valued environment variable, it SHOULD s
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
 For variables accepting an enum value, if the user provides a value the SDK does not recognize,
 the SDK MUST generate a warning and gracefully ignore the setting,
-or cause the application to fail on initialization.
+or _fail fast_ and cause the application to fail, but MUST NOT cause the application to fail later at run time.
 
 If a null object (empty, no-op) value is acceptable, then the enum value representing it MUST be `"none"`.
 
