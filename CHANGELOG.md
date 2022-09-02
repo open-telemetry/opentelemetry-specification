@@ -26,6 +26,9 @@ release.
   ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538)).
 - Add `process.threads` host metric semantic convention.
   ([#2705](https://github.com/open-telemetry/opentelemetry-specification/pull/2705)).
+- Changed the default buckets for Explicit Bucket Histogram to better match the
+  official Promethues Clients.
+  ([#2770](https://github.com/open-telemetry/opentelemetry-specification/pull/2770)).
 
 ### Logs
 
