@@ -17,10 +17,11 @@
 
 Features flags are commonly used in modern applications to decouple feature
 releases from deployments. Many feature flagging tools support the ability to
-update flag configurations in near real-time. They also commonly allow rulesets
-to be defined that return value based on contextual information. For example, a
-feature could be enabled only for a specific subset of users based on context
-(e.g. users email domain, membership tier, country).
+update flag configurations in near real-time from a remote feature flag management
+service. They also commonly allow rulesets to be defined that return values based
+on contextual information. For example, a feature could be enabled only for a
+specific subset of users based on context (e.g. users email domain, membership
+tier, country).
 
 Since feature flags are dynamic and affect runtime behavior, it's important to
 collect relevant feature flag telemetry signals. This can be used to determine
@@ -63,7 +64,7 @@ span SHOULD be named `Feature Flag <feature_flag.flag_key>`.
 
 The following example shows how a feature flag span can be represented on a trace.
 
-In this scenario, developers are updating an endpoint which returns the nth number in the Fibonacci sequence. They want to monitor the impact of this updated algorithm on the system. After a GET request is made to `/fib`, a feature flag with the key `fib-algo-name` determines which algorithm is used during this calculation. This feature flag is evaluated by a feature flagging service called `Flag Manager`, which returns the new algorithm only for internal test users. The span `Flag Manager fib-algo-name` has the attribute `feature_flag.evaluated_value`, which represents the algorithm that was run during this request. This span information can then be used to understand the impact that a flag(s) had on a request and to determine whether a new feature should be rolled out to a more general audience.
+In this scenario, developers are updating an endpoint which returns the n-th number in the Fibonacci sequence. They want to monitor the impact of this updated algorithm on the system. After a GET request is made to `/fib`, a feature flag with the key `fib-algo-name` determines which algorithm is used during this calculation. This feature flag is evaluated by a feature flagging service called `Flag Manager`, which returns the new algorithm only for internal test users. The span `Flag Manager fib-algo-name` has the attribute `feature_flag.evaluated_value`, which represents the algorithm that was run during this request. This span information can then be used to understand the impact that a flag(s) had on a request and to determine whether a new feature should be rolled out to a more general audience.
 
 ```
 ┌───────────────────────────────────────────────────────┐
