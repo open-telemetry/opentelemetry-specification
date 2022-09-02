@@ -74,4 +74,4 @@ In this scenario, developers are updating an endpoint which returns the nth numb
   └────────────────────────────┘ └───────────────────┘
 ```
 
-> NOTE: The `Flag Manager fib-algo-name` and `GET /calcFib` spans are children of the parent span.
+> NOTE: The `Flag Manager fib-algo-name` and `GET /calcFib` spans are children of `GET /fib`.
