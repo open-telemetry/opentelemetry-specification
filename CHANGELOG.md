@@ -68,6 +68,8 @@ release.
 
 - Update log SDK to allow log processors to mutate log records
   ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
+- Add experimental Events and Logs API specification
+  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
 
 ### Resource
 
@@ -88,9 +90,6 @@ release.
   ([#2618](https://github.com/open-telemetry/opentelemetry-specification/pull/2618))
 - Change `faas.document.time` and `faas.time` level from `required` to `recommended`
   ([#2627](https://github.com/open-telemetry/opentelemetry-specification/pull/2627))
-- Remove `direction` dimension, instead creating metrics with names reflecting those
-  dimensions.
-  ([#2617](https://github.com/open-telemetry/opentelemetry-specification/pull/2617))
 - Add `rpc.grpc.status_code` to RPC metric semantic conventions
   ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604))
 - Add `http.*.*.size` metric semantic conventions for tracking size of requests
