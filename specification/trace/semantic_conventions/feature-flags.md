@@ -22,6 +22,7 @@ For example, a feature could be enabled only for a specific subset of users base
 
 Since feature flags are dynamic and affect runtime behavior, it's important to collect relevant feature flag telemetry signals.
 This can be used to determine the impact a feature has on a request, enabling enhanced observability use cases, such as A/B testing or progressive feature releases.
+Depending on the implementation, flag evaluations may occasionally block on an I/O operation, making the timing information collected by a span valuable.
 
 ## Overview
 
