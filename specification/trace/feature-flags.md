@@ -68,9 +68,10 @@ In this scenario, developers are updating an endpoint which returns the nth numb
 ```
 ┌───────────────────────────────────────────────────────┐
 │ GET /fib                                              │
-└──┬──────────────────────────────┬─────────────────────┘
-   │                              │
-  ┌┴───────────────────────────┐ ┌┴──────────────────┐
+└───────────────────────────────────────────────────────┘
+  ┌────────────────────────────┐ ┌───────────────────┐
   │ Flag Manager fib-algo-name │ │ GET /calcFib      │
   └────────────────────────────┘ └───────────────────┘
 ```
+
+> NOTE: The `Flag Manager fib-algo-name` and `GET /calcFib` spans are children of the parent span.
