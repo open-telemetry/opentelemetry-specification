@@ -38,7 +38,7 @@ labels only
 Since OpenTelemetry allows for different levels of attributes, it is possible
 that the same attribute appears multiple times on different levels.
 
-This document aims to provide guidance on how OpenTelemetry attributes can be
+This document provides guidance on how OpenTelemetry attributes can be
 consistently mapped to flat sets.
 
 ## Attribute hierarchy in OTLP messages
