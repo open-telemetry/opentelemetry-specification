@@ -235,3 +235,6 @@ metric exporters.
 * OpenTelemetry does not support OpenCensus' GaugeHistogram type; these metrics
   MUST be dropped when using the bridge.
 * OpenTelemetry does not currently support context-based attributes (tags).
+* The OpenCensus bridge produces counters and distributions with a cumulative
+  AggregationTemporality. Many OpenTelemetry exporters do not support cumulative
+  AggregationTemporality, and will return errors if used with this bridge.
