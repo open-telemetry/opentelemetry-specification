@@ -370,8 +370,6 @@ Exports to an OTLP network destination via OTLP/gRPC or OTLP/HTTP.
 
 Writes to a file or stdout in either OTLP JSON or OTLP Protobuf binary format.
 
-TODO: update image to reflect current naming conventions
-
 ![Logging to File](img/otlp-file.png)
 
 TODO: clarify how this functionality co-exists with the overlapping

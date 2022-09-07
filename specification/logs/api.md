@@ -202,8 +202,6 @@ the currently [active Span](../trace/api.md#context-interaction) and populate
 library may also have an alternate way to inject the context into `LogRecords`
 (e.g. MDC in Log4j).
 
-TODO: update image to reflect current naming conventions
-
 ![Appender](img/appender.png)
 
 This same approach can be also used for example for:
