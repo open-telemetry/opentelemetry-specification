@@ -213,18 +213,18 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
 | **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| LoggerProvider.Get Logger                    |          |     | +    |     | +      |      |        |     |      |     | -    |       |
+| LoggerProvider.Get Logger                    |          |     |      |     |        |      |        |     |      |     | -    |       |
 | LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        |     |      |     |      |       |
-| LoggerProvider.Shutdown                      |          |     | +    |     | +      |      |        |     |      |     | -    |       |
-| LoggerProvider.ForceFlush                    |          |     | +    |     | +      |      |        |     |      |     | -    |       |
-| Logger.Emit(LogRecord)                       |          |     | +    |     | +      |      |        |     |      |     | -    |       |
-| SimpleLogRecordProcessor                     |          |     | +    |     | +      |      |        |     |      |     | +    |       |
-| BatchLogRecordProcessor                      |          |     | +    |     | +      |      |        |     |      |     | +    |       |
-| Can plug custom LogRecordProcessor           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
+| LoggerProvider.Shutdown                      |          |     |      |     |        |      |        |     |      |     | -    |       |
+| LoggerProvider.ForceFlush                    |          |     |      |     |        |      |        |     |      |     | -    |       |
+| Logger.Emit(LogRecord)                       |          |     |      |     |        |      |        |     |      |     | -    |       |
+| SimpleLogRecordProcessor                     |          |     |      |     |        |      |        |     |      |     |      |       |
+| BatchLogRecordProcessor                      |          |     |      |     |        |      |        |     |      |     |      |       |
+| Can plug custom LogRecordProcessor           |          |     |      |     |        |      |        |     |      |     |      |       |
 | OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
 | OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
-| Can plug custom LogRecordExporter            |          |     | +    |     | +      |      |        |     |      |     | +    |       |
+| Can plug custom LogRecordExporter            |          |     |      |     |        |      |        |     |      |     |      |       |
 | Implicit Context Injection                   |          |     | -    |     | +      |      |        |     |      |     | +    |       |
 | Explicit Context                             |          |     | +    |     | -      |      |        |     |      |     | -    |       |
 

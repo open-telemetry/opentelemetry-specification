@@ -29,7 +29,9 @@
 The Events and Logs API consist of these main classes:
 
 * LoggerProvider is the entry point of the API. It provides access to Loggers.
-* Logger is the class responsible for creating Events and Logs using LogRecords.
+* Logger is the class responsible for
+  creating [Events](./semantic_conventions/events.md)
+  and [Logs](./data-model.md#log-and-event-record-definition) as LogRecords.
 
 LoggerProvider/Logger are analogous to TracerProvider/Tracer.
 
@@ -140,9 +142,10 @@ This function MAY be named `logEvent`.
 
 **Parameters:**
 
-* `name` - the Event name. This argument MUST be recorded as an attribute with
-  the key `event.name`. Care MUST be taken by the implementation to not override
-  or delete this attribute while the Event is emitted to preserve its identity.
+* `name` - the Event name. This argument MUST be recorded as a `LogRecord`
+  attribute with the key `event.name`. Care MUST be taken by the implementation
+  to not override or delete this attribute while the Event is emitted to
+  preserve its identity.
 * `logRecord` - the [LogRecord](#logrecord) representing the Event.
 
 Events require the `event.domain` attribute. The API MUST not allow creating an
@@ -182,7 +185,7 @@ fields:
 
 ### How to Create Log4J Style Appender
 
-An Appender implementation can be used to allow emitting `LogRecords` via
+An Appender implementation can be used to allow emitting logs via
 OpenTelemetry [LogRecordExporters](sdk.md#logrecordexporter). This approach is
 typically used for applications which are fine with changing the log transport
 and is [one of the supported](README.md#direct-to-collector) log collection
