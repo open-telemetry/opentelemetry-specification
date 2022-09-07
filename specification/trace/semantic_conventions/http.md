@@ -368,7 +368,7 @@ Example of retries in the presence of a trace started by an inbound request:
 ```
 request (SERVER, trace=t1, span=s1)
   |
-  -- GET / - 401 (CLIENT, trace=t1, span=s2)
+  -- GET /hello - 401 (CLIENT, trace=t1, span=s2)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
@@ -380,7 +380,7 @@ request (SERVER, trace=t1, span=s1)
 Example of retries with no trace started upfront:
 
 ```
-GET / - 401 (CLIENT, trace=t1, span=s1)
+GET /hello - 401 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
