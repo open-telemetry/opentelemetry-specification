@@ -29,6 +29,11 @@ release.
 
 ### Logs
 
+- Update log SDK to allow log processors to mutate log records
+  ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
+- Add experimental Events and Logs API specification
+  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
+
 ### Resource
 
 - Update the version of the W3C Baggage specification used for `OTEL_RESOURCE_ATTRIBUTES`.
@@ -48,9 +53,6 @@ release.
   ([#2618](https://github.com/open-telemetry/opentelemetry-specification/pull/2618))
 - Change `faas.document.time` and `faas.time` level from `required` to `recommended`
   ([#2627](https://github.com/open-telemetry/opentelemetry-specification/pull/2627))
-- Remove `direction` dimension, instead creating metrics with names reflecting those
-  dimensions.
-  ([#2617](https://github.com/open-telemetry/opentelemetry-specification/pull/2617))
 - Add `rpc.grpc.status_code` to RPC metric semantic conventions
   ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604)).
 - Add `http.*.*.size` metric semantic conventions for tracking size of requests
@@ -66,8 +68,6 @@ release.
   ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
 - Add `process.parent_pid` attribute for use in reporting parent process id (PID)
   ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
-- Separate tcp/udp protocols for metric `system.network.connections`.
-  ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
 - Add OpenSearch to db.system semantic conventions
   ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718)).
 
