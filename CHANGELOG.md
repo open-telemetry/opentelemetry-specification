@@ -70,6 +70,8 @@ release.
   ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
 - Add OpenSearch to db.system semantic conventions
   ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718)).
+- Add semantic conventions for JVM implementation information and memory usage.
+  ([#2776](https://github.com/open-telemetry/opentelemetry-specification/pull/2777)).
 
 ### Compatibility
 
