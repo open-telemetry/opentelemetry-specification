@@ -39,6 +39,7 @@ Starting with an application using entirely OpenCensus instrumention for traces 
 
 1. Migrate the exporters (SDK)
     1. Install the OpenTelemetry SDK, with an equivalent exporter
+        1. If using an OpenCensus exporter, switch to using an OTLP exporter
     2. Install equivalent OpenTelemetry resource detectors
     3. Install OpenTelemetry propagators for OpenCensus' `TextFormat` and `BinaryPropagator` formats.
     4. **breaking**: Install the metrics and trace bridges
