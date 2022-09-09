@@ -147,3 +147,97 @@ Some other implementations may use a streaming approach where every
 that individual attribute value being exported using a streaming wire protocol.
 In such cases the enforcement of uniqueness will likely be the responsibility of
 the recipient of this data.
+
+## Full Scope naming requirements
+
+Scope Attributes, introduced in version 1.13 of the OpenTelemetry
+specification are new identifying fields in the protocol that MUST
+be handled using backwards compatibility mechanism specified below.
+Stable elements of OTLP protocol that already recognize Scopes without
+attributes would be broken without the following requirement.
+
+Using the [syntax specified for HTTP `User-Agent`
+fields](https://www.rfc-editor.org/rfc/rfc9110.html#name-user-agent),
+the Scope name should be constructed so that it contains the Scope
+Attributes in a manner that consumers will recognize and, therefore,
+can reverse.
+
+Specifically, the full value of the Scope Name given to all exporters
+should be constructed from the input `Name` and attributes `[(Key,
+Value), ...]` used to get a Tracer, Meter, or Logger, sorted
+lexicographically by `Key`.  In the simple case where all attributes
+are strings, the following syntax applies:
+
+```
+FullScopeName = Name Key1/Value1 Key2/Value2 ...
+```
+
+When an attribute value is not a string, the User-Agent comment syntax
+is used to indicate the type.  The comment should be derived from [the
+field name specified for mapping to the OTLP
+`AnyValue`](./attribute-type-mapping.md#converting-to-anyvalue) by
+stripping `_value` from the corresponding `AnyValue` field name.  For
+example, an integer-valued attribute might be represented by `key/1234
+(int)` since the corresponding `AnyValue` field is named `int_value`.
+
+The `Name`, `Key`, and `Value` parts SHOULD be percent-encoded (i.e.,
+URL-encoded) to ensure that scope attribute values can properly
+include whitespace and `/` characters, for example.
+
+For example, an API call such as
+
+```
+    meter := meterProvider.Meter("Fancy", 
+        metric.WithVersion("v1.0"), 
+	    metric.WithScopeAttributes(
+		    attribute.Int("shard", shard),   // shard = 1234
+	        attribute.String("path", path),  // path = "/a/b/c"
+	    ),
+		metric.WithSchemaURL("http://schema.org/telemetry/sqldriver/v1.1"),
+	)
+```
+
+The example generates the following OTLP Scope data structure:
+
+```
+InstrumentationScope{
+	Name: "Fancy path/%2Fa%2Fb%2Fc shard=1234 (int)
+	Version: "1.0"
+	SchemaUrl: "http://schema.org/telemetry/sqldriver/v1.1"
+	Attributes: []*KeyValue{
+	  &KeyValue{Key: "path", Value: &AnyValue_StringValue{...}},
+	  &KeyValue{Key: "shard", Value: &AnyValue_IntValue{...}},
+	}
+}
+```
+
+This requirement can potentially be lifted in a future version of the
+specification.  For example, with content negotiation (e.g., using
+information in the exporter's `User-Agent` header).  When the receiver
+supports Scope Attributes it is unnecessary to perform
+backwards-compatible full scope naming.
+
+### Full scope naming: Producer requirements
+
+Producers of OTLP Scopes in OpenTelemetry version 1.13 and later
+versions SHOULD export Scope Attributes both as an Attributes list and
+by including Scope Attributes in the Scope's full name, for backwards
+compatibility, until a future specification changes this
+recommendation.
+
+### Full scope naming: Consumer recommendations
+
+Receivers that recognize Scope attributes SHOULD attempt to parse the
+Scope's name using the [syntax specified for HTTP `User-Agent`
+fields](https://www.rfc-editor.org/rfc/rfc9110.html#name-user-agent).
+If the Scope's name parses successfully, the consumer SHOULD verify
+that the Scope Attributes match those included in the Scope's full
+name.
+
+When Attributes parsed from the Scope full name do not match those
+included in the Scope, the consumer SHOULD notify the user of an
+unexpected disagreement in the data.
+
+When Attributes from the Scope full name match the Scope attributes,
+the consumer SHOULD restore the Scope Name to its original value
+without including Scope Attributes in the full name.
