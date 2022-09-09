@@ -192,11 +192,6 @@ implements the OpenTelemetry MetricProducer interface. When Produce() is
 invoked, the shim collects metrics from the OpenCensus global state, converts
 the metrics to an OpenTelemetry metrics batch, and returns.
 
-To construct a shim, the caller MUST be able to provide the following:
-
-* A resource (optional) to attach to metrics batches. If not provided, the
-default resource is used.
-
 ### Requirements
 
 * This component MUST be an optional dependency.
@@ -226,7 +221,7 @@ the shim.
 ### Usage
 
 The shim can be passed as an option to an OpenTelemetry
-[MetricReader](../metrics/sdk.md#metricreader) when configuring the
+[MeterProvider](../metrics/sdk.md#meterprovider) when configuring the
 OpenTelemetry SDK. This enables the bridge to work with both push and pull
 metric exporters.
 
