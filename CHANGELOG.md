@@ -33,6 +33,8 @@ release.
   ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
 - Add experimental Events and Logs API specification
   ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
+- Add environment variables for configuring the `BatchLogRecordProcessor`.
+  ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
 
 ### Resource
 
