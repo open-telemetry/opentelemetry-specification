@@ -776,7 +776,7 @@ used with pull-based metrics collection.  A common sub-class of
 `MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
 to be used typically with push-based metrics collection.
 
-The `MetricReader` MUST ensure that data points from OTel
+The `MetricReader` MUST ensure that data points from OpenTelemetry
 [instruments](./api.md#instrument) are output in the configured aggregation
 temporality for each instrument kind. For synchronous instruments being output
 with Cumulative temporality, this means converting
