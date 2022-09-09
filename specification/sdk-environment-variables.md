@@ -89,6 +89,17 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
+## Batch LogRecord Processor
+
+**Status**: [Experimental](document-status.md)
+
+| Name                           | Description                                    | Default | Notes                                                 |
+| ------------------------------ | ---------------------------------------------- | ------- | ----------------------------------------------------- |
+| OTEL_BURP_SCHEDULE_DELAY        | Delay interval between two consecutive exports | 5000    |                                                       |
+| OTEL_BURP_EXPORT_TIMEOUT        | Maximum allowed time to export data            | 30000   |                                                       |
+| OTEL_BURP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
+| OTEL_BURP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BURP_MAX_QUEUE_SIZE |
+
 ## Attribute Limits
 
 SDKs SHOULD only offer environment variables for the types of attributes, for
