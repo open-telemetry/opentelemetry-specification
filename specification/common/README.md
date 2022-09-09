@@ -15,6 +15,9 @@ aliases: [/docs/reference/specification/common/common]
     + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
 - [Attribute Collections](#attribute-collections)
+- [Full Scope naming requirements](#full-scope-naming-requirements)
+  * [Full scope naming: Producer requirements](#full-scope-naming-producer-requirements)
+  * [Full scope naming: Consumer recommendations](#full-scope-naming-consumer-recommendations)
 
 <!-- tocstop -->
 
@@ -186,7 +189,7 @@ include whitespace and `/` characters, for example.
 
 For example, an API call such as
 
-```
+```golang
     meter := meterProvider.Meter("Fancy", 
         metric.WithVersion("v1.0"), 
 	    metric.WithScopeAttributes(
@@ -199,15 +202,15 @@ For example, an API call such as
 
 The example generates the following OTLP Scope data structure:
 
-```
+```golang
 InstrumentationScope{
-	Name: "Fancy path/%2Fa%2Fb%2Fc shard=1234 (int)
-	Version: "1.0"
-	SchemaUrl: "http://schema.org/telemetry/sqldriver/v1.1"
+	Name: "Fancy path/%2Fa%2Fb%2Fc shard=1234 (int)",
+	Version: "1.0",
+	SchemaUrl: "http://schema.org/telemetry/sqldriver/v1.1",
 	Attributes: []*KeyValue{
 	  &KeyValue{Key: "path", Value: &AnyValue_StringValue{...}},
 	  &KeyValue{Key: "shard", Value: &AnyValue_IntValue{...}},
-	}
+	},
 }
 ```
 
