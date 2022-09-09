@@ -33,6 +33,8 @@ release.
   ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
 - Add experimental Events and Logs API specification
   ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
+- Add the signal-specific OTEL_EXPORTER_OTLP_LOGS_* environment variables.
+  ([#2782](https://github.com/open-telemetry/opentelemetry-specification/pull/2782))
 
 ### Resource
 
