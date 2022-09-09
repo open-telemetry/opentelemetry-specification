@@ -27,7 +27,7 @@ OpenTelemetry implementations MUST NOT throw unhandled exceptions at run time.
    In general, internal exceptions should only affect the execution context of the request that caused the exception.
 4. Internal error handling should follow language-specific conventions.
    In general, developers should minimize the scope of error handlers and add special processing for expected exceptions.
-5. Beware external callbacks and overrideable interfaces: Expect them to throw.
+5. Beware external callbacks and overridable interfaces: Expect them to throw.
 6. Beware to call any methods that wasn't explicitly provided by API and SDK users as a callbacks.
    Method `ToString` that SDK may decide to call on user object may be badly implemented and lead to stack overflow.
    It is common that the application never calls this method and this bad implementation would never be caught by an application owner.
