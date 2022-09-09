@@ -94,7 +94,7 @@ release.
 - Introduce Instrumentation Scope Attributes
   ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
 - Introduce Instrumentation Scope Full name requirements
-  ([#2780])(https://github.com/open-telemetry/opentelemetry-specification/pull/2780).
+  ([#2780](https://github.com/open-telemetry/opentelemetry-specification/pull/2780)).
 
 ## v1.12.0 (2022-06-10)
 
