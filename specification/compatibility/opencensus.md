@@ -66,7 +66,7 @@ Finally, the Application would update all usages of OpenCensus to OpenTelemetry.
 OpenCensus supports two primary types of telemetry: Traces and Stats (Metrics).
 Compatibility for these is defined separately.
 
-> The overridding philosophy for compatibility is that OpenCensus instrumented
+> The overriding philosophy for compatibility is that OpenCensus instrumented
 > libraries and applications need make *no change* to their API usage in order
 > to use OpenTelemetry. All changes should be solely configuration / setup.
 
@@ -109,7 +109,7 @@ OpenTelemetry.
 
 Below are listed known incompatibilities between OpenTelemetry and OpenCensus
 specifications.   Applications leveraging unspecified behavior from OpenCensus
-that *is* specified incompatibly within OpenTelemetry are not eligble for
+that *is* specified incompatibly within OpenTelemetry are not eligible for
 using the OpenCensus <-> OpenTelemetry bridge.
 
 1. In OpenCensus, there is [no specification](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/Span.md#span-creation)
@@ -127,7 +127,7 @@ using the OpenCensus <-> OpenTelemetry bridge.
 4. TraceFlags in both OpenCensus and OpenTelemetry only specify the single
    `sampled` flag ([OpenTelemetry](../trace/api.md#spancontext),
    [OpenCensus](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/TraceConfig.md#traceparams)).
-   Some OpenCensus APIs support "debug" and "defer" tracing flags in additon to
+   Some OpenCensus APIs support "debug" and "defer" tracing flags in addition to
    "sampled".  In this case, the OpenCensus bridge will do its best to support
    and translate unspecified flags into the closest OpenTelemetry equivalent.
 

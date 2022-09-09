@@ -185,7 +185,7 @@ Environment variables specific for the `udp/thrift.binary` transport protocol:
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
 | OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
 
-Addtionally, the following environment variables are reserved for future
+Additionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:
 
 - `OTEL_EXPORTER_ZIPKIN_PROTOCOL`
@@ -245,7 +245,7 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
-- `"none"`: No measurements are eligble for exemplar sampling.
+- `"none"`: No measurements are eligible for exemplar sampling.
 - `"all"`: All measurements are eligible for exemplar sampling.
 - `"with_sampled_trace"`: Only allow measurements with a sampled parent span in context.
 
