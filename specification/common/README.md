@@ -204,7 +204,7 @@ The example generates the following OTLP Scope data structure:
 
 ```golang
 InstrumentationScope{
-	Name: "Fancy path/%2Fa%2Fb%2Fc shard=1234 (int)",
+	Name: "Fancy path/%2Fa%2Fb%2Fc shard/1234 (int)",
 	Version: "1.0",
 	SchemaUrl: "http://schema.org/telemetry/sqldriver/v1.1",
 	Attributes: []*KeyValue{
