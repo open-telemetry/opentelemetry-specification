@@ -20,7 +20,7 @@
 - [Usage](#usage)
   * [How to Create Log4J Style Appender](#how-to-create-log4j-style-appender)
   * [Implicit Context Injection](#implicit-context-injection)
-  * [Explicit Context](#explicit-context)
+  * [Explicit Context Injection](#explicit-context-injection)
 
 <!-- tocstop -->
 
@@ -196,11 +196,9 @@ global [LoggerProvider](#loggerprovider) at startup time, then
 call [Emit LogRecord](#emit-logrecord) for `LogRecords` received from the
 application.
 
-For languages with implicit Context, the Appender may call Context API to get
-the currently [active Span](../trace/api.md#context-interaction) and populate
-`TraceContext` fields of the `LogRecord` before emitting it. The log
-library may also have an alternate way to inject the context into `LogRecords`
-(e.g. MDC in Log4j).
+[Implicit Context Injection](#implicit-context-injection)
+and [Explicit Context Injection](#explicit-context-injection) describe how an
+Appender injects `TraceContext` into `LogRecords`.
 
 ![Appender](img/appender.png)
 
@@ -219,27 +217,25 @@ popular logging library.
 
 ### Implicit Context Injection
 
-When Context is implicitly available (e.g. in Java) it may be fetched by the log
-library extension synchronously for every `LogRecord` by calling the
-OpenTelemetry Context API and injecting the span context fields into the
-`LogRecord` before emitting it.
+When Context is implicitly available (e.g. in Java) the log library extension
+can rely on automatic context propagation
+by [obtaining a Logger](#get-a-logger) with `include_trace_context=true`.
 
-Some log libraries have mechanisms specifically tailored for injecting
-contextual information into log records. An example of such a mechanism is Log4j
-MDC. When available such mechanisms may be the preferable place to fetch the
-span context and inject it into the log records, since it usually allows
-fetching of the context to work correctly even when log records are emitted
-asynchronously (which otherwise can result in the incorrect implicit context
-being fetched.
+Some log libraries have mechanism specifically tailored for injecting contextual
+information into logs, such as MDC in Log4j. When available such mechanisms may
+be the preferable place to fetch the `TraceContext` and inject it into
+the `LogRecord`, since it usually allows fetching of the context to work
+correctly even when log records are emitted asynchronously which otherwise can
+result in the incorrect implicit context being fetched.
 
 TODO: clarify how works or doesn't work when the log statement call site and the
 log appender are executed on different threads.
 
-### Explicit Context
+### Explicit Context Injection
 
 In languages where the Context must be provided explicitly (e.g. Go) the end
 user must capture the context and explicitly pass it to the logging subsystem in
-order for trace context to be recorded in Log records.
+order for `TraceContext` to be recorded in `LogRecords`
 
 Support for OpenTelemetry for logging libraries in these languages typically can
 be implemented in the form of logger wrappers that can capture the context once,
