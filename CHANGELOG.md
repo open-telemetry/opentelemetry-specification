@@ -532,6 +532,8 @@ release.
   conventions. ([#2272](https://github.com/open-telemetry/opentelemetry-specification/pull/2272))
 - Add opentracing.ref_type semantic convention.
   ([#2297](https://github.com/open-telemetry/opentelemetry-specification/pull/2297))
+- Add `db.redis.instance` Resource attribute in Redis.
+  ([#2145](https://github.com/open-telemetry/opentelemetry-specification/pull/2145))
 
 ### Compatibility
 
