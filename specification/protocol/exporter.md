@@ -165,7 +165,7 @@ For OTLP/HTTP, the errors `408 (Request Timeout)` and `5xx (Server Errors)` are 
 OpenTelemetry protocol exporters SHOULD emit a User-Agent header to at a minimum identify the exporter, the language of its implementation, and the version of the exporter. For example, the Python OTLP exporter version 1.2.3 would report the following:
 
 ```
-OpenTelemetry OTLP Exporter Python/1.2.3
+Otel OTLP Exporter Python/1.2.3
 ```
 
 The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
