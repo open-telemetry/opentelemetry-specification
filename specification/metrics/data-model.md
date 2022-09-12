@@ -864,7 +864,7 @@ boundary could be mapped into the incorrect bucket due to inaccuracy.
 Defining an exact mapping function is out of scope for this document.
 
 However, when inputs are an exact power of two, it is possible to
-calculate the exactly corect bucket index.  Since it is relatively
+calculate the exactly correct bucket index.  Since it is relatively
 simple to check for exact powers of two, implementations SHOULD
 apply such a special case:
 
@@ -1312,7 +1312,7 @@ type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed
 from the suffix as well, if the metric suffix matches the unit.
 
 The [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
-if present, MUST be added as the desciption of the OTLP metric.
+if present, MUST be added as the description of the OTLP metric.
 
 The [OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
 if present, MUST be used to determine the OTLP data type, and dictates

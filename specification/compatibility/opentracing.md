@@ -121,7 +121,7 @@ Parameters:
 - An optional explicit start timestamp, a numeric value.
 
 For OpenTracing languages implementing the [ScopeManager](#scopemanager-shim)
-interface, the folllowing parameters are defined as well:
+interface, the following parameters are defined as well:
 
 - An optional boolean specifying whether the current `Span`
   should be ignored as automatic parent.
