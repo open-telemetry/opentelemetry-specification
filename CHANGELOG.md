@@ -95,6 +95,8 @@ release.
 
 - Introduce Instrumentation Scope Attributes
   ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
+  - Define Instrumentation Scope Attributes as non identifiers
+    ([#2789](https://github.com/open-telemetry/opentelemetry-specification/pull/2789))
 
 ## v1.12.0 (2022-06-10)
 
