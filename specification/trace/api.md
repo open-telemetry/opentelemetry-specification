@@ -132,12 +132,12 @@ This API MUST accept the following parameters:
   to associate with emitted telemetry.
 
 Implementations MUST return different `Tracer` instances when called repeatedly
-with different values of parameters. Note that always returning a new `Tracer` instance
+with different values of (name,version,schema_url) parameters. Note that always returning a new `Tracer` instance
 is a valid implementation. The only exception to this rule is the no-op `Tracer`:
 implementations MAY return the same instance regardless of parameter values.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
-with the same name+version+schema_url+attributes to pick up configuration changes.
+with the same (name,version,schema_url) parameters to pick up configuration changes.
 This can be achieved either by allowing to work with an outdated configuration or
 by ensuring that new configuration applies also to previously returned `Tracer`s.
 

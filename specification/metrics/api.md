@@ -150,17 +150,17 @@ This API MUST accept the following parameters:
 Meters are identified by all of these parameters.
 
 Implementations MUST return different `Meter` instances when called repeatedly
-with different values of parameters. Note that always returning a new `Meter` instance
+with different values of (name,version,schema_url) parameters. Note that always returning a new `Meter` instance
 is a valid implementation. The only exception to this rule is the no-op `Meter`:
 implementations MAY return the same instance regardless of parameter values.
 
 It is unspecified whether or under which conditions the same or different
 `Meter` instances are returned from this function when the same
-(name,version,schema_url,attributes) parameters are used.
+(name,version,schema_url) parameters are used.
 
 The term *identical* applied to Meters describes instances where all identifying fields
-are equal. The term *distinct* applied to Meters describes instances where at
-least one identifying field has a different value.
+(name,version,schema_url) are equal. The term *distinct* applied to Meters describes instances where at
+least one of identifying fields (name,version,schema_url) has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a `Meter` with
 the same identity to pick up configuration changes. This can be

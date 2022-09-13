@@ -100,13 +100,13 @@ SHOULD be true by default.
 associate with emitted telemetry.
 
 Implementations MUST return different `Logger` instances when called repeatedly
-with different values of parameters. Note that always returning a new `Logger`
+with different values of (name,version,schema_url) parameters. Note that always returning a new `Logger`
 instance is a valid implementation. The only exception to this rule is the no-op
 `Logger`: implementations MAY return the same instance regardless of parameter
 values.
 
 Implementations MUST NOT require users to repeatedly obtain a Logger again with
-the same name+version+schema_url+event_domain+include_trace_context+attributes
+the same (name,version,schema_url) parameters
 to pick up configuration changes. This can be achieved either by allowing to
 work with an outdated configuration or by ensuring that new configuration
 applies also to previously returned Loggers.
@@ -115,7 +115,7 @@ Note: This could, for example, be implemented by storing any mutable
 configuration in the `LoggerProvider` and having `Logger` implementation objects
 have a reference to the `LoggerProvider` from which they were obtained.
 If configuration must be stored per-Logger (such as disabling a certain `Logger`),
-the `Logger` could, for example, do a look-up with its name+version+schema_url+event_domain+include_trace_context+attributes
+the `Logger` could, for example, do a look-up with its (name,version,schema_url)
 in a map in the `LoggerProvider`, or the `LoggerProvider` could maintain a registry
 of all returned `Logger`s and actively update their configuration if it changes.
 
