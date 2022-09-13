@@ -99,11 +99,15 @@ SHOULD be true by default.
 - `attributes` (optional): Specifies the instrumentation scope attributes to
 associate with emitted telemetry.
 
-Implementations MUST return different `Logger` instances when called repeatedly
-with different values of parameters. Note that always returning a new `Logger`
-instance is a valid implementation. The only exception to this rule is the no-op
-`Logger`: implementations MAY return the same instance regardless of parameter
-values.
+Loggers are identified by `name`, `version`, and `schema_url` fields.  When more
+than one `Logger` of the same `name`, `version`, and `schema_url` is created, it
+is unspecified whether or under which conditions the same or different `Logger`
+instances are returned. It is a user error to create Loggers with different
+attributes but the same identity.
+
+The term *identical* applied to Loggers describes instances where all
+identifying fields are equal. The term *distinct* applied to Loggers describes
+instances where at least one identifying field has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a Logger again with
 the same name+version+schema_url+event_domain+include_trace_context+attributes
