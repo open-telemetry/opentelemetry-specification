@@ -86,6 +86,12 @@ Configuration (i.e., [MetricExporters](#metricexporter),
 provide a way to configure all options that are implemented by the SDK. This
 MAY be done at the time of MeterProvider creation if appropriate.
 
+If a meter is created which produces an
+[`InstrumentationScope`](../glossary.md#instrumentation-scope), which matches
+the InstrumentationScope of a [MetricProducer](#metricproducer), or if multiple
+[MetricProducers](#metricproducer) have the same InstrumenatationScope the SDK
+SHOULD emit a warning.
+
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MetricReader`), the updated
 configuration MUST also apply to all already returned `Meters` (i.e. it MUST NOT
