@@ -35,6 +35,8 @@ release.
   ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676)).
 - Align log SDK and API component naming
   ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
+- Fix inconsistencies in log README
+  ([#2800](https://github.com/open-telemetry/opentelemetry-specification/pull/2800)).
 
 ### Resource
 
