@@ -69,7 +69,9 @@ release.
 - Update log SDK to allow log processors to mutate log records
   ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
 - Add experimental Events and Logs API specification
-  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
+  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676)).
+- Align log SDK and API component naming
+  ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
 
 ### Resource
 
@@ -138,6 +140,8 @@ release.
 
 - Introduce Instrumentation Scope Attributes
   ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
+  - Define Instrumentation Scope Attributes as non identifiers
+    ([#2789](https://github.com/open-telemetry/opentelemetry-specification/pull/2789))
 
 ## v1.12.0 (2022-06-10)
 
@@ -634,7 +638,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 
 ### Traces
 
-- Prefer global user defined limits over model-sepcific default values.
+- Prefer global user defined limits over model-specific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
 - Generalize the "message" event to apply to all RPC systems not just gRPC
   ([#1914](https://github.com/open-telemetry/opentelemetry-specification/pull/1914))
