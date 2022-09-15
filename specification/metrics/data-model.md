@@ -66,9 +66,11 @@ linkTitle: Data Model
     + [Dropped Types](#dropped-types)
     + [Start Time](#start-time)
     + [Exemplars](#exemplars-1)
+    + [Instrumentation Scope](#instrumentation-scope)
     + [Resource Attributes](#resource-attributes)
   * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
     + [Metric Metadata](#metric-metadata-1)
+    + [Instrumentation Scope](#instrumentation-scope-1)
     + [Gauges](#gauges-1)
     + [Sums](#sums-1)
     + [Histograms](#histograms-1)
@@ -1385,6 +1387,48 @@ retrieved from the `trace_id` and `span_id` label keys, respectively.  All
 labels not used for the trace and span ids MUST be added to the OpenTelemetry
 exemplar as attributes.
 
+#### Instrumentation Scope
+
+Each `opentelemetry_scope_info` metric point present in a batch of metrics
+SHOULD be dropped from the incoming scrape, and converted to an instrumentation
+scope. The `opentelemetry_scope_name` and `opentelemetry_scope_version` labels,
+if present, MUST be converted to the Name and Version of the Instrumentation
+Scope. Additional labels MUST be added as scope attributes, with keys and
+values unaltered. Other metrics in the batch which have
+`opentelemetry_scope_name` and `opentelemetry_scope_version`
+labels that match an instrumentation scope MUST be placed within the matching
+instrumentation scope, and MUST remove those labels. For example, the
+OpenMetrics metrics:
+
+```
+# TYPE opentelemetry_scope_info info
+opentelemetry_scope_info{opentelemetry_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",opentelemetry_scope_version="v0.24.0",library_mascot="bear"} 1
+# TYPE otelhttp_http_server_duration counter
+otelhttp_http_server_duration{opentelemetry_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",opentelemetry_scope_version="v0.24.0"...} 1
+```
+
+becomes:
+
+```yaml
+# within a resource_metrics
+scope_metrics:
+  scope:
+    name: go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp
+    version: v0.24.0
+    attributes:
+      library_mascot: bear
+  metrics:
+  - name: http_server_duration
+    data:
+      sum:
+        data_points:
+        - value: 1
+```
+
+Metrics which are not found to be associated with an instrumentation scope are
+all placed within an empty instrumentation scope, and do not have any labels
+removed.
+
 #### Resource Attributes
 
 When scraping a Prometheus endpoint, resource attributes MUST be added to the
@@ -1444,6 +1488,19 @@ The description of an OTLP metrics point MUST be added as
 The data point type of an OTLP metric MUST be added as
 [OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
 It also dictates type-specific conversion rules listed below.
+
+#### Instrumentation Scope
+
+Prometheus exporters SHOULD generate an [Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)-typed
+metric named `opentelemetry_scope_info`. If present, Instrumentation
+Scope `name` and `version` MUST be added as `opentelemetry_scope_name` and
+`opentelemetry_scope_version` labels. Scope attributes MUST also be added as
+labels following the rules described in the
+[`Metric Attributes`](#metric-attributes) section below.
+
+Prometheus exporters MUST add the scope name as the `opentelemetry_scope_name`
+label and SHOULD add the scope version as the `opentelemetry_scope_version` label
+on all metrics points.
 
 #### Gauges
 
