@@ -107,7 +107,7 @@ perf counter (similar for Writes)
 |                               |             |       |                                                   |            | state         | used, free, reserved |
 |                               |             |       |                                                   |            | type          | ext4, tmpfs, etc.    |
 |                               |             |       |                                                   |            | mode          | rw, ro, etc.         |
-|                               |             |       |                                                   |            | mountain      | (path)               |
+|                               |             |       |                                                   |            | mountpoint    | (path)               |
 | system.filesystem.utilization |             | 1     | Gauge                                             | Double     | device        | (identifier)         |
 |                               |             |       |                                                   |            | state         | used, free, reserved |
 |                               |             |       |                                                   |            | type          | ext4, tmpfs, etc.    |
