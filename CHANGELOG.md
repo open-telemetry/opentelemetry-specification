@@ -35,7 +35,9 @@ release.
 - Update log SDK to allow log processors to mutate log records
   ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
 - Add experimental Events and Logs API specification
-  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
+  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676)).
+- Align log SDK and API component naming
+  ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
 
 ### Resource
 
@@ -96,6 +98,8 @@ release.
 
 - Introduce Instrumentation Scope Attributes
   ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
+  - Define Instrumentation Scope Attributes as non identifiers
+    ([#2789](https://github.com/open-telemetry/opentelemetry-specification/pull/2789))
 
 ## v1.12.0 (2022-06-10)
 
