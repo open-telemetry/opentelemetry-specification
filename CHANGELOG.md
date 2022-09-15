@@ -32,9 +32,11 @@ release.
 - Update log SDK to allow log processors to mutate log records
   ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
 - Add experimental Events and Logs API specification
-  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676)).
+  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
 - Align log SDK and API component naming
   ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
+- Add the signal-specific OTEL_EXPORTER_OTLP_LOGS_* environment variables
+  ([#2782](https://github.com/open-telemetry/opentelemetry-specification/pull/2782)).
 
 ### Resource
 
