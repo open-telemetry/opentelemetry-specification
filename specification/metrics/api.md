@@ -147,20 +147,15 @@ This API MUST accept the following parameters:
 * [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
     to associate with emitted telemetry.
 
-Meters are identified by all of these parameters.
+Meters are identified by `name`, `version`, and `schema_url` fields.  When more
+than one `Meter` of the same `name`, `version`, and `schema_url` is created, it
+is unspecified whether or under which conditions the same or different `Meter`
+instances are returned. It is a user error to create Meters with different
+attributes but the same identity.
 
-Implementations MUST return different `Meter` instances when called repeatedly
-with different values of parameters. Note that always returning a new `Meter` instance
-is a valid implementation. The only exception to this rule is the no-op `Meter`:
-implementations MAY return the same instance regardless of parameter values.
-
-It is unspecified whether or under which conditions the same or different
-`Meter` instances are returned from this function when the same
-(name,version,schema_url,attributes) parameters are used.
-
-The term *identical* applied to Meters describes instances where all identifying fields
-are equal. The term *distinct* applied to Meters describes instances where at
-least one identifying field has a different value.
+The term *identical* applied to Meters describes instances where all identifying
+fields are equal. The term *distinct* applied to Meters describes instances where
+at least one identifying field has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a `Meter` with
 the same identity to pick up configuration changes. This can be

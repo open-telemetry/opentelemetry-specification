@@ -31,6 +31,12 @@ release.
 
 - Update log SDK to allow log processors to mutate log records
   ([#2681](https://github.com/open-telemetry/opentelemetry-specification/pull/2681)).
+- Add experimental Events and Logs API specification
+  ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
+- Align log SDK and API component naming
+  ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
+- Add the signal-specific OTEL_EXPORTER_OTLP_LOGS_* environment variables
+  ([#2782](https://github.com/open-telemetry/opentelemetry-specification/pull/2782)).
 
 ### Resource
 
@@ -53,9 +59,6 @@ release.
   ([#2618](https://github.com/open-telemetry/opentelemetry-specification/pull/2618))
 - Change `faas.document.time` and `faas.time` level from `required` to `recommended`
   ([#2627](https://github.com/open-telemetry/opentelemetry-specification/pull/2627))
-- Remove `direction` dimension, instead creating metrics with names reflecting those
-  dimensions.
-  ([#2617](https://github.com/open-telemetry/opentelemetry-specification/pull/2617))
 - Add `rpc.grpc.status_code` to RPC metric semantic conventions
   ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604)).
 - Add `http.*.*.size` metric semantic conventions for tracking size of requests
@@ -71,8 +74,6 @@ release.
   ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
 - Add `process.parent_pid` attribute for use in reporting parent process id (PID)
   ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
-- Separate tcp/udp protocols for metric `system.network.connections`.
-  ([#2675](https://github.com/open-telemetry/opentelemetry-specification/pull/2675))
 - Add OpenSearch to db.system semantic conventions
   ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718)).
 
@@ -98,6 +99,8 @@ release.
 
 - Introduce Instrumentation Scope Attributes
   ([#2579](https://github.com/open-telemetry/opentelemetry-specification/pull/2579))
+  - Define Instrumentation Scope Attributes as non identifiers
+    ([#2789](https://github.com/open-telemetry/opentelemetry-specification/pull/2789))
 
 ## v1.12.0 (2022-06-10)
 
@@ -594,7 +597,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 
 ### Traces
 
-- Prefer global user defined limits over model-sepcific default values.
+- Prefer global user defined limits over model-specific default values.
   ([#1893](https://github.com/open-telemetry/opentelemetry-specification/pull/1893))
 - Generalize the "message" event to apply to all RPC systems not just gRPC
   ([#1914](https://github.com/open-telemetry/opentelemetry-specification/pull/1914))
