@@ -126,7 +126,7 @@ libraries, such as Log4j or Logback.
 
 OpenTelemetry defines [events](#events-and-logs) as a type of LogRecord with
 specific characteristics. While it may be possible to create events using
-existing logging libraries, its often clunky and error-prone.
+existing logging libraries, it is often clunky and error-prone.
 
 There are also countless existing prebuilt applications or systems that emit
 logs in certain formats. Operators of such applications have no or limited
@@ -384,7 +384,7 @@ logs directly to the logging backend without using a log collection agent.
 
 To facilitate both approaches described above OpenTelemetry provides
 an [API](./api.md) and [SDK](./sdk.md), which can be used together with existing
-logging libraries, automatically inject the request context in the emitted logs,
+logging libraries to automatically inject the request context in the emitted logs,
 and provide an easy way to send the logs via OTLP. Instead of
 modifying each logging statement, [Appenders](./api.md#how-to-create-log4j-style-appender)
 use the API to bridge logs from existing logging libraries to the OpenTelemetry
