@@ -17,6 +17,9 @@ release.
 
 ### Resource
 
+- Add `browser.mobile` and `browser.language` resource attributes
+  ([#2761](https://github.com/open-telemetry/opentelemetry-specification/pull/2761))
+
 ### Semantic Conventions
 
 ### Compatibility
@@ -79,8 +82,6 @@ release.
 
 - Update the version of the W3C Baggage specification used for `OTEL_RESOURCE_ATTRIBUTES`
   ([#2670](https://github.com/open-telemetry/opentelemetry-specification/pull/2670))
-- Add `browser.mobile` and `browser.language` resource attributes
-  ([#2761](https://github.com/open-telemetry/opentelemetry-specification/pull/2761))
 
 ### Semantic Conventions
 
