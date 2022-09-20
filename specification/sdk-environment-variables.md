@@ -20,7 +20,8 @@ Any value that represents a Boolean MUST be set to true only by the case-insensi
 An SDK MUST NOT extend this definition and define additional values that are interpreted as true.
 Any value not explicitly defined here as a true value, including unset and empty values, MUST be interpreted as false.
 If any value other than a true value, case-insensitive string `"false"`, empty, or unset is used, a warning SHOULD be logged to inform users about the fallback to false being applied.
-All Boolean environment variables SHOULD be named and defined such that false is the expected safe default behavior. Renaming and changing the default value MUST not happen between major versions.
+All Boolean environment variables SHOULD be named and defined such that false is the expected safe default behavior.
+Renaming or changing the default value MUST NOT happen without a major version upgrade.
 
 ### Numeric value
 
