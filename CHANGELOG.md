@@ -17,6 +17,9 @@ release.
 
 ### Resource
 
+- Remove mention of browser from `process.runtime` semantic convention
+  ([#2815](https://github.com/open-telemetry/opentelemetry-specification/pull/2815/files))
+
 ### Semantic Conventions
 
 ### Compatibility
