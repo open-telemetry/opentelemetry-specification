@@ -11,19 +11,56 @@ release.
 
 ### Traces
 
-- Clarify the return of `Export(batch)` in the Batch Span Processor and exporter
-  concurrency ([#2452](https://github.com/open-telemetry/opentelemetry-specification/pull/2452))
-- Clarify that Context should not be mutable when setting a span ([#2637](https://github.com/open-telemetry/opentelemetry-specification/pull/2637))
-- Clarify that `ForceFlush` is a required method on `SpanExporter` interface.
-  ([#2654](https://github.com/open-telemetry/opentelemetry-specification/pull/2654)).
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+### Common
+
+## v1.13.0 (2022-09-19)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Clarify the return of `Export(batch)` in the Batch Span Processor and exporter concurrency
+  ([#2452](https://github.com/open-telemetry/opentelemetry-specification/pull/2452))
+- Clarify that Context should not be mutable when setting a span
+  ([#2637](https://github.com/open-telemetry/opentelemetry-specification/pull/2637))
+- Clarify that `ForceFlush` is a required method on `SpanExporter` interface
+  ([#2654](https://github.com/open-telemetry/opentelemetry-specification/pull/2654))
 
 ### Metrics
 
 - Add experimental `OTEL_EXPORTER_OTLP_DEFAULT_HISTOGRAM_AGGREGATION` variable for
   configuring default histogram aggregation of OTLP metric exporter
-  ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619)).
-- Clarify async instrument callback identity.
-  ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538)).
+  ([#2619](https://github.com/open-telemetry/opentelemetry-specification/pull/2619))
+- Clarify async instrument callback identity
+  ([#2538](https://github.com/open-telemetry/opentelemetry-specification/pull/2538))
+- Prometheus export: Only monotonic sum are counters (with `_total`)
+  ([#2644](https://github.com/open-telemetry/opentelemetry-specification/pull/2644))
+- [OM/OTLP] Use `_created` for StartTimeUnixNano and vice-versa
+  ([#2645](https://github.com/open-telemetry/opentelemetry-specification/pull/2645))
+- Prometheus compatibility: use target_info metric instead of "target" info MF
+  ([#2701](https://github.com/open-telemetry/opentelemetry-specification/pull/2701))
+- Add optional Zero Threshold for Exponential Histograms to the metrics data model
+  ([#2665](https://github.com/open-telemetry/opentelemetry-specification/pull/2665))
+- Change the inclusivity of exponential histogram bounds
+  ([#2633](https://github.com/open-telemetry/opentelemetry-specification/pull/2633))
 - Add `process.threads` host metric semantic convention.
   ([#2705](https://github.com/open-telemetry/opentelemetry-specification/pull/2705)).
 
@@ -40,13 +77,13 @@ release.
 
 ### Resource
 
-- Update the version of the W3C Baggage specification used for `OTEL_RESOURCE_ATTRIBUTES`.
+- Update the version of the W3C Baggage specification used for `OTEL_RESOURCE_ATTRIBUTES`
   ([#2670](https://github.com/open-telemetry/opentelemetry-specification/pull/2670))
 
 ### Semantic Conventions
 
 - Add `net.app.protocol.*` attributes
-  ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602)).
+  ([#2602](https://github.com/open-telemetry/opentelemetry-specification/pull/2602))
 - Add network metrics to process semantic conventions
   ([#2556](https://github.com/open-telemetry/opentelemetry-specification/pull/2556))
 - Adopt attribute requirement levels in semantic conventions
@@ -58,29 +95,37 @@ release.
 - Change `faas.document.time` and `faas.time` level from `required` to `recommended`
   ([#2627](https://github.com/open-telemetry/opentelemetry-specification/pull/2627))
 - Add `rpc.grpc.status_code` to RPC metric semantic conventions
-  ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604)).
+  ([#2604](https://github.com/open-telemetry/opentelemetry-specification/pull/2604))
 - Add `http.*.*.size` metric semantic conventions for tracking size of requests
   / responses for http servers / clients
-  ([#2588](https://github.com/open-telemetry/opentelemetry-specification/pull/2588)).
+  ([#2588](https://github.com/open-telemetry/opentelemetry-specification/pull/2588))
 - BREAKING: rename `net.peer.ip` to `net.sock.peer.addr`, `net.host.ip` to `net.sock.host.addr`,
   `net.peer.name` to `net.sock.peer.name` for socket-level instrumentation.
-  Define socket-level attributes and clarify logical peer and host attributes meaning.
+  Define socket-level attributes and clarify logical peer and host attributes meaning
   ([#2594](https://github.com/open-telemetry/opentelemetry-specification/pull/2594))
 - Add semantic conventions for JVM buffer pool usage
-  ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650)).
+  ([#2650](https://github.com/open-telemetry/opentelemetry-specification/pull/2650))
 - Improve the definition of `state` attribute for metric `system.network.connections`
   ([#2663](https://github.com/open-telemetry/opentelemetry-specification/pull/2663))
 - Add `process.parent_pid` attribute for use in reporting parent process id (PID)
-  ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691)).
+  ([#2691](https://github.com/open-telemetry/opentelemetry-specification/pull/2691))
 - Add OpenSearch to db.system semantic conventions
-  ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718)).
+  ([#2718](https://github.com/open-telemetry/opentelemetry-specification/pull/2718))
+- Clarify when "count" is used instead of pluralization
+  ([#2613](https://github.com/open-telemetry/opentelemetry-specification/pull/2613))
+- Add the convention 'type' to the YAML definitions for all existing semantic conventions
+  ([#2693](https://github.com/open-telemetry/opentelemetry-specification/pull/2693))
+- Remove alternative attribute sets from HTTP semantic conventions
+  ([#2469](https://github.com/open-telemetry/opentelemetry-specification/pull/2469))
 
 ### Compatibility
+
+- No changes.
 
 ### OpenTelemetry Protocol
 
 - Add support for partial success in an OTLP export response
-  ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696)).
+  ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696))
 
 ### SDK Configuration
 
@@ -91,7 +136,7 @@ release.
 ### Telemetry Schemas
 
 - Introduce "split" metric schema transformation
-  ([#2653](https://github.com/open-telemetry/opentelemetry-specification/pull/2653)).
+  ([#2653](https://github.com/open-telemetry/opentelemetry-specification/pull/2653))
 
 ### Common
 
@@ -157,7 +202,7 @@ release.
   ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
 - Change JVM runtime metric `process.runtime.jvm.memory.max`
   to `process.runtime.jvm.memory.limit`
-  ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).  
+  ([#2605](https://github.com/open-telemetry/opentelemetry-specification/pull/2605)).
 - Add semantic conventions for hardware metrics
   ([#2518](https://github.com/open-telemetry/opentelemetry-specification/pull/2518)).
 

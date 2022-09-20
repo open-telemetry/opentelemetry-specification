@@ -1306,6 +1306,10 @@ OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types
 
 #### Metric Metadata
 
+The [OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
+MUST be added as the Name of the OTLP metric after the removal of unit and type
+suffixes described below.
+
 The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
 if present, MUST be converted to the unit of the OTLP metric.  After trimming
 type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed
@@ -1420,6 +1424,13 @@ in keys).
 
 #### Metric Metadata
 
+The Name of an OTLP metric MUST be added as the
+[OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+with unit and type suffixes added as described below. The metric name is
+required to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Invalid characters
+in the metric name MUST be replaced with the `_` character. Multiple
+consecutive `_` characters MUST be replaced with a single `_` character.
+
 The Unit of an OTLP metric point MUST be added as
 [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
 Additionally, the unit MUST be added as a suffix to the metric name, and SHOULD
@@ -1488,7 +1499,20 @@ The following OTLP data points MUST be dropped:
 
 #### Metric Attributes
 
-OpenTelemetry Metric Attributes MUST be converted to [Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).  String Attribute values are converted directly to Metric Attributes, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](../common/README.md#attribute).  Prometheus metric label keys are required to match the following regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`.  Metrics from OpenTelemetry with unsupported Attribute names MUST replace invalid characters with the `_` character. This may cause ambiguity in scenarios where multiple similar-named attributes share invalid characters at the same location.  In such unlikely cases, if multiple key-value pairs are converted to have the same Prometheus key, the values MUST be concatenated together, separated by `;`, and ordered by the lexicographical order of the original keys.
+OpenTelemetry Metric Attributes MUST be converted to
+[Prometheus labels](https://Prometheus.io/docs/concepts/data_model/#metric-names-and-labels).
+String Attribute values are converted directly to Metric Attributes, and
+non-string Attribute values MUST be converted to string attributes following
+the [attribute specification](../common/README.md#attribute).  Prometheus
+metric label keys are required to match the following regex:
+`[a-zA-Z_]([a-zA-Z0-9_])*`.  Metrics from OpenTelemetry with unsupported
+Attribute names MUST replace invalid characters with the `_` character.
+Multiple consecutive `_` characters MUST be replaced with a single `_`
+character. This may cause ambiguity in scenarios where multiple similar-named
+attributes share invalid characters at the same location.  In such unlikely
+cases, if multiple key-value pairs are converted to have the same Prometheus
+key, the values MUST be concatenated together, separated by `;`, and ordered by
+the lexicographical order of the original keys.
 
 #### Exemplars
 
