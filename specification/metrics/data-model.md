@@ -1391,20 +1391,19 @@ exemplar as attributes.
 
 Each `opentelemetry_scope_info` metric point present in a batch of metrics
 SHOULD be dropped from the incoming scrape, and converted to an instrumentation
-scope. The `opentelemetry_scope_name` and `opentelemetry_scope_version` labels,
-if present, MUST be converted to the Name and Version of the Instrumentation
-Scope. Additional labels MUST be added as scope attributes, with keys and
-values unaltered. Other metrics in the batch which have
-`opentelemetry_scope_name` and `opentelemetry_scope_version`
+scope. The `otel_scope_name` and `otel_scope_version` labels, if present, MUST
+be converted to the Name and Version of the Instrumentation Scope. Additional
+labels MUST be added as scope attributes, with keys and values unaltered. Other
+metrics in the batch which have `otel_scope_name` and `otel_scope_version`
 labels that match an instrumentation scope MUST be placed within the matching
 instrumentation scope, and MUST remove those labels. For example, the
 OpenMetrics metrics:
 
 ```
 # TYPE opentelemetry_scope_info info
-opentelemetry_scope_info{opentelemetry_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",opentelemetry_scope_version="v0.24.0",library_mascot="bear"} 1
-# TYPE otelhttp_http_server_duration counter
-otelhttp_http_server_duration{opentelemetry_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",opentelemetry_scope_version="v0.24.0"...} 1
+opentelemetry_scope_info{otel_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",otel_scope_version="v0.24.0",library_mascot="bear"} 1
+# TYPE http_server_duration counter
+http_server_duration{otel_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",otel_scope_version="v0.24.0"...} 1
 ```
 
 becomes:
@@ -1492,15 +1491,15 @@ It also dictates type-specific conversion rules listed below.
 #### Instrumentation Scope
 
 Prometheus exporters SHOULD generate an [Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)-typed
-metric named `opentelemetry_scope_info`. If present, Instrumentation
-Scope `name` and `version` MUST be added as `opentelemetry_scope_name` and
-`opentelemetry_scope_version` labels. Scope attributes MUST also be added as
-labels following the rules described in the
-[`Metric Attributes`](#metric-attributes) section below.
+metric named `opentelemetry_scope_info`. If present, Instrumentation Scope
+`name` and `version` MUST be added as `otel_scope_name` and
+`otel_scope_version` labels. Scope attributes MUST also be added as labels
+following the rules described in the [`Metric Attributes`](#metric-attributes)
+section below.
 
-Prometheus exporters MUST add the scope name as the `opentelemetry_scope_name`
-label and SHOULD add the scope version as the `opentelemetry_scope_version` label
-on all metrics points.
+Prometheus exporters MUST add the scope name as the `otel_scope_name` label and
+SHOULD add the scope version as the `otel_scope_version` label on all metrics
+points.
 
 #### Gauges
 
