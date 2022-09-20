@@ -138,14 +138,14 @@ Examples for some Java runtimes
 
 ### JavaScript runtimes
 
-JavaScript Node instrumentation should fill in the values by copying from built-in runtime constants.
+JavaScript Node.js instrumentation should fill in the values by copying from built-in runtime constants.
 
 - `process.runtime.name`:
   Fill in the constant value `nodejs`.
 - `process.runtime.version`:
   Fill in the value of `process.versions.node`.
 
-Example for a Node runtime:
+Example of a Node.js runtime:
 
 | Name | `process.runtime.name` | `process.runtime.version` |
 | --- | --- | --- |

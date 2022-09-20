@@ -20,7 +20,7 @@ release.
 - Add `browser.mobile` and `browser.language` resource attributes
   ([#2761](https://github.com/open-telemetry/opentelemetry-specification/pull/2761))
 - Remove mention of browser from `process.runtime` semantic convention
-  ([#2815](https://github.com/open-telemetry/opentelemetry-specification/pull/2815/files))
+  ([#2815](https://github.com/open-telemetry/opentelemetry-specification/pull/2815))
 
 ### Semantic Conventions
 
