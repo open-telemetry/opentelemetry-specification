@@ -26,6 +26,9 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Add user agent to OTLP exporter specification
+  ([#2684](https://github.com/open-telemetry/opentelemetry-specification/pull/2684))
+
 ### SDK Configuration
 
 ### Telemetry Schemas
