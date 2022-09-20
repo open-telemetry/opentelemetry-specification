@@ -17,11 +17,17 @@ release.
 
 ### Resource
 
+- Add `browser.mobile` and `browser.language` resource attributes
+  ([#2761](https://github.com/open-telemetry/opentelemetry-specification/pull/2761))
+
 ### Semantic Conventions
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Add user agent to OTLP exporter specification
+  ([#2684](https://github.com/open-telemetry/opentelemetry-specification/pull/2684))
 
 ### SDK Configuration
 

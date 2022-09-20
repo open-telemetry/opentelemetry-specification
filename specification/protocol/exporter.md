@@ -160,4 +160,16 @@ Transient errors MUST be handled with a retry strategy. This retry strategy MUST
 
 For OTLP/HTTP, the errors `408 (Request Timeout)` and `5xx (Server Errors)` are defined as transient, detailed information about errors can be found in the [HTTP failures section](otlp.md#failures). For the OTLP/gRPC, the full list of the gRPC retryable status codes can be found in the [gRPC response section](otlp.md#otlpgrpc-response).
 
+## User Agent
+
+OpenTelemetry protocol exporters SHOULD emit a User-Agent header to at a minimum identify the exporter, the language of its implementation, and the version of the exporter. For example, the Python OTLP exporter version 1.2.3 would report the following:
+
+```
+OTel OTLP Exporter Python/1.2.3
+```
+
+The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
+
+[resource-semconv]: ../resource/semantic_conventions/README.md#telemetry-sdk
 [otlphttp-req]: otlp.md#otlphttp-request
+[rfc-7231]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3
