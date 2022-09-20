@@ -419,6 +419,13 @@ for mapping between Protobuf and JSON, with the following deviations from that m
   represented like this:
   { "kind": 2, ... }
 
+- OTLP/JSON receivers MUST ignore message fields with unknown names and MUST unmarshal the
+  message as if the unknown field was not resent in the payload.
+  This aligns with the behavior of the Binary Protobuf unmarshaler and ensures that adding
+  new fields to OTLP messages does not break existing receivers.
+  Protobuf unmarshalling implementations often support this via an option called
+  "Ignore unknown fields".
+
 Note that according to [Protobuf specs](
 https://developers.google.com/protocol-buffers/docs/proto3#json) 64-bit integer
 numbers in JSON-encoded payloads are encoded as decimal strings, and either
