@@ -10,44 +10,44 @@ The following configuration options MUST be available to configure the OTLP expo
 
 - **Endpoint (OTLP/HTTP)**: Target URL to which the exporter is going to send spans or metrics. The endpoint MUST be a valid URL with scheme (http or https) and host, MAY contain a port, SHOULD contain a path and MUST NOT contain other parts (such as query string or fragment). A scheme of https indicates a secure connection. When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters MUST construct per-signal URLs as  [described below](#endpoint-urls-for-otlphttp). The per-signal endpoint configuration options take precedence and can be used to override this behavior (the URL is used as-is for them, without any modifications). See the [OTLP Specification][otlphttp-req] for more details.
   - Default:  `http://localhost:4318` [1]
-  - Env vars: `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`
+  - Env vars: `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`
 
 - **Endpoint (OTLP/gRPC)**: Target to which the exporter is going to send spans or metrics. The endpoint SHOULD accept any form allowed by the underlying gRPC client implementation. Additionally, the endpoint MUST accept a URL with a scheme of either `http` or `https`. A scheme of `https` indicates a secure connection and takes precedence over the `insecure` configuration setting. A scheme of `http` indicates an insecure connection and takes precedence over the `insecure` configuration setting. If the gRPC client implementation does not support an endpoint with a scheme of `http` or `https` then the endpoint SHOULD be transformed to the most sensible format for that implementation.
   - Default: `http://localhost:4317` [1]
-  - Env vars: `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`
+  - Env vars: `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`
 
 - **Insecure**: Whether to enable client transport security for the exporter's gRPC connection. This option only applies to OTLP/gRPC when an endpoint is provided without the `http` or `https` scheme - OTLP/HTTP always uses the scheme provided for the `endpoint`. Implementations MAY choose to not implement the `insecure` option if it is not required or supported by the underlying gRPC client implementation.
   - Default: `false`
-  - Env vars: `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_TRACES_INSECURE` `OTEL_EXPORTER_OTLP_METRICS_INSECURE` `OTEL_EXPORTER_OTLP_SPAN_INSECURE` `OTEL_EXPORTER_OTLP_METRIC_INSECURE` [2]
+  - Env vars: `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_TRACES_INSECURE` `OTEL_EXPORTER_OTLP_METRICS_INSECURE` `OTEL_EXPORTER_OTLP_LOGS_INSECURE` `OTEL_EXPORTER_OTLP_SPAN_INSECURE` `OTEL_EXPORTER_OTLP_METRIC_INSECURE` [2]
 
 - **Certificate File**: The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection.
   - Default: n/a
-  - Env vars: `OTEL_EXPORTER_OTLP_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE`
+  - Env vars: `OTEL_EXPORTER_OTLP_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE` `OTEL_EXPORTER_OTLP_LOGS_CERTIFICATE`
 
 - **Client key file**: Clients private key to use in mTLS communication in PEM format.
   - Default: n/a
-  - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_KEY` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_KEY` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_KEY`
+  - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_KEY` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_KEY` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_KEY` `OTEL_EXPORTER_OTLP_LOGS_CLIENT_KEY`
 
 - **Client certificate file**: Client certificate/chain trust for clients private key to use in mTLS communication in PEM format.
   - Default: n/a
-  - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_CERTIFICATE`
+  - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_LOGS_CLIENT_CERTIFICATE`
 
 - **Headers**: Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.
   - Default: n/a
-  - Env vars: `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS`
+  - Env vars: `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` `OTEL_EXPORTER_OTLP_LOGS_HEADERS`
 
 - **Compression**: Compression key for supported compression types. Supported compression: `gzip`.
   - Default: No value [2]
-  - Env vars: `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION`
+  - Env vars: `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` `OTEL_EXPORTER_OTLP_LOGS_COMPRESSION`
 
 - **Timeout**: Maximum time the OTLP exporter will wait for each batch export.
   - Default: 10s
-  - Env vars: `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT`
+  - Env vars: `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT`
 
 - **Protocol**: The transport protocol. Options MUST be one of: `grpc`, `http/protobuf`, `http/json`.
   See [Specify Protocol](./exporter.md#specify-protocol) for more details.
   - Default: `http/protobuf` [3]
-  - Env vars: `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL`
+  - Env vars: `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` `OTEL_EXPORTER_OTLP_LOGS_PROTOCOL`
 
 **[1]**: SDKs SHOULD default endpoint variables to use `http` scheme unless they have good reasons to choose
 `https` scheme for the default (e.g., for backward compatibility reasons in a stable SDK release).
