@@ -22,6 +22,10 @@ release.
 
 ### Semantic Conventions
 
+- Add `process.context_switches`, and `process.open_file_descriptors`, to the
+  metrics semantic conventions
+  ([#2706](https://github.com/open-telemetry/opentelemetry-specification/pull/2706))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
@@ -69,9 +73,6 @@ release.
   ([#2633](https://github.com/open-telemetry/opentelemetry-specification/pull/2633))
 - Add `process.threads` host metric semantic convention.
   ([#2705](https://github.com/open-telemetry/opentelemetry-specification/pull/2705)).
-- Add `process.context_switches`, and `process.open_file_descriptors`, to the
-  metrics semantic conventions
-  ([#2706](https://github.com/open-telemetry/opentelemetry-specification/pull/2706)).
 
 ### Logs
 
