@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Changed the default buckets for Explicit Bucket Histogram to better match the
+  official Prometheus clients.
+  ([#2770](https://github.com/open-telemetry/opentelemetry-specification/pull/2770)).
+
 ### Logs
 
 ### Resource
