@@ -61,8 +61,8 @@ one that is needlessly restrictive and complex.
 The Specification has a number of tools it uses to check things like style,
 spelling and link validity. Before using the tools:
 
-- Install the latest [LTS release][] of **Node**. For example, using **[nvm][]**
-  under Linux run:
+- Install the latest LTS release of **[Node](https://nodejs.org/)**.
+For example, using **[nvm][]** under Linux run:
 
   ```bash
   nvm install --lts
@@ -265,5 +265,4 @@ If none of the above worked and the PR has been stuck for more than 2 weeks, the
 owner should bring it to the [OpenTelemetry Specification SIG
 meeting](https://github.com/open-telemetry/community#cross-language-specification).
 
-[LTS release]: https://nodejs.org/en/about/releases/
 [nvm]: https://github.com/nvm-sh/nvm/blob/master/README.md#installing-and-updating

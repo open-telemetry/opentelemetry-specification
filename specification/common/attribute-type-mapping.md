@@ -33,7 +33,7 @@ The mapping is needed when OpenTelemetry needs to convert a value produced outsi
 OpenTelemetry into a value that can be exported using an OTLP exporter, or otherwise be
 converted to be used inside OpenTelemetry boundaries. Example use cases are the following:
 
-- In [Logging Library SDK](../logs/logging-library-sdk.md)s, to convert values received
+- In the [Logging SDK](../logs/sdk.md)s, to convert values received
   from logging libraries into OpenTelemetry representation.
 - In the Collector, to convert values received from various data sources into
   [pdata](https://github.com/open-telemetry/opentelemetry-collector/blob/4998703dadd19fa91a88eabf7ccc68d728bee3fd/model/pdata/common.go#L84)

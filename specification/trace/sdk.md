@@ -743,6 +743,3 @@ public interface SpanExporter {
  void shutdown();
 }
 ```
-
-[trace-flags]: https://www.w3.org/TR/trace-context/#trace-flags
-[otep-83]: https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md
