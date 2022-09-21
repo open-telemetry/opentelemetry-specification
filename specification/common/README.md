@@ -80,7 +80,7 @@ If an SDK provides a way to:
       to ensure if the string is valid UTF8 that it remains valid,
     - if working with grapheme clusters is not overly complex in a particularly
       language then they should be used, meaning the string "👩‍👩‍👦‍👦" (made up
-      of 4 code points) is treated as a single "character", a limit of 1 should
+      of 7 code points) is treated as a single "character", a limit of 1 should
       truncate to the empty string "…" not the single code point "👩",
     - if code points are used the above string "👩‍👩‍👦‍👦" with limit 1 would
       truncate to "👩…"
