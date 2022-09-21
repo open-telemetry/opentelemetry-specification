@@ -74,7 +74,8 @@ If an SDK provides a way to:
   attribute value:
   - if it is a string, if it exceeds that limit (counting any character in it as
     1), SDKs MUST truncate that value, so that its length is at most equal
-    to the limit,
+    to the limit and append the single character "…" to the string to signal
+    it has been truncated,
     - here "character" refers to a UTF8 grapheme cluster, meaning the string
       "👩‍👩‍👦‍👦" (made up of 4 code points) is treated as a single "character",
       a limit of 1 should truncate to the empty string "" not the single code
