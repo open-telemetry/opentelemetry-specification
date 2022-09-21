@@ -13,15 +13,29 @@ release.
 
 ### Metrics
 
+- Changed the default buckets for Explicit Bucket Histogram to better match the
+  official Prometheus clients.
+  ([#2770](https://github.com/open-telemetry/opentelemetry-specification/pull/2770)).
+
 ### Logs
 
 ### Resource
 
+- Add `browser.mobile` and `browser.language` resource attributes
+  ([#2761](https://github.com/open-telemetry/opentelemetry-specification/pull/2761))
+
 ### Semantic Conventions
+
+- Add `process.context_switches`, and `process.open_file_descriptors`, to the
+  metrics semantic conventions
+  ([#2706](https://github.com/open-telemetry/opentelemetry-specification/pull/2706))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
+
+- Add user agent to OTLP exporter specification
+  ([#2684](https://github.com/open-telemetry/opentelemetry-specification/pull/2684))
 
 ### SDK Configuration
 
