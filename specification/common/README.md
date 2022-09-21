@@ -76,10 +76,14 @@ If an SDK provides a way to:
     1), SDKs MUST truncate that value, so that its length is at most equal
     to the limit and append the single character "…" to the string to signal
     it has been truncated,
-    - here "character" refers to a UTF8 grapheme cluster, meaning the string
-      "👩‍👩‍👦‍👦" (made up of 4 code points) is treated as a single "character",
-      a limit of 1 should truncate to the empty string "" not the single code
-      point "👩",
+    - here "character" refers to either a UTF8 grapheme cluster or a code point
+      to ensure if the string is valid UTF8 that it remains valid,
+    - if working with grapheme clusters is not overly complex in a particularly
+      language then they should be used, meaning the string "👩‍👩‍👦‍👦" (made up
+      of 4 code points) is treated as a single "character", a limit of 1 should
+      truncate to the empty string "…" not the single code point "👩",
+    - if code points are used the above string "👩‍👩‍👦‍👦" with limit 1 would
+      truncate to "👩…"
   - if it is an array of strings, then apply the above rule to each of the
     values separately,
   - otherwise a value MUST NOT be truncated;
