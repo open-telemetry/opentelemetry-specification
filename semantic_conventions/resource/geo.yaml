@@ -1,0 +1,94 @@
+groups:
+  - id: geo
+    prefix: geo
+    type: resource
+    brief: >
+      Fields describing a location.
+    attributes:
+      - id: city_name
+        type: string
+        brief: >
+          City name.
+        examples: ["Montreal", "Berlin"]
+      - id: continent_code
+        type:
+          allow_custom_values: false
+          members:
+            - id: af
+              value: "AF"
+              brief: "Africa"
+            - id: an
+              value: "AN"
+              brief: "Antarctica"
+            - id: as 
+              value: "AS"
+              brief: "Asia"
+            - id: eu
+              value: "EU"
+              brief: "Europe"
+            - id: na
+              value: "NA"
+              brief: "North America"
+            - id: oc
+              value: "OC"
+              brief: "Oceania"
+            - id: sa
+              value: "SA"
+              brief: "South America"
+        brief: >
+          Two-letter code representing continent’s name.
+      - id: continent_name
+        type: string
+        brief: >
+          Name of the continent.
+        examples: ["North America", "Europe"]
+      - id: country_iso_code
+        type: string
+        brief: >
+          Two-letter ISO Country Code (ISO 3166-1 alpha2).
+        examples: ["CA"]
+      - id: country_name
+        type: string
+        brief: >
+          Country name.
+        examples: ["Canada"]
+      - id: location.lon
+        type: double
+        brief: >
+          Longitude of the geo location.
+        examples: [-73.614830]
+      - id: location.lat
+        type: double
+        brief: >
+          Latitude of the geo location.
+        examples: [45.505918]
+      - id: name
+        type: string
+        brief: >
+          User-defined description of a location.
+        note: >
+          User-defined description of a location, at the level of granularity they care about.
+          Could be the name of their data centers, the floor number, if this describes a local physical entity, city names.
+          Not typically used in automated geolocation.
+        examples: ["boston-dc"]
+      - id: postal_code
+        type: string
+        brief: >
+          Postal code associated with the location.
+          Values appropriate for this field may also be known as a postcode or ZIP code and will vary widely from country to country.
+        examples: ["94040"]
+      - id: region_iso_code
+        type: string
+        brief: >
+          Region ISO code (ISO 3166-2).
+        examples: ["CA-QC"]
+      - id: region_name
+        type: string
+        brief: >
+          Region name.
+        examples: ["Quebec"]
+      - id: timezone
+        type: string
+        brief: >
+          The time zone of the location, such as IANA time zone name.
+        examples: ["America/Argentina/Buenos_Aires"]
