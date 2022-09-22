@@ -210,23 +210,23 @@ formats is required. Implementing more than one format is optional.
 
 Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
 
-| Feature                                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-|--------------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
-| **[Logging SDK](specification/logs/logging-library-sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| LogEmitterProvider.Get LogEmitter                            |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
-| LogEmitterProvider.Get LogEmitter accepts attributes         |          |     |      |     |        |      |        |     |      |     |      |       |
-| LogEmitterProvider.Shutdown                                  |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
-| LogEmitterProvider.ForceFlush                                |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
-| LogEmitter.Emit(LogRecord)                                   |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
-| SimpleLogProcessor                                           |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| BatchLogProcessor                                            |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| Can plug custom log processor                                |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| OTLP/gRPC exporter                                           |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| OTLP/HTTP exporter                                           |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| OTLP File exporter                                           |          |     | -    |     |   -    |      |        |     |      |     | -    |       |
-| Can plug custom log exporter                                 |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| Implicit Context Injection                                   |          |     | -    |     |   +    |      |        |     |      |     | +    |       |
-| Explicit Context                                             |          |     | +    |     |   -    |      |        |     |      |     | -    |       |
+| Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
+| **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| LoggerProvider.Get Logger                    |          |     |      |     |        |      |        |     |      |     | -    |       |
+| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        |     |      |     |      |       |
+| LoggerProvider.Shutdown                      |          |     |      |     |        |      |        |     |      |     | -    |       |
+| LoggerProvider.ForceFlush                    |          |     |      |     |        |      |        |     |      |     | -    |       |
+| Logger.Emit(LogRecord)                       |          |     |      |     |        |      |        |     |      |     | -    |       |
+| SimpleLogRecordProcessor                     |          |     |      |     |        |      |        |     |      |     |      |       |
+| BatchLogRecordProcessor                      |          |     |      |     |        |      |        |     |      |     |      |       |
+| Can plug custom LogRecordProcessor           |          |     |      |     |        |      |        |     |      |     |      |       |
+| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
+| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
+| OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
+| Can plug custom LogRecordExporter            |          |     |      |     |        |      |        |     |      |     |      |       |
+| Implicit Context Injection                   |          |     | -    |     | +      |      |        |     |      |     | +    |       |
+| Explicit Context                             |          |     | +    |     | -      |      |        |     |      |     | -    |       |
 
 ## Resource
 
