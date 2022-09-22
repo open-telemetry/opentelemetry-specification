@@ -21,6 +21,9 @@ release.
 
 ### Compatibility
 
+- Specify how Prometheus exporters and receivers handle instrumentation scope.
+  ([#2703](https://github.com/open-telemetry/opentelemetry-specification/pull/2703)).
+
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
