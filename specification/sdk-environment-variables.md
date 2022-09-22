@@ -14,6 +14,15 @@ The SDK MUST interpret an empty value of an environment variable the same way as
 
 **Status**: [Stable](document-status.md)
 
+### Boolean value
+
+Any value that represents a Boolean MUST be set to true only by the case-insensitive string `"true"`, meaning `"True"` or `"TRUE"` are also accepted, as true.
+An SDK MUST NOT extend this definition and define additional values that are interpreted as true.
+Any value not explicitly defined here as a true value, including unset and empty values, MUST be interpreted as false.
+If any value other than a true value, case-insensitive string `"false"`, empty, or unset is used, a warning SHOULD be logged to inform users about the fallback to false being applied.
+All Boolean environment variables SHOULD be named and defined such that false is the expected safe default behavior.
+Renaming or changing the default value MUST NOT happen without a major version upgrade.
+
 ### Numeric value
 
 If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
