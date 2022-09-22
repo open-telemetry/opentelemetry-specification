@@ -19,6 +19,9 @@ release.
 
 ### Logs
 
+- Fix inconsistencies in log README
+  ([#2800](https://github.com/open-telemetry/opentelemetry-specification/pull/2800)).
+
 ### Resource
 
 - Add `browser.mobile` and `browser.language` resource attributes
@@ -88,8 +91,6 @@ release.
   ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
 - Add the signal-specific OTEL_EXPORTER_OTLP_LOGS_* environment variables
   ([#2782](https://github.com/open-telemetry/opentelemetry-specification/pull/2782)).
-- Fix inconsistencies in log README
-  ([#2800](https://github.com/open-telemetry/opentelemetry-specification/pull/2800)).
 
 ### Resource
 
