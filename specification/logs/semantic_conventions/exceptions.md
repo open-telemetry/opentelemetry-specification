@@ -30,14 +30,12 @@ the language runtime.
 The table below indicates which attributes should be added to the
 [LogRecord](../api.md#logrecord) and their types.
 
-<!-- semconv exception(tag=logs-and-traces) -->
-The event name MUST be `exception`.
-
+<!-- semconv log-exception -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| [`exception.type`](../../trace/semantic_conventions/exceptions.md) | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.net.ConnectException`; `OSError` | See below |
 | [`exception.message`](../../trace/semantic_conventions/exceptions.md) | string | The exception message. | `Division by zero`; `Can't convert 'int' object to str implicitly` | See below |
 | [`exception.stacktrace`](../../trace/semantic_conventions/exceptions.md) | string | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. | `Exception in thread "main" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)` | Recommended |
+| [`exception.type`](../../trace/semantic_conventions/exceptions.md) | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.net.ConnectException`; `OSError` | See below |
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
