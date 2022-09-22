@@ -2,8 +2,9 @@
 
 **Status**: [Experimental](../../document-status.md)
 
-This document defines semantic conventions for recording exceptions on "logs"
-and "events" emitted through the [Logger API](../api.md#logger).
+This document defines semantic conventions for recording exceptions on
+[logs](../api.md#emit-logrecord) and [events](../api.md#emit-event) emitted
+through the [Logger API](../api.md#logger).
 
 <!-- toc -->
 
