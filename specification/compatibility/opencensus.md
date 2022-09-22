@@ -233,3 +233,5 @@ metric exporters.
 * The OpenCensus bridge produces counters and distributions with a cumulative
   AggregationTemporality. Many OpenTelemetry exporters do not support cumulative
   AggregationTemporality, and will return errors if used with this bridge.
+* OpenTelemetry does not support OpenCensus' SumOfSquaredDeviation field; this
+  is dropped when using the bridge.
