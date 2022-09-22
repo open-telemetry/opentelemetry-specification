@@ -32,6 +32,9 @@ release.
 - Add `process.context_switches`, and `process.open_file_descriptors`, to the
   metrics semantic conventions
   ([#2706](https://github.com/open-telemetry/opentelemetry-specification/pull/2706))
+- Update http metrics to use `http.route` instead of `http.target` for servers,
+  drop `http.url` for clients
+  ([#2818](https://github.com/open-telemetry/opentelemetry-specification/pull/2818)).
 
 ### Compatibility
 
