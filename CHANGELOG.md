@@ -7,6 +7,9 @@ release.
 
 ## Unreleased
 
+- Add the definition of a Boolean environment variable
+  ([#2755](https://github.com/open-telemetry/opentelemetry-specification/pull/2755)).
+
 ### Context
 
 ### Traces
