@@ -14,6 +14,15 @@ The SDK MUST interpret an empty value of an environment variable the same way as
 
 **Status**: [Stable](document-status.md)
 
+### Boolean value
+
+Any value that represents a Boolean MUST be set to true only by the case-insensitive string `"true"`, meaning `"True"` or `"TRUE"` are also accepted, as true.
+An SDK MUST NOT extend this definition and define additional values that are interpreted as true.
+Any value not explicitly defined here as a true value, including unset and empty values, MUST be interpreted as false.
+If any value other than a true value, case-insensitive string `"false"`, empty, or unset is used, a warning SHOULD be logged to inform users about the fallback to false being applied.
+All Boolean environment variables SHOULD be named and defined such that false is the expected safe default behavior.
+Renaming or changing the default value MUST NOT happen without a major version upgrade.
+
 ### Numeric value
 
 If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
@@ -39,12 +48,13 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 | Name                     | Description                                       | Default                           | Notes                               |
 | ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
+| OTEL_SDK_DISABLED         | Disable the SDK for all signals | false | Boolean value. If "true", a no-op SDK implementation will be used for all telemetry signals. Any other value or absence of the variable will have no effect and the SDK will remain enabled. This setting has no effect on propagators configured through the OTEL_PROPAGATORS variable.|
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes | See [Resource semantic conventions](resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for details. | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](./resource/semantic_conventions/README.md#service) resource attribute | | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
 | OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
-| OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.  |
+| OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set. |
 
 Known values for `OTEL_PROPAGATORS` are:
 
