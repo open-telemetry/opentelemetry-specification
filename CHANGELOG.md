@@ -19,6 +19,9 @@ release.
 
 ### Logs
 
+- Add environment variables for configuring the `BatchLogRecordProcessor`.
+  ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
+
 ### Resource
 
 - Add `browser.mobile` and `browser.language` resource attributes
@@ -91,8 +94,6 @@ release.
   ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
 - Add the signal-specific OTEL_EXPORTER_OTLP_LOGS_* environment variables
   ([#2782](https://github.com/open-telemetry/opentelemetry-specification/pull/2782)).
-- Add environment variables for configuring the `BatchLogRecordProcessor`.
-  ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
 
 ### Resource
 
