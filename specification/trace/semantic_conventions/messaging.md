@@ -7,6 +7,10 @@
 <!-- toc -->
 
 - [Definitions](#definitions)
+  * [Message](#message)
+  * [Producer](#producer)
+  * [Consumer](#consumer)
+  * [Intermediary](#intermediary)
   * [Destinations](#destinations)
   * [Message consumption](#message-consumption)
   * [Conversations](#conversations)
