@@ -48,12 +48,13 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 | Name                     | Description                                       | Default                           | Notes                               |
 | ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
+| OTEL_SDK_DISABLED         | Disable the SDK for all signals | false | Boolean value. If "true", a no-op SDK implementation will be used for all telemetry signals. Any other value or absence of the variable will have no effect and the SDK will remain enabled. This setting has no effect on propagators configured through the OTEL_PROPAGATORS variable.|
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes | See [Resource semantic conventions](resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for details. | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
 | OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](./resource/semantic_conventions/README.md#service) resource attribute | | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence. |
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
 | OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
-| OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.  |
+| OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set. |
 
 Known values for `OTEL_PROPAGATORS` are:
 
@@ -91,12 +92,23 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 **Status**: [Stable](document-status.md)
 
-| Name                           | Description                                    | Default | Notes                                                 |
-| ------------------------------ | ---------------------------------------------- | ------- | ----------------------------------------------------- |
-| OTEL_BSP_SCHEDULE_DELAY        | Delay interval between two consecutive exports | 5000    |                                                       |
-| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time to export data            | 30000   |                                                       |
-| OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                             | 2048    |                                                       |
-| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                             | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
+| Name                           | Description                                                      | Default  | Notes                                                 |
+| ------------------------------ | ---------------------------------------------------------------- | -------  | ----------------------------------------------------- |
+| OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000     |                                                       |
+| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000    |                                                       |
+| OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048     |                                                       |
+| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512      | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
+
+## Batch LogRecord Processor
+
+**Status**: [Experimental](document-status.md)
+
+| Name                            | Description                                                      | Default  | Notes                                                  |
+| ------------------------------- | ---------------------------------------------------------------- | -------  | ------------------------------------------------------ |
+| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000     |                                                        |
+| OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000    |                                                        |
+| OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048     |                                                        |
+| OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512      | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE |
 
 ## Attribute Limits
 
@@ -152,21 +164,21 @@ SDKs have good reasons to choose other as the default
 
 Environment variables specific for the `http/thrift.binary` transport protocol:
 
-| Name                          | Description                                                      | Default                             |
-|-------------------------------|------------------------------------------------------------------|-------------------------------------|
-| OTEL_EXPORTER_JAEGER_ENDPOINT | Full URL of the [Jaeger HTTP endpoint][jaeger_collector]         | `http://localhost:14268/api/traces` |
-| OTEL_EXPORTER_JAEGER_TIMEOUT  | Maximum time the Jaeger exporter will wait for each batch export | 10s                                 |
-| OTEL_EXPORTER_JAEGER_USER     | Username to be used for HTTP basic authentication                |                                     |
-| OTEL_EXPORTER_JAEGER_PASSWORD | Password to be used for HTTP basic authentication                |                                     |
+| Name                          | Description                                                                        | Default                             |
+|-------------------------------|------------------------------------------------------------------------------------|-------------------------------------|
+| OTEL_EXPORTER_JAEGER_ENDPOINT | Full URL of the [Jaeger HTTP endpoint][jaeger_collector]                           | `http://localhost:14268/api/traces` |
+| OTEL_EXPORTER_JAEGER_TIMEOUT  | Maximum time (in milliseconds) the Jaeger exporter will wait for each batch export | 10000                               |
+| OTEL_EXPORTER_JAEGER_USER     | Username to be used for HTTP basic authentication                                  |                                     |
+| OTEL_EXPORTER_JAEGER_PASSWORD | Password to be used for HTTP basic authentication                                  |                                     |
 
 Environment variables specific for the `grpc` transport protocol:
 
-| Name                          | Description                                                      | Default                  |
-|-------------------------------|------------------------------------------------------------------|--------------------------|
-| OTEL_EXPORTER_JAEGER_ENDPOINT | URL of the [Jaeger gRPC endpoint][jaeger_collector]              | `http://localhost:14250` |
-| OTEL_EXPORTER_JAEGER_TIMEOUT  | Maximum time the Jaeger exporter will wait for each batch export | 10s                      |
-| OTEL_EXPORTER_JAEGER_USER     | Username to be used for HTTP basic authentication                |                          |
-| OTEL_EXPORTER_JAEGER_PASSWORD | Password to be used for HTTP basic authentication                |                          |
+| Name                          | Description                                                                        | Default                  |
+|-------------------------------|------------------------------------------------------------------------------------|--------------------------|
+| OTEL_EXPORTER_JAEGER_ENDPOINT | URL of the [Jaeger gRPC endpoint][jaeger_collector]                                | `http://localhost:14250` |
+| OTEL_EXPORTER_JAEGER_TIMEOUT  | Maximum time (in milliseconds) the Jaeger exporter will wait for each batch export | 10000                    |
+| OTEL_EXPORTER_JAEGER_USER     | Username to be used for HTTP basic authentication                                  |                          |
+| OTEL_EXPORTER_JAEGER_PASSWORD | Password to be used for HTTP basic authentication                                  |                          |
 
 Environment variables specific for the `udp/thrift.compact` transport protocol:
 
@@ -189,10 +201,10 @@ Environment variables specific for the `udp/thrift.binary` transport protocol:
 
 **Status**: [Stable](document-status.md)
 
-| Name                          | Description                | Default                                                                                                      |
-| ----------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces | <!-- markdown-link-check-disable --> "http://localhost:9411/api/v2/spans"<!-- markdown-link-check-enable --> |
-| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time the Zipkin exporter will wait for each batch export | 10s                                                                                              |
+| Name                          | Description                                                                        | Default                              |
+| ----------------------------- | ---------------------------------------------------------------------------------- |------------------------------------- |
+| OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces                                                         | `http://localhost:9411/api/v2/spans` |
+| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time (in milliseconds) the Zipkin exporter will wait for each batch export | 10000                                |
 
 Additionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:

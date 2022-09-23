@@ -94,6 +94,8 @@ release.
   ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
 - Add the signal-specific OTEL_EXPORTER_OTLP_LOGS_* environment variables
   ([#2782](https://github.com/open-telemetry/opentelemetry-specification/pull/2782)).
+- Add environment variables for configuring the `BatchLogRecordProcessor`.
+  ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
 
 ### Resource
 
@@ -148,6 +150,9 @@ release.
   ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696))
 
 ### SDK Configuration
+
+- Add the OTEL_SDK_DISABLED environment variable to the SDK configuration.
+  ([2679](https://github.com/open-telemetry/opentelemetry-specification/pull/2679))
 
 - Mark `OTEL_METRIC_EXPORT_INTERVAL`, `OTEL_METRIC_EXPORT_TIMEOUT`
   environment variables as Stable
