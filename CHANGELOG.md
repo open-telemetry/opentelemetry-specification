@@ -89,7 +89,7 @@ release.
   ([#2676](https://github.com/open-telemetry/opentelemetry-specification/pull/2676))
 - Align log SDK and API component naming
   ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
-- Add the signal-specific OTEL_EXPORTER_OTLP_LOGS_* environment variables
+- Add the signal-specific OTEL*EXPORTER_OTLP_LOGS*\* environment variables
   ([#2782](https://github.com/open-telemetry/opentelemetry-specification/pull/2782)).
 - Add environment variables for configuring the `BatchLogRecordProcessor`.
   ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
@@ -220,7 +220,7 @@ release.
   ([#2508](https://github.com/open-telemetry/opentelemetry-specification/pull/2508)).
 - Refactor jvm classes semantic conventions
   ([#2550](https://github.com/open-telemetry/opentelemetry-specification/pull/2550)).
-- Add browser.* attributes
+- Add browser.\* attributes
   ([#2353](https://github.com/open-telemetry/opentelemetry-specification/pull/2353)).
 - Change JVM runtime metric `process.runtime.jvm.memory.max`
   to `process.runtime.jvm.memory.limit`
@@ -371,7 +371,7 @@ release.
   ([#2415](https://github.com/open-telemetry/opentelemetry-specification/pull/2415)).
 - Clarify the manner in which aggregation and temporality preferences
   are encoded via MetricReader parameters "on the basis of instrument
-  kind".  Rename the environment variable
+  kind". Rename the environment variable
   `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` used to set the
   preference to be used when auto-configuring an OTLP Exporter,
   defaults to CUMULATIVE, with DELTA an option that makes Counter,
@@ -534,6 +534,7 @@ release.
   ([#2297](https://github.com/open-telemetry/opentelemetry-specification/pull/2297))
 - Add `db.redis.instance` Resource attribute in Redis.
   ([#2145](https://github.com/open-telemetry/opentelemetry-specification/pull/2145))
+  ([#2836](https://github.com/open-telemetry/opentelemetry-specification/pull/2836))
 
 ### Compatibility
 
@@ -604,7 +605,7 @@ release.
 
 - Fix Syslog severity number mapping in the example.
   ([#2091](https://github.com/open-telemetry/opentelemetry-specification/pull/2091))
-- Add log.* attributes.
+- Add log.\* attributes.
   ([#2022](https://github.com/open-telemetry/opentelemetry-specification/pull/2022))
 
 ### Resource
@@ -997,13 +998,13 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 - Add `arch` to `host` semantic conventions ([#1483](https://github.com/open-telemetry/opentelemetry-specification/pull/1483))
 - Add `runtime` to `container` semantic conventions ([#1482](https://github.com/open-telemetry/opentelemetry-specification/pull/1482))
 - Rename `gcp_gke` to `gcp_kubernetes_engine` to have consistency with other
-Google products under `cloud.infrastructure_service` ([#1496](https://github.com/open-telemetry/opentelemetry-specification/pull/1496))
+  Google products under `cloud.infrastructure_service` ([#1496](https://github.com/open-telemetry/opentelemetry-specification/pull/1496))
 - `http.url` MUST NOT contain credentials ([#1502](https://github.com/open-telemetry/opentelemetry-specification/pull/1502))
 - Add `aws.eks.cluster.arn` to EKS specific semantic conventions ([#1484](https://github.com/open-telemetry/opentelemetry-specification/pull/1484))
 - Rename `zone` to `availability_zone` in `cloud` semantic conventions ([#1495](https://github.com/open-telemetry/opentelemetry-specification/pull/1495))
 - Rename `cloud.infrastructure_service` to `cloud.platform` ([#1530](https://github.com/open-telemetry/opentelemetry-specification/pull/1530))
 - Add section describing that libraries and the collector should autogenerate
-the semantic convention keys. ([#1515](https://github.com/open-telemetry/opentelemetry-specification/pull/1515))
+  the semantic convention keys. ([#1515](https://github.com/open-telemetry/opentelemetry-specification/pull/1515))
 
 ## v1.0.1 (2021-02-11)
 
@@ -1115,8 +1116,8 @@ New:
   the absence of an installed SDK
 - Add API and semantic conventions for recording exceptions as Span Events
   ([#697](https://github.com/open-telemetry/opentelemetry-specification/pull/697))
-  * API was extended to allow adding arbitrary event attributes ([#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
-  * `exception.escaped` semantic span event attribute was added
+  - API was extended to allow adding arbitrary event attributes ([#874](https://github.com/open-telemetry/opentelemetry-specification/pull/874))
+  - `exception.escaped` semantic span event attribute was added
     ([#784](https://github.com/open-telemetry/opentelemetry-specification/pull/784),
     [#946](https://github.com/open-telemetry/opentelemetry-specification/pull/946))
 - Allow samplers to modify tracestate
@@ -1159,13 +1160,13 @@ Updates:
   ([#690](https://github.com/open-telemetry/opentelemetry-specification/pull/690))
 - Remove lazy Event and Link API from Span interface
   ([#840](https://github.com/open-telemetry/opentelemetry-specification/pull/840))
-  * SIGs are recommended to remove any existing implementation of the lazy APIs
+  - SIGs are recommended to remove any existing implementation of the lazy APIs
     to avoid conflicts/breaking changes in case they will be reintroduced to the
     spec in future.
 - Provide clear definitions for readable and read/write span interfaces in the
   SDK
   ([#669](https://github.com/open-telemetry/opentelemetry-specification/pull/669))
-  * SpanProcessors must provide read/write access at least in OnStart.
+  - SpanProcessors must provide read/write access at least in OnStart.
 - Specify how `Probability` sampler is used with `ParentOrElse` sampler.
 - Clarify event timestamp origin and range
   ([#839](https://github.com/open-telemetry/opentelemetry-specification/pull/839))
@@ -1182,7 +1183,7 @@ Updates:
   ([#873](https://github.com/open-telemetry/opentelemetry-specification/pull/873))
 - Add semantic conventions for process runtime
   ([#882](https://github.com/open-telemetry/opentelemetry-specification/pull/882),
-   [#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
+  [#1137](https://github.com/open-telemetry/opentelemetry-specification/pull/1137))
 - Use hex encoding for trace id and span id fields in OTLP JSON encoding:
   ([#911](https://github.com/open-telemetry/opentelemetry-specification/pull/911))
 - Explicitly specify the SpanContext APIs IsValid and IsRemote as required
@@ -1249,8 +1250,8 @@ Updates:
 - Clarify Tracer vs TracerProvider in tracing API and SDK spec.
   ([#619](https://github.com/open-telemetry/opentelemetry-specification/pull/619))
   Most importantly:
-  * Configuration should be stored not per Tracer but in the TracerProvider.
-  * Active spans are not per Tracer.
+  - Configuration should be stored not per Tracer but in the TracerProvider.
+  - Active spans are not per Tracer.
 - Do not set any value in Context upon failed extraction
   ([#671](https://github.com/open-telemetry/opentelemetry-specification/pull/671))
 - Clarify semantic conventions around span start and end time
