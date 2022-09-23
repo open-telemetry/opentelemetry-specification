@@ -31,10 +31,8 @@ to non-hierarchical formats.
 A mapping is required when flattening out attributes from the structured OTLP
 format, which has attributes at different levels (e.g., Resource attributes,
 InstrumentationScope attributes, attributes on Spans/Metrics/Logs) to a
-non-hierarchical representation (e.g., Prometheus/OpenMetrics labels).
-In the case of OpenMetrics, the set of labels is flat and must have unique
-labels only
-(<https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#labelset>).
+non-hierarchical representation (e.g., Zipkin tags).
+In the case of Zipkin, tags are string-to-string dictionaries.
 Since OpenTelemetry allows for different levels of attributes, it is possible
 that the same attribute appears multiple times on different levels.
 
