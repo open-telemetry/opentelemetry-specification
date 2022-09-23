@@ -29,6 +29,8 @@ release.
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+- Add `process.uptime` and `system.uptime` metrics to semantic conventions
+  ([#2824](https://github.com/open-telemetry/opentelemetry-specification/pull/2824))
 
 ### Compatibility
 

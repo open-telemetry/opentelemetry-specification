@@ -16,6 +16,7 @@ instruments not explicitly defined in the specification.
 <!-- toc -->
 
 - [Metric Instruments](#metric-instruments)
+  * [`system.` - General system metrics](#system---general-system-metrics)
   * [`system.cpu.` - Processor metrics](#systemcpu---processor-metrics)
   * [`system.memory.` - Memory metrics](#systemmemory---memory-metrics)
   * [`system.paging.` - Paging/swap metrics](#systempaging---pagingswap-metrics)
@@ -28,6 +29,14 @@ instruments not explicitly defined in the specification.
 <!-- tocstop -->
 
 ## Metric Instruments
+
+### `system.` - General system metrics
+
+**Description:** General system metrics.
+
+| Name                   | Description                                                                                              | Units | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key(s) | Attribute Values                    |
+| ---------------------- | -------------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------------- | ---------- | ---------------- | ----------------------------------- |
+| system.uptime          | Number of seconds that the system has been running.                                                      | s     | Counter                                           | Int64      |                  |                                     |
 
 ### `system.cpu.` - Processor metrics
 
