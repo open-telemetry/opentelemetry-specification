@@ -31,6 +31,8 @@ release.
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+- Add `process.start_time` resource attribute to semantic conventions
+  ([#2825](https://github.com/open-telemetry/opentelemetry-specification/pull/2825))
 
 ### Compatibility
 

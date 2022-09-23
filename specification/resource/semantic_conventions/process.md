@@ -35,6 +35,7 @@
 | `process.command_line` | string | The full command used to launch the process as a single string representing the full command. On Windows, can be set to the result of `GetCommandLineW`. Do not set this if you have to assemble it just for monitoring; use `process.command_args` instead. | `C:\cmd\otecol --config="my directory\config.yaml"` | Conditionally Required: See alternative attributes below. |
 | `process.command_args` | string[] | All the command arguments (including the command/executable itself) as received by the process. On Linux-based systems (and some other Unixoid systems supporting procfs), can be set according to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based executables, this would be the full argv vector passed to `main`. | `[cmd/otecol, --config=config.yaml]` | Conditionally Required: See alternative attributes below. |
 | `process.owner` | string | The username of the user that owns the process. | `root` | Recommended |
+| `process.start_time` | int | The start time of the process in UTC, expressed as number of seconds since the Unix epoch. | `1663931438` | Recommended |
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 

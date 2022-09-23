@@ -68,6 +68,12 @@ groups:
         brief: >
           The username of the user that owns the process.
         examples: 'root'
+      - id: start_time
+        type: int
+        brief: >
+          The start time of the process in UTC,
+          expressed as number of seconds since the Unix epoch.
+        examples: [1663931438]
     constraints:
       - any_of:
           - process.executable.name
