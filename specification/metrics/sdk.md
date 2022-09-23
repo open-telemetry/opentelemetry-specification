@@ -431,7 +431,7 @@ This Aggregation honors the following configuration parameters:
 
 | Key | Value | Default Value | Description |
 | --- | --- | --- | --- |
-| Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 1000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets:<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 1000.0], (1000.0, +&infin;) |
+| Boundaries | double\[\] | [ 0, 5, 10, 25, 50, 75, 100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000 ] | Array of increasing values representing explicit bucket boundary values.<br><br>The Default Value represents the following buckets (heavily influenced by the default buckets of Prometheus clients, e.g. [Java](https://github.com/prometheus/client_java/blob/6730f3e32199d6bf0e963b306ff69ef08ac5b178/simpleclient/src/main/java/io/prometheus/client/Histogram.java#L88) and [Go](https://github.com/prometheus/client_golang/blob/83d56b1144a0c2eb10d399e7abbae3333bebc463/prometheus/histogram.go#L68)):<br>(-&infin;, 0], (0, 5.0], (5.0, 10.0], (10.0, 25.0], (25.0, 50.0], (50.0, 75.0], (75.0, 100.0], (100.0, 250.0], (250.0, 500.0], (500.0, 750.0], (750.0, 1000.0], (1000.0, 2500.0], (2500.0, 5000.0], (5000.0, 7500.0], (7500.0, 10000.0], (10000.0, +&infin;). SDKs SHOULD use the default value when boundaries are not explicitly provided, unless they have good reasons to use something different (e.g. for backward compatibility reasons in a stable SDK release). |
 | RecordMinMax | true, false | true | Whether to record min and max. |
 
 Explicit buckets are stated in terms of their upper boundary.  Buckets
