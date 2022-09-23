@@ -31,6 +31,8 @@
 
 ## Definitions
 
+### Message
+
 Although messaging systems are not as standardized as, e.g., HTTP, it is assumed that the following definitions are applicable to most of them that have similar concepts at all (names borrowed mostly from JMS):
 
 A *message* is an envelope with a potentially empty payload.
@@ -43,6 +45,27 @@ With Apache Kafka, the physical broker a message is written to depends on the nu
 * Logically: some particular message *destination*.
 
 Messages can be delivered to 0, 1, or multiple consumers depending on the dispatching semantic of the protocol.
+
+### Producer
+
+The "producer" is a specific instance, process or device that creates and
+publishes a message. "Publishing" is the process of sending a message or batch
+to the intermediary or consumer.
+
+### Consumer
+
+A "consumer" receives the message and acts upon it. It uses the context and
+data to execute some logic, which might lead to the occurrence of new events.
+
+The consumer receives, processes, and settles a message. "Receiving" is the
+process of obtaining a message from the intermediary, "processing" is the
+process of acting on the information a message contains, "settling" is the
+process of notifying an intermediary that a message was processed successfully.
+
+### Intermediary
+
+An "intermediary" receives a message to forward it to the next receiver, which
+might be another intermediary or a consumer.
 
 ### Destinations
 
@@ -88,31 +111,23 @@ when it is propagated from the producer to the consumer(s). To be able to correl
 consumer traces with producer traces using the existing context propagation mechanisms,
 all components must propagate context down the chain.
 
-Due to the complex nature of messaging systems, it cannot be assumed
-that all components are instrumented and propagate context accordingly.
-For example, an application using a messaging system offered via
-software as a service (SaaS) that does not propagate context will lead to incomplete traces.
-
-To be able to correlate consumer traces with producer traces without requiring
-intermediary instrumentation, the context needs to be propagated on a
-*per-message* basis instead of on a *per-request* basis. This allows all components
-to have access to the same per-message context information, making it possible
-to correlate all stages involved in processing a message with the message's
-creation.
+Messaging systems themselves may trace messages as the messages travels from
+producers to consumers. Such tracing would cover the transport layer but would
+not help in correlating producers with consumers. To be able to directly
+correlate producers with consumers, another context that is propagated with
+the message is required.
 
 A message *creation context* allows correlating producers with consumers
 of a message and model the dependencies between them,
 regardless of the underlying messaging transport mechanism and its instrumentation.
 
 The message creation context is created by the producer and should be propagated
-to the consumer(s).
-
-Consumer traces cannot be directly correlated to producer traces if the message
-creation context is not attached and propagated with the message.
+to the consumer(s). Consumer traces cannot be directly correlated with producer
+traces if the message creation context is not attached and propagated with the message.
 
 A producer SHOULD attach a message creation context to each message.
-The message creation context SHOULD be attached in such a way that it is
-not possible to be changed by intermediaries.
+If possible, the message creation context SHOULD be attached
+in such a way that it cannot be changed by intermediaries.
 
 > This document does not specify the exact mechanisms on how the creation context
 > is attached/extracted to/from messages. Future versions of these conventions
