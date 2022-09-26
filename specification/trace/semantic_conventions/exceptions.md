@@ -47,9 +47,15 @@ The event name MUST be `exception`.
 | `exception.type` | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.net.ConnectException`; `OSError` | See below |
 | `exception.message` | string | The exception message. | `Division by zero`; `Can't convert 'int' object to str implicitly` | See below |
 | `exception.stacktrace` | string | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. | `Exception in thread "main" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)` | Recommended |
-| `exception.escaped` | boolean | SHOULD be set to true if the exception event is recorded at a point where it is known that the exception is escaping the scope of the span. [1] |  | Recommended |
+| `exception.structured_stacktrace.function_names` | string[] | The fully-qualified names that uniquely identify the function or method that is active in the frame. [1] | `[com.example.GenerateTrace.methodB, com.example.GenerateTrace.methodA, com.example.GenerateTrace.main]` | Recommended |
+| `exception.structured_stacktrace.filenames` | string[] | The source file names where each function call appears. | `[GenerateTrace.java, GenerateTrace.java, GenerateTrace.java]` | Recommended |
+| `exception.structured_stacktrace.line_numbers` | int[] | The line number in file where each function call appears. | `[13, 9, 5]` | Recommended |
+| `exception.structured_stacktrace.column_numbers` | int[] | The column number, if available, in each file where the function call appears. | `[8, 4, 4]` | Recommended |
+| `exception.escaped` | boolean | SHOULD be set to true if the exception event is recorded at a point where it is known that the exception is escaping the scope of the span. [2] |  | Recommended |
 
-**[1]:** An exception is considered to have escaped (or left) the scope of a span,
+**[1]:** The `structured_stacktrace` attribute takes precedence over `stacktrace` when both appear. Each array must start with the top of the stack.
+
+**[2]:** An exception is considered to have escaped (or left) the scope of a span,
 if that span is ended while the exception is still logically "in flight".
 This may be actually "in flight" in some languages (e.g. if the exception
 is passed to a Context manager's `__exit__` method in Python) but will

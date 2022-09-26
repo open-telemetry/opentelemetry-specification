@@ -29,6 +29,11 @@ release.
 - Add `process.context_switches`, and `process.open_file_descriptors`, to the
   metrics semantic conventions
   ([#2706](https://github.com/open-telemetry/opentelemetry-specification/pull/2706))
+- Add structured stacktrace to exception attributes. The stacktrace is broken up
+  to 4 attributes: `exception.structured_stacktrace.function_names`,
+  `exception.structured_stacktrace.filenames`,
+  `exception.structured_stacktrace.line_numbers`,
+  `exception.structured_stacktrace.column_numbers` ([#2841](https://github.com/open-telemetry/opentelemetry-specification/pull/2841))
 
 ### Compatibility
 

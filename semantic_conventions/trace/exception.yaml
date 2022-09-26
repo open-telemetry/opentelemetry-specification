@@ -26,6 +26,30 @@ groups:
         at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n
         at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n
         at com.example.GenerateTrace.main(GenerateTrace.java:5)'
+      - id: structured_stacktrace.function_names
+        type: string[]
+        brief: >
+          The fully-qualified names that uniquely identify the function or
+          method that is active in the frame.
+        examples: ["com.example.GenerateTrace.methodB", "com.example.GenerateTrace.methodA",
+        "com.example.GenerateTrace.main"]
+        note: |-
+          The `structured_stacktrace` attribute takes precedence over `stacktrace` when both appear. Each array must start with the top of the stack.
+      - id: structured_stacktrace.filenames
+        type: string[]
+        brief: >
+          The source file names where each function call appears.
+        examples: ["GenerateTrace.java", "GenerateTrace.java", "GenerateTrace.java"]
+      - id: structured_stacktrace.line_numbers
+        type: int[]
+        brief: >
+          The line number in file where each function call appears.
+        examples: [13, 9, 5]
+      - id: structured_stacktrace.column_numbers
+        type: int[]
+        brief: >
+          The column number, if available, in each file where the function call appears.
+        examples: [8, 4, 4]
       - id: escaped
         type: boolean
         brief: >
