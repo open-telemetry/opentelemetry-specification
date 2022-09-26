@@ -1,7 +1,6 @@
 groups:
   - id: exception
     prefix: exception
-    type: event
     brief: >
       This document defines the shared attributes used to
       report a single exception associated with a span or log.
