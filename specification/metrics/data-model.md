@@ -1498,7 +1498,11 @@ following the rules described in the [`Metric Attributes`](#metric-attributes)
 section below.
 
 Prometheus exporters MUST add the scope name as the `otel_scope_name` label and
-the scope version as the `otel_scope_version` label on all metric points.
+the scope version as the `otel_scope_version` label on all metric points by
+default.
+
+Prometheus exporters SHOULD provide a configuration option to disable the
+`otel_scope_info` metric and `otel_scope_` labels.
 
 #### Gauges
 
