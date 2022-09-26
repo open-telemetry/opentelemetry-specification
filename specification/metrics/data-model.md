@@ -1424,8 +1424,8 @@ scope_metrics:
         - value: 1
 ```
 
-Metrics which are not found to be associated with an instrumentation scope are
-all placed within an empty instrumentation scope, and do not have any labels
+Metrics which are not found to be associated with an instrumentation scope MUST
+all be placed within an empty instrumentation scope, and MUST not have any labels
 removed.
 
 #### Resource Attributes
