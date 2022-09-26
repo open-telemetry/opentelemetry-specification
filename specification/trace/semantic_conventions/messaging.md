@@ -54,7 +54,7 @@ Messages can be delivered to 0, 1, or multiple consumers depending on the dispat
 
 The "producer" is a specific instance, process or device that creates and
 publishes a message. "Publishing" is the process of sending a message or batch
-to the intermediary or consumer.
+of messages to the intermediary or consumer.
 
 ### Consumer
 
