@@ -335,7 +335,7 @@ describe the host in the cloud and specific container or an application running
 in the process.
 
 Note, that some of the process identification information can be associated with
-telemetry automatically by OpenTelemetry SDK.
+telemetry automatically by the OpenTelemetry SDK.
 
 ## Context Propagation
 
