@@ -335,10 +335,7 @@ describe the host in the cloud and specific container or an application running
 in the process.
 
 Note, that some of the process identification information can be associated with
-telemetry automatically by OpenTelemetry SDK or specific exporter. See
-OpenTelemetry
-[proto](https://github.com/open-telemetry/opentelemetry-proto/blob/a46c815aa5e85a52deb6cb35b8bc182fb3ca86a0/src/opentelemetry/proto/agent/common/v1/common.proto#L28-L96)
-for an example.
+telemetry automatically by the OpenTelemetry SDK.
 
 ## Context Propagation
 
