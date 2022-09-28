@@ -31,6 +31,8 @@ release.
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+- Add `process.disk.operations` metric to semantic conventions
+  ([#2845](https://github.com/open-telemetry/opentelemetry-specification/pull/2845))
 
 ### Compatibility
 
