@@ -19,6 +19,9 @@ release.
 
 ### Logs
 
+- Add environment variables for configuring the `BatchLogRecordProcessor`.
+  ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
+
 ### Resource
 
 - Add `browser.mobile` and `browser.language` resource attributes
@@ -38,8 +41,13 @@ release.
 
 - Add user agent to OTLP exporter specification
   ([#2684](https://github.com/open-telemetry/opentelemetry-specification/pull/2684))
+- Clarify that unknown fields must be ignored when receiving OTLP/JSON
+  ([#2816](https://github.com/open-telemetry/opentelemetry-specification/pull/2816))
 
 ### SDK Configuration
+
+- Add the definition of a Boolean environment variable
+  ([#2755](https://github.com/open-telemetry/opentelemetry-specification/pull/2755)).
 
 ### Telemetry Schemas
 
@@ -144,6 +152,9 @@ release.
   ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696))
 
 ### SDK Configuration
+
+- Add the OTEL_SDK_DISABLED environment variable to the SDK configuration.
+  ([2679](https://github.com/open-telemetry/opentelemetry-specification/pull/2679))
 
 - Mark `OTEL_METRIC_EXPORT_INTERVAL`, `OTEL_METRIC_EXPORT_TIMEOUT`
   environment variables as Stable
