@@ -19,6 +19,9 @@ release.
 
 ### Logs
 
+
+- Add environment variables for configuring the `BatchLogRecordProcessor`.
+  ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
 - Fix inconsistencies in log README
   ([#2800](https://github.com/open-telemetry/opentelemetry-specification/pull/2800)).
 
@@ -39,6 +42,8 @@ release.
 
 - Add user agent to OTLP exporter specification
   ([#2684](https://github.com/open-telemetry/opentelemetry-specification/pull/2684))
+- Clarify that unknown fields must be ignored when receiving OTLP/JSON
+  ([#2816](https://github.com/open-telemetry/opentelemetry-specification/pull/2816))
 
 ### SDK Configuration
 
@@ -94,8 +99,6 @@ release.
   ([#2768](https://github.com/open-telemetry/opentelemetry-specification/pull/2768)).
 - Add the signal-specific OTEL_EXPORTER_OTLP_LOGS_* environment variables
   ([#2782](https://github.com/open-telemetry/opentelemetry-specification/pull/2782)).
-- Add environment variables for configuring the `BatchLogRecordProcessor`.
-  ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
 
 ### Resource
 
