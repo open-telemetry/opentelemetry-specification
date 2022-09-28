@@ -41,6 +41,8 @@ release.
   ([#2684](https://github.com/open-telemetry/opentelemetry-specification/pull/2684))
 - Clarify that unknown fields must be ignored when receiving OTLP/JSON
   ([#2816](https://github.com/open-telemetry/opentelemetry-specification/pull/2816))
+- Add OTLP exporter user agent to the spec compliance matrix
+  ([#xyz](https://github.com/open-telemetry/opentelemetry-specification/pull/xyz)).
 
 ### SDK Configuration
 
