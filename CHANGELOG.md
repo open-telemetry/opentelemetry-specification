@@ -34,6 +34,8 @@ release.
   ([#2706](https://github.com/open-telemetry/opentelemetry-specification/pull/2706))
 - Add exceptions to the logs semantic conventions
   ([#2819](https://github.com/open-telemetry/opentelemetry-specification/pull/2819))
+- Make context propagation requirements explicit for messaging semantic conventions
+  ([#2750](https://github.com/open-telemetry/opentelemetry-specification/pull/2750)).
 
 ### Compatibility
 
