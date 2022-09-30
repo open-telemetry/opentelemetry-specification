@@ -470,7 +470,7 @@ Additional information about errors and/or exceptions that are associated with
 a log record MAY be included in the structured data in the `Attributes` section
 of the record.
 If included, they MUST follow the OpenTelemetry
-[semantic conventions for exception-related attributes](../trace/semantic_conventions/exceptions.md#attributes).
+[semantic conventions for exception-related attributes](./semantic_conventions/exceptions.md#attributes).
 
 ## Example Log Records
 
