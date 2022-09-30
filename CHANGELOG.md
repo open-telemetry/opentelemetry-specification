@@ -32,6 +32,8 @@ release.
 - Add `process.context_switches`, and `process.open_file_descriptors`, to the
   metrics semantic conventions
   ([#2706](https://github.com/open-telemetry/opentelemetry-specification/pull/2706))
+- Add exceptions to the logs semantic conventions
+  ([#2819](https://github.com/open-telemetry/opentelemetry-specification/pull/2819))
 
 ### Compatibility
 
