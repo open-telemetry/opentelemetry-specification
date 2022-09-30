@@ -210,23 +210,23 @@ formats is required. Implementing more than one format is optional.
 
 Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
 
-| Feature                                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-|--------------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
-| **[Logging SDK](specification/logs/logging-library-sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| LogEmitterProvider.Get LogEmitter                            |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
-| LogEmitterProvider.Get LogEmitter accepts attributes         |          |     |      |     |        |      |        |     |      |     |      |       |
-| LogEmitterProvider.Shutdown                                  |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
-| LogEmitterProvider.ForceFlush                                |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
-| LogEmitter.Emit(LogRecord)                                   |          |     | +    |     |   +    |      |        |     |      |     | -    |       |
-| SimpleLogProcessor                                           |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| BatchLogProcessor                                            |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| Can plug custom log processor                                |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| OTLP/gRPC exporter                                           |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| OTLP/HTTP exporter                                           |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| OTLP File exporter                                           |          |     | -    |     |   -    |      |        |     |      |     | -    |       |
-| Can plug custom log exporter                                 |          |     | +    |     |   +    |      |        |     |      |     | +    |       |
-| Implicit Context Injection                                   |          |     | -    |     |   +    |      |        |     |      |     | +    |       |
-| Explicit Context                                             |          |     | +    |     |   -    |      |        |     |      |     | -    |       |
+| Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
+| **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| LoggerProvider.Get Logger                    |          |     |      |     |        |      |        |     |      |     | -    |       |
+| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        |     |      |     |      |       |
+| LoggerProvider.Shutdown                      |          |     |      |     |        |      |        |     |      |     | -    |       |
+| LoggerProvider.ForceFlush                    |          |     |      |     |        |      |        |     |      |     | -    |       |
+| Logger.Emit(LogRecord)                       |          |     |      |     |        |      |        |     |      |     | -    |       |
+| SimpleLogRecordProcessor                     |          |     |      |     |        |      |        |     |      |     |      |       |
+| BatchLogRecordProcessor                      |          |     |      |     |        |      |        |     |      |     |      |       |
+| Can plug custom LogRecordProcessor           |          |     |      |     |        |      |        |     |      |     |      |       |
+| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
+| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
+| OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
+| Can plug custom LogRecordExporter            |          |     |      |     |        |      |        |     |      |     |      |       |
+| Implicit Context Injection                   |          |     | -    |     | +      |      |        |     |      |     | +    |       |
+| Explicit Context                             |          |     | +    |     | -      |      |        |     |      |     | -    |       |
 
 ## Resource
 
@@ -266,12 +266,14 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 Note: Support for environment variables is optional.
 
 |Feature                                           |Go | Java |JS |Python|Ruby|Erlang|PHP|Rust|C++|.NET|Swift|
-|--------------------------------------------------|---|------|---|------|----|------|---|----|---|----|-----|
+|--------------------------------------------------|--|------|---|------|----|------|---|----|---|----|-----|
+|OTEL_SDK_DISABLED                                 | - | -    | - | -    | -  | -    | - | -  | - | -  | -   |
 |OTEL_RESOURCE_ATTRIBUTES                          | + | +    | + | +    | +  | +    | + | +  | + | +  | -   |
 |OTEL_SERVICE_NAME                                 | + | +    | + | +    | +  | +    | + |    |   | +  |     |
 |OTEL_LOG_LEVEL                                    | - | -    | + | [-][py1059] | +  | - | -  |    | - | -  | -   |
 |OTEL_PROPAGATORS                                  | - | +    |   | +    | +  | +    | - | -  | - | -  | -   |
 |OTEL_BSP_*                                        | + | +    |   | +    | +  | +    | - | +  | - | -  | -   |
+|OTEL_BLRP_*                                       |   |      |   |      |    |      |   |    |   |    |     |
 |OTEL_EXPORTER_OTLP_*                              | + | +    |   | +    | +  | +    | - | +  | + | +  | -   |
 |OTEL_EXPORTER_JAEGER_*                            | + | +    |   | +    | +  | -    | - |    | - | +  | -   |
 |OTEL_EXPORTER_ZIPKIN_*                            | - | +    |   | +    | +  | -    | - | -  | - | +  | -   |
@@ -314,6 +316,7 @@ Note: Support for environment variables is optional.
 | SchemaURL in ResourceSpans and ScopeSpans                                      |          | +  | +    |    | +           |      | +      |     |      |     | -    |       |
 | SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    | +           |      | -      |     |      |     | -    |       |
 | SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    | +           |      | -      |     |      |     | -    |       |
+| Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        |     |      |     |      |       |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | +    |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | +    |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
