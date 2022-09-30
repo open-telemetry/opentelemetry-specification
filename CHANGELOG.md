@@ -21,6 +21,8 @@ release.
 
 - Add environment variables for configuring the `BatchLogRecordProcessor`.
   ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
+- Remove language around uniqueness of event names within a domain
+  ([#2848](https://github.com/open-telemetry/opentelemetry-specification/pull/2848))
 
 ### Resource
 
