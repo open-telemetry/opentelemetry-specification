@@ -39,7 +39,7 @@ release.
 - Update http metrics to use `http.route` instead of `http.target` for servers,
   drop `http.url` for clients
   ([#2818](https://github.com/open-telemetry/opentelemetry-specification/pull/2818)).
- 
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
