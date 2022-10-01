@@ -32,16 +32,24 @@ release.
 - Add `process.context_switches`, and `process.open_file_descriptors`, to the
   metrics semantic conventions
   ([#2706](https://github.com/open-telemetry/opentelemetry-specification/pull/2706))
+- Add exceptions to the logs semantic conventions
+  ([#2819](https://github.com/open-telemetry/opentelemetry-specification/pull/2819))
+- Make context propagation requirements explicit for messaging semantic conventions
+  ([#2750](https://github.com/open-telemetry/opentelemetry-specification/pull/2750)).
 - Update http metrics to use `http.route` instead of `http.target` for servers,
   drop `http.url` for clients
   ([#2818](https://github.com/open-telemetry/opentelemetry-specification/pull/2818)).
-
+ 
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
 - Add user agent to OTLP exporter specification
   ([#2684](https://github.com/open-telemetry/opentelemetry-specification/pull/2684))
+- Clarify that unknown fields must be ignored when receiving OTLP/JSON
+  ([#2816](https://github.com/open-telemetry/opentelemetry-specification/pull/2816))
+- Add OTLP exporter user agent to the spec compliance matrix
+  ([#2842](https://github.com/open-telemetry/opentelemetry-specification/pull/2842)).
 
 ### SDK Configuration
 
