@@ -1,31 +1,14 @@
 groups:
-  - id: exception
+  - id: trace-exception
     prefix: exception
     type: event
     brief: >
       This document defines the attributes used to
       report a single exception associated with a span.
     attributes:
-      - id: type
-        type: string
-        brief: >
-          The type of the exception (its fully-qualified class name, if applicable).
-          The dynamic type of the exception should be preferred over the static type
-          in languages that support it.
-        examples: ["java.net.ConnectException", "OSError"]
-      - id: message
-        type: string
-        brief: The exception message.
-        examples: ["Division by zero", "Can't convert 'int' object to str implicitly"]
-      - id: stacktrace
-        type: string
-        brief: >
-          A stacktrace as a string in the natural representation for the language runtime.
-          The representation is to be determined and documented by each language SIG.
-        examples: 'Exception in thread "main" java.lang.RuntimeException: Test exception\n
-        at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n
-        at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n
-        at com.example.GenerateTrace.main(GenerateTrace.java:5)'
+      - ref: exception.type
+      - ref: exception.message
+      - ref: exception.stacktrace
       - id: escaped
         type: boolean
         brief: >
