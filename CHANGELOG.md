@@ -36,6 +36,9 @@ release.
   ([#2819](https://github.com/open-telemetry/opentelemetry-specification/pull/2819))
 - Make context propagation requirements explicit for messaging semantic conventions
   ([#2750](https://github.com/open-telemetry/opentelemetry-specification/pull/2750)).
+- Update http metrics to use `http.route` instead of `http.target` for servers,
+  drop `http.url` for clients
+  ([#2818](https://github.com/open-telemetry/opentelemetry-specification/pull/2818)).
 
 ### Compatibility
 
