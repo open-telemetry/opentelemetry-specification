@@ -13,9 +13,39 @@ release.
 
 ### Metrics
 
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+### Common
+
+## v1.14.0 (2022-10-04)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
 - Changed the default buckets for Explicit Bucket Histogram to better match the
   official Prometheus clients.
   ([#2770](https://github.com/open-telemetry/opentelemetry-specification/pull/2770)).
+- Fix OpenMetrics valid label keys, and specify prometheus conversion for metric name.
+  ([#2788](https://github.com/open-telemetry/opentelemetry-specification/pull/2788))
 
 ### Logs
 
@@ -42,10 +72,14 @@ release.
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
 
 - Add user agent to OTLP exporter specification
   ([#2684](https://github.com/open-telemetry/opentelemetry-specification/pull/2684))
+- Prohibit usage of enum value name strings in OTLP/JSON
+  ([#2758](https://github.com/open-telemetry/opentelemetry-specification/pull/2758))
 - Clarify that unknown fields must be ignored when receiving OTLP/JSON
   ([#2816](https://github.com/open-telemetry/opentelemetry-specification/pull/2816))
 - Add OTLP exporter user agent to the spec compliance matrix
@@ -53,12 +87,18 @@ release.
 
 ### SDK Configuration
 
+- Add the OTEL_SDK_DISABLED environment variable to the SDK configuration.
+  ([2679](https://github.com/open-telemetry/opentelemetry-specification/pull/2679))
 - Add the definition of a Boolean environment variable
   ([#2755](https://github.com/open-telemetry/opentelemetry-specification/pull/2755)).
 
 ### Telemetry Schemas
 
+- No changes.
+
 ### Common
+
+- No changes.
 
 ## v1.13.0 (2022-09-19)
 
@@ -159,9 +199,6 @@ release.
   ([#2696](https://github.com/open-telemetry/opentelemetry-specification/pull/2696))
 
 ### SDK Configuration
-
-- Add the OTEL_SDK_DISABLED environment variable to the SDK configuration.
-  ([2679](https://github.com/open-telemetry/opentelemetry-specification/pull/2679))
 
 - Mark `OTEL_METRIC_EXPORT_INTERVAL`, `OTEL_METRIC_EXPORT_TIMEOUT`
   environment variables as Stable
