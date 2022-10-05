@@ -6,7 +6,7 @@ groups:
     attributes:
       - id: status_code
         type:
-          allow_custom_values: true
+          allow_custom_values: false
           members:
             - id: ok
               value: ok
