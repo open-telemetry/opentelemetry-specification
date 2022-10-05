@@ -30,8 +30,8 @@ pairs associated with the Span, Metric Data Point or LogRecord using the followi
 <!-- semconv otel.scope -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `otel.scope.name` | string | The name of the instrumentation scope - `InstrumentationScope.Name`. | `io.opentelemetry.contrib.mongodb` | Recommended |
-| `otel.scope.version` | string | The version of the instrumentation scope - `InstrumentationScope.Version`. | `1.0.0` | Recommended |
+| `otel.scope.name` | string | The name of the instrumentation scope - (`InstrumentationScope.Name` in OTLP). | `io.opentelemetry.contrib.mongodb` | Recommended |
+| `otel.scope.version` | string | The version of the instrumentation scope - (`InstrumentationScope.Version` in OTLP). | `1.0.0` | Recommended |
 <!-- endsemconv -->
 
 The following deprecated aliases MUST also be reported with exact same values for
@@ -40,8 +40,8 @@ backward compatibility reasons:
 <!-- semconv otel.library -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `otel.library.name` | string | Use `otel.scope.name` attribute. | `io.opentelemetry.contrib.mongodb` | Recommended |
-| `otel.library.version` | string | Use `otel.scope.version` attribute. | `1.0.0` | Recommended |
+| `otel.library.name` | string | Deprecated, use the `otel.scope.name` attribute. | `io.opentelemetry.contrib.mongodb` | Recommended |
+| `otel.library.version` | string | Deprecated, use the `otel.scope.version` attribute. | `1.0.0` | Recommended |
 <!-- endsemconv -->
 
 ### Span Status
@@ -52,18 +52,18 @@ unless the `Status` is `UNSET`. In the latter case it MUST NOT be reported.
 The following table defines the OpenTelemetry `Status`'s mapping to Span's
 key-value pairs:
 
-<!-- semconv otel -->
+<!-- semconv otel_span -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `otel.status_code` | string | Name of the code, either OK or ERROR. MUST NOT be set if the status code is UNSET. | `ok` | Recommended |
-| `otel.status_message` | string | Description of the Status if it has a value otherwise not set. | `resource not found` | Recommended |
+| `otel.status_code` | string | Name of the code, either "OK" or "ERROR". MUST NOT be set if the status code is UNSET. | `OK` | Recommended |
+| `otel.status_description` | string | Description of the Status if it has a value, otherwise not set. | `resource not found` | Recommended |
 
-`otel.status_code` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+`otel.status_code` MUST be one of the following:
 
 | Value  | Description |
 |---|---|
-| `ok` | The operation has been validated by an Application developer or Operator to have completed successfully. |
-| `error` | The operation contains an error. |
+| `OK` | The operation has been validated by an Application developer or Operator to have completed successfully. |
+| `ERROR` | The operation contains an error. |
 <!-- endsemconv -->
 
 ### Dropped Attributes Count
