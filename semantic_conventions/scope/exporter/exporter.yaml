@@ -2,7 +2,7 @@ groups:
   - id: otel.scope
     prefix: otel.scope
     type: resource
-    brief: Span attributes used by non OTLP exporters to represent OpenTelemetry Scope's concepts.
+    brief: Attributes used by non OTLP exporters to represent OpenTelemetry Scope's concepts.
     attributes:
       - id: name
         type: string
