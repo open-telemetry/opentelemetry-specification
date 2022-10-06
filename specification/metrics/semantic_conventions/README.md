@@ -24,6 +24,7 @@ linkTitle: Semantic Conventions
 The following semantic conventions surrounding metrics are defined:
 
 * [HTTP](http-metrics.md): For HTTP client and server metrics.
+* [RPC](rpc-metrics.md): For RPC client and server metrics.
 * [Database](database-metrics.md): For SQL and NoSQL client metrics.
 * [System](system-metrics.md): For standard system metrics.
 * [Process](process-metrics.md): For standard process metrics.
