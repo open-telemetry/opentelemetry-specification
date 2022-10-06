@@ -125,8 +125,9 @@ example in Java world there are several highly popular and widely used logging
 libraries, such as Log4j or Logback.
 
 OpenTelemetry defines [events](#events-and-logs) as a type of LogRecord with
-specific characteristics. While it may be possible to create events using
-existing logging libraries, it is often clunky and error-prone.
+specific characteristics. This definition is not ubiquitous across existing
+libraries and languages. In some logging libraries, producing events aligned
+with the OpenTelemetry event definition is clunky or error-prone.
 
 There are also countless existing prebuilt applications or systems that emit
 logs in certain formats. Operators of such applications have no or limited
@@ -147,12 +148,14 @@ Given the above state of the logging space we took the following approach:
   OpenTelemetry log data model. OpenTelemetry Collector can read such logs and
   translate them to OpenTelemetry log data model.
 
-- Existing applications or logging libraries can be modified to emit
-  OpenTelemetry LogRecords
-  using [Appenders](./api.md#how-to-create-log4j-style-appender). Appenders use
-  the API for [emitting LogRecords](./api.md#emit-logrecord) (Note, not to be
-  used by application developers) to bridge between common logging libraries and
-  the OpenTelemetry log data model.
+- OpenTelemetry defines an API
+  for [emitting LogRecords](./api.md#emit-logrecord). Application developers are
+  NOT encouraged to call this API directly. It is provided for library authors
+  to build [Appenders](./api.md#how-to-create-log4j-style-appender), which use
+  the API to bridge between existing logging libraries and the OpenTelemetry log
+  data model. Existing logging libraries generally provide a much richer set of
+  features than what is defined in OpenTelemetry. It is NOT a goal of
+  OpenTelemetry to ship a feature-rich logging library.
 
 - OpenTelemetry defines an API for [emitting Events](./api.md#emit-event).
   Application developers are encouraged to call this API directly.
