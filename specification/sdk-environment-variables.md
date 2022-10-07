@@ -143,7 +143,12 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 ## Jaeger Exporter
 
-**Status**: [Stable](document-status.md)
+**Status**: [Deprecated](document-status.md)
+
+_Note: Jaeger supports the [OpenTelemetry protocol natively][jaeger_otlp] and most users 
+should export to Jaeger using OTLP. These environment variables remain here
+only for backwards compatibility and will be removed in a future version. SDKs MAY include
+Jaeger exporters, but Jaeger export is not required._
 
 The `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable
 MAY by used to specify the transport protocol.
@@ -157,6 +162,7 @@ The value MUST be one of:
 [jaeger_http]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-http-stable
 [jaeger_grpc]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
 [jaeger_udp]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
+[jaeger_otlp]: https://www.jaegertracing.io/docs/1.38/apis/#opentelemetry-protocol-stable
 
 The default transport protocol SHOULD be `http/thrift.binary` unless
 SDKs have good reasons to choose other as the default
