@@ -17,6 +17,8 @@ aliases: [/docs/reference/specification/logs/overview]
 - [OpenTelemetry Solution](#opentelemetry-solution)
 - [Log Correlation](#log-correlation)
 - [Events and Logs](#events-and-logs)
+  * [OpenTelemetry Event Definition](#opentelemetry-event-definition)
+  * [FAQ](#faq)
 - [Legacy and Modern Log Sources](#legacy-and-modern-log-sources)
   * [System Logs](#system-logs)
   * [Infrastructure Logs](#infrastructure-logs)
@@ -124,10 +126,10 @@ languages have established standards for using particular logging libraries. For
 example in Java world there are several highly popular and widely used logging
 libraries, such as Log4j or Logback.
 
-OpenTelemetry defines [events](#events-and-logs) as a type of LogRecord with
+OpenTelemetry defines [Events](#events-and-logs) as a type of LogRecord with
 specific characteristics. This definition is not ubiquitous across existing
 libraries and languages. In some logging libraries, producing events aligned
-with the OpenTelemetry event definition is clunky or error-prone.
+with the OpenTelemetry Event definition is clunky or error-prone.
 
 There are also countless existing prebuilt applications or systems that emit
 logs in certain formats. Operators of such applications have no or limited
@@ -208,15 +210,106 @@ Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
 >In computing, a log file is a file that records either events that occur in an
 >operating system or other software runs.
 
-From OpenTelemetry's perspective LogRecords and Events are both represented
-using the same [data model](./data-model.md).
+From OpenTelemetry's perspective logs and events conceptually are not different. Both
+are represented using the same [LogRecord data model](./data-model.md).
 
-However, OpenTelemetry does recognize a subtle semantic difference between
-LogRecords and Events: Events are LogRecords which have a `name` and `domain`.
-Within a particular `domain`, the `name` uniquely defines a particular class or
-type of event. Events with the same `domain` / `name` follow the same schema
-which assists in analysis in observability platforms. Events are described in
-more detail in the [semantic conventions](./semantic_conventions/events.md).
+### OpenTelemetry Event Definition
+
+OpenTelemetry defines **OpenTelemetry Events** as LogRecords that are shaped
+in a special way:
+
+- They have a LogRecord attribute `event.name` (and possibly other LogRecord attributes).
+- They have an InstrumentationScope with a non-empty `Name` and with an
+  InstrumentationScope attribute `event.domain` (and possibly other InstrumentationScope attributes).
+
+Within a particular `event.domain`, the `event.name` uniquely defines a particular class
+or type of OpenTelemetry Event. OpenTelemetry Events with the same `event.domain` /
+`event.name` follow the same schema which assists in analysis in observability platforms.
+See also OpenTelemetry Event [semantic conventions](./semantic_conventions/events.md).
+
+Note: in this specification we use capitalized word "Event" as a shorthand for
+OpenTelemetry Event. When referring to the generic concept of events this specification
+may use the word "event" (both in logging section and other sections, e.g. in metrics
+section). This is not to be confused with the capitalized Event that has a precise
+definition described above. When there is a confusion possible we will always use
+fully qualified concept name: **OpenTelemetry Event**.
+
+To avoid confusion we highly recommend to use the generic word "logs" when referring to
+logs and events that are not OpenTelemetry Events.
+
+OpenTelemetry also defines an [API](
+https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/api.md#emit-event
+) that helps to emit LogRecords that are shaped as OpenTelemetry Events.
+
+### FAQ
+
+**What is OpenTelemetry Event?**
+
+It is a specially shaped LogRecord. See [OpenTelemetry Event Definition](#opentelemetry-event-definition).
+
+**How are events and logs different?**
+
+They are not. The words "events" and "logs" are synonyms. We prefer the word "logs"
+when referring to generic log and event data.
+
+**Who produces OpenTelemetry Events?**
+
+OpenTelemetry Events are produced using OpenTelemetry Events API.
+
+**Why do OpenTelemetry Events exist as concept?**
+
+OpenTelemetry Events are a class of events designed within OpenTelemetry community
+or in compliance with OpenTelemetry recommendations. OpenTelemetry Events have a
+particular shape of data that OpenTelemetry believes is beneficial for designers of
+events structure to adopt.
+
+**What are the reasons OpenTelemetry Events have an `event.domain` Scope attribute?**
+
+There are 2 reasons:
+
+1. The `event.domain` Scope attribute isolates groups (domains) of Events designed by different
+   people. Any decisions about the choice of attribute names and other decisions
+   about the shape of the LogRecord made by designers of Events in a particular domain have
+   no impact on the design of events in another domain.
+   In other words, the `event.domain` attribute allows different groups of people to
+   independently make choices about Event representation in their domain of expertise
+   without worrying that their choices will impact people who design Events
+   in some other domain of expertise.
+
+2. The `event.domain` Scope attribute can be used for efficient routing and filtering
+   decision for a batch of LogRecords that belong to the particular domain. This is enabled
+   by the design of OTLP protocol which [groups the LogRecords by a Scope](
+   https://github.com/open-telemetry/opentelemetry-proto/blob/724e427879e3d2bae2edc0218fff06e37b9eb46e/opentelemetry/proto/logs/v1/logs.proto#L64)
+   on the wire.
+
+**I have a non-OpenTelemetry data source that produces events (e.g. Windows Events).
+Should I make sure they are shaped like OpenTelemetry Events when used with OpenTelemetry
+software (e.g. inside OpenTelemetry Collector)?**
+
+Not necessarily. Just because the data in an external data source is called an "event" it
+does not mean it automatically qualifies as an OpenTelemetry Event and must be shaped like
+an OpenTelemetry Event.
+
+**I have non-OpenTelemetry data source that produces events that have a `name` and
+`category`. The semantics of the `name` and `category` in this data source are exactly the
+same as `event.name` and `event.domain` at OpenTelemetry. What should I do when I bring
+these events to OpenTelemetry?**
+
+If there is an exact match in the semantics then it is reasonable to map them to
+OpenTelemetry's concepts. So, when the events from the external data source are converted
+to OpenTelemetry LogRecords (for example in OpenTelemetry Collector) it is reasonable
+to shape them like OpenTelemetry Events. In the given example it is reasonable to map
+the `name` field from the data source to `event.name` and the `category` field to
+`event.domain`.
+
+**I am designing a new library/application/system and want to produce structured logs/events
+using OpenTelemetry. Should my events be shaped like OpenTelemetry Events?**
+
+Yes. For new designs we recommend to shape your data like OpenTelemetry Events.
+Make sure to choose a good descriptive value for `event.domain`. If the domain is common
+enough consider adding it as a well-known domain name in OpenTelemetry's [semantic conventions](
+https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/semantic_conventions/events.md)
+for `event.domain` attribute.
 
 ## Legacy and Modern Log Sources
 
