@@ -107,7 +107,7 @@ Coding against the OpenTelemetry API such as the [Tracing API](trace/api.md), [M
 
 Refers to telemetry collection methods that do not require the end-user to modify application's source code.
 Methods vary by programming language, and examples include code manipulation (during compilation or at runtime),
-monkey patching, running eBFP programs.
+monkey patching, running eBPF programs.
 
 Synonym: *Auto-instrumentation*.
 
