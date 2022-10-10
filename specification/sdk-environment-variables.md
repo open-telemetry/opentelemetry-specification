@@ -162,7 +162,7 @@ The value MUST be one of:
 [jaeger_http]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-http-stable
 [jaeger_grpc]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
 [jaeger_udp]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
-[jaeger_otlp]: https://www.jaegertracing.io/docs/1.38/apis/#opentelemetry-protocol-stable
+[jaeger_otlp]: https://www.jaegertracing.io/docs/latest/apis/#opentelemetry-protocol-stable
 
 The default transport protocol SHOULD be `http/thrift.binary` unless
 SDKs have good reasons to choose other as the default
