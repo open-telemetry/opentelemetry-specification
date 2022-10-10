@@ -124,6 +124,11 @@ languages have established standards for using particular logging libraries. For
 example in Java world there are several highly popular and widely used logging
 libraries, such as Log4j or Logback.
 
+OpenTelemetry defines [events](#events-and-logs) as a type of LogRecord with
+specific characteristics. This definition is not ubiquitous across existing
+libraries and languages. In some logging libraries, producing events aligned
+with the OpenTelemetry event definition is clunky or error-prone.
+
 There are also countless existing prebuilt applications or systems that emit
 logs in certain formats. Operators of such applications have no or limited
 control on how the logs are emitted. OpenTelemetry needs to support these logs.
@@ -131,7 +136,7 @@ control on how the logs are emitted. OpenTelemetry needs to support these logs.
 Given the above state of the logging space we took the following approach:
 
 - OpenTelemetry defines a [log data model](data-model.md). The purpose of the
-  data model is to have a common understanding of what a log record is, what
+  data model is to have a common understanding of what a LogRecord is, what
   data needs to be recorded, transferred, stored and interpreted by a logging
   system.
 
@@ -143,24 +148,27 @@ Given the above state of the logging space we took the following approach:
   OpenTelemetry log data model. OpenTelemetry Collector can read such logs and
   translate them to OpenTelemetry log data model.
 
-- Existing applications or logging libraries can be modified to emit logs
-  according to OpenTelemetry log data model. OpenTelemetry does not define a new
-  logging API that application developers are expected to call. Instead we opt
-  to make it easy to continue using the common logging libraries that already
-  exist. OpenTelemetry provides guidance on how applications or logging
-  libraries can be modified to become OpenTelemetry-compliant (link TBD). We
-  also provide SDKs for some languages (link TBD) that make it easy to modify
-  the existing logging libraries so that they emit OpenTelemetry-compliant logs.
+- OpenTelemetry defines an API
+  for [emitting LogRecords](./api.md#emit-logrecord). Application developers are
+  NOT encouraged to call this API directly. It is provided for library authors
+  to build [Appenders](./api.md#how-to-create-log4j-style-appender), which use
+  the API to bridge between existing logging libraries and the OpenTelemetry log
+  data model. Existing logging libraries generally provide a much richer set of
+  features than what is defined in OpenTelemetry. It is NOT a goal of
+  OpenTelemetry to ship a feature-rich logging library.
+
+- OpenTelemetry defines an API for [emitting Events](./api.md#emit-event).
+  Application developers are encouraged to call this API directly.
+
+- OpenTelemetry defines an [SDK](./sdk.md) implementation of the [API](./api.md),
+  which enables configuration of [processing](./sdk.md#logrecordprocessor)
+  and [exporting](./sdk.md#logrecordexporter) LogRecords.
 
 This approach allows OpenTelemetry to read existing system and application logs,
 provides a way for newly built application to emit rich, structured,
 OpenTelemetry-compliant logs, and ensures that all logs are eventually
 represented according to a uniform log data model on which the backends can
 operate.
-
-In the future OpenTelemetry may define a new logging API and provide
-implementations for various languages (like we currently do for traces and
-metrics), but it is not an immediate priority.
 
 Later in this document we will discuss in more details
 [how various log sources are handled](#legacy-and-modern-log-sources) by
@@ -179,7 +187,7 @@ Logs can be correlated with the rest of observability data in a few dimensions:
   standard practice to record the execution context (trace and span ids as well
   as user-defined context) in the spans. OpenTelemetry extends this practice to
   logs where possible by including [TraceId](data-model.md#field-traceid) and
-  [SpanId](data-model.md#field-spanid) in the log records. This allows to
+  [SpanId](data-model.md#field-spanid) in the LogRecords. This allows to
   directly correlate logs and traces that correspond to the same execution
   context. It also allows to correlate logs from different components of a
   distributed system that participated in the particular request execution.
@@ -187,7 +195,7 @@ Logs can be correlated with the rest of observability data in a few dimensions:
 - By the **origin of the telemetry**, also known as the Resource context.
   OpenTelemetry traces and metrics contain information about the Resource they
   come from. We extend this practice to logs by including the
-  [Resource](data-model.md#field-resource) in log records.
+  [Resource](data-model.md#field-resource) in LogRecords.
 
 These 3 correlations can be the foundation of powerful navigational, filtering,
 querying and analytical capabilities. OpenTelemetry aims to record and collects
@@ -200,21 +208,15 @@ Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
 >In computing, a log file is a file that records either events that occur in an
 >operating system or other software runs.
 
-The notion of a log record used throughout OpenTelemetry is aligned with
-Wikipedia’s definition. We claim that in the observability realm there is no
-important distinction between log records and recorded events from a data
-modeling perspective.
+From OpenTelemetry's perspective LogRecords and Events are both represented
+using the same [data model](./data-model.md).
 
-From OpenTelemetry's perspective Log Records and Events are different names for
-the same concept.
-
-Some products may want to make a distinction between Events collected from
-certain sources and Logs collected from other sources. OpenTelemetry believes
-that there is nothing inherently different between log records and events from
-data modeling perspective, the differences are in the sources themselves. Thus
-where it matters the products should make that distinction based on the source
-of the data rather than attempt to arbitrarily categorize the data as events vs
-logs.
+However, OpenTelemetry does recognize a subtle semantic difference between
+LogRecords and Events: Events are LogRecords which have a `name` and `domain`.
+Within a particular `domain`, the `name` uniquely defines a particular class or
+type of event. Events with the same `domain` / `name` follow the same schema
+which assists in analysis in observability platforms. Events are described in
+more detail in the [semantic conventions](./semantic_conventions/events.md).
 
 ## Legacy and Modern Log Sources
 
@@ -323,7 +325,7 @@ collected from all applications that can be instrumented in this manner.
 Some logging libraries are designed to be extended in this manner relatively
 easily. There is no need to actually modify the libraries, instead we can
 implement "appender" or "exporter" components for such libraries and implement
-the additional log record enrichment in these components.
+the additional LogRecord enrichment in these components.
 
 There are typically 2 ways to collect logs from these applications.
 
@@ -383,14 +385,15 @@ highly structured format, removes all complexity associated with file logs, such
 as parsers, log tailing and rotation. It also enables the possibility to send
 logs directly to the logging backend without using a log collection agent.
 
-To facilitate both approaches described above OpenTelemetry provides SDKs, which
-can be used together with existing logging libraries and which automatically
-inject the request context in the emitted logs and provide an easy way to send
-the logs via OTLP. These SDKs do not require application developers to modify
-each logging statement in the source code and instead require the developer to
-enable the OpenTelemetry SDK's logging support at the application startup. After
-that the SDK intercepts all emitted logs and modifies the emitting behavior as
-configured.
+To facilitate both approaches described above OpenTelemetry provides
+an [API](./api.md) and [SDK](./sdk.md), which can be used together with existing
+logging libraries to automatically inject the request context in the emitted logs,
+and provide an easy way to send the logs via OTLP. Instead of
+modifying each logging statement, [Appenders](./api.md#how-to-create-log4j-style-appender)
+use the API to bridge logs from existing logging libraries to the OpenTelemetry
+data model, where the SDK controls how the logs are processed and exported.
+Application developers only need to configure the Appender and SDK at
+application startup.
 
 ### New First-Party Application Logs
 
@@ -408,10 +411,8 @@ augmented by application-specific resource context (e.g. process id, programming
 language, logging library name and version, etc). Full correlation across all
 context dimensions will be available for these logs.
 
-As noted earlier OpenTelemetry does not currently define a new logging API or
-create new user-facing logging libraries. Our initial goal is to enhance
-existing popular logging libraries as needed. This is how a typical new
-application uses OpenTelemetry API, SDK and the existing log libraries:
+This is how a typical new application uses OpenTelemetry API, SDK and the
+existing log libraries:
 
 ![Application, API, SDK Diagram](img/application-api-sdk.png)
 
