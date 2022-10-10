@@ -141,7 +141,7 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 
 **Status**: [Experimental](document-status.md)
 
-See the SDK [LogRecord Limits](logs/sdk.md#log-limits) section for the definition of the limits.
+See the SDK [LogRecord Limits](logs/sdk.md#logrecord-limits) section for the definition of the limits.
 
 | Name                                        | Description                                | Default | Notes |
 | ------------------------------------------- | -------------------------------------------| ------- | ----- |
