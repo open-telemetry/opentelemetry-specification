@@ -27,7 +27,7 @@ release.
 
 - Add log-specific attribute limit configuration and clarify that general
   attribute limit configuration also apply to log records.
-([#TBD](https://github.com/open-telemetry/opentelemetry-specification/pull/TBD))
+([#2861](https://github.com/open-telemetry/opentelemetry-specification/pull/2861))
 
 ### Telemetry Schemas
 
