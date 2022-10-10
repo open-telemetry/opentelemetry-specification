@@ -25,6 +25,10 @@ release.
 
 ### SDK Configuration
 
+- Add log-specific attribute limit configuration and clarify that general
+  attribute limit configuration also apply to log records.
+([#TBD](https://github.com/open-telemetry/opentelemetry-specification/pull/TBD))
+
 ### Telemetry Schemas
 
 ### Common

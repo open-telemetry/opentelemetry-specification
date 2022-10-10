@@ -14,6 +14,7 @@
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
   * [ReadWriteLogRecord](#readwritelogrecord)
+- [LogRecord Limits](#logrecord-limits)
 - [LogRecordProcessor](#logrecordprocessor)
   * [LogRecordProcessor operations](#logrecordprocessor-operations)
     + [OnEmit](#onemit)
@@ -129,6 +130,36 @@ full [LogRecord](api.md#logrecord) and additionally MUST be able to retrieve all
 information
 that was added to the `LogRecord` (as with
 [ReadableLogRecord](#readablelogrecord)).
+
+## LogRecord Limits
+
+`LogRecord` attributes MUST adhere to the [common rules of attribute limits](../common/README.md#attribute-limits).
+
+If the SDK implements attribute limits it MUST provide a way to change these
+limits, via a configuration to the `LoggerProvider`, by allowing users to
+configure individual limits like in the Java example below.
+
+The options MAY be bundled in a class, which then SHOULD be called
+`LogRecordLimits`.
+
+```java
+public final class LogRecordLimits {
+  LogRecordLimits(int attributeCountLimit, int attributeValueLengthLimit);
+
+  public int getAttributeCountLimit();
+
+  public int getAttributeValueLengthLimit();
+}
+```
+
+**Configurable parameters:**
+
+* [all common options applicable to attributes](../common/README.md#configurable-parameters)
+
+There SHOULD be a log emitted to indicate to the user that an attribute was
+discarded due to such a limit. To prevent excessive logging, the log
+should be emitted at most once per log record (i.e., not per discarded
+attribute.)
 
 ## LogRecordProcessor
 

@@ -120,7 +120,7 @@ See the SDK [Attribute Limits](common/README.md#attribute-limits) section for th
 | Name                              | Description                          | Default | Notes |
 | --------------------------------- | ------------------------------------ | ------- | ----- |
 | OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
-| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     |       |
+| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute count      | 128     |       |
 
 ## Span Limits
 
@@ -136,6 +136,17 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 | OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
 | OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     |       |
 | OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     |       |
+
+## LogRecord Limits
+
+**Status**: [Experimental](document-status.md)
+
+See the SDK [LogRecord Limits](logs/sdk.md#log-limits) section for the definition of the limits.
+
+| Name                                        | Description                                | Default | Notes |
+| ------------------------------------------- | -------------------------------------------| ------- | ----- |
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size       |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed log record attribute count | 128     |       |
 
 ## OTLP Exporter
 
