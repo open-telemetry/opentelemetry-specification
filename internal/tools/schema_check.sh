@@ -55,5 +55,11 @@ for file in $schemas_dir/*; do
   docker run -v $schemas_dir:/schemas \
   		otel/build-tool-schemas:$BUILD_TOOL_SCHEMAS_VERSION --file /schemas/$ver --version=$ver
 
-  echo "OK"
+  curl --no-progress-meter https://opentelemetry.io/schemas/$ver > verify$ver
+
+  diff verify$ver $file && echo "Published schema at https://opentelemetry.io/schemas/$ver is correct" \
+    || (echo "Published schema at https://opentelemetry.io/schemas/$ver is incorrect!" && exit 3)
+
+  rm verify$ver
+
 done
