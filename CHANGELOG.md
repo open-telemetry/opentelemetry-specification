@@ -26,6 +26,9 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Clarify that lowerCamelCase field names MUST be used for OTLP/JSON
+  ([#2829](https://github.com/open-telemetry/opentelemetry-specification/pull/2829))
+
 ### SDK Configuration
 
 ### Telemetry Schemas
