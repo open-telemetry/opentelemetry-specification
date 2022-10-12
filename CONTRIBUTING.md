@@ -279,7 +279,7 @@ Release Procedure:
    This is expected and will be fixed in the next steps. Have this PR reviewed and approved
    and ready to be merged. While it is being reviewed you can work on step 3-4 in parallel.
 3. Prepare the schema file for the upcoming release. The schema file should be placed
-   in [schemas](schemas) directory. If no changes to semantic conventions happened
+   in `schemas` directory. If no changes to semantic conventions happened
    since the last release which require a corresponding section in the schema file then
    simply copy the previous schema file, rename it to the new version and add a section
    with the new version number to the file. See for example the schema file for [1.9.0](
