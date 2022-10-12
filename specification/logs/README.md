@@ -238,8 +238,8 @@ To avoid confusion we highly recommend to use the generic word "logs" when refer
 logs and events that are not OpenTelemetry Events.
 
 OpenTelemetry also defines an [API](
-https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/api.md#emit-event
-) that helps to emit LogRecords that are shaped as OpenTelemetry Events.
+https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/api.md#emit-event)
+that helps to emit LogRecords that are shaped as OpenTelemetry Events.
 
 ### FAQ
 
@@ -256,7 +256,7 @@ when referring to generic log and event data.
 
 OpenTelemetry Events are produced using OpenTelemetry Events API.
 
-**Why do OpenTelemetry Events exist as concept?**
+**Why do OpenTelemetry Events exist as a concept?**
 
 OpenTelemetry Events are a class of events designed within OpenTelemetry community
 or in compliance with OpenTelemetry recommendations. OpenTelemetry Events have a
