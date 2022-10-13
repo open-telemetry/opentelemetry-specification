@@ -17,6 +17,8 @@ aliases: [/docs/reference/specification/logs/overview]
 - [OpenTelemetry Solution](#opentelemetry-solution)
 - [Log Correlation](#log-correlation)
 - [Events and Logs](#events-and-logs)
+  * [Categorized LogsRecords](#categorized-logsrecords)
+  * [FAQ](#faq)
 - [Legacy and Modern Log Sources](#legacy-and-modern-log-sources)
   * [System Logs](#system-logs)
   * [Infrastructure Logs](#infrastructure-logs)
@@ -124,11 +126,6 @@ languages have established standards for using particular logging libraries. For
 example in Java world there are several highly popular and widely used logging
 libraries, such as Log4j or Logback.
 
-OpenTelemetry defines [events](#events-and-logs) as a type of LogRecord with
-specific characteristics. This definition is not ubiquitous across existing
-libraries and languages. In some logging libraries, producing events aligned
-with the OpenTelemetry event definition is clunky or error-prone.
-
 There are also countless existing prebuilt applications or systems that emit
 logs in certain formats. Operators of such applications have no or limited
 control on how the logs are emitted. OpenTelemetry needs to support these logs.
@@ -148,6 +145,12 @@ Given the above state of the logging space we took the following approach:
   OpenTelemetry log data model. OpenTelemetry Collector can read such logs and
   translate them to OpenTelemetry log data model.
 
+- OpenTelemetry defines [Categorized Logs](#events-and-logs) as a type of LogRecord with
+  specific characteristics:
+  - They have a LogRecord attribute `event.name` (and possibly other LogRecord attributes).
+  - They have an InstrumentationScope with a non-empty `Name` and with an
+    InstrumentationScope attribute `event.domain` (and possibly other InstrumentationScope attributes).
+
 - OpenTelemetry defines an API
   for [emitting LogRecords](./api.md#emit-logrecord). Application developers are
   NOT encouraged to call this API directly. It is provided for library authors
@@ -157,7 +160,7 @@ Given the above state of the logging space we took the following approach:
   features than what is defined in OpenTelemetry. It is NOT a goal of
   OpenTelemetry to ship a feature-rich logging library.
 
-- OpenTelemetry defines an API for [emitting Events](./api.md#emit-event).
+- OpenTelemetry defines an API for [emitting Categorized Logs](./api.md#emit-event).
   Application developers are encouraged to call this API directly.
 
 - OpenTelemetry defines an [SDK](./sdk.md) implementation of the [API](./api.md),
@@ -208,15 +211,84 @@ Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
 >In computing, a log file is a file that records either events that occur in an
 >operating system or other software runs.
 
-From OpenTelemetry's perspective LogRecords and Events are both represented
-using the same [data model](./data-model.md).
+From OpenTelemetry's perspective logs and events conceptually are not different. Both
+are represented using the same [LogRecord data model](./data-model.md).
 
-However, OpenTelemetry does recognize a subtle semantic difference between
-LogRecords and Events: Events are LogRecords which have a `name` and `domain`.
-Within a particular `domain`, the `name` uniquely defines a particular class or
-type of event. Events with the same `domain` / `name` follow the same schema
-which assists in analysis in observability platforms. Events are described in
-more detail in the [semantic conventions](./semantic_conventions/events.md).
+### Categorized LogsRecords
+
+OpenTelemetry defines **Categorized LogRecords** as LogRecords that are shaped
+in a special way:
+
+- They have a LogRecord attribute `log.name` (and possibly other LogRecord attributes).
+- They have an InstrumentationScope with a non-empty `Name` and with an
+  InstrumentationScope attribute `log.category` (and possibly other InstrumentationScope attributes).
+
+Within a particular `log.category`, the `log.name` uniquely defines a particular class
+or type of Categorized LogRecords. Categorized LogRecords with the same `log.category` /
+`log.name` follow the same schema which assists in analysis in observability platforms.
+See also OpenTelemetry Log [semantic conventions](./semantic_conventions/events.md).
+
+### FAQ
+
+**What is a Categorized LogRecord?**
+
+It is a specially shaped LogRecord. See [Categorized LogRecords](#categorized-logsrecords).
+
+**How are events and logs different?**
+
+They are not. The words "events" and "logs" are synonyms. We prefer the word "logs"
+when referring to generic log and event data.
+
+**Who produces Categorized LogRecords?**
+
+Categorized LogRecord are produced using OpenTelemetry Categorized Logs API or
+by OpenTelemetry Collector.
+
+**Why do Categorized LogRecords exist as a concept?**
+
+Categorized LogRecords are a class of logs designed within OpenTelemetry community
+or in compliance with OpenTelemetry recommendations. Categorized LogRecords have a
+particular shape of data that OpenTelemetry believes is beneficial for designers of
+structured logs and events to adopt.
+
+**What are the reasons Categorized LogRecords have an `log.category` attribute?**
+
+The `log.category` Scope attribute isolates groups (categorizes) of logs or events
+designed by different people. Any decisions about the choice of attribute names and other
+decisions about the shape of the LogRecord made by designers of logs in a particular
+domain have no impact on the design of logs in another domain.
+In other words, the `log.category` attribute allows different groups of people to
+independently make choices about log representation in their domain of expertise
+without worrying that their choices will impact people who design logs
+in some other domain of expertise.
+
+**I have a non-OpenTelemetry data source that produces logs/events (e.g. Windows Events).
+Should I make sure they are shaped like Categorized LogRecords when used with OpenTelemetry
+software (e.g. inside OpenTelemetry Collector)?**
+
+Not necessarily. Only do so if the semantics of the non-OpenTelemetry data source
+match the definition of Categorized LogRecords.
+
+**I have non-OpenTelemetry data source that produces events that have a `name` and
+`category`. The semantics of the `name` and `category` in this data source are exactly the
+same as `log.name` and `log.category` at OpenTelemetry. What should I do when I bring
+these events to OpenTelemetry?**
+
+If there is an exact match in the semantics then it is reasonable to map them to
+OpenTelemetry's concepts. So, when the events from the external data source are converted
+to OpenTelemetry LogRecords (for example in OpenTelemetry Collector) it is reasonable
+to shape them like Categorized Logs. In the given example it is reasonable to map
+the `name` field from the data source to `log.name` and the `category` field to
+`log.category`.
+
+**I am designing a new library/application/system and want to produce structured logs/events
+using OpenTelemetry. Should my events be shaped like Categorize LogRecords?**
+
+Yes. For new designs we recommend to shape your data like Categorize LogRecords.
+Make sure to choose a good descriptive value for `log.category`. If the domain is common
+enough consider adding it as a well-known domain name in OpenTelemetry's [semantic conventions](
+https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/semantic_conventions/events.md)
+for `log.category` attribute.
 
 ## Legacy and Modern Log Sources
 

@@ -1,4 +1,4 @@
-# Events and Logs API Interface
+# Logs API Interface
 
 **Status**: [Experimental](../document-status.md)
 
@@ -14,7 +14,7 @@
     + [Get a Logger](#get-a-logger)
 - [Logger](#logger)
   * [Logger operations](#logger-operations)
-    + [Emit Event](#emit-event)
+    + [Emit Categorized LogRecord](#emit-categorized-logrecord)
     + [Emit LogRecord](#emit-logrecord)
 - [LogRecord](#logrecord)
 - [Usage](#usage)
@@ -26,19 +26,19 @@
 
 </details>
 
-The Events and Logs API consist of these main classes:
+The Logs API consist of these main classes:
 
 * LoggerProvider is the entry point of the API. It provides access to Loggers.
 * Logger is the class responsible for
-  creating [Events](./semantic_conventions/events.md)
-  and [Logs](./data-model.md#log-and-event-record-definition) as LogRecords.
+  creating [arbitrary LogRecords](#emit-logrecord) or
+  [Categorized Logs](#emit-categorized-logrecord).
 
 LoggerProvider/Logger are analogous to TracerProvider/Tracer.
 
 ```mermaid
 graph TD
     A[LoggerProvider] -->|Get| B(Logger)
-    B --> C(Event)
+    B --> C(Categorized Log)
     B --> D(Log)
 ```
 
@@ -91,10 +91,10 @@ produced by this library.
 the scope has a version (e.g. a library version). Example value: 1.0.0.
 - `schema_url` (optional): Specifies the Schema URL that should be recorded in
 the emitted telemetry.
-- `event_domain` (optional): Specifies the domain for the Events emitted, which
-should be added as `event.domain` attribute of the instrumentation scope.
+- `log_category` (optional): Specifies the category for the logs emitted, which
+should be added as `log.category` attribute of the LogRecords.
 - `include_trace_context` (optional): Specifies whether the Trace Context should
-automatically be passed on to the Events and Logs emitted by the Logger. This
+automatically be passed on to the Logs emitted by the Logger. This
 SHOULD be true by default.
 - `attributes` (optional): Specifies the instrumentation scope attributes to
 associate with emitted telemetry.
@@ -110,7 +110,7 @@ identifying fields are equal. The term *distinct* applied to Loggers describes
 instances where at least one identifying field has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a Logger again with
-the same name+version+schema_url+event_domain+include_trace_context+attributes
+the same name+version+schema_url+log_category+include_trace_context+attributes
 to pick up configuration changes. This can be achieved either by allowing to
 work with an outdated configuration or by ensuring that new configuration
 applies also to previously returned Loggers.
@@ -119,7 +119,7 @@ Note: This could, for example, be implemented by storing any mutable
 configuration in the `LoggerProvider` and having `Logger` implementation objects
 have a reference to the `LoggerProvider` from which they were obtained.
 If configuration must be stored per-Logger (such as disabling a certain `Logger`),
-the `Logger` could, for example, do a look-up with its name+version+schema_url+event_domain+include_trace_context+attributes
+the `Logger` could, for example, do a look-up with its name+version+schema_url+log_category+include_trace_context+attributes
 in a map in the `LoggerProvider`, or the `LoggerProvider` could maintain a registry
 of all returned `Logger`s and actively update their configuration if it changes.
 
@@ -129,7 +129,7 @@ the emitted data format is capable of representing such association.
 
 ## Logger
 
-The `Logger` is responsible for emitting Events and Logs.
+The `Logger` is responsible for emitting Logs.
 
 Note that `Logger`s should not be responsible for configuration. This should be
 the responsibility of the `LoggerProvider` instead.
@@ -138,22 +138,22 @@ the responsibility of the `LoggerProvider` instead.
 
 The Logger MUST provide functions to:
 
-#### Emit Event
+#### Emit Categorized LogRecord
 
-Emit a `LogRecord` representing an Event to the processing pipeline.
+Emit a `LogRecord` representing a Categorized LogRecord to the processing pipeline.
 
-This function MAY be named `logEvent`.
+This function MAY be named `logCategorized`.
 
 **Parameters:**
 
-* `name` - the Event name. This argument MUST be recorded as a `LogRecord`
-  attribute with the key `event.name`. Care MUST be taken by the implementation
-  to not override or delete this attribute while the Event is emitted to
+* `name` - the log name. This argument MUST be recorded as a `LogRecord`
+  attribute with the key `log.name`. Care MUST be taken by the implementation
+  to not override or delete this attribute while the log is emitted to
   preserve its identity.
-* `logRecord` - the [LogRecord](#logrecord) representing the Event.
+* `logRecord` - the [LogRecord](#logrecord) representing the log.
 
-Events require the `event.domain` attribute. The API MUST not allow creating an
-Event if the Logger instance doesn't have `event.domain` scope attribute.
+Categorize Logs require the `log.category` attribute. The API MUST not allow creating a
+Categorize Log if the Logger instance doesn't have `log.category` attribute.
 
 #### Emit LogRecord
 
@@ -171,8 +171,9 @@ by end users or other instrumentation.
 
 ## LogRecord
 
-The API emits [Events](#emit-event) and [LogRecords](#emit-logrecord) using
-the `LogRecord` [data model](data-model.md).
+The API emits [arbitrary LogRecords](#emit-logrecord) or
+[Categorized LogRecords](#emit-categorized-logrecord) using the `LogRecord`
+[data model](data-model.md).
 
 A function receiving this as an argument MUST be able to set the following
 fields:
