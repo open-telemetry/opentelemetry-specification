@@ -424,6 +424,13 @@ for mapping between Protobuf and JSON, with the following deviations from that m
   This aligns with the behavior of the Binary Protobuf unmarshaler and ensures that adding
   new fields to OTLP messages does not break existing receivers.
 
+- The keys of JSON objects are field names converted to lowerCamelCase. Original
+  field names are not valid to use a keys of JSON objects.
+  For example this is a valid JSON representation of a Resource:
+  `{ "attributes": {...}, "droppedAttributesCount": 123 }`, and this is NOT a valid
+  representation:
+  `{ "attributes": {...}, "dropped_attributes_count": 123 }`.
+
 Note that according to [Protobuf specs](
 https://developers.google.com/protocol-buffers/docs/proto3#json) 64-bit integer
 numbers in JSON-encoded payloads are encoded as decimal strings, and either
