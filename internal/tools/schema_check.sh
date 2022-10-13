@@ -62,5 +62,5 @@ for file in $schemas_dir/*; do
   docker run -v $schemas_dir:/schemas \
   		otel/build-tool-schemas:$BUILD_TOOL_SCHEMAS_VERSION --file /schemas/$ver --version=$ver
 
-
+  echo "OK"
 done
