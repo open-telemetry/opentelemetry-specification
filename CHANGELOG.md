@@ -21,7 +21,13 @@ release.
 
 ### Compatibility
 
+- Specify how Prometheus exporters and receivers handle instrumentation scope.
+  ([#2703](https://github.com/open-telemetry/opentelemetry-specification/pull/2703)).
+
 ### OpenTelemetry Protocol
+
+- Clarify that lowerCamelCase field names MUST be used for OTLP/JSON
+  ([#2829](https://github.com/open-telemetry/opentelemetry-specification/pull/2829))
 
 ### SDK Configuration
 
@@ -54,6 +60,8 @@ release.
 
 - Add environment variables for configuring the `BatchLogRecordProcessor`.
   ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
+- Fix inconsistencies in log README
+  ([#2800](https://github.com/open-telemetry/opentelemetry-specification/pull/2800)).
 
 ### Resource
 
