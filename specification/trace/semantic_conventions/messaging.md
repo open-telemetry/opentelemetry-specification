@@ -301,10 +301,17 @@ Specific attributes for Apache RocketMQ are defined below.
 | `messaging.rocketmq.namespace` | string | Namespace of RocketMQ resources, resources in different namespaces are individual. | `myNamespace` | Required |
 | `messaging.rocketmq.client_group` | string | Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind. | `myConsumerGroup` | Required |
 | `messaging.rocketmq.client_id` | string | The unique identifier for each client. | `myhost@8742@s8083jm` | Required |
+| `messaging.rocketmq.delivery_timestamp` | int | The timestamp in milliseconds that the delay message is expected to be delivered to consumer. | `1665987217045` | Conditionally Required: [1] |
+| `messaging.rocketmq.delay_time_level` | int | The delay time level for delay message, which determines the message delay time. | `3` | Conditionally Required: [2] |
+| `messaging.rocketmq.message_group` | string | It is essential for FIFO message. Messages that belong to the same message group are always processed one by one within the same consumer group. | `myMessageGroup` | Conditionally Required: If the message type is FIFO. |
 | `messaging.rocketmq.message_type` | string | Type of message. | `normal` | Recommended |
 | `messaging.rocketmq.message_tag` | string | The secondary classifier of message besides topic. | `tagA` | Recommended |
 | `messaging.rocketmq.message_keys` | string[] | Key(s) of message, another way to mark message besides message id. | `[keyA, keyB]` | Recommended |
 | `messaging.rocketmq.consumption_model` | string | Model of message consumption. This only applies to consumer spans. | `clustering` | Recommended |
+
+**[1]:** If the message type is delay and delay time level is not specified.
+
+**[2]:** If the message type is delay and delivery timestamp is not specified.
 
 `messaging.rocketmq.message_type` MUST be one of the following:
 
