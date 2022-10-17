@@ -138,8 +138,8 @@ OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to Jaeger.
 
 Primitive types MUST be represented by the corresponding types of Jaeger tags.
 
-Array values MUST be serialized to string like a JSON list as mentioned in
-[semantic conventions](../../overview.md#semantic-conventions).
+Array and map values MUST be serialized to a JSON and recorded as a tag of string type
+as mentioned in [attribute value definition](../../common/README.md#attribute).
 
 ### Links
 

@@ -215,6 +215,7 @@ formats is required. Implementing more than one format is optional.
 | A metric Producer accepts an optional metric Filter                                                                                                                    |          |    |      |     |        |      |        |     |      |     |      |       |
 | The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers                                                  |          |    |      |     |        |      |        |     |      |     |      |       |
 | The metric SDK's metric Producer implementations uses the metric Filter                                                                                                |          |    |      |     |        |      |        |     |      |     |      |       |
+| Non-homogeneous arrays and maps (including nested)                                                                                                                     |          |    |      |     |        |      |        |     |      |     |      |       |
 
 ## Logs
 
@@ -242,6 +243,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Feature                                                                                                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |---------------------------------------------------------------------------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | Create from Attributes                                                                                                                      |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
+| Non-homogeneous arrays and maps (including nested) for attribute values                                                                     |          |    |      |    |        |      |        |     |      |     |      |       |
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          | +  | +    |    | +      | +    | +      | +   | +    | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |

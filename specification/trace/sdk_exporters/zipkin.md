@@ -131,8 +131,8 @@ document maps to the strongly-typed fields of Zipkin spans.
 Primitive types MUST be converted to string using en-US culture settings.
 Boolean values MUST use lower case strings `"true"` and `"false"`.
 
-Array values MUST be serialized to string like a JSON list as mentioned in
-[semantic conventions](../../overview.md#semantic-conventions).
+Array and map values MUST be serialized to a JSON and recorded as a tag of string type
+as mentioned in [attribute value definition](../../common/README.md#attribute).
 
 TBD: add examples
 

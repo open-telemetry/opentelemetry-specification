@@ -37,6 +37,9 @@ release.
 - Clarify that attribute keys are case-sensitive.
   ([#3784](https://github.com/open-telemetry/opentelemetry-specification/pull/3784))
 
+- Support maps and heterogeneous arrays as attribute values
+  ([#2888](https://github.com/open-telemetry/opentelemetry-specification/pull/2888))
+
 ### Supplementary Guidelines
 
 ## v1.28.0 (2023-12-07)
