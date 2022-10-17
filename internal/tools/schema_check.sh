@@ -31,6 +31,13 @@ grep -o -e '## v[1-9].*\s' $root_dir/CHANGELOG.md | grep -o '[1-9].*' | while re
     echo "FAILED: $file does not exist. The schema file must exist because the version is declared in CHANGELOG.md."
     exit 3
   fi
+
+  curl --no-progress-meter https://opentelemetry.io/schemas/$ver > verify$ver
+
+  diff verify$ver $file && echo "Published schema at https://opentelemetry.io/schemas/$ver is correct" \
+    || (echo "Published schema at https://opentelemetry.io/schemas/$ver is incorrect!" && exit 3)
+
+  rm verify$ver
 done
 
 # Now check the content of all schema files in the ../shemas directory.
