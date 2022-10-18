@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Rename `http.retry_count` to `http.resend_count` and clarify its meaning.
+  ([#2743](https://github.com/open-telemetry/opentelemetry-specification/pull/2743))
+
 ### Metrics
 
 ### Logs
