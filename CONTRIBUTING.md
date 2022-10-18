@@ -266,3 +266,41 @@ owner should bring it to the [OpenTelemetry Specification SIG
 meeting](https://github.com/open-telemetry/community#cross-language-specification).
 
 [nvm]: https://github.com/nvm-sh/nvm/blob/master/README.md#installing-and-updating
+
+## Releasing
+
+Release Procedure:
+
+1. Prepare a [draft release here](https://github.com/open-telemetry/opentelemetry-specification/releases).
+   Don't publish it yet.
+2. Create a PR with updated [CHANGELOG.md](CHANGELOG.md). The CHANGELOG.md must have a
+   heading with the new version number. Ensure that no CHANGELOG entries are missing or
+   ended up in the wrong section (e.g., in the last released version rather than Unreleased).
+   The PR will fail the `schemas-check` Github action (all other actions must pass).
+   This is expected and will be fixed in the next steps. Have this PR reviewed and approved
+   and ready to be merged. While it is being reviewed you can work on step 3-4 in parallel.
+3. Prepare the schema file for the upcoming release. The schema file should be placed
+   in the `schemas` directory. If no changes to semantic conventions happened
+   since the last release which require a corresponding section in the schema file then
+   simply copy the previous schema file, rename it to the new version and add a section
+   with the new version number to the file. See for example the schema file for [1.9.0](
+   https://github.com/open-telemetry/opentelemetry-specification/blob/main/schemas/1.9.0)
+   that has no changes from 1.8.0.
+   The schema file may already exist if there were changes done to semantic conventions
+   and the schema file was created with corresponding changes.
+4. Create and merge the PR with the new schema file. Note the commit hash after merging.
+   If the schema file for the new release version previously existed then no new PR is
+   necessary, just note that latest commit hash of this repository.
+5. Once CHANGELOG.md PR is approved and ready to be merged we are ready to make the release.
+   Update the [opentelemetry.io](https://github.com/open-telemetry/opentelemetry.io)
+   repository: the [opentelemetry-specification](
+   https://github.com/open-telemetry/opentelemetry.io/tree/main/content-modules)
+   submodule points to this repository. Create a PR and update the submodule to point to
+   the commit hash from step 4. Merge this PR. This should update the
+   [https://opentelemetry.io/](https://opentelemetry.io/) website and the new schema file
+   should be downloadable at `https://opentelemetry.io/schemas/<version>`.
+6. Re-trigger the `schema-checks` Github action on the PR that updates the CHANGELOG.md.
+   The action should pass now. Merge the PR.
+7. Add the changelog entries from `CHANGELOG.md` to the description of the previously
+   created [draft release here](
+   https://github.com/open-telemetry/opentelemetry-specification/releases) and publish it.
