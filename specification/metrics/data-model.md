@@ -1469,9 +1469,12 @@ in keys).
 #### Metric Metadata
 
 Prometheus SDK exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
-comments for the same metric name to be present on the Prometheus endpoint.
-Exporters MUST drop metrics to prevent conflicting TYPE comments, but
-SHOULD NOT drop metrics as a result of conflicting UNIT or HELP comments.
+comments for the same metric name to be returned in a single scrape of the
+Prometheus endpoint. Exporters MUST drop entire metrics to prevent conflicting
+TYPE comments, but SHOULD NOT drop metric points as a result of conflicting
+UNIT or HELP comments. Instead, all but one of the conflicting UNIT and HELP
+comments (but not metric points) SHOULD be dropped. If dropping a comment or
+metric points, the exporter SHOULD warn the user through error logging.
 
 The Name of an OTLP metric MUST be added as the
 [OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
