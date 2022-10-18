@@ -22,6 +22,9 @@ release.
 
 ### Semantic Conventions
 
+- Add `process.paging.faults` metric to semantic conventions
+  ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+
 ### Compatibility
 
 - Specify how Prometheus exporters and receivers handle instrumentation scope.
