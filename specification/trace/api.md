@@ -559,6 +559,11 @@ status, which is `Unset`.
   `Description` MUST only be used with the `Error` `StatusCode` value.
   An empty `Description` is equivalent with a not present one.
 
+Note: The [OTLP protocol definition](https://github.com/open-telemetry/opentelemetry-proto/blob/724e427879e3d2bae2edc0218fff06e37b9eb46e/opentelemetry/proto/trace/v1/trace.proto#L264)
+refers to the `Description` property as `message`.  These two names are
+equivalent when used to refer to the string-valued component
+of a `Span`'s `Status`.
+
 `StatusCode` is one of the following values:
 
 - `Unset`
