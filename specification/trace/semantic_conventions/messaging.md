@@ -21,6 +21,8 @@
   * [Span kind](#span-kind)
   * [Operation names](#operation-names)
 - [Messaging attributes](#messaging-attributes)
+  * [Producer attributes](#producer-attributes)
+  * [Consumer attributes](#consumer-attributes)
   * [Per-message attributes](#per-message-attributes)
   * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)
     + [RabbitMQ](#rabbitmq)
