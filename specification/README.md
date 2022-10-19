@@ -60,9 +60,10 @@ the [specification][].
 - The official acronym used by the OpenTelemetry project is "OTel". Refrain from
   using "OT" in order to avoid confusion with the now deprecated "OpenTracing"
   project.
-- The official names for sub-projects, like language specific implementations, follow the pattern of
-  "OpenTelemetry {the name of the programming language, runtime or component}", for
-  example, "OpenTelemetry Python", "OpenTelemetry .NET" or "OpenTelemetry Collector".
+- The official names for sub-projects, like language specific implementations,
+  follow the pattern of "OpenTelemetry {the name of the programming language,
+  runtime or component}", for example, "OpenTelemetry Python", "OpenTelemetry
+  .NET" or "OpenTelemetry Collector".
 
 ## About the project
 
