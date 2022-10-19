@@ -113,10 +113,14 @@ groups:
         note: >
           When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
           URI port identifier, otherwise it MUST match `Host` header port identifier.
-      - id: retry_count
+      - id: resend_count
         type: int
         brief: >
-          The ordinal number of request re-sending attempt.
+          The ordinal number of request resending attempt (for any reason, including redirects).
+        note: >
+          The resend count SHOULD be updated each time an HTTP request gets resent by the client, regardless of what
+          was the cause of the resending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues,
+          or any other).
         requirement_level:
           recommended: if and only if request was retried.
         examples: 3
