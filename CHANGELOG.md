@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Rename `http.retry_count` to `http.resend_count` and clarify its meaning.
+  ([#2743](https://github.com/open-telemetry/opentelemetry-specification/pull/2743))
+
 ### Metrics
 
 ### Logs
@@ -18,6 +21,9 @@ release.
 ### Resource
 
 ### Semantic Conventions
+
+- Add `process.paging.faults` metric to semantic conventions
+  ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
 
 ### Compatibility
 

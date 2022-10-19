@@ -19,9 +19,11 @@ and various HTTP versions like 1.1, 2 and SPDY.
 - [HTTP server](#http-server)
   * [HTTP server definitions](#http-server-definitions)
   * [HTTP Server semantic conventions](#http-server-semantic-conventions)
-- [HTTP client-server example](#http-client-server-example)
-- [HTTP retries examples](#http-retries-examples)
-- [HTTP redirects examples](#http-redirects-examples)
+- [Examples](#examples)
+  * [HTTP client-server example](#http-client-server-example)
+  * [HTTP client retries examples](#http-client-retries-examples)
+  * [HTTP client authorization retry examples](#http-client-authorization-retry-examples)
+  * [HTTP client redirects examples](#http-client-redirects-examples)
 
 <!-- tocstop -->
 
@@ -128,13 +130,15 @@ before any HTTP-redirects that may happen when executing the request.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `http.url` | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [1] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Required |
-| `http.retry_count` | int | The ordinal number of request re-sending attempt. | `3` | Recommended: if and only if request was retried. |
-| [`net.peer.name`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
-| [`net.peer.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
+| `http.resend_count` | int | The ordinal number of request resending attempt (for any reason, including redirects). [2] | `3` | Recommended: if and only if request was retried. |
+| [`net.peer.name`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `example.com` | Required |
+| [`net.peer.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
-**[2]:** Determined by using the first of the following that applies
+**[2]:** The resend count SHOULD be updated each time an HTTP request gets resent by the client, regardless of what was the cause of the resending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues, or any other).
+
+**[3]:** Determined by using the first of the following that applies
 
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form
@@ -142,9 +146,9 @@ before any HTTP-redirects that may happen when executing the request.
 
 SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[3]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
+**[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
-**[4]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
@@ -158,13 +162,15 @@ Note that in some cases host and port identifiers in the `Host` header might be 
 ### HTTP request retries and redirects
 
 Retries and redirects cause more than one physical HTTP request to be sent.
+A request is resent when an HTTP client library sends more than one HTTP request to satisfy the same API call.
+This may happen due to following redirects, authorization cahllenges, 503 Server Unavailable, network issues, or any other.
 A CLIENT span SHOULD be created for each one of these physical requests.
 No span is created corresponding to the "logical" (encompassing) request.
 
-For retries, `http.retry_count` attribute SHOULD be added to each retry span
-with the value that reflects the ordinal number of request retry attempt.
+Each time an HTTP request is resent, the `http.resend_count` attribute SHOULD be added to each repeated span
+and set to the ordinal number of the request resend attempt.
 
-See [examples](#http-retries-examples) for more details.
+See [examples](#http-client-retries-examples) for more details.
 
 ## HTTP server
 
@@ -285,7 +291,9 @@ Following attributes MUST be provided **at span creation time** (when provided a
 
 Note that in some cases host and port identifiers in the `Host` header might be different from the `net.host.name` and `net.host.port`, in this case instrumentation MAY populate `Host` header on `http.request.header.host` attribute even if it's not enabled by user.
 
-## HTTP client-server example
+## Examples
+
+### HTTP client-server example
 
 As an example, if a browser request for `https://example.com:8080/webshop/articles/4?s=1` is invoked from a host with IP 192.0.2.4, we may have the following Span on the client side:
 
@@ -319,7 +327,7 @@ Span name: `/webshop/articles/:article_id`.
 | `net.sock.peer.addr` | `"192.0.2.5"` (the client goes through a proxy) |
 | `http.user_agent`    | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
 
-## HTTP retries examples
+### HTTP client retries examples
 
 Example of retries in the presence of a trace started by an inbound request:
 
@@ -330,11 +338,11 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
-  -- GET / - 500 (CLIENT, trace=t1, span=s4, http.retry_count=1)
+  -- GET / - 500 (CLIENT, trace=t1, span=s4, http.resend_count=1)
   |   |
   |   --- server (SERVER, trace=t1, span=s5)
   |
-  -- GET / - 200 (CLIENT, trace=t1, span=s6, http.retry_count=2)
+  -- GET / - 200 (CLIENT, trace=t1, span=s6, http.resend_count=2)
       |
       --- server (SERVER, trace=t1, span=s7)
 ```
@@ -346,16 +354,44 @@ GET / - 500 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET / - 500 (CLIENT, trace=t2, span=s1, http.retry_count=1)
+GET / - 500 (CLIENT, trace=t2, span=s1, http.resend_count=1)
  |
  --- server (SERVER, trace=t2, span=s2)
 
-GET / - 200 (CLIENT, trace=t3, span=s1, http.retry_count=2)
+GET / - 200 (CLIENT, trace=t3, span=s1, http.resend_count=2)
  |
  --- server (SERVER, trace=t3, span=s1)
 ```
 
-## HTTP redirects examples
+### HTTP client authorization retry examples
+
+Example of retries in the presence of a trace started by an inbound request:
+
+```
+request (SERVER, trace=t1, span=s1)
+  |
+  -- GET /hello - 401 (CLIENT, trace=t1, span=s2)
+  |   |
+  |   --- server (SERVER, trace=t1, span=s3)
+  |
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, http.resend_count=1)
+      |
+      --- server (SERVER, trace=t1, span=s5)
+```
+
+Example of retries with no trace started upfront:
+
+```
+GET /hello - 401 (CLIENT, trace=t1, span=s1)
+ |
+ --- server (SERVER, trace=t1, span=s2)
+
+GET /hello - 200 (CLIENT, trace=t2, span=s1, http.resend_count=1)
+ |
+ --- server (SERVER, trace=t2, span=s2)
+```
+
+### HTTP client redirects examples
 
 Example of redirects in the presence of a trace started by an inbound request:
 
@@ -366,7 +402,7 @@ request (SERVER, trace=t1, span=s1)
   |   |
   |   --- server (SERVER, trace=t1, span=s3)
   |
-  -- GET /hello - 200 (CLIENT, trace=t1, span=s4)
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s4, http.resend_count=1)
       |
       --- server (SERVER, trace=t1, span=s5)
 ```
@@ -378,7 +414,7 @@ GET / - 302 (CLIENT, trace=t1, span=s1)
  |
  --- server (SERVER, trace=t1, span=s2)
 
-GET /hello - 200 (CLIENT, trace=t2, span=s1)
+GET /hello - 200 (CLIENT, trace=t2, span=s1, http.resend_count=1)
  |
  --- server (SERVER, trace=t2, span=s2)
 ```
