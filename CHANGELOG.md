@@ -46,15 +46,19 @@ release.
 - Rename `http.retry_count` to `http.resend_count` and clarify its meaning.
   ([#2743](https://github.com/open-telemetry/opentelemetry-specification/pull/2743))
 - BREAKING: rename `messaging.destination` to `messaging.destination.name`,
+  `messaging.temp_destination` to `messaging.destination.temporary`,
+  `messaging.destination_kind` to `messaging.destination.kind`,
   `messaging.message_id` to `messaging.message.id`,
+  `messaging.protocol` to `net.app.protocol.name`,
+  `messaging.protocol_version`, `net.app.protocol.version`,
   `messaging.conversation_id` to `messaging.message.conversation_id`,
   `messaging.message_payload_size_bytes` to `messaging.message.payload_size_bytes`,
   `messaging.message_payload_compressed_size_bytes` to `messaging.message.payload_compressed_size_bytes`,
   `messaging.kafka.message_key` to `messaging.kafka.message.key`,
   `messaging.rocketmq.message_type` to `messaging.rocketmq.message.type`,
   `messaging.rocketmq.message_tag` to `messaging.rocketmq.message.tag`,
-  `messaging.rocketmq.message_keys` to `messaging.rocketmq.message.keys`.
-  Clarify that per-message attributes should be populated on links for batching scenarios.
+  `messaging.rocketmq.message_keys` to `messaging.rocketmq.message.keys`,
+  Split `destination` and `source` namespaces and clarify per-message attributes in batching scenarios.
   ([#2763](https://github.com/open-telemetry/opentelemetry-specification/pull/2763)).
 
 ### Metrics

@@ -1,6 +1,7 @@
 groups:
   - id: messaging.message
     prefix: messaging
+    # todo (https://github.com/open-telemetry/build-tools/issues/123)
     type: span
     brief: 'Semantic convention describing per-message attributes populated on messaging spans or links.'
     attributes:
@@ -11,8 +12,18 @@ groups:
           Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
           broker does not have such notion, destination name SHOULD uniquely identify broker.
 
-          If destination name is the same for all messages being published, 
-          it MUST be set on corresponding publish, receive, process or other span.
+          If destination name is the same for all messages being published,
+          it MUST be set on corresponding span.
+        examples: ['MyQueue', 'MyTopic']
+      - id: source.name
+        type: string
+        brief: 'The message source name'
+        note: |
+          Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
+          broker does not have such notion, source name SHOULD uniquely identify broker.
+
+          If source name is the same for all messages being received or processed,
+          it MUST be set on corresponding span.
         examples: ['MyQueue', 'MyTopic']
       - id: message.id
         type: string
@@ -47,32 +58,6 @@ groups:
         requirement_level: required
         brief: 'A string identifying the messaging system.'
         examples: ['kafka', 'rabbitmq', 'rocketmq', 'activemq', 'AmazonSQS']
-      - id: destination_kind
-        type:
-          allow_custom_values: false
-          members:
-            - id: queue
-              value: "queue"
-              brief: "A message sent to a queue"
-            - id: topic
-              value: "topic"
-              brief: "A message sent to a topic"
-        requirement_level:
-          conditionally_required: If the message destination is either a `queue` or `topic`.
-        brief: 'The kind of message destination'
-      - id: temp_destination
-        type: boolean
-        requirement_level:
-          conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
-        brief: 'A boolean that is true if the message destination is temporary.'
-      - id: protocol
-        type: string
-        brief: 'The name of the transport protocol.'
-        examples: ['AMQP', 'MQTT']
-      - id: protocol_version
-        type: string
-        brief: 'The version of the transport protocol.'
-        examples: '0.9.1'
       - id: url
         type: string
         brief: 'Connection string.'
@@ -87,12 +72,7 @@ groups:
             Instrumentation SHOULD always set it on batch `receive` operations regardless
             of the actual number of received messages (e.g. 0, 1, or more).
         examples: [0, 1, 2]
-      - ref: messaging.destination.name
-        requirement_level:
-          conditionally_required: if available and if the value applies to all messages in the batch.
       - ref: messaging.message.id
-        requirement_level:
-          recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
       - ref: messaging.message.conversation_id
         requirement_level:
           recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
@@ -117,7 +97,9 @@ groups:
         tag: connection-level
         requirement_level:
           recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
-
+      - ref: net.app.protocol.name
+        examples: ['AMQP', 'MQTT']
+      - ref: net.app.protocol.version
     constraints:
       - include: network
 
@@ -127,6 +109,47 @@ groups:
     extends: messaging
     span_kind: producer
     brief: 'Semantic convention for producers of messages sent to a messaging systems.'
+    attributes:
+      - ref: messaging.destination.name
+        requirement_level:
+          conditionally_required: If the value applies to all messages in the batch.
+      - id: destination.kind
+        type:
+          allow_custom_values: false
+          members:
+            - id: queue
+              value: "queue"
+              brief: "A message sent to a queue"
+            - id: topic
+              value: "topic"
+              brief: "A message sent to a topic"
+        requirement_level:
+          conditionally_required: If the message destination is either a `queue` or `topic`.
+        brief: 'The kind of message destination'
+      - id: destination.template
+        type: string
+        requirement_level:
+          conditionally_required: >
+            If available. Instrumentations MUST NOT use `messaging.destination.name` as template
+            unless low-cardinality of destination name is guaranteed.
+        brief: Low cardinality field representing messaging destination
+        note: >
+          Destination names could be constructed from templates.
+          An example would be a destination name involving a user name or product id.
+          Although the destination name in this case is of high cardinality,
+          the underlying template is of low cardinality and can be effectively
+          used for grouping and searching spans.
+        examples: ['/customers/{customerId}']
+      - id: destination.temporary
+        type: boolean
+        requirement_level:
+          conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
+        brief: 'A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed.'
+      - id: destination.anonymous
+        type: boolean
+        requirement_level:
+          conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
+        brief: 'A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name).'
 
   - id: messaging.producer.synchronous
     prefix: messaging
@@ -165,6 +188,40 @@ groups:
           `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id`
           of the client consuming the message.
         examples: 'mygroup - client-6'
+      - ref: messaging.source.name
+        requirement_level:
+          conditionally_required: If the value applies to all messages in the batch.
+      - id: source.kind
+        type:
+          allow_custom_values: true
+          members:
+            - id: queue
+              value: "queue"
+              brief: "A message received from a queue"
+            - id: topic
+              value: "topic"
+              brief: "A message received from a topic"
+        requirement_level:
+          conditionally_required: If the message source is either a `queue` or `topic`.
+        brief: 'The kind of message source'
+      - id: source.template
+        type: string
+        brief: 'Low cardinality field representing messaging source'
+        requirement_level:
+          conditionally_required: >
+            If available. Instrumentations MUST NOT use `messaging.source.name` as template
+            unless low-cardinality of source name is guaranteed.
+        examples: ['/customers/{customerId}']
+      - id: source.temporary
+        type: boolean
+        requirement_level:
+          recommended: when supported by messaging system and only if the source is temporary. If missing, assumed to be false.
+        brief: 'denotes that the source is a temporary source and might not exist anymore after messages are processed'
+      - id: source.anonymous
+        type: boolean
+        requirement_level:
+          recommended: when supported by messaging system and only if the source is anonymous. If missing, assumed to be false.
+        brief: 'denotes that the source is an anonymous source (could be unnamed or have auto-generated name)'
 
   - id: messaging.consumer.synchronous
     prefix: messaging
