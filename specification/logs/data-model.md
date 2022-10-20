@@ -474,70 +474,8 @@ If included, they MUST follow the OpenTelemetry
 
 ## Example Log Records
 
-Below are examples that show one possible representation of log records in JSON.
-These are just examples to help understand the data model. Don’t treat the
-examples as _the_ way to represent this data model in JSON.
-
-This document does not define the actual encoding and format of the log record
-representation. Format definitions will be done in separate OTEPs (e.g. the log
-records may be represented as msgpack, JSON, Protocol Buffer messages, etc).
-
-Example 1
-
-```javascript
-{
-  "Timestamp": "1586960586000000000",
-  "Attributes": {
-    "http.status_code": 500,
-    "http.url": "http://example.com",
-    "my.custom.application.tag": "hello",
-  },
-  "Resource": {
-    "service.name": "donut_shop",
-    "service.version": "2.0.0",
-    "k8s.pod.uid": "1138528c-c36e-11e9-a1a7-42010a800198",
-  },
-  "TraceId": "f4dbb3edd765f620", // this is a byte sequence
-                                 // (hex-encoded in JSON)
-  "SpanId": "43222c2d51a7abe3",
-  "SeverityText": "INFO",
-  "SeverityNumber": 9,
-  "Body": "20200415T072306-0700 INFO I like donuts"
-}
-```
-
-Example 2
-
-```javascript
-{
-  "Timestamp": "1586960586000000000",
-  ...
-  "Body": {
-    "i": "am",
-    "an": "event",
-    "of": {
-      "some": "complexity"
-    }
-  }
-}
-```
-
-Example 3
-
-```javascript
-{
-   "Timestamp": "1586960586000000000",
-   "Attributes":{
-      "http.scheme":"https",
-      "http.host":"donut.mycie.com",
-      "http.target":"/order",
-      "http.method":"post",
-      "http.status_code":500,
-      "http.flavor":"1.1",
-      "http.user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36",
-   }
-}
-```
+For example log records see
+[JSON File serialization](../../experimental/serialization/json.md).
 
 ## Appendix A. Example Mappings
 
