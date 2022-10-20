@@ -24,6 +24,8 @@ release.
 
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+- Add semantic conventions for Feature Flags
+  ([#2529](https://github.com/open-telemetry/opentelemetry-specification/pull/2529))
 
 ### Compatibility
 
@@ -83,8 +85,6 @@ release.
 - Update http metrics to use `http.route` instead of `http.target` for servers,
   drop `http.url` for clients
   ([#2818](https://github.com/open-telemetry/opentelemetry-specification/pull/2818)).
-- Add semantic conventions for Feature Flags
-  ([#2529](https://github.com/open-telemetry/opentelemetry-specification/pull/2529))
 
 ### Compatibility
 
