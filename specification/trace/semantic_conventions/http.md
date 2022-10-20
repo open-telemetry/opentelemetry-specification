@@ -163,7 +163,7 @@ Note that in some cases host and port identifiers in the `Host` header might be 
 
 Retries and redirects cause more than one physical HTTP request to be sent.
 A request is resent when an HTTP client library sends more than one HTTP request to satisfy the same API call.
-This may happen due to following redirects, authorization cahllenges, 503 Server Unavailable, network issues, or any other.
+This may happen due to following redirects, authorization challenges, 503 Server Unavailable, network issues, or any other.
 A CLIENT span SHOULD be created for each one of these physical requests.
 No span is created corresponding to the "logical" (encompassing) request.
 
