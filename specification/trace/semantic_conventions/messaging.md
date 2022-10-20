@@ -456,8 +456,10 @@ Process CB:                 | Span CB1 |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` |
 | `net.peer.port` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
-| `messaging.destination` | `"T"` | `"T"` | `"T"` |
-| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` |
+| `messaging.destination.name` | `"T"` | | |
+| `messaging.destination.kind` | `"topic"` |  |  |
+| `messaging.source.name` | | `"T"` | `"T"` |
+| `messaging.source.kind` | | `"topic"` | `"topic"` |
 | `messaging.operation` |  | `"process"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a1"`| `"a1"` |
 
@@ -491,8 +493,10 @@ Process CB:                           | Span Rcv2 |
 | `peer.service` | `"myKafka"` |  |  | `"myKafka"` |  |
 | `service.name` |  | `"myConsumer1"` | `"myConsumer1"` |  | `"myConsumer2"` |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
-| `messaging.destination` | `"T1"` | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
-| `messaging.destination_kind` | `"topic"` | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
+| `messaging.destination.name` | `"T1"` | | | | |
+| `messaging.destination.kind` | `"topic"` | | | | |
+| `messaging.source.name` |  | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
+| `messaging.source.kind` |  | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
 | `messaging.operation` |  |  | `"process"` |  | `"receive"` |
 | `messaging.kafka.message.key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
 | `messaging.kafka.consumer_group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
@@ -523,8 +527,10 @@ Process C:                      | Span Recv1 |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
 | `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
-| `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
-| `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
+| `messaging.destination.name` | `"Q"` | `"Q"` | | | |
+| `messaging.destination.kind` | `"queue"` | `"queue"` | | | |
+| `messaging.source.name` | | | `"Q"` | `"Q"` | `"Q"` |
+| `messaging.source.kind` | | | `"queue"` | `"queue"` | `"queue"` |
 | `messaging.operation` |  |  | `"receive"` | `"process"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a2"` | | `"a1"` | `"a2"` |
 | `messaging.batch.size` |  |  | 2 |  |  |
@@ -558,8 +564,10 @@ Process C:                              | Span Recv1 | Span Recv2 |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
 | `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
-| `messaging.destination` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
-| `messaging.destination_kind` | `"queue"` | `"queue"` | `"queue"` | `"queue"` | `"queue"` |
+| `messaging.destination.name` | `"Q"` | `"Q"` | | | |
+| `messaging.destination.kind` | `"queue"` | `"queue"` | | | |
+| `messaging.source.name` | | | `"Q"` | `"Q"` | `"Q"` |
+| `messaging.source.kind` | | | `"queue"` | `"queue"` | `"queue"` |
 | `messaging.operation` |  |  | `"receive"` | `"receive"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a2"` | `"a1"` | `"a2"` | |
 | `messaging.batch.size` | | | 1 | 1 | 2 |
