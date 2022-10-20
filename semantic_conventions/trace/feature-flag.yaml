@@ -1,11 +1,10 @@
 groups:
   - id: feature_flag
     prefix: feature_flag
-    type: span
+    type: event
     brief: >
       This semantic convention defines the attributes used to represent a
-      feature flag evaluation as a span.
-    span_kind: internal
+      feature flag evaluation as an event.
     attributes:
       - id: key
         type: string
@@ -15,22 +14,21 @@ groups:
       - id: provider_name
         type: string
         requirement_level: recommended
-        brief: The name of the service that performs the flag evaluation.
+        brief: The name of the service provider that performs the flag evaluation.
         examples: ["Flag Manager"]
       - id: variant
         type: string
-        brief: The human readable name that identifies the evaluated value.
-        examples: ["red", "blue", "green"]
-        requirement_level:
-          conditionally_required: >
-            A variant should be used if it is available. If the variant is
-            present, feature_flag.value should be omitted.
-      - id: value
-        type: string
-        brief: A string representation of the evaluated value.
-        examples: ["ff0000", "0000ff", "00ff00"]
-        requirement_level:
-          conditionally_required: >
-            The value should only be used if the variant is not available. How
-            the value is represented as a string should be determined by the
-            implementer.
+        requirement_level: recommended
+        examples: ["red", "true", "on"]
+        brief: >
+          SHOULD be a semantic identifier for a value. If one is unavailable, a
+          stringified version of the value can be used.
+        note: |-
+          A semantic identifier, commonly referred to as a variant, provides a means
+          for referring to a value without including the value itself. This can
+          provide additional context for understanding the meaning behind a value.
+          For example, the variant `red` maybe be used for the value `#c05543`.
+
+          A stringified version of the value can be used in situations where a
+          semantic identifier is unavailable. String representation of the value 
+          should be determined by the implementer.
