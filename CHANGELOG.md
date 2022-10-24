@@ -16,12 +16,17 @@ release.
 
 ### Metrics
 
+- Handle duplicate description comments during Prometheus conversion.
+  ([#2890](https://github.com/open-telemetry/opentelemetry-specification/pull/2890))
+
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
 
+- Add gRPC request and response metadata semantic conventions
+  ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
 
