@@ -19,6 +19,7 @@ This document defines how to describe remote procedure calls
 - [gRPC](#grpc)
   * [gRPC Attributes](#grpc-attributes)
   * [gRPC Status](#grpc-status)
+  * [gRPC Request and Response Metadata](#grpc-request-and-response-metadata)
 - [JSON RPC](#json-rpc)
   * [JSON RPC Attributes](#json-rpc-attributes)
 
@@ -201,6 +202,16 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 ### gRPC Status
 
 The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC status code, and set to `Error` for all others.
+
+### gRPC Request and Response Metadata
+
+| Attribute                     | Type     | Description                                                                                                                                                       | Examples                                                                   | Requirement Level |
+|-------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|-------------------|
+| `rpc.request.metadata.<key>`  | string[] | gRPC request metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1]  | `rpc.request.metadata.my_custom_metadata_attribute=["1.2.3.4", "1.2.3.5"]` | Optional          |
+| `rpc.response.metadata.<key>` | string[] | gRPC response metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1] | `rpc.response.metadata.my_custom_metadata_attribute=["attribute_value"]`   | Optional          |
+
+**[1]:** Instrumentations SHOULD require an explicit configuration of which metadata values are to be captured.
+Including all request/response metadata values can be a security risk - explicit configuration helps avoid leaking sensitive information.
 
 ## JSON RPC
 
