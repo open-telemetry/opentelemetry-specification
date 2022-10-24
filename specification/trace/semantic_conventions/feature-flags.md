@@ -9,7 +9,6 @@
 - [Motivation](#motivation)
 - [Overview](#overview)
 - [Convention](#convention)
-- [Example](#example)
 
 <!-- tocstop -->
 
