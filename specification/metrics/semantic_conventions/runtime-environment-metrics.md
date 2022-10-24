@@ -89,12 +89,13 @@ Examples include `G1 Old Gen`, `G1 Eden space`, `G1 Survivor Space`, `Metaspace`
 **[2]**: These utilizations are not defined as being for the specific interval since last measurement (unlike `system.cpu.utilization`).
 **[3]**: Pool names are generally obtained via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
 **[4]**: Garbage collector name and action are generally obtained via [GarbageCollectionNotificationInfo#getGcName()](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.management/com/sun/management/GarbageCollectionNotificationInfo.html#getGcName()) and [GarbageCollectionNotificationInfo#getGcAction()](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.management/com/sun/management/GarbageCollectionNotificationInfo.html#getGcAction()) respectively. The following is an incomplete list of names and actions for several popular garbage collectors:
-  * G1 Garbage Collector
-    * Names: `G1 Young Generation`, `G1 Old Generation`
-    * Actions: `end of minor GC`, `end of major GC`
-  * Senandoah Garbage Collector
-    * Names: `Shenandoah Cycles`, `Shenandoah Pauses`
-    * Actions: `end of GC cycle`, `end of GC pause`
-  * Z Garbage Collector
-    * Names: `ZGC Cycles`, `ZGC Pauses`
-    * Actions: `end of GC cycle`, `end of GC pause`
+
+* G1 Garbage Collector
+  * Names: `G1 Young Generation`, `G1 Old Generation`
+  * Actions: `end of minor GC`, `end of major GC`
+* Senandoah Garbage Collector
+  * Names: `Shenandoah Cycles`, `Shenandoah Pauses`
+  * Actions: `end of GC cycle`, `end of GC pause`
+* Z Garbage Collector
+  * Names: `ZGC Cycles`, `ZGC Pauses`
+  * Actions: `end of GC cycle`, `end of GC pause`
