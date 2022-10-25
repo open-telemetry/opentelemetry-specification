@@ -457,6 +457,7 @@ Aggregation honors the following configuration parameter:
 | Key     | Value   | Default Value | Description                                                                                                  |
 |---------|---------|---------------|--------------------------------------------------------------------------------------------------------------|
 | MaxSize | integer | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
+| RecordMinMax | true, false | true | Whether to record min and max. |
 
 The default of 160 buckets is selected to establish default support
 for a high-resolution histogram able to cover a long-tail latency
