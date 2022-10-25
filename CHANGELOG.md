@@ -15,7 +15,7 @@ release.
 
 ### Logs
 
-- Remove language around uniqueness of event names within a domain
+- Clarification on what an Event is, and what the event.domain and event.name attributes represent
   ([#2848](https://github.com/open-telemetry/opentelemetry-specification/pull/2848))
 
 ### Resource
