@@ -47,6 +47,6 @@ provide additional context for understanding the meaning behind a value.
 For example, the variant `red` maybe be used for the value `#c05543`.
 
 A stringified version of the value can be used in situations where a
-semantic identifier is unavailable. String representation of the value 
+semantic identifier is unavailable. String representation of the value
 should be determined by the implementer.
 <!-- endsemconv -->
