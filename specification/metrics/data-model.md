@@ -1,5 +1,6 @@
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Data Model
+aliases: [/docs/reference/specification/metrics/datamodel]
 --->
 
 # Metrics Data Model
@@ -733,8 +734,8 @@ double-width floating point values have indices in the range
 func MapToIndexScale0(value float64) int32 {
     rawBits := math.Float64bits(value)
 
-    // rawExponent is an 11-bit biased representation of the base-2 
-    // exponent: 
+    // rawExponent is an 11-bit biased representation of the base-2
+    // exponent:
     // - value 0 indicates a subnormal representation or a zero value
     // - value 2047 indicates an Inf or NaN value
     // - value [1, 2046] are offset by ExponentBias (1023)
@@ -754,13 +755,13 @@ func MapToIndexScale0(value float64) int32 {
         rawExponent -= int64(bits.LeadingZeros64(rawFragment - 1) - 12)
 
         // In the example with 0x1p-1023, the preceding expression subtracts
-        // (13-12)=1, leaving the rawExponent equal to -1.  The next statement 
-        // below subtracts `ExponentBias` (1023), leaving `ieeeExponent` equal 
+        // (13-12)=1, leaving the rawExponent equal to -1.  The next statement
+        // below subtracts `ExponentBias` (1023), leaving `ieeeExponent` equal
         // to -1024, which is the correct upper-inclusive bucket index for
         // the value 0x1p-1023.
     }
     ieeeExponent := int32(rawExponent - ExponentBias)
-    // Note that rawFragment and rawExponent cannot both be zero, 
+    // Note that rawFragment and rawExponent cannot both be zero,
     // or else the value is exactly zero, in which case the the ZeroCount
     // bucket is used.
     if rawFragment == 0 {
@@ -779,7 +780,7 @@ smallest normal value, which may permit the use of a built-in function:
 func MapToIndexScale0(value float64) int {
     // Note: Frexp() rounds submnormal values to the smallest normal
     // value and returns an exponent corresponding to fractions in the
-    // range [0.5, 1), whereas an exponent for the range [1, 2), so 
+    // range [0.5, 1), whereas an exponent for the range [1, 2), so
     // subtract 1 from the exponent immediately.
     frac, exp := math.Frexp(value)
     exp--
@@ -878,7 +879,7 @@ func MapToIndex(value float64) int {
         return ((exp - 1) << scale) - 1
     }
     scaleFactor := math.Ldexp(math.Log2E, scale)
-    // Note: math.Floor(value) equals math.Ceil(value)-1 when value 
+    // Note: math.Floor(value) equals math.Ceil(value)-1 when value
     // is not a power of two, which is checked above.
     return math.Floor(math.Log(value) * scaleFactor)
 }
@@ -1466,6 +1467,14 @@ in keys).
 ### OTLP Metric points to Prometheus
 
 #### Metric Metadata
+
+Prometheus SDK exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
+comments for the same metric name to be returned in a single scrape of the
+Prometheus endpoint. Exporters MUST drop entire metrics to prevent conflicting
+TYPE comments, but SHOULD NOT drop metric points as a result of conflicting
+UNIT or HELP comments. Instead, all but one of the conflicting UNIT and HELP
+comments (but not metric points) SHOULD be dropped. If dropping a comment or
+metric points, the exporter SHOULD warn the user through error logging.
 
 The Name of an OTLP metric MUST be added as the
 [OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
