@@ -57,7 +57,9 @@ release.
   `messaging.kafka.message_key` to `messaging.kafka.message.key`,
   `messaging.rocketmq.message_type` to `messaging.rocketmq.message.type`,
   `messaging.rocketmq.message_tag` to `messaging.rocketmq.message.tag`,
-  `messaging.rocketmq.message_keys` to `messaging.rocketmq.message.keys`,
+  `messaging.rocketmq.message_keys` to `messaging.rocketmq.message.keys`;
+  Removed `messaging.url`;
+  Renamed `send` operation to `publish`;
   Split `destination` and `source` namespaces and clarify per-message attributes in batching scenarios.
   ([#2763](https://github.com/open-telemetry/opentelemetry-specification/pull/2763)).
 

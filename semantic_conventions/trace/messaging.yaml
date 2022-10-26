@@ -11,9 +11,6 @@ groups:
         note: |
           Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
           broker does not have such notion, destination name SHOULD uniquely identify broker.
-
-          If destination name is the same for all messages being published,
-          it MUST be set on corresponding span.
         examples: ['MyQueue', 'MyTopic']
       - id: source.name
         type: string
@@ -21,9 +18,6 @@ groups:
         note: |
           Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
           broker does not have such notion, source name SHOULD uniquely identify broker.
-
-          If source name is the same for all messages being received or processed,
-          it MUST be set on corresponding span.
         examples: ['MyQueue', 'MyTopic']
       - id: message.id
         type: string
@@ -58,10 +52,21 @@ groups:
         requirement_level: required
         brief: 'A string identifying the messaging system.'
         examples: ['kafka', 'rabbitmq', 'rocketmq', 'activemq', 'AmazonSQS']
-      - id: url
-        type: string
-        brief: 'Connection string.'
-        examples: ['tibjmsnaming://localhost:7222', 'https://queue.amazonaws.com/80398EXAMPLE/MyQueue']
+      - id: operation
+        type:
+          allow_custom_values: true
+          members:
+            - id: publish
+              value: "publish"
+            - id: receive
+              value: "receive"
+            - id: process
+              value: "process"
+        brief: >
+          A string identifying the kind of messaging operation as defined in the
+          [Operation names](#operation-names) section above.
+        requirement_level:
+          conditionally_required:
       - id: batch.size
         type: int
         brief: The number of messages sent, received, or processed in the scope of the batching operation.
@@ -167,19 +172,6 @@ groups:
     span_kind: consumer
     brief: 'Semantic convention for a consumer of messages received from a messaging system'
     attributes:
-      - id: operation
-        type:
-          allow_custom_values: false
-          members:
-            - id: receive
-              value: "receive"
-            - id: process
-              value: "process"
-        brief: >
-          A string identifying the kind of message consumption as defined in the
-          [Operation names](#operation-names) section above.
-          If the operation is "send", this attribute MUST NOT be set, since the
-          operation can be inferred from the span kind in that case.
       - id: consumer_id
         type: string
         brief: >

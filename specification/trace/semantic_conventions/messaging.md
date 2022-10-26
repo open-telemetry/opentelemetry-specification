@@ -162,13 +162,13 @@ If the format above is used, the operation name MUST match the `messaging.operat
 
 Examples:
 
-* `shop.orders send`
+* `shop.orders publish`
 * `shop.orders receive`
 * `shop.orders process`
-* `print_jobs send`
+* `print_jobs publish`
 * `topic with spaces process`
 * `AuthenticationRequest-Conversations process`
-* `(temporary) send` (`(temporary)` being a stable identifier for randomly generated, temporary destination names)
+* `(temporary) publish` (`(temporary)` being a stable identifier for randomly generated, temporary destination names)
 
 ### Span kind
 
@@ -182,7 +182,7 @@ The following operations related to messages are defined for these semantic conv
 
 | Operation name | Description |
 | -------------- | ----------- |
-| `send`         | A message is sent to a destination by a message producer/client.       |
+| `publish`      | A message is sent to a destination by a message producer/client.       |
 | `receive`      | A message is received from a destination by a message consumer/server. |
 | `process`      | A message that was previously received from a destination is processed by a message consumer/server. |
 
@@ -192,7 +192,7 @@ The following operations related to messages are defined for these semantic conv
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `rocketmq`; `activemq`; `AmazonSQS` | Required |
-| `messaging.url` | string | Connection string. | `tibjmsnaming://localhost:7222`; `https://queue.amazonaws.com/80398EXAMPLE/MyQueue` | Recommended |
+| `messaging.operation` | string | A string identifying the kind of messaging operation as defined in the [Operation names](#operation-names) section above. | `publish` | Required |
 | `messaging.batch.size` | int | The number of messages sent, received, or processed in the scope of the batching operation. [1] | `0`; `1`; `2` | Conditionally Required: [2] |
 | `messaging.message.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended: [3] |
 | `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended |
@@ -225,13 +225,23 @@ The following operations related to messages are defined for these semantic conv
 **[9]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
 
 **[10]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
+
+`messaging.operation` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+
+| Value  | Description |
+|---|---|
+| `publish` | publish |
+| `receive` | receive |
+| `process` | process |
 <!-- endsemconv -->
 
 Additionally `net.peer.port` from the [network attributes][] is recommended.
 Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
-Note that attributes in `messaging.message` namespace describe message. It's recommended to use `messaging.{system}.message` namespace for specific messaging system attributes that describe individual messages.
+Note that attributes in `messaging.message` namespace describe an individual message, `messaging.destination` namespace
+contains attributes that describe the logical entity messages are published to, and `messaging.source` describes
+logical entity messages are received from.
 
 [network attributes]: span-general.md#general-network-connection-attributes
 [`net.transport`]: span-general.md#network-transport-attributes
@@ -263,9 +273,6 @@ For message producers, the following additional attributes may be set:
 **[6]:** Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
 broker does not have such notion, destination name SHOULD uniquely identify broker.
 
-If destination name is the same for all messages being published,
-it MUST be set on corresponding span.
-
 **[7]:** If the value applies to all messages in the batch.
 
 `messaging.destination.kind` MUST be one of the following:
@@ -283,7 +290,6 @@ For message consumers, the following additional attributes may be set:
 <!-- semconv messaging.consumer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.operation` | string | A string identifying the kind of message consumption as defined in the [Operation names](#operation-names) section above. If the operation is "send", this attribute MUST NOT be set, since the operation can be inferred from the span kind in that case. | `receive` | Recommended |
 | `messaging.consumer_id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | Recommended |
 | `messaging.source.kind` | string | The kind of message source | `queue` | Conditionally Required: [1] |
 | `messaging.source.template` | string | Low cardinality field representing messaging source | `/customers/{customerId}` | Conditionally Required: [2] |
@@ -302,17 +308,7 @@ For message consumers, the following additional attributes may be set:
 **[5]:** Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
 broker does not have such notion, source name SHOULD uniquely identify broker.
 
-If source name is the same for all messages being received or processed,
-it MUST be set on corresponding span.
-
 **[6]:** If the value applies to all messages in the batch.
-
-`messaging.operation` MUST be one of the following:
-
-| Value  | Description |
-|---|---|
-| `receive` | receive |
-| `process` | process |
 
 `messaging.source.kind` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -331,9 +327,9 @@ Instead span kind should be set to either `CONSUMER` or `SERVER` according to th
 
 ### Per-message attributes
 
-All messaging operations (`send`, `receive`, `process`, or other not covered by this specification) can describe a batch of messages. For batch operations per-message attributes cannot be set on the corresponding span and MAY instead be set on a link. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
+All messaging operations (`publish`, `receive`, `process`, or other not covered by this specification) can describe a batch of messages.
 
-Following attributes apply to links describing each message.
+The following attributes describe individual messages. For batch operations per-message attributes cannot be set on the corresponding unless they are the same for all batch and MAY instead be set on a link. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
 
 <!-- semconv messaging.message -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -348,17 +344,19 @@ Following attributes apply to links describing each message.
 **[1]:** Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
 broker does not have such notion, destination name SHOULD uniquely identify broker.
 
-If destination name is the same for all messages being published,
-it MUST be set on corresponding span.
-
 **[2]:** Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
 broker does not have such notion, source name SHOULD uniquely identify broker.
-
-If source name is the same for all messages being received or processed,
-it MUST be set on corresponding span.
 <!-- endsemconv -->
 
 ### Attributes specific to certain messaging systems
+
+All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Message-, destination-, or source-specific attributes SHOULD be populated under corresponding namespace:
+
+* Message-specific under `messaging.{system}.message`
+* Destination-specific under `messaging.{system}.destination`
+* source-specific under `messaging.{system}.source`
+
+System name in the namespace MUST match `messaging.system` attribute value.
 
 #### RabbitMQ
 
@@ -448,7 +446,7 @@ Process CB:                 | Span CB1 |
 
 | Field or Attribute | Span Prod1 | Span CA1 | Span CB1 |
 |-|-|-|-|
-| Span name | `"T send"` | `"T process"` | `"T process"` |
+| Span name | `"T publish"` | `"T process"` | `"T process"` |
 | Parent |  | Span Prod1 | Span Prod1 |
 | Links |  |  |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` |
@@ -485,7 +483,7 @@ Process CB:                           | Span Rcv2 |
 
 | Field or Attribute | Span Prod1 | Span Rcv1 | Span Proc1 | Span Prod2 | Span Rcv2
 |-|-|-|-|-|-|
-| Span name | `"T1 send"` | `"T1 receive"` | `"T1 process"` | `"T2 send"` | `"T2 receive`" |
+| Span name | `"T1 publish"` | `"T1 receive"` | `"T1 process"` | `"T2 publish"` | `"T2 receive`" |
 | Parent |  | Span Prod1 | Span Rcv1 | Span Rcv1 | Span Prod2 |
 | Links |  |  | |  |  |
 | SpanKind | `PRODUCER` | `CONSUMER` | `CONSUMER` | `PRODUCER` | `CONSUMER` |
@@ -505,7 +503,7 @@ Process CB:                           | Span Rcv2 |
 
 ### Batch receiving
 
-Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span Recv1) and processes each message separately (Spans Proc1 and Proc2).
+Given is a process P, that publishes two messages to a queue Q on messaging system MS, and a process C, which receives both of them in one batch (Span Recv1) and processes each message separately (Spans Proc1 and Proc2).
 
 Since a span can only have one parent and the propagated trace and span IDs are not known when the receiving span is started, the receiving span will have no parent and the processing spans are correlated with the producing spans using links.
 
@@ -519,7 +517,7 @@ Process C:                      | Span Recv1 |
 
 | Field or Attribute | Span Prod1 | Span Prod2 | Span Recv1 | Span Proc1 | Span Proc2 |
 |-|-|-|-|-|-|
-| Span name | `"Q send"` | `"Q send"` | `"Q receive"` | `"Q process"` | `"Q process"` |
+| Span name | `"Q publish"` | `"Q publish"` | `"Q receive"` | `"Q process"` | `"Q process"` |
 | Parent |  |  |  | Span Recv1 | Span Recv1 |
 | Links |  |  |  | Span Prod1 | Span Prod2 |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
@@ -537,7 +535,7 @@ Process C:                      | Span Recv1 |
 
 ### Batch processing
 
-Given is a process P, that sends two messages to a queue Q on messaging system MS, and a process C, which receives them separately in two different operations (Span Recv1 and Recv2) and processes both messages in one batch (Span Proc1).
+Given is a process P, that publishes two messages to a queue Q on messaging system MS, and a process C, which receives them separately in two different operations (Span Recv1 and Recv2) and processes both messages in one batch (Span Proc1).
 
 Since each span can only have one parent, C3 should not choose a random parent out of C1 and C2, but rather rely on the implicitly selected parent as defined by the [tracing API spec](../api.md).
 Depending on the implementation, the producing spans might still be available in the meta data of the messages and should be added to C3 as links.
@@ -554,7 +552,7 @@ Process C:                              | Span Recv1 | Span Recv2 |
 
 | Field or Attribute | Span Prod1 | Span Prod2 | Span Recv1 | Span Recv2 | Span Proc1 |
 |-|-|-|-|-|-|
-| Span name | `"Q send"` | `"Q send"` | `"Q receive"` | `"Q receive"` | `"Q process"` |
+| Span name | `"Q publish"` | `"Q publish"` | `"Q receive"` | `"Q receive"` | `"Q process"` |
 | Parent |  |  | Span Prod1 | Span Prod2 |  |
 | Links |  |  |  |  | [Span Prod1, Span Prod2 ] |
 | Link attributes |  |  |  |  | Span Prod1: `messaging.message.id`: `"a1"`  |
