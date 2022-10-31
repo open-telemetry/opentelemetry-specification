@@ -18,7 +18,7 @@ release.
 
 - Handle duplicate description comments during Prometheus conversion.
   ([#2890](https://github.com/open-telemetry/opentelemetry-specification/pull/2890))
-- Add `process.runtime.jvm.memory.usage_after_gc` metric to semantic conventions.
+- Add `process.runtime.jvm.memory.usage_after_last_gc` metric to semantic conventions.
   ([#2901](https://github.com/open-telemetry/opentelemetry-specification/pull/2901))
 
 ### Logs
