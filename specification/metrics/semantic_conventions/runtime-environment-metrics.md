@@ -96,7 +96,7 @@ Examples include `G1 Old Gen`, `G1 Eden space`, `G1 Survivor Space`, `Metaspace`
 * G1 Garbage Collector
   * Names: `G1 Young Generation`, `G1 Old Generation`
   * Actions: `end of minor GC`, `end of major GC`
-* Senandoah Garbage Collector
+* Shenandoah Garbage Collector
   * Names: `Shenandoah Cycles`, `Shenandoah Pauses`
   * Actions: `end of GC cycle`, `end of GC pause`
 * Z Garbage Collector
