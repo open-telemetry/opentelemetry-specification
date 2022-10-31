@@ -18,6 +18,8 @@ release.
 
 - Handle duplicate description comments during Prometheus conversion.
   ([#2890](https://github.com/open-telemetry/opentelemetry-specification/pull/2890))
+- Add `process.runtime.jvm.gc.time` metric to semantic conventions.
+  ([#2903](https://github.com/open-telemetry/opentelemetry-specification/pull/2903))
 
 ### Logs
 
