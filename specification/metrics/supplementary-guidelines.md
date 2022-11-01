@@ -114,14 +114,14 @@ middle. Here are some examples:
 In OpenTelemetry, each [Instrument](./api.md#instrument) implies whether it is
 additive or not.
 
-| Instrument                                                        | Additive     |
-| ----------------------------------------------------------------- | ------------ |
-| [Counter](./api.md#counter)                                       | additive     |
-| [UpDownCounter](./api.md#updowncounter)                           | additive     |
-| [Histogram](./api.md#histogram)                                   | mixed^1      |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | non-additive |
-| [Asynchronous Counter](./api.md#asynchronous-counter)             | additive     |
-| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | additive     |
+| Instrument                                                        | Additive          |
+| ----------------------------------------------------------------- | ----------------- |
+| [Counter](./api.md#counter)                                       | additive          |
+| [UpDownCounter](./api.md#updowncounter)                           | additive          |
+| [Histogram](./api.md#histogram)                                   | mixed<sup>1</sup> |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | non-additive      |
+| [Asynchronous Counter](./api.md#asynchronous-counter)             | additive          |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | additive          |
 
 1: The Histogram bucket counts are additive if the buckets are the same, the sum is additive, but the min and max are non-additive.
 
