@@ -18,6 +18,8 @@ release.
 
 - Handle duplicate description comments during Prometheus conversion.
   ([#2890](https://github.com/open-telemetry/opentelemetry-specification/pull/2890))
+- Allow to configure min/max recording in the exponential histogram aggregation.
+  ([#2904](https://github.com/open-telemetry/opentelemetry-specification/pull/2904))
 
 ### Logs
 
