@@ -118,10 +118,12 @@ additive or not.
 | ----------------------------------------------------------------- | ------------ |
 | [Counter](./api.md#counter)                                       | additive     |
 | [UpDownCounter](./api.md#updowncounter)                           | additive     |
-| [Histogram](./api.md#histogram)                                   | mixed        |
+| [Histogram](./api.md#histogram)                                   | mixed^1      |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | non-additive |
 | [Asynchronous Counter](./api.md#asynchronous-counter)             | additive     |
 | [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | additive     |
+
+1: The Histogram bucket counts are additive if the buckets are the same, the sum is additive, but the min and max are non-additive.
 
 #### Numeric type selection
 
