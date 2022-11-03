@@ -1,0 +1,30 @@
+groups:
+  - id: otel.scope
+    prefix: otel.scope
+    type: resource
+    brief: Attributes used by non-OTLP exporters to represent OpenTelemetry Scope's concepts.
+    attributes:
+      - id: name
+        type: string
+        brief: The name of the instrumentation scope - (`InstrumentationScope.Name` in OTLP).
+        examples: ['io.opentelemetry.contrib.mongodb']
+      - id: version
+        type: string
+        brief: The version of the instrumentation scope - (`InstrumentationScope.Version` in OTLP).
+        examples: ['1.0.0']
+  - id: otel.library
+    prefix: otel.library
+    type: resource
+    brief: >
+      Span attributes used by non-OTLP exporters to represent OpenTelemetry Scope's concepts.
+    attributes:
+      - id: name
+        type: string
+        stability: "deprecated"
+        brief: Deprecated, use the `otel.scope.name` attribute.
+        examples: ['io.opentelemetry.contrib.mongodb']
+      - id: version
+        type: string
+        stability: "deprecated"
+        brief: Deprecated, use the `otel.scope.version` attribute.
+        examples: ['1.0.0']

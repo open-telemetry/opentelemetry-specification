@@ -1,5 +1,6 @@
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Data Model
+aliases: [/docs/reference/specification/metrics/datamodel]
 --->
 
 # Metrics Data Model
@@ -66,9 +67,11 @@ linkTitle: Data Model
     + [Dropped Types](#dropped-types)
     + [Start Time](#start-time)
     + [Exemplars](#exemplars-1)
+    + [Instrumentation Scope](#instrumentation-scope)
     + [Resource Attributes](#resource-attributes)
   * [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
     + [Metric Metadata](#metric-metadata-1)
+    + [Instrumentation Scope](#instrumentation-scope-1)
     + [Gauges](#gauges-1)
     + [Sums](#sums-1)
     + [Histograms](#histograms-1)
@@ -731,8 +734,8 @@ double-width floating point values have indices in the range
 func MapToIndexScale0(value float64) int32 {
     rawBits := math.Float64bits(value)
 
-    // rawExponent is an 11-bit biased representation of the base-2 
-    // exponent: 
+    // rawExponent is an 11-bit biased representation of the base-2
+    // exponent:
     // - value 0 indicates a subnormal representation or a zero value
     // - value 2047 indicates an Inf or NaN value
     // - value [1, 2046] are offset by ExponentBias (1023)
@@ -752,13 +755,13 @@ func MapToIndexScale0(value float64) int32 {
         rawExponent -= int64(bits.LeadingZeros64(rawFragment - 1) - 12)
 
         // In the example with 0x1p-1023, the preceding expression subtracts
-        // (13-12)=1, leaving the rawExponent equal to -1.  The next statement 
-        // below subtracts `ExponentBias` (1023), leaving `ieeeExponent` equal 
+        // (13-12)=1, leaving the rawExponent equal to -1.  The next statement
+        // below subtracts `ExponentBias` (1023), leaving `ieeeExponent` equal
         // to -1024, which is the correct upper-inclusive bucket index for
         // the value 0x1p-1023.
     }
     ieeeExponent := int32(rawExponent - ExponentBias)
-    // Note that rawFragment and rawExponent cannot both be zero, 
+    // Note that rawFragment and rawExponent cannot both be zero,
     // or else the value is exactly zero, in which case the the ZeroCount
     // bucket is used.
     if rawFragment == 0 {
@@ -777,7 +780,7 @@ smallest normal value, which may permit the use of a built-in function:
 func MapToIndexScale0(value float64) int {
     // Note: Frexp() rounds submnormal values to the smallest normal
     // value and returns an exponent corresponding to fractions in the
-    // range [0.5, 1), whereas an exponent for the range [1, 2), so 
+    // range [0.5, 1), whereas an exponent for the range [1, 2), so
     // subtract 1 from the exponent immediately.
     frac, exp := math.Frexp(value)
     exp--
@@ -876,7 +879,7 @@ func MapToIndex(value float64) int {
         return ((exp - 1) << scale) - 1
     }
     scaleFactor := math.Ldexp(math.Log2E, scale)
-    // Note: math.Floor(value) equals math.Ceil(value)-1 when value 
+    // Note: math.Floor(value) equals math.Ceil(value)-1 when value
     // is not a power of two, which is checked above.
     return math.Floor(math.Log(value) * scaleFactor)
 }
@@ -1385,6 +1388,47 @@ retrieved from the `trace_id` and `span_id` label keys, respectively.  All
 labels not used for the trace and span ids MUST be added to the OpenTelemetry
 exemplar as attributes.
 
+#### Instrumentation Scope
+
+Each `otel_scope_info` metric point present in a batch of metrics
+SHOULD be dropped from the incoming scrape, and converted to an instrumentation
+scope. The `otel_scope_name` and `otel_scope_version` labels, if present, MUST
+be converted to the Name and Version of the Instrumentation Scope. Additional
+labels MUST be added as scope attributes, with keys and values unaltered. Other
+metrics in the batch which have `otel_scope_name` and `otel_scope_version`
+labels that match an instrumentation scope MUST be placed within the matching
+instrumentation scope, and MUST remove those labels. For example, the
+OpenMetrics metrics:
+
+```
+# TYPE otel_scope_info info
+otel_scope_info{otel_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",otel_scope_version="v0.24.0",library_mascot="bear"} 1
+# TYPE http_server_duration counter
+http_server_duration{otel_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",otel_scope_version="v0.24.0"...} 1
+```
+
+becomes:
+
+```yaml
+# within a resource_metrics
+scope_metrics:
+  scope:
+    name: go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp
+    version: v0.24.0
+    attributes:
+      library_mascot: bear
+  metrics:
+  - name: http_server_duration
+    data:
+      sum:
+        data_points:
+        - value: 1
+```
+
+Metrics which are not found to be associated with an instrumentation scope MUST
+all be placed within an empty instrumentation scope, and MUST not have any labels
+removed.
+
 #### Resource Attributes
 
 When scraping a Prometheus endpoint, resource attributes MUST be added to the
@@ -1424,6 +1468,14 @@ in keys).
 
 #### Metric Metadata
 
+Prometheus SDK exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
+comments for the same metric name to be returned in a single scrape of the
+Prometheus endpoint. Exporters MUST drop entire metrics to prevent conflicting
+TYPE comments, but SHOULD NOT drop metric points as a result of conflicting
+UNIT or HELP comments. Instead, all but one of the conflicting UNIT and HELP
+comments (but not metric points) SHOULD be dropped. If dropping a comment or
+metric points, the exporter SHOULD warn the user through error logging.
+
 The Name of an OTLP metric MUST be added as the
 [OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
 with unit and type suffixes added as described below. The metric name is
@@ -1444,6 +1496,22 @@ The description of an OTLP metrics point MUST be added as
 The data point type of an OTLP metric MUST be added as
 [OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
 It also dictates type-specific conversion rules listed below.
+
+#### Instrumentation Scope
+
+Prometheus exporters SHOULD generate an [Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)-typed
+metric named `otel_scope_info`. If present, Instrumentation Scope
+`name` and `version` MUST be added as `otel_scope_name` and
+`otel_scope_version` labels. Scope attributes MUST also be added as labels
+following the rules described in the [`Metric Attributes`](#metric-attributes)
+section below.
+
+Prometheus exporters MUST add the scope name as the `otel_scope_name` label and
+the scope version as the `otel_scope_version` label on all metric points by
+default.
+
+Prometheus exporters SHOULD provide a configuration option to disable the
+`otel_scope_info` metric and `otel_scope_` labels.
 
 #### Gauges
 
