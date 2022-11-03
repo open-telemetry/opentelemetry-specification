@@ -356,8 +356,6 @@ All attributes that are specific for a messaging system SHOULD be populated in `
 * Destination-specific under `messaging.{system}.destination`
 * source-specific under `messaging.{system}.source`
 
-System name in the namespace MUST match `messaging.system` attribute value.
-
 #### RabbitMQ
 
 In RabbitMQ, the destination is defined by an *exchange* and a *routing key*.
