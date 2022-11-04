@@ -266,9 +266,9 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
-- `"none"`: No measurements are eligible for exemplar sampling.
-- `"all"`: All measurements are eligible for exemplar sampling.
-- `"with_sampled_trace"`: Only allow measurements with a sampled parent span in context.
+- `"none"`: [NeverSample](./metrics/sdk.md#neversample)
+- `"all"`: [AlwaysSample](./metrics/sdk.md#alwayssample)
+- `"with_sampled_trace"`: [SampleWithTrace](./metrics/sdk.md#samplewithtrace)
 
 ### Periodic exporting MetricReader
 
