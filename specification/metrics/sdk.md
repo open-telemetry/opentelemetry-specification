@@ -658,8 +658,28 @@ This interface SHOULD have access to:
   [Span](../trace/api.md#span).
 - A `timestamp` that best represents when the measurement was taken.
 
-See [Defaults and Configuration](#defaults-and-configuration) for built-in
-filters.
+Sampled here simply makes the measurement eligible for being included as an
+exemplar. `ExemplarReservoir` makes the final decision if a measurement becomes
+an exemplar.
+
+### Built-in ExemplarFilters
+
+OpenTelemetry supports a number of built-in exemplar filters to choose from.
+The default is `SampleWithTrace`.
+
+#### AlwaysSample
+
+An ExemplarFilter which makes all measurements eligible for being an Exemplar.
+
+#### NeverSample
+
+An ExemplarFilter which makes no measurements eligible for being an Exemplar.
+Using this ExemplarFilter is as good as disabling Exemplar feature.
+
+#### SampleWithTrace
+
+An ExemplarFilter which makes those measurements eligible for being an
+Exemplar, which are recorded in the context of a sampled parent span.
 
 ### ExemplarReservoir
 
