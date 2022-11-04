@@ -12,7 +12,7 @@ groups:
         examples: ['click', 'exception']
       - id: domain
         brief: >
-          The domain identifies the context in which an event happened.
+          The domain identifies the business context for the events.
         type:
           allow_custom_values: true
           members:
