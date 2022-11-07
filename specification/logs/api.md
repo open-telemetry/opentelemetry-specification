@@ -179,7 +179,7 @@ fields:
 
 - [Timestamp](./data-model.md#field-timestamp)
 - [Observed Timestamp](./data-model.md#field-observedtimestamp)
-- [Trace Context](./data-model.md#trace-context-fields)
+- `Context` including [TraceContext](./data-model.md#trace-context-fields)
 - [Severity Number](./data-model.md#field-severitynumber)
 - [Severity Text](./data-model.md#field-severitytext)
 - [Body](./data-model.md#field-body)
