@@ -18,8 +18,8 @@ release.
 
 - Handle duplicate description comments during Prometheus conversion.
   ([#2890](https://github.com/open-telemetry/opentelemetry-specification/pull/2890))
-- Add `process.runtime.jvm.memory.usage_after_last_gc` metric to semantic conventions.
-  ([#2901](https://github.com/open-telemetry/opentelemetry-specification/pull/2901))
+- Allow to configure min/max recording in the exponential histogram aggregation.
+  ([#2904](https://github.com/open-telemetry/opentelemetry-specification/pull/2904))
 
 ### Logs
 
@@ -31,6 +31,8 @@ release.
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+- Add `process.runtime.jvm.memory.usage_after_last_gc` metric to semantic conventions.
+  ([#2901](https://github.com/open-telemetry/opentelemetry-specification/pull/2901))
 
 ### Compatibility
 
