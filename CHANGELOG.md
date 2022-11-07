@@ -11,6 +11,32 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+### Common
+
+## v1.15.0 (2022-11-08)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Rename `http.retry_count` to `http.resend_count` and clarify its meaning.
   ([#2743](https://github.com/open-telemetry/opentelemetry-specification/pull/2743))
 
@@ -20,17 +46,29 @@ release.
   ([#2890](https://github.com/open-telemetry/opentelemetry-specification/pull/2890))
 - Allow to configure min/max recording in the exponential histogram aggregation.
   ([#2904](https://github.com/open-telemetry/opentelemetry-specification/pull/2904))
+- Add table of instrument additive property
+  ([#2906](https://github.com/open-telemetry/opentelemetry-specification/pull/2906))
 
 ### Logs
 
+- No changes.
+
 ### Resource
+
+- No changes.
 
 ### Semantic Conventions
 
+- Change to messaging.kafka.max.lag from UpDownCounter to Gauge (and rename it)
+  ([#2837](https://github.com/open-telemetry/opentelemetry-specification/pull/2837))
+- Add daemon attribute to jvm threads metric
+  ([#2828](https://github.com/open-telemetry/opentelemetry-specification/pull/2828))
 - Add gRPC request and response metadata semantic conventions
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+- Define semantic conventions yaml for non-otlp conventions
+  ([#2850](https://github.com/open-telemetry/opentelemetry-specification/pull/2850))
 
 ### Compatibility
 
@@ -44,9 +82,16 @@ release.
 
 ### SDK Configuration
 
+- No changes.
+
 ### Telemetry Schemas
 
+- No changes.
+
 ### Common
+
+- Clarify that Scope is defined at build time
+  ([#2878](https://github.com/open-telemetry/opentelemetry-specification/pull/2878))
 
 ## v1.14.0 (2022-10-04)
 
