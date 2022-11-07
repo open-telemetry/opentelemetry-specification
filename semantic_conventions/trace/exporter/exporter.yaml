@@ -1,0 +1,21 @@
+groups:
+  - id: otel_span
+    prefix: otel
+    type: span
+    brief: Span attributes used by non-OTLP exporters to represent OpenTelemetry Span's concepts.
+    attributes:
+      - id: status_code
+        type:
+          allow_custom_values: false
+          members:
+            - id: ok
+              value: OK
+              brief: 'The operation has been validated by an Application developer or Operator to have completed successfully.'
+            - id: error
+              value: ERROR
+              brief: 'The operation contains an error.'
+        brief: Name of the code, either "OK" or "ERROR". MUST NOT be set if the status code is UNSET.
+      - id: status_description
+        type: string
+        brief: Description of the Status if it has a value, otherwise not set.
+        examples: ['resource not found']
