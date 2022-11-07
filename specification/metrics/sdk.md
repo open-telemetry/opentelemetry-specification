@@ -667,11 +667,11 @@ an exemplar.
 OpenTelemetry supports a number of built-in exemplar filters to choose from.
 The default is `SampleWithTrace`.
 
-#### AlwaysSample
+#### AlwaysOn
 
 An ExemplarFilter which makes all measurements eligible for being an Exemplar.
 
-#### NeverSample
+#### AlwaysOff
 
 An ExemplarFilter which makes no measurements eligible for being an Exemplar.
 Using this ExemplarFilter is as good as disabling Exemplar feature.
