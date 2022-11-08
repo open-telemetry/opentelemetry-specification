@@ -220,6 +220,27 @@ groups:
         brief: >
           The unique identifier for each client.
         examples: 'myhost@8742@s8083jm'
+      - id: delivery_timestamp
+        type: int
+        requirement_level:
+          conditionally_required: If the message type is delay and delay time level is not specified.
+        brief: >
+          The timestamp in milliseconds that the delay message is expected to be delivered to consumer.
+        examples: 1665987217045
+      - id: delay_time_level
+        type: int
+        requirement_level:
+          conditionally_required: If the message type is delay and delivery timestamp is not specified.
+        brief: >
+          The delay time level for delay message, which determines the message delay time.
+        examples: 3
+      - id: message_group
+        type: string
+        requirement_level:
+          conditionally_required: If the message type is FIFO.
+        brief: >
+          It is essential for FIFO message. Messages that belong to the same message group are always processed one by one within the same consumer group.
+        examples: 'myMessageGroup'
       - id: message_type
         type:
           allow_custom_values: false
