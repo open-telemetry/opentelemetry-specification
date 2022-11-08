@@ -23,6 +23,9 @@ release.
 
 ### Logs
 
+- Add `Context` as argument to `LogRecordProcessor#onEmit`.
+  ([#2927](https://github.com/open-telemetry/opentelemetry-specification/pull/2927))
+
 ### Resource
 
 ### Semantic Conventions
