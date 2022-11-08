@@ -69,6 +69,8 @@ release.
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
 - Define semantic conventions yaml for non-otlp conventions
   ([#2850](https://github.com/open-telemetry/opentelemetry-specification/pull/2850))
+- Add more semantic convetion attributes of Apache RocketMQ
+  ([#2881](https://github.com/open-telemetry/opentelemetry-specification/pull/2881))
 
 ### Compatibility
 
