@@ -31,6 +31,8 @@ release.
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+- Add more semantic convetion attributes of Apache RocketMQ
+  ([#2881](https://github.com/open-telemetry/opentelemetry-specification/pull/2881))
 
 ### Compatibility
 
