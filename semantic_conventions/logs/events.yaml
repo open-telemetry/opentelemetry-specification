@@ -12,7 +12,7 @@ groups:
         examples: ['click', 'exception']
       - id: domain
         brief: >
-          The domain identifies the context in which an event happened. An event name is unique only within a domain.
+          The domain identifies the business context for the events.
         type:
           allow_custom_values: true
           members:
@@ -27,6 +27,5 @@ groups:
               brief: 'Events from Kubernetes'
         requirement_level: required
         note: |
-          An `event.name` is supposed to be unique only in the context of an
-          `event.domain`, so this allows for two events in different domains to
-          have same `event.name`, yet be unrelated events.
+          Events across different domains may have same `event.name`, yet be
+          unrelated events.
