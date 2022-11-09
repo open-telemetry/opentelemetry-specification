@@ -30,10 +30,3 @@ groups:
           An `event.name` is supposed to be unique only in the context of an
           `event.domain`, so this allows for two events in different domains to
           have same `event.name`, yet be unrelated events.
-      - id: data
-        brief: >
-         The data attribute contains nested attributes which can be custom or set of defined attributes for schemas for specific scenarios.
-         Eg: PageView, UserInteraction, etc from RUM events.
-        type:
-         allow_custom_values: true
-        requirement_level: required
