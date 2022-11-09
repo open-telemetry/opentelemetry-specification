@@ -17,4 +17,3 @@
 |---|---|---|---|
 | `message` | string | `VM516:1 Uncaught ReferenceError: a is not defined at <anonymous>:1:1` | Required |
 | `type` | string | `sendAppErrorEvent`  | Required |
-
