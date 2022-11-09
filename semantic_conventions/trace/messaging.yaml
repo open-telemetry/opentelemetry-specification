@@ -103,7 +103,7 @@ groups:
         requirement_level:
           recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
       - ref: net.app.protocol.name
-        examples: ['AMQP', 'MQTT']
+        examples: ['amqp', 'mqtt']
       - ref: net.app.protocol.version
     constraints:
       - include: network
@@ -231,7 +231,7 @@ groups:
     brief: >
       Attributes for RabbitMQ
     attributes:
-      - id: routing_key
+      - id: message.routing_key
         type: string
         requirement_level:
           conditionally_required: If not empty.
@@ -267,12 +267,12 @@ groups:
         brief: >
           Client Id for the Consumer or Producer that is handling the message.
         examples: 'client-5'
-      - id: partition
+      - id: message.partition
         type: int
         brief: >
           Partition the message is sent to.
         examples: 2
-      - id: tombstone
+      - id: message.tombstone
         type: boolean
         requirement_level:
           conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.

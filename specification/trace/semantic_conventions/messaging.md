@@ -198,7 +198,7 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended |
 | `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [4] |
 | `messaging.message.payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended: [5] |
-| [`net.app.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `AMQP`; `MQTT` | Recommended |
+| [`net.app.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
 | [`net.app.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [6] | `3.1.1` | Recommended |
 | [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [7] | `example.com` | Conditionally Required: If available. |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [8] |
@@ -359,12 +359,12 @@ All attributes that are specific for a messaging system SHOULD be populated in `
 #### RabbitMQ
 
 In RabbitMQ, the destination is defined by an *exchange* and a *routing key*.
-`messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
+`messaging.destination.name` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
 
 <!-- semconv messaging.rabbitmq -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.rabbitmq.routing_key` | string | RabbitMQ message routing key. | `myKey` | Conditionally Required: If not empty. |
+| `messaging.rabbitmq.message.routing_key` | string | RabbitMQ message routing key. | `myKey` | Conditionally Required: If not empty. |
 <!-- endsemconv -->
 
 #### Apache Kafka
@@ -377,8 +377,8 @@ For Apache Kafka, the following additional attributes are defined:
 | `messaging.kafka.message.key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message.id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | Recommended |
 | `messaging.kafka.consumer_group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
 | `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | Recommended |
-| `messaging.kafka.partition` | int | Partition the message is sent to. | `2` | Recommended |
-| `messaging.kafka.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditionally Required: [2] |
+| `messaging.kafka.message.partition` | int | Partition the message is sent to. | `2` | Recommended |
+| `messaging.kafka.message.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditionally Required: [2] |
 
 **[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don't include its value.
 
