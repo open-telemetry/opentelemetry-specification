@@ -3,7 +3,8 @@
 **Status**: [Experimental](../../document-status.md)
 
 This document describes the attributes of standalone Events that are represented
-by `LogRecord`s. Events are LogRecords that are shaped in a special way:
+in the data model by `LogRecord`s. Events are recorded as LogRecords that are shaped
+in a special way:
 
 - They have a LogRecord attribute `event.name` (and possibly other LogRecord attributes).
 - They have an InstrumentationScope with a non-empty `Name` and with an
