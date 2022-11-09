@@ -170,6 +170,12 @@ fully qualified class name).
 The instrumentation scope is used to obtain a
 [Tracer or Meter](#tracer-name--meter-name).
 
+The instrumentation scope may have zero or more additional attributes that provide
+additional information about the scope. For example for a scope that specifies an
+instrumentation library an additional attribute may be recorded to denote the URL of the
+repository URL the library's source code is stored. Since the scope is a build-time
+concept the attributes of the scope cannot change at runtime.
+
 ### Tracer Name / Meter Name
 
 This refers to the `name` and (optional) `version` arguments specified when
