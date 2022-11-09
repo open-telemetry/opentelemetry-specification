@@ -6,14 +6,14 @@ versions:
       changes:
         - rename_attributes:
             attribute_map:
-              # https://github.com/open-telemetry/opentelemetry-specification/pull/2743            
+              # https://github.com/open-telemetry/opentelemetry-specification/pull/2743
               http.retry_count: http.resend_count
               # https://github.com/open-telemetry/opentelemetry-specification/pull/2763
               messaging.protocol: net.app.protocol.name
               messaging.protocol_version: net.app.protocol.version
               messaging.destination: messaging.destination.name
-              messaging.temp_destination: messaging.destination.temporary,
-              messaging.destination_kind: messaging.destination.kind,
+              messaging.temp_destination: messaging.destination.temporary
+              messaging.destination_kind: messaging.destination.kind
               messaging.message_id: messaging.message.id
               messaging.conversation_id: messaging.message.conversation_id
               messaging.message_payload_size_bytes: messaging.message.payload_size_bytes

@@ -74,19 +74,23 @@ groups:
           conditionally_required: >
             If available within the messaging system, and only if the span describes operations that operate with message batches.
         note: >
-            Instrumentation SHOULD always set it on batch `receive` operations regardless
+            Instrumentation MUST set it on batch `receive` operations regardless
             of the actual number of received messages (e.g. 0, 1, or more).
+            Instrumentations SHOULD set `messaging.batch.size` on spans representing
+            other operations - when it's not set, it's assumed to be `1`.
         examples: [0, 1, 2]
       - ref: messaging.message.id
+        requirement_level:
+          recommended: Only if span represents operation on a single message.
       - ref: messaging.message.conversation_id
         requirement_level:
           recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
       - ref: messaging.message.payload_size_bytes
         requirement_level:
-          recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
+          recommended: Only if span represents operation on a single message.
       - ref: messaging.message.payload_compressed_size_bytes
         requirement_level:
-          recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
+          recommended: Only if span represents operation on a single message.
       - ref: net.peer.name
         note: >
           This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
@@ -117,7 +121,7 @@ groups:
     attributes:
       - ref: messaging.destination.name
         requirement_level:
-          conditionally_required: If the value applies to all messages in the batch.
+          conditionally_required: If one message is being published or if the value applies to all messages in the batch.
       - id: destination.kind
         type:
           allow_custom_values: false
@@ -143,7 +147,7 @@ groups:
           An example would be a destination name involving a user name or product id.
           Although the destination name in this case is of high cardinality,
           the underlying template is of low cardinality and can be effectively
-          used for grouping and searching spans.
+          used for grouping and aggregation.
         examples: ['/customers/{customerId}']
       - id: destination.temporary
         type: boolean
@@ -155,7 +159,6 @@ groups:
         requirement_level:
           conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
         brief: 'A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name).'
-
   - id: messaging.producer.synchronous
     prefix: messaging
     type: span
@@ -204,16 +207,22 @@ groups:
             If available. Instrumentations MUST NOT use `messaging.source.name` as template
             unless low-cardinality of source name is guaranteed.
         examples: ['/customers/{customerId}']
+        note: >
+          Source names could be constructed from templates.
+          An example would be a source name involving a user name or product id.
+          Although the source name in this case is of high cardinality,
+          the underlying template is of low cardinality and can be effectively
+          used for grouping and aggregation.
       - id: source.temporary
         type: boolean
         requirement_level:
           recommended: when supported by messaging system and only if the source is temporary. If missing, assumed to be false.
-        brief: 'denotes that the source is a temporary source and might not exist anymore after messages are processed'
+        brief: 'A boolean that is true if the message source is temporary and might not exist anymore after messages are processed.'
       - id: source.anonymous
         type: boolean
         requirement_level:
           recommended: when supported by messaging system and only if the source is anonymous. If missing, assumed to be false.
-        brief: 'denotes that the source is an anonymous source (could be unnamed or have auto-generated name)'
+        brief: 'A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name).'
 
   - id: messaging.consumer.synchronous
     prefix: messaging

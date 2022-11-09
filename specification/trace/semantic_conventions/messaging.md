@@ -195,36 +195,38 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.operation` | string | A string identifying the kind of messaging operation as defined in the [Operation names](#operation-names) section above. | `publish` | Required |
 | `messaging.batch.size` | int | The number of messages sent, received, or processed in the scope of the batching operation. [1] | `0`; `1`; `2` | Conditionally Required: [2] |
 | `messaging.message.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended: [3] |
-| `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended |
-| `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [4] |
-| `messaging.message.payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended: [5] |
+| `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [4] |
+| `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [5] |
+| `messaging.message.payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended: [6] |
 | [`net.app.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
-| [`net.app.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [6] | `3.1.1` | Recommended |
-| [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [7] | `example.com` | Conditionally Required: If available. |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [8] |
+| [`net.app.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [7] | `3.1.1` | Recommended |
+| [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [8] | `example.com` | Conditionally Required: If available. |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [9] |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
-| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [9] |
-| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [10] |
+| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [10] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [11] |
 
-**[1]:** Instrumentation SHOULD always set it on batch `receive` operations regardless of the actual number of received messages (e.g. 0, 1, or more).
+**[1]:** Instrumentation MUST set it on batch `receive` operations regardless of the actual number of received messages (e.g. 0, 1, or more). Instrumentations SHOULD set `messaging.batch.size` on spans representing other operations - when it's not set, it's assumed to be `1`.
 
 **[2]:** If available within the messaging system, and only if the span describes operations that operate with message batches.
 
 **[3]:** Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
 
-**[4]:** Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
+**[4]:** Only if span represents operation on a single message.
 
-**[5]:** Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
+**[5]:** Only if span represents operation on a single message.
 
-**[6]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[6]:** Only if span represents operation on a single message.
 
-**[7]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+**[7]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[8]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[8]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
-**[9]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+**[9]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
-**[10]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
+**[10]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+
+**[11]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
 `messaging.operation` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -249,7 +251,7 @@ logical entity messages are received from.
 
 ### Producer attributes
 
-For message producers, the following additional attributes may be set:
+Following additional attributes describe message producer operations.
 
 <!-- semconv messaging.producer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -262,7 +264,7 @@ For message producers, the following additional attributes may be set:
 
 **[1]:** If the message destination is either a `queue` or `topic`.
 
-**[2]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and searching spans.
+**[2]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
 
 **[3]:** If available. Instrumentations MUST NOT use `messaging.destination.name` as template unless low-cardinality of destination name is guaranteed.
 
@@ -273,7 +275,7 @@ For message producers, the following additional attributes may be set:
 **[6]:** Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
 broker does not have such notion, destination name SHOULD uniquely identify broker.
 
-**[7]:** If the value applies to all messages in the batch.
+**[7]:** If one message is being published or if the value applies to all messages in the batch.
 
 `messaging.destination.kind` MUST be one of the following:
 
@@ -285,30 +287,32 @@ broker does not have such notion, destination name SHOULD uniquely identify brok
 
 ### Consumer attributes
 
-For message consumers, the following additional attributes may be set:
+Following additional attributes describe message consumer operations.
 
 <!-- semconv messaging.consumer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `messaging.consumer_id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | Recommended |
 | `messaging.source.kind` | string | The kind of message source | `queue` | Conditionally Required: [1] |
-| `messaging.source.template` | string | Low cardinality field representing messaging source | `/customers/{customerId}` | Conditionally Required: [2] |
-| `messaging.source.temporary` | boolean | denotes that the source is a temporary source and might not exist anymore after messages are processed |  | Recommended: [3] |
-| `messaging.source.anonymous` | boolean | denotes that the source is an anonymous source (could be unnamed or have auto-generated name) |  | Recommended: [4] |
-| `messaging.source.name` | string | The message source name [5] | `MyQueue`; `MyTopic` | Conditionally Required: [6] |
+| `messaging.source.template` | string | Low cardinality field representing messaging source [2] | `/customers/{customerId}` | Conditionally Required: [3] |
+| `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [4] |
+| `messaging.source.anonymous` | boolean | A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name). |  | Recommended: [5] |
+| `messaging.source.name` | string | The message source name [6] | `MyQueue`; `MyTopic` | Conditionally Required: [7] |
 
 **[1]:** If the message source is either a `queue` or `topic`.
 
-**[2]:** If available. Instrumentations MUST NOT use `messaging.source.name` as template unless low-cardinality of source name is guaranteed.
+**[2]:** Source names could be constructed from templates. An example would be a source name involving a user name or product id. Although the source name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
 
-**[3]:** when supported by messaging system and only if the source is temporary. If missing, assumed to be false.
+**[3]:** If available. Instrumentations MUST NOT use `messaging.source.name` as template unless low-cardinality of source name is guaranteed.
 
-**[4]:** when supported by messaging system and only if the source is anonymous. If missing, assumed to be false.
+**[4]:** when supported by messaging system and only if the source is temporary. If missing, assumed to be false.
 
-**[5]:** Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
+**[5]:** when supported by messaging system and only if the source is anonymous. If missing, assumed to be false.
+
+**[6]:** Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
 broker does not have such notion, source name SHOULD uniquely identify broker.
 
-**[6]:** If the value applies to all messages in the batch.
+**[7]:** If the value applies to all messages in the batch.
 
 `messaging.source.kind` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -329,7 +333,7 @@ Instead span kind should be set to either `CONSUMER` or `SERVER` according to th
 
 All messaging operations (`publish`, `receive`, `process`, or other not covered by this specification) can describe a batch of messages.
 
-The following attributes describe individual messages. For batch operations per-message attributes cannot be set on the corresponding unless they are the same for all batch and MAY instead be set on a link. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
+The following attributes describe individual messages. For batch operations per-message attributes cannot be set on the corresponding span unless they are the same for all messages in the batch and MAY instead be set on a link. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
 
 <!-- semconv messaging.message -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -350,10 +354,10 @@ broker does not have such notion, source name SHOULD uniquely identify broker.
 
 ### Attributes specific to certain messaging systems
 
-All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Message-, destination-, or source-specific attributes SHOULD be populated under corresponding namespace:
+All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Attributes that are specific to the message, the message destination, or the message source SHOULD be populated under corresponding namespace:
 
-* Message-specific under `messaging.{system}.message`
-* Destination-specific under `messaging.{system}.destination`
+* message-specific under `messaging.{system}.message`
+* destination-specific under `messaging.{system}.destination`
 * source-specific under `messaging.{system}.source`
 
 #### RabbitMQ
