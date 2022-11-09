@@ -23,6 +23,8 @@ release.
 
 ### Logs
 
+- Add `Context` as argument to `LogRecordProcessor#onEmit`.
+  ([#2927](https://github.com/open-telemetry/opentelemetry-specification/pull/2927))
 - Clarification on what an Event is, and what the event.domain and event.name attributes represent
   ([#2848](https://github.com/open-telemetry/opentelemetry-specification/pull/2848))
 
@@ -34,6 +36,10 @@ release.
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+- Add more semantic convetion attributes of Apache RocketMQ
+  ([#2881](https://github.com/open-telemetry/opentelemetry-specification/pull/2881))
+- Add `process.runtime.jvm.memory.usage_after_last_gc` metric to semantic conventions.
+  ([#2901](https://github.com/open-telemetry/opentelemetry-specification/pull/2901))
 
 ### Compatibility
 
