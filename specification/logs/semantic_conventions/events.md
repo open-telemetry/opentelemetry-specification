@@ -3,19 +3,40 @@
 **Status**: [Experimental](../../document-status.md)
 
 This document describes the attributes of standalone Events that are represented
-by `LogRecord`s. All standalone Events have a name and a domain. The Event domain
-is a namespace for event names and is used as a mechanism to avoid conflicts of
+in the data model by `LogRecord`s. Events are recorded as LogRecords that are shaped
+in a special way:
+
+- They have a LogRecord attribute `event.name` (and possibly other LogRecord attributes).
+- They have an InstrumentationScope with a non-empty `Name` and with an
+  InstrumentationScope attribute `event.domain` (and possibly other InstrumentationScope attributes).
+
+The `event.domain` attribute is used to logically separate events from different
+systems. For example, to record Events from browser apps, mobile apps and
+Kubernetes, we could use `browser`, `device` and `k8s` as the domain for their
+Events. This provides a clean separation of semantics for events in each of the
+domains.
+
+Within a particular domain, the `event.name` attribute identifies the event.
+Events with same domain and name are structurally similar to one another. For
+example, some domains could have well-defined schema for their events based on
 event names.
+
+When recording events from an existing system as OpenTelemetry Events, it is
+possible that the existing system does not have the equivalent of a name or
+requires multiple fields to identify the structure of the events. In such cases,
+OpenTelemetry recommends using a combination of one or more fields as the name
+such that the name identifies the event structurally. It is also recommended that
+the event names have low-cardinality, so care must be taken to not use fields
+that identify the instance of the Event and not the class of Events.
 
 <!-- semconv event -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `event.name` | string | The name identifies the event. | `click`; `exception` | Required |
-| `event.domain` | string | The domain identifies the context in which an event happened. An event name is unique only within a domain. [1] | `browser` | Required |
+| `event.domain` | string | The domain identifies the business context for the events. [1] | `browser` | Required |
 
-**[1]:** An `event.name` is supposed to be unique only in the context of an
-`event.domain`, so this allows for two events in different domains to
-have same `event.name`, yet be unrelated events.
+**[1]:** Events across different domains may have same `event.name`, yet be
+unrelated events.
 
 `event.domain` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
