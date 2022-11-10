@@ -266,8 +266,8 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
-- `"always_on"`: [AlwaysOn](./metrics/sdk.md#alwayssample)
-- `"always_off"`: [AlwaysOff](./metrics/sdk.md#neversample)
+- `"always_on"`: [AlwaysOn](./metrics/sdk.md#alwayson)
+- `"always_off"`: [AlwaysOff](./metrics/sdk.md#alwaysoff)
 - `"sample_with_trace"`: [SampleWithTrace](./metrics/sdk.md#samplewithtrace)
 
 ### Periodic exporting MetricReader
