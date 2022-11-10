@@ -50,7 +50,7 @@ Optionally, when applicable:
 | Name             | Instrument Type ([*](README.md#instrument-types)) | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                     |
 |------------------|---------------------------------------------------|--------------|-------------------------------------------|-------------------------------------------------|
 | `faas.mem_usage` | Histogram                                         | Bytes        | `By`                                      | Distribution of max memory usage per invocation |
-| `faas.cpu_usage` | Histogram                                         | milliseconds | `ms`                                      | Distribution of cpu usage per invocation        |
+| `faas.cpu_usage` | Histogram                                         | milliseconds | `ms`                                      | Distribution of CPU usage per invocation        |
 | `faas.net_io`    | Histogram                                         | Bytes        | `By`                                      | Distribution of net I/O usage per invocation    |
 
 ## Attributes
