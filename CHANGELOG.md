@@ -33,6 +33,8 @@ release.
 - Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
   `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
   ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
+- Add version as a k8s attribute.
+  ([#2937](https://github.com/open-telemetry/opentelemetry-specification/pull/2937))
 
 ### Compatibility
 

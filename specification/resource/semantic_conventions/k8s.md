@@ -25,6 +25,7 @@ Kubernetes object, but "name" is usually more user friendly so can be also set.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `k8s.cluster.name` | string | The name of the cluster. | `opentelemetry-cluster` | Recommended |
+| `k8s.cluster.version` | string | The version of the cluster. | `v1.21.11` | Recommended |
 <!-- endsemconv -->
 
 ## Node

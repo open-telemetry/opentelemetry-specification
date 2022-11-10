@@ -10,6 +10,12 @@ groups:
         brief: >
           The name of the cluster.
         examples: ['opentelemetry-cluster']
+      - id: version
+        type: string
+        brief: >
+          The version of the cluster.
+        examples: ['v1.21.11']
+
 
   - id: k8s.node
     prefix: k8s.node
