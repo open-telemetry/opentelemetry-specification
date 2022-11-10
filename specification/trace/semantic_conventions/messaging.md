@@ -14,7 +14,7 @@
   * [Destinations](#destinations)
   * [Message consumption](#message-consumption)
   * [Conversations](#conversations)
-  * [Temporary destinations](#temporary-destinations)
+  * [Temporary and anonymous destinations](#temporary-and-anonymous-destinations)
 - [Conventions](#conventions)
   * [Context propagation](#context-propagation)
   * [Span name](#span-name)
@@ -102,10 +102,10 @@ In some messaging systems, a message can receive one or more reply messages that
 The grouping usually happens through some sort of "In-Reply-To:" meta information or an explicit *conversation ID* (sometimes called *correlation ID*).
 Sometimes a conversation can span multiple message destinations (e.g. initiated via a topic, continued on a temporary one-to-one queue).
 
-### Temporary destinations
+### Temporary and anonymous destinations
 
 Some messaging systems support the concept of *temporary destination* (often only temporary queues) that are established just for a particular set of communication partners (often one to one) or conversation.
-Often such destinations are unnamed or have an auto-generated name.
+Often such destinations are also  *anonymous* - unnamed or have an auto-generated name.
 
 ## Conventions
 
@@ -155,7 +155,7 @@ The destination name SHOULD only be used for the span name if it is known to be 
 This can be assumed if it is statically derived from application code or configuration.
 Wherever possible, the real destination names after resolving logical or aliased names SHOULD be used.
 If the destination name is dynamic, such as a [conversation ID](#conversations) or a value obtained from a `Reply-To` header, it SHOULD NOT be used for the span name.
-In these cases, an artificial destination name that best expresses the destination, or a generic, static fallback like `"(temporary)"` for [temporary destinations](#temporary-destinations) SHOULD be used instead.
+In these cases, an artificial destination name that best expresses the destination, or a generic, static fallback like `"(anonymous)"` for [anonymous destinations](#temporary-and-anonymous-destinations) SHOULD be used instead.anonymous
 
 The values allowed for `<operation name>` are defined in the section [Operation names](#operation-names) below.
 If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans below.
@@ -168,7 +168,7 @@ Examples:
 * `print_jobs publish`
 * `topic with spaces process`
 * `AuthenticationRequest-Conversations process`
-* `(temporary) publish` (`(temporary)` being a stable identifier for randomly generated, temporary destination names)
+* `(anonymous) publish` (`(anonymous)` being a stable identifier for randomly generated, anonymous destination names)
 
 ### Span kind
 
@@ -206,11 +206,11 @@ The following operations related to messages are defined for these semantic conv
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [10] |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [11] |
 
-**[1]:** Instrumentation MUST set it on batch `receive` operations regardless of the actual number of received messages (e.g. 0, 1, or more). Instrumentations SHOULD set `messaging.batch.size` on spans representing other operations - when it's not set, it's assumed to be `1`.
+**[1]:** Instrumentations SHOULD NOT set `messaging.batch.size` on spans that operate with a single message. When client library supports batch and single-message API for the same operation, instrumentations SHOULD use `messaging.batch.size` for batching APIs and SHOULD NOT use it for single-message APIs.
 
-**[2]:** If available within the messaging system, and only if the span describes operations that operate with message batches.
+**[2]:** If the span describes operation on a batch of messages.
 
-**[3]:** Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
+**[3]:** Only if span represents operation on a single message.
 
 **[4]:** Only if span represents operation on a single message.
 
@@ -332,25 +332,12 @@ Instead span kind should be set to either `CONSUMER` or `SERVER` according to th
 ### Per-message attributes
 
 All messaging operations (`publish`, `receive`, `process`, or other not covered by this specification) can describe a batch of messages.
+Attributes in `messaging.message` or `messaging.{system}.message` namespace describe individual messages. For single-message operations they SHOULD be set on corresponding span.
 
-The following attributes describe individual messages. For batch operations per-message attributes cannot be set on the corresponding span unless they are the same for all messages in the batch and MAY instead be set on a link. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
+For batch operations per-message attributes are usually different and cannot be set on the corresponding span and MAY be set on links. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
 
-<!-- semconv messaging.message -->
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `messaging.destination.name` | string | The message destination name [1] | `MyQueue`; `MyTopic` | Recommended |
-| `messaging.source.name` | string | The message source name [2] | `MyQueue`; `MyTopic` | Recommended |
-| `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended |
-| `messaging.message.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended |
-| `messaging.message.payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended |
-| `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended |
-
-**[1]:** Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
-broker does not have such notion, destination name SHOULD uniquely identify broker.
-
-**[2]:** Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
-broker does not have such notion, source name SHOULD uniquely identify broker.
-<!-- endsemconv -->
+Some messaging systems such as Kafka, Azure EventGrid allow to publish a single batch of messages to different topics, in such cases attributes in `messaging.destination` and `messaging.source` MAY be 
+set on links. Corresponding instrumentations MAY set source and destination attributes on the span if all messages in the batch share the same destination or source.
 
 ### Attributes specific to certain messaging systems
 

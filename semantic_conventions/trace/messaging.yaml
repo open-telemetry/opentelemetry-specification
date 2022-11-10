@@ -71,20 +71,18 @@ groups:
         type: int
         brief: The number of messages sent, received, or processed in the scope of the batching operation.
         requirement_level:
-          conditionally_required: >
-            If available within the messaging system, and only if the span describes operations that operate with message batches.
+          conditionally_required: If the span describes operation on a batch of messages.
         note: >
-            Instrumentation MUST set it on batch `receive` operations regardless
-            of the actual number of received messages (e.g. 0, 1, or more).
-            Instrumentations SHOULD set `messaging.batch.size` on spans representing
-            other operations - when it's not set, it's assumed to be `1`.
+            Instrumentations SHOULD NOT set `messaging.batch.size` on spans that operate with a single message.
+            When client library supports batch and single-message API for the same operation, instrumentations SHOULD
+            use `messaging.batch.size` for batching APIs and SHOULD NOT use it for single-message APIs.
         examples: [0, 1, 2]
       - ref: messaging.message.id
         requirement_level:
           recommended: Only if span represents operation on a single message.
       - ref: messaging.message.conversation_id
         requirement_level:
-          recommended: Only if messaging.batch.size is not set or if the value applies to all messages in the batch.
+          recommended: Only if span represents operation on a single message.
       - ref: messaging.message.payload_size_bytes
         requirement_level:
           recommended: Only if span represents operation on a single message.
