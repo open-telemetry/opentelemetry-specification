@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Split out Event API from Log API
+  ([#2941](https://github.com/open-telemetry/opentelemetry-specification/pull/2941))
+
 ### Resource
 
 ### Semantic Conventions
