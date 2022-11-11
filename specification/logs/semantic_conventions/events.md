@@ -4,11 +4,8 @@
 
 This document describes the attributes of standalone Events that are represented
 in the data model by `LogRecord`s. Events are recorded as LogRecords that are shaped
-in a special way:
-
-- They have a LogRecord attribute `event.name` (and possibly other LogRecord attributes).
-- They have an InstrumentationScope with a non-empty `Name` and with an
-  InstrumentationScope attribute `event.domain` (and possibly other InstrumentationScope attributes).
+in a special way: Event LogRecords have the attributes `event.domain`
+and `event.name` (and possibly other LogRecord attributes).
 
 The `event.domain` attribute is used to logically separate events from different
 systems. For example, to record Events from browser apps, mobile apps and

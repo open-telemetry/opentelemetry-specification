@@ -92,7 +92,8 @@ the scope has a version (e.g. a library version). Example value: 1.0.0.
 - `schema_url` (optional): Specifies the Schema URL that should be recorded in
 the emitted telemetry.
 - `event_domain` (optional): Specifies the domain for the Events emitted, which
-should be added as `event.domain` attribute of the instrumentation scope.
+  MUST be added as an attribute with the key `event.domain`
+  to [emitted Events](#emit-event).
 - `include_trace_context` (optional): Specifies whether the Trace Context should
 automatically be passed on to the Events and Logs emitted by the Logger. This
 SHOULD be true by default.
@@ -153,7 +154,8 @@ This function MAY be named `logEvent`.
 * `logRecord` - the [LogRecord](#logrecord) representing the Event.
 
 Events require the `event.domain` attribute. The API MUST not allow creating an
-Event if the Logger instance doesn't have `event.domain` scope attribute.
+Event if `event_domain` was not specified when
+the [Logger was obtained](#get-a-logger).
 
 #### Emit LogRecord
 
