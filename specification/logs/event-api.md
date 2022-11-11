@@ -22,10 +22,6 @@ The Event API offers convenience methods
 for [emitting LogRecords](./api.md#emit-logrecord) that conform
 to the [semantic conventions for Events](./semantic_conventions/events.md).
 
-Unlike the Trace, Metric and Log APIs, the Event API does not support
-alternative implementations. Instead, the Event API is a concrete implementation
-which delegates to the [Log API](./api.md).
-
 ## EventLogger
 
 The `EventLogger` is the entrypoint of the Event API, and is responsible for
