@@ -336,7 +336,7 @@ Attributes in `messaging.message` or `messaging.{system}.message` namespace desc
 
 For batch operations per-message attributes are usually different and cannot be set on the corresponding span and MAY be set on links. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
 
-Some messaging systems such as Kafka, Azure EventGrid allow to publish a single batch of messages to different topics, in such cases attributes in `messaging.destination` and `messaging.source` MAY be 
+Some messaging systems such as Kafka, Azure EventGrid allow to publish a single batch of messages to different topics, in such cases attributes in `messaging.destination` and `messaging.source` MAY be
 set on links. Corresponding instrumentations MAY set source and destination attributes on the span if all messages in the batch share the same destination or source.
 
 ### Attributes specific to certain messaging systems
