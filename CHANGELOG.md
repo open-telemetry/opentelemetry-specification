@@ -23,6 +23,9 @@ release.
 
 ### Semantic Conventions
 
+- Add RabbitMQ message header attributes to semantic conventions.
+([#2946](https://github.com/open-telemetry/opentelemetry-specification/pull/2946))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
