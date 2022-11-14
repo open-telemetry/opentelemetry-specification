@@ -264,9 +264,14 @@ In RabbitMQ, the destination is defined by an *exchange* and a *routing key*.
 `messaging.destination` MUST be set to the name of the exchange. This will be an empty string if the default exchange is used.
 
 <!-- semconv messaging.rabbitmq -->
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `messaging.rabbitmq.routing_key` | string | RabbitMQ message routing key. | `myKey` | Conditionally Required: If not empty. |
+| Attribute                                 | Type   | Description                                                                                                                                                         | Examples                                                          | Requirement Level                     |
+|-------------------------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|---------------------------------------|
+| `messaging.rabbitmq.routing_key`          | string | RabbitMQ message routing key.                                                                                                                                       | `myKey`                                                           | Conditionally Required: If not empty. |
+| `messaging.rabbitmq.message.header.<key>` | string | RabbitMQ message headers. `<key>` being the normalized message header name (lowercase, with - characters replaced by _), the value being the header values. [1] [2] | `messaging.rabbitmq.message.header.my_header=["my_header_value"]` | Recommended                           |
+
+**[1]:** Instrumentations SHOULD require an explicit configuration of which message headers are to be captured. Including all headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
+
+**[2]:** The attribute value MUST consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the library provides access to message headers.
 <!-- endsemconv -->
 
 #### Apache Kafka
