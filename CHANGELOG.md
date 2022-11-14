@@ -15,6 +15,10 @@ release.
 
 ### Logs
 
+- Move `event.domain` from InstrumentationScope attributes to LogRecord
+  attributes.
+  ([#2940](https://github.com/open-telemetry/opentelemetry-specification/pull/2940))
+
 ### Resource
 
 ### Semantic Conventions
