@@ -256,4 +256,4 @@ groups:
             - id: unauthenticated
               value: UNAUTHENTICATED
         requirement_level: required
-        brief: "The [numeric error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request."
+        brief: "The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request."
