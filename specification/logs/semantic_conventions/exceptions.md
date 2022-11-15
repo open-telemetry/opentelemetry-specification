@@ -3,8 +3,8 @@
 **Status**: [Experimental](../../document-status.md)
 
 This document defines semantic conventions for recording exceptions on
-[logs](../api.md#emit-logrecord) and [events](../api.md#emit-event) emitted
-through the [Logger API](../api.md#logger).
+[logs](../api.md#emit-logrecord) and [events](../event-api.md#emit-event)
+emitted through the [Logger API](../api.md#logger).
 
 <!-- toc -->
 
