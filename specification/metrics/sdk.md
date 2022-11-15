@@ -1120,16 +1120,24 @@ sources MUST implement so they can be plugged into an OpenTelemetry
 [MetricReader](#metricreader) as a source of aggregated metric data. The SDK's
 in-memory state MAY implement the `MetricBridge` interface for convenience.
 
+`MetricBridge` implementations SHOULD accept configuration for the
+`AggregationTemporality` of produced metrics. SDK authors MAY provide utility
+libraries to facilitate conversion between delta and cumulative temporalities.
+
+If the batch of [Metric points](./data-model.md#metric-points) returned by
+`Produce()` includes a [Resource](../resource/sdk.md), the `MetricBridge` MUST
+accept configuration for the [Resource](../resource/sdk.md).
+
 ```text
 +-----------------+            +--------------+
 |                 | Metrics... |              |
 | In-memory state +------------> MetricReader |
 |                 |            |              |
-+-----------------+            +--------------+
-
-+-----------------+            +--------------+
++-----------------+            |              |
+                               |              |
++-----------------+            |              |
 |                 | Metrics... |              |
-| MetricBridge    +------------> MetricReader |
+| MetricBridge    +------------>              |
 |                 |            |              |
 +-----------------+            +--------------+
 ```
