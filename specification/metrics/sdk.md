@@ -758,8 +758,8 @@ common configurable aspects of the OpenTelemetry Metrics SDK and
 determines the following capabilities:
 
 * Registering a [MetricBridge](#metricbridge)
-* Collecting metrics from the registered [MetricBridge](#metricbridge) on
-  demand.
+* Collecting metrics from the SDK and any registered
+  [MetricBridges](#metricbridge) on demand.
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
@@ -828,13 +828,12 @@ functions.
 
 Register causes the MetricReader to use the provided
 [MetricBridge](#metricbridge) for as a source of aggregated metric data in
-subsequent invokations of Collect. It MUST NOT allow more than one
-[MetricBridge](#metricbridge) or [MeterProvider](#meterprovider) instance
-to be registered with the [MetricReader](#metricreader).
+subsequent invokations of Collect.
 
 If the [MeterProvider](#meterprovider) is an instance of of
 [MetricBridge](#metricbridge), this MAY be used to register the
-MeterProvider.
+MeterProvider, but MUST NOT allow multiple [MeterProviders](#meterprovider)
+to be registered with the same MetricReader.
 
 #### Collect
 
