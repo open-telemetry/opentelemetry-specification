@@ -1158,6 +1158,11 @@ failed or timed out. When the `Produce` operation fails, the `MetricBridge`
 MAY return successfully collected results and a failed reasons list to the
 caller.
 
+If a batch of [Metric points](./data-model.md#metric-points) can include
+[`InstrumentationScope`](../glossary.md#instrumentation-scope) information,
+`Produce` SHOULD include a single InstrumentationScope which identifies the
+bridge.
+
 ## Defaults and configuration
 
 The SDK MUST provide configuration according to the [SDK environment
