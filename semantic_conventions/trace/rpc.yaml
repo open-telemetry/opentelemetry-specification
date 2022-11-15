@@ -23,9 +23,9 @@ groups:
             - id: apache_dubbo
               value: 'apache_dubbo'
               brief: 'Apache Dubbo'
-            - id: connect
-              value: 'connect'
-              brief: 'connect'
+            - id: buf_connect
+              value: 'buf_connect'
+              brief: 'buf Connect'
       - id: service
         type: string
         requirement_level: recommended
@@ -214,8 +214,8 @@ groups:
         type: int
         brief: "Uncompressed size of the message in bytes."
 
-  - id: rpc.connect
-    prefix: rpc.connect
+  - id: rpc.buf_connect
+    prefix: rpc.buf_connect
     type: span
     extends: rpc
     brief: 'Tech-specific attributes for Connect.'
