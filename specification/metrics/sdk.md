@@ -37,7 +37,7 @@ linkTitle: SDK
   * [Exemplar defaults](#exemplar-defaults)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
-    + [Register(MetricProducer)](#registermetricproducer)
+    + [Register(MetricBridge)](#registermetricbridge)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
@@ -48,7 +48,7 @@ linkTitle: SDK
       - [ForceFlush()](#forceflush)
       - [Shutdown()](#shutdown)
   * [Pull Metric Exporter](#pull-metric-exporter)
-- [MetricProducer](#metricproducer)
+- [MetricBridge](#metricbridge)
   * [Interface Definition](#interface-definition-1)
     + [Produce() batch](#produce-batch)
 - [Defaults and configuration](#defaults-and-configuration)
@@ -757,8 +757,8 @@ measurements using the equivalent of the following naive algorithm:
 common configurable aspects of the OpenTelemetry Metrics SDK and
 determines the following capabilities:
 
-* Registering a [MetricProducer](#metricproducer)
-* Collecting metrics from the registered [MetricProducer](#metricproducer) on
+* Registering a [MetricBridge](#metricbridge)
+* Collecting metrics from the registered [MetricBridge](#metricbridge) on
   demand.
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
@@ -786,7 +786,7 @@ Delta](supplementary-guidelines.md#asynchronous-example-delta-temporality) aggre
 temporality.
 
 The `MetricReader` is not required to ensure data points from a non-SDK
-[MetricProducer](#metricproducer) are output in the configured aggregation
+[MetricBridge](#metricbridge) are output in the configured aggregation
 temporality, as these data points are not collected using OpenTelemetry
 instruments.
 
@@ -824,22 +824,22 @@ functions.
 
 ### MetricReader operations
 
-#### Register(MetricProducer)
+#### Register(MetricBridge)
 
 Register causes the MetricReader to use the provided
-[MetricProducer](#metricproducer) for as a source of aggregated metric data in
+[MetricBridge](#metricbridge) for as a source of aggregated metric data in
 subsequent invokations of Collect. It MUST NOT allow more than one
-[MetricProducer](#metricproducer) or [MeterProvider](#meterprovider) instance
+[MetricBridge](#metricbridge) or [MeterProvider](#meterprovider) instance
 to be registered with the [MetricReader](#metricreader).
 
 If the [MeterProvider](#meterprovider) is an instance of of
-[MetricProducer](#metricproducer), this MAY be used to register the
+[MetricBridge](#metricbridge), this MAY be used to register the
 MeterProvider.
 
 #### Collect
 
 Collects the metrics from the SDK and any registered
-[MetricProducers](#metricproducer). If there are
+[MetricBridges](#metricbridge). If there are
 [asynchronous SDK Instruments](./api.md#asynchronous-instrument-api) involved,
 their callback functions will be triggered.
 
@@ -1111,14 +1111,14 @@ modeled to interact with other components in the SDK:
                                  +-----------------------------+
   ```
 
-## MetricProducer
+## MetricBridge
 
 **Status**: [Experimental](../document-status.md)
 
-`MetricProducer` defines the interface which bridges to third-party metric
+`MetricBridge` defines the interface which bridges to third-party metric
 sources MUST implement so they can be plugged into an OpenTelemetry
 [MetricReader](#metricreader) as a source of aggregated metric data. The SDK's
-in-memory state MAY implement the `MetricProducer` interface for convenience.
+in-memory state MAY implement the `MetricBridge` interface for convenience.
 
 ```text
 +-----------------+            +--------------+
@@ -1129,24 +1129,24 @@ in-memory state MAY implement the `MetricProducer` interface for convenience.
 
 +-----------------+            +--------------+
 |                 | Metrics... |              |
-| MetricProducer  +------------> MetricReader |
+| MetricBridge    +------------> MetricReader |
 |                 |            |              |
 +-----------------+            +--------------+
 ```
 
 ### Interface Definition
 
-A `MetricProducer` MUST support the following functions:
+A `MetricBridge` MUST support the following functions:
 
 #### Produce() batch
 
-`Produce` provides metrics from the MetricProducer to the caller. `Produce`
+`Produce` provides metrics from the MetricBridge to the caller. `Produce`
 MUST return a batch of [Metric points](./data-model.md#metric-points).
 `Produce` does not have any required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
 
 `Produce` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out. When the `Produce` operation fails, the `MetricProducer`
+failed or timed out. When the `Produce` operation fails, the `MetricBridge`
 MAY return successfully collected results and a failed reasons list to the
 caller.
 
