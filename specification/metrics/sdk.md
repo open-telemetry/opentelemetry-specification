@@ -37,6 +37,7 @@ linkTitle: SDK
   * [Exemplar defaults](#exemplar-defaults)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
+    + [Register(MetricProducer)](#registermetricproducer)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
@@ -47,6 +48,9 @@ linkTitle: SDK
       - [ForceFlush()](#forceflush)
       - [Shutdown()](#shutdown)
   * [Pull Metric Exporter](#pull-metric-exporter)
+- [MetricProducer](#metricproducer)
+  * [Interface Definition](#interface-definition-1)
+    + [Produce() batch](#produce-batch)
 - [Defaults and configuration](#defaults-and-configuration)
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
@@ -753,7 +757,9 @@ measurements using the equivalent of the following naive algorithm:
 common configurable aspects of the OpenTelemetry Metrics SDK and
 determines the following capabilities:
 
-* Collecting metrics from the SDK on demand.
+* Registering a [MetricProducer](#metricproducer)
+* Collecting metrics from the registered [MetricProducer](#metricproducer) on
+  demand.
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
@@ -770,14 +776,19 @@ used with pull-based metrics collection.  A common sub-class of
 `MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
 to be used typically with push-based metrics collection.
 
-The `MetricReader` MUST ensure that data points are output in the
-configured aggregation temporality for each instrument kind.  For
-synchronous instruments being output with Cumulative temporality, this
-means converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
+The `MetricReader` MUST ensure that data points from OpenTelemetry
+[instruments](./api.md#instrument) are output in the configured aggregation
+temporality for each instrument kind. For synchronous instruments being output
+with Cumulative temporality, this means converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
 aggregation temporality.  For asynchronous instruments being output
 with Delta temporality, this means converting [Cumulative to
 Delta](supplementary-guidelines.md#asynchronous-example-delta-temporality) aggregation
 temporality.
+
+The `MetricReader` is not required to ensure data points from a non-SDK
+[MetricProducer](#metricproducer) are output in the configured aggregation
+temporality, as these data points are not collected using OpenTelemetry
+instruments.
 
 The SDK MUST support multiple `MetricReader` instances to be registered on the
 same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
@@ -813,11 +824,24 @@ functions.
 
 ### MetricReader operations
 
+#### Register(MetricProducer)
+
+Register causes the MetricReader to use the provided
+[MetricProducer](#metricproducer) for as a source of aggregated metric data in
+subsequent invokations of Collect. It MUST NOT allow more than one
+[MetricProducer](#metricproducer) or [MeterProvider](#meterprovider) instance
+to be registered with the [MetricReader](#metricreader).
+
+If the [MeterProvider](#meterprovider) is an instance of of
+[MetricProducer](#metricproducer), this MAY be used to register the
+MeterProvider.
+
 #### Collect
 
-Collects the metrics from the SDK. If there are [asynchronous
-Instruments](./api.md#asynchronous-instrument-api) involved, their callback
-functions will be triggered.
+Collects the metrics from the SDK and any registered
+[MetricProducers](#metricproducer). If there are
+[asynchronous SDK Instruments](./api.md#asynchronous-instrument-api) involved,
+their callback functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Collect` operation fails or times out on
@@ -1086,6 +1110,45 @@ modeled to interact with other components in the SDK:
                                  |                             |
                                  +-----------------------------+
   ```
+
+## MetricProducer
+
+**Status**: [Experimental](../document-status.md)
+
+`MetricProducer` defines the interface which bridges to third-party metric
+sources MUST implement so they can be plugged into an OpenTelemetry
+[MetricReader](#metricreader) as a source of aggregated metric data. The SDK's
+in-memory state MAY implement the `MetricProducer` interface for convenience.
+
+```text
++-----------------+            +--------------+
+|                 | Metrics... |              |
+| In-memory state +------------> MetricReader |
+|                 |            |              |
++-----------------+            +--------------+
+
++-----------------+            +--------------+
+|                 | Metrics... |              |
+| MetricProducer  +------------> MetricReader |
+|                 |            |              |
++-----------------+            +--------------+
+```
+
+### Interface Definition
+
+A `MetricProducer` MUST support the following functions:
+
+#### Produce() batch
+
+`Produce` provides metrics from the MetricProducer to the caller. `Produce`
+MUST return a batch of [Metric points](./data-model.md#metric-points).
+`Produce` does not have any required parameters, however, [OpenTelemetry
+SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
+
+`Produce` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out. When the `Produce` operation fails, the `MetricProducer`
+MAY return successfully collected results and a failed reasons list to the
+caller.
 
 ## Defaults and configuration
 
