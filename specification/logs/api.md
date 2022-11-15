@@ -1,4 +1,4 @@
-# Events and Logs API Interface
+# Logs API Interface
 
 **Status**: [Experimental](../document-status.md)
 
@@ -14,7 +14,6 @@
     + [Get a Logger](#get-a-logger)
 - [Logger](#logger)
   * [Logger operations](#logger-operations)
-    + [Emit Event](#emit-event)
     + [Emit LogRecord](#emit-logrecord)
 - [LogRecord](#logrecord)
 - [Usage](#usage)
@@ -26,20 +25,19 @@
 
 </details>
 
-The Events and Logs API consist of these main classes:
+The Logs API consist of these main classes:
 
 * LoggerProvider is the entry point of the API. It provides access to Loggers.
 * Logger is the class responsible for
-  creating [Events](./semantic_conventions/events.md)
-  and [Logs](./data-model.md#log-and-event-record-definition) as LogRecords.
+  emitting [Logs](./data-model.md#log-and-event-record-definition) as
+  LogRecords.
 
 LoggerProvider/Logger are analogous to TracerProvider/Tracer.
 
 ```mermaid
 graph TD
     A[LoggerProvider] -->|Get| B(Logger)
-    B --> C(Event)
-    B --> D(Log)
+    B --> C(Log)
 ```
 
 ## LoggerProvider
@@ -91,12 +89,9 @@ produced by this library.
 the scope has a version (e.g. a library version). Example value: 1.0.0.
 - `schema_url` (optional): Specifies the Schema URL that should be recorded in
 the emitted telemetry.
-- `event_domain` (optional): Specifies the domain for the Events emitted, which
-  MUST be added as an attribute with the key `event.domain`
-  to [emitted Events](#emit-event).
 - `include_trace_context` (optional): Specifies whether the Trace Context should
-automatically be passed on to the Events and Logs emitted by the Logger. This
-SHOULD be true by default.
+  automatically be passed on to the LogRecords emitted by the Logger. This
+  SHOULD be true by default.
 - `attributes` (optional): Specifies the instrumentation scope attributes to
 associate with emitted telemetry.
 
@@ -111,7 +106,7 @@ identifying fields are equal. The term *distinct* applied to Loggers describes
 instances where at least one identifying field has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a Logger again with
-the same name+version+schema_url+event_domain+include_trace_context+attributes
+the same name+version+schema_url+include_trace_context+attributes
 to pick up configuration changes. This can be achieved either by allowing to
 work with an outdated configuration or by ensuring that new configuration
 applies also to previously returned Loggers.
@@ -120,7 +115,7 @@ Note: This could, for example, be implemented by storing any mutable
 configuration in the `LoggerProvider` and having `Logger` implementation objects
 have a reference to the `LoggerProvider` from which they were obtained.
 If configuration must be stored per-Logger (such as disabling a certain `Logger`),
-the `Logger` could, for example, do a look-up with its name+version+schema_url+event_domain+include_trace_context+attributes
+the `Logger` could, for example, do a look-up with its name+version+schema_url+include_trace_context+attributes
 in a map in the `LoggerProvider`, or the `LoggerProvider` could maintain a registry
 of all returned `Logger`s and actively update their configuration if it changes.
 
@@ -130,7 +125,7 @@ the emitted data format is capable of representing such association.
 
 ## Logger
 
-The `Logger` is responsible for emitting Events and Logs.
+The `Logger` is responsible for emitting `LogRecord`s
 
 Note that `Logger`s should not be responsible for configuration. This should be
 the responsibility of the `LoggerProvider` instead.
@@ -138,24 +133,6 @@ the responsibility of the `LoggerProvider` instead.
 ### Logger operations
 
 The Logger MUST provide functions to:
-
-#### Emit Event
-
-Emit a `LogRecord` representing an Event to the processing pipeline.
-
-This function MAY be named `logEvent`.
-
-**Parameters:**
-
-* `name` - the Event name. This argument MUST be recorded as a `LogRecord`
-  attribute with the key `event.name`. Care MUST be taken by the implementation
-  to not override or delete this attribute while the Event is emitted to
-  preserve its identity.
-* `logRecord` - the [LogRecord](#logrecord) representing the Event.
-
-Events require the `event.domain` attribute. The API MUST not allow creating an
-Event if `event_domain` was not specified when
-the [Logger was obtained](#get-a-logger).
 
 #### Emit LogRecord
 
@@ -173,7 +150,7 @@ by end users or other instrumentation.
 
 ## LogRecord
 
-The API emits [Events](#emit-event) and [LogRecords](#emit-logrecord) using
+The API emits [LogRecords](#emit-logrecord) using
 the `LogRecord` [data model](data-model.md).
 
 A function receiving this as an argument MUST be able to set the following
