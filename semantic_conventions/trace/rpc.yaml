@@ -25,7 +25,7 @@ groups:
               brief: 'Apache Dubbo'
             - id: buf_connect
               value: 'buf_connect'
-              brief: 'buf Connect'
+              brief: 'Buf Connect'
       - id: service
         type: string
         requirement_level: recommended

@@ -100,6 +100,7 @@ measurements.
 | `java_rmi` | Java RMI |
 | `dotnet_wcf` | .NET WCF |
 | `apache_dubbo` | Apache Dubbo |
+| `buf_connect` | Buf Connect |
 <!-- endsemconv -->
 
 To avoid high cardinality, implementations should prefer the most stable of `net.peer.name` or
