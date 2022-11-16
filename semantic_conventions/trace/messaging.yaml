@@ -62,11 +62,11 @@ groups:
               value: "receive"
             - id: process
               value: "process"
+        requirement_level: required
         brief: >
           A string identifying the kind of messaging operation as defined in the
           [Operation names](#operation-names) section above.
-        requirement_level:
-          conditionally_required:
+        note: If custom value is used, it MUST known to be of low cardinality.
       - id: batch.size
         type: int
         brief: The number of messages sent, received, or processed in the scope of the batching operation.
