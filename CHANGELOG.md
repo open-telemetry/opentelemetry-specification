@@ -15,6 +15,12 @@ release.
 
 ### Logs
 
+- Move `event.domain` from InstrumentationScope attributes to LogRecord
+  attributes.
+  ([#2940](https://github.com/open-telemetry/opentelemetry-specification/pull/2940))
+- Split out Event API from Log API
+  ([#2941](https://github.com/open-telemetry/opentelemetry-specification/pull/2941))
+
 ### Resource
 
 ### Semantic Conventions
@@ -76,6 +82,8 @@ release.
   ([#2881](https://github.com/open-telemetry/opentelemetry-specification/pull/2881))
 - Add `process.runtime.jvm.memory.usage_after_last_gc` metric to semantic conventions.
   ([#2901](https://github.com/open-telemetry/opentelemetry-specification/pull/2901))
+- Add `process.runtime.jvm.gc.duration` metric to semantic conventions.
+  ([#2903](https://github.com/open-telemetry/opentelemetry-specification/pull/2903))
 
 ### Compatibility
 

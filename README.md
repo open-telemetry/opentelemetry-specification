@@ -29,7 +29,7 @@ APAC timezone friendly meeting is held Tuesdays, 4PM pacific time. See
 Escalations to technical committee may be made over the
 [e-mail](https://github.com/open-telemetry/community#tc-technical-committee).
 Technical committee holds regular meetings, notes are held
-[here](https://docs.google.com/document/d/17v2RMZlJZkgoPYHZhIFTVdDqQMIAH8kzo8Sl2kP3cbY/edit?usp=sharing).
+[here](https://docs.google.com/document/d/1hOHPCu5TGenqTeWPB9qQB_qd33uITZBcvK1FnWxYJAw/edit?usp=sharing).
 
 ## Specification compliance matrix by language
 
