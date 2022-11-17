@@ -830,7 +830,7 @@ Register causes the MetricReader to use the provided
 [MetricBridge](#metricbridge) for as a source of aggregated metric data in
 subsequent invokations of Collect.
 
-If the [MeterProvider](#meterprovider) is an instance of of
+If the [MeterProvider](#meterprovider) is an instance of
 [MetricBridge](#metricbridge), this MAY be used to register the
 MeterProvider, but MUST NOT allow multiple [MeterProviders](#meterprovider)
 to be registered with the same MetricReader.
