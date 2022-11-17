@@ -37,7 +37,7 @@ linkTitle: SDK
   * [Exemplar defaults](#exemplar-defaults)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
-    + [Register(MetricBridge)](#registermetricbridge)
+    + [RegisterBridge(metricBridge)](#registerbridgemetricbridge)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
@@ -824,11 +824,13 @@ functions.
 
 ### MetricReader operations
 
-#### Register(MetricBridge)
+#### RegisterBridge(metricBridge)
 
-Register causes the MetricReader to use the provided
+RegisterBridge causes the MetricReader to use the provided
 [MetricBridge](#metricbridge) for as a source of aggregated metric data in
-subsequent invokations of Collect.
+subsequent invocations of Collect. RegisterBridge is expected to be called
+during initialization, but MAY be invoked later.  Multiple registrations
+of the same metricBridge MAY result in duplicate metric data being collected.
 
 If the [MeterProvider](#meterprovider) is an instance of
 [MetricBridge](#metricbridge), this MAY be used to register the
