@@ -35,6 +35,10 @@ cascade:
   - [Protocol](protocol/README.md)
     - [Metrics](metrics/data-model.md)
     - [Logs](logs/data-model.md)
+  - Compatibility
+    - [OpenCensus](compatibility/opencensus.md)
+    - [OpenTracing](compatibility/opentracing.md)
+    - [Prometheus and OpenMetrics](compatibility/prometheus_and_openmetrics.md)
 
 ## Notation Conventions and Compliance
 
