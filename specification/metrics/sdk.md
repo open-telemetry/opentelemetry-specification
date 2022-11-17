@@ -757,7 +757,7 @@ measurements using the equivalent of the following naive algorithm:
 common configurable aspects of the OpenTelemetry Metrics SDK and
 determines the following capabilities:
 
-* Registering a [MetricBridge](#metricbridge)
+* Registering [MetricBridge](#metricbridge)(s)
 * Collecting metrics from the SDK and any registered
   [MetricBridges](#metricbridge) on demand.
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
