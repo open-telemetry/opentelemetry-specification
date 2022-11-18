@@ -913,9 +913,9 @@ memory when they become stale, making it possible to recover from an
 explosion of cardinality from one collection cycle to the next
 provided the application stops using excessive cardinality.  However,
 for Readers that have Synchronous instruments configured with
-Cumulative aggregation temporality, once a limit are reached the
-library cannot recover and SHOULD be disabled for the lifetime of the
-SDK.
+Cumulative aggregation temporality, once a limit is reached the
+library cannot recover and the SDK SHOULD disable it for the remaining
+lifetime of the SDK.
 
 The configurable limits are:
 
