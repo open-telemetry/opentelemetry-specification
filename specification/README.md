@@ -55,8 +55,8 @@ all the following conditions:
 
 * It MUST satisfy all the "MUST", "MUST NOT", "REQUIRED", "SHALL", and "SHALL
 NOT" requirements defined in the [specification][].
-* It MUST NOT provide additional feature or functionality that are not covered
-  by the [specification][], except for any of the following situations:
+* It MUST NOT provide additional features or functionalities that are not
+  covered by the [specification][], except for any of the following situations:
   * Such feature/functionality is very specific to a programming language, runtime
     or framework.
   * Anything that is retrospecitive, for example, a feature/functionality which
