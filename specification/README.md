@@ -50,12 +50,18 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 [[RFC8174](https://tools.ietf.org/html/rfc8174)] when, and only when, they
 appear in all capitals, as shown here.
 
-An implementation of the [specification][] is not compliant if it fails to
-satisfy one or more of the "MUST", "MUST NOT", "REQUIRED", "SHALL", or "SHALL
-NOT" requirements defined in the [specification][]. Conversely, an
-implementation of the [specification][] is compliant if it satisfies all the
-"MUST", "MUST NOT", "REQUIRED", "SHALL", and "SHALL NOT" requirements defined in
-the [specification][].
+An implementation of the [specification][] is compliant if and only if it meets
+all the following conditions:
+
+* It MUST satisfy all the "MUST", "MUST NOT", "REQUIRED", "SHALL", and "SHALL
+NOT" requirements defined in the [specification][].
+* It MUST NOT provide additional feature or functionality that are not covered
+  by the [specification][], except for any of the following situations:
+  * Such feature/functionality is very specific to a programming language, runtime
+    or framework.
+  * Anything that is retrospecitive, for example, a feature/functionality which
+    has been released as a stable/GA offering before this compliance rule was
+    formalized.
 
 ## Project Naming
 
