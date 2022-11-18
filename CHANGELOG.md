@@ -35,6 +35,10 @@ release.
 
 ### Common
 
+- Clarify compliance requirement by restricting implementations from providing
+  features/functionalities that are not covered by the specification.
+  ([#2968](https://github.com/open-telemetry/opentelemetry-specification/pull/2968))
+
 ## v1.15.0 (2022-11-09)
 
 ### Context
