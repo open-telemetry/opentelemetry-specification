@@ -40,6 +40,7 @@ linkTitle: SDK
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
+  * [MetricReader configurable limits](#metricreader-configurable-limits)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
@@ -763,6 +764,7 @@ SHOULD provide at least the following:
 * The `exporter` to use, which is a `MetricExporter` instance.
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
+* The configurable limits to be applied.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -876,6 +878,54 @@ from `MetricReader` and start a background task which calls the inherited
 * After another 15 seconds (at the end of the second 30 second interval),
   the background task calls `Collect()` which passes metrics to the push
   exporter.
+
+### MetricReader configurable limits
+
+**Status**: [Experimental](../document-status.md)
+
+MetricReader SHOULD support being configured with limits to be applied
+to metrics produced from a single Instrumentation Library Scope.  This
+mechanism supports protecting metrics pipelines from excessive data
+production, which is usually caused by a problem known as "explosition
+of cardinality", in which the number of timeseries produced by the SDK
+exceeds a reasonable number.  These limits help protect the overall
+system from individual sources of excessive metrics instrumentation.
+
+When the limits are reached by an the individual instrumentation
+library scope, the entire batch of metrics for the scope MUST be
+dropped and an error reported to the user indicating:
+
+- Detail about the limit that was exceeded (e.g., the library name and
+  version, the configured limit, the instruments of that library
+  ranked by cardinality).
+- Recommend the user to configure a [View](#view) that filters the
+  offending cardinality or drops selected instruments to correct the problem.
+
+Note that limits expressed here refer to exported data for a single
+collection cycle.  The term "timeseries" in each of these limits
+indicates the number of data points produced over one interval.
+
+Under some circumstances, depending on the configured aggregation
+temporality, the SDK may be able to recover after these limits are
+reached.  In particular, for Synchronous instruments configured with
+Delta aggregation temporality, the SDK SHOULD remove timeseries from
+memory when they become stale, making it possible to recover from an
+explosion of cardinality from one collection cycle to the next
+provided the application stops using excessive cardinality.  However,
+for Readers that have Synchronous instruments configured with
+Cumulative aggregation temporality, once a limit are reached the
+library cannot recover and SHOULD be disabled for the lifetime of the
+SDK.
+
+The configurable limits are:
+
+1. The number of timeseries per instrument, with recommended default value 2000.
+2. The number of timeseries per instrumentation library scope, with recommended default value 2000.
+
+For both of these limits, the limit MAY be unset to indicate an
+unlimited configuration and the zero value is considered invalid.
+OpenTelemetry SDKs SHOULD NOT use an unlimited memory configuration by
+default.
 
 ## MetricExporter
 

@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Recommended limits applied to MetricReaders by default to protect
+  metrics pipelines against excessive data production by a single
+  instrumentation library or instrument.
+
 ### Logs
 
 - Move `event.domain` from InstrumentationScope attributes to LogRecord
