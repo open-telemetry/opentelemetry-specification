@@ -15,7 +15,8 @@ release.
 
 - Recommended limits applied to MetricReaders by default to protect
   metrics pipelines against excessive data production by a single
-  instrumentation library or instrument.
+  instrumentation library or instrument. 
+  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 
 ### Logs
 
