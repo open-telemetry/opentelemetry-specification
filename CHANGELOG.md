@@ -25,6 +25,9 @@ release.
 
 ### Semantic Conventions
 
+- Add IBM Cloud as a cloud provider.
+  ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
