@@ -159,3 +159,40 @@ Below is a table of attributes that SHOULD be included on client and server RPC 
 <!-- endsemconv -->
 
 [gRPC]: https://grpc.io/
+
+## Connect conventions
+
+For remote procedure calls via [connect](http://connect.build), additional conventions are described in this section.
+
+`rpc.system` MUST be set to `"buf_connect"`.
+
+### Connect Attributes
+
+Below is a table of attributes that SHOULD be included on client and server RPC measurements when `rpc.system` is `"buf_connect"`.
+
+<!-- semconv rpc.buf_connect -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `rpc.buf_connect.error_code` | string | The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request. | `CANCELLED` | Conditionally Required: If applicable. |
+
+`rpc.buf_connect.error_code` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `CANCELLED` | cancelled |
+| `UNKNOWN` | unknown |
+| `INVALID_ARGUMENT` | invalid_argument |
+| `DEADLINE_EXCEEDED` | deadline_exceeded |
+| `NOT_FOUND` | not_found |
+| `ALREADY_EXISTS` | already_exists |
+| `PERMISSION_DENIED` | permission_denied |
+| `RESOURCE_EXHAUSTED` | resource_exhausted |
+| `FAILED_PRECONDITION` | failed_precondition |
+| `ABORTED` | aborted |
+| `OUT_OF_RANGE` | out_of_range |
+| `UNIMPLEMENTED` | unimplemented |
+| `INTERNAL` | internal |
+| `UNAVAILABLE` | unavailable |
+| `DATA_LOSS` | data_loss |
+| `UNAUTHENTICATED` | unauthenticated |
+<!-- endsemconv -->
