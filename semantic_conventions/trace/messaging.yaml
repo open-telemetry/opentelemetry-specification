@@ -66,7 +66,7 @@ groups:
         brief: >
           A string identifying the kind of messaging operation as defined in the
           [Operation names](#operation-names) section above.
-        note: If custom value is used, it MUST known to be of low cardinality.
+        note: If a custom value is used, it MUST known to be of low cardinality.
       - id: batch.size
         type: int
         brief: The number of messages sent, received, or processed in the scope of the batching operation.
@@ -221,6 +221,18 @@ groups:
         requirement_level:
           recommended: when supported by messaging system and only if the source is anonymous. If missing, assumed to be false.
         brief: 'A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name).'
+      - ref: messaging.destination.name
+        requirement_level:
+          recommended: If known on consumer
+      - ref: messaging.destination.kind
+        requirement_level:
+          recommended: If known on consumer
+      - ref: messaging.destination.temporary
+        requirement_level:
+          recommended: If known on consumer      
+      - ref: messaging.destination.anonymous
+        requirement_level:
+          recommended: If known on consumer      
 
   - id: messaging.consumer.synchronous
     prefix: messaging
@@ -238,7 +250,7 @@ groups:
     brief: >
       Attributes for RabbitMQ
     attributes:
-      - id: message.routing_key
+      - id: destination.routing_key
         type: string
         requirement_level:
           conditionally_required: If not empty.
@@ -274,7 +286,7 @@ groups:
         brief: >
           Client Id for the Consumer or Producer that is handling the message.
         examples: 'client-5'
-      - id: message.partition
+      - id: destination.partition
         type: int
         brief: >
           Partition the message is sent to.
@@ -284,6 +296,11 @@ groups:
         brief: >
           The offset of a record in the corresponding Kafka partition.
         examples: 42
+      - id: source.partition
+        type: int
+        brief: >
+          Partition the message is received from.
+        examples: 2
       - id: message.tombstone
         type: boolean
         requirement_level:

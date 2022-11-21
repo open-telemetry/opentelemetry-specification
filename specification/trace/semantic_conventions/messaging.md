@@ -155,7 +155,7 @@ The destination name SHOULD only be used for the span name if it is known to be 
 This can be assumed if it is statically derived from application code or configuration.
 Wherever possible, the real destination names after resolving logical or aliased names SHOULD be used.
 If the destination name is dynamic, such as a [conversation ID](#conversations) or a value obtained from a `Reply-To` header, it SHOULD NOT be used for the span name.
-In these cases, an artificial destination name that best expresses the destination, or a generic, static fallback like `"(anonymous)"` for [anonymous destinations](#temporary-and-anonymous-destinations) SHOULD be used instead.anonymous
+In these cases, an artificial destination name that best expresses the destination, or a generic, static fallback like `"(anonymous)"` for [anonymous destinations](#temporary-and-anonymous-destinations) SHOULD be used instead.
 
 The values allowed for `<operation name>` are defined in the section [Operation names](#operation-names) below.
 If the format above is used, the operation name MUST match the `messaging.operation` attribute defined for message consumer spans below.
@@ -206,7 +206,7 @@ The following operations related to messages are defined for these semantic conv
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [11] |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [12] |
 
-**[1]:** If custom value is used, it MUST known to be of low cardinality.
+**[1]:** If a custom value is used, it MUST known to be of low cardinality.
 
 **[2]:** Instrumentations SHOULD NOT set `messaging.batch.size` on spans that operate with a single message. When client library supports batch and single-message API for the same operation, instrumentations SHOULD use `messaging.batch.size` for batching APIs and SHOULD NOT use it for single-message APIs.
 
@@ -253,7 +253,7 @@ logical entity messages are received from. Attributes in `messaging.batch` names
 
 ### Producer attributes
 
-Following additional attributes describe message producer operations.
+The following additional attributes describe message producer operations.
 
 <!-- semconv messaging.producer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -289,7 +289,7 @@ broker does not have such notion, destination name SHOULD uniquely identify brok
 
 ### Consumer attributes
 
-Following additional attributes describe message consumer operations.
+The following additional attributes describe message consumer operations.
 
 <!-- semconv messaging.consumer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -299,7 +299,11 @@ Following additional attributes describe message consumer operations.
 | `messaging.source.template` | string | Low cardinality field representing messaging source [2] | `/customers/{customerId}` | Conditionally Required: [3] |
 | `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [4] |
 | `messaging.source.anonymous` | boolean | A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name). |  | Recommended: [5] |
-| `messaging.source.name` | string | The message source name [6] | `MyQueue`; `MyTopic` | Conditionally Required: [7] |
+| `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Recommended: If known on consumer |
+| `messaging.destination.kind` | string | The kind of message destination | `queue` | Recommended: If known on consumer |
+| `messaging.destination.name` | string | The message destination name [6] | `MyQueue`; `MyTopic` | Recommended: If known on consumer |
+| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Recommended: If known on consumer |
+| `messaging.source.name` | string | The message source name [7] | `MyQueue`; `MyTopic` | Conditionally Required: [8] |
 
 **[1]:** If the message source is either a `queue` or `topic`.
 
@@ -311,10 +315,13 @@ Following additional attributes describe message consumer operations.
 
 **[5]:** when supported by messaging system and only if the source is anonymous. If missing, assumed to be false.
 
-**[6]:** Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
+**[6]:** Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
+broker does not have such notion, destination name SHOULD uniquely identify broker.
+
+**[7]:** Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
 broker does not have such notion, source name SHOULD uniquely identify broker.
 
-**[7]:** If the value applies to all messages in the batch.
+**[8]:** If the value applies to all messages in the batch.
 
 `messaging.source.kind` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -330,6 +337,9 @@ The distinction between receiving and processing of messages is not always of pa
 For batch receiving and processing (see the [Batch receiving](#batch-receiving) and [Batch processing](#batch-processing) examples below) in particular, the attribute SHOULD be set.
 Even though in that case one might think that the processing span's kind should be `INTERNAL`, that kind MUST NOT be used.
 Instead span kind should be set to either `CONSUMER` or `SERVER` according to the rules defined above.
+
+
+> Note: Consumer spans can have attributes describing source and destination. Since messages could be routed by brokers, source and destination don't always match. If original destination information is available on the consumer, consumer instrumentations SHOULD populate corresponding `messaging.destination` attributes.
 
 ### Per-message attributes
 
@@ -358,7 +368,7 @@ In RabbitMQ, the destination is defined by an *exchange* and a *routing key*.
 <!-- semconv messaging.rabbitmq -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.rabbitmq.message.routing_key` | string | RabbitMQ message routing key. | `myKey` | Conditionally Required: If not empty. |
+| `messaging.rabbitmq.destination.routing_key` | string | RabbitMQ message routing key. | `myKey` | Conditionally Required: If not empty. |
 <!-- endsemconv -->
 
 #### Apache Kafka
@@ -371,8 +381,13 @@ For Apache Kafka, the following additional attributes are defined:
 | `messaging.kafka.message.key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message.id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | Recommended |
 | `messaging.kafka.consumer_group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
 | `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | Recommended |
+<<<<<<< HEAD
 | `messaging.kafka.message.partition` | int | Partition the message is sent to. | `2` | Recommended |
 | `messaging.kafka.message.offset` | int | The offset of a record in the corresponding Kafka partition. | `42` | Recommended |
+=======
+| `messaging.kafka.destination.partition` | int | Partition the message is sent to. | `2` | Recommended |
+| `messaging.kafka.source.partition` | int | Partition the message is received from. | `2` | Recommended |
+>>>>>>> dd7251c (clarify destination attributes on consumers)
 | `messaging.kafka.message.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditionally Required: [2] |
 
 **[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don't include its value.
