@@ -157,8 +157,10 @@ Given the above state of the logging space we took the following approach:
   features than what is defined in OpenTelemetry. It is NOT a goal of
   OpenTelemetry to ship a feature-rich logging library.
 
-- OpenTelemetry defines an API for [emitting Events](./api.md#emit-event).
-  Application developers are encouraged to call this API directly.
+- OpenTelemetry defines an API for [emitting Events](./event-api.md). The API
+  consists of convenience methods which delegate to the API
+  for [emitting LogRecords](./api.md#emit-logrecord). Application developers are
+  encouraged to call this API directly.
 
 - OpenTelemetry defines an [SDK](./sdk.md) implementation of the [API](./api.md),
   which enables configuration of [processing](./sdk.md#logrecordprocessor)
