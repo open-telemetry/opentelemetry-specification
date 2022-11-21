@@ -186,6 +186,15 @@ therefore it SHOULD NOT block or throw exceptions.
 
 **Returns:** `Void`
 
+**Data Ownership**:
+
+Implementations own `logRecord` from the time `OnEmit` is called until the
+implementation returns. Implementations are allowed to freely modify the data
+while they own it. If an implementation wishes to modify the data but does not
+want to incur the cost synchronously, it can use various techniques to make the
+change asynchronously. For example, by asynchronously copying `logRecord` before
+modifying it.
+
 #### ShutDown
 
 Shuts down the processor. Called when the SDK is shut down. This is an
