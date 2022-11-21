@@ -57,8 +57,10 @@ all the following conditions:
 NOT" requirements defined in the [specification][].
 * It MUST NOT provide additional features or functionalities that are not
   covered by the [specification][], except for any of the following situations:
-  * Such feature/functionality is very specific to a programming language, runtime
-    or framework.
+  * Such feature/functionality is very specific to a programming language,
+    runtime or framework, and not expected to interfere or overlap with any
+    feature that might (likely) be added to the cross-language specification in
+    future.
   * Anything that is retrospecitive, for example, a feature/functionality which
     has been released as a stable/GA offering before this compliance rule was
     formalized.
