@@ -3,8 +3,8 @@
 **Status**: [Experimental](../../document-status.md)
 
 This document defines semantic conventions for recording feature flag evaluations as
-[logs](../api.md#emit-logrecord) and [events](../api.md#emit-event) emitted
-through the [Logger API](../api.md#logger).
+a [log record](../api.md#logrecord) emitted through the
+[Logger API](../api.md#emit-logrecord).
 
 <!-- toc -->
 
