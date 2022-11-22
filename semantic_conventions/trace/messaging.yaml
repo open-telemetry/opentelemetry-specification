@@ -173,12 +173,12 @@ groups:
     span_kind: consumer
     brief: 'Semantic convention for a consumer of messages received from a messaging system'
     attributes:
-      - id: consumer_id
+      - id: consumer.id
         type: string
         brief: >
           The identifier for the consumer receiving a message. For Kafka, set it to
-          `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only
-          `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id`
+          `{messaging.kafka.consumer.group} - {messaging.kafka.client_id}`, if both are present, or only
+          `messaging.kafka.consumer.group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id`
           of the client consuming the message.
         examples: 'mygroup - client-6'
       - ref: messaging.source.name
@@ -275,7 +275,7 @@ groups:
           If the key type is not string, it's string representation has to be supplied for the attribute.
           If the key has no unambiguous, canonical string form, don't include its value.
         examples: 'myKey'
-      - id: consumer_group
+      - id: consumer.group
         type: string
         brief: >
           Name of the Kafka Consumer Group that is handling the message.

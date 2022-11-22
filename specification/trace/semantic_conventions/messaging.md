@@ -245,7 +245,8 @@ These attributes should be set to the broker to which the message is sent/from w
 
 Note that attributes in `messaging.message` namespace describe an individual message, `messaging.destination` namespace
 contains attributes that describe the logical entity messages are published to, and `messaging.source` describes
-logical entity messages are received from. Attributes in `messaging.batch` namespace describe batch properties.
+logical entity messages are received from; attributes in `messaging.batch` namespace describe batch properties and `messaging.consumer` namespace
+describes message consumer properties.
 
 [network attributes]: span-general.md#general-network-connection-attributes
 [`net.transport`]: span-general.md#network-transport-attributes
@@ -294,7 +295,7 @@ The following additional attributes describe message consumer operations.
 <!-- semconv messaging.consumer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.consumer_id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer_group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer_group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | Recommended |
+| `messaging.consumer.id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer.group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer.group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | Recommended |
 | `messaging.source.kind` | string | The kind of message source | `queue` | Conditionally Required: [1] |
 | `messaging.source.template` | string | Low cardinality field representing messaging source [2] | `/customers/{customerId}` | Conditionally Required: [3] |
 | `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [4] |
@@ -353,12 +354,12 @@ set on links. Corresponding instrumentations MAY set source and destination attr
 
 ### Attributes specific to certain messaging systems
 
-All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Attributes that are specific to the message, the message destination, the message source, or the whole batch SHOULD be populated under corresponding namespace:
+All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Attributes that describe message, destination, source, consumer, or batch properties SHOULD be populated under corresponding namespace:
 
-* message-specific under `messaging.{system}.message`
-* destination-specific under `messaging.{system}.destination`
-* source-specific under `messaging.{system}.source`
-* batch-specific under `messaging.{system}.batch`
+* `messaging.{system}.message` namespace describes individual messages
+* `messaging.{system}.destination` namespace describes destination a message (or a batch) are published to, and `messaging.{system}.source` describes source messages were received from. Combination of attributes in these namespaces should uniquely identify the entity and describe it as precisely as possible. For example, if partitioning is supported, attributes should include partition or other important and visible to users entity properties.
+* `messaging.{system}.consumer` namespace describes message consumer properties
+* `messaging.{system}.batch` namespace describes message batch properties
 
 #### RabbitMQ
 
@@ -379,7 +380,7 @@ For Apache Kafka, the following additional attributes are defined:
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `messaging.kafka.message.key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message.id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | Recommended |
-| `messaging.kafka.consumer_group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
+| `messaging.kafka.consumer.group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
 | `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | Recommended |
 <<<<<<< HEAD
 | `messaging.kafka.message.partition` | int | Partition the message is sent to. | `2` | Recommended |
@@ -505,7 +506,7 @@ Process CB:                           | Span Rcv2 |
 | `messaging.source.kind` |  | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
 | `messaging.operation` |  |  | `"process"` |  | `"receive"` |
 | `messaging.kafka.message.key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
-| `messaging.kafka.consumer_group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
+| `messaging.kafka.consumer.group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
 | `messaging.kafka.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
 | `messaging.kafka.partition` | `"1"` | `"1"` | `"1"` | `"3"` | `"3"` |
 | `messaging.kafka.message.offset` | `"12"` | `"12"` | `"12"` | `"32"` | `"32"` |

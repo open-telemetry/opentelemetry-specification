@@ -133,7 +133,8 @@ release.
 
 - Rename `http.retry_count` to `http.resend_count` and clarify its meaning.
   ([#2743](https://github.com/open-telemetry/opentelemetry-specification/pull/2743))
-- BREAKING: rename `messaging.destination` to `messaging.destination.name`,
+- BREAKING: rename `messaging.consumer_id` to `messaging.consumer.id`,
+  `messaging.destination` to `messaging.destination.name`,
   `messaging.temp_destination` to `messaging.destination.temporary`,
   `messaging.destination_kind` to `messaging.destination.kind`,
   `messaging.message_id` to `messaging.message.id`,
@@ -144,6 +145,7 @@ release.
   `messaging.message_payload_compressed_size_bytes` to `messaging.message.payload_compressed_size_bytes`,
   `messaging.rabbitmq.routing_key`: `messaging.rabbitmq.destination.routing_key`,
   `messaging.kafka.message_key` to `messaging.kafka.message.key`,
+  `messaging.kafka.consumer_group` to `messaging.kafka.consumer.group`,
   `messaging.kafka.partition` to `messaging.kafka.destination.partition`,
   `messaging.kafka.tombstone` to `messaging.kafka.message.tombstone`,
   `messaging.rocketmq.message_type` to `messaging.rocketmq.message.type`,
