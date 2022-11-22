@@ -222,7 +222,7 @@ the shim.
 ### Usage
 
 The shim can be passed as an option to an OpenTelemetry
-[MeterProvider](../metrics/sdk.md#meterprovider) when configuring the
+[MetricReader](../metrics/sdk.md#metricreader) when configuring the
 OpenTelemetry SDK. This enables the bridge to work with both push and pull
 metric exporters.
 
