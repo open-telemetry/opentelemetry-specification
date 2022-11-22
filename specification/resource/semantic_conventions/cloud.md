@@ -29,6 +29,7 @@
 | `aws` | Amazon Web Services |
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
+| `ibm_cloud` | IBM Cloud |
 | `tencent_cloud` | Tencent Cloud |
 
 `cloud.platform` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
@@ -53,6 +54,7 @@
 | `gcp_kubernetes_engine` | Google Cloud Kubernetes Engine (GKE) |
 | `gcp_cloud_functions` | Google Cloud Functions (GCF) |
 | `gcp_app_engine` | Google Cloud App Engine (GAE) |
+| `ibm_cloud_openshift` | Red Hat OpenShift on IBM Cloud |
 | `tencent_cloud_cvm` | Tencent Cloud Cloud Virtual Machine (CVM) |
 | `tencent_cloud_eks` | Tencent Cloud Elastic Kubernetes Service (EKS) |
 | `tencent_cloud_scf` | Tencent Cloud Serverless Cloud Function (SCF) |

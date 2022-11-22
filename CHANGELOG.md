@@ -27,6 +27,8 @@ release.
 
 - Add RabbitMQ message header attributes to semantic conventions.
 ([#2946](https://github.com/open-telemetry/opentelemetry-specification/pull/2946))
+- Add IBM Cloud as a cloud provider.
+  ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
 
 ### Compatibility
 
