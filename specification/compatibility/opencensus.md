@@ -188,9 +188,10 @@ OpenCensus specifies the following [HTTP Attributes](https://github.com/census-i
 ## Metrics / Stats
 
 OpenTelemetry will provide an OpenCensus-Metrics-Shim component which
-implements the OpenTelemetry MetricProducer interface. When Produce() is
-invoked, the shim collects metrics from the OpenCensus global state, converts
-the metrics to an OpenTelemetry metrics batch, and returns.
+implements the OpenTelemetry [MetricProducer](../metrics/sdk.md#metricproducer)
+interface. When Produce() is invoked, the shim collects metrics from the
+OpenCensus global state, converts the metrics to an OpenTelemetry metrics
+batch, and returns.
 
 ### Requirements
 
