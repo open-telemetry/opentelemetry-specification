@@ -195,7 +195,7 @@ batch, and returns.
 
 ### Requirements
 
-* This component MUST be an optional dependency.
+* This component MUST be an optional dependency
 * MUST NOT require OpenCensus to depend on OpenTelemetry
 * MUST require few or no changes to OpenCensus
 * MUST be compatible with push and pull exporters
