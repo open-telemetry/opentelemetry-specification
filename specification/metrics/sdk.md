@@ -827,7 +827,7 @@ functions.
 #### RegisterBridge(metricBridge)
 
 RegisterBridge causes the MetricReader to use the provided
-[MetricBridge](#metricbridge) for as a source of aggregated metric data in
+[MetricBridge](#metricbridge) as a source of aggregated metric data in
 subsequent invocations of Collect. RegisterBridge is expected to be called
 during initialization, but MAY be invoked later.  Multiple registrations
 of the same metricBridge MAY result in duplicate metric data being collected.
