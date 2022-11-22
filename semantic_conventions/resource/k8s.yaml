@@ -15,7 +15,9 @@ groups:
         brief: >
           The Kubernetes version of the of the cluster.
         examples: ['v1.21.11']
-
+        note: |
+          This information can be retrieved from the Kubernetes `/version` endpoint.
+          **Example:** `curl ${CLUSTER_ADDRESS}/version` or `kubectl version`
 
   - id: k8s.node
     prefix: k8s.node

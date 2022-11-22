@@ -25,7 +25,10 @@ Kubernetes object, but "name" is usually more user friendly so can be also set.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `k8s.cluster.name` | string | The name of the cluster. | `opentelemetry-cluster` | Recommended |
-| `k8s.cluster.version` | string | The version of the cluster. | `v1.21.11` | Recommended |
+| `k8s.cluster.version` | string | The Kubernetes version of the of the cluster. [1] | `v1.21.11` | Recommended |
+
+**[1]:** This information can be retrieved from the Kubernetes `/version` endpoint.
+**Example:** `curl ${CLUSTER_ADDRESS}/version` or `kubectl version`
 <!-- endsemconv -->
 
 ## Node
