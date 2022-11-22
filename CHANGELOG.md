@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
+  ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
+
 ### Logs
 
 - Move `event.domain` from InstrumentationScope attributes to LogRecord
