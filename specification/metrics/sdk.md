@@ -831,7 +831,7 @@ functions.
 RegisterProducer causes the MetricReader to use the provided
 [MetricProducer](#metricproducer) as a source of aggregated metric data in
 subsequent invocations of Collect. RegisterProducer is expected to be called
-during initialization, but MAY be invoked later.  Multiple registrations
+during initialization, but MAY be invoked later. Multiple registrations
 of the same MetricProducer MAY result in duplicate metric data being collected.
 
 If the [MeterProvider](#meterprovider) is an instance of
