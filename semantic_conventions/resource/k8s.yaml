@@ -13,7 +13,7 @@ groups:
       - id: version
         type: string
         brief: >
-          The version of the cluster.
+          The Kubernetes version of the of the cluster.
         examples: ['v1.21.11']
 
 
