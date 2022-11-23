@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add `messaging.kafka.message.offset` attribute.
+  ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
+
 ### Metrics
 
 - Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
