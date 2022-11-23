@@ -193,7 +193,7 @@ The following operations related to messages are defined for these semantic conv
 |---|---|---|---|---|
 | `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `rocketmq`; `activemq`; `AmazonSQS` | Required |
 | `messaging.operation` | string | A string identifying the kind of messaging operation as defined in the [Operation names](#operation-names) section above. [1] | `publish` | Required |
-| `messaging.batch.size` | int | The number of messages sent, received, or processed in the scope of the batching operation. [2] | `0`; `1`; `2` | Conditionally Required: [3] |
+| `messaging.batch.message_count` | int | The number of messages sent, received, or processed in the scope of the batching operation. [2] | `0`; `1`; `2` | Conditionally Required: [3] |
 | `messaging.message.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended: [4] |
 | `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [5] |
 | `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [6] |
@@ -208,7 +208,7 @@ The following operations related to messages are defined for these semantic conv
 
 **[1]:** If a custom value is used, it MUST known to be of low cardinality.
 
-**[2]:** Instrumentations SHOULD NOT set `messaging.batch.size` on spans that operate with a single message. When client library supports batch and single-message API for the same operation, instrumentations SHOULD use `messaging.batch.size` for batching APIs and SHOULD NOT use it for single-message APIs.
+**[2]:** Instrumentations SHOULD NOT set `messaging.batch.message_count` on spans that operate with a single message. When client library supports batch and single-message API for the same operation, instrumentations SHOULD use `messaging.batch.message_count` for batching APIs and SHOULD NOT use it for single-message APIs.
 
 **[3]:** If the span describes operation on a batch of messages.
 
@@ -541,7 +541,7 @@ Process C:                      | Span Recv1 |
 | `messaging.source.kind` | | | `"queue"` | `"queue"` | `"queue"` |
 | `messaging.operation` |  |  | `"receive"` | `"process"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a2"` | | `"a1"` | `"a2"` |
-| `messaging.batch.size` |  |  | 2 |  |  |
+| `messaging.batch.message_count` |  |  | 2 |  |  |
 
 ### Batch processing
 
@@ -578,4 +578,4 @@ Process C:                              | Span Recv1 | Span Recv2 |
 | `messaging.source.kind` | | | `"queue"` | `"queue"` | `"queue"` |
 | `messaging.operation` |  |  | `"receive"` | `"receive"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a2"` | `"a1"` | `"a2"` | |
-| `messaging.batch.size` | | | 1 | 1 | 2 |
+| `messaging.batch.message_count` | | | 1 | 1 | 2 |

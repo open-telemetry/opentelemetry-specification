@@ -67,15 +67,15 @@ groups:
           A string identifying the kind of messaging operation as defined in the
           [Operation names](#operation-names) section above.
         note: If a custom value is used, it MUST known to be of low cardinality.
-      - id: batch.size
+      - id: batch.message_count
         type: int
         brief: The number of messages sent, received, or processed in the scope of the batching operation.
         requirement_level:
           conditionally_required: If the span describes operation on a batch of messages.
         note: >
-            Instrumentations SHOULD NOT set `messaging.batch.size` on spans that operate with a single message.
+            Instrumentations SHOULD NOT set `messaging.batch.message_count` on spans that operate with a single message.
             When client library supports batch and single-message API for the same operation, instrumentations SHOULD
-            use `messaging.batch.size` for batching APIs and SHOULD NOT use it for single-message APIs.
+            use `messaging.batch.message_count` for batching APIs and SHOULD NOT use it for single-message APIs.
         examples: [0, 1, 2]
       - ref: messaging.message.id
         requirement_level:
