@@ -28,8 +28,9 @@ Renaming or changing the default value MUST NOT happen without a major version u
 If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
 
 For variables accepting an numeric value, if the user provides a value the SDK cannot parse,
-or which is outside the valid range for the configuragion item SDK SHOULD
-generate a warning and gracefully ignore the setting. In particular, SDKs
+or which is outside the valid range for the configuration item, the SDK SHOULD
+generate a warning and gracefully ignore the setting, i.e., treat them as not set.
+In particular, SDKs
 SHOULD NOT assign a custom interpretation e.g. to negative values if a negative
 value does not naturally apply to a configuration, but treat it like any other
 invalid value.
