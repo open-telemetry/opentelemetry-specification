@@ -32,7 +32,7 @@ or which is outside the valid range for the configuration item, the SDK SHOULD
 generate a warning and gracefully ignore the setting, i.e., treat them as not set.
 In particular, SDKs
 SHOULD NOT assign a custom interpretation e.g. to negative values if a negative
-value does not naturally apply to a configuration, but treat it like any other
+value does not naturally apply to a configuration and does not have an explicitly specified meaning, but treat it like any other
 invalid value.
 (Note: This paragraph was added after stabilization and the requirements are
 thus qualified as "SHOULD" to allow SDKs to avoid breaking changes. For new
