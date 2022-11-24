@@ -24,6 +24,7 @@ linkTitle: Semantic Conventions
 The following semantic conventions surrounding metrics are defined:
 
 * [HTTP](http-metrics.md): For HTTP client and server metrics.
+* [RPC](rpc-metrics.md): For RPC client and server metrics.
 * [Database](database-metrics.md): For SQL and NoSQL client metrics.
 * [System](system-metrics.md): For standard system metrics.
 * [Process](process-metrics.md): For standard process metrics.
@@ -93,7 +94,7 @@ usable.
 
 When building components that interoperate between OpenTelemetry and a system
 using the OpenMetrics exposition format, use the
-[OpenMetrics Guidelines](./openmetrics-guidelines.md).
+[OpenMetrics Guidelines](../../compatibility/prometheus_and_openmetrics.md).
 
 ### Pluralization
 

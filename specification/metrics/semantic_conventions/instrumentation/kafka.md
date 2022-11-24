@@ -31,7 +31,7 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 | messaging.kafka.partitions.offline           | UpDownCounter | Int64      | partitions | `{partitions}` | The number of offline partitions. | | |
 | messaging.kafka.partitions.under-replicated  | UpDownCounter | Int64      | partition  | `{partitions}` | The number of under replicated partitions. | | |
 | messaging.kafka.isr.operations               | Counter       | Int64      | operations | `{operations}` | The number of in-sync replica shrink and expand operations. | `operation` | `shrink`, `expand` |
-| messaging.kafka.max.lag                      | UpDownCounter | Int64      | messages   | `{messages}`   | Max lag in messages between follower and leader replicas. | | |
+| messaging.kafka.lag_max                      | Gauge         | Int64      | lag max    | `{lag max}`    | Max lag in messages between follower and leader replicas. | | |
 | messaging.kafka.controllers.active           | UpDownCounter | Int64      | controllers | `{controllers}` | The number of active controllers in the broker. | | |
 | messaging.kafka.leader.elections             | Counter       | Int64      | elections | `{elections}` | Leader election rate (increasing values indicates broker failures). | | |
 | messaging.kafka.leader.unclean-elections     | Counter       | Int64      | elections | `{elections}` | Unclean leader election rate (increasing values indicates broker failures). | | |

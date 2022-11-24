@@ -7,11 +7,16 @@
 <!-- toc -->
 
 - [Definitions](#definitions)
+  * [Message](#message)
+  * [Producer](#producer)
+  * [Consumer](#consumer)
+  * [Intermediary](#intermediary)
   * [Destinations](#destinations)
   * [Message consumption](#message-consumption)
   * [Conversations](#conversations)
   * [Temporary destinations](#temporary-destinations)
 - [Conventions](#conventions)
+  * [Context propagation](#context-propagation)
   * [Span name](#span-name)
   * [Span kind](#span-kind)
   * [Operation names](#operation-names)
@@ -30,6 +35,8 @@
 
 ## Definitions
 
+### Message
+
 Although messaging systems are not as standardized as, e.g., HTTP, it is assumed that the following definitions are applicable to most of them that have similar concepts at all (names borrowed mostly from JMS):
 
 A *message* is an envelope with a potentially empty payload.
@@ -42,6 +49,27 @@ With Apache Kafka, the physical broker a message is written to depends on the nu
 * Logically: some particular message *destination*.
 
 Messages can be delivered to 0, 1, or multiple consumers depending on the dispatching semantic of the protocol.
+
+### Producer
+
+The "producer" is a specific instance, process or device that creates and
+publishes a message. "Publishing" is the process of sending a message or batch
+of messages to the intermediary or consumer.
+
+### Consumer
+
+A "consumer" receives the message and acts upon it. It uses the context and
+data to execute some logic, which might lead to the occurrence of new events.
+
+The consumer receives, processes, and settles a message. "Receiving" is the
+process of obtaining a message from the intermediary, "processing" is the
+process of acting on the information a message contains, "settling" is the
+process of notifying an intermediary that a message was processed successfully.
+
+### Intermediary
+
+An "intermediary" receives a message to forward it to the next receiver, which
+might be another intermediary or a consumer.
 
 ### Destinations
 
@@ -79,6 +107,38 @@ Often such destinations are unnamed or have an auto-generated name.
 ## Conventions
 
 Given these definitions, the remainder of this section describes the semantic conventions for Spans describing interactions with messaging systems.
+
+### Context propagation
+
+A message may traverse many different components and layers in one or more intermediaries
+when it is propagated from the producer to the consumer(s). To be able to correlate
+consumer traces with producer traces using the existing context propagation mechanisms,
+all components must propagate context down the chain.
+
+Messaging systems themselves may trace messages as the messages travels from
+producers to consumers. Such tracing would cover the transport layer but would
+not help in correlating producers with consumers. To be able to directly
+correlate producers with consumers, another context that is propagated with
+the message is required.
+
+A message *creation context* allows correlating producers with consumers
+of a message and model the dependencies between them,
+regardless of the underlying messaging transport mechanism and its instrumentation.
+
+The message creation context is created by the producer and should be propagated
+to the consumer(s). Consumer traces cannot be directly correlated with producer
+traces if the message creation context is not attached and propagated with the message.
+
+A producer SHOULD attach a message creation context to each message.
+If possible, the message creation context SHOULD be attached
+in such a way that it cannot be changed by intermediaries.
+
+> This document does not specify the exact mechanisms on how the creation context
+> is attached/extracted to/from messages. Future versions of these conventions
+> will give clear recommendations, following industry standards including, but not limited to
+> [Trace Context: AMQP protocol](https://w3c.github.io/trace-context-amqp/) and
+> [Trace Context: MQTT protocol](https://w3c.github.io/trace-context-mqtt/)
+> once those standards reach a stable state.
 
 ### Span name
 
@@ -241,10 +301,17 @@ Specific attributes for Apache RocketMQ are defined below.
 | `messaging.rocketmq.namespace` | string | Namespace of RocketMQ resources, resources in different namespaces are individual. | `myNamespace` | Required |
 | `messaging.rocketmq.client_group` | string | Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind. | `myConsumerGroup` | Required |
 | `messaging.rocketmq.client_id` | string | The unique identifier for each client. | `myhost@8742@s8083jm` | Required |
+| `messaging.rocketmq.delivery_timestamp` | int | The timestamp in milliseconds that the delay message is expected to be delivered to consumer. | `1665987217045` | Conditionally Required: [1] |
+| `messaging.rocketmq.delay_time_level` | int | The delay time level for delay message, which determines the message delay time. | `3` | Conditionally Required: [2] |
+| `messaging.rocketmq.message_group` | string | It is essential for FIFO message. Messages that belong to the same message group are always processed one by one within the same consumer group. | `myMessageGroup` | Conditionally Required: If the message type is FIFO. |
 | `messaging.rocketmq.message_type` | string | Type of message. | `normal` | Recommended |
 | `messaging.rocketmq.message_tag` | string | The secondary classifier of message besides topic. | `tagA` | Recommended |
 | `messaging.rocketmq.message_keys` | string[] | Key(s) of message, another way to mark message besides message id. | `[keyA, keyB]` | Recommended |
 | `messaging.rocketmq.consumption_model` | string | Model of message consumption. This only applies to consumer spans. | `clustering` | Recommended |
+
+**[1]:** If the message type is delay and delay time level is not specified.
+
+**[2]:** If the message type is delay and delivery timestamp is not specified.
 
 `messaging.rocketmq.message_type` MUST be one of the following:
 
