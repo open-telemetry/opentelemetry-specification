@@ -33,7 +33,11 @@ generate a warning and gracefully ignore the setting, i.e., treat them as not se
 In particular, SDKs
 SHOULD NOT assign a custom interpretation e.g. to negative values if a negative
 value does not naturally apply to a configuration and does not have an explicitly specified meaning, but treat it like any other
-invalid value.
+invalid value (for example, a value specifying a buffer size must naturally be non-negative.
+Treating a negative value as "buffer everything" would be an example of such a discouraged custom interpretation.
+Instead the default buffer size should be used.)
+Note that this could make a difference even if the custom interpretation is identical with the default value,
+because it might reset a value set from other configuration sources with the default.
 (Note: This paragraph was added after stabilization and the requirements are
 thus qualified as "SHOULD" to allow SDKs to avoid breaking changes. For new
 implementations, these should be treated as MUST-requirements.)
