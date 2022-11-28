@@ -40,6 +40,9 @@ release.
 
 ### SDK Configuration
 
+- Specify handling of invalid numeric environment variables
+  ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
+
 ### Telemetry Schemas
 
 ### Common
