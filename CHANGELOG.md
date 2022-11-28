@@ -13,7 +13,7 @@ release.
 
 ### Metrics
 
-- Add OTLP exporter temporality preference named "lowmemory" which
+- Add OTLP exporter temporality preference named "LowMemory" which
   configures Synchronous Counter and Histogram instruments to use 
   Delta aggregation temporality, which allows them to shed memory 
   following a cardinality explosion, thus use less memory.
