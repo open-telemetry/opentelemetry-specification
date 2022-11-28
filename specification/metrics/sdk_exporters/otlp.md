@@ -49,7 +49,7 @@ The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_TEMPORA
 * `cumulative`: Choose cumulative aggregation temporality for all instrument kinds.
 * `delta`: Choose Delta aggregation temporality for Counter, Asynchronous Counter and Histogram instrument kinds, choose
   Cumulative aggregation for UpDownCounter and Asynchronous UpDownCounter instrument kinds.
-* `lowmemory`: This configuration uses Delta aggregation temporality for Synchronous Counter and Histogram and uses Cumulative aggregation temporality for Asynchronous Counter, UpDownCounter and Asynchronous UpDownCounter instrument kinds.
+* `lowmemory`: This configuration uses Delta aggregation temporality for Synchronous Counter and Histogram and uses Cumulative aggregation temporality for Synchronous UpDownCounter, Asynchronous Counter, and Asynchronous UpDownCounter instrument kinds.
 
 The "lowmemory" choice is so-named because the SDK can under certain
 conditions use less memory in this configuration than the others.
