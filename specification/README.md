@@ -61,7 +61,7 @@ NOT" requirements defined in the [specification][].
     runtime or framework, and not expected to interfere or overlap with any
     feature that might (likely) be added to the cross-language specification in
     future.
-  * Anything that is retrospecitive, for example, a feature/functionality which
+  * Anything that is retrospective, for example, a feature/functionality which
     has been released as a stable/GA offering before this compliance rule was
     formalized (release 1.16.0).
 
