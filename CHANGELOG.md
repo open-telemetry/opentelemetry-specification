@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
+  ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
+
 ### Logs
 
 - Move `event.domain` from InstrumentationScope attributes to LogRecord
@@ -29,12 +32,18 @@ release.
   ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
 - Add semantic conventions for Feature Flags
   ([#2529](https://github.com/open-telemetry/opentelemetry-specification/pull/2529))
+- Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
+  `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
+  ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
+
+- Specify handling of invalid numeric environment variables
+  ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
 
 ### Telemetry Schemas
 
