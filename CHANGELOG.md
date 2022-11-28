@@ -17,7 +17,7 @@ release.
   ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
 - Recommended limits applied by default at the MetricProvider level to protect
   metrics pipelines against excessive data production from a single
-  instrumentation library or instrument. 
+  instrumentation library or instrument.
   ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 
 ### Logs
