@@ -107,7 +107,7 @@ groups:
               brief: Azure App Service
             - id: azure_openshift
               value: 'azure_openshift'
-              brief: Azure Cloud Red Hat OpenShift
+              brief: Azure Red Hat OpenShift
             - id: gcp_compute_engine
               value: 'gcp_compute_engine'
               brief: Google Cloud Compute Engine (GCE)
