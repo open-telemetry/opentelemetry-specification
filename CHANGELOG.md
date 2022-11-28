@@ -15,8 +15,8 @@ release.
 
 - Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
   ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
-- Recommended limits applied to MetricReaders by default to protect
-  metrics pipelines against excessive data production by a single
+- Recommended limits applied by default at the MetricProvider level to protect
+  metrics pipelines against excessive data production from a single
   instrumentation library or instrument. 
   ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 
