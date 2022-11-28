@@ -13,10 +13,12 @@ release.
 
 ### Metrics
 
+- Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
+  ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
 - Add OTLP exporter temporality preference named "LowMemory" which
   configures Synchronous Counter and Histogram instruments to use 
   Delta aggregation temporality, which allows them to shed memory 
-  following a cardinality explosion, thus use less memory.
+  following a cardinality explosion, thus use less memory. ([#2961](https://github.com/open-telemetry/opentelemetry-specification/pull/2961))
 
 ### Logs
 
@@ -29,6 +31,12 @@ release.
 ### Resource
 
 ### Semantic Conventions
+
+- Add IBM Cloud as a cloud provider.
+  ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
+- Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
+  `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
+  ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
 
 ### Compatibility
 
