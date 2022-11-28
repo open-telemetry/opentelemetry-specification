@@ -196,12 +196,13 @@ batch, and returns.
 ### Requirements
 
 * This component MUST be an optional dependency
-* MUST NOT require OpenCensus to depend on OpenTelemetry
+* MUST NOT require OpenTelemetry to be included in OpenCensus API distributions
+* SHOULD NOT require OpenCensus to depend on OpenTelemetry at runtime
 * MUST require few or no changes to OpenCensus
 * MUST be compatible with push and pull exporters
 * MUST support Gauges, Counters, Cumulative Histograms, and Summaries
-* are NOT REQUIRED to support Gauge Histograms
-* MUST support exemplars
+* Is NOT REQUIRED to support Gauge Histograms
+* MUST support exemplar span context in language that provide utilities for recording span context in exemplars
 
 ### Resource
 
