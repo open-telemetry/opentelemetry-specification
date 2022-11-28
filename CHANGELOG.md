@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
+  ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
 - Recommended limits applied to MetricReaders by default to protect
   metrics pipelines against excessive data production by a single
   instrumentation library or instrument. 
@@ -29,6 +31,12 @@ release.
 ### Resource
 
 ### Semantic Conventions
+
+- Add IBM Cloud as a cloud provider.
+  ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
+- Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
+  `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
+  ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
 
 ### Compatibility
 
