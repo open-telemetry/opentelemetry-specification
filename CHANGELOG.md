@@ -30,6 +30,9 @@ release.
 
 - Add IBM Cloud as a cloud provider.
   ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
+- Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
+  `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
+  ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
 
 ### Compatibility
 
