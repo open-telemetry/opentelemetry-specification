@@ -51,7 +51,7 @@
 | `azure_aks` | Azure Kubernetes Service |
 | `azure_functions` | Azure Functions |
 | `azure_app_service` | Azure App Service |
-| `azure_openshift` | Azure Cloud Red Hat OpenShift |
+| `azure_openshift` | Azure Red Hat OpenShift |
 | `gcp_compute_engine` | Google Cloud Compute Engine (GCE) |
 | `gcp_cloud_run` | Google Cloud Run |
 | `gcp_kubernetes_engine` | Google Cloud Kubernetes Engine (GKE) |
