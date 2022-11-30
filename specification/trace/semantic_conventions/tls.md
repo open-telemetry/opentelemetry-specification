@@ -8,6 +8,10 @@ This document defines semantic conventions for TLS/SSL client and server Spans.
 
 <!-- toc -->
 
+- [Common Attributes](#common-attributes)
+- [Cipher suite attributes](#cipher-suite-attributes)
+- [Certificate attributes](#certificate-attributes)
+
 <!-- tocstop -->
 
 ## Common Attributes
