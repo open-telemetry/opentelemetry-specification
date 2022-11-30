@@ -206,15 +206,15 @@ The following operations related to messages are defined for these semantic conv
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [11] |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [12] |
 
-**[1]:** If a custom value is used, it MUST known to be of low cardinality.
+**[1]:** If a custom value is used, it MUST be of low cardinality.
 
-**[2]:** Instrumentations SHOULD NOT set `messaging.batch.message_count` on spans that operate with a single message. When client library supports batch and single-message API for the same operation, instrumentations SHOULD use `messaging.batch.message_count` for batching APIs and SHOULD NOT use it for single-message APIs.
+**[2]:** Instrumentations SHOULD NOT set `messaging.batch.message_count` on spans that operate with a single message. When a messaging client library supports both batch and single-message API for the same operation, instrumentations SHOULD use `messaging.batch.message_count` for batching APIs and SHOULD NOT use it for single-message APIs.
 
-**[3]:** If the span describes operation on a batch of messages.
+**[3]:** If the span describes an operation on a batch of messages.
 
 **[4]:** Only if span represents operation on a single message.
 
-**[5]:** Only if span represents operation on a single message.
+**[5]:** Only for spans that represent an operation on a single message.
 
 **[6]:** Only if span represents operation on a single message.
 
@@ -265,7 +265,7 @@ The following additional attributes describe message producer operations.
 | `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Conditionally Required: [5] |
 | `messaging.destination.name` | string | The message destination name [6] | `MyQueue`; `MyTopic` | Conditionally Required: [7] |
 
-**[1]:** If the message destination is either a `queue` or `topic`.
+**[1]:** If the message destination is either a `queue` or a `topic`.
 
 **[2]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
 
@@ -275,8 +275,8 @@ The following additional attributes describe message producer operations.
 
 **[5]:** If value is `true`. When missing, the value is assumed to be `false`.
 
-**[6]:** Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
-broker does not have such notion, destination name SHOULD uniquely identify broker.
+**[6]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
+the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
 
 **[7]:** If one message is being published or if the value applies to all messages in the batch.
 
@@ -312,15 +312,15 @@ The following additional attributes describe message consumer operations.
 
 **[3]:** If available. Instrumentations MUST NOT use `messaging.source.name` as template unless low-cardinality of source name is guaranteed.
 
-**[4]:** when supported by messaging system and only if the source is temporary. If missing, assumed to be false.
+**[4]:** When supported by messaging system and only if the source is temporary. When missing, the value is assumed to be `false`.
 
-**[5]:** when supported by messaging system and only if the source is anonymous. If missing, assumed to be false.
+**[5]:** When supported by messaging system and only if the source is anonymous. When missing, the value is assumed to be `false`.
 
-**[6]:** Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
-broker does not have such notion, destination name SHOULD uniquely identify broker.
+**[6]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
+the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
 
-**[7]:** Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
-broker does not have such notion, source name SHOULD uniquely identify broker.
+**[7]:** Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
+the broker does not have such notion, the source name SHOULD uniquely identify the broker.
 
 **[8]:** If the value applies to all messages in the batch.
 
