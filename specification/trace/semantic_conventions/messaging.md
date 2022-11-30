@@ -339,7 +339,6 @@ For batch receiving and processing (see the [Batch receiving](#batch-receiving) 
 Even though in that case one might think that the processing span's kind should be `INTERNAL`, that kind MUST NOT be used.
 Instead span kind should be set to either `CONSUMER` or `SERVER` according to the rules defined above.
 
-
 > Note: Consumer spans can have attributes describing source and destination. Since messages could be routed by brokers, source and destination don't always match. If original destination information is available on the consumer, consumer instrumentations SHOULD populate corresponding `messaging.destination` attributes.
 
 ### Per-message attributes
