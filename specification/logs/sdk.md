@@ -186,14 +186,9 @@ therefore it SHOULD NOT block or throw exceptions.
 
 **Returns:** `Void`
 
-**Data Ownership**:
-
-Implementations own `logRecord` from the time `OnEmit` is called until the
-implementation returns. Implementations are allowed to freely modify the data
-while they own it. If an implementation wishes to modify the data but does not
-want to incur the cost synchronously, it can use various techniques to make the
-change asynchronously. For example, by asynchronously copying `logRecord` before
-modifying it.
+A `LogRecordProcessor` may freely modify `logRecord` for the duration of
+the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
+asynchronous processing) only reads are permitted.
 
 #### ShutDown
 
