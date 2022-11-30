@@ -5,6 +5,14 @@
 This document defines semantic conventions for recording feature flag evaluations as
 a [log record](../api.md#logrecord) emitted through the
 [Logger API](../api.md#emit-logrecord).
+This is useful when a flag is evaluated outside of a transaction context
+such as when the application loads or on a timer.
+To record a flag evaluation as a part of a transaction context,
+consider [recording it as a span event](../../trace/semantic_conventions/feature-flags.md).
+
+For more information about why it is useful to capture feature flag evaluations,
+refer to the [motivation](../../trace/semantic_conventions/feature-flags.md#motivation)
+section of the trace semantic convention for feature flag evaluations.
 
 <!-- toc -->
 

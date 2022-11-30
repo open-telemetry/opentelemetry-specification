@@ -2,6 +2,11 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+This document defines semantic conventions for recording dynamic feature flag
+evaluations within a transaction as span events.
+To record an evaluation outside of a transaction context, consider
+[recording it as a log record](../../logs/semantic_conventions/feature-flags.md).
+
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
 <!-- toc -->
