@@ -5,20 +5,8 @@ groups:
     type: span
     brief: 'Semantic convention describing per-message attributes populated on messaging spans or links.'
     attributes:
-      - id: destination.name
-        type: string
-        brief: 'The message destination name'
-        note: |
-          Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
-          the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
-        examples: ['MyQueue', 'MyTopic']
-      - id: source.name
-        type: string
-        brief: 'The message source name'
-        note: |
-          Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
-          the broker does not have such notion, the source name SHOULD uniquely identify the broker.
-        examples: ['MyQueue', 'MyTopic']
+      - ref: messaging.destination.name
+      - ref: messaging.source.name
       - id: message.id
         type: string
         brief: 'A value used by the messaging system as an identifier for the message, represented as a string.'
@@ -39,6 +27,88 @@ groups:
         type: int
         brief: 'The compressed size of the message payload in bytes.'
         examples: 2048
+
+  - id: messaging.destination
+    prefix: messaging.destination
+    # todo (https://github.com/open-telemetry/build-tools/issues/123)
+    type: span
+    brief: 'Semantic convention for attributes that describe messaging destination on broker'
+    attributes:
+      - id: name
+        type: string
+        brief: 'The message destination name'
+        note: |
+          Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
+          the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
+        examples: ['MyQueue', 'MyTopic']
+      - id: kind
+        type:
+          allow_custom_values: false
+          members:
+            - id: queue
+              value: "queue"
+              brief: "A message sent to a queue"
+            - id: topic
+              value: "topic"
+              brief: "A message sent to a topic"
+        brief: 'The kind of message destination'
+      - id: template
+        type: string
+        brief: Low cardinality field representing messaging destination
+        note: >
+          Destination names could be constructed from templates.
+          An example would be a destination name involving a user name or product id.
+          Although the destination name in this case is of high cardinality,
+          the underlying template is of low cardinality and can be effectively
+          used for grouping and aggregation.
+        examples: ['/customers/{customerId}']
+      - id: temporary
+        type: boolean
+        brief: 'A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed.'
+      - id: anonymous
+        type: boolean
+        brief: 'A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name).'
+
+  - id: messaging.source
+    prefix: messaging.source
+    # todo (https://github.com/open-telemetry/build-tools/issues/123)
+    type: span
+    brief: 'Semantic convention for attributes that describe messaging source on broker'
+    attributes:
+      - id: name
+        type: string
+        brief: 'The message source name'
+        note: |
+          Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
+          the broker does not have such notion, the source name SHOULD uniquely identify the broker.
+        examples: ['MyQueue', 'MyTopic']
+      - id: kind
+        type:
+          allow_custom_values: true
+          members:
+            - id: queue
+              value: "queue"
+              brief: "A message received from a queue"
+            - id: topic
+              value: "topic"
+              brief: "A message received from a topic"
+        brief: 'The kind of message source'
+      - id: template
+        type: string
+        brief: 'Low cardinality field representing messaging source'
+        examples: ['/customers/{customerId}']
+        note: >
+          Source names could be constructed from templates.
+          An example would be a source name involving a user name or product id.
+          Although the source name in this case is of high cardinality,
+          the underlying template is of low cardinality and can be effectively
+          used for grouping and aggregation.
+      - id: temporary
+        type: boolean
+        brief: 'A boolean that is true if the message source is temporary and might not exist anymore after messages are processed.'
+      - id: anonymous
+        type: boolean
+        brief: 'A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name).'
 
   - id: messaging
     prefix: messaging
@@ -120,43 +190,21 @@ groups:
       - ref: messaging.destination.name
         requirement_level:
           conditionally_required: If one message is being published or if the value applies to all messages in the batch.
-      - id: destination.kind
-        type:
-          allow_custom_values: false
-          members:
-            - id: queue
-              value: "queue"
-              brief: "A message sent to a queue"
-            - id: topic
-              value: "topic"
-              brief: "A message sent to a topic"
+      - ref: messaging.destination.kind
         requirement_level:
           conditionally_required: If the message destination is either a `queue` or a `topic`.
-        brief: 'The kind of message destination'
-      - id: destination.template
-        type: string
+      - ref: messaging.destination.template
         requirement_level:
           conditionally_required: >
             If available. Instrumentations MUST NOT use `messaging.destination.name` as template
             unless low-cardinality of destination name is guaranteed.
-        brief: Low cardinality field representing messaging destination
-        note: >
-          Destination names could be constructed from templates.
-          An example would be a destination name involving a user name or product id.
-          Although the destination name in this case is of high cardinality,
-          the underlying template is of low cardinality and can be effectively
-          used for grouping and aggregation.
-        examples: ['/customers/{customerId}']
-      - id: destination.temporary
-        type: boolean
+      - ref: messaging.destination.temporary
         requirement_level:
           conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
-        brief: 'A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed.'
-      - id: destination.anonymous
-        type: boolean
+      - ref: messaging.destination.anonymous
         requirement_level:
           conditionally_required: If value is `true`. When missing, the value is assumed to be `false`.
-        brief: 'A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name).'
+
   - id: messaging.producer.synchronous
     prefix: messaging
     type: span
@@ -184,43 +232,20 @@ groups:
       - ref: messaging.source.name
         requirement_level:
           conditionally_required: If the value applies to all messages in the batch.
-      - id: source.kind
-        type:
-          allow_custom_values: true
-          members:
-            - id: queue
-              value: "queue"
-              brief: "A message received from a queue"
-            - id: topic
-              value: "topic"
-              brief: "A message received from a topic"
+      - ref: messaging.source.kind
         requirement_level:
           conditionally_required: If the message source is either a `queue` or `topic`.
-        brief: 'The kind of message source'
-      - id: source.template
-        type: string
-        brief: 'Low cardinality field representing messaging source'
+      - ref: messaging.source.template
         requirement_level:
           conditionally_required: >
             If available. Instrumentations MUST NOT use `messaging.source.name` as template
             unless low-cardinality of source name is guaranteed.
-        examples: ['/customers/{customerId}']
-        note: >
-          Source names could be constructed from templates.
-          An example would be a source name involving a user name or product id.
-          Although the source name in this case is of high cardinality,
-          the underlying template is of low cardinality and can be effectively
-          used for grouping and aggregation.
-      - id: source.temporary
-        type: boolean
+      - ref: messaging.source.temporary
         requirement_level:
           recommended: When supported by messaging system and only if the source is temporary. When missing, the value is assumed to be `false`.
-        brief: 'A boolean that is true if the message source is temporary and might not exist anymore after messages are processed.'
-      - id: source.anonymous
-        type: boolean
+      - ref: messaging.source.anonymous
         requirement_level:
           recommended: When supported by messaging system and only if the source is anonymous. When missing, the value is assumed to be `false`.
-        brief: 'A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name).'
       - ref: messaging.destination.name
         requirement_level:
           recommended: If known on consumer

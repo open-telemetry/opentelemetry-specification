@@ -259,33 +259,26 @@ The following additional attributes describe message producer operations.
 <!-- semconv messaging.producer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.destination.kind` | string | The kind of message destination | `queue` | Conditionally Required: [1] |
-| `messaging.destination.template` | string | Low cardinality field representing messaging destination [2] | `/customers/{customerId}` | Conditionally Required: [3] |
-| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [4] |
-| `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Conditionally Required: [5] |
-| `messaging.destination.name` | string | The message destination name [6] | `MyQueue`; `MyTopic` | Conditionally Required: [7] |
+| `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Conditionally Required: [1] |
+| `messaging.destination.kind` | string | The kind of message destination | `queue` | Conditionally Required: [2] |
+| `messaging.destination.name` | string | The message destination name [3] | `MyQueue`; `MyTopic` | Conditionally Required: [4] |
+| `messaging.destination.template` | string | Low cardinality field representing messaging destination [5] | `/customers/{customerId}` | Conditionally Required: [6] |
+| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [7] |
 
-**[1]:** If the message destination is either a `queue` or a `topic`.
+**[1]:** If value is `true`. When missing, the value is assumed to be `false`.
 
-**[2]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
+**[2]:** If the message destination is either a `queue` or a `topic`.
 
-**[3]:** If available. Instrumentations MUST NOT use `messaging.destination.name` as template unless low-cardinality of destination name is guaranteed.
-
-**[4]:** If value is `true`. When missing, the value is assumed to be `false`.
-
-**[5]:** If value is `true`. When missing, the value is assumed to be `false`.
-
-**[6]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
+**[3]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
 the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
 
-**[7]:** If one message is being published or if the value applies to all messages in the batch.
+**[4]:** If one message is being published or if the value applies to all messages in the batch.
 
-`messaging.destination.kind` MUST be one of the following:
+**[5]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
 
-| Value  | Description |
-|---|---|
-| `queue` | A message sent to a queue |
-| `topic` | A message sent to a topic |
+**[6]:** If available. Instrumentations MUST NOT use `messaging.destination.name` as template unless low-cardinality of destination name is guaranteed.
+
+**[7]:** If value is `true`. When missing, the value is assumed to be `false`.
 <!-- endsemconv -->
 
 ### Consumer attributes
@@ -296,40 +289,33 @@ The following additional attributes describe message consumer operations.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `messaging.consumer.id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer.group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer.group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | Recommended |
-| `messaging.source.kind` | string | The kind of message source | `queue` | Conditionally Required: [1] |
-| `messaging.source.template` | string | Low cardinality field representing messaging source [2] | `/customers/{customerId}` | Conditionally Required: [3] |
-| `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [4] |
-| `messaging.source.anonymous` | boolean | A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name). |  | Recommended: [5] |
 | `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Recommended: If known on consumer |
 | `messaging.destination.kind` | string | The kind of message destination | `queue` | Recommended: If known on consumer |
-| `messaging.destination.name` | string | The message destination name [6] | `MyQueue`; `MyTopic` | Recommended: If known on consumer |
+| `messaging.destination.name` | string | The message destination name [1] | `MyQueue`; `MyTopic` | Recommended: If known on consumer |
 | `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Recommended: If known on consumer |
-| `messaging.source.name` | string | The message source name [7] | `MyQueue`; `MyTopic` | Conditionally Required: [8] |
+| `messaging.source.anonymous` | boolean | A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name). |  | Recommended: [2] |
+| `messaging.source.kind` | string | The kind of message source | `queue` | Conditionally Required: [3] |
+| `messaging.source.name` | string | The message source name [4] | `MyQueue`; `MyTopic` | Conditionally Required: [5] |
+| `messaging.source.template` | string | Low cardinality field representing messaging source [6] | `/customers/{customerId}` | Conditionally Required: [7] |
+| `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [8] |
 
-**[1]:** If the message source is either a `queue` or `topic`.
-
-**[2]:** Source names could be constructed from templates. An example would be a source name involving a user name or product id. Although the source name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
-
-**[3]:** If available. Instrumentations MUST NOT use `messaging.source.name` as template unless low-cardinality of source name is guaranteed.
-
-**[4]:** When supported by messaging system and only if the source is temporary. When missing, the value is assumed to be `false`.
-
-**[5]:** When supported by messaging system and only if the source is anonymous. When missing, the value is assumed to be `false`.
-
-**[6]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
+**[1]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
 the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
 
-**[7]:** Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
+**[2]:** When supported by messaging system and only if the source is anonymous. When missing, the value is assumed to be `false`.
+
+**[3]:** If the message source is either a `queue` or `topic`.
+
+**[4]:** Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
 the broker does not have such notion, the source name SHOULD uniquely identify the broker.
 
-**[8]:** If the value applies to all messages in the batch.
+**[5]:** If the value applies to all messages in the batch.
 
-`messaging.source.kind` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+**[6]:** Source names could be constructed from templates. An example would be a source name involving a user name or product id. Although the source name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
 
-| Value  | Description |
-|---|---|
-| `queue` | A message received from a queue |
-| `topic` | A message received from a topic |
+**[7]:** If available. Instrumentations MUST NOT use `messaging.source.name` as template unless low-cardinality of source name is guaranteed.
+
+**[8]:** When supported by messaging system and only if the source is temporary. When missing, the value is assumed to be `false`.
 <!-- endsemconv -->
 
 The *receive* span is be used to track the time used for receiving the message(s), whereas the *process* span(s) track the time for processing the message(s).
