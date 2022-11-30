@@ -599,8 +599,7 @@ series and the topic requires further analysis.
 
 MeterProviders SHOULD support being configured with limits to be applied
 to metrics produced from a single Instrumentation Library Scope.  This
-mechanism supports protecting metrics pipelines from excessive da
-ta
+mechanism supports protecting metrics pipelines from excessive data
 production, which is usually caused by a problem known as ["explosion
 of cardinality"](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality),
 in which the number of timeseries produced by application code exceeds a
