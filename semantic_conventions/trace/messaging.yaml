@@ -9,15 +9,15 @@ groups:
         type: string
         brief: 'The message destination name'
         note: |
-          Destination name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
-          broker does not have such notion, destination name SHOULD uniquely identify broker.
+          Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
+          the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
         examples: ['MyQueue', 'MyTopic']
       - id: source.name
         type: string
         brief: 'The message source name'
         note: |
-          Source name SHOULD uniquely identify specific queue, topic, or other entity within broker. If
-          broker does not have such notion, source name SHOULD uniquely identify broker.
+          Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
+          the broker does not have such notion, the source name SHOULD uniquely identify the broker.
         examples: ['MyQueue', 'MyTopic']
       - id: message.id
         type: string
@@ -44,7 +44,7 @@ groups:
     prefix: messaging
     type: span
     brief: >
-        This document defines the attributes used in
+        This document defines general attributes used in
         messaging systems.
     attributes:
       - id: system
@@ -66,20 +66,20 @@ groups:
         brief: >
           A string identifying the kind of messaging operation as defined in the
           [Operation names](#operation-names) section above.
-        note: If a custom value is used, it MUST known to be of low cardinality.
+        note: If a custom value is used, it MUST be of low cardinality.
       - id: batch.message_count
         type: int
         brief: The number of messages sent, received, or processed in the scope of the batching operation.
         requirement_level:
-          conditionally_required: If the span describes operation on a batch of messages.
+          conditionally_required: If the span describes an operation on a batch of messages.
         note: >
             Instrumentations SHOULD NOT set `messaging.batch.message_count` on spans that operate with a single message.
-            When client library supports batch and single-message API for the same operation, instrumentations SHOULD
+            When a messaging client library supports both batch and single-message API for the same operation, instrumentations SHOULD
             use `messaging.batch.message_count` for batching APIs and SHOULD NOT use it for single-message APIs.
         examples: [0, 1, 2]
       - ref: messaging.message.id
         requirement_level:
-          recommended: Only if span represents operation on a single message.
+          recommended: Only for spans that represent an operation on a single message.
       - ref: messaging.message.conversation_id
         requirement_level:
           recommended: Only if span represents operation on a single message.
@@ -131,7 +131,7 @@ groups:
               value: "topic"
               brief: "A message sent to a topic"
         requirement_level:
-          conditionally_required: If the message destination is either a `queue` or `topic`.
+          conditionally_required: If the message destination is either a `queue` or a `topic`.
         brief: 'The kind of message destination'
       - id: destination.template
         type: string
@@ -214,12 +214,12 @@ groups:
       - id: source.temporary
         type: boolean
         requirement_level:
-          recommended: when supported by messaging system and only if the source is temporary. If missing, assumed to be false.
+          recommended: When supported by messaging system and only if the source is temporary. When missing, the value is assumed to be `false`.
         brief: 'A boolean that is true if the message source is temporary and might not exist anymore after messages are processed.'
       - id: source.anonymous
         type: boolean
         requirement_level:
-          recommended: when supported by messaging system and only if the source is anonymous. If missing, assumed to be false.
+          recommended: When supported by messaging system and only if the source is anonymous. When missing, the value is assumed to be `false`.
         brief: 'A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name).'
       - ref: messaging.destination.name
         requirement_level:
