@@ -9,7 +9,8 @@ groups:
         type: string
         brief: >
           Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider.
-        examples: ['opentelemetry-test']
+          For non-containerized Linux systems, the `machine-id` located in `/etc/machine-id` or `/var/lib/dbus/machine-id` may be used.
+        examples: ['fdbf79e8af94cb7f9e8df36789187052']
       - id: name
         type: string
         brief: >
