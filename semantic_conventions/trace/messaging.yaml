@@ -54,7 +54,7 @@ groups:
         brief: 'The kind of message destination'
       - id: template
         type: string
-        brief: Low cardinality field representing messaging destination
+        brief: Low cardinality representation of the messaging destination name
         note: >
           Destination names could be constructed from templates.
           An example would be a destination name involving a user name or product id.
@@ -95,7 +95,7 @@ groups:
         brief: 'The kind of message source'
       - id: template
         type: string
-        brief: 'Low cardinality field representing messaging source'
+        brief: 'Low cardinality representation of the messaging source name'
         examples: ['/customers/{customerId}']
         note: >
           Source names could be constructed from templates.

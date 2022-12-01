@@ -246,7 +246,9 @@ These attributes should be set to the broker to which the message is sent/from w
 Note that attributes in `messaging.message` namespace describe an individual message, `messaging.destination` namespace
 contains attributes that describe the logical entity messages are published to, and `messaging.source` describes
 logical entity messages are received from; attributes in `messaging.batch` namespace describe batch properties and `messaging.consumer` namespace
-describes message consumer properties.
+describes message consumer properties. 
+Messaging system-specific attributes MUST be defined in the corresponding `messaging.{system}` namespace
+as described in [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems).
 
 [network attributes]: span-general.md#general-network-connection-attributes
 [`net.transport`]: span-general.md#network-transport-attributes
@@ -262,7 +264,7 @@ The following additional attributes describe message producer operations.
 | `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Conditionally Required: [1] |
 | `messaging.destination.kind` | string | The kind of message destination | `queue` | Conditionally Required: [2] |
 | `messaging.destination.name` | string | The message destination name [3] | `MyQueue`; `MyTopic` | Conditionally Required: [4] |
-| `messaging.destination.template` | string | Low cardinality field representing messaging destination [5] | `/customers/{customerId}` | Conditionally Required: [6] |
+| `messaging.destination.template` | string | Low cardinality representation of the messaging destination name [5] | `/customers/{customerId}` | Conditionally Required: [6] |
 | `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [7] |
 
 **[1]:** If value is `true`. When missing, the value is assumed to be `false`.
@@ -296,7 +298,7 @@ The following additional attributes describe message consumer operations.
 | `messaging.source.anonymous` | boolean | A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name). |  | Recommended: [2] |
 | `messaging.source.kind` | string | The kind of message source | `queue` | Conditionally Required: [3] |
 | `messaging.source.name` | string | The message source name [4] | `MyQueue`; `MyTopic` | Conditionally Required: [5] |
-| `messaging.source.template` | string | Low cardinality field representing messaging source [6] | `/customers/{customerId}` | Conditionally Required: [7] |
+| `messaging.source.template` | string | Low cardinality representation of the messaging source name [6] | `/customers/{customerId}` | Conditionally Required: [7] |
 | `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [8] |
 
 **[1]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
@@ -342,9 +344,9 @@ set on links. Instrumentations MAY set source and destination attributes on the 
 All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Attributes that describe a message, a destination, a source, a consumer or a batch of messages SHOULD be populated under the corresponding namespace:
 
 * `messaging.{system}.message`: Describes attributes for individual messages
-* `messaging.{system}.destination` and `messaging.{system}.source`: Describes the destination and source a message (or a batch) are published to and received from respectively. The combination of attributes in these namespaces should uniquely identify the entity and describe it as precisely as possible. For example, if partitioning is supported, the attributes should include the partition or other important and visible to users entity properties.
-* `messaging.{system}.consumer` namespace describes message consumer properties
-* `messaging.{system}.batch` namespace describes message batch properties
+* `messaging.{system}.destination` and `messaging.{system}.source`: Describe the destination and source a message (or a batch) are published to and received from respectively. The combination of attributes in these namespaces should uniquely identify the entity and include properties significant for this messaging system. For example, Kafka instrumentations should include partition identifier. 
+* `messaging.{system}.consumer`: Describes message consumer properties
+* `messaging.{system}.batch`: Describes message batch properties
 
 #### RabbitMQ
 
