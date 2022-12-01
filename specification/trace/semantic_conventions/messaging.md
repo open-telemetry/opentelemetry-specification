@@ -105,7 +105,7 @@ Sometimes a conversation can span multiple message destinations (e.g. initiated 
 ### Temporary and anonymous destinations
 
 Some messaging systems support the concept of *temporary destination* (often only temporary queues) that are established just for a particular set of communication partners (often one to one) or conversation.
-Often such destinations are also  *anonymous* - unnamed or have an auto-generated name.
+Often such destinations are also unnamed (anonymous) or have an auto-generated name.
 
 ## Conventions
 
@@ -168,7 +168,7 @@ Examples:
 * `print_jobs publish`
 * `topic with spaces process`
 * `AuthenticationRequest-Conversations process`
-* `(anonymous) publish` (`(anonymous)` being a stable identifier for randomly generated, anonymous destination names)
+* `(anonymous) publish` (`(anonymous)` being a stable identifier for an unnamed destination)
 
 ### Span kind
 
@@ -329,20 +329,20 @@ Instead span kind should be set to either `CONSUMER` or `SERVER` according to th
 
 ### Per-message attributes
 
-All messaging operations (`publish`, `receive`, `process`, or other not covered by this specification) can describe a batch of messages.
-Attributes in `messaging.message` or `messaging.{system}.message` namespace describe individual messages. For single-message operations they SHOULD be set on corresponding span.
+All messaging operations (`publish`, `receive`, `process`, or others not covered by this specification) can describe both single and/or batch of messages.
+Attributes in the `messaging.message` or `messaging.{system}.message` namespace describe individual messages. For single-message operations they SHOULD be set on corresponding span.
 
-For batch operations per-message attributes are usually different and cannot be set on the corresponding span and MAY be set on links. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
+For batch operations, per-message attributes are usually different and cannot be set on the corresponding span. In such cases the attributes MAY be set on links. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
 
-Some messaging systems such as Kafka, Azure EventGrid allow to publish a single batch of messages to different topics, in such cases attributes in `messaging.destination` and `messaging.source` MAY be
-set on links. Corresponding instrumentations MAY set source and destination attributes on the span if all messages in the batch share the same destination or source.
+Some messaging systems (e.g., Kafka, Azure EventGrid) allow publishing a single batch of messages to different topics. In such cases, the attributes in `messaging.destination` and `messaging.source` MAY be
+set on links. Instrumentations MAY set source and destination attributes on the span if all messages in the batch share the same destination or source.
 
 ### Attributes specific to certain messaging systems
 
-All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Attributes that describe message, destination, source, consumer, or batch properties SHOULD be populated under corresponding namespace:
+All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Attributes that describe a message, a destination, a source, a consumer or a batch of messages SHOULD be populated under the corresponding namespace:
 
-* `messaging.{system}.message` namespace describes individual messages
-* `messaging.{system}.destination` namespace describes destination a message (or a batch) are published to, and `messaging.{system}.source` describes source messages were received from. Combination of attributes in these namespaces should uniquely identify the entity and describe it as precisely as possible. For example, if partitioning is supported, attributes should include partition or other important and visible to users entity properties.
+* `messaging.{system}.message`: Describes attributes for individual messages
+* `messaging.{system}.destination` and `messaging.{system}.source`: Describes the destination and source a message (or a batch) are published to and received from respectively. The combination of attributes in these namespaces should uniquely identify the entity and describe it as precisely as possible. For example, if partitioning is supported, the attributes should include the partition or other important and visible to users entity properties.
 * `messaging.{system}.consumer` namespace describes message consumer properties
 * `messaging.{system}.batch` namespace describes message batch properties
 
