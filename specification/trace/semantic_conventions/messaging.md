@@ -246,7 +246,7 @@ These attributes should be set to the broker to which the message is sent/from w
 Note that attributes in `messaging.message` namespace describe an individual message, `messaging.destination` namespace
 contains attributes that describe the logical entity messages are published to, and `messaging.source` describes
 logical entity messages are received from; attributes in `messaging.batch` namespace describe batch properties and `messaging.consumer` namespace
-describes message consumer properties. 
+describes message consumer properties.
 Messaging system-specific attributes MUST be defined in the corresponding `messaging.{system}` namespace
 as described in [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems).
 
@@ -344,7 +344,7 @@ set on links. Instrumentations MAY set source and destination attributes on the 
 All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Attributes that describe a message, a destination, a source, a consumer or a batch of messages SHOULD be populated under the corresponding namespace:
 
 * `messaging.{system}.message`: Describes attributes for individual messages
-* `messaging.{system}.destination` and `messaging.{system}.source`: Describe the destination and source a message (or a batch) are published to and received from respectively. The combination of attributes in these namespaces should uniquely identify the entity and include properties significant for this messaging system. For example, Kafka instrumentations should include partition identifier. 
+* `messaging.{system}.destination` and `messaging.{system}.source`: Describe the destination and source a message (or a batch) are published to and received from respectively. The combination of attributes in these namespaces should uniquely identify the entity and include properties significant for this messaging system. For example, Kafka instrumentations should include partition identifier.
 * `messaging.{system}.consumer`: Describes message consumer properties
 * `messaging.{system}.batch`: Describes message batch properties
 
@@ -369,13 +369,9 @@ For Apache Kafka, the following additional attributes are defined:
 | `messaging.kafka.message.key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message.id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | Recommended |
 | `messaging.kafka.consumer.group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
 | `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | Recommended |
-<<<<<<< HEAD
-| `messaging.kafka.message.partition` | int | Partition the message is sent to. | `2` | Recommended |
-| `messaging.kafka.message.offset` | int | The offset of a record in the corresponding Kafka partition. | `42` | Recommended |
-=======
 | `messaging.kafka.destination.partition` | int | Partition the message is sent to. | `2` | Recommended |
 | `messaging.kafka.source.partition` | int | Partition the message is received from. | `2` | Recommended |
->>>>>>> dd7251c (clarify destination attributes on consumers)
+| `messaging.kafka.message.offset` | int | The offset of a record in the corresponding Kafka partition. | `42` | Recommended |
 | `messaging.kafka.message.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditionally Required: [2] |
 
 **[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don't include its value.
