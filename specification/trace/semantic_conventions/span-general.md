@@ -144,7 +144,7 @@ For IP-based communication, the name should be a DNS host name of the remote ser
 
 `net.peer.name` should be the name of logical remote destination, e.g., `"example.com"` if connecting to an URL `https://example.com/foo`. Usually, application pass it as configuration to client libraries in form of URL, connection string, host name, etc.
 
-Sometimes host name is only available to instrumentation as a string which may contain DNS name or IP address. `net.peer.name` SHOULD be set to the available known hostname (e.g., `"127.0.0.1"` if connecting to an URL `https://127.0.0.1.com/foo`).
+Sometimes host name is only available to instrumentation as a string which may contain DNS name or IP address. `net.peer.name` SHOULD be set to the available known hostname (e.g., `"127.0.0.1"` if connecting to an URL `https://127.0.0.1/foo`).
 
 If only IP address is available via `net.sock.peer.addr`, `net.peer.name` SHOULD NOT be set. Reverse DNS lookup SHOULD NOT be used to obtain DNS name.
 

@@ -34,15 +34,22 @@ release.
 
 - Add IBM Cloud as a cloud provider.
   ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
+- Add semantic conventions for Feature Flags
+  ([#2529](https://github.com/open-telemetry/opentelemetry-specification/pull/2529))
 - Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
   `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
   ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
+- Add `messaging.kafka.message.offset` attribute.
+  ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
+
+- Specify handling of invalid numeric environment variables
+  ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
 
 ### Telemetry Schemas
 
