@@ -27,6 +27,8 @@ release.
   ([#2940](https://github.com/open-telemetry/opentelemetry-specification/pull/2940))
 - Split out Event API from Log API
   ([#2941](https://github.com/open-telemetry/opentelemetry-specification/pull/2941))
+- Clarify data modification in `LogRecordProcessor`.
+  ([#2969](https://github.com/open-telemetry/opentelemetry-specification/pull/2969))
 
 ### Resource
 
