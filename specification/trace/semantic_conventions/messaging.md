@@ -280,6 +280,7 @@ For Apache Kafka, the following additional attributes are defined:
 | `messaging.kafka.consumer_group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
 | `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | Recommended |
 | `messaging.kafka.partition` | int | Partition the message is sent to. | `2` | Recommended |
+| `messaging.kafka.message.offset` | int | The offset of a record in the corresponding Kafka partition. | `42` | Recommended |
 | `messaging.kafka.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditionally Required: [2] |
 
 **[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don't include its value.
@@ -395,7 +396,8 @@ Process CB:                           | Span Rcv2 |
 | `messaging.kafka.message_key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
 | `messaging.kafka.consumer_group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
 | `messaging.kafka.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
-| `messaging.kafka.partition` |  | `"1"` | `"1"` |  | `"3"` |
+| `messaging.kafka.partition` | `"1"` | `"1"` | `"1"` | `"3"` | `"3"` |
+| `messaging.kafka.message.offset` | `"12"` | `"12"` | `"12"` | `"32"` | `"32"` |
 
 ### Batch receiving
 
