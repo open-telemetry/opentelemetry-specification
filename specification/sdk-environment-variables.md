@@ -47,6 +47,8 @@ Instead the default buffer size should be used.
 Note that this could make a difference even if the custom interpretation is identical with the default value,
 because it might reset a value set from other configuration sources with the default.
 
+If a null value is acceptable, the numeric value representing it MUST be `"none"`.
+
 ### Enum value
 
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
