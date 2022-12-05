@@ -43,6 +43,8 @@ release.
   ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
 - Add `messaging.kafka.message.offset` attribute.
   ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
+- Add ClickHouse to db.system semantic conventions
+  ([#3011](https://github.com/open-telemetry/opentelemetry-specification/pull/3011))
 
 ### Compatibility
 
