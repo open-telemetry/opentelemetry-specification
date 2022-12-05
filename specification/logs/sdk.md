@@ -210,8 +210,16 @@ therefore it SHOULD NOT block or throw exceptions.
 
 * `logRecord` - a [ReadWriteLogRecord](#readwritelogrecord) for the
   emitted `LogRecord`.
+* `context` - the `Context` that the SDK determined (the explicitly
+  passed `Context`, the current `Context`, or an empty `Context` if
+  the [Logger](./api.md#get-a-logger) was obtained
+  with `include_trace_context=false`)
 
 **Returns:** `Void`
+
+A `LogRecordProcessor` may freely modify `logRecord` for the duration of
+the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
+asynchronous processing) only reads are permitted.
 
 #### ShutDown
 
