@@ -21,6 +21,7 @@
   * [Span kind](#span-kind)
   * [Operation names](#operation-names)
 - [Messaging attributes](#messaging-attributes)
+  * [Attribute namespaces](#attribute-namespaces)
   * [Producer attributes](#producer-attributes)
   * [Consumer attributes](#consumer-attributes)
   * [Per-message attributes](#per-message-attributes)
@@ -243,7 +244,7 @@ Additionally `net.peer.port` from the [network attributes][] is recommended.
 Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
-## Attribute namespaces
+### Attribute namespaces
 
 - `messaging.message`: Contains attributes that describe individual messages
 - `messaging.destination`: Contains attributes that describe the logical entity messages are published to
@@ -251,11 +252,6 @@ These attributes should be set to the broker to which the message is sent/from w
 - `messaging.batch`: Contains attributes that describe batch operations
 - `messaging.consumer`: Contains attributes that describe message consumers
 
-Note: Messaging system-specific attributes MUST be defined in the corresponding `messaging.{system}` namespace
-as described in [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems).
-contains attributes that describe the logical entity messages are published to, and `messaging.source` describes
-logical entity messages are received from; attributes in `messaging.batch` namespace describe batch properties and `messaging.consumer` namespace
-describes message consumer properties.
 Messaging system-specific attributes MUST be defined in the corresponding `messaging.{system}` namespace
 as described in [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems).
 
