@@ -43,6 +43,8 @@ release.
   ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
 - Add `messaging.kafka.message.offset` attribute.
   ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
+- Update hardware metrics to use `direction` as per general semantic conventions
+  ([#2942](https://github.com/open-telemetry/opentelemetry-specification/pull/2942))
 
 ### Compatibility
 
