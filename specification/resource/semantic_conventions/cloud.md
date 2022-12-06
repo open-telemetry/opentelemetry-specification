@@ -38,22 +38,26 @@
 |---|---|
 | `alibaba_cloud_ecs` | Alibaba Cloud Elastic Compute Service |
 | `alibaba_cloud_fc` | Alibaba Cloud Function Compute |
+| `alibaba_cloud_openshift` | Red Hat OpenShift on Alibaba Cloud |
 | `aws_ec2` | AWS Elastic Compute Cloud |
 | `aws_ecs` | AWS Elastic Container Service |
 | `aws_eks` | AWS Elastic Kubernetes Service |
 | `aws_lambda` | AWS Lambda |
 | `aws_elastic_beanstalk` | AWS Elastic Beanstalk |
 | `aws_app_runner` | AWS App Runner |
+| `aws_openshift` | Red Hat OpenShift on AWS (ROSA) |
 | `azure_vm` | Azure Virtual Machines |
 | `azure_container_instances` | Azure Container Instances |
 | `azure_aks` | Azure Kubernetes Service |
 | `azure_functions` | Azure Functions |
 | `azure_app_service` | Azure App Service |
+| `azure_openshift` | Azure Red Hat OpenShift |
 | `gcp_compute_engine` | Google Cloud Compute Engine (GCE) |
 | `gcp_cloud_run` | Google Cloud Run |
 | `gcp_kubernetes_engine` | Google Cloud Kubernetes Engine (GKE) |
 | `gcp_cloud_functions` | Google Cloud Functions (GCF) |
 | `gcp_app_engine` | Google Cloud App Engine (GAE) |
+| `google_cloud_openshift` | Red Hat OpenShift on Google Cloud |
 | `ibm_cloud_openshift` | Red Hat OpenShift on IBM Cloud |
 | `tencent_cloud_cvm` | Tencent Cloud Cloud Virtual Machine (CVM) |
 | `tencent_cloud_eks` | Tencent Cloud Elastic Kubernetes Service (EKS) |
