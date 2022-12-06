@@ -464,6 +464,15 @@ OpenTelemetry [semantic conventions for Log Attributes](./semantic_conventions/R
 [semantic conventions for Span Attributes](../trace/semantic_conventions/README.md).
 This field is optional.
 
+### Field: `StructuredBody`
+
+Type: `map<string, any>`.
+
+Description: A structured representation of the log record (see the description
+of `any` type above). Can vary for each occurrence of the event coming from the
+same source. This field is optional. SHOULD follow OpenTelemetry [semantic conventions
+for Log Bodies (TODO)](./semantic_conventions/README.md). This field is optional.
+
 #### Errors and Exceptions
 
 Additional information about errors and/or exceptions that are associated with
@@ -946,7 +955,7 @@ Field            | Type               | Description                             
 timestamp        | string             | The time the event described by the log entry occurred. | Timestamp
 resource         | MonitoredResource  | The monitored resource that produced this log entry.    | Resource
 log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Attributes["gcp.log_name"]
-json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
+json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | StructuredBody
 proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
 text_payload     | string             | The log entry payload, represented as a Unicode string (UTF-8). | Body
 severity         | LogSeverity        | The severity of the log entry.                          | Severity
