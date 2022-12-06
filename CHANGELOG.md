@@ -15,6 +15,10 @@ release.
 
 - Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
   ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
+- Add OTLP exporter temporality preference named "LowMemory" which
+  configures Synchronous Counter and Histogram instruments to use
+  Delta aggregation temporality, which allows them to shed memory
+  following a cardinality explosion, thus use less memory. ([#2961](https://github.com/open-telemetry/opentelemetry-specification/pull/2961))
 
 ### Logs
 
@@ -23,16 +27,27 @@ release.
   ([#2940](https://github.com/open-telemetry/opentelemetry-specification/pull/2940))
 - Split out Event API from Log API
   ([#2941](https://github.com/open-telemetry/opentelemetry-specification/pull/2941))
+- Clarify data modification in `LogRecordProcessor`.
+  ([#2969](https://github.com/open-telemetry/opentelemetry-specification/pull/2969))
 
 ### Resource
+
+- Extend Cloud Platform Enum with OpenShift entry for all supported cloud providers.
+  ([#2985](https://github.com/open-telemetry/opentelemetry-specification/pull/2985))
 
 ### Semantic Conventions
 
 - Add IBM Cloud as a cloud provider.
   ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
+- Add semantic conventions for Feature Flags
+  ([#2529](https://github.com/open-telemetry/opentelemetry-specification/pull/2529))
 - Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
   `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
   ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
+- Add `messaging.kafka.message.offset` attribute.
+  ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
+- Update hardware metrics to use `direction` as per general semantic conventions
+  ([#2942](https://github.com/open-telemetry/opentelemetry-specification/pull/2942))
 
 ### Compatibility
 

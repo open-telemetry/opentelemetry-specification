@@ -66,6 +66,9 @@ groups:
             - id: alibaba_cloud_fc
               value: 'alibaba_cloud_fc'
               brief: Alibaba Cloud Function Compute
+            - id: alibaba_cloud_openshift
+              value: 'alibaba_cloud_openshift'
+              brief: Red Hat OpenShift on Alibaba Cloud
             - id: aws_ec2
               value: 'aws_ec2'
               brief: AWS Elastic Compute Cloud
@@ -84,6 +87,9 @@ groups:
             - id: aws_app_runner
               value: 'aws_app_runner'
               brief: AWS App Runner
+            - id: aws_openshift
+              value: 'aws_openshift'
+              brief: Red Hat OpenShift on AWS (ROSA)
             - id: azure_vm
               value: 'azure_vm'
               brief: Azure Virtual Machines
@@ -99,6 +105,9 @@ groups:
             - id: azure_app_service
               value: 'azure_app_service'
               brief: Azure App Service
+            - id: azure_openshift
+              value: 'azure_openshift'
+              brief: Azure Red Hat OpenShift
             - id: gcp_compute_engine
               value: 'gcp_compute_engine'
               brief: Google Cloud Compute Engine (GCE)
@@ -114,6 +123,9 @@ groups:
             - id: gcp_app_engine
               value: 'gcp_app_engine'
               brief: Google Cloud App Engine (GAE)
+            - id: google_cloud_openshift
+              value: 'google_cloud_openshift'
+              brief: Red Hat OpenShift on Google Cloud
             - id: ibm_cloud_openshift
               value: 'ibm_cloud_openshift'
               brief: Red Hat OpenShift on IBM Cloud

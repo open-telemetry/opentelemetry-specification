@@ -189,6 +189,11 @@ groups:
         brief: >
           Partition the message is sent to.
         examples: 2
+      - id: message.offset
+        type: int
+        brief: >
+          The offset of a record in the corresponding Kafka partition.
+        examples: 42
       - id: tombstone
         type: boolean
         requirement_level:
