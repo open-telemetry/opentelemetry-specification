@@ -452,16 +452,16 @@ The Exponential Histogram Aggregation informs the SDK to collect data
 for the [Exponential Histogram Metric
 Point](./data-model.md#exponentialhistogram), which uses an exponential
 formula to determine bucket boundaries and an integer `scale`
-parameter to control resolution.
+parameter to control resolution. Implementations adjust scale as necessary given
+the data.
 
-Scale is not a configurable property of this Aggregation, the
-implementation will adjust it as necessary given the data.  This
-Aggregation honors the following configuration parameter:
+This Aggregation honors the following configuration parameters:
 
-| Key     | Value   | Default Value | Description                                                                                                  |
-|---------|---------|---------------|--------------------------------------------------------------------------------------------------------------|
-| MaxSize | integer | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
-| RecordMinMax | true, false | true | Whether to record min and max. |
+| Key          | Value       | Default Value | Description                                                                                                  |
+|--------------|-------------|---------------|--------------------------------------------------------------------------------------------------------------|
+| MaxSize      | integer     | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
+| MaxScale     | integer     | 20            | Maximum `scale` factor.                                                                                      |
+| RecordMinMax | true, false | true          | Whether to record min and max.                                                                               |
 
 The default of 160 buckets is selected to establish default support
 for a high-resolution histogram able to cover a long-tail latency
@@ -496,8 +496,11 @@ bucketMidpoint = ((base - 1) / 2) / ((base + 1) / 2) = (base - 1) /
 This Aggregation uses the notion of "ideal" scale.  The ideal scale is
 either:
 
-1. The maximum supported scale, generally used for single-value histogram Aggregations where scale is not otherwise constrained
-2. The largest value of scale such that no more than the maximum number of buckets are needed to represent the full range of input data in either of the positive or negative ranges.
+1. The `MaxScale` (see configuration parameters), generally used for
+   single-value histogram Aggregations where scale is not otherwise constrained.
+2. The largest value of scale such that no more than the maximum number of
+   buckets are needed to represent the full range of input data in either of the
+   positive or negative ranges.
 
 ###### Handle all normal values
 
@@ -515,7 +518,8 @@ nearest normal value.
 ###### Support a minimum and maximum scale
 
 The implementation MUST maintain reasonable minimum and maximum scale
-parameters that the automatic scale parameter will not exceed.
+parameters that the automatic scale parameter will not exceed. The maximum scale
+is defined by the `MaxScale` configuration parameter.
 
 ###### Use the maximum scale for single measurements
 
