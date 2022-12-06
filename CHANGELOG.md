@@ -27,6 +27,8 @@ release.
   ([#2940](https://github.com/open-telemetry/opentelemetry-specification/pull/2940))
 - Split out Event API from Log API
   ([#2941](https://github.com/open-telemetry/opentelemetry-specification/pull/2941))
+- Clarify data modification in `LogRecordProcessor`.
+  ([#2969](https://github.com/open-telemetry/opentelemetry-specification/pull/2969))
 
 ### Resource
 
@@ -44,6 +46,8 @@ release.
   ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
 - Add `messaging.kafka.message.offset` attribute.
   ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
+- Update hardware metrics to use `direction` as per general semantic conventions
+  ([#2942](https://github.com/open-telemetry/opentelemetry-specification/pull/2942))
 
 ### Compatibility
 
