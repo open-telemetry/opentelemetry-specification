@@ -32,6 +32,9 @@ release.
 
 ### Resource
 
+- Extend Cloud Platform Enum with OpenShift entry for all supported cloud providers.
+  ([#2985](https://github.com/open-telemetry/opentelemetry-specification/pull/2985))
+
 ### Semantic Conventions
 
 - Add IBM Cloud as a cloud provider.
