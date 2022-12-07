@@ -224,9 +224,8 @@ consecutive `_` characters MUST be replaced with a single `_` character.
 The Unit of an OTLP metric point MUST be added as
 [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
 Additionally, the unit MUST be added as a suffix to the metric name, and SHOULD
-be converted to [base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units)
-recommended by OpenMetrics when possible.  The unit suffix comes before any
-type-specific suffixes.
+be converted from abbreviations to full words (e.g. ms to milliseconds) where
+possible. The unit suffix comes before any type-specific suffixes.
 
 The description of an OTLP metrics point MUST be added as
 [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
