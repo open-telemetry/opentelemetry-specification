@@ -579,17 +579,23 @@ This is an implementation of the `SpanProcessor` which create batches of finishe
 spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
 
+The processor SHOULD export a batch when `scheduledDelayMillis` milliseconds
+have elapsed since the processor was created or the previous export completed,
+or when the queue contains `maxExportBatchSize` or more spans.
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached spans are
   dropped. The default value is `2048`.
-* `scheduledDelayMillis` - the delay interval in milliseconds between two
+* `scheduledDelayMillis` - the maximum delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
-  smaller or equal to `maxQueueSize`. The default value is `512`.
+  smaller or equal to `maxQueueSize`. If the queue reaches `maxExportBatchSize`
+  a batch will be exported even if `scheduledDelayMillis` milliseconds have not
+  elapsed. The default value is `512`.
 
 ## Span Exporter
 

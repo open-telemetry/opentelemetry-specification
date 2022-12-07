@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Clarify that the BatchSpanProcessor should export batches when the queue reaches the batch size
+  ([#number])(https://github.com/open-telemetry/opentelemetry-specification/pull/number))
+
 ### Metrics
 
 - Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
