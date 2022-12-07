@@ -12,7 +12,7 @@ release.
 ### Traces
 
 - Clarify that the BatchSpanProcessor should export batches when the queue reaches the batch size
-  ([#number])(https://github.com/open-telemetry/opentelemetry-specification/pull/number))
+  ([#3024](https://github.com/open-telemetry/opentelemetry-specification/pull/3024))
 
 ### Metrics
 
