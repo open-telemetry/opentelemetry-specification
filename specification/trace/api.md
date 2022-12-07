@@ -454,14 +454,15 @@ The Span interface MUST provide:
 
 #### IsRecording
 
-Returns true if this `Span` is recording information like events with the
-`AddEvent` operation, attributes using `SetAttributes`, status with `SetStatus`,
-etc.
-
+Returns `true` if this `Span` has been started but not ended.
 After a `Span` is ended, it usually becomes non-recording and thus
-`IsRecording` SHOULD consequently return false for ended Spans.
+`IsRecording` SHOULD consequently return `false` for ended Spans.
 Note: Streaming implementations, where it is not known if a span is ended,
 are one expected case where `IsRecording` cannot change after ending a Span.
+
+Recording information like events with the `AddEvent` operation, attributes
+using `SetAttributes`, status with `SetStatus`, etc will not perform if
+`IsRecording` returns `false`.
 
 `IsRecording` SHOULD NOT take any parameters.
 
