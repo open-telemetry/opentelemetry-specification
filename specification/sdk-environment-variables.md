@@ -165,6 +165,8 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 **Status**: [Deprecated](document-status.md)
 
+Jaeger exporter support will be removed from OpenTelemetry in December 2023.
+
 _Note: Jaeger supports the [OpenTelemetry protocol natively][jaeger_otlp] and most users
 should export to Jaeger using OTLP. These environment variables remain here
 only for backwards compatibility and will be removed in a future version. SDKs MAY include
