@@ -224,36 +224,37 @@ groups:
         type:
           members:
             - id: cancelled
-              value: CANCELLED
+              value: cancelled
             - id: unknown
-              value: UNKNOWN
+              value: unknown
             - id: invalid_argument
-              value: INVALID_ARGUMENT
+              value: invalid_argument
             - id: deadline_exceeded
-              value: DEADLINE_EXCEEDED
+              value: deadline_exceeded
             - id: not_found
-              value: NOT_FOUND
+              value: not_found
             - id: already_exists
-              value: ALREADY_EXISTS
+              value: already_exists
             - id: permission_denied
-              value: PERMISSION_DENIED
+              value: permission_denied
             - id: resource_exhausted
-              value: RESOURCE_EXHAUSTED
+              value: resource_exhausted
             - id: failed_precondition
-              value: FAILED_PRECONDITION
+              value: failed_precondition
             - id: aborted
-              value: ABORTED
+              value: aborted
             - id: out_of_range
-              value: OUT_OF_RANGE
+              value: out_of_range
             - id: unimplemented
-              value: UNIMPLEMENTED
+              value: unimplemented
             - id: internal
-              value: INTERNAL
+              value: internal
             - id: unavailable
-              value: UNAVAILABLE
+              value: unavailable
             - id: data_loss
-              value: DATA_LOSS
+              value: data_loss
             - id: unauthenticated
-              value: UNAUTHENTICATED
-        requirement_level: required
+              value: unauthenticated
+        requirement_level:
+          conditionally_required: If response is not successful and if error code available.
         brief: "The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request."

@@ -173,26 +173,28 @@ Below is a table of attributes that SHOULD be included on client and server RPC 
 <!-- semconv rpc.buf_connect -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `rpc.buf_connect.error_code` | string | The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request. | `CANCELLED` | Conditionally Required: If applicable. |
+| `rpc.buf_connect.error_code` | string | The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request. | `cancelled` | Conditionally Required: [1] |
+
+**[1]:** If response is not successful and if error code available.
 
 `rpc.buf_connect.error_code` MUST be one of the following:
 
 | Value  | Description |
 |---|---|
-| `CANCELLED` | cancelled |
-| `UNKNOWN` | unknown |
-| `INVALID_ARGUMENT` | invalid_argument |
-| `DEADLINE_EXCEEDED` | deadline_exceeded |
-| `NOT_FOUND` | not_found |
-| `ALREADY_EXISTS` | already_exists |
-| `PERMISSION_DENIED` | permission_denied |
-| `RESOURCE_EXHAUSTED` | resource_exhausted |
-| `FAILED_PRECONDITION` | failed_precondition |
-| `ABORTED` | aborted |
-| `OUT_OF_RANGE` | out_of_range |
-| `UNIMPLEMENTED` | unimplemented |
-| `INTERNAL` | internal |
-| `UNAVAILABLE` | unavailable |
-| `DATA_LOSS` | data_loss |
-| `UNAUTHENTICATED` | unauthenticated |
+| `cancelled` | cancelled |
+| `unknown` | unknown |
+| `invalid_argument` | invalid_argument |
+| `deadline_exceeded` | deadline_exceeded |
+| `not_found` | not_found |
+| `already_exists` | already_exists |
+| `permission_denied` | permission_denied |
+| `resource_exhausted` | resource_exhausted |
+| `failed_precondition` | failed_precondition |
+| `aborted` | aborted |
+| `out_of_range` | out_of_range |
+| `unimplemented` | unimplemented |
+| `internal` | internal |
+| `unavailable` | unavailable |
+| `data_loss` | data_loss |
+| `unauthenticated` | unauthenticated |
 <!-- endsemconv -->
