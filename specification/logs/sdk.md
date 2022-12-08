@@ -156,10 +156,10 @@ public final class LogRecordLimits {
 
 * [all common options applicable to attributes](../common/README.md#configurable-parameters)
 
-There SHOULD be a log emitted to indicate to the user that an attribute was
-discarded due to such a limit. To prevent excessive logging, the log
-should be emitted at most once per log record (i.e., not per discarded
-attribute.)
+There SHOULD be a message printed in the SDK's log to indicate to the user
+that an attribute was discarded due to such a limit.
+To prevent excessive logging, the message should be printed at most once per
+`LogRecord` (i.e., not per discarded attribute.)
 
 ## LogRecordProcessor
 
