@@ -421,7 +421,7 @@ of `any` type above). Can be for example a human-readable string message
 structured data composed of arrays and maps of other values. First-party
 Applications SHOULD use a string message. However, a structured body SHOULD be
 used to preserve the semantics of structured logs emitted by Third-party
-applications. Can vary for each occurrence of the event coming from the same
+Applications. Can vary for each occurrence of the event coming from the same
 source. This field is optional.
 
 ### Field: `Resource`
