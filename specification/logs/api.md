@@ -25,6 +25,12 @@
 
 </details>
 
+<b>Note: this document defines a log *backend* API. The API is not intended to be called
+by application developers directly. It is provided for logging library authors
+to build [Appenders](#how-to-create-log4j-style-appender), which use
+this API to bridge between existing logging libraries and the OpenTelemetry log
+data model.</b>
+
 The Logs API consist of these main classes:
 
 * LoggerProvider is the entry point of the API. It provides access to Loggers.

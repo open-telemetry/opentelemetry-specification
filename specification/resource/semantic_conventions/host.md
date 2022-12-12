@@ -9,7 +9,7 @@
 <!-- semconv host -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `host.id` | string | Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider. | `opentelemetry-test` | Recommended |
+| `host.id` | string | Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider. For non-containerized Linux systems, the `machine-id` located in `/etc/machine-id` or `/var/lib/dbus/machine-id` may be used. | `fdbf79e8af94cb7f9e8df36789187052` | Recommended |
 | `host.name` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. | `opentelemetry-test` | Recommended |
 | `host.type` | string | Type of host. For Cloud, this must be the machine type. | `n1-standard-1` | Recommended |
 | `host.arch` | string | The CPU architecture the host system is running on. | `amd64` | Recommended |

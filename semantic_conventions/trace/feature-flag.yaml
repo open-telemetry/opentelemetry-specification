@@ -1,0 +1,34 @@
+groups:
+  - id: feature_flag
+    prefix: feature_flag
+    type: event
+    brief: >
+      This semantic convention defines the attributes used to represent a
+      feature flag evaluation as an event.
+    attributes:
+      - id: key
+        type: string
+        requirement_level: required
+        brief: The unique identifier of the feature flag.
+        examples: ["logo-color"]
+      - id: provider_name
+        type: string
+        requirement_level: recommended
+        brief: The name of the service provider that performs the flag evaluation.
+        examples: ["Flag Manager"]
+      - id: variant
+        type: string
+        requirement_level: recommended
+        examples: ["red", "true", "on"]
+        brief: >
+          SHOULD be a semantic identifier for a value. If one is unavailable, a
+          stringified version of the value can be used.
+        note: |-
+          A semantic identifier, commonly referred to as a variant, provides a means
+          for referring to a value without including the value itself. This can
+          provide additional context for understanding the meaning behind a value.
+          For example, the variant `red` maybe be used for the value `#c05543`.
+
+          A stringified version of the value can be used in situations where a
+          semantic identifier is unavailable. String representation of the value
+          should be determined by the implementer.
