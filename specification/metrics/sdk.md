@@ -36,7 +36,7 @@ linkTitle: SDK
   * [Built-in ExemplarFilters](#built-in-exemplarfilters)
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
-    + [SampleWithTrace](#samplewithtrace)
+    + [TraceBased](#tracebased)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
 - [MetricReader](#metricreader)
@@ -655,7 +655,9 @@ A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically
 ### ExemplarFilter
 
 The `ExemplarFilter` interface MUST provide a method to determine if a
-measurement should be sampled.
+measurement should be sampled. Sampled here simply makes the measurement
+eligible for being included as an exemplar. `ExemplarReservoir` makes the final
+decision if a measurement becomes an exemplar.
 
 This interface SHOULD have access to:
 
@@ -666,14 +668,10 @@ This interface SHOULD have access to:
   [Span](../trace/api.md#span).
 - A `timestamp` that best represents when the measurement was taken.
 
-Sampled here simply makes the measurement eligible for being included as an
-exemplar. `ExemplarReservoir` makes the final decision if a measurement becomes
-an exemplar.
-
 ### Built-in ExemplarFilters
 
 OpenTelemetry supports a number of built-in exemplar filters to choose from.
-The default is `SampleWithTrace`.
+The default is `TraceBased`.
 
 #### AlwaysOn
 
@@ -684,7 +682,7 @@ An ExemplarFilter which makes all measurements eligible for being an Exemplar.
 An ExemplarFilter which makes no measurements eligible for being an Exemplar.
 Using this ExemplarFilter is as good as disabling Exemplar feature.
 
-#### SampleWithTrace
+#### TraceBased
 
 An ExemplarFilter which makes those measurements eligible for being an
 Exemplar, which are recorded in the context of a sampled parent span.

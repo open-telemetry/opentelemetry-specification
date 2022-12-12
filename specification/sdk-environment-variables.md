@@ -288,7 +288,7 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
 - `"always_on"`: [AlwaysOn](./metrics/sdk.md#alwayson)
 - `"always_off"`: [AlwaysOff](./metrics/sdk.md#alwaysoff)
-- `"sample_with_trace"`: [SampleWithTrace](./metrics/sdk.md#samplewithtrace)
+- `"sample_with_trace"`: [TraceBased](./metrics/sdk.md#tracebased)
 
 ### Periodic exporting MetricReader
 
