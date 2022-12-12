@@ -547,6 +547,27 @@ defined in `Status` message schema.
 The server MAY include `Status.details` field with additional details. Read
 below about what this field can contain in each specific failure case.
 
+The server is recommended to use HTTP response status codes to indicate
+retryable and not-retryable errors for a particular erroneous situation. The
+client SHOULD honour HTTP response status codes as retryable or not-retryable
+according to the following table:
+
+|HTTP response status code|Retryable?|
+|---------|----------|
+|400 Bad Request|No|
+|401 Unauthorized|No|
+|402 Payment Required|No|
+|403 Forbidden|No|
+|404 Not Found|No|
+|405 Method Not Allowed|No|
+|413 Payload Too Large|No|
+|414 URI Too Long|No|
+|429 Too Many Requests|Yes|
+|431 Request Header Fields Too Large|No|
+|502 Bad Gateway|Yes|
+|503 Service Unavailable|Yes|
+|504 Gateway Timeout|Yes|
+
 ##### Bad Data
 
 If the processing of the request fails because the request contains data that
