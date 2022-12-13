@@ -454,7 +454,9 @@ The Span interface MUST provide:
 
 #### IsRecording
 
-Returns `true` if this `Span` has been started but not ended.
+Always returns `false` If this is a non-recording `Span` (Sampling
+`Decision` was `DROP` at the time of `Span` creation). Otherwise returns
+`true` if this `Span` has been started but not ended.
 After a `Span` is ended, it usually becomes non-recording and thus
 `IsRecording` SHOULD consequently return `false` for ended Spans.
 Note: Streaming implementations, where it is not known if a span is ended,
