@@ -13,6 +13,11 @@ release.
 
 ### Metrics
 
+- Recommended limits applied by default at the MetricProvider level to protect
+  metrics pipelines against excessive data production from a single
+  instrumentation library or instrument.
+  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
+
 ### Logs
 
 ### Resource
@@ -43,10 +48,6 @@ release.
 
 - Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
   ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
-- Recommended limits applied by default at the MetricProvider level to protect
-  metrics pipelines against excessive data production from a single
-  instrumentation library or instrument.
-  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 - Add OTLP exporter temporality preference named "LowMemory" which
   configures Synchronous Counter and Histogram instruments to use
   Delta aggregation temporality, which allows them to shed memory

@@ -597,51 +597,43 @@ series and the topic requires further analysis.
 
 **Status**: [Experimental](../document-status.md)
 
-MeterProviders SHOULD support being configured with limits to be applied
-to metrics produced from a single Instrumentation Library Scope.  This
+MeterProviders SHOULD support being configured with limits to be
+applied to metrics produced from a single metric instrument.  This
 mechanism supports protecting metrics pipelines from excessive data
-production, which is usually caused by a problem known as ["explosion
-of cardinality"](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality),
-in which the number of timeseries produced by application code exceeds a
-reasonable number.  These limits help protect the overall system from
-individual sources of excessive metrics instrumentation.
+production in cases when the number of timeseries produced by
+application code grows large, which can happen due to several factors.
 
-When the limits are reached by an the individual instrumentation
-library scope, the entire batch of metrics for the scope MUST be
-dropped and an error reported to the user indicating:
+Whether because of single attributes having many distinct values or
+because of combinatorial expansion among many attributes, these limits
+help protect the overall system from individual sources of excessive
+metrics instrumentation.
+
+When the limit is reached by an the individual metric instrument, the
+entire batch of metrics for the instrument MUST be dropped and an
+error reported to the user indicating:
 
 - Detail about the limit that was exceeded (e.g., the library name and
-  version, the configured limit, the instruments of that library
-  ranked by cardinality).
+  version, the instrument, and the configured limit).
 - Recommend the user to configure a [View](#view) that filters the
-  offending cardinality or drops selected instruments to correct the problem.
+  offending instrument to limit cardinality or otherwise correct the problem.
 
-Note that limits expressed here refer to exported data for a single
-collection cycle.  The number of timeseries referred to in each of
-these limits equals the number of distinct data points produced over
-one interval.
+Note that limit expressed here refers to exported data for a single
+instrument and collection interval.  The number of timeseries referred
+to here corresponds with the number of distinct data points produced
+by the instrument over one collection interval.
 
 Under some circumstances, depending on the configured aggregation
 temporality, the MeterProvider may be able to recover after these
-limits are reached.  In particular, for Synchronous instruments
-configured with Delta aggregation temporality, the MeterProvider
-SHOULD remove timeseries from memory when they become stale, making it
-possible to recover from an explosion of cardinality from one
-collection cycle to the next provided the application stops using
-excessive cardinality.  However, for MeterProviders that have
-Synchronous instruments configured with Cumulative aggregation
-temporality, once a limit is reached the MeterProvider SHOULD disable
-it for the remaining lifetime of the MeterProvider.
+limits are reached.
 
-The configurable limits are:
+### Specific cardinality limits
 
-1. The number of timeseries per instrument, with recommended default value 2000.
-2. The number of timeseries per instrumentation library scope, with recommended default value 2000.
+There is only one configurable limit: the number of timeseries per
+instrument, with recommended default value 2000.
 
-For both of these limits, the limit MAY be unset to indicate an
-unlimited configuration and the zero value is considered invalid.
-MeterProviders SHOULD NOT use an unlimited memory configuration by
-default.
+SDKs SHOULD NOT support unlimited cardinality.  There is no unset
+value for this configurable limit.  Users that wish to configure
+"unlimited" cardinality should instead configure a very large limit.
 
 ## Exemplar
 
