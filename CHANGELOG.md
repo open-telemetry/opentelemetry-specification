@@ -10,6 +10,8 @@ release.
 ### Context
 
 ### Traces
+- Deprecate jaeger exporter, scheduled for spec removal in July 2023.
+  [#2858](https://github.com/open-telemetry/opentelemetry-specification/pull/2858)
 
 ### Metrics
 
