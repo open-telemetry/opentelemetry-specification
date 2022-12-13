@@ -547,7 +547,7 @@ defined in `Status` message schema.
 The server MAY include `Status.details` field with additional details. Read
 below about what this field can contain in each specific failure case.
 
-The server is recommended to use HTTP response status codes to indicate
+The server SHOULD use HTTP response status codes to indicate
 retryable and not-retryable errors for a particular erroneous situation. The
 client SHOULD honour HTTP response status codes as retryable or not-retryable
 according to the following table:
