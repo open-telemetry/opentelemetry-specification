@@ -463,7 +463,7 @@ Note: Streaming implementations, where it is not known if a span is ended,
 are one expected case where `IsRecording` cannot change after ending a Span.
 
 Recording information like events with the `AddEvent` operation, attributes
-using `SetAttributes`, status with `SetStatus`, etc will not perform if
+using `SetAttributes`, status with `SetStatus`, etc will not perform when
 `IsRecording` returns `false`.
 
 `IsRecording` SHOULD NOT take any parameters.
