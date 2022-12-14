@@ -139,6 +139,7 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 - [Function as a Service](./faas.md)
 - [Process](./process.md)
 - [Web engine](./webengine.md)
+- [Heroku dyno](./heroku.md)
 
 ## Compute Instance
 
