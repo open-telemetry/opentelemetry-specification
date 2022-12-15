@@ -460,7 +460,7 @@ some form (e.g. in memory). When a `Span` is not recording (`IsRecording` return
 `false`), all this data is discarded right away. Further attempts to set or add
 data will not record, making the span effectively a no-op.
 
-This flag may be `true` despite the entire trace being sampled out. This
+This flag may be `true` despite the entire trace not being sampled. This
 allows to record and process information about the individual Span without
 sending it to the backend. An example of this scenario may be recording and
 processing of all incoming requests for the processing and building of
