@@ -454,16 +454,23 @@ The Span interface MUST provide:
 
 #### IsRecording
 
-Always returns `false` If this is a non-recording `Span`. Otherwise returns
-`true` if this `Span` has been started but not ended.
-After a `Span` is ended, it usually becomes non-recording and thus
-`IsRecording` SHOULD consequently return `false` for ended Spans.
-Note: Streaming implementations, where it is not known if a span is ended,
-are one expected case where `IsRecording` cannot change after ending a Span.
+A `Span` is recording (`IsRecording` returns `true`) when the data provided to
+it via functions like `SetAttributes`, `AddEvent`, `SetStatus` is captured in
+some form (e.g. in memory). When a `Span` is not recording (`IsRecording` returns
+`false`), all this data is discarded right away. Further attempts to set or add
+data will not record, making the span effectively a no-op.
 
-Recording information like events with the `AddEvent` operation, attributes
-using `SetAttributes`, status with `SetStatus`, etc will be discarded when
-`IsRecording` returns `false`.
+This flag may be `true` despite the entire trace being sampled out. This
+allows to record and process information about the individual Span without
+sending it to the backend. An example of this scenario may be recording and
+processing of all incoming requests for the processing and building of
+SLA/SLO latency charts while sending only a subset - sampled spans - to the
+backend. See also the [sampling section of SDK design](sdk.md#sampling).
+
+After a `Span` is ended, it SHOULD become non-recording and its `IsRecording`
+SHOULD start consequently return `false`. The one known exception to this is
+streaming implementations of the API that do not keep local state and cannot
+change the value of `IsRecording` after ending the span.
 
 `IsRecording` SHOULD NOT take any parameters.
 
