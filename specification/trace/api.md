@@ -461,7 +461,7 @@ some form (e.g. in memory). When a `Span` is not recording (`IsRecording` return
 data will not record, making the span effectively a no-op.
 
 This flag may be `true` despite the entire trace not being sampled. This
-allows to record and process information about the individual Span without
+allows information about the individual Span to be recorded and processed without
 sending it to the backend. An example of this scenario may be recording and
 processing of all incoming requests for the processing and building of
 SLA/SLO latency charts while sending only a subset - sampled spans - to the
