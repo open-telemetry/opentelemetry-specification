@@ -258,7 +258,7 @@ object.
 It produces an output called `SamplingResult` which contains:
 
 * A sampling `Decision`. One of the following enum values:
-  * `DROP` - `IsRecording() = false`, span will not be recorded and all events and attributes
+  * `DROP` - `IsRecording` will be `false`, span will not be recorded and all events and attributes
   will be dropped.
   * `RECORD_ONLY` - `IsRecording() = true`, but `Sampled` flag MUST NOT be set.
   * `RECORD_AND_SAMPLE` - `IsRecording() = true` AND `Sampled` flag MUST be set.
