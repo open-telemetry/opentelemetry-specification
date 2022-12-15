@@ -480,13 +480,6 @@ span's recording is determined independently from the value of this flag
 (typically based on the `sampled` flag of a `TraceFlags` on
 [SpanContext](#spancontext)).
 
-This flag may be `true` despite the entire trace being sampled out. This
-allows to record and process information about the individual Span without
-sending it to the backend. An example of this scenario may be recording and
-processing of all incoming requests for the processing and building of
-SLA/SLO latency charts while sending only a subset - sampled spans - to the
-backend. See also the [sampling section of SDK design](sdk.md#sampling).
-
 Users of the API should only access the `IsRecording` property when
 instrumenting code and never access `SampledFlag` unless used in context
 propagators.
