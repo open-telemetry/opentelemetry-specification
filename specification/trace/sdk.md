@@ -260,8 +260,8 @@ It produces an output called `SamplingResult` which contains:
 * A sampling `Decision`. One of the following enum values:
   * `DROP` - `IsRecording` will be `false`, the span will not be recorded and all events and attributes
   will be dropped.
-  * `RECORD_ONLY` - `IsRecording` will be `true`, but `Sampled` flag MUST NOT be set.
-  * `RECORD_AND_SAMPLE` - `IsRecording` will be `true` and `Sampled` flag MUST be set.
+  * `RECORD_ONLY` - `IsRecording` will be `true`, but the `Sampled` flag MUST NOT be set.
+  * `RECORD_AND_SAMPLE` - `IsRecording` will be `true` and the `Sampled` flag MUST be set.
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
 * A `Tracestate` that will be associated with the `Span` through the new
