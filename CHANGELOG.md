@@ -631,6 +631,7 @@ release.
   ([#2235](https://github.com/open-telemetry/opentelemetry-specification/pull/2235))
 - Parameters for private key and its chain added
   ([#2370](https://github.com/open-telemetry/opentelemetry-specification/pull/2370))
+- Add table for OTLP/HTTP response code and client retry recommendation([#3028](https://github.com/open-telemetry/opentelemetry-specification/pull/3028))
 
 ### SDK Configuration
 
