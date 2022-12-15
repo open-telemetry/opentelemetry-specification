@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Mark exponential bucket histogram as stable.
+  ([#3041](https://github.com/open-telemetry/opentelemetry-specification/pull/3041))
+
 ### Logs
 
 ### Resource
