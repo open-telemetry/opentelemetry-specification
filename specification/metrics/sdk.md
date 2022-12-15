@@ -352,10 +352,7 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
-
-The SDK MAY provide the following `Aggregation`:
-
-- [Exponential Bucket Histogram Aggregation](./sdk.md#exponential-bucket-histogram-aggregation)
+- [Exponential Bucket Histogram](./sdk.md#exponential-bucket-histogram-aggregation)
 
 #### Drop Aggregation
 
@@ -445,8 +442,6 @@ into the greatest-numbered bucket with boundary that is greater than
 or equal to the measurement.
 
 ##### Exponential Bucket Histogram Aggregation
-
-**Status**: [Experimental](../document-status.md)
 
 The Exponential Histogram Aggregation informs the SDK to collect data
 for the [Exponential Histogram Metric
