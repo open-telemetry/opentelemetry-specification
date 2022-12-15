@@ -467,8 +467,8 @@ processing of all incoming requests for the processing and building of
 SLA/SLO latency charts while sending only a subset - sampled spans - to the
 backend. See also the [sampling section of SDK design](sdk.md#sampling).
 
-After a `Span` is ended, it SHOULD become non-recording and its `IsRecording`
-SHOULD start consequently return `false`. The one known exception to this is
+After a `Span` is ended, it SHOULD become non-recording and `IsRecording`
+SHOULD always return `false`. The one known exception to this is
 streaming implementations of the API that do not keep local state and cannot
 change the value of `IsRecording` after ending the span.
 
