@@ -32,6 +32,7 @@ linkTitle: SDK
   * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
 - [Attribute limits](#attribute-limits)
 - [Cardinality limits](#cardinality-limits)
+  * [Specific cardinality limits](#specific-cardinality-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
   * [ExemplarReservoir](#exemplarreservoir)
