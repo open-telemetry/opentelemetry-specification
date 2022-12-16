@@ -549,21 +549,13 @@ below about what this field can contain in each specific failure case.
 
 The server SHOULD use HTTP response status codes to indicate
 retryable and not-retryable errors for a particular erroneous situation. The
-client SHOULD honour HTTP response status codes as retryable or not-retryable
-according to the following table:
+client SHOULD honour HTTP response status codes as retryable or not-retryable,
+status codes listed in following table are retryable and the other `4xx` or
+`5xx` status codes are not retryable.
 
 |HTTP response status code|Retryable?|
 |---------|----------|
-|400 Bad Request|No|
-|401 Unauthorized|No|
-|402 Payment Required|No|
-|403 Forbidden|No|
-|404 Not Found|No|
-|405 Method Not Allowed|No|
-|413 Payload Too Large|No|
-|414 URI Too Long|No|
 |429 Too Many Requests|Yes|
-|431 Request Header Fields Too Large|No|
 |502 Bad Gateway|Yes|
 |503 Service Unavailable|Yes|
 |504 Gateway Timeout|Yes|
