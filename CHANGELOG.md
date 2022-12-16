@@ -13,35 +13,17 @@ release.
 
 ### Metrics
 
-- Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
-  ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
-
 ### Logs
-
-- Move `event.domain` from InstrumentationScope attributes to LogRecord
-  attributes.
-  ([#2940](https://github.com/open-telemetry/opentelemetry-specification/pull/2940))
-- Split out Event API from Log API
-  ([#2941](https://github.com/open-telemetry/opentelemetry-specification/pull/2941))
 
 ### Resource
 
 ### Semantic Conventions
-
-- Add IBM Cloud as a cloud provider.
-  ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
-- Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
-  `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
-  ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
-
-- Specify handling of invalid numeric environment variables
-  ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
 
 ### Telemetry Schemas
 
@@ -50,6 +32,87 @@ release.
 - Clarify compliance requirement by restricting implementations from providing
   features/functionalities that are not covered by the specification.
   ([#2968](https://github.com/open-telemetry/opentelemetry-specification/pull/2968))
+
+## v1.16.0 (2022-12-08)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
+  ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
+- Add OTLP exporter temporality preference named "LowMemory" which
+  configures Synchronous Counter and Histogram instruments to use
+  Delta aggregation temporality, which allows them to shed memory
+  following a cardinality explosion, thus use less memory.
+  ([#2961](https://github.com/open-telemetry/opentelemetry-specification/pull/2961))
+
+### Logs
+
+- Clarification on what an Event is, and what the event.domain and event.name attributes represent
+  ([#2848](https://github.com/open-telemetry/opentelemetry-specification/pull/2848))
+- Move `event.domain` from InstrumentationScope attributes to LogRecord
+  attributes.
+  ([#2940](https://github.com/open-telemetry/opentelemetry-specification/pull/2940))
+- Split out Event API from Log API
+  ([#2941](https://github.com/open-telemetry/opentelemetry-specification/pull/2941))
+- Clarify data modification in `LogRecordProcessor`.
+  ([#2969](https://github.com/open-telemetry/opentelemetry-specification/pull/2969))
+- Make sure it is very clear we are not building a Logging API.
+  ([#2966](https://github.com/open-telemetry/opentelemetry-specification/pull/2966))
+
+### Resource
+
+- Extend Cloud Platform Enum with OpenShift entry for all supported cloud providers.
+  ([#2985](https://github.com/open-telemetry/opentelemetry-specification/pull/2985))
+
+### Semantic Conventions
+
+- Add `process.runtime.jvm.gc.duration` metric to semantic conventions.
+  ([#2903](https://github.com/open-telemetry/opentelemetry-specification/pull/2903))
+- Make http.status_code metric attribute an int.
+  ([#2943](https://github.com/open-telemetry/opentelemetry-specification/pull/2943))
+- Add IBM Cloud as a cloud provider.
+  ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
+- Add semantic conventions for Feature Flags
+  ([#2529](https://github.com/open-telemetry/opentelemetry-specification/pull/2529))
+- Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
+  `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
+  ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
+- List the machine-id as potential source for a unique host.id
+  ([#2978](https://github.com/open-telemetry/opentelemetry-specification/pull/2978))
+- Add `messaging.kafka.message.offset` attribute.
+  ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
+- Update hardware metrics to use `direction` as per general semantic conventions
+  ([#2942](https://github.com/open-telemetry/opentelemetry-specification/pull/2942))
+
+### Compatibility
+
+- Add OpenCensus metric bridge specification.
+  ([#2979](https://github.com/open-telemetry/opentelemetry-specification/pull/2979))
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### SDK Configuration
+
+- Specify handling of invalid numeric environment variables
+  ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
+
+### Telemetry Schemas
+
+- No changes.
+
+### Common
+
+- No changes.
 
 ## v1.15.0 (2022-11-09)
 
@@ -75,8 +138,6 @@ release.
 
 - Add `Context` as argument to `LogRecordProcessor#onEmit`.
   ([#2927](https://github.com/open-telemetry/opentelemetry-specification/pull/2927))
-- Clarification on what an Event is, and what the event.domain and event.name attributes represent
-  ([#2848](https://github.com/open-telemetry/opentelemetry-specification/pull/2848))
 
 ### Resource
 
@@ -98,8 +159,6 @@ release.
   ([#2881](https://github.com/open-telemetry/opentelemetry-specification/pull/2881))
 - Add `process.runtime.jvm.memory.usage_after_last_gc` metric to semantic conventions.
   ([#2901](https://github.com/open-telemetry/opentelemetry-specification/pull/2901))
-- Add `process.runtime.jvm.gc.duration` metric to semantic conventions.
-  ([#2903](https://github.com/open-telemetry/opentelemetry-specification/pull/2903))
 
 ### Compatibility
 
