@@ -75,12 +75,15 @@ process of notifying an intermediary that a message was processed successfully.
 An "intermediary" receives a message to forward it to the next receiver, which
 might be another intermediary or a consumer.
 
-### Destinations
+### Destinations and sources
 
 A destination is usually identified by some name unique within the messaging system instance, which might look like a URL or a simple one-word identifier.
 Traditional messaging, such as JMS, involves two kinds of destinations: *topic*s and *queue*s.
 A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all consumers that have *subscribed* to the topic.
-A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
+
+A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing). 
+
+Entity messages are received from is called **source** here. Messages can be routed within one or multiple brokers, so message's *source* and *destination* could be different.
 
 In a messaging system such as Apache Kafka, all destinations are *topic*s.
 Each record, or message, is sent to a single consumer per consumer group.
@@ -247,10 +250,13 @@ These attributes should be set to the broker to which the message is sent/from w
 ### Attribute namespaces
 
 - `messaging.message`: Contains attributes that describe individual messages
-- `messaging.destination`: Contains attributes that describe the logical entity messages are published to
+- `messaging.destination`: Contains attributes that describe the logical entity messages are published to.
+  See [Destinations and sources](#destinations-and-sources) for more details
 - `messaging.source`: Contains attributes that describe the logical entity messages are received from
 - `messaging.batch`: Contains attributes that describe batch operations
-- `messaging.consumer`: Contains attributes that describe message consumers
+- `messaging.consumer`: Contains attributes that describe application instance that consumes a message. See [consumer](#consumer) for more details
+
+Communication with broker is described with general [network attributes].
 
 Messaging system-specific attributes MUST be defined in the corresponding `messaging.{system}` namespace
 as described in [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems).
