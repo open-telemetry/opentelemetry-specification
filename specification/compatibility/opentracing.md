@@ -158,9 +158,6 @@ OpenTracing and OpenTelemetry units.
 
 The API MUST return an OpenTracing `Span`.
 
-For OpenTracing languages implementing [Close](#close), this operation MUST
-return an OpenTracing no-op `Span` if the `Tracer` Shim has been closed.
-
 ### Inject
 
 Parameters:
@@ -211,15 +208,9 @@ or no value could be extracted, depending on the specific OpenTracing Language A
 
 ## Close
 
-Mark the `Tracer` Shim as closed, effectively preventing creation of new `Span` instances.
-Subsequent calls to [Start a new Span](#start-a-new-span) MUST return a no-op instance.
-
-Closing an already closed instance MUST NOT raise an error.
-
-Observe that not all OpenTracing languages implement this operation.
-
-Note: the underlying OpenTelemetry `Tracer` is not actually closed, as the OpenTelemetry API
-currently does not expose such functionality.
+Optional operation. If this operation is implemented for a specific OpenTracing language,
+it MUST flush the underlying `TracerProvider` if such functionality is defined in the
+OpenTelemetry API, and else it MUST be defined as a no-op operation.
 
 ## Span Shim and SpanContext Shim relationship
 
