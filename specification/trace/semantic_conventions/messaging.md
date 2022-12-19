@@ -11,7 +11,7 @@
   * [Producer](#producer)
   * [Consumer](#consumer)
   * [Intermediary](#intermediary)
-  * [Destinations](#destinations)
+  * [Destinations and sources](#destinations-and-sources)
   * [Message consumption](#message-consumption)
   * [Conversations](#conversations)
   * [Temporary and anonymous destinations](#temporary-and-anonymous-destinations)
@@ -81,7 +81,7 @@ A destination is usually identified by some name unique within the messaging sys
 Traditional messaging, such as JMS, involves two kinds of destinations: *topic*s and *queue*s.
 A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all consumers that have *subscribed* to the topic.
 
-A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing). 
+A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
 
 Entity messages are received from is called **source** here. Messages can be routed within one or multiple brokers, so message's *source* and *destination* could be different.
 
