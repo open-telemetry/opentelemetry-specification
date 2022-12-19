@@ -12,6 +12,7 @@
   * [Start a new Span](#start-a-new-span)
   * [Inject](#inject)
   * [Extract](#extract)
+  * [Close](#close)
 * [Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship)
 * [Span Shim](#span-shim)
   * [Get Context](#get-context)
@@ -157,6 +158,9 @@ OpenTracing and OpenTelemetry units.
 
 The API MUST return an OpenTracing `Span`.
 
+For OpenTracing languages implementing [Close](#close), this operation MUST
+return an OpenTracing no-op `Span` if the `Tracer` Shim has been closed.
+
 ### Inject
 
 Parameters:
@@ -204,6 +208,18 @@ return SpanContextShim(extractedSpanContext, extractedBaggage);
 Errors MAY be raised if either the `Format` is not recognized
 or no value could be extracted, depending on the specific OpenTracing Language API
 (e.g. Go and Python do, but Java may not).
+
+## Close
+
+Mark the `Tracer` Shim as closed, effectively preventing creation of new `Span` instances.
+Subsequent calls to [Start a new Span](#start-a-new-span) MUST return a no-op instance.
+
+Closing an already closed instance MUST NOT raise an error.
+
+Observe that not all OpenTracing languages implement this operation.
+
+Note: the underlying OpenTelemetry `Tracer` is not actually closed, as the OpenTelemetry API
+currently does not expose such functionality.
 
 ## Span Shim and SpanContext Shim relationship
 
