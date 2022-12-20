@@ -16,6 +16,9 @@ release.
 
 ### Metrics
 
+- Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
+  ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
+
 ### Logs
 
 ### Resource
@@ -27,6 +30,10 @@ release.
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
+
+- Rename knowns values for "OTEL_METRICS_EXEMPLAR_FILTER" to "always_on",
+  "always_off" and "trace_based".
+  ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
 
 ### Telemetry Schemas
 
