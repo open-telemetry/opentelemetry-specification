@@ -60,6 +60,10 @@ Don't set the span status description if the reason can be inferred from `http.s
 
 ## Common Attributes
 
+The common attributes listed in this section apply to both HTTP clients and servers in addition to
+the specific attributes listed in the [HTTP client](#http-client) and [HTTP server](#http-server)
+sections below.
+
 <!-- semconv http -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
