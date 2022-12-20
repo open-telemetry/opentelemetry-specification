@@ -1,4 +1,8 @@
-# Schema File
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: 1.1.0
+--->
+
+# Schema File Format 1.1.0
 
 **Status**: [Experimental](../document-status.md)
 
@@ -266,10 +270,10 @@ Here is the structure:
       changes:
         - split:
             # Name of old metric to split.
-            apply_to_metric: 
+            apply_to_metric:
             # Name of attribute in the old metric to use for splitting. The attribute will be
             # eliminated, the new metric will not have it.
-            by_attribute: 
+            by_attribute:
             # Names of new metrics to create, one for each possible value of attribute.
             metrics_from_attributes:
               # map of key/values. The keys are the new metric name starting from this
