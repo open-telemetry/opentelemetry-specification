@@ -1,18 +1,32 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Schemas
+aliases: [/docs/reference/specification/schemas/overview]
+--->
+
 # Telemetry Schemas
 
 **Status**: [Experimental](../document-status.md)
 
-* [Motivation](#motivation)
-* [How Schemas Work](#how-schemas-work)
-* [What is Out of Scope](#what-is-out-of-scope)
-* [Use Cases](#use-cases)
+<details>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
+
+- [Motivation](#motivation)
+- [How Schemas Work](#how-schemas-work)
+- [What is Out of Scope](#what-is-out-of-scope)
+- [Use Cases](#use-cases)
   * [Full Schema-Aware](#full-schema-aware)
   * [Collector-Assisted Schema Transformation](#collector-assisted-schema-transformation)
-* [Schema URL](#schema-url)
-* [Schema Version Number](#schema-version-number)
-* [OTLP Support](#otlp-support)
-* [API Support](#api-support)
-* [OpenTelemetry Schema](#opentelemetry-schema)
+- [Schema URL](#schema-url)
+- [Schema Version Number](#schema-version-number)
+- [OTLP Support](#otlp-support)
+- [API Support](#api-support)
+- [OpenTelemetry Schema](#opentelemetry-schema)
+
+<!-- tocstop -->
+
+</details>
 
 ## Motivation
 
@@ -252,7 +266,8 @@ is associated with a Schema URL.
 ## OpenTelemetry Schema
 
 OpenTelemetry publishes it own schema at
-`https://opentelemetry.io/schemas/<version>`. The version number of the schema
+[opentelemetry.io/](https://opentelemetry.io/)schemas/<_version_>.
+The version number of the schema
 is the same as the specification version number which publishes the schema.
 Every time a new specification version is released a corresponding new schema
 MUST be released simultaneously. If the specification release did not introduce
