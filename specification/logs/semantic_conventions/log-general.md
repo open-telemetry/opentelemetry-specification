@@ -9,6 +9,8 @@ They may be used in any Log Record they apply to.
 
 <!-- toc -->
 
+- [General log identification attributes](#general-log-identification-attributes)
+
 <!-- tocstop -->
 
 ## General log identification attributes
