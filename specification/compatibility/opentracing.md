@@ -213,8 +213,8 @@ it MUST flush the underlying `TracerProvider` if such functionality is defined i
 OpenTelemetry API, and else it MUST be defined as a no-op operation.
 
 Optional operation. If this operation is implemented for a specific OpenTracing language,
-it MUST close the underlying `TracerProvider` if it implements a closeable interface or method,
-and else it MUST be defined as a no-op operation.
+it MUST close the underlying `TracerProvider` if it implements a "closeable" interface or method;
+otherwise it MUST be defined as a no-op operation.
 
 ## Span Shim and SpanContext Shim relationship
 
