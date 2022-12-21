@@ -27,6 +27,8 @@ release.
 
 ### Compatibility
 
+- Add Tracer.Close() to the OpenTracing Shim layer.
+
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
