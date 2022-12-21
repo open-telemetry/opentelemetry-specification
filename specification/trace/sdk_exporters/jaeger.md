@@ -7,10 +7,11 @@ The generic transformation [rules specified here](../../common/mapping-to-non-ot
 particular generic transformation rule and the rule in this document contradict
 then the rule in this document MUST be used.
 
-Jaeger accepts spans in two formats:
+Jaeger accepts spans in the following formats:
 
-* Thrift `Batch`, defined in [jaeger-idl/.../jaeger.thrift](https://github.com/jaegertracing/jaeger-idl/blob/master/thrift/jaeger.thrift), accepted via UDP or HTTP
-* Protobuf `Batch`, defined in [jaeger-idl/.../model.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/model.proto), accepted via gRPC
+* OpenTelemetry Protocol (OTLP), defined in [opentelemetry-proto](https://github.com/open-telemetry/opentelemetry-proto)
+* Thrift `Batch`, defined in [jaeger-idl/.../jaeger.thrift](https://github.com/jaegertracing/jaeger-idl/blob/main/thrift/jaeger.thrift), accepted via UDP or HTTP
+* Protobuf `Batch`, defined in [jaeger-idl/.../model.proto](https://github.com/jaegertracing/jaeger-idl/blob/main/proto/api_v2/model.proto), accepted via gRPC
 
 See also:
 
