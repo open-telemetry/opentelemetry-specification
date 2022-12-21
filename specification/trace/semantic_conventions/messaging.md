@@ -77,11 +77,11 @@ might be another intermediary or a consumer.
 
 ### Destinations and sources
 
-A destination is usually identified by some name unique within the messaging system instance, which might look like a URL or a simple one-word identifier.
+A destination is usually uniquely identified by name within the messaging system instance. Examples of a destination name would be a URL or a simple one-word identifier.
 Traditional messaging, such as JMS, involves two kinds of destinations: *topic*s and *queue*s.
 A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all consumers that have *subscribed* to the topic.
 
-A message submitted to a queue is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
+A message that is sent to a *queue* is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
 
 Entity messages are received from is called **source** here. Messages can be routed within one or multiple brokers, so message's *source* and *destination* could be different.
 
