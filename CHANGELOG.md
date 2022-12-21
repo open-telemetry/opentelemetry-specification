@@ -11,7 +11,13 @@ release.
 
 ### Traces
 
+- Deprecate jaeger exporter, scheduled for spec removal in July 2023.
+  [#2858](https://github.com/open-telemetry/opentelemetry-specification/pull/2858)
+
 ### Metrics
+
+- Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
+  ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
 
 ### Logs
 
@@ -24,6 +30,10 @@ release.
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
+
+- Rename knowns values for "OTEL_METRICS_EXEMPLAR_FILTER" to "always_on",
+  "always_off" and "trace_based".
+  ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
 
 ### Telemetry Schemas
 
@@ -631,6 +641,7 @@ release.
   ([#2235](https://github.com/open-telemetry/opentelemetry-specification/pull/2235))
 - Parameters for private key and its chain added
   ([#2370](https://github.com/open-telemetry/opentelemetry-specification/pull/2370))
+- Add table for OTLP/HTTP response code and client retry recommendation([#3028](https://github.com/open-telemetry/opentelemetry-specification/pull/3028))
 
 ### SDK Configuration
 
