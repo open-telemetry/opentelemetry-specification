@@ -208,9 +208,6 @@ or no value could be extracted, depending on the specific OpenTracing Language A
 
 ## Close
 
-Optional operation. If this operation is implemented for a specific OpenTracing language,
-it MUST flush the underlying `TracerProvider` if such functionality is defined in the
-OpenTelemetry API, and else it MUST be defined as a no-op operation.
 
 Optional operation. If this operation is implemented for a specific OpenTracing language,
 it MUST close the underlying `TracerProvider` if it implements a "closeable" interface or method;
