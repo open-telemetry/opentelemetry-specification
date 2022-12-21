@@ -22,7 +22,6 @@ release.
 - Expand the declaration of `pool.name`.
   ([#3050](https://github.com/open-telemetry/opentelemetry-specification/pull/3050))
 
-
 ### Logs
 
 ### Resource
