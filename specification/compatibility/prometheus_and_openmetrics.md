@@ -82,7 +82,7 @@ An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/
 
 ### Unknown-typed
 
-A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge.
+A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge and MUST preserve the notion of unknown (e.g a datapoint attribute specify unknown-typed) 
 
 ### Histograms
 
