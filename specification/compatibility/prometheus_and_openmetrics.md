@@ -103,6 +103,8 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 
 * The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus line produces one quantile on the resulting summary.
 * Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
+* If `_count` is not present, the metric MUST be dropped.
+* If `_sum` is not present, the summaries's sum MUST be unset.
 
 ### Dropped Types
 
