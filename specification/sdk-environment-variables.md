@@ -163,7 +163,14 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 ## Jaeger Exporter
 
-**Status**: [Stable](document-status.md)
+**Status**: [Deprecated](document-status.md)
+
+Jaeger exporter support will be removed from OpenTelemetry in July 2023.
+
+_Note: Jaeger supports the [OpenTelemetry protocol natively][jaeger_otlp] and most users
+should export to Jaeger using OTLP. These environment variables remain here
+only for backwards compatibility and will be removed in a future version. SDKs MAY include
+Jaeger exporters, but Jaeger export is not required._
 
 The `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable
 MAY by used to specify the transport protocol.
@@ -177,6 +184,7 @@ The value MUST be one of:
 [jaeger_http]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-http-stable
 [jaeger_grpc]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
 [jaeger_udp]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
+[jaeger_otlp]: https://www.jaegertracing.io/docs/latest/apis/#opentelemetry-protocol-stable
 
 The default transport protocol SHOULD be `http/thrift.binary` unless
 SDKs have good reasons to choose other as the default
@@ -286,9 +294,9 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
-- `"none"`: No measurements are eligible for exemplar sampling.
-- `"all"`: All measurements are eligible for exemplar sampling.
-- `"with_sampled_trace"`: Only allow measurements with a sampled parent span in context.
+- `"always_on"`: [AlwaysOn](./metrics/sdk.md#alwayson)
+- `"always_off"`: [AlwaysOff](./metrics/sdk.md#alwaysoff)
+- `"trace_based"`: [TraceBased](./metrics/sdk.md#tracebased)
 
 ### Periodic exporting MetricReader
 
