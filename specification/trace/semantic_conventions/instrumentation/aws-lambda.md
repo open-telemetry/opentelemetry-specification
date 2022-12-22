@@ -123,7 +123,7 @@ added as a link to the span. This means the span may have as many links as messa
 - [`faas.trigger`][faas]] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md) MUST be set to `process`.
 - [`messaging.system`](../messaging.md) MUST be set to `AmazonSQS`.
-- [`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
+- [`messaging.destination.kind` or `messaging.source.kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
 ### SQS Message
 
@@ -136,7 +136,7 @@ added as a link to the span.
 - [`faas.trigger`][faas] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
 - [`messaging.system`](../messaging.md#messaging-attributes) MUST be set to `AmazonSQS`.
-- [`messaging.destination_kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
+- [`messaging.destination.kind` or `messaging.source.kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
 Other [Messaging attributes](../messaging.md#messaging-attributes) SHOULD be set based on the available information in the SQS message
 event.
@@ -219,13 +219,15 @@ Function F:                      | Span ProcBatch |
 | SpanKind | `PRODUCER` | `PRODUCER` | `CONSUMER` | `CONSUMER` | `CONSUMER` |
 | Status | `Ok` | `Ok` | `Ok` | `Ok` | `Ok` |
 | `messaging.system` | `AmazonSQS` | `AmazonSQS` | `AmazonSQS` | `AmazonSQS` | `AmazonSQS` |
-| `messaging.destination` | `Q` | `Q` | `Q` | `Q` | `Q` |
-| `messaging.destination_kind` | `queue` | `queue` | `queue` | `queue` | `queue` |
+| `messaging.destination.name` | `Q` | `Q` | | | |
+| `messaging.source.name` | | | `Q` | `Q` | `Q` |
+| `messaging.destination.kind` | `queue` | `queue` | | | |
+| `messaging.source.kind` | | | `queue` | `queue` | `queue` |
 | `messaging.operation` |  |  | `process` | `process` | `process` |
-| `messaging.message_id` | | | | `"a1"` | `"a2"` |
+| `messaging.message.id` | | | | `"a1"` | `"a2"` |
 
 Note that if Span Prod1 and Span Prod2 were sent to different queues, Span ProcBatch would not have
-`messaging.destination` set as it would correspond to multiple destinations.
+`messaging.source.name` set as it would correspond to multiple sources.
 
 The above requires user code change to create `Span Proc1` and `Span Proc2`. In Java, the user would inherit from
 [TracingSqsMessageHandler][] instead of Lambda's standard `RequestHandler` to enable them. Otherwise these two spans

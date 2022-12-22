@@ -334,9 +334,9 @@ Note: Support for environment variables is optional.
 | Event attributes mapping to Annotations                                        |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Integer microseconds in timestamps                                             |          | N/A| +    |    | +           | +    | -      | +   | +    | +   | +    | +     |
 | **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | *        | +  |      |    | +           | +    | -      | -   | +    | +   | +    | +     |
-| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | *        | -  | +    |    | +           | -    | -      | -   |      | -   | -    | -     |
-| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | *        | +  | -    |    | +           | +    | -      | -   | +    | +   | +    | -     |
+| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | X        | +  |      |    | +           | +    | -      | -   | +    | +   | +    | +     |
+| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | X        | -  | +    |    | +           | -    | -      | -   |      | -   | -    | -     |
+| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | X        | +  | -    |    | +           | +    | -      | -   | +    | +   | +    | -     |
 | Service name mapping                                                           |          | +  | +    |    | +           | +    | -      | -   |      | +   | +    | +     |
 | Resource to Process mapping                                                    |          | +  | +    |    | +           | +    | -      | -   | +    | -   | +    | -     |
 | InstrumentationLibrary mapping                                                 |          | +  | +    |    | +           | +    | -      | -   | +    | -   | +    | -     |
