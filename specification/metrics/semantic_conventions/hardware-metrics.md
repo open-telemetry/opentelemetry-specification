@@ -1,4 +1,7 @@
-<!-- omit in toc -->
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Hardware
+--->
+
 # Semantic Conventions for Hardware Metrics
 
 **Status**: [Experimental](../../document-status.md)
