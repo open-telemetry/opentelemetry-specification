@@ -25,6 +25,9 @@ release.
 
 ### Semantic Conventions
 
+- Add `code.lineno` source code attribute
+  ([#3029](https://github.com/open-telemetry/opentelemetry-specification/pull/3029))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
