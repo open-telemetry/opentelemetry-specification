@@ -11,7 +11,13 @@ release.
 
 ### Traces
 
+- Deprecate jaeger exporter, scheduled for spec removal in July 2023.
+  [#2858](https://github.com/open-telemetry/opentelemetry-specification/pull/2858)
+
 ### Metrics
+
+- Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
+  ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
 
 ### Logs
 
@@ -19,11 +25,21 @@ release.
 
 ### Semantic Conventions
 
+- Add `code.lineno` source code attribute
+  ([#3029](https://github.com/open-telemetry/opentelemetry-specification/pull/3029))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
+- Add table for OTLP/HTTP response code and client retry recommendation
+  ([#3028](https://github.com/open-telemetry/opentelemetry-specification/pull/3028))
+
 ### SDK Configuration
+
+- Rename knowns values for "OTEL_METRICS_EXEMPLAR_FILTER" to "always_on",
+  "always_off" and "trace_based".
+  ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
 
 ### Telemetry Schemas
 
@@ -62,6 +78,8 @@ release.
   ([#2969](https://github.com/open-telemetry/opentelemetry-specification/pull/2969))
 - Make sure it is very clear we are not building a Logging API.
   ([#2966](https://github.com/open-telemetry/opentelemetry-specification/pull/2966))
+- Clarify usage of log body for structured logs
+  ([#3023](https://github.com/open-telemetry/opentelemetry-specification/pull/3023))
 
 ### Resource
 
@@ -120,6 +138,28 @@ release.
 
 - Rename `http.retry_count` to `http.resend_count` and clarify its meaning.
   ([#2743](https://github.com/open-telemetry/opentelemetry-specification/pull/2743))
+- BREAKING: rename `messaging.consumer_id` to `messaging.consumer.id`,
+  `messaging.destination` to `messaging.destination.name`,
+  `messaging.temp_destination` to `messaging.destination.temporary`,
+  `messaging.destination_kind` to `messaging.destination.kind`,
+  `messaging.message_id` to `messaging.message.id`,
+  `messaging.protocol` to `net.app.protocol.name`,
+  `messaging.protocol_version`, `net.app.protocol.version`,
+  `messaging.conversation_id` to `messaging.message.conversation_id`,
+  `messaging.message_payload_size_bytes` to `messaging.message.payload_size_bytes`,
+  `messaging.message_payload_compressed_size_bytes` to `messaging.message.payload_compressed_size_bytes`,
+  `messaging.rabbitmq.routing_key`: `messaging.rabbitmq.destination.routing_key`,
+  `messaging.kafka.message_key` to `messaging.kafka.message.key`,
+  `messaging.kafka.consumer_group` to `messaging.kafka.consumer.group`,
+  `messaging.kafka.partition` to `messaging.kafka.destination.partition`,
+  `messaging.kafka.tombstone` to `messaging.kafka.message.tombstone`,
+  `messaging.rocketmq.message_type` to `messaging.rocketmq.message.type`,
+  `messaging.rocketmq.message_tag` to `messaging.rocketmq.message.tag`,
+  `messaging.rocketmq.message_keys` to `messaging.rocketmq.message.keys`;
+  Removed `messaging.url`;
+  Renamed `send` operation to `publish`;
+  Split `destination` and `source` namespaces and clarify per-message attributes in batching scenarios.
+  ([#2763](https://github.com/open-telemetry/opentelemetry-specification/pull/2763)).
 
 ### Metrics
 
