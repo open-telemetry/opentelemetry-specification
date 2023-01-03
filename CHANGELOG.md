@@ -78,6 +78,8 @@ release.
   ([#2969](https://github.com/open-telemetry/opentelemetry-specification/pull/2969))
 - Make sure it is very clear we are not building a Logging API.
   ([#2966](https://github.com/open-telemetry/opentelemetry-specification/pull/2966))
+- Clarify usage of log body for structured logs
+  ([#3023](https://github.com/open-telemetry/opentelemetry-specification/pull/3023))
 
 ### Resource
 
