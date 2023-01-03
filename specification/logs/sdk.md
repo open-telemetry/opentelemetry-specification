@@ -28,9 +28,6 @@
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
-  * [Built-in exporters](#built-in-exporters)
-    + [OTLP Exporter](#otlp-exporter)
-    + [OTLP File exporter](#otlp-file-exporter)
 
 <!-- tocstop -->
 
@@ -396,21 +393,3 @@ return a Failure result.
 `Shutdown` SHOULD NOT block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
-
-### Built-in exporters
-
-TODO: Break out into files under `./sdk_exporters`.
-
-#### OTLP Exporter
-
-Exports to an OTLP network destination via OTLP/gRPC or OTLP/HTTP.
-
-#### OTLP File exporter
-
-Writes to a file or stdout in either OTLP JSON or OTLP Protobuf binary format.
-
-![Logging to File](img/otlp-file.png)
-
-TODO: clarify how this functionality co-exists with the overlapping
-functionality in logging libraries that allow specifying how logs are written to
-a file.
