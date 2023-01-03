@@ -476,7 +476,7 @@ If included, they MUST follow the OpenTelemetry
 ## Example Log Records
 
 For example log records see
-[JSON File serialization](../../experimental/serialization/json.md).
+[JSON File serialization](../protocol/file-exporter.md#examples).
 
 ## Appendix A. Example Mappings
 
