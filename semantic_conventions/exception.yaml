@@ -1,5 +1,6 @@
 groups:
   - id: exception
+    type: span
     prefix: exception
     brief: >
       This document defines the shared attributes used to
