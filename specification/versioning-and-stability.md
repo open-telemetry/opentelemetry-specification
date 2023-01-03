@@ -159,7 +159,7 @@ Changes to telemetry produced by OpenTelemetry instrumentation SHOULD avoid
 breaking analysis tools, such as dashboards and alerts. To achieve this, while
 allowing the evolution of telemetry and semantic conventions, OpenTelemetry
 relies on the concept of
-[Telemetry Schemas](schemas/overview.md).
+[Telemetry Schemas](schemas/README.md).
 
 Changes to semantic conventions in this specification are allowed, provided that
 the changes can be described by schema files. The following changes can be
@@ -171,7 +171,7 @@ currently described and are allowed:
 
 All such changes MUST be described in the OpenTelemetry
 [Schema File Format](schemas/file_format_v1.1.0.md) and published in this repository.
-For details see [how OpenTelemetry Schemas are published](schemas/overview.md#opentelemetry-schema).
+For details see [how OpenTelemetry Schemas are published](schemas/README.md#opentelemetry-schema).
 
 See the [Telemetry Stability](telemetry-stability.md) document for details on how
 instrumentations can use schemas to change the instrumentation they produce.
