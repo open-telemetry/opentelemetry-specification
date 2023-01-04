@@ -235,7 +235,10 @@ The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in P
 * Converting "foo/bar" to "foo_per_bar".
 
 The resulting unit SHOULD be added to the metric as
-[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily) and as a suffix to the metric name, or the unit MUST be omitted. The unit suffix comes before any type-specific suffixes.
+[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
+and as a suffix to the metric name unless the metric name already contains the
+unit, or the unit MUST be omitted. The unit suffix comes before any
+type-specific suffixes.
 
 The description of an OTLP metrics point MUST be added as
 [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
