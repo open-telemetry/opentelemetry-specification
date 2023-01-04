@@ -324,9 +324,11 @@ The API to construct synchronous instruments MUST accept the following parameter
 
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
+
+Additionally this API MAY accept the following parameters:
+
+* A `unit` of measure, following the [instrument unit rule](#instrument-unit).
+* A `description`, following the [instrument description
   rule](#instrument-description).
 
 #### Asynchronous Instrument API
@@ -340,12 +342,14 @@ The API to construct asynchronous instruments MUST accept the following paramete
 
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
-  rule](#instrument-description).
 * Zero or more `callback` functions, responsible for reporting
   [Measurement](#measurement) values of the created instrument.
+
+Additionally, this API MAY accept the following parameters:
+
+* A `unit` of measure, following the [instrument unit rule](#instrument-unit).
+* A `description`, following the [instrument description
+  rule](#instrument-description).
 
 The API MUST support creation of asynchronous instruments by passing
 zero or more `callback` functions to be permanently registered to the
