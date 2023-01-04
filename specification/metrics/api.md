@@ -121,7 +121,7 @@ The `MeterProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-* `name` (required): This name SHOULD uniquely identify the [instrumentation
+* `name`: This name SHOULD uniquely identify the [instrumentation
   scope](../glossary.md#instrumentation-scope), such as the
   [instrumentation library](../glossary.md#instrumentation-library) (e.g.
   `io.opentelemetry.contrib.mongodb`), package,
@@ -140,12 +140,15 @@ This API MUST accept the following parameters:
   implementation which is not even observability-related). A MeterProvider could
   also return a no-op Meter here if application owners configure the SDK to
   suppress telemetry produced by this library.
-* `version` (optional): Specifies the version of the instrumentation scope if the scope
+
+This API MAY accept the following parameters:
+
+* `version`: Specifies the version of the instrumentation scope if the scope
   has a version (e.g. a library version). Example value: `1.0.0`.
-* [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
-  recorded in the emitted telemetry.
-* [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
-    to associate with emitted telemetry.
+* [since 1.4.0] `schema_url`: Specifies the Schema URL that should be recorded
+  in the emitted telemetry.
+* [since 1.13.0] `attributes`: Specifies the instrumentation scope attributes
+  to associate with emitted telemetry.
 
 Meters are identified by `name`, `version`, and `schema_url` fields.  When more
 than one `Meter` of the same `name`, `version`, and `schema_url` is created, it
