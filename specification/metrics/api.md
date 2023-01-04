@@ -141,7 +141,7 @@ This API MUST accept the following parameters:
   also return a no-op Meter here if application owners configure the SDK to
   suppress telemetry produced by this library.
 
-This API MAY accept the following parameters:
+Additionally, this API MAY accept the following parameters:
 
 * `version`: Specifies the version of the instrumentation scope if the scope
   has a version (e.g. a library version). Example value: `1.0.0`.
