@@ -105,6 +105,8 @@ release.
   ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
 - Update hardware metrics to use `direction` as per general semantic conventions
   ([#2942](https://github.com/open-telemetry/opentelemetry-specification/pull/2942))
+- Add ClickHouse to db.system semantic conventions
+  ([#3011](https://github.com/open-telemetry/opentelemetry-specification/pull/3011))
 
 ### Compatibility
 
