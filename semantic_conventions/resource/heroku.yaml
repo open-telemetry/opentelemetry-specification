@@ -1,0 +1,37 @@
+groups:
+  - id: heroku
+    prefix: heroku
+    type: resource
+    brief: >
+      Heroku dyno metadata
+    attributes:
+      - id: release.version
+        type: string
+        brief: >
+          Identifier for the current release
+        examples: ['v42']
+      - id: release.creation_timestamp
+        type: string
+        brief: >
+          Time and date the release was created
+        examples: [ '2022-10-23T18:00:42Z' ]
+      - id: heroku.release.commit
+        type: string
+        brief: >
+          Commit hash for the current release
+        examples: [ 'e6134959463efd8966b20e75b913cafe3f5ec' ]
+      - id: heroku.app.name
+        type: string
+        brief: >
+          Application name
+        examples: [ 'foo-app' ]
+      - id: heroku.app.id
+        type: string
+        brief: >
+          Unique identifier for the application
+        examples: [ '2daa2797-e42b-4624-9322-ec3f968df4da' ]
+      - id: heroku.dyno.id
+        type: string
+        brief: >
+          Dyno identifier. Used as host name
+        examples: [ '2vac3221-f56c-1897-4453-ba4d8638c1ac' ]
