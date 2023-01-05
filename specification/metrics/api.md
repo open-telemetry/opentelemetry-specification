@@ -467,10 +467,14 @@ Increment the Counter by a fixed amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Required parameters:
+This API MUST accept the following parameter:
 
-* Optional [attributes](../common/README.md#attribute).
-* The increment amount, which MUST be a non-negative numeric value.
+* The numeric increment value. This value is expected to be non-negative. The
+  API MUST NOT validate this value, that is left to the API implementation.
+
+Additionally, this API MAY accept the following parameters:
+
+* The [attributes](../common/README.md#attribute) to associate with the value.
 
 The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as arguments. If
@@ -688,10 +692,15 @@ Updates the statistics with the specified amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Parameters:
+This API MUST accept the following parameter:
 
-* The amount of the `Measurement`, which MUST be a non-negative numeric value.
-* Optional [attributes](../common/README.md#attribute).
+* The `Measurement` value. This value is expected to be non-negative. The API
+  MUST NOT validate this value, that is left to the API implementation.
+
+Additionally, this API MAY accept the following parameters:
+
+* The [attributes](../common/README.md#attribute) to associate with the
+  `Measurement` value.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as individual
@@ -922,10 +931,13 @@ Increment or decrement the UpDownCounter by a fixed amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Parameters:
+This API MUST accept the following parameter:
 
-* The amount to be added, can be positive, negative or zero.
-* Optional [attributes](../common/README.md#attribute).
+* The numeric value to be added. This value can be positive, negative or zero.
+
+Additionally, this API MAY accept the following parameters:
+
+* The [attributes](../common/README.md#attribute) to associate with the value.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as individual
