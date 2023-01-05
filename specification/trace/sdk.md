@@ -582,6 +582,9 @@ configured `SpanExporter`.
 The processor SHOULD export a batch when `scheduledDelayMillis` milliseconds
 have elapsed since the processor was created or the previous export completed,
 or when the queue contains `maxExportBatchSize` or more spans.
+After the processor is created or the previous export completed, a processor
+MAY wait to start the `scheduledDelayMillis` timer until the first span is
+added to the batch.
 
 **Configurable parameters:**
 
