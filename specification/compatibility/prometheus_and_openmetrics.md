@@ -320,6 +320,9 @@ Histogram as follows:
 - `Min` and `Max` are not used.
 - `StartTimeUnixNano` is not used.
 
+[OpenTelemetry Histogram](../metrics/data-model.md#exponentialhistogram) metric
+with the delta aggregation temporality is dropped.
+
 ### Summaries
 
 An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be converted to a Prometheus metric family with the following metrics:
