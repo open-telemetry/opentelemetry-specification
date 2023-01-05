@@ -17,6 +17,10 @@ release.
 
 ### Metrics
 
+- Define conversion mapping from OTel Exponential Histograms to Prometheus Native
+  Histograms.
+  ([#3078](https://github.com/open-telemetry/opentelemetry-specification/issues/3078))
+
 ### Logs
 
 - Define BatchLogRecordProcessor default configuration values.
