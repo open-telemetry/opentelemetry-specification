@@ -295,24 +295,25 @@ OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated
 
 ### Exponential Histograms
 
-An [OpenTelemetry Histogram](../metrics/data-model.md#exponentialhistogram) with
+An [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram) with
 a cumulative aggregation temporality MUST be converted to a Prometheus Native
 Histogram as follows:
 
 - `Scale` is converted to the Native Histogram `Schema`. Currently,
   [valid values](https://github.com/prometheus/prometheus/commit/d9d51c565c622cdc7d626d3e7569652bc28abe15#diff-bdaf80ebc5fa26365f45db53435b960ce623ea6f86747fb8870ad1abc355f64fR76-R83)
-  for `schema` are -4 <= n <= 8. Exponential Histogram data points are dropped,
+  for `schema` are -4 <= n <= 8. Exponential Histogram data points are dropped
   if their `Schema` is not within this range.
 - `Count` is converted to Native Histogram `Count` if the `NoRecordedValue`
-  flag is set to `false`.
+  flag is set to `false`, otherwise, Native Histogram `Count` is set to the
+  Stale NaN value.
 - `Sum` is converted to the Native Histogram `Sum` if `Sum` is set and the
-  `NoRecordedValue` flag is set to `false`.
+  `NoRecordedValue` flag is set to `false`, otherwise, Native Histogram `Sum` is
+  set to the Stale NaN value.
 - `TimeUnixNano` is converted to the Native Histogram `Timestamp` after
-  converting nano to milliseconds.
+  converting nanoseconds to milliseconds.
 - `ZeroCount` is converted directly to the Native Histogram `ZeroCount`.
 - `ZeroThreshold`, if set, is converted to the Native Histogram `ZeroThreshold`.
   Otherwise, it is set to the default value `1e-128`.
-
 - The dense bucket layout represented by `Positive` bucket counts and `Offset` is
   converted to the Native Histogram sparse layout represented by `PositiveSpans`
   and `PositiveDeltas`. The same holds for the `Negative` bucket counts
@@ -320,8 +321,8 @@ Histogram as follows:
 - `Min` and `Max` are not used.
 - `StartTimeUnixNano` is not used.
 
-[OpenTelemetry Histogram](../metrics/data-model.md#exponentialhistogram) metric
-with the delta aggregation temporality is dropped.
+[OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram)
+metrics with the delta aggregation temporality are dropped.
 
 ### Summaries
 
