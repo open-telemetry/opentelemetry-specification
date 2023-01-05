@@ -229,10 +229,13 @@ Environment variables specific for the `udp/thrift.binary` transport protocol:
 
 **Status**: [Stable](document-status.md)
 
-| Name                          | Description                                                                        | Default                              |
-| ----------------------------- | ---------------------------------------------------------------------------------- |------------------------------------- |
-| OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces                                                         | `http://localhost:9411/api/v2/spans` |
-| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time (in milliseconds) the Zipkin exporter will wait for each batch export | 10000                                |
+| Name                                    | Description                                                                                                                                                                                              | Default                              |
+|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
+| OTEL_EXPORTER_ZIPKIN_ENDPOINT           | Endpoint for Zipkin traces                                                                                                                                                                               | `http://localhost:9411/api/v2/spans` |
+| OTEL_EXPORTER_ZIPKIN_TIMEOUT            | Maximum time (in milliseconds) the Zipkin exporter will wait for each batch export                                                                                                                       | 10000                                |
+| OTEL_EXPORTER_ZIPKIN_CERTIFICATE        | The path to the file containing trusted certificates to use when verifying server's TLS credentials. The file should contain one or more X.509 certificates in PEM format.                               |                                      |
+| OTEL_EXPORTER_ZIPKIN_CLIENT_KEY         | The path to the file containing private client key to use when verifying a client's TLS credentials. The file should contain one private key PKCS8 PEM format.                                           |                                      |
+| OTEL_EXPORTER_ZIPKIN_CLIENT_CERTIFICATE | The path to the file containing trusted certificates to use when verifying an OTLP trace, metric, or log client's TLS credentials. The file should contain one or more X.509 certificates in PEM format. |                                      |
 
 Additionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:
