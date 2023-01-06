@@ -633,10 +633,13 @@ limits are reached.
 
 ### Specific cardinality limits
 
-There is only one configurable limit: the number of timeseries per
-instrument, with recommended default value 2000.
+The SDKs that support cardinality limits MUST support the configuration and enforcement of the following limits.
 
-SDKs SHOULD NOT support unlimited cardinality.  There is no unset
+- The number of timeseries per instrument, with a RECOMMENDED default value 2000.
+
+All SDKs MUST NOT support the configuration or enforcement of any limit not listed above.
+
+SDKs SHOULD NOT support the configuration of unlimited limits.  There is no unset
 value for this configurable limit.  Users that wish to configure
 "unlimited" cardinality should instead configure a very large limit.
 
