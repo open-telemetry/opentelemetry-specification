@@ -32,6 +32,24 @@ The following configuration options MUST be available to configure the OTLP expo
   - Default: n/a
   - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_LOGS_CLIENT_CERTIFICATE`
 
+- **TLS minimum version**: Minimum TLS version to use with SSL.
+  Should only be used for a secure connection.
+  See [TLS version](./exporter.md#tls-version) for more details.
+  - Default: n/a
+  - Env vars: `OTEL_EXPORTER_OTLP_MIN_TLS` `OTEL_EXPORTER_OTLP_TRACES_MIN_TLS` `OTEL_EXPORTER_OTLP_METRICS_MIN_TLS` `OTEL_EXPORTER_OTLP_LOGS_MIN_TLS`
+
+- **TLS maximum version**: Maximum TLS version to use with SSL.
+  Should only be used for a secure connection.
+  See [TLS version](./exporter.md#tls-version) for more details.
+  - Default: n/a
+  - Env vars: `OTEL_EXPORTER_OTLP_MAX_TLS` `OTEL_EXPORTER_OTLP_TRACES_MAX_TLS` `OTEL_EXPORTER_OTLP_METRICS_MAX_TLS` `OTEL_EXPORTER_OTLP_LOGS_MAX_TLS`
+
+- **TLS cipher list**: Cipher list to use with SSL.
+  Should only be used for a secure connection.
+  See [TLS cipher](./exporter.md#tls-cipher) for more details.
+  - Default: n/a
+  - Env vars: `OTEL_EXPORTER_OTLP_CIPHER_LIST` `OTEL_EXPORTER_OTLP_TRACES_CIPHER_LIST` `OTEL_EXPORTER_OTLP_METRICS_CIPHER_LIST` `OTEL_EXPORTER_OTLP_LOGS_CIPHER_LIST`
+
 - **Headers**: Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.
   - Default: n/a
   - Env vars: `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` `OTEL_EXPORTER_OTLP_LOGS_HEADERS`
@@ -149,6 +167,56 @@ If no configuration is provided the default transport SHOULD be `http/protobuf`
 unless SDKs have good reasons to choose `grpc` as the default (e.g. for backward
 compatibility reasons when `grpc` was already the default in a stable SDK
 release).
+
+### TLS version
+
+When using a secure connection with SSL,
+configuration options `OTEL_EXPORTER_OTLP_MIN_TLS` and `OTEL_EXPORTER_OTLP_MAX_TLS`
+are used to further restrict the version of the TLS protocol negotiated by the
+secure connection.
+
+The minimum and maximum TLS version are not an arbitrary string,
+a TLS version string is an enumerated list of valid version names.
+
+The list of valid TLS version names is implementation dependent.
+
+When TLS of the corresponding version is supported by the implementation,
+valid version names SHOULD use the following syntax:
+
+- `TLSv1.0`
+- `TLSv1.1`
+- `TLSv1.2`
+- `TLSv1.3`
+
+Valid version names MAY include other versions not in this list.
+
+When an environment variable is set to a non empty value,
+and when the name is not valid for the implementation (unknown),
+the exporter MUST raise an error,
+and MUST fail to connect to the exporter endpoint.
+
+When `OTEL_EXPORTER_OTLP_MIN_TLS` is set to a valid version name,
+the OTLP exporter MUST use a TLS version greater or equal to `OTEL_EXPORTER_OTLP_MIN_TLS`.
+
+When `OTEL_EXPORTER_OTLP_MAX_TLS` is set to a valid version name,
+the OTLP exporter MUST use a TLS version lesser or equal to `OTEL_EXPORTER_OTLP_MAX_TLS`.
+
+### TLS cipher
+
+When using a secure connection with SSL,
+the configuration option `OTEL_EXPORTER_OTLP_CIPHER_LIST`
+is used to further restrict the cipher negotiated by the secure connection.
+
+The format of this variable is a textual list of cipher names, separated by
+a colon (:) character.
+
+The list of valid cipher names is implementation dependent.
+
+When connecting to the exporter endpoint, the exporter MUST use a cipher
+from the list of cipher names provided.
+
+If no suitable cipher can be used,
+the exporter MUST fail to connect to the endpoint.
 
 ### Specifying headers via environment variables
 

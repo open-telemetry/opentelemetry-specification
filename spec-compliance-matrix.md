@@ -318,6 +318,8 @@ Note: Support for environment variables is optional.
 | SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    | +           |      | -      |     |      |     | -    |       |
 | SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    | +           |      | -      |     |      |     | -    |       |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        | +   |      |     |      |       |
+| Honors the [TLS version spec](specification/protocol/exporter.md#tls-version)  |          |    |      |    |             |      |        |     |      |     |      |       |
+| Honors the [TLS cipher spec](specification/protocol/exporter.md#tls-cipher)    |          |    |      |    |             |      |        |     |      |     |      |       |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | +    |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | +    |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
