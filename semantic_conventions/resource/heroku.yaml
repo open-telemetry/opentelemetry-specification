@@ -10,28 +10,34 @@ groups:
         brief: >
           Identifier for the current release
         examples: ['v42']
+        requirement_level: optional
       - id: release.creation_timestamp
         type: string
         brief: >
           Time and date the release was created
         examples: [ '2022-10-23T18:00:42Z' ]
+        requirement_level: optional
       - id: release.commit
         type: string
         brief: >
           Commit hash for the current release
         examples: [ 'e6134959463efd8966b20e75b913cafe3f5ec' ]
+        requirement_level: optional
       - id: app.name
         type: string
         brief: >
           Application name
         examples: [ 'foo-app' ]
+        requirement_level: optional
       - id: app.id
         type: string
         brief: >
           Unique identifier for the application
         examples: [ '2daa2797-e42b-4624-9322-ec3f968df4da' ]
+        requirement_level: optional
       - id: dyno.id
         type: string
         brief: >
           Dyno identifier. Used as host name
         examples: [ '2vac3221-f56c-1897-4453-ba4d8638c1ac' ]
+        requirement_level: optional
