@@ -24,6 +24,9 @@ release.
 
 - Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
   ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+- Add heroku resource semantic conventions.
+  [#3075](https://github.com/open-telemetry/opentelemetry-specification/pull/3075)
+
 
 ### Compatibility
 
