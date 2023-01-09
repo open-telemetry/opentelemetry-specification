@@ -1,6 +1,6 @@
 groups:
-  - id: log_record
-    prefix: log_record
+  - id: log.record
+    prefix: log.record
     brief: >
       The attributes described in this section are rather generic. They may be used in any Log Record they apply to.
     attributes:
