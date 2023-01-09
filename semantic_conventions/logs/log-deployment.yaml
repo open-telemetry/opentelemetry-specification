@@ -1,0 +1,37 @@
+groups:
+  - id: log-deployment-application
+    type: event
+    prefix: deployment.application
+    brief: >
+      This document defines attributes for Cloud Native deployments
+      represented using Log Records.
+    attributes:
+      - ref: deployment.application.name
+      - ref: deployment.application.version
+      - ref: deployment.application.status
+
+  - id: log-deployment-workload
+    type: event
+    prefix: deployment.workload
+    brief: >
+      This document defines attributes for Cloud Native workload
+      represented using Log Records.
+    attributes:
+      - ref: deployment.application.name
+      - ref: deployment.workload.name
+      - ref: deployment.workload.version
+      - ref: deployment.workload.status
+
+  - id: log-deployment-task
+    type: event
+    prefix: deployment.task
+    brief: >
+      This document defines attributes for accompanying tasks that support Cloud Native deployments
+      represented using Log Records.
+    attributes:
+      - ref: deployment.application.name
+      - ref: deployment.workload.name
+        requirement_level: recommended
+      - ref: deployment.task.name
+      - ref: deployment.task.status
+

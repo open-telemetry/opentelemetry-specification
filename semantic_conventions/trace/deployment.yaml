@@ -1,0 +1,125 @@
+groups:
+  - id: deployment.application
+    prefix: deployment.application
+    type: event
+    brief: >
+        This document defines attributes for Cloud Native deployments of applications.
+        These attributes can be attached to spans when performing operations for deploying applications on Kubernetes,
+        regardless of the deployment tool being used.
+    attributes:
+      - id: name
+        type: string
+        requirement_level: required
+        brief: >
+          The name of the application under deployment.
+        examples: [ 'podtato-head' ]
+      - id: version
+        type: string
+        brief: >
+          The version of the application under deployment.
+        examples: [ '0.1.0' ]
+      - id: status
+        type:
+          allow_custom_values: true
+          members:
+            - id: 'pending'
+              value: 'Pending'
+              brief: 'The deployment has been accepted and is being set up'
+            - id: 'progressing'
+              value: 'Progressing'
+              brief: 'The deployment is currently taking place'
+            - id: 'succeeded'
+              value: 'Succeeded'
+              brief: 'The deployment was completed correctly'
+            - id: 'failed'
+              value: 'Failed'
+              brief: 'The deployment was **not** completed correctly'
+            - id: 'unknown'
+              value: 'Unknown'
+              brief: 'The deployment was unsuccessful and the reason is unknown'
+        brief: >
+          The status of the application deployment.
+
+  - id: deployment.workload
+    prefix: deployment.workload
+    type: event
+    brief: >
+      This document defines attributes for the deployment of Cloud Native workloads.
+      These attributes can be attached to spans when performing operations for deploying workloads on Kubernetes,
+      regardless of the deployment tool being used.
+    attributes:
+      - ref: deployment.application.name
+      - id: name
+        type: string
+        requirement_level: required
+        brief: >
+          The name of the single workload under deployment.
+        examples: [ 'podtato-head-hat', 'podtato-head-left-leg' ]
+      - id: namespace
+        type: string
+        brief: >
+          The namespace in which the workload will be deployed.
+        examples: [ 'podtatohead' ]
+      - id: version
+        type: string
+        brief: >
+          The version of the workload under deployment.
+        examples: [ 'v0.1.0' ]
+      - id: status
+        type:
+          allow_custom_values: true
+          members:
+            - id: 'pending'
+              value: 'Pending'
+              brief: 'The deployment has been accepted and is being set up'
+            - id: 'progressing'
+              value: 'Progressing'
+              brief: 'The deployment is currently taking place'
+            - id: 'succeeded'
+              value: 'Succeeded'
+              brief: 'The deployment was completed correctly'
+            - id: 'failed'
+              value: 'Failed'
+              brief: 'The deployment was **not** completed correctly'
+            - id: 'unknown'
+              value: 'Unknown'
+              brief: 'The deployment wass unsuccessful and the reason is unknown'
+        brief: >
+          The status of the workload deployment.
+
+  - id: deployment.task
+    prefix: deployment.task
+    type: event
+    brief: >
+      This document defines attributes for accompanying tasks that support Cloud Native deployments.
+    attributes:
+      - ref: deployment.application.name
+      - ref: deployment.workload.name
+        requirement_level: recommended
+      - id: name
+        type: string
+        requirement_level: required
+        brief: >
+          The name that identifies the executed task.
+        examples: [ 'database-migration', 'report-metric', 'provision-infrastructure' ]
+      - id: status
+        type:
+          allow_custom_values: true
+          members:
+            - id: 'pending'
+              value: 'Pending'
+              brief: 'The deployment has been accepted and is being set up'
+            - id: 'progressing'
+              value: 'Progressing'
+              brief: 'The deployment is currently taking place'
+            - id: 'succeeded'
+              value: 'Succeeded'
+              brief: 'The deployment was completed correctly'
+            - id: 'failed'
+              value: 'Failed'
+              brief: 'The deployment was **not** completed correctly'
+            - id: 'unknown'
+              value: 'Unknown'
+              brief: 'The deployment was unsuccessful and the reason is unknown'
+        brief: >
+          The status of the task execution.
