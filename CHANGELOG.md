@@ -44,6 +44,9 @@ release.
   "always_off" and "trace_based".
   ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
 
+- Add TLS min version, TLS max version, and TLS cipher list in OTLP exporter.
+  ([#3088](https://github.com/open-telemetry/opentelemetry-specification/pull/3088))
+
 ### Telemetry Schemas
 
 ### Common
