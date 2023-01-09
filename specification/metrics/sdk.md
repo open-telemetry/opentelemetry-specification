@@ -43,6 +43,7 @@ linkTitle: SDK
   * [MetricReader operations](#metricreader-operations)
     + [RegisterProducer(metricProducer)](#registerproducermetricproducer)
     + [Collect](#collect)
+    + [ForceFlush](#forceflush-1)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 - [MetricExporter](#metricexporter)
@@ -120,11 +121,7 @@ decide if they want to make the shutdown timeout configurable.
 
 This method provides a way for provider to notify the registered
 [MetricReader](#metricreader) and [MetricExporter](#metricexporter) instances,
-so they can do as much as they could to consume or send the metrics. Note:
-unlike [Push Metric Exporter](#push-metric-exporter) which can send data on its
-own schedule, [Pull Metric Exporter](#pull-metric-exporter) can only send the
-data when it is being asked by the scraper, so `ForceFlush` would not make much
-sense.
+so they can do as much as they could to consume or send the metrics.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
@@ -882,6 +879,23 @@ Note: it is expected that the `MetricReader.Collect` implementations will be
 provided by the SDK, so it is RECOMMENDED to prevent the user from accidentally
 overriding it, if possible (e.g. `final` in C++ and Java, `sealed` in C#).
 
+#### ForceFlush
+
+This method provides a way for the `MetricReader` and the configured
+[Metric Exporter](#metricexporter) to do as much as they could to consume or
+send the metrics.
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out. Note: unlike [Push Metric Exporter](#push-metric-exporter)
+which can send data on its own schedule,
+[Pull Metric Exporter](#pull-metric-exporter) can only send the data when it is
+being asked by the scraper, so `ForceFlush` would not make much sense.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
+decide if they want to make the shutdown timeout configurable.
+
 #### Shutdown
 
 This method provides a way for the `MetricReader` to do any cleanup required.
@@ -913,8 +927,9 @@ Configurable parameters:
 
 One possible implementation of periodic exporting MetricReader is to inherit
 from `MetricReader` and start a background task which calls the inherited
-`Collect()` method at the requested `exportIntervalMillis`. The reader's
-`Collect()` method may still be invoked by other callers. For example,
+`Collect()` method at the requested `exportIntervalMillis` and on the invocation
+of inherited `ForceFlush`. The reader's `Collect()` method may still be invoked
+by other callers. For example,
 
 * A user configures periodic exporting MetricReader with a push exporter and a
   30 second interval.
