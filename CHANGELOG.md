@@ -21,6 +21,8 @@ release.
 
 - Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
   ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
+- Include effects of force flush in Sdk shutdown.
+  ([#3085](https://github.com/open-telemetry/opentelemetry-specification/pull/3085))
 
 ### Logs
 

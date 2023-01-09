@@ -108,6 +108,8 @@ SHOULD return a valid no-op Meter for these calls, if possible.
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
+`Shutdown` MUST include the effects of `ForceFlush`.
+
 `Shutdown` SHOULD complete or abort within some timeout. `Shutdown` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
