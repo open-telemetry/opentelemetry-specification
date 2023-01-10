@@ -579,12 +579,25 @@ This is an implementation of the `SpanProcessor` which create batches of finishe
 spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
 
-The processor SHOULD export a batch when `scheduledDelayMillis` milliseconds
-have elapsed since the processor was created or the previous export completed,
-or when the queue contains `maxExportBatchSize` or more spans.
-After the processor is created or the previous export completed, a processor
-MAY wait to start the `scheduledDelayMillis` timer until the first span is
-added to the batch.
+The processor SHOULD export a batch when any of the following happens AND
+there is not an export currently in progress:
+
+- `scheduledDelayMillis` after the processor is constructed OR the first span
+  is received from the span processor
+- `scheduledDelayMillis` after the previous export timer ends, OR the previous
+  export completes, OR the first span is added to the queue after the previous
+  export timer ends or previous batch completes.
+- The queue contains `maxExportBatchSize` or more spans.
+
+In any of the above cases the processor MUST NOT begin an export if another
+export is in progress. If one of the above events occurs during an ongoing export
+the processor MAY do either of the following:
+
+- Export the next batch immediately when the ongoing export completes
+- Export the next batch `scheduledDelayMillis` after the ongoing export completes
+
+In any of the above cases, if the queue is empty the processor MAY export
+an empty batch OR skip the export and consider it to be completed immediately.
 
 **Configurable parameters:**
 
