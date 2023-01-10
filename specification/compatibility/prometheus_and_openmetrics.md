@@ -317,7 +317,9 @@ Histogram as follows:
 - The dense bucket layout represented by `Positive` bucket counts and `Offset` is
   converted to the Native Histogram sparse layout represented by `PositiveSpans`
   and `PositiveDeltas`. The same holds for the `Negative` bucket counts
-  and `Offset`.
+  and `Offset`. Note that Prometheus Native Histograms buckets are indexed by
+  upper boundary while Exponential Histograms are indexed by lower boundary, the
+  result being that the Offset fields are different-by-one.
 - `Min` and `Max` are not used.
 - `StartTimeUnixNano` is not used.
 
