@@ -30,6 +30,8 @@ release.
 
 - Add `code.lineno` source code attribute
   ([#3029](https://github.com/open-telemetry/opentelemetry-specification/pull/3029))
+- Add semantic conventions for TLS/SSL encrypted communication
+  ([#2992](https://github.com/open-telemetry/opentelemetry-specification/pull/2992))
 
 ### Compatibility
 
