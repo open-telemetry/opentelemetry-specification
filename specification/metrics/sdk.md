@@ -356,6 +356,9 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Sum](./sdk.md#sum-aggregation)
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
+
+The SDK SHOULD provide the following `Aggregation`:
+
 - [Exponential Bucket Histogram](./sdk.md#exponential-bucket-histogram-aggregation)
 
 #### Drop Aggregation
