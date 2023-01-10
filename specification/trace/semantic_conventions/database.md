@@ -266,4 +266,4 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.name`               | `"shopDb"` |
 | `db.statement`          | not set |
 | `db.operation`          | `"findAndModify"` |
-| `db.mongodb.collection` | `"products"` |
+| `db.mongodb.collection` | `"products"` | 
