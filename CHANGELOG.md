@@ -7,6 +7,9 @@ release.
 
 ## Unreleased
 
+- Remove spaces from example exporter User-Agent header to conform to RFC7231 & RFC7230.
+  [#3052](https://github.com/open-telemetry/opentelemetry-specification/pull/3052)
+
 ### Context
 
 ### Traces
