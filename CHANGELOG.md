@@ -27,8 +27,8 @@ release.
 
 ### Compatibility
 
-- Add condition with sum and count for prometheus summaries
-([3059]https://github.com/open-telemetry/opentelemetry-specification/pull/3059)
+- Add condition with sum and count for Prometheus summaries
+([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059))
 
 ### OpenTelemetry Protocol
 
