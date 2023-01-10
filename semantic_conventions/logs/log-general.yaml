@@ -14,4 +14,4 @@ groups:
           If an id is provided, other log records with the same id will be considered duplicates and can be removed safely.
           This means, that two distinguishable log records MUST have different values.
           However, in the case of duplication, it is not guaranteed that duplicated log records have the same id.
-        examples: ["click", "exception"]
+        examples: ["01ARZ3NDEKTSV4RRFFQ69G5FAV"]
