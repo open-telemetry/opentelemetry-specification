@@ -204,6 +204,15 @@ groups:
           The database statement being executed.
         note: The value may be sanitized to exclude sensitive information.
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
+      - id: values
+        tag: call-level
+        type: string
+        requirement_level:
+          conditionally_required: >
+            If applicable and not explicitly disabled via instrumentation configuration.
+        brief: >
+          Array of the values to insert into placeholders in sql query.
+        examples: [David, 1234]
       - id: operation
         tag: call-level
         type: string

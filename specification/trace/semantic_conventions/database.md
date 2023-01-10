@@ -159,7 +159,6 @@ Usually only one `db.name` will be used per connection though.
 |---|---|---|---|---|
 | `db.name` | string | This attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`; `main` | Conditionally Required: If applicable. |
 | `db.statement` | string | The database statement being executed. [2] | `SELECT * FROM wuser_table`; `SET mykey "WuValue"` | Conditionally Required: [3] |
-| `db.values` | string[] | Array of the values to insert into placeholders in sql query | `[David, 1234]` | Conditionally Required: [3] |
 | `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [4] | `findAndModify`; `HMSET`; `SELECT` | Conditionally Required: If `db.statement` is not applicable. |
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name". In case there are multiple layers that could be considered for database name (e.g. Oracle instance name and schema name), the database name to be used is the more specific layer (e.g. Oracle schema name).
