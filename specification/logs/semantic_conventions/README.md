@@ -4,7 +4,7 @@
 
 The following semantic conventions for logs are defined:
 
-* [General](log-general.md): General semantic attributes that may be used in describing Log Records.
+* [General](general.md): General semantic attributes that may be used in describing Log Records.
 * [Log Media](media.md): Semantic attributes that may be used in describing the source of a log.
 
 The following semantic conventions for events are defined:
