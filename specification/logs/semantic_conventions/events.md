@@ -26,11 +26,22 @@ such that the name identifies the event structurally. It is also recommended tha
 the event names have low-cardinality, so care must be taken to use fields
 that identify the class of Events but not the instance of the Event.
 
-<!-- semconv event -->
+Events MAY include domain-specific information about the occurrence (`payload`)
+of the `event`, when present this information MUST be included in the `event.data`
+attribute the values included SHOULD conform to the domain-specific defined schema
+for the identified `event`. This is the primary container for details about the
+`event`.
+
+Events MAY also include one or more additional Attributes which can be used to
+provide additional context about the `event`, whether an Attribute is required
+or optional SHOULD be defined by the domain-specific schema definition of the
+`event`.
+
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `event.name` | string | The name identifies the event. | `click`; `exception` | Required |
 | `event.domain` | string | The domain identifies the business context for the events. [1] | `browser` | Required |
+| `event.data` | [any](../data-model.md#type-any) \| [map<string, any>](../data-model.md#type-mapstring-any) | The domain-specific `payload` of the `event` which provides details about the occurrence of the named event. | `{ connectStart: 100, connectEnd: 103, domainLookupStart: 80, domainLookupEnd: 90 }` | Optional |
 
 **[1]:** Events across different domains may have same `event.name`, yet be
 unrelated events.
@@ -42,4 +53,11 @@ unrelated events.
 | `browser` | Events from browser apps |
 | `device` | Events from mobile apps |
 | `k8s` | Events from Kubernetes |
-<!-- endsemconv -->
+
+`event.data` contains the domain-specific information about the occurrence of the
+`event` (ie. the payload of the event). And may include details about the occurrence
+or data that was change (depending on the schema of the domain-specific named event)
+
+The specification does not place any restriction on the fields or type of the
+information included in the `event.data` Attribute as it's contents SHOULD conform
+to the `schema` of the domain-specific event.
