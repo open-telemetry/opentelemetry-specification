@@ -30,6 +30,10 @@ release.
 
 - Add `code.lineno` source code attribute
   ([#3029](https://github.com/open-telemetry/opentelemetry-specification/pull/3029))
+- Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
+  to match the existing `cloud.provider` prefix.
+  [#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095)
+
 
 ### Compatibility
 
