@@ -595,7 +595,7 @@ export is in progress. If one of the above events occurs during an ongoing expor
 the processor MAY do either of the following:
 
 - Export the next batch immediately when the ongoing export completes. This
-  behavior SHOULD be chosen when the next batch export was triggered by `ForceFlush`.
+  behavior SHOULD be chosen when the next batch export was triggered by reaching `maxExportBatchSize` spans in the queue or when`ForceFlush` is called.
 - Export the next batch `scheduledDelayMillis` after the ongoing export completes.
 
 In any of the above cases, if the queue is empty the processor MAY export
