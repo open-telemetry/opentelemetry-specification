@@ -21,7 +21,11 @@ release.
 
 - Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
   ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
-- Mark exponential bucket histogram as stable.
+- Rename exponential histogram aggregation to base 2 exponential histogram
+  aggregation. Rename "OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION"
+  value from "exponential_bucket_histogram" to
+  "base2_exponential_bucket_histogram". Mark exponential histogram data model and
+  base2 exponential histogram aggregation aggregation as stable.
   ([#3041](https://github.com/open-telemetry/opentelemetry-specification/pull/3041))
 
 ### Logs

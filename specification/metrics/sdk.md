@@ -23,7 +23,7 @@ linkTitle: SDK
     + [Last Value Aggregation](#last-value-aggregation)
     + [Histogram Aggregations](#histogram-aggregations)
       - [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
-      - [Exponential Bucket Histogram Aggregation](#exponential-bucket-histogram-aggregation)
+      - [Base2 Exponential Bucket Histogram Aggregation](#base2-exponential-bucket-histogram-aggregation)
         * [Handle all normal values](#handle-all-normal-values)
         * [Support a minimum and maximum scale](#support-a-minimum-and-maximum-scale)
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
@@ -359,7 +359,7 @@ The SDK MUST provide the following `Aggregation` to support the
 
 The SDK SHOULD provide the following `Aggregation`:
 
-- [Exponential Bucket Histogram](./sdk.md#exponential-bucket-histogram-aggregation)
+- [Base2 Exponential Bucket Histogram](./sdk.md#base2-exponential-bucket-histogram-aggregation)
 
 #### Drop Aggregation
 
@@ -448,11 +448,11 @@ bound (except at positive infinity).  A measurement is defined to fall
 into the greatest-numbered bucket with boundary that is greater than
 or equal to the measurement.
 
-##### Exponential Bucket Histogram Aggregation
+##### Base2 Exponential Bucket Histogram Aggregation
 
-The Exponential Histogram Aggregation informs the SDK to collect data
+The Base2 Exponential Histogram Aggregation informs the SDK to collect data
 for the [Exponential Histogram Metric
-Point](./data-model.md#exponentialhistogram), which uses an exponential
+Point](./data-model.md#exponentialhistogram), which uses a base-2 exponential
 formula to determine bucket boundaries and an integer `scale`
 parameter to control resolution.
 
