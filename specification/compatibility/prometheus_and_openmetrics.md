@@ -301,8 +301,10 @@ Histogram as follows:
 
 - `Scale` is converted to the Native Histogram `Schema`. Currently,
   [valid values](https://github.com/prometheus/prometheus/commit/d9d51c565c622cdc7d626d3e7569652bc28abe15#diff-bdaf80ebc5fa26365f45db53435b960ce623ea6f86747fb8870ad1abc355f64fR76-R83)
-  for `schema` are -4 <= n <= 8. Exponential Histogram data points are dropped
-  if their `Schema` is not within this range.
+  for `schema` are -4 <= n <= 8.
+  If `Scale` is > 8 then Exponential Histogram data points SHOULD be downscaled
+  to a scale accepted by Prometheus (in range [-4,8]). Any data point unable to
+  be rescaled to an acceptable range MUST be dropped.
 - `Count` is converted to Native Histogram `Count` if the `NoRecordedValue`
   flag is set to `false`, otherwise, Native Histogram `Count` is set to the
   Stale NaN value.

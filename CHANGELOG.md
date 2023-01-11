@@ -17,10 +17,6 @@ release.
 
 ### Metrics
 
-- Define conversion mapping from OTel Exponential Histograms to Prometheus Native
-  Histograms.
-  ([#3078](https://github.com/open-telemetry/opentelemetry-specification/issues/3078))
-
 ### Logs
 
 - Define BatchLogRecordProcessor default configuration values.
@@ -46,6 +42,10 @@ release.
   ([#3165](https://github.com/open-telemetry/opentelemetry-specification/pull/3165))
 
 ### Compatibility
+
+- Define conversion mapping from OTel Exponential Histograms to Prometheus Native
+  Histograms.
+  ([#3078](https://github.com/open-telemetry/opentelemetry-specification/issues/3078))
 
 - Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
   ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
