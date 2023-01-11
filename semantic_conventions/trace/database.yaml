@@ -402,6 +402,56 @@ groups:
           value MUST NOT be set.
         examples: ['public.users', 'customers']
 
+  - id: db.cosmosdb
+    prefix: db.cosmosdb
+    type: span
+    extends: db
+    brief: >
+      Call-level attributes for CosmosDb
+    attributes:
+      - id: "client_id"
+        type: string
+        tag: call-level-tech-specific-cosmsodb
+      - id: "machine_id"
+        type: string
+        tag: call-level-tech-specific-cosmsodb
+      - id: "user_agent"
+        type: string
+        tag: call-level-tech-specific-cosmsodb
+      - id: "connection_mode"
+        type: string
+        tag: call-level-tech-specific-cosmsodb
+      - id: "container"
+        type: string
+        tag: call-level-tech-specific-cosmsodb
+      - id: "request_content_length_bytes"
+        type: int
+        tag: call-level-tech-specific-cosmsodb
+      - id: "response_content_length_bytes"
+        type: int
+        tag: call-level-tech-specific-cosmsodb
+      - id: "status_code"
+        type: int
+        tag: call-level-tech-specific-cosmsodb
+      - id: "sub_status_code"
+        type: int
+        tag: call-level-tech-specific-cosmsodb
+      - id: "request_charge"
+        type: int
+        tag: call-level-tech-specific-cosmsodb
+      - id: "regions_contacted"
+        type: string
+        tag: call-level-tech-specific-cosmsodb
+      - id: "retry_count"
+        type: int
+        tag: call-level-tech-specific-cosmsodb
+      - id: "operation_type"
+        type: string
+        tag: call-level-tech-specific-cosmsodb
+      - id: "item_count"
+        type: int
+        tag: call-level-tech-specific-cosmsodb
+
   - id: db.tech
     type: span
     brief: "Semantic convention group for specific technologies"
@@ -410,3 +460,6 @@ groups:
       - include: 'db.redis'
       - include: 'db.mongodb'
       - include: 'db.sql'
+      - include: 'db.cosmosdb'
+  
+

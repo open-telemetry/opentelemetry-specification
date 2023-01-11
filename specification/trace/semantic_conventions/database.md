@@ -16,6 +16,7 @@
   * [MySQL](#mysql)
   * [Redis](#redis)
   * [MongoDB](#mongodb)
+  * [CosmosDB](#cosmosdb)
 
 <!-- tocstop -->
 
@@ -268,3 +269,52 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.statement`          | not set |
 | `db.operation`          | `"findAndModify"` |
 | `db.mongodb.collection` | `"products"` |
+
+### CosmosDB
+
+##### Azure Specific Attributes
+| Attribute  | Value | Comment |
+| --------  | ------------------- | --------------------- |
+| _kind_ | _client_       | _IGNORE, By Default, setting them as part of diagnostic scope_ | 
+| _az.namespace_| _Microsoft.DocumentDB_  | _IGNORE,  By Default, setting them as part of diagnostic scope_  | 
+
+##### Common Database Attributes
+| Attribute  | Value | Comment |
+| --------  | ------------------- | --------------------- |
+|db.system| cosmosdb | Open Telemetry Convention To identify type of Db  ref. https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/database.md#notes-and-well-known-identifiers-for-dbsystem|
+| db.name | < Database Name >  |   | 
+| db.operation| ReadItemAsync, DeleteItemStreamAsync etc  | Database Operation ~Type~ Name  | 
+| net.peer.name |  e.g. sourabhjaintemp  |  Account Name + Cloud | 
+
+##### Cosmos DB Specific
+Account Level Information:
+| Attribute  | Value | Comment |
+| --------  | ------------------- | --------------------- |
+| db.cosmosdb.client_id| Unique Client Id| Combination of client id and machine id can tell us, if customer is following best practices to create singleton client  |
+| db.cosmosdb.machine_id| Unique Machine Id|  |
+| db.cosmosdb.user_agent| < User Agent With SDK version>  | Useful to identify the SDK version  | 
+| db.cosmosdb.connection_mode | Direct/Gateway |   go through | 
+
+Request Level Information:
+
+| Attribute  | Value | Comment |
+| --------  | ------------------- | --------------------- |
+| db.cosmosdb.container| Container |    |
+| db.cosmosdb.request_content_length_bytes | Size of request payload |    |
+| db.cosmosdb.response_content_length_bytes | Size of response Payload |   | 
+| db.cosmosdb.status_code  | 201/200/204   |  Cosmos Db Http Status Code, it tells if particular cosmosdb call/request is passed/failed with which HttpStatusCode  | 
+| db.cosmosdb.sub_status_code  | 1000/1002   |  Cosmos Db SubStatus Code | 
+| db.cosmosdb.request_charge  | < double type number > | RU consumed for that operation  | 
+| db.cosmosdb.regions_contacted| Region Cosmos Db|  |
+| db.cosmosdb.retry_count| Number of retries|  |
+| db.cosmosdb.operation_type| Query/Read/Create |  |
+| db.cosmosdb.item_count | < int number> |  Number of items returned by the operation, only Feed Operation |
+| db.cosmosdb.request_diagnostics | < JSON String> |  **Open Question: What if this string is out of the limit size? will appinsight will break it and divide into different attributes?**  |
+
+##### Open Telemetry Standard for any Exception
+
+| Attribute  | Value | Comment |
+| --------  | ------------------- | --------------------- |
+| exception.type| `java.net.ConnectException; ``OSError `| ref. https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/exceptions.md | 
+| exception.message| `Division by zero; Can't convert 'int' object to str implicitly `| ref. https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/exceptions.md | 
+| exception.stacktrace| `Exception in thread "main" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)` | ref. https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/exceptions.md | 
