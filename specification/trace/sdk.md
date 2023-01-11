@@ -583,7 +583,7 @@ The processor SHOULD export a batch when any of the following happens AND
 there is not an export currently in progress:
 
 - `scheduledDelayMillis` after the processor is constructed OR the first span
-  is received from the span processor.
+  is received by the span processor.
 - `scheduledDelayMillis` after the previous export timer ends, OR the previous
   export completes, OR the first span is added to the queue after the previous
   export timer ends or previous batch completes.
