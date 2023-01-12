@@ -206,13 +206,13 @@ groups:
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
       - id: values
         tag: call-level
-        type: string
+        type: string[]
         requirement_level:
           conditionally_required: >
-            If applicable and not explicitly disabled via instrumentation configuration.
+            If applicable and enabled via instrumentation configuration.
         brief: >
-          Array of the values to insert into placeholders in sql query.
-        examples: [David, 1234]
+          An array of values that accompanies the query.
+        examples: ["David", "1234"]
       - id: operation
         tag: call-level
         type: string
