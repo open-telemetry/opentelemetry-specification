@@ -203,9 +203,6 @@ In other words:
 - an implementation is free to add more versions, for example
   `1.4` when TLS version 1.4 becomes available.
 
-
-
-
 When an environment variable is set to a non empty value,
 and when the name is not valid for the implementation (unknown),
 the exporter MUST raise an error,
@@ -229,18 +226,20 @@ so there are several things to consider.
 From an end user point of view:
 
 - end users are expected to know how to write a value
-  for environment variable `OTEL_EXPORTER_OTLP_CIPHER_LIST`
-- hence, valid cipher names should be specified somewhere
-- and, how to represent a list should be specified somewhere
+  for environment variable `OTEL_EXPORTER_OTLP_CIPHER_LIST`,
+- hence, valid cipher names should be specified somewhere,
+- and, how to represent a list should be specified somewhere.
 
 From an opentelemetry implementation point of view:
 
 - the data format in `OTEL_EXPORTER_OTLP_CIPHER_LIST` is implementation dependent,
   because it ultimately depends on the software package used
-  to implement SSL/TLS, which will vary.
-- Not every SSL/TLS package, and therefore every opentelemetry
+  to implement SSL/TLS, which will vary,
+- not every SSL/TLS package, and therefore every opentelemetry
   implementation, will use the same representation for cipher names and
   lists, so the implementation needs to have some freedom here.
+
+These two points of view appear to be conflicting.
 
 This is resolved by introducing a documentation requirement:
 
@@ -249,7 +248,7 @@ This is resolved by introducing a documentation requirement:
   When a third party library is used, this can be achieved for example by
   pointing to the relevant third party library documentation.
 
-For example with curl, the ciphers are documented
+To illustrate with `curl`, the ciphers are documented
 [here](https://curl.se/docs/ssl-ciphers.html).
 
 ### Specifying headers via environment variables
