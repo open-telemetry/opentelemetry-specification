@@ -272,33 +272,20 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 
 ### CosmosDB
 
-##### Azure Specific Attributes
+CosmosDb SDK (Currently only .Net) emit Activity at operation level with following attributes/information.
+
 | Attribute  | Value | Comment |
 | --------  | ------------------- | --------------------- |
 | _kind_ | _client_       | _IGNORE, By Default, setting them as part of diagnostic scope_ | 
 | _az.namespace_| _Microsoft.DocumentDB_  | _IGNORE,  By Default, setting them as part of diagnostic scope_  | 
-
-##### Common Database Attributes
-| Attribute  | Value | Comment |
-| --------  | ------------------- | --------------------- |
 |db.system| cosmosdb | Open Telemetry Convention To identify type of Db  ref. https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/database.md#notes-and-well-known-identifiers-for-dbsystem|
 | db.name | < Database Name >  |   | 
 | db.operation| ReadItemAsync, DeleteItemStreamAsync etc  | Database Operation ~Type~ Name  | 
 | net.peer.name |  e.g. sourabhjaintemp  |  Account Name + Cloud | 
-
-##### Cosmos DB Specific
-Account Level Information:
-| Attribute  | Value | Comment |
-| --------  | ------------------- | --------------------- |
 | db.cosmosdb.client_id| Unique Client Id| Combination of client id and machine id can tell us, if customer is following best practices to create singleton client  |
 | db.cosmosdb.machine_id| Unique Machine Id|  |
 | db.cosmosdb.user_agent| < User Agent With SDK version>  | Useful to identify the SDK version  | 
 | db.cosmosdb.connection_mode | Direct/Gateway |   go through | 
-
-Request Level Information:
-
-| Attribute  | Value | Comment |
-| --------  | ------------------- | --------------------- |
 | db.cosmosdb.container| Container |    |
 | db.cosmosdb.request_content_length_bytes | Size of request payload |    |
 | db.cosmosdb.response_content_length_bytes | Size of response Payload |   | 
@@ -309,12 +296,18 @@ Request Level Information:
 | db.cosmosdb.retry_count| Number of retries|  |
 | db.cosmosdb.operation_type| Query/Read/Create |  |
 | db.cosmosdb.item_count | < int number> |  Number of items returned by the operation, only Feed Operation |
-| db.cosmosdb.request_diagnostics | < JSON String> |  **Open Question: What if this string is out of the limit size? will appinsight will break it and divide into different attributes?**  |
-
-##### Open Telemetry Standard for any Exception
-
-| Attribute  | Value | Comment |
-| --------  | ------------------- | --------------------- |
+| db.cosmosdb.activity_id | Guid |  Unique Id for the operation and can be helpful to debug particular operation in backend logs  |
+| db.cosmosdb.correlated_activity_id| Guid | It will be populated only in case of query operation to allow correlating query pages retrieved for the same multi-page or cross-partition query. |
 | exception.type| `java.net.ConnectException; ``OSError `| ref. https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/exceptions.md | 
 | exception.message| `Division by zero; Can't convert 'int' object to str implicitly `| ref. https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/exceptions.md | 
 | exception.stacktrace| `Exception in thread "main" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)` | ref. https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/exceptions.md | 
+
+CosmosDb SDK (Currently only .Net) emit Activity at Network level with following attributes/information.
+
+| Attribute  | Value | Comment |
+| --------  | ------------------- | --------------------- |
+| rntbd.url | |   rntbd url with partitionid and replicaid |
+| rntbd.operation_type |  |   Operation Type |
+| rntbd.resource_type |  |  Resource Type | 
+| rntbd.status_code  | 201/200/204   |  network status code  | 
+| rntbd.sub_status_code  | 1000/1002   |  Cosmos Db SubStatus Code | 
