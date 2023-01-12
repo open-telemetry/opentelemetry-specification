@@ -272,25 +272,3 @@ metric exporters.
 * OpenTelemetry does not currently support context-based attributes (tags).
 * OpenTelemetry does not support OpenCensus' SumOfSquaredDeviation field; this
   is dropped when using the bridge.
-
-## Semantic Convention Mappings
-
-Where possible, the tracing and metrics shims SHOULD provide mappings of labels
-to attributes defined within the OpenTelemetry semantic convetions.
-
-> The principle is to ensure OpenTelemetry exporters, which use these semantic
-> conventions, are likely to export the correct data.
-
-### HTTP Attributes
-
-OpenCensus specifies the following [HTTP Attributes](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/HTTP.md#attributes):
-
-| OpenCensus Name    | OpenTelemetry Name | Comments             |
-| ------------------ | ------------------ |----------------------|
-| `http.host`        | `http.host`        |                      |
-| `http.method`      | `http.method`      |                      |
-| `http.user_agent`  | `http.user_agent`  |                      |
-| `http.status_code` | `http.status_code` |                      |
-| `http.url`         | `http.url`         |                      |
-| `http.path`        | `http.target`      | key-name change only |
-| `http.route`       | N/A                | Pass through ok      |
