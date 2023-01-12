@@ -25,8 +25,8 @@ linkTitle: API
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
-    + [Synchronous Instrument API](#synchronous-instrument-api)
-    + [Asynchronous Instrument API](#asynchronous-instrument-api)
+      - [Synchronous Instrument API](#synchronous-instrument-api)
+      - [Asynchronous Instrument API](#asynchronous-instrument-api)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -295,10 +295,10 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 * It MUST support at least 1023 characters. [OpenTelemetry
   API](../overview.md#api) authors MAY decide if they want to support more.
 
+#### Synchronous and Asynchronous instruments
+
 Instruments are categorized on whether they are synchronous or
 asynchronous:
-
-#### Synchronous and Asynchronous instruments
 
 * Synchronous instruments (e.g. [Counter](#counter)) are meant to be invoked
   inline with application/business processing logic. For example, an HTTP client
@@ -318,7 +318,7 @@ Please note that the term *synchronous* and *asynchronous* have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
-#### Synchronous Instrument API
+##### Synchronous Instrument API
 
 The API to construct synchronous instruments MUST accept the following parameters:
 
@@ -331,7 +331,7 @@ Additionally this API MAY accept the following parameters:
 * A `description`, following the [instrument description
   rule](#instrument-description).
 
-#### Asynchronous Instrument API
+##### Asynchronous Instrument API
 
 Asynchronous instruments have associated `callback` functions which
 are responsible for reporting [Measurement](#measurement)s. Callback
