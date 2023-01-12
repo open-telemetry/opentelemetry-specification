@@ -36,18 +36,23 @@ The following configuration options MUST be available to configure the OTLP expo
   Should only be used for a secure connection.
   See [TLS version](./exporter.md#tls-version) for more details.
   - Default: n/a
+  - Type: enum
+  - Enum items: see details
   - Env vars: `OTEL_EXPORTER_OTLP_MIN_TLS` `OTEL_EXPORTER_OTLP_TRACES_MIN_TLS` `OTEL_EXPORTER_OTLP_METRICS_MIN_TLS` `OTEL_EXPORTER_OTLP_LOGS_MIN_TLS`
 
 - **TLS maximum version**: Maximum TLS version to use with SSL.
   Should only be used for a secure connection.
   See [TLS version](./exporter.md#tls-version) for more details.
   - Default: n/a
+  - Type: enum
+  - Enum items: see details
   - Env vars: `OTEL_EXPORTER_OTLP_MAX_TLS` `OTEL_EXPORTER_OTLP_TRACES_MAX_TLS` `OTEL_EXPORTER_OTLP_METRICS_MAX_TLS` `OTEL_EXPORTER_OTLP_LOGS_MAX_TLS`
 
 - **TLS cipher list**: Cipher list to use with SSL.
   Should only be used for a secure connection.
   See [TLS cipher](./exporter.md#tls-cipher) for more details.
   - Default: n/a
+  - Type: string
   - Env vars: `OTEL_EXPORTER_OTLP_CIPHER_LIST` `OTEL_EXPORTER_OTLP_TRACES_CIPHER_LIST` `OTEL_EXPORTER_OTLP_METRICS_CIPHER_LIST` `OTEL_EXPORTER_OTLP_LOGS_CIPHER_LIST`
 
 - **Headers**: Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.
@@ -175,20 +180,31 @@ configuration options `OTEL_EXPORTER_OTLP_MIN_TLS` and `OTEL_EXPORTER_OTLP_MAX_T
 are used to further restrict the version of the TLS protocol negotiated by the
 secure connection.
 
-The minimum and maximum TLS version are not an arbitrary string,
-a TLS version string is an enumerated list of valid version names.
+The minimum and maximum TLS version are enumerated values,
+listing TLS version names.
 
-The list of valid TLS version names is implementation dependent.
+The list of TLS version names is implementation dependent.
 
 When TLS of the corresponding version is supported by the implementation,
-valid version names SHOULD use the following syntax:
+version names SHOULD use the following syntax:
 
-- `TLSv1.0`
-- `TLSv1.1`
-- `TLSv1.2`
-- `TLSv1.3`
+- `1.0`
+- `1.1`
+- `1.2`
+- `1.3`
 
-Valid version names MAY include other versions not in this list.
+Version names MAY include other versions not in this list.
+
+In other words:
+
+- the specification does not require that TLS v1.0 is supported by an implementation,
+  it only requires that if TLS v1.0 is implemented,
+  the enum value to represent it should be `1.0`
+- an implementation is free to add more versions, for example
+  `1.4` when TLS version 1.4 becomes available.
+
+
+
 
 When an environment variable is set to a non empty value,
 and when the name is not valid for the implementation (unknown),
@@ -207,16 +223,34 @@ When using a secure connection with SSL,
 the configuration option `OTEL_EXPORTER_OTLP_CIPHER_LIST`
 is used to further restrict the cipher negotiated by the secure connection.
 
-The format of this variable is a textual list of cipher names, separated by
-a colon (:) character.
+This variable is a complex type, serialized as a string,
+so there are several things to consider.
 
-The list of valid cipher names is implementation dependent.
+From an end user point of view:
 
-When connecting to the exporter endpoint, the exporter MUST use a cipher
-from the list of cipher names provided.
+- end users are expected to know how to write a value
+  for environment variable `OTEL_EXPORTER_OTLP_CIPHER_LIST`
+- hence, valid cipher names should be specified somewhere
+- and, how to represent a list should be specified somewhere
 
-If no suitable cipher can be used,
-the exporter MUST fail to connect to the endpoint.
+From an opentelemetry implementation point of view:
+
+- the data format in `OTEL_EXPORTER_OTLP_CIPHER_LIST` is implementation dependent,
+  because it ultimately depends on the software package used
+  to implement SSL/TLS, which will vary.
+- Not every SSL/TLS package, and therefore every opentelemetry
+  implementation, will use the same representation for cipher names and
+  lists, so the implementation needs to have some freedom here.
+
+This is resolved by introducing a documentation requirement:
+
+- the opentelemetry implementation MUST, in the documentation,
+  provide details about how the cipher list is represented.
+  When a third party library is used, this can be achieved for example by
+  pointing to the relevant third party library documentation.
+
+For example with curl, the ciphers are documented
+[here](https://curl.se/docs/ssl-ciphers.html).
 
 ### Specifying headers via environment variables
 
