@@ -216,7 +216,7 @@ The Shim layer MUST protect against errors or exceptions raised while closing th
 underlying `TracerProvider`.
 
 Note: Users are advised against calling this operation more than once per `TracerProvider`
-as it may incur in unexpected side effects, limitations or race conditions, e.g.
+as it may have unexpected side effects, limitations or race conditions, e.g.
 a single Shim `Tracer` being closed multiple times or multiple Shim `Tracer`
 having their close operation being called.
 
