@@ -7,6 +7,9 @@ release.
 
 ## Unreleased
 
+- Remove spaces from example exporter User-Agent header to conform to RFC7231 & RFC7230.
+  [#3052](https://github.com/open-telemetry/opentelemetry-specification/pull/3052)
+
 ### Context
 
 ### Traces
@@ -105,6 +108,8 @@ release.
   ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
 - Update hardware metrics to use `direction` as per general semantic conventions
   ([#2942](https://github.com/open-telemetry/opentelemetry-specification/pull/2942))
+- Add ClickHouse to db.system semantic conventions
+  ([#3011](https://github.com/open-telemetry/opentelemetry-specification/pull/3011))
 
 ### Compatibility
 
