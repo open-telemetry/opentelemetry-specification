@@ -41,11 +41,12 @@ Starting with an application using entirely OpenCensus instrumention for traces 
     1. Install the OpenTelemetry SDK, with an equivalent exporter
         1. If using an OpenCensus exporter, switch to using an OTLP exporter
     2. Install equivalent OpenTelemetry resource detectors
-    3. Install OpenTelemetry propagators for OpenCensus' `TextFormat` and `BinaryPropagator` formats.
+    3. Install OpenTelemetry [`W3c TraceContext`](../context/api-propagators.md#propagators-distribution) propagator, which is the equivalent of the OpenCensus' `TextFormat` propagator.
     4. **breaking**: Install the metrics and trace bridges
     5. Remove initialization of OpenCensus exporters
 2. Migrate the instrumentation (API)
     1. **breaking**: For OpenCensus instrumentation packages, migrate to the OpenTelemetry equivalent.
+        1. If migrating gRPC, enable the [`BinaryPropagation`](../context/api-propagators.md#propagators-distribution) propagator if the language supports it. Otherwise, enable OpenCensus `BinaryPropagation` on the OpenTelemetry gRPC instrumentation.
     2. For external dependencies, wait for it to migrate to OpenTelemetry, and update the dependency.
     3. For instrumentation which is part of the application, migrate it following the "library" guidance below.
 3. Clean up: Remove the metrics and trace bridges
@@ -160,11 +161,6 @@ and auto injection of dependencies.
 All specified methods in OpenCensus will delegate to the underlying `Span` of
 OpenTelemetry.
 
-### Span Attributes
-
-Span attributes SHOULD be mapped following
-[semantic convention mappings](#semantic-convention-mappings) described below.
-
 ### Resources
 
 Note: resources appear not to be usable in the "API" section of OpenCensus.
@@ -195,33 +191,21 @@ using the OpenCensus <-> OpenTelemetry bridge.
    "sampled".  In this case, the OpenCensus bridge will do its best to support
    and translate unspecified flags into the closest OpenTelemetry equivalent.
 
-## OpenCensus Context Propagation
+## OpenCensus Binary Context Propagation
 
-The shim will provide an OpenCensus `PropagationComponent` implementation which
-maps OpenCenus binary and text propagation to OpenTelemetry context.
-
-### Text Context
-
-This adapter MUST use an OpenTelemetry `TextMapPropagator` to implement the
-OpenCensus `TextFormat`.
-
-This adapter SHOULD use configured OpenTelemetry `TextMapPropagator` on the
-OpenTelemetry `TraceProvider` for text format propagation.
-
-This adapter MUST provide a default `W3CTraceContextPropagator`.  If
-OpenTelemetry defines a global TextMapPropogator, OpenCensus SHOULD use this
-for OpenCensus `traceContextFormat` propagation.
-
-### B3 Context
-
-This adapter SHOULD use a contributed OpenTelemetry `B3Propagator` for the
-B3 text format.
-
-### OpenCensus Binary Context
+The shim will provide an OpenCensus `BinaryPropogator` implementation which
+maps [OpenCenus binary trace context format](https://github.com/census-instrumentation/opencensus-specs/blob/master/encodings/BinaryEncoding.md#trace-context) to an OpenTelemetry
+[SpanContext](../overview.md#spancontext).
 
 This adapter MUST provide an implementation of OpenCensus `BinaryPropogator` to
 write OpenCensus binary format using OpenTelemetry's context.  This
 implementation may be drawn from OpenCensus if applicable.
+
+The `BinaryPropagator` MUST be a [TextMapPropagator](../context/api-propagators.md#textmap-propagator)
+if possible in the language. Otherwise, the `BinaryPropagator` MUST be a library,
+which is expected to be used by OpenTelemetry gRPC instrumentation. gRPC
+instrumentation in those languages SHOULD NOT enable the `BinaryPropagator` by
+default, but SHOULD provide configuration to allow users to enable it.
 
 ## Metrics / Stats
 
@@ -247,11 +231,6 @@ batch, and returns.
 The shim MUST discard the resource attached to OpenCensus metrics, and insert
 the resource provided during initialization, or fall back to the the default
 OpenTelemetry resource.
-
-### Metric Attributes
-
-Metric attributes SHOULD be mapped following
-[semantic convention mappings](#semantic-convention-mappings).
 
 ### Instrumentation Scope
 
