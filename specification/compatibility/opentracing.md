@@ -212,6 +212,14 @@ OPTIONAL operation. If this operation is implemented for a specific OpenTracing 
 it MUST close the underlying `TracerProvider` if it implements a "closeable" interface or method;
 otherwise it MUST be defined as a no-op operation.
 
+The Shim layer MUST protect against errors or exceptions raised while closing the
+underlying `TracerProvider`.
+
+Note: Users are advised against calling this operation more than once per `TracerProvider`
+as it may incur in unexpected side effects, limitations or race conditions, e.g.
+a single Shim `Tracer` being closed multiple times or multiple Shim `Tracer`
+having their close operation being called.
+
 ## Span Shim and SpanContext Shim relationship
 
 As per the OpenTracing Specification, the OpenTracing `SpanContext` Shim
