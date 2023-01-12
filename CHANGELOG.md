@@ -12,6 +12,8 @@ release.
 
 ### Context
 
+- Add `SuppressTracing` flag. [](https://github.com/open-telemetry/opentelemetry-specification/pull/)
+
 ### Traces
 
 - Clarify that the BatchSpanProcessor should export batches when the queue reaches the batch size

@@ -28,6 +28,8 @@ formats is required. Implementing more than one format is optional.
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |     |      |     |        |      |        |     |      |     |      |       |
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Set SuppressTracing                                                                                  |          |   |      |     |        |      |        |     |      |     |      |       |
+| Unset SuppressTracing                                                                                  |          |   |      |     |        |      |        |     |      |     |      |       |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           |          |     |      |     |        |      |        |     |      |     |      |       |
 | Create a new Span                                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Documentation defines adding attributes at span creation as preferred                            |          |     |      |     | +      | +    |        | +   |      |     | +    |       |

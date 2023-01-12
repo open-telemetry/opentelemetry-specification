@@ -169,9 +169,18 @@ instance:
 
 - Extract the `Span` from a `Context` instance
 - Combine the `Span` with a `Context` instance, creating a new `Context` instance
+- Set a `SuppressTracing` flag on a `Context` instance
+- Get the value of the `SuppressTracing` flag on a `Context`, returning `false`
+  if undefined
+- Unset the `SuppressTracing` flag on a `Context` instance
 
 The functionality listed above is necessary because API users SHOULD NOT have
 access to the [Context Key](../context/README.md#create-a-key) used by the Tracing API implementation.
+
+The `SuppressTracing` flag is for cases it may be useful to temporarily suppress
+tracing. For example, this may be used to prevent `Span` exports from being traced
+and exported, or by an instrumentation which wraps a lower-level package which
+may also be instrumented in order to prevent duplicate spans. 
 
 If the language has support for implicitly propagated `Context` (see
 [here](../context/README.md#optional-global-operations)), the API SHOULD also provide
@@ -397,6 +406,10 @@ A `Span` is said to have a *remote parent* if it is the child of a `Span`
 created in another process. Each propagators' deserialization must set
 `IsRemote` to true on a parent `SpanContext` so `Span` creation knows if the
 parent is remote.
+
+If the [`SuppressTracing`](#suppress-tracing) `Context` flag is set then the API
+MUST return the parent Span marked as non-recording, if one exists, otherwise
+return an empty non-recording Span.
 
 Any span that is created MUST also be ended.
 This is the responsibility of the user.
