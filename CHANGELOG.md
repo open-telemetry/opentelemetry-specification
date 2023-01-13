@@ -39,6 +39,8 @@ release.
 
 ### Compatibility
 
+- Add Tracer.Close() to the OpenTracing Shim layer.
+
 ### OpenTelemetry Protocol
 
 - Add table for OTLP/HTTP response code and client retry recommendation
