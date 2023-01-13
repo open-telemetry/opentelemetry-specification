@@ -4,7 +4,7 @@ versions:
   1.17.0:
     spans:
       changes:
-        # https://github.com/open-telemetry/opentelemetry-specification/pull/2763
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/2957
         - rename_attributes:
             attribute_map:
               messaging.consumer_id: messaging.consumer.id
