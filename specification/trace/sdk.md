@@ -186,7 +186,7 @@ means that the current `Span` does record information, but most likely the child
 `Span` will not.
 
 The flag combination `SampledFlag == true` and `IsRecording == false`
-could cause gaps in the distributed trace, and because of this OpenTelemetry API
+could cause gaps in the distributed trace, and because of this the OpenTelemetry SDK
 MUST NOT allow this combination.
 
 ### Recording Sampled reaction table
