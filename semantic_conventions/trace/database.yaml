@@ -514,5 +514,3 @@ groups:
       - include: 'db.mongodb'
       - include: 'db.sql'
       - include: 'db.cosmosdb'
-  
-
