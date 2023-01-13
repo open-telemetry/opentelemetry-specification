@@ -229,7 +229,6 @@ consecutive `_` characters MUST be replaced with a single `_` character.
 The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible.  This includes:
 
 * Converting from abbreviations to full words (e.g. "ms" to "milliseconds").
-* Converting to [base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units) (e.g. "milliseconds" to "seconds"), which also requires adjusting the value.
 * Dropping the portions of the Unit within brackets (e.g. {packets}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
 * Special case: Converting "1" to "ratio".
 * Converting "foo/bar" to "foo_per_bar".
