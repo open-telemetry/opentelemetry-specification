@@ -325,7 +325,7 @@ The API to construct synchronous instruments MUST accept the following parameter
 * The `name` of the Instrument, following the [instrument naming
   rule](#instrument-naming-rule).
 
-Additionally this API MAY accept the following parameters:
+Additionally, this API MAY accept the following parameters:
 
 * A `unit` of measure, following the [instrument unit rule](#instrument-unit).
 * A `description`, following the [instrument description
