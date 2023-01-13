@@ -23,6 +23,12 @@ release.
   ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
 - Add `MaxScale` config option to Exponential Bucket Histogram Aggregation.
   ([#3017](https://github.com/open-telemetry/opentelemetry-specification/pull/3017))
+- Rename exponential bucket histogram aggregation to base 2 exponential histogram
+  aggregation. Rename "OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION"
+  value from "exponential_bucket_histogram" to
+  "base2_exponential_bucket_histogram". Mark exponential histogram data model and
+  base2 exponential histogram aggregation as stable.
+  ([#3041](https://github.com/open-telemetry/opentelemetry-specification/pull/3041))
 
 ### Logs
 
