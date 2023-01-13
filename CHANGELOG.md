@@ -14,6 +14,8 @@ release.
 
 ### Traces
 
+- Clarify that the BatchSpanProcessor should export batches when the queue reaches the batch size
+  ([#3024](https://github.com/open-telemetry/opentelemetry-specification/pull/3024))
 - Deprecate jaeger exporter, scheduled for spec removal in July 2023.
   [#2858](https://github.com/open-telemetry/opentelemetry-specification/pull/2858)
 
