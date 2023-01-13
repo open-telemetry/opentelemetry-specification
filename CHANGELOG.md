@@ -34,7 +34,6 @@ release.
   to match the existing `cloud.provider` prefix.
   [#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095)
 
-
 ### Compatibility
 
 ### OpenTelemetry Protocol
