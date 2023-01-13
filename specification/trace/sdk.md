@@ -580,7 +580,8 @@ spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
 
 The processor SHOULD export a batch when any of the following happens AND
-there is not an export currently in progress:
+`SpanProcessor#Export()` has not yet returned (for additional concurrency
+details see the [Export() specification](#exportbatch)):
 
 - `scheduledDelayMillis` after the processor is constructed OR the first span
   is received by the span processor.
@@ -590,15 +591,9 @@ there is not an export currently in progress:
 - The queue contains `maxExportBatchSize` or more spans.
 - `ForceFlush` is called.
 
-In any of the above cases the processor MUST NOT begin an export if another
-export is in progress. If one of the above events occurs during an ongoing export
-the processor MAY do either of the following:
-
-- Export the next batch immediately when the ongoing export completes. This
-  behavior SHOULD be chosen when the next batch export was triggered by `ForceFlush`.
-- Export the next batch `scheduledDelayMillis` after the ongoing export completes.
-
-In any of the above cases, if the queue is empty the processor MAY export
+If any of the above events occurs before `Export()` returns, the span processor
+should wait until `Export()` returns before exporting the next batch.
+If the queue is empty when an export is triggered, the processor MAY export
 an empty batch OR skip the export and consider it to be completed immediately.
 
 **Configurable parameters:**
