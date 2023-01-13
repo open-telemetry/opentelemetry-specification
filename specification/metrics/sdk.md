@@ -894,7 +894,7 @@ being asked by the scraper, so `ForceFlush` would not make much sense.
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
-decide if they want to make the shutdown timeout configurable.
+decide if they want to make the timeout configurable.
 
 #### Shutdown
 
