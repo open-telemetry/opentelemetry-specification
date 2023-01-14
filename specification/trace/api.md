@@ -177,7 +177,7 @@ instance:
 The functionality listed above is necessary because API users SHOULD NOT have
 access to the [Context Key](../context/README.md#create-a-key) used by the Tracing API implementation.
 
-The `SuppressTracing` flag is for cases, within a single service, it may be
+The `SuppressTracing` flag is for cases when, within a single service, it may be
 useful to temporarily suppress tracing. For example, this may be used to prevent
 `Span` exports from being traced and exported, or by an instrumentation which
 wraps a lower-level package which may also be instrumented in order to prevent
