@@ -409,8 +409,7 @@ created in another process. Each propagators' deserialization must set
 parent is remote.
 
 If the [`SuppressTracing`](#suppress-tracing) `Context` flag is set then the API
-MUST return the parent Span marked as non-recording, if one exists, otherwise
-return an empty non-recording Span.
+MUST return a non-recording Span with SpanContext equal to that of the parent Span (if one exists). If the parent Span exists and is already non-recording, it may be returned directly, as an optimization.
 
 Any span that is created MUST also be ended.
 This is the responsibility of the user.
