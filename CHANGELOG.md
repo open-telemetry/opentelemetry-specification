@@ -10,6 +10,9 @@ release.
 - Remove spaces from example exporter User-Agent header to conform to RFC7231 & RFC7230.
   [#3052](https://github.com/open-telemetry/opentelemetry-specification/pull/3052)
 
+- Add Cloud Spanner and Microsoft SQL Server Compact to db.system semantic conventions.
+  [#3105](https://github.com/open-telemetry/opentelemetry-specification/pull/3105)
+
 ### Context
 
 ### Traces
