@@ -20,7 +20,7 @@ These attributes may be used for identifying a Log Record.
 <!-- semconv log.record -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `log.record.id` | string | A unique identifier for the Log Record. [1] | `click`; `exception` | Recommended |
+| `log.record.id` | string | A unique identifier for the Log Record. [1] | `01ARZ3NDEKTSV4RRFFQ69G5FAV` | Recommended |
 
-**[1]:** MUST be an [Universally Unique Lexicographically Sortable Identifier (ULID)](https://github.com/ulid/spec). If a value is provided, other log records with the same value will be considered to be duplicates and can be removed safely. This means, that two distinguishable log records MUST have different values. However in the case of duplication it is not guaranteed that duplicated log records have the same value.
+**[1]:** MUST be an [Universally Unique Lexicographically Sortable Identifier (ULID)](https://github.com/ulid/spec). If an id is provided, other log records with the same id will be considered duplicates and can be removed safely. This means, that two distinguishable log records MUST have different values. However, in the case of duplication, it is not guaranteed that duplicated log records have the same id.
 <!-- endsemconv -->
