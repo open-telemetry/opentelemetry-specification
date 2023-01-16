@@ -4,11 +4,9 @@ linkTitle: OTLP
 
 # OpenTelemetry Metrics Exporter - OTLP
 
-**Status**: [Mixed](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 ## General
-
-**Status**: [Stable](../../document-status.md)
 
 OTLP Metrics Exporter is a [Push Metric
 Exporter](../sdk.md#push-metric-exporter) which sends metrics via the
@@ -37,12 +35,10 @@ then by default:
 
 ## Additional Configuration
 
-**Status**: [Mixed](../../document-status.md)
-
-| Name                                                | Status       | Description                                                         | Default                     |
-|-----------------------------------------------------|--------------|---------------------------------------------------------------------|-----------------------------|
-| `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` | Stable       | The aggregation temporality to use on the basis of instrument kind. | `cumulative`                |
-| `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION`  | Experimental | The default aggregation to use for histogram instruments.           | `explicit_bucket_histogram` |
+| Name                                                       | Description                                                         | Default                     |
+|------------------------------------------------------------|---------------------------------------------------------------------|-----------------------------|
+| `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE`        | The aggregation temporality to use on the basis of instrument kind. | `cumulative`                |
+| `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION` | The default aggregation to use for histogram instruments.           | `explicit_bucket_histogram` |
 
 The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` are:
 
@@ -62,5 +58,5 @@ The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_DEFAULT
 
 * `explicit_bucket_histogram`:
   Use [Explicit Bucket Histogram Aggregation](../sdk.md#explicit-bucket-histogram-aggregation).
-* `exponential_bucket_histogram`:
-  Use [Exponential Bucket Histogram Aggregation](../sdk.md#exponential-bucket-histogram-aggregation).
+* `base2_exponential_bucket_histogram`:
+  Use [Base2 Exponential Bucket Histogram Aggregation](../sdk.md#base2-exponential-bucket-histogram-aggregation).
