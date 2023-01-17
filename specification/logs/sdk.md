@@ -140,9 +140,7 @@ The options MAY be bundled in a class, which then SHOULD be called
 `LogRecordLimits`.
 
 ```java
-public final class LogRecordLimits {
-  LogRecordLimits(int attributeCountLimit, int attributeValueLengthLimit);
-
+public interface LogRecordLimits {
   public int getAttributeCountLimit();
 
   public int getAttributeValueLengthLimit();

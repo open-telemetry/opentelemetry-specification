@@ -389,9 +389,7 @@ Implementations MAY provide additional configuration such as
 `AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
 
 ```java
-public final class SpanLimits {
-  SpanLimits(int attributeCountLimit, int attributeValueLengthLimit, int linkCountLimit, int eventCountLimit);
-
+public interface SpanLimits {
   public int getAttributeCountLimit();
 
   public int getAttributeValueLengthLimit();
