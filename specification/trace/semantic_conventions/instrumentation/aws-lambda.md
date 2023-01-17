@@ -120,7 +120,7 @@ the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an O
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span. This means the span may have as many links as messages in the batch.
 
-- [`faas.trigger`][faas]] MUST be set to `pubsub`.
+- [`faas.trigger`][faas] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md) MUST be set to `process`.
 - [`messaging.system`](../messaging.md) MUST be set to `AmazonSQS`.
 - [`messaging.destination.kind` or `messaging.source.kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
