@@ -7,10 +7,15 @@ release.
 
 ## Unreleased
 
+- Remove spaces from example exporter User-Agent header to conform to RFC7231 & RFC7230.
+  [#3052](https://github.com/open-telemetry/opentelemetry-specification/pull/3052)
+
 ### Context
 
 ### Traces
 
+- Clarify that the BatchSpanProcessor should export batches when the queue reaches the batch size
+  ([#3024](https://github.com/open-telemetry/opentelemetry-specification/pull/3024))
 - Deprecate jaeger exporter, scheduled for spec removal in July 2023.
   [#2858](https://github.com/open-telemetry/opentelemetry-specification/pull/2858)
 
@@ -18,6 +23,14 @@ release.
 
 - Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
   ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
+- Add `MaxScale` config option to Exponential Bucket Histogram Aggregation.
+  ([#3017](https://github.com/open-telemetry/opentelemetry-specification/pull/3017))
+- Rename exponential bucket histogram aggregation to base 2 exponential histogram
+  aggregation. Rename "OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION"
+  value from "exponential_bucket_histogram" to
+  "base2_exponential_bucket_histogram". Mark exponential histogram data model and
+  base2 exponential histogram aggregation as stable.
+  ([#3041](https://github.com/open-telemetry/opentelemetry-specification/pull/3041))
 - Recommended limits applied by default at the MetricProvider level to protect
   metrics pipelines against excessive data production from a single
   instrumentation library or instrument.
@@ -33,6 +46,8 @@ release.
   ([#3029](https://github.com/open-telemetry/opentelemetry-specification/pull/3029))
 
 ### Compatibility
+
+- Add Tracer.Close() to the OpenTracing Shim layer.
 
 ### OpenTelemetry Protocol
 
