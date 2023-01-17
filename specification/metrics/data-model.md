@@ -519,7 +519,7 @@ so that worst-case error is within their error tolerance.
 
 ### ExponentialHistogram
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 [ExponentialHistogram](https://github.com/open-telemetry/opentelemetry-proto/blob/cfbf9357c03bf4ac150a3ab3bcbe4cc4ed087362/opentelemetry/proto/metrics/v1/metrics.proto#L222)
 data points are an alternate representation to the
