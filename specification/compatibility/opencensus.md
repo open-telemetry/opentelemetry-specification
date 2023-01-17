@@ -30,8 +30,8 @@ Starting with a deployment of the OC agent, using the OC protocol, migrate by:
 
 1. Deploy the OpenTelemetry collector with OpenCensus and OTLP receivers and equivalent processors and exporters.
 2. **breaking**: For each workload sending the OC protocol, change to sending to the OpenTelemetry collector's OpenCensus receiver.
-3. Remove the deployment of the OC Agent
-4. For each workload, migrate the application from OpenCensus to OpenTelemetry, following the guidance below, and use the OTLP exporter
+3. Remove the deployment of the OC Agent.
+4. For each workload, migrate the application from OpenCensus to OpenTelemetry, following the guidance below, and use the OTLP exporter.
 
 #### Migrating an Application using Bridges
 
