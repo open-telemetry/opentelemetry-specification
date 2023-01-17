@@ -186,6 +186,10 @@ therefore it SHOULD NOT block or throw exceptions.
 
 **Returns:** `Void`
 
+A `LogRecordProcessor` may freely modify `logRecord` for the duration of
+the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
+asynchronous processing) only reads are permitted.
+
 #### ShutDown
 
 Shuts down the processor. Called when the SDK is shut down. This is an
