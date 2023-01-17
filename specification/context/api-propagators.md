@@ -346,6 +346,10 @@ as OpenTelemetry extension packages:
 * [OT Trace](https://github.com/opentracing?q=basic&type=&language=). Propagation format
   used by the OpenTracing Basic Tracers. It MUST NOT use `OpenTracing` in the resulting
   propagator name as it is not widely adopted format in the OpenTracing ecosystem.
+* [OpenCensus BinaryFormat](https://github.com/census-instrumentation/opencensus-specs/blob/master/encodings/BinaryEncoding.md#trace-context).
+  Propagation format used by OpenCensus, which describes how to format the span context
+  into the binary format, and does not prescribe a key. It is commonly used with
+  OpenCensus gRPC using the `grpc-trace-bin` propagation key.
 
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of

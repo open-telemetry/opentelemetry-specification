@@ -693,7 +693,7 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 Parameters:
 
-* The amount of the `Measurement`, which MUST be a non-negative numeric value.
+* The numeric value to record, which MUST be a non-negative numeric value.
 * Optional [attributes](../common/README.md#attribute).
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
