@@ -44,6 +44,9 @@ release.
 ### Compatibility
 
 - Add Tracer.Close() to the OpenTracing Shim layer.
+- Add OpenCensus migration guide and add BinaryPropagation as an option to gRPC
+  instrumentation for OpenCensus compatibility
+  ([#3015](https://github.com/open-telemetry/opentelemetry-specification/pull/3015)).
 
 ### OpenTelemetry Protocol
 
