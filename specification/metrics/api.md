@@ -141,14 +141,28 @@ This API MUST accept the following parameters:
   also return a no-op Meter here if application owners configure the SDK to
   suppress telemetry produced by this library.
 
-Additionally, this API MAY accept the following parameters:
-
+  The `name` needs to be provided by a user. If possible, the API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, the API MUST be documented
+  in a way to communicate to users that this parameter is needed.
 * `version`: Specifies the version of the instrumentation scope if the scope
   has a version (e.g. a library version). Example value: `1.0.0`.
+  
+  Users can provide a `version`, but it is up to their discretion. Therefore,
+  this API needs to be structured to accept a `version`, but MUST NOT obligate
+  a user to provide one.
 * [since 1.4.0] `schema_url`: Specifies the Schema URL that should be recorded
   in the emitted telemetry.
+  
+  Users can provide a `schema_url`, but it is up to their discretion.
+  Therefore, this API needs to be structured to accept a `schema_url`, but MUST
+  NOT obligate a user to provide one.
 * [since 1.13.0] `attributes`: Specifies the instrumentation scope attributes
   to associate with emitted telemetry.
+  
+  Users can provide attributes to associate with the instrumentation scope, but
+  it is up to their discretion. Therefore, this API MUST be structured to
+  accept a variable number of attributes, including none.
 
 Meters are identified by `name`, `version`, and `schema_url` fields.  When more
 than one `Meter` of the same `name`, `version`, and `schema_url` is created, it
