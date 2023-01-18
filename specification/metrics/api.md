@@ -469,12 +469,23 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 This API MUST accept the following parameter:
 
-* The increment value. This value is expected to be non-negative. The
-  API MUST NOT validate this value, that is left to the API implementation.
-
-Additionally, this API MUST accept the following optional parameters:
-
-* The [attributes](../common/README.md#attribute) to associate with the value.
+* A numeric increment value.
+  
+  The increment value needs to be provided by a user. If possible, this API
+  SHOULD be structured so a user is obligated to provide this parameter. If it
+  is not possible to structurally enforce this obligation, this API MUST be
+  documented in a way to communicate to users that this parameter is needed.
+  
+  The increment value is expected to be non-negative. This API SHOULD be
+  documented in a way to communicate to users that this value is expected to be
+  non-negative. The API MUST NOT validate this value, that is left to
+  implementations of the API.
+* [Attributes](../common/README.md#attribute) to associate with the increment
+  value.
+  
+  Users can provide attributes to associate with the increment value, but it is
+  up to their discretion. Therefore, this API MUST be structured to accept a
+  variable number of attributes, including none.
 
 The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as arguments. If
@@ -694,12 +705,22 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 This API MUST accept the following parameter:
 
-* The value to record. This value is expected to be non-negative. The API MUST
-  NOT validate this value, that is left to the API implementation.
+* A numeric value to record.
 
-Additionally, this API MAY accept the following parameters:
-
-* The [attributes](../common/README.md#attribute) to associate with the value.
+  The value needs to be provided by a user. If possible, this API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, this API MUST be documented
+  in a way to communicate to users that this parameter is needed.
+  
+  The value is expected to be non-negative. This API SHOULD be documented in a
+  way to communicate to users that this value is expected to be non-negative.
+  The API MUST NOT validate this value, that is left to implementations of the
+  API.
+* [Attributes](../common/README.md#attribute) to associate with the value.
+  
+  Users can provide attributes to associate with the value, but it is up to
+  their discretion. Therefore, this API MUST be structured to accept a variable
+  number of attributes, including none.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as individual
@@ -932,11 +953,17 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 This API MUST accept the following parameter:
 
-* The value to be added. This value can be positive, negative, or zero.
+* A numeric value to add.
 
-Additionally, this API MAY accept the following parameters:
-
-* The [attributes](../common/README.md#attribute) to associate with the value.
+  The value needs to be provided by a user. If possible, this API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, this API MUST be documented
+  in a way to communicate to users that this parameter is needed.
+* [Attributes](../common/README.md#attribute) to associate with the value.
+  
+  Users can provide attributes to associate with the value, but it is up to
+  their discretion. Therefore, this API MUST be structured to accept a variable
+  number of attributes, including none.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as individual
