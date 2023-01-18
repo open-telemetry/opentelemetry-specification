@@ -478,7 +478,7 @@ This API MUST accept the following parameter:
   
   The increment value is expected to be non-negative. This API SHOULD be
   documented in a way to communicate to users that this value is expected to be
-  non-negative. The API MUST NOT validate this value, that is left to
+  non-negative. This API MUST NOT validate this value, that is left to
   implementations of the API.
 * [Attributes](../common/README.md#attribute) to associate with the increment
   value.
@@ -714,7 +714,7 @@ This API MUST accept the following parameter:
   
   The value is expected to be non-negative. This API SHOULD be documented in a
   way to communicate to users that this value is expected to be non-negative.
-  The API MUST NOT validate this value, that is left to implementations of the
+  This API MUST NOT validate this value, that is left to implementations of the
   API.
 * [Attributes](../common/README.md#attribute) to associate with the value.
   
