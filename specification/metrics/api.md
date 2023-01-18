@@ -469,7 +469,7 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 This API MUST accept the following parameter:
 
-* The numeric increment value. This value is expected to be non-negative. The
+* The increment value. This value is expected to be non-negative. The
   API MUST NOT validate this value, that is left to the API implementation.
 
 Additionally, this API MUST accept the following optional parameters:
