@@ -70,6 +70,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 |---|---|
 | `other_sql` | Some other SQL database. Fallback only. See notes. |
 | `mssql` | Microsoft SQL Server |
+| `mssqlcompact` | Microsoft SQL Server Compact |
 | `mysql` | MySQL |
 | `oracle` | Oracle Database |
 | `db2` | IBM Db2 |
@@ -118,7 +119,6 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `opensearch` | OpenSearch |
 | `clickhouse` | ClickHouse |
 | `spanner` | Cloud Spanner |
-| `mssqlcompact` | Microsoft SQL Server Compact |
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
