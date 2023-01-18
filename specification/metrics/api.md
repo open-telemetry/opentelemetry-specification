@@ -694,13 +694,12 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 This API MUST accept the following parameter:
 
-* The `Measurement` value. This value is expected to be non-negative. The API
-  MUST NOT validate this value, that is left to the API implementation.
+* The value to record. This value is expected to be non-negative. The API MUST
+  NOT validate this value, that is left to the API implementation.
 
 Additionally, this API MAY accept the following parameters:
 
-* The [attributes](../common/README.md#attribute) to associate with the
-  `Measurement` value.
+* The [attributes](../common/README.md#attribute) to associate with the value.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as individual
