@@ -329,7 +329,7 @@ The API to construct synchronous instruments MUST accept the following parameter
   possible to structurally enforce this obligation, the API MUST be documented
   in a way to communicate to users that this parameter is needed.
   
-  The `name` needs to following the [instrument naming
+  The `name` needs to follow the [instrument naming
   rule](#instrument-naming-rule). The API SHOULD be documented in a way to
   communicate to users that this parameter needs to conform to the linked
   syntax. The API MUST NOT validate the `name`, that is left to implementations
