@@ -12,6 +12,7 @@
   * [Start a new Span](#start-a-new-span)
   * [Inject](#inject)
   * [Extract](#extract)
+  * [Close](#close)
 * [Span Shim and SpanContext Shim relationship](#span-shim-and-spancontext-shim-relationship)
 * [Span Shim](#span-shim)
   * [Get Context](#get-context)
@@ -204,6 +205,20 @@ return SpanContextShim(extractedSpanContext, extractedBaggage);
 Errors MAY be raised if either the `Format` is not recognized
 or no value could be extracted, depending on the specific OpenTracing Language API
 (e.g. Go and Python do, but Java may not).
+
+## Close
+
+OPTIONAL operation. If this operation is implemented for a specific OpenTracing language,
+it MUST close the underlying `TracerProvider` if it implements a "closeable" interface or method;
+otherwise it MUST be defined as a no-op operation.
+
+The Shim layer MUST protect against errors or exceptions raised while closing the
+underlying `TracerProvider`.
+
+Note: Users are advised against calling this operation more than once per `TracerProvider`
+as it may have unexpected side effects, limitations or race conditions, e.g.
+a single Shim `Tracer` being closed multiple times or multiple Shim `Tracer`
+having their close operation being called.
 
 ## Span Shim and SpanContext Shim relationship
 
