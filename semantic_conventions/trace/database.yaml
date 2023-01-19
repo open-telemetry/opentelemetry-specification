@@ -209,7 +209,7 @@ groups:
         type: string[]
         requirement_level: optional
         brief: >
-          An array of values that accompanies the query.
+          An array with the values of the SQL statement bind parameters.
         examples: ["David", "1234"]
       - id: operation
         tag: call-level
