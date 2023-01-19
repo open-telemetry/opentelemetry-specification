@@ -18,6 +18,7 @@ release.
 ### Resource
 
 ### Semantic Conventions
+- Add Connect RPC specific conventions (#3116).
 
 ### Compatibility
 
