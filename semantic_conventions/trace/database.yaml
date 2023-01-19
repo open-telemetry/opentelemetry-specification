@@ -157,6 +157,9 @@ groups:
             - id: opensearch
               value: 'opensearch'
               brief: 'OpenSearch'
+            - id: clickhouse
+              value: 'clickhouse'
+              brief: 'ClickHouse'
       - id: connection_string
         tag: connection-level
         type: string
