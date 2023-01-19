@@ -549,7 +549,7 @@ Can include data that describes particular occurrence of the event.
 Can be meta-information, e.g. quality of timestamp value.</td>
     <td>SDID origin.swVersion map to Resource["service.version"]
 
-SDID origin.ip map to attribute[net.host.ip"]
+SDID origin.ip map to attribute["net.sock.host.addr"]
 
 Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
@@ -846,19 +846,19 @@ When mapping from the unified model to HEC, we apply this additional mapping:
   <tr>
     <td>%a</td>
     <td>string</td>
-    <td>Client IP</td>
-    <td>Attributes["net.peer.ip"]</td>
+    <td>Client address</td>
+    <td>Attributes["net.sock.peer.addr"]</td>
   </tr>
   <tr>
     <td>%A</td>
     <td>string</td>
-    <td>Server IP</td>
-    <td>Attributes["net.host.ip"]</td>
+    <td>Server address</td>
+    <td>Attributes["net.sock.host.addr"]</td>
   </tr>
   <tr>
     <td>%h</td>
     <td>string</td>
-    <td>Remote hostname. </td>
+    <td>Client hostname.</td>
     <td>Attributes["net.peer.name"]</td>
   </tr>
   <tr>
@@ -918,7 +918,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>sourceIPAddress</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>Resource["net.peer.ip"] or Resource["net.host.ip"]? TBD</td>
+    <td>Resource["net.peer.ip"] or Resource["net.sock.host.addr"]? TBD</td>
   </tr>
   <tr>
     <td>errorCode</td>
@@ -1036,7 +1036,7 @@ All other fields |                    |                                         
     <td>source.ip, client.ip</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>Attributes["net.peer.ip"] or Attributes["net.host.ip"]</td>
+    <td>Attributes["net.peer.ip"] or Attributes["net.sock.host.addr"]</td>
   </tr>
   <tr>
     <td>cloud.account.id</td>
