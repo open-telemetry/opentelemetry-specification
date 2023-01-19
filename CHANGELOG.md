@@ -21,9 +21,6 @@ release.
 
 ### Compatibility
 
-- Add condition with sum and count for Prometheus summaries
-([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059))
-
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
@@ -105,6 +102,8 @@ release.
 - Add OpenCensus migration guide and add BinaryPropagation as an option to gRPC
   instrumentation for OpenCensus compatibility
   ([#3015](https://github.com/open-telemetry/opentelemetry-specification/pull/3015)).
+- Add condition with sum and count for Prometheus summaries
+([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059))
 
 ### OpenTelemetry Protocol
 
