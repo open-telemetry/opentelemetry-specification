@@ -204,12 +204,10 @@ groups:
           The database statement being executed.
         note: The value may be sanitized to exclude sensitive information.
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
-      - id: values
+      - id: bind_values
         tag: call-level
         type: string[]
-        requirement_level:
-          conditionally_required: >
-            If applicable and enabled via instrumentation configuration.
+        requirement_level: optional
         brief: >
           An array of values that accompanies the query.
         examples: ["David", "1234"]

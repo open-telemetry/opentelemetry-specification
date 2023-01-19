@@ -30,6 +30,7 @@ release.
 
 - Add `code.lineno` source code attribute
   ([#3029](https://github.com/open-telemetry/opentelemetry-specification/pull/3029))
+- Add `db.values` attribute to database specification. [#3092](https://github.com/open-telemetry/opentelemetry-specification/pull/3092)
 
 ### Compatibility
 
