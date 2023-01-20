@@ -109,9 +109,9 @@ paths._
 
 #### OTLP/gRPC Concurrent Requests
 
-After sending the request, the client MAY wait until the server receives a response. 
-In that case, there will be, at most only one request in flight that the server does 
-not yet acknowledge.
+After sending the request the client MAY wait until the response is received
+from the server. In that case there will be at most only one request in flight
+that is not yet acknowledged by the server.
 
 ![Unary](img/otlp-sequential.png)
 
@@ -241,7 +241,7 @@ additional
 [details via status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails)
 using
 [BadRequest](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L119).
-If more appropriate, it is possible to use another gRPC status code. Here is a 
+If more appropriate, another gRPC status code MAY be used. Here is a 
 snippet of sample Go code to illustrate:
 
 ```go
@@ -284,8 +284,8 @@ exception to this is the Throttling case explained below, which provides
 explicit instructions about retrying interval.
 
 The client SHOULD interpret `RESOURCE_EXHAUSTED` code as retryable only if the 
-server signals that the recovery from resource exhaustion is possible. For example, 
-this is signaled by the server by returning 
+server signals that the recovery from resource exhaustion is possible.
+This is signaled by the server by returning 
 [a status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails) containing
 [RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40). 
 In this case the behavior of the server and the client is exactly as described in 
@@ -424,9 +424,9 @@ for mapping between Protobuf and JSON, with the following deviations from that m
   { "kind": 2, ... }
 
 - OTLP/JSON receivers MUST ignore message fields with unknown names and MUST unmarshal 
-  the message as if the unknown field was not present in the payload. For example, 
-  this aligns with the behavior of the Binary Protobuf unmarshaler and ensures that adding
-  new fields to OTLP messages do not break existing receivers.
+  the message as if the unknown field was not present in the payload. This aligns with 
+  the behavior of the Binary Protobuf unmarshaler and ensures that adding new fields 
+  to OTLP messages does not break existing receivers.
 
 - The keys of JSON objects are field names converted to lowerCamelCase. Original
   field names are not valid to use as keys for JSON objects.
@@ -636,7 +636,7 @@ acknowledges the data and the other server does not (yet), the client needs
 to decide how to move forward.
 
 In such a situation, the client SHOULD implement queuing, acknowledgment-handling 
-and retry logic per destination. For example, this ensures that servers do not
+and retry logic per destination. This ensures that servers do not
 block each other. The queues SHOULD reference and send shared immutable data,
 thus minimizing the memory overhead caused by having multiple queues.
 
@@ -652,17 +652,16 @@ client-side queue).
 
 #### Duplicate Data
 
-The client has to know in edge cases (such as reconnections, network interruptions,
-etc.) whether recently provided data was delivered and whether an acknowledgment 
-was received or not. Therefore, the client will typically choose to re-send such 
-data to guarantee delivery, which may result in duplicate data on the server side. 
-This is a deliberate choice and is considered to be the right tradeoff for telemetry 
-data.
+In edge cases (e.g. on reconnections, network interruptions, etc) the client has
+no way of knowing if recently sent data was delivered if no acknowledgement was
+received yet. The client will typically choose to re-send such data to guarantee
+delivery, which may result in duplicate data on the server side. This is a
+deliberate choice and is considered to be the right tradeoff for telemetry data.
 
 ## Future Versions and Interoperability
 
 OTLP will evolve and change over time. Future versions of OTLP must be designed
-and implemented in a way to ensure that clients and servers that implement
+and implemented in a way that ensures that clients and servers that implement
 different versions of OTLP can interoperate and exchange telemetry data. Old
 clients must be able to talk to new servers and vice versa. Suppose new versions of OTLP
 introduce new functionality that cannot be understood and supported by nodes implementing 
