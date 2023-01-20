@@ -19,6 +19,9 @@ release.
 
 ### Semantic Conventions
 
+- Enable semantic convention tooling for metrics in spec
+  ([#3118](https://github.com/open-telemetry/opentelemetry-specification/pull/3118))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
