@@ -265,7 +265,7 @@ representations to the configured `LogRecordExporter`.
 * `maxQueueSize` - the maximum queue size. After the size is reached logs are
   dropped. The default value is `2048`.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
-  consecutive exports. The default value is `5000`.
+  consecutive exports. The default value is `1000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
