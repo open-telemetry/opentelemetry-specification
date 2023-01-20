@@ -153,8 +153,8 @@ public interface LogRecordLimits {
 
 There SHOULD be a message printed in the SDK's log to indicate to the user
 that an attribute was discarded due to such a limit.
-To prevent excessive logging, the message should be printed at most once per
-`LogRecord` (i.e., not per discarded attribute.)
+To prevent excessive logging, the message should not be printed once per
+`LogRecord` or per discarded attribute.
 
 ## LogRecordProcessor
 
