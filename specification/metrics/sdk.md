@@ -23,7 +23,7 @@ linkTitle: SDK
     + [Last Value Aggregation](#last-value-aggregation)
     + [Histogram Aggregations](#histogram-aggregations)
       - [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
-      - [Exponential Bucket Histogram Aggregation](#exponential-bucket-histogram-aggregation)
+      - [Base2 Exponential Bucket Histogram Aggregation](#base2-exponential-bucket-histogram-aggregation)
         * [Handle all normal values](#handle-all-normal-values)
         * [Support a minimum and maximum scale](#support-a-minimum-and-maximum-scale)
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
@@ -33,6 +33,10 @@ linkTitle: SDK
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
+  * [Built-in ExemplarFilters](#built-in-exemplarfilters)
+    + [AlwaysOn](#alwayson)
+    + [AlwaysOff](#alwaysoff)
+    + [TraceBased](#tracebased)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
 - [MetricReader](#metricreader)
@@ -353,9 +357,9 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
-The SDK MAY provide the following `Aggregation`:
+The SDK SHOULD provide the following `Aggregation`:
 
-- [Exponential Bucket Histogram Aggregation](./sdk.md#exponential-bucket-histogram-aggregation)
+- [Base2 Exponential Bucket Histogram](./sdk.md#base2-exponential-bucket-histogram-aggregation)
 
 #### Drop Aggregation
 
@@ -444,24 +448,22 @@ bound (except at positive infinity).  A measurement is defined to fall
 into the greatest-numbered bucket with boundary that is greater than
 or equal to the measurement.
 
-##### Exponential Bucket Histogram Aggregation
+##### Base2 Exponential Bucket Histogram Aggregation
 
-**Status**: [Experimental](../document-status.md)
-
-The Exponential Histogram Aggregation informs the SDK to collect data
+The Base2 Exponential Histogram Aggregation informs the SDK to collect data
 for the [Exponential Histogram Metric
-Point](./data-model.md#exponentialhistogram), which uses an exponential
+Point](./data-model.md#exponentialhistogram), which uses a base-2 exponential
 formula to determine bucket boundaries and an integer `scale`
-parameter to control resolution.
+parameter to control resolution. Implementations adjust scale as necessary given
+the data.
 
-Scale is not a configurable property of this Aggregation, the
-implementation will adjust it as necessary given the data.  This
-Aggregation honors the following configuration parameter:
+This Aggregation honors the following configuration parameters:
 
-| Key     | Value   | Default Value | Description                                                                                                  |
-|---------|---------|---------------|--------------------------------------------------------------------------------------------------------------|
-| MaxSize | integer | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
-| RecordMinMax | true, false | true | Whether to record min and max. |
+| Key          | Value       | Default Value | Description                                                                                                  |
+|--------------|-------------|---------------|--------------------------------------------------------------------------------------------------------------|
+| MaxSize      | integer     | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
+| MaxScale     | integer     | 20            | Maximum `scale` factor.                                                                                      |
+| RecordMinMax | true, false | true          | Whether to record min and max.                                                                               |
 
 The default of 160 buckets is selected to establish default support
 for a high-resolution histogram able to cover a long-tail latency
@@ -496,8 +498,11 @@ bucketMidpoint = ((base - 1) / 2) / ((base + 1) / 2) = (base - 1) /
 This Aggregation uses the notion of "ideal" scale.  The ideal scale is
 either:
 
-1. The maximum supported scale, generally used for single-value histogram Aggregations where scale is not otherwise constrained
-2. The largest value of scale such that no more than the maximum number of buckets are needed to represent the full range of input data in either of the positive or negative ranges.
+1. The `MaxScale` (see configuration parameters), generally used for
+   single-value histogram Aggregations where scale is not otherwise constrained.
+2. The largest value of scale such that no more than the maximum number of
+   buckets are needed to represent the full range of input data in either of the
+   positive or negative ranges.
 
 ###### Handle all normal values
 
@@ -515,7 +520,8 @@ nearest normal value.
 ###### Support a minimum and maximum scale
 
 The implementation MUST maintain reasonable minimum and maximum scale
-parameters that the automatic scale parameter will not exceed.
+parameters that the automatic scale parameter will not exceed. The maximum scale
+is defined by the `MaxScale` configuration parameter.
 
 ###### Use the maximum scale for single measurements
 
@@ -651,7 +657,9 @@ A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically
 ### ExemplarFilter
 
 The `ExemplarFilter` interface MUST provide a method to determine if a
-measurement should be sampled.
+measurement should be sampled. Sampled here simply makes the measurement
+eligible for being included as an exemplar. `ExemplarReservoir` makes the final
+decision if a measurement becomes an exemplar.
 
 This interface SHOULD have access to:
 
@@ -662,8 +670,24 @@ This interface SHOULD have access to:
   [Span](../trace/api.md#span).
 - A `timestamp` that best represents when the measurement was taken.
 
-See [Defaults and Configuration](#defaults-and-configuration) for built-in
-filters.
+### Built-in ExemplarFilters
+
+OpenTelemetry supports a number of built-in exemplar filters to choose from.
+The default is `TraceBased`.
+
+#### AlwaysOn
+
+An ExemplarFilter which makes all measurements eligible for being an Exemplar.
+
+#### AlwaysOff
+
+An ExemplarFilter which makes no measurements eligible for being an Exemplar.
+Using this ExemplarFilter is as good as disabling Exemplar feature.
+
+#### TraceBased
+
+An ExemplarFilter which makes those measurements eligible for being an
+Exemplar, which are recorded in the context of a sampled parent span.
 
 ### ExemplarReservoir
 
