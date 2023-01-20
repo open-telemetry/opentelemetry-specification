@@ -78,10 +78,6 @@ sections below.
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [3] |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [4] |
 
-Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
-
-* `http.method`
-
 **[1]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 **[2]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
@@ -89,6 +85,10 @@ Following attributes MUST be provided **at span creation time** (when provided a
 **[3]:** If available and different from `net.peer.name` and if `net.sock.peer.addr` is set.
 
 **[4]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
+
+Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
+
+* `http.method`
 
 `http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -138,12 +138,6 @@ before any HTTP-redirects that may happen when executing the request.
 | [`net.peer.name`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `example.com` | Required |
 | [`net.peer.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 
-Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
-
-* `http.url`
-* [`net.peer.name`](span-general.md)
-* [`net.peer.port`](span-general.md)
-
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
 **[2]:** The resend count SHOULD be updated each time an HTTP request gets resent by the client, regardless of what was the cause of the resending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues, or any other).
@@ -159,6 +153,12 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 **[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
+
+* `http.url`
+* [`net.peer.name`](span-general.md)
+* [`net.peer.port`](span-general.md)
 <!-- endsemconv -->
 
 Note that in some cases host and port identifiers in the `Host` header might be different from the `net.peer.name` and `net.peer.port`, in this case instrumentation MAY populate `Host` header on `http.request.header.host` attribute even if it's not enabled by user.
@@ -248,13 +248,6 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Optional |
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
 
-Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
-
-* `http.scheme`
-* `http.target`
-* [`net.host.name`](span-general.md)
-* [`net.host.port`](span-general.md)
-
 **[1]:** 'http.route' MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 
 **[2]:** This is not necessarily the same as `net.sock.peer.addr`, which would
@@ -289,6 +282,13 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
 **[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+
+Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
+
+* `http.scheme`
+* `http.target`
+* [`net.host.name`](span-general.md)
+* [`net.host.port`](span-general.md)
 <!-- endsemconv -->
 
 `http.route` MUST be provided at span creation time if and only if it's already available. If it becomes available after span starts, instrumentation MUST populate it anytime before span ends.
