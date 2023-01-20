@@ -377,22 +377,22 @@ Following configuration properties should be available when creating the sampler
 
 Span attributes MUST adhere to the [common rules of attribute limits](../common/README.md#attribute-limits).
 
-If the SDK implements attribute limits it MUST provide a way to change these
-limits, via a configuration to the `TracerProvider`, by allowing users to
-configure individual limits like in the Java example below.
-
 SDK Spans MAY also discard links and events that would increase the number of
 elements of each collection beyond the configured limit.
 
-The options MAY be bundled in a class, which then SHOULD be called `SpanLimits`.
-Implementations MAY provide additional configuration such as
-`AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
+If the SDK implements the limits above it MUST provide a way to change these
+limits, via a configuration to the TracerProvider, by allowing users to
+configure individual limits like in the Java example bellow.
+
+The name of the configuration options SHOULD be `EventCountLimit` and `LinkCountLimit`. The options MAY be bundled in a class,
+which then SHOULD be called `SpanLimits`. Implementations MAY provide additional
+configuration such as `AttributePerEventCountLimit` and `AttributePerLinkCountLimit`.
 
 ```java
-public interface SpanLimits {
-  public int getAttributeCountLimit();
+public final class SpanLimits {
+  SpanLimits(int attributeCountLimit, int linkCountLimit, int eventCountLimit);
 
-  public int getAttributeValueLengthLimit();
+  public int getAttributeCountLimit();
 
   public int getAttributeCountPerEventLimit();
 
@@ -414,8 +414,7 @@ public interface SpanLimits {
 
 There SHOULD be a log emitted to indicate to the user that an attribute, event,
 or link was discarded due to such a limit. To prevent excessive logging, the log
-should be emitted at most once per span (i.e., not per discarded attribute,
-event, or link).
+should not be emitted once per span, or per discarded attribute, event, or links.
 
 ## Id Generators
 
