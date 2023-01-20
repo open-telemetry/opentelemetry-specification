@@ -186,7 +186,7 @@ means that the current `Span` does record information, but most likely the child
 `Span` will not.
 
 The flag combination `SampledFlag == true` and `IsRecording == false`
-could cause gaps in the distributed trace, and because of this OpenTelemetry API
+could cause gaps in the distributed trace, and because of this the OpenTelemetry SDK
 MUST NOT allow this combination.
 
 ### Recording Sampled reaction table
@@ -580,17 +580,36 @@ This is an implementation of the `SpanProcessor` which create batches of finishe
 spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
 
+The processor SHOULD export a batch when any of the following happens AND
+`SpanProcessor#Export()` has not yet returned (for additional concurrency
+details see the [Export() specification](#exportbatch)):
+
+- `scheduledDelayMillis` after the processor is constructed OR the first span
+  is received by the span processor.
+- `scheduledDelayMillis` after the previous export timer ends, OR the previous
+  export completes, OR the first span is added to the queue after the previous
+  export timer ends or previous batch completes.
+- The queue contains `maxExportBatchSize` or more spans.
+- `ForceFlush` is called.
+
+If any of the above events occurs before `Export()` returns, the span processor
+should wait until `Export()` returns before exporting the next batch.
+If the queue is empty when an export is triggered, the processor MAY export
+an empty batch OR skip the export and consider it to be completed immediately.
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached spans are
   dropped. The default value is `2048`.
-* `scheduledDelayMillis` - the delay interval in milliseconds between two
+* `scheduledDelayMillis` - the maximum delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
-  smaller or equal to `maxQueueSize`. The default value is `512`.
+  smaller or equal to `maxQueueSize`. If the queue reaches `maxExportBatchSize`
+  a batch will be exported even if `scheduledDelayMillis` milliseconds have not
+  elapsed. The default value is `512`.
 
 ## Span Exporter
 
