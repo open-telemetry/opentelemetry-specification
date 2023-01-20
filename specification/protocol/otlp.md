@@ -97,8 +97,8 @@ to receive a response to each request:
 
 ![Request-Response](img/otlp-request-response.png)
 
-_Note: this protocol is concerned with the reliability of delivery between one pair
-of client/server nodes and aims to ensure that no data is lost in transit
+_Note: this protocol is concerned with the reliability of delivery between one
+pair of client/server nodes and aims to ensure that no data is lost in transit
 between the client and the server. Many telemetry collection systems have
 intermediary nodes that the data must travel across until reaching the final
 destination (e.g., application -> agent -> collector -> backend). End-to-end
@@ -109,7 +109,9 @@ paths._
 
 #### OTLP/gRPC Concurrent Requests
 
-After sending the request, the client MAY wait until the server receives a response. In that case, there will be, at most only one request in flight that the server does not yet acknowledge.
+After sending the request, the client MAY wait until the server receives a response. 
+In that case, there will be, at most only one request in flight that the server does 
+not yet acknowledge.
 
 ![Unary](img/otlp-sequential.png)
 
@@ -238,8 +240,8 @@ additional
 [details via status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails)
 using
 [BadRequest](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L119).
-If more appropriate, it is possible to use another gRPC status code. Here is a snippet of sample
-Go code to illustrate:
+If more appropriate, it is possible to use another gRPC status code. Here is a 
+snippet of sample Go code to illustrate:
 
 ```go
   // Do this on the server side.
@@ -416,9 +418,9 @@ for mapping between Protobuf and JSON, with the following deviations from that m
   represented like this:
   { "kind": 2, ... }
 
-- OTLP/JSON receivers MUST ignore message fields with unknown names and MUST unmarshal the
-  message as if the unknown field was not present in the payload.
-  For example, this aligns with the behavior of the Binary Protobuf unmarshaler and ensures that adding
+- OTLP/JSON receivers MUST ignore message fields with unknown names and MUST unmarshal 
+  the message as if the unknown field was not present in the payload. For example, 
+  this aligns with the behavior of the Binary Protobuf unmarshaler and ensures that adding
   new fields to OTLP messages do not break existing receivers.
 
 - The keys of JSON objects are field names converted to lowerCamelCase. Original
@@ -547,7 +549,8 @@ below about what this field can contain in each specific failure case.
 The server SHOULD use HTTP response status codes to indicate
 retryable and not-retryable errors for a particular erroneous situation. The
 client SHOULD honour HTTP response status codes as retryable or not-retryable.
-The requests that receive a response status code listed in following table SHOULD be retried.
+The requests that receive a response status code listed in following table SHOULD 
+be retried.
 All other `4xx` or `5xx` response status codes MUST NOT be retried.
 
 |HTTP response status code|
@@ -622,11 +625,13 @@ The default network port for OTLP/HTTP is 4318.
 
 ### Multi-Destination Exporting
 
-An additional complication must be accounted for when one client must send telemetry data
-to more than one destination server. When one of the servers acknowledges the data and the  
-other server does not (yet), the client needs to decide how to move forward.
+An additional complication must be accounted for when one client must send 
+telemetry data to more than one destination server. When one of the servers 
+acknowledges the data and the other server does not (yet), the client needs 
+to decide how to move forward.
 
-In such a situation, the client SHOULD implement queuing, acknowledgment-handling and retry logic per destination. For example, this ensures that servers do not
+In such a situation, the client SHOULD implement queuing, acknowledgment-handling 
+and retry logic per destination. For example, this ensures that servers do not
 block each other. The queues SHOULD reference and send shared immutable data,
 thus minimizing the memory overhead caused by having multiple queues.
 
@@ -642,11 +647,12 @@ client-side queue).
 
 #### Duplicate Data
 
-The client has to know in edge cases (such as reconnections, network interruptions, etc.)
-whether recently provided data was delivered and whether an acknowledgment was received or not.
-Therefore, the client will typically choose to re-send such data to guarantee
-delivery, which may result in duplicate data on the server side. This is a
-deliberate choice and is considered to be the right tradeoff for telemetry data.
+The client has to know in edge cases (such as reconnections, network interruptions,
+etc.) whether recently provided data was delivered and whether an acknowledgment 
+was received or not. Therefore, the client will typically choose to re-send such 
+data to guarantee delivery, which may result in duplicate data on the server side. 
+This is a deliberate choice and is considered to be the right tradeoff for telemetry 
+data.
 
 ## Future Versions and Interoperability
 
