@@ -216,6 +216,33 @@ Separated for clarity.
 **[1]:** This mirrors the db.sql.table attribute but references cassandra rather than sql. It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
 <!-- endsemconv -->
 
+## Microsoft Azure Cosmos DB
+
+Cosmos DB instrumentation includes call-level (public API) surface spans and network spans. Depending on the connection mode (Gateway or Direct), network-level spans may also be created.
+
+<!-- semconv db.cosmosdb -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `db.cosmosdb.client_id` | string | Unique cosmos client instance id. | `3ba4827d-4422-483f-b59f-85b74211c11d` | Recommended |
+| `db.cosmosdb.user_agent` | string | Cosmos client SDK user agent. | `cosmos-netstandard-sdk/3.31.2|1|X64|Linux 5.4.0-1095-azure 101 18|.NET 6.0.2|N|` | Recommended |
+| `db.cosmosdb.connection_mode` | string | Cosmos client connection mode. | `gateway` | Required |
+| `db.cosmosdb.container` | string | Cosmos DB container name. | `anystring` | Conditionally Required: if available |
+| `db.cosmosdb.request_content_length` | int | Request payload size in bytes |  | Recommended |
+| `db.cosmosdb.status_code` | int | Cosmos DB status code. | `200`; `201` | Conditionally Required: if response was received |
+| `db.cosmosdb.sub_status_code` | int | Cosmos DB sub status code. | `1000`; `1002` | Conditionally Required: [1] |
+| `db.cosmosdb.request_charge` | double | RU consumed for that operation | `46.18`; `1.0` | Conditionally Required: when available |
+
+`db.cosmosdb.connection_mode` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `gateway` | Gateway (HTTP) connections mode |
+| `direct` | Direct connection. |
+<!-- endsemconv -->
+
+In addition to Cosmos DB attributes, all spans include
+`az.namespace` attribute representing Azure Resource Provider namespace that MUST be equal to `Microsoft.DocumentDB`.
+
 ## Examples
 
 ### MySQL
@@ -272,44 +299,24 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 
 ### Microsoft Azure Cosmos DB
 
-Microsoft Azure Cosmos DB SDK (Currently only .Net) emit Activity at operation level with following attributes/information.
+### Microsoft Azure Cosmos DB
 
-<!-- semconv db.tech(tag=call-level-tech-specific-cosmosdb) -->
-| Attribute  | Value | Comment |
-| --------  | ------------------- | --------------------- |
-| _kind_ | _client_       | _IGNORE, By Default, setting them as part of diagnostic scope_ |
-| _az.namespace_| _Microsoft.DocumentDB_  | _IGNORE,  By Default, setting them as part of diagnostic scope_  |
-|db.system| cosmosdb | Open Telemetry Convention To identify type of Db |
-| db.name | < Database Name >  |   |
-| db.operation| ReadItemAsync, DeleteItemStreamAsync etc  | Database Operation ~Type~ Name  |
-| net.peer.name |  e.g. sourabhjaintemp  |  Account Name + Cloud |
-| db.cosmosdb.client_id| Unique Client Id| Combination of client id and machine id can tell us, if customer is following best practices to create singleton client  |
-| db.cosmosdb.machine_id| Unique Machine Id|  |
-| db.cosmosdb.user_agent| < User Agent With SDK version>  | Useful to identify the SDK version  |
-| db.cosmosdb.connection_mode | Direct/Gateway |   go through |
-| db.cosmosdb.container| Container |    |
-| db.cosmosdb.request_content_length_bytes | Size of request payload |    |
-| db.cosmosdb.response_content_length_bytes | Size of response Payload |   |
-| db.cosmosdb.status_code  | 201/200/204   |  Cosmos Db Http Status Code, it tells if particular cosmosdb call/request is passed/failed with which HttpStatusCode  |
-| db.cosmosdb.sub_status_code  | 1000/1002   |  Cosmos Db SubStatus Code |
-| db.cosmosdb.request_charge  | < double type number > | RU consumed for that operation  |
-| db.cosmosdb.regions_contacted| Region Cosmos Db|  |
-| db.cosmosdb.retry_count| Number of retries|  |
-| db.cosmosdb.operation_type| Query/Read/Create |  |
-| db.cosmosdb.item_count |   |  Number of items returned by the operation, only Feed Operation |
-| db.cosmosdb.activity_id | Guid |  Unique Id for the operation and can be helpful to debug particular operation in backend logs  |
-| db.cosmosdb.correlated_activity_id| Guid | It will be populated only in case of query operation to allow correlating query pages retrieved for the same multi-page or cross-partition query. |
-| exception.type| `java.net.ConnectException; ``OSError `|  |
-| exception.message| `Division by zero; Can't convert 'int' object to str implicitly `| |
-| exception.stacktrace| `Exception in thread "main" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)` |  |
-
-CosmosDb SDK (Currently only .Net) emit Activity at Network level with following attributes/information.
-
-<!-- semconv db.tech(tag=connection-level-cosmsodb) -->
-| Attribute  | Value | Comment |
-| --------  | ------------------- | --------------------- |
-| rntbd.url | |   rntbd url with partitionid and replicaid |
-| rntbd.operation_type |  |   Operation Type |
-| rntbd.resource_type |  |  Resource Type |
-| rntbd.status_code  | 201/200/204   |  network status code  |
-| rntbd.sub_status_code  | 1000/1002   |  Cosmos Db SubStatus Code |
+| Key | Value |
+| :-------- | :------------------- |
+| Span name | `"CosmosClient.ReadItemsAsync"` |
+| `az.namespace` | `"Microsoft.DocumentDB"` |
+| `db.system` | `"cosmosdb"` |
+| `db.name` | `"todo"` |
+| `db.operation` | `"Read"` |
+| `net.peer.name` |  `"account.documents.azure.com"`  |
+| `db.cosmosdb.client_id` | `3ba4827d-4422-483f-b59f-85b74211c11d` |
+| `db.cosmosdb.user_agent` | `cosmos-netstandard-sdk/3.31.2|1|X64|Linux 5.4.0-1095-azure 101 18|.NET 6.0.2|N|appname` |
+| `db.cosmosdb.connection_mode` | `"Direct"` |
+| `db.cosmosdb.container` | `"items"` |
+| `db.cosmosdb.request_content_length` | `20` |
+| `db.cosmosdb.response_content_length` | `4200` |
+| `db.cosmosdb.status_code`  | `201` |
+| `db.cosmosdb.sub_status_code`  | `0` |
+| `db.cosmosdb.request_charge`  | `7.43` |
+| `db.cosmosdb.regions_contacted` | [] |  |
+| `db.cosmosdb.item_count` | 5  |
