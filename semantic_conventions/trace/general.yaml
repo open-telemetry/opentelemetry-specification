@@ -289,3 +289,8 @@ groups:
         brief: >
           The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`.
         examples: 42
+      - id: column
+        type: int
+        brief: >
+          The column number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`.
+        examples: 16

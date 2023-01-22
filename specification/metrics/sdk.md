@@ -23,7 +23,7 @@ linkTitle: SDK
     + [Last Value Aggregation](#last-value-aggregation)
     + [Histogram Aggregations](#histogram-aggregations)
       - [Explicit Bucket Histogram Aggregation](#explicit-bucket-histogram-aggregation)
-      - [Exponential Bucket Histogram Aggregation](#exponential-bucket-histogram-aggregation)
+      - [Base2 Exponential Bucket Histogram Aggregation](#base2-exponential-bucket-histogram-aggregation)
         * [Handle all normal values](#handle-all-normal-values)
         * [Support a minimum and maximum scale](#support-a-minimum-and-maximum-scale)
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
@@ -33,10 +33,15 @@ linkTitle: SDK
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
+  * [Built-in ExemplarFilters](#built-in-exemplarfilters)
+    + [AlwaysOn](#alwayson)
+    + [AlwaysOff](#alwaysoff)
+    + [TraceBased](#tracebased)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
+    + [RegisterProducer(metricProducer)](#registerproducermetricproducer)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
@@ -47,6 +52,9 @@ linkTitle: SDK
       - [ForceFlush()](#forceflush)
       - [Shutdown()](#shutdown)
   * [Pull Metric Exporter](#pull-metric-exporter)
+- [MetricProducer](#metricproducer)
+  * [Interface Definition](#interface-definition-1)
+    + [Produce() batch](#produce-batch)
 - [Defaults and configuration](#defaults-and-configuration)
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
@@ -349,9 +357,9 @@ The SDK MUST provide the following `Aggregation` to support the
 - [Last Value](./sdk.md#last-value-aggregation)
 - [Explicit Bucket Histogram](./sdk.md#explicit-bucket-histogram-aggregation)
 
-The SDK MAY provide the following `Aggregation`:
+The SDK SHOULD provide the following `Aggregation`:
 
-- [Exponential Bucket Histogram Aggregation](./sdk.md#exponential-bucket-histogram-aggregation)
+- [Base2 Exponential Bucket Histogram](./sdk.md#base2-exponential-bucket-histogram-aggregation)
 
 #### Drop Aggregation
 
@@ -440,23 +448,22 @@ bound (except at positive infinity).  A measurement is defined to fall
 into the greatest-numbered bucket with boundary that is greater than
 or equal to the measurement.
 
-##### Exponential Bucket Histogram Aggregation
+##### Base2 Exponential Bucket Histogram Aggregation
 
-**Status**: [Experimental](../document-status.md)
-
-The Exponential Histogram Aggregation informs the SDK to collect data
+The Base2 Exponential Histogram Aggregation informs the SDK to collect data
 for the [Exponential Histogram Metric
-Point](./data-model.md#exponentialhistogram), which uses an exponential
+Point](./data-model.md#exponentialhistogram), which uses a base-2 exponential
 formula to determine bucket boundaries and an integer `scale`
-parameter to control resolution.
+parameter to control resolution. Implementations adjust scale as necessary given
+the data.
 
-Scale is not a configurable property of this Aggregation, the
-implementation will adjust it as necessary given the data.  This
-Aggregation honors the following configuration parameter:
+This Aggregation honors the following configuration parameters:
 
-| Key     | Value   | Default Value | Description                                                                                                  |
-|---------|---------|---------------|--------------------------------------------------------------------------------------------------------------|
-| MaxSize | integer | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
+| Key          | Value       | Default Value | Description                                                                                                  |
+|--------------|-------------|---------------|--------------------------------------------------------------------------------------------------------------|
+| MaxSize      | integer     | 160           | Maximum number of buckets in each of the positive and negative ranges, not counting the special zero bucket. |
+| MaxScale     | integer     | 20            | Maximum `scale` factor.                                                                                      |
+| RecordMinMax | true, false | true          | Whether to record min and max.                                                                               |
 
 The default of 160 buckets is selected to establish default support
 for a high-resolution histogram able to cover a long-tail latency
@@ -491,8 +498,11 @@ bucketMidpoint = ((base - 1) / 2) / ((base + 1) / 2) = (base - 1) /
 This Aggregation uses the notion of "ideal" scale.  The ideal scale is
 either:
 
-1. The maximum supported scale, generally used for single-value histogram Aggregations where scale is not otherwise constrained
-2. The largest value of scale such that no more than the maximum number of buckets are needed to represent the full range of input data in either of the positive or negative ranges.
+1. The `MaxScale` (see configuration parameters), generally used for
+   single-value histogram Aggregations where scale is not otherwise constrained.
+2. The largest value of scale such that no more than the maximum number of
+   buckets are needed to represent the full range of input data in either of the
+   positive or negative ranges.
 
 ###### Handle all normal values
 
@@ -510,7 +520,8 @@ nearest normal value.
 ###### Support a minimum and maximum scale
 
 The implementation MUST maintain reasonable minimum and maximum scale
-parameters that the automatic scale parameter will not exceed.
+parameters that the automatic scale parameter will not exceed. The maximum scale
+is defined by the `MaxScale` configuration parameter.
 
 ###### Use the maximum scale for single measurements
 
@@ -646,7 +657,9 @@ A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically
 ### ExemplarFilter
 
 The `ExemplarFilter` interface MUST provide a method to determine if a
-measurement should be sampled.
+measurement should be sampled. Sampled here simply makes the measurement
+eligible for being included as an exemplar. `ExemplarReservoir` makes the final
+decision if a measurement becomes an exemplar.
 
 This interface SHOULD have access to:
 
@@ -657,8 +670,24 @@ This interface SHOULD have access to:
   [Span](../trace/api.md#span).
 - A `timestamp` that best represents when the measurement was taken.
 
-See [Defaults and Configuration](#defaults-and-configuration) for built-in
-filters.
+### Built-in ExemplarFilters
+
+OpenTelemetry supports a number of built-in exemplar filters to choose from.
+The default is `TraceBased`.
+
+#### AlwaysOn
+
+An ExemplarFilter which makes all measurements eligible for being an Exemplar.
+
+#### AlwaysOff
+
+An ExemplarFilter which makes no measurements eligible for being an Exemplar.
+Using this ExemplarFilter is as good as disabling Exemplar feature.
+
+#### TraceBased
+
+An ExemplarFilter which makes those measurements eligible for being an
+Exemplar, which are recorded in the context of a sampled parent span.
 
 ### ExemplarReservoir
 
@@ -752,7 +781,9 @@ measurements using the equivalent of the following naive algorithm:
 common configurable aspects of the OpenTelemetry Metrics SDK and
 determines the following capabilities:
 
-* Collecting metrics from the SDK on demand.
+* Registering [MetricProducer](#metricproducer)(s)
+* Collecting metrics from the SDK and any registered
+  [MetricProducers](#metricproducer) on demand.
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
@@ -769,14 +800,19 @@ used with pull-based metrics collection.  A common sub-class of
 `MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
 to be used typically with push-based metrics collection.
 
-The `MetricReader` MUST ensure that data points are output in the
-configured aggregation temporality for each instrument kind.  For
-synchronous instruments being output with Cumulative temporality, this
-means converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
+The `MetricReader` MUST ensure that data points from OpenTelemetry
+[instruments](./api.md#instrument) are output in the configured aggregation
+temporality for each instrument kind. For synchronous instruments being output
+with Cumulative temporality, this means converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
 aggregation temporality.  For asynchronous instruments being output
 with Delta temporality, this means converting [Cumulative to
 Delta](supplementary-guidelines.md#asynchronous-example-delta-temporality) aggregation
 temporality.
+
+The `MetricReader` is not required to ensure data points from a non-SDK
+[MetricProducer](#metricproducer) are output in the configured aggregation
+temporality, as these data points are not collected using OpenTelemetry
+instruments.
 
 The SDK MUST support multiple `MetricReader` instances to be registered on the
 same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
@@ -812,11 +848,27 @@ functions.
 
 ### MetricReader operations
 
+#### RegisterProducer(metricProducer)
+
+**Status**: [Experimental](../document-status.md)
+
+RegisterProducer causes the MetricReader to use the provided
+[MetricProducer](#metricproducer) as a source of aggregated metric data in
+subsequent invocations of Collect. RegisterProducer is expected to be called
+during initialization, but MAY be invoked later. Multiple registrations
+of the same MetricProducer MAY result in duplicate metric data being collected.
+
+If the [MeterProvider](#meterprovider) is an instance of
+[MetricProducer](#metricproducer), this MAY be used to register the
+MeterProvider, but MUST NOT allow multiple [MeterProviders](#meterprovider)
+to be registered with the same MetricReader.
+
 #### Collect
 
-Collects the metrics from the SDK. If there are [asynchronous
-Instruments](./api.md#asynchronous-instrument-api) involved, their callback
-functions will be triggered.
+Collects the metrics from the SDK and any registered
+[MetricProducers](#metricproducer). If there are
+[asynchronous SDK Instruments](./api.md#asynchronous-instrument-api) involved,
+their callback functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Collect` operation fails or times out on
@@ -1085,6 +1137,58 @@ modeled to interact with other components in the SDK:
                                  |                             |
                                  +-----------------------------+
   ```
+
+## MetricProducer
+
+**Status**: [Experimental](../document-status.md)
+
+`MetricProducer` defines the interface which bridges to third-party metric
+sources MUST implement so they can be plugged into an OpenTelemetry
+[MetricReader](#metricreader) as a source of aggregated metric data. The SDK's
+in-memory state MAY implement the `MetricProducer` interface for convenience.
+
+`MetricProducer` implementations SHOULD accept configuration for the
+`AggregationTemporality` of produced metrics. SDK authors MAY provide utility
+libraries to facilitate conversion between delta and cumulative temporalities.
+
+If the batch of [Metric points](./data-model.md#metric-points) returned by
+`Produce()` includes a [Resource](../resource/sdk.md), the `MetricProducer` MUST
+accept configuration for the [Resource](../resource/sdk.md).
+
+```text
++-----------------+            +--------------+
+|                 | Metrics... |              |
+| In-memory state +------------> MetricReader |
+|                 |            |              |
++-----------------+            |              |
+                               |              |
++-----------------+            |              |
+|                 | Metrics... |              |
+| MetricProducer  +------------>              |
+|                 |            |              |
++-----------------+            +--------------+
+```
+
+### Interface Definition
+
+A `MetricProducer` MUST support the following functions:
+
+#### Produce() batch
+
+`Produce` provides metrics from the MetricProducer to the caller. `Produce`
+MUST return a batch of [Metric points](./data-model.md#metric-points).
+`Produce` does not have any required parameters, however, [OpenTelemetry
+SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
+
+`Produce` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out. When the `Produce` operation fails, the `MetricProducer`
+MAY return successfully collected results and a failed reasons list to the
+caller.
+
+If a batch of [Metric points](./data-model.md#metric-points) can include
+[`InstrumentationScope`](../glossary.md#instrumentation-scope) information,
+`Produce` SHOULD include a single InstrumentationScope which identifies the
+`MetricProducer`.
 
 ## Defaults and configuration
 

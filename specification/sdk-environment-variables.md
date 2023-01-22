@@ -27,6 +27,26 @@ Renaming or changing the default value MUST NOT happen without a major version u
 
 If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
 
+> The following paragraph was added after stabilization and the requirements are
+thus qualified as "SHOULD" to allow SDKs to avoid breaking changes.
+For new
+implementations, these should be treated as MUST requirements.
+
+For variables accepting a numeric value, if the user provides a value the SDK cannot parse,
+or which is outside the valid range for the configuration item, the SDK SHOULD
+generate a warning and gracefully ignore the setting, i.e., treat them as not set.
+In particular, SDKs
+SHOULD NOT assign a custom interpretation e.g. to negative values if a negative
+value does not naturally apply to a configuration and does not have an explicitly specified meaning, but treat it like any other
+invalid value.
+
+For example, a value specifying a buffer size must naturally be non-negative.
+Treating a negative value as "buffer everything" would be an example of such a discouraged custom interpretation.
+Instead the default buffer size should be used.
+
+Note that this could make a difference even if the custom interpretation is identical with the default value,
+because it might reset a value set from other configuration sources with the default.
+
 ### Enum value
 
 For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
@@ -119,7 +139,7 @@ See the SDK [Attribute Limits](common/README.md#attribute-limits) section for th
 
 | Name                              | Description                          | Default | Notes |
 | --------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | no limit|       |
 | OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count | 128     |       |
 
 ## Span Limits
@@ -130,7 +150,7 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 
 | Name                                   | Description                                    | Default | Notes |
 | -------------------------------------- | ---------------------------------------------- | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           |         | Empty value is treated as infinity. Non-integer and negative values are invalid. |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | no limit |       |
 | OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     |       |
 | OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     |       |
 | OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
@@ -143,7 +163,14 @@ See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.
 
 ## Jaeger Exporter
 
-**Status**: [Stable](document-status.md)
+**Status**: [Deprecated](document-status.md)
+
+Jaeger exporter support will be removed from OpenTelemetry in July 2023.
+
+_Note: Jaeger supports the [OpenTelemetry protocol natively][jaeger_otlp] and most users
+should export to Jaeger using OTLP. These environment variables remain here
+only for backwards compatibility and will be removed in a future version. SDKs MAY include
+Jaeger exporters, but Jaeger export is not required._
 
 The `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable
 MAY by used to specify the transport protocol.
@@ -157,6 +184,7 @@ The value MUST be one of:
 [jaeger_http]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-http-stable
 [jaeger_grpc]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
 [jaeger_udp]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
+[jaeger_otlp]: https://www.jaegertracing.io/docs/latest/apis/#opentelemetry-protocol-stable
 
 The default transport protocol SHOULD be `http/thrift.binary` unless
 SDKs have good reasons to choose other as the default
@@ -262,13 +290,13 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
-| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"with_sampled_trace"` | |
+| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"trace_based"` | |
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
-- `"none"`: No measurements are eligible for exemplar sampling.
-- `"all"`: All measurements are eligible for exemplar sampling.
-- `"with_sampled_trace"`: Only allow measurements with a sampled parent span in context.
+- `"always_on"`: [AlwaysOn](./metrics/sdk.md#alwayson)
+- `"always_off"`: [AlwaysOff](./metrics/sdk.md#alwaysoff)
+- `"trace_based"`: [TraceBased](./metrics/sdk.md#tracebased)
 
 ### Periodic exporting MetricReader
 

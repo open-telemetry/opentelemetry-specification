@@ -11,13 +11,7 @@ release.
 
 ### Traces
 
-- Rename `http.retry_count` to `http.resend_count` and clarify its meaning.
-  ([#2743](https://github.com/open-telemetry/opentelemetry-specification/pull/2743))
-
 ### Metrics
-
-- Handle duplicate description comments during Prometheus conversion.
-  ([#2890](https://github.com/open-telemetry/opentelemetry-specification/pull/2890))
 
 ### Logs
 
@@ -25,10 +19,240 @@ release.
 
 ### Semantic Conventions
 
+### Compatibility
+
+- Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
+  ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+### Common
+
+## v1.17.0 (2023-01-17)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Clarify that the BatchSpanProcessor should export batches when the queue reaches the batch size
+  ([#3024](https://github.com/open-telemetry/opentelemetry-specification/pull/3024))
+- Deprecate jaeger exporter, scheduled for spec removal in July 2023.
+  [#2858](https://github.com/open-telemetry/opentelemetry-specification/pull/2858)
+
+### Metrics
+
+- Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
+  ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
+- Add `MaxScale` config option to Exponential Bucket Histogram Aggregation.
+  ([#3017](https://github.com/open-telemetry/opentelemetry-specification/pull/3017))
+- Rename exponential bucket histogram aggregation to base 2 exponential histogram
+  aggregation. Rename "OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION"
+  value from "exponential_bucket_histogram" to
+  "base2_exponential_bucket_histogram". Mark exponential histogram data model and
+  base2 exponential histogram aggregation as stable.
+  ([#3041](https://github.com/open-telemetry/opentelemetry-specification/pull/3041))
+
+### Logs
+
+- Clarify usage of log body for structured logs
+  ([#3023](https://github.com/open-telemetry/opentelemetry-specification/pull/3023))
+
+### Resource
+
+- No changes.
+
+### Semantic Conventions
+
+- Clarify common HTTP attributes apply to both clients and servers
+  ([#3044](https://github.com/open-telemetry/opentelemetry-specification/pull/3044))
+- Add `code.lineno` source code attribute
+  ([#3029](https://github.com/open-telemetry/opentelemetry-specification/pull/3029))
+- Add ClickHouse to db.system semantic conventions
+  ([#3011](https://github.com/open-telemetry/opentelemetry-specification/pull/3011))
+- Refactor messaging attributes and per-message attributes in batching scenarios.
+  ([#2957](https://github.com/open-telemetry/opentelemetry-specification/pull/2957)).
+  BREAKING: rename `messaging.consumer_id` to `messaging.consumer.id`,
+  `messaging.destination` to `messaging.destination.name`,
+  `messaging.temp_destination` to `messaging.destination.temporary`,
+  `messaging.destination_kind` to `messaging.destination.kind`,
+  `messaging.message_id` to `messaging.message.id`,
+  `messaging.protocol` to `net.app.protocol.name`,
+  `messaging.protocol_version`, `net.app.protocol.version`,
+  `messaging.conversation_id` to `messaging.message.conversation_id`,
+  `messaging.message_payload_size_bytes` to `messaging.message.payload_size_bytes`,
+  `messaging.message_payload_compressed_size_bytes` to `messaging.message.payload_compressed_size_bytes`,
+  `messaging.rabbitmq.routing_key`: `messaging.rabbitmq.destination.routing_key`,
+  `messaging.kafka.message_key` to `messaging.kafka.message.key`,
+  `messaging.kafka.consumer_group` to `messaging.kafka.consumer.group`,
+  `messaging.kafka.partition` to `messaging.kafka.destination.partition`,
+  `messaging.kafka.tombstone` to `messaging.kafka.message.tombstone`,
+  `messaging.rocketmq.message_type` to `messaging.rocketmq.message.type`,
+  `messaging.rocketmq.message_tag` to `messaging.rocketmq.message.tag`,
+  `messaging.rocketmq.message_keys` to `messaging.rocketmq.message.keys`;
+  Removed `messaging.url`;
+  Renamed `send` operation to `publish`;
+  Split `destination` and `source` namespaces and clarify per-message attributes in batching scenarios.
+
+### Compatibility
+
+- Add Tracer.Close() to the OpenTracing Shim layer.
+- Add OpenCensus migration guide and add BinaryPropagation as an option to gRPC
+  instrumentation for OpenCensus compatibility
+  ([#3015](https://github.com/open-telemetry/opentelemetry-specification/pull/3015)).
+
+### OpenTelemetry Protocol
+
+- Add table for OTLP/HTTP response code and client retry recommendation
+  ([#3028](https://github.com/open-telemetry/opentelemetry-specification/pull/3028))
+- Remove spaces from example exporter User-Agent header to conform to RFC7231 & RFC7230.
+  [#3052](https://github.com/open-telemetry/opentelemetry-specification/pull/3052)
+
+### SDK Configuration
+
+- Rename knowns values for "OTEL_METRICS_EXEMPLAR_FILTER" to "always_on",
+  "always_off" and "trace_based".
+  ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
+
+### Telemetry Schemas
+
+- No changes.
+
+### Common
+
+- No changes.
+
+## v1.16.0 (2022-12-08)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
+  ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
+- Add OTLP exporter temporality preference named "LowMemory" which
+  configures Synchronous Counter and Histogram instruments to use
+  Delta aggregation temporality, which allows them to shed memory
+  following a cardinality explosion, thus use less memory.
+  ([#2961](https://github.com/open-telemetry/opentelemetry-specification/pull/2961))
+
+### Logs
+
+- Clarification on what an Event is, and what the event.domain and event.name attributes represent
+  ([#2848](https://github.com/open-telemetry/opentelemetry-specification/pull/2848))
+- Move `event.domain` from InstrumentationScope attributes to LogRecord
+  attributes.
+  ([#2940](https://github.com/open-telemetry/opentelemetry-specification/pull/2940))
+- Split out Event API from Log API
+  ([#2941](https://github.com/open-telemetry/opentelemetry-specification/pull/2941))
+- Clarify data modification in `LogRecordProcessor`.
+  ([#2969](https://github.com/open-telemetry/opentelemetry-specification/pull/2969))
+- Make sure it is very clear we are not building a Logging API.
+  ([#2966](https://github.com/open-telemetry/opentelemetry-specification/pull/2966))
+
+### Resource
+
+- Extend Cloud Platform Enum with OpenShift entry for all supported cloud providers.
+  ([#2985](https://github.com/open-telemetry/opentelemetry-specification/pull/2985))
+
+### Semantic Conventions
+
+- Add `process.runtime.jvm.gc.duration` metric to semantic conventions.
+  ([#2903](https://github.com/open-telemetry/opentelemetry-specification/pull/2903))
+- Make http.status_code metric attribute an int.
+  ([#2943](https://github.com/open-telemetry/opentelemetry-specification/pull/2943))
+- Add IBM Cloud as a cloud provider.
+  ([#2965](https://github.com/open-telemetry/opentelemetry-specification/pull/2965))
+- Add semantic conventions for Feature Flags
+  ([#2529](https://github.com/open-telemetry/opentelemetry-specification/pull/2529))
+- Rename `rpc.request.metadata.<key>` and `rpc.response.metadata.<key>` to
+  `rpc.grpc.request.metadata.<key>` and `rpc.grpc.response.metadata.<key>`
+  ([#2981](https://github.com/open-telemetry/opentelemetry-specification/pull/2981))
+- List the machine-id as potential source for a unique host.id
+  ([#2978](https://github.com/open-telemetry/opentelemetry-specification/pull/2978))
+- Add `messaging.kafka.message.offset` attribute.
+  ([#2982](https://github.com/open-telemetry/opentelemetry-specification/pull/2982))
+- Update hardware metrics to use `direction` as per general semantic conventions
+  ([#2942](https://github.com/open-telemetry/opentelemetry-specification/pull/2942))
+
+### Compatibility
+
+- Add OpenCensus metric bridge specification.
+  ([#2979](https://github.com/open-telemetry/opentelemetry-specification/pull/2979))
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### SDK Configuration
+
+- Specify handling of invalid numeric environment variables
+  ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
+
+### Telemetry Schemas
+
+- No changes.
+
+### Common
+
+- No changes.
+
+## v1.15.0 (2022-11-09)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Rename `http.retry_count` to `http.resend_count` and clarify its meaning.
+  ([#2743](https://github.com/open-telemetry/opentelemetry-specification/pull/2743))
+
+### Metrics
+
+- Handle duplicate description comments during Prometheus conversion.
+  ([#2890](https://github.com/open-telemetry/opentelemetry-specification/pull/2890))
+- Allow to configure min/max recording in the exponential histogram aggregation.
+  ([#2904](https://github.com/open-telemetry/opentelemetry-specification/pull/2904))
+- Add table of instrument additive property
+  ([#2906](https://github.com/open-telemetry/opentelemetry-specification/pull/2906))
+
+### Logs
+
+- Add `Context` as argument to `LogRecordProcessor#onEmit`.
+  ([#2927](https://github.com/open-telemetry/opentelemetry-specification/pull/2927))
+
+### Resource
+
+- No changes.
+
+### Semantic Conventions
+
+- Change to messaging.kafka.max.lag from UpDownCounter to Gauge (and rename it)
+  ([#2837](https://github.com/open-telemetry/opentelemetry-specification/pull/2837))
+- Add daemon attribute to jvm threads metric
+  ([#2828](https://github.com/open-telemetry/opentelemetry-specification/pull/2828))
 - Add gRPC request and response metadata semantic conventions
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
+- Define semantic conventions yaml for non-otlp conventions
+  ([#2850](https://github.com/open-telemetry/opentelemetry-specification/pull/2850))
+- Add more semantic convetion attributes of Apache RocketMQ
+  ([#2881](https://github.com/open-telemetry/opentelemetry-specification/pull/2881))
+- Add `process.runtime.jvm.memory.usage_after_last_gc` metric to semantic conventions.
+  ([#2901](https://github.com/open-telemetry/opentelemetry-specification/pull/2901))
 
 ### Compatibility
 
@@ -42,9 +266,16 @@ release.
 
 ### SDK Configuration
 
+- No changes.
+
 ### Telemetry Schemas
 
+- No changes.
+
 ### Common
+
+- Clarify that Scope is defined at build time
+  ([#2878](https://github.com/open-telemetry/opentelemetry-specification/pull/2878))
 
 ## v1.14.0 (2022-10-04)
 

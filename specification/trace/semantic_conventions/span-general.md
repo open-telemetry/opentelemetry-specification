@@ -144,7 +144,7 @@ For IP-based communication, the name should be a DNS host name of the remote ser
 
 `net.peer.name` should be the name of logical remote destination, e.g., `"example.com"` if connecting to an URL `https://example.com/foo`. Usually, application pass it as configuration to client libraries in form of URL, connection string, host name, etc.
 
-Sometimes host name is only available to instrumentation as a string which may contain DNS name or IP address. `net.peer.name` SHOULD be set to the available known hostname (e.g., `"127.0.0.1"` if connecting to an URL `https://127.0.0.1.com/foo`).
+Sometimes host name is only available to instrumentation as a string which may contain DNS name or IP address. `net.peer.name` SHOULD be set to the available known hostname (e.g., `"127.0.0.1"` if connecting to an URL `https://127.0.0.1/foo`).
 
 If only IP address is available via `net.sock.peer.addr`, `net.peer.name` SHOULD NOT be set. Reverse DNS lookup SHOULD NOT be used to obtain DNS name.
 
@@ -315,4 +315,5 @@ about the span.
 | `code.namespace` | string | The "namespace" within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit. | `com.example.MyHttpService` | Recommended |
 | `code.filepath` | string | The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/content_root/app/index.php` | Recommended |
 | `code.lineno` | int | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | Recommended |
+| `code.column` | int | The column number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `16` | Recommended |
 <!-- endsemconv -->
