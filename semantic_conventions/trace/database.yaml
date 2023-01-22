@@ -202,7 +202,7 @@ groups:
             If applicable and not explicitly disabled via instrumentation configuration.
         brief: >
           The database statement being executed.
-        note: The value may be sanitized to exclude sensitive information.
+        note: The value may be sanitized to exclude sensitive information. It is recommended to sanitize the value by default in order to prevent security vulnerabilities.
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
       - id: operation
         tag: call-level
