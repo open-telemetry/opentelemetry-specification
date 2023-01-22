@@ -94,7 +94,7 @@ usable.
 
 When building components that interoperate between OpenTelemetry and a system
 using the OpenMetrics exposition format, use the
-[OpenMetrics Guidelines](./openmetrics-guidelines.md).
+[OpenMetrics Guidelines](../../compatibility/prometheus_and_openmetrics.md).
 
 ### Pluralization
 

@@ -454,14 +454,23 @@ The Span interface MUST provide:
 
 #### IsRecording
 
-Returns true if this `Span` is recording information like events with the
-`AddEvent` operation, attributes using `SetAttributes`, status with `SetStatus`,
-etc.
+A `Span` is recording (`IsRecording` returns `true`) when the data provided to
+it via functions like `SetAttributes`, `AddEvent`, `SetStatus` is captured in
+some form (e.g. in memory). When a `Span` is not recording (`IsRecording` returns
+`false`), all this data is discarded right away. Further attempts to set or add
+data will not record, making the span effectively a no-op.
 
-After a `Span` is ended, it usually becomes non-recording and thus
-`IsRecording` SHOULD consequently return false for ended Spans.
-Note: Streaming implementations, where it is not known if a span is ended,
-are one expected case where `IsRecording` cannot change after ending a Span.
+This flag may be `true` despite the entire trace not being sampled. This
+allows information about the individual Span to be recorded and processed without
+sending it to the backend. An example of this scenario may be recording and
+processing of all incoming requests for the processing and building of
+SLA/SLO latency charts while sending only a subset - sampled spans - to the
+backend. See also the [sampling section of SDK design](sdk.md#sampling).
+
+After a `Span` is ended, it SHOULD become non-recording and `IsRecording`
+SHOULD always return `false`. The one known exception to this is
+streaming implementations of the API that do not keep local state and cannot
+change the value of `IsRecording` after ending the span.
 
 `IsRecording` SHOULD NOT take any parameters.
 
@@ -470,13 +479,6 @@ events in case when a Span is definitely not recorded. Note that any child
 span's recording is determined independently from the value of this flag
 (typically based on the `sampled` flag of a `TraceFlags` on
 [SpanContext](#spancontext)).
-
-This flag may be `true` despite the entire trace being sampled out. This
-allows to record and process information about the individual Span without
-sending it to the backend. An example of this scenario may be recording and
-processing of all incoming requests for the processing and building of
-SLA/SLO latency charts while sending only a subset - sampled spans - to the
-backend. See also the [sampling section of SDK design](sdk.md#sampling).
 
 Users of the API should only access the `IsRecording` property when
 instrumenting code and never access `SampledFlag` unless used in context
@@ -558,6 +560,9 @@ status, which is `Unset`.
 - Optional `Description` that provides a descriptive message of the `Status`.
   `Description` MUST only be used with the `Error` `StatusCode` value.
   An empty `Description` is equivalent with a not present one.
+
+Note: The [OTLP protocol definition](https://github.com/open-telemetry/opentelemetry-proto/blob/724e427879e3d2bae2edc0218fff06e37b9eb46e/opentelemetry/proto/trace/v1/trace.proto#L264)
+refers to the `Description` property as `message`.
 
 `StatusCode` is one of the following values:
 

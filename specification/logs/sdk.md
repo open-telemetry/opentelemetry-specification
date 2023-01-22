@@ -27,9 +27,6 @@
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
-  * [Built-in exporters](#built-in-exporters)
-    + [OTLP Exporter](#otlp-exporter)
-    + [OTLP File exporter](#otlp-file-exporter)
 
 <!-- tocstop -->
 
@@ -179,8 +176,16 @@ therefore it SHOULD NOT block or throw exceptions.
 
 * `logRecord` - a [ReadWriteLogRecord](#readwritelogrecord) for the
   emitted `LogRecord`.
+* `context` - the `Context` that the SDK determined (the explicitly
+  passed `Context`, the current `Context`, or an empty `Context` if
+  the [Logger](./api.md#get-a-logger) was obtained
+  with `include_trace_context=false`)
 
 **Returns:** `Void`
+
+A `LogRecordProcessor` may freely modify `logRecord` for the duration of
+the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
+asynchronous processing) only reads are permitted.
 
 #### ShutDown
 
@@ -357,21 +362,3 @@ return a Failure result.
 `Shutdown` SHOULD NOT block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
-
-### Built-in exporters
-
-TODO: Break out into files under `./sdk_exporters`.
-
-#### OTLP Exporter
-
-Exports to an OTLP network destination via OTLP/gRPC or OTLP/HTTP.
-
-#### OTLP File exporter
-
-Writes to a file or stdout in either OTLP JSON or OTLP Protobuf binary format.
-
-![Logging to File](img/otlp-file.png)
-
-TODO: clarify how this functionality co-exists with the overlapping
-functionality in logging libraries that allow specifying how logs are written to
-a file.

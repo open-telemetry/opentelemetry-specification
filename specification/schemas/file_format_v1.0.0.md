@@ -1,4 +1,8 @@
-# Schema File
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: 1.0.0
+--->
+
+# Schema File Format 1.0.0
 
 **Status**: [Experimental](../document-status.md)
 
