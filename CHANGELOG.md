@@ -13,6 +13,8 @@ release.
 
 - Rename `http.retry_count` to `http.resend_count` and clarify its meaning.
   ([#2743](https://github.com/open-telemetry/opentelemetry-specification/pull/2743))
+- Add a recommendation to sanitize DB_STATEMENT by default.
+  ([#3127](https://github.com/open-telemetry/opentelemetry-specification/pull/3127))
 
 ### Metrics
 
