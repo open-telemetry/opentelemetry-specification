@@ -246,7 +246,7 @@ section below.
 
 Prometheus exporters MUST add the scope name as the `otel_scope_name` label and
 the scope version as the `otel_scope_version` label on all metric points by
-default.
+default, based on the scope the original data point was nested in.
 
 Prometheus exporters SHOULD provide a configuration option to disable the
 `otel_scope_info` metric and `otel_scope_` labels.
