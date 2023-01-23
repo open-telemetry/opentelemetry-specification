@@ -34,6 +34,9 @@ release.
 
 ## v1.17.0 (2023-01-17)
 
+- Add Cloud Spanner and Microsoft SQL Server Compact to db.system semantic conventions.
+  [#3105](https://github.com/open-telemetry/opentelemetry-specification/pull/3105)
+
 ### Context
 
 - No changes.
