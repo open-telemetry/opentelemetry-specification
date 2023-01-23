@@ -139,7 +139,7 @@ spans per second. It is easy to see that in high latency networks or when the
 server response time is high to achieve good throughput, the requests need to be
 very big or a lot concurrent requests must be done.
 
-If the client is shutting down (e.g., when the containing process wants to exit)
+If the client is shutting down (e.g. when the containing process wants to exit)
 the client will optionally wait until all pending acknowledgements are received
 or until an implementation-specific timeout expires. This ensures the reliable
 delivery of telemetry data. The client implementation SHOULD expose an option to
