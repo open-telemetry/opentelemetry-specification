@@ -175,7 +175,7 @@ in case of a successful response.
 ##### Partial Success
 
 If the request is only partially accepted
-(i.e., when the server accepts only parts of the data and rejects the rest), the
+(i.e. when the server accepts only parts of the data and rejects the rest), the
 server response MUST be the same
 [Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
 message as in the [Full Success](#full-success) case.
