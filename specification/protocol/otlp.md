@@ -145,7 +145,7 @@ or until an implementation-specific timeout expires. This ensures the reliable
 delivery of telemetry data. The client implementation SHOULD expose an option to
 turn on and off the waiting during a shutdown.
 
-If the client is unable to deliver a certain request (e.g., a timer expired while
+If the client is unable to deliver a certain request (e.g. a timer expired while
 waiting for acknowledgements) the client SHOULD record the fact that the data
 was not delivered.
 
