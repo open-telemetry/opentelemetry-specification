@@ -136,7 +136,7 @@ For example, if the request can contain at most 100 spans, network roundtrip
 latency is 200ms, and server response time is 300 ms, then the maximum achievable
 throughput with one concurrent request is `100 spans / (200ms+300ms)` or 200
 spans per second. It is easy to see that in high latency networks or when the
-server response time is high to achieve good throughput, the requests must be
+server response time is high to achieve good throughput, the requests need to be
 very big or a lot concurrent requests must be done.
 
 If the client is shutting down (e.g., when the containing process wants to exit)
