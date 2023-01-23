@@ -101,7 +101,7 @@ _Note: this protocol is concerned with the reliability of delivery between one
 pair of client/server nodes and aims to ensure that no data is lost in transit
 between the client and the server. Many telemetry collection systems have
 intermediary nodes that the data must travel across until reaching the final
-destination (e.g., application -> agent -> collector -> backend). End-to-end
+destination (e.g. application -> agent -> collector -> backend). End-to-end
 delivery guarantees in such systems is outside of the scope of OTLP. The
 acknowledgements described in this protocol happen between a single
 client/server pair and do not span intermediary nodes in multi-hop delivery
