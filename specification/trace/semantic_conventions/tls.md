@@ -8,10 +8,9 @@ This document defines semantic conventions for TLS/SSL client and server Spans.
 
 <!-- toc -->
 
-- [Semantic conventions for TLS spans](#semantic-conventions-for-tls-spans)
-  - [Common Attributes](#common-attributes)
-  - [Cipher suite attributes](#cipher-suite-attributes)
-  - [Certificate attributes](#certificate-attributes)
+- [Common Attributes](#common-attributes)
+- [Cipher suite attributes](#cipher-suite-attributes)
+- [Certificate attributes](#certificate-attributes)
 
 <!-- tocstop -->
 
@@ -23,7 +22,7 @@ These attributes may be used for base information of any TLS/SSL encrypted commu
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `tls.protocol` | string | The negotiated [SSL/TLS protocol version](https://www.openssl.org/docs/man1.1.1/man3/SSL_get_version.html#RETURN-VALUES) of the current connection. | `SSLv3` | Required |
-| `tls.authorized` | boolean | true, if the peer certificate was signed by one of the CAs specified when creating the socket, otherwise false. | `True` | Recommended |
+| `tls.authorized` | boolean | true, if the peer certificate was signed by one of the CAs specified when creating the socket, otherwise false. | `True` | Optional |
 
 `tls.protocol` MUST be one of the following:
 
@@ -61,13 +60,13 @@ This is a widely-used notation by CLI tools like `openssl` or browsers to displa
 | `tls.peer.certificate.subject` | string | The peer [certificate subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) | `C=US, ST=California, L=San Francisco, O=OpenTelemetry, Inc, CN=*.opentelemetry.io` | Optional |
 | `tls.peer.certificate.fingerprint` | string | The SHA-1 digest of the DER encoded peer certificate | `95:B4:D0:6E:CD:C1:2C:22:92:B8:CD:26:54:79:E4:84:E3:47:34:2E` | Optional |
 | `tls.peer.certificate.fingerprint256` | string | The SHA-256 digest of the DER encoded peer certificate | `10:5A:86:67:BC:22:43:55:62:88:21:31:1B:93:F0:62:7F:05:F2:D8:EE:19:C6:F3:D6:BB:60:91:DD:ED:95:D1` | Optional |
-| `tls.peer.certificate.serial_number` | string | The peer [certificate serial number](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.2), as a hex string | `04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C` | Recommended |
+| `tls.peer.certificate.serial_number` | string | The peer [certificate serial number](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.2), as a hex string | `04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C` | Optional |
 | `tls.peer.certificate.not_before` | string | The date-time the peer certificate is valid from. | `Mar 9 00:00:00 2021 GMT` | Optional |
 | `tls.peer.certificate.not_after` | string | The date-time after which the peer certificate is no longer valid. | `Mar 1 23:59:59 2022 GMT` | Optional |
 | `tls.host.certificate.subject` | string | The host certificate [certificate subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) | `C=US, ST=California, L=San Francisco, O=OpenTelemetry, Inc, CN=*.opentelemetry.io` | Optional |
 | `tls.host.certificate.fingerprint` | string | The SHA-1 digest of the DER encoded host certificate | `95:B4:D0:6E:CD:C1:2C:22:92:B8:CD:26:54:79:E4:84:E3:47:34:2E` | Optional |
 | `tls.host.certificate.fingerprint256` | string | The SHA-256 digest of the DER encoded host certificate | `10:5A:86:67:BC:22:43:55:62:88:21:31:1B:93:F0:62:7F:05:F2:D8:EE:19:C6:F3:D6:BB:60:91:DD:ED:95:D1` | Optional |
-| `tls.host.certificate.serial_number` | string | The host certificate [certificate serial number](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.2), as a hex string | `04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C` | Recommended |
+| `tls.host.certificate.serial_number` | string | The host certificate [certificate serial number](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.2), as a hex string | `04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C` | Optional |
 | `tls.host.certificate.not_before` | string | The date-time the host certificate is valid from. | `Mar 9 00:00:00 2021 GMT` | Optional |
 | `tls.host.certificate.not_after` | string | The date-time after which the peer certificate is no longer valid. | `Mar 1 23:59:59 2022 GMT` | Optional |
 <!-- endsemconv -->
