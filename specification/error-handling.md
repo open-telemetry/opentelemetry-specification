@@ -91,7 +91,7 @@ func (IgnoreExporterErrorsHandler) Handle(err error) {
 
 func main() {
     // Other setup ...
-    opentelemetrysdk.SetHandler(IgnoreExporterErrorsHandler{})
+    otel.SetErrorHandler(IgnoreExporterErrorsHandler{})
 }
 
 ```
