@@ -23,6 +23,9 @@ release.
 
 ### Compatibility
 
+- Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
+  ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
+
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
