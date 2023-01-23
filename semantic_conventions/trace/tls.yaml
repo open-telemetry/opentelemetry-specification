@@ -4,7 +4,7 @@ groups:
     type: span
     brief: 'This document defines semantic conventions for TLS/SSL client and server Spans.'
     attributes:
-      - id: protocol 
+      - id: protocol
         requirement_level: required
         brief: 'The negotiated [SSL/TLS protocol version](https://www.openssl.org/docs/man1.1.1/man3/SSL_get_version.html#RETURN-VALUES) of the current connection.'
         type:
