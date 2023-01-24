@@ -81,6 +81,8 @@ metrics produced by any `Meter` from the `MeterProvider`. The [tracing SDK
 specification](../trace/sdk.md#additional-span-interfaces) has provided some
 suggestions regarding how to implement this efficiently.
 
+The SDK SHOULD allow the creation of multiple independent `MeterProvider`s.
+
 ### Meter Creation
 
 New `Meter` instances are always created through a `MeterProvider`

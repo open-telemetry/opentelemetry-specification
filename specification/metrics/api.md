@@ -105,12 +105,6 @@ Normally, the `MeterProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
 `MeterProvider`.
 
-Notwithstanding any global `MeterProvider`, some applications may want to or
-have to use multiple `MeterProvider` instances, e.g. to have different
-configuration for each, or because its easier with dependency injection
-frameworks. Thus, implementations of `MeterProvider` SHOULD allow creating an
-arbitrary number of `MeterProvider` instances.
-
 ### MeterProvider operations
 
 The `MeterProvider` MUST provide the following functions:
