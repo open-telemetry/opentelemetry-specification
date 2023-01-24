@@ -86,6 +86,10 @@ sections below.
 
 **[4]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
+Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
+
+* `http.method`
+
 `http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
@@ -96,10 +100,6 @@ sections below.
 | `3.0` | HTTP/3 |
 | `SPDY` | SPDY protocol. |
 | `QUIC` | QUIC protocol. |
-
-Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
-
-* `http.method`
 <!-- endsemconv -->
 
 It is recommended to also use the general [socket-level attributes][] - `net.sock.peer.addr` when available,  `net.sock.peer.name` and `net.sock.peer.port` when don't match `net.peer.name` and `net.peer.port` (if [intermediary](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.7) is detected).
