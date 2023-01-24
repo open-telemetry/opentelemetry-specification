@@ -207,11 +207,13 @@ When the server returns an error, it falls into 2 broad categories:
 retryable and not-retryable:
 
 - Retryable errors indicate that telemetry data processing failed, and the
-  client SHOULD record the error and may retry exporting the same data. For example, this can
-  happen when the server is temporarily unable to process the data.
+  client SHOULD record the error and may retry exporting the same data.
+  For example, this can happen when the server is temporarily unable to
+  process the data.
 
 - Not-retryable errors indicate that telemetry data processing failed, and the
-  client MUST NOT retry sending the same telemetry data. The client MUST drop the telemetry data. 
+  client MUST NOT retry sending the same telemetry data. The client MUST drop
+  the telemetry data.
   For example, this can happen, when the request contains bad data
   and cannot be deserialized or processed by the server. The client
   SHOULD maintain a counter of such dropped data.
@@ -241,7 +243,7 @@ additional
 [details via status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails)
 using
 [BadRequest](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L119).
-If more appropriate, another gRPC status code MAY be used. Here is a 
+If more appropriate, another gRPC status code may be used. Here is a
 snippet of sample Go code to illustrate:
 
 ```go
@@ -283,13 +285,13 @@ When retrying, the client SHOULD implement an exponential backoff strategy. An
 exception to this is the Throttling case explained below, which provides
 explicit instructions about retrying interval.
 
-The client SHOULD interpret `RESOURCE_EXHAUSTED` code as retryable only if the 
+The client SHOULD interpret `RESOURCE_EXHAUSTED` code as retryable only if the
 server signals that the recovery from resource exhaustion is possible.
-This is signaled by the server by returning 
+This is signaled by the server by returning
 [a status](https://godoc.org/google.golang.org/grpc/status#Status.WithDetails) containing
-[RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40). 
-In this case the behavior of the server and the client is exactly as described in 
-[OTLP/gRPC Throttling](#otlpgrpc-throttling) section. If no such status is returned, 
+[RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40).
+In this case the behavior of the server and the client is exactly as described in
+[OTLP/gRPC Throttling](#otlpgrpc-throttling) section. If no such status is returned,
 then the `RESOURCE_EXHAUSTED` code SHOULD be treated as non-retryable.
 
 #### OTLP/gRPC Throttling
@@ -423,9 +425,9 @@ for mapping between Protobuf and JSON, with the following deviations from that m
   represented like this:
   { "kind": 2, ... }
 
-- OTLP/JSON receivers MUST ignore message fields with unknown names and MUST unmarshal 
-  the message as if the unknown field was not present in the payload. This aligns with 
-  the behavior of the Binary Protobuf unmarshaler and ensures that adding new fields 
+- OTLP/JSON receivers MUST ignore message fields with unknown names and MUST unmarshal
+  the message as if the unknown field was not present in the payload. This aligns with
+  the behavior of the Binary Protobuf unmarshaler and ensures that adding new fields
   to OTLP messages does not break existing receivers.
 
 - The keys of JSON objects are field names converted to lowerCamelCase. Original
@@ -554,7 +556,7 @@ below about what this field can contain in each specific failure case.
 The server SHOULD use HTTP response status codes to indicate
 retryable and not-retryable errors for a particular erroneous situation. The
 client SHOULD honour HTTP response status codes as retryable or not-retryable.
-The requests that receive a response status code listed in following table SHOULD 
+The requests that receive a response status code listed in following table SHOULD
 be retried.
 All other `4xx` or `5xx` response status codes MUST NOT be retried.
 
@@ -630,12 +632,12 @@ The default network port for OTLP/HTTP is 4318.
 
 ### Multi-Destination Exporting
 
-An additional complication must be accounted for when one client must send 
-telemetry data to more than one destination server. When one of the servers 
-acknowledges the data and the other server does not (yet), the client needs 
+An additional complication must be accounted for when one client must send
+telemetry data to more than one destination server. When one of the servers
+acknowledges the data and the other server does not (yet), the client needs
 to decide how to move forward.
 
-In such a situation, the client SHOULD implement queuing, acknowledgment-handling 
+In such a situation, the client SHOULD implement queuing, acknowledgment-handling
 and retry logic per destination. This ensures that servers do not
 block each other. The queues SHOULD reference and send shared immutable data,
 thus minimizing the memory overhead caused by having multiple queues.
@@ -664,7 +666,7 @@ OTLP will evolve and change over time. Future versions of OTLP must be designed
 and implemented in a way that ensures that clients and servers that implement
 different versions of OTLP can interoperate and exchange telemetry data. Old
 clients must be able to talk to new servers and vice versa. Suppose new versions of OTLP
-introduce new functionality that cannot be understood and supported by nodes implementing 
+introduce new functionality that cannot be understood and supported by nodes implementing
 the old versions of OTLP. In that case, the protocol must regress to the
 lowest common denominator from a functional perspective.
 
