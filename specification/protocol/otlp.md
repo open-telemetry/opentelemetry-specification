@@ -101,7 +101,7 @@ _Note: this protocol is concerned with the reliability of delivery between one
 pair of client/server nodes and aims to ensure that no data is lost in transit
 between the client and the server. Many telemetry collection systems have
 intermediary nodes that the data must travel across until reaching the final
-destination (e.g., application -> agent -> collector -> backend). End-to-end
+destination (e.g. application -> agent -> collector -> backend). End-to-end
 delivery guarantees in such systems is outside of the scope of OTLP. The
 acknowledgements described in this protocol happen between a single
 client/server pair and do not span intermediary nodes in multi-hop delivery
@@ -136,16 +136,16 @@ For example, if the request can contain at most 100 spans, network roundtrip
 latency is 200ms, and server response time is 300 ms, then the maximum achievable
 throughput with one concurrent request is `100 spans / (200ms+300ms)` or 200
 spans per second. It is easy to see that in high latency networks or when the
-server response time is high to achieve good throughput, the requests must be
+server response time is high to achieve good throughput, the requests need to be
 very big or a lot concurrent requests must be done.
 
-If the client is shutting down (e.g., when the containing process wants to exit)
+If the client is shutting down (e.g. when the containing process wants to exit)
 the client will optionally wait until all pending acknowledgements are received
 or until an implementation-specific timeout expires. This ensures the reliable
 delivery of telemetry data. The client implementation SHOULD expose an option to
 turn on and off the waiting during a shutdown.
 
-If the client is unable to deliver a certain request (e.g., a timer expired while
+If the client is unable to deliver a certain request (e.g. a timer expired while
 waiting for acknowledgements) the client SHOULD record the fact that the data
 was not delivered.
 
@@ -175,7 +175,7 @@ in case of a successful response.
 ##### Partial Success
 
 If the request is only partially accepted
-(i.e., when the server accepts only parts of the data and rejects the rest), the
+(i.e. when the server accepts only parts of the data and rejects the rest), the
 server response MUST be the same
 [Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
 message as in the [Full Success](#full-success) case.
@@ -506,7 +506,7 @@ in case of a successful response.
 ##### Partial Success
 
 If the request is only partially accepted
-(i.e., when the server accepts only parts of the data and rejects the rest), the
+(i.e. when the server accepts only parts of the data and rejects the rest), the
 server MUST respond with `HTTP 200 OK`. The response body MUST be the same
 [Export<signal>ServiceResponse](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/collector)
 message as in the [Full Success](#full-success-1) case.
