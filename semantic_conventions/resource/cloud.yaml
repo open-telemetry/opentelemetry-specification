@@ -123,8 +123,8 @@ groups:
             - id: gcp_app_engine
               value: 'gcp_app_engine'
               brief: Google Cloud App Engine (GAE)
-            - id: google_cloud_openshift
-              value: 'google_cloud_openshift'
+            - id: gcp_openshift
+              value: 'gcp_openshift'
               brief: Red Hat OpenShift on Google Cloud
             - id: ibm_cloud_openshift
               value: 'ibm_cloud_openshift'
