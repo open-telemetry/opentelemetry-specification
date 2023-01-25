@@ -290,7 +290,7 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
-| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"with_sampled_trace"` | |
+| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"trace_based"` | |
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
