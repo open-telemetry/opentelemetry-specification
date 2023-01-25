@@ -396,8 +396,8 @@ connection cannot be established.
 Binary Protobuf encoded payloads use proto3
 [encoding standard](https://developers.google.com/protocol-buffers/docs/encoding).
 
-The client and the server MUST set "Content-Type: application/x-protobuf" request and
-response headers when sending binary Protobuf encoded payload.
+The client and the server MUST set "Content-Type: application/x-protobuf"
+request and response headers when sending binary Protobuf encoded payload.
 
 #### JSON Protobuf Encoding
 
@@ -418,17 +418,16 @@ for mapping between Protobuf and JSON, with the following deviations from that m
 
 - Values of enum fields MUST be encoded as integer values. Unlike the standard
   [Protobuf JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json),
-  which allows values of enum fields to be encoded as either integer values or as enum
-  name strings, only integer enum values are allowed in OTLP JSON Protobuf Encoding;
-  the enum name strings MUST NOT be used.
-  For example, the `kind` field with a value of SPAN_KIND_SERVER in a Span can be
-  represented like this:
-  { "kind": 2, ... }
+  which allows values of enum fields to be encoded as either integer values or
+  as enum name strings, only integer enum values are allowed in OTLP JSON
+  Protobuf Encoding; the enum name strings MUST NOT be used. For example, the
+  `kind` field with a value of SPAN_KIND_SERVER in a Span can be represented
+  like this: { "kind": 2, ... }
 
-- OTLP/JSON receivers MUST ignore message fields with unknown names and MUST unmarshal
-  the message as if the unknown field was not present in the payload. This aligns with
-  the behavior of the Binary Protobuf unmarshaler and ensures that adding new fields
-  to OTLP messages does not break existing receivers.
+- OTLP/JSON receivers MUST ignore message fields with unknown names and MUST
+  unmarshal the message as if the unknown field was not present in the payload.
+  This aligns with the behavior of the Binary Protobuf unmarshaler and ensures
+  that adding new fields to OTLP messages does not break existing receivers.
 
 - The keys of JSON objects are field names converted to lowerCamelCase. Original
   field names are not valid to use as keys for JSON objects.
@@ -471,8 +470,8 @@ sides.
 
 #### OTLP/HTTP Response
 
-The response body MUST be the appropriate serialized Protobuf message (see below for
-the specific message to use in the [Full Success](#full-success-1),
+The response body MUST be the appropriate serialized Protobuf message (see
+below for the specific message to use in the [Full Success](#full-success-1),
 [Partial Success](#partial-success-1) and [Failure](#failures-1) cases).
 
 The server MUST set "Content-Type: application/x-protobuf" header if the
@@ -587,10 +586,10 @@ overloaded, the server SHOULD respond with `HTTP 429 Too Many Requests` or
 ["Retry-After"](https://tools.ietf.org/html/rfc7231#section-7.1.3) header with a
 recommended time interval in seconds to wait before retrying.
 
-The client SHOULD honour the waiting interval specified in the "Retry-After" header
-if it is present. If the client receives an `HTTP 429` or an `HTTP 503` response and
-the "Retry-After" header is not present in the response, then the client SHOULD
-implement an exponential backoff strategy between retries.
+The client SHOULD honour the waiting interval specified in the "Retry-After"
+header if it is present. If the client receives an `HTTP 429` or an `HTTP 503`
+response and the "Retry-After" header is not present in the response, then the
+client SHOULD implement an exponential backoff strategy between retries.
 
 ##### All Other Responses
 
@@ -637,8 +636,8 @@ telemetry data to more than one destination server. When one of the servers
 acknowledges the data and the other server does not (yet), the client needs
 to decide how to move forward.
 
-In such a situation, the client SHOULD implement queuing, acknowledgment-handling
-and retry logic per destination. This ensures that servers do not
+In such a situation, the client SHOULD implement (per destination): queuing,  
+acknowledgment-handling, and retry logic. This ensures that servers do not
 block each other. The queues SHOULD reference and send shared immutable data,
 thus minimizing the memory overhead caused by having multiple queues.
 
@@ -665,10 +664,10 @@ deliberate choice and is considered to be the right tradeoff for telemetry data.
 OTLP will evolve and change over time. Future versions of OTLP must be designed
 and implemented in a way that ensures that clients and servers that implement
 different versions of OTLP can interoperate and exchange telemetry data. Old
-clients must be able to talk to new servers and vice versa. Suppose new versions of OTLP
-introduce new functionality that cannot be understood and supported by nodes implementing
-the old versions of OTLP. In that case, the protocol must regress to the
-lowest common denominator from a functional perspective.
+clients must be able to talk to new servers and vice versa. Suppose new versions
+of OTLP introduce new functionality that cannot be understood and supported by
+nodes implementing the old versions of OTLP. In that case, the protocol must
+regress to the lowest common denominator from a functional perspective.
 
 When possible, the interoperability MUST be ensured between all versions of
 OTLP that are not declared obsolete.
