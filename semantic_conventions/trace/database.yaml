@@ -19,6 +19,9 @@ groups:
             - id: mssql
               value: 'mssql'
               brief: 'Microsoft SQL Server'
+            - id: mssqlcompact
+              value: 'mssqlcompact'
+              brief: 'Microsoft SQL Server Compact'
             - id: mysql
               value: 'mysql'
               brief: 'MySQL'
@@ -160,6 +163,9 @@ groups:
             - id: clickhouse
               value: 'clickhouse'
               brief: 'ClickHouse'
+            - id: spanner
+              value: 'spanner'
+              brief: 'Cloud Spanner'
       - id: connection_string
         tag: connection-level
         type: string
