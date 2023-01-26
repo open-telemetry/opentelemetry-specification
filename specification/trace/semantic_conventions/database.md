@@ -162,7 +162,7 @@ Usually only one `db.name` will be used per connection though.
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name". In case there are multiple layers that could be considered for database name (e.g. Oracle instance name and schema name), the database name to be used is the more specific layer (e.g. Oracle schema name).
 
-**[2]:** The value may be sanitized to exclude sensitive information. It is recommended to sanitize the value by default in order to prevent security vulnerabilities.
+**[2]:** This attribute may contain private or sensitive information. It is recommended to sanitize it to exclude such information. Ideally, this is already done by default by the instrumentation collecting it.
 
 **[3]:** If applicable and not explicitly disabled via instrumentation configuration.
 
