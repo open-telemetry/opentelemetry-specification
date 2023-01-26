@@ -25,8 +25,8 @@ linkTitle: API
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
-    + [Synchronous Instrument API](#synchronous-instrument-api)
-    + [Asynchronous Instrument API](#asynchronous-instrument-api)
+      - [Synchronous Instrument API](#synchronous-instrument-api)
+      - [Asynchronous Instrument API](#asynchronous-instrument-api)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -121,7 +121,7 @@ The `MeterProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-* `name` (required): This name SHOULD uniquely identify the [instrumentation
+* `name`: This name SHOULD uniquely identify the [instrumentation
   scope](../glossary.md#instrumentation-scope), such as the
   [instrumentation library](../glossary.md#instrumentation-library) (e.g.
   `io.opentelemetry.contrib.mongodb`), package,
@@ -140,12 +140,29 @@ This API MUST accept the following parameters:
   implementation which is not even observability-related). A MeterProvider could
   also return a no-op Meter here if application owners configure the SDK to
   suppress telemetry produced by this library.
-* `version` (optional): Specifies the version of the instrumentation scope if the scope
+
+  The `name` needs to be provided by a user. If possible, the API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, the API MUST be documented
+  in a way to communicate to users that this parameter is needed.
+* `version`: Specifies the version of the instrumentation scope if the scope
   has a version (e.g. a library version). Example value: `1.0.0`.
-* [since 1.4.0] `schema_url` (optional): Specifies the Schema URL that should be
-  recorded in the emitted telemetry.
-* [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
-    to associate with emitted telemetry.
+  
+  Users can provide a `version`, but it is up to their discretion. Therefore,
+  this API needs to be structured to accept a `version`, but MUST NOT obligate
+  a user to provide one.
+* [since 1.4.0] `schema_url`: Specifies the Schema URL that should be recorded
+  in the emitted telemetry.
+  
+  Users can provide a `schema_url`, but it is up to their discretion.
+  Therefore, this API needs to be structured to accept a `schema_url`, but MUST
+  NOT obligate a user to provide one.
+* [since 1.13.0] `attributes`: Specifies the instrumentation scope attributes
+  to associate with emitted telemetry.
+  
+  Users can provide attributes to associate with the instrumentation scope, but
+  it is up to their discretion. Therefore, this API MUST be structured to
+  accept a variable number of attributes, including none.
 
 Meters are identified by `name`, `version`, and `schema_url` fields.  When more
 than one `Meter` of the same `name`, `version`, and `schema_url` is created, it
@@ -295,10 +312,10 @@ instrument. It MUST be treated as an opaque string from the API and SDK.
 * It MUST support at least 1023 characters. [OpenTelemetry
   API](../overview.md#api) authors MAY decide if they want to support more.
 
+#### Synchronous and Asynchronous instruments
+
 Instruments are categorized on whether they are synchronous or
 asynchronous:
-
-#### Synchronous and Asynchronous instruments
 
 * Synchronous instruments (e.g. [Counter](#counter)) are meant to be invoked
   inline with application/business processing logic. For example, an HTTP client
@@ -318,7 +335,7 @@ Please note that the term *synchronous* and *asynchronous* have nothing to do
 with the [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
-#### Synchronous Instrument API
+##### Synchronous Instrument API
 
 The API to construct synchronous instruments MUST accept the following parameters:
 
@@ -329,7 +346,7 @@ The API to construct synchronous instruments MUST accept the following parameter
 * An optional `description`, following the [instrument description
   rule](#instrument-description).
 
-#### Asynchronous Instrument API
+##### Asynchronous Instrument API
 
 Asynchronous instruments have associated `callback` functions which
 are responsible for reporting [Measurement](#measurement)s. Callback
@@ -690,7 +707,7 @@ certain programming languages or systems, for example `null`, `undefined`).
 
 Parameters:
 
-* The amount of the `Measurement`, which MUST be a non-negative numeric value.
+* The numeric value to record, which MUST be a non-negative numeric value.
 * Optional [attributes](../common/README.md#attribute).
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
