@@ -57,7 +57,7 @@
 | `gcp_kubernetes_engine` | Google Cloud Kubernetes Engine (GKE) |
 | `gcp_cloud_functions` | Google Cloud Functions (GCF) |
 | `gcp_app_engine` | Google Cloud App Engine (GAE) |
-| `google_cloud_openshift` | Red Hat OpenShift on Google Cloud |
+| `gcp_openshift` | Red Hat OpenShift on Google Cloud |
 | `ibm_cloud_openshift` | Red Hat OpenShift on IBM Cloud |
 | `tencent_cloud_cvm` | Tencent Cloud Cloud Virtual Machine (CVM) |
 | `tencent_cloud_eks` | Tencent Cloud Elastic Kubernetes Service (EKS) |
