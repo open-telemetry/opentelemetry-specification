@@ -375,7 +375,7 @@ RabbitMQ message headers:
 
 | Attribute                                 | Type     | Description                                                                                                                                                         | Examples                                                          | Requirement Level |
 |-------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|-------------------|
-| `messaging.rabbitmq.message.header.<key>` | string[] | RabbitMQ message headers. `<key>` being the normalized message header name (lowercase, with - characters replaced by _), the value being the header values. [1] [2] | `messaging.rabbitmq.message.header.my_header=["my_header_value"]` | Recommended       |
+| `messaging.rabbitmq.message.header.<key>` | string[] | RabbitMQ message headers. `<key>` being the normalized message header name (lowercase, with - characters replaced by _), the value being the header values. [1] [2] | `messaging.rabbitmq.message.header.my_header=["my_header_value"]` | Optional          |
 
 **[1]:** Instrumentations SHOULD require an explicit configuration of which message headers are to be captured. Including all headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
 
