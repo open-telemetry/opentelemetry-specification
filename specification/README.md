@@ -55,8 +55,10 @@ all the following conditions:
 
 * It MUST satisfy all the "MUST", "MUST NOT", "REQUIRED", "SHALL", and "SHALL
 NOT" requirements defined in the [specification][].
-* It MUST NOT provide additional features or functionalities that are not
-  covered by the [specification][], except for any of the following situations:
+* For an implementation of the API Specification (note that this restriction
+  does not apply to an SDK implementation), it MUST NOT provide additional
+  features or functionalities that are not covered by the [specification][],
+  except for any of the following situations:
   * Such feature/functionality is very specific to a programming language,
     runtime or framework, and not expected to interfere or overlap with any
     feature that might (likely) be added to the cross-language specification in
