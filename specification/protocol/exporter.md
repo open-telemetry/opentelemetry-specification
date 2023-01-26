@@ -55,6 +55,13 @@ The following configuration options MUST be available to configure the OTLP expo
   - Type: string
   - Env vars: `OTEL_EXPORTER_OTLP_CIPHER_LIST` `OTEL_EXPORTER_OTLP_TRACES_CIPHER_LIST` `OTEL_EXPORTER_OTLP_METRICS_CIPHER_LIST` `OTEL_EXPORTER_OTLP_LOGS_CIPHER_LIST`
 
+- **TLS cipher suite**: Cipher suite to use with SSL.
+  Should only be used for a secure connection.
+  See [TLS cipher](./exporter.md#tls-cipher) for more details.
+  - Default: n/a
+  - Type: string
+  - Env vars: `OTEL_EXPORTER_OTLP_CIPHER_SUITE` `OTEL_EXPORTER_OTLP_TRACES_CIPHER_SUITE` `OTEL_EXPORTER_OTLP_METRICS_CIPHER_SUITE` `OTEL_EXPORTER_OTLP_LOGS_CIPHER_SUITE`
+
 - **Headers**: Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.
   - Default: n/a
   - Env vars: `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` `OTEL_EXPORTER_OTLP_LOGS_HEADERS`
@@ -214,10 +221,35 @@ the OTLP exporter MUST use a TLS version greater or equal to `OTEL_EXPORTER_OTLP
 When `OTEL_EXPORTER_OTLP_MAX_TLS` is set to a valid version name,
 the OTLP exporter MUST use a TLS version lesser or equal to `OTEL_EXPORTER_OTLP_MAX_TLS`.
 
+#### Example 1
+
+Traces sent to an endpoint using TLS 1.2 or newer
+
+```bash
+export OTEL_EXPORTER_OTLP_TRACES_MIN_TLS=1.2
+```
+
+#### Example 2
+
+Metrics sent to an endpoint using TLS 1.1 or older
+
+```bash
+export OTEL_EXPORTER_OTLP_METRICS_MAX_TLS=1.1
+```
+
+#### Example 3
+
+Logs sent to an endpoint using TLS 1.3
+
+```bash
+export OTEL_EXPORTER_OTLP_LOGS_MIN_TLS=1.3
+export OTEL_EXPORTER_OTLP_LOGS_MAX_TLS=1.3
+```
+
 ### TLS cipher
 
 When using a secure connection with SSL,
-the configuration option `OTEL_EXPORTER_OTLP_CIPHER_LIST`
+the configuration option `OTEL_EXPORTER_OTLP_CIPHER_SUITE`
 is used to further restrict the cipher negotiated by the secure connection.
 
 This variable is a complex type, serialized as a string,
@@ -226,13 +258,13 @@ so there are several things to consider.
 From an end user point of view:
 
 - end users are expected to know how to write a value
-  for environment variable `OTEL_EXPORTER_OTLP_CIPHER_LIST`,
+  for environment variable `OTEL_EXPORTER_OTLP_CIPHER_SUITE`,
 - hence, valid cipher names should be specified somewhere,
 - and, how to represent a list should be specified somewhere.
 
 From an opentelemetry implementation point of view:
 
-- the data format in `OTEL_EXPORTER_OTLP_CIPHER_LIST` is implementation dependent,
+- the data format in `OTEL_EXPORTER_OTLP_CIPHER_SUITE` is implementation dependent,
   because it ultimately depends on the software package used
   to implement SSL/TLS, which will vary,
 - not every SSL/TLS package, and therefore every opentelemetry
@@ -248,8 +280,67 @@ This is resolved by introducing a documentation requirement:
   When a third party library is used, this can be achieved for example by
   pointing to the relevant third party library documentation.
 
+To illustrate with `openssl 1.1.1`, the ciphers are documented
+[here](https://www.openssl.org/docs/man1.1.1/man1/ciphers.html).
+
 To illustrate with `curl`, the ciphers are documented
 [here](https://curl.se/docs/ssl-ciphers.html).
+
+To illustrate with `go`, the ciphers are documented
+[here](https://golang.org/pkg/crypto/tls/#pkg-constants).
+
+For some implementations, only one variable is necessary (for example, GO),
+in which case only the variable `OTEL_EXPORTER_OTLP_CIPHER_SUITE` is used.
+
+For other implementations, due to constraints of the underlying SSL library
+used (for example, openssl and CURL), it is necessary to separate ciphers
+for TLS <= 1.2 on one list, and TLS >= 1.3 in another list.
+
+Such implementations MAY use two variables:
+
+- `OTEL_EXPORTER_OTLP_CIPHER_LIST` for all TLS <= 1.2 ciphers
+- `OTEL_EXPORTER_OTLP_CIPHER_SUITE` for all TLS >= 1.3 ciphers
+
+#### Example 1
+
+The implementation is documented to use the openssl syntax.
+
+Traces sent to an endpoint using TLS ciphers:
+
+* `ECDHE-ECDSA-AES256-GCM-SHA384` (TLS <= 1.2)
+* `ECDHE-RSA-AES256-GCM-SHA384` (TLS <= 1.2)
+
+```bash
+export OTEL_EXPORTER_OTLP_TRACES_CIPHER_LIST="ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
+```
+
+#### Example 2
+
+The implementation is documented to use the GO syntax.
+
+Metrics sent to an endpoint using TLS ciphers:
+
+* `TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384` (0xc030) (TLS <= 1.2)
+* `TLS_AES_128_GCM_SHA256` (0x1301) (TLS 1.3)
+
+```bash
+export OTEL_EXPORTER_OTLP_METRICS_CIPHER_SUITE="0xc030,0x1301"
+```
+
+#### Example 3
+
+The implementation is documented to use the CURL syntax.
+
+Logs sent to an endpoint using TLS ciphers:
+
+* `AES256-GCM-SHA384` (TLS <= 1.2)
+* `ECDHE-ECDSA-AES256-SHA384` (TLS <= 1.2)
+* `TLS_AES_256_GCM_SHA384` (TLS >= 1.3)
+
+```bash
+export OTEL_EXPORTER_OTLP_LOGS_CIPHER_LIST="AES256-GCM-SHA384:ECDHE-ECDSA-AES256-SHA384"
+export OTEL_EXPORTER_OTLP_LOGS_CIPHER_SUITE="TLS_AES_256_GCM_SHA384"
+```
 
 ### Specifying headers via environment variables
 
