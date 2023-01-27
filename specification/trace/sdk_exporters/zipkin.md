@@ -102,9 +102,9 @@ always available. The following table lists the possible attributes for
 |7|db.name|Commonly used database name attribute for DB Spans.|
 
 * Ranking should control the selection order. For example, `net.peer.name` (Rank
-  2) should be selected before `http.host` (Rank 6).
-* `net.peer.ip` can be used by itself as `remoteEndpoint` but should be combined
-  with `net.peer.port` if it is also present.
+  2) should be selected before `peer.address` (Rank 6).
+* `net.sock.peer.name` and `net.sock.peer.addr` can be used by themselves as `remoteEndpoint` but should be combined
+  with `net.sock.peer.port` if it is also present.
 
 #### Zipkin -> OTLP
 
