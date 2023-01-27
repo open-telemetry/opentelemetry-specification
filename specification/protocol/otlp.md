@@ -39,6 +39,7 @@ nodes such as collectors and telemetry backends.
 - [Implementation Recommendations](#implementation-recommendations)
   * [Multi-Destination Exporting](#multi-destination-exporting)
 - [Known Limitations](#known-limitations)
+  * [Span Tracking](#span-tracking)
   * [Request Acknowledgements](#request-acknowledgements)
     + [Duplicate Data](#duplicate-data)
 - [Future Versions and Interoperability](#future-versions-and-interoperability)
@@ -643,6 +644,13 @@ speed of reception (within the available limits imposed by the size of the
 client-side queue).
 
 ## Known Limitations
+ 
+### Span Tracking
+
+It is impossible to send incomplete spans, so if the span failed to complete for
+any reason (abnormal termination, exception, logical error), there won't be any
+sign that the span even started. For the same reason real-time tracking of spans
+is impossible. Spans are sent only when their end is reached.
 
 ### Request Acknowledgements
 
