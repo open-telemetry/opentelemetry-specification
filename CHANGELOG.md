@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Define BatchLogRecordProcessor default configuration values.
+  ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
+
 ### Resource
 
 ### Semantic Conventions
