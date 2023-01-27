@@ -210,6 +210,9 @@ release.
 
 - Specify handling of invalid numeric environment variables
   ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
+- Add log-specific attribute limit configuration and clarify that general
+  attribute limit configuration also apply to log records.
+  ([#2861](https://github.com/open-telemetry/opentelemetry-specification/pull/2861))
 
 ### Telemetry Schemas
 
