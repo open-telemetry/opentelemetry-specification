@@ -14,6 +14,7 @@
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
   * [ReadWriteLogRecord](#readwritelogrecord)
+- [LogRecord Limits](#logrecord-limits)
 - [LogRecordProcessor](#logrecordprocessor)
   * [LogRecordProcessor operations](#logrecordprocessor-operations)
     + [OnEmit](#onemit)
@@ -126,6 +127,34 @@ full [LogRecord](api.md#logrecord) and additionally MUST be able to retrieve all
 information
 that was added to the `LogRecord` (as with
 [ReadableLogRecord](#readablelogrecord)).
+
+## LogRecord Limits
+
+`LogRecord` attributes MUST adhere to the [common rules of attribute limits](../common/README.md#attribute-limits).
+
+If the SDK implements attribute limits it MUST provide a way to change these
+limits, via a configuration to the `LoggerProvider`, by allowing users to
+configure individual limits like in the Java example below.
+
+The options MAY be bundled in a class, which then SHOULD be called
+`LogRecordLimits`.
+
+```java
+public interface LogRecordLimits {
+  public int getAttributeCountLimit();
+
+  public int getAttributeValueLengthLimit();
+}
+```
+
+**Configurable parameters:**
+
+* [all common options applicable to attributes](../common/README.md#configurable-parameters)
+
+There SHOULD be a message printed in the SDK's log to indicate to the user
+that an attribute was discarded due to such a limit.
+To prevent excessive logging, the message should not be printed once per
+`LogRecord` or per discarded attribute.
 
 ## LogRecordProcessor
 
@@ -263,13 +292,13 @@ representations to the configured `LogRecordExporter`.
 
 * `exporter` - the exporter where the `LogRecords` are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached logs are
-  dropped. The default value is TODO.
+  dropped. The default value is `2048`.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
-  consecutive exports. The default value is TODO.
+  consecutive exports. The default value is `1000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
-  The default value is TODO.
+  The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
-  smaller or equal to `maxQueueSize`. The default value is TODO.
+  smaller or equal to `maxQueueSize`. The default value is `512`.
 
 ## LogRecordExporter
 
