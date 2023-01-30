@@ -27,6 +27,8 @@ release.
 - Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
   to match the existing `cloud.provider` prefix.
   [#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095)
+- Add semantic conventions for TLS/SSL encrypted communication
+  ([#2992](https://github.com/open-telemetry/opentelemetry-specification/pull/2992))
 
 ### Compatibility
 
@@ -110,8 +112,6 @@ release.
   Removed `messaging.url`;
   Renamed `send` operation to `publish`;
   Split `destination` and `source` namespaces and clarify per-message attributes in batching scenarios.
-- Add semantic conventions for TLS/SSL encrypted communication
-  ([#2992](https://github.com/open-telemetry/opentelemetry-specification/pull/2992))
 
 ### Compatibility
 
