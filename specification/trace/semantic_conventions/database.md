@@ -331,7 +331,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | Key | Value |
 | :-------- | :------------------- |
 | Span name | `"Request.Read"` |
-| `kind` | `"internal"` |
+| `kind` | `"client"` |
 | `az.namespace` | `"Microsoft.DocumentDB"` |
 | `db.system` | `"cosmosdb"` |
 | `rntbd.resource_type` | `"Document"` |
