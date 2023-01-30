@@ -542,10 +542,25 @@ Increment the Counter by a fixed amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Required parameters:
+This API MUST accept the following parameter:
 
-* Optional [attributes](../common/README.md#attribute).
-* The increment amount, which MUST be a non-negative numeric value.
+* A numeric increment value.
+  
+  The increment value needs to be provided by a user. If possible, this API
+  SHOULD be structured so a user is obligated to provide this parameter. If it
+  is not possible to structurally enforce this obligation, this API MUST be
+  documented in a way to communicate to users that this parameter is needed.
+  
+  The increment value is expected to be non-negative. This API SHOULD be
+  documented in a way to communicate to users that this value is expected to be
+  non-negative. This API SHOULD NOT validate this value, that is left to
+  implementations of the API.
+* [Attributes](../common/README.md#attribute) to associate with the increment
+  value.
+  
+  Users can provide attributes to associate with the increment value, but it is
+  up to their discretion. Therefore, this API MUST be structured to accept a
+  variable number of attributes, including none.
 
 The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as arguments. If
@@ -763,10 +778,24 @@ Updates the statistics with the specified amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Parameters:
+This API MUST accept the following parameter:
 
-* The numeric value to record, which MUST be a non-negative numeric value.
-* Optional [attributes](../common/README.md#attribute).
+* A numeric value to record.
+
+  The value needs to be provided by a user. If possible, this API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, this API MUST be documented
+  in a way to communicate to users that this parameter is needed.
+  
+  The value is expected to be non-negative. This API SHOULD be documented in a
+  way to communicate to users that this value is expected to be non-negative.
+  This API SHOULD NOT validate this value, that is left to implementations of
+  the API.
+* [Attributes](../common/README.md#attribute) to associate with the value.
+  
+  Users can provide attributes to associate with the value, but it is up to
+  their discretion. Therefore, this API MUST be structured to accept a variable
+  number of attributes, including none.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as individual
@@ -997,10 +1026,19 @@ Increment or decrement the UpDownCounter by a fixed amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Parameters:
+This API MUST accept the following parameter:
 
-* The amount to be added, can be positive, negative or zero.
-* Optional [attributes](../common/README.md#attribute).
+* A numeric value to add.
+
+  The value needs to be provided by a user. If possible, this API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, this API MUST be documented
+  in a way to communicate to users that this parameter is needed.
+* [Attributes](../common/README.md#attribute) to associate with the value.
+  
+  Users can provide attributes to associate with the value, but it is up to
+  their discretion. Therefore, this API MUST be structured to accept a variable
+  number of attributes, including none.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as individual
