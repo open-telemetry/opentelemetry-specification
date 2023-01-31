@@ -9,14 +9,12 @@ Currently, it only describes the serialization of OpenTelemetry data to the OTLP
 
 ## Table of Contents
 
-- [OpenTelemetry Protocol File Exporter](#opentelemetry-protocol-file-exporter)
-  - [Table of Contents](#table-of-contents)
-  - [JSON File serialization](#json-file-serialization)
-    - [File storage requirements](#file-storage-requirements)
-      - [JSON lines file](#json-lines-file)
-      - [Streaming appending](#streaming-appending)
-    - [Telemetry data requirements](#telemetry-data-requirements)
-    - [Examples](#examples)
+- [JSON File serialization](#json-file-serialization)
+  - [File storage requirements](#file-storage-requirements)
+    - [JSON lines file](#json-lines-file)
+    - [Streaming appending](#streaming-appending)
+  - [Telemetry data requirements](#telemetry-data-requirements)
+  - [Examples](#examples)
 
 ## JSON File serialization
 
