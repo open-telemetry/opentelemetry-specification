@@ -239,14 +239,6 @@ Cosmos DB instrumentation includes call-level (public API) surface spans and net
 |---|---|
 | `gateway` | Gateway (HTTP) connections mode |
 | `direct` | Direct connection. |
-
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `rntbd.resource_type` | string | Cosmosdb Resource Type | Document | Required |
-| `rntbd.url` | string | RNTBD URL | rntbd://host:port/partitionid/replicaId | Required |
-| `rntbd.status_code` | int | Status Code | 200 | Required |
-| `rntbd.sub_status_code` | int |  Sub Status Code | 1000 | Conditionally Required: When there is an exception |
-
 <!-- endsemconv -->
 
 In addition to Cosmos DB attributes, all spans include
@@ -326,15 +318,3 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.cosmosdb.status_code`  | `201` |
 | `db.cosmosdb.sub_status_code`  | `0` |
 | `db.cosmosdb.request_charge`  | `7.43` |
-
-
-| Key | Value |
-| :-------- | :------------------- |
-| Span name | `"Request.Read"` |
-| `kind` | `"client"` |
-| `az.namespace` | `"Microsoft.DocumentDB"` |
-| `db.system` | `"cosmosdb"` |
-| `rntbd.resource_type` | `"Document"` |
-| `rntbd.url` | `"rntbd://<hostname><partitionid><replicaid>"` |
-| `rntbd.status_code` | `201` |
-| `rntbd.sub_status_code` | `0` |

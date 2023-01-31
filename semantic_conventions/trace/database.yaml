@@ -460,30 +460,6 @@ groups:
         examples: [46.18, 1.0]
         requirement_level:
           conditionally_required: when available
-    
-  - id: rntbd
-    type: span
-    prefix: rntbd
-    brief: Describes Network calls to CosmosDB in Direct mode. When used in HTTP mode, follow HTTP semantic conventions.
-    note: I'd remove it from this document and address in a different PR - this describes protocol semantic conventions.
-    attributes:
-      - id: resource_type
-        type: string
-        brief: Resource Tyoe
-        examples: ['Document']
-      - id: url
-        type: string
-        tag: connection-level
-        brief: Cosmos DB request URL
-        examples: 'rntb://<hostname><partitionid><replicaid>'      
-      - id: status_code
-        type: string
-        brief: status code
-        examples: [1000, 1002]
-      - id: sub_status_code
-        type: string
-        brief: sub status code
-        examples: ['0']
 
   - id: db.tech
     type: span
