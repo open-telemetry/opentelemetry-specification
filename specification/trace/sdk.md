@@ -56,7 +56,7 @@
 ### Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider`
-(see[API](api.md#tracerprovider)). The `name`, `version` (optional),
+(see [API](api.md#tracerprovider)). The `name`, `version` (optional),
 `schema_url` (optional), and `attributes` (optional) arguments supplied to
 the `TracerProvider` must be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
