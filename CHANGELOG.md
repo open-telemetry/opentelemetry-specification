@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Define BatchLogRecordProcessor default configuration values.
+  ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
+
 ### Resource
 
 ### Semantic Conventions
@@ -29,6 +32,8 @@ release.
 
 - Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
   ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
+- Prometheus Unknown MUST preserve its original type information
+  ([#3056](https://github.com/open-telemetry/opentelemetry-specification/pull/3056))
 
 ### OpenTelemetry Protocol
 
@@ -109,8 +114,6 @@ release.
   Split `destination` and `source` namespaces and clarify per-message attributes in batching scenarios.
 
 ### Compatibility
-- Prometheus Unknown MUST preserve its original type information
-  ([#3056](https://github.com/open-telemetry/opentelemetry-specification/pull/3056))
 
 - Add Tracer.Close() to the OpenTracing Shim layer.
 - Add OpenCensus migration guide and add BinaryPropagation as an option to gRPC
@@ -212,6 +215,9 @@ release.
 
 - Specify handling of invalid numeric environment variables
   ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
+- Add log-specific attribute limit configuration and clarify that general
+  attribute limit configuration also apply to log records.
+  ([#2861](https://github.com/open-telemetry/opentelemetry-specification/pull/2861))
 
 ### Telemetry Schemas
 

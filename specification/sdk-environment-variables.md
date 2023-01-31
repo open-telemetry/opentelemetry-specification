@@ -157,6 +157,17 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 | OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     |       |
 | OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     |       |
 
+## LogRecord Limits
+
+**Status**: [Experimental](document-status.md)
+
+See the SDK [LogRecord Limits](logs/sdk.md#logrecord-limits) section for the definition of the limits.
+
+| Name                                        | Description                                | Default  | Notes |
+| ------------------------------------------- | -------------------------------------------| -------- | ----- |
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size       | no limit |       |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed log record attribute count | 128      |       |
+
 ## OTLP Exporter
 
 See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).
