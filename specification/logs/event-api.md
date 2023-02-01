@@ -80,12 +80,17 @@ This function MAY be named `logEvent`.
   attribute with the key `event.name`. Care MUST be taken by the implementation
   to not override or delete this attribute while the Event is emitted to
   preserve its identity.
-* `logRecord` - the [LogRecord](./data-model.md#log-and-event-record-definition) representing the Event.
+* `event_data` - this argument should of type [`Attributes`](../common/README.md#attribute)
+  and MUST recorded as a `LogRecod` attribute with the key `event.data`.
+* `other_attributes` - this argument should of type [`Attributes`](../common/README.md#attribute)
+  and MUST recorded as attributes on the `LogRecod`. Care MUST be taken by the
+  implementation to not override aready recorded attributes with names
+  `event.name`, `event.domain` and `event.data`.
 
 **Implementation Requirements:**
 
-The implementation MUST [emit](./bridge-api.md#emit-a-logrecord) the `logRecord` to
-the `logger` specified when [creating the EventLogger](#create-eventlogger)
+The implementation MUST [emit](./bridge-api.md#emit-a-logrecord) the [`LogRecord`](./data-model.md#log-and-event-record-definition)
+to the `logger` specified when [creating the EventLogger](#create-eventlogger)
 after making the following changes:
 
 * The `event_domain` specified
