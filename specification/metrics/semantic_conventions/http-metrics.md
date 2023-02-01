@@ -41,7 +41,7 @@ This metric is required.
 
 **[3]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](../../trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -51,7 +51,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](../../trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
@@ -82,7 +82,7 @@ This metric is optional.
 
 **[2]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](../../trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -92,7 +92,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[3]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](../../trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
@@ -127,7 +127,7 @@ This metric is optional.
 
 **[3]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](../../trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -137,7 +137,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](../../trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
@@ -172,7 +172,7 @@ This metric is optional.
 
 **[3]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](../../trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -182,7 +182,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](../../trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
