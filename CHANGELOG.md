@@ -85,7 +85,7 @@ release.
   ([#3044](https://github.com/open-telemetry/opentelemetry-specification/pull/3044))
 - Add `code.lineno` source code attribute
   ([#3029](https://github.com/open-telemetry/opentelemetry-specification/pull/3029))
-- Add `db.values` attribute to database specification. [#3092](https://github.com/open-telemetry/opentelemetry-specification/pull/3092)
+- Add `db.bind_values` attribute to database specification. [#3092](https://github.com/open-telemetry/opentelemetry-specification/pull/3092)
 - Add ClickHouse to db.system semantic conventions
   ([#3011](https://github.com/open-telemetry/opentelemetry-specification/pull/3011))
 - Refactor messaging attributes and per-message attributes in batching scenarios.
