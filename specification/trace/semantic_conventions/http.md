@@ -247,7 +247,8 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Optional |
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
 
-**[1]:** 'http.route' MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+**[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+SHOULD include the [application root](#http-server-definitions) if there is one.
 
 **[2]:** This is not necessarily the same as `net.sock.peer.addr`, which would
 identify the network-level peer, which may be a proxy.
