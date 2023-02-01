@@ -918,7 +918,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>sourceIPAddress</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>Resource["net.peer.ip"] or Resource["net.sock.host.addr"]? TBD</td>
+    <td>Attributes["net.sock.peer.addr"] or Attributes["net.sock.host.addr"]</td>
   </tr>
   <tr>
     <td>errorCode</td>
@@ -1036,7 +1036,7 @@ All other fields |                    |                                         
     <td>source.ip, client.ip</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>Attributes["net.peer.ip"] or Attributes["net.sock.host.addr"]</td>
+    <td>Attributes["net.sock.peer.addr"] or Attributes["net.sock.host.addr"]</td>
   </tr>
   <tr>
     <td>cloud.account.id</td>
