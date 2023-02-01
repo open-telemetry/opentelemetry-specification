@@ -27,6 +27,8 @@ release.
 - Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
   to match the existing `cloud.provider` prefix.
   [#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095)
+- `http.route` SHOULD contain the "application root" if there is one.
+  ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
 
 ### Compatibility
 
