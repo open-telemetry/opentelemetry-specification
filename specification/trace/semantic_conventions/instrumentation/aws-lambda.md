@@ -71,7 +71,7 @@ Instrumentation SHOULD provide default implementations for the standard event ty
 
 If the `_X_AMZN_TRACE_ID` environment variable is set, instrumentation SHOULD try to parse an
 OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../context/api-propagators.md). If the
-resulting `Context` is [valid](../../api.md#isvalid) then a span link should be added to the lambda span with
+resulting `Context` is [valid](../../api.md#isvalid) then a [Span Link](https://opentelemetry.io/docs/concepts/signals/traces/#span-links) should be added to the new Span's [start options](../../api.md#specifying-links) with
 an associated attribute of `source=x-ray-env` to indicate the source of the linked span.
 Instrumentation needs to check if the context is valid because the `_X_AMZN_TRACE_ID` environment variable may
 contain an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable will be set and the
