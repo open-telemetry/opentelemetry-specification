@@ -15,10 +15,15 @@ release.
 
 ### Logs
 
+- Define BatchLogRecordProcessor default configuration values.
+  ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
+
 ### Resource
 
 ### Semantic Conventions
 
+- Enable semantic convention tooling for metrics in spec
+  ([#3119](https://github.com/open-telemetry/opentelemetry-specification/pull/3119))
 - Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
   to match the existing `cloud.provider` prefix.
   [#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095)
@@ -210,6 +215,9 @@ release.
 
 - Specify handling of invalid numeric environment variables
   ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
+- Add log-specific attribute limit configuration and clarify that general
+  attribute limit configuration also apply to log records.
+  ([#2861](https://github.com/open-telemetry/opentelemetry-specification/pull/2861))
 
 ### Telemetry Schemas
 
