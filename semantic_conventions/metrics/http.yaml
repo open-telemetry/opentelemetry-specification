@@ -20,9 +20,30 @@ groups:
       - ref: http.flavor
       - ref: net.host.name
         requirement_level: required
+        brief: >
+          Name of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+            include host identifier.
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
       - ref: net.host.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
+        brief: >
+          Port of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+          - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Port identifier of the `Host` header
 
   - id: metric.http.server.active_requests
     prefix: http
@@ -39,9 +60,30 @@ groups:
       - ref: http.flavor
       - ref: net.host.name
         requirement_level: required
+        brief: >
+          Name of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+            include host identifier.
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
       - ref: net.host.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
+        brief: >
+          Port of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+          - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Port identifier of the `Host` header
 
   - id: metric.http.server.request.size
     prefix: http
@@ -65,9 +107,30 @@ groups:
       - ref: http.flavor
       - ref: net.host.name
         requirement_level: required
+        brief: >
+          Name of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+            include host identifier.
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
       - ref: net.host.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
+        brief: >
+          Port of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+          - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Port identifier of the `Host` header
 
   - id: metric.http.server.response.size
     prefix: http
@@ -91,9 +154,30 @@ groups:
       - ref: http.flavor
       - ref: net.host.name
         requirement_level: required
+        brief: >
+          Name of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+            include host identifier.
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
       - ref: net.host.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
+        brief: >
+          Port of the local HTTP server that received the request.
+        note: |
+          Determined by using the first of the following that applies
+
+          - Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+          - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form.
+          - Port identifier of the `Host` header
 
   - id: metric.http.client.duration
     prefix: http
@@ -111,9 +195,24 @@ groups:
       - ref: http.flavor
       - ref: net.peer.name
         requirement_level: required
+        brief: >
+          Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+        note: |
+          Determined by using the first of the following that applies
+
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if capturing it would require an extra DNS lookup.
       - ref: net.peer.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
+        brief: >
+          Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+        note: >
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
+          URI port identifier, otherwise it MUST match `Host` header port identifier.
       - ref: net.sock.peer.addr
 
   - id: metric.http.client.request.size
@@ -133,9 +232,24 @@ groups:
       - ref: http.flavor
       - ref: net.peer.name
         requirement_level: required
+        brief: >
+          Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+        note: |
+          Determined by using the first of the following that applies
+
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if capturing it would require an extra DNS lookup.
       - ref: net.peer.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
+        brief: >
+          Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+        note: >
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
+          URI port identifier, otherwise it MUST match `Host` header port identifier.
       - ref: net.sock.peer.addr
 
   - id: metric.http.client.response.size
@@ -155,7 +269,22 @@ groups:
       - ref: http.flavor
       - ref: net.peer.name
         requirement_level: required
+        brief: >
+          Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+        note: |
+          Determined by using the first of the following that applies
+
+          - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+            if it's sent in absolute-form
+          - Host identifier of the `Host` header
+
+          SHOULD NOT be set if capturing it would require an extra DNS lookup.
       - ref: net.peer.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
+        brief: >
+          Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+        note: >
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
+          URI port identifier, otherwise it MUST match `Host` header port identifier.
       - ref: net.sock.peer.addr
