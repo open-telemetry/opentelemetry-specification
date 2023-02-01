@@ -105,12 +105,6 @@ Normally, the `MeterProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
 `MeterProvider`.
 
-Notwithstanding any global `MeterProvider`, some applications may want to or
-have to use multiple `MeterProvider` instances, e.g. to have different
-configuration for each, or because its easier with dependency injection
-frameworks. Thus, implementations of `MeterProvider` SHOULD allow creating an
-arbitrary number of `MeterProvider` instances.
-
 ### MeterProvider operations
 
 The `MeterProvider` MUST provide the following functions:
@@ -339,12 +333,39 @@ pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 
 The API to construct synchronous instruments MUST accept the following parameters:
 
-* The `name` of the Instrument, following the [instrument naming
-  rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
-  rule](#instrument-description).
+* A `name` of the Instrument.
+  
+  The `name` needs to be provided by a user. If possible, the API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, the API MUST be documented
+  in a way to communicate to users that this parameter is needed.
+  
+  The `name` needs to follow the [instrument naming
+  rule](#instrument-naming-rule). The API SHOULD be documented in a way to
+  communicate to users that this parameter needs to conform to the linked
+  syntax. The API SHOULD NOT validate the `name`, that is left to
+  implementations of the API.
+* A `unit` of measure.
+  
+  Users can provide a `unit`, but it is up to their discretion. Therefore, this
+  API needs to be structured to accept a `unit`, but MUST NOT obligate a user
+  to provide one.
+  
+  The `unit` parameter needs to support the [instrument unit
+  rule](#instrument-unit). Meaning, the API MUST accept a case-sensitive string
+  that supports ASCII character encoding and can hold at least 63 characters.
+  The API SHOULD NOT validate the `unit`.
+* A `description` describing the Instrument in human-readable terms.
+  
+  Users can provide a `description`, but it is up to their discretion.
+  Therefore, this API needs to be structured to accept a `description`, but
+  MUST NOT obligate a user to provide one.
+  
+  The `description` needs to support the [instrument description
+  rule](#instrument-description). Meaning, the API MUST accept a string that
+  supports at least [BMP (Unicode Plane
+  0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane)
+  encoded characters and hold at least 1023 characters.
 
 ##### Asynchronous Instrument API
 
@@ -355,14 +376,45 @@ order of callback execution is not specified.
 
 The API to construct asynchronous instruments MUST accept the following parameters:
 
-* The `name` of the Instrument, following the [instrument naming
-  rule](#instrument-naming-rule).
-* An optional `unit` of measure, following the [instrument unit
-  rule](#instrument-unit).
-* An optional `description`, following the [instrument description
-  rule](#instrument-description).
-* Zero or more `callback` functions, responsible for reporting
-  [Measurement](#measurement) values of the created instrument.
+* A `name` of the Instrument.
+  
+  The `name` needs to be provided by a user. If possible, the API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, the API MUST be documented
+  in a way to communicate to users that this parameter is needed.
+  
+  The `name` needs to follow the [instrument naming
+  rule](#instrument-naming-rule). The API SHOULD be documented in a way to
+  communicate to users that this parameter needs to conform to the linked
+  syntax. The API SHOULD NOT validate the `name`, that is left to
+  implementations of the API.
+* A `unit` of measure.
+  
+  Users can provide a `unit`, but it is up to their discretion. Therefore, this
+  API needs to be structured to accept a `unit`, but MUST NOT obligate a user
+  to provide one.
+  
+  The `unit` parameter needs to support the [instrument unit
+  rule](#instrument-unit). Meaning, the API MUST accept a case-sensitive string
+  that supports ASCII character encoding and can hold at least 63 characters.
+  The API SHOULD NOT validate the `unit`.
+* A `description` describing the Instrument in human-readable terms.
+  
+  Users can provide a `description`, but it is up to their discretion.
+  Therefore, this API needs to be structured to accept a `description`, but
+  MUST NOT obligate a user to provide one.
+  
+  The `description` needs to support the [instrument description
+  rule](#instrument-description). Meaning, the API MUST accept a string that
+  supports at least [BMP (Unicode Plane
+  0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane)
+  encoded characters and hold at least 1023 characters.
+* `callback` functions that report [Measurements](#measurement) of the created
+  instrument.
+  
+  Users can provide `callback` functions, but it is up to their discretion.
+  Therefore, this API MUST be structured to accept a variable number of
+  `callback` functions, including none.
 
 The API MUST support creation of asynchronous instruments by passing
 zero or more `callback` functions to be permanently registered to the
@@ -484,10 +536,25 @@ Increment the Counter by a fixed amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Required parameters:
+This API MUST accept the following parameter:
 
-* Optional [attributes](../common/README.md#attribute).
-* The increment amount, which MUST be a non-negative numeric value.
+* A numeric increment value.
+  
+  The increment value needs to be provided by a user. If possible, this API
+  SHOULD be structured so a user is obligated to provide this parameter. If it
+  is not possible to structurally enforce this obligation, this API MUST be
+  documented in a way to communicate to users that this parameter is needed.
+  
+  The increment value is expected to be non-negative. This API SHOULD be
+  documented in a way to communicate to users that this value is expected to be
+  non-negative. This API SHOULD NOT validate this value, that is left to
+  implementations of the API.
+* [Attributes](../common/README.md#attribute) to associate with the increment
+  value.
+  
+  Users can provide attributes to associate with the increment value, but it is
+  up to their discretion. Therefore, this API MUST be structured to accept a
+  variable number of attributes, including none.
 
 The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as arguments. If
@@ -705,10 +772,24 @@ Updates the statistics with the specified amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Parameters:
+This API MUST accept the following parameter:
 
-* The numeric value to record, which MUST be a non-negative numeric value.
-* Optional [attributes](../common/README.md#attribute).
+* A numeric value to record.
+
+  The value needs to be provided by a user. If possible, this API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, this API MUST be documented
+  in a way to communicate to users that this parameter is needed.
+  
+  The value is expected to be non-negative. This API SHOULD be documented in a
+  way to communicate to users that this value is expected to be non-negative.
+  This API SHOULD NOT validate this value, that is left to implementations of
+  the API.
+* [Attributes](../common/README.md#attribute) to associate with the value.
+  
+  Users can provide attributes to associate with the value, but it is up to
+  their discretion. Therefore, this API MUST be structured to accept a variable
+  number of attributes, including none.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as individual
@@ -939,10 +1020,19 @@ Increment or decrement the UpDownCounter by a fixed amount.
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
-Parameters:
+This API MUST accept the following parameter:
 
-* The amount to be added, can be positive, negative or zero.
-* Optional [attributes](../common/README.md#attribute).
+* A numeric value to add.
+
+  The value needs to be provided by a user. If possible, this API SHOULD be
+  structured so a user is obligated to provide this parameter. If it is not
+  possible to structurally enforce this obligation, this API MUST be documented
+  in a way to communicate to users that this parameter is needed.
+* [Attributes](../common/README.md#attribute) to associate with the value.
+  
+  Users can provide attributes to associate with the value, but it is up to
+  their discretion. Therefore, this API MUST be structured to accept a variable
+  number of attributes, including none.
 
 [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
 [attributes](../common/README.md#attribute) to be passed in as individual
