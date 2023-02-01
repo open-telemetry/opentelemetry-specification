@@ -63,17 +63,18 @@ and the [cloud resource conventions][cloud]. The following AWS Lambda-specific a
 
 ### EventToCarrier
 
-Each event type transmits propagation data inconsistently. Instrumentation SHOULD define a function that
-takes the event as an argument and returns a carrier that can be passed into the configured propagators.
+Each event type may represent propagation data in its own way. Instrumentation SHOULD support a user defined transform
+function which takes the event as an argument and returns a carrier that can be passed into the configured propagators.
+Instrumentation SHOULD provide default implementations for the standard event types.
 
 ### AWS X-Ray Environment Span Link
 
 If the `_X_AMZN_TRACE_ID` environment variable is set, instrumentation SHOULD try to parse an
 OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../context/api-propagators.md). If the
 resulting `Context` is [valid](../../api.md#isvalid) then a span link should be added to the lambda span with
-an associated attribute of `source=x-ray-env` to indicate what the link is for.
-We check if it is valid because sometimes the `_X_AMZN_TRACE_ID` environment variable contains
-an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable will be set and the
+an associated attribute of `source=x-ray-env` to indicate the source of the linked span.
+Instrumentation needs to check if the context is valid because the `_X_AMZN_TRACE_ID` environment variable may
+contain an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable will be set and the
 `Context` will be valid and sampled only if AWS X-Ray has been enabled for the Lambda function. A user can
 disable AWS X-Ray for the function if the X-Ray span link is not desired.
 
