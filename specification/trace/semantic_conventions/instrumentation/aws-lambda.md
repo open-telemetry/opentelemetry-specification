@@ -61,22 +61,21 @@ and the [cloud resource conventions][cloud]. The following AWS Lambda-specific a
 [faasres]: ../../../resource/semantic_conventions/faas.md (FaaS resource conventions)
 [cloud]: ../../../resource/semantic_conventions/cloud.md (Cloud resource conventions)
 
-### Determining the parent of a span
+### EventToCarrier
 
-The parent of the span MUST be determined by considering both the environment and any headers or attributes
-available from the event.
+Each event type transmits propagation data inconsistently. Instrumentation SHOULD define a function that
+takes the event as an argument and returns a carrier that can be passed into the configured propagators.
 
-If the `_X_AMZN_TRACE_ID` environment variable is set, instrumentations SHOULD first try to parse an
+### AWS X-Ray Environment Span Link
+
+If the `_X_AMZN_TRACE_ID` environment variable is set, instrumentation SHOULD try to parse an
 OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../context/api-propagators.md). If the
-resulting `Context` is [valid](../../api.md#isvalid) and sampled, then this `Context` is the parent of the
-function span. We check if it is valid because sometimes the `_X_AMZN_TRACE_ID` environment variable contains
+resulting `Context` is [valid](../../api.md#isvalid) then a span link should be added to the lambda span with
+an associated attribute of `source=x-ray-env` to indicate what the link is for.
+We check if it is valid because sometimes the `_X_AMZN_TRACE_ID` environment variable contains
 an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable will be set and the
 `Context` will be valid and sampled only if AWS X-Ray has been enabled for the Lambda function. A user can
-disable AWS X-Ray for the function if X-Ray propagation is not desired.
-
-Otherwise, when X-Ray propagation fails, the user's configured propagators SHOULD be applied to the HTTP
-headers of the request to extract a `Context`. For example, API Gateway proxy requests can be configured to
-send HTTP headers to a Lambda function using [a body mapping template](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-override-request-response-parameters.html).
+disable AWS X-Ray for the function if the X-Ray span link is not desired.
 
 ## API Gateway
 
