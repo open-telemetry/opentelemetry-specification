@@ -1,6 +1,5 @@
 groups:
   - id: metric.http.server.duration
-    prefix: http
     type: metric
     metric_name: http.server.duration
     brief: "Measures the duration of inbound HTTP requests."
@@ -46,7 +45,6 @@ groups:
           - Port identifier of the `Host` header
 
   - id: metric.http.server.active_requests
-    prefix: http
     type: metric
     metric_name: http.server.active_requests
     brief: "Measures the number of concurrent HTTP requests that are currently in-flight."
@@ -86,7 +84,6 @@ groups:
           - Port identifier of the `Host` header
 
   - id: metric.http.server.request.size
-    prefix: http
     type: metric
     metric_name: http.server.request.size
     brief: "Measures the size of HTTP request messages (compressed)."
@@ -133,7 +130,6 @@ groups:
           - Port identifier of the `Host` header
 
   - id: metric.http.server.response.size
-    prefix: http
     type: metric
     metric_name: http.server.response.size
     brief: "Measures the size of HTTP response messages (compressed)."
@@ -180,7 +176,6 @@ groups:
           - Port identifier of the `Host` header
 
   - id: metric.http.client.duration
-    prefix: http
     type: metric
     metric_name: http.client.duration
     brief: "Measures the duration of outbound HTTP requests."
@@ -216,7 +211,6 @@ groups:
       - ref: net.sock.peer.addr
 
   - id: metric.http.client.request.size
-    prefix: http
     type: metric
     metric_name: http.client.request.size
     brief: "Measures the size of HTTP request messages (compressed)."
@@ -253,7 +247,6 @@ groups:
       - ref: net.sock.peer.addr
 
   - id: metric.http.client.response.size
-    prefix: http
     type: metric
     metric_name: http.client.response.size
     brief: "Measures the size of HTTP response messages (compressed)."
