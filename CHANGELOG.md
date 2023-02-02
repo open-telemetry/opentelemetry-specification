@@ -170,6 +170,8 @@ release.
 
 ### Semantic Conventions
 
+- Add semantic conventions for Deployments
+  ([#3169](https://github.com/open-telemetry/opentelemetry-specification/pull/3169))
 - Clarify common HTTP attributes apply to both clients and servers
   ([#3044](https://github.com/open-telemetry/opentelemetry-specification/pull/3044))
 - Add `code.lineno` source code attribute
