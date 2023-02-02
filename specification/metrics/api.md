@@ -215,8 +215,6 @@ DIGIT = %x30-39 ; 0-9
 The `unit` is an optional string provided by the author of the Instrument. It
 SHOULD be treated as an opaque string from the API and SDK.
 
-* If the `unit` is not provided or the `unit` is null, the API MUST make sure
-  that the behavior is the same as an empty `unit` string.
 * It MUST be case-sensitive (e.g. `kb` and `kB` are different units), ASCII
   string.
 * It can have a maximum length of 63 characters. The number 63 is chosen to
@@ -229,9 +227,6 @@ SHOULD be treated as an opaque string from the API and SDK.
 The `description` is an optional free-form text provided by the author of the
 instrument. It MUST be treated as an opaque string from the API and SDK.
 
-* If the `description` is not provided or the `description` is null, the API
-  MUST make sure that the behavior is the same as an empty `description`
-  string.
 * It MUST support [BMP (Unicode Plane
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
   which is basically only the first three bytes of UTF-8 (or `utf8mb3`).
