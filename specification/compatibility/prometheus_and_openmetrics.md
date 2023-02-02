@@ -54,7 +54,12 @@ suffixes described below.
 The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
 if present, MUST be converted to the unit of the OTLP metric.  After trimming
 type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed
-from the suffix as well, if the metric suffix matches the unit.
+from the suffix as well, if the metric suffix matches the unit. The unit SHOULD
+be translated from Prometheus conventions to OpenTelemetry conventions by:
+
+* Converting from full words to abbreviations (e.g. "milliseconds" to "ms").
+* Special case: Converting "ratio" to "1".
+* Converting "foo_per_bar" to "foo/bar".
 
 The [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
 if present, MUST be added as the description of the OTLP metric.
@@ -223,11 +228,17 @@ required to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Invalid characters
 in the metric name MUST be replaced with the `_` character. Multiple
 consecutive `_` characters MUST be replaced with a single `_` character.
 
-The Unit of an OTLP metric point MUST be added as
-[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
-Additionally, the unit MUST be added as a suffix to the metric name, and SHOULD
-be converted to [base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units)
-recommended by OpenMetrics when possible.  The unit suffix comes before any
+The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible.  This includes:
+
+* Converting from abbreviations to full words (e.g. "ms" to "milliseconds").
+* Dropping the portions of the Unit within brackets (e.g. {packets}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
+* Special case: Converting "1" to "ratio".
+* Converting "foo/bar" to "foo_per_bar".
+
+The resulting unit SHOULD be added to the metric as
+[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
+and as a suffix to the metric name unless the metric name already contains the
+unit, or the unit MUST be omitted. The unit suffix comes before any
 type-specific suffixes.
 
 The description of an OTLP metrics point MUST be added as
