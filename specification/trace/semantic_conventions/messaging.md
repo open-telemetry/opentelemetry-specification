@@ -379,7 +379,7 @@ RabbitMQ message headers:
 
 **[1]:** Refer to [the RabbitMQ documentation](https://www.rabbitmq.com/publishers.html#message-properties) for more details on message headers.
 
-**[2]:** The attribute value MUST consist of multiple header values as an array of strings. Comma-seperated strings SHOULD be split into an array of strings, depending on the way the library provides access to message headers.
+**[2]:** The attribute value MUST consist of multiple header values as an array of strings. Comma-separated strings SHOULD be split into an array of strings, depending on the way the library provides access to message headers.
 
 #### Apache Kafka
 
