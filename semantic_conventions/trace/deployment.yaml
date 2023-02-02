@@ -83,7 +83,7 @@ groups:
               brief: 'The deployment was **not** completed correctly'
             - id: 'unknown'
               value: 'Unknown'
-              brief: 'The deployment wass unsuccessful and the reason is unknown'
+              brief: 'The deployment was unsuccessful and the reason is unknown'
         brief: >
           The status of the workload deployment.
 

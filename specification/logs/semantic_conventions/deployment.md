@@ -67,7 +67,6 @@ Task executions that support deployments SHOULD be recorded as attributes on the
 operations. Task executions MAY be recorded on "logs" or "events" depending on the
 context.
 
-
 ### Attributes
 
 <!-- semconv log-deployment-task -->

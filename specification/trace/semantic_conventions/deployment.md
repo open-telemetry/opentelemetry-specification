@@ -31,7 +31,7 @@ deployment of an application.
 
 ### Application
 
-Each stage of the lifecycle of a cloud-native application deployment SHOULD be recorded as an Event on the span during 
+Each stage of the lifecycle of a cloud-native application deployment SHOULD be recorded as an Event on the span during
 which it occurred.
 
 <!-- semconv deployment.application -->
@@ -54,7 +54,7 @@ The event name MUST be `deployment.application`.
 | `Unknown` | The deployment was unsuccessful and the reason is unknown |
 <!-- endsemconv -->
 
-### Workload 
+### Workload
 
 Cloud-native applications are composed of one or several components that are usually called [workloads](https://kubernetes.io/docs/concepts/workloads/).
 Similarly to applications, each stage of the lifecycle of a workload deployment SHOULD be recorded as an Event on the span during
@@ -79,7 +79,7 @@ The event name MUST be `deployment.workload`.
 | `Progressing` | The deployment is currently taking place |
 | `Succeeded` | The deployment was completed correctly |
 | `Failed` | The deployment was **not** completed correctly |
-| `Unknown` | The deployment wass unsuccessful and the reason is unknown |
+| `Unknown` | The deployment was unsuccessful and the reason is unknown |
 <!-- endsemconv -->
 
 ### Task

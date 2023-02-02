@@ -34,4 +34,3 @@ groups:
         requirement_level: recommended
       - ref: deployment.task.name
       - ref: deployment.task.status
-
