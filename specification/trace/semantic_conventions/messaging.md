@@ -373,15 +373,13 @@ In RabbitMQ, the destination is defined by an *exchange* and a *routing key*.
 
 RabbitMQ message headers:
 
-| Attribute                                 | Type     | Description                                                                                                                                                             | Examples                                                          | Requirement Level |
-|-------------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|-------------------|
-| `messaging.rabbitmq.message.header.<key>` | string[] | RabbitMQ message headers [1]. `<key>` being the normalized message header name (lowercase, with - characters replaced by _), the value being the header values. [2] [3] | `messaging.rabbitmq.message.header.my_header=["my_header_value"]` | Optional          |
+| Attribute                                 | Type     | Description                                                                                                                                                         | Examples                                                          | Requirement Level |
+|-------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|-------------------|
+| `messaging.rabbitmq.message.header.<key>` | string[] | RabbitMQ message headers [1]. `<key>` being the normalized message header name (lowercase, with - characters replaced by _), the value being the header values. [2] | `messaging.rabbitmq.message.header.my_header=["my_header_value"]` | Optional          |
 
 **[1]:** Refer to [the RabbitMQ documentation](https://www.rabbitmq.com/publishers.html#message-properties) for more details on message headers.
 
-**[2]:** Instrumentations SHOULD require an explicit configuration of which message headers are to be captured. Including all headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
-
-**[3]:** The attribute value MUST consist of either multiple header values as an array of strings or a single-item array containing a possibly comma-concatenated string, depending on the way the library provides access to message headers.
+**[2]:** The attribute value MUST consist of multiple header values as an array of strings. Comma-seperated strings SHOULD be split into an array of strings, depending on the way the library provides access to message headers.
 
 #### Apache Kafka
 
