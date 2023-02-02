@@ -12,6 +12,7 @@ linkTitle: SDK
 <!-- toc -->
 
 - [MeterProvider](#meterprovider)
+  * [MeterProvider Creation](#meterprovider-creation)
   * [Meter Creation](#meter-creation)
     + [Instrument type conflict detection](#instrument-type-conflict-detection)
   * [Shutdown](#shutdown)
@@ -85,6 +86,8 @@ be specified. If a `Resource` is specified, it SHOULD be associated with all the
 metrics produced by any `Meter` from the `MeterProvider`. The [tracing SDK
 specification](../trace/sdk.md#additional-span-interfaces) has provided some
 suggestions regarding how to implement this efficiently.
+
+### MeterProvider Creation
 
 The SDK SHOULD allow the creation of multiple independent `MeterProvider`s.
 
