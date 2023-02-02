@@ -14,7 +14,6 @@ linkTitle: SDK
 - [MeterProvider](#meterprovider)
   * [MeterProvider Creation](#meterprovider-creation)
   * [Meter Creation](#meter-creation)
-    + [Instrument type conflict detection](#instrument-type-conflict-detection)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
   * [View](#view)
