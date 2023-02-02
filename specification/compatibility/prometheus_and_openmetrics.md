@@ -87,7 +87,7 @@ An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/
 
 ### Unknown-typed
 
-A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge and MUST preserve its original type information. Type preservation MUST be achieved by adding a datapoint attribute `prom_metric_type` with the value of [Prometheus `MetricTypeUnknown`](https://github.com/prometheus/prometheus/blob/fa6e05903fd3ce52e374a6e1bf4eb98c9f1f45a7/model/textparse/interface.go#L117)
+A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge. It MUST add an additional a datapoint attribute to all datapoints with key `prometheus.type` and value `unknown`, to match the [OpenMetrics type string](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#type).
 
 ### Histograms
 
