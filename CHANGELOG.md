@@ -11,12 +11,20 @@ release.
 
 ### Traces
 
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
+
 ### Metrics
 
 ### Logs
 
 - Define BatchLogRecordProcessor default configuration values.
   ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
+
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
 
 ### Resource
 
@@ -27,6 +35,11 @@ release.
 - Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
   to match the existing `cloud.provider` prefix.
   [#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095)
+- Changes http server span names from `{http.route}` to `{http.method} {http.route}`
+  (when route is available), and from `HTTP {http.method}` to `{http.method}` (when
+  route is not available).
+  Changes http client span names from `HTTP {http.method}` to `{http.method}`.
+  ([#3165](https://github.com/open-telemetry/opentelemetry-specification/pull/3165))
 
 ### Compatibility
 

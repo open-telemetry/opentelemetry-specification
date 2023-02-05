@@ -56,7 +56,7 @@
 ### Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider`
-(see[API](api.md#tracerprovider)). The `name`, `version` (optional),
+(see [API](api.md#tracerprovider)). The `name`, `version` (optional),
 `schema_url` (optional), and `attributes` (optional) arguments supplied to
 the `TracerProvider` must be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
@@ -412,9 +412,10 @@ public final class SpanLimits {
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
 * `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
-There SHOULD be a log emitted to indicate to the user that an attribute, event,
-or link was discarded due to such a limit. To prevent excessive logging, the log
-should not be emitted once per span, or per discarded attribute, event, or links.
+There SHOULD be a message printed in the SDK's log to indicate to the user
+that an attribute was discarded due to such a limit.
+To prevent excessive logging, the message MUST be printed at most once per
+span (i.e., not per discarded attribute, event, or link).
 
 ## Id Generators
 
