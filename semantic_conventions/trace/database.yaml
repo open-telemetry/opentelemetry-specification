@@ -204,7 +204,7 @@ groups:
           The database statement being executed.
         note: The value may be sanitized to exclude sensitive information.
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
-      - id: bind_values
+      - id: bind.values
         tag: call-level
         type: string[]
         requirement_level: optional
