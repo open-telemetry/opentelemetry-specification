@@ -412,9 +412,10 @@ public final class SpanLimits {
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
 * `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
-There SHOULD be a log emitted to indicate to the user that an attribute, event,
-or link was discarded due to such a limit. To prevent excessive logging, the log
-should not be emitted once per span, or per discarded attribute, event, or links.
+There SHOULD be a message printed in the SDK's log to indicate to the user
+that an attribute was discarded due to such a limit.
+To prevent excessive logging, the message MUST be printed at most once per
+span (i.e., not per discarded attribute, event, or link).
 
 ## Id Generators
 

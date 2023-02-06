@@ -11,12 +11,20 @@ release.
 
 ### Traces
 
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
+
 ### Metrics
 
 ### Logs
 
 - Define BatchLogRecordProcessor default configuration values.
   ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
+
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
 
 ### Resource
 
