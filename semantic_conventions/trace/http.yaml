@@ -19,34 +19,6 @@ groups:
           conditionally_required: If and only if one was received/sent.
         brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
         examples: [200]
-      - id: flavor
-        type:
-          # Default value: `true`. If false, it helps the code gen tool to
-          # encode checks that only accept the listed values.
-          allow_custom_values: true
-          members:
-            - id: http_1_0
-              value: '1.0'
-              brief: 'HTTP/1.0'
-            - id: http_1_1
-              value: '1.1'
-              brief: 'HTTP/1.1'
-            - id: http_2_0
-              value: '2.0'
-              brief: 'HTTP/2'
-            - id: http_3_0
-              value: '3.0'
-              brief: 'HTTP/3'
-            - id: spdy
-              value: 'SPDY'
-              brief: 'SPDY protocol.'
-            - id: quic
-              value: 'QUIC'
-              brief: 'QUIC protocol.'
-        brief: 'Kind of HTTP protocol used.'
-        note: >
-          If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor`
-          is `QUIC`, in which case `IP.UDP` is assumed.
       - id: user_agent
         type: string
         brief: 'Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client.'
@@ -65,6 +37,8 @@ groups:
           is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
+      - ref: net.app.protocol.name
+      - ref: net.app.protocol.version
       - ref: net.sock.peer.addr
       - ref: net.sock.peer.port
       - ref: net.sock.peer.name

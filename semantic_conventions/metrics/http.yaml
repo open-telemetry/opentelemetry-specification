@@ -23,7 +23,8 @@ groups:
       - ref: http.status_code
         requirement_level:
           conditionally_required: If and only if one was received/sent.
-      - ref: http.flavor
+      - ref: net.app.protocol.name
+      - ref: net.app.protocol.version
       - ref: net.host.name
         requirement_level: required
         brief: >
@@ -62,7 +63,8 @@ groups:
         requirement_level: required
       - ref: http.scheme
         requirement_level: required
-      - ref: http.flavor
+      - ref: net.app.protocol.name
+      - ref: net.app.protocol.version
       - ref: net.host.name
         requirement_level: required
         brief: >
@@ -115,7 +117,8 @@ groups:
       - ref: http.status_code
         requirement_level:
           conditionally_required: If and only if one was received/sent.
-      - ref: http.flavor
+      - ref: net.app.protocol.name
+      - ref: net.app.protocol.version
       - ref: net.host.name
         requirement_level: required
         brief: >
@@ -168,7 +171,8 @@ groups:
       - ref: http.status_code
         requirement_level:
           conditionally_required: If and only if one was received/sent.
-      - ref: http.flavor
+      - ref: net.app.protocol.name
+      - ref: net.app.protocol.version
       - ref: net.host.name
         requirement_level: required
         brief: >
@@ -208,7 +212,8 @@ groups:
       - ref: http.status_code
         requirement_level:
           conditionally_required: If and only if one was received/sent.
-      - ref: http.flavor
+      - ref: net.app.protocol.name
+      - ref: net.app.protocol.version
       - ref: net.peer.name
         requirement_level: required
         brief: >
@@ -244,7 +249,8 @@ groups:
       - ref: http.status_code
         requirement_level:
           conditionally_required: If and only if one was received/sent.
-      - ref: http.flavor
+      - ref: net.app.protocol.name
+      - ref: net.app.protocol.version
       - ref: net.peer.name
         requirement_level: required
         brief: >
@@ -280,7 +286,8 @@ groups:
       - ref: http.status_code
         requirement_level:
           conditionally_required: If and only if one was received/sent.
-      - ref: http.flavor
+      - ref: net.app.protocol.name
+      - ref: net.app.protocol.version
       - ref: net.peer.name
         requirement_level: required
         brief: >

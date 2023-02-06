@@ -67,16 +67,17 @@ sections below.
 |---|---|---|---|---|
 | `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
-| `http.flavor` | string | Kind of HTTP protocol used. [1] | `1.0` | Recommended |
 | `http.user_agent` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
 | `http.request_content_length` | int | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
 | `http.response_content_length` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
+| [`net.app.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| [`net.app.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet`; `inet6` | Conditionally Required: [2] |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [3] |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [4] |
 
-**[1]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
+**[1]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
 **[2]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
@@ -87,17 +88,6 @@ sections below.
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
 * `http.method`
-
-`http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
-
-| Value  | Description |
-|---|---|
-| `1.0` | HTTP/1.0 |
-| `1.1` | HTTP/1.1 |
-| `2.0` | HTTP/2 |
-| `3.0` | HTTP/3 |
-| `SPDY` | SPDY protocol. |
-| `QUIC` | QUIC protocol. |
 <!-- endsemconv -->
 
 It is recommended to also use the general [socket-level attributes][] - `net.sock.peer.addr` when available,  `net.sock.peer.name` and `net.sock.peer.port` when don't match `net.peer.name` and `net.peer.port` (if [intermediary](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.7) is detected).
@@ -301,33 +291,35 @@ As an example, if a browser request for `https://example.com:8080/webshop/articl
 
 Span name: `GET`
 
-|   Attribute name     |                                       Value             |
-| :------------------- | :-------------------------------------------------------|
-| `http.method`        | `"GET"`                                                 |
-| `http.flavor`        | `"1.1"`                                                 |
-| `http.url`           | `"https://example.com:8080/webshop/articles/4?s=1"`     |
-| `net.peer.name`      | `example.com`                                           |
-| `net.peer.port`      | 8080                                           |
-| `net.sock.peer.addr` | `"192.0.2.5"`                                           |
-| `http.status_code`   | `200`                                                   |
+| Attribute name             | Value                                               |
+|:---------------------------|:----------------------------------------------------|
+| `http.method`              | `"GET"`                                             |
+| `net.app.protocol.name`    | `"http"`                                            |
+| `net.app.protocol.version` | `"1.1"`                                             |
+| `http.url`                 | `"https://example.com:8080/webshop/articles/4?s=1"` |
+| `net.peer.name`            | `example.com`                                       |
+| `net.peer.port`            | 8080                                                |
+| `net.sock.peer.addr`       | `"192.0.2.5"`                                       |
+| `http.status_code`         | `200`                                               |
 
 The corresponding server Span may look like this:
 
 Span name: `GET /webshop/articles/:article_id`.
 
-|   Attribute name     |                      Value                      |
-| :------------------- | :---------------------------------------------- |
-| `http.method`        | `"GET"`                                         |
-| `http.flavor`        | `"1.1"`                                         |
-| `http.target`        | `"/webshop/articles/4?s=1"`                     |
-| `net.host.name`      | `"example.com"`                                 |
-| `net.host.port`      | `8080`                                          |
-| `http.scheme`        | `"https"`                                       |
-| `http.route`         | `"/webshop/articles/:article_id"`               |
-| `http.status_code`   | `200`                                           |
-| `http.client_ip`     | `"192.0.2.4"`                                   |
-| `net.sock.peer.addr` | `"192.0.2.5"` (the client goes through a proxy) |
-| `http.user_agent`    | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
+| Attribute name             |                      Value                      |
+|:---------------------------| :---------------------------------------------- |
+| `http.method`              | `"GET"`                                         |
+| `net.app.protocol.name`    | `"http"`                                            |
+| `net.app.protocol.version` | `"1.1"`                                             |
+| `http.target`              | `"/webshop/articles/4?s=1"`                     |
+| `net.host.name`            | `"example.com"`                                 |
+| `net.host.port`            | `8080`                                          |
+| `http.scheme`              | `"https"`                                       |
+| `http.route`               | `"/webshop/articles/:article_id"`               |
+| `http.status_code`         | `200`                                           |
+| `http.client_ip`           | `"192.0.2.4"`                                   |
+| `net.sock.peer.addr`       | `"192.0.2.5"` (the client goes through a proxy) |
+| `http.user_agent`          | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
 
 ### HTTP client retries examples
 
