@@ -41,18 +41,18 @@ sources listed below to obtain the machine id.
 
 | OS      | Primary                                                                             | Fallback                               |
 |---------|-------------------------------------------------------------------------------------|----------------------------------------|
-| Linux   | contents of `/var/lib/dbus/machine-id`                                              | contents of `/etc/machine-id`          |
+| Linux   | contents of `/etc/machine-id`                                                       | contents of `/var/lib/dbus/machine-id` |
 | BSD     | contents of `/etc/hostid`                                                           | output of `kenv -q smbios.system.uuid` |
 | MacOS   | `IOPlatformUUID` line from the output of `ioreg -rd1 -c "IOPlatformExpertDevice"`   | -                                      |
 | Windows | `MachineGuid` from registry `HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography` | -                                      |
 
 ### Privileged Machine ID Lookup
 
-The `host.id` can be looked up using privileged sources such as the output of
-`dmidecode -t system`, `dmidecode -t baseboard`, `dmidecode -t chassis`, or
-reading the corresponding data from the filesystem (e.g.
-`cat /sys/devices/virtual/dmi/id/product_id`,
-`cat /sys/devices/virtual/dmi/id/product_uuid`, etc), however SDK resource
+The `host.id` can be looked up using privileged sources. For example, Linux
+systems can use the output of `dmidecode -t system`, `dmidecode -t baseboard`,
+`dmidecode -t chassis`, or read the corresponding data from the filesystem
+(e.g. `cat /sys/devices/virtual/dmi/id/product_id`,
+`cat /sys/devices/virtual/dmi/id/product_uuid`, etc), however, SDK resource
 detector implementations MUST not collect `host.id` from privileged sources. If
 privileged lookup of `host.id` is required, the value should be injected via the
 `OTEL_RESOURCE_ATTRIBUTES` environment variable.
