@@ -11,15 +11,40 @@ release.
 
 ### Traces
 
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
+
 ### Metrics
 
 ### Logs
+
+- Define BatchLogRecordProcessor default configuration values.
+  ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
+
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
 
 ### Resource
 
 ### Semantic Conventions
 
+- Enable semantic convention tooling for metrics in spec
+  ([#3119](https://github.com/open-telemetry/opentelemetry-specification/pull/3119))
+- Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
+  to match the existing `cloud.provider` prefix.
+  [#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095)
+- Changes http server span names from `{http.route}` to `{http.method} {http.route}`
+  (when route is available), and from `HTTP {http.method}` to `{http.method}` (when
+  route is not available).
+  Changes http client span names from `HTTP {http.method}` to `{http.method}`.
+  ([#3165](https://github.com/open-telemetry/opentelemetry-specification/pull/3165))
+
 ### Compatibility
+
+- Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
+  ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
 
 ### OpenTelemetry Protocol
 
@@ -30,6 +55,9 @@ release.
 ### Common
 
 ## v1.17.0 (2023-01-17)
+
+- Add Cloud Spanner and Microsoft SQL Server Compact to db.system semantic conventions.
+  [#3105](https://github.com/open-telemetry/opentelemetry-specification/pull/3105)
 
 ### Context
 
@@ -103,6 +131,8 @@ release.
 - Add OpenCensus migration guide and add BinaryPropagation as an option to gRPC
   instrumentation for OpenCensus compatibility
   ([#3015](https://github.com/open-telemetry/opentelemetry-specification/pull/3015)).
+- Add condition with sum and count for Prometheus summaries
+([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059))
 
 ### OpenTelemetry Protocol
 
@@ -197,6 +227,9 @@ release.
 
 - Specify handling of invalid numeric environment variables
   ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
+- Add log-specific attribute limit configuration and clarify that general
+  attribute limit configuration also apply to log records.
+  ([#2861](https://github.com/open-telemetry/opentelemetry-specification/pull/2861))
 
 ### Telemetry Schemas
 
