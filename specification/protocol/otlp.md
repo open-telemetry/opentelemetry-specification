@@ -547,6 +547,19 @@ defined in `Status` message schema.
 The server MAY include `Status.details` field with additional details. Read
 below about what this field can contain in each specific failure case.
 
+The server SHOULD use HTTP response status codes to indicate
+retryable and not-retryable errors for a particular erroneous situation. The
+client SHOULD honour HTTP response status codes as retryable or not-retryable.
+The requests that receive a response status code listed in following table SHOULD be retried.
+All other `4xx` or `5xx` response status codes MUST NOT be retried.
+
+|HTTP response status code|
+|---------|
+|429 Too Many Requests|
+|502 Bad Gateway|
+|503 Service Unavailable|
+|504 Gateway Timeout|
+
 ##### Bad Data
 
 If the processing of the request fails because the request contains data that

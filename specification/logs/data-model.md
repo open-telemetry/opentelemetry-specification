@@ -419,9 +419,10 @@ Description: A value containing the body of the log record (see the description
 of `any` type above). Can be for example a human-readable string message
 (including multi-line) describing the event in a free form or it can be a
 structured data composed of arrays and maps of other values. First-party
-Applications SHOULD use a string message. However, a structured body may be
-necessary to preserve the semantics of some existing log formats. Can vary for
-each occurrence of the event coming from the same source. This field is optional.
+Applications SHOULD use a string message. However, a structured body SHOULD be
+used to preserve the semantics of structured logs emitted by Third-party
+Applications. Can vary for each occurrence of the event coming from the same
+source. This field is optional.
 
 ### Field: `Resource`
 
@@ -475,7 +476,7 @@ If included, they MUST follow the OpenTelemetry
 ## Example Log Records
 
 For example log records see
-[JSON File serialization](../../experimental/serialization/json.md).
+[JSON File serialization](../protocol/file-exporter.md#examples).
 
 ## Appendix A. Example Mappings
 

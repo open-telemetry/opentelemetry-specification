@@ -1,28 +1,30 @@
-# JSON File serialization
+# OpenTelemetry Protocol File Exporter
 
 **Status**: [Experimental](../../specification/document-status.md)
 
+This document provides a placeholder for specifying an OTLP exporter capable of
+exporting to either a file or stdout.
+
+Currently, it only describes the serialization of OpenTelemetry data to the OTLP JSON format.
+
 ## Table of Contents
 
-- [Overview](#overview)
-- [Requirements](#requirements)
+- [JSON File serialization](#json-file-serialization)
   - [File storage requirements](#file-storage-requirements)
     - [JSON lines file](#json-lines-file)
     - [Streaming appending](#streaming-appending)
   - [Telemetry data requirements](#telemetry-data-requirements)
-- [Examples](#examples)
+  - [Examples](#examples)
 
-## Overview
+## JSON File serialization
 
 This document describes the serialization of OpenTelemetry data as JSON objects that can be stored in files.
-
-## Requirements
 
 ### File storage requirements
 
 #### JSON lines file
 
-This file is a [JSON lines file](https://jsonlines.org/), and therefore follows those requirements:
+This file is a JSON lines file (jsonlines.org), and therefore follows those requirements:
 
 * UTF-8 encoding
 * Each line is a valid JSON value
@@ -33,7 +35,7 @@ This file is a [JSON lines file](https://jsonlines.org/), and therefore follows 
 
 There is no guarantee that the data in the file is ordered.
 
-There is no guarantee in particular that timestamps will be monotically increasing.
+There is no guarantee in particular that timestamps will be monotonically increasing.
 
 ### Telemetry data requirements
 
@@ -46,7 +48,7 @@ Only top-level objects, `ExportTraceServiceRequest`, `ExportMetricsServiceReques
 
 Files must contain exactly one type of data: traces, metrics, or logs.
 
-## Examples
+### Examples
 
 This is an example showing traces:
 
