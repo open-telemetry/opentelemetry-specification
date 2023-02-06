@@ -40,6 +40,11 @@ release.
   route is not available).
   Changes http client span names from `HTTP {http.method}` to `{http.method}`.
   ([#3165](https://github.com/open-telemetry/opentelemetry-specification/pull/3165))
+- Mark `http.server.duration` and `http.client.duration` metrics as required, and mark
+  all other HTTP metrics as optional.
+  [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
+- Add `net.host.port` to `http.server.active_requests` metrics attributes.
+  [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
 
 ### Compatibility
 
