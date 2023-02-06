@@ -45,6 +45,8 @@ release.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
 - Add `net.host.port` to `http.server.active_requests` metrics attributes.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
+- `http.route` SHOULD contain the "application root" if there is one.
+  ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
 
 ### Compatibility
 

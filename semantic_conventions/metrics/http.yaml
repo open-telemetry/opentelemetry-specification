@@ -13,6 +13,13 @@ groups:
       - ref: http.route
         requirement_level:
           conditionally_required: If and only if it's available
+        brief: >
+          The matched route (path template in the format used by the respective server framework). See note below
+        examples: ['/users/:userID?', '{controller}/{action}/{id?}']
+        note: >
+          MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+
+          SHOULD include the [application root](../../trace/semantic_conventions/http.md#http-server-definitions) if there is one.
       - ref: http.status_code
         requirement_level:
           conditionally_required: If and only if one was received/sent.
@@ -98,6 +105,13 @@ groups:
       - ref: http.route
         requirement_level:
           conditionally_required: If and only if it's available
+        brief: >
+          The matched route (path template in the format used by the respective server framework). See note below
+        examples: ['/users/:userID?', '{controller}/{action}/{id?}']
+        note: >
+          MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+
+          SHOULD include the [application root](../../trace/semantic_conventions/http.md#http-server-definitions) if there is one.
       - ref: http.status_code
         requirement_level:
           conditionally_required: If and only if one was received/sent.
@@ -144,6 +158,13 @@ groups:
       - ref: http.route
         requirement_level:
           conditionally_required: If and only if it's available
+        brief: >
+          The matched route (path template in the format used by the respective server framework). See note below
+        examples: ['/users/:userID?', '{controller}/{action}/{id?}']
+        note: >
+          MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+
+          SHOULD include the [application root](../../trace/semantic_conventions/http.md#http-server-definitions) if there is one.
       - ref: http.status_code
         requirement_level:
           conditionally_required: If and only if one was received/sent.
