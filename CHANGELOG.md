@@ -47,6 +47,9 @@ release.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
 - `http.route` SHOULD contain the "application root" if there is one.
   ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
+- Add `http.client_scheme` to capture the original client scheme, e.g. `X-Forwarded-Proto`
+  / `Forwarded` when using SSL-terminating web server in front of application.
+  ([#3179](https://github.com/open-telemetry/opentelemetry-specification/pull/3179))
 
 ### Compatibility
 
