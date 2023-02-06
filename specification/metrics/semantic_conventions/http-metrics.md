@@ -38,7 +38,7 @@ This metric is required.
 **[1]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 **[2]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
-SHOULD include the [application root](#http-server-definitions) if there is one.
+SHOULD include the [application root](../../trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
 **[3]:** Determined by using the first of the following that applies
 
@@ -125,7 +125,7 @@ This metric is optional.
 **[1]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 **[2]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
-SHOULD include the [application root](#http-server-definitions) if there is one.
+SHOULD include the [application root](../../trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
 **[3]:** Determined by using the first of the following that applies
 
@@ -171,7 +171,7 @@ This metric is optional.
 **[1]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 **[2]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
-SHOULD include the [application root](#http-server-definitions) if there is one.
+SHOULD include the [application root](../../trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
 **[3]:** Determined by using the first of the following that applies
 
