@@ -239,11 +239,12 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
 | `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/path/12314/?q=ddds` | Required |
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
-| `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | Recommended |
-| [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `localhost` | Required |
-| [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
+| `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For) or [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded)). [2] | `83.164.160.102` | Recommended |
+| `http.client_scheme` | string | The http scheme of the original client behind all proxies, if known (e.g. from [X-Forwarded-Proto](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto) or [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded)). [3] | `http`; `https` | Recommended |
+| [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [4] | `localhost` | Required |
+| [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [5] | `8080` | Conditionally Required: [6] |
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Optional |
-| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
+| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [7] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](#http-server-definitions) if there is one.
@@ -252,7 +253,7 @@ SHOULD include the [application root](#http-server-definitions) if there is one.
 identify the network-level peer, which may be a proxy.
 
 This attribute should be set when a source of information different
-from the one used for `net.sock.peer.addr`, is available even if that other
+from the one used for `net.sock.peer.addr` is available, even if that other
 source just confirms the same value as `net.sock.peer.addr`.
 Rationale: For `net.sock.peer.addr`, one typically does not know if it
 comes from a proxy, reverse proxy, or the actual client. Setting
@@ -260,7 +261,16 @@ comes from a proxy, reverse proxy, or the actual client. Setting
 one is at least somewhat confident that the address is not that of
 the closest proxy.
 
-**[3]:** Determined by using the first of the following that applies
+**[3]:** This attribute should be set when a source of information different
+from the one used for `http.scheme` is available, even if that other
+source just confirms the same value as `http.scheme`.
+Rationale: For `http.scheme`, one typically does not know if it
+comes from a proxy, reverse proxy, or the actual client. Setting
+`http.client_scheme` when it's the same as `http.scheme` means that
+one is at least somewhat confident that the scheme is not that of
+the closest proxy.
+
+**[4]:** Determined by using the first of the following that applies
 
 - The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
@@ -270,16 +280,16 @@ the closest proxy.
 
 SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-**[4]:** Determined by using the first of the following that applies
+**[5]:** Determined by using the first of the following that applies
 
 - Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
 
-**[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[6]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+**[7]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 

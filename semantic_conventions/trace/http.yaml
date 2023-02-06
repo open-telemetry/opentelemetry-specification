@@ -159,13 +159,14 @@ groups:
         type: string
         brief: >
             The IP address of the original client behind all proxies, if
-            known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)).
+            known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)
+            or [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded)).
         note: |
             This is not necessarily the same as `net.sock.peer.addr`, which would
             identify the network-level peer, which may be a proxy.
 
             This attribute should be set when a source of information different
-            from the one used for `net.sock.peer.addr`, is available even if that other
+            from the one used for `net.sock.peer.addr` is available, even if that other
             source just confirms the same value as `net.sock.peer.addr`.
             Rationale: For `net.sock.peer.addr`, one typically does not know if it
             comes from a proxy, reverse proxy, or the actual client. Setting
@@ -173,6 +174,22 @@ groups:
             one is at least somewhat confident that the address is not that of
             the closest proxy.
         examples: '83.164.160.102'
+      - id: client_scheme
+        type: string
+        brief: >
+          The http scheme of the original client behind all proxies, if
+          known (e.g. from [X-Forwarded-Proto](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto)
+          or [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded)).
+        note: |
+          This attribute should be set when a source of information different
+          from the one used for `http.scheme` is available, even if that other
+          source just confirms the same value as `http.scheme`.
+          Rationale: For `http.scheme`, one typically does not know if it
+          comes from a proxy, reverse proxy, or the actual client. Setting
+          `http.client_scheme` when it's the same as `http.scheme` means that
+          one is at least somewhat confident that the scheme is not that of
+          the closest proxy.
+        examples: ["http", "https"]
       - ref: net.host.name
         requirement_level: required
         sampling_relevant: true
