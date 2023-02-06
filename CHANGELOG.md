@@ -47,6 +47,9 @@ release.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
 - `http.route` SHOULD contain the "application root" if there is one.
   ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
+- `http.flavor` is removed and replaced by the recently introduced
+  `net.app.protocol.name` and `net.app.protocol.version`.
+  ([#3178](https://github.com/open-telemetry/opentelemetry-specification/pull/3178))
 
 ### Compatibility
 
