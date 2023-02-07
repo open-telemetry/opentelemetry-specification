@@ -30,16 +30,14 @@ and various HTTP versions like 1.1, 2 and SPDY.
 ## Name
 
 HTTP spans MUST follow the overall [guidelines for span names](../api.md#span).
-Many REST APIs encode parameters into URI path, e.g. `/api/users/123` where `123`
-is a user id, which creates high cardinality value space not suitable for span
-names. In case of HTTP servers, these endpoints are often mapped by the server
-frameworks to more concise *HTTP routes*, e.g. `/api/users/{user_id}`, which are
-recommended as the low cardinality span names. However, the same approach usually
-does not work for HTTP client spans, especially when instrumentation is provided
-by a lower-level middleware that is not aware of the specifics of how the URIs
-are formed. Therefore, HTTP client spans SHOULD be using conservative, low
-cardinality names formed from the available parameters of an HTTP request,
-such as `"HTTP {METHOD_NAME}"`. Instrumentation MUST NOT default to using URI
+HTTP server span names SHOULD be `{http.method} {http.route}` if there is a
+(low-cardinality) `http.route` available.
+HTTP server span names SHOULD be `{http.method}` if there is no (low-cardinality)
+`http.route` available.
+HTTP client spans have no `http.route` attribute since client-side instrumentation
+is not generally aware of the "route", and therefore HTTP client spans SHOULD use
+`{http.method}`.
+Instrumentation MUST NOT default to using URI
 path as span name, but MAY provide hooks to allow custom logic to override the
 default span name.
 
@@ -202,8 +200,8 @@ Within a single virtual host, some servers support the concepts of an **HTTP app
 in a deployment of a Python application to Apache, the application would be the [PEP 3333][] conformant callable that is configured using the
 [`WSGIScriptAlias` directive][modwsgisetup] of `mod_wsgi`).
 
-An application can be "mounted" under some **application root**
-(also know as *[context root][]* *[context prefix][]*, or *[document base][]*)
+An application can be "mounted" under an **application root**
+(also known as a *[context root][]*, *[context prefix][]*, or *[document base][]*)
 which is a fixed path prefix of the URL that determines to which application a request is routed
 (e.g., the server could be configured to route all requests that go to an URL path starting with `/webshop/`
 at a particular virtual host
@@ -232,7 +230,6 @@ This span type represents an inbound HTTP request.
 For an HTTP server span, `SpanKind` MUST be `Server`.
 
 Given an inbound request for a route (e.g. `"/users/:userID?"`) the `name` attribute of the span SHOULD be set to this route.
-If the route does not include the application root, it SHOULD be prepended to the span name.
 
 If the route cannot be determined, the `name` attribute MUST be set as defined in the general semantic conventions for HTTP.
 
@@ -248,7 +245,8 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Optional |
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
 
-**[1]:** 'http.route' MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+**[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+SHOULD include the [application root](#http-server-definitions) if there is one.
 
 **[2]:** This is not necessarily the same as `net.sock.peer.addr`, which would
 identify the network-level peer, which may be a proxy.
@@ -301,7 +299,7 @@ Note that in some cases host and port identifiers in the `Host` header might be 
 
 As an example, if a browser request for `https://example.com:8080/webshop/articles/4?s=1` is invoked from a host with IP 192.0.2.4, we may have the following Span on the client side:
 
-Span name: `HTTP GET`
+Span name: `GET`
 
 |   Attribute name     |                                       Value             |
 | :------------------- | :-------------------------------------------------------|
@@ -315,7 +313,7 @@ Span name: `HTTP GET`
 
 The corresponding server Span may look like this:
 
-Span name: `/webshop/articles/:article_id`.
+Span name: `GET /webshop/articles/:article_id`.
 
 |   Attribute name     |                      Value                      |
 | :------------------- | :---------------------------------------------- |
