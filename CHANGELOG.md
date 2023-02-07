@@ -43,6 +43,8 @@ release.
 - Clarify guidance regarding excessive logging when attributes are dropped
   or truncated.
   ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
+- Allow adding links after span creation, add new `AddLink` method.
+  ([#2278](https://github.com/open-telemetry/opentelemetry-specification/pull/2278))
 
 ### Metrics
 
