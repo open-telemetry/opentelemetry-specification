@@ -50,6 +50,10 @@ release.
 
 ### Compatibility
 
+- Define conversion mapping from OTel Exponential Histograms to Prometheus Native
+  Histograms.
+  ([#3078](https://github.com/open-telemetry/opentelemetry-specification/issues/3078))
+
 - Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
   ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
 
