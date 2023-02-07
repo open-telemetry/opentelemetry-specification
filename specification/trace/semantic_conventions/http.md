@@ -200,8 +200,8 @@ Within a single virtual host, some servers support the concepts of an **HTTP app
 in a deployment of a Python application to Apache, the application would be the [PEP 3333][] conformant callable that is configured using the
 [`WSGIScriptAlias` directive][modwsgisetup] of `mod_wsgi`).
 
-An application can be "mounted" under some **application root**
-(also know as *[context root][]* *[context prefix][]*, or *[document base][]*)
+An application can be "mounted" under an **application root**
+(also known as a *[context root][]*, *[context prefix][]*, or *[document base][]*)
 which is a fixed path prefix of the URL that determines to which application a request is routed
 (e.g., the server could be configured to route all requests that go to an URL path starting with `/webshop/`
 at a particular virtual host
@@ -245,7 +245,8 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Optional |
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
 
-**[1]:** 'http.route' MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+**[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+SHOULD include the [application root](#http-server-definitions) if there is one.
 
 **[2]:** This is not necessarily the same as `net.sock.peer.addr`, which would
 identify the network-level peer, which may be a proxy.

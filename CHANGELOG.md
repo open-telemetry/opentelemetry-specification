@@ -45,8 +45,14 @@ release.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
 - Add `net.host.port` to `http.server.active_requests` metrics attributes.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
+- `http.route` SHOULD contain the "application root" if there is one.
+  ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
 
 ### Compatibility
+
+- Define conversion mapping from OTel Exponential Histograms to Prometheus Native
+  Histograms.
+  ([#3078](https://github.com/open-telemetry/opentelemetry-specification/issues/3078))
 
 - Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
   ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
