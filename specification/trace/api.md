@@ -292,7 +292,7 @@ the entire operation and, optionally, one or more sub-spans for its sub-operatio
 - A [`SpanKind`](#spankind)
 - A start timestamp
 - An end timestamp
-- [`Attributes`](../common/common.md#attributes)
+- [`Attributes`](../common/README.md#attribute)
 - A list of [`Link`s](#add-links) to other `Span`s
 - A list of timestamped [`Event`s](#add-events)
 - A [`Status`](#set-status).
@@ -500,7 +500,7 @@ A `Span` SHOULD have the ability to add `Link`s associated with it. Linked
 A `Link` is structurally defined by the following properties:
 
 - `SpanContext` of the `Span` to link to.
-- Zero or more [`Attributes`](../common/common.md#attributes) further describing
+- Zero or more [`Attributes`](../common/README.md#attribute) further describing
   the link.
 
 The Span interface SHOULD provide:
