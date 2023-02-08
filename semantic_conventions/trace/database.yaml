@@ -203,14 +203,14 @@ groups:
       - id: statement
         tag: call-level
         type: string
-        requirement_level:
-          conditionally_required: >
-            If applicable, can be enabled via instrumentation configuration.
+        requirement_level: optional
         brief: >
           The database statement being executed.
         note: >
+          Not collected by default; can be enabled via instrumentation configuration.
           This attribute may contain private or sensitive information.
-          The instrumentation library should support receiving a sanitizer function that will handle said information.
+          The instrumentation library should support accepting a function that will
+          sanitize said information before logging it.
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
       - id: operation
         tag: call-level
