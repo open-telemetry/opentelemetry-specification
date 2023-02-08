@@ -177,14 +177,10 @@ using the OpenCensus <-> OpenTelemetry bridge.
    that [parent spans must be specified during span creation](../trace/api.md#span-creation).
    This leads to some issues with OpenCensus APIs that allowed flexible
    specification of parent spans post-initialization.
-2. Links added to spans after the spans are created. This is [not supported in
-   OpenTelemetry](../trace/api.md#add-links), therefore OpenCensus spans
-   that have links added to them after creation will be mapped to OpenTelemetry
-   spans without the links.
-3. OpenTelemetry specifies that samplers are
+2. OpenTelemetry specifies that samplers are
    [attached to an entire Trace provider](../trace/sdk.md#sampling)
    while [OpenCensus allows custom samplers per span](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/Sampling.md#how-can-users-control-the-sampler-that-is-used-for-sampling).
-4. TraceFlags in both OpenCensus and OpenTelemetry only specify the single
+3. TraceFlags in both OpenCensus and OpenTelemetry only specify the single
    `sampled` flag ([OpenTelemetry](../trace/api.md#spancontext),
    [OpenCensus](https://github.com/census-instrumentation/opencensus-specs/blob/master/trace/TraceConfig.md#traceparams)).
    Some OpenCensus APIs support "debug" and "defer" tracing flags in addition to
