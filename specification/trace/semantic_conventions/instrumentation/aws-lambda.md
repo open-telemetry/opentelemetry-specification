@@ -68,7 +68,7 @@ OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../cont
 resulting `Context` is [valid](../../api.md#isvalid) then a [Span Link][] SHOULD be added to the new Span's
 [start options](../../api.md#specifying-links) with an associated attribute of `source=x-ray-env` to
 indicate the source of the linked span.
-Instrumentation needs to check if the context is valid because the `_X_AMZN_TRACE_ID` environment variable may
+Instrumentation MUST check if the context is valid before using it because the `_X_AMZN_TRACE_ID` environment variable can
 contain an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable will be set and the
 `Context` will be valid and sampled only if AWS X-Ray has been enabled for the Lambda function. A user can
 disable AWS X-Ray for the function if the X-Ray Span Link is not desired.
