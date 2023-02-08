@@ -65,7 +65,7 @@ and the [cloud resource conventions][cloud]. The following AWS Lambda-specific a
 
 If the `_X_AMZN_TRACE_ID` environment variable is set, instrumentation SHOULD try to parse an
 OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../context/api-propagators.md). If the
-resulting `Context` is [valid](../../api.md#isvalid) then a [Span Link][] should be added to the new Span's
+resulting `Context` is [valid](../../api.md#isvalid) then a [Span Link][] SHOULD be added to the new Span's
 [start options](../../api.md#specifying-links) with an associated attribute of `source=x-ray-env` to
 indicate the source of the linked span.
 Instrumentation needs to check if the context is valid because the `_X_AMZN_TRACE_ID` environment variable may
