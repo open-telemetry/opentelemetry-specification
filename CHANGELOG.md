@@ -37,7 +37,9 @@ release.
 
 ### Traces
 
-- No changes.
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
 
 ### Metrics
 
@@ -47,6 +49,9 @@ release.
 
 - Define BatchLogRecordProcessor default configuration values.
   ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
 
 ### Resource
 
@@ -61,13 +66,28 @@ release.
 - Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
   to match the existing `cloud.provider` prefix.
   ([#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095))
-- Clarify prometheus unit conversions
-  ([#3066](https://github.com/open-telemetry/opentelemetry-specification/pull/3066)).
+- Changes http server span names from `{http.route}` to `{http.method} {http.route}`
+  (when route is available), and from `HTTP {http.method}` to `{http.method}` (when
+  route is not available).
+  Changes http client span names from `HTTP {http.method}` to `{http.method}`.
+  ([#3165](https://github.com/open-telemetry/opentelemetry-specification/pull/3165))
+- Mark `http.server.duration` and `http.client.duration` metrics as required, and mark
+  all other HTTP metrics as optional.
+  [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
+- Add `net.host.port` to `http.server.active_requests` metrics attributes.
+  [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
+- `http.route` SHOULD contain the "application root" if there is one.
+  ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
 
 ### Compatibility
 
 - Add condition with sum and count for Prometheus summaries
   ([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059)).
+- Clarify prometheus unit conversions
+  ([#3066](https://github.com/open-telemetry/opentelemetry-specification/pull/3066)).
+- Define conversion mapping from OTel Exponential Histograms to Prometheus Native
+  Histograms.
+  ([#3079](https://github.com/open-telemetry/opentelemetry-specification/pull/3079))
 - Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
   ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
 
