@@ -121,7 +121,7 @@ FaaS environments some of the information required for resource
 attributes is only readily available in the context of an invocation (e.g. as part of a "request context" argument)
 and while a separate API call to look up the resource information is often possible, it
 may be prohibitively expensive due to cold start duration concerns.
-The `faas.id` and `cloud.account.id` attributes on AWS are some examples.
+The `cloud.resource_id` and `cloud.account.id` attributes on AWS are some examples.
 In principle, the above considerations apply to any resource attribute that fulfills the criteria above
 (not being readily available without some extra effort that could be expensive).
 
@@ -233,6 +233,5 @@ This example shows the FaaS attributes for a (non-FaaS) process hosted on Google
 | Span           | `faas.execution`        | n/a                    | `"af9d5aa4-a685-4c5f-a22b-444f80b3cc28"` |
 | Span           | `faas.coldstart`        | n/a                    | `true` |
 | Resource       | `faas.name`             | n/a                    | `"my-lambda-function"` |
-| Resource       | `faas.id`               | n/a                    | `"arn:aws:lambda:us-west-2:123456789012:function:my-lambda-function"` |
 | Resource       | `faas.version`          | n/a                    | `"semver:2.0.0"` |
 | Resource       | `faas.instance`         | n/a                    | `"my-lambda-function:instance-0001"` |
