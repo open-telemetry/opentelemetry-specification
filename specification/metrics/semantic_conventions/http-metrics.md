@@ -36,13 +36,13 @@ This metric is required.
 | [`net.host.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
-SHOULD include the [application root](#http-server-definitions) if there is one.
+SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
 **[2]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 **[3]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -52,7 +52,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
@@ -92,7 +92,7 @@ This metric is optional.
 
 **[1]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -102,7 +102,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[2]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
@@ -132,13 +132,13 @@ This metric is optional.
 | [`net.host.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
-SHOULD include the [application root](#http-server-definitions) if there is one.
+SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
 **[2]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 **[3]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -148,7 +148,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
@@ -189,13 +189,13 @@ This metric is optional.
 | [`net.host.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
-SHOULD include the [application root](#http-server-definitions) if there is one.
+SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
 **[2]:** If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor` is `QUIC`, in which case `IP.UDP` is assumed.
 
 **[3]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -205,7 +205,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header

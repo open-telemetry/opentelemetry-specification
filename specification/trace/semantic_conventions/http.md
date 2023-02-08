@@ -254,7 +254,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
-SHOULD include the [application root](#http-server-definitions) if there is one.
+SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
 **[2]:** This is not necessarily the same as `net.sock.peer.addr`, which would
 identify the network-level peer, which may be a proxy.
@@ -270,7 +270,7 @@ the closest proxy.
 
 **[3]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -280,7 +280,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
