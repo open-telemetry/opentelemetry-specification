@@ -26,6 +26,9 @@ release.
   or truncated.
   ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
 
+- Rename Log API to Log SPI to prevent confusion.
+  ([#3187](https://github.com/open-telemetry/opentelemetry-specification/pull/3187))
+
 ### Resource
 
 ### Semantic Conventions

@@ -3,8 +3,8 @@
 **Status**: [Experimental](../../document-status.md)
 
 This document defines semantic conventions for recording feature flag evaluations as
-a [log record](../api.md#logrecord) emitted through the
-[Logger API](../api.md#emit-logrecord).
+a [log record](../spi.md#logrecord) emitted through the
+[Log SPI](../spi.md#emit-logrecord).
 This is useful when a flag is evaluated outside of a transaction context
 such as when the application loads or on a timer.
 To record a flag evaluation as a part of a transaction context,
@@ -24,14 +24,14 @@ section of the trace semantic convention for feature flag evaluations.
 ## Recording an Evaluation
 
 Feature flag evaluations SHOULD be recorded as attributes on the
-[LogRecord](../api.md#logrecord) passed to the [Logger](../api.md#logger) emit
+[LogRecord](../spi.md#logrecord) passed to the [Logger](../spi.md#logger) emit
 operations. Evaluations MAY be recorded on "logs" or "events" depending on the
 context.
 
 ## Attributes
 
 The table below indicates which attributes should be added to the
-[LogRecord](../api.md#logrecord) and their types.
+[LogRecord](../spi.md#logrecord) and their types.
 
 <!-- semconv log-feature_flag -->
 The event name MUST be `feature_flag`.

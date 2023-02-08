@@ -148,21 +148,21 @@ Given the above state of the logging space we took the following approach:
   OpenTelemetry log data model. OpenTelemetry Collector can read such logs and
   translate them to OpenTelemetry log data model.
 
-- OpenTelemetry defines an API
-  for [emitting LogRecords](./api.md#emit-logrecord). Application developers are
-  NOT encouraged to call this API directly. It is provided for library authors
-  to build [Appenders](./api.md#how-to-create-log4j-style-appender), which use
-  the API to bridge between existing logging libraries and the OpenTelemetry log
+- OpenTelemetry defines an SPI (Service Provider Interface)
+  for [emitting LogRecords](./spi.md#emit-logrecord). Application developers are
+  NOT encouraged to call this SPI directly. It is provided for library authors
+  to build [Appenders](./spi.md#how-to-create-log4j-style-appender), which use
+  the SPI to bridge between existing logging libraries and the OpenTelemetry log
   data model. Existing logging libraries generally provide a much richer set of
   features than what is defined in OpenTelemetry. It is NOT a goal of
   OpenTelemetry to ship a feature-rich logging library.
 
 - OpenTelemetry defines an API for [emitting Events](./event-api.md). The API
-  consists of convenience methods which delegate to the API
-  for [emitting LogRecords](./api.md#emit-logrecord). Application developers are
-  encouraged to call this API directly.
+  consists of convenience methods which delegate to the Log SPI
+  for [emitting LogRecords](./spi.md#emit-logrecord). Application developers are
+  encouraged to call this Events API directly.
 
-- OpenTelemetry defines an [SDK](./sdk.md) implementation of the [API](./api.md),
+- OpenTelemetry defines an [SDK](./sdk.md) implementation of the [SPI](./spi.md),
   which enables configuration of [processing](./sdk.md#logrecordprocessor)
   and [exporting](./sdk.md#logrecordexporter) LogRecords.
 
@@ -388,11 +388,11 @@ as parsers, log tailing and rotation. It also enables the possibility to send
 logs directly to the logging backend without using a log collection agent.
 
 To facilitate both approaches described above OpenTelemetry provides
-an [API](./api.md) and [SDK](./sdk.md), which can be used together with existing
+an [SPI](./spi.md) and [SDK](./sdk.md), which can be used together with existing
 logging libraries to automatically inject the request context in the emitted logs,
 and provide an easy way to send the logs via OTLP. Instead of
-modifying each logging statement, [Appenders](./api.md#how-to-create-log4j-style-appender)
-use the API to bridge logs from existing logging libraries to the OpenTelemetry
+modifying each logging statement, [Appenders](./spi.md#how-to-create-log4j-style-appender)
+use the SPI to bridge logs from existing logging libraries to the OpenTelemetry
 data model, where the SDK controls how the logs are processed and exported.
 Application developers only need to configure the Appender and SDK at
 application startup.
@@ -416,7 +416,7 @@ context dimensions will be available for these logs.
 This is how a typical new application uses OpenTelemetry API, SDK and the
 existing log libraries:
 
-![Application, API, SDK Diagram](img/application-api-sdk.png)
+![Application, SPI, SDK Diagram](img/application-spi-sdk.png)
 
 ## OpenTelemetry Collector
 

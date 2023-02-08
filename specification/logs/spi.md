@@ -1,4 +1,4 @@
-# Logs API Interface
+# Logs SPI Interface
 
 **Status**: [Experimental](../document-status.md)
 
@@ -25,15 +25,16 @@
 
 </details>
 
-<b>Note: this document defines a log *backend* API. The API is not intended to be called
-by application developers directly. It is provided for logging library authors
-to build [Appenders](#how-to-create-log4j-style-appender), which use
-this API to bridge between existing logging libraries and the OpenTelemetry log
+<b>Note: this document defines a log *backend* Service Provider Interface (SPI).
+The SPI is not intended to be called by application developers directly.
+It is provided for logging library authors to build
+[Appenders](#how-to-create-log4j-style-appender), which use
+this SPI to bridge between existing logging libraries and the OpenTelemetry log
 data model.</b>
 
-The Logs API consist of these main classes:
+The Log SPI consist of these main classes:
 
-* LoggerProvider is the entry point of the API. It provides access to Loggers.
+* LoggerProvider is the entry point of the SPI. It provides access to Loggers.
 * Logger is the class responsible for
   emitting [Logs](./data-model.md#log-and-event-record-definition) as
   LogRecords.
@@ -50,11 +51,11 @@ graph TD
 
 `Logger`s can be accessed with a `LoggerProvider`.
 
-In implementations of the API, the LoggerProvider is expected to be the stateful
+In implementations of the SPI, the LoggerProvider is expected to be the stateful
 object that holds any configuration.
 
 Normally, the LoggerProvider is expected to be accessed from a central place.
-Thus, the API SHOULD provide a way to set/register and access a global default
+Thus, the SPI SHOULD provide a way to set/register and access a global default
 LoggerProvider.
 
 Notwithstanding any global LoggerProvider, some applications may want to or have
@@ -72,7 +73,7 @@ The LoggerProvider MUST provide the following functions:
 
 #### Get a Logger
 
-This API MUST accept the following parameters:
+This SPI MUST accept the following parameters:
 
 - `name` (required): This name SHOULD uniquely identify the [instrumentation scope](../glossary.md#instrumentation-scope),
 such as the [instrumentation library](../glossary.md#instrumentation-library)
@@ -86,7 +87,7 @@ name within that library or application. In case an invalid name
 returned as a fallback rather than returning null or throwing an exception, its
 `name` property SHOULD be set to an empty string, and a message reporting that
 the specified value is invalid SHOULD be logged. A library implementing the
-OpenTelemetry API may also ignore this name and return a default instance for
+OpenTelemetry SPI may also ignore this name and return a default instance for
 all calls, if it does not support "named" functionality (e.g. an implementation
 which is not even observability-related). A LoggerProvider could also return a
 no-op Logger here if application owners configure the SDK to suppress telemetry
@@ -146,17 +147,13 @@ Emit a `LogRecord` to the processing pipeline.
 
 This function MAY be named `logRecord`.
 
-This API is intended for use
-by [Log Appenders](#how-to-create-log4j-style-appender), and SHOULD not be used
-by end users or other instrumentation.
-
 **Parameters:**
 
 * `logRecord` - the [LogRecord](#logrecord).
 
 ## LogRecord
 
-The API emits [LogRecords](#emit-logrecord) using
+This method emits [LogRecords](#emit-logrecord) using
 the `LogRecord` [data model](data-model.md).
 
 A function receiving this as an argument MUST be able to set the following
