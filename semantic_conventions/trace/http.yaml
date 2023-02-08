@@ -1,7 +1,7 @@
 groups:
   - id: trace.http.common
     prefix: http
-    extends: http.attributes
+    extends: attributes.http.common
     type: attribute_group
     brief: 'This document defines semantic conventions for HTTP client and server Spans.'
     note: >
@@ -37,7 +37,7 @@ groups:
   - id: trace.http.client
     prefix: http
     type: span
-    extends: http.client.attributes
+    extends: attributes.http.client
     span_kind: client
     brief: 'Semantic Convention for HTTP Client'
     attributes:
@@ -89,7 +89,7 @@ groups:
   - id: trace.http.server
     prefix: http
     type: span
-    extends: http.server.attributes
+    extends: attributes.http.server
     span_kind: server
     brief: 'Semantic Convention for HTTP Server'
     attributes:

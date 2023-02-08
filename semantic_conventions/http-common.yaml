@@ -1,5 +1,5 @@
 groups:
-  - id: http.attributes
+  - id: attributes.http.common
     type: attribute_group
     brief: "Describes HTTP attributes."
     prefix: http
@@ -44,7 +44,7 @@ groups:
           If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor`
           is `QUIC`, in which case `IP.UDP` is assumed.
 
-  - id: http.client.attributes
+  - id: attributes.http.client
     prefix: http
     type: attribute_group
     brief: 'HTTP Client spans attributes'
@@ -70,7 +70,7 @@ groups:
           When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
           URI port identifier, otherwise it MUST match `Host` header port identifier.
 
-  - id: http.server.attributes
+  - id: attributes.http.server
     prefix: http
     type: attribute_group
     brief: 'HTTP Server spans attributes'

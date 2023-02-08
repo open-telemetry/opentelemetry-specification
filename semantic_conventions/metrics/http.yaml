@@ -5,7 +5,7 @@ groups:
     brief: "Measures the duration of inbound HTTP requests."
     instrument: histogram
     unit: "ms"
-    extends: http.server.attributes
+    extends: attributes.http.server
     attributes:
       # todo (lmolkova) build tools don't populate grandparent attributes
       - ref: http.method
@@ -56,7 +56,7 @@ groups:
     brief: "Measures the size of HTTP request messages (compressed)."
     instrument: histogram
     unit: "By"
-    extends: http.server.attributes
+    extends: attributes.http.server
     # TODO (trask) below attributes are identical to above in metric.http.server.duration
     attributes:
       # todo (lmolkova) build tools don't populate grandparent attributes
@@ -70,7 +70,7 @@ groups:
     brief: "Measures the size of HTTP response messages (compressed)."
     instrument: histogram
     unit: "By"
-    extends: http.server.attributes
+    extends: attributes.http.server
     # TODO (trask) below attributes are identical to above in metric.http.server.duration
     attributes:
       - ref: http.method
@@ -83,7 +83,7 @@ groups:
     brief: "Measures the duration of outbound HTTP requests."
     instrument: histogram
     unit: "ms"
-    extends: http.client.attributes
+    extends: attributes.http.client
     attributes:
       - ref: http.method
       - ref: http.status_code
@@ -96,7 +96,7 @@ groups:
     brief: "Measures the size of HTTP request messages (compressed)."
     instrument: histogram
     unit: "By"
-    extends: http.client.attributes
+    extends: attributes.http.client
     # TODO (trask) below attributes are identical to above in metric.http.client.duration
     attributes:
       - ref: http.method
@@ -110,7 +110,7 @@ groups:
     brief: "Measures the size of HTTP response messages (compressed)."
     instrument: histogram
     unit: "By"
-    extends: http.client.attributes
+    extends: attributes.http.client
     # TODO (trask) below attributes are identical to above in metric.http.client.duration
     attributes:
       - ref: http.method
