@@ -164,9 +164,9 @@ Usually only one `db.name` will be used per connection though.
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name". In case there are multiple layers that could be considered for database name (e.g. Oracle instance name and schema name), the database name to be used is the more specific layer (e.g. Oracle schema name).
 
-**[2]:** This attribute may contain private or sensitive information. It is recommended to sanitize it to exclude such information. Ideally, this is already done by default by the instrumentation collecting it.
+**[2]:** This attribute may contain private or sensitive information. The instrumentation library should support receiving a sanitizer function that will handle said information.
 
-**[3]:** If applicable and not explicitly disabled via instrumentation configuration.
+**[3]:** If applicable, can be enabled via instrumentation configuration.
 
 **[4]:** When setting this to an SQL keyword, it is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if the operation name is provided by the library being instrumented. If the SQL statement has an ambiguous operation, or performs more than one operation, this value may be omitted.
 <!-- endsemconv -->

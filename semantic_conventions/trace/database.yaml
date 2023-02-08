@@ -205,13 +205,12 @@ groups:
         type: string
         requirement_level:
           conditionally_required: >
-            If applicable and not explicitly disabled via instrumentation configuration.
+            If applicable, can be enabled via instrumentation configuration.
         brief: >
           The database statement being executed.
         note: >
           This attribute may contain private or sensitive information.
-          It is recommended to sanitize it to exclude such information.
-          Ideally, this is already done by default by the instrumentation collecting it.
+          The instrumentation library should support receiving a sanitizer function that will handle said information.
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
       - id: operation
         tag: call-level
