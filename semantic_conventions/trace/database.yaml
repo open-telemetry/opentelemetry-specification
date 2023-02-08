@@ -210,7 +210,7 @@ groups:
           Not collected by default; can be enabled via instrumentation configuration.
           This attribute may contain private or sensitive information.
           The instrumentation library should support accepting a function that will
-          sanitize said information before logging it.
+          sanitize the statement before recording it.
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
       - id: operation
         tag: call-level
