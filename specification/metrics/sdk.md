@@ -597,9 +597,10 @@ model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
 It is unspecified whether or under which conditions the same or
 different Instrument instance will be returned as a result of
 duplicate instrument registration. The term _identical_ applied to
-Instruments describes instances where all identifying fields are
-equal.  The term _distinct_ applied to Instruments describes instances
-where at least one field value is different.
+Instruments describes instances where all [identifying
+fields](./api.md#instrument) are equal.  The term _distinct_ applied
+to Instruments describes instances where at least one field value is
+different.
 
 Based on [the recommendations from the data
 model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations),
