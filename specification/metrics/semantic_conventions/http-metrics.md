@@ -21,7 +21,7 @@ This metric is required.
 <!-- semconv metric.http.server.duration(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `http.server.duration` | Histogram | `ms` | Measures the duration of inbound HTTP requests. |
+| `http.server.duration` | Histogram | `s` | Measures the duration of inbound HTTP requests. |
 <!-- endsemconv -->
 
 <!-- semconv metric.http.server.duration -->
@@ -202,7 +202,7 @@ This metric is required.
 <!-- semconv metric.http.client.duration(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `http.client.duration` | Histogram | `ms` | Measures the duration of outbound HTTP requests. |
+| `http.client.duration` | Histogram | `s` | Measures the duration of outbound HTTP requests. |
 <!-- endsemconv -->
 
 <!-- semconv metric.http.client.duration -->

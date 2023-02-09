@@ -4,7 +4,7 @@ groups:
     metric_name: http.server.duration
     brief: "Measures the duration of inbound HTTP requests."
     instrument: histogram
-    unit: "ms"
+    unit: "s"
     attributes:
       - ref: http.method
         requirement_level: required
@@ -201,7 +201,7 @@ groups:
     metric_name: http.client.duration
     brief: "Measures the duration of outbound HTTP requests."
     instrument: histogram
-    unit: "ms"
+    unit: "s"
     attributes:
       - ref: http.method
         requirement_level: required
