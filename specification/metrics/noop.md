@@ -85,7 +85,7 @@ any argument it receives.
 A Meter is always created by a MeterProvider. The No-Op MUST NOT provide
 a way for a user to create a Meter other than by a No-Op MeterProvider.
 
-The Meters created by the No-Op needs to hold as small a memory
+The Meters created by the No-Op need to hold as small a memory
 footprint as possible. Therefore, all Meters created MUST NOT hold
 configuration or operational state.
 
