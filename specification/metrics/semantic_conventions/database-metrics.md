@@ -58,4 +58,4 @@ Below is a table of the attributes that MUST be included on all connection pool 
 
 | Name        | Type   | Description                                                                  | Examples       | Requirement Level |
 |-------------|--------|------------------------------------------------------------------------------|----------------|-------------------|
-| `pool.name` | string | The name of the connection pool; unique within the instrumented application. In case the pool has no name in the monitored database, then the name should be as follows: `host: '<host>', port: <port>, database: '<database name>', user: '<user>'`. | `myDataSource`, `host: localhost, port: 3306, database: 'db_test', user: 'root'`  | Required          |
+| `pool.name` | string | The name of the connection pool; unique within the instrumented application. In case the pool has no name in the monitored database, then the [db.connection_string](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/database.md#connection-level-attributes) should be used. | `myDataSource` | Required          |
