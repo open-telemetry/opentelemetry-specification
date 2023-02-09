@@ -271,7 +271,7 @@ The API to construct synchronous instruments MUST accept the following parameter
   
   The API SHOULD be documented in a way to communicate to users that the `name`
   parameter needs to conform to the [instrument name
-  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`,
+  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`;
   that is left to implementations of the API.
 * A `unit` of measure.
   

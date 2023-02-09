@@ -55,7 +55,7 @@ footprint as possible. Therefore, all MeterProviders created MUST NOT
 hold configuration or operational state.
 
 Since all MeterProviders a will hold the same empty state, a No-Op MAY
-provided the same MeterProvider instances to all creation requests.
+provide the same MeterProvider instances to all creation requests.
 
 The No-Op is used by OpenTelemetry users to disable OpenTelemetry
 computation overhead and eliminate OpenTelemetry related output. For
@@ -82,7 +82,7 @@ any argument it receives.
 
 ## Meter
 
-A Meter is always created by a MeterProvider, the No-Op MUST NOT provide
+A Meter is always created by a MeterProvider. The No-Op MUST NOT provide
 a way for a user to create a Meter other than by a No-Op MeterProvider.
 
 The Meters created by the No-Op needs to hold as small a memory
