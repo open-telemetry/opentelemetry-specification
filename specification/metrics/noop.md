@@ -69,8 +69,8 @@ concurrently.
 
 [New Meter instances are always created with a
 MeterProvider](./api.md#meterprovider). Therefore, MeterProviders MUST
-allow for the creation of Meters. All Meters created MUST be implemented
-by the No-Op.
+allow for the creation of Meters. All Meters created MUST be an instance of the
+[No-Op Meter](#meter).
 
 Since all Meters will hold the same empty state, a MeterProvider MAY
 return the same Meter instances to all creation requests.
