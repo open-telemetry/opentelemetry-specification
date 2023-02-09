@@ -152,7 +152,9 @@ groups:
             The matched route (path template in the format used by the respective server framework). See note below
         examples: ['/users/:userID?', '{controller}/{action}/{id?}']
         note: >
-          'http.route' MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+          MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
+
+          SHOULD include the [application root](#http-server-definitions) if there is one.
       - id: client_ip
         type: string
         brief: >
