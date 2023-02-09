@@ -56,7 +56,7 @@
 ### Tracer Creation
 
 New `Tracer` instances are always created through a `TracerProvider`
-(see[API](api.md#tracerprovider)). The `name`, `version` (optional),
+(see [API](api.md#tracerprovider)). The `name`, `version` (optional),
 `schema_url` (optional), and `attributes` (optional) arguments supplied to
 the `TracerProvider` must be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
@@ -186,7 +186,7 @@ means that the current `Span` does record information, but most likely the child
 `Span` will not.
 
 The flag combination `SampledFlag == true` and `IsRecording == false`
-could cause gaps in the distributed trace, and because of this OpenTelemetry API
+could cause gaps in the distributed trace, and because of this the OpenTelemetry SDK
 MUST NOT allow this combination.
 
 ### Recording Sampled reaction table
@@ -361,17 +361,21 @@ Optional parameters:
 
 #### JaegerRemoteSampler
 
-[Jaeger remote sampler](https://www.jaegertracing.io/docs/1.29/sampling/#collector-sampling-configuration) allows remotely controlling the sampling configuration for the SDKs. The sampling is typically configured at the collector and the SDKs actively poll for changes. The sampler uses `TraceIdRatioBased` or rate-limited sampler under the hood. These samplers can be configured per whole service (a.k.a default), or per span name in a given service (a.k.a per operation).
+[Jaeger remote sampler][jaeger-remote-sampling] allows remotely controlling the sampling configuration for the SDKs. The sampling configuration is periodically loaded from the backend (see [Remote Sampling API][jaeger-remote-sampling-api]), where it can be managed by operators via configuration files or even automatically calculated (see [Adaptive Sampling][jaeger-adaptive-sampling]). The sampling configuration retrieved by the remote sampler can instruct it to  use either a single sampling method for the whole service (e.g., `TraceIdRatioBased`), or different methods for different endpoints (span names), for example, sample `/product` endpoint at 10%, `/admin` endpoint at 100%, and never sample `/metrics` endpoint.
 
 The full Protobuf definition can be found at [jaegertracing/jaeger-idl/api_v2/sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/main/proto/api_v2/sampling.proto).
 
 ##### Configuration
 
-Following configuration properties should be available when creating the sampler:
+The following configuration properties should be available when creating the sampler:
 
-* endpoint - collector address with running service with sampling manager
+* endpoint - address of a service that implements the [Remote Sampling API][jaeger-remote-sampling-api], such as Jaeger Collector or OpenTelemetry Collector.
 * polling interval - polling interval for getting configuration from remote
 * initial sampler - initial sampler that is used before the first configuration is fetched
+
+[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#remote-sampling
+[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/apis/#remote-sampling-configuration-stable
+[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#adaptive-sampling
 
 ## Span Limits
 
@@ -412,9 +416,10 @@ public final class SpanLimits {
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
 * `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
-There SHOULD be a log emitted to indicate to the user that an attribute, event,
-or link was discarded due to such a limit. To prevent excessive logging, the log
-should not be emitted once per span, or per discarded attribute, event, or links.
+There SHOULD be a message printed in the SDK's log to indicate to the user
+that an attribute was discarded due to such a limit.
+To prevent excessive logging, the message MUST be printed at most once per
+span (i.e., not per discarded attribute, event, or link).
 
 ## Id Generators
 
@@ -579,17 +584,36 @@ This is an implementation of the `SpanProcessor` which create batches of finishe
 spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
 
+The processor SHOULD export a batch when any of the following happens AND
+`SpanProcessor#Export()` has not yet returned (for additional concurrency
+details see the [Export() specification](#exportbatch)):
+
+- `scheduledDelayMillis` after the processor is constructed OR the first span
+  is received by the span processor.
+- `scheduledDelayMillis` after the previous export timer ends, OR the previous
+  export completes, OR the first span is added to the queue after the previous
+  export timer ends or previous batch completes.
+- The queue contains `maxExportBatchSize` or more spans.
+- `ForceFlush` is called.
+
+If any of the above events occurs before `Export()` returns, the span processor
+should wait until `Export()` returns before exporting the next batch.
+If the queue is empty when an export is triggered, the processor MAY export
+an empty batch OR skip the export and consider it to be completed immediately.
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached spans are
   dropped. The default value is `2048`.
-* `scheduledDelayMillis` - the delay interval in milliseconds between two
+* `scheduledDelayMillis` - the maximum delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
-  smaller or equal to `maxQueueSize`. The default value is `512`.
+  smaller or equal to `maxQueueSize`. If the queue reaches `maxExportBatchSize`
+  a batch will be exported even if `scheduledDelayMillis` milliseconds have not
+  elapsed. The default value is `512`.
 
 ## Span Exporter
 

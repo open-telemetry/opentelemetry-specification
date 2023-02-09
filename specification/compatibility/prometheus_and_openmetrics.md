@@ -27,8 +27,8 @@
   * [Gauges](#gauges-1)
   * [Sums](#sums)
   * [Histograms](#histograms-1)
+  * [Exponential Histograms](#exponential-histograms)
   * [Summaries](#summaries-1)
-  * [Dropped Data Points](#dropped-data-points)
   * [Metric Attributes](#metric-attributes)
   * [Exemplars](#exemplars-1)
   * [Resource Attributes](#resource-attributes-1)
@@ -54,7 +54,12 @@ suffixes described below.
 The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
 if present, MUST be converted to the unit of the OTLP metric.  After trimming
 type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed
-from the suffix as well, if the metric suffix matches the unit.
+from the suffix as well, if the metric suffix matches the unit. The unit SHOULD
+be translated from Prometheus conventions to OpenTelemetry conventions by:
+
+* Converting from full words to abbreviations (e.g. "milliseconds" to "ms").
+* Special case: Converting "ratio" to "1".
+* Converting "foo_per_bar" to "foo/bar".
 
 The [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
 if present, MUST be added as the description of the OTLP metric.
@@ -90,7 +95,7 @@ A [Prometheus Histogram](https://github.com/OpenObservability/OpenMetrics/blob/m
 
 Multiple Prometheus histogram metrics MUST be merged together into a single OTLP Histogram:
 
-* The `le` label on non-suffixed metrics is used to identify and order histogram bucket boundaries. Each Prometheus line produces one bucket count on the resulting histogram. Each value for the `le` label except `+Inf` produces one bucket boundary.
+* The `le` label on the `_bucket`-suffixed metric is used to identify and order histogram bucket boundaries. Each Prometheus line produces one bucket count on the resulting histogram. Each value for the `le` label except `+Inf` produces one bucket boundary.
 * Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the histogram's sum MUST be unset.
@@ -103,6 +108,8 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 
 * The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus line produces one quantile on the resulting summary.
 * Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
+* If `_count` is not present, the metric MUST be dropped.
+* If `_sum` is not present, the summary's sum MUST be [set to zero.](https://github.com/open-telemetry/opentelemetry-proto/blob/d8729d40f629dba12694b44c4c32c1eab109b00a/opentelemetry/proto/metrics/v1/metrics.proto#L601)
 
 ### Dropped Types
 
@@ -221,11 +228,17 @@ required to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Invalid characters
 in the metric name MUST be replaced with the `_` character. Multiple
 consecutive `_` characters MUST be replaced with a single `_` character.
 
-The Unit of an OTLP metric point MUST be added as
-[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
-Additionally, the unit MUST be added as a suffix to the metric name, and SHOULD
-be converted to [base units](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#units-and-base-units)
-recommended by OpenMetrics when possible.  The unit suffix comes before any
+The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible.  This includes:
+
+* Converting from abbreviations to full words (e.g. "ms" to "milliseconds").
+* Dropping the portions of the Unit within brackets (e.g. {packets}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
+* Special case: Converting "1" to "ratio".
+* Converting "foo/bar" to "foo_per_bar".
+
+The resulting unit SHOULD be added to the metric as
+[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
+and as a suffix to the metric name unless the metric name already contains the
+unit, or the unit MUST be omitted. The unit suffix comes before any
 type-specific suffixes.
 
 The description of an OTLP metrics point MUST be added as
@@ -246,7 +259,7 @@ section below.
 
 Prometheus exporters MUST add the scope name as the `otel_scope_name` label and
 the scope version as the `otel_scope_version` label on all metric points by
-default.
+default, based on the scope the original data point was nested in.
 
 Prometheus exporters SHOULD provide a configuration option to disable the
 `otel_scope_info` metric and `otel_scope_` labels.
@@ -261,7 +274,7 @@ An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to a 
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
-- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Sum. The following behaviors are expected:
+- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Counter. The following behaviors are expected:
   - The new data point type must be the same as the accumulated data point type.
   - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues](../metrics/data-model.md#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
@@ -275,10 +288,45 @@ An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulati
 
 - A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
 - `{name}_sum` metric denoting the sum field of the histogram, reported only if the sum is positive and monotonic. The sum is positive and monotonic when all buckets are positive. All attributes of the histogram point are converted to Prometheus labels.
-- A series of `{name}` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up the the boundary reported in the `le` label. These points will include a single exemplar that falls within `le` label and no other `le` labelled point.  The final bucket metric MUST have an `+Inf` threshold.
+- A series of `{name}_bucket` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up the the boundary reported in the `le` label. These points will include a single exemplar that falls within `le` label and no other `le` labelled point.  The final bucket metric MUST have an `+Inf` threshold.
 - Histograms with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
 
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
+
+### Exponential Histograms
+
+An [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram) with
+a cumulative aggregation temporality MUST be converted to a Prometheus Native
+Histogram as follows:
+
+- `Scale` is converted to the Native Histogram `Schema`. Currently,
+  [valid values](https://github.com/prometheus/prometheus/commit/d9d51c565c622cdc7d626d3e7569652bc28abe15#diff-bdaf80ebc5fa26365f45db53435b960ce623ea6f86747fb8870ad1abc355f64fR76-R83)
+  for `schema` are -4 <= n <= 8.
+  If `Scale` is > 8 then Exponential Histogram data points SHOULD be downscaled
+  to a scale accepted by Prometheus (in range [-4,8]). Any data point unable to
+  be rescaled to an acceptable range MUST be dropped.
+- `Count` is converted to Native Histogram `Count` if the `NoRecordedValue`
+  flag is set to `false`, otherwise, Native Histogram `Count` is set to the
+  Stale NaN value.
+- `Sum` is converted to the Native Histogram `Sum` if `Sum` is set and the
+  `NoRecordedValue` flag is set to `false`, otherwise, Native Histogram `Sum` is
+  set to the Stale NaN value.
+- `TimeUnixNano` is converted to the Native Histogram `Timestamp` after
+  converting nanoseconds to milliseconds.
+- `ZeroCount` is converted directly to the Native Histogram `ZeroCount`.
+- `ZeroThreshold`, if set, is converted to the Native Histogram `ZeroThreshold`.
+  Otherwise, it is set to the default value `1e-128`.
+- The dense bucket layout represented by `Positive` bucket counts and `Offset` is
+  converted to the Native Histogram sparse layout represented by `PositiveSpans`
+  and `PositiveDeltas`. The same holds for the `Negative` bucket counts
+  and `Offset`. Note that Prometheus Native Histograms buckets are indexed by
+  upper boundary while Exponential Histograms are indexed by lower boundary, the
+  result being that the Offset fields are different-by-one.
+- `Min` and `Max` are not used.
+- `StartTimeUnixNano` is not used.
+
+[OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram)
+metrics with the delta aggregation temporality are dropped.
 
 ### Summaries
 
@@ -296,12 +344,6 @@ An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be conv
   starting from lowest to highest, and all being non-negative.  The value of
   each point is the computed value of the quantile point.
 - Summaries with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
-
-### Dropped Data Points
-
-The following OTLP data points MUST be dropped:
-
-* [ExponentialHistogram](../metrics/data-model.md#exponentialhistogram)
 
 ### Metric Attributes
 
