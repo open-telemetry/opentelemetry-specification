@@ -2,6 +2,12 @@ file_format: 1.1.0
 schema_url: https://opentelemetry.io/schemas/1.18.0
 versions:
   1.18.0:
+    spans:
+      changes:
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3190
+        - rename_attributes:
+            attribute_map:
+              http.user_agent: user_agent.original
   1.17.0:
     spans:
       changes:
