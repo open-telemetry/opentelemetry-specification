@@ -610,33 +610,47 @@ series and the topic requires further analysis.
 **Status**: [Experimental](../document-status.md)
 
 MeterProviders SHOULD support being configured with limits to be
-applied to metrics produced from a single metric instrument.  This
-mechanism supports protecting metrics pipelines from excessive data
-production in cases when the number of timeseries produced by
-application code grows large, which can happen due to several factors.
+applied to individual metric instruments.  This mechanism supports
+protecting metrics pipelines from excessive data production in cases
+when the number of timeseries produced by application code grows
+large, which can happen due to several factors.
 
 Whether because of single attributes having many distinct values or
 because of combinatorial expansion among many attributes, these limits
 help protect the overall system from individual sources of excessive
 metrics instrumentation.
 
-When the limit is reached by an the individual metric instrument, the
-entire batch of metrics for the instrument MUST be dropped and an
-error reported to the user indicating:
+Implementations may take unique approach to managing concurrency in
+the OTel API, therefore we cannot prescribe how to evaluate when the
+limit is reached.  The requirements for the implementation are:
 
-- Detail about the limit that was exceeded (e.g., the library name and
-  version, the instrument, and the configured limit).
-- Recommend the user to configure a [View](#view) that filters the
-  offending instrument to limit cardinality or otherwise correct the problem.
+- An instrument with no configured views SHOULD NOT implement
+  cardinality limits.
+- An instrument with one or more configured views SHOULD detect that
+  the limit was reached before or during the next collection event (by
+  any Reader).
+- An instrument is NOT REQUIRED to be remove stale timeseries (e.g.,
+  exclude zero-valued sums from consideration) before evaluating the
+  cardinality limit.
 
-Note that limit expressed here refers to exported data for a single
-instrument and collection interval.  The number of timeseries referred
-to here corresponds with the number of distinct data points produced
-by the instrument over one collection interval.
+When the limit is reached by an the individual metric instrument,
+subsequent new timeseries created for that instrument will have their
+complete attribute set replaced by a single-attribute named `overflow`
+with value `true`.
 
-Under some circumstances, depending on the configured aggregation
-temporality, the MeterProvider may be able to recover after these
-limits are reached.
+The implementation is permitted to evaluate the cardinality limit at a
+time when it is convenient.  Implementations are NOT REQUIRED to
+exactly meet the cardinality limit when it is reached, because that
+implies an unwanted degree of synchronization.  Implementations MAY
+exceed the limit due to the effects of concurrency.  Implementations
+SHOULD NOT allow unchecked cardinality growth between collection
+events.
+
+Concerning the synchronous instruments, the implementation of
+cardinality limits is NOT REQUIRED to ensure that metric API events
+are mapped uniquely onto a single timeseries when the instrument has
+reached its cardinality limit.  All that is required is that every
+metric event is aggregated in exactly one timeseries.
 
 ### Specific cardinality limits
 
