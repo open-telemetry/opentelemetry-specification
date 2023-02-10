@@ -3,7 +3,7 @@ groups:
     prefix: host
     type: resource
     brief: >
-        A host is defined as a general computing instance.
+        'A host is defined as a computing instance. Examples: physical server, virtual machine, switch or disk array.'
     attributes:
       - id: id
         type: string
@@ -61,7 +61,7 @@ groups:
       - id: image.id
         type: string
         brief: >
-          VM image ID. For Cloud, this value is from the provider.
+          VM image ID or host OS image ID. For Cloud, this value is from the provider.
         examples: ['ami-07b06b442921831e5']
       - id: image.version
         type: string
