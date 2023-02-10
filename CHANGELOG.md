@@ -139,10 +139,6 @@ release.
   "base2_exponential_bucket_histogram". Mark exponential histogram data model and
   base2 exponential histogram aggregation as stable.
   ([#3041](https://github.com/open-telemetry/opentelemetry-specification/pull/3041))
-- Recommended limits applied by default at the MetricProvider level to protect
-  metrics pipelines against excessive data production from a single
-  instrumentation library or instrument.
-  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 
 ### Logs
 

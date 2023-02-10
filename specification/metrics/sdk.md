@@ -609,26 +609,38 @@ series and the topic requires further analysis.
 
 **Status**: [Experimental](../document-status.md)
 
-MeterProviders SHOULD support being configured with limits to be
-applied to individual metric instruments.  This mechanism supports
-protecting metrics pipelines from excessive data production in cases
-when the number of timeseries produced by application code grows
-large, which can happen due to several factors.
+MeterProviders SHOULD support being configured with a limit applied to
+individual metric instruments to control the maximum number of
+timeseries they can produce.  This mechanism supports protecting
+metrics pipelines from excessive data production in cases when the
+number of timeseries produced by application code grows large, which
+can happen due to several factors.
 
 Whether because of single attributes having many distinct values or
 because of combinatorial expansion among many attributes, these limits
 help protect the overall system from individual sources of excessive
 metrics instrumentation.
 
-Implementations may take unique approach to managing concurrency in
-the OTel API, therefore we cannot prescribe how to evaluate when the
-limit is reached.  The requirements for the implementation are:
+The specific limit, known as `MaxTimeseries` is configured as an
+option to the SDK during initialization.  In a metrics pipeline, every
+unqiue attribute set maps onto at most one unique
+[timeseries](./data-model.md#timeseries-model).  Although the limit
+controls the number of timeseries produced by a metrics pipeline, the
+SDKs SHOULD apply this limit as early as possible in the metrics
+pipeline to prevent buildup of memory.
+
+In this version of the specification, the SDK's `MaxTimeseries`
+setting limits all instruments and all instrumentation libraries
+equally; future versions of this specification may support finer-grain
+configuration of cardinality limits.
+
+Implementations details determine how concurrent API events will be
+handled.  To enforce the `MaxTimeseries` limit:
 
 - An instrument with no configured views SHOULD NOT implement
   cardinality limits.
 - An instrument with one or more configured views SHOULD detect that
-  the limit was reached before or during the next collection event (by
-  any Reader).
+  the limit was reached before or during the next collection event.
 - An instrument is NOT REQUIRED to be remove stale timeseries (e.g.,
   exclude zero-valued sums from consideration) before evaluating the
   cardinality limit.
@@ -643,14 +655,20 @@ time when it is convenient.  Implementations are NOT REQUIRED to
 exactly meet the cardinality limit when it is reached, because that
 implies an unwanted degree of synchronization.  Implementations MAY
 exceed the limit due to the effects of concurrency.  Implementations
-SHOULD NOT allow unchecked cardinality growth between collection
-events.
+MAY defer the overflow test until the nexts collection cycle.
+
+When cardinality limits are reached, the implementation is REQUIRED
+eventually to stop creating new timeseries for the instrument.
 
 Concerning the synchronous instruments, the implementation of
 cardinality limits is NOT REQUIRED to ensure that metric API events
 are mapped uniquely onto a single timeseries when the instrument has
-reached its cardinality limit.  All that is required is that every
-metric event is aggregated in exactly one timeseries.
+reached its cardinality limit.
+
+The SDK SHOULD try to maintain correctness for timeseries that existed
+before the overflow event.  However, if this feature requires
+substantial additional memory the SDK SHOULD prefer to export an
+arbitrary subset of timeseries when the limit is reached.
 
 ### Specific cardinality limits
 
