@@ -45,7 +45,7 @@ groups:
           it is recommended to generate a random Version 1 or Version 4 RFC 4122 UUID
           (services aiming for reproducible UUIDs may also use Version 5, see RFC 4122
           for more recommendations).
-        examples: ["627cc493-f310-47de-96bd-71410b7dec09"]
+        examples: ["my-k8s-pod-deployment-1", "627cc493-f310-47de-96bd-71410b7dec09"]
       - id: version
         type: string
         brief: >

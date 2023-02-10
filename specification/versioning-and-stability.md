@@ -176,6 +176,10 @@ For details see [how OpenTelemetry Schemas are published](schemas/README.md#open
 See the [Telemetry Stability](telemetry-stability.md) document for details on how
 instrumentations can use schemas to change the instrumentation they produce.
 
+**Exception:** Some resource attributes are embedded in various locations of the
+Specification, e.g. the `service.*` attributes which are required by SDKs to be
+produced and have corresponding [environment variables defined in general SDK configuration](sdk-environment-variables.md#general-sdk-configuration).
+
 In addition to the 3 types of changes described above there are certain types
 that are always allowed. Such changes do not need to be described (and are not
 described) by schema files. Here is the list of such changes:

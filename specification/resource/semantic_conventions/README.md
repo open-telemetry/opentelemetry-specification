@@ -1,6 +1,6 @@
 # Resource Semantic Conventions
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Mixed](../../document-status.md)
 
 This document defines standard attributes for resources. These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
 [OpenCensus Resource standard](https://github.com/census-instrumentation/opencensus-specs/blob/master/resource/StandardResources.md).
@@ -34,11 +34,15 @@ This document defines standard attributes for resources. These attributes are ty
 
 ## Document Conventions
 
+**Status**: [Stable](../../document-status.md)
+
 Attributes are grouped logically by the type of the concept that they described. Attributes in the same group have a common prefix that ends with a dot. For example all attributes that describe Kubernetes properties start with "k8s."
 
 Certain attribute groups in this document have a **Required** column. For these groups if any attribute from the particular group is present in the Resource then all attributes that are marked as Required MUST be also present in the Resource. However it is also valid if the entire attribute group is omitted (i.e. none of the attributes from the particular group are present even though some of them are marked as Required in this document).
 
 ## Attributes with Special Handling
+
+**Status**: [Stable](../../document-status.md)
 
 Given their significance some resource attributes are treated specifically as described below.
 
@@ -55,8 +59,11 @@ These are the attributes which MUST be provided by the SDK
 as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource-attributes):
 
 - [`service.name`](#service)
+- [`telemetry.sdk` group](#telemetry-sdk)
 
 ## Service
+
+**Status**: [Stable](../../document-status.md)
 
 **type:** `service`
 
@@ -67,7 +74,7 @@ as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource
 |---|---|---|---|---|
 | `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Required |
 | `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | Recommended |
-| `service.instance.id` | string | The string ID of the service instance. [3] | `627cc493-f310-47de-96bd-71410b7dec09` | Recommended |
+| `service.instance.id` | string | The string ID of the service instance. [3] | `my-k8s-pod-deployment-1`; `627cc493-f310-47de-96bd-71410b7dec09` | Recommended |
 | `service.version` | string | The version string of the service API or implementation. | `2.0.0` | Recommended |
 
 **[1]:** MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
@@ -92,6 +99,8 @@ service.name = Shop.shoppingcart
 ```
 
 ## Telemetry SDK
+
+**Status**: [Stable](../../document-status.md)
 
 **type:** `telemetry.sdk`
 
@@ -133,6 +142,8 @@ The identifier SHOULD be stable across different versions of an implementation.
 
 ## Compute Unit
 
+**Status**: [Experimental](../../document-status.md)
+
 Attributes defining a compute unit (e.g. Container, Process, Function as a Service):
 
 - [Container](./container.md)
@@ -142,11 +153,15 @@ Attributes defining a compute unit (e.g. Container, Process, Function as a Servi
 
 ## Compute Instance
 
+**Status**: [Experimental](../../document-status.md)
+
 Attributes defining a computing instance (e.g. host):
 
 - [Host](./host.md)
 
 ## Environment
+
+**Status**: [Experimental](../../document-status.md)
 
 Attributes defining a running environment (e.g. Operating System, Cloud, Data Center, Deployment Service):
 
@@ -160,11 +175,15 @@ Attributes defining a running environment (e.g. Operating System, Cloud, Data Ce
 
 ## Version attributes
 
+**Status**: [Stable](../../document-status.md)
+
 Version attributes, such as `service.version`, are values of type `string`. They are
 the exact version used to identify an artifact. This may be a semantic version, e.g., `1.2.3`, git hash, e.g.,
 `8ae73a`, or an arbitrary version string, e.g., `0.1.2.20210101`, whatever was used when building the artifact.
 
 ## Cloud-Provider-Specific Attributes
+
+**Status**: [Experimental](../../document-status.md)
 
 Attributes that are only applicable to resources from a specific cloud provider. Currently, these
 resources can only be defined for providers listed as a valid `cloud.provider` in
