@@ -11,30 +11,64 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+- Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
+  ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+### Common
+
+## v1.18.0 (2023-02-09)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Clarify guidance regarding excessive logging when attributes are dropped
   or truncated.
   ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
 
 ### Metrics
 
+- No changes.
+
 ### Logs
 
 - Define BatchLogRecordProcessor default configuration values.
   ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
-
 - Clarify guidance regarding excessive logging when attributes are dropped
   or truncated.
   ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
 
 ### Resource
 
+- No changes.
+
 ### Semantic Conventions
 
+- Add Cloud Spanner and Microsoft SQL Server Compact to db.system semantic conventions
+  ([#3105](https://github.com/open-telemetry/opentelemetry-specification/pull/3105)).
 - Enable semantic convention tooling for metrics in spec
   ([#3119](https://github.com/open-telemetry/opentelemetry-specification/pull/3119))
 - Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
   to match the existing `cloud.provider` prefix.
-  [#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095)
+  ([#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095))
 - Changes http server span names from `{http.route}` to `{http.method} {http.route}`
   (when route is available), and from `HTTP {http.method}` to `{http.method}` (when
   route is not available).
@@ -50,25 +84,35 @@ release.
 
 ### Compatibility
 
+- Add condition with sum and count for Prometheus summaries
+  ([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059)).
+- Clarify prometheus unit conversions
+  ([#3066](https://github.com/open-telemetry/opentelemetry-specification/pull/3066)).
 - Define conversion mapping from OTel Exponential Histograms to Prometheus Native
   Histograms.
-  ([#3078](https://github.com/open-telemetry/opentelemetry-specification/issues/3078))
-
+  ([#3079](https://github.com/open-telemetry/opentelemetry-specification/pull/3079))
 - Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
   ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
 
 ### OpenTelemetry Protocol
 
+- No changes.
+
 ### SDK Configuration
+
+- Add log-specific attribute limit configuration and clarify that general
+  attribute limit configuration also apply to log records
+  ([#2861](https://github.com/open-telemetry/opentelemetry-specification/pull/2861)).
 
 ### Telemetry Schemas
 
+- No changes.
+
 ### Common
 
-## v1.17.0 (2023-01-17)
+- No changes.
 
-- Add Cloud Spanner and Microsoft SQL Server Compact to db.system semantic conventions.
-  [#3105](https://github.com/open-telemetry/opentelemetry-specification/pull/3105)
+## v1.17.0 (2023-01-17)
 
 ### Context
 
@@ -141,8 +185,6 @@ release.
 - Add OpenCensus migration guide and add BinaryPropagation as an option to gRPC
   instrumentation for OpenCensus compatibility
   ([#3015](https://github.com/open-telemetry/opentelemetry-specification/pull/3015)).
-- Add condition with sum and count for Prometheus summaries
-([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059))
 
 ### OpenTelemetry Protocol
 
@@ -237,9 +279,6 @@ release.
 
 - Specify handling of invalid numeric environment variables
   ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
-- Add log-specific attribute limit configuration and clarify that general
-  attribute limit configuration also apply to log records.
-  ([#2861](https://github.com/open-telemetry/opentelemetry-specification/pull/2861))
 
 ### Telemetry Schemas
 
