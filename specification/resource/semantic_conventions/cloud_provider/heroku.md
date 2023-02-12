@@ -4,7 +4,7 @@
 
 **type:** `heroku`
 
-**Description:** Heroku dyno metadata [1]
+**Description:** [Heroku dyno metadata]
 
 <!-- semconv heroku -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -14,7 +14,7 @@
 | `heroku.id` | string | Unique identifier for the application | `2daa2797-e42b-4624-9322-ec3f968df4da` | Optional |
 <!-- endsemconv -->
 
-**Data mapping:**
+**Mapping:**
 
 | Dyno metadata environment variable | Resource attribute          |
 |------------------------------------|-----------------------------|
@@ -25,4 +25,4 @@
 | `HEROKU_RELEASE_VERSION`           | `service.version`           |
 | `HEROKU_SLUG_COMMIT`               | `heroku.commit`             |
 
-[1]: https://devcenter.heroku.com/articles/dyno-metadata
+[Heroku dyno metadata]: https://devcenter.heroku.com/articles/dyno-metadata
