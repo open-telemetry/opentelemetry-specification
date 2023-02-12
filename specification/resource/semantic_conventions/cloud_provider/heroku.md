@@ -1,6 +1,6 @@
 # Heroku
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Experimental](../../../document-status.md)
 
 **type:** `heroku`
 
