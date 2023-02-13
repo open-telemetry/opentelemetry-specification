@@ -157,6 +157,8 @@ release.
 
 - Clarify usage of log body for structured logs
   ([#3023](https://github.com/open-telemetry/opentelemetry-specification/pull/3023))
+- Move appendices from Data Model to new Data Model Appendix document (TODO PR
+  link)
 
 ### Resource
 
