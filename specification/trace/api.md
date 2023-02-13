@@ -514,10 +514,10 @@ The Span interface SHOULD provide:
 
 The Span interface MAY provide:
 
-- An API to set multiple `Link`s at once, where the `Link`s are passed in a
+- An API to add multiple `Link`s at once, where the `Link`s are passed in a
   single method call.
 
-Spans SHOULD preserve the order in which Links are set.
+Spans SHOULD preserve the order in which Links are added.
 
 Note that [Samplers](sdk.md#sampler) can only consider information already
 present during span creation. Any `Link`s added later cannot change their

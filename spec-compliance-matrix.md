@@ -66,7 +66,7 @@ formats is required. Implementing more than one format is optional.
 | Array of primitives (homogeneous)                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | `null` values documented as invalid/undefined                                                    |          | +   | +    | +   | +      | +    | N/A    | +   |      | +   |      | N/A   |
 | Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Span linking](specification/trace/api.md#add-links)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Span linking](specification/trace/api.md#add-links)                                             | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation                                                           |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | AddLink                                                                                          |          |     |      |     |        |      |        |     |      |     |      |       |
 | Links order is preserved                                                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
