@@ -44,7 +44,7 @@ performing any operations. The No-Op OpenTelemetry API implementation
 functionally. It implements the OpenTelemetry API so that no telemetry
 is produced and computation resources are minimized.
 
-All language implementations of OpenTelemetry SHOULD provide a No-Op.
+All language implementations of OpenTelemetry MUST provide a No-Op.
 
 ## MeterProvider
 
