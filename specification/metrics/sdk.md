@@ -582,7 +582,7 @@ given instrument before starting a subsequent round of collection.
 
 ## Meter
 
-Meters MUST be treated as separate namespaces for the purposes of detecting
+Distinct meters MUST be treated as separate namespaces for the purposes of detecting
 [duplicate instrument registrations](#duplicate-instrument-registration).
 
 ### Duplicate instrument registration

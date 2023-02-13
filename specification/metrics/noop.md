@@ -1,5 +1,5 @@
 <!--- Hugo front matter used to generate the website version of this page:
-linkTitle: SDK
+linkTitle: noop
 --->
 
 # Metrics No-Op API Implementation
@@ -54,7 +54,7 @@ The MeterProviders created by the No-Op needs to hold as small a memory
 footprint as possible. Therefore, all MeterProviders created MUST NOT
 hold configuration or operational state.
 
-Since all MeterProviders a will hold the same empty state, a No-Op MAY
+Since all MeterProviders hold the same empty state, a No-Op MAY
 provide the same MeterProvider instances to all creation requests.
 
 The No-Op is used by OpenTelemetry users to disable OpenTelemetry
