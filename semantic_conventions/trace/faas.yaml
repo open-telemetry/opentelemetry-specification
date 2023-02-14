@@ -95,7 +95,7 @@ groups:
       Semantic Convention for FaaS triggered as a response to some data
       source operation such as a database or filesystem read/write.
     constraints:
-      - include: http.server
+      - include: trace.http.server
 
   - id: faas_span.pubsub
     type: span
