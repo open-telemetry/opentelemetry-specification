@@ -212,8 +212,8 @@ DIGIT = %x30-39 ; 0-9
 
 #### Instrument unit
 
-The `unit` is an optional string provided by the author of the Instrument. It
-SHOULD be treated as an opaque string from the API and SDK.
+The `unit` is an optional string provided by the author of the Instrument. The
+API SHOULD treat it as an opaque string.
 
 * It MUST be case-sensitive (e.g. `kb` and `kB` are different units), ASCII
   string.
@@ -225,7 +225,7 @@ SHOULD be treated as an opaque string from the API and SDK.
 #### Instrument description
 
 The `description` is an optional free-form text provided by the author of the
-instrument. It MUST be treated as an opaque string from the API and SDK.
+instrument. The API MUST treat it as an opaque string.
 
 * It MUST support [BMP (Unicode Plane
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
