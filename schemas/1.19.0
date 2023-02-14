@@ -8,6 +8,7 @@ versions:
         - rename_attributes:
             attribute_map:
               http.user_agent: user_agent.original
+              browser.user_agent: user_agent.original
   1.18.0:
   1.17.0:
     spans:
