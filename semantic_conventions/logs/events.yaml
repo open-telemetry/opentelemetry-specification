@@ -1,6 +1,6 @@
 groups:
   - id: event
-    type: span
+    type: attribute_group
     prefix: event
     brief: >
         This document defines attributes for Events represented using Log Records.
