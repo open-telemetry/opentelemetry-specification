@@ -31,7 +31,7 @@ release.
 - BREAKING: Change faas.max_memory units to Bytes instead of MB
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - Allow custom `messaging.destination.kind` values.
-  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+  ([#3214](https://github.com/open-telemetry/opentelemetry-specification/pull/3214))
 
 ### Compatibility
 
