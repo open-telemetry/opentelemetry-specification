@@ -62,15 +62,15 @@ The common attributes listed in this section apply to both HTTP clients and serv
 the specific attributes listed in the [HTTP client](#http-client) and [HTTP server](#http-server)
 sections below.
 
-<!-- semconv http -->
+<!-- semconv trace.http.common(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | `http.flavor` | string | Kind of HTTP protocol used. [1] | `1.0` | Recommended |
 | `http.user_agent` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
 | `http.request_content_length` | int | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
 | `http.response_content_length` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
+| `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet`; `inet6` | Conditionally Required: [2] |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [3] |
@@ -98,6 +98,14 @@ Following attributes MUST be provided **at span creation time** (when provided a
 | `3.0` | HTTP/3 |
 | `SPDY` | SPDY protocol. |
 | `QUIC` | QUIC protocol. |
+
+`net.sock.family` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+
+| Value  | Description |
+|---|---|
+| `inet` | IPv4 address |
+| `inet6` | IPv6 address |
+| `unix` | Unix domain socket path |
 <!-- endsemconv -->
 
 It is recommended to also use the general [socket-level attributes][] - `net.sock.peer.addr` when available,  `net.sock.peer.name` and `net.sock.peer.port` when don't match `net.peer.name` and `net.peer.port` (if [intermediary](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.7) is detected).
@@ -128,7 +136,7 @@ For an HTTP client span, `SpanKind` MUST be `Client`.
 If set, `http.url` must be the originally requested URL,
 before any HTTP-redirects that may happen when executing the request.
 
-<!-- semconv http.client -->
+<!-- semconv trace.http.client(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `http.url` | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [1] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Required |
@@ -233,20 +241,20 @@ Given an inbound request for a route (e.g. `"/users/:userID?"`) the `name` attri
 
 If the route cannot be determined, the `name` attribute MUST be set as defined in the general semantic conventions for HTTP.
 
-<!-- semconv http.server -->
+<!-- semconv trace.http.server(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
-| `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/path/12314/?q=ddds` | Required |
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
+| `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/path/12314/?q=ddds` | Required |
 | `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | Recommended |
+| `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
 | [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `localhost` | Required |
 | [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Optional |
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
-SHOULD include the [application root](#http-server-definitions) if there is one.
+SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
 **[2]:** This is not necessarily the same as `net.sock.peer.addr`, which would
 identify the network-level peer, which may be a proxy.
@@ -262,7 +270,7 @@ the closest proxy.
 
 **[3]:** Determined by using the first of the following that applies
 
-- The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+- The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
@@ -272,7 +280,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** Determined by using the first of the following that applies
 
-- Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+- Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
@@ -283,8 +291,8 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
-* `http.scheme`
 * `http.target`
+* `http.scheme`
 * [`net.host.name`](span-general.md)
 * [`net.host.port`](span-general.md)
 <!-- endsemconv -->
