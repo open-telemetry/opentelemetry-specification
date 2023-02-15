@@ -50,7 +50,10 @@ groups:
       - id: resource_id
         type: string
         brief: >
-          A unique identifier for a specific cloud resource.
+          Cloud provider-specific native identifier of the monitored cloud resource
+          (e.g. an [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) on AWS,
+          an [fully qualified resource ID](https://learn.microsoft.com/en-us/rest/api/resources/resources/get-by-id) on Azure,
+          a [full resource name](https://cloud.google.com/apis/design/resource_names#full_resource_name) on GCP)
         note: |
           On some cloud providers, it may not be possible to determine the full ID at startup,
           so it may be necessary to set `cloud.resource_id` as a span attribute instead.
