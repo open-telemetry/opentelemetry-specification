@@ -21,6 +21,8 @@ release.
 
 - Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
   ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+- Support pod.spec.hostname in resource k8s.pod
+  ([#3201])[https://github.com/open-telemetry/opentelemetry-specification/pull/3201]
 
 ### Compatibility
 

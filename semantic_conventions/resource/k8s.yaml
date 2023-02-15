@@ -56,6 +56,11 @@ groups:
         brief: >
           The name of the Pod.
         examples: ['opentelemetry-pod-autoconf']
+      - id: hostname
+        type: string
+        brief: >
+          The hostname in the pod spec. refer to [pod.spec.hostname](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-hostname-and-subdomain-fields)
+        examples: ['opentelemetry-pod-autoconf']
 
   - id: k8s.container
     prefix: k8s.container

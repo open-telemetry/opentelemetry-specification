@@ -69,6 +69,7 @@ containers on your cluster.
 |---|---|---|---|---|
 | `k8s.pod.uid` | string | The UID of the Pod. | `275ecb36-5aa8-4c2a-9c47-d8bb681b9aff` | Recommended |
 | `k8s.pod.name` | string | The name of the Pod. | `opentelemetry-pod-autoconf` | Recommended |
+| `k8s.pod.hostname` | string | The hostname in the pod spec. refer to [pod.spec.hostname](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-hostname-and-subdomain-fields) | `opentelemetry-pod-autoconf` | Recommended |
 <!-- endsemconv -->
 
 ## Container
