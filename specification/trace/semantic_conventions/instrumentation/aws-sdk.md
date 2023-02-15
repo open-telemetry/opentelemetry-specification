@@ -9,6 +9,16 @@ are found.
 
 Some descriptions are also provided for populating general OpenTelemetry semantic conventions based on these APIs.
 
+## Context Propagation
+
+When making outgoing calls using an aws-sdk, AWS X-Ray's propagation format MUST be used to add context propagation
+to http headers of the outgoing request. Propagation headers MUST be added before the signature is calculated
+to prevent errors on signed requests. X-Ray is necessary because it is the only format currently supported by AWS to
+allow context propagation through AWS managed services, for example SNS -> SQS -> lambda. Implementations of AWS X-Ray
+instrumentation for aws-sdk can be used as reference for how to instrument the SDK for each language.
+(For example: [java](https://github.com/aws/aws-xray-sdk-java), [node](https://github.com/aws/aws-xray-sdk-node), and
+[python](https://github.com/aws/aws-xray-sdk-python).)
+
 ## Common Attributes
 
 The span name MUST be of the format `Service.Operation` as per the AWS HTTP API, e.g., `DynamoDB.GetItem`,
