@@ -84,7 +84,7 @@ This function MAY be named `logEvent`.
   and MUST recorded as a `LogRecod` attribute with the key `event.data`.
 * `other_attributes` - this argument should of type [`Attributes`](../common/README.md#attribute)
   and MUST recorded as attributes on the `LogRecod`. Care MUST be taken by the
-  implementation to not override aready recorded attributes with names
+  implementation to not override already recorded attributes with names
   `event.name`, `event.domain` and `event.data`.
 
 **Implementation Requirements:**
