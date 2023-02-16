@@ -1,52 +1,13 @@
 groups:
-  - id: http
+  - id: trace.http.common
     prefix: http
-    type: span
+    extends: attributes.http.common
+    type: attribute_group
     brief: 'This document defines semantic conventions for HTTP client and server Spans.'
     note: >
         These conventions can be used for http and https schemes
         and various HTTP versions like 1.1, 2 and SPDY.
     attributes:
-      - id: method
-        type: string
-        requirement_level: required
-        brief: 'HTTP request method.'
-        sampling_relevant: true
-        examples: ["GET", "POST", "HEAD"]
-      - id: status_code
-        type: int
-        requirement_level:
-          conditionally_required: If and only if one was received/sent.
-        brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
-        examples: [200]
-      - id: flavor
-        type:
-          # Default value: `true`. If false, it helps the code gen tool to
-          # encode checks that only accept the listed values.
-          allow_custom_values: true
-          members:
-            - id: http_1_0
-              value: '1.0'
-              brief: 'HTTP/1.0'
-            - id: http_1_1
-              value: '1.1'
-              brief: 'HTTP/1.1'
-            - id: http_2_0
-              value: '2.0'
-              brief: 'HTTP/2'
-            - id: http_3_0
-              value: '3.0'
-              brief: 'HTTP/3'
-            - id: spdy
-              value: 'SPDY'
-              brief: 'SPDY protocol.'
-            - id: quic
-              value: 'QUIC'
-              brief: 'QUIC protocol.'
-        brief: 'Kind of HTTP protocol used.'
-        note: >
-          If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor`
-          is `QUIC`, in which case `IP.UDP` is assumed.
       - id: user_agent
         type: string
         brief: 'Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client.'
@@ -65,18 +26,18 @@ groups:
           is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
+      - ref: http.method
+        sampling_relevant: true
       - ref: net.sock.peer.addr
       - ref: net.sock.peer.port
       - ref: net.sock.peer.name
       - ref: net.sock.family
         examples: ['inet', 'inet6']
-    constraints:
-      - include: network
 
-  - id: http.client
+  - id: trace.http.client
     prefix: http
     type: span
-    extends: http
+    extends: attributes.http.client
     span_kind: client
     brief: 'Semantic Convention for HTTP Client'
     attributes:
@@ -91,9 +52,20 @@ groups:
           In such case the attribute's value should be `https://www.example.com/`.
         sampling_relevant: true
         examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
+      - id: resend_count
+        type: int
+        brief: >
+          The ordinal number of request resending attempt (for any reason, including redirects).
+        note: >
+          The resend count SHOULD be updated each time an HTTP request gets resent by the client, regardless of what
+          was the cause of the resending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues,
+          or any other).
+        requirement_level:
+          recommended: if and only if request was retried.
+        examples: 3
       - ref: net.peer.name
-        requirement_level: required
         sampling_relevant: true
+        requirement_level: required
         brief: >
           Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
         note: |
@@ -113,48 +85,20 @@ groups:
         note: >
           When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
           URI port identifier, otherwise it MUST match `Host` header port identifier.
-      - id: resend_count
-        type: int
-        brief: >
-          The ordinal number of request resending attempt (for any reason, including redirects).
-        note: >
-          The resend count SHOULD be updated each time an HTTP request gets resent by the client, regardless of what
-          was the cause of the resending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues,
-          or any other).
-        requirement_level:
-          recommended: if and only if request was retried.
-        examples: 3
 
-  - id: http.server
+  - id: trace.http.server
     prefix: http
     type: span
-    extends: http
+    extends: attributes.http.server
     span_kind: server
     brief: 'Semantic Convention for HTTP Server'
     attributes:
-      - id: scheme
-        type: string
-        brief: 'The URI scheme identifying the used protocol.'
-        requirement_level: required
-        sampling_relevant: true
-        examples: ["http", "https"]
       - id: target
         type: string
         brief: 'The full request target as passed in a HTTP request line or equivalent.'
         requirement_level: required
         sampling_relevant: true
         examples: ['/path/12314/?q=ddds']
-      - id: route
-        type: string
-        requirement_level:
-          conditionally_required: If and only if it's available
-        brief: >
-            The matched route (path template in the format used by the respective server framework). See note below
-        examples: ['/users/:userID?', '{controller}/{action}/{id?}']
-        note: >
-          MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
-
-          SHOULD include the [application root](#http-server-definitions) if there is one.
       - id: client_ip
         type: string
         brief: >
@@ -173,6 +117,8 @@ groups:
             one is at least somewhat confident that the address is not that of
             the closest proxy.
         examples: '83.164.160.102'
+      - ref: http.scheme
+        sampling_relevant: true
       - ref: net.host.name
         requirement_level: required
         sampling_relevant: true
@@ -181,7 +127,7 @@ groups:
         note: |
           Determined by using the first of the following that applies
 
-          - The [primary server name](#http-server-definitions) of the matched virtual host. MUST only
+          - The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
             include host identifier.
           - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
             if it's sent in absolute-form.
@@ -198,11 +144,10 @@ groups:
         note: |
           Determined by using the first of the following that applies
 
-          - Port identifier of the [primary server host](#http-server-definitions) of the matched virtual host.
+          - Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
           - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
             if it's sent in absolute-form.
           - Port identifier of the `Host` header
-
       - ref: net.sock.host.addr
         requirement_level: optional
       - ref: net.sock.host.port

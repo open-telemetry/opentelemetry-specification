@@ -28,7 +28,7 @@ formats is required. Implementing more than one format is optional.
 | [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |     |      |     |        |      |        |     |      |     |      |       |
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Tracer](specification/trace/api.md#tracer-operations)                                           |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Tracer](specification/trace/api.md#tracer-operations)                                           | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create a new Span                                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Documentation defines adding attributes at span creation as preferred                            |          |     |      |     | +      | +    |        | +   |      |     | +    |       |
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -38,7 +38,7 @@ formats is required. Implementing more than one format is optional.
 | IsValid                                                                                          |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRemote                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Conforms to the W3C TraceContext spec                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Span](specification/trace/api.md#span)                                                          |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Span](specification/trace/api.md#span)                                                          | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create root span                                                                                 |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with default parent (active span)                                                         |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with parent from Context                                                                  |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -55,7 +55,7 @@ formats is required. Implementing more than one format is optional.
 | events collection size limit                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | -   | -    | +     |
 | attribute collection size limit                                                                  |          | +   | +    | +   | +      | +    | +      | +   | +    | -   | -    | +     |
 | links collection size limit                                                                      |          | +   | +    | +   | +      | +    | +      | +   | +    | -   | -    | +     |
-| [Span attributes](specification/trace/api.md#set-attributes)                                     |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Span attributes](specification/trace/api.md#set-attributes)                                     | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | SetAttribute                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set order preserved                                                                              | X        | +   | -    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | String type                                                                                      |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -65,7 +65,7 @@ formats is required. Implementing more than one format is optional.
 | Array of primitives (homogeneous)                                                                |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | `null` values documented as invalid/undefined                                                    |          | +   | +    | +   | +      | +    | N/A    | +   |      | +   |      | N/A   |
 | Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Span linking](specification/trace/api.md#specifying-links)                                      |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Span linking](specification/trace/api.md#specifying-links)                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation                                                           |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | Links order is preserved                                                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
@@ -75,9 +75,10 @@ formats is required. Implementing more than one format is optional.
 | [Span exceptions](specification/trace/api.md#record-exception)                                   |          |     |      |     |        |      |        |     |      |     |      |       |
 | RecordException                                                                                  |          | -   | +    | +   | +      | +    | +      | +   | +    | -   | +    | -     |
 | RecordException with extra parameters                                                            |          | -   | +    | +   | +      | +    | +      | +   | +    | -   | +    | -     |
-| [Sampling](specification/trace/sdk.md#sampling)                                                  |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Sampling](specification/trace/sdk.md#sampling)                                                  | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Allow samplers to modify tracestate                                                              |          | +   | +    |     | +      | +    | +      | +   | +    | +   | -    | +     |
 | ShouldSample gets full parent Context                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | -    | +     |
+| Sampler: JaegerRemoteSampler                                                                     |          | +   | +    |     |        |      |        |     | +    |     |      |       |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |          | +   | +    |     | +      | +    | +      | +   | +    | +   | -    | +     |
 | [IdGenerators](specification/trace/sdk.md#id-generators)                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   |      | +     |
 | [SpanLimits](specification/trace/sdk.md#span-limits)                                             | X        | +   | +    |     | +      | +    | +      | +   |      | -   |      | +     |
