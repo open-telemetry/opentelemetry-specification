@@ -20,7 +20,7 @@ instrumentation for aws-sdk can be used as reference for how to instrument the S
 [python](https://github.com/aws/aws-xray-sdk-python).)
 
 Additional propagation formats MAY be applied to individual request types that support arbitrary attributes such as
-`SqsMessage`. This can allow for transporting additional context that may not be supported by x-ray, such as baggage.
+`SqsMessage`. This can allow for transporting additional context that may not be supported by x-ray, such as baggage or tracestate.
 Documentation SHOULD advise that doing so is subject to attribute limits and billing impacts.
 
 ## Common Attributes
