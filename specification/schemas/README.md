@@ -5,7 +5,7 @@ aliases: [/docs/reference/specification/schemas/overview]
 
 # Telemetry Schemas
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
