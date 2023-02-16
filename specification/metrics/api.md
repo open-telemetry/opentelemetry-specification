@@ -22,6 +22,7 @@ linkTitle: API
     + [Instrument name syntax](#instrument-name-syntax)
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
+    + [Instrument advice](#instrument-advice)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
       - [Synchronous Instrument API](#synchronous-instrument-api)
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
@@ -235,6 +236,20 @@ instrument. The API MUST treat it as an opaque string.
 * It MUST support at least 1023 characters. [OpenTelemetry
   API](../overview.md#api) authors MAY decide if they want to support more.
 
+#### Instrument advice
+
+`advice` are an optional set of recommendations provided by the author of the
+Instrument, aimed at assisting implementations in providing useful output with
+minimal configuration.
+
+* Implementations MAY ignore `advice`. However, OpenTelemetry SDKs
+  handle `advice` as described in [here](./sdk.md#instrument-advice).
+* `advice` parameters may be general, or vary by instrument `kind`.
+  * `Histogram`:
+    * `Boundaries` (`double[]`): The recommended set of bucket
+      boundaries to use if aggregating to
+      a [explict bucket Histogram metric data point](./data-model.md#histogram).
+
 #### Synchronous and Asynchronous instruments
 
 Instruments are categorized on whether they are synchronous or
@@ -294,6 +309,17 @@ The API to construct synchronous instruments MUST accept the following parameter
   supports at least [BMP (Unicode Plane
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane)
   encoded characters and hold at least 1023 characters.
+
+* `advice` for implementations.
+
+  Users can provide `advice`, but its up to their discretion. Therefore, this
+  API needs to be structured to accept `advice`, but MUST NOT obligate the user
+  to provide it.
+
+  `advice` needs to be structured as described
+  in [instrument advice](#instrument-advice), with parameters that are general
+  and specific to a particular instrument `kind`. The API SHOULD NOT
+  validate `advice`.
 
 ##### Asynchronous Instrument API
 

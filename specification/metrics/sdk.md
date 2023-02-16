@@ -35,6 +35,7 @@ linkTitle: SDK
   * [Instrument name](#instrument-name)
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
+  * [Instrument advice](#instrument-advice)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -395,18 +396,18 @@ This Aggregation does not have any configuration parameters.
 
 #### Default Aggregation
 
-The Default Aggregation informs the SDK to use the Instrument Kind
-(e.g. at View registration OR at first seen measurement)
-to select an aggregation and configuration parameters.
+The Default Aggregation informs the SDK to use the Instrument `kind` to select
+an aggregation and `advice` to influence aggregation configuration parameters
+(as noted in the "Selected Aggregation" column).
 
-| Instrument Kind | Selected Aggregation                                                                    |
-| --- |-----------------------------------------------------------------------------------------|
-| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation)                               |
-| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation) |
+| Instrument Kind                                                   | Selected Aggregation                                                                                                                                          |
+|-------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Counter](./api.md#counter)                                       | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                   |
+| [Asynchronous Counter](./api.md#asynchronous-counter)             | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                   |
+| [UpDownCounter](./api.md#updowncounter)                           | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                   |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                   |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                     |
+| [Histogram](./api.md#histogram)                                   | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation), with `Boundaries` from [advice](./api#instrument-advice) if provided |
 
 This Aggregation does not have any configuration parameters.
 
@@ -641,6 +642,12 @@ as an empty unit string.
 When a Meter creates an instrument, it SHOULD NOT validate the instrument
 description. If a description is not provided or the description is null, the
 Meter MUST treat it the same as an empty description string.
+
+### Instrument advice
+
+When a Meter creates an instrument, it SHOULD validate the instrument advice
+parameters. If an advice parameter is not valid, the Meter SHOULD emit an error
+notifying the user and proceed as if the parameter was not provided.
 
 ## Attribute limits
 
