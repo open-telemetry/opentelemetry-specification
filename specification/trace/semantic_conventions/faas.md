@@ -39,6 +39,7 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 |---|---|---|---|---|
 | `faas.trigger` | string | Type of the trigger which caused this function execution. [1] | `datasource` | Recommended |
 | `faas.execution` | string | The execution ID of the current function execution. | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | Recommended |
+| [`cloud.resource_id`](../../resource/semantic_conventions/cloud.md) | string | Cloud provider-specific native identifier of the monitored cloud resource (e.g. an [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) on AWS, a [fully qualified resource ID](https://learn.microsoft.com/en-us/rest/api/resources/resources/get-by-id) on Azure, a [full resource name](https://cloud.google.com/apis/design/resource_names#full_resource_name) on GCP) [2] | `arn:aws:lambda:REGION:ACCOUNT_ID:function:my-function`; `//run.googleapis.com/projects/PROJECT_ID/locations/LOCATION_ID/services/SERVICE_ID`; `/subscriptions/<SUBSCIPTION_GUID>/resourceGroups/<RG>/providers/Microsoft.Web/sites/<FUNCAPP>/functions/<FUNC>` | Recommended |
 
 **[1]:** For the server/consumer span on the incoming side,
 `faas.trigger` MUST be set.
@@ -49,6 +50,24 @@ the event type. If clients set it, it should be the same as the
 trigger that corresponding incoming would have (i.e., this has
 nothing to do with the underlying transport used to make the API
 call to invoke the lambda, which is often HTTP).
+
+**[2]:** On some cloud providers, it may not be possible to determine the full ID at startup,
+so it may be necessary to set `cloud.resource_id` as a span attribute instead.
+
+The exact value to use for `cloud.resource_id` depends on the cloud provider.
+For example, with FAAS platforms, use the following guidelines:
+
+* **AWS Lambda:** The function [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html).
+  Take care not to use the "invoked ARN" directly but replace any
+  [alias suffix](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html)
+  with the resolved function version, as the same runtime instance may be invokable with
+  multiple different aliases.
+* **GCP:** The [URI of the resource](https://cloud.google.com/iam/docs/full-resource-names)
+* **Azure:** The [Fully Qualified Resource ID](https://docs.microsoft.com/en-us/rest/api/resources/resources/get-by-id) of the invoked function,
+  *not* the function app, having the form
+  `/subscriptions/<SUBSCIPTION_GUID>/resourceGroups/<RG>/providers/Microsoft.Web/sites/<FUNCAPP>/functions/<FUNC>`.
+  This means that a span attribute MUST be used, as an Azure function app can host multiple functions that would usually share
+  a TracerProvider.
 
 `faas.trigger` MUST be one of the following:
 
