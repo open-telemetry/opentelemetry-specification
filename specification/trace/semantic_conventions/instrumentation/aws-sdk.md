@@ -19,6 +19,10 @@ instrumentation for aws-sdk can be used as reference for how to instrument the S
 (For example: [java](https://github.com/aws/aws-xray-sdk-java), [node](https://github.com/aws/aws-xray-sdk-node), and
 [python](https://github.com/aws/aws-xray-sdk-python).)
 
+Additional propagation formats MAY be applied to individual request types that support arbitrary attributes such as
+`SqsMessage`. This can allow for transporting additional context that may not be supported by x-ray, such as baggage.
+Documentation SHOULD advise that doing so is subject to attribute limits and billing impacts.
+
 ## Common Attributes
 
 The span name MUST be of the format `Service.Operation` as per the AWS HTTP API, e.g., `DynamoDB.GetItem`,
