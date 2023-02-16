@@ -183,6 +183,7 @@ will have the following fields:
   one of the other kinds, whether it is synchronous or asynchronous
 * An optional `unit` of measure
 * An optional `description`
+* Optional `advice`
 
 Instruments are associated with the Meter during creation. Instruments
 are identified by all of these fields.
@@ -248,7 +249,7 @@ minimal configuration.
   * `Histogram`:
     * `Boundaries` (`double[]`): The recommended set of bucket
       boundaries to use if aggregating to
-      a [explict bucket Histogram metric data point](./data-model.md#histogram).
+      a [explicit bucket Histogram metric data point](./data-model.md#histogram).
 
 #### Synchronous and Asynchronous instruments
 
