@@ -22,6 +22,9 @@ release.
 
 ### Semantic Conventions
 
+- Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
+  ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
