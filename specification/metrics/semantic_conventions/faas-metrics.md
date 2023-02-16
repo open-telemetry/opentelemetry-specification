@@ -42,7 +42,7 @@ Below is a table of FaaS invocation metric instruments.
 | `faas.init_duration`   | Histogram                                         | milliseconds | `ms`                                      | Measures the duration of the function's initialization, such as a cold start |
 | `faas.coldstarts`      | Counter                                           | default unit | `{coldstarts}`                            | Number of invocation cold starts.                                            |
 | `faas.errors`          | Counter                                           | default unit | `{errors}`                                | Number of invocation errors.                                                 |
-| `faas.invocations`      | Counter                                          | default unit | `{invocations}`                            | Number of successful invocations.                                            |
+| `faas.invocations`      | Counter                                          | default unit | `{invocations}`                           | Number of successful invocations.                                            |
 | `faas.timeouts`        | Counter                                           | default unit | `{timeouts}`                              | Number of invocation timeouts.                                               |
 
 Optionally, when applicable:
