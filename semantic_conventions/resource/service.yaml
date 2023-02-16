@@ -31,6 +31,7 @@ groups:
         examples: ["Shop"]
       - id: instance.id
         type: string
+        requirement_level: required
         brief: >
           The string ID of the service instance.
         note: >
@@ -45,6 +46,19 @@ groups:
           it is recommended to generate a random Version 1 or Version 4 RFC 4122 UUID
           (services aiming for reproducible UUIDs may also use Version 5, see RFC 4122
           for more recommendations).
+
+          SDKs are required to follow the following algorithm when generating
+          `service.instance.id`:
+
+          - If the user has provided a `service.instance.id`, via environment
+            variable, configuration or custom resource detection, this will
+            always be used and honored over generated ids.
+          - When the SDK is running in an environment where a non-ambiguous IP
+            address exists, the ID should be set to this IP address.
+          - When the environment the SDK targets provides a stable identifier
+            matching the goals of `service.instance.id`, then this may be used.
+          - When no other source is available the SDK MUST generate an ID. This
+            ID SHOULD follow version 1, 4 or 5 of RFC 4122.
         examples: ["627cc493-f310-47de-96bd-71410b7dec09"]
       - id: version
         type: string
