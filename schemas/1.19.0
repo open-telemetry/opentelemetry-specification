@@ -8,7 +8,7 @@ versions:
         - rename_attributes:
             attribute_map:
               http.user_agent: user_agent.original
-    resources:
+    Resources:
       changes:
         # https://github.com/open-telemetry/opentelemetry-specification/pull/3190
         - rename_attributes:
