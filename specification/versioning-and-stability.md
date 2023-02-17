@@ -173,7 +173,7 @@ following API calls when constructing instrumentation:
   - The following data provided to [span](trace/api.md#span) by available APIs:
     - The span name
     - The attribute keys provided to the span.
-  - The following data provided when [adding an event](trace/apid.md#add-events)
+  - The following data provided when [adding an event](trace/api.md#add-events)
     - The event name
     - The attribute keys provided for the event.
 - [Metrics](metrics/api.md)
