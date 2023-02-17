@@ -186,7 +186,7 @@ following API calls when constructing instrumentation:
     - the unit of the instrument.
   - The attribute keys provided when recording a measurement, for
     both synchronous and asynchronous instruments.
-- Logs (via [bridge](logs/bridge-api.md) or [event](logs/event-api.md) are not currently enforced.
+- Logs (via [bridge](logs/bridge-api.md) or [event](logs/event-api.md)) are not currently enforced.
 
 Things not listed in the above are not enforced via semantic convention and allowed (or expected) to change. A few examples:
 
