@@ -29,6 +29,7 @@
 | `aws` | Amazon Web Services |
 | `azure` | Microsoft Azure |
 | `gcp` | Google Cloud Platform |
+| `heroku` | Heroku Platform as a Service |
 | `ibm_cloud` | IBM Cloud |
 | `tencent_cloud` | Tencent Cloud |
 

@@ -11,7 +11,7 @@
 |---|---|---|---|---|
 | `heroku.creation_timestamp` | string | Time and date the release was created | `2022-10-23T18:00:42Z` | Optional |
 | `heroku.commit` | string | Commit hash for the current release | `e6134959463efd8966b20e75b913cafe3f5ec` | Optional |
-| `heroku.id` | string | Unique identifier for the application | `2daa2797-e42b-4624-9322-ec3f968df4da` | Optional |
+| `heroku.app.id` | string | Unique identifier for the application | `2daa2797-e42b-4624-9322-ec3f968df4da` | Optional |
 <!-- endsemconv -->
 
 **Mapping:**
@@ -24,5 +24,7 @@
 | `HEROKU_RELEASE_CREATED_AT`        | `heroku.creation_timestamp` |
 | `HEROKU_RELEASE_VERSION`           | `service.version`           |
 | `HEROKU_SLUG_COMMIT`               | `heroku.commit`             |
+
+Additionally, [the `cloud.provider` resource attribute MUST be set to `heroku`](../cloud.md).
 
 [Heroku dyno metadata]: https://devcenter.heroku.com/articles/dyno-metadata

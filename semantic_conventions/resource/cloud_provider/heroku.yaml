@@ -17,7 +17,7 @@ groups:
           Commit hash for the current release
         examples: [ 'e6134959463efd8966b20e75b913cafe3f5ec' ]
         requirement_level: optional
-      - id: id
+      - id: app.id
         type: string
         brief: >
           Unique identifier for the application
