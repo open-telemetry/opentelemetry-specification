@@ -182,7 +182,7 @@ following API calls when constructing instrumentation:
     - The name of the instrument.
     - The kind of instrument.
       - For `Counter` and `UpDownCounter` instruments, it is
-        acceptable to use asynchronous or synchronous instruments.
+        acceptable to change between asynchronous and synchronous instruments.
     - the unit of the instrument.
   - The attribute keys provided when recording a measurement, for
     both synchronous and asynchronous instruments.
