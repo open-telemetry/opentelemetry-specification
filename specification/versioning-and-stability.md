@@ -161,6 +161,41 @@ allowing the evolution of telemetry and semantic conventions, OpenTelemetry
 relies on the concept of
 [Telemetry Schemas](schemas/README.md).
 
+Semantic Conventions are not enforced on all fields available for telemetry.
+Instead, semantic conventions apply to "API" type interfaces on telemetry as
+opposed to actual values. Explicitly, Semantic conventions apply to the
+following API calls when constructing instrumentation:
+
+- [Resource](resource/sdk.md)
+  - attribute keys provided to Create or resource detectors
+- [Trace](trace/api.md)
+  - Attribute keys provided to [get a tracer](trace/api.md#get-a-tracer)
+  - The following data provided to [span](trace/api.md#span) by available APIs:
+    - The span name
+    - The attribute keys provided to the span.
+  - The following data provided when [adding an event](trace/apid.md#add-events)
+    - The event name
+    - The attribute keys provided for the event.
+- [Metrics](metrics/api.md)
+  - Attribute keys provided to [get a meter](metrics/api.md#get-a-meter)
+  - The following arguments when constructing [an instrument](metrics/api.md#instrument):
+    - The name of the instrument.
+    - The kind of instrument.
+      - For `Counter` and `UpDownCounter` instruments, it is
+        acceptable to use asynchronous or synchronous instruments.
+    - the unit of the instrument.
+  - The attribute keys provided when recording a measurement, for
+    both synchronous and asynchronous instruments.
+- Logs (via [bridge](logs/bridge-api.md) or [event](logs/event-api.md) are not currently enforced.
+
+Things not listed in the above are not enforced via semantic convention and allowed (or expected) to change. A few examples:
+
+- The values of attributes
+- The links attached to a span
+- The recorded measurement type (float or integer) of a metric is not enforced and allowed to change.
+- The description of a metric instrument.
+- The values being recorded by an instrument.
+
 Changes to semantic conventions in this specification are allowed, provided that
 the changes can be described by schema files. The following changes can be
 currently described and are allowed:
@@ -181,8 +216,8 @@ that are always allowed. Such changes do not need to be described (and are not
 described) by schema files. Here is the list of such changes:
 
 - Adding new attributes to the existing semantic conventions for resources,
-  spans, span events or log records. Note that adding attributes to existing metrics is
-  considered to be a breaking change.
+  spans, span events or log records. 
+- Adding new attributes to existing metrics that do not create new timeseries.
 - Adding semantic conventions for new types of resources, spans, span events,
   metrics or log records.
 
