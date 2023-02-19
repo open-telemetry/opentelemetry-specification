@@ -19,9 +19,7 @@ linkTitle: API
   * [Meter operations](#meter-operations)
 - [Instrument](#instrument)
   * [General characteristics](#general-characteristics)
-    + [Instrument type conflict detection](#instrument-type-conflict-detection)
-    + [Instrument namespace](#instrument-namespace)
-    + [Instrument naming rule](#instrument-naming-rule)
+    + [Instrument name syntax](#instrument-name-syntax)
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
@@ -115,30 +113,16 @@ The `MeterProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-* `name`: This name SHOULD uniquely identify the [instrumentation
+* `name`: This name uniquely identifies the [instrumentation
   scope](../glossary.md#instrumentation-scope), such as the
   [instrumentation library](../glossary.md#instrumentation-library) (e.g.
   `io.opentelemetry.contrib.mongodb`), package,
   module or class name. If an application or library has built-in OpenTelemetry
   instrumentation, both [Instrumented
   library](../glossary.md#instrumented-library) and [Instrumentation
-  library](../glossary.md#instrumentation-library) may refer to the same
+  library](../glossary.md#instrumentation-library) can refer to the same
   library. In that scenario, the `name` denotes a module name or component name
-  within that library or application. In case an invalid name (null or empty
-  string) is specified, a working Meter implementation MUST be returned as a
-  fallback rather than returning null or throwing an exception, its `name`
-  property SHOULD keep the original invalid value, and a message reporting that
-  the specified value is invalid SHOULD be logged. A library, implementing the
-  OpenTelemetry API *may* also ignore this name and return a default instance
-  for all calls, if it does not support "named" functionality (e.g. an
-  implementation which is not even observability-related). A MeterProvider could
-  also return a no-op Meter here if application owners configure the SDK to
-  suppress telemetry produced by this library.
-
-  The `name` needs to be provided by a user. If possible, the API SHOULD be
-  structured so a user is obligated to provide this parameter. If it is not
-  possible to structurally enforce this obligation, the API MUST be documented
-  in a way to communicate to users that this parameter is needed.
+  within that library or application.
 * `version`: Specifies the version of the instrumentation scope if the scope
   has a version (e.g. a library version). Example value: `1.0.0`.
   
@@ -167,23 +151,6 @@ attributes but the same identity.
 The term *identical* applied to Meters describes instances where all identifying
 fields are equal. The term *distinct* applied to Meters describes instances where
 at least one identifying field has a different value.
-
-Implementations MUST NOT require users to repeatedly obtain a `Meter` with
-the same identity to pick up configuration changes. This can be
-achieved either by allowing to work with an outdated configuration or by
-ensuring that new configuration applies also to previously returned `Meter`s.
-
-Note: This could, for example, be implemented by storing any mutable
-configuration in the `MeterProvider` and having `Meter` implementation objects
-have a reference to the `MeterProvider` from which they were obtained. If
-configuration must be stored per-meter (such as disabling a certain meter), the
-meter could, for example, do a look-up with its identity in a map
-in the `MeterProvider`, or the `MeterProvider` could maintain a registry of all
-returned `Meter`s and actively update their configuration if it changes.
-
-The effect of associating a Schema URL with a `Meter` MUST be that the telemetry
-emitted using the `Meter` will be associated with the Schema URL, provided that
-the emitted data format is capable of representing such association.
 
 ## Meter
 
@@ -224,42 +191,10 @@ floating point numbers SHOULD be considered as identifying.
 
 ### General characteristics
 
-#### Instrument type conflict detection
+#### Instrument name syntax
 
-When more than one Instrument of the same `name` is created for
-identical Meters, denoted *duplicate instrument registration*, the
-implementation MUST create a valid Instrument in every case.  Here,
-"valid" means an instrument that is functional and can be expected to
-export data, despite potentially creating a [semantic error in the
-data
-model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations).
-
-It is unspecified whether or under which conditions the same or
-different Instrument instance will be returned as a result of
-duplicate instrument registration.  The term *identical* applied to
-Instruments describes instances where all identifying fields are
-equal.  The term *distinct* applied to Instruments describes instances
-where at least one field value is different.
-
-When more than one distinct Instrument is registered with the same
-`name` for identical Meters, the implementation SHOULD emit a warning
-to the user informing them of duplicate registration conflict(s).
-The warning helps to avoid the semantic error state described in the
-[OpenTelemetry Metrics data
-model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
-when more than one `Metric` is written for a given instrument `name`
-and Meter identity by the same MeterProvider.
-
-#### Instrument namespace
-
-Distinct Meters MUST be treated as separate namespaces for the
-purposes of detecting [duplicate instrument registration
-conflicts](#instrument-type-conflict-detection).
-
-#### Instrument naming rule
-
-Instrument names MUST conform to the following syntax (described using the
-[Augmented Backus-Naur Form](https://tools.ietf.org/html/rfc5234)):
+The instrument name syntax is defined below using the [Augmented Backus-Naur
+Form](https://tools.ietf.org/html/rfc5234):
 
 ```abnf
 instrument-name = ALPHA 0*62 ("_" / "." / "-" / ALPHA / DIGIT)
@@ -277,12 +212,9 @@ DIGIT = %x30-39 ; 0-9
 
 #### Instrument unit
 
-The `unit` is an optional string provided by the author of the Instrument. It
-SHOULD be treated as an opaque string from the API and SDK (e.g. the SDK is not
-expected to validate the unit of measurement, or perform the unit conversion).
+The `unit` is an optional string provided by the author of the Instrument. The
+API SHOULD treat it as an opaque string.
 
-* If the `unit` is not provided or the `unit` is null, the API and SDK MUST make
-  sure that the behavior is the same as an empty `unit` string.
 * It MUST be case-sensitive (e.g. `kb` and `kB` are different units), ASCII
   string.
 * It can have a maximum length of 63 characters. The number 63 is chosen to
@@ -293,11 +225,8 @@ expected to validate the unit of measurement, or perform the unit conversion).
 #### Instrument description
 
 The `description` is an optional free-form text provided by the author of the
-instrument. It MUST be treated as an opaque string from the API and SDK.
+instrument. The API MUST treat it as an opaque string.
 
-* If the `description` is not provided or the `description` is null, the API and
-  SDK MUST make sure that the behavior is the same as an empty `description`
-  string.
 * It MUST support [BMP (Unicode Plane
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
   which is basically only the first three bytes of UTF-8 (or `utf8mb3`).
@@ -340,11 +269,10 @@ The API to construct synchronous instruments MUST accept the following parameter
   possible to structurally enforce this obligation, the API MUST be documented
   in a way to communicate to users that this parameter is needed.
   
-  The `name` needs to follow the [instrument naming
-  rule](#instrument-naming-rule). The API SHOULD be documented in a way to
-  communicate to users that this parameter needs to conform to the linked
-  syntax. The API SHOULD NOT validate the `name`, that is left to
-  implementations of the API.
+  The API SHOULD be documented in a way to communicate to users that the `name`
+  parameter needs to conform to the [instrument name
+  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`;
+  that is left to implementations of the API.
 * A `unit` of measure.
   
   Users can provide a `unit`, but it is up to their discretion. Therefore, this
@@ -383,11 +311,10 @@ The API to construct asynchronous instruments MUST accept the following paramete
   possible to structurally enforce this obligation, the API MUST be documented
   in a way to communicate to users that this parameter is needed.
   
-  The `name` needs to follow the [instrument naming
-  rule](#instrument-naming-rule). The API SHOULD be documented in a way to
-  communicate to users that this parameter needs to conform to the linked
-  syntax. The API SHOULD NOT validate the `name`, that is left to
-  implementations of the API.
+  The API SHOULD be documented in a way to communicate to users that the `name`
+  parameter needs to conform to the [instrument name
+  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`,
+  that is left to implementations of the API.
 * A `unit` of measure.
   
   Users can provide a `unit`, but it is up to their discretion. Therefore, this

@@ -1,8 +1,7 @@
 groups:
   - id: messaging.message
     prefix: messaging
-    # todo (https://github.com/open-telemetry/build-tools/issues/123)
-    type: span
+    type: attribute_group
     brief: 'Semantic convention describing per-message attributes populated on messaging spans or links.'
     attributes:
       - ref: messaging.destination.name
@@ -30,8 +29,7 @@ groups:
 
   - id: messaging.destination
     prefix: messaging.destination
-    # todo (https://github.com/open-telemetry/build-tools/issues/123)
-    type: span
+    type: attribute_group
     brief: 'Semantic convention for attributes that describe messaging destination on broker'
     attributes:
       - id: name
@@ -71,8 +69,7 @@ groups:
 
   - id: messaging.source
     prefix: messaging.source
-    # todo (https://github.com/open-telemetry/build-tools/issues/123)
-    type: span
+    type: attribute_group
     brief: 'Semantic convention for attributes that describe messaging source on broker'
     attributes:
       - id: name
@@ -270,7 +267,7 @@ groups:
 
   - id: messaging.rabbitmq
     prefix: messaging.rabbitmq
-    type: span
+    type: attribute_group
     extends: messaging
     brief: >
       Attributes for RabbitMQ
@@ -285,7 +282,7 @@ groups:
 
   - id: messaging.kafka
     prefix: messaging.kafka
-    type: span
+    type: attribute_group
     extends: messaging
     brief: >
       Attributes for Apache Kafka
@@ -334,7 +331,7 @@ groups:
 
   - id: messaging.rocketmq
     prefix: messaging.rocketmq
-    type: span
+    type: attribute_group
     extends: messaging
     brief: >
       Attributes for Apache RocketMQ

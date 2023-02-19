@@ -19,7 +19,7 @@
 </details>
 
 The Event API offers convenience methods
-for [emitting LogRecords](./api.md#emit-logrecord) that conform
+for [emitting LogRecords](./bridge-api.md#emit-logrecord) that conform
 to the [semantic conventions for Events](./semantic_conventions/events.md).
 
 ## EventLogger
@@ -38,7 +38,7 @@ on `EventLogger`.
 
 **Parameters:**
 
-* `logger` - the delegate [Logger](./api.md#logger) used to emit `Events`
+* `logger` - the delegate [Logger](./bridge-api.md#logger) used to emit `Events`
   as `LogRecords`.
 * `event_domain` - the domain of emitted events, used to set the `event.domain`
   attribute.
@@ -55,11 +55,11 @@ This function MAY be named `logEvent`.
   attribute with the key `event.name`. Care MUST be taken by the implementation
   to not override or delete this attribute while the Event is emitted to
   preserve its identity.
-* `logRecord` - the [LogRecord](./api.md#logrecord) representing the Event.
+* `logRecord` - the [LogRecord](./bridge-api.md#logrecord) representing the Event.
 
 **Implementation Requirements:**
 
-The implementation MUST [emit](./api.md#emit-logrecord) the `logRecord` to
+The implementation MUST [emit](./bridge-api.md#emit-logrecord) the `logRecord` to
 the `logger` specified when [creating the EventLogger](#create-eventlogger)
 after making the following changes:
 

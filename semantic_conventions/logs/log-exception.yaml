@@ -1,6 +1,6 @@
 groups:
   - id: log-exception
-    type: span
+    type: attribute_group
     prefix: exception
     brief: >
       This document defines attributes for exceptions represented using Log
