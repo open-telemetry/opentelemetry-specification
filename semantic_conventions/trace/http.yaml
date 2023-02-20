@@ -86,6 +86,26 @@ groups:
           When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
           URI port identifier, otherwise it MUST match `Host` header port identifier.
 
+  - id: trace.http.client_connect
+    type: span
+    span_kind: client
+    brief: 'Semantic Convention for establishing an HTTP connection'
+    attributes:
+      - ref: net.peer.name
+        sampling_relevant: true
+        requirement_level: required
+        brief: >
+          Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+      - ref: net.peer.port
+        sampling_relevant: true
+        brief: >
+          Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
+      - ref: net.sock.peer.addr
+      - ref: net.sock.peer.port
+      - ref: net.sock.peer.name
+      - ref: net.sock.family
+        examples: ['inet', 'inet6']
+
   - id: trace.http.server
     prefix: http
     type: span

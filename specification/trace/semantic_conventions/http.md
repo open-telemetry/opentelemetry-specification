@@ -15,6 +15,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
 - [Common Attributes](#common-attributes)
   * [HTTP request and response headers](#http-request-and-response-headers)
 - [HTTP client](#http-client)
+  * [Establishing an HTTP connection](#establishing-an-http-connection)
   * [HTTP request retries and redirects](#http-request-retries-and-redirects)
 - [HTTP server](#http-server)
   * [HTTP server definitions](#http-server-definitions)
@@ -24,6 +25,8 @@ and various HTTP versions like 1.1, 2 and SPDY.
   * [HTTP client retries examples](#http-client-retries-examples)
   * [HTTP client authorization retry examples](#http-client-authorization-retry-examples)
   * [HTTP client redirects examples](#http-client-redirects-examples)
+  * [HTTP client establishing connection examples](#http-client-establishing-connection-examples)
+  * [HTTP client establishing connection error examples](#http-client-establishing-connection-error-examples)
 
 <!-- tocstop -->
 
@@ -129,12 +132,20 @@ Users MAY explicitly configure instrumentations to capture them even though it i
 
 ## HTTP client
 
-This span type represents an outbound HTTP request.
+This span type represents an outbound HTTP request. There are two ways this can be achieved in an instrumentation:
+
+1. Instrumentations SHOULD create an HTTP span for each attempt to send an HTTP request over the wire.
+   In case the request is resent, the resend attempts MUST follow the [HTTP resend spec](#http-request-retries-and-redirects).
+   Instrumentations MUST NOT emit a "logical" (encompassing) HTTP span.
+   Since establishing an HTTP connection happens before the client attempts to send an HTTP requests,
+   instrumentations SHOULD emit a [CONNECT span](#establishing-an-http-connection) whenever a new HTTP connection is made.
+
+2. If for some reason it is not possible to emit a span for each send attempt (because e.g. the instrumented library does not expose hooks that would allow this),
+   instrumentations MAY create an HTTP span for the top-most operation of the HTTP client.
+   In this case, the `http.url` MUST be the originally requested URL, before any HTTP-redirects that may happen when executing the request.
+   The instrumentation MUST NOT set the `http.resend_count` attribute.
 
 For an HTTP client span, `SpanKind` MUST be `Client`.
-
-If set, `http.url` must be the originally requested URL,
-before any HTTP-redirects that may happen when executing the request.
 
 <!-- semconv trace.http.client(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -169,18 +180,63 @@ Following attributes MUST be provided **at span creation time** (when provided a
 
 Note that in some cases host and port identifiers in the `Host` header might be different from the `net.peer.name` and `net.peer.port`, in this case instrumentation MAY populate `Host` header on `http.request.header.host` attribute even if it's not enabled by user.
 
+### Establishing an HTTP connection
+
+If an instrumented HTTP client library allows capturing connection level information, instrumentations SHOULD emit a CONNECT span whenever a new HTTP connection is made.
+A CONNECT span contains information that might not get captured by an HTTP client span.
+In particular, if the connection was not established due to some network failure, the HTTP client might return with an error before any HTTP client span is emitted.
+
+Spans emitted when an HTTP connection is established should simply be named `CONNECT`.
+CONNECT spans are not HTTP spans; they do not represent an outgoing HTTP requests and SHOULD NOT contain any `http.*` attributes.
+
+For a CONNECT span, `SpanKind` MUST be `Client`.
+
+<!-- semconv trace.http.client_connect(full) -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| [`net.peer.name`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [1] | `example.com` | Required |
+| [`net.peer.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. | `80`; `8080`; `443` | Recommended |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet`; `inet6` | Conditionally Required: [2] |
+| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
+| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [3] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [4] |
+
+**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
+
+**[2]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+
+**[3]:** If available and different from `net.peer.name` and if `net.sock.peer.addr` is set.
+
+**[4]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
+
+Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
+
+* [`net.peer.name`](span-general.md)
+* [`net.peer.port`](span-general.md)
+
+`net.sock.family` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+
+| Value  | Description |
+|---|---|
+| `inet` | IPv4 address |
+| `inet6` | IPv6 address |
+| `unix` | Unix domain socket path |
+<!-- endsemconv -->
+
+See the examples of a [successful CONNECT span and the subsequent HTTP request](#http-client-establishing-connection-examples) and a [failure when establishing a connection](#http-client-establishing-connection-error-examples).
+
 ### HTTP request retries and redirects
 
 Retries and redirects cause more than one physical HTTP request to be sent.
 A request is resent when an HTTP client library sends more than one HTTP request to satisfy the same API call.
 This may happen due to following redirects, authorization challenges, 503 Server Unavailable, network issues, or any other.
-A CLIENT span SHOULD be created for each one of these physical requests.
-No span is created corresponding to the "logical" (encompassing) request.
 
-Each time an HTTP request is resent, the `http.resend_count` attribute SHOULD be added to each repeated span
-and set to the ordinal number of the request resend attempt.
+Each time an HTTP request is resent, the `http.resend_count` attribute MUST be added to each repeated span and set to the ordinal number of the request resend attempt.
 
-See [examples](#http-client-retries-examples) for more details.
+See the examples for more details about:
+* [retrying a server error](#http-client-retries-examples),
+* [redirects](#http-client-redirects-examples),
+* [authorization](#http-client-authorization-retry-examples).
 
 ## HTTP server
 
@@ -427,4 +483,48 @@ GET / - 302 (CLIENT, trace=t1, span=s1)
 GET /hello - 200 (CLIENT, trace=t2, span=s1, http.resend_count=1)
  |
  --- server (SERVER, trace=t2, span=s2)
+```
+
+### HTTP client establishing connection examples
+
+Example of establishing an HTTP connection in the presence of a trace started by an inbound request:
+
+```
+request (SERVER, trace=t1, span=s1)
+  |
+  -- CONNECT www.example.com:80 (CLIENT, trace=t1, span=s2)
+  |
+  -- GET /hello - 200 (CLIENT, trace=t1, span=s3)
+      |
+      --- server (SERVER, trace=t1, span=s4)
+```
+
+Example of establishing an HTTP connection with no trace started upfront:
+
+```
+CONNECT www.example.com:80 (CLIENT, trace=t1, span=s2)
+
+GET /hello - 200 (CLIENT, trace=t1, span=s3)
+ |
+ --- server (SERVER, trace=t1, span=s4)
+```
+
+### HTTP client establishing connection error examples
+
+Example of an error occurring during establishing an HTTP connection in the presence of a trace started by an inbound request:
+
+```
+request (SERVER, trace=t1, span=s1)
+  |
+  -- CONNECT www.example.com:80 (CLIENT, trace=t1, span=s2) Couldn't connect to server
+```
+
+Example of an error occurring during establishing an HTTP connection with no trace started upfront:
+
+```
+CONNECT www.example.com:80 (CLIENT, trace=t1, span=s2)
+
+GET /hello - 200 (CLIENT, trace=t1, span=s3)
+ |
+ --- server (SERVER, trace=t1, span=s4)
 ```
