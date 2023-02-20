@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Rename Logs API to Logs Bridge API to prevent confusion.
+  ([#3197](https://github.com/open-telemetry/opentelemetry-specification/pull/3197))
+
 ### Resource
 
 ### Semantic Conventions
