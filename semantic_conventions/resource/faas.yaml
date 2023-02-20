@@ -75,10 +75,10 @@ groups:
       - id: max_memory
         type: int
         brief: >
-          The amount of memory available to the serverless function in MiB.
+          The amount of memory available to the serverless function converted to Bytes.
         note: >
           It's recommended to set this attribute since e.g. too little memory can easily
           stop a Java AWS Lambda function from working correctly.
           On AWS Lambda, the environment variable `AWS_LAMBDA_FUNCTION_MEMORY_SIZE`
-          provides this information.
-        examples: 128
+          provides this information (which must be multiplied by 1,048,576).
+        examples: 134217728
