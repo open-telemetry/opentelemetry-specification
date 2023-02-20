@@ -45,7 +45,7 @@ groups:
           [AWS regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/),
           [Azure regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/),
           [Google Cloud regions](https://cloud.google.com/about/locations),
-          or [Tencent Cloud regions](https://intl.cloud.tencent.com/document/product/213/6091).
+          or [Tencent Cloud regions](https://www.tencentcloud.com/document/product/213/6091).
         examples: ['us-central1', 'us-east-1']
       - id: availability_zone
         type: string
