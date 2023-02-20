@@ -13,7 +13,7 @@ See also the [additional instructions for instrumenting AWS Lambda](instrumentat
 
 - [General Attributes](#general-attributes)
   * [Function Name](#function-name)
-  * [Difference between execution and instance](#difference-between-execution-and-instance)
+  * [Difference between invocation and instance](#difference-between-invocation-and-instance)
 - [Incoming Invocations](#incoming-invocations)
   * [Incoming FaaS Span attributes](#incoming-faas-span-attributes)
   * [Resource attributes as incoming FaaS span attributes](#resource-attributes-as-incoming-faas-span-attributes)
@@ -37,8 +37,8 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 <!-- semconv faas_span -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `faas.trigger` | string | Type of the trigger which caused this function execution. [1] | `datasource` | Recommended |
-| `faas.execution` | string | The execution ID of the current function execution. | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | Recommended |
+| `faas.trigger` | string | Type of the trigger which caused this function invocation. [1] | `datasource` | Recommended |
+| `faas.invocation_id` | string | The invocation ID of the current function invocation. | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | Recommended |
 
 **[1]:** For the server/consumer span on the incoming side,
 `faas.trigger` MUST be set.
@@ -73,15 +73,15 @@ purpose. It is also highly likely that Span name will contain the function name
 weaker "SHOULD" requirement). Consumers that needs such guarantee can use
 `faas.name` attribute as the source.
 
-### Difference between execution and instance
+### Difference between invocation and instance
 
 For performance reasons (e.g. [AWS lambda], or [Azure functions]), FaaS providers allocate an execution environment for a single instance of a function that is used to serve multiple requests.
-Developers exploit this fact to solve the **cold start** issue, caching expensive resource computations between different function executions.
+Developers exploit this fact to solve the **cold start** issue, caching expensive resource computations between different function invocations.
 Furthermore, FaaS providers encourage this behavior, e.g. [Google functions].
-The `faas.instance` resource attribute MAY be set to help correlate function executions that belong to the same execution environment.
-The span attribute `faas.execution` differs from the [resource attribute][FaaS resource attributes] `faas.instance` in the following:
+The `faas.instance` resource attribute MAY be set to help correlate function invocations that belong to the same execution environment.
+The span attribute `faas.invocation_id` differs from the [resource attribute][FaaS resource attributes] `faas.instance` in the following:
 
-- `faas.execution` refers to the current request ID handled by the function;
+- `faas.invocation_id` refers to the ID of the current invocation of the function;
 - `faas.instance` refers to the execution environment ID of the function.
 
 [AWS lambda]: https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
@@ -100,7 +100,7 @@ For incoming FaaS spans, the span kind MUST be `Server`.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `faas.coldstart` | boolean | A boolean that is true if the serverless function is executed for the first time (aka cold-start). |  | Recommended |
-| `faas.trigger` | string | Type of the trigger which caused this function execution. [1] | `datasource` | Required |
+| `faas.trigger` | string | Type of the trigger which caused this function invocation. [1] | `datasource` | Required |
 
 **[1]:** For the server/consumer span on the incoming side,
 `faas.trigger` MUST be set.
@@ -197,9 +197,9 @@ The function responsibility is to provide an answer to an inbound HTTP request. 
 ### PubSub
 
 A function is set to be executed when messages are sent to a messaging system.
-In this case, multiple messages could be batch and forwarded at once to the same function execution.
+In this case, multiple messages could be batch and forwarded at once to the same function invocation.
 Therefore, a different root span of type `faas` MUST be created for each message processed by the function, following the [Messaging systems semantic conventions](messaging.md).
-This way, it is possible to correlate each individual message with its execution sender.
+This way, it is possible to correlate each individual message with its invocation sender.
 
 ### Timer
 
@@ -230,7 +230,7 @@ This example shows the FaaS attributes for a (non-FaaS) process hosted on Google
 | Span           | `faas.invoked_provider` | `"aws"`                | n/a |
 | Span           | `faas.invoked_region`   | `"eu-central-1"`       | n/a |
 | Span           | `faas.trigger`          | n/a                    | `"http"` |
-| Span           | `faas.execution`        | n/a                    | `"af9d5aa4-a685-4c5f-a22b-444f80b3cc28"` |
+| Span           | `faas.invocation_id`    | n/a                    | `"af9d5aa4-a685-4c5f-a22b-444f80b3cc28"` |
 | Span           | `faas.coldstart`        | n/a                    | `true` |
 | Resource       | `faas.name`             | n/a                    | `"my-lambda-function"` |
 | Resource       | `faas.id`               | n/a                    | `"arn:aws:lambda:us-west-2:123456789012:function:my-lambda-function"` |
