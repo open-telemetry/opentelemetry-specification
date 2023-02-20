@@ -295,6 +295,14 @@ the broker does not have such notion, the destination name SHOULD uniquely ident
 **[7]:** If value is `true`. When missing, the value is assumed to be `false`.
 <!-- endsemconv -->
 
+<!-- TODO: remove this note once https://github.com/open-telemetry/build-tools/issues/136 is fixed -->
+`messaging.destination.kind` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+
+| Value  | Description |
+|---|---|
+| `queue` | A message sent to a queue |
+| `topic` | A message sent to a topic |
+
 ### Consumer attributes
 
 The following additional attributes describe message consumer operations.
@@ -333,6 +341,14 @@ the broker does not have such notion, the source name SHOULD uniquely identify t
 
 **[8]:** When supported by messaging system and only if the source is temporary. When missing, the value is assumed to be `false`.
 <!-- endsemconv -->
+
+<!-- TODO: remove this note once https://github.com/open-telemetry/build-tools/issues/136 is fixed -->
+`messaging.source.kind` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+
+| Value  | Description |
+|---|---|
+| `queue` | A message sent to a queue |
+| `topic` | A message sent to a topic |
 
 The *receive* span is be used to track the time used for receiving the message(s), whereas the *process* span(s) track the time for processing the message(s).
 Note that one or multiple Spans with `messaging.operation` = `process` may often be the children of a Span with `messaging.operation` = `receive`.

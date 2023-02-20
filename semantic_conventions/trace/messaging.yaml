@@ -41,7 +41,7 @@ groups:
         examples: ['MyQueue', 'MyTopic']
       - id: kind
         type:
-          allow_custom_values: false
+          allow_custom_values: true
           members:
             - id: queue
               value: "queue"
