@@ -1,0 +1,29 @@
+groups:
+  - id: trace-link
+    type: event
+    prefix: link
+    brief: >
+      This document defines the shared attributes used to
+      report a soft link associated with a span.
+    attributes:
+      - id: traceid
+        type: string
+        brief: >
+          The lowercase hex encoded trace id, as
+          [retrieved](../api.md#retrieving-the-traceid-and-spanid)
+          by `SpanContext`.
+        examples: 'af9d5aa4-a685-4c5f-a22b-444f80b3cc28'
+      - id: spanid
+        type: string
+        brief: >
+          The lowercase hex encoded span id, as
+          [retrieved](../api.md#retrieving-the-traceid-and-spanid)
+          by `SpanContext`.
+        examples: 'af9d5aa4-a685-4c5f-a22b-444f80b3cc28'
+      - id: tracestate
+        type: string
+        brief: >
+          The trace state, as specified in the
+          [API](../api.md#tracestate).
+        examples: 'congo=t61rcWkgMzE'
+
