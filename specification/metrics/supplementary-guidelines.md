@@ -431,30 +431,30 @@ Instrument](./api.md#histogram). What if we collect measurements from an
 [Asynchronous Counter](./api.md#asynchronous-counter)?
 
 The following example shows the number of [page
-faults](https://en.wikipedia.org/wiki/Page_fault) of each thread since the
-thread ever started:
+faults](https://en.wikipedia.org/wiki/Page_fault) of each process since
+it started:
 
 * During the time range (T<sub>0</sub>, T<sub>1</sub>]:
-  * pid = `1001`, tid = `1`, #PF = `50`
-  * pid = `1001`, tid = `2`, #PF = `30`
+  * pid = `1001`, #PF = `50`
+  * pid = `1002`, #PF = `30`
 * During the time range (T<sub>1</sub>, T<sub>2</sub>]:
-  * pid = `1001`, tid = `1`, #PF = `53`
-  * pid = `1001`, tid = `2`, #PF = `38`
+  * pid = `1001`, #PF = `53`
+  * pid = `1002`, #PF = `38`
 * During the time range (T<sub>2</sub>, T<sub>3</sub>]
-  * pid = `1001`, tid = `1`, #PF = `56`
-  * pid = `1001`, tid = `2`, #PF = `42`
+  * pid = `1001`, #PF = `56`
+  * pid = `1002`, #PF = `42`
 * During the time range (T<sub>3</sub>, T<sub>4</sub>]:
-  * pid = `1001`, tid = `1`, #PF = `60`
-  * pid = `1001`, tid = `2`, #PF = `47`
+  * pid = `1001`, #PF = `60`
+  * pid = `1002`, #PF = `47`
 * During the time range (T<sub>4</sub>, T<sub>5</sub>]:
-  * thread 1 died, thread 3 started
-  * pid = `1001`, tid = `2`, #PF = `53`
-  * pid = `1001`, tid = `3`, #PF = `5`
+  * process 1001 died, process 1003 started
+  * pid = `1002`, #PF = `53`
+  * pid = `1003`, #PF = `5`
 * During the time range (T<sub>5</sub>, T<sub>6</sub>]:
-  * thread 1 restarts
-  * pid = `1001`, tid = `1`, #PF = `10`
-  * pid = `1001`, tid = `2`, #PF = `57`
-  * pid = `1001`, tid = `3`, #PF = `8`
+  * A new process 1001 started
+  * pid = `1001`, #PF = `10`
+  * pid = `1002`, #PF = `57`
+  * pid = `1003`, #PF = `8`
   
 Note that in the following examples, Cumulative aggregation
 temporality is discussed before Delta aggregation temporality because
@@ -466,27 +466,27 @@ API with specified Cumulative aggregation temporality.
 If we export the metrics using **Cumulative Temporality**:
 
 * (T<sub>0</sub>, T<sub>1</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, sum: `50`
-  * attributes: {pid = `1001`, tid = `2`}, sum: `30`
+  * attributes: {pid = `1001`}, sum: `50`
+  * attributes: {pid = `1002`}, sum: `30`
 * (T<sub>0</sub>, T<sub>2</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, sum: `53`
-  * attributes: {pid = `1001`, tid = `2`}, sum: `38`
+  * attributes: {pid = `1001`}, sum: `53`
+  * attributes: {pid = `1002`}, sum: `38`
 * (T<sub>0</sub>, T<sub>3</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, sum: `56`
-  * attributes: {pid = `1001`, tid = `2`}, sum: `42`
+  * attributes: {pid = `1001`}, sum: `56`
+  * attributes: {pid = `1002`}, sum: `42`
 * (T<sub>0</sub>, T<sub>4</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, sum: `60`
-  * attributes: {pid = `1001`, tid = `2`}, sum: `47`
+  * attributes: {pid = `1001`}, sum: `60`
+  * attributes: {pid = `1002`}, sum: `47`
 * (T<sub>0</sub>, T<sub>5</sub>]
-  * attributes: {pid = `1001`, tid = `2`}, sum: `53`
+  * attributes: {pid = `1002`}, sum: `53`
 * (T<sub>4</sub>, T<sub>5</sub>]
-  * attributes: {pid = `1001`, tid = `3`}, sum: `5`
+  * attributes: {pid = `1003`}, sum: `5`
 * (T<sub>5</sub>, T<sub>6</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, sum: `10`
+  * attributes: {pid = `1001`}, sum: `10`
 * (T<sub>0</sub>, T<sub>6</sub>]
-  * attributes: {pid = `1001`, tid = `2`}, sum: `57`
+  * attributes: {pid = `1002`}, sum: `57`
 * (T<sub>4</sub>, T<sub>6</sub>]
-  * attributes: {pid = `1001`, tid = `3`}, sum: `8`
+  * attributes: {pid = `1003`}, sum: `8`
 
 The behavior in the first four periods is quite straightforward - we
 just take the data being reported from the asynchronous instruments
@@ -532,24 +532,23 @@ data model.
 If we export the metrics using **Delta Temporality**:
 
 * (T<sub>0</sub>, T<sub>1</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, delta: `50`
-  * attributes: {pid = `1001`, tid = `2`}, delta: `30`
+  * attributes: {pid = `1002`}, delta: `30`
 * (T<sub>1</sub>, T<sub>2</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, delta: `3`
-  * attributes: {pid = `1001`, tid = `2`}, delta: `8`
+  * attributes: {pid = `1001`}, delta: `3`
+  * attributes: {pid = `1002`}, delta: `8`
 * (T<sub>2</sub>, T<sub>3</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, delta: `3`
-  * attributes: {pid = `1001`, tid = `2`}, delta: `4`
+  * attributes: {pid = `1001`}, delta: `3`
+  * attributes: {pid = `1002`}, delta: `4`
 * (T<sub>3</sub>, T<sub>4</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, delta: `4`
-  * attributes: {pid = `1001`, tid = `2`}, delta: `5`
+  * attributes: {pid = `1001`}, delta: `4`
+  * attributes: {pid = `1002`}, delta: `5`
 * (T<sub>4</sub>, T<sub>5</sub>]
-  * attributes: {pid = `1001`, tid = `2`}, delta: `6`
-  * attributes: {pid = `1001`, tid = `3`}, delta: `5`
+  * attributes: {pid = `1002`}, delta: `6`
+  * attributes: {pid = `1003`}, delta: `5`
 * (T<sub>5</sub>, T<sub>6</sub>]
-  * attributes: {pid = `1001`, tid = `1`}, delta: `10`
-  * attributes: {pid = `1001`, tid = `2`}, delta: `4`
-  * attributes: {pid = `1001`, tid = `3`}, delta: `3`
+  * attributes: {pid = `1001`}, delta: `10`
+  * attributes: {pid = `1002`}, delta: `4`
+  * attributes: {pid = `1003`}, delta: `3`
 
 You can see that we are performing Cumulative->Delta conversion, and it requires
 us to remember the last value of **every single permutation we've encountered so
@@ -577,11 +576,10 @@ So here are some suggestions that we encourage SDK implementers to consider:
 ##### Asynchronous example: attribute removal in a view
 
 Suppose the metrics in the asynchronous example above are exported
-through a view configured to remove the `tid` attribute, leaving a
-single-dimensional count of page faults by `pid`.  For each metric
-stream, two measurements are produced covering the same interval of
-time, which the SDK is expected to aggregate before producing the
-output.
+through a view configured to remove the `pid` attribute, leaving a
+count of page faults.  For each metric stream, two measurements are produced
+covering the same interval of time, which the SDK is expected to aggregate
+before producing the output.
 
 The data model specifies to use the "natural merge" function, in this
 case meaning to add the current point values together because they
@@ -589,17 +587,17 @@ are `Sum` data points.  The expected output is, still in **Cumulative
 Temporality**:
 
 * (T<sub>0</sub>, T<sub>1</sub>]
-  * dimensions: {pid = `1001`}, sum: `80`
+  * dimensions: {}, sum: `80`
 * (T<sub>0</sub>, T<sub>2</sub>]
-  * dimensions: {pid = `1001`}, sum: `91`
+  * dimensions: {}, sum: `91`
 * (T<sub>0</sub>, T<sub>3</sub>]
-  * dimensions: {pid = `1001`}, sum: `98`
+  * dimensions: {}, sum: `98`
 * (T<sub>0</sub>, T<sub>4</sub>]
-  * dimensions: {pid = `1001`}, sum: `107`
+  * dimensions: {}, sum: `107`
 * (T<sub>0</sub>, T<sub>5</sub>]
-  * dimensions: {pid = `1001`}, sum: `58`
+  * dimensions: {}, sum: `58`
 * (T<sub>0</sub>, T<sub>6</sub>]
-  * dimensions: {pid = `1001`}, sum: `75`
+  * dimensions: {}, sum: `75`
 
 As discussed in the asynchronous cumulative temporality example above,
 there are various treatments available for detecting resets.  Even if
