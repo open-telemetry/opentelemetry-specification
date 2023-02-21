@@ -502,11 +502,11 @@ request (SERVER, trace=t1, span=s1)
 Example of establishing an HTTP connection with no trace started upfront:
 
 ```
-CONNECT www.example.com:80 (CLIENT, trace=t1, span=s2)
+CONNECT www.example.com:80 (CLIENT, trace=t1, span=s1)
 
-GET /hello - 200 (CLIENT, trace=t1, span=s3)
+GET /hello - 200 (CLIENT, trace=t2, span=s1)
  |
- --- server (SERVER, trace=t1, span=s4)
+ --- server (SERVER, trace=t2, span=s2)
 ```
 
 ### HTTP client establishing connection error examples
@@ -522,9 +522,9 @@ request (SERVER, trace=t1, span=s1)
 Example of an error occurring during establishing an HTTP connection with no trace started upfront:
 
 ```
-CONNECT www.example.com:80 (CLIENT, trace=t1, span=s2)
+CONNECT www.example.com:80 (CLIENT, trace=t1, span=s1)
 
-GET /hello - 200 (CLIENT, trace=t1, span=s3)
+GET /hello - 200 (CLIENT, trace=t2, span=s1)
  |
- --- server (SERVER, trace=t1, span=s4)
+ --- server (SERVER, trace=t2, span=s2)
 ```
