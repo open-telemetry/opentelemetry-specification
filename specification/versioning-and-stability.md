@@ -161,10 +161,11 @@ allowing the evolution of telemetry and semantic conventions, OpenTelemetry
 relies on the concept of
 [Telemetry Schemas](schemas/README.md).
 
-Semantic Conventions are not enforced on all fields available for telemetry.
-Instead, semantic conventions apply to "API" type interfaces on telemetry as
-opposed to actual values. Explicitly, Semantic conventions apply to the
-following API calls when constructing instrumentation:
+Semantic Conventions enforce stability in the telemetry produced for tooling.
+Semantic Convention stability applies to "API" type interfaces on telemetry as
+opposed to actual values. Semantic Conventions are allowed to recommend and
+suggest the shape of runtime values. However only the following fields will have
+enforced stability and interaction with telemetry schemas:
 
 - [Resource](resource/sdk.md)
   - attribute keys provided to Create or resource detectors
@@ -187,7 +188,6 @@ following API calls when constructing instrumentation:
     - the unit of the instrument.
   - The attribute keys provided when recording a measurement, for
     both synchronous and asynchronous instruments.
-- Logs (via [bridge](logs/bridge-api.md) or [event](logs/event-api.md)) are not currently enforced.
 
 Things not listed in the above are not enforced via semantic convention and allowed (or expected) to change. A few examples:
 
@@ -196,6 +196,8 @@ Things not listed in the above are not enforced via semantic convention and allo
 - The recorded measurement type (float or integer) of a metric is not enforced and allowed to change.
 - The description of a metric instrument.
 - The values being recorded by an instrument.
+
+The list of telemetry fields with enforced stability MAY be appended.
 
 Changes to semantic conventions in this specification are allowed, provided that
 the changes can be described by schema files. The following changes can be
