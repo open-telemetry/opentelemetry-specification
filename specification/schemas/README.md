@@ -81,7 +81,7 @@ address these needs.
 
 ## How Schemas Work
 
-We believe that the 3 parties described above should be able to evolve
+We believe that the 3 parties described above are able to evolve
 independently over time, while continuously retaining the ability to correctly
 work together.
 
@@ -102,10 +102,10 @@ how the schemas work:
 - Telemetry schemas are identified by Schema URLs, that are unique for each
   schema version.
 
-- Telemetry sources (e.g. instrumentation libraries) should include a schema URL
+- Telemetry sources (e.g. instrumentation libraries) will include a schema URL
   in the emitted telemetry.
 
-- Telemetry consumers should pay attention to the schema of the received
+- Telemetry consumers will pay attention to the schema of the received
   telemetry. If necessary, telemetry consumers may transform the telemetry data
   from the received schema version to the target schema version as expected at
   the point of use (e.g. a dashboard may define which schema version it
@@ -148,7 +148,7 @@ how the schemas work:
   attempt to support a comprehensive set of possible transformation types that
   can handle all possible changes to schemas that we can imagine. That would be
   too complicated and very likely superfluous. Any new transformation types
-  should be proposed and added in the future to the schema file format when
+  MUST be proposed and added in the future to the schema file format when
   there is an evidence that they are necessary for the evolution of
   OpenTelemetry.
 
