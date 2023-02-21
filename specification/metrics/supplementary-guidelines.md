@@ -450,6 +450,11 @@ thread ever started:
   * thread 1 died, thread 3 started
   * pid = `1001`, tid = `2`, #PF = `53`
   * pid = `1001`, tid = `3`, #PF = `5`
+* During the time range (T<sub>5</sub>, T<sub>6</sub>]:
+  * thread 1 restarts
+  * pid = `1001`, tid = `1`, #PF = `10`
+  * pid = `1001`, tid = `2`, #PF = `57`
+  * pid = `1001`, tid = `3`, #PF = `8`
   
 Note that in the following examples, Cumulative aggregation
 temporality is discussed before Delta aggregation temporality because
@@ -474,34 +479,42 @@ If we export the metrics using **Cumulative Temporality**:
   * attributes: {pid = `1001`, tid = `2`}, sum: `47`
 * (T<sub>0</sub>, T<sub>5</sub>]
   * attributes: {pid = `1001`, tid = `2`}, sum: `53`
+* (T<sub>4</sub>, T<sub>5</sub>]
   * attributes: {pid = `1001`, tid = `3`}, sum: `5`
+* (T<sub>5</sub>, T<sub>6</sub>]
+  * attributes: {pid = `1001`, tid = `1`}, sum: `10`
+* (T<sub>0</sub>, T<sub>6</sub>]
+  * attributes: {pid = `1001`, tid = `2`}, sum: `57`
+* (T<sub>4</sub>, T<sub>6</sub>]
+  * attributes: {pid = `1001`, tid = `3`}, sum: `8`
 
 The behavior in the first four periods is quite straightforward - we
 just take the data being reported from the asynchronous instruments
 and send them.
 
-The data model prescribes several valid behaviors at T<sub>5</sub> in
-this case, where one stream dies and another starts.  The [Resets and
-Gaps](./data-model.md#resets-and-gaps) section describes how start
-timestamps and staleness markers can be used to increase the
+The data model prescribes several valid behaviors at T<sub>5</sub> and
+T<sub>6</sub> in this case, where one stream dies and another starts.
+The [Resets and Gaps](./data-model.md#resets-and-gaps) section describes
+how start timestamps and staleness markers can be used to increase the
 receiver's understanding of these events.
 
 Consider whether the SDK maintains individual timestamps for the
 individual stream, or just one per process.  In this example, where a
-thread can die and start counting page faults from zero, the valid
-behaviors at T<sub>5</sub> are:
+thread can die and restart start counting page faults from zero, the
+valid behaviors at T<sub>5</sub> and T<sub>6</sub> are:
 
 1. If all streams in the process share a start time, and the SDK is
    not required to remember all past streams: the thread restarts with
-   zero sum.  Receivers with reset detection are able to calculate a
-   correct rate (except for frequent restarts relative to the
-   collection interval), however the precise time of a reset will be
-   unknown.
-2. If the SDK maintains per-stream start times, it signals to the
-   receiver precisely when a stream started, making the first
-   observation in a stream more useful for diagnostics.  Receivers can
-   perform overlap detection or duplicate suppression and do not
-   require reset detection, in this case.
+   zero sum, and the start time of the process.  Receivers with reset
+   detection are able to calculate a correct rate (except for frequent
+   restarts relative to the collection interval), however the precise
+   time of a reset will be unknown.
+2. If the SDK maintains per-stream start times, it provides the previous
+   callback time as the start time, as this time is before the occurrence
+   of any events which are measured during the subsequent callback. This
+   makes the first observation in a stream more useful for diagnostics,
+   as downstream consumers can perform overlap detection or duplicate
+   suppression and do not require reset detection in this case.
 3. Independent of above treatments, the SDK can add a staleness marker
    to indicate the start of a gap in the stream when one thread dies
    by remembering which streams have previously reported but are not
@@ -533,6 +546,10 @@ If we export the metrics using **Delta Temporality**:
 * (T<sub>4</sub>, T<sub>5</sub>]
   * attributes: {pid = `1001`, tid = `2`}, delta: `6`
   * attributes: {pid = `1001`, tid = `3`}, delta: `5`
+* (T<sub>5</sub>, T<sub>6</sub>]
+  * attributes: {pid = `1001`, tid = `1`}, delta: `10`
+  * attributes: {pid = `1001`, tid = `2`}, delta: `4`
+  * attributes: {pid = `1001`, tid = `3`}, delta: `3`
 
 You can see that we are performing Cumulative->Delta conversion, and it requires
 us to remember the last value of **every single permutation we've encountered so
@@ -581,6 +598,8 @@ Temporality**:
   * dimensions: {pid = `1001`}, sum: `107`
 * (T<sub>0</sub>, T<sub>5</sub>]
   * dimensions: {pid = `1001`}, sum: `58`
+* (T<sub>0</sub>, T<sub>6</sub>]
+  * dimensions: {pid = `1001`}, sum: `75`
 
 As discussed in the asynchronous cumulative temporality example above,
 there are various treatments available for detecting resets.  Even if
