@@ -15,12 +15,21 @@ release.
 
 ### Logs
 
+- Rename Logs API to Logs Bridge API to prevent confusion.
+  ([#3197](https://github.com/open-telemetry/opentelemetry-specification/pull/3197))
+
 ### Resource
 
 ### Semantic Conventions
 
 - Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
   ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+- BREAKING: Rename faas.execution to faas.invocation_id
+  ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
+- BREAKING: Change faas.max_memory units to Bytes instead of MB
+  ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
+- Add Connect RPC specific conventions
+  ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
 - Add requirement to use X-Ray propagation for aws-sdk client calls.
   ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
 
