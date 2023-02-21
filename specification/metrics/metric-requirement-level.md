@@ -19,7 +19,7 @@ The following metric requirement levels are specified:
 
 - [Required](#required)
 - [Recommended](#recommended)
-- [Optional](#optional)
+- [Opt-In](#opt-in)
 
 ## Required
 
