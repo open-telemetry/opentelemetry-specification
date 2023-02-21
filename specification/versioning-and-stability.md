@@ -189,7 +189,7 @@ enforced stability and interaction with telemetry schemas:
   - The attribute keys provided when recording a measurement, for
     both synchronous and asynchronous instruments.
 
-Things not listed in the above are not enforced via semantic convention and allowed (or expected) to change. A few examples:
+Things not listed in the above are not enforced via semantic convention and are allowed (or expected) to change. A few examples:
 
 - The values of attributes
 - The links attached to a span
