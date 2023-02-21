@@ -14,7 +14,7 @@ use cases.
 <!-- toc -->
 
 - [All triggers](#all-triggers)
-  * [Determining the parent of a span](#determining-the-parent-of-a-span)
+  * [AWS X-Ray Environment Span Link](#aws-x-ray-environment-span-link)
 - [API Gateway](#api-gateway)
 - [SQS](#sqs)
   * [SQS Event](#sqs-event)
@@ -36,7 +36,7 @@ Lambda `Context`.
 
 The following attributes SHOULD be set:
 
-- [`faas.execution`][faas] - The value of the AWS Request ID, which is always available through an accessor on the Lambda `Context`.
+- [`faas.invocation_id`][faas] - The value of the AWS Request ID, which is always available through an accessor on the Lambda `Context`.
 - [`cloud.account.id`][cloud] - In some languages, this is available as an accessor on the Lambda `Context`. Otherwise, it can be parsed from the ARN as the fifth item when splitting on `:`
 
 Also consider setting other attributes of the [`faas` resource][faasres] and [trace][faas] conventions
@@ -54,22 +54,19 @@ and the [cloud resource conventions][cloud]. The following AWS Lambda-specific a
 [faasres]: ../../../resource/semantic_conventions/faas.md (FaaS resource conventions)
 [cloud]: ../../../resource/semantic_conventions/cloud.md (Cloud resource conventions)
 
-### Determining the parent of a span
+### AWS X-Ray Environment Span Link
 
-The parent of the span MUST be determined by considering both the environment and any headers or attributes
-available from the event.
-
-If the `_X_AMZN_TRACE_ID` environment variable is set, instrumentations SHOULD first try to parse an
+If the `_X_AMZN_TRACE_ID` environment variable is set, instrumentation SHOULD try to parse an
 OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../context/api-propagators.md). If the
-resulting `Context` is [valid](../../api.md#isvalid) and sampled, then this `Context` is the parent of the
-function span. We check if it is valid because sometimes the `_X_AMZN_TRACE_ID` environment variable contains
-an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable will be set and the
+resulting `Context` is [valid](../../api.md#isvalid) then a [Span Link][] SHOULD be added to the new Span's
+[start options](../../api.md#specifying-links) with an associated attribute of `source=x-ray-env` to
+indicate the source of the linked span.
+Instrumentation MUST check if the context is valid before using it because the `_X_AMZN_TRACE_ID` environment variable can
+contain an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable will be set and the
 `Context` will be valid and sampled only if AWS X-Ray has been enabled for the Lambda function. A user can
-disable AWS X-Ray for the function if X-Ray propagation is not desired.
+disable AWS X-Ray for the function if the X-Ray Span Link is not desired.
 
-Otherwise, when X-Ray propagation fails, the user's configured propagators SHOULD be applied to the HTTP
-headers of the request to extract a `Context`. For example, API Gateway proxy requests can be configured to
-send HTTP headers to a Lambda function using [a body mapping template](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-override-request-response-parameters.html).
+[Span Link]: https://opentelemetry.io/docs/concepts/signals/traces/#span-links
 
 ## API Gateway
 
@@ -165,7 +162,7 @@ Function F:    | Span Function |
 | Parent |  | Span Client |
 | SpanKind | `CLIENT` | `SERVER` |
 | Status | `Ok` | `Ok` |
-| `faas.execution` | | `79104EXAMPLEB723` |
+| `faas.invocation_id` | | `79104EXAMPLEB723` |
 | `faas.trigger` | | `http` |
 | `cloud.account.id` | | `12345678912` |
 | `net.peer.name` | `foo.execute-api.us-east-1.amazonaws.com` |  |
