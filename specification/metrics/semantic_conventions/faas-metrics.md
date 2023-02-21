@@ -42,7 +42,7 @@ Below is a table of FaaS invocation metric instruments.
 | `faas.init_duration`   | Histogram                                         | milliseconds | `ms`                                      | Measures the duration of the function's initialization, such as a cold start |
 | `faas.coldstarts`      | Counter                                           | default unit | `{coldstarts}`                            | Number of invocation cold starts.                                            |
 | `faas.errors`          | Counter                                           | default unit | `{errors}`                                | Number of invocation errors.                                                 |
-| `faas.executions`      | Counter                                           | default unit | `{executions}`                            | Number of successful invocations.                                            |
+| `faas.invocations`      | Counter                                          | default unit | `{invocations}`                           | Number of successful invocations.                                            |
 | `faas.timeouts`        | Counter                                           | default unit | `{timeouts}`                              | Number of invocation timeouts.                                               |
 
 Optionally, when applicable:
@@ -65,9 +65,9 @@ Below is a table of the attributes to be included on FaaS metric events.
 | `faas.invoked_region`   | Required          | Cloud provider region of invoked function. Corresponds to resource `cloud.region`. Example: `us-east-1`                  |
 
 More details on these attributes, the function name and the difference compared to the faas.invoked_name can be found at the related [FaaS tracing specification](../../trace/semantic_conventions/faas.md).
-For incoming FaaS executions, the function for which metrics are reported is already described by its [FaaS resource attributes](../../resource/semantic_conventions/faas.md).
-Outgoing FaaS executions are identified using the `faas.invoked_*` attributes above.
-`faas.trigger` SHOULD be included in all metric events while `faas.invoked_*` attributes apply on outgoing FaaS execution events only.
+For incoming FaaS invocations, the function for which metrics are reported is already described by its [FaaS resource attributes](../../resource/semantic_conventions/faas.md).
+Outgoing FaaS invocations are identified using the `faas.invoked_*` attributes above.
+`faas.trigger` SHOULD be included in all metric events while `faas.invoked_*` attributes apply on outgoing FaaS invocation events only.
 
 ## References
 
