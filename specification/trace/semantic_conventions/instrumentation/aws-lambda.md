@@ -36,7 +36,7 @@ Lambda `Context`.
 
 The following attributes SHOULD be set:
 
-- [`faas.execution`][faas] - The value of the AWS Request ID, which is always available through an accessor on the Lambda `Context`.
+- [`faas.invocation_id`][faas] - The value of the AWS Request ID, which is always available through an accessor on the Lambda `Context`.
 - [`faas.id`][faasres] - The value of the invocation ARN
   for the function, which is always available through an accessor on the
   Lambda `Context`, modified as follows: Discard all parts beyond the seventh (when split on `:`;
@@ -169,7 +169,7 @@ Function F:    | Span Function |
 | Parent |  | Span Client |
 | SpanKind | `CLIENT` | `SERVER` |
 | Status | `Ok` | `Ok` |
-| `faas.execution` | | `79104EXAMPLEB723` |
+| `faas.invocation_id` | | `79104EXAMPLEB723` |
 | `faas.id` | | `arn:aws:lambda:us-west-2:123456789012:function:my-function` |
 | `faas.trigger` | | `http` |
 | `cloud.account.id` | | `12345678912` |
