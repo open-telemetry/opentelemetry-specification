@@ -215,7 +215,7 @@ identifiers.
 
 To create a new version of the schema copy the schema file for the last version
 in the schema family and add the definition of the new version. The schema file
-that corresponds to the new version must be retrievable at a new URL.
+that corresponds to the new version MUST be retrievable at a new URL.
 
 Important: schema files are immutable once they are published. Once the schema
 file is retrieved it is recommended to be cached permanently. Schema files may
