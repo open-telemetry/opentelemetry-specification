@@ -43,8 +43,4 @@ groups:
         brief: >
           The version string of the telemetry SDK.
         examples: ["1.2.3"]
-      - id: auto.version
-        type: string
-        brief: >
-          The version string of the auto instrumentation agent, if used.
-        examples: ["1.2.3"]
+

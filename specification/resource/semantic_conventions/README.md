@@ -73,15 +73,28 @@ as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Required |
-| `service.namespace` | string | A namespace for `service.name`. [2] | `Shop` | Recommended |
-| `service.instance.id` | string | The string ID of the service instance. [3] | `my-k8s-pod-deployment-1`; `627cc493-f310-47de-96bd-71410b7dec09` | Recommended |
-| `service.version` | string | The version string of the service API or implementation. | `2.0.0` | Recommended |
 
 **[1]:** MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
+<!-- endsemconv -->
 
-**[2]:** A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
+## Service (Experimental)
 
-**[3]:** MUST be unique for each instance of the same `service.namespace,service.name` pair (in other words `service.namespace,service.name,service.instance.id` triplet MUST be globally unique). The ID helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). It is preferable for the ID to be persistent and stay the same for the lifetime of the service instance, however it is acceptable that the ID is ephemeral and changes during important lifetime events for the service (e.g. service restarts). If the service has no inherent unique ID that can be used as the value of this attribute it is recommended to generate a random Version 1 or Version 4 RFC 4122 UUID (services aiming for reproducible UUIDs may also use Version 5, see RFC 4122 for more recommendations).
+**Status**: [Experimental](../../document-status.md)
+
+**type:** `service`
+
+**Description:** Additions to service instance.
+
+<!-- semconv service_experimental -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `service.namespace` | string | A namespace for `service.name`. [1] | `Shop` | Recommended |
+| `service.instance.id` | string | The string ID of the service instance. [2] | `my-k8s-pod-deployment-1`; `627cc493-f310-47de-96bd-71410b7dec09` | Recommended |
+| `service.version` | string | The version string of the service API or implementation. | `2.0.0` | Recommended |
+
+**[1]:** A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
+
+**[2]:** MUST be unique for each instance of the same `service.namespace,service.name` pair (in other words `service.namespace,service.name,service.instance.id` triplet MUST be globally unique). The ID helps to distinguish instances of the same service that exist at the same time (e.g. instances of a horizontally scaled service). It is preferable for the ID to be persistent and stay the same for the lifetime of the service instance, however it is acceptable that the ID is ephemeral and changes during important lifetime events for the service (e.g. service restarts). If the service has no inherent unique ID that can be used as the value of this attribute it is recommended to generate a random Version 1 or Version 4 RFC 4122 UUID (services aiming for reproducible UUIDs may also use Version 5, see RFC 4122 for more recommendations).
 <!-- endsemconv -->
 
 Note: `service.namespace` and `service.name` are not intended to be concatenated for the purpose of forming a single globally unique name for the service. For example the following 2 sets of attributes actually describe 2 different services (despite the fact that the concatenation would result in the same string):
@@ -121,7 +134,6 @@ The identifier SHOULD be stable across different versions of an implementation.
 | `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. | `opentelemetry` | Recommended |
 | `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | Recommended |
 | `telemetry.sdk.version` | string | The version string of the telemetry SDK. | `1.2.3` | Recommended |
-| `telemetry.auto.version` | string | The version string of the auto instrumentation agent, if used. | `1.2.3` | Recommended |
 
 `telemetry.sdk.language` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -138,6 +150,20 @@ The identifier SHOULD be stable across different versions of an implementation.
 | `ruby` | ruby |
 | `webjs` | webjs |
 | `swift` | swift |
+<!-- endsemconv -->
+
+## Telemetry SDK (Experimental)
+
+**Status**: [Experimental](../../document-status.md)
+
+**type:** `telemetry.sdk`
+
+**Description:** Additions to the telemetry SDK.
+
+<!-- semconv telemetry_experimental -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `telemetry.auto.version` | string | The version string of the auto instrumentation agent, if used. | `1.2.3` | Recommended |
 <!-- endsemconv -->
 
 ## Compute Unit
