@@ -28,6 +28,8 @@ release.
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - BREAKING: Change faas.max_memory units to Bytes instead of MB
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
+- Add Connect RPC specific conventions
+  ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
 
 ### Compatibility
 
