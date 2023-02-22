@@ -11,14 +11,12 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 
 ## Context Propagation
 
-When making outgoing calls using an aws-sdk, AWS X-Ray's propagation format MUST be used to add context propagation to
-http headers of the outgoing request. Propagation headers MUST be added before the signature is calculated to prevent errors
-on signed requests. Instrumentations MAY offer an enabled-by-default option to control enabling/disabling X-Ray propagation.
+When making outgoing calls using an aws-sdk, an AWS service-supported propagation format MUST be used to add context propagation to
+http headers of the outgoing request unless another propagator is explicitly provided. Propagation headers MUST be added before the signature is calculated to prevent errors
+on signed requests.
 
 X-Ray is necessary because it is the only format currently supported by AWS to allow context propagation through AWS managed
-services, for example SNS -> SQS -> Lambda. Implementations of AWS X-Ray instrumentation for aws-sdk can be used as
-reference for how to instrument the SDK for each language. (For example: [java](https://github.com/aws/aws-xray-sdk-java),
-[node](https://github.com/aws/aws-xray-sdk-node), and [python](https://github.com/aws/aws-xray-sdk-python).)
+services, for example SNS -> SQS -> Lambda.
 
 Additional propagation formats MAY be applied to individual request types that support arbitrary attributes such as `SqsMessage`.
 This can allow for transporting additional context that may not be supported by x-ray, such as baggage or tracestate.

@@ -30,7 +30,7 @@ release.
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - Add Connect RPC specific conventions
   ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
-- Add requirement to use X-Ray propagation for aws-sdk client calls.
+- Add requirement to use X-Ray propagation as default for aws-sdk client calls.
   ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
 
 ### Compatibility
