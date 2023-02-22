@@ -5,13 +5,13 @@ groups:
     brief: >
       Heroku dyno metadata
     attributes:
-      - id: creation_timestamp
+      - id: release.creation_timestamp
         type: string
         brief: >
           Time and date the release was created
         examples: [ '2022-10-23T18:00:42Z' ]
         requirement_level: optional
-      - id: commit
+      - id: release.commit
         type: string
         brief: >
           Commit hash for the current release
