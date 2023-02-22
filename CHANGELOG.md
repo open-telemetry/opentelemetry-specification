@@ -55,7 +55,8 @@ release.
 
 ### Metrics
 
-- No changes.
+- Add unit to View's Instrument selection criteria.
+  ([#3184](https://github.com/open-telemetry/opentelemetry-specification/pull/3184))
 
 ### Logs
 
