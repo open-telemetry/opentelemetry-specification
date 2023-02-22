@@ -1,4 +1,4 @@
-# Logs API Interface
+# Logs Bridge API
 
 **Status**: [Experimental](../document-status.md)
 
@@ -31,7 +31,7 @@ to build [Appenders](#how-to-create-log4j-style-appender), which use
 this API to bridge between existing logging libraries and the OpenTelemetry log
 data model.</b>
 
-The Logs API consist of these main classes:
+The Logs Bridge API consist of these main classes:
 
 * LoggerProvider is the entry point of the API. It provides access to Loggers.
 * Logger is the class responsible for

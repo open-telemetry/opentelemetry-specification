@@ -23,8 +23,8 @@ possible that the existing system does not have the equivalent of a name or
 requires multiple fields to identify the structure of the events. In such cases,
 OpenTelemetry recommends using a combination of one or more fields as the name
 such that the name identifies the event structurally. It is also recommended that
-the event names have low-cardinality, so care must be taken to not use fields
-that identify the instance of the Event and not the class of Events.
+the event names have low-cardinality, so care must be taken to use fields
+that identify the class of Events but not the instance of the Event.
 
 <!-- semconv event -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
