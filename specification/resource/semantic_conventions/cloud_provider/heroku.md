@@ -18,7 +18,7 @@
 
 | Dyno metadata environment variable | Resource attribute          |
 |------------------------------------|-----------------------------|
-| `HEROKU_APP_ID`                    | `heroku.id`                 |
+| `HEROKU_APP_ID`                    | `heroku.app.id`             |
 | `HEROKU_APP_NAME`                  | `service.name`              |
 | `HEROKU_DYNO_ID`                   | `service.instance.id`       |
 | `HEROKU_RELEASE_CREATED_AT`        | `heroku.creation_timestamp` |
