@@ -244,4 +244,7 @@ AWS Lambda resource information is available as [environment variables][] provid
 - [`faas.name`][faasres] MUST be set to the value of the `AWS_LAMBDA_FUNCTION_NAME` environment variable
 - [`faas.version`][faasres] MUST be set to the value of the `AWS_LAMBDA_FUNCTION_VERSION` environment variable
 
+Note that [`cloud.resource_id`][cloud] currently cannot be populated as a resource
+because it is not available until function invocation.
+
 [environment variables]: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
