@@ -401,7 +401,7 @@ request and response headers when sending binary Protobuf encoded payload.
 
 #### JSON Protobuf Encoding
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 JSON Protobuf encoded payloads use proto3 standard defined
 [JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json)

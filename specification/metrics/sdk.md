@@ -12,6 +12,7 @@ linkTitle: SDK
 <!-- toc -->
 
 - [MeterProvider](#meterprovider)
+  * [MeterProvider Creation](#meterprovider-creation)
   * [Meter Creation](#meter-creation)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
@@ -29,7 +30,11 @@ linkTitle: SDK
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
         * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
-  * [Resolving duplicate instrument registration conflicts](#resolving-duplicate-instrument-registration-conflicts)
+- [Meter](#meter)
+  * [Duplicate instrument registration](#duplicate-instrument-registration)
+  * [Instrument name](#instrument-name)
+  * [Instrument unit](#instrument-unit)
+  * [Instrument description](#instrument-description)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -64,6 +69,13 @@ linkTitle: SDK
 
 </details>
 
+Users of OpenTelemetry need a way for instrumentation interactions with the
+OpenTelemetry API to actually produce telemetry. The OpenTelemetry SDK
+(henceforth referred to as the SDK) is an implementation of the OpenTelemetry
+API that provides users with this functionally.
+
+All language implementations of OpenTelemetry MUST provide an SDK.
+
 ## MeterProvider
 
 **Status**: [Stable](../document-status.md)
@@ -74,6 +86,10 @@ metrics produced by any `Meter` from the `MeterProvider`. The [tracing SDK
 specification](../trace/sdk.md#additional-span-interfaces) has provided some
 suggestions regarding how to implement this efficiently.
 
+### MeterProvider Creation
+
+The SDK SHOULD allow the creation of multiple independent `MeterProvider`s.
+
 ### Meter Creation
 
 New `Meter` instances are always created through a `MeterProvider`
@@ -82,6 +98,15 @@ New `Meter` instances are always created through a `MeterProvider`
 the `MeterProvider` MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
+
+In the case where an invalid `name` (null or empty string) is specified, a
+working Meter MUST be returned as a fallback rather than returning null or
+throwing an exception, its `name` SHOULD keep the original invalid value, and a
+message reporting that the specified value is invalid SHOULD be logged.
+
+When a Schema URL is passed as an argument when creating a `Meter` the emitted
+telemetry for that `Meter` MUST be associated with the Schema URL, provided
+that the emitted data format is capable of representing such association.
 
 Configuration (i.e., [MetricExporters](#metricexporter),
 [MetricReaders](#metricreader) and [Views](#view)) MUST be managed solely by the
@@ -174,6 +199,7 @@ are the inputs:
     matching zero or more characters.  If wildcards are not supported in general,
     OpenTelemetry SDKs MUST specifically recognize the single `*` wildcard
     as matching all instruments.
+  * The `unit` of the Instrument(s) (optional).
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
@@ -555,33 +581,67 @@ execution.
 The implementation MUST complete the execution of all callbacks for a
 given instrument before starting a subsequent round of collection.
 
-### Resolving duplicate instrument registration conflicts
+## Meter
 
-As [stated in the API
-specification](api.md#instrument-type-conflict-detection),
-implementations are REQUIRED to create valid instruments in case of
-duplicate instrument registration, and the [data model includes
-RECOMMENDATIONS on how to treat the consequent duplicate
-conflicting](data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
-`Metric` definitions.
+Distinct meters MUST be treated as separate namespaces for the purposes of detecting
+[duplicate instrument registrations](#duplicate-instrument-registration).
 
-The implementation MUST aggregate data from identical Instruments
-together in its export pipeline.
+### Duplicate instrument registration
 
-The implementation SHOULD assist the user in managing conflicts by
-reporting each duplicate-conflicting instrument registration that was
-not corrected by a View as follows.  When a potential conflict arises
-between two non-identical `Metric` instances having the same `name`:
+When more than one Instrument of the same `name` is created for identical
+Meters, denoted _duplicate instrument registration_, the Meter MUST create a
+valid Instrument in every case. Here, "valid" means an instrument that is
+functional and can be expected to export data, despite potentially creating a
+[semantic error in the data
+model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations).
+
+It is unspecified whether or under which conditions the same or
+different Instrument instance will be returned as a result of
+duplicate instrument registration. The term _identical_ applied to
+Instruments describes instances where all [identifying
+fields](./api.md#instrument) are equal.  The term _distinct_ applied
+to Instruments describes instances where at least one field value is
+different.
+
+Based on [the recommendations from the data
+model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations),
+the SDK MUST aggregate data from identical Instruments together in its export
+pipeline.
+
+When a duplicate instrument registration occurs, and it is not corrected with a
+View, a warning SHOULD be emitted. The emitted warning SHOULD include
+information for the user on how to resolve the conflict, if possible.
 
 1. If the potential conflict involves multiple `description`
    properties, setting the `description` through a configured View
    SHOULD avoid the warning.
 2. If the potential conflict involves instruments that can be
    distinguished by a supported View selector (e.g., instrument type)
-   a View recipe SHOULD be printed advising the user how to avoid the
-   warning by renaming one of the conflicting instruments.
-3. Otherwise (e.g., use of multiple units), the implementation SHOULD
-   pass through the data by reporting both `Metric` objects.
+   a renaming View recipe SHOULD be included in the warning.
+3. Otherwise (e.g., use of multiple units), the SDK SHOULD pass through the
+   data by reporting both `Metric` objects and emit a generic warning
+   describing the duplicate instrument registration.
+
+### Instrument name
+
+When a Meter creates an instrument, it SHOULD validate the instrument name
+conforms to the [instrument name syntax](./api.md#instrument-name-syntax)
+
+If the instrument name does not conform to this syntax, the Meter SHOULD emit
+an error notifying the user about the invalid name. It is left unspecified if a
+valid instrument is also returned.
+
+### Instrument unit
+
+When a Meter creates an instrument, it SHOULD NOT validate the instrument unit.
+If a unit is not provided or the unit is null, the Meter MUST treat it the same
+as an empty unit string.
+
+### Instrument description
+
+When a Meter creates an instrument, it SHOULD NOT validate the instrument
+description. If a description is not provided or the description is null, the
+Meter MUST treat it the same as an empty description string.
 
 ## Attribute limits
 
