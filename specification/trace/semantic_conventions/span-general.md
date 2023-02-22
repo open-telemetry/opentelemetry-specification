@@ -52,7 +52,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.name` | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
 | `net.host.port` | int | Logical local port number, preferably the one that the peer used to connect | `8080` | Recommended |
 | `net.sock.host.addr` | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
-| `net.sock.host.port` | int | Local socket port number. | `35555` | Recommended: [6] |
+| `net.sock.host.port` | int | Local socket port number. | `35555` | Conditionally Required: [6] |
 | `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
 | `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
 | `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |

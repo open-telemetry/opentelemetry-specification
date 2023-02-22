@@ -251,7 +251,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `localhost` | Required |
 | [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Optional |
-| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
+| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Conditionally Required: [6] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
