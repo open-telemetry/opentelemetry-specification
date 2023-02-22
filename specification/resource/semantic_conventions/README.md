@@ -131,9 +131,9 @@ The identifier SHOULD be stable across different versions of an implementation.
 <!-- semconv telemetry -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. | `opentelemetry` | Recommended |
-| `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | Recommended |
-| `telemetry.sdk.version` | string | The version string of the telemetry SDK. | `1.2.3` | Recommended |
+| `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. | `opentelemetry` | Required |
+| `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | Required |
+| `telemetry.sdk.version` | string | The version string of the telemetry SDK. | `1.2.3` | Required |
 
 `telemetry.sdk.language` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
