@@ -500,8 +500,9 @@ receiver's understanding of these events.
 
 Consider whether the SDK maintains individual timestamps for the
 individual stream, or just one per process.  In this example, where a
-thread can die and restart start counting page faults from zero, the
-valid behaviors at T<sub>5</sub> and T<sub>6</sub> are:
+process can die and restart, it starts counting page faults from zero.
+In this case, the valid behaviors at T<sub>5</sub> and T<sub>6</sub>
+are:
 
 1. If all streams in the process share a start time, and the SDK is
    not required to remember all past streams: the thread restarts with
