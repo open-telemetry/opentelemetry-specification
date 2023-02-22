@@ -99,5 +99,5 @@ grained information from a stacktrace, if necessary.
 [js-stacktrace]: https://v8.dev/docs/stack-trace-api
 [ruby-full-message]: https://ruby-doc.org/core-2.7.1/Exception.html#method-i-full_message
 [csharp-stacktrace]: https://docs.microsoft.com/en-us/dotnet/api/system.exception.tostring
-[go-stacktrace]: https://golang.org/pkg/runtime/debug/#Stack
+[go-stacktrace]: https://pkg.go.dev/runtime/debug#Stack
 [telemetry-sdk-resource]: ../../resource/semantic_conventions/README.md#telemetry-sdk
