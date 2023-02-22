@@ -354,7 +354,7 @@ outlined in documentation for
 // reached.
 ```
 
-The server determines the value of the `retry_delay` and is implementation
+The value of `retry_delay` is determined by the server and is implementation
 dependant. The server SHOULD choose a `retry_delay` value that is big enough to
 give the server time to recover yet is not too big to cause the client to drop
 data while being throttled.
@@ -636,9 +636,9 @@ telemetry data to more than one destination server. When one of the servers
 acknowledges the data and the other server does not (yet), the client needs
 to decide how to move forward.
 
-In such a situation, the client SHOULD implement (per destination): queuing,  
-acknowledgment-handling, and retry logic. This ensures that servers do not
-block each other. The queues SHOULD reference and send shared immutable data,
+In such a situation, the client SHOULD implement queuing, acknowledgment
+handling, and retrying logic per destination. This ensures that servers do not
+block each other. The queues SHOULD reference shared, immutable data to be sent,
 thus minimizing the memory overhead caused by having multiple queues.
 
 ![Multi-Destination Exporting](img/otlp-multi-destination.png)
