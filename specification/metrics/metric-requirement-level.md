@@ -30,7 +30,7 @@ A semantic convention defining a Required metric expects that an absolute majori
 
 Instrumentations SHOULD emit the metric by default if it's readily available and can be efficiently emitted. Instrumentations MAY offer a configuration option to disable Recommended metrics.
 
-Instrumentations that decide not to emit `Recommended` metrics due to performance, security, privacy, or other consideration by default, SHOULD use the `Opt-In` requirement level on them if the metrics are logically applicable.
+Instrumentations that decide not to emit `Recommended` metrics due to performance, security, privacy, or other consideration by default, SHOULD allow for opting in to emitting them as defined for the `Opt-In` requirement level if the metrics are logically applicable.
 
 ## Opt-In
 
