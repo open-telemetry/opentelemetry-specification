@@ -30,6 +30,8 @@ release.
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - Add Connect RPC specific conventions
   ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
+- Remove mention of `net.transport` from HTTP semantic conventions
+  ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
 
 ### Compatibility
 
