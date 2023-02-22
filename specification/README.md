@@ -65,7 +65,7 @@ NOT" requirements defined in the [specification][].
     future.
   * Anything that is retrospective, for example, a feature/functionality which
     has been released as a stable/GA offering before this compliance rule was
-    formalized (release 1.16.0).
+    formalized (release 1.19.0).
 
 ## Project Naming
 
