@@ -30,6 +30,8 @@ release.
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - Add Connect RPC specific conventions
   ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
+- Mark `net.sock.host.port` as conditionally required.
+  ([#3246](https://github.com/open-telemetry/opentelemetry-specification/pull/3246))
 
 ### Compatibility
 
