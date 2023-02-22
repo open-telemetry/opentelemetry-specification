@@ -46,4 +46,3 @@ groups:
         brief: >
           The version string of the telemetry SDK.
         examples: ["1.2.3"]
-

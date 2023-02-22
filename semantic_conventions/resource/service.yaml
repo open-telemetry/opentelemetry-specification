@@ -16,4 +16,3 @@ groups:
           with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`.
           If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
         examples: ["shoppingcart"]
-
