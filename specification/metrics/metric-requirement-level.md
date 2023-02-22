@@ -23,7 +23,8 @@ The following metric requirement levels are specified:
 
 ## Required
 
-All instrumentations MUST emit the metric. A semantic convention defining a Required metric expects that an absolute majority of instrumentation libraries and applications are able to efficiently emit it. `http.server.duration` is an example of a Required metric.
+All instrumentations MUST emit the metric.
+A semantic convention defining a Required metric expects that an absolute majority of instrumentation libraries and applications are able to efficiently emit it.
 
 ## Recommended
 
