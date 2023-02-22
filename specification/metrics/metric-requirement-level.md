@@ -33,4 +33,7 @@ Instrumentations that decide not to emit `Recommended` metrics due to performanc
 
 ## Opt-In
 
-Instrumentations SHOULD emit the metric if and only if the user configures the instrumentation to do so. Instrumentation that doesn't support configuration MUST NOT emit `Opt-In` metrics.
+Instrumentations SHOULD emit the metric if and only if the user configures the instrumentation to do so.
+Instrumentation that doesn't support configuration MUST NOT emit `Opt-In` metrics.
+
+This attribute requirement level is recommended for metrics that are particularly expensive to retrieve or might pose a security or privacy risk. These should therefore only be enabled deliberately by a user making an informed decision.
