@@ -81,9 +81,15 @@ This function MAY be named `logEvent`.
   to not override or delete this attribute while the Event is emitted to
   preserve its identity.
 * `event_data` - this argument should of type [`Attributes`](../common/README.md#attribute)
-  and MUST recorded as a `LogRecod` attribute with the key `event.data`.
-* `other_attributes` - this argument should of type [`Attributes`](../common/README.md#attribute)
-  and MUST recorded as attributes on the `LogRecod`. Care MUST be taken by the
+  and MUST only contain the values as defined by the defined domain-specific schema
+  for the `event` (identified by the event domain + name combination) and is
+  recorded as a `LogRecod` attribute with the key `event.data`. It is optional to
+  support simple ping style events which do not require any form of payload, when
+  a payload is required `events` SHOULD provide a `event_data` and not simply use
+  `other_attributes` as a replacement.
+* `other_attributes` - this argument is used to provide additional context about
+  an `event`, it should of type [`Attributes`](../common/README.md#attribute)
+  and MUST be recorded as attributes on the `LogRecod`. Care MUST be taken by the
   implementation to not override already recorded attributes with names
   `event.name`, `event.domain` and `event.data`.
 
@@ -97,3 +103,10 @@ after making the following changes:
   when [creating the EventLogger](#create-eventlogger) MUST be set as
   the `event.domain` attribute on the `logRecord`.
 * The `event_name` MUST be set as the `event.name` attribute on the `logRecord`.
+* The `event_data` if provided MUST be set as the `event.data` attribute on the
+ `logRecord`. Validation of the domain-specific contents of the `event_data` is
+  optional and not required at the API level, as validation SHOULD occur downstream
+  of the API.
+* `other_attributes` should be optional and is only provided to enable additional
+  context about an `event` it is NOT a replacement for payload of an event which
+  is represented by the contents of `event.data`.
