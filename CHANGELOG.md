@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add metric requirement levels "Required", "Recommended", and "Opt-In".
+  ([#3237](https://github.com/open-telemetry/opentelemetry-specification/pull/3237))
+
 ### Logs
 
 - Rename Logs API to Logs Bridge API to prevent confusion.
