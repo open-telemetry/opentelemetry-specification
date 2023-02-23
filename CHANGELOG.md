@@ -17,6 +17,8 @@ release.
 
 - Rename Logs API to Logs Bridge API to prevent confusion.
   ([#3197](https://github.com/open-telemetry/opentelemetry-specification/pull/3197))
+- Move event language from log README to event-api.
+  ([#3252](https://github.com/open-telemetry/opentelemetry-specification/pull/3252))
 
 ### Resource
 
