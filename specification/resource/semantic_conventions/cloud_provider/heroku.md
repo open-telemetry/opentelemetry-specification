@@ -16,7 +16,6 @@
 
 **Mapping:**
 
-
 | Dyno metadata environment variable | Resource attribute                  |
 |------------------------------------|-------------------------------------|
 | `HEROKU_APP_ID`                    | `heroku.app.id`                     |
