@@ -144,7 +144,7 @@ Given the above state of the logging space we took the following approach:
   OpenTelemetry's log data model. More on this [later](#new-first-party-application-logs).
 
 - Existing log formats can be
-  [unambiguously mapped](data-model.md#appendix-a-example-mappings) to
+  [unambiguously mapped](data-model-appendix.md) to
   OpenTelemetry log data model. OpenTelemetry Collector can read such logs and
   translate them to OpenTelemetry log data model.
 
