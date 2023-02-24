@@ -26,6 +26,7 @@ groups:
         examples:
           - GetItem
           - PutItem
+      - ref: rpc.aws.request_id
 
   - id: dynamodb.all
     type: span
