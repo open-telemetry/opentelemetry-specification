@@ -12,7 +12,8 @@ Some descriptions are also provided for populating general OpenTelemetry semanti
 ## Context Propagation
 
 When making outgoing calls using an aws-sdk, an AWS service-supported propagation format MUST be used to add
-context propagation to http headers on the outgoing request, unless another propagator is explicitly provided.
+context propagation to HTTP headers on the outgoing request, unless another propagator is explicitly provided,
+in which case the provided propagator MUST be used.
 Propagation headers MUST be added before the signature is calculated to prevent errors on signed requests.
 
 The following formats are currently supported by AWS services for propagation:
