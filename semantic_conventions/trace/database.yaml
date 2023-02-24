@@ -414,9 +414,41 @@ groups:
         brief: Unique cosmos client instance id.
         examples: '3ba4827d-4422-483f-b59f-85b74211c11d'
       - id: operation_type
-        type: string
+        type:
+          allow_custom_values: false
+          members:
+            - id: Invalid
+              value: 'Invalid'
+            - id: Create
+              value: 'Create'
+            - id: Patch
+              value: 'Patch'
+            - id: Read
+              value: 'Read'
+            - id: ReadFeed
+              value: 'ReadFeed'
+            - id: Delete
+              value: 'Delete'
+            - id: Replace
+              value: 'Replace'
+            - id: Execute
+              value: 'Execute'
+            - id: Query
+              value: 'Query'
+            - id: Head
+              value: 'Head'
+            - id: HeadFeed
+              value: 'HeadFeed'
+            - id: Upsert
+              value: 'Upsert'
+            - id: Batch
+              value: 'Batch'
+            - id: QueryPlan
+              value: 'QueryPlan'
+            - id: ExecuteJavaScript
+              value: 'ExecuteJavaScript'
         brief: Cosmsodb Operation Type.
-        examples: '3ba4827d-4422-483f-b59f-85b74211c11d'
+        requirement_level: required
       - id: user_agent
         type: string
         brief: Cosmos client SDK user agent.
