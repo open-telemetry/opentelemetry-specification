@@ -16,7 +16,8 @@ versions:
       changes:
         # https://github.com/open-telemetry/opentelemetry-specification/pull/3190
         - rename_attributes:
-          browser.user_agent: user_agent.original
+            attribute_map:
+              browser.user_agent: user_agent.original
   1.18.0:
   1.17.0:
     spans:
