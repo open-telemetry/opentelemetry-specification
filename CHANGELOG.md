@@ -13,10 +13,15 @@ release.
 
 ### Metrics
 
+- Add metric requirement levels "Required", "Recommended", and "Opt-In".
+  ([#3237](https://github.com/open-telemetry/opentelemetry-specification/pull/3237))
+
 ### Logs
 
 - Rename Logs API to Logs Bridge API to prevent confusion.
   ([#3197](https://github.com/open-telemetry/opentelemetry-specification/pull/3197))
+- Move event language from log README to event-api.
+  ([#3252](https://github.com/open-telemetry/opentelemetry-specification/pull/3252))
 
 ### Resource
 
@@ -30,6 +35,10 @@ release.
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - Add Connect RPC specific conventions
   ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
+- Rename JVM metric attribute value from `nonheap` to `non_heap`
+  ([#3250](https://github.com/open-telemetry/opentelemetry-specification/pull/3250))
+- Mark the attribute naming guidelines in the specification as stable.
+  ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
 
 ### Compatibility
 
