@@ -15,7 +15,9 @@ i.e.:
 ## Writing semantic conventions
 
 Semantic conventions for the spec MUST adhere to the
-[attribute naming](../specification/common/attribute-naming.md) and [requirement level](../specification/common/attribute-requirement-level.md) conventions.
+[attribute naming](../specification/common/attribute-naming.md),
+[attribute requirement level](../specification/common/attribute-requirement-level.md),
+and [metric requirement level](../specification/metrics/metric-requirement-level.md) conventions.
 
 Refer to the [syntax](https://github.com/open-telemetry/build-tools/tree/v0.15.1/semantic-conventions/syntax.md)
 for how to write the YAML files for semantic conventions and what the YAML properties mean.

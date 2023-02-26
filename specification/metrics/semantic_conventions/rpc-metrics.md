@@ -23,6 +23,8 @@ metrics can be filtered for finer grain analysis.
   * [Service name](#service-name)
 - [gRPC conventions](#grpc-conventions)
   * [gRPC Attributes](#grpc-attributes)
+- [Connect RPC conventions](#connect-rpc-conventions)
+  * [Connect RPC Attributes](#connect-rpc-attributes)
 
 <!-- tocstop -->
 
@@ -100,6 +102,7 @@ measurements.
 | `java_rmi` | Java RMI |
 | `dotnet_wcf` | .NET WCF |
 | `apache_dubbo` | Apache Dubbo |
+| `connect_rpc` | Connect RPC |
 <!-- endsemconv -->
 
 To avoid high cardinality, implementations should prefer the most stable of `net.peer.name` or
@@ -158,3 +161,42 @@ Below is a table of attributes that SHOULD be included on client and server RPC 
 <!-- endsemconv -->
 
 [gRPC]: https://grpc.io/
+
+## Connect RPC conventions
+
+For remote procedure calls via [connect](http://connect.build), additional conventions are described in this section.
+
+`rpc.system` MUST be set to `"connect_rpc"`.
+
+### Connect RPC Attributes
+
+Below is a table of attributes that SHOULD be included on client and server RPC measurements when `rpc.system` is `"connect_rpc"`.
+
+<!-- semconv rpc.connect_rpc -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| [`rpc.connect_rpc.error_code`](../../trace/semantic_conventions/rpc.md) | string | The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request. Error codes are always string values. | `cancelled` | Conditionally Required: [1] |
+
+**[1]:** If response is not successful and if error code available.
+
+`rpc.connect_rpc.error_code` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `cancelled` | cancelled |
+| `unknown` | unknown |
+| `invalid_argument` | invalid_argument |
+| `deadline_exceeded` | deadline_exceeded |
+| `not_found` | not_found |
+| `already_exists` | already_exists |
+| `permission_denied` | permission_denied |
+| `resource_exhausted` | resource_exhausted |
+| `failed_precondition` | failed_precondition |
+| `aborted` | aborted |
+| `out_of_range` | out_of_range |
+| `unimplemented` | unimplemented |
+| `internal` | internal |
+| `unavailable` | unavailable |
+| `data_loss` | data_loss |
+| `unauthenticated` | unauthenticated |
+<!-- endsemconv -->

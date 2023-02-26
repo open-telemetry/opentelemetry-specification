@@ -20,7 +20,7 @@ See also:
 | `faas.id` | string | The unique ID of the single function that this runtime instance executes. [2] | `arn:aws:lambda:us-west-2:123456789012:function:my-function` | Recommended |
 | `faas.version` | string | The immutable version of the function being executed. [3] | `26`; `pinkfroid-00002` | Recommended |
 | `faas.instance` | string | The execution environment ID as a string, that will be potentially reused for other invocations to the same function/function version. [4] | `2021/06/28/[$LATEST]2f399eb14537447da05ab2a2e39309de` | Recommended |
-| `faas.max_memory` | int | The amount of memory available to the serverless function in MiB. [5] | `128` | Recommended |
+| `faas.max_memory` | int | The amount of memory available to the serverless function converted to Bytes. [5] | `134217728` | Recommended |
 
 **[1]:** This is the name of the function as configured/deployed on the FaaS
 platform and is usually different from the name of the callback
@@ -68,10 +68,10 @@ The exact value to use for `faas.id` depends on the cloud provider:
 
 **[4]:** * **AWS Lambda:** Use the (full) log stream name.
 
-**[5]:** It's recommended to set this attribute since e.g. too little memory can easily stop a Java AWS Lambda function from working correctly. On AWS Lambda, the environment variable `AWS_LAMBDA_FUNCTION_MEMORY_SIZE` provides this information.
+**[5]:** It's recommended to set this attribute since e.g. too little memory can easily stop a Java AWS Lambda function from working correctly. On AWS Lambda, the environment variable `AWS_LAMBDA_FUNCTION_MEMORY_SIZE` provides this information (which must be multiplied by 1,048,576).
 <!-- endsemconv -->
 
-Note: The resource attribute `faas.instance` differs from the span attribute `faas.execution`. For more information see the [Semantic conventions for FaaS spans](../../trace/semantic_conventions/faas.md#difference-between-execution-and-instance).
+Note: The resource attribute `faas.instance` differs from the span attribute `faas.invocation_id`. For more information see the [Semantic conventions for FaaS spans](../../trace/semantic_conventions/faas.md#difference-between-invocation-and-instance).
 
 ## Using span attributes instead of resource attributes
 
