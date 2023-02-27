@@ -13,7 +13,7 @@ release.
 
 * Clarify required parent information in ReadableSpan. Technically a relaxation,
   but previously it was easy to overlook certain properties were required.
-  (#TODO)[https://github.com/open-telemetry/opentelemetry-specification/pull/TODO]
+  [#3257](https://github.com/open-telemetry/opentelemetry-specification/pull/3257)
 
 ### Metrics
 
