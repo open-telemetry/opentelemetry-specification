@@ -8,6 +8,10 @@ versions:
         - rename_attributes:
             attribute_map:
               faas.execution: faas.invocation_id
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3188
+        - rename_attributes:
+            attribute_map:
+              faas.id: cloud.resource_id
   1.18.0:
   1.17.0:
     spans:
