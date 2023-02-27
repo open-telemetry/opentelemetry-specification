@@ -120,8 +120,14 @@ Thus, the SDK specification defines sets of possible requirements for
 
 * **Readable span**: A function receiving this as argument MUST be able to
   access all information that was added to the span, as listed
-  [in the API spec](api.md#span). In particular, it MUST also be
-  able to access the `InstrumentationScope` [since 1.10.0] and `Resource`
+  in the API spec for [Span](api.md#span) (Note: this also includes all
+  e.g. all its [Span Context](api.md#spancontext) properties).
+
+  SDKs MAY choose not to expose (and store) the full parent [Context](../context/README.md)
+  of the Span but MUST expose at least the full parent [SpanContext](api.md#spancontext).
+
+  In particular, it MUST also be able to access the `InstrumentationScope`
+  [since 1.10.0] and `Resource`
   information (implicitly) associated with the span. For backwards compatibility
   it MUST also be able to access the `InstrumentationLibrary`
   [deprecated since 1.10.0] having the same name and version values as the
