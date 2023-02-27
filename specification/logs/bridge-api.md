@@ -146,10 +146,6 @@ Emit a `LogRecord` to the processing pipeline.
 
 This function MAY be named `logRecord`.
 
-This API is intended for use
-by [Log Appenders](#how-to-create-log4j-style-appender), and SHOULD not be used
-by end users or other instrumentation.
-
 **Parameters:**
 
 * `logRecord` - the [LogRecord](#logrecord).
