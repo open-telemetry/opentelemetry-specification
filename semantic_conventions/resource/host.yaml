@@ -3,7 +3,7 @@ groups:
     prefix: host
     type: resource
     brief: >
-        'A host is defined as a computing instance. Examples: physical server, virtual machine, switch or disk array.'
+        A host is defined as a computing instance. For example, physical servers, virtual machines, switches or disk array.
     attributes:
       - id: id
         type: string

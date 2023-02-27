@@ -4,7 +4,7 @@
 
 **type:** `host`
 
-**Description:** A host is defined as a computing instance. Examples: physical server, virtual machine, switch or disk array.
+**Description:** A host is defined as a computing instance. For example, physical servers, virtual machines, switches or disk array.
 
 <!-- semconv host -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
