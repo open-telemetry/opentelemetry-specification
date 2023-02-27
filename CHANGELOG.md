@@ -20,6 +20,8 @@ release.
 
 - Rename Logs API to Logs Bridge API to prevent confusion.
   ([#3197](https://github.com/open-telemetry/opentelemetry-specification/pull/3197))
+- Move event language from log README to event-api.
+  ([#3252](https://github.com/open-telemetry/opentelemetry-specification/pull/3252))
 
 ### Resource
 
@@ -27,6 +29,8 @@ release.
 
 - Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
   ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+- Add heroku resource semantic conventions.
+  [#3075](https://github.com/open-telemetry/opentelemetry-specification/pull/3075)
 - BREAKING: Rename faas.execution to faas.invocation_id
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - BREAKING: Change faas.max_memory units to Bytes instead of MB
