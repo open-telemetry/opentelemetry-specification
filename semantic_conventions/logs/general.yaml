@@ -4,7 +4,7 @@ groups:
     brief: >
       The attributes described in this section are rather generic. They may be used in any Log Record they apply to.
     attributes:
-      - id: id
+      - id: uid
         type: string
         requirement_level: optional
         brief: >
