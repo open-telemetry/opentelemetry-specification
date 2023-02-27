@@ -23,6 +23,9 @@ groups:
             - id: apache_dubbo
               value: 'apache_dubbo'
               brief: 'Apache Dubbo'
+            - id: connect_rpc
+              value: 'connect_rpc'
+              brief: 'Connect RPC'
       - id: service
         type: string
         requirement_level: recommended
@@ -210,3 +213,48 @@ groups:
       - id: uncompressed_size
         type: int
         brief: "Uncompressed size of the message in bytes."
+
+  - id: rpc.connect_rpc
+    prefix: rpc.connect_rpc
+    type: span
+    extends: rpc
+    brief: 'Tech-specific attributes for Connect RPC.'
+    attributes:
+      - id: error_code
+        type:
+          members:
+            - id: cancelled
+              value: cancelled
+            - id: unknown
+              value: unknown
+            - id: invalid_argument
+              value: invalid_argument
+            - id: deadline_exceeded
+              value: deadline_exceeded
+            - id: not_found
+              value: not_found
+            - id: already_exists
+              value: already_exists
+            - id: permission_denied
+              value: permission_denied
+            - id: resource_exhausted
+              value: resource_exhausted
+            - id: failed_precondition
+              value: failed_precondition
+            - id: aborted
+              value: aborted
+            - id: out_of_range
+              value: out_of_range
+            - id: unimplemented
+              value: unimplemented
+            - id: internal
+              value: internal
+            - id: unavailable
+              value: unavailable
+            - id: data_loss
+              value: data_loss
+            - id: unauthenticated
+              value: unauthenticated
+        requirement_level:
+          conditionally_required: If response is not successful and if error code available.
+        brief: "The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request. Error codes are always string values."
