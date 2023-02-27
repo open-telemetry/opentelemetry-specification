@@ -3,7 +3,7 @@
 **Status**: [Experimental](../../document-status.md)
 
 This document defines semantic conventions for recording an application delivery as
-a [log record](../api.md#logrecord) emitted through the [Logger API](../api.md#emit-logrecord).
+a [log record](../bridge-api.md#logrecord) emitted through the [Logger API](../bridge-api.md#emit-logrecord).
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
@@ -21,14 +21,14 @@ a [log record](../api.md#logrecord) emitted through the [Logger API](../api.md#e
 ## Recording an Application Delivery
 
 Application deployments SHOULD be recorded as attributes on the
-[LogRecord](../api.md#logrecord) passed to the [Logger](../api.md#logger) emit
+[LogRecord](../bridge-api.md#logrecord) passed to the [Logger](../bridge-api.md#logger) emit
 operations. Application deployments MAY be recorded on "logs" or "events" depending on the
 context.
 
 ### Attributes
 
 The table below indicates which attributes should be added to the
-[LogRecord](../api.md#logrecord) and their types.
+[LogRecord](../bridge-api.md#logrecord) and their types.
 
 <!-- semconv log-deployment-application -->
 The event name MUST be `deployment.application`.
@@ -43,7 +43,7 @@ The event name MUST be `deployment.application`.
 ## Recording a Workload Delivery
 
 Workload deployments SHOULD be recorded as attributes on the
-[LogRecord](../api.md#logrecord) passed to the [Logger](../api.md#logger) emit
+[LogRecord](../bridge-api.md#logrecord) passed to the [Logger](../bridge-api.md#logger) emit
 operations. Workload deployments MAY be recorded on "logs" or "events" depending on the
 context.
 
@@ -63,7 +63,7 @@ The event name MUST be `deployment.workload`.
 ## Recording a Task execution
 
 Task executions that support deployments SHOULD be recorded as attributes on the
-[LogRecord](../api.md#logrecord) passed to the [Logger](../api.md#logger) emit
+[LogRecord](../bridge-api.md#logrecord) passed to the [Logger](../bridge-api.md#logger) emit
 operations. Task executions MAY be recorded on "logs" or "events" depending on the
 context.
 
