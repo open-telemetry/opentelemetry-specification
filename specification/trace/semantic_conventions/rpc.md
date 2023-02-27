@@ -20,6 +20,10 @@ This document defines how to describe remote procedure calls
   * [gRPC Attributes](#grpc-attributes)
   * [gRPC Status](#grpc-status)
   * [gRPC Request and Response Metadata](#grpc-request-and-response-metadata)
+- [Connect RPC conventions](#connect-rpc-conventions)
+  * [Connect RPC Attributes](#connect-rpc-attributes)
+  * [Connect RPC Status](#connect-rpc-status)
+  * [Connect RPC Request and Response Metadata](#connect-rpc-request-and-response-metadata)
 - [JSON RPC](#json-rpc)
   * [JSON RPC Attributes](#json-rpc-attributes)
 
@@ -92,6 +96,7 @@ Examples of span names:
 | `java_rmi` | Java RMI |
 | `dotnet_wcf` | .NET WCF |
 | `apache_dubbo` | Apache Dubbo |
+| `connect_rpc` | Connect RPC |
 <!-- endsemconv -->
 
 For client-side spans `net.peer.port` is required if the connection is IP-based and the port is available (it describes the server port they are connecting to).
@@ -209,6 +214,59 @@ The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC stat
 |-------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|-------------------|
 | `rpc.grpc.request.metadata.<key>`  | string[] | gRPC request metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1]  | `rpc.grpc.request.metadata.my_custom_metadata_attribute=["1.2.3.4", "1.2.3.5"]` | Optional          |
 | `rpc.grpc.response.metadata.<key>` | string[] | gRPC response metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1] | `rpc.grpc.response.metadata.my_custom_metadata_attribute=["attribute_value"]`   | Optional          |
+
+**[1]:** Instrumentations SHOULD require an explicit configuration of which metadata values are to be captured.
+Including all request/response metadata values can be a security risk - explicit configuration helps avoid leaking sensitive information.
+
+## Connect RPC conventions
+
+For remote procedure calls via [connect](http://connect.build), additional conventions are described in this section.
+
+`rpc.system` MUST be set to `"connect_rpc"`.
+
+### Connect RPC Attributes
+
+Below is a table of attributes that SHOULD be included on client and server RPC measurements when `rpc.system` is `"connect_rpc"`.
+
+<!-- semconv rpc.connect_rpc -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `rpc.connect_rpc.error_code` | string | The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request. Error codes are always string values. | `cancelled` | Conditionally Required: [1] |
+
+**[1]:** If response is not successful and if error code available.
+
+`rpc.connect_rpc.error_code` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `cancelled` | cancelled |
+| `unknown` | unknown |
+| `invalid_argument` | invalid_argument |
+| `deadline_exceeded` | deadline_exceeded |
+| `not_found` | not_found |
+| `already_exists` | already_exists |
+| `permission_denied` | permission_denied |
+| `resource_exhausted` | resource_exhausted |
+| `failed_precondition` | failed_precondition |
+| `aborted` | aborted |
+| `out_of_range` | out_of_range |
+| `unimplemented` | unimplemented |
+| `internal` | internal |
+| `unavailable` | unavailable |
+| `data_loss` | data_loss |
+| `unauthenticated` | unauthenticated |
+<!-- endsemconv -->
+
+### Connect RPC Status
+
+If `rpc.connect_rpc.error_code` is set, [Span Status](../api.md#set-status) MUST be set to `Error` and left unset in all other cases.
+
+### Connect RPC Request and Response Metadata
+
+| Attribute                                 | Type     | Description                                                                                                                                                             | Examples                                                                   | Requirement Level |
+|-------------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|-------------------|
+| `rpc.connect_rpc.request.metadata.<key>`  | string[] | Connect request metadata, `<key>` being the normalized Connect Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1]  | `rpc.request.metadata.my_custom_metadata_attribute=["1.2.3.4", "1.2.3.5"]` | Optional          |
+| `rpc.connect_rpc.response.metadata.<key>` | string[] | Connect response metadata, `<key>` being the normalized Connect Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1] | `rpc.response.metadata.my_custom_metadata_attribute=["attribute_value"]`   | Optional          |
 
 **[1]:** Instrumentations SHOULD require an explicit configuration of which metadata values are to be captured.
 Including all request/response metadata values can be a security risk - explicit configuration helps avoid leaking sensitive information.
