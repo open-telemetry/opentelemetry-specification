@@ -176,3 +176,4 @@ Valid cloud providers are:
 - [Google Cloud Platform](https://cloud.google.com/) (`gcp`)
 - [Microsoft Azure](https://azure.microsoft.com/) (`azure`)
 - [Tencent Cloud](https://www.tencentcloud.com/) (`tencent_cloud`)
+- [Heroku dyno](./cloud_provider/heroku.md)
