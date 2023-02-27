@@ -197,7 +197,7 @@ The `Tracer` MUST provide functions to:
 
 - [Create a new `Span`](#span-creation) (see the section on `Span`)
 
-## SpanContext
+´## SpanContext
 
 A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
@@ -224,7 +224,7 @@ specification](https://www.w3.org/TR/trace-context/#tracestate-header). For
 specific OTel values in `TraceState`, see the [TraceState Handling](tracestate-handling.md)
 document.
 
-`IsRemote´, a boolean indicating whether the SpanContext was received from somewhere
+`IsRemote`, a boolean indicating whether the SpanContext was received from somewhere
 else or locally generated, see [IsRemote](#isremote).
 
 The API MUST implement methods to create a `SpanContext`. These methods SHOULD be the only way to
