@@ -120,8 +120,7 @@ Thus, the SDK specification defines sets of possible requirements for
 
 * **Readable span**: A function receiving this as argument MUST be able to
   access all information that was added to the span, as listed
-  in the API spec for [Span](api.md#span) (Note: this also includes all
-  e.g. all its [Span Context](api.md#spancontext) properties).
+  in the API spec for [Span](api.md#span).
 
   SDKs MAY choose not to expose (and store) the full parent [Context](../context/README.md)
   of the Span but MUST expose at least the full parent [SpanContext](api.md#spancontext).
