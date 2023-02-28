@@ -201,6 +201,10 @@ set of fields to which stability concerns apply are as follows:
 Things not listed in the above are not enforced via semantic convention and are allowed (or expected) to change. A few examples:
 
 - The values of attributes
+  - Specifically for `enums` the list of allowed values is expected to change
+    overtime.
+  - Event for `enums` that limit allowed values to semconv, some may need to
+    updated values in the future.
 - The links attached to a span
 - The recorded measurement type (float or integer) of a metric is not enforced and allowed to change.
 - The description of a metric instrument.
