@@ -176,6 +176,8 @@ fields will have enforced stability and interaction with telemetry schemas:
     - The span name
     - The span kind
     - The attribute keys provided to the span
+      - Whether these attributes must be provided at span start time, due to
+        sampling concerns.
   - The following data provided when [adding an event](trace/api.md#add-events)
     - The event name
     - The attribute keys provided for the event
