@@ -25,6 +25,9 @@ release.
 
 ### Resource
 
+- Clarify how to collect `host.id` for non-containerized systems.
+  ([#3173](https://github.com/open-telemetry/opentelemetry-specification/pull/3173))
+
 ### Semantic Conventions
 
 - Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
