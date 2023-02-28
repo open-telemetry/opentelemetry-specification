@@ -161,12 +161,11 @@ allowing the evolution of telemetry and semantic conventions, OpenTelemetry
 relies on the concept of
 [Telemetry Schemas](schemas/README.md).
 
-Semantic Conventions enforce stability in the telemetry produced for tooling.
-Semantic Convention stability applies to "API" type interfaces on telemetry,
-that is the portions of telemetry where specialized tooling would interact are
-expected to remain stable for that tooling. Semantic Conventions are allowed to
-recommend and suggest the shape of runtime values. However, only the following
-fields will have enforced stability and interaction with telemetry schemas:
+Semantic Conventions defines breaking changes as those that would break the
+"API" of tooling written against the telemetry it produces. That is the portions
+of telemetry where specialized tooling (alerts, dashboards, e.g.) interact are
+expected to remain stable for that tooling. Semantic Conventions defines the
+set of fields to which stability concerns apply are as follows:
 
 - [Resource](resource/sdk.md)
   - attribute keys provided to Create or resource detectors
