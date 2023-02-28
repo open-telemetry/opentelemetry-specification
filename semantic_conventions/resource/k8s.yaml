@@ -10,6 +10,12 @@ groups:
         brief: >
           The name of the cluster.
         examples: ['opentelemetry-cluster']
+      - id: uid
+        type: string
+        brief: >
+          A pseudo-id for the cluster, set to the uid of the `kube-system`
+          namespace.
+        examples: ['218fc5a9-a5f1-4b54-aa05-46717d0ab26d']
 
   - id: k8s.node
     prefix: k8s.node

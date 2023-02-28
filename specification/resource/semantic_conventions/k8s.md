@@ -25,6 +25,7 @@ Kubernetes object, but "name" is usually more user friendly so can be also set.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `k8s.cluster.name` | string | The name of the cluster. | `opentelemetry-cluster` | Recommended |
+| `k8s.cluster.uid` | string | A pseudo-id for the cluster, set to the uid of the `kube-system` namespace. | `218fc5a9-a5f1-4b54-aa05-46717d0ab26d` | Recommended |
 <!-- endsemconv -->
 
 ## Node
