@@ -197,7 +197,7 @@ The `Tracer` MUST provide functions to:
 
 - [Create a new `Span`](#span-creation) (see the section on `Span`)
 
-´## SpanContext
+## SpanContext
 
 A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
