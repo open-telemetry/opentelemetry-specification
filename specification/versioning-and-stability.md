@@ -162,10 +162,11 @@ relies on the concept of
 [Telemetry Schemas](schemas/README.md).
 
 Semantic Conventions enforce stability in the telemetry produced for tooling.
-Semantic Convention stability applies to "API" type interfaces on telemetry as
-opposed to actual values. Semantic Conventions are allowed to recommend and
-suggest the shape of runtime values. However only the following fields will have
-enforced stability and interaction with telemetry schemas:
+Semantic Convention stability applies to "API" type interfaces on telemetry,
+that is the portions of telemetry where specialized tooling would interact are
+expected to remain stable for that tooling. Semantic Conventions are allowed to
+recommend and suggest the shape of runtime values. However, only the following
+fields will have enforced stability and interaction with telemetry schemas:
 
 - [Resource](resource/sdk.md)
   - attribute keys provided to Create or resource detectors
@@ -174,20 +175,27 @@ enforced stability and interaction with telemetry schemas:
   - The following data provided to [span](trace/api.md#span) by available APIs:
     - The span name
     - The span kind
-    - The attribute keys provided to the span.
+    - The attribute keys provided to the span
   - The following data provided when [adding an event](trace/api.md#add-events)
     - The event name
-    - The attribute keys provided for the event.
+    - The attribute keys provided for the event
 - [Metrics](metrics/api.md)
   - Attribute keys provided to [get a meter](metrics/api.md#get-a-meter)
   - The following arguments when constructing [an instrument](metrics/api.md#instrument):
-    - The name of the instrument.
-    - The kind of instrument.
+    - The name of the instrument
+    - The kind of instrument
       - For `Counter` and `UpDownCounter` instruments, it is
         acceptable to change between asynchronous and synchronous instruments.
     - the unit of the instrument.
   - The attribute keys provided when recording a measurement, for
     both synchronous and asynchronous instruments.
+- [Log Records](logs/bridge-api.md#logrecord)
+  - The attribute keys provided on the LogRecord
+- [Log Events](logs/event-api.md)
+  - The following data provided to [emit event](logs/event-api.md#emit-event):
+    - The event name
+    - The components of [LogRecord](logs/bridge-api.md#logrecord) also
+      listed here.
 
 Things not listed in the above are not enforced via semantic convention and are allowed (or expected) to change. A few examples:
 
@@ -219,7 +227,7 @@ that are always allowed. Such changes do not need to be described (and are not
 described) by schema files. Here is the list of such changes:
 
 - Adding new attributes to the existing semantic conventions for resources,
-  spans, span events or log records. 
+  spans, span events or log records.
 - Adding new attributes to existing metrics that do not create new timeseries.
 - Adding semantic conventions for new types of resources, spans, span events,
   metrics or log records.
