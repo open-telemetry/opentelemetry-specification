@@ -16,7 +16,7 @@ context propagation to HTTP headers on the outgoing request, unless another prop
 in which case the provided propagator MUST be used.
 Propagation headers MUST be added before the signature is calculated to prevent errors on signed requests.
 
-The following formats are currently supported by AWS services for propagation:
+The following formats are currently natively supported by AWS services for propagation:
 
 * [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html)
 
