@@ -133,7 +133,7 @@ underlying numeric types (e.g., signed integer, unsigned integer, double) have
 direct impact on the dynamic range, precision, and how the data is interpreted.
 Typically, integers are precise but have limited dynamic range, and might see
 overflow/underflow. [IEEE-754 double-precision floating-point
-format](https://wikipedia.org/wiki/Double-precision_floating-point_format) has a
+format](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) has a
 wide dynamic range of numeric values with the sacrifice on precision.
 
 ##### Integer
