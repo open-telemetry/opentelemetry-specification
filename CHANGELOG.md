@@ -25,10 +25,15 @@ release.
 
 ### Resource
 
+- Clarify how to collect `host.id` for non-containerized systems.
+  ([#3173](https://github.com/open-telemetry/opentelemetry-specification/pull/3173))
+
 ### Semantic Conventions
 
 - Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
   ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+- Add heroku resource semantic conventions.
+  [#3075](https://github.com/open-telemetry/opentelemetry-specification/pull/3075)
 - BREAKING: Rename faas.execution to faas.invocation_id
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - BREAKING: Change faas.max_memory units to Bytes instead of MB
@@ -39,6 +44,8 @@ release.
   ([#3250](https://github.com/open-telemetry/opentelemetry-specification/pull/3250))
 - Mark the attribute naming guidelines in the specification as stable.
   ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
+- Remove mention of `net.transport` from HTTP semantic conventions
+  ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
 
 ### Compatibility
 
