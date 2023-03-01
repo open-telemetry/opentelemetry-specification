@@ -210,7 +210,7 @@ Things not listed in the above are not enforced via semantic convention and are 
 - The description of a metric instrument.
 - The values being recorded by an instrument.
 
-The list of telemetry fields with enforced stability MAY be appended.
+The list of telemetry fields which are covered by stability guarantees MAY be extended.
 
 Changes to semantic conventions in this specification are allowed, provided that
 the changes can be described by schema files. The following changes can be
