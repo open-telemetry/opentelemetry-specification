@@ -46,6 +46,10 @@ release.
   ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
 - Remove mention of `net.transport` from HTTP semantic conventions
   ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
+- Rename `net.app.transport.(name|version)` to `net.transport.(name|version)`
+  ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
+- Replace `http.flavor` with `net.transport.(name|version)`
+  ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
 
 ### Compatibility
 
