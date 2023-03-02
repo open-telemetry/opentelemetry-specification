@@ -168,7 +168,7 @@ expected to remain stable for that tooling. Semantic Conventions defines the
 set of fields to which stability concerns apply as follows:
 
 - [Resource](resource/sdk.md)
-  - attribute keys provided to Create or resource detectors
+  - attribute keys provided to Create resource detectors
 - [Trace](trace/api.md)
   - Attribute keys provided to [get a tracer](trace/api.md#get-a-tracer)
   - The following data provided to [span](trace/api.md#span) by available APIs:
