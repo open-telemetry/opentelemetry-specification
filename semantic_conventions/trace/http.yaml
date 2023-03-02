@@ -149,5 +149,5 @@ groups:
             if it's sent in absolute-form.
           - Port identifier of the `Host` header
       - ref: net.sock.host.addr
-        requirement_level: optional
+        requirement_level: opt_in
       - ref: net.sock.host.port
