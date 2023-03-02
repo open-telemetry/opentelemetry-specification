@@ -48,7 +48,7 @@ release.
   ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
 - Rename `net.app.protocol.(name|version)` to `net.protocol.(name|version)`
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
-- Replace `http.flavor` with `net.transport.(name|version)`
+- Replace `http.flavor` with `net.protocol.(name|version)`
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
 
 ### Compatibility
