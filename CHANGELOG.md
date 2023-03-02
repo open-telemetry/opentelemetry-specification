@@ -46,6 +46,10 @@ release.
   ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
 - Remove mention of `net.transport` from HTTP semantic conventions
   ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
+- Remove mention of `net.transport` from HTTP semantic conventions
+  ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
+- Metric requirement levels are now stable
+  ([#3271](https://github.com/open-telemetry/opentelemetry-specification/pull/3271))
 
 ### Compatibility
 
