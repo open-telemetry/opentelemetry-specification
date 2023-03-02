@@ -12,6 +12,11 @@ versions:
         - rename_attributes:
             attribute_map:
               faas.id: cloud.resource_id
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3272
+        - rename_attributes:
+            attribute_map:
+              net.app.protocol.name: net.protocol.name
+              net.app.protocol.version: net.protocol.version
   1.18.0:
   1.17.0:
     spans:
