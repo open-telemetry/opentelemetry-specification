@@ -113,9 +113,9 @@ It is recommended to also use the general [socket-level attributes][] - `net.soc
 ### HTTP request and response headers
 
 | Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.request.header.content_type=["application/json"]`; `http.request.header.x_forwarded_for=["1.2.3.4", "1.2.3.5"]` | Optional |
-| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.response.header.content_type=["application/json"]`; `http.response.header.my_custom_header=["abc", "def"]` | Optional |
+|---|---|---|---|-------------------|
+| `http.request.header.<key>` | string[] | HTTP request headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.request.header.content_type=["application/json"]`; `http.request.header.x_forwarded_for=["1.2.3.4", "1.2.3.5"]` | Opt-In            |
+| `http.response.header.<key>` | string[] | HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [1] [2] | `http.response.header.content_type=["application/json"]`; `http.response.header.my_custom_header=["abc", "def"]` | Opt-In            |
 
 **[1]:** Instrumentations SHOULD require an explicit configuration of which headers are to be captured.
 Including all request/response headers can be a security risk - explicit configuration helps avoid leaking sensitive information.
@@ -248,7 +248,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
 | [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `localhost` | Required |
 | [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
-| [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Optional |
+| [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Opt-In |
 | [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
