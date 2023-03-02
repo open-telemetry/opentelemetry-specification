@@ -57,13 +57,6 @@ Normally, the LoggerProvider is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
 LoggerProvider.
 
-Notwithstanding any global LoggerProvider, some applications may want to or have
-to use multiple LoggerProvider instances, e.g. to have different configuration
-(like [LogRecordProcessors](sdk.md#logrecordprocessor)) for each (and
-consequently for the Loggers obtained from them), or because it's easier with
-dependency injection frameworks. Thus, implementations of LoggerProvider SHOULD
-allow creating an arbitrary number of instances.
-
 ### LoggerProvider operations
 
 The LoggerProvider MUST provide the following functions:
@@ -74,67 +67,52 @@ The LoggerProvider MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-- `name` (required): This name SHOULD uniquely identify the [instrumentation scope](../glossary.md#instrumentation-scope),
-such as the [instrumentation library](../glossary.md#instrumentation-library)
-(e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
-If an application or library has built-in OpenTelemetry instrumentation, both
-[Instrumented library](../glossary.md#instrumented-library) and
-[Instrumentation library](../glossary.md#instrumentation-library) may refer to
-the same library. In that scenario, the `name` denotes a module name or component
-name within that library or application. In case an invalid name
-(null or empty string) is specified, a working Logger implementation MUST be
-returned as a fallback rather than returning null or throwing an exception, its
-`name` property SHOULD be set to an empty string, and a message reporting that
-the specified value is invalid SHOULD be logged. A library implementing the
-OpenTelemetry API may also ignore this name and return a default instance for
-all calls, if it does not support "named" functionality (e.g. an implementation
-which is not even observability-related). A LoggerProvider could also return a
-no-op Logger here if application owners configure the SDK to suppress telemetry
-produced by this library.
-- `version` (optional): Specifies the version of the instrumentation scope if
-the scope has a version (e.g. a library version). Example value: 1.0.0.
-- `schema_url` (optional): Specifies the Schema URL that should be recorded in
-the emitted telemetry.
-- `include_trace_context` (optional): Specifies whether the Trace Context should
-  automatically be passed on to the LogRecords emitted by the Logger. This
-  SHOULD be true by default.
-- `attributes` (optional): Specifies the instrumentation scope attributes to
-associate with emitted telemetry.
+* `name`: This name uniquely identify the [instrumentation scope](../glossary.md#instrumentation-scope),
+  such as the [instrumentation library](../glossary.md#instrumentation-library)
+  (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
+  If an application or library has built-in OpenTelemetry instrumentation, both
+  [Instrumented library](../glossary.md#instrumented-library) and
+  [Instrumentation library](../glossary.md#instrumentation-library) may refer to
+  the same library. In that scenario, the `name` denotes a module name or component
+  name within that library or application.
+* `version`: Specifies the version of the instrumentation scope if
+  the scope has a version (e.g. a library version). Example value: 1.0.0.
+
+  Users can provide a `version`, but it is up to their discretion. Therefore,
+  this API needs to be structured to accept a `version`, but MUST NOT obligate
+  a user to provide one.
+* `schema_url`: Specifies the Schema URL that should be recorded in
+  the emitted telemetry.
+
+  Users can provide a `schema_url`, but it is up to their discretion.
+  Therefore, this API needs to be structured to accept a `schema_url`, but MUST
+  NOT obligate a user to provide one.
+* `attributes`: Specifies the instrumentation scope attributes to
+  associate with emitted telemetry.
+
+  Users can provide attributes to associate with the instrumentation scope, but
+  it is up to their discretion. Therefore, this API MUST be structured to
+  accept a variable number of attributes, including none.
+* `include_trace_context`: Specifies whether the Trace Context should
+  automatically be passed on to the `LogRecord`s emitted by the `Logger`.
+
+  Users can provide `include_trace_context`, but it is up to their discretion.
+  Therefore, this API needs to be structured to accept a `include_trace_context`, but MUST
+  NOT obligate a user to provide one.
 
 Loggers are identified by `name`, `version`, and `schema_url` fields.  When more
 than one `Logger` of the same `name`, `version`, and `schema_url` is created, it
 is unspecified whether or under which conditions the same or different `Logger`
 instances are returned. It is a user error to create Loggers with different
-attributes but the same identity.
+`include_trace_context` or `attributes` but the same identity.
 
 The term *identical* applied to Loggers describes instances where all
 identifying fields are equal. The term *distinct* applied to Loggers describes
 instances where at least one identifying field has a different value.
 
-Implementations MUST NOT require users to repeatedly obtain a Logger again with
-the same name+version+schema_url+include_trace_context+attributes
-to pick up configuration changes. This can be achieved either by allowing to
-work with an outdated configuration or by ensuring that new configuration
-applies also to previously returned Loggers.
-
-Note: This could, for example, be implemented by storing any mutable
-configuration in the `LoggerProvider` and having `Logger` implementation objects
-have a reference to the `LoggerProvider` from which they were obtained.
-If configuration must be stored per-Logger (such as disabling a certain `Logger`),
-the `Logger` could, for example, do a look-up with its name+version+schema_url+include_trace_context+attributes
-in a map in the `LoggerProvider`, or the `LoggerProvider` could maintain a registry
-of all returned `Logger`s and actively update their configuration if it changes.
-
-The effect of associating a Schema URL with a `Logger` MUST be that the telemetry
-emitted using the `Logger` will be associated with the Schema URL, provided that
-the emitted data format is capable of representing such association.
-
 ## Logger
 
 The `Logger` is responsible for emitting `LogRecord`s
-
-Note that `Logger`s should not be responsible for configuration. This should be
-the responsibility of the `LoggerProvider` instead.
 
 ### Logger operations
 
@@ -167,11 +145,15 @@ fields:
 - [Body](./data-model.md#field-body)
 - [Attributes](./data-model.md#field-attributes)
 
+User can provide each of these fields, but it is up to their discretion.
+Therefore, this API needs to be structured to accept these fields, but MUST NOT
+obligate a user to provide them.
+
 ## Usage
 
 ### How to Create Log4J Style Appender
 
-An Appender implementation can be used to allow emitting logs via
+An Appender implementation can be used to bridge logs into the [Log SDK](./sdk.md)
 OpenTelemetry [LogRecordExporters](sdk.md#logrecordexporter). This approach is
 typically used for applications which are fine with changing the log transport
 and is [one of the supported](README.md#direct-to-collector) log collection
@@ -179,12 +161,12 @@ approaches.
 
 The Appender implementation will typically acquire a [Logger](#logger) from the
 global [LoggerProvider](#loggerprovider) at startup time, then
-call [Emit LogRecord](#emit-logrecord) for `LogRecords` received from the
+call [Emit LogRecord](#emit-logrecord) for `LogRecord`s received from the
 application.
 
 [Implicit Context Injection](#implicit-context-injection)
 and [Explicit Context Injection](#explicit-context-injection) describe how an
-Appender injects `TraceContext` into `LogRecords`.
+Appender injects `TraceContext` into `LogRecord`s.
 
 ![Appender](img/appender.png)
 
@@ -203,9 +185,9 @@ popular logging library.
 
 ### Implicit Context Injection
 
-When Context is implicitly available (e.g. in Java) the log library extension
-can rely on automatic context propagation
-by [obtaining a Logger](#get-a-logger) with `include_trace_context=true`.
+When Context is implicitly available (e.g. in Java) the Appender can rely on
+automatic context propagation by [obtaining a Logger](#get-a-logger)
+with `include_trace_context=true`.
 
 Some log libraries have mechanism specifically tailored for injecting contextual
 information into logs, such as MDC in Log4j. When available such mechanisms may
@@ -221,13 +203,13 @@ log appender are executed on different threads.
 
 In languages where the Context must be provided explicitly (e.g. Go) the end
 user must capture the context and explicitly pass it to the logging subsystem in
-order for `TraceContext` to be recorded in `LogRecords`
+order for `TraceContext` to be recorded in `LogRecord`s
 
 Support for OpenTelemetry for logging libraries in these languages typically can
 be implemented in the form of logger wrappers that can capture the context once,
 when the span is created and then use the wrapped logger to execute log
 statements in a normal way. The wrapper will be responsible for injecting the
-captured context in the `LogRecords`.
+captured context in the `LogRecord`s.
 
 This specification does not define how exactly it is achieved since the actual
 mechanism depends on the language and the particular logging library used. In

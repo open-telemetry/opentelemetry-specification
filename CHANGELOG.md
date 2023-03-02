@@ -22,6 +22,8 @@ release.
   ([#3197](https://github.com/open-telemetry/opentelemetry-specification/pull/3197))
 - Move event language from log README to event-api.
   ([#3252](https://github.com/open-telemetry/opentelemetry-specification/pull/3252))
+- Ensure Logs Bridge API doesn't contain SDK implementation details
+  ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
 
 ### Resource
 

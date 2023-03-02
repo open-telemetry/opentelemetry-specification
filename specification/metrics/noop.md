@@ -2,7 +2,7 @@
 linkTitle: noop
 --->
 
-# Metrics No-Op API Implementation
+# Metrics API No-Op Implementation
 
 **Status**: [Experimental](../document-status.md)
 
@@ -41,8 +41,8 @@ linkTitle: noop
 Users of OpenTelemetry need a way to disable the API from actually
 performing any operations. The No-Op OpenTelemetry API implementation
 (henceforth referred to as the No-Op) provides users with this
-functionally. It implements the OpenTelemetry API so that no telemetry
-is produced and computation resources are minimized.
+functionally. It implements the [OpenTelemetry Metrics API](./api.md) so that no
+telemetry is produced and computation resources are minimized.
 
 All language implementations of OpenTelemetry MUST provide a No-Op.
 

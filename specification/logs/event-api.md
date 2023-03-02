@@ -50,7 +50,7 @@ instrumentation authors are encouraged to call this API directly.
 ## EventLogger
 
 The `EventLogger` is the entrypoint of the Event API, and is responsible for
-emitting `Events` as `LogRecords`.
+emitting `Events` as `LogRecord`s.
 
 ### EventLogger Operations
 
@@ -64,7 +64,7 @@ on `EventLogger`.
 **Parameters:**
 
 * `logger` - the delegate [Logger](./bridge-api.md#logger) used to emit `Events`
-  as `LogRecords`.
+  as `LogRecord`s.
 * `event_domain` - the domain of emitted events, used to set the `event.domain`
   attribute.
 
