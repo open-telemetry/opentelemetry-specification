@@ -70,7 +70,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 **[5]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
 
 `net.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 

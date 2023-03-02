@@ -131,7 +131,7 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 
 **[1]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
-**[2]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+**[2]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
 <!-- endsemconv -->
 
 ### Events
@@ -212,8 +212,8 @@ The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC stat
 
 | Attribute                     | Type     | Description                                                                                                                                                       | Examples                                                                   | Requirement Level |
 |-------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|-------------------|
-| `rpc.grpc.request.metadata.<key>`  | string[] | gRPC request metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1]  | `rpc.grpc.request.metadata.my_custom_metadata_attribute=["1.2.3.4", "1.2.3.5"]` | Optional          |
-| `rpc.grpc.response.metadata.<key>` | string[] | gRPC response metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1] | `rpc.grpc.response.metadata.my_custom_metadata_attribute=["attribute_value"]`   | Optional          |
+| `rpc.grpc.request.metadata.<key>`  | string[] | gRPC request metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1]  | `rpc.grpc.request.metadata.my_custom_metadata_attribute=["1.2.3.4", "1.2.3.5"]` | Opt-In            |
+| `rpc.grpc.response.metadata.<key>` | string[] | gRPC response metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1] | `rpc.grpc.response.metadata.my_custom_metadata_attribute=["attribute_value"]`   | Opt-In            |
 
 **[1]:** Instrumentations SHOULD require an explicit configuration of which metadata values are to be captured.
 Including all request/response metadata values can be a security risk - explicit configuration helps avoid leaking sensitive information.
