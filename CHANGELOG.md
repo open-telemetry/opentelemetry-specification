@@ -46,6 +46,8 @@ release.
   ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
 - Remove mention of `net.transport` from HTTP semantic conventions
   ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
+- Mark `net.sock.host.port` as conditionally required.
+  ([#3246](https://github.com/open-telemetry/opentelemetry-specification/pull/3246))
 
 ### Compatibility
 
