@@ -28,16 +28,16 @@ groups:
               brief: 'Something else (non IP-based).'
         brief: >
           Transport protocol used. See note below.
-      - id: app.protocol.name
+      - id: protocol.name
         type: string
         brief: 'Application layer protocol used. The value SHOULD be normalized to lowercase.'
         examples: ['amqp', 'http', 'mqtt']
-      - id: app.protocol.version
+      - id: protocol.version
         type: string
         brief: 'Version of the application layer protocol used. See note below.'
         examples: '3.1.1'
         note: >
-          `net.app.protocol.version` refers to the version of the protocol used and might be
+          `net.protocol.version` refers to the version of the protocol used and might be
           different from the protocol client's version. If the HTTP client used has a version
           of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
       - id: sock.peer.name
