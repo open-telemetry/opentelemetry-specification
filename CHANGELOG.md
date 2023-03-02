@@ -46,6 +46,9 @@ release.
   ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
 - Remove mention of `net.transport` from HTTP semantic conventions
   ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
+- Clarifies that if an HTTP client request is explicitly made to an IP address,
+  e.g. `http://x.x.x.x:8080`, then `net.peer.name` SHOULD be the IP address `x.x.x.x`
+  ([#3276](https://github.com/open-telemetry/opentelemetry-specification/pull/3276))
 
 ### Compatibility
 
