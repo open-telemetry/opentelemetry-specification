@@ -2,7 +2,6 @@
 
 **Status**: [Experimental](../../../document-status.md)
 
-
 <details>
 <summary>Table of Contents</summary>
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
@@ -24,10 +23,9 @@
 
 </details>
 
-
 This document describes the semantic conventions for browser events.
 
-# Events
+## Events
 
 The events may be represented either as Span Events or Log Events.
 
@@ -39,7 +37,7 @@ All events have the following three high-level attributes. The event name is spe
 | `event.name` | string | Described in each section below||Required|
 | `event.data` | map | A map of key/value pairs, with the keys for each event described in following sections||Recommended|
 
-## PageView
+### PageView
 
 **Event name**:  `page_view`.
 
@@ -59,7 +57,6 @@ All events have the following three high-level attributes. The event name is spe
 |---|---|
 | `0` | physical_page |
 | `1` | virtual_page |
-
 
 <details>
 <summary>Sample PageView Event</summary>
@@ -114,11 +111,11 @@ All events have the following three high-level attributes. The event name is spe
         }
         ]
     }
-
 ```
+
 </details>
 
-## PageLoad
+### PageLoad
 
 **Event name**:`page_load`.
 
@@ -129,7 +126,7 @@ All events have the following three high-level attributes. The event name is spe
 **[1]:** Alias for [`http.url`](../../../trace/semantic_conventions/http.md)
 **[2]:** The URL fragment may be included for virtual pages
 
-## PageNavigationTiming
+### PageNavigationTiming
 
 **Event name**:`page_navigation_timing`
 
@@ -147,11 +144,9 @@ All events have the following three high-level attributes. The event name is spe
 | firstPaint | long | || Recommended |
 | firstContentfulPaint | long | || Recommended |
 
-
-## ResourceTiming
+### ResourceTiming
 
 **Event name**:`resource_timing`
-
 
 | Key  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
@@ -165,8 +160,7 @@ All events have the following three high-level attributes. The event name is spe
 |responseStart | long | || Recommended |
 |responseEnd | long | || Recommended |
 
-
-## HTTP
+### HTTP
 
 **Event name**:`HTTP`
 
@@ -201,10 +195,9 @@ All events have the following three high-level attributes. The event name is spe
 | `1` | xhr |
 | `2` | send_beacon |
 
-## HttpRequestTiming
+### HttpRequestTiming
 
 **Event name**:`http_request_timing`
-
 
 | Key  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
@@ -220,8 +213,7 @@ All events have the following three high-level attributes. The event name is spe
 | responseEnd | long | || Recommended |
 | loaded | long | || Recommended |
 
-
-## Exception
+### Exception
 
 **Event name**:`exception`
 
@@ -234,7 +226,7 @@ All events have the following three high-level attributes. The event name is spe
 | `exception.stacktrace` | string | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. | `Exception in thread "main" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)` | Recommended |
 | `exception.type` | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. | `java.net.ConnectException`; `OSError` | Recommended |
 
-## UserAction
+### UserAction
 
 **Event name**:`user_action`
 
@@ -252,10 +244,9 @@ All events have the following three high-level attributes. The event name is spe
 |---|---|
 | `click` | click |
 
-## WebVital
+### WebVital
 
 **Event name**:`web_vital`
-
 
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
