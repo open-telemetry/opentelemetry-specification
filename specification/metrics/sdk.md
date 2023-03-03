@@ -601,7 +601,7 @@ View configuration SHOULD support applying per-view cardinality limits.
 
 The cardinality limit is taken as an exact, hard limit on the number
 of data points that can be written per collection.  Each view MUST NOT
-output more than the configured cardinality limit number of data ponts
+output more than the configured cardinality limit number of data points
 per period.
 
 The RECOMMENDED default cardinality limit is 2000.
