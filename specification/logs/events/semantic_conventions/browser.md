@@ -1,6 +1,6 @@
 # Semantic conventions for browser events
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Experimental](../../../document-status.md)
 
 
 <details>
