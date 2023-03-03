@@ -54,7 +54,8 @@ For example, `net.peer.name` is `Conditionally Required` by [Database convention
 
 Instrumentations SHOULD add the attribute by default if it's readily available and can be [efficiently populated](#performance-suggestions). Instrumentations MAY offer a configuration option to disable Recommended attributes.
 
-Instrumentations that decide not to populate `Recommended` attributes due to [performance](#performance-suggestions), security, privacy, or other consideration by default, SHOULD allow for opting in to emitting them as defined for the `Opt-In` requirement level if the attributes are logically applicable.
+Instrumentations that decide not to populate `Recommended` attributes due to [performance](#performance-suggestions), security, privacy, or other consideration by default, SHOULD allow for users to
+opt-in to emit them as defined for the `Opt-In` requirement level (if the attributes are logically applicable).
 
 ## Opt-In
 
