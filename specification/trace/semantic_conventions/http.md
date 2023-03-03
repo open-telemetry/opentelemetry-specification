@@ -67,7 +67,6 @@ sections below.
 |---|---|---|---|---|
 | `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | `http.flavor` | string | Kind of HTTP protocol used. | `1.0` | Recommended |
-| `http.user_agent` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
 | `http.request_content_length` | int | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
 | `http.response_content_length` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
 | `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
@@ -75,6 +74,7 @@ sections below.
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [2] |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [3] |
+| `user_agent.original` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
 
 **[1]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
@@ -249,7 +249,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `localhost` | Required |
 | [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Opt-In |
-| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
+| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Conditionally Required: [6] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
@@ -285,7 +285,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
