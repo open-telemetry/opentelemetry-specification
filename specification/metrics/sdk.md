@@ -30,14 +30,15 @@ linkTitle: SDK
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
         * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
+  * [Cardinality limits](#cardinality-limits)
+    + [Synchronous instrument cardinality limits](#synchronous-instrument-cardinality-limits)
+    + [Asynchronous instrument cardinality limits](#asynchronous-instrument-cardinality-limits)
 - [Meter](#meter)
   * [Duplicate instrument registration](#duplicate-instrument-registration)
   * [Instrument name](#instrument-name)
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
 - [Attribute limits](#attribute-limits)
-- [Cardinality limits](#cardinality-limits)
-  * [Specific cardinality limits](#specific-cardinality-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
   * [Built-in ExemplarFilters](#built-in-exemplarfilters)
@@ -87,12 +88,6 @@ be specified. If a `Resource` is specified, it SHOULD be associated with all the
 metrics produced by any `Meter` from the `MeterProvider`. The [tracing SDK
 specification](../trace/sdk.md#additional-span-interfaces) has provided some
 suggestions regarding how to implement this efficiently.
-
-A `MeterProvider` SHOULD provide a way to specify the configurable
-[cardinality limits](#cardinality-limits) to be applied to `Meter`
-instances.  SDKs that support configurable limits MUST provide an
-option to configure the default limits to be applied to all `Meter`
-instances by default.
 
 ### MeterProvider Creation
 
@@ -242,6 +237,12 @@ are the inputs:
     `exemplar_reservoir` (optional) to use for storing exemplars. This should be
     a factory or callback similar to aggregation which allows different
     reservoirs to be chosen by the aggregation.
+  * **Status**: [Experimental](../document-status.md) - the
+    `cardinality_limit` (optional) associated with the view.  This
+    should be an positive integer to be taken as a hard limit on the
+    number of data points that will be emitted during a single
+    collection by a single instrument.  See [cardinality limits](#cardinality-limits),
+    below.
 
 In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
@@ -589,6 +590,50 @@ execution.
 The implementation MUST complete the execution of all callbacks for a
 given instrument before starting a subsequent round of collection.
 
+### Cardinality limits
+
+**Status**: [Experimental](../document-status.md)
+
+Views SHOULD support being configured with a cardinality limit to be
+applied to all aggregators not configured by a specific view.
+
+View configuration SHOULD support applying per-view cardinality linits.
+
+The cardinality limit is taken as an exact, hard limit on the number
+of data points that can be written per collection.  Each view MUST NOT
+output more than the configured cardinality limit number of data ponts
+per period.
+
+An overflow attribute is defined, named `otel.metric.overflow` having
+(boolean) value `true`, used to report a synthetic aggregation of the
+metric events that could not be independently aggregated because of
+the limit.  The overflow attribute set MUST be included in the limit
+calculation, thus the maximum number of distinct, non-overflow
+attributes is one less than the limit.
+
+The RECOMMENDED default cardinality limit is 2000.
+
+#### Synchronous instrument cardinality limits
+
+Views of synchronous instruments with cumulative aggregation
+temporality MUST continue export the all attribute sets that were
+observed prior to the beginning of overflow.  Metric events
+corresponding with attribute sets that were not observed prior to the
+overflow will be reflected in a single data point described by (only)
+the overflow attribute.
+
+Views of synchronous instruments with delta aggregation temporality
+can choose an arbitrary subset of attributes to output.  Regardless of
+aggregation temporality, the SDK is SHOULD ensure that every output
+data point is correct, the same result that would be achieved by
+filtering all attribute keys.
+
+#### Asynchronous instrument cardinality limits
+
+Views of asynchronous instruments SHOULD prefer the first-observed
+attributes in the callback when limiting cardinality, regardless of
+aggregation temporality.
+
 ## Meter
 
 Distinct meters MUST be treated as separate namespaces for the purposes of detecting
@@ -659,83 +704,6 @@ Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/README.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
-
-## Cardinality limits
-
-**Status**: [Experimental](../document-status.md)
-
-MeterProviders SHOULD support being configured with a limit applied to
-individual metric instruments to control the maximum number of
-timeseries they can produce.  This mechanism supports protecting
-metrics pipelines from excessive data production in cases when the
-number of timeseries produced by application code grows large, which
-can happen due to several factors.
-
-Whether because of single attributes having many distinct values or
-because of combinatorial expansion among many attributes, these limits
-help protect the overall system from individual sources of excessive
-metrics instrumentation.
-
-The specific limit, known as `MaxTimeseries` is configured as an
-option to the SDK during initialization.  In a metrics pipeline, every
-unqiue attribute set maps onto at most one unique
-[timeseries](./data-model.md#timeseries-model).  Although the limit
-controls the number of timeseries produced by a metrics pipeline, the
-SDKs SHOULD apply this limit as early as possible in the metrics
-pipeline to prevent buildup of memory.
-
-In this version of the specification, the SDK's `MaxTimeseries`
-setting limits all instruments and all instrumentation libraries
-equally; future versions of this specification may support finer-grain
-configuration of cardinality limits.
-
-Implementations details determine how concurrent API events will be
-handled.  To enforce the `MaxTimeseries` limit:
-
-- An instrument with no configured views SHOULD NOT implement
-  cardinality limits.
-- An instrument with one or more configured views SHOULD detect that
-  the limit was reached before or during the next collection event.
-- An instrument is NOT REQUIRED to be remove stale timeseries (e.g.,
-  exclude zero-valued sums from consideration) before evaluating the
-  cardinality limit.
-
-When the limit is reached by an the individual metric instrument,
-subsequent new timeseries created for that instrument will have their
-complete attribute set replaced by a single-attribute named `overflow`
-with value `true`.
-
-The implementation is permitted to evaluate the cardinality limit at a
-time when it is convenient.  Implementations are NOT REQUIRED to
-exactly meet the cardinality limit when it is reached, because that
-implies an unwanted degree of synchronization.  Implementations MAY
-exceed the limit due to the effects of concurrency.  Implementations
-MAY defer the overflow test until the nexts collection cycle.
-
-When cardinality limits are reached, the implementation is REQUIRED
-eventually to stop creating new timeseries for the instrument.
-
-Concerning the synchronous instruments, the implementation of
-cardinality limits is NOT REQUIRED to ensure that metric API events
-are mapped uniquely onto a single timeseries when the instrument has
-reached its cardinality limit.
-
-The SDK SHOULD try to maintain correctness for timeseries that existed
-before the overflow event.  However, if this feature requires
-substantial additional memory the SDK SHOULD prefer to export an
-arbitrary subset of timeseries when the limit is reached.
-
-### Specific cardinality limits
-
-The SDKs that support cardinality limits MUST support the configuration and enforcement of the following limits.
-
-- The number of timeseries per instrument, with a RECOMMENDED default value 2000.
-
-All SDKs MUST NOT support the configuration or enforcement of any limit not listed above.
-
-SDKs SHOULD NOT support the configuration of unlimited limits.  There is no unset
-value for this configurable limit.  Users that wish to configure
-"unlimited" cardinality should instead configure a very large limit.
 
 ## Exemplar
 
