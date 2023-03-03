@@ -40,14 +40,6 @@ groups:
           [UA client hints API](https://wicg.github.io/ua-client-hints/#interface)
           (`navigator.userAgentData.mobile`). If unavailable, this attribute
           SHOULD be left unset.
-      - id: user_agent
-        type: string
-        brief: 'Full user-agent string provided by the browser'
-        note: >
-          The user-agent value SHOULD be provided only from browsers that do not have a mechanism
-          to retrieve brands and platform individually from the User-Agent Client Hints API.
-          To retrieve the value, the legacy `navigator.userAgent` API can be used.
-        examples: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'
       - id: language
         type: string
         brief: 'Preferred language of the user using the browser'
@@ -55,3 +47,10 @@ groups:
           This value is intended to be taken from the Navigator API
           `navigator.language`.
         examples: ["en", "en-US", "fr", "fr-FR"]
+      - ref: user_agent.original
+        brief: 'Full user-agent string provided by the browser'
+        note: >
+          The user-agent value SHOULD be provided only from browsers that do not have a mechanism
+          to retrieve brands and platform individually from the User-Agent Client Hints API.
+          To retrieve the value, the legacy `navigator.userAgent` API can be used.
+        examples: ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36']

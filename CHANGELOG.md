@@ -13,16 +13,44 @@ release.
 
 ### Metrics
 
-- Recommended limits applied by default at the MetricProvider level to protect
-  metrics pipelines against excessive data production from a single
-  instrumentation library or instrument.
+- Add metric requirement levels "Required", "Recommended", and "Opt-In".
+  ([#3237](https://github.com/open-telemetry/opentelemetry-specification/pull/3237))
+- Recommended cardinality limits to protect metrics pipelines against
+  excessive data production from a single instrument.
   ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 
 ### Logs
 
+- Rename Logs API to Logs Bridge API to prevent confusion.
+  ([#3197](https://github.com/open-telemetry/opentelemetry-specification/pull/3197))
+- Move event language from log README to event-api.
+  ([#3252](https://github.com/open-telemetry/opentelemetry-specification/pull/3252))
+
 ### Resource
 
+- Clarify how to collect `host.id` for non-containerized systems.
+  ([#3173](https://github.com/open-telemetry/opentelemetry-specification/pull/3173))
+
 ### Semantic Conventions
+
+- Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
+  ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+- Add heroku resource semantic conventions.
+  [#3075](https://github.com/open-telemetry/opentelemetry-specification/pull/3075)
+- BREAKING: Rename faas.execution to faas.invocation_id
+  ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
+- BREAKING: Change faas.max_memory units to Bytes instead of MB
+  ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
+- Add Connect RPC specific conventions
+  ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
+- Rename JVM metric attribute value from `nonheap` to `non_heap`
+  ([#3250](https://github.com/open-telemetry/opentelemetry-specification/pull/3250))
+- Mark the attribute naming guidelines in the specification as stable.
+  ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
+- Remove mention of `net.transport` from HTTP semantic conventions
+  ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
+- Mark `net.sock.host.port` as conditionally required.
+  ([#3246](https://github.com/open-telemetry/opentelemetry-specification/pull/3246))
 
 ### Compatibility
 
@@ -48,7 +76,8 @@ release.
 
 ### Metrics
 
-- No changes.
+- Add unit to View's Instrument selection criteria.
+  ([#3184](https://github.com/open-telemetry/opentelemetry-specification/pull/3184))
 
 ### Logs
 
@@ -83,6 +112,8 @@ release.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
 - `http.route` SHOULD contain the "application root" if there is one.
   ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
+- Rename `http.user_agent` to `user_agent.original`.
+  ([#3190](https://github.com/open-telemetry/opentelemetry-specification/pull/3190))
 
 ### Compatibility
 
@@ -131,6 +162,8 @@ release.
 
 - Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
   ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
+- Expand the declaration of `pool.name`.
+  ([#3050](https://github.com/open-telemetry/opentelemetry-specification/pull/3050))
 - Add `MaxScale` config option to Exponential Bucket Histogram Aggregation.
   ([#3017](https://github.com/open-telemetry/opentelemetry-specification/pull/3017))
 - Rename exponential bucket histogram aggregation to base 2 exponential histogram
