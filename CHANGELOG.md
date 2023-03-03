@@ -48,6 +48,10 @@ release.
   ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
 - Mark `net.sock.host.port` as conditionally required.
   ([#3246](https://github.com/open-telemetry/opentelemetry-specification/pull/3246))
+- Clarify that attribute requirement levels apply to instrumentation. And that,
+  because users can transform their telemetry in a number of ways, these requirement
+  levels cannot be relied on by telemetry consumers.
+  ([#3289](https://github.com/open-telemetry/opentelemetry-specification/pull/3289))
 
 ### Compatibility
 
