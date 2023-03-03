@@ -597,12 +597,14 @@ given instrument before starting a subsequent round of collection.
 Views SHOULD support being configured with a cardinality limit to be
 applied to all aggregators not configured by a specific view.
 
-View configuration SHOULD support applying per-view cardinality linits.
+View configuration SHOULD support applying per-view cardinality limits.
 
 The cardinality limit is taken as an exact, hard limit on the number
 of data points that can be written per collection.  Each view MUST NOT
 output more than the configured cardinality limit number of data ponts
 per period.
+
+The RECOMMENDED default cardinality limit is 2000.
 
 An overflow attribute is defined, named `otel.metric.overflow` having
 (boolean) value `true`, used to report a synthetic aggregation of the
@@ -610,8 +612,6 @@ metric events that could not be independently aggregated because of
 the limit.  The overflow attribute set MUST be included in the limit
 calculation, thus the maximum number of distinct, non-overflow
 attributes is one less than the limit.
-
-The RECOMMENDED default cardinality limit is 2000.
 
 #### Synchronous instrument cardinality limits
 
