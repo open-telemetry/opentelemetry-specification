@@ -159,6 +159,8 @@ release.
 
 - Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
   ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
+- Expand the declaration of `pool.name`.
+  ([#3050](https://github.com/open-telemetry/opentelemetry-specification/pull/3050))
 - Add `MaxScale` config option to Exponential Bucket Histogram Aggregation.
   ([#3017](https://github.com/open-telemetry/opentelemetry-specification/pull/3017))
 - Rename exponential bucket histogram aggregation to base 2 exponential histogram
