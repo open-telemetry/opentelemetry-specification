@@ -54,3 +54,35 @@ groups:
           to retrieve brands and platform individually from the User-Agent Client Hints API.
           To retrieve the value, the legacy `navigator.userAgent` API can be used.
         examples: ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36']
+      - id: visitor_id
+        type: string
+        brief: An anonymous id for the visiting user.
+        note: >
+          This will remain same in a given browser session, and will persist
+          across page navigations in the same browser session.
+        examples: ["123"]
+      - id: session_id
+        type: string
+        brief: Identifier for the current browser session
+        examples: ["123"]
+      - id: page_impression_id
+        type: string
+        brief: Unique id for the page impression, represented by a GUID
+        note: >
+          As an example, Page.html will yield 4 impression ids if the page is
+          refreshed 4 times in the same browser instance. For SPA apps, every
+          URL change results in a new impression.
+        examples: ["12627cc493-f310-47de-96bd-71410b7dec043"]
+      - id: screen_width
+        type: int
+        brief: Screen width of the device/browser view port
+        examples: [600]
+      - id: screen_height
+        type: int
+        brief: Screen height of the device/browser view port
+        examples: [400]
+      - id: url
+        type: string
+        brief: Complete URL of the current active page including the URL fragment
+        examples: ["https://en.wikipedia.org/wiki/Main_Page#foo"]
+      
