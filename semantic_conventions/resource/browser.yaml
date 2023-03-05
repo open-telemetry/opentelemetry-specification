@@ -85,4 +85,3 @@ groups:
         type: string
         brief: Complete URL of the current active page including the URL fragment
         examples: ["https://en.wikipedia.org/wiki/Main_Page#foo"]
-      
