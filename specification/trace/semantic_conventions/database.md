@@ -16,7 +16,7 @@
   * [MySQL](#mysql)
   * [Redis](#redis)
   * [MongoDB](#mongodb)
-  * [CosmosDB](#cosmosdb)
+  * [Microsoft Azure Cosmos DB](#microsoft-azure-cosmos-db)
 
 <!-- tocstop -->
 
@@ -221,17 +221,17 @@ Separated for clarity.
 Cosmos DB instrumentation includes call-level (public API) surface spans and network spans. Depending on the connection mode (Gateway or Direct), network-level spans may also be created.
 
 <!-- semconv db.cosmosdb -->
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `db.cosmosdb.client_id` | string | Unique cosmos client instance id. | `3ba4827d-4422-483f-b59f-85b74211c11d` | Recommended |
-| `db.cosmosdb.operation_type` | string | Cosmos Db Operation Type | `Read` | Recommended |
-| `db.cosmosdb.user_agent` | string | Cosmos client SDK user agent. | `cosmos-netstandard-sdk/3.31.2|1|X64|Linux 5.4.0-1095-azure 101 18|.NET 6.0.2|N|` | Recommended |
-| `db.cosmosdb.connection_mode` | string | Cosmos client connection mode. | `gateway` | Required |
-| `db.cosmosdb.container` | string | Cosmos DB container name. | `anystring` | Conditionally Required: if available |
+| Attribute                            | Type | Description  | Examples  | Requirement Level |
+|--------------------------------------|---|---|---|---|
+| `db.cosmosdb.client_id`              | string | Unique cosmos client instance id. | `3ba4827d-4422-483f-b59f-85b74211c11d` | Recommended |
+| `db.cosmosdb.operation_type`         | string | Cosmos Db Operation Type | `Read` | Recommended |
+| `db.cosmosdb.connection_mode`        | string | Cosmos client connection mode. | `gateway` | Required |
+| `db.cosmosdb.container`              | string | Cosmos DB container name. | `anystring` | Conditionally Required: if available |
 | `db.cosmosdb.request_content_length` | int | Request payload size in bytes |  | Recommended |
-| `db.cosmosdb.status_code` | int | Cosmos DB status code. | `200`; `201` | Conditionally Required: if response was received |
-| `db.cosmosdb.sub_status_code` | int | Cosmos DB sub status code. | `1000`; `1002` | Conditionally Required: [1] |
-| `db.cosmosdb.request_charge` | double | RU consumed for that operation | `46.18`; `1.0` | Conditionally Required: when available |
+| `db.cosmosdb.status_code`            | int | Cosmos DB status code. | `200`; `201` | Conditionally Required: if response was received |
+| `db.cosmosdb.sub_status_code`        | int | Cosmos DB sub status code. | `1000`; `1002` | Conditionally Required: [1] |
+| `db.cosmosdb.request_charge`         | double | RU consumed for that operation | `46.18`; `1.0` | Conditionally Required: when available |
+| `user_agent.cosmosdb`                | string | Cosmos client SDK user agent. | `cosmos-netstandard-sdk/3.31.2|1|X64|Linux 5.4.0-1095-azure 101 18|.NET 6.0.2|N|` | Recommended |
 
 `db.cosmosdb.connection_mode` MUST be one of the following:
 
@@ -300,21 +300,21 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 
 ### Microsoft Azure Cosmos DB
 
-| Key | Value |
-| :-------- | :------------------- |
-| Span name | `"Operation.ReadItemsAsync"` |
-| `kind` | `"internal"` |
-| `az.namespace` | `"Microsoft.DocumentDB"` |
-| `db.system` | `"cosmosdb"` |
-| `db.name` | `"database name"` |
-| `db.operation` | `"ReadItemsAsync"` |
-| `net.peer.name` |  `"account.documents.azure.com"`  |
-| `db.cosmosdb.client_id` | `3ba4827d-4422-483f-b59f-85b74211c11d` |
-| `db.cosmosdb.operation_type` | `Read` |
-| `db.cosmosdb.user_agent` | `cosmos-netstandard-sdk/3.31.2|1|X64|Linux 5.4.0-1095-azure 101 18|.NET 6.0.2|N|appname` |
-| `db.cosmosdb.connection_mode` | `"Direct"` |
-| `db.cosmosdb.container` | `"container name"` |
+| Key                                  | Value |
+|:-------------------------------------| :------------------- |
+| Span name                            | `"Operation.ReadItemsAsync"` |
+| `kind`                               | `"internal"` |
+| `az.namespace`                       | `"Microsoft.DocumentDB"` |
+| `db.system`                          | `"cosmosdb"` |
+| `db.name`                            | `"database name"` |
+| `db.operation`                       | `"ReadItemsAsync"` |
+| `net.peer.name`                      |  `"account.documents.azure.com"`  |
+| `db.cosmosdb.client_id`              | `3ba4827d-4422-483f-b59f-85b74211c11d` |
+| `db.cosmosdb.operation_type`         | `Read` |
+| `user_agent.cosmosdb`                | `cosmos-netstandard-sdk/3.31.2|1|X64|Linux 5.4.0-1095-azure 101 18|.NET 6.0.2|N|appname` |
+| `db.cosmosdb.connection_mode`        | `"Direct"` |
+| `db.cosmosdb.container`              | `"container name"` |
 | `db.cosmosdb.request_content_length` | `20` |
-| `db.cosmosdb.status_code`  | `201` |
-| `db.cosmosdb.sub_status_code`  | `0` |
-| `db.cosmosdb.request_charge`  | `7.43` |
+| `db.cosmosdb.status_code`            | `201` |
+| `db.cosmosdb.sub_status_code`        | `0` |
+| `db.cosmosdb.request_charge`         | `7.43` |

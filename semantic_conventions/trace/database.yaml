@@ -449,10 +449,7 @@ groups:
               value: 'ExecuteJavaScript'
         brief: Cosmsodb Operation Type.
         requirement_level: required
-      - id: user_agent
-        type: string
-        brief: Cosmos client SDK user agent.
-        examples: 'Cosmos-netstandard-sdk/3.31.2001P'
+      - ref: user_agent.cosmosdb
       - id: connection_mode
         type:
           allow_custom_values: false
