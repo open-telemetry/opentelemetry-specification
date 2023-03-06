@@ -157,8 +157,8 @@ individual process level, see [process metrics](process-metrics.md).
 
 | Name                     | Description                                               | Units       | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key | Attribute Values                                                                               |
 | ------------------------ | --------------------------------------------------------- | ----------- | ------------------------------------------------- | ---------- | ------------- | ---------------------------------------------------------------------------------------------- |
-| system.processes.count   | Total number of processes in each state                   | {processes} | UpDownCounter                                     | Int64      | status        | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
-| system.processes.created | Total number of processes created over uptime of the host | {processes} | Counter                                           | Int64      | -             | -                                                                                              |
+| system.processes.count   | Total number of processes in each state                   | {process} | UpDownCounter                                     | Int64      | status        | running, sleeping, [etc.](https://man7.org/linux/man-pages/man1/ps.1.html#PROCESS_STATE_CODES) |
+| system.processes.created | Total number of processes created over uptime of the host | {process} | Counter                                           | Int64      | -             | -                                                                                              |
 
 ### `system.{os}.` - OS Specific System Metrics
 
