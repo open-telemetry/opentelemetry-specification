@@ -13,6 +13,36 @@ release.
 
 ### Metrics
 
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+### Common
+
+## v1.19.0 (2023-03-06)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Add unit to View's Instrument selection criteria.
+  ([#3184](https://github.com/open-telemetry/opentelemetry-specification/pull/3184))
 - Add metric requirement levels "Required", "Recommended", and "Opt-In".
   ([#3237](https://github.com/open-telemetry/opentelemetry-specification/pull/3237))
 
@@ -38,12 +68,16 @@ release.
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - BREAKING: Change faas.max_memory units to Bytes instead of MB
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
+- BREAKING: Expand scope of faas.id to cloud.resource_id
+  ([#3188](https://github.com/open-telemetry/opentelemetry-specification/pull/3188))
 - Add Connect RPC specific conventions
   ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
 - Rename JVM metric attribute value from `nonheap` to `non_heap`
   ([#3250](https://github.com/open-telemetry/opentelemetry-specification/pull/3250))
 - Mark the attribute naming guidelines in the specification as stable.
   ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
+- Mark telemetry schema readme stable.
+  ([#3221](https://github.com/open-telemetry/opentelemetry-specification/pull/3221))
 - Remove mention of `net.transport` from HTTP semantic conventions
   ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
 - Clarifies that if an HTTP client request is explicitly made to an IP address,
@@ -51,16 +85,34 @@ release.
   ([#3276](https://github.com/open-telemetry/opentelemetry-specification/pull/3276))
 - Mark `net.sock.host.port` as conditionally required.
   ([#3246](https://github.com/open-telemetry/opentelemetry-specification/pull/3246))
+- Rename Optional attribute requirement level to Opt-In.
+  ([#3228](https://github.com/open-telemetry/opentelemetry-specification/pull/3228))
+- Rename `http.user_agent` to `user_agent.original`.
+  ([#3190](https://github.com/open-telemetry/opentelemetry-specification/pull/3190))
+- Expand the declaration of `pool.name`.
+  ([#3050](https://github.com/open-telemetry/opentelemetry-specification/pull/3050))
 
 ### Compatibility
 
+- Update Zipkin remoteEndpoint preferences.
+  ([#3087](https://github.com/open-telemetry/opentelemetry-specification/pull/3087))
+
 ### OpenTelemetry Protocol
+
+- Declare OTLP/JSON Stable.
+  ([#2930](https://github.com/open-telemetry/opentelemetry-specification/pull/2930))
 
 ### SDK Configuration
 
+- No changes.
+
 ### Telemetry Schemas
 
+- No changes.
+
 ### Common
+
+- No changes.
 
 ## v1.18.0 (2023-02-09)
 
@@ -76,8 +128,7 @@ release.
 
 ### Metrics
 
-- Add unit to View's Instrument selection criteria.
-  ([#3184](https://github.com/open-telemetry/opentelemetry-specification/pull/3184))
+- No changes.
 
 ### Logs
 
@@ -112,8 +163,6 @@ release.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
 - `http.route` SHOULD contain the "application root" if there is one.
   ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
-- Rename `http.user_agent` to `user_agent.original`.
-  ([#3190](https://github.com/open-telemetry/opentelemetry-specification/pull/3190))
 
 ### Compatibility
 
@@ -162,8 +211,6 @@ release.
 
 - Rename built-in ExemplarFilters to AlwaysOn, AlwaysOff and TraceBased.
   ([#2919](https://github.com/open-telemetry/opentelemetry-specification/pull/2919))
-- Expand the declaration of `pool.name`.
-  ([#3050](https://github.com/open-telemetry/opentelemetry-specification/pull/3050))
 - Add `MaxScale` config option to Exponential Bucket Histogram Aggregation.
   ([#3017](https://github.com/open-telemetry/opentelemetry-specification/pull/3017))
 - Rename exponential bucket histogram aggregation to base 2 exponential histogram
