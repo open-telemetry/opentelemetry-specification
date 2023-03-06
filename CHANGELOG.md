@@ -19,6 +19,10 @@ release.
 
 ### Semantic Conventions
 
+- Mark "Instrumentation Units" and "Instrumentation Types" sections of the general
+  metric semantic conventions as stable
+  ([#3294](https://github.com/open-telemetry/opentelemetry-specification/pull/3294))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
