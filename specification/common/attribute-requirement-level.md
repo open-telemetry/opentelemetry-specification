@@ -19,7 +19,7 @@
 
 _This section applies to Log, Metric, Resource, and Span, and describes requirement levels for attributes defined in semantic conventions._
 
-Attribute requirement levels apply to instrumentation. Because users can transform their telemetry in a number of ways
+Attribute requirement levels apply to the [instrumentation library](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/glossary.md#instrumentation-library). Because telemetry may be transformed in a number of ways with custom telemetry pipelines
 (e.g. metric views, span processors, and collector transformations), these requirement levels cannot be relied on by
 telemetry consumers.
 
