@@ -195,6 +195,7 @@ set of fields to which stability concerns apply as follows:
 - [Log Events](logs/event-api.md)
   - The following data provided to [emit event](logs/event-api.md#emit-event):
     - The event name
+    - The event domain
     - The components of [LogRecord](logs/bridge-api.md#logrecord) also
       listed here.
 
