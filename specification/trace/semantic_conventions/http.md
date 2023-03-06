@@ -152,7 +152,8 @@ before any HTTP-redirects that may happen when executing the request.
   if it's sent in absolute-form
 - Host identifier of the `Host` header
 
-SHOULD NOT be set if capturing it would require an extra DNS lookup.
+If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.x.x:8080`, then
+`net.peer.name` SHOULD be the IP address `x.x.x.x`. A DNS lookup SHOULD NOT be used.
 
 **[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 

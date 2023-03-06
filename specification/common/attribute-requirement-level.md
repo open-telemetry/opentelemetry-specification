@@ -26,44 +26,47 @@ The following attribute requirement levels are specified:
 - [Recommended](#recommended)
 - [Opt-In](#opt-in)
 
-The requirement level for attribute is defined by semantic conventions depending on attribute availability across instrumented entities, performance, security, and other factors. When defining requirement levels, semantic conventions MUST take into account signal-specific requirements.
+The requirement level for an attribute is specified by semantic conventions depending on attribute availability across instrumented entities, performance, security, and other factors. When specifying requirement levels, a semantic convention MUST take into account signal-specific requirements.
 
 For example, Metric attributes that may have high cardinality can only be defined with `Opt-In` level.
 
-Semantic convention that refers to an attribute from another semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from the referred semantic convention applies.
+A semantic convention that refers to an attribute from another semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from the referred semantic convention applies.
 
 For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
 
 ## Required
 
-All instrumentations MUST populate the attribute. Semantic convention defining a Required attribute expects that an absolute majority of instrumentation libraries and applications are able to efficiently retrieve and populate it, can ensure cardinality, security, and other requirements specific to signal defined by the convention. `http.method` is an example of a Required attribute.
+All instrumentations MUST populate the attribute. A semantic convention defining a Required attribute expects an absolute majority of instrumentation libraries and applications can additionally meet requirements for cardinality, security, and any others specific to the signal defined by the convention. `http.method` is an example of a Required attribute.
 
-_Note: Consumers of telemetry can detect if telemetry item follows a specific semantic convention by checking the presence of a `Required` attribute defined by such convention. For example, the presence of `db.system` attribute on a span can be used as an indication that the span follows database semantics._
+_Note: Consumers of telemetry can detect if a telemetry item follows a specific semantic convention by checking for the presence of a `Required` attribute defined by such convention. For example, the presence of the `db.system` attribute on a span can be used as an indication that the span follows database semantics._
 
 ## Conditionally Required
 
-All instrumentations MUST add the attribute when given condition is satisfied. Semantic convention of a `Conditionally Required` level of an attribute MUST clarify the condition under which the attribute is expected to be populated.
+All instrumentations MUST populate the attribute when the given condition is satisfied. The semantic convention of a `Conditionally Required` attribute MUST clarify the condition under which the attribute is to be populated.
 
-`http.route` is an example of a conditionally required attribute to be populated when instrumented HTTP framework provides route information for the instrumented request. Some low-level HTTP server implementations do not support routing and corresponding instrumentations can't populate the attribute.
+`http.route` is an example of a conditionally required attribute that is populated when the instrumented HTTP framework provides route information for the instrumented request. Some low-level HTTP server implementations do not support routing and corresponding instrumentations can't populate the attribute.
 
-When the condition on `Conditionally Required` attribute is not satisfied and there is no requirement to populate attribute, semantic conventions MAY provide special instructions on how to handle it. If no instructions are given and if instrumentation can populate the attribute, instrumentation SHOULD use the `Opt-In` requirement level on the attribute.
+When a `Conditionally Required` attribute's condition is not satisfied, and there is no requirement to populate the attribute, semantic conventions MAY provide special instructions on how to handle it. If no instructions are given and if instrumentation can populate the attribute, instrumentation SHOULD use the `Opt-In` requirement level on the attribute.
 
-For example, `net.peer.name` is `Conditionally Required` by [Database convention](../trace/semantic_conventions/database.md) when available. When only `net.sock.peer.addr` is available,  instrumentation can do a DNS lookup, cache and populate `net.sock.peer.name` but only if user explicitly enables instrumentation to do so, considering performance issues the DNS lookup introduces.
+For example, `net.peer.name` is `Conditionally Required` by the [Database convention](../trace/semantic_conventions/database.md) when available. When `net.sock.peer.addr` is available instead, instrumentation can do a DNS lookup, cache and populate `net.peer.name`, but only if the user explicitly enables the instrumentation to do so, considering the performance issues that DNS lookups introduce.
 
 ## Recommended
 
 Instrumentations SHOULD add the attribute by default if it's readily available and can be [efficiently populated](#performance-suggestions). Instrumentations MAY offer a configuration option to disable Recommended attributes.
 
-Instrumentations that decide not to populate `Recommended` attributes due to [performance](#performance-suggestions), security, privacy, or other consideration by default, SHOULD use the `Opt-In` requirement level on them if the attributes are logically applicable.
+Instrumentations that decide not to populate `Recommended` attributes due to [performance](#performance-suggestions), security, privacy, or other consideration by default, SHOULD allow for users to
+opt-in to emit them as defined for the `Opt-In` requirement level (if the attributes are logically applicable).
 
 ## Opt-In
 
 Instrumentations SHOULD populate the attribute if and only if the user configures the instrumentation to do so. Instrumentation that doesn't support configuration MUST NOT populate `Opt-In` attributes.
 
+This attribute requirement level is recommended for attributes that are particularly expensive to retrieve or might pose a security or privacy risk. These should therefore only be enabled enabled explicitly by a user making an informed decision.
+
 ## Performance suggestions
 
 Here are several examples of expensive operations to be avoided by default:
 
-- DNS lookup to populate `net.peer.name` if only IP address is available to the instrumentation. Caching lookup results does not solve the issue for all possible cases and should be avoided by default too.
-- forcing `http.route` calculation before HTTP framework calculates it
+- DNS lookups to populate `net.peer.name` when only an IP address is available to the instrumentation. Caching lookup results does not solve the issue for all possible cases and should be avoided by default too.
+- forcing an `http.route` calculation before the HTTP framework calculates it
 - reading response stream to find `http.response_content_length` when `Content-Length` header is not available
