@@ -12,6 +12,16 @@ versions:
         - rename_attributes:
             attribute_map:
               faas.id: cloud.resource_id
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3190
+        - rename_attributes:
+            attribute_map:
+              http.user_agent: user_agent.original
+    resources:
+      changes:
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3190
+        - rename_attributes:
+            attribute_map:
+              browser.user_agent: user_agent.original
   1.18.0:
   1.17.0:
     spans:

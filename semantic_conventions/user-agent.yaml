@@ -1,0 +1,10 @@
+groups:
+  - id: attributes.user_agent
+    type: attribute_group
+    brief: "Describes user-agent attributes."
+    prefix: user_agent
+    attributes:
+      - id: original
+        type: string
+        brief: 'Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client.'
+        examples: ['CERN-LineMode/2.15 libwww/2.17b3']
