@@ -6,7 +6,7 @@ groups:
     attributes:
       - id: uid
         type: string
-        requirement_level: optional
+        requirement_level: opt_in
         brief: >
           A unique identifier for the Log Record.
         note: >
