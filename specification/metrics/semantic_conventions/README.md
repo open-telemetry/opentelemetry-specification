@@ -5,7 +5,7 @@ linkTitle: Semantic Conventions
 <!-- omit in toc -->
 # Metrics Semantic Conventions
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Mixed](../../document-status.md)
 
 <!-- toc -->
 
@@ -173,6 +173,8 @@ instrument creation, but can be added if there is ambiguity.
 
 ### Instrument Units
 
+**Status**: [Stable](../../document-status.md)
+
 Units should follow the
 [Unified Code for Units of Measure](http://unitsofmeasure.org/ucum.html) (need
 more clarification in
@@ -186,6 +188,8 @@ give additional meaning *without* the leading default unit (`1`). For example,
 use `{packets}`, `{errors}`, `{faults}`, etc.
 
 ### Instrument Types
+
+**Status**: [Stable](../../document-status.md)
 
 The semantic metric conventions specification is written to use the names of the synchronous instrument types,
 like `Counter` or `UpDownCounter`. However, compliant implementations MAY use the asynchronous equivalent instead,
