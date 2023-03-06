@@ -9,6 +9,7 @@
 
 <!-- toc -->
 
+- [Overview](#overview)
 - [EventLogger](#eventlogger)
   * [EventLogger Operations](#eventlogger-operations)
     + [Create EventLogger](#create-eventlogger)
@@ -18,9 +19,33 @@
 
 </details>
 
+## Overview
+
+Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
+
+>In computing, a log file is a file that records either events that occur in an
+>operating system or other software runs.
+
+From OpenTelemetry's perspective LogRecords and Events are both represented
+using the same [data model](./data-model.md).
+
+However, OpenTelemetry does recognize a subtle semantic difference between
+LogRecords and Events: Events are LogRecords which have a `name` and `domain`.
+Within a particular `domain`, the `name` uniquely defines a particular class or
+type of event. Events with the same `domain` / `name` follow the same schema
+which assists in analysis in observability platforms. Events are described in
+more detail in the [semantic conventions](./semantic_conventions/events.md).
+
+While the logging space has a diverse legacy with many existing logging
+libraries in different languages, there is not ubiquitous alignment with
+OpenTelemetry events. In some logging libraries, producing records shaped as
+OpenTelemetry events is clunky or error-prone.
+
 The Event API offers convenience methods
 for [emitting LogRecords](./bridge-api.md#emit-logrecord) that conform
 to the [semantic conventions for Events](./semantic_conventions/events.md).
+Unlike the [Logs Brdige API](./bridge-api.md), application developers and
+instrumentation authors are encouraged to call this API directly.
 
 ## EventLogger
 

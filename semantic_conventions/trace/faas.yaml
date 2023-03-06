@@ -41,7 +41,7 @@ groups:
         type: string
         brief: 'The invocation ID of the current function invocation.'
         examples: 'af9d5aa4-a685-4c5f-a22b-444f80b3cc28'
-
+      - ref: cloud.resource_id
   - id: faas_span.datasource
     prefix: faas.document
     type: span

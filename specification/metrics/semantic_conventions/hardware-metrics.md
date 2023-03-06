@@ -42,10 +42,10 @@ Additionally, it is recommended that all metrics in `hw.` instruments have the
 below attributes:
 
 | Attribute Key | Description                                                                                                   | Example                             | Requirement Level |
-| ------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ----------------- |
+| ------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------- |-------------------|
 | `id`          | An identifier for the hardware component, unique within the monitored host                                    | `win32battery_battery_testsysa33_1` | Required          |
 | `name`        | An easily-recognizable name for the hardware component                                                        | `eth0`                              | Recommended       |
-| `parent`      | Unique identifier of the parent component (typically the `id` attribute of the enclosure, or disk controller) | `dellStorage_perc_0`                | Optional          |
+| `parent`      | Unique identifier of the parent component (typically the `id` attribute of the enclosure, or disk controller) | `dellStorage_perc_0`                | Opt-In            |
 
 ## Metric Instruments
 
