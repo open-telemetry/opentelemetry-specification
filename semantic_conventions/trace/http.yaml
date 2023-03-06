@@ -8,10 +8,6 @@ groups:
         These conventions can be used for http and https schemes
         and various HTTP versions like 1.1, 2 and SPDY.
     attributes:
-      - id: user_agent
-        type: string
-        brief: 'Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client.'
-        examples: ['CERN-LineMode/2.15 libwww/2.17b3']
       - id: request_content_length
         type: int
         brief: >
@@ -33,6 +29,7 @@ groups:
       - ref: net.sock.peer.name
       - ref: net.sock.family
         examples: ['inet', 'inet6']
+      - ref: user_agent.original
 
   - id: trace.http.client
     prefix: http
