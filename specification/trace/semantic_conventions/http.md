@@ -152,7 +152,8 @@ before any HTTP-redirects that may happen when executing the request.
   if it's sent in absolute-form
 - Host identifier of the `Host` header
 
-SHOULD NOT be set if capturing it would require an extra DNS lookup.
+If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.x.x:8080`, then
+`net.peer.name` SHOULD be the IP address `x.x.x.x`. A DNS lookup SHOULD NOT be used.
 
 **[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
@@ -249,7 +250,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `localhost` | Required |
 | [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Opt-In |
-| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [6] |
+| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Conditionally Required: [6] |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
@@ -285,7 +286,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
