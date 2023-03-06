@@ -80,6 +80,9 @@ release.
   ([#3221](https://github.com/open-telemetry/opentelemetry-specification/pull/3221))
 - Remove mention of `net.transport` from HTTP semantic conventions
   ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
+- Clarifies that if an HTTP client request is explicitly made to an IP address,
+  e.g. `http://x.x.x.x:8080`, then `net.peer.name` SHOULD be the IP address `x.x.x.x`
+  ([#3276](https://github.com/open-telemetry/opentelemetry-specification/pull/3276))
 - Mark `net.sock.host.port` as conditionally required.
   ([#3246](https://github.com/open-telemetry/opentelemetry-specification/pull/3246))
 - Rename Optional attribute requirement level to Opt-In.
@@ -221,6 +224,8 @@ release.
 
 - Clarify usage of log body for structured logs
   ([#3023](https://github.com/open-telemetry/opentelemetry-specification/pull/3023))
+- Move appendices from Data Model to new Data Model Appendix document
+  ([#3207](https://github.com/open-telemetry/opentelemetry-specification/pull/3207))
 
 ### Resource
 

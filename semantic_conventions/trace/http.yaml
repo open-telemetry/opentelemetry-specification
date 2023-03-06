@@ -72,7 +72,8 @@ groups:
             if it's sent in absolute-form
           - Host identifier of the `Host` header
 
-          SHOULD NOT be set if capturing it would require an extra DNS lookup.
+          If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.x.x:8080`, then
+          `net.peer.name` SHOULD be the IP address `x.x.x.x`. A DNS lookup SHOULD NOT be used.
       - ref: net.peer.port
         sampling_relevant: true
         requirement_level:
