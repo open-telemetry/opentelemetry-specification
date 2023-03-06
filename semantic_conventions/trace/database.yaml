@@ -415,7 +415,7 @@ groups:
         examples: '3ba4827d-4422-483f-b59f-85b74211c11d'
       - id: operation_type
         type:
-          allow_custom_values: false
+          allow_custom_values: true
           members:
             - id: Invalid
               value: 'Invalid'
@@ -447,9 +447,10 @@ groups:
               value: 'QueryPlan'
             - id: ExecuteJavaScript
               value: 'ExecuteJavaScript'
-        brief: Cosmsodb Operation Type.
-        requirement_level: required
-      - ref: user_agent.cosmosdb
+        brief: CosmosDB Operation Type.
+        requirement_level:
+          conditionally_required: when performing one of the operations in this list
+      - ref: user_agent.original
       - id: connection_mode
         type:
           allow_custom_values: false
@@ -461,7 +462,8 @@ groups:
               value: 'direct'
               brief: Direct connection.
         brief: Cosmos client connection mode.
-        requirement_level: required
+        requirement_level:
+          conditionally_required: if not `direct` (or pick gw as default)
       - id: container
         type: string
         brief: Cosmos DB container name.
