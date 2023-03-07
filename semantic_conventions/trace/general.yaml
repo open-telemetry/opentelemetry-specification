@@ -106,7 +106,7 @@ groups:
         type: int
         brief: 'Local socket port number.'
         requirement_level:
-          recommended: If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+          conditionally_required: If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
         examples: 35555
       - id: host.connection.type
         type:
