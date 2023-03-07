@@ -60,9 +60,9 @@ This document defines how to apply semantic conventions when instrumenting Kafka
 |                                               |               |            |                   |                 |                                                                       | `topic`     | topic name        |
 | messaging.kafka.producer.record-error.rate    | Gauge         | Double     | error rate | `{error}/s` | The average per-second number of record sends that resulted in errors for a specific topic.  | `client-id` | `client-id` value |
 |                                               |               |            |            |              |                                                                                              | `topic`     | topic name        |
-| messaging.kafka.producer.record-retry.rate    | Gauge         | Double     | retry rate | `{retrie}/s` | The average per-second number of retried record sends for a specific topic. | `client-id` | `client-id` value  |
+| messaging.kafka.producer.record-retry.rate    | Gauge         | Double     | retry rate | `{retry}/s` | The average per-second number of retried record sends for a specific topic. | `client-id` | `client-id` value  |
 |                                               |               |            |            |               |                                                                             | `topic`     | topic name         |
-| messaging.kafka.producer.record-sent.rate     | Gauge         | Double     | records sent rate | `{records_sent}/s` | The average number of records sent per second for a specific topic.  | `client-id` | `client-id` value  |
+| messaging.kafka.producer.record-sent.rate     | Gauge         | Double     | records sent rate | `{record_sent}/s` | The average number of records sent per second for a specific topic.  | `client-id` | `client-id` value  |
 |                                               |               |            |                   |                    |                                                                      | `topic`     | topic name         |
 
 ## Kafka Consumer Metrics
