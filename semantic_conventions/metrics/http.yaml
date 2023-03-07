@@ -17,7 +17,7 @@ groups:
     metric_name: http.server.active_requests
     brief: "Measures the number of concurrent HTTP requests that are currently in-flight."
     instrument: updowncounter
-    unit: "{requests}"
+    unit: "{request}"
     attributes:
       - ref: http.method
       - ref: http.status_code
