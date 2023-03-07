@@ -417,35 +417,35 @@ groups:
         type:
           allow_custom_values: true
           members:
-            - id: Invalid
+            - id: invalid
               value: 'Invalid'
-            - id: Create
+            - id: create
               value: 'Create'
-            - id: Patch
+            - id: patch
               value: 'Patch'
-            - id: Read
+            - id: read
               value: 'Read'
-            - id: ReadFeed
+            - id: readFeed
               value: 'ReadFeed'
-            - id: Delete
+            - id: delete
               value: 'Delete'
-            - id: Replace
+            - id: replace
               value: 'Replace'
-            - id: Execute
+            - id: execute
               value: 'Execute'
-            - id: Query
+            - id: query
               value: 'Query'
-            - id: Head
+            - id: head
               value: 'Head'
-            - id: HeadFeed
+            - id: headFeed
               value: 'HeadFeed'
-            - id: Upsert
+            - id: upsert
               value: 'Upsert'
-            - id: Batch
+            - id: batch
               value: 'Batch'
-            - id: QueryPlan
+            - id: queryPlan
               value: 'QueryPlan'
-            - id: ExecuteJavaScript
+            - id: executejavascript
               value: 'ExecuteJavaScript'
         brief: CosmosDB Operation Type.
         requirement_level:
