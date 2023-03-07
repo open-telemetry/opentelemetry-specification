@@ -164,7 +164,7 @@ relies on the concept of
 Semantic Conventions defines breaking changes as those that would break the
 "API" of tooling written against the telemetry it produces. That is, the portions
 of telemetry where specialized tooling (alerts, dashboards, e.g.) interact are
-expected to remain stable for that tooling. Semantic Conventions defines the
+expected to remain stable for that tooling after schema transformations are applied. Semantic Conventions defines the
 set of fields to which stability concerns apply as follows:
 
 - [Resource](resource/sdk.md)
