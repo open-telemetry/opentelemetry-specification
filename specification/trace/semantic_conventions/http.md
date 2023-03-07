@@ -123,8 +123,7 @@ This span type represents an outbound HTTP request. There are two ways this can 
 
 1. Instrumentations SHOULD create an HTTP span for each attempt to send an HTTP request over the wire.
    In case the request is resent, the resend attempts MUST follow the [HTTP resend spec](#http-request-retries-and-redirects).
-   Instrumentations MAY emit a "logical" (encompassing) span that is a parent of all the resend attempt spans;
-   however, this span MUST NOT exhibit HTTP semantics.
+   In this case, instrumentations MUST NOT (also) emit a logical encompassing HTTP client span.
 
 2. If for some reason it is not possible to emit a span for each send attempt (because e.g. the instrumented library does not expose hooks that would allow this),
    instrumentations MAY create an HTTP span for the top-most operation of the HTTP client.
