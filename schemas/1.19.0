@@ -16,11 +16,6 @@ versions:
         - rename_attributes:
             attribute_map:
               http.user_agent: user_agent.original
-        # https://github.com/open-telemetry/opentelemetry-specification/pull/3272
-        - rename_attributes:
-            attribute_map:
-              net.app.protocol.name: net.protocol.name
-              net.app.protocol.version: net.protocol.version
     resources:
       changes:
         # https://github.com/open-telemetry/opentelemetry-specification/pull/3190
