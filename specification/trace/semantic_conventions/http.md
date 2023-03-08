@@ -245,7 +245,8 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 |---|---|---|---|---|
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
 | `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/users/12314/?q=ddds` | Required |
-| `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | Recommended |
+| `http.forwarded.for` | string | The address of the original client behind all proxies. [2] | `2001:db8:cafe::17`; `83.164.160.102:65534`; `_hidden` | Recommended: if and only if it's available. |
+| `http.forwarded.proto` | string | The original protocol client used to connect to the proxy (e.g. from the `proto` component of [Forwarded](https://www.rfc-editor.org/rfc/rfc7239.html) header) | `https`; `http` | Recommended: if known and only if it's available. |
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
 | [`net.host.name`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `localhost` | Required |
 | [`net.host.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `8080` | Conditionally Required: [5] |
@@ -255,17 +256,14 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
-**[2]:** This is not necessarily the same as `net.sock.peer.addr`, which would
+**[2]:** `http.forwarded.for` is usually represented by the first [`for`](https://www.rfc-editor.org/rfc/rfc7239.html#section-5.2)
+parameter in the `Forwarded` header or the first IP address in the
+[`X-Forwarded-For`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For) header.
+This is not the same as `net.sock.peer.addr`, which would
 identify the network-level peer, which may be a proxy.
-
-This attribute should be set when a source of information different
-from the one used for `net.sock.peer.addr`, is available even if that other
-source just confirms the same value as `net.sock.peer.addr`.
-Rationale: For `net.sock.peer.addr`, one typically does not know if it
-comes from a proxy, reverse proxy, or the actual client. Setting
-`http.client_ip` when it's the same as `net.sock.peer.addr` means that
-one is at least somewhat confident that the address is not that of
-the closest proxy.
+This attribute SHOULD be set when a source of information different
+from the one used for `net.sock.peer.addr` is available and SHOULD NOT be set
+if there is no such source.
 
 **[3]:** Determined by using the first of the following that applies
 
@@ -294,6 +292,13 @@ Following attributes MUST be provided **at span creation time** (when provided a
 * `http.scheme`
 * [`net.host.name`](span-general.md)
 * [`net.host.port`](span-general.md)
+
+`http.forwarded.proto` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+
+| Value  | Description |
+|---|---|
+| `http` | http |
+| `https` | https |
 <!-- endsemconv -->
 
 `http.route` MUST be provided at span creation time if and only if it's already available. If it becomes available after span starts, instrumentation MUST populate it anytime before span ends.

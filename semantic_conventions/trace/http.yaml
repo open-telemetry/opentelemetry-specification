@@ -97,24 +97,36 @@ groups:
         requirement_level: required
         sampling_relevant: true
         examples: ['/users/12314/?q=ddds']
-      - id: client_ip
+      - id: forwarded.for
         type: string
+        requirement_level:
+          recommended: if and only if it's available.
         brief: >
-            The IP address of the original client behind all proxies, if
-            known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)).
+            The address of the original client behind all proxies.
         note: |
-            This is not necessarily the same as `net.sock.peer.addr`, which would
+            `http.forwarded.for` is usually represented by the first [`for`](https://www.rfc-editor.org/rfc/rfc7239.html#section-5.2)
+            parameter in the `Forwarded` header or the first IP address in the
+            [`X-Forwarded-For`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For) header.
+            This is not the same as `net.sock.peer.addr`, which would
             identify the network-level peer, which may be a proxy.
-
-            This attribute should be set when a source of information different
-            from the one used for `net.sock.peer.addr`, is available even if that other
-            source just confirms the same value as `net.sock.peer.addr`.
-            Rationale: For `net.sock.peer.addr`, one typically does not know if it
-            comes from a proxy, reverse proxy, or the actual client. Setting
-            `http.client_ip` when it's the same as `net.sock.peer.addr` means that
-            one is at least somewhat confident that the address is not that of
-            the closest proxy.
-        examples: '83.164.160.102'
+            This attribute SHOULD be set when a source of information different
+            from the one used for `net.sock.peer.addr` is available and SHOULD NOT be set
+            if there is no such source.
+        examples: ['2001:db8:cafe::17', '83.164.160.102:65534', '_hidden']
+      - id: forwarded.proto
+        type:
+          allow_custom_values: true
+          members:
+            - id: http
+              value: "http"
+            - id: https
+              value: "https"
+        requirement_level:
+          recommended: if known and only if it's available.
+        brief: >
+          The original protocol client used to connect to the proxy (e.g.
+          from the `proto` component of [Forwarded](https://www.rfc-editor.org/rfc/rfc7239.html) header)
+        examples: ['https', 'http']
       - ref: http.scheme
         sampling_relevant: true
       - ref: net.host.name
