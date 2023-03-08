@@ -10,10 +10,8 @@
 
 - [Events](#events)
   * [PageView](#pageview)
-  * [PageLoad](#pageload)
   * [PageNavigationTiming](#pagenavigationtiming)
   * [ResourceTiming](#resourcetiming)
-  * [HTTP](#http)
   * [HttpRequestTiming](#httprequesttiming)
   * [Exception](#exception)
   * [UserAction](#useraction)
@@ -115,20 +113,12 @@ All events have the following three high-level attributes. The event name is spe
 
 </details>
 
-### PageLoad
-
-**Event name**:`page_load`.
-
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `url` [1]| string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [2] | `https://en.wikipedia.org/wiki/Main_Page`; `https://en.wikipedia.org/wiki/Main_Page#foo` | Required |
-
-**[1]:** Alias for [`http.url`](../../../trace/semantic_conventions/http.md)
-**[2]:** The URL fragment may be included for virtual pages
-
 ### PageNavigationTiming
 
 **Event name**:`page_navigation_timing`
+
+This event may be represented in a Span Event on the Span representing the
+loading of a Page.
 
 | Key  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
@@ -160,44 +150,13 @@ All events have the following three high-level attributes. The event name is spe
 |responseStart | long | || Recommended |
 |responseEnd | long | || Recommended |
 
-### HTTP
-
-**Event name**:`HTTP`
-
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `request_type` | int | Request type | `0` | Required |
-| `url` [1] | string | Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [2] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Required |
-| `method` [3] | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
-| `status_code` [4]| int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
-| `request_content_length` [5]| int | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
-| `response_content_length` [6] | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
-| `response_content_length_uncompressed` [7] | int | length of the response after it's uncompressed | `23421` | Recommended |
-| `request.header.<key>` [8]| string[] | HTTP request headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [9] | `http.request.header.content_type=["application/json"]`; `http.request.header.x_forwarded_for=["1.2.3.4", "1.2.3.5"]` | Optional |
-| `response.header.<key>` [10]| string[] | HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase, with `-` characters replaced by `_`), the value being the header values. [11] | `http.response.header.content_type=["application/json"]`; `http.response.header.my_custom_header=["abc", "def"]` | Optional |
-
-**[1]:**  Alias for [`http.url`](../../../trace/semantic_conventions/http.md)
-**[2]:** `url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
-**[3]:** Alias for [`http.method`](../../../trace/semantic_conventions/http.md)
-**[4]:**  Alias for [`http.status_code`](../../../trace/semantic_conventions/http.md)
-**[5]:** Alias for [`http.request_content_length`](../../../trace/semantic_conventions/http.md)
-**[6]:**  Alias for [`http.response_content_length`](../../../trace/semantic_conventions/http.md)
-**[7]:** Alias for `http.response_content_length_uncompressed`
-**[8]:** Alias for `http.request.header.<key>`
-**[10]:**  Alias for `http.response.header.<key>`
-**[9,11]:** Instrumentations SHOULD require an explicit configuration of which headers are to be captured. Including all request/response headers can be a security risk - explicit configuration helps avoid leaking sensitive information. The `User-Agent` header is already captured in the `browser.user_agent` resource attribute. Users MAY explicitly configure instrumentations to capture them even though it is not recommended.
-
-`request_type` MUST be one of the following:
-
-| Value  | Description |
-|---|---|
-| `0` | fetch |
-| `1` | xhr |
-| `2` | send_beacon |
 
 ### HttpRequestTiming
 
 **Event name**:`http_request_timing`
+
+This event may be represented using a Span Event on the Spans represening HTTP
+requests made by the browser using XMLHttpRequest or Fetch or sendBeacon APIs.
 
 | Key  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
