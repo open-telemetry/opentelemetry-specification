@@ -150,7 +150,6 @@ loading of a Page.
 |responseStart | long | || Recommended |
 |responseEnd | long | || Recommended |
 
-
 ### HttpRequestTiming
 
 **Event name**:`http_request_timing`
