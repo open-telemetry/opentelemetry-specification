@@ -19,9 +19,7 @@ release.
 
 ### Semantic Conventions
 
-- Clarify that attribute requirement levels apply to instrumentation. And that,
-  because users can transform their telemetry in a number of ways, these requirement
-  levels cannot be relied on by telemetry consumers.
+- Clarify that attribute requirement levels apply to the instrumentation library
   ([#3289](https://github.com/open-telemetry/opentelemetry-specification/pull/3289))
 
 ### Compatibility
