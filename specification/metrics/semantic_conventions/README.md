@@ -102,7 +102,7 @@ Metric names SHOULD NOT be pluralized, unless the value being recorded
 represents discrete instances of a
 [countable quantity](https://en.wikipedia.org/wiki/Count_noun).
 Generally, the name SHOULD be pluralized only if the unit of the metric in
-question is a non-unit (like `{faults}` or `{operations}`).
+question is a non-unit (like `{fault}` or `{operation}`).
 
 Examples:
 
@@ -180,10 +180,14 @@ more clarification in
 
 - Instruments for **utilization** metrics (that measure the fraction out of a
 total) are dimensionless and SHOULD use the default unit `1` (the unity).
+- All non-units that use curly braces to annotate a quantity need to match the
+  grammatical number of the quantity it represent. For example if measuring the
+  number of individual requests to a process the unit would be `{request}`, not
+  `{requests}`.
 - Instruments that measure an integer count of something SHOULD only use
 [annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
 give additional meaning *without* the leading default unit (`1`). For example,
-use `{packets}`, `{errors}`, `{faults}`, etc.
+use `{packet}`, `{error}`, `{fault}`, etc.
 
 ### Instrument Types
 
