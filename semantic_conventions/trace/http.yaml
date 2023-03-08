@@ -8,10 +8,6 @@ groups:
         These conventions can be used for http and https schemes
         and various HTTP versions like 1.1, 2 and SPDY.
     attributes:
-      - id: user_agent
-        type: string
-        brief: 'Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client.'
-        examples: ['CERN-LineMode/2.15 libwww/2.17b3']
       - id: request_content_length
         type: int
         brief: >
@@ -33,6 +29,7 @@ groups:
       - ref: net.sock.peer.name
       - ref: net.sock.family
         examples: ['inet', 'inet6']
+      - ref: user_agent.original
 
   - id: trace.http.client
     prefix: http
@@ -75,7 +72,8 @@ groups:
             if it's sent in absolute-form
           - Host identifier of the `Host` header
 
-          SHOULD NOT be set if capturing it would require an extra DNS lookup.
+          If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.x.x:8080`, then
+          `net.peer.name` SHOULD be the IP address `x.x.x.x`. A DNS lookup SHOULD NOT be used.
       - ref: net.peer.port
         sampling_relevant: true
         requirement_level:
@@ -149,5 +147,5 @@ groups:
             if it's sent in absolute-form.
           - Port identifier of the `Host` header
       - ref: net.sock.host.addr
-        requirement_level: optional
+        requirement_level: opt_in
       - ref: net.sock.host.port
