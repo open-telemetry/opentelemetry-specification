@@ -22,6 +22,9 @@ release.
 
 ### Semantic Conventions
 
+- Fix grammatical number of metric units.
+  ([#3298](https://github.com/open-telemetry/opentelemetry-specification/pull/3298))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
