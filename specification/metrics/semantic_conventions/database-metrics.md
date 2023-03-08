@@ -31,7 +31,7 @@ instrumentations:
 
 | Name                          | Instrument                 | Unit        | Unit ([UCUM](README.md#instrument-units)) | Description                                                                               |
 |-------------------------------|----------------------------|-------------|-------------------------------------------|-------------------------------------------------------------------------------------------|
-| `db.client.connections.usage` | UpDownCounter | connections | `{connections}`                           | The number of connections that are currently in state described by the `state` attribute. |
+| `db.client.connections.usage` | UpDownCounter | connections | `{connection}`                           | The number of connections that are currently in state described by the `state` attribute. |
 
 All `db.client.connections.usage` measurements MUST include the following attribute:
 
@@ -45,11 +45,11 @@ MUST NOT be used.
 
 | Name                                     | Instrument ([*](README.md#instrument-types)) | Unit         | Unit ([UCUM](README.md#instrument-units)) | Description                                                                                       |
 |------------------------------------------|----------------------------------------------|--------------|-------------------------------------------|---------------------------------------------------------------------------------------------------|
-| `db.client.connections.idle.max`         | UpDownCounter                                | connections  | `{connections}`                           | The maximum number of idle open connections allowed.                                              |
-| `db.client.connections.idle.min`         | UpDownCounter                                | connections  | `{connections}`                           | The minimum number of idle open connections allowed.                                              |
-| `db.client.connections.max`              | UpDownCounter                                | connections  | `{connections}`                           | The maximum number of open connections allowed.                                                   |
-| `db.client.connections.pending_requests` | UpDownCounter                                | requests     | `{requests}`                              | The number of pending requests for an open connection, cumulative for the entire pool.            |
-| `db.client.connections.timeouts`         | Counter                                      | timeouts     | `{timeouts}`                              | The number of connection timeouts that have occurred trying to obtain a connection from the pool. |
+| `db.client.connections.idle.max`         | UpDownCounter                                | connections  | `{connection}`                           | The maximum number of idle open connections allowed.                                              |
+| `db.client.connections.idle.min`         | UpDownCounter                                | connections  | `{connection}`                           | The minimum number of idle open connections allowed.                                              |
+| `db.client.connections.max`              | UpDownCounter                                | connections  | `{connection}`                           | The maximum number of open connections allowed.                                                   |
+| `db.client.connections.pending_requests` | UpDownCounter                                | requests     | `{request}`                              | The number of pending requests for an open connection, cumulative for the entire pool.            |
+| `db.client.connections.timeouts`         | Counter                                      | timeouts     | `{timeout}`                              | The number of connection timeouts that have occurred trying to obtain a connection from the pool. |
 | `db.client.connections.create_time`      | Histogram                                    | milliseconds | `ms`                                      | The time it took to create a new connection.                                                      |
 | `db.client.connections.wait_time`        | Histogram                                    | milliseconds | `ms`                                      | The time it took to obtain an open connection from the pool.                                      |
 | `db.client.connections.use_time`         | Histogram                                    | milliseconds | `ms`                                      | The time between borrowing a connection and returning it to the pool.                             |

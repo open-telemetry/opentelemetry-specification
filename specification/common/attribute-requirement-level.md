@@ -36,7 +36,7 @@ For example, [Database semantic convention](../trace/semantic_conventions/databa
 
 ## Required
 
-All instrumentations MUST populate the attribute. A semantic convention defining a Required attribute expects an absolute majority of instrumentation libraries and applications can additionally meet requirements for cardinality, security, and any others specific to the signal defined by the convention. `http.method` is an example of a Required attribute.
+All instrumentations MUST populate the attribute. A semantic convention defining a Required attribute expects an absolute majority of instrumentation libraries and applications are able to efficiently retrieve and populate it, and can additionally meet requirements for cardinality, security, and any others specific to the signal defined by the convention. `http.method` is an example of a Required attribute.
 
 _Note: Consumers of telemetry can detect if a telemetry item follows a specific semantic convention by checking for the presence of a `Required` attribute defined by such convention. For example, the presence of the `db.system` attribute on a span can be used as an indication that the span follows database semantics._
 
@@ -61,7 +61,7 @@ opt-in to emit them as defined for the `Opt-In` requirement level (if the attrib
 
 Instrumentations SHOULD populate the attribute if and only if the user configures the instrumentation to do so. Instrumentation that doesn't support configuration MUST NOT populate `Opt-In` attributes.
 
-This attribute requirement level is recommended for attributes that are particularly expensive to retrieve or might pose a security or privacy risk. These should therefore only be enabled enabled explicitly by a user making an informed decision.
+This attribute requirement level is recommended for attributes that are particularly expensive to retrieve or might pose a security or privacy risk. These should therefore only be enabled explicitly by a user making an informed decision.
 
 ## Performance suggestions
 
