@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Clarify that units should use UCUM case sensitive variant.
+  ([#TBD](https://github.com/open-telemetry/opentelemetry-specification/pull/TBD))
+
 ### Logs
 
 ### Resource
