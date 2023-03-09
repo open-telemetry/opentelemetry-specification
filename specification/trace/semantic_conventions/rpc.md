@@ -127,11 +127,11 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 | [`net.host.name`](span-general.md) | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [1] |
 | [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
-| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Recommended: [2] |
+| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Conditionally Required: [2] |
 
 **[1]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
-**[2]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+**[2]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
 <!-- endsemconv -->
 
 ### Events
@@ -212,8 +212,8 @@ The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC stat
 
 | Attribute                     | Type     | Description                                                                                                                                                       | Examples                                                                   | Requirement Level |
 |-------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|-------------------|
-| `rpc.grpc.request.metadata.<key>`  | string[] | gRPC request metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1]  | `rpc.grpc.request.metadata.my_custom_metadata_attribute=["1.2.3.4", "1.2.3.5"]` | Optional          |
-| `rpc.grpc.response.metadata.<key>` | string[] | gRPC response metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1] | `rpc.grpc.response.metadata.my_custom_metadata_attribute=["attribute_value"]`   | Optional          |
+| `rpc.grpc.request.metadata.<key>`  | string[] | gRPC request metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1]  | `rpc.grpc.request.metadata.my_custom_metadata_attribute=["1.2.3.4", "1.2.3.5"]` | Opt-In            |
+| `rpc.grpc.response.metadata.<key>` | string[] | gRPC response metadata, `<key>` being the normalized gRPC Metadata key (lowercase, with `-` characters replaced by `_`), the value being the metadata values. [1] | `rpc.grpc.response.metadata.my_custom_metadata_attribute=["attribute_value"]`   | Opt-In            |
 
 **[1]:** Instrumentations SHOULD require an explicit configuration of which metadata values are to be captured.
 Including all request/response metadata values can be a security risk - explicit configuration helps avoid leaking sensitive information.

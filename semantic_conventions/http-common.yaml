@@ -40,9 +40,6 @@ groups:
               value: 'QUIC'
               brief: 'QUIC protocol.'
         brief: 'Kind of HTTP protocol used.'
-        note: >
-          If `net.transport` is not specified, it can be assumed to be `IP.TCP` except if `http.flavor`
-          is `QUIC`, in which case `IP.UDP` is assumed.
 
   - id: attributes.http.client
     prefix: http
