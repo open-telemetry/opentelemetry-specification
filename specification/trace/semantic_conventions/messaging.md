@@ -82,13 +82,7 @@ Sending messages to a destination is called "*publish*" in context of this speci
 
 A source represents an entity within messaging system messages are consumed from. Source and destination for specific message may be the same. However, if message is routed within one or multiple brokers, source and destination can be different.
 
-Traditional messaging, such as JMS, involves two kinds of destinations and source: *topic*s and *queue*s.
-
-In a messaging system such as Apache Kafka, all destinations are *topic*s.
-Each record, or message, is sent to a single consumer per consumer group.
-Consumer groups provide *deliver once* semantics for consumers of a topic within a group.
-Whether a specific message is processed as if it was sent to a topic or queue entirely depends on the consumer groups and their composition.
-For instance, there can be multiple consumer groups processing records from the same topic.
+Typical examples of destinations and sources include Kafka topics, RabbitMQ queues and topics.
 
 ### Message consumption
 
