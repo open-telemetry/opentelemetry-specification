@@ -58,7 +58,7 @@ markdownlint:
 	@if ! npm ls markdownlint; then npm install; fi
 	@for f in $(ALL_DOCS); do \
 		echo $$f; \
-		npx --no -p markdownlint-cli markdownlint -c .markdownlint.yaml $$f \
+		npx --no -p markdownlint -c .markdownlint.yaml $$f \
 			|| exit 1; \
 	done
 
