@@ -425,7 +425,7 @@ groups:
               value: 'Patch'
             - id: read
               value: 'Read'
-            - id: readFeed
+            - id: read_feed
               value: 'ReadFeed'
             - id: delete
               value: 'Delete'
@@ -437,15 +437,15 @@ groups:
               value: 'Query'
             - id: head
               value: 'Head'
-            - id: headFeed
+            - id: head_feed
               value: 'HeadFeed'
             - id: upsert
               value: 'Upsert'
             - id: batch
               value: 'Batch'
-            - id: queryPlan
+            - id: query_plan
               value: 'QueryPlan'
-            - id: executejavascript
+            - id: execute_javascript
               value: 'ExecuteJavaScript'
         brief: CosmosDB Operation Type.
         requirement_level:

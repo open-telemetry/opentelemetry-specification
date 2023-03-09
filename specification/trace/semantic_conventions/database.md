@@ -216,7 +216,7 @@ Separated for clarity.
 **[1]:** This mirrors the db.sql.table attribute but references cassandra rather than sql. It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
 <!-- endsemconv -->
 
-#### Microsoft Azure Cosmos DB
+#### Microsoft Azure Cosmos DB Attributes
 
 Cosmos DB instrumentation includes call-level (public API) surface spans and network spans. Depending on the connection mode (Gateway or Direct), network-level spans may also be created.
 
