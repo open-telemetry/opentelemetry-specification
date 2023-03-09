@@ -67,6 +67,6 @@ groups:
       - id: image.version
         type: string
         brief: >
-          The version string of the VM image as defined in
+          The version string of the VM image or host OS as defined in
           [Version Attributes](README.md#version-attributes).
         examples: ['0.1']
