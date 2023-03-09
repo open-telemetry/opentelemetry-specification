@@ -76,7 +76,7 @@ This metric is optional.
 <!-- semconv metric.http.server.active_requests(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `http.server.active_requests` | UpDownCounter | `{requests}` | Measures the number of concurrent HTTP requests that are currently in-flight. |
+| `http.server.active_requests` | UpDownCounter | `{request}` | Measures the number of concurrent HTTP requests that are currently in-flight. |
 <!-- endsemconv -->
 
 <!-- semconv metric.http.server.active_requests(full) -->
