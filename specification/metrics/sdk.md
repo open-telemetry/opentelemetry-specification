@@ -400,14 +400,14 @@ The Default Aggregation informs the SDK to use the Instrument `kind` to select
 an aggregation and `advice` to influence aggregation configuration parameters
 (as noted in the "Selected Aggregation" column).
 
-| Instrument Kind                                                   | Selected Aggregation                                                                                                                                             |
-|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Counter](./api.md#counter)                                       | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                      |
-| [Asynchronous Counter](./api.md#asynchronous-counter)             | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                      |
-| [UpDownCounter](./api.md#updowncounter)                           | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                      |
-| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                      |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                        |
-| [Histogram](./api.md#histogram)                                   | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation), with `Boundaries` from [advice](./api.md#instrument-advice) if provided |
+| Instrument Kind                                                   | Selected Aggregation                                                                                                                                                           |
+|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Counter](./api.md#counter)                                       | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
+| [Asynchronous Counter](./api.md#asynchronous-counter)             | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
+| [UpDownCounter](./api.md#updowncounter)                           | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                      |
+| [Histogram](./api.md#histogram)                                   | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation), with `ExplicitBucketBoundaries` from [advice](./api.md#instrument-advice) if provided |
 
 This Aggregation does not have any configuration parameters.
 
@@ -583,10 +583,14 @@ given instrument before starting a subsequent round of collection.
 
 ## Meter
 
+**Status**: [Mixed](../document-status.md)
+
 Distinct meters MUST be treated as separate namespaces for the purposes of detecting
 [duplicate instrument registrations](#duplicate-instrument-registration).
 
 ### Duplicate instrument registration
+
+**Status**: [Stable](../document-status.md)
 
 When more than one Instrument of the same `name` is created for identical
 Meters, denoted _duplicate instrument registration_, the Meter MUST create a
@@ -624,6 +628,8 @@ information for the user on how to resolve the conflict, if possible.
 
 ### Instrument name
 
+**Status**: [Stable](../document-status.md)
+
 When a Meter creates an instrument, it SHOULD validate the instrument name
 conforms to the [instrument name syntax](./api.md#instrument-name-syntax)
 
@@ -633,17 +639,23 @@ valid instrument is also returned.
 
 ### Instrument unit
 
+**Status**: [Stable](../document-status.md)
+
 When a Meter creates an instrument, it SHOULD NOT validate the instrument unit.
 If a unit is not provided or the unit is null, the Meter MUST treat it the same
 as an empty unit string.
 
 ### Instrument description
 
+**Status**: [Stable](../document-status.md)
+
 When a Meter creates an instrument, it SHOULD NOT validate the instrument
 description. If a description is not provided or the description is null, the
 Meter MUST treat it the same as an empty description string.
 
 ### Instrument advice
+
+**Status**: [Experimental](../document-status.md)
 
 When a Meter creates an instrument, it SHOULD validate the instrument advice
 parameters. If an advice parameter is not valid, the Meter SHOULD emit an error

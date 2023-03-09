@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add experimental histogram advice API.
+  ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+
 ### Logs
 
 ### Resource
