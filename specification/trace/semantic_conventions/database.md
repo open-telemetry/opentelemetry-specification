@@ -335,7 +335,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `net.peer.name`                      |  `"account.documents.azure.com"`  |
 | `db.cosmosdb.client_id`              | `3ba4827d-4422-483f-b59f-85b74211c11d` |
 | `db.cosmosdb.operation_type`         | `Read` |
-| `user_agent.cosmosdb`                | `cosmos-netstandard-sdk/3.31.2|1|X64|Linux 5.4.0-1095-azure 101 18|.NET 6.0.2|N|appname` |
+| `user_agent.original`                | `cosmos-netstandard-sdk/3.31.2|1|X64|Linux 5.4.0-1095-azure 101 18|.NET 6.0.2|N|appname` |
 | `db.cosmosdb.connection_mode`        | `"Direct"` |
 | `db.cosmosdb.container`              | `"container name"` |
 | `db.cosmosdb.request_content_length` | `20` |
