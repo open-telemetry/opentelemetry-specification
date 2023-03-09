@@ -200,6 +200,7 @@ are the inputs:
     matching zero or more characters.  If wildcards are not supported in general,
     OpenTelemetry SDKs MUST specifically recognize the single `*` wildcard
     as matching all instruments.
+  * The `unit` of the Instrument(s) (optional).
   * The `name` of the Meter (optional).
   * The `version` of the Meter (optional).
   * The `schema_url` of the Meter (optional).
