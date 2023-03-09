@@ -52,7 +52,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.name` | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
 | `net.host.port` | int | Logical local port number, preferably the one that the peer used to connect | `8080` | Recommended |
 | `net.sock.host.addr` | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
-| `net.sock.host.port` | int | Local socket port number. | `35555` | Recommended: [6] |
+| `net.sock.host.port` | int | Local socket port number. | `35555` | Conditionally Required: [6] |
 | `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
 | `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
 | `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
@@ -70,7 +70,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 **[5]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
 
 `net.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
