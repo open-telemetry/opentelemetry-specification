@@ -12,6 +12,7 @@
 - [Call-level attributes](#call-level-attributes)
   * [Call-level attributes for specific technologies](#call-level-attributes-for-specific-technologies)
     + [Cassandra](#cassandra)
+    + [Microsoft Azure Cosmos DB Attributes](#microsoft-azure-cosmos-db-attributes)
 - [Examples](#examples)
   * [MySQL](#mysql)
   * [Redis](#redis)
