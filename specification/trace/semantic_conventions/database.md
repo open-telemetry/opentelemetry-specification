@@ -327,7 +327,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 
 | Key                                  | Value |
 |:-------------------------------------| :------------------- |
-| Span name                            | `"Operation.ReadItemsAsync"` |
+| Span name                            | `"ReadItemsAsync"` |
 | `kind`                               | `"internal"` |
 | `az.namespace`                       | `"Microsoft.DocumentDB"` |
 | `db.system`                          | `"cosmosdb"` |
