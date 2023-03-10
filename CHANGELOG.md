@@ -13,12 +13,17 @@ release.
 
 ### Metrics
 
+- Clarify that units should use UCUM case sensitive variant.
+  ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
+
 ### Logs
 
 ### Resource
 
 ### Semantic Conventions
 
+- Fix grammatical number of metric units.
+  ([#3298](https://github.com/open-telemetry/opentelemetry-specification/pull/3298))
 - Rename `net.app.protocol.(name|version)` to `net.protocol.(name|version)`
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
 - Replace `http.flavor` with `net.protocol.(name|version)`
