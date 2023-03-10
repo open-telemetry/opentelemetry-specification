@@ -24,6 +24,10 @@ release.
 
 - Fix grammatical number of metric units.
   ([#3298](https://github.com/open-telemetry/opentelemetry-specification/pull/3298))
+- Rename `net.app.protocol.(name|version)` to `net.protocol.(name|version)`
+  ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
+- Replace `http.flavor` with `net.protocol.(name|version)`
+  ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
 - BREAKING: rename `http.client_ip` to `http.forwarded.for` and introduce `http.forwarded.proto` attributes.
   ([#3218](https://github.com/open-telemetry/opentelemetry-specification/pull/3218))
 

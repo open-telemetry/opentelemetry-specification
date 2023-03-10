@@ -58,4 +58,4 @@ Below is a table of the attributes that MUST be included on all connection pool 
 
 | Name        | Type   | Description                                                                  | Examples       | Requirement Level |
 |-------------|--------|------------------------------------------------------------------------------|----------------|-------------------|
-| `pool.name` | string | The name of the connection pool; unique within the instrumented application. In case the connection pool implementation does not provide a name, then the [db.connection_string](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/database.md#connection-level-attributes) should be used. | `myDataSource` | Required          |
+| `pool.name` | string | The name of the connection pool; unique within the instrumented application. In case the connection pool implementation does not provide a name, then the [db.connection_string](/specification/trace/semantic_conventions/database.md#connection-level-attributes) should be used. | `myDataSource` | Required          |

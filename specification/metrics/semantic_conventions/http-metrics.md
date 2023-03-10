@@ -29,11 +29,12 @@ This metric is required.
 |---|---|---|---|---|
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
-| `http.flavor` | string | Kind of HTTP protocol used. | `1.0` | Recommended |
 | `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`net.host.name`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [2] | `localhost` | Required |
 | [`net.host.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [3] | `8080` | Conditionally Required: [4] |
+| [`net.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| [`net.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [5] | `3.1.1` | Recommended |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
@@ -57,16 +58,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-`http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
-
-| Value  | Description |
-|---|---|
-| `1.0` | HTTP/1.0 |
-| `1.1` | HTTP/1.1 |
-| `2.0` | HTTP/2 |
-| `3.0` | HTTP/3 |
-| `SPDY` | SPDY protocol. |
-| `QUIC` | QUIC protocol. |
+**[5]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 <!-- endsemconv -->
 
 ### Metric: `http.server.active_requests`
@@ -123,11 +115,12 @@ This metric is optional.
 |---|---|---|---|---|
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
-| `http.flavor` | string | Kind of HTTP protocol used. | `1.0` | Recommended |
 | `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`net.host.name`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [2] | `localhost` | Required |
 | [`net.host.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [3] | `8080` | Conditionally Required: [4] |
+| [`net.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| [`net.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [5] | `3.1.1` | Recommended |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
@@ -151,16 +144,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-`http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
-
-| Value  | Description |
-|---|---|
-| `1.0` | HTTP/1.0 |
-| `1.1` | HTTP/1.1 |
-| `2.0` | HTTP/2 |
-| `3.0` | HTTP/3 |
-| `SPDY` | SPDY protocol. |
-| `QUIC` | QUIC protocol. |
+**[5]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 <!-- endsemconv -->
 
 ### Metric: `http.server.response.size`
@@ -178,11 +162,12 @@ This metric is optional.
 |---|---|---|---|---|
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
-| `http.flavor` | string | Kind of HTTP protocol used. | `1.0` | Recommended |
 | `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`net.host.name`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [2] | `localhost` | Required |
 | [`net.host.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [3] | `8080` | Conditionally Required: [4] |
+| [`net.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| [`net.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [5] | `3.1.1` | Recommended |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
@@ -206,16 +191,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-`http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
-
-| Value  | Description |
-|---|---|
-| `1.0` | HTTP/1.0 |
-| `1.1` | HTTP/1.1 |
-| `2.0` | HTTP/2 |
-| `3.0` | HTTP/3 |
-| `SPDY` | SPDY protocol. |
-| `QUIC` | QUIC protocol. |
+**[5]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 <!-- endsemconv -->
 
 ## HTTP Client
@@ -233,11 +209,12 @@ This metric is required.
 <!-- semconv metric.http.client.duration(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.flavor` | string | Kind of HTTP protocol used. | `1.0` | Recommended |
 | `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`net.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [1] | `example.com` | Required |
 | [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `80`; `8080`; `443` | Conditionally Required: [3] |
+| [`net.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| [`net.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [4] | `3.1.1` | Recommended |
 | [`net.sock.peer.addr`](../../trace/semantic_conventions/span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 
 **[1]:** Determined by using the first of the following that applies
@@ -252,16 +229,7 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **[3]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-`http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
-
-| Value  | Description |
-|---|---|
-| `1.0` | HTTP/1.0 |
-| `1.1` | HTTP/1.1 |
-| `2.0` | HTTP/2 |
-| `3.0` | HTTP/3 |
-| `SPDY` | SPDY protocol. |
-| `QUIC` | QUIC protocol. |
+**[4]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 <!-- endsemconv -->
 
 ### Metric: `http.client.request.size`
@@ -277,11 +245,12 @@ This metric is optional.
 <!-- semconv metric.http.client.request.size(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.flavor` | string | Kind of HTTP protocol used. | `1.0` | Recommended |
 | `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`net.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [1] | `example.com` | Required |
 | [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `80`; `8080`; `443` | Conditionally Required: [3] |
+| [`net.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| [`net.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [4] | `3.1.1` | Recommended |
 | [`net.sock.peer.addr`](../../trace/semantic_conventions/span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 
 **[1]:** Determined by using the first of the following that applies
@@ -296,16 +265,7 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **[3]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-`http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
-
-| Value  | Description |
-|---|---|
-| `1.0` | HTTP/1.0 |
-| `1.1` | HTTP/1.1 |
-| `2.0` | HTTP/2 |
-| `3.0` | HTTP/3 |
-| `SPDY` | SPDY protocol. |
-| `QUIC` | QUIC protocol. |
+**[4]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 <!-- endsemconv -->
 
 ### Metric: `http.client.response.size`
@@ -321,11 +281,12 @@ This metric is optional.
 <!-- semconv metric.http.client.response.size(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.flavor` | string | Kind of HTTP protocol used. | `1.0` | Recommended |
 | `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`net.peer.name`](../../trace/semantic_conventions/span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [1] | `example.com` | Required |
 | [`net.peer.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `80`; `8080`; `443` | Conditionally Required: [3] |
+| [`net.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| [`net.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [4] | `3.1.1` | Recommended |
 | [`net.sock.peer.addr`](../../trace/semantic_conventions/span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 
 **[1]:** Determined by using the first of the following that applies
@@ -340,14 +301,5 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **[3]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-`http.flavor` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
-
-| Value  | Description |
-|---|---|
-| `1.0` | HTTP/1.0 |
-| `1.1` | HTTP/1.1 |
-| `2.0` | HTTP/2 |
-| `3.0` | HTTP/3 |
-| `SPDY` | SPDY protocol. |
-| `QUIC` | QUIC protocol. |
+**[4]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 <!-- endsemconv -->
