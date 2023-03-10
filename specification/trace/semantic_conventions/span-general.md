@@ -41,8 +41,8 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | Recommended |
-| `net.app.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| `net.app.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
+| `net.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| `net.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
 | `net.sock.peer.name` | string | Remote socket peer name. | `proxy.example.com` | Recommended: [2] |
 | `net.sock.peer.addr` | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | `net.sock.peer.port` | int | Remote socket peer port. | `16456` | Recommended: [3] |
@@ -60,7 +60,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
 | `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
 
-**[1]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[1]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
 **[2]:** If available and different from `net.peer.name` and if `net.sock.peer.addr` is set.
 
