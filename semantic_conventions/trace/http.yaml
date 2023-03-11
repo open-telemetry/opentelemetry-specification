@@ -96,7 +96,7 @@ groups:
         brief: 'The full request target as passed in a HTTP request line or equivalent.'
         requirement_level: required
         sampling_relevant: true
-        examples: ['/path/12314/?q=ddds']
+        examples: ['/users/12314/?q=ddds']
       - id: client_ip
         type: string
         brief: >
