@@ -3,8 +3,8 @@
 **Status**: [Experimental](../../document-status.md)
 
 This document defines semantic conventions for recording exceptions on
-[logs](../api.md#emit-logrecord) and [events](../event-api.md#emit-event)
-emitted through the [Logger API](../api.md#logger).
+[logs](../bridge-api.md#emit-logrecord) and [events](../event-api.md#emit-event)
+emitted through the [Logger API](../bridge-api.md#logger).
 
 <!-- toc -->
 
@@ -17,7 +17,7 @@ emitted through the [Logger API](../api.md#logger).
 ## Recording an Exception
 
 Exceptions SHOULD be recorded as attributes on the
-[LogRecord](../api.md#logrecord) passed to the [Logger](../api.md#logger) emit
+[LogRecord](../bridge-api.md#logrecord) passed to the [Logger](../bridge-api.md#logger) emit
 operations. Exceptions MAY be recorded on "logs" or "events" depending on the
 context.
 
@@ -29,7 +29,7 @@ the language runtime.
 ## Attributes
 
 The table below indicates which attributes should be added to the
-[LogRecord](../api.md#logrecord) and their types.
+[LogRecord](../bridge-api.md#logrecord) and their types.
 
 <!-- semconv log-exception -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |

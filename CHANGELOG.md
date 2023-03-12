@@ -13,25 +13,23 @@ release.
 
 ### Metrics
 
-### Logs
+- Clarify that units should use UCUM case sensitive variant.
+  ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
 
-- Define BatchLogRecordProcessor default configuration values.
-  ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
+### Logs
 
 ### Resource
 
 ### Semantic Conventions
 
-- Enable semantic convention tooling for metrics in spec
-  ([#3119](https://github.com/open-telemetry/opentelemetry-specification/pull/3119))
-- Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
-  to match the existing `cloud.provider` prefix.
-  [#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095)
+- Fix grammatical number of metric units.
+  ([#3298](https://github.com/open-telemetry/opentelemetry-specification/pull/3298))
+- Rename `net.app.protocol.(name|version)` to `net.protocol.(name|version)`
+  ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
+- Replace `http.flavor` with `net.protocol.(name|version)`
+  ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
 
 ### Compatibility
-
-- Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
-  ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
 
 ### OpenTelemetry Protocol
 
@@ -41,10 +39,172 @@ release.
 
 ### Common
 
-## v1.17.0 (2023-01-17)
+## v1.19.0 (2023-03-06)
 
-- Add Cloud Spanner and Microsoft SQL Server Compact to db.system semantic conventions.
-  [#3105](https://github.com/open-telemetry/opentelemetry-specification/pull/3105)
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Add unit to View's Instrument selection criteria.
+  ([#3184](https://github.com/open-telemetry/opentelemetry-specification/pull/3184))
+- Add metric requirement levels "Required", "Recommended", and "Opt-In".
+  ([#3237](https://github.com/open-telemetry/opentelemetry-specification/pull/3237))
+
+### Logs
+
+- Rename Logs API to Logs Bridge API to prevent confusion.
+  ([#3197](https://github.com/open-telemetry/opentelemetry-specification/pull/3197))
+- Move event language from log README to event-api.
+  ([#3252](https://github.com/open-telemetry/opentelemetry-specification/pull/3252))
+
+### Resource
+
+- Clarify how to collect `host.id` for non-containerized systems.
+  ([#3173](https://github.com/open-telemetry/opentelemetry-specification/pull/3173))
+
+### Semantic Conventions
+
+- Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
+  ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+- Add heroku resource semantic conventions.
+  [#3075](https://github.com/open-telemetry/opentelemetry-specification/pull/3075)
+- BREAKING: Rename faas.execution to faas.invocation_id
+  ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
+- BREAKING: Change faas.max_memory units to Bytes instead of MB
+  ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
+- BREAKING: Expand scope of faas.id to cloud.resource_id
+  ([#3188](https://github.com/open-telemetry/opentelemetry-specification/pull/3188))
+- Add Connect RPC specific conventions
+  ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
+- Rename JVM metric attribute value from `nonheap` to `non_heap`
+  ([#3250](https://github.com/open-telemetry/opentelemetry-specification/pull/3250))
+- Mark the attribute naming guidelines in the specification as stable.
+  ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
+- Mark telemetry schema readme stable.
+  ([#3221](https://github.com/open-telemetry/opentelemetry-specification/pull/3221))
+- Remove mention of `net.transport` from HTTP semantic conventions
+  ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
+- Clarifies that if an HTTP client request is explicitly made to an IP address,
+  e.g. `http://x.x.x.x:8080`, then `net.peer.name` SHOULD be the IP address `x.x.x.x`
+  ([#3276](https://github.com/open-telemetry/opentelemetry-specification/pull/3276))
+- Mark `net.sock.host.port` as conditionally required.
+  ([#3246](https://github.com/open-telemetry/opentelemetry-specification/pull/3246))
+- Rename Optional attribute requirement level to Opt-In.
+  ([#3228](https://github.com/open-telemetry/opentelemetry-specification/pull/3228))
+- Rename `http.user_agent` to `user_agent.original`.
+  ([#3190](https://github.com/open-telemetry/opentelemetry-specification/pull/3190))
+- Expand the declaration of `pool.name`.
+  ([#3050](https://github.com/open-telemetry/opentelemetry-specification/pull/3050))
+
+### Compatibility
+
+- Update Zipkin remoteEndpoint preferences.
+  ([#3087](https://github.com/open-telemetry/opentelemetry-specification/pull/3087))
+
+### OpenTelemetry Protocol
+
+- Declare OTLP/JSON Stable.
+  ([#2930](https://github.com/open-telemetry/opentelemetry-specification/pull/2930))
+
+### SDK Configuration
+
+- No changes.
+
+### Telemetry Schemas
+
+- No changes.
+
+### Common
+
+- No changes.
+
+## v1.18.0 (2023-02-09)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
+
+### Metrics
+
+- No changes.
+
+### Logs
+
+- Define BatchLogRecordProcessor default configuration values.
+  ([#3002](https://github.com/open-telemetry/opentelemetry-specification/pull/3002))
+- Clarify guidance regarding excessive logging when attributes are dropped
+  or truncated.
+  ([#3151](https://github.com/open-telemetry/opentelemetry-specification/pull/3151))
+
+### Resource
+
+- No changes.
+
+### Semantic Conventions
+
+- Add Cloud Spanner and Microsoft SQL Server Compact to db.system semantic conventions
+  ([#3105](https://github.com/open-telemetry/opentelemetry-specification/pull/3105)).
+- Enable semantic convention tooling for metrics in spec
+  ([#3119](https://github.com/open-telemetry/opentelemetry-specification/pull/3119))
+- Rename google openshift platform attribute from `google_cloud_openshift` to `gcp_openshift`
+  to match the existing `cloud.provider` prefix.
+  ([#3095](https://github.com/open-telemetry/opentelemetry-specification/pull/3095))
+- Changes http server span names from `{http.route}` to `{http.method} {http.route}`
+  (when route is available), and from `HTTP {http.method}` to `{http.method}` (when
+  route is not available).
+  Changes http client span names from `HTTP {http.method}` to `{http.method}`.
+  ([#3165](https://github.com/open-telemetry/opentelemetry-specification/pull/3165))
+- Mark `http.server.duration` and `http.client.duration` metrics as required, and mark
+  all other HTTP metrics as optional.
+  [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
+- Add `net.host.port` to `http.server.active_requests` metrics attributes.
+  [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
+- `http.route` SHOULD contain the "application root" if there is one.
+  ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
+
+### Compatibility
+
+- Add condition with sum and count for Prometheus summaries
+  ([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059)).
+- Clarify prometheus unit conversions
+  ([#3066](https://github.com/open-telemetry/opentelemetry-specification/pull/3066)).
+- Define conversion mapping from OTel Exponential Histograms to Prometheus Native
+  Histograms.
+  ([#3079](https://github.com/open-telemetry/opentelemetry-specification/pull/3079))
+- Fix Prometheus histogram metric suffixes. Bucket series end in `_bucket`
+  ([#3018](https://github.com/open-telemetry/opentelemetry-specification/pull/3018)).
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### SDK Configuration
+
+- Add log-specific attribute limit configuration and clarify that general
+  attribute limit configuration also apply to log records
+  ([#2861](https://github.com/open-telemetry/opentelemetry-specification/pull/2861)).
+
+### Telemetry Schemas
+
+- No changes.
+
+### Common
+
+- No changes.
+
+## v1.17.0 (2023-01-17)
 
 ### Context
 
@@ -74,6 +234,8 @@ release.
 
 - Clarify usage of log body for structured logs
   ([#3023](https://github.com/open-telemetry/opentelemetry-specification/pull/3023))
+- Move appendices from Data Model to new Data Model Appendix document
+  ([#3207](https://github.com/open-telemetry/opentelemetry-specification/pull/3207))
 
 ### Resource
 
@@ -117,8 +279,6 @@ release.
 - Add OpenCensus migration guide and add BinaryPropagation as an option to gRPC
   instrumentation for OpenCensus compatibility
   ([#3015](https://github.com/open-telemetry/opentelemetry-specification/pull/3015)).
-- Add condition with sum and count for Prometheus summaries
-([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059))
 
 ### OpenTelemetry Protocol
 
@@ -213,9 +373,6 @@ release.
 
 - Specify handling of invalid numeric environment variables
   ([#2963](https://github.com/open-telemetry/opentelemetry-specification/pull/2963))
-- Add log-specific attribute limit configuration and clarify that general
-  attribute limit configuration also apply to log records.
-  ([#2861](https://github.com/open-telemetry/opentelemetry-specification/pull/2861))
 
 ### Telemetry Schemas
 

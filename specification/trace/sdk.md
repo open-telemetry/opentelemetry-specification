@@ -361,17 +361,21 @@ Optional parameters:
 
 #### JaegerRemoteSampler
 
-[Jaeger remote sampler](https://www.jaegertracing.io/docs/1.29/sampling/#collector-sampling-configuration) allows remotely controlling the sampling configuration for the SDKs. The sampling is typically configured at the collector and the SDKs actively poll for changes. The sampler uses `TraceIdRatioBased` or rate-limited sampler under the hood. These samplers can be configured per whole service (a.k.a default), or per span name in a given service (a.k.a per operation).
+[Jaeger remote sampler][jaeger-remote-sampling] allows remotely controlling the sampling configuration for the SDKs. The sampling configuration is periodically loaded from the backend (see [Remote Sampling API][jaeger-remote-sampling-api]), where it can be managed by operators via configuration files or even automatically calculated (see [Adaptive Sampling][jaeger-adaptive-sampling]). The sampling configuration retrieved by the remote sampler can instruct it to  use either a single sampling method for the whole service (e.g., `TraceIdRatioBased`), or different methods for different endpoints (span names), for example, sample `/product` endpoint at 10%, `/admin` endpoint at 100%, and never sample `/metrics` endpoint.
 
 The full Protobuf definition can be found at [jaegertracing/jaeger-idl/api_v2/sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/main/proto/api_v2/sampling.proto).
 
 ##### Configuration
 
-Following configuration properties should be available when creating the sampler:
+The following configuration properties should be available when creating the sampler:
 
-* endpoint - collector address with running service with sampling manager
+* endpoint - address of a service that implements the [Remote Sampling API][jaeger-remote-sampling-api], such as Jaeger Collector or OpenTelemetry Collector.
 * polling interval - polling interval for getting configuration from remote
 * initial sampler - initial sampler that is used before the first configuration is fetched
+
+[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#remote-sampling
+[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/apis/#remote-sampling-configuration-stable
+[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#adaptive-sampling
 
 ## Span Limits
 
@@ -412,9 +416,10 @@ public final class SpanLimits {
 * `AttributePerEventCountLimit` (Default=128) - Maximum allowed attribute per span event count;
 * `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
-There SHOULD be a log emitted to indicate to the user that an attribute, event,
-or link was discarded due to such a limit. To prevent excessive logging, the log
-should not be emitted once per span, or per discarded attribute, event, or links.
+There SHOULD be a message printed in the SDK's log to indicate to the user
+that an attribute was discarded due to such a limit.
+To prevent excessive logging, the message MUST be printed at most once per
+span (i.e., not per discarded attribute, event, or link).
 
 ## Id Generators
 

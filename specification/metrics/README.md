@@ -99,6 +99,7 @@ SDK](../overview.md#sdk) concept for more information.
 * [Metrics API](./api.md)
 * [Metrics SDK](./sdk.md)
 * [Metrics Data Model and Protocol](./data-model.md)
+* [Metrics Requirement Levels](./metric-requirement-level.md)
 * [Semantic Conventions](./semantic_conventions/README.md)
 
 ## References
