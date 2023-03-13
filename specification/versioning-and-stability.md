@@ -155,6 +155,10 @@ A new, incompatible version of an integration SHOULD be released as a separate c
 
 #### Semantic Conventions Stability
 
+Semantic conventions define a contract between the signals that instrumentation
+will provide and analysis tools that consumes the instrumentation (e.g.
+dashboards, alerts, queries, etc.).
+
 Changes to telemetry produced by OpenTelemetry instrumentation SHOULD avoid
 breaking analysis tools, such as dashboards and alerts. To achieve this, while
 allowing the evolution of telemetry and semantic conventions, OpenTelemetry
@@ -162,10 +166,13 @@ relies on the concept of
 [Telemetry Schemas](schemas/README.md).
 
 Semantic Conventions defines breaking changes as those that would break the
-"API" of tooling written against the telemetry it produces. That is, the portions
-of telemetry where specialized tooling (alerts, dashboards, e.g.) interact are
-expected to remain stable for that tooling after schema transformations are applied. Semantic Conventions defines the
-set of fields to which stability concerns apply as follows:
+common usage of tooling written against the telemetry it produces. That is, the
+portions of telemetry where specialized tooling (alerts, dashboards, e.g.)
+interact are expected to remain stable for that tooling *after schema
+transformations are applied*.
+
+Semantic Conventions defines the set of fields to which stability concerns apply
+as follows:
 
 - [Resource](resource/sdk.md)
   - attribute keys provided to Create resource detectors
@@ -199,19 +206,21 @@ set of fields to which stability concerns apply as follows:
     - The components of [LogRecord](logs/bridge-api.md#logrecord) also
       listed here.
 
-Things not listed in the above are not enforced via semantic convention and are allowed (or expected) to change. A few examples:
+Things not listed in the above are not expected to remain stable via semantic
+convention and are allowed (or expected) to change. A few examples:
 
 - The values of attributes
   - Specifically for `enums` the list of allowed values is expected to change
     overtime.
   - Even for `enums` that limit allowed values to semconv, some may need to
-    updated values in the future.
+    updated values in the future. Tooling should expect unknown values.
 - The links attached to a span
 - The recorded measurement type (float or integer) of a metric is not enforced and allowed to change.
 - The description of a metric instrument.
 - The values being recorded by an instrument.
 
-The list of telemetry fields which are covered by stability guarantees MAY be extended.
+The list of telemetry fields which are covered by stability guarantees MAY be
+extended.
 
 Changes to semantic conventions in this specification are allowed, provided that
 the changes can be described by schema files. The following changes can be
@@ -234,7 +243,8 @@ described) by schema files. Here is the list of such changes:
 
 - Adding new attributes to the existing semantic conventions for resources,
   spans, span events or log records.
-- Adding new attributes to existing metrics that do not create new timeseries.
+- Adding new attributes to existing metrics that do not "break apart" existing
+  timeseries, such that alert thresholds would break / need to change.
 - Adding semantic conventions for new types of resources, spans, span events,
   metrics or log records.
 
