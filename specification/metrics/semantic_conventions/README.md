@@ -193,7 +193,7 @@ use `{packet}`, `{error}`, `{fault}`, etc.
 - Instruments SHOULD use non-prefixed units (i.e. `By` instead of `MiBy`) when
   there is no pre-existing prefixed standard unit for the measurement and
   doing so will not introduce limitations on the representable values.
-  - If there are pre-existing prefixed standard unit for a measurement, that
+  - If there is a pre-existing prefixed standard unit for a measurement, that
     prefixed unit SHOULD be used. For example, using `Mbit/s` instead of
     `bit/s` for network bandwidth and throughput.
   - If using a non-prefixed unit would limit the data that could be
