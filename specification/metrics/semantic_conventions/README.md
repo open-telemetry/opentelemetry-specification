@@ -191,7 +191,7 @@ use `{packet}`, `{error}`, `{fault}`, etc.
 - Instrument units SHOULD be specified using the UCUM case sensitive ("c/s")
   variant. For example, "Cel" for the unit with full name "degree Celsius".
 - Instruments SHOULD use non-prefixed units (i.e. `By` instead of `MiBy`) when
-  there are no pre-existing prefixed standard unit for the measurement and
+  there is no pre-existing prefixed standard unit for the measurement and
   doing so will not introduce limitations on the representable values.
   - If there are pre-existing prefixed standard unit for a measurement, that
     prefixed unit SHOULD be used. For example, using `Mbit/s` instead of
