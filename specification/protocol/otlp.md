@@ -1,6 +1,6 @@
 # OpenTelemetry Protocol Specification
 
-**Status**: [Mixed](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The OpenTelemetry Protocol (OTLP) specification describes the encoding, transport,
 and delivery mechanism of telemetry data between telemetry sources, intermediate
@@ -11,7 +11,6 @@ nodes such as collectors and telemetry backends.
 
 <!-- toc -->
 
-- [Signals Maturity Level](#signals-maturity-level)
 - [Protocol Details](#protocol-details)
   * [OTLP/gRPC](#otlpgrpc)
     + [OTLP/gRPC Concurrent Requests](#otlpgrpc-concurrent-requests)
@@ -52,17 +51,6 @@ nodes such as collectors and telemetry backends.
 OTLP is a general-purpose telemetry data delivery protocol designed in the scope
 of the OpenTelemetry project.
 
-## Signals Maturity Level
-
-Each signal has different support and stability in OTLP, described through its
-own maturity level, which in turn applies to **all** the OTLP Transports listed below.
-
-* Tracing: **Stable**
-* Metrics: **Stable**
-* Logs: **Stable**
-
-See [OTLP Maturity Level](https://github.com/open-telemetry/opentelemetry-proto#maturity-level).
-
 ## Protocol Details
 
 OTLP defines the encoding of telemetry data and the protocol used to exchange
@@ -83,8 +71,6 @@ All server components MUST support the following transport compression options:
 * Gzip compression, denoted by `gzip`.
 
 ### OTLP/gRPC
-
-**Status**: [Stable](../document-status.md)
 
 After establishing the underlying gRPC transport, the client starts sending
 telemetry data using unary requests using
@@ -391,8 +377,6 @@ connection cannot be established.
 
 #### Binary Protobuf Encoding
 
-**Status**: [Stable](../document-status.md)
-
 Binary Protobuf encoded payloads use proto3
 [encoding standard](https://developers.google.com/protocol-buffers/docs/encoding).
 
@@ -400,8 +384,6 @@ The client and the server MUST set "Content-Type: application/x-protobuf"
 request and response headers when sending binary Protobuf encoded payload.
 
 #### JSON Protobuf Encoding
-
-**Status**: [Stable](../document-status.md)
 
 JSON Protobuf encoded payloads use proto3 standard defined
 [JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json)
