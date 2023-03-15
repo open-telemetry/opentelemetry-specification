@@ -274,9 +274,9 @@ Note: Support for environment variables is optional.
 | OTEL_SERVICE_NAME                                        | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
 | OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | -   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
-| OTEL_BSP_*                                               | +   | +    |     | +           | +    | +      | +   | +    | -   | -    | -     |
+| OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    | -     |
 | OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     |      |       |
-| OTEL_EXPORTER_OTLP_*                                     | +   | +    | +   | +           | +    | +      | +   | +    | +   | +    | -     |
+| OTEL_EXPORTER_OTLP_*                                     | +   | +    |     | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_EXPORTER_JAEGER_*                                   | +   | +    |     | +           | +    | -      | -   |      | -   | +    | -     |
 | OTEL_EXPORTER_ZIPKIN_*                                   | -   | +    |     | +           | +    | -      | +   | -    | -   | +    | -     |
 | OTEL_TRACES_EXPORTER                                     | -   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
