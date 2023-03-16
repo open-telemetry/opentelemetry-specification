@@ -19,6 +19,8 @@
 
 _This section applies to Log, Metric, Resource, and Span, and describes requirement levels for attributes defined in semantic conventions._
 
+Attribute requirement levels apply to the [instrumentation library](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/glossary.md#instrumentation-library).
+
 The following attribute requirement levels are specified:
 
 - [Required](#required)
