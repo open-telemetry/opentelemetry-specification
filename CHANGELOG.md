@@ -22,6 +22,8 @@ release.
 
 ### Semantic Conventions
 
+- Clarify that attribute requirement levels apply to the instrumentation library
+  ([#3289](https://github.com/open-telemetry/opentelemetry-specification/pull/3289))
 - Fix grammatical number of metric units.
   ([#3298](https://github.com/open-telemetry/opentelemetry-specification/pull/3298))
 - Rename `net.app.protocol.(name|version)` to `net.protocol.(name|version)`
