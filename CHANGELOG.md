@@ -30,6 +30,8 @@ release.
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
 - Replace `http.flavor` with `net.protocol.(name|version)`
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
+- Metric requirement levels are now stable
+  ([#3271](https://github.com/open-telemetry/opentelemetry-specification/pull/3271))
 - BREAKING: rename `http.client_ip` to `http.forwarded.for` and introduce `http.forwarded.proto` attributes.
   ([#3218](https://github.com/open-telemetry/opentelemetry-specification/pull/3218))
 
