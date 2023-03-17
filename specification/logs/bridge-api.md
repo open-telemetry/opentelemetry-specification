@@ -149,6 +149,15 @@ User can provide each of these fields, but it is up to their discretion.
 Therefore, this API needs to be structured to accept these fields, but MUST NOT
 obligate a user to provide them.
 
+## Concurrency requirements
+
+For languages which support concurrent execution the Logs Bridge APIs provide
+specific guarantees and safeties.
+
+**LoggerProvider** - all methods are safe to be called concurrently.
+
+**Logger** - all methods are safe to be called concurrently.
+
 ## Usage
 
 ### How to Create Log4J Style Appender

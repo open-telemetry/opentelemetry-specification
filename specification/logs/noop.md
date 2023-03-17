@@ -44,12 +44,9 @@ computation overhead and eliminate OpenTelemetry related output. For
 this reason, the `LoggerProvider` MUST NOT return a non-empty error or log
 any message for any operations it performs.
 
-All operations a `LoggerProvider` provides MUST be safe to be run
-concurrently.
-
 ### Logger Creation
 
-[New Logger instances are always created with a LoggerProvider](./bridge-api.md#loggerprovider).
+New `Logger` instances are always created with a [LoggerProvider](./bridge-api.md#loggerprovider).
 Therefore, `LoggerProvider` MUST allow for the creation of `Logger`s.
 All `Logger`s created MUST be an instance of the [No-Op Logger](#logger).
 
@@ -72,8 +69,6 @@ configuration or operational state.
 
 The `Logger` MUST NOT return a non-empty error or log any message for any
 operations it performs.
-
-All operations a `Logger` provides MUST be safe to be run concurrently.
 
 ### Emit LogRecord
 

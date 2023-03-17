@@ -62,9 +62,6 @@ computation overhead and eliminate OpenTelemetry related output. For
 this reason, the MeterProvider MUST NOT return a non-empty error or log
 any message for any operations it performs.
 
-All operations a MeterProvider provides MUST be safe to be run
-concurrently.
-
 ### Meter Creation
 
 [New Meter instances are always created with a
@@ -91,8 +88,6 @@ configuration or operational state.
 
 The Meter MUST NOT return a non-empty error or log any message for any
 operations it performs.
-
-All operations a Meter provides MUST be safe to be run concurrently.
 
 ### Counter Creation
 
@@ -196,8 +191,6 @@ for a user to create a Counter other than by a No-Op Meter.
 Counters MUST NOT return a non-empty error or log any message for any
 operations they perform.
 
-All operations a Counter provides MUST be safe to be run concurrently.
-
 #### Counter Add
 
 The No-Op Counter MUST provide the user an interface to Add that
@@ -212,9 +205,6 @@ a way for a user to create a UpDownCounter other than by a No-Op Meter.
 UpDownCounters MUST NOT return a non-empty error or log any message for
 any operations they perform.
 
-All operations an UpDownCounter provides MUST be safe to be run
-concurrently.
-
 #### UpDownCounter Add
 
 The No-Op UpDownCounter MUST provide the user an interface to Add that
@@ -228,8 +218,6 @@ way for a user to create a Histogram other than by a No-Op Meter.
 
 Histograms MUST NOT return a non-empty error or log any message for any
 operations they perform.
-
-All operations a Histogram provides MUST be safe to be run concurrently.
 
 #### Histogram Record
 
@@ -246,9 +234,6 @@ a No-Op Meter.
 Asynchronous Counters MUST NOT return a non-empty error or log any
 message for any operations they perform.
 
-All operations an Asynchronous Counter provides MUST be safe to be run
-concurrently.
-
 ### Asynchronous Counter Observations
 
 The No-Op Asynchronous Counter MUST NOT validate or retain any state
@@ -263,9 +248,6 @@ other than by a No-Op Meter.
 Asynchronous UpDownCounters MUST NOT return a non-empty error or log any
 message for any operations they perform.
 
-All operations an Asynchronous UpDownCounter provides MUST be safe to be
-run concurrently.
-
 ### Asynchronous UpDownCounter Observations
 
 The No-Op Asynchronous UpDownCounter MUST NOT validate or retain any
@@ -279,9 +261,6 @@ No-Op Meter.
 
 Asynchronous Gauges MUST NOT return a non-empty error or log any message
 for any operations they perform.
-
-All operations an Asynchronous Gauge provides MUST be safe to be run
-concurrently.
 
 ### Asynchronous Gauge Observations
 
