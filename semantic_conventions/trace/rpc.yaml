@@ -258,15 +258,3 @@ groups:
         requirement_level:
           conditionally_required: If response is not successful and if error code available.
         brief: "The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request. Error codes are always string values."
-
-  - id: rpc.aws
-    prefix: rpc.aws
-    type: span
-    brief: "RPC AWS request attributes"
-    attributes:
-      - id: request_id
-        type: string
-        brief: "The AWS request ID as returned in the response headers `x-amz-request-id` or `x-amz-requestid`."
-        examples:
-          - 79b9da39-b7ae-508a-a6bc-864b2829c622
-          - C9ER4AJX75574TDJ

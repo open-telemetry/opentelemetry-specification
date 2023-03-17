@@ -26,7 +26,12 @@ groups:
         examples:
           - GetItem
           - PutItem
-      - ref: rpc.aws.request_id
+      - id: request_id
+        type: string
+        brief: "The AWS request ID as returned in the response headers `x-amz-request-id` or `x-amz-requestid`."
+        examples:
+          - 79b9da39-b7ae-508a-a6bc-864b2829c622
+          - C9ER4AJX75574TDJ
 
   - id: dynamodb.all
     type: span
