@@ -203,9 +203,9 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [5] |
 | `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [6] |
 | `messaging.message.payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended: [7] |
-| [`net.app.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
-| [`net.app.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [8] | `3.1.1` | Recommended |
-| [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [9] | `example.com` | Conditionally Required: If available. |
+| [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [8] | `example.com` | Conditionally Required: If available. |
+| [`net.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
+| [`net.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [9] | `3.1.1` | Recommended |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [10] |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [11] |
@@ -225,9 +225,9 @@ The following operations related to messages are defined for these semantic conv
 
 **[7]:** Only if span represents operation on a single message.
 
-**[8]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[8]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
-**[9]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+**[9]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
 **[10]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 

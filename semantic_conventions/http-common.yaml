@@ -15,31 +15,12 @@ groups:
           conditionally_required: If and only if one was received/sent.
         brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
         examples: [200]
-      - id: flavor
-        type:
-          # Default value: `true`. If false, it helps the code gen tool to
-          # encode checks that only accept the listed values.
-          allow_custom_values: true
-          members:
-            - id: http_1_0
-              value: '1.0'
-              brief: 'HTTP/1.0'
-            - id: http_1_1
-              value: '1.1'
-              brief: 'HTTP/1.1'
-            - id: http_2_0
-              value: '2.0'
-              brief: 'HTTP/2'
-            - id: http_3_0
-              value: '3.0'
-              brief: 'HTTP/3'
-            - id: spdy
-              value: 'SPDY'
-              brief: 'SPDY protocol.'
-            - id: quic
-              value: 'QUIC'
-              brief: 'QUIC protocol.'
-        brief: 'Kind of HTTP protocol used.'
+      - ref: net.protocol.name
+        examples: ['http', 'spdy']
+        requirement_level:
+          recommended: if not default (`http`).
+      - ref: net.protocol.version
+        examples: ['1.0', '1.1', '2.0']
 
   - id: attributes.http.client
     prefix: http
