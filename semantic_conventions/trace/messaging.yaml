@@ -171,9 +171,9 @@ groups:
         tag: connection-level
         requirement_level:
           recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
-      - ref: net.app.protocol.name
+      - ref: net.protocol.name
         examples: ['amqp', 'mqtt']
-      - ref: net.app.protocol.version
+      - ref: net.protocol.version
     constraints:
       - include: network
 

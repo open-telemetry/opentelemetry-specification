@@ -1,0 +1,25 @@
+groups:
+  - id: heroku
+    prefix: heroku
+    type: resource
+    brief: >
+      Heroku dyno metadata
+    attributes:
+      - id: release.creation_timestamp
+        type: string
+        brief: >
+          Time and date the release was created
+        examples: [ '2022-10-23T18:00:42Z' ]
+        requirement_level: opt_in
+      - id: release.commit
+        type: string
+        brief: >
+          Commit hash for the current release
+        examples: [ 'e6134959463efd8966b20e75b913cafe3f5ec' ]
+        requirement_level: opt_in
+      - id: app.id
+        type: string
+        brief: >
+          Unique identifier for the application
+        examples: [ '2daa2797-e42b-4624-9322-ec3f968df4da' ]
+        requirement_level: opt_in
