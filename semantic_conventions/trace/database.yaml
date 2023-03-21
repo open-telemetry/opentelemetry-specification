@@ -411,7 +411,7 @@ groups:
     attributes:
       - id: client_id
         type: string
-        brief: Unique cosmos client instance id.
+        brief: Unique Cosmos client instance id.
         examples: '3ba4827d-4422-483f-b59f-85b74211c11d'
       - id: operation_type
         type:
