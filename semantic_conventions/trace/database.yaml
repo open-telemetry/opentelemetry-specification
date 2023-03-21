@@ -407,7 +407,7 @@ groups:
     extends: db
     prefix: db.cosmosdb
     brief: >
-      Call-level attributes for CosmosDb.
+      Call-level attributes for Cosmos DB.
     attributes:
       - id: client_id
         type: string
