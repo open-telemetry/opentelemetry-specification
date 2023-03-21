@@ -224,7 +224,7 @@ Cosmos DB instrumentation includes call-level (public API) surface spans and net
 <!-- semconv db.cosmosdb -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.cosmosdb.client_id` | string | Unique cosmos client instance id. | `3ba4827d-4422-483f-b59f-85b74211c11d` | Recommended |
+| `db.cosmosdb.client_id` | string | Unique Cosmos client instance id. | `3ba4827d-4422-483f-b59f-85b74211c11d` | Recommended |
 | `db.cosmosdb.operation_type` | string | CosmosDB Operation Type. | `Invalid` | Conditionally Required: [1] |
 | `db.cosmosdb.connection_mode` | string | Cosmos client connection mode. | `gateway` | Conditionally Required: if not `direct` (or pick gw as default) |
 | `db.cosmosdb.container` | string | Cosmos DB container name. | `anystring` | Conditionally Required: if available |
