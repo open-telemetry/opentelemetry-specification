@@ -34,6 +34,8 @@ release.
   ([#3271](https://github.com/open-telemetry/opentelemetry-specification/pull/3271))
 - BREAKING: remove `messaging.destination.kind` and `messaging.source.kind`.
   ([#3214](https://github.com/open-telemetry/opentelemetry-specification/pull/3214))
+- BREAKING: Change span statuses for gRPC server spans.
+  ([#3333](https://github.com/open-telemetry/opentelemetry-specification/pull/3333))
 
 ### Compatibility
 
