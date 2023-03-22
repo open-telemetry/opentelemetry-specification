@@ -18,7 +18,7 @@ release.
 
 ### Logs
 
-- Break count compatibility document on recording trace context in non-OTLP Log Format
+- Break out compatibility document on recording trace context in non-OTLP Log Format
   ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
 
 ### Resource
