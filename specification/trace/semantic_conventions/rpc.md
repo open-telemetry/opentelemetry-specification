@@ -214,7 +214,6 @@ to `Error` for the [gRPC status codes](https://github.com/grpc/grpc/blob/v1.33.2
 listed below.
 
 - `UNKNOWN`
-- `UNIMPLEMENTED`
 - `INTERNAL`
 - `UNAVAILABLE`
 - `DATA_LOSS`
