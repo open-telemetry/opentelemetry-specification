@@ -16,6 +16,7 @@
   * [Logger operations](#logger-operations)
     + [Emit LogRecord](#emit-logrecord)
 - [LogRecord](#logrecord)
+- [Concurrency requirements](#concurrency-requirements)
 - [Usage](#usage)
   * [How to Create Log4J Style Appender](#how-to-create-log4j-style-appender)
   * [Implicit Context Injection](#implicit-context-injection)
