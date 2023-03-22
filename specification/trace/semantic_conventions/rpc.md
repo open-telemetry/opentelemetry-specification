@@ -208,7 +208,7 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 
 The table below describes when
 the [Span Status](../api.md#set-status) MUST be set
-to `Error`
+to `Error` or remain unset
 depending on the [gRPC status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md)
 and [Span Kind](../api.md#spankind).
 
