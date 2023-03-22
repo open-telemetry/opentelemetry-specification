@@ -402,6 +402,96 @@ groups:
           value MUST NOT be set.
         examples: ['public.users', 'customers']
 
+  - id: db.cosmosdb
+    type: span
+    extends: db
+    prefix: db.cosmosdb
+    brief: >
+      Call-level attributes for Cosmos DB.
+    attributes:
+      - id: client_id
+        type: string
+        brief: Unique Cosmos client instance id.
+        examples: '3ba4827d-4422-483f-b59f-85b74211c11d'
+      - id: operation_type
+        type:
+          allow_custom_values: true
+          members:
+            - id: invalid
+              value: 'Invalid'
+            - id: create
+              value: 'Create'
+            - id: patch
+              value: 'Patch'
+            - id: read
+              value: 'Read'
+            - id: read_feed
+              value: 'ReadFeed'
+            - id: delete
+              value: 'Delete'
+            - id: replace
+              value: 'Replace'
+            - id: execute
+              value: 'Execute'
+            - id: query
+              value: 'Query'
+            - id: head
+              value: 'Head'
+            - id: head_feed
+              value: 'HeadFeed'
+            - id: upsert
+              value: 'Upsert'
+            - id: batch
+              value: 'Batch'
+            - id: query_plan
+              value: 'QueryPlan'
+            - id: execute_javascript
+              value: 'ExecuteJavaScript'
+        brief: CosmosDB Operation Type.
+        requirement_level:
+          conditionally_required: when performing one of the operations in this list
+      - ref: user_agent.original
+      - id: connection_mode
+        type:
+          allow_custom_values: false
+          members:
+            - id: gateway
+              value: 'gateway'
+              brief: Gateway (HTTP) connections mode
+            - id: direct
+              value: 'direct'
+              brief: Direct connection.
+        brief: Cosmos client connection mode.
+        requirement_level:
+          conditionally_required: if not `direct` (or pick gw as default)
+      - id: container
+        type: string
+        brief: Cosmos DB container name.
+        requirement_level:
+          conditionally_required: if available
+        examples: 'anystring'
+      - id: request_content_length
+        type: int
+        brief: Request payload size in bytes
+      - id: status_code
+        type: int
+        brief: Cosmos DB status code.
+        examples: [200, 201]
+        requirement_level:
+          conditionally_required: if response was received
+      - id: sub_status_code
+        type: int
+        brief: Cosmos DB sub status code.
+        examples: [1000, 1002]
+        requirement_level:
+          conditionally_required: when response was received and contained sub-code.
+      - id: request_charge
+        type: double
+        brief: RU consumed for that operation
+        examples: [46.18, 1.0]
+        requirement_level:
+          conditionally_required: when available
+
   - id: db.tech
     type: span
     brief: "Semantic convention group for specific technologies"
@@ -410,3 +500,4 @@ groups:
       - include: 'db.redis'
       - include: 'db.mongodb'
       - include: 'db.sql'
+      - include: 'db.cosmosdb'

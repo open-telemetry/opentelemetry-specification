@@ -673,7 +673,7 @@ might consider:
 http_server_duration = meter.create_histogram(
     name="http.server.duration",
     description="measures the duration of the inbound HTTP request",
-    unit="milliseconds",
+    unit="ms",
     value_type=float)
 ```
 
@@ -683,7 +683,7 @@ http_server_duration = meter.create_histogram(
 var httpServerDuration = meter.CreateHistogram<double>(
     "http.server.duration",
     description: "measures the duration of the inbound HTTP request",
-    unit: "milliseconds"
+    unit: "ms"
     );
 ```
 

@@ -44,7 +44,7 @@ OpenTelemetry events is clunky or error-prone.
 The Event API offers convenience methods
 for [emitting LogRecords](./bridge-api.md#emit-logrecord) that conform
 to the [semantic conventions for Events](./semantic_conventions/events.md).
-Unlike the [Logs Brdige API](./bridge-api.md), application developers and
+Unlike the [Logs Bridge API](./bridge-api.md), application developers and
 instrumentation authors are encouraged to call this API directly.
 
 ## EventLogger

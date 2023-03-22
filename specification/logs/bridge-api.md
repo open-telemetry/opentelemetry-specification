@@ -33,35 +33,31 @@ data model.</b>
 
 The Logs Bridge API consist of these main classes:
 
-* LoggerProvider is the entry point of the API. It provides access to Loggers.
-* Logger is the class responsible for
-  emitting [Logs](./data-model.md#log-and-event-record-definition) as
-  LogRecords.
-
-LoggerProvider/Logger are analogous to TracerProvider/Tracer.
+* [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
+* [Logger](#logger) is the class responsible for emitting logs as [LogRecords](#logrecord).
 
 ```mermaid
 graph TD
     A[LoggerProvider] -->|Get| B(Logger)
-    B --> C(Log)
+    B -->|Emit| C(LogRecord)
 ```
 
 ## LoggerProvider
 
 `Logger`s can be accessed with a `LoggerProvider`.
 
-In implementations of the API, the LoggerProvider is expected to be the stateful
+In implementations of the API, the `LoggerProvider` is expected to be the stateful
 object that holds any configuration.
 
-Normally, the LoggerProvider is expected to be accessed from a central place.
+Normally, the `LoggerProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
-LoggerProvider.
+`LoggerProvider`.
 
 ### LoggerProvider operations
 
-The LoggerProvider MUST provide the following functions:
+The `LoggerProvider` MUST provide the following functions:
 
-* Get a Logger
+* Get a `Logger`
 
 #### Get a Logger
 
@@ -100,23 +96,23 @@ This API MUST accept the following parameters:
   Therefore, this API needs to be structured to accept a `include_trace_context`, but MUST
   NOT obligate a user to provide one.
 
-Loggers are identified by `name`, `version`, and `schema_url` fields.  When more
+`Logger`s are identified by `name`, `version`, and `schema_url` fields.  When more
 than one `Logger` of the same `name`, `version`, and `schema_url` is created, it
 is unspecified whether or under which conditions the same or different `Logger`
 instances are returned. It is a user error to create Loggers with different
 `include_trace_context` or `attributes` but the same identity.
 
-The term *identical* applied to Loggers describes instances where all
-identifying fields are equal. The term *distinct* applied to Loggers describes
+The term *identical* applied to `Logger`s describes instances where all
+identifying fields are equal. The term *distinct* applied to `Logger`s describes
 instances where at least one identifying field has a different value.
 
 ## Logger
 
-The `Logger` is responsible for emitting `LogRecord`s
+The `Logger` is responsible for emitting `LogRecord`s.
 
 ### Logger operations
 
-The Logger MUST provide functions to:
+The `Logger` MUST provide functions to:
 
 #### Emit LogRecord
 
@@ -126,20 +122,19 @@ This function MAY be named `logRecord`.
 
 **Parameters:**
 
-* `logRecord` - the [LogRecord](#logrecord).
+* `logRecord` - the [LogRecord](#logrecord) to emit.
 
 ## LogRecord
 
-The API emits [LogRecords](#emit-logrecord) using
-the `LogRecord` [data model](data-model.md).
+The API emits [LogRecords](#emit-logrecord) using the `LogRecord` [data model](data-model.md).
 
 A function receiving this as an argument MUST be able to set the following
 fields:
 
 - [Timestamp](./data-model.md#field-timestamp)
 - [Observed Timestamp](./data-model.md#field-observedtimestamp)
-- [Context](../context/README.md)
-  including [TraceContext](./data-model.md#trace-context-fields)
+- [Context](../context/README.md) that contains the
+  [TraceContext](./data-model.md#trace-context-fields)
 - [Severity Number](./data-model.md#field-severitynumber)
 - [Severity Text](./data-model.md#field-severitytext)
 - [Body](./data-model.md#field-body)
@@ -198,11 +193,11 @@ When Context is implicitly available (e.g. in Java) the Appender can rely on
 automatic context propagation by [obtaining a Logger](#get-a-logger)
 with `include_trace_context=true`.
 
-Some log libraries have mechanism specifically tailored for injecting contextual
+Some log libraries have mechanisms specifically tailored for injecting contextual
 information into logs, such as MDC in Log4j. When available such mechanisms may
 be the preferable place to fetch the `TraceContext` and inject it into
 the `LogRecord`, since it usually allows fetching of the context to work
-correctly even when log records are emitted asynchronously which otherwise can
+correctly even when log records are emitted asynchronously, which otherwise can
 result in the incorrect implicit context being fetched.
 
 TODO: clarify how works or doesn't work when the log statement call site and the
