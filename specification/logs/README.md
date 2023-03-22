@@ -24,6 +24,7 @@ aliases: [/docs/reference/specification/logs/overview]
   * [New First-Party Application Logs](#new-first-party-application-logs)
 - [OpenTelemetry Collector](#opentelemetry-collector)
 - [Auto-Instrumenting Existing Logging](#auto-instrumenting-existing-logging)
+- [Specifications](#specifications)
 - [Trace Context in Legacy Formats](#trace-context-in-legacy-formats)
   * [Syslog RFC5424](#syslog-rfc5424)
   * [Plain Text Formats](#plain-text-formats)
