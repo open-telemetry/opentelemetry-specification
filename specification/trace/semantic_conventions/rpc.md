@@ -214,9 +214,32 @@ to `Error` for the [gRPC status codes](https://github.com/grpc/grpc/blob/v1.33.2
 listed below (for other codes it MUST be left unset).
 
 - `UNKNOWN`
+- `DEADLINE_EXCEEDED`
 - `INTERNAL`
 - `UNAVAILABLE`
 - `DATA_LOSS`
+
+This is summarized in the table below.
+
+| gRPC Status Number | gRPC Status Code | `SpanKind.SERVER` Span Status | `SpanKind.CLIENT` Span Status |
+|---|---|---|---|
+| `0` | OK | unset | unset |
+| `1` | CANCELLED | unset | `Error` |
+| `2` | UNKNOWN | `Error` | `Error`  |
+| `3` | INVALID_ARGUMENT | unset | `Error` |
+| `4` | DEADLINE_EXCEEDED | `Error` | `Error` |
+| `5` | NOT_FOUND | unset | `Error` |
+| `6` | ALREADY_EXISTS | unset | `Error` |
+| `7` | PERMISSION_DENIED | unset | `Error` |
+| `8` | RESOURCE_EXHAUSTED | unset| `Error` |
+| `9` | FAILED_PRECONDITION | unset | `Error` |
+| `10` | ABORTED | unset | `Error` |
+| `11` | OUT_OF_RANGE | unset | `Error` |
+| `12` | UNIMPLEMENTED | unset | `Error` |
+| `13` | INTERNAL | `Error` | `Error` |
+| `14` | UNAVAILABLE | `Error` | `Error` |
+| `15` | DATA_LOSS | `Error` | `Error` |
+| `16` | UNAUTHENTICATED | unset | `Error` |
 
 ### gRPC Request and Response Metadata
 
