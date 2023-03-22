@@ -211,7 +211,7 @@ MUST be left unset for an `OK` gRPC status code, and set to `Error` for all othe
 
 For `SpanKind.SERVER` spans, the [Span Status](../api.md#set-status) MUST be set
 to `Error` for the [gRPC status codes](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md)
-listed below.
+listed below (for other codes it MUST be left unset).
 
 - `UNKNOWN`
 - `INTERNAL`
