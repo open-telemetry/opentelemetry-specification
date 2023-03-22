@@ -20,6 +20,8 @@ release.
 
 - Update log readme "request context" to "trace context".
   ([#3332](https://github.com/open-telemetry/opentelemetry-specification/pull/3332))
+- Add log appender / bridge to glossary.
+  ([#3335](https://github.com/open-telemetry/opentelemetry-specification/pull/3335))
 
 ### Resource
 

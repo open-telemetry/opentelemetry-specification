@@ -17,7 +17,7 @@
     + [Emit LogRecord](#emit-logrecord)
 - [LogRecord](#logrecord)
 - [Usage](#usage)
-  * [How to Create Log4J Style Appender](#how-to-create-log4j-style-appender)
+  * [How to Create Log4J Log Appender](#how-to-create-log4j-log-appender)
   * [Implicit Context Injection](#implicit-context-injection)
   * [Explicit Context Injection](#explicit-context-injection)
 
@@ -27,7 +27,7 @@
 
 <b>Note: this document defines a log *backend* API. The API is not intended to be called
 by application developers directly. It is provided for logging library authors
-to build [Appenders](#how-to-create-log4j-style-appender), which use
+to build [log appenders](#how-to-create-log4j-log-appender), which use
 this API to bridge between existing logging libraries and the OpenTelemetry log
 data model.</b>
 
@@ -164,15 +164,16 @@ fields:
 
 ## Usage
 
-### How to Create Log4J Style Appender
+### How to Create Log4J Log Appender
 
-An Appender implementation can be used to allow emitting logs via
+A [log appender](../glossary.md#log-appender--bridge) implementation can be used
+to allow emitting logs via
 OpenTelemetry [LogRecordExporters](sdk.md#logrecordexporter). This approach is
 typically used for applications which are fine with changing the log transport
 and is [one of the supported](README.md#direct-to-collector) log collection
 approaches.
 
-The Appender implementation will typically acquire a [Logger](#logger) from the
+The log appender implementation will typically acquire a [Logger](#logger) from the
 global [LoggerProvider](#loggerprovider) at startup time, then construct
 `LogRecord`s for each log received from the application, and then call
 [Emit LogRecord](#emit-logrecord).
@@ -190,7 +191,7 @@ This same approach can be also used for example for:
   there is no implicit Context in Go it is not possible to get and use the
   active Span.
 
-Appenders can be created in OpenTelemetry language libraries by OpenTelemetry
+Log appenders can be created in OpenTelemetry language libraries by OpenTelemetry
 maintainers, or by 3rd parties for any logging library that supports a similar
 extension mechanism. This specification recommends each OpenTelemetry language
 library to include out-of-the-box Appender implementation for at least one
