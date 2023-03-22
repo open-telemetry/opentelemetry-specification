@@ -3,9 +3,7 @@ linkTitle: Logs
 aliases: [/docs/reference/specification/logs/overview]
 --->
 
-# OpenTelemetry Logging Overview
-
-**Status**: [Experimental](../document-status.md)
+# OpenTelemetry Logging
 
 <details>
 <summary>Table of Contents</summary>
@@ -26,6 +24,7 @@ aliases: [/docs/reference/specification/logs/overview]
   * [New First-Party Application Logs](#new-first-party-application-logs)
 - [OpenTelemetry Collector](#opentelemetry-collector)
 - [Auto-Instrumenting Existing Logging](#auto-instrumenting-existing-logging)
+- [Specifications](#specifications)
 - [Trace Context in Legacy Formats](#trace-context-in-legacy-formats)
   * [Syslog RFC5424](#syslog-rfc5424)
   * [Plain Text Formats](#plain-text-formats)
@@ -442,6 +441,14 @@ that do this.
 A further optional modification would be to auto-instrument loggers to send logs
 directly to the backend via OTLP instead or in addition to writing to a file or
 standard output.
+
+## Specifications
+
+* [Logs Bridge API](./bridge-api.md)
+* [Logs SDK](./sdk.md)
+* [Logs Data Model](./data-model.md)
+* [Event API](./event-api.md)
+* [Semantic Conventions](./semantic_conventions/README.md)
 
 ## Trace Context in Legacy Formats
 
