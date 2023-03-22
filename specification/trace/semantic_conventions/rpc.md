@@ -212,25 +212,25 @@ to `Error` or remain unset
 depending on the [gRPC status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md)
 and [Span Kind](../api.md#spankind).
 
-| gRPC Status Number | gRPC Status Code | `SpanKind.SERVER` Span Status | `SpanKind.CLIENT` Span Status |
-|---|---|---|---|
-| `0` | OK | unset | unset |
-| `1` | CANCELLED | unset | `Error` |
-| `2` | UNKNOWN | `Error` | `Error`  |
-| `3` | INVALID_ARGUMENT | unset | `Error` |
-| `4` | DEADLINE_EXCEEDED | `Error` | `Error` |
-| `5` | NOT_FOUND | unset | `Error` |
-| `6` | ALREADY_EXISTS | unset | `Error` |
-| `7` | PERMISSION_DENIED | unset | `Error` |
-| `8` | RESOURCE_EXHAUSTED | unset| `Error` |
-| `9` | FAILED_PRECONDITION | unset | `Error` |
-| `10` | ABORTED | unset | `Error` |
-| `11` | OUT_OF_RANGE | unset | `Error` |
-| `12` | UNIMPLEMENTED | unset | `Error` |
-| `13` | INTERNAL | `Error` | `Error` |
-| `14` | UNAVAILABLE | `Error` | `Error` |
-| `15` | DATA_LOSS | `Error` | `Error` |
-| `16` | UNAUTHENTICATED | unset | `Error` |
+| gRPC Status Code | `SpanKind.SERVER` Span Status | `SpanKind.CLIENT` Span Status |
+|---|---|---|
+| OK | unset | unset |
+| CANCELLED | unset | `Error` |
+| UNKNOWN | `Error` | `Error`  |
+| INVALID_ARGUMENT | unset | `Error` |
+| DEADLINE_EXCEEDED | `Error` | `Error` |
+| NOT_FOUND | unset | `Error` |
+| ALREADY_EXISTS | unset | `Error` |
+| PERMISSION_DENIED | unset | `Error` |
+| RESOURCE_EXHAUSTED | unset| `Error` |
+| FAILED_PRECONDITION | unset | `Error` |
+| ABORTED | unset | `Error` |
+| OUT_OF_RANGE | unset | `Error` |
+| UNIMPLEMENTED | unset | `Error` |
+| INTERNAL | `Error` | `Error` |
+| UNAVAILABLE | `Error` | `Error` |
+| DATA_LOSS | `Error` | `Error` |
+| UNAUTHENTICATED | unset | `Error` |
 
 ### gRPC Request and Response Metadata
 
