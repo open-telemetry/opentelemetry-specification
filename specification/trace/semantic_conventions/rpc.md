@@ -206,7 +206,18 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 
 ### gRPC Status
 
-The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC status code, and set to `Error` for all others.
+For `SpanKind.CLIENT` spans, the [Span Status](../api.md#set-status)
+MUST be left unset for an `OK` gRPC status code, and set to `Error` for all others.
+
+For `SpanKind.SERVER` spans, the [Span Status](../api.md#set-status) MUST be set
+to `Error` for the [gRPC status codes](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md)
+listed below.
+
+- `UNKNOWN`
+- `UNIMPLEMENTED`
+- `INTERNAL`
+- `UNAVAILABLE`
+- `DATA_LOSS`
 
 ### gRPC Request and Response Metadata
 
