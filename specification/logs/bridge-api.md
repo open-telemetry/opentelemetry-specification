@@ -212,7 +212,7 @@ log appender are executed on different threads.
 
 In languages where the Context must be provided explicitly (e.g. Go) the end
 user must capture the context and explicitly pass it to the logging subsystem in
-order for `TraceContext` to be recorded in `LogRecord`s
+order for `TraceContext` to be recorded in `LogRecord`s.
 
 Support for OpenTelemetry for logging libraries in these languages typically can
 be implemented in the form of logger wrappers that can capture the context once,
