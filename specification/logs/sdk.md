@@ -66,9 +66,6 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-If the case where `include_trace_context` is not specified, its default value
-SHOULD be true by default.
-
 Configuration (i.e. [LogRecordProcessors](#logrecordprocessor)) MUST be managed
 solely by the `LoggerProvider` and the SDK MUST provide some way to configure
 all options that are implemented by the SDK. This MAY be done at the time

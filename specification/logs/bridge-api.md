@@ -16,6 +16,7 @@
   * [Logger operations](#logger-operations)
     + [Emit LogRecord](#emit-logrecord)
 - [LogRecord](#logrecord)
+- [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [Usage](#usage)
   * [How to Create Log4J Style Appender](#how-to-create-log4j-style-appender)
@@ -72,30 +73,20 @@ This API MUST accept the following parameters:
   [Instrumentation library](../glossary.md#instrumentation-library) may refer to
   the same library. In that scenario, the `name` denotes a module name or component
   name within that library or application.
-* `version`: Specifies the version of the instrumentation scope if
+
+* `version` (optional): Specifies the version of the instrumentation scope if
   the scope has a version (e.g. a library version). Example value: 1.0.0.
 
-  Users can provide a `version`, but it is up to their discretion. Therefore,
-  this API needs to be structured to accept a `version`, but MUST NOT obligate
-  a user to provide one.
-* `schema_url`: Specifies the Schema URL that should be recorded in
+* `schema_url` (optional): Specifies the Schema URL that should be recorded in
   the emitted telemetry.
 
-  Users can provide a `schema_url`, but it is up to their discretion.
-  Therefore, this API needs to be structured to accept a `schema_url`, but MUST
-  NOT obligate a user to provide one.
-* `attributes`: Specifies the instrumentation scope attributes to
-  associate with emitted telemetry.
+* `attributes` (optional): Specifies the instrumentation scope attributes to
+  associate with emitted telemetry. This API MUST be structured to accept a
+  variable number of attributes, including none.
 
-  Users can provide attributes to associate with the instrumentation scope, but
-  it is up to their discretion. Therefore, this API MUST be structured to
-  accept a variable number of attributes, including none.
-* `include_trace_context`: Specifies whether the Trace Context should
+* `include_trace_context` (optional): Specifies whether the Trace Context should
   automatically be passed on to the `LogRecord`s emitted by the `Logger`.
-
-  Users can provide `include_trace_context`, but it is up to their discretion.
-  Therefore, this API needs to be structured to accept a `include_trace_context`, but MUST
-  NOT obligate a user to provide one.
+  If `include_trace_context` is not specified, it SHOULD be `true` by default.
 
 `Logger`s are identified by `name`, `version`, and `schema_url` fields.  When more
 than one `Logger` of the same `name`, `version`, and `schema_url` is created, it
@@ -106,6 +97,10 @@ instances are returned. It is a user error to create Loggers with different
 The term *identical* applied to `Logger`s describes instances where all
 identifying fields are equal. The term *distinct* applied to `Logger`s describes
 instances where at least one identifying field has a different value.
+
+The effect of associating a Schema URL with a `Logger` MUST be that the telemetry
+emitted using the `Logger` will be associated with the Schema URL, provided that
+the emitted data format is capable of representing such association.
 
 ## Logger
 
@@ -130,7 +125,7 @@ This function MAY be named `logRecord`.
 The API emits [LogRecords](#emit-logrecord) using the `LogRecord` [data model](data-model.md).
 
 A function receiving this as an argument MUST be able to set the following
-fields:
+parameters:
 
 - [Timestamp](./data-model.md#field-timestamp)
 - [Observed Timestamp](./data-model.md#field-observedtimestamp)
@@ -141,9 +136,15 @@ fields:
 - [Body](./data-model.md#field-body)
 - [Attributes](./data-model.md#field-attributes)
 
-User can provide each of these fields, but it is up to their discretion.
-Therefore, this API needs to be structured to accept these fields, but MUST NOT
-obligate a user to provide them.
+All parameters are optional.
+
+## Optional and required parameters
+
+The operations defined include various parameters, some of which are marked optional. Parameters not marked optional are required.
+
+For each optional parameter, the API MUST be structured to accept it, but MUST NOT obligate a user to provide it.
+
+For each required parameter, the API MUST be structured to obligate a user to provide it.
 
 ## Concurrency requirements
 
