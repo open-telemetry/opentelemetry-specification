@@ -104,6 +104,10 @@ working Meter MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
+When a Schema URL is passed as an argument when creating a `Meter` the emitted
+telemetry for that `Meter` MUST be associated with the Schema URL, provided
+that the emitted data format is capable of representing such association.
+
 Configuration (i.e., [MetricExporters](#metricexporter),
 [MetricReaders](#metricreader) and [Views](#view)) MUST be managed solely by the
 `MeterProvider` and the SDK MUST provide a way to configure all options that are
