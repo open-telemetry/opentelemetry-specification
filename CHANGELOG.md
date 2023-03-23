@@ -20,6 +20,13 @@ release.
 
 ### Logs
 
+- Update log readme "request context" to "trace context".
+  ([#3332](https://github.com/open-telemetry/opentelemetry-specification/pull/3332))
+- Remove log readme document status.
+  ([#3334](https://github.com/open-telemetry/opentelemetry-specification/pull/3334))
+- Break out compatibility document on recording trace context in non-OTLP Log Format
+  ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
+
 ### Resource
 
 ### Semantic Conventions
@@ -34,6 +41,10 @@ release.
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
 - Metric requirement levels are now stable
   ([#3271](https://github.com/open-telemetry/opentelemetry-specification/pull/3271))
+- BREAKING: remove `messaging.destination.kind` and `messaging.source.kind`.
+  ([#3214](https://github.com/open-telemetry/opentelemetry-specification/pull/3214))
+- Define attributes collected for `cosmosdb` by Cosmos DB SDK
+  ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
 
 ### Compatibility
 
