@@ -9,6 +9,9 @@ versions:
             attribute_map:
               net.app.protocol.name: net.protocol.name
               net.app.protocol.version: net.protocol.version
+              messaging.kafka.client_id: messaging.client_id
+              messaging.rocketmq.client_id: messaging.client_id
+
   1.19.0:
     spans:
       changes:
