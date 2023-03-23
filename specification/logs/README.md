@@ -3,9 +3,7 @@ linkTitle: Logs
 aliases: [/docs/reference/specification/logs/overview]
 --->
 
-# OpenTelemetry Logging Overview
-
-**Status**: [Experimental](../document-status.md)
+# OpenTelemetry Logging
 
 <details>
 <summary>Table of Contents</summary>
@@ -26,11 +24,7 @@ aliases: [/docs/reference/specification/logs/overview]
   * [New First-Party Application Logs](#new-first-party-application-logs)
 - [OpenTelemetry Collector](#opentelemetry-collector)
 - [Auto-Instrumenting Existing Logging](#auto-instrumenting-existing-logging)
-- [Trace Context in Legacy Formats](#trace-context-in-legacy-formats)
-  * [Syslog RFC5424](#syslog-rfc5424)
-  * [Plain Text Formats](#plain-text-formats)
-  * [JSON Formats](#json-formats)
-  * [Other Structured Formats](#other-structured-formats)
+- [Specifications](#specifications)
 
 <!-- tocstop -->
 
@@ -330,7 +324,8 @@ The benefit of using an intermediary medium is that how logs are produced and
 where they are written by the application requires no or minimal changes. The
 downside is that it requires the often non-trivial log file reading and parsing
 functionality. Parsing may also be not reliable if the output format is not
-well-defined.
+well-defined. For details on recording and parsing trace context,
+see [Trace Context in Non-OTLP Log Formats](../compatibility/logging_trace_context.md).
 
 #### Direct to Collector
 
@@ -443,56 +438,11 @@ A further optional modification would be to auto-instrument loggers to send logs
 directly to the backend via OTLP instead or in addition to writing to a file or
 standard output.
 
-## Trace Context in Legacy Formats
+## Specifications
 
-Earlier we briefly mentioned that it is possible to modify existing applications
-so that they include the Request Context information in the emitted logs.
-
-[OTEP0114](https://github.com/open-telemetry/oteps/pull/114) defines how the
-trace context should be recorded in logs. To summarize, the following field
-names should be used in legacy formats:
-
-- "trace_id" for [TraceId](data-model.md#field-traceid), hex-encoded.
-- "span_id" for [SpanId](data-model.md#field-spanid), hex-encoded.
-- "trace_flags" for [trace flags](data-model.md#field-traceflags), formatted
-  according to W3C traceflags format.
-
-All 3 fields are optional (see the [data model](data-model.md) for details of
-which combination of fields is considered valid).
-
-### Syslog RFC5424
-
-Trace id, span id and traceflags SHOULD be recorded via SD-ID "opentelemetry".
-
-For example:
-
-```
-[opentelemetry trace_id="102981ABCD2901" span_id="abcdef1010" trace_flags="01"]
-```
-
-### Plain Text Formats
-
-The fields should be recorded according to the customary approach used for a
-particular format (e.g. field:value format for LTSV). For example:
-
-```
-host:192.168.0.1<TAB>trace_id:102981ABCD2901<TAB>span_id:abcdef1010<TAB>time:[01/Jan/2010:10:11:23 -0400]<TAB>req:GET /health HTTP/1.0<TAB>status:200
-```
-
-### JSON Formats
-
-The fields should be recorded as top-level fields in the JSON structure. For example:
-
-```json
-{
-  "timestamp":1581385157.14429,
-  "body":"Incoming request",
-  "trace_id":"102981ABCD2901",
-  "span_id":"abcdef1010"
-}
-```
-
-### Other Structured Formats
-
-The fields should be recorded as top-level structured attributes of the log
-record as it is customary for the particular format.
+* [Logs Bridge API](./bridge-api.md)
+* [Logs SDK](./sdk.md)
+* [Logs Data Model](./data-model.md)
+* [Event API](./event-api.md)
+* [Semantic Conventions](./semantic_conventions/README.md)
+* [Trace Context in non-OTLP Log Formats](../compatibility/logging_trace_context.md)
