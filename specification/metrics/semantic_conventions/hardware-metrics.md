@@ -52,12 +52,12 @@ Additionally, all metrics in `hw.` instruments have the following attributes:
 
 The below metrics apply to any type of hardware component.
 
-| Name        | Description                                                                        | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key(s)       | Attribute Values           |
-| ----------- | ---------------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ---------- | ---------------------- | -------------------------- |
-| `hw.energy` | Energy consumed by the component, in joules                                        | J        | Counter                                           | Int64      |                        |                            |
-| `hw.errors` | Number of errors encountered by the component                                      | {errors} | Counter                                           | Int64      | `type` (Recommended)   |                            |
-| `hw.power`  | Instantaneous power consumed by the component, in Watts (`hw.energy` is preferred) | W        | Gauge                                             | Double     |                        |                            |
-| `hw.status` | Operational status: `1` (true) or `0` (false) for each of the possible states      |          | UpDownCounter                                     | Int        | `state` (**Required**) | `ok`, `degraded`, `failed` |
+| Name        | Description                                                                        | Units   | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key(s)       | Attribute Values           |
+| ----------- | ---------------------------------------------------------------------------------- | ------- | ------------------------------------------------- | ---------- | ---------------------- | -------------------------- |
+| `hw.energy` | Energy consumed by the component, in joules                                        | J       | Counter                                           | Int64      |                        |                            |
+| `hw.errors` | Number of errors encountered by the component                                      | {error} | Counter                                           | Int64      | `type` (Recommended)   |                            |
+| `hw.power`  | Instantaneous power consumed by the component, in Watts (`hw.energy` is preferred) | W       | Gauge                                             | Double     |                        |                            |
+| `hw.status` | Operational status: `1` (true) or `0` (false) for each of the possible states      |         | UpDownCounter                                     | Int        | `state` (**Required**) | `ok`, `degraded`, `failed` |
 
 These common `hw.` metrics must include the below attributes to describe the
 monitored component:
@@ -116,13 +116,13 @@ describe the characteristics of the monitored battery:
 the operating system for multi-core systems). A physical processor may include
 many individual cores.
 
-| Name                 | Description                                                                   | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key              | Attribute Values                                |
-| -------------------- | ----------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ---------- | -------------------------- | ----------------------------------------------- |
-| `hw.errors`          | Total number of errors encountered and corrected by the CPU                   | {errors} | Counter                                           | Int64      | `hw.type` (**Required**)   | `cpu`                                           |
-| `hw.cpu.speed`       | CPU current frequency                                                         | Hz       | Gauge                                             | Int64      |                            |                                                 |
-| `hw.cpu.speed.limit` | CPU maximum frequency                                                         | Hz       | Gauge                                             | Int64      | `limit_type` (Recommended) | `throttled`, `max`, `turbo`                     |
-| `hw.status`          | Operational status: `1` (true) or `0` (false) for each of the possible states |          | UpDownCounter                                     | Int        | `state` (**Required**)     | `ok`, `degraded`, `failed`, `predicted_failure` |
-|                      |                                                                               |          |                                                   |            | `hw.type` (**Required**)   | `cpu`                                           |
+| Name                 | Description                                                                   | Units   | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key              | Attribute Values                                |
+| -------------------- | ----------------------------------------------------------------------------- | ------- | ------------------------------------------------- | ---------- | -------------------------- | ----------------------------------------------- |
+| `hw.errors`          | Total number of errors encountered and corrected by the CPU                   | {error} | Counter                                           | Int64      | `hw.type` (**Required**)   | `cpu`                                           |
+| `hw.cpu.speed`       | CPU current frequency                                                         | Hz      | Gauge                                             | Int64      |                            |                                                 |
+| `hw.cpu.speed.limit` | CPU maximum frequency                                                         | Hz      | Gauge                                             | Int64      | `limit_type` (Recommended) | `throttled`, `max`, `turbo`                     |
+| `hw.status`          | Operational status: `1` (true) or `0` (false) for each of the possible states |         | UpDownCounter                                     | Int        | `state` (**Required**)     | `ok`, `degraded`, `failed`, `predicted_failure` |
+|                      |                                                                               |         |                                                   |            | `hw.type` (**Required**)   | `cpu`                                           |
 
 Additional **Recommended** attributes:
 
@@ -194,18 +194,18 @@ Additional **Recommended** attributes:
 
 **Description:** Graphics Processing Unit (discrete)
 
-| Name                        | Description                                                                   | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key              | Attribute Values                                |
-| --------------------------- | ----------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ---------- | -------------------------- | ----------------------------------------------- |
-| `hw.errors`                 | Number of errors encountered by the GPU                                       | {errors} | Counter                                           | Int64      | `type` (Recommended)       | `corrected`, `all`                              |
-|                             |                                                                               |          |                                                   |            | `hw.type` (**Required**)   | `gpu`                                           |
-| `hw.gpu.io`                 | Received and transmitted bytes by the GPU                                     | By       | Counter                                           | Int64      | `direction` (**Required**) | `receive`, `transmit`                           |
-| `hw.gpu.memory.limit`       | Size of the GPU memory                                                        | By       | UpDownCounter                                     | Int64      |                            |                                                 |
-| `hw.gpu.memory.utilization` | Fraction of GPU memory used                                                   | 1        | Gauge                                             | Double     |                            |                                                 |
-| `hw.gpu.memory.usage`       | GPU memory used                                                               | By       | UpDownCounter                                     | Int64      |                            |                                                 |
-| `hw.gpu.power`              | GPU instantaneous power consumption in Watts                                  | W        | Gauge                                             | Double     |                            |                                                 |
-| `hw.gpu.utilization`        | Fraction of time spent in a specific task                                     | 1        | Gauge                                             | Double     | `task` (Recommended)       | `decoder`, `encoder`, `general`                 |
-| `hw.status`                 | Operational status: `1` (true) or `0` (false) for each of the possible states |          | UpDownCounter                                     | Int        | `state` (**Required**)     | `ok`, `degraded`, `failed`, `predicted_failure` |
-|                             |                                                                               |          |                                                   |            | `hw.type` (**Required**)   | `gpu`                                           |
+| Name                        | Description                                                                   | Units   | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key              | Attribute Values                                |
+| --------------------------- | ----------------------------------------------------------------------------- | ------- | ------------------------------------------------- | ---------- | -------------------------- | ----------------------------------------------- |
+| `hw.errors`                 | Number of errors encountered by the GPU                                       | {error} | Counter                                           | Int64      | `type` (Recommended)       | `corrected`, `all`                              |
+|                             |                                                                               |         |                                                   |            | `hw.type` (**Required**)   | `gpu`                                           |
+| `hw.gpu.io`                 | Received and transmitted bytes by the GPU                                     | By      | Counter                                           | Int64      | `direction` (**Required**) | `receive`, `transmit`                           |
+| `hw.gpu.memory.limit`       | Size of the GPU memory                                                        | By      | UpDownCounter                                     | Int64      |                            |                                                 |
+| `hw.gpu.memory.utilization` | Fraction of GPU memory used                                                   | 1       | Gauge                                             | Double     |                            |                                                 |
+| `hw.gpu.memory.usage`       | GPU memory used                                                               | By      | UpDownCounter                                     | Int64      |                            |                                                 |
+| `hw.gpu.power`              | GPU instantaneous power consumption in Watts                                  | W       | Gauge                                             | Double     |                            |                                                 |
+| `hw.gpu.utilization`        | Fraction of time spent in a specific task                                     | 1       | Gauge                                             | Double     | `task` (Recommended)       | `decoder`, `encoder`, `general`                 |
+| `hw.status`                 | Operational status: `1` (true) or `0` (false) for each of the possible states |         | UpDownCounter                                     | Int        | `state` (**Required**)     | `ok`, `degraded`, `failed`, `predicted_failure` |
+|                             |                                                                               |         |                                                   |            | `hw.type` (**Required**)   | `gpu`                                           |
 
 Additional **Recommended** attributes:
 
@@ -223,14 +223,14 @@ Additional **Recommended** attributes:
 controller to the operating system (e.g. a RAID 1 set made of 2 disks, and exposed
 as /dev/hdd0 by the controller).
 
-| Name                          | Description                                                                   | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key            | Attribute Values           |
-| ----------------------------- | ----------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ---------- | ------------------------ | -------------------------- |
-| `hw.errors`                   | Number of errors encountered on this logical disk                             | {errors} | Counter                                           | Int64      | `hw.type` (**Required**) | `logical_disk`             |
-| `hw.logical_disk.limit`       | Size of the logical disk                                                      | By       | UpDownCounter                                     | Int64      |                          |                            |
-| `hw.logical_disk.usage`       | Logical disk space usage                                                      | By       | UpDownCounter                                     | Int64      | `state` (**Required**)   | `used`, `free`             |
-| `hw.logical_disk.utilization` | Logical disk space utilization as a fraction                                  | 1        | Gauge                                             | Double     | `state` (**Required**)   | `used`, `free`             |
-| `hw.status`                   | Operational status: `1` (true) or `0` (false) for each of the possible states |          | UpDownCounter                                     | Int        | `state` (**Required**)   | `ok`, `degraded`, `failed` |
-|                               |                                                                               |          |                                                   |            | `hw.type` (**Required**) | `logical_disk`             |
+| Name                          | Description                                                                   | Units   | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key            | Attribute Values           |
+| ----------------------------- | ----------------------------------------------------------------------------- | ------- | ------------------------------------------------- | ---------- | ------------------------ | -------------------------- |
+| `hw.errors`                   | Number of errors encountered on this logical disk                             | {error} | Counter                                           | Int64      | `hw.type` (**Required**) | `logical_disk`             |
+| `hw.logical_disk.limit`       | Size of the logical disk                                                      | By      | UpDownCounter                                     | Int64      |                          |                            |
+| `hw.logical_disk.usage`       | Logical disk space usage                                                      | By      | UpDownCounter                                     | Int64      | `state` (**Required**)   | `used`, `free`             |
+| `hw.logical_disk.utilization` | Logical disk space utilization as a fraction                                  | 1       | Gauge                                             | Double     | `state` (**Required**)   | `used`, `free`             |
+| `hw.status`                   | Operational status: `1` (true) or `0` (false) for each of the possible states |         | UpDownCounter                                     | Int        | `state` (**Required**)   | `ok`, `degraded`, `failed` |
+|                               |                                                                               |         |                                                   |            | `hw.type` (**Required**) | `logical_disk`             |
 
 Additional **Recommended** attributes:
 
@@ -242,12 +242,12 @@ Additional **Recommended** attributes:
 
 **Description:** A memory module in a computer system.
 
-| Name             | Description                                                                   | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key            | Attribute Values                                |
-| ---------------- | ----------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ---------- | ------------------------ | ----------------------------------------------- |
-| `hw.errors`      | Number of errors encountered on this memory module                            | {errors} | Counter                                           | Int64      | `hw.type` (**Required**) | `memory`                                        |
-| `hw.memory.size` | Size of the memory module                                                     | By       | UpDownCounter                                     | Int64      |                          |                                                 |
-| `hw.status`      | Operational status: `1` (true) or `0` (false) for each of the possible states |          | UpDownCounter                                     | Int        | `state` (**Required**)   | `ok`, `degraded`, `failed`, `predicted_failure` |
-|                  |                                                                               |          |                                                   |            | `hw.type` (**Required**) | `memory`                                        |
+| Name             | Description                                                                   | Units   | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key            | Attribute Values                                |
+| ---------------- | ----------------------------------------------------------------------------- | ------- | ------------------------------------------------- | ---------- | ------------------------ | ----------------------------------------------- |
+| `hw.errors`      | Number of errors encountered on this memory module                            | {error} | Counter                                           | Int64      | `hw.type` (**Required**) | `memory`                                        |
+| `hw.memory.size` | Size of the memory module                                                     | By      | UpDownCounter                                     | Int64      |                          |                                                 |
+| `hw.status`      | Operational status: `1` (true) or `0` (false) for each of the possible states |         | UpDownCounter                                     | Int        | `state` (**Required**)   | `ok`, `degraded`, `failed`, `predicted_failure` |
+|                  |                                                                               |         |                                                   |            | `hw.type` (**Required**) | `memory`                                        |
 
 Additional **Recommended** attributes:
 
@@ -264,17 +264,17 @@ Additional **Recommended** attributes:
 (NIC), excluding virtual adapters and loopbacks. Examples: an Ethernet adapter,
 an HBA, an fiber channel port or a Wi-Fi adapter.
 
-| Name                               | Description                                                                                                  | Units     | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key              | Attribute Values            |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------- | ------------------------------------------------- | ---------- | -------------------------- | --------------------------- |
-| `hw.errors`                        | Number of errors encountered by the network adapter                                                          | {errors}  | Counter                                           | Int64      | `type` (Recommended)       | `all`, `zero_buffer_credit` |
-|                                    |                                                                                                              |           |                                                   |            | `hw.type` (**Required**)   | `network`                   |
-| `hw.network.bandwidth.limit`       | Link speed                                                                                                   | By        | UpDownCounter                                     | Int64      |                            |                             |
-| `hw.network.bandwidth.utilization` | Utilization of the network bandwidth as a fraction                                                           | 1         | Gauge                                             | Double     |                            |                             |
-| `hw.network.io`                    | Received and transmitted network traffic in bytes                                                            | By        | Counter                                           | Int64      | `direction` (**Required**) | `receive`, `transmit`       |
-| `hw.network.packets`               | Received and transmitted network traffic in packets (or frames)                                              | {packets} | Counter                                           | Int64      | `direction` (**Required**) | `receive`, `transmit`       |
-| `hw.network.up`                    | Link status: `1` (up) or `0` (down)                                                                          |           | UpDownCounter                                     | Int        |                            |                             |
-| `hw.status`                        | Operational status, regardless of the link status: `1` (true) or `0` (false) for each of the possible states |           | UpDownCounter                                     | Int        | `state` (**Required**)     | `ok`, `degraded`, `failed`  |
-|                                    |                                                                                                              |           |                                                   |            | `hw.type` (**Required**)   | `network`                   |
+| Name                               | Description                                                                                                  | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key              | Attribute Values            |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------ | -------- | ------------------------------------------------- | ---------- | -------------------------- | --------------------------- |
+| `hw.errors`                        | Number of errors encountered by the network adapter                                                          | {error}  | Counter                                           | Int64      | `type` (Recommended)       | `all`, `zero_buffer_credit` |
+|                                    |                                                                                                              |          |                                                   |            | `hw.type` (**Required**)   | `network`                   |
+| `hw.network.bandwidth.limit`       | Link speed                                                                                                   | By       | UpDownCounter                                     | Int64      |                            |                             |
+| `hw.network.bandwidth.utilization` | Utilization of the network bandwidth as a fraction                                                           | 1        | Gauge                                             | Double     |                            |                             |
+| `hw.network.io`                    | Received and transmitted network traffic in bytes                                                            | By       | Counter                                           | Int64      | `direction` (**Required**) | `receive`, `transmit`       |
+| `hw.network.packets`               | Received and transmitted network traffic in packets (or frames)                                              | {packet} | Counter                                           | Int64      | `direction` (**Required**) | `receive`, `transmit`       |
+| `hw.network.up`                    | Link status: `1` (up) or `0` (down)                                                                          |          | UpDownCounter                                     | Int        |                            |                             |
+| `hw.status`                        | Operational status, regardless of the link status: `1` (true) or `0` (false) for each of the possible states |          | UpDownCounter                                     | Int        | `state` (**Required**)     | `ok`, `degraded`, `failed`  |
+|                                    |                                                                                                              |          |                                                   |            | `hw.type` (**Required**)   | `network`                   |
 
 Additional **Recommended** attributes:
 
@@ -290,14 +290,14 @@ Additional **Recommended** attributes:
 
 **Description:** Physical hard drive (HDD or SDD)
 
-| Name                                     | Description                                                                                 | Units    | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key                   | Attribute Values                                |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ---------- | ------------------------------- | ----------------------------------------------- |
-| `hw.errors`                              | Number of errors encountered on this disk                                                   | {errors} | Counter                                           | Int64      | `hw.type` (**Required**)        | `physical_disk`                                 |
-| `hw.physical_disk.endurance_utilization` | Endurance remaining for this SSD disk                                                       | 1        | Gauge                                             | Double     | `state` (**Required**)          | `remaining`                                     |
-| `hw.physical_disk.size`                  | Size of the disk                                                                            | By       | UpDownCounter                                     | Int64      |                                 |                                                 |
-| `hw.physical_disk.smart`                 | Value of the corresponding [S.M.A.R.T.](https://en.wikipedia.org/wiki/S.M.A.R.T.) attribute | 1        | Gauge                                             | Int        | `smart_attribute` (Recommended) | `Seek Error Rate`, `Spin Retry Count`, etc.     |
-| `hw.status`                              | Operational status: `1` (true) or `0` (false) for each of the possible states               |          | UpDownCounter                                     | Int        | `state` (**Required**)          | `ok`, `degraded`, `failed`, `predicted_failure` |
-|                                          |                                                                                             |          |                                                   |            | `hw.type` (**Required**)        | `physical_disk`                                 |
+| Name                                     | Description                                                                                 | Units   | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key                   | Attribute Values                                |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------- | ---------- | ------------------------------- | ----------------------------------------------- |
+| `hw.errors`                              | Number of errors encountered on this disk                                                   | {error} | Counter                                           | Int64      | `hw.type` (**Required**)        | `physical_disk`                                 |
+| `hw.physical_disk.endurance_utilization` | Endurance remaining for this SSD disk                                                       | 1       | Gauge                                             | Double     | `state` (**Required**)          | `remaining`                                     |
+| `hw.physical_disk.size`                  | Size of the disk                                                                            | By      | UpDownCounter                                     | Int64      |                                 |                                                 |
+| `hw.physical_disk.smart`                 | Value of the corresponding [S.M.A.R.T.](https://en.wikipedia.org/wiki/S.M.A.R.T.) attribute | 1       | Gauge                                             | Int        | `smart_attribute` (Recommended) | `Seek Error Rate`, `Spin Retry Count`, etc.     |
+| `hw.status`                              | Operational status: `1` (true) or `0` (false) for each of the possible states               |         | UpDownCounter                                     | Int        | `state` (**Required**)          | `ok`, `degraded`, `failed`, `predicted_failure` |
+|                                          |                                                                                             |         |                                                   |            | `hw.type` (**Required**)        | `physical_disk`                                 |
 
 Additional **Recommended** attributes:
 
@@ -334,12 +334,12 @@ Additional **Recommended** attributes:
 **Description:** A tape drive in a computer or in a tape library (excluding
 virtual tape libraries)
 
-| Name                       | Description                                                                   | Units        | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key            | Attribute Values                             |
-| -------------------------- | ----------------------------------------------------------------------------- | ------------ | ------------------------------------------------- | ---------- | ------------------------ | -------------------------------------------- |
-| `hw.errors`                | Number of errors encountered by the tape drive                                | {errors}     | Counter                                           | Int64      | `hw.type`                | `tape_drive`                                 |
-| `hw.tape_drive.operations` | Operations performed by the tape drive                                        | {operations} | Counter                                           | Int64      | `type` (Recommended)     | `mount`, `unmount`, `clean`                  |
-| `hw.status`                | Operational status: `1` (true) or `0` (false) for each of the possible states |              | UpDownCounter                                     | Int        | `state` (**Required**)   | `ok`, `degraded`, `failed`, `needs_cleaning` |
-|                            |                                                                               |              |                                                   |            | `hw.type` (**Required**) | `tape_drive`                                 |
+| Name                       | Description                                                                   | Units       | Instrument Type ([*](README.md#instrument-types)) | Value Type | Attribute Key            | Attribute Values                             |
+| -------------------------- | ----------------------------------------------------------------------------- | ----------- | ------------------------------------------------- | ---------- | ------------------------ | -------------------------------------------- |
+| `hw.errors`                | Number of errors encountered by the tape drive                                | {error}     | Counter                                           | Int64      | `hw.type`                | `tape_drive`                                 |
+| `hw.tape_drive.operations` | Operations performed by the tape drive                                        | {operation} | Counter                                           | Int64      | `type` (Recommended)     | `mount`, `unmount`, `clean`                  |
+| `hw.status`                | Operational status: `1` (true) or `0` (false) for each of the possible states |             | UpDownCounter                                     | Int        | `state` (**Required**)   | `ok`, `degraded`, `failed`, `needs_cleaning` |
+|                            |                                                                               |             |                                                   |            | `hw.type` (**Required**) | `tape_drive`                                 |
 
 Additional **Recommended** attributes:
 
