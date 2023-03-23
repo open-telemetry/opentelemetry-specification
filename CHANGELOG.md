@@ -20,6 +20,10 @@ release.
 
 - Update log readme "request context" to "trace context".
   ([#3332](https://github.com/open-telemetry/opentelemetry-specification/pull/3332))
+- Remove log readme document status.
+  ([#3334](https://github.com/open-telemetry/opentelemetry-specification/pull/3334))
+- Break out compatibility document on recording trace context in non-OTLP Log Format
+  ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
 - Add log appender / bridge to glossary.
   ([#3335](https://github.com/open-telemetry/opentelemetry-specification/pull/3335))
 
