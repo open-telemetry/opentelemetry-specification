@@ -41,6 +41,8 @@ release.
   ([#3271](https://github.com/open-telemetry/opentelemetry-specification/pull/3271))
 - BREAKING: remove `messaging.destination.kind` and `messaging.source.kind`.
   ([#3214](https://github.com/open-telemetry/opentelemetry-specification/pull/3214))
+- Define attributes collected for `cosmosdb` by Cosmos DB SDK
+  ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
 
 ### Compatibility
 
@@ -114,8 +116,6 @@ release.
   ([#3190](https://github.com/open-telemetry/opentelemetry-specification/pull/3190))
 - Expand the declaration of `pool.name`.
   ([#3050](https://github.com/open-telemetry/opentelemetry-specification/pull/3050))
-- Define attributes collected for `cosmosdb` by Cosmos DB SDK
-  ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
 
 ### Compatibility
 
