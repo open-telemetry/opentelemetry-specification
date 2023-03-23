@@ -140,11 +140,14 @@ All parameters are optional.
 
 ## Optional and required parameters
 
-The operations defined include various parameters, some of which are marked optional. Parameters not marked optional are required.
+The operations defined include various parameters, some of which are marked
+optional. Parameters not marked optional are required.
 
-For each optional parameter, the API MUST be structured to accept it, but MUST NOT obligate a user to provide it.
+For each optional parameter, the API MUST be structured to accept it, but MUST
+NOT obligate a user to provide it.
 
-For each required parameter, the API MUST be structured to obligate a user to provide it.
+For each required parameter, the API MUST be structured to obligate a user to
+provide it.
 
 ## Concurrency requirements
 
