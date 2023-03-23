@@ -156,6 +156,9 @@ at least one identifying field has a different value.
 
 The meter is responsible for creating [Instruments](#instrument).
 
+Note: `Meter` SHOULD NOT be responsible for the configuration. This should be
+the responsibility of the `MeterProvider` instead.
+
 ### Meter operations
 
 The `Meter` MUST provide functions to create new [Instruments](#instrument):

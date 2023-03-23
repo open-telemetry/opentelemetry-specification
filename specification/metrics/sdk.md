@@ -70,7 +70,7 @@ linkTitle: SDK
 </details>
 
 Users of OpenTelemetry need a way for instrumentation interactions with the
-OpenTelemetry API to actually produce telemetry. The OpenTelemetry Metrics SDK
+OpenTelemetry API to actually produce telemetry. The OpenTelemetry SDK
 (henceforth referred to as the SDK) is an implementation of the OpenTelemetry
 API that provides users with this functionally.
 
@@ -585,9 +585,6 @@ given instrument before starting a subsequent round of collection.
 
 Distinct meters MUST be treated as separate namespaces for the purposes of detecting
 [duplicate instrument registrations](#duplicate-instrument-registration).
-
-Note: `Meter` SHOULD NOT be responsible for the configuration. This should be
-the responsibility of the `MeterProvider` instead.
 
 ### Duplicate instrument registration
 
