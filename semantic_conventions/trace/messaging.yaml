@@ -39,17 +39,6 @@ groups:
           Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
           the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
         examples: ['MyQueue', 'MyTopic']
-      - id: kind
-        type:
-          allow_custom_values: false
-          members:
-            - id: queue
-              value: "queue"
-              brief: "A message sent to a queue"
-            - id: topic
-              value: "topic"
-              brief: "A message sent to a topic"
-        brief: 'The kind of message destination'
       - id: template
         type: string
         brief: Low cardinality representation of the messaging destination name
@@ -79,17 +68,6 @@ groups:
           Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
           the broker does not have such notion, the source name SHOULD uniquely identify the broker.
         examples: ['MyQueue', 'MyTopic']
-      - id: kind
-        type:
-          allow_custom_values: true
-          members:
-            - id: queue
-              value: "queue"
-              brief: "A message received from a queue"
-            - id: topic
-              value: "topic"
-              brief: "A message received from a topic"
-        brief: 'The kind of message source'
       - id: template
         type: string
         brief: 'Low cardinality representation of the messaging source name'
@@ -187,9 +165,6 @@ groups:
       - ref: messaging.destination.name
         requirement_level:
           conditionally_required: If one message is being published or if the value applies to all messages in the batch.
-      - ref: messaging.destination.kind
-        requirement_level:
-          conditionally_required: If the message destination is either a `queue` or a `topic`.
       - ref: messaging.destination.template
         requirement_level:
           conditionally_required: >
@@ -229,9 +204,6 @@ groups:
       - ref: messaging.source.name
         requirement_level:
           conditionally_required: If the value applies to all messages in the batch.
-      - ref: messaging.source.kind
-        requirement_level:
-          conditionally_required: If the message source is either a `queue` or `topic`.
       - ref: messaging.source.template
         requirement_level:
           conditionally_required: >
@@ -244,9 +216,6 @@ groups:
         requirement_level:
           recommended: When supported by messaging system and only if the source is anonymous. When missing, the value is assumed to be `false`.
       - ref: messaging.destination.name
-        requirement_level:
-          recommended: If known on consumer
-      - ref: messaging.destination.kind
         requirement_level:
           recommended: If known on consumer
       - ref: messaging.destination.temporary
