@@ -606,27 +606,32 @@ per period.
 
 The RECOMMENDED default cardinality limit is 2000.
 
-An overflow attribute is defined, named `otel.metric.overflow` having
-(boolean) value `true`, used to report a synthetic aggregation of the
-metric events that could not be independently aggregated because of
-the limit.  The overflow attribute set MUST be included in the limit
-calculation, thus the maximum number of distinct, non-overflow
-attributes is one less than the limit.
+An overflow attribute set is defined, containing a single attribute
+`otel.metric.overflow` having (boolean) value `true`, which is used to
+report a synthetic aggregation of the metric events that could not be
+independently aggregated because of the limit.  The overflow attribute
+set MUST be included in the limit calculation, thus the maximum number
+of distinct, non-overflow attributes is one less than the limit.
 
 #### Synchronous instrument cardinality limits
 
 Views of synchronous instruments with cumulative aggregation
-temporality MUST continue export the all attribute sets that were
+temporality MUST continue to export the all attribute sets that were
 observed prior to the beginning of overflow.  Metric events
 corresponding with attribute sets that were not observed prior to the
 overflow will be reflected in a single data point described by (only)
 the overflow attribute.
 
 Views of synchronous instruments with delta aggregation temporality
-can choose an arbitrary subset of attributes to output.  Regardless of
-aggregation temporality, the SDK is SHOULD ensure that every output
-data point is correct, the same result that would be achieved by
-filtering all attribute keys.
+MAY choose an arbitrary subset of attributes to output.
+
+Regardless of aggregation temporality, the SDK MUST ensure that every
+metric event is reflected in exactly one Aggregator, which is either
+an Aggregator associated with the correct attribute set or an
+aggregator associated with the overflow attribute set.
+
+Events MUST NOT be double-counted or dropped during overflow an
+overflow.
 
 #### Asynchronous instrument cardinality limits
 
@@ -906,6 +911,7 @@ SHOULD provide at least the following:
 * The `exporter` to use, which is a `MetricExporter` instance.
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
+* The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
