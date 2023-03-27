@@ -609,9 +609,13 @@ The RECOMMENDED default cardinality limit is 2000.
 An overflow attribute set is defined, containing a single attribute
 `otel.metric.overflow` having (boolean) value `true`, which is used to
 report a synthetic aggregation of the metric events that could not be
-independently aggregated because of the limit.  The overflow attribute
-set MUST be included in the limit calculation, thus the maximum number
-of distinct, non-overflow attributes is one less than the limit.
+independently aggregated because of the limit.
+
+The SDK MUST create an Aggregator with the overflow attribute set
+prior to reaching the cardinality limit and use it to aggregate events
+for which the correct Aggregator could not be created.  The maximum
+number of distinct, non-overflow attributes is one less than the
+limit, as a result.
 
 #### Synchronous instrument cardinality limits
 
