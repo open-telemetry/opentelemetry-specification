@@ -15,6 +15,8 @@ release.
 
 - Clarify that units should use UCUM case sensitive variant.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
+- Fixed attributes requirement level in semantic conventions for hardware metrics
+  ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
 
 ### Logs
 
@@ -22,6 +24,10 @@ release.
   ([#3332](https://github.com/open-telemetry/opentelemetry-specification/pull/3332))
 - Remove log readme document status.
   ([#3334](https://github.com/open-telemetry/opentelemetry-specification/pull/3334))
+- Break out compatibility document on recording trace context in non-OTLP Log Format
+  ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
+- Ensure Logs Bridge API doesn't contain SDK implementation details
+  ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
 
 ### Resource
 
@@ -39,6 +45,8 @@ release.
   ([#3271](https://github.com/open-telemetry/opentelemetry-specification/pull/3271))
 - BREAKING: remove `messaging.destination.kind` and `messaging.source.kind`.
   ([#3214](https://github.com/open-telemetry/opentelemetry-specification/pull/3214))
+- Define attributes collected for `cosmosdb` by Cosmos DB SDK
+  ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
 - BREAKING: Change span statuses for gRPC server spans.
   ([#3333](https://github.com/open-telemetry/opentelemetry-specification/pull/3333))
 
@@ -114,8 +122,6 @@ release.
   ([#3190](https://github.com/open-telemetry/opentelemetry-specification/pull/3190))
 - Expand the declaration of `pool.name`.
   ([#3050](https://github.com/open-telemetry/opentelemetry-specification/pull/3050))
-- Define attributes collected for `cosmosdb` by Cosmos DB SDK
-  ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
 
 ### Compatibility
 
