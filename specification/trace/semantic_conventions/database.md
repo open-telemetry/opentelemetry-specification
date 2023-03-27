@@ -12,10 +12,12 @@
 - [Call-level attributes](#call-level-attributes)
   * [Call-level attributes for specific technologies](#call-level-attributes-for-specific-technologies)
     + [Cassandra](#cassandra)
+    + [Microsoft Azure Cosmos DB Attributes](#microsoft-azure-cosmos-db-attributes)
 - [Examples](#examples)
   * [MySQL](#mysql)
   * [Redis](#redis)
   * [MongoDB](#mongodb)
+  * [Microsoft Azure Cosmos DB](#microsoft-azure-cosmos-db)
 
 <!-- tocstop -->
 
@@ -215,6 +217,58 @@ Separated for clarity.
 **[1]:** This mirrors the db.sql.table attribute but references cassandra rather than sql. It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
 <!-- endsemconv -->
 
+#### Microsoft Azure Cosmos DB Attributes
+
+Cosmos DB instrumentation includes call-level (public API) surface spans and network spans. Depending on the connection mode (Gateway or Direct), network-level spans may also be created.
+
+<!-- semconv db.cosmosdb -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `db.cosmosdb.client_id` | string | Unique Cosmos client instance id. | `3ba4827d-4422-483f-b59f-85b74211c11d` | Recommended |
+| `db.cosmosdb.operation_type` | string | CosmosDB Operation Type. | `Invalid` | Conditionally Required: [1] |
+| `db.cosmosdb.connection_mode` | string | Cosmos client connection mode. | `gateway` | Conditionally Required: if not `direct` (or pick gw as default) |
+| `db.cosmosdb.container` | string | Cosmos DB container name. | `anystring` | Conditionally Required: if available |
+| `db.cosmosdb.request_content_length` | int | Request payload size in bytes |  | Recommended |
+| `db.cosmosdb.status_code` | int | Cosmos DB status code. | `200`; `201` | Conditionally Required: if response was received |
+| `db.cosmosdb.sub_status_code` | int | Cosmos DB sub status code. | `1000`; `1002` | Conditionally Required: [2] |
+| `db.cosmosdb.request_charge` | double | RU consumed for that operation | `46.18`; `1.0` | Conditionally Required: when available |
+| `user_agent.original` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
+
+**[1]:** when performing one of the operations in this list
+
+**[2]:** when response was received and contained sub-code.
+
+`db.cosmosdb.operation_type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+
+| Value  | Description |
+|---|---|
+| `Invalid` | invalid |
+| `Create` | create |
+| `Patch` | patch |
+| `Read` | read |
+| `ReadFeed` | read_feed |
+| `Delete` | delete |
+| `Replace` | replace |
+| `Execute` | execute |
+| `Query` | query |
+| `Head` | head |
+| `HeadFeed` | head_feed |
+| `Upsert` | upsert |
+| `Batch` | batch |
+| `QueryPlan` | query_plan |
+| `ExecuteJavaScript` | execute_javascript |
+
+`db.cosmosdb.connection_mode` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `gateway` | Gateway (HTTP) connections mode |
+| `direct` | Direct connection. |
+<!-- endsemconv -->
+
+In addition to Cosmos DB attributes, all spans include
+`az.namespace` attribute representing Azure Resource Provider namespace that MUST be equal to `Microsoft.DocumentDB`.
+
 ## Examples
 
 ### MySQL
@@ -268,3 +322,24 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.statement`          | not set |
 | `db.operation`          | `"findAndModify"` |
 | `db.mongodb.collection` | `"products"` |
+
+### Microsoft Azure Cosmos DB
+
+| Key                                  | Value |
+|:-------------------------------------| :------------------- |
+| Span name                            | `"ReadItemsAsync"` |
+| `kind`                               | `"internal"` |
+| `az.namespace`                       | `"Microsoft.DocumentDB"` |
+| `db.system`                          | `"cosmosdb"` |
+| `db.name`                            | `"database name"` |
+| `db.operation`                       | `"ReadItemsAsync"` |
+| `net.peer.name`                      |  `"account.documents.azure.com"`  |
+| `db.cosmosdb.client_id`              | `3ba4827d-4422-483f-b59f-85b74211c11d` |
+| `db.cosmosdb.operation_type`         | `Read` |
+| `user_agent.original`                | `cosmos-netstandard-sdk/3.31.2|1|X64|Linux 5.4.0-1095-azure 101 18|.NET 6.0.2|N|appname` |
+| `db.cosmosdb.connection_mode`        | `"Direct"` |
+| `db.cosmosdb.container`              | `"container name"` |
+| `db.cosmosdb.request_content_length` | `20` |
+| `db.cosmosdb.status_code`            | `201` |
+| `db.cosmosdb.sub_status_code`        | `0` |
+| `db.cosmosdb.request_charge`         | `7.43` |
