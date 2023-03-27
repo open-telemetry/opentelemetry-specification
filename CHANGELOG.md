@@ -24,6 +24,8 @@ release.
   ([#3334](https://github.com/open-telemetry/opentelemetry-specification/pull/3334))
 - Break out compatibility document on recording trace context in non-OTLP Log Format
   ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
+- Ensure Logs Bridge API doesn't contain SDK implementation details
+  ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
 
 ### Resource
 
