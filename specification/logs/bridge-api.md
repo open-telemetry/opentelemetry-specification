@@ -17,7 +17,7 @@
     + [Emit LogRecord](#emit-logrecord)
 - [LogRecord](#logrecord)
 - [Usage](#usage)
-  * [How to Create Log4J Log Appender](#how-to-create-log4j-log-appender)
+  * [How to Create Log4J Log Appender](#how-to-create-a-log4j-log-appender)
   * [Implicit Context Injection](#implicit-context-injection)
   * [Explicit Context Injection](#explicit-context-injection)
 
@@ -27,7 +27,7 @@
 
 <b>Note: this document defines a log *backend* API. The API is not intended to be called
 by application developers directly. It is provided for logging library authors
-to build [log appenders](#how-to-create-log4j-log-appender), which use
+to build [log appenders](#how-to-create-a-log4j-log-appender), which use
 this API to bridge between existing logging libraries and the OpenTelemetry log
 data model.</b>
 
@@ -164,7 +164,7 @@ fields:
 
 ## Usage
 
-### How to Create Log4J Log Appender
+### How to Create a Log4J Log Appender
 
 A [log appender](../glossary.md#log-appender--bridge) implementation can be used
 to allow emitting logs via
