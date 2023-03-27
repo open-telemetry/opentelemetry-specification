@@ -1,6 +1,6 @@
 # Metric Requirement Levels for Semantic Conventions
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
