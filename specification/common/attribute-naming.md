@@ -7,14 +7,13 @@
 
 <!-- toc -->
 
-- [Attribute Naming](#attribute-naming)
-  - [Unicode](#unicode)
-  - [Namespaces](#namespaces)
-  - [Name pluralization](#name-pluralization)
-  - [Name reuse prohibition](#name-reuse-prohibition)
-  - [Recommendations for OpenTelemetry authors](#recommendations-for-opentelemetry-authors)
-  - [Recommendations for application developers](#recommendations-for-application-developers)
-  - [`otel.*` namespace](#otel-namespace)
+- [Unicode](#unicode)
+- [Namespaces](#namespaces)
+- [Name pluralization](#name-pluralization)
+- [Name reuse prohibition](#name-reuse-prohibition)
+- [Recommendations for OpenTelemetry authors](#recommendations-for-opentelemetry-authors)
+- [Recommendations for application developers](#recommendations-for-application-developers)
+- [`otel.*` namespace](#otel-namespace)
 
 <!-- tocstop -->
 
