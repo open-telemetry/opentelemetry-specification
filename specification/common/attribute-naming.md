@@ -7,68 +7,85 @@
 
 <!-- toc -->
 
-- [Name Pluralization guidelines](#name-pluralization-guidelines)
-- [Name Reuse Prohibition](#name-reuse-prohibition)
-- [Recommendations for OpenTelemetry Authors](#recommendations-for-opentelemetry-authors)
-- [Recommendations for Application Developers](#recommendations-for-application-developers)
-- [otel.* Namespace](#otel-namespace)
+- [Attribute Naming](#attribute-naming)
+  - [Unicode](#unicode)
+  - [Namespaces](#namespaces)
+  - [Name pluralization](#name-pluralization)
+  - [Name reuse prohibition](#name-reuse-prohibition)
+  - [Recommendations for OpenTelemetry authors](#recommendations-for-opentelemetry-authors)
+  - [Recommendations for application developers](#recommendations-for-application-developers)
+  - [`otel.*` namespace](#otel-namespace)
 
 <!-- tocstop -->
 
 </details>
 
-_This section applies to Resource, Span, Log, and Metric attribute names (also
-known as the "attribute keys"). For brevity within this section when we use the
-term "name" without an adjective it is implied to mean "attribute name"._
+> **Note**
+> Attribute names are also known as the "attribute keys". For brevity within
+> this section when we use the term "name" without an adjective it is implied
+> to mean "attribute name".
+
+## Unicode
 
 Every name MUST be a valid Unicode sequence.
 
-_Note: we merely require that the names are represented as Unicode sequences.
-This specification does not define how exactly the Unicode sequences are
-encoded. The encoding can vary from one programming language to another and from
-one wire format to another. Use the idiomatic way to represent Unicode in the
-particular programming language or wire format._
+> **Note**
+> We merely require that the names are represented as Unicode sequences. This
+> specification does not define how exactly the Unicode sequences are encoded.
+> The encoding can vary from one programming language to another and from one
+> wire format to another. Use the idiomatic way to represent Unicode in the
+> particular programming language or wire format._
 
-Names SHOULD follow these rules:
+## Namespaces
 
-- Use namespacing to avoid name clashes. Delimit the namespaces using a dot
-  character. For example `service.version` denotes the service version where
-  `service` is the namespace and `version` is an attribute in that namespace.
+Namespaces are used to avoid naming conflicts or overlaps. They are delimited
+using a dot character. For example `service.version` denotes the service
+version where `service` is the namespace and `version` is an attribute in that
+namespace.
 
-- Namespaces can be nested. For example `telemetry.sdk` is a namespace inside
-  top-level `telemetry` namespace and `telemetry.sdk.name` is an attribute
-  inside `telemetry.sdk` namespace.
-  Note: the fact that an entity is located within another entity is typically
-  not a sufficient reason for forming nested namespaces. The purpose of a
-  namespace is to avoid name clashes, not to indicate entity hierarchies. This
-  purpose should primarily drive the decision about forming nested namespaces.
+Depending on the signal type, namespacing may be mandatory or optional.
 
-- For each multi-word dot-delimited component of the attribute name separate the
-  words by underscores (i.e. use snake_case). For example `http.status_code`
-  denotes the status code in the http namespace.
+| Signal   | Namespacing | Comments                                                                                                                                                                                                                                                                      |
+| -------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Resource | Mandatory   | Resource attribute names may conflict with the attributes associated to traces, logs, and metrics. It is critical to ensure naming uniqueness across all signals.                                                                                                             |
+| Traces   | Mandatory   | Attribute names may conflict and overlap because of the hierarchical nature of traces. Use namespacing to prevent name clashes.                                                                                                                                               |
+| Logs     | Mandatory   | Logs are often linked to traces and their attributes may therefore conflict and overlap.                                                                                                                                                                                      |
+| Metrics  | Optional    | Identical attribute names are unlikely to conflict across unrelated metrics. Identical attribute names for different metrics may be desirable (e.g. `state`, `direction`). Namespacing may still be required to match with attributes names of corresponding traces and logs. |
 
-- Names SHOULD NOT coincide with namespaces. For example if
-  `service.instance.id` is an attribute name then it is no longer valid to have
-  an attribute named `service.instance` because `service.instance` is already a
-  namespace. Because of this rule be careful when choosing names: every existing
-  name prohibits existence of an equally named namespace in the future, and vice
-  versa: any existing namespace prohibits existence of an equally named
-  attribute key in the future.
+Namespaces can be nested. For example `telemetry.sdk` is a namespace inside
+top-level `telemetry` namespace and `telemetry.sdk.name` is an attribute inside
+`telemetry.sdk` namespace.
 
-## Name Pluralization guidelines
+> **Note**
+> The fact that an entity is located within another entity is typically not a
+> sufficient reason for forming nested namespaces. The purpose of a namespace
+> is to avoid name clashes, not to indicate entity hierarchies. This purpose
+> should primarily drive the decision about forming nested namespaces.
 
-- When an attribute represents a single entity, the attribute name SHOULD be singular.
-  Examples: `host.name`, `db.user`, `container.id`.
+For each multi-word dot-delimited component of the attribute name separate the
+words by underscores (i.e. use snake_case). For example `http.status_code`
+denotes the status code in the http namespace.
 
-- When attribute can represent multiple entities, the attribute name SHOULD be pluralized
-  and the value type SHOULD be an array. E.g. `process.command_args` might include multiple
-  values: the executable name and command arguments.
+Names SHOULD NOT coincide with namespaces. For example if `service.instance.id` is an attribute name then it is no longer valid to have an attribute named `service.instance` because `service.instance` is already a namespace. Because
+of this rule be careful when choosing names: every existing name prohibits
+existence of an equally named namespace in the future, and vice versa: any
+existing namespace prohibits existence of an equally named attribute key in the
+future.
 
-- When an attribute represents a measurement,
-  [Metric Name Pluralization Guidelines](../metrics/semantic_conventions/README.md#pluralization)
-  SHOULD be followed for the attribute name.
+## Name pluralization
 
-## Name Reuse Prohibition
+When an attribute represents a single entity, the attribute name SHOULD be
+singular. Examples: `host.name`, `db.user`, `container.id`.
+
+When attribute can represent multiple entities, the attribute name SHOULD be
+pluralized and the value type SHOULD be an array. E.g. `process.command_args`
+might include multiple values: the executable name and command arguments.
+
+When an attribute represents a measurement,
+[Metric Name Pluralization Guidelines](../metrics/semantic_conventions/README.md#pluralization)
+SHOULD be followed for the attribute name.
+
+## Name reuse prohibition
 
 A new attribute MUST NOT be added with the same name as an attribute that
 existed in the past but was renamed (with a corresponding schema file).
@@ -77,7 +94,7 @@ When introducing a new attribute name check all existing schema files to make
 sure the name does not appear as a key of any "rename_attributes" section (keys
 denote old attribute names in rename operations).
 
-## Recommendations for OpenTelemetry Authors
+## Recommendations for OpenTelemetry authors
 
 - All names that are part of OpenTelemetry semantic conventions SHOULD be part
   of a namespace.
@@ -108,7 +125,7 @@ denote old attribute names in rename operations).
   the following Unicode code points: Latin alphabet, Numeric, Underscore, Dot
   (as namespace delimiter).
 
-## Recommendations for Application Developers
+## Recommendations for application developers
 
 As an application developer when you need to record an attribute first consult
 existing semantic conventions for
@@ -142,7 +159,7 @@ It is recommended to limit names to printable Basic Latin characters
 [U+0021 .. U+007E](https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)#Table_of_characters)
 subset of Unicode code points).
 
-## otel.* Namespace
+## `otel.*` namespace
 
 Attribute names that start with `otel.` are reserved to be defined by
 OpenTelemetry specification. These are typically used to express OpenTelemetry
