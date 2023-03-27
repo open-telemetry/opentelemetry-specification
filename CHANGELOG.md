@@ -29,7 +29,7 @@ release.
 - Ensure Logs Bridge API doesn't contain SDK implementation details
   ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
 - Add Log Bridge API artifact naming guidance 
-  ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3345))
+  ([#3346](https://github.com/open-telemetry/opentelemetry-specification/pull/3346))
 
 ### Resource
 
