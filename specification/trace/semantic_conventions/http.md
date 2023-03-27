@@ -123,7 +123,7 @@ This span type represents an outbound HTTP request. There are two ways this can 
 
 1. Instrumentations SHOULD create an HTTP span for each attempt to send an HTTP request over the wire.
    In case the request is resent, the resend attempts MUST follow the [HTTP resend spec](#http-request-retries-and-redirects).
-   In this case, instrumentations MUST NOT (also) emit a logical encompassing HTTP client span.
+   In this case, instrumentations SHOULD NOT (also) emit a logical encompassing HTTP client span.
 
 2. If for some reason it is not possible to emit a span for each send attempt (because e.g. the instrumented library does not expose hooks that would allow this),
    instrumentations MAY create an HTTP span for the top-most operation of the HTTP client.
@@ -172,7 +172,7 @@ Retries and redirects cause more than one physical HTTP request to be sent.
 A request is resent when an HTTP client library sends more than one HTTP request to satisfy the same API call.
 This may happen due to following redirects, authorization challenges, 503 Server Unavailable, network issues, or any other.
 
-Each time an HTTP request is resent, the `http.resend_count` attribute MUST be added to each repeated span and set to the ordinal number of the request resend attempt.
+Each time an HTTP request is resent, the `http.resend_count` attribute SHOULD be added to each repeated span and set to the ordinal number of the request resend attempt.
 
 See the examples for more details about:
 
