@@ -17,6 +17,8 @@ release.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
 - Remove No-Op instrument and Meter creation requirements.
   ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
+- Fixed attributes requirement level in semantic conventions for hardware metrics
+  ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
 
 ### Logs
 
@@ -26,6 +28,8 @@ release.
   ([#3334](https://github.com/open-telemetry/opentelemetry-specification/pull/3334))
 - Break out compatibility document on recording trace context in non-OTLP Log Format
   ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
+- Ensure Logs Bridge API doesn't contain SDK implementation details
+  ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
 
 ### Resource
 

@@ -8,9 +8,11 @@
 <!-- toc -->
 
 - [LoggerProvider](#loggerprovider)
+  * [LoggerProvider Creation](#loggerprovider-creation)
   * [Logger Creation](#logger-creation)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
+- [Logger](#logger)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
   * [ReadWriteLogRecord](#readwritelogrecord)
@@ -33,19 +35,36 @@
 
 </details>
 
+Users of OpenTelemetry need a way for instrumentation interactions with the
+OpenTelemetry API to actually produce telemetry. The OpenTelemetry Logging SDK
+(henceforth referred to as the SDK) is an implementation of the OpenTelemetry
+API that provides users with this functionally.
+
+All language implementations of OpenTelemetry MUST provide an SDK.
+
 ## LoggerProvider
 
 A `LoggerProvider` MUST provide a way to allow a [Resource](../resource/sdk.md)
 to be specified. If a `Resource` is specified, it SHOULD be associated with all
-the `LogRecords` produced by any `Logger` from the `LoggerProvider`.
+the `LogRecord`s produced by any `Logger` from the `LoggerProvider`.
+
+### LoggerProvider Creation
+
+The SDK SHOULD allow the creation of multiple independent `LoggerProviders`s.
 
 ### Logger Creation
 
 New `Logger` instances are always created through a `LoggerProvider`
-(see [Bridge API](bridge-api.md)). The `name`, `version` (optional), and `attributes` (optional)
-supplied to the `LoggerProvider` must be used to create
+(see [Bridge API](bridge-api.md)). The `name`, `version` (optional),
+`schema_url` (optional), and `attributes` (optional) supplied to
+the `LoggerProvider` must be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Logger`.
+
+In the case where an invalid `name` (null or empty string) is specified, a
+working `Logger` MUST be returned as a fallback rather than returning null or
+throwing an exception, its `name` SHOULD keep the original invalid value, and a
+message reporting that the specified value is invalid SHOULD be logged.
 
 Configuration (i.e. [LogRecordProcessors](#logrecordprocessor)) MUST be managed
 solely by the `LoggerProvider` and the SDK MUST provide some way to configure
@@ -54,7 +73,7 @@ of `LoggerProvider` creation if appropriate.
 
 The `LoggerProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `LogRecordProcessor`), the updated
-configuration MUST also apply to all already returned `Loggers` (i.e. it MUST
+configuration MUST also apply to all already returned `Logger`s (i.e. it MUST
 NOT matter whether a `Logger` was obtained from the `LoggerProvider` before or
 after the configuration change). Note: Implementation-wise, this could mean
 that `Logger` instances have a reference to their `LoggerProvider` and access
@@ -87,7 +106,7 @@ registered [LogRecordProcessors](#logrecordprocessor) to immediately export all
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
-is an error condition; and if there is no error condition, it should return
+is an error condition; and if there is no error condition, it SHOULD return
 some **NO ERROR** status, language implementations MAY decide how to model
 **ERROR** and **NO ERROR**.
 
@@ -98,6 +117,15 @@ decide if they want to make the flush timeout configurable.
 
 `ForceFlush` MUST invoke `ForceFlush` on all
 registered [LogRecordProcessors](#logrecordprocessor).
+
+## Logger
+
+If a `Logger` was obtained with `include_trace_context=true`, the `LogRecord`s
+it [emits](./bridge-api.md#emit-logrecord) MUST automatically include the Trace
+Context from the active Context, if Context has not been explicitly set.
+
+Note that `Logger`s should not be responsible for configuration. This should be
+the responsibility of the `LoggerProvider` instead.
 
 ## Additional LogRecord interfaces
 
@@ -130,7 +158,8 @@ that was added to the `LogRecord` (as with
 
 ## LogRecord Limits
 
-`LogRecord` attributes MUST adhere to the [common rules of attribute limits](../common/README.md#attribute-limits).
+`LogRecord` attributes MUST adhere to
+the [common rules of attribute limits](../common/README.md#attribute-limits).
 
 If the SDK implements attribute limits it MUST provide a way to change these
 limits, via a configuration to the `LoggerProvider`, by allowing users to
@@ -161,7 +190,7 @@ To prevent excessive logging, the message MUST be printed at most once per
 `LogRecordProcessor` is an interface which allows hooks for `LogRecord`
 emitting.
 
-Built-in processors are responsible for batching and conversion of `LogRecords`
+Built-in processors are responsible for batching and conversion of `LogRecord`s
 to exportable representation and passing batches to exporters.
 
 `LogRecordProcessors` can be registered directly on SDK `LoggerProvider` and
@@ -173,7 +202,7 @@ MUST allow each pipeline to end with an individual exporter.
 
 The SDK MUST allow users to implement and configure custom processors and
 decorate built-in processors for advanced scenarios such as enriching with
-attributes or filtering.
+attributes.
 
 The following diagram shows `LogRecordProcessor`'s relationship to other
 components in the SDK:
@@ -237,13 +266,13 @@ to make the shutdown timeout configurable.
 
 #### ForceFlush
 
-This is a hint to ensure that any tasks associated with `LogRecords` for which
+This is a hint to ensure that any tasks associated with `LogRecord`s for which
 the `LogRecordProcessor` had already received events prior to the call
 to `ForceFlush` SHOULD be completed as soon as possible, preferably before
 returning from this method.
 
 In particular, if any `LogRecordProcessor` has any associated exporter, it
-SHOULD try to call the exporter's `Export` with all `LogRecords` for which this
+SHOULD try to call the exporter's `Export` with all `LogRecord`s for which this
 was not already done and then invoke `ForceFlush` on it.
 The [built-in LogRecordProcessors](#built-in-processors) MUST do so. If a
 timeout is specified (see below), the `LogRecordProcessor` MUST prioritize
@@ -257,7 +286,7 @@ failed or timed out.
 `ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
 such as when using some FaaS providers that may suspend the process after an
 invocation, but before the `LogRecordProcessor` exports the
-completed `LogRecords`.
+emitted `LogRecord`s.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
@@ -267,7 +296,7 @@ make the flush timeout configurable.
 ### Built-in processors
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
-as described below. Other common processing scenarios should be first considered
+as described below. Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
 
@@ -280,17 +309,17 @@ finished.
 
 **Configurable parameters:**
 
-* `exporter` - the exporter where the `LogRecords` are pushed.
+* `exporter` - the exporter where the `LogRecord`s are pushed.
 
 #### Batching processor
 
 This is an implementation of the `LogRecordProcessor` which create batches
-of `LogRecords` and passes the export-friendly `ReadableLogRecord`
+of `LogRecord`s and passes the export-friendly `ReadableLogRecord`
 representations to the configured `LogRecordExporter`.
 
 **Configurable parameters:**
 
-* `exporter` - the exporter where the `LogRecords` are pushed.
+* `exporter` - the exporter where the `LogRecord`s are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached logs are
   dropped. The default value is `2048`.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
@@ -385,7 +414,7 @@ Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.
 
 Shutdown SHOULD be called only once for each `LogRecordExporter` instance. After
-the call to `Shutdown` subsequent calls to `Export` are not allowed and should
+the call to `Shutdown` subsequent calls to `Export` are not allowed and SHOULD
 return a Failure result.
 
 `Shutdown` SHOULD NOT block indefinitely (e.g. if it attempts to flush the data
