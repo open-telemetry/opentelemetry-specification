@@ -19,7 +19,7 @@
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [Usage](#usage)
-  * [How to Create Log4J Log Appender](#how-to-create-a-log4j-log-appender)
+  * [How to Create a Log4J Log Appender](#how-to-create-a-log4j-log-appender)
   * [Implicit Context Injection](#implicit-context-injection)
   * [Explicit Context Injection](#explicit-context-injection)
 
@@ -170,7 +170,7 @@ and is [one of the supported](README.md#direct-to-collector) log collection
 approaches.
 
 The log appender implementation will typically acquire a [Logger](#logger) from the
-global [LoggerProvider](#loggerprovider) at startup time,  then
+global [LoggerProvider](#loggerprovider) at startup time, then
 call [Emit LogRecord](#emit-logrecord) for `LogRecord`s received from the
 application.
 
