@@ -78,21 +78,11 @@ might be another intermediary or a consumer.
 ### Destinations and sources
 
 A destination is usually uniquely identified by name within the messaging system instance. Examples of a destination name would be a URL or a simple one-word identifier.
-Traditional messaging, such as JMS, involves two kinds of destinations: *topic*s and *queue*s.
-
-A message that is sent (the send-operation is often called "*publish*" in this context) to a *topic* is broadcasted to all consumers that have *subscribed* to the topic.
-
-A message that is sent to a *queue* is processed by a message *consumer* (usually exactly once although some message systems support a more performant at-least-once mode for messages with [idempotent][] processing).
+Sending messages to a destination is called "*publish*" in context of this specification.
 
 A source represents an entity within messaging system messages are consumed from. Source and destination for specific message may be the same. However, if message is routed within one or multiple brokers, source and destination can be different.
 
-In a messaging system such as Apache Kafka, all destinations are *topic*s.
-Each record, or message, is sent to a single consumer per consumer group.
-Consumer groups provide *deliver once* semantics for consumers of a topic within a group.
-Whether a specific message is processed as if it was sent to a topic or queue entirely depends on the consumer groups and their composition.
-For instance, there can be multiple consumer groups processing records from the same topic.
-
-[idempotent]: https://en.wikipedia.org/wiki/Idempotence
+Typical examples of destinations and sources include Kafka topics, RabbitMQ queues and topics.
 
 ### Message consumption
 
@@ -274,25 +264,22 @@ The following additional attributes describe message producer operations.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Conditionally Required: [1] |
-| `messaging.destination.kind` | string | The kind of message destination | `queue` | Conditionally Required: [2] |
-| `messaging.destination.name` | string | The message destination name [3] | `MyQueue`; `MyTopic` | Conditionally Required: [4] |
-| `messaging.destination.template` | string | Low cardinality representation of the messaging destination name [5] | `/customers/{customerId}` | Conditionally Required: [6] |
-| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [7] |
+| `messaging.destination.name` | string | The message destination name [2] | `MyQueue`; `MyTopic` | Conditionally Required: [3] |
+| `messaging.destination.template` | string | Low cardinality representation of the messaging destination name [4] | `/customers/{customerId}` | Conditionally Required: [5] |
+| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [6] |
 
 **[1]:** If value is `true`. When missing, the value is assumed to be `false`.
 
-**[2]:** If the message destination is either a `queue` or a `topic`.
-
-**[3]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
+**[2]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
 the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
 
-**[4]:** If one message is being published or if the value applies to all messages in the batch.
+**[3]:** If one message is being published or if the value applies to all messages in the batch.
 
-**[5]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
+**[4]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
 
-**[6]:** If available. Instrumentations MUST NOT use `messaging.destination.name` as template unless low-cardinality of destination name is guaranteed.
+**[5]:** If available. Instrumentations MUST NOT use `messaging.destination.name` as template unless low-cardinality of destination name is guaranteed.
 
-**[7]:** If value is `true`. When missing, the value is assumed to be `false`.
+**[6]:** If value is `true`. When missing, the value is assumed to be `false`.
 <!-- endsemconv -->
 
 ### Consumer attributes
@@ -306,32 +293,28 @@ The following additional attributes describe message consumer operations.
 |---|---|---|---|---|
 | `messaging.consumer.id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer.group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer.group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | Recommended |
 | `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Recommended: If known on consumer |
-| `messaging.destination.kind` | string | The kind of message destination | `queue` | Recommended: If known on consumer |
 | `messaging.destination.name` | string | The message destination name [1] | `MyQueue`; `MyTopic` | Recommended: If known on consumer |
 | `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Recommended: If known on consumer |
 | `messaging.source.anonymous` | boolean | A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name). |  | Recommended: [2] |
-| `messaging.source.kind` | string | The kind of message source | `queue` | Conditionally Required: [3] |
-| `messaging.source.name` | string | The message source name [4] | `MyQueue`; `MyTopic` | Conditionally Required: [5] |
-| `messaging.source.template` | string | Low cardinality representation of the messaging source name [6] | `/customers/{customerId}` | Conditionally Required: [7] |
-| `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [8] |
+| `messaging.source.name` | string | The message source name [3] | `MyQueue`; `MyTopic` | Conditionally Required: [4] |
+| `messaging.source.template` | string | Low cardinality representation of the messaging source name [5] | `/customers/{customerId}` | Conditionally Required: [6] |
+| `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [7] |
 
 **[1]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
 the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
 
 **[2]:** When supported by messaging system and only if the source is anonymous. When missing, the value is assumed to be `false`.
 
-**[3]:** If the message source is either a `queue` or `topic`.
-
-**[4]:** Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
+**[3]:** Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
 the broker does not have such notion, the source name SHOULD uniquely identify the broker.
 
-**[5]:** If the value applies to all messages in the batch.
+**[4]:** If the value applies to all messages in the batch.
 
-**[6]:** Source names could be constructed from templates. An example would be a source name involving a user name or product id. Although the source name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
+**[5]:** Source names could be constructed from templates. An example would be a source name involving a user name or product id. Although the source name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
 
-**[7]:** If available. Instrumentations MUST NOT use `messaging.source.name` as template unless low-cardinality of source name is guaranteed.
+**[6]:** If available. Instrumentations MUST NOT use `messaging.source.name` as template unless low-cardinality of source name is guaranteed.
 
-**[8]:** When supported by messaging system and only if the source is temporary. When missing, the value is assumed to be `false`.
+**[7]:** When supported by messaging system and only if the source is temporary. When missing, the value is assumed to be `false`.
 <!-- endsemconv -->
 
 The *receive* span is be used to track the time used for receiving the message(s), whereas the *process* span(s) track the time for processing the message(s).
@@ -459,9 +442,7 @@ Process CB:                 | Span CB1 |
 | `net.peer.port` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination.name` | `"T"` | | |
-| `messaging.destination.kind` | `"topic"` |  |  |
 | `messaging.source.name` | | `"T"` | `"T"` |
-| `messaging.source.kind` | | `"topic"` | `"topic"` |
 | `messaging.operation` |  | `"process"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a1"`| `"a1"` |
 
@@ -496,9 +477,7 @@ Process CB:                           | Span Rcv2 |
 | `service.name` |  | `"myConsumer1"` | `"myConsumer1"` |  | `"myConsumer2"` |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
 | `messaging.destination.name` | `"T1"` | | | | |
-| `messaging.destination.kind` | `"topic"` | | | | |
 | `messaging.source.name` |  | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
-| `messaging.source.kind` |  | `"topic"` | `"topic"` | `"topic"` | `"topic"` |
 | `messaging.operation` |  |  | `"process"` |  | `"receive"` |
 | `messaging.kafka.message.key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
 | `messaging.kafka.consumer.group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
@@ -531,9 +510,7 @@ Process C:                      | Span Recv1 |
 | `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination.name` | `"Q"` | `"Q"` | | | |
-| `messaging.destination.kind` | `"queue"` | `"queue"` | | | |
 | `messaging.source.name` | | | `"Q"` | `"Q"` | `"Q"` |
-| `messaging.source.kind` | | | `"queue"` | `"queue"` | `"queue"` |
 | `messaging.operation` |  |  | `"receive"` | `"process"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a2"` | | `"a1"` | `"a2"` |
 | `messaging.batch.message_count` |  |  | 2 |  |  |
@@ -568,9 +545,7 @@ Process C:                              | Span Recv1 | Span Recv2 |
 | `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
 | `messaging.destination.name` | `"Q"` | `"Q"` | | | |
-| `messaging.destination.kind` | `"queue"` | `"queue"` | | | |
 | `messaging.source.name` | | | `"Q"` | `"Q"` | `"Q"` |
-| `messaging.source.kind` | | | `"queue"` | `"queue"` | `"queue"` |
 | `messaging.operation` |  |  | `"receive"` | `"receive"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a2"` | `"a1"` | `"a2"` | |
 | `messaging.batch.message_count` | | | 1 | 1 | 2 |
