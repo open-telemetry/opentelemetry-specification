@@ -28,6 +28,8 @@ release.
   ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
 - Ensure Logs Bridge API doesn't contain SDK implementation details
   ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
+- Add log appender / bridge to glossary.
+  ([#3335](https://github.com/open-telemetry/opentelemetry-specification/pull/3335))
 
 ### Resource
 
