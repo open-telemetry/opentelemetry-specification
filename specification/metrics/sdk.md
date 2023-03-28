@@ -238,7 +238,7 @@ are the inputs:
     a factory or callback similar to aggregation which allows different
     reservoirs to be chosen by the aggregation.
   * **Status**: [Experimental](../document-status.md) - the
-    `cardinality_limit` (optional) associated with the view.  This
+    `aggregation_cardinality_limit` (optional) associated with the view.  This
     should be an positive integer to be taken as a hard limit on the
     number of data points that will be emitted during a single
     collection by a single instrument.  See [cardinality limits](#cardinality-limits),
@@ -595,16 +595,18 @@ given instrument before starting a subsequent round of collection.
 **Status**: [Experimental](../document-status.md)
 
 Views SHOULD support being configured with a cardinality limit to be
-applied to all aggregators not configured by a specific view.
+applied to all aggregators not configured by a specific view, specified
+via `MetricReader` configuration.
 
-View configuration SHOULD support applying per-view cardinality limits.
+View configuration SHOULD support applying per-aggregation cardinality limits.
 
 The cardinality limit is taken as an exact, hard limit on the number
-of data points that can be written per collection.  Each view MUST NOT
-output more than the configured cardinality limit number of data points
-per period.
+of data points that can be written per collection, per aggregation.  
+Each aggregation configured view MUST NOT output more than the
+configured `aggregation_cardinality_limit` number of data points per 
+period.
 
-The RECOMMENDED default cardinality limit is 2000.
+The RECOMMENDED default aggregation cardinality limit is 2000.
 
 An overflow attribute set is defined, containing a single attribute
 `otel.metric.overflow` having (boolean) value `true`, which is used to
