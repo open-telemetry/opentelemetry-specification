@@ -213,10 +213,10 @@ requests made by the browser using XMLHttpRequest or Fetch or sendBeacon APIs.
 | `delta` | double | The delta between the current value and the last-reported value | `0.2` | Required |
 | `id` | string | A unique ID representing this particular metric instance | "v3-1677874579383-6381583661209" | Required |
 
-`name` MUST be one of the following:
+`name` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
-| `CLS` | cls |
-| `LCP` | lcp |
-| `FID` | fid |
+| `CLS` | Cumulative Layout Shift |
+| `LCP` | Largest Contentful Paint |
+| `FID` | First Input Delay |
