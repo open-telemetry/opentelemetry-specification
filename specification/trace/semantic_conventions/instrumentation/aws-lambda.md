@@ -126,7 +126,6 @@ added as a link to the span.
 - [`faas.trigger`][faas] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
 - [`messaging.system`](../messaging.md#messaging-attributes) MUST be set to `AmazonSQS`.
-- [`messaging.destination.kind` or `messaging.source.kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
 Other [Messaging attributes](../messaging.md#messaging-attributes) SHOULD be set based on the available information in the SQS message
 event.
