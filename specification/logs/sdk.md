@@ -135,7 +135,9 @@ following `LogRecord`-like interfaces are defined in the SDK:
 ### ReadableLogRecord
 
 A function receiving this as an argument MUST be able to access all the
-information added to the [LogRecord](bridge-api.md#logrecord). It MUST also be able to
+information added to the [LogRecord](bridge-api.md#logrecord), with the
+exception that only [TraceContext](./data-model.md#trace-context-fields) is
+available rather than [Context](../context/README.md). It MUST also be able to
 access the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
 and [Resource](./data-model.md#field-resource) information (implicitly)
 associated with the `LogRecord`.
@@ -150,11 +152,12 @@ value type.
 
 ### ReadWriteLogRecord
 
-A function receiving this as an argument MUST be able to write to the
-full [LogRecord](bridge-api.md#logrecord) and additionally MUST be able to retrieve all
-information
-that was added to the `LogRecord` (as with
-[ReadableLogRecord](#readablelogrecord)).
+A function receiving this as an argument MUST be able to write to
+all [LogRecord](bridge-api.md#logrecord) fields, except that
+only [TraceContext](./data-model.md#trace-context-fields) is writable rather
+than [Context](../context/README.md). Additionally, receivers MUST be able to
+retrieve all information that was added to the `LogRecord`, as described
+in [ReadableLogRecord](#readablelogrecord).
 
 ## LogRecord Limits
 
@@ -235,9 +238,7 @@ therefore it SHOULD NOT block or throw exceptions.
 * `logRecord` - a [ReadWriteLogRecord](#readwritelogrecord) for the
   emitted `LogRecord`.
 * `context` - the `Context` that the SDK determined (the explicitly
-  passed `Context`, the current `Context`, or an empty `Context` if
-  the [Logger](./bridge-api.md#get-a-logger) was obtained
-  with `include_trace_context=false`)
+  passed `Context`, or the current `Context` if not explicitly passed)
 
 **Returns:** `Void`
 
