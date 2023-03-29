@@ -30,6 +30,8 @@ release.
   ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
 - Add log appender / bridge to glossary.
   ([#3335](https://github.com/open-telemetry/opentelemetry-specification/pull/3335))
+- Clarify that ReadWriteLogRecord and ReadableLogRecord can only access TraceContext
+  ([#3350](https://github.com/open-telemetry/opentelemetry-specification/pull/3350))
 
 ### Resource
 
