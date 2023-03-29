@@ -1,8 +1,7 @@
 groups:
   - id: messaging.message
     prefix: messaging
-    # todo (https://github.com/open-telemetry/build-tools/issues/123)
-    type: span
+    type: attribute_group
     brief: 'Semantic convention describing per-message attributes populated on messaging spans or links.'
     attributes:
       - ref: messaging.destination.name
@@ -30,8 +29,7 @@ groups:
 
   - id: messaging.destination
     prefix: messaging.destination
-    # todo (https://github.com/open-telemetry/build-tools/issues/123)
-    type: span
+    type: attribute_group
     brief: 'Semantic convention for attributes that describe messaging destination on broker'
     attributes:
       - id: name
@@ -41,17 +39,6 @@ groups:
           Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
           the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
         examples: ['MyQueue', 'MyTopic']
-      - id: kind
-        type:
-          allow_custom_values: false
-          members:
-            - id: queue
-              value: "queue"
-              brief: "A message sent to a queue"
-            - id: topic
-              value: "topic"
-              brief: "A message sent to a topic"
-        brief: 'The kind of message destination'
       - id: template
         type: string
         brief: Low cardinality representation of the messaging destination name
@@ -71,8 +58,7 @@ groups:
 
   - id: messaging.source
     prefix: messaging.source
-    # todo (https://github.com/open-telemetry/build-tools/issues/123)
-    type: span
+    type: attribute_group
     brief: 'Semantic convention for attributes that describe messaging source on broker'
     attributes:
       - id: name
@@ -82,17 +68,6 @@ groups:
           Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
           the broker does not have such notion, the source name SHOULD uniquely identify the broker.
         examples: ['MyQueue', 'MyTopic']
-      - id: kind
-        type:
-          allow_custom_values: true
-          members:
-            - id: queue
-              value: "queue"
-              brief: "A message received from a queue"
-            - id: topic
-              value: "topic"
-              brief: "A message received from a topic"
-        brief: 'The kind of message source'
       - id: template
         type: string
         brief: 'Low cardinality representation of the messaging source name'
@@ -174,9 +149,9 @@ groups:
         tag: connection-level
         requirement_level:
           recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
-      - ref: net.app.protocol.name
+      - ref: net.protocol.name
         examples: ['amqp', 'mqtt']
-      - ref: net.app.protocol.version
+      - ref: net.protocol.version
     constraints:
       - include: network
 
@@ -190,9 +165,6 @@ groups:
       - ref: messaging.destination.name
         requirement_level:
           conditionally_required: If one message is being published or if the value applies to all messages in the batch.
-      - ref: messaging.destination.kind
-        requirement_level:
-          conditionally_required: If the message destination is either a `queue` or a `topic`.
       - ref: messaging.destination.template
         requirement_level:
           conditionally_required: >
@@ -232,9 +204,6 @@ groups:
       - ref: messaging.source.name
         requirement_level:
           conditionally_required: If the value applies to all messages in the batch.
-      - ref: messaging.source.kind
-        requirement_level:
-          conditionally_required: If the message source is either a `queue` or `topic`.
       - ref: messaging.source.template
         requirement_level:
           conditionally_required: >
@@ -247,9 +216,6 @@ groups:
         requirement_level:
           recommended: When supported by messaging system and only if the source is anonymous. When missing, the value is assumed to be `false`.
       - ref: messaging.destination.name
-        requirement_level:
-          recommended: If known on consumer
-      - ref: messaging.destination.kind
         requirement_level:
           recommended: If known on consumer
       - ref: messaging.destination.temporary
@@ -270,7 +236,7 @@ groups:
 
   - id: messaging.rabbitmq
     prefix: messaging.rabbitmq
-    type: span
+    type: attribute_group
     extends: messaging
     brief: >
       Attributes for RabbitMQ
@@ -285,7 +251,7 @@ groups:
 
   - id: messaging.kafka
     prefix: messaging.kafka
-    type: span
+    type: attribute_group
     extends: messaging
     brief: >
       Attributes for Apache Kafka
@@ -334,7 +300,7 @@ groups:
 
   - id: messaging.rocketmq
     prefix: messaging.rocketmq
-    type: span
+    type: attribute_group
     extends: messaging
     brief: >
       Attributes for Apache RocketMQ
