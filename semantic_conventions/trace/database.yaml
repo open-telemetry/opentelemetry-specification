@@ -204,7 +204,8 @@ groups:
         tag: call-level
         type: string
         requirement_level:
-          conditionally_required: Should not be collected by default if there is no sanitization that excludes sensitive information.
+          conditionally_required: >
+            Should not be collected by default if there is no sanitization that excludes sensitive information.
         brief: >
           The database statement being executed.
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
