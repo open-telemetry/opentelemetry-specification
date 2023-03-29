@@ -38,6 +38,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Log Attributes](#log-attributes)
   * [Structured Logs](#structured-logs)
   * [Flat File Logs](#flat-file-logs)
+  * [Log Appender / Bridge](#log-appender--bridge)
 
 <!-- tocstop -->
 
@@ -234,3 +235,11 @@ records are possible too). There is no common industry agreement whether
 logs written to text files in more structured formats (e.g. JSON files)
 are considered Flat File Logs or not. Where such distinction is important it is
 recommended to call it out specifically.
+
+### Log Appender / Bridge
+
+A log appender or bridge is a component which bridges logs from an existing log
+API into OpenTelemetry using the [Log Bridge API](./logs/bridge-api.md). The
+terms "log bridge" and "log appender" are used interchangeably, reflecting that
+these components bridge data into OpenTelemetry, but are often called appenders
+in the logging domain.
