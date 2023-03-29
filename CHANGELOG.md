@@ -195,7 +195,7 @@ release.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
 - `http.route` SHOULD contain the "application root" if there is one.
   ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
-- Change `db.statement` to only be collected if explicitly configured.
+- Change `db.statement` to only be collected if there is sanitization.
   ([#3127](https://github.com/open-telemetry/opentelemetry-specification/pull/3127))
 
 ### Compatibility
