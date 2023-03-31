@@ -114,7 +114,8 @@ The `Logger` MUST provide functions to:
 
 Emit a `LogRecord` to the processing pipeline.
 
-This function MAY be named `logRecord`.
+This function MAY be named `logRecord`. `LogRecord`s emitted can be
+associated with the [Context](../context/README.md).
 
 **Parameters:**
 
@@ -129,8 +130,7 @@ parameters:
 
 - [Timestamp](./data-model.md#field-timestamp)
 - [Observed Timestamp](./data-model.md#field-observedtimestamp)
-- [Context](../context/README.md) that contains the
-  [TraceContext](./data-model.md#trace-context-fields)
+- [TraceContext](./data-model.md#trace-context-fields)
 - [Severity Number](./data-model.md#field-severitynumber)
 - [Severity Text](./data-model.md#field-severitytext)
 - [Body](./data-model.md#field-body)
