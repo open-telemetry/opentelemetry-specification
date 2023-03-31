@@ -584,14 +584,10 @@ given instrument before starting a subsequent round of collection.
 
 ## Meter
 
-**Status**: [Mixed](../document-status.md)
-
 Distinct meters MUST be treated as separate namespaces for the purposes of detecting
 [duplicate instrument registrations](#duplicate-instrument-registration).
 
 ### Duplicate instrument registration
-
-**Status**: [Stable](../document-status.md)
 
 When more than one Instrument of the same `name` is created for identical
 Meters, denoted _duplicate instrument registration_, the Meter MUST create a
@@ -629,8 +625,6 @@ information for the user on how to resolve the conflict, if possible.
 
 ### Instrument name
 
-**Status**: [Stable](../document-status.md)
-
 When a Meter creates an instrument, it SHOULD validate the instrument name
 conforms to the [instrument name syntax](./api.md#instrument-name-syntax)
 
@@ -640,15 +634,11 @@ valid instrument is also returned.
 
 ### Instrument unit
 
-**Status**: [Stable](../document-status.md)
-
 When a Meter creates an instrument, it SHOULD NOT validate the instrument unit.
 If a unit is not provided or the unit is null, the Meter MUST treat it the same
 as an empty unit string.
 
 ### Instrument description
-
-**Status**: [Stable](../document-status.md)
 
 When a Meter creates an instrument, it SHOULD NOT validate the instrument
 description. If a description is not provided or the description is null, the

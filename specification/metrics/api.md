@@ -4,7 +4,7 @@ linkTitle: API
 
 # Metrics API
 
-**Status**: [Mixed](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -58,8 +58,6 @@ linkTitle: API
 
 ## Overview
 
-**Status**: [Stable](../document-status.md)
-
 The Metrics API consists of these main components:
 
 * [MeterProvider](#meterprovider) is the entry point of the API. It provides
@@ -96,8 +94,6 @@ the metrics API:
 ```
 
 ## MeterProvider
-
-**Status**: [Stable](../document-status.md)
 
 `Meter`s can be accessed with a `MeterProvider`.
 
@@ -159,8 +155,6 @@ at least one identifying field has a different value.
 
 ## Meter
 
-**Status**: [Stable](../document-status.md)
-
 The meter is responsible for creating [Instruments](#instrument).
 
 Note: `Meter` SHOULD NOT be responsible for the configuration. This should be
@@ -180,8 +174,6 @@ The `Meter` MUST provide functions to create new [Instruments](#instrument):
 Also see the respective sections below for more information on instrument creation.
 
 ## Instrument
-
-**Status**: [Mixed](../document-status.md)
 
 Instruments are used to report [Measurements](#measurement). Each Instrument
 will have the following fields:
@@ -203,8 +195,6 @@ floating point numbers SHOULD be considered as identifying.
 
 #### Instrument name syntax
 
-**Status**: [Stable](../document-status.md)
-
 The instrument name syntax is defined below using the [Augmented Backus-Naur
 Form](https://tools.ietf.org/html/rfc5234):
 
@@ -224,8 +214,6 @@ DIGIT = %x30-39 ; 0-9
 
 #### Instrument unit
 
-**Status**: [Stable](../document-status.md)
-
 The `unit` is an optional string provided by the author of the Instrument. The
 API SHOULD treat it as an opaque string.
 
@@ -237,8 +225,6 @@ API SHOULD treat it as an opaque string.
   performance is critical.
 
 #### Instrument description
-
-**Status**: [Stable](../document-status.md)
 
 The `description` is an optional free-form text provided by the author of the
 instrument. The API MUST treat it as an opaque string.
@@ -268,8 +254,6 @@ minimal configuration.
       [explicit bucket Histogram metric data point](./data-model.md#histogram).
 
 #### Synchronous and Asynchronous instruments
-
-**Status**: [Stable](../document-status.md)
 
 Instruments are categorized on whether they are synchronous or
 asynchronous:
@@ -455,8 +439,6 @@ or something else).
 
 ### Counter
 
-**Status**: [Stable](../document-status.md)
-
 `Counter` is a [synchronous Instrument](#synchronous-instrument-api) which supports
 non-negative increments.
 
@@ -558,8 +540,6 @@ counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_gree
 ```
 
 ### Asynchronous Counter
-
-**Status**: [Stable](../document-status.md)
 
 Asynchronous Counter is an [asynchronous Instrument](#asynchronous-instrument-api)
 which reports [monotonically](https://wikipedia.org/wiki/Monotonic_function)
@@ -697,8 +677,6 @@ class Device:
 
 ### Histogram
 
-**Status**: [Stable](../document-status.md)
-
 `Histogram` is a [synchronous Instrument](#synchronous-instrument-api) which can be
 used to report arbitrary values that are likely to be statistically meaningful.
 It is intended for statistics such as histograms, summaries, and percentile.
@@ -791,8 +769,6 @@ httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", schem
 ```
 
 ### Asynchronous Gauge
-
-**Status**: [Stable](../document-status.md)
 
 Asynchronous Gauge is an [asynchronous Instrument](#asynchronous-instrument-api)
 which reports non-additive value(s) (e.g. the room temperature - it makes no
@@ -908,8 +884,6 @@ class Device:
 ```
 
 ### UpDownCounter
-
-**Status**: [Stable](../document-status.md)
 
 `UpDownCounter` is a [synchronous Instrument](#synchronous-instrument-api) which
 supports increments and decrements.
@@ -1037,8 +1011,6 @@ customersInStore.Add(-1, new Account { Type = "residential" });
 
 ### Asynchronous UpDownCounter
 
-**Status**: [Stable](../document-status.md)
-
 Asynchronous UpDownCounter is an [asynchronous
 Instrument](#asynchronous-instrument-api) which reports additive value(s) (e.g. the
 process heap size - it makes sense to report the heap size from multiple
@@ -1159,8 +1131,6 @@ class Device:
 
 ## Measurement
 
-**Status**: [Stable](../document-status.md)
-
 A `Measurement` represents a data point reported via the metrics API to the SDK.
 Please refer to the [Metrics Programming Model](./README.md#programming-model)
 for the interaction between the API and SDK.
@@ -1215,8 +1185,6 @@ class Device:
 
 ## Compatibility requirements
 
-**Status**: [Stable](../document-status.md)
-
 All the metrics components SHOULD allow new APIs to be added to
 existing components without introducing breaking changes.
 
@@ -1224,8 +1192,6 @@ All the metrics APIs SHOULD allow optional parameter(s) to be added to existing
 APIs without introducing breaking changes, if possible.
 
 ## Concurrency requirements
-
-**Status**: [Stable](../document-status.md)
 
 For languages which support concurrent execution the Metrics APIs provide
 specific guarantees and safeties.
