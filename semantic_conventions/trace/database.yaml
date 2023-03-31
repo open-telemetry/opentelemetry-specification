@@ -439,6 +439,9 @@ groups:
             - id: delete
               value: 'DELETE'
               brief: DELETE request
+            - id: head
+              value: 'HEAD'
+              brief: HEAD request
         requirement_level: required
         tag: call-level-tech-specific
         brief: >

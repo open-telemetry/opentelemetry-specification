@@ -87,4 +87,5 @@ would result in `'abc*'`, `'*xyz'` being added to the list of sanitized keys men
 | `POST`   | HTTP POST request   |
 | `PUT`    | HTTP PUT request    |
 | `DELETE` | HTTP DELETE request |
+| `HEAD`   | HTTP HEAD request   |
 <!-- endsemconv -->
