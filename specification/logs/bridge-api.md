@@ -115,11 +115,14 @@ The `Logger` MUST provide functions to:
 Emit a `LogRecord` to the processing pipeline.
 
 This function MAY be named `logRecord`. `LogRecord`s emitted can be
-associated with the [Context](../context/README.md).
+associated with the .
 
-**Parameters:**
+The API MUST accept the following parameters:
 
-* `logRecord` - the [LogRecord](#logrecord) to emit.
+* The [LogRecord](#logrecord) to emit.
+* The [Context](../context/README.md) associated with the `LogRecord`. The API
+  MAY also have an option for implicitly using the current Context as a default
+  behavior.
 
 ## LogRecord
 
