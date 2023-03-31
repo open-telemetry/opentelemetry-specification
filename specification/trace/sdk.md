@@ -120,20 +120,29 @@ Thus, the SDK specification defines sets of possible requirements for
 
 * **Readable span**: A function receiving this as argument MUST be able to
   access all information that was added to the span, as listed
-  [in the API spec](api.md#span). In particular, it MUST also be
-  able to access the `InstrumentationScope` [since 1.10.0] and `Resource`
-  information (implicitly) associated with the span. For backwards compatibility
+  in the API spec for [Span](api.md#span). Note: Below, a few particular properties
+  are called out for clarity, but for the complete list of required properties,
+  the [Span API spec](api.md#span) is authoritative.
+
+  A function receiving this as argument MUST be able to access
+  the `InstrumentationScope` [since 1.10.0] and `Resource` information
+  (implicitly) associated with the span. For backwards compatibility
   it MUST also be able to access the `InstrumentationLibrary`
   [deprecated since 1.10.0] having the same name and version values as the
   `InstrumentationScope`.
 
-  It must also be able to reliably determine whether the Span has ended
+  A function receiving this as argument MUST must be able to reliably determine
+  whether the Span has ended
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
 
   Counts for attributes, events and links dropped due to collection limits MUST be
   available for exporters to report as described in the [exporters](../common/mapping-to-non-otlp.md#dropped-attributes-count)
   specification.
+
+  As an exception to the authoritative set of span properties defined in the API spec,
+  implementations MAY choose not to expose (and store) the full parent [Context](../context/README.md)
+  of the Span but they MUST expose at least the full parent [SpanContext](api.md#spancontext).
 
   A function receiving this as argument might not be able to modify the Span.
 
