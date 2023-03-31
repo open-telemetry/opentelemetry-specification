@@ -385,6 +385,64 @@ groups:
           The collection being accessed within the database stated in `db.name`.
         examples: [ 'customers', 'products' ]
 
+  - id: db.elasticsearch
+    prefix: db.elasticsearch
+    type: span
+    extends: db
+    brief: >
+      Call-level attributes for Elasticsearch
+    attributes:
+      - id: doc_id
+        type: string
+        requirement_level:
+          conditionally_required: when the request targets a specific document by id
+        tag: call-level-tech-specific
+        brief: >
+          The document that the request targets.
+        examples: [ '123', '456' ]
+      - id: params
+        type: string
+        requirement_level:
+          conditionally_required: when params are provided as part of the request
+        tag: call-level-tech-specific
+        brief: >
+          The query params of the request, as a json string.
+        examples: [ '"{\"q\":\"test\"}", "{\"refresh\":true}"' ]
+      - id: target
+        type: string
+        requirement_level:
+          conditionally_required: when a specific index or data stream is targeted by the request
+        tag: call-level-tech-specific
+        brief: >
+          The name of the data stream or index that is targeted.
+        examples: [ 'users' ]
+      - id: url
+        type: string
+        requirement_level: required
+        tag: call-level-tech-specific
+        brief: >
+          The url of the request, including the target and exact document id.
+        examples: [ '/test-index/_search', '/test-index/_doc/123' ]
+      - id: method
+        type:
+          allow_custom_values: false
+          members:
+            - id: get
+              value: 'GET'
+              brief: GET request
+            - id: post
+              value: 'POST'
+              brief: POST request
+            - id: put
+              value: 'PUT'
+              brief: PUT request
+            - id: delete
+              value: 'DELETE'
+              brief: DELETE request
+        requirement_level: required
+        tag: call-level-tech-specific
+        brief: >
+          The HTTP method of the request.
   - id: db.sql
     prefix: 'db.sql'
     type: span
