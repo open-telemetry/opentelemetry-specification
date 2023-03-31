@@ -227,8 +227,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
 | Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      |     |      |       |
-| Implicit Context Injection                   |          |     | -    |     | +      |      |        | +   |      |     | +    |       |
-| Explicit Context                             |          |     | +    |     | -      |      |        | +   |      |     | -    |       |
+| Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
 
 ## Resource
 
