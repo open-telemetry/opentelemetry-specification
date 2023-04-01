@@ -114,7 +114,7 @@ The `Logger` MUST provide functions to:
 
 Emit a `LogRecord` to the processing pipeline.
 
-This function MAY be named `logRecord`.
+This function MAY be named `emit`.
 
 The API MUST accept the following parameters:
 
