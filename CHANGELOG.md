@@ -11,12 +11,29 @@ release.
 
 ### Traces
 
+* Clarify required parent information in ReadableSpan. Technically a relaxation,
+  but previously it was easy to overlook certain properties were required.
+  [#3257](https://github.com/open-telemetry/opentelemetry-specification/pull/3257)
+
 ### Metrics
 
 - Clarify that units should use UCUM case sensitive variant.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
+- Fixed attributes requirement level in semantic conventions for hardware metrics
+  ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
 
 ### Logs
+
+- Update log readme "request context" to "trace context".
+  ([#3332](https://github.com/open-telemetry/opentelemetry-specification/pull/3332))
+- Remove log readme document status.
+  ([#3334](https://github.com/open-telemetry/opentelemetry-specification/pull/3334))
+- Break out compatibility document on recording trace context in non-OTLP Log Format
+  ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
+- Ensure Logs Bridge API doesn't contain SDK implementation details
+  ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
+- Add log appender / bridge to glossary.
+  ([#3335](https://github.com/open-telemetry/opentelemetry-specification/pull/3335))
 
 ### Resource
 
@@ -30,6 +47,13 @@ release.
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
 - Replace `http.flavor` with `net.protocol.(name|version)`
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
+- Metric requirement levels are now stable
+  ([#3271](https://github.com/open-telemetry/opentelemetry-specification/pull/3271))
+- BREAKING: remove `messaging.destination.kind` and `messaging.source.kind`.
+  ([#3214](https://github.com/open-telemetry/opentelemetry-specification/pull/3214),
+  [#3348](https://github.com/open-telemetry/opentelemetry-specification/pull/3348))
+- Define attributes collected for `cosmosdb` by Cosmos DB SDK
+  ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
 
 ### Compatibility
 
