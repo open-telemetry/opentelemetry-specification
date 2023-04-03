@@ -110,17 +110,13 @@ The `Logger` is responsible for emitting `LogRecord`s.
 
 The `Logger` MUST provide functions to:
 
-- [Emit a `LogRecord`](#emit-a-logrecord) (see the section on `LogRecord`)
+- Emit a `LogRecord`
 
-## LogRecord
+#### Emit a LogRecord
 
 `LogRecord`s encapsulate the fields identified in the `LogRecord`
-[data model](data-model.md).
-
-### Emit a LogRecord
-
-`LogRecord`s are emitted to the processing pipeline using an API provided by
-[`Logger`](#logger).
+[data model](data-model.md) and are emitted to the processing pipeline using
+this API.
 
 The API MUST accept the following parameters:
 
