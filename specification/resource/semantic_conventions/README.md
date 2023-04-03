@@ -40,7 +40,8 @@ This document defines standard attributes for resources. These attributes are ty
 
 Attributes are grouped logically by the type of the concept that they described. Attributes in the same group have a common prefix that ends with a dot. For example all attributes that describe Kubernetes properties start with "k8s."
 
-Certain attribute groups in this document have a **Required** column. For these groups if any attribute from the particular group is present in the Resource then all attributes that are marked as Required MUST be also present in the Resource. However it is also valid if the entire attribute group is omitted (i.e. none of the attributes from the particular group are present even though some of them are marked as Required in this document).
+See [Attribute Requirement Levels](../../common/attribute-requirement-level.md) for details on when attributes
+should be included.
 
 ## Attributes with Special Handling
 
