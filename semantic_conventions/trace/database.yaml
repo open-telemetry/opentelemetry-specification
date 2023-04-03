@@ -424,28 +424,12 @@ groups:
           The url of the request, including the target and exact document id.
         examples: [ '/test-index/_search', '/test-index/_doc/123' ]
       - id: method
-        type:
-          allow_custom_values: false
-          members:
-            - id: get
-              value: 'GET'
-              brief: GET request
-            - id: post
-              value: 'POST'
-              brief: POST request
-            - id: put
-              value: 'PUT'
-              brief: PUT request
-            - id: delete
-              value: 'DELETE'
-              brief: DELETE request
-            - id: head
-              value: 'HEAD'
-              brief: HEAD request
+        type: string
         requirement_level: required
         tag: call-level-tech-specific
         brief: >
           The HTTP method of the request.
+        examples: [ 'GET', 'PUT' ]
   - id: db.sql
     prefix: 'db.sql'
     type: span
