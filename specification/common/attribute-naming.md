@@ -11,7 +11,7 @@
 - [Namespaces](#namespaces)
 - [Name pluralization](#name-pluralization)
 - [Name reuse prohibition](#name-reuse-prohibition)
-- [Recommendations for OpenTelemetry authors](#recommendations-for-opentelemetry-authors)
+- [Guidelines for OpenTelemetry authors](#guidelines-for-opentelemetry-authors)
 - [Recommendations for application developers](#recommendations-for-application-developers)
 - [`otel.*` namespace](#otel-namespace)
 
@@ -49,7 +49,7 @@ Depending on the signal type, namespacing may be mandatory or optional.
 | Resource | Mandatory   | Resource attribute names may conflict with the attributes associated to traces, logs, and metrics. It is critical to ensure naming uniqueness across all signals.                                                                                                             |
 | Traces   | Mandatory   | Attribute names may conflict and overlap because of the hierarchical nature of traces. Use namespacing to prevent name clashes.                                                                                                                                               |
 | Logs     | Mandatory   | Logs are often linked to traces and their attributes may therefore conflict and overlap.                                                                                                                                                                                      |
-| Metrics  | Optional    | Identical attribute names are unlikely to conflict across unrelated metrics. Identical attribute names for different metrics may be desirable (e.g. `state`, `direction`). Namespacing may still be required to match with attributes names of corresponding traces and logs. |
+| Metrics  | Optional    | Identical attribute names for metrics in different namespaces may be desirable (e.g. `state`, `direction`). Namespace may still be required to match with attributes names of corresponding traces and logs. |
 
 Namespaces can be nested. For example `telemetry.sdk` is a namespace inside
 top-level `telemetry` namespace and `telemetry.sdk.name` is an attribute inside
@@ -93,10 +93,10 @@ When introducing a new attribute name check all existing schema files to make
 sure the name does not appear as a key of any "rename_attributes" section (keys
 denote old attribute names in rename operations).
 
-## Recommendations for OpenTelemetry authors
+## Guidelines for OpenTelemetry authors
 
-- All names that are part of OpenTelemetry semantic conventions SHOULD be part
-  of a namespace.
+- All attribute names that are part of OpenTelemetry semantic conventions for
+  Resources, Traces, and Logs MUST be part of a namespace.
 
 - When coming up with a new semantic convention make sure to check existing
   namespaces for
