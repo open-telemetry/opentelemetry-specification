@@ -14,8 +14,8 @@
     + [Get a Logger](#get-a-logger)
 - [Logger](#logger)
   * [Logger operations](#logger-operations)
-    + [Emit LogRecord](#emit-logrecord)
 - [LogRecord](#logrecord)
+  * [Emit a LogRecord](#emit-a-logrecord)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [Usage](#usage)
@@ -110,29 +110,25 @@ The `Logger` is responsible for emitting `LogRecord`s.
 
 The `Logger` MUST provide functions to:
 
-#### Emit LogRecord
-
-Emit a `LogRecord` to the processing pipeline.
-
-This function MAY be named `emit`.
-
-The API MUST accept the following parameters:
-
-* The [LogRecord](#logrecord) to emit.
-* The [Context](../context/README.md) associated with the `LogRecord`. The API
-  MAY also have an option for implicitly using the current Context as a default
-  behavior.
+- [Emit a `LogRecord`](#emit-a-logrecord) (see the section on `LogRecord`)
 
 ## LogRecord
 
-The API emits [LogRecords](#emit-logrecord) using the `LogRecord` [data model](data-model.md).
+`LogRecord`s encapsulate the fields identified in the `LogRecord`
+[data model](data-model.md).
 
-A function receiving this as an argument MUST be able to set the following
-parameters:
+### Emit a LogRecord
+
+`LogRecord`s are emitted to the processing pipeline using an API provided by
+[`Logger`](#logger).
+
+The API MUST accept the following parameters:
 
 - [Timestamp](./data-model.md#field-timestamp)
 - [Observed Timestamp](./data-model.md#field-observedtimestamp)
-- [TraceContext](./data-model.md#trace-context-fields)
+- The [Context](../context/README.md) associated with the `LogRecord`. The API
+  MAY also have an option for implicitly using the current Context as a default
+  behavior.
 - [Severity Number](./data-model.md#field-severitynumber)
 - [Severity Text](./data-model.md#field-severitytext)
 - [Body](./data-model.md#field-body)
