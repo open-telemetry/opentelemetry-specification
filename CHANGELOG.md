@@ -54,6 +54,8 @@ release.
   [#3348](https://github.com/open-telemetry/opentelemetry-specification/pull/3348))
 - Define attributes collected for `cosmosdb` by Cosmos DB SDK
   ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
+- Clarify stability requirements of semantic conventions
+  ([#3225](https://github.com/open-telemetry/opentelemetry-specification/pull/3225))
 
 ### Compatibility
 

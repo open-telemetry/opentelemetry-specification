@@ -169,42 +169,48 @@ Semantic Conventions defines breaking changes as those that would break the
 common usage of tooling written against the telemetry it produces. That is, the
 portions of telemetry where specialized tooling (alerts, dashboards, e.g.)
 interact are expected to remain stable for that tooling *after schema
-transformations are applied*.
+transformations are applied*. These also assume no user interventions in the
+default configuration, e.g. Samplers, Views, etc.
 
-Semantic Conventions defines the set of fields to which stability concerns apply
-as follows:
+Semantic Conventions defines the set of fields in the OTLP data model:
 
 - [Resource](resource/sdk.md)
-  - attribute keys provided to Create resource detectors
+  - attribute keys. (The key section of attributes key value pairs)
+- InstrumentationScope
+  - Attribute keys 
+    - provided to [get a tracer](trace/api.md#get-a-tracer)
+    - provided to [get a meter](metrics/api.md#get-a-meter)
 - [Trace](trace/api.md)
-  - Attribute keys provided to [get a tracer](trace/api.md#get-a-tracer)
-  - The following data provided to [span](trace/api.md#span) by available APIs:
+  - The following data on [span](trace/api.md#span):
     - The span name
     - The span kind
     - The attribute keys provided to the span
       - Whether these attributes must be provided at span start time, due to
         sampling concerns.
-  - The following data provided when [adding an event](trace/api.md#add-events)
+  - The following data provided on [span events](trace/api.md#add-events)
     - The event name
     - The attribute keys provided for the event
 - [Metrics](metrics/api.md)
-  - Attribute keys provided to [get a meter](metrics/api.md#get-a-meter)
-  - The following arguments when constructing [an instrument](metrics/api.md#instrument):
-    - The name of the instrument
-    - The kind of instrument
+  - The following portions of a Metric
+    (passed when constructing [an instrument](metrics/api.md#instrument)):
+    - The name of the metric (defaults to instrument name).
+    - The kind of metric data (Gauge, Sum, Histogram, ExponentialHistogram)
       - For `Counter` and `UpDownCounter` instruments, it is
-        acceptable to change between asynchronous and synchronous instruments.
-    - the unit of the instrument.
-  - The attribute keys provided when recording a measurement, for
-    both synchronous and asynchronous instruments.
+        acceptable to change between asynchronous and synchronous instruments,
+        as this preserves the metric kind.
+    - The unit of the metric (defaults to instrument unit).
+  - The attribute keys on any `*DataPoint`.
+    - These are provided in the API when recording a measurement, for
+      both synchronous and asynchronous instruments.
+    - These exist on `NumberDataPoint`, `HistogramDataPoint`,
+      `ExponentialHistogramDataPoint` and `SummaryDataPoint`.
 - [Log Records](logs/bridge-api.md#logrecord)
   - The attribute keys provided on the LogRecord
-- [Log Events](logs/event-api.md)
-  - The following data provided to [emit event](logs/event-api.md#emit-event):
-    - The event name
-    - The event domain
-    - The components of [LogRecord](logs/bridge-api.md#logrecord) also
-      listed here.
+  - For log records that are [Log Events](logs/event-api.md)
+    - The following data provided to [emit event](logs/event-api.md#emit-event):
+      - The event name (the value of the `event.name` attribute)
+      - The event domain (the value of the `event.domain` attribute)
+
 
 Things not listed in the above are not expected to remain stable via semantic
 convention and are allowed (or expected) to change. A few examples:
