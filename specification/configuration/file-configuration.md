@@ -30,7 +30,7 @@ interpreted to produce configured OpenTelemetry components.
 
 ## Configuration Schema
 
-The configuration schema is defined in [./schema/](./schema)
+The configuration schema is defined in [./schema/](./schema/)
 using [JSON Schema](https://json-schema.org/).
 
 ### Stability Definition
