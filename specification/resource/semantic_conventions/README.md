@@ -129,7 +129,7 @@ If another SDK, like a fork or a vendor-provided implementation, is used, this S
 `telemetry.sdk.name` to the fully-qualified class or module name of this SDK's main entry point
 or another suitable identifier depending on the language.
 The identifier `opentelemetry` is reserved and MUST NOT be used in this case.
-The identifier SHOULD be stable across different versions of an implementation.
+All custom identifiers SHOULD be stable across different versions of an implementation.
 
 <!-- semconv telemetry -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
