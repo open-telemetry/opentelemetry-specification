@@ -177,7 +177,7 @@ Semantic Conventions defines the set of fields in the OTLP data model:
 - [Resource](resource/sdk.md)
   - attribute keys. (The key section of attributes key value pairs)
 - InstrumentationScope
-  - Attribute keys 
+  - Attribute keys
     - provided to [get a tracer](trace/api.md#get-a-tracer)
     - provided to [get a meter](metrics/api.md#get-a-meter)
 - [Trace](trace/api.md)
@@ -210,7 +210,6 @@ Semantic Conventions defines the set of fields in the OTLP data model:
     - The following data provided to [emit event](logs/event-api.md#emit-event):
       - The event name (the value of the `event.name` attribute)
       - The event domain (the value of the `event.domain` attribute)
-
 
 Things not listed in the above are not expected to remain stable via semantic
 convention and are allowed (or expected) to change. A few examples:
