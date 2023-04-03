@@ -178,7 +178,9 @@ instrumentations can use schemas to change the instrumentation they produce.
 
 **Exception:** Some resource attributes are embedded in various locations of the
 Specification, e.g. the `service.*` attributes which are required by SDKs to be
-produced and have corresponding [environment variables defined in general SDK configuration](sdk-environment-variables.md#general-sdk-configuration).
+produced and have corresponding [environment variables defined in general SDK configuration](sdk-environment-variables.md#general-sdk-configuration). These resource
+attributes MUST NOT be ever changed. They are considered a hard-coded part of
+this specification.
 
 In addition to the 3 types of changes described above there are certain types
 that are always allowed. Such changes do not need to be described (and are not
