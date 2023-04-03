@@ -25,19 +25,8 @@ When there is no target or document id, the span name will contain the exact url
 | `db.elasticsearch.params` | string | The query params of the request, as a json string.                  | `'"{\"q\":\"test\"}", "{\"refresh\":true}"'`            | Conditionally Required |
 | `db.elasticsearch.target` | string | The name of the data stream or index that is targeted.              | `'users'`                                               | Conditionally Required |
 | `db.elasticsearch.url`    | string | The exact url of the request, including the target and document id. | `'/test-index/_doc/123'`                                | Required               |
-| `db.elasticsearch.method` | string | The HTTP method of the request. [1]                                 | `'GET'`                                                 | Required               |
-| `db.statement`            | string | The request body, as a json string. [2]                             | `"{\"name\":\"TestUser\",\"password\":\"top_secret\"}"` | Conditionally Required |
+| `db.elasticsearch.method` | string | The HTTP method of the request.                                     | `'GET'`                                                 | Required               |
+| `db.statement`            | string | The request body, as a json string. [1]                             | `"{\"name\":\"TestUser\",\"password\":\"top_secret\"}"` | Conditionally Required |
 
-
-**[1]:** The value MUST be one of the following:
-
-| Value    | Description         |
-|----------|---------------------|
-| `GET`    | HTTP GET request    |
-| `POST`   | HTTP POST request   |
-| `PUT`    | HTTP PUT request    |
-| `DELETE` | HTTP DELETE request |
-| `HEAD`   | HTTP HEAD request   |
-
-**[2]:** The value may be sanitized to exclude sensitive information.
+**[1]:** The value may be sanitized to exclude sensitive information.
 <!-- endsemconv -->
