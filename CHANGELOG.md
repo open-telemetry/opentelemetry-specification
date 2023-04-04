@@ -11,6 +11,32 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Semantic Conventions
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+### Common
+
+## v1.20.0 (2023-04-05)
+
+### Context
+
+- No changes.
+
+### Traces
+
 * Clarify required parent information in ReadableSpan. Technically a relaxation,
   but previously it was easy to overlook certain properties were required.
   [#3257](https://github.com/open-telemetry/opentelemetry-specification/pull/3257)
@@ -21,8 +47,6 @@ release.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
 - Remove No-Op instrument and Meter creation requirements.
   ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
-- Fixed attributes requirement level in semantic conventions for hardware metrics
-  ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
 
 ### Logs
 
@@ -38,6 +62,8 @@ release.
   ([#3335](https://github.com/open-telemetry/opentelemetry-specification/pull/3335))
 
 ### Resource
+
+- No changes.
 
 ### Semantic Conventions
 
@@ -63,16 +89,33 @@ release.
 - Stabilize key components of `service.*` and `telemetry.sdk.*` resource
   semantic conventions.
   ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
+- Fixed attributes requirement level in semantic conventions for hardware metrics
+  ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
+- Added AWS S3 semantic conventions.
+  ([#3251](https://github.com/open-telemetry/opentelemetry-specification/pull/3251))
+- Fix units in the Kafka metric semantic conventions.
+  ([#3300](https://github.com/open-telemetry/opentelemetry-specification/pull/3300))
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- Declare OTLP stable.
+  ([#3274](https://github.com/open-telemetry/opentelemetry-specification/pull/3274))
 
 ### SDK Configuration
 
+- No changes.
+
 ### Telemetry Schemas
 
+- No changes.
+
 ### Common
+
+- No changes.
 
 ## v1.19.0 (2023-03-06)
 
