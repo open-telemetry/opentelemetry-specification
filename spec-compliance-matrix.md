@@ -215,20 +215,19 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
 | **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        |     |      |     | -    |       |
-| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        |     |      |     |      |       |
-| LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        |     |      |     | -    |       |
-| LoggerProvider.ForceFlush                    |          |     | +    |     |        |      |        |     |      |     | -    |       |
-| Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        |     |      |     | -    |       |
-| SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        |     |      |     |      |       |
-| BatchLogRecordProcessor                      |          |     | +    |     |        |      |        |     |      |     |      |       |
-| Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        |     |      |     |      |       |
-| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
-| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
+| LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
+| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      |     |      |       |
+| LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
+| LoggerProvider.ForceFlush                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
+| Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        | +   |      |     | -    |       |
+| SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        | +   |      |     |      |       |
+| BatchLogRecordProcessor                      |          |     | +    |     |        |      |        | +   |      |     |      |       |
+| Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        | +   |      |     |      |       |
+| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
+| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
-| Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        |     |      |     |      |       |
-| Implicit Context Injection                   |          |     | -    |     | +      |      |        |     |      |     | +    |       |
-| Explicit Context                             |          |     | +    |     | -      |      |        |     |      |     | -    |       |
+| Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      |     |      |       |
+| Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
 
 ## Resource
 
@@ -288,6 +287,8 @@ Note: Support for environment variables is optional.
 | OTEL_SPAN_LINK_COUNT_LIMIT                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
 | OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +   | -    |     | +           | +    | +      | +   |      |     | -    |       |
 | OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +   | -    |     | +           | +    | +      | +   |      |     | -    |       |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT                     |     |      |     |             |      |        | +   |      |     |      |       |
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT              |     |      |     |             |      |        | +   |      |     |      |       |
 | OTEL_TRACES_SAMPLER                                      | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_TRACES_SAMPLER_ARG                                  | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +   | +    | +   | +           | +    | -      | +   |      |     | -    |       |
