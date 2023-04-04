@@ -63,6 +63,9 @@ release.
 - Stabilize key components of `service.*` and `telemetry.sdk.*` resource
   semantic conventions.
   ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
+- BREAKING: Remove `http.status_code` attribute from the
+  `http.server.active_requests` metric.
+  ([#3366](https://github.com/open-telemetry/opentelemetry-specification/pull/3366))
 
 ### Compatibility
 
