@@ -1,0 +1,12 @@
+groups:
+  - id: telemetry_experimental
+    prefix: telemetry
+    type: resource
+    brief: >
+      The telemetry SDK used to capture data recorded by the instrumentation libraries.
+    attributes:
+      - id: auto.version
+        type: string
+        brief: >
+          The version string of the auto instrumentation agent, if used.
+        examples: ["1.2.3"]
