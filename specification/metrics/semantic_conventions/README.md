@@ -198,3 +198,9 @@ like `Counter` or `UpDownCounter`. However, compliant implementations MAY use th
 like `Asynchronous Counter` or `Asynchronous UpDownCounter`.
 Whether implementations choose the synchronous type or the asynchronous equivalent is considered to be an
 implementation detail. Both choices are compliant with this specification.
+
+### Consistent UpDownCounter timeseries
+
+When recording `UpDownCounter` metrics, the same attribute values used to record an increment must be used to record any
+associated decrement (e.g. when capturing `http.server.active_requests`), otherwise those increments and decrements will
+end up as different timeseries.
