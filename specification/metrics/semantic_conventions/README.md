@@ -18,6 +18,7 @@ linkTitle: Semantic Conventions
   * [Instrument Naming](#instrument-naming)
   * [Instrument Units](#instrument-units)
   * [Instrument Types](#instrument-types)
+  * [Consistent UpDownCounter timeseries](#consistent-updowncounter-timeseries)
 
 <!-- tocstop -->
 
@@ -201,6 +202,6 @@ implementation detail. Both choices are compliant with this specification.
 
 ### Consistent UpDownCounter timeseries
 
-When recording `UpDownCounter` metrics, the same attribute values used to record an increment must be used to record any
-associated decrement (e.g. when capturing `http.server.active_requests`), otherwise those increments and decrements will
-end up as different timeseries.
+When recording `UpDownCounter` metrics, the same attribute values used to record an increment SHOULD be used to record
+any associated decrement (e.g. when capturing `http.server.active_requests`), otherwise those increments and decrements
+will end up as different timeseries.
