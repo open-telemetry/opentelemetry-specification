@@ -5,11 +5,11 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [Configuration Schema](#configuration-schema)
+- [Configuration Model](#configuration-model)
   * [Stability Definition](#stability-definition)
 - [Configuration file](#configuration-file)
 - [SDK Configuration](#sdk-configuration)
-  * [Configuration Model](#configuration-model)
+  * [In-Memory Configuration Model](#in-memory-configuration-model)
   * [Operations](#operations)
 - [References](#references)
 
@@ -23,16 +23,16 @@ the [environment variable](../sdk-environment-variables.md) based scheme, and
 language agnostic in a way not possible
 with [programmatic configuration](../sdk-configuration.md#programmatic).
 
-File configuration defines a [Configuration Schema](#configuration-schema),
+File configuration defines a [Configuration Model](#configuration-model),
 which can be expressed in a [configuration file](#configuration-file).
 Configuration files can be validated against the Configuration Schema, and
 interpreted to produce configured OpenTelemetry components.
 
-## Configuration Schema
+## Configuration Model
 
-The configuration schema is defined
-in [./schema/](./schema/opentelemetry_configuration.json)
-using [JSON Schema](https://json-schema.org/).
+The configuration model is defined
+in [./schema/](./schema/opentelemetry_configuration.json) using
+the [JSON Schema](https://json-schema.org/).
 
 ### Stability Definition
 
@@ -40,8 +40,8 @@ TODO: define stability guarantees and backwards compatibility
 
 ## Configuration file
 
-A configuration file is a file representation of the model defined
-by [./Configuration Schema](#configuration-schema).
+A configuration file is a file representation of
+the [Configuration Model](#configuration-model).
 
 TODO: define acceptable file formats
 
@@ -52,10 +52,10 @@ TODO: define environment variable substitution
 SDK configuration defines the interfaces and operations that SDKs are expected
 to expose to enable file based configuration.
 
-### Configuration Model
+### In-Memory Configuration Model
 
-`Configuration` is an in-memory representation of the model defined
-by [./Configuration Schema](#configuration-schema).
+SDKs SHOULD define an in-memory representation of
+the [Configuration Model](#configuration-model) called `Configuration`.
 
 ### Operations
 
