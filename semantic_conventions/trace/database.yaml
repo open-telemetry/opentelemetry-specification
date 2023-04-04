@@ -204,7 +204,7 @@ groups:
         tag: call-level
         type: string
         requirement_level:
-          conditionally_required: >
+          recommended: >
             Should be collected by default only if there is sanitization that excludes sensitive information.
         brief: >
           The database statement being executed.
