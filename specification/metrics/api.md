@@ -246,7 +246,7 @@ Instrument, aimed at assisting implementations in providing useful output with
 minimal configuration.
 
 * Implementations MAY ignore `advice`. However, OpenTelemetry SDKs
-  handle `advice` as described in [here](./sdk.md#instrument-advice).
+  handle `advice` as described [here](./sdk.md#instrument-advice).
 * `advice` parameters may be general, or vary by instrument `kind`.
   * `Histogram`:
     * `ExplicitBucketBoundaries` (`double[]`): The recommended set of bucket
