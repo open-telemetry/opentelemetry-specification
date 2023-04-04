@@ -60,6 +60,9 @@ release.
   ([#3225](https://github.com/open-telemetry/opentelemetry-specification/pull/3225))
 - BREAKING: Change span statuses for gRPC server spans.
   ([#3333](https://github.com/open-telemetry/opentelemetry-specification/pull/3333))
+- Stabilize key components of `service.*` and `telemetry.sdk.*` resource
+  semantic conventions.
+  ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
 
 ### Compatibility
 
