@@ -41,6 +41,8 @@ release.
 
 ### Semantic Conventions
 
+- Add k8s.cluster.uid semantic convention
+  ([#3267](https://github.com/open-telemetry/opentelemetry-specification/pull/3267))
 - Clarify that attribute requirement levels apply to the instrumentation library
   ([#3289](https://github.com/open-telemetry/opentelemetry-specification/pull/3289))
 - Fix grammatical number of metric units.
