@@ -21,6 +21,8 @@ release.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
 - Recommended non-prefixed units for metric instrument semantic conventions.
   ([#3312](https://github.com/open-telemetry/opentelemetry-specification/pull/3312))
+- Remove No-Op instrument and Meter creation requirements.
+  ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
 - Fixed attributes requirement level in semantic conventions for hardware metrics
   ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
 
@@ -56,6 +58,13 @@ release.
   [#3348](https://github.com/open-telemetry/opentelemetry-specification/pull/3348))
 - Define attributes collected for `cosmosdb` by Cosmos DB SDK
   ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
+- Clarify stability requirements of semantic conventions
+  ([#3225](https://github.com/open-telemetry/opentelemetry-specification/pull/3225))
+- BREAKING: Change span statuses for gRPC server spans.
+  ([#3333](https://github.com/open-telemetry/opentelemetry-specification/pull/3333))
+- Stabilize key components of `service.*` and `telemetry.sdk.*` resource
+  semantic conventions.
+  ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
 
 ### Compatibility
 

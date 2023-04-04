@@ -82,9 +82,6 @@ any argument it receives.
 
 ## Meter
 
-A Meter is always created by a MeterProvider. The No-Op MUST NOT provide
-a way for a user to create a Meter other than by a No-Op MeterProvider.
-
 The Meters created by the No-Op need to hold as small a memory
 footprint as possible. Therefore, all Meters created MUST NOT hold
 configuration or operational state.
@@ -190,9 +187,6 @@ telemetry.
 
 ### Counter
 
-Counters are always created by a Meter, the No-Op MUST NOT provide a way
-for a user to create a Counter other than by a No-Op Meter.
-
 Counters MUST NOT return a non-empty error or log any message for any
 operations they perform.
 
@@ -205,9 +199,6 @@ implements the [API](./api.md#add). It MUST NOT validate or retain any
 state about the arguments it receives.
 
 ### UpDownCounter
-
-UpDownCounters are always created by a Meter, the No-Op MUST NOT provide
-a way for a user to create a UpDownCounter other than by a No-Op Meter.
 
 UpDownCounters MUST NOT return a non-empty error or log any message for
 any operations they perform.
@@ -223,9 +214,6 @@ state about the arguments it receives.
 
 ### Histogram
 
-Histograms are always created by a Meter, the No-Op MUST NOT provide a
-way for a user to create a Histogram other than by a No-Op Meter.
-
 Histograms MUST NOT return a non-empty error or log any message for any
 operations they perform.
 
@@ -238,10 +226,6 @@ implements the [API](./api.md#record). It MUST NOT validate or retain
 any state about the arguments it receives.
 
 ### Asynchronous Counter
-
-Asynchronous Counters are always created by a Meter, the No-Op MUST NOT
-provide a way for a user to create a Asynchronous Counter other than by
-a No-Op Meter.
 
 Asynchronous Counters MUST NOT return a non-empty error or log any
 message for any operations they perform.
@@ -256,10 +240,6 @@ about observations made for the instrument.
 
 ### Asynchronous UpDownCounter
 
-Asynchronous UpDownCounters are always created by a Meter, the No-Op
-MUST NOT provide a way for a user to create a Asynchronous UpDownCounter
-other than by a No-Op Meter.
-
 Asynchronous UpDownCounters MUST NOT return a non-empty error or log any
 message for any operations they perform.
 
@@ -272,10 +252,6 @@ The No-Op Asynchronous UpDownCounter MUST NOT validate or retain any
 state about observations made for the instrument.
 
 ### Asynchronous Gauge
-
-Asynchronous Gauges are always created by a Meter, the No-Op MUST NOT
-provide a way for a user to create a Asynchronous Gauge other than by a
-No-Op Meter.
 
 Asynchronous Gauges MUST NOT return a non-empty error or log any message
 for any operations they perform.
