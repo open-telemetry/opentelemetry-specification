@@ -63,6 +63,8 @@ release.
 - Stabilize key components of `service.*` and `telemetry.sdk.*` resource
   semantic conventions.
   ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
+- Mark attribute requirement levels as stable
+  ([#3368](https://github.com/open-telemetry/opentelemetry-specification/pull/3368))
 
 ### Compatibility
 
