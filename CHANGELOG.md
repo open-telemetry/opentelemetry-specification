@@ -65,6 +65,8 @@ release.
 - Stabilize key components of `service.*` and `telemetry.sdk.*` resource
   semantic conventions.
   ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
+- Add Trino to Database specific conventions
+  ([#3347](https://github.com/open-telemetry/opentelemetry-specification/pull/3347))
 
 ### Compatibility
 
