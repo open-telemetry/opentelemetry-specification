@@ -166,6 +166,9 @@ groups:
             - id: spanner
               value: 'spanner'
               brief: 'Cloud Spanner'
+            - id: trino
+              value: 'trino'
+              brief: 'Trino'
       - id: connection_string
         tag: connection-level
         type: string
