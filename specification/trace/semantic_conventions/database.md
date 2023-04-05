@@ -121,6 +121,7 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `opensearch` | OpenSearch |
 | `clickhouse` | ClickHouse |
 | `spanner` | Cloud Spanner |
+| `trino` | Trino |
 <!-- endsemconv -->
 
 ### Notes and well-known identifiers for `db.system`
