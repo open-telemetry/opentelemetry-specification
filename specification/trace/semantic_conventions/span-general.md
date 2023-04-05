@@ -41,8 +41,8 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | Recommended |
-| `net.app.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| `net.app.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
+| `net.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| `net.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
 | `net.sock.peer.name` | string | Remote socket peer name. | `proxy.example.com` | Recommended: [2] |
 | `net.sock.peer.addr` | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | `net.sock.peer.port` | int | Remote socket peer port. | `16456` | Recommended: [3] |
@@ -52,7 +52,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.name` | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
 | `net.host.port` | int | Logical local port number, preferably the one that the peer used to connect | `8080` | Recommended |
 | `net.sock.host.addr` | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
-| `net.sock.host.port` | int | Local socket port number. | `35555` | Recommended: [6] |
+| `net.sock.host.port` | int | Local socket port number. | `35555` | Conditionally Required: [6] |
 | `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
 | `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
 | `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
@@ -60,7 +60,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
 | `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
 
-**[1]:** `net.app.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[1]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
 **[2]:** If available and different from `net.peer.name` and if `net.sock.peer.addr` is set.
 
@@ -70,7 +70,7 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 **[5]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set.
+**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
 
 `net.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 

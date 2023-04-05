@@ -11,8 +11,83 @@ release.
 
 ### Traces
 
+* Clarify required parent information in ReadableSpan. Technically a relaxation,
+  but previously it was easy to overlook certain properties were required.
+  [#3257](https://github.com/open-telemetry/opentelemetry-specification/pull/3257)
+
 ### Metrics
 
+- Clarify that units should use UCUM case sensitive variant.
+  ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
+- Remove No-Op instrument and Meter creation requirements.
+  ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
+- Fixed attributes requirement level in semantic conventions for hardware metrics
+  ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
+
+### Logs
+
+- Update log readme "request context" to "trace context".
+  ([#3332](https://github.com/open-telemetry/opentelemetry-specification/pull/3332))
+- Remove log readme document status.
+  ([#3334](https://github.com/open-telemetry/opentelemetry-specification/pull/3334))
+- Break out compatibility document on recording trace context in non-OTLP Log Format
+  ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
+- Ensure Logs Bridge API doesn't contain SDK implementation details
+  ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
+- Add log appender / bridge to glossary.
+  ([#3335](https://github.com/open-telemetry/opentelemetry-specification/pull/3335))
+
+### Resource
+
+### Semantic Conventions
+
+- Clarify that attribute requirement levels apply to the instrumentation library
+  ([#3289](https://github.com/open-telemetry/opentelemetry-specification/pull/3289))
+- Fix grammatical number of metric units.
+  ([#3298](https://github.com/open-telemetry/opentelemetry-specification/pull/3298))
+- Rename `net.app.protocol.(name|version)` to `net.protocol.(name|version)`
+  ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
+- Replace `http.flavor` with `net.protocol.(name|version)`
+  ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
+- Metric requirement levels are now stable
+  ([#3271](https://github.com/open-telemetry/opentelemetry-specification/pull/3271))
+- BREAKING: remove `messaging.destination.kind` and `messaging.source.kind`.
+  ([#3214](https://github.com/open-telemetry/opentelemetry-specification/pull/3214),
+  [#3348](https://github.com/open-telemetry/opentelemetry-specification/pull/3348))
+- Define attributes collected for `cosmosdb` by Cosmos DB SDK
+  ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
+- Clarify stability requirements of semantic conventions
+  ([#3225](https://github.com/open-telemetry/opentelemetry-specification/pull/3225))
+- BREAKING: Change span statuses for gRPC server spans.
+  ([#3333](https://github.com/open-telemetry/opentelemetry-specification/pull/3333))
+- Stabilize key components of `service.*` and `telemetry.sdk.*` resource
+  semantic conventions.
+  ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+### Common
+
+## v1.19.0 (2023-03-06)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Add unit to View's Instrument selection criteria.
+  ([#3184](https://github.com/open-telemetry/opentelemetry-specification/pull/3184))
 - Add metric requirement levels "Required", "Recommended", and "Opt-In".
   ([#3237](https://github.com/open-telemetry/opentelemetry-specification/pull/3237))
 
@@ -25,28 +100,60 @@ release.
 
 ### Resource
 
+- Clarify how to collect `host.id` for non-containerized systems.
+  ([#3173](https://github.com/open-telemetry/opentelemetry-specification/pull/3173))
+
 ### Semantic Conventions
 
 - Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
   ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
+- Add heroku resource semantic conventions.
+  [#3075](https://github.com/open-telemetry/opentelemetry-specification/pull/3075)
 - BREAKING: Rename faas.execution to faas.invocation_id
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
 - BREAKING: Change faas.max_memory units to Bytes instead of MB
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
+- BREAKING: Expand scope of faas.id to cloud.resource_id
+  ([#3188](https://github.com/open-telemetry/opentelemetry-specification/pull/3188))
 - Add Connect RPC specific conventions
   ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
 - Rename JVM metric attribute value from `nonheap` to `non_heap`
   ([#3250](https://github.com/open-telemetry/opentelemetry-specification/pull/3250))
 - Mark the attribute naming guidelines in the specification as stable.
   ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
+- Mark telemetry schema readme stable.
+  ([#3221](https://github.com/open-telemetry/opentelemetry-specification/pull/3221))
+- Remove mention of `net.transport` from HTTP semantic conventions
+  ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
+- Clarifies that if an HTTP client request is explicitly made to an IP address,
+  e.g. `http://x.x.x.x:8080`, then `net.peer.name` SHOULD be the IP address `x.x.x.x`
+  ([#3276](https://github.com/open-telemetry/opentelemetry-specification/pull/3276))
+- Mark `net.sock.host.port` as conditionally required.
+  ([#3246](https://github.com/open-telemetry/opentelemetry-specification/pull/3246))
+- Rename Optional attribute requirement level to Opt-In.
+  ([#3228](https://github.com/open-telemetry/opentelemetry-specification/pull/3228))
+- Rename `http.user_agent` to `user_agent.original`.
+  ([#3190](https://github.com/open-telemetry/opentelemetry-specification/pull/3190))
+- Expand the declaration of `pool.name`.
+  ([#3050](https://github.com/open-telemetry/opentelemetry-specification/pull/3050))
 
 ### Compatibility
 
+- Update Zipkin remoteEndpoint preferences.
+  ([#3087](https://github.com/open-telemetry/opentelemetry-specification/pull/3087))
+
 ### OpenTelemetry Protocol
+
+- Declare OTLP/JSON Stable.
+  ([#2930](https://github.com/open-telemetry/opentelemetry-specification/pull/2930))
 
 ### SDK Configuration
 
+- No changes.
+
 ### Telemetry Schemas
+
+- No changes.
 
 ### Common
 
@@ -68,8 +175,7 @@ release.
 
 ### Metrics
 
-- Add unit to View's Instrument selection criteria.
-  ([#3184](https://github.com/open-telemetry/opentelemetry-specification/pull/3184))
+- No changes.
 
 ### Logs
 
@@ -165,6 +271,8 @@ release.
 
 - Clarify usage of log body for structured logs
   ([#3023](https://github.com/open-telemetry/opentelemetry-specification/pull/3023))
+- Move appendices from Data Model to new Data Model Appendix document
+  ([#3207](https://github.com/open-telemetry/opentelemetry-specification/pull/3207))
 
 ### Resource
 

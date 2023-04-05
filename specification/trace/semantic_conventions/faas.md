@@ -39,6 +39,7 @@ If Spans following this convention are produced, a Resource of type `faas` MUST 
 |---|---|---|---|---|
 | `faas.trigger` | string | Type of the trigger which caused this function invocation. [1] | `datasource` | Recommended |
 | `faas.invocation_id` | string | The invocation ID of the current function invocation. | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28` | Recommended |
+| [`cloud.resource_id`](../../resource/semantic_conventions/cloud.md) | string | Cloud provider-specific native identifier of the monitored cloud resource (e.g. an [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) on AWS, a [fully qualified resource ID](https://learn.microsoft.com/en-us/rest/api/resources/resources/get-by-id) on Azure, a [full resource name](https://cloud.google.com/apis/design/resource_names#full_resource_name) on GCP) [2] | `arn:aws:lambda:REGION:ACCOUNT_ID:function:my-function`; `//run.googleapis.com/projects/PROJECT_ID/locations/LOCATION_ID/services/SERVICE_ID`; `/subscriptions/<SUBSCIPTION_GUID>/resourceGroups/<RG>/providers/Microsoft.Web/sites/<FUNCAPP>/functions/<FUNC>` | Recommended |
 
 **[1]:** For the server/consumer span on the incoming side,
 `faas.trigger` MUST be set.
@@ -49,6 +50,24 @@ the event type. If clients set it, it should be the same as the
 trigger that corresponding incoming would have (i.e., this has
 nothing to do with the underlying transport used to make the API
 call to invoke the lambda, which is often HTTP).
+
+**[2]:** On some cloud providers, it may not be possible to determine the full ID at startup,
+so it may be necessary to set `cloud.resource_id` as a span attribute instead.
+
+The exact value to use for `cloud.resource_id` depends on the cloud provider.
+The following well-known definitions MUST be used if you set this attribute and they apply:
+
+* **AWS Lambda:** The function [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html).
+  Take care not to use the "invoked ARN" directly but replace any
+  [alias suffix](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html)
+  with the resolved function version, as the same runtime instance may be invokable with
+  multiple different aliases.
+* **GCP:** The [URI of the resource](https://cloud.google.com/iam/docs/full-resource-names)
+* **Azure:** The [Fully Qualified Resource ID](https://docs.microsoft.com/en-us/rest/api/resources/resources/get-by-id) of the invoked function,
+  *not* the function app, having the form
+  `/subscriptions/<SUBSCIPTION_GUID>/resourceGroups/<RG>/providers/Microsoft.Web/sites/<FUNCAPP>/functions/<FUNC>`.
+  This means that a span attribute MUST be used, as an Azure function app can host multiple functions that would usually share
+  a TracerProvider.
 
 `faas.trigger` MUST be one of the following:
 
@@ -121,7 +140,7 @@ FaaS environments some of the information required for resource
 attributes is only readily available in the context of an invocation (e.g. as part of a "request context" argument)
 and while a separate API call to look up the resource information is often possible, it
 may be prohibitively expensive due to cold start duration concerns.
-The `faas.id` and `cloud.account.id` attributes on AWS are some examples.
+The `cloud.resource_id` and `cloud.account.id` attributes on AWS are some examples.
 In principle, the above considerations apply to any resource attribute that fulfills the criteria above
 (not being readily available without some extra effort that could be expensive).
 
@@ -233,6 +252,5 @@ This example shows the FaaS attributes for a (non-FaaS) process hosted on Google
 | Span           | `faas.invocation_id`    | n/a                    | `"af9d5aa4-a685-4c5f-a22b-444f80b3cc28"` |
 | Span           | `faas.coldstart`        | n/a                    | `true` |
 | Resource       | `faas.name`             | n/a                    | `"my-lambda-function"` |
-| Resource       | `faas.id`               | n/a                    | `"arn:aws:lambda:us-west-2:123456789012:function:my-lambda-function"` |
 | Resource       | `faas.version`          | n/a                    | `"semver:2.0.0"` |
 | Resource       | `faas.instance`         | n/a                    | `"my-lambda-function:instance-0001"` |

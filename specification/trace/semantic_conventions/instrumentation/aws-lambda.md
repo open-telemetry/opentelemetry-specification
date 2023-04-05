@@ -37,14 +37,7 @@ Lambda `Context`.
 The following attributes SHOULD be set:
 
 - [`faas.invocation_id`][faas] - The value of the AWS Request ID, which is always available through an accessor on the Lambda `Context`.
-- [`faas.id`][faasres] - The value of the invocation ARN
-  for the function, which is always available through an accessor on the
-  Lambda `Context`, modified as follows: Discard all parts beyond the seventh (when split on `:`;
-  the seventh part is the function name) and append the [`faas.version`][faasres], separated by a colon.
-
-  Note that this is set as span attribute instead of resource attribute due to technical limitations
-  (account ID is not available at startup).
-- [`cloud.account.id`][cloud] - In some languages, this is available as an accessor on the Lambda `Context`. Otherwise, it can be parsed from the value of `faas.id` as the fifth item when splitting on `:`
+- [`cloud.account.id`][cloud] - In some languages, this is available as an accessor on the Lambda `Context`. Otherwise, it can be parsed from the ARN as the fifth item when splitting on `:`
 
 Also consider setting other attributes of the [`faas` resource][faasres] and [trace][faas] conventions
 and the [cloud resource conventions][cloud]. The following AWS Lambda-specific attribute MAY also be set:
@@ -54,7 +47,7 @@ and the [cloud resource conventions][cloud]. The following AWS Lambda-specific a
 |---|---|---|---|---|
 | `aws.lambda.invoked_arn` | string | The full invoked ARN as provided on the `Context` passed to the function (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable). [1] | `arn:aws:lambda:us-east-1:123456:function:myfunction:myalias` | Recommended |
 
-**[1]:** This may be different from `faas.id` if an alias is involved.
+**[1]:** This may be different from `cloud.resource_id` if an alias is involved.
 <!-- endsemconv -->
 
 [faas]: ../faas.md (FaaS trace conventions)
@@ -133,7 +126,6 @@ added as a link to the span.
 - [`faas.trigger`][faas] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
 - [`messaging.system`](../messaging.md#messaging-attributes) MUST be set to `AmazonSQS`.
-- [`messaging.destination.kind` or `messaging.source.kind`](../messaging.md#messaging-attributes) MUST be set to `queue`.
 
 Other [Messaging attributes](../messaging.md#messaging-attributes) SHOULD be set based on the available information in the SQS message
 event.
@@ -170,7 +162,6 @@ Function F:    | Span Function |
 | SpanKind | `CLIENT` | `SERVER` |
 | Status | `Ok` | `Ok` |
 | `faas.invocation_id` | | `79104EXAMPLEB723` |
-| `faas.id` | | `arn:aws:lambda:us-west-2:123456789012:function:my-function` |
 | `faas.trigger` | | `http` |
 | `cloud.account.id` | | `12345678912` |
 | `net.peer.name` | `foo.execute-api.us-east-1.amazonaws.com` |  |
@@ -252,7 +243,7 @@ AWS Lambda resource information is available as [environment variables][] provid
 - [`faas.name`][faasres] MUST be set to the value of the `AWS_LAMBDA_FUNCTION_NAME` environment variable
 - [`faas.version`][faasres] MUST be set to the value of the `AWS_LAMBDA_FUNCTION_VERSION` environment variable
 
-Note that [`faas.id`][faasres] currently cannot be populated to resource
+Note that [`cloud.resource_id`][cloud] currently cannot be populated as a resource
 because it is not available until function invocation.
 
 [environment variables]: https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
