@@ -11,10 +11,16 @@ release.
 
 ### Traces
 
+* Clarify required parent information in ReadableSpan. Technically a relaxation,
+  but previously it was easy to overlook certain properties were required.
+  [#3257](https://github.com/open-telemetry/opentelemetry-specification/pull/3257)
+
 ### Metrics
 
 - Clarify that units should use UCUM case sensitive variant.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
+- Remove No-Op instrument and Meter creation requirements.
+  ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
 - Fixed attributes requirement level in semantic conventions for hardware metrics
   ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
 
@@ -30,6 +36,8 @@ release.
   ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
 - Add Log Bridge API artifact naming guidance
   ([#3346](https://github.com/open-telemetry/opentelemetry-specification/pull/3346))
+- Add log appender / bridge to glossary.
+  ([#3335](https://github.com/open-telemetry/opentelemetry-specification/pull/3335))
 
 ### Resource
 
@@ -46,9 +54,17 @@ release.
 - Metric requirement levels are now stable
   ([#3271](https://github.com/open-telemetry/opentelemetry-specification/pull/3271))
 - BREAKING: remove `messaging.destination.kind` and `messaging.source.kind`.
-  ([#3214](https://github.com/open-telemetry/opentelemetry-specification/pull/3214))
+  ([#3214](https://github.com/open-telemetry/opentelemetry-specification/pull/3214),
+  [#3348](https://github.com/open-telemetry/opentelemetry-specification/pull/3348))
 - Define attributes collected for `cosmosdb` by Cosmos DB SDK
   ([#3097](https://github.com/open-telemetry/opentelemetry-specification/pull/3097))
+- Clarify stability requirements of semantic conventions
+  ([#3225](https://github.com/open-telemetry/opentelemetry-specification/pull/3225))
+- BREAKING: Change span statuses for gRPC server spans.
+  ([#3333](https://github.com/open-telemetry/opentelemetry-specification/pull/3333))
+- Stabilize key components of `service.*` and `telemetry.sdk.*` resource
+  semantic conventions.
+  ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
 
 ### Compatibility
 
