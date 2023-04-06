@@ -46,5 +46,5 @@ their language, e.g. via version numbers, artifact names, documentation, etc.
 
 Stable instrumentations authored by OpenTelemetry SHOULD include a schema URL indicating
 which version of OpenTelemetry semantic conventions it conforms to.
-Stable instrumentations SHOULD NOT produce telemetry that is not described by OpenTelemetry
+Stable instrumentations authored by OpenTelemetry SHOULD NOT produce telemetry that is not described by OpenTelemetry
 semantic conventions.
