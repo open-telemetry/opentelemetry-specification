@@ -206,7 +206,31 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 
 ### gRPC Status
 
-The [Span Status](../api.md#set-status) MUST be left unset for an `OK` gRPC status code, and set to `Error` for all others.
+The table below describes when
+the [Span Status](../api.md#set-status) MUST be set
+to `Error` or remain unset
+depending on the [gRPC status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md)
+and [Span Kind](../api.md#spankind).
+
+| gRPC Status Code | `SpanKind.SERVER` Span Status | `SpanKind.CLIENT` Span Status |
+|---|---|---|
+| OK | unset | unset |
+| CANCELLED | unset | `Error` |
+| UNKNOWN | `Error` | `Error`  |
+| INVALID_ARGUMENT | unset | `Error` |
+| DEADLINE_EXCEEDED | `Error` | `Error` |
+| NOT_FOUND | unset | `Error` |
+| ALREADY_EXISTS | unset | `Error` |
+| PERMISSION_DENIED | unset | `Error` |
+| RESOURCE_EXHAUSTED | unset| `Error` |
+| FAILED_PRECONDITION | unset | `Error` |
+| ABORTED | unset | `Error` |
+| OUT_OF_RANGE | unset | `Error` |
+| UNIMPLEMENTED | `Error` | `Error` |
+| INTERNAL | `Error` | `Error` |
+| UNAVAILABLE | `Error` | `Error` |
+| DATA_LOSS | `Error` | `Error` |
+| UNAUTHENTICATED | unset | `Error` |
 
 ### gRPC Request and Response Metadata
 
