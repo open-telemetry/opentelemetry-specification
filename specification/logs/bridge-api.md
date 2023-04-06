@@ -18,6 +18,7 @@
 - [LogRecord](#logrecord)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
+- [Artifact Naming](#artifact-naming)
 - [Usage](#usage)
   * [How to Create a Log4J Log Appender](#how-to-create-a-log4j-log-appender)
   * [Implicit Context Injection](#implicit-context-injection)
@@ -157,6 +158,15 @@ specific guarantees and safeties.
 **LoggerProvider** - all methods are safe to be called concurrently.
 
 **Logger** - all methods are safe to be called concurrently.
+
+## Artifact Naming
+
+The Logs Bridge API is not intended to be called by application developers
+directly, and SHOULD include documentation that discourages direct use. However,
+in the event OpenTelemetry were to add a user facing API, the Logs Bridge API would
+be a natural starting point. Therefore, Log Bridge API artifact, package, and class
+names MUST NOT include the terms "bridge", "appender", or any other qualifier
+that would prevent evolution into a user facing API.
 
 ## Usage
 
