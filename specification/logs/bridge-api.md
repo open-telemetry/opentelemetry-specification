@@ -124,7 +124,7 @@ The API MUST accept the following parameters:
 - [Timestamp](./data-model.md#field-timestamp)
 - [Observed Timestamp](./data-model.md#field-observedtimestamp)
 - The [Context](../context/README.md) associated with the `LogRecord`. The API
-  MAY also have an option for implicitly using the current Context as a default
+  MAY implicitly use the current Context as a default
   behavior.
 - [Severity Number](./data-model.md#field-severitynumber)
 - [Severity Text](./data-model.md#field-severitytext)
