@@ -18,14 +18,14 @@ When there is no target or document id, the span name will contain the exact url
 ### Span attributes
 
 <!-- semconv elasticsearch -->
-| Attribute                 | Type | Description                                                         | Examples                                                | Requirement Level      |
-|---------------------------|---|---------------------------------------------------------------------|---------------------------------------------------------|------------------------|
-| `db.elasticsearch.doc_id` | string | The document that the request targets, specified in the path.       | `'123'`                                                 | Conditionally Required |
-| `db.elasticsearch.params` | string | The query params of the request, as a json string.                  | `'"{\"q\":\"test\"}", "{\"refresh\":true}"'`            | Conditionally Required |
-| `db.elasticsearch.target` | string | The name of the data stream or index that is targeted.              | `'users'`                                               | Conditionally Required |
-| `db.elasticsearch.url`    | string | The exact url of the request, including the target and document id. | `'/test-index/_doc/123'`                                | Required               |
-| `db.elasticsearch.method` | string | The HTTP method of the request.                                     | `'GET'`                                                 | Required               |
-| `db.statement`            | string | The request body, as a json string. [1]                             | `"{\"name\":\"TestUser\",\"password\":\"top_secret\"}"` | Conditionally Required |
+| Attribute                  | Type | Description                                                          | Examples                                                | Requirement Level      |
+|----------------------------|---|----------------------------------------------------------------------|---------------------------------------------------------|------------------------|
+| `db.elasticsearch.doc_id`  | string | The document that the request targets, specified in the path.        | `'123'`                                                 | Conditionally Required |
+| `db.elasticsearch.target`  | string | The name of the data stream or index that is targeted.               | `'users'`                                               | Conditionally Required |
+| `db.elasticsearch.url.path` | string | The exact path of the request, including the target and document id. | `'/test-index/_doc/123'`                                | Required               |
+| `db.elasticsearch.url.query` | string | The query params of the request, as a json string. | `'"{\"q\":\"test\"}", "{\"refresh\":true}"'`            | Conditionally Required |
+| `db.statement`             | string | The request body, as a json string. [1]                              | `"{\"name\":\"TestUser\",\"password\":\"top_secret\"}"` | Conditionally Required |
+| `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD`                                   | Required               |
 
 **[1]:** The value may be sanitized to exclude sensitive information.
 <!-- endsemconv -->

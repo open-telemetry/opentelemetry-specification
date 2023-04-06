@@ -400,10 +400,10 @@ groups:
         brief: >
           The document that the request targets.
         examples: [ '123', '456' ]
-      - id: params
+      - id: url.query
         type: string
         requirement_level:
-          conditionally_required: when params are provided as part of the request
+          conditionally_required: when query params are provided as part of the request
         tag: call-level-tech-specific
         brief: >
           The query params of the request, as a json string.
@@ -416,20 +416,16 @@ groups:
         brief: >
           The name of the data stream or index that is targeted.
         examples: [ 'users' ]
-      - id: url
+      - id: url.path
         type: string
         requirement_level: required
         tag: call-level-tech-specific
         brief: >
-          The url of the request, including the target and exact document id.
+          The path of the request, including the target and exact document id.
         examples: [ '/test-index/_search', '/test-index/_doc/123' ]
-      - id: method
-        type: string
+      - ref: http.method
         requirement_level: required
-        tag: call-level-tech-specific
-        brief: >
-          The HTTP method of the request.
-        examples: [ 'GET', 'PUT' ]
+
   - id: db.sql
     prefix: 'db.sql'
     type: span
@@ -562,3 +558,4 @@ groups:
       - include: 'db.mongodb'
       - include: 'db.sql'
       - include: 'db.cosmosdb'
+      - include: 'db.elasticsearch'
