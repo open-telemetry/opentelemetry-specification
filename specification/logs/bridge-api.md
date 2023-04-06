@@ -35,7 +35,8 @@ data model.</b>
 The Logs Bridge API consist of these main classes:
 
 * [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
-* [Logger](#logger) is the class responsible for emitting logs as [LogRecords](#logrecord).
+* [Logger](#logger) is the class responsible for emitting logs as
+  [LogRecords](./data-model.md#log-and-event-record-definition).
 
 ```mermaid
 graph TD
@@ -164,7 +165,7 @@ approaches.
 
 The log appender implementation will typically acquire a [Logger](#logger) from the
 global [LoggerProvider](#loggerprovider) at startup time, then
-call [Emit LogRecord](#emit-logrecord) for `LogRecord`s received from the
+call [Emit LogRecord](#emit-a-logrecord) for `LogRecord`s received from the
 application.
 
 [Implicit Context Injection](#implicit-context-injection)
