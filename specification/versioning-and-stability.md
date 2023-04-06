@@ -168,9 +168,8 @@ relies on the concept of
 Semantic Conventions defines breaking changes as those that would break the
 common usage of tooling written against the telemetry it produces. That is, the
 portions of telemetry where specialized tooling (alerts, dashboards, e.g.)
-interact are expected to remain stable for that tooling *after schema
-transformations are applied*. These also assume no user interventions in the
-default configuration, e.g. Samplers, Views, etc.
+interact are expected to remain stable for that tooling. These also assume no
+user interventions in the default configuration, e.g. Samplers, Views, etc.
 
 Semantic Conventions defines the set of fields in the OTLP data model:
 
