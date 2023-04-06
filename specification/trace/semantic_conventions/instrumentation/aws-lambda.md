@@ -45,7 +45,7 @@ and the [cloud resource conventions][cloud]. The following AWS Lambda-specific a
 <!-- semconv aws.lambda -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `aws.lambda.invoked_arn` | string | The full invoked ARN as provided on the `Context` passed to the function (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable). [1] | `arn:aws:lambda:us-east-1:123456:function:myfunction:myalias` | Recommended |
+| `aws.lambda.invoked_arn` | string | **Stable**<br>The full invoked ARN as provided on the `Context` passed to the function (`Lambda-Runtime-Invoked-Function-Arn` header on the `/runtime/invocation/next` applicable). [1] | `arn:aws:lambda:us-east-1:123456:function:myfunction:myalias` | Recommended |
 
 **[1]:** This may be different from `cloud.resource_id` if an alias is involved.
 <!-- endsemconv -->
@@ -167,13 +167,11 @@ Function F:    | Span Function |
 | `server.address` | `foo.execute-api.us-east-1.amazonaws.com` |  |
 | `server.port` | `413` |  |
 | `http.method` | `GET` | `GET` |
-| `http.user_agent` | `okhttp 3.0` | `okhttp 3.0` |
-| `http.url` | `https://foo.execute-api.us-east-1.amazonaws.com/pets/10` |  |
-| `http.scheme` | | `https` |
-| `http.host` | | `foo.execute-api.us-east-1.amazonaws.com` |
-| `http.target` | | `/pets/10` |
-| `http.route` | | `/pets/{petId}` |
-| `http.status_code` | `200` | `200` |
+| `user_agent.original` | `okhttp 3.0` | `okhttp 3.0` |
+| `url.full` | `https://foo.execute-api.us-east-1.amazonaws.com/pets/10` |  |
+| `url.scheme` | | `https` |
+| `url.path` | | `/pets/10` |
+| `http.response.status_code` | `200` | `200` |
 
 ### API Gateway Request Proxy (Lambda tracing active)
 

@@ -9,5 +9,5 @@
 <!-- semconv deployment -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `deployment.environment` | string | Name of the [deployment environment](https://en.wikipedia.org/wiki/Deployment_environment) (aka deployment tier). | `staging`; `production` | Recommended |
+| `deployment.environment` | string | **Stable**<br>Name of the [deployment environment](https://en.wikipedia.org/wiki/Deployment_environment) (aka deployment tier). | `staging`; `production` | Recommended |
 <!-- endsemconv -->

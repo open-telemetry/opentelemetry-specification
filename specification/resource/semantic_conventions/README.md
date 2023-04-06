@@ -75,7 +75,7 @@ as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource
 <!-- semconv service -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `service.name` | string | Logical name of the service. [1] | `shoppingcart` | Required |
+| `service.name` | string | **Stable**<br>Logical name of the service. [1] | `shoppingcart` | Required |
 
 **[1]:** MUST be the same for all instances of horizontally scaled services. If the value was not specified, SDKs MUST fallback to `unknown_service:` concatenated with [`process.executable.name`](process.md#process), e.g. `unknown_service:bash`. If `process.executable.name` is not available, the value MUST be set to `unknown_service`.
 <!-- endsemconv -->
@@ -91,9 +91,9 @@ as specified in the [Resource SDK specification](../sdk.md#sdk-provided-resource
 <!-- semconv service_experimental -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `service.namespace` | string | A namespace for `service.name`. [1] | `Shop` | Recommended |
-| `service.instance.id` | string | The string ID of the service instance. [2] | `my-k8s-pod-deployment-1`; `627cc493-f310-47de-96bd-71410b7dec09` | Recommended |
-| `service.version` | string | The version string of the service API or implementation. | `2.0.0` | Recommended |
+| `service.namespace` | string | **Stable**<br>A namespace for `service.name`. [1] | `Shop` | Recommended |
+| `service.instance.id` | string | **Stable**<br>The string ID of the service instance. [2] | `my-k8s-pod-deployment-1`; `627cc493-f310-47de-96bd-71410b7dec09` | Recommended |
+| `service.version` | string | **Stable**<br>The version string of the service API or implementation. | `2.0.0` | Recommended |
 
 **[1]:** A string value having a meaning that helps to distinguish a group of services, for example the team name that owns a group of services. `service.name` is expected to be unique within the same namespace. If `service.namespace` is not specified in the Resource then `service.name` is expected to be unique for all services that have no explicit namespace defined (so the empty/unspecified namespace is simply one more valid namespace). Zero-length namespace string is assumed equal to unspecified namespace.
 
@@ -125,9 +125,9 @@ service.name = Shop.shoppingcart
 <!-- semconv telemetry -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. [1] | `opentelemetry` | Required |
-| `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | Required |
-| `telemetry.sdk.version` | string | The version string of the telemetry SDK. | `1.2.3` | Required |
+| `telemetry.sdk.name` | string | **Stable**<br>The name of the telemetry SDK as defined above. [1] | `opentelemetry` | Required |
+| `telemetry.sdk.language` | string | **Stable**<br>The language of the telemetry SDK. | `cpp` | Required |
+| `telemetry.sdk.version` | string | **Stable**<br>The version string of the telemetry SDK. | `1.2.3` | Required |
 
 **[1]:** The OpenTelemetry SDK MUST set the `telemetry.sdk.name` attribute to `opentelemetry`.
 If another SDK, like a fork or a vendor-provided implementation, is used, this SDK MUST set the
@@ -165,7 +165,7 @@ All custom identifiers SHOULD be stable across different versions of an implemen
 <!-- semconv telemetry_experimental -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `telemetry.auto.version` | string | The version string of the auto instrumentation agent, if used. | `1.2.3` | Recommended |
+| `telemetry.auto.version` | string | **Stable**<br>The version string of the auto instrumentation agent, if used. | `1.2.3` | Recommended |
 <!-- endsemconv -->
 
 ## Compute Unit

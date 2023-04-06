@@ -23,7 +23,7 @@ between a child Span and a parent Span, as defined by
 <!-- semconv opentracing -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `opentracing.ref_type` | string | Parent-child Reference type [1] | `child_of` | Recommended |
+| `opentracing.ref_type` | string | **Stable**<br>Parent-child Reference type [1] | `child_of` | Recommended |
 
 **[1]:** The causal relationship between a child Span and a parent Span.
 

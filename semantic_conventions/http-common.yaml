@@ -1,15 +1,56 @@
 groups:
+  - id: attributes.http.deprecated
+    type: attribute_group
+    brief: "Describes deprecated HTTP attributes."
+    prefix: http
+    attributes:
+      - id: method
+        type: string
+        brief: 'Deprecated, use `http.request.method` instead.'
+        stability: deprecated
+        examples: ["GET", "POST", "HEAD"]
+      - id: status_code
+        type: int
+        brief: 'Deprecated, use `http.response.status_code` instead.'
+        stability: deprecated
+        examples: [200]
+      - id: scheme
+        type: string
+        brief: 'Deprecated, use `url.scheme` instead.'
+        stability: deprecated
+        examples: ['http', 'https']
+      - id: url
+        type: string
+        brief: 'Deprecated, use `url.full` instead.'
+        stability: deprecated
+        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
+      - id: target
+        type: string
+        brief: 'Deprecated, use `url.path` and `url.query` instead.'
+        stability: deprecated
+        examples: ['/search?q=OpenTelemetry#SemConv']
+      - id: request_content_length
+        type: int
+        brief: 'Deprecated, use `http.request.body.bytes` instead.'
+        stability: deprecated
+        examples: 3495
+      - id: response_content_length
+        type: int
+        brief: 'Deprecated, use `http.response.body.bytes` instead.'
+        stability: deprecated
+        examples: 3495
+
   - id: attributes.http.common
     type: attribute_group
     brief: "Describes HTTP attributes."
     prefix: http
     attributes:
-      - id: method
+      - id: request.method
         type: string
         requirement_level: required
         brief: 'HTTP request method.'
         examples: ["GET", "POST", "HEAD"]
-      - id: status_code
+      - id: response.status_code
         type: int
         requirement_level:
           conditionally_required: If and only if one was received/sent.
@@ -47,17 +88,13 @@ groups:
         note: >
           When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match
           URI port identifier, otherwise it MUST match `Host` header port identifier.
+      - ref: url.full
 
   - id: attributes.http.server
     prefix: http
     type: attribute_group
     brief: 'HTTP Server spans attributes'
     attributes:
-      - id: scheme
-        type: string
-        brief: 'The URI scheme identifying the used protocol.'
-        requirement_level: required
-        examples: ["http", "https"]
       - id: route
         type: string
         requirement_level:
@@ -96,3 +133,6 @@ groups:
           - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
             if it's sent in absolute-form.
           - Port identifier of the `Host` header
+      - ref: url.scheme
+        requirement_level: required
+        examples: ["http", "https"]

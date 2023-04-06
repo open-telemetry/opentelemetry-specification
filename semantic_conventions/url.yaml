@@ -1,0 +1,27 @@
+groups:
+  - id: url
+    brief: "Describes URL."
+    type: attribute_group
+    prefix: url
+    attributes:
+      - id: scheme
+        type: string
+        brief: 'The URI scheme identifying the used protocol.'
+        examples: ["http", "https"]
+      - id: full
+        type: string
+        brief: >
+            Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`.
+            Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
+        note: >
+          `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
+          In such case the attribute's value should be `https://www.example.com/`.
+        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
+      - id: path
+        type: string
+        brief: 'The URI path'
+        examples: ['/search']
+      - id: query
+        type: string
+        brief: 'The URI query'
+        examples: ["?q=OpenTelemetry#SemConv"]

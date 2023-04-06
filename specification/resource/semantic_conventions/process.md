@@ -27,14 +27,14 @@
 <!-- semconv process -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `process.pid` | int | Process identifier (PID). | `1234` | Recommended |
-| `process.parent_pid` | int | Parent Process identifier (PID). | `111` | Recommended |
-| `process.executable.name` | string | The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`. | `otelcol` | Conditionally Required: See alternative attributes below. |
-| `process.executable.path` | string | The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`. | `/usr/bin/cmd/otelcol` | Conditionally Required: See alternative attributes below. |
-| `process.command` | string | The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`. | `cmd/otelcol` | Conditionally Required: See alternative attributes below. |
-| `process.command_line` | string | The full command used to launch the process as a single string representing the full command. On Windows, can be set to the result of `GetCommandLineW`. Do not set this if you have to assemble it just for monitoring; use `process.command_args` instead. | `C:\cmd\otecol --config="my directory\config.yaml"` | Conditionally Required: See alternative attributes below. |
-| `process.command_args` | string[] | All the command arguments (including the command/executable itself) as received by the process. On Linux-based systems (and some other Unixoid systems supporting procfs), can be set according to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based executables, this would be the full argv vector passed to `main`. | `[cmd/otecol, --config=config.yaml]` | Conditionally Required: See alternative attributes below. |
-| `process.owner` | string | The username of the user that owns the process. | `root` | Recommended |
+| `process.pid` | int | **Stable**<br>Process identifier (PID). | `1234` | Recommended |
+| `process.parent_pid` | int | **Stable**<br>Parent Process identifier (PID). | `111` | Recommended |
+| `process.executable.name` | string | **Stable**<br>The name of the process executable. On Linux based systems, can be set to the `Name` in `proc/[pid]/status`. On Windows, can be set to the base name of `GetProcessImageFileNameW`. | `otelcol` | Conditionally Required: See alternative attributes below. |
+| `process.executable.path` | string | **Stable**<br>The full path to the process executable. On Linux based systems, can be set to the target of `proc/[pid]/exe`. On Windows, can be set to the result of `GetProcessImageFileNameW`. | `/usr/bin/cmd/otelcol` | Conditionally Required: See alternative attributes below. |
+| `process.command` | string | **Stable**<br>The command used to launch the process (i.e. the command name). On Linux based systems, can be set to the zeroth string in `proc/[pid]/cmdline`. On Windows, can be set to the first parameter extracted from `GetCommandLineW`. | `cmd/otelcol` | Conditionally Required: See alternative attributes below. |
+| `process.command_line` | string | **Stable**<br>The full command used to launch the process as a single string representing the full command. On Windows, can be set to the result of `GetCommandLineW`. Do not set this if you have to assemble it just for monitoring; use `process.command_args` instead. | `C:\cmd\otecol --config="my directory\config.yaml"` | Conditionally Required: See alternative attributes below. |
+| `process.command_args` | string[] | **Stable**<br>All the command arguments (including the command/executable itself) as received by the process. On Linux-based systems (and some other Unixoid systems supporting procfs), can be set according to the list of null-delimited strings extracted from `proc/[pid]/cmdline`. For libc-based executables, this would be the full argv vector passed to `main`. | `[cmd/otecol, --config=config.yaml]` | Conditionally Required: See alternative attributes below. |
+| `process.owner` | string | **Stable**<br>The username of the user that owns the process. | `root` | Recommended |
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
@@ -62,9 +62,9 @@ In that case it MUST be interpreted as if it was `process.command_args`.
 <!-- semconv process.runtime -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `process.runtime.name` | string | The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler. | `OpenJDK Runtime Environment` | Recommended |
-| `process.runtime.version` | string | The version of the runtime of this process, as returned by the runtime without modification. | `14.0.2` | Recommended |
-| `process.runtime.description` | string | An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment. | `Eclipse OpenJ9 Eclipse OpenJ9 VM openj9-0.21.0` | Recommended |
+| `process.runtime.name` | string | **Stable**<br>The name of the runtime of this process. For compiled native binaries, this SHOULD be the name of the compiler. | `OpenJDK Runtime Environment` | Recommended |
+| `process.runtime.version` | string | **Stable**<br>The version of the runtime of this process, as returned by the runtime without modification. | `14.0.2` | Recommended |
+| `process.runtime.description` | string | **Stable**<br>An additional description about the runtime of the process, for example a specific vendor customization of the runtime environment. | `Eclipse OpenJ9 Eclipse OpenJ9 VM openj9-0.21.0` | Recommended |
 <!-- endsemconv -->
 
 How to set these attributes for particular runtime kinds is described in the following subsections.

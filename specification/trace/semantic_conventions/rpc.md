@@ -87,15 +87,15 @@ Examples of span names:
 <!-- semconv rpc -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `rpc.system` | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Required |
-| `rpc.service` | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | Recommended |
-| `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | Recommended |
-| [`network.transport`](span-general.md) | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
-| [`network.type`](span-general.md) | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
-| [`server.address`](span-general.md) | string | RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html). [3] | `example.com` | Required |
-| [`server.port`](span-general.md) | int | Logical server port number | `80`; `8080`; `443` | Conditionally Required: See below |
-| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
-| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: [4] |
+| `rpc.system` | string | **Stable**<br>A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Required |
+| `rpc.service` | string | **Stable**<br>The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | Recommended |
+| `rpc.method` | string | **Stable**<br>The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | Recommended |
+| [`network.transport`](span-general.md) | string | **Stable**<br>[OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
+| [`network.type`](span-general.md) | string | **Stable**<br>[OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
+| [`server.address`](span-general.md) | string | **Stable**<br>RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html). [3] | `example.com` | Required |
+| [`server.port`](span-general.md) | int | **Stable**<br>Logical server port number | `80`; `8080`; `443` | Conditionally Required: See below |
+| [`server.socket.address`](span-general.md) | string | **Stable**<br>Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
+| [`server.socket.port`](span-general.md) | int | **Stable**<br>Physical server port. | `16456` | Recommended: [4] |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
 
@@ -144,7 +144,7 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 <!-- semconv rpc.client -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [1] | `proxy.example.com` | Recommended: [2] |
+| [`server.socket.domain`](span-general.md) | string | **Stable**<br>The domain name of an immediate peer. [1] | `proxy.example.com` | Recommended: [2] |
 
 **[1]:** Typically observed from the client side, and represents a proxy or other intermediary domain name.
 
@@ -156,12 +156,12 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 <!-- semconv rpc.server -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| [`client.address`](span-general.md) | string | Client address - unix domain socket name, IPv4 or IPv6 address. [1] | `/tmp/my.sock`; `10.1.2.80` | Recommended |
-| [`client.port`](span-general.md) | int | Client port number [2] | `65123` | Recommended |
-| [`client.socket.address`](span-general.md) | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: If different than `client.address`. |
-| [`client.socket.port`](span-general.md) | int | Immediate client peer port number | `35555` | Recommended: If different than `client.port`. |
-| [`network.transport`](span-general.md) | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
-| [`network.type`](span-general.md) | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
+| [`client.address`](span-general.md) | string | **Stable**<br>Client address - unix domain socket name, IPv4 or IPv6 address. [1] | `/tmp/my.sock`; `10.1.2.80` | Recommended |
+| [`client.port`](span-general.md) | int | **Stable**<br>Client port number [2] | `65123` | Recommended |
+| [`client.socket.address`](span-general.md) | string | **Stable**<br>Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: If different than `client.address`. |
+| [`client.socket.port`](span-general.md) | int | **Stable**<br>Immediate client peer port number | `35555` | Recommended: If different than `client.port`. |
+| [`network.transport`](span-general.md) | string | **Stable**<br>[OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
+| [`network.type`](span-general.md) | string | **Stable**<br>[OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
 
 **[1]:** When observed from the server side, and when communicating through an intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available.
 
@@ -179,10 +179,10 @@ The event name MUST be `message`.
 
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `message.type` | string | Whether this is a received or sent message. | `SENT` | Recommended |
-| `message.id` | int | MUST be calculated as two different counters starting from `1` one for sent messages and one for received message. [1] |  | Recommended |
-| `message.compressed_size` | int | Compressed size of the message in bytes. |  | Recommended |
-| `message.uncompressed_size` | int | Uncompressed size of the message in bytes. |  | Recommended |
+| `message.type` | string | **Stable**<br>Whether this is a received or sent message. | `SENT` | Recommended |
+| `message.id` | int | **Stable**<br>MUST be calculated as two different counters starting from `1` one for sent messages and one for received message. [1] |  | Recommended |
+| `message.compressed_size` | int | **Stable**<br>Compressed size of the message in bytes. |  | Recommended |
+| `message.uncompressed_size` | int | **Stable**<br>Uncompressed size of the message in bytes. |  | Recommended |
 
 **[1]:** This way we guarantee that the values will be consistent between different implementations.
 
@@ -211,7 +211,7 @@ For remote procedure calls via [gRPC][], additional conventions are described in
 <!-- semconv rpc.grpc -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `rpc.grpc.status_code` | int | The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request. | `0` | Required |
+| `rpc.grpc.status_code` | int | **Stable**<br>The [numeric status code](https://github.com/grpc/grpc/blob/v1.33.2/doc/statuscodes.md) of the gRPC request. | `0` | Required |
 
 `rpc.grpc.status_code` MUST be one of the following:
 
@@ -289,7 +289,7 @@ Below is a table of attributes that SHOULD be included on client and server RPC 
 <!-- semconv rpc.connect_rpc -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `rpc.connect_rpc.error_code` | string | The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request. Error codes are always string values. | `cancelled` | Conditionally Required: [1] |
+| `rpc.connect_rpc.error_code` | string | **Stable**<br>The [error codes](https://connect.build/docs/protocol/#error-codes) of the Connect request. Error codes are always string values. | `cancelled` | Conditionally Required: [1] |
 
 **[1]:** If response is not successful and if error code available.
 
@@ -340,11 +340,11 @@ Conventions specific to [JSON RPC](https://www.jsonrpc.org/).
 <!-- semconv rpc.jsonrpc -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `rpc.jsonrpc.version` | string | Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted. | `2.0`; `1.0` | Conditionally Required: If other than the default version (`1.0`) |
-| `rpc.jsonrpc.request_id` | string | `id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification. | `10`; `request-7`; `` | Recommended |
-| `rpc.jsonrpc.error_code` | int | `error.code` property of response if it is an error response. | `-32700`; `100` | Conditionally Required: If response is not successful. |
-| `rpc.jsonrpc.error_message` | string | `error.message` property of response if it is an error response. | `Parse error`; `User already exists` | Recommended |
-| `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [1] | `exampleMethod` | Required |
+| `rpc.jsonrpc.version` | string | **Stable**<br>Protocol version as in `jsonrpc` property of request/response. Since JSON-RPC 1.0 does not specify this, the value can be omitted. | `2.0`; `1.0` | Conditionally Required: If other than the default version (`1.0`) |
+| `rpc.jsonrpc.request_id` | string | **Stable**<br>`id` property of request or response. Since protocol allows id to be int, string, `null` or missing (for notifications), value is expected to be cast to string for simplicity. Use empty string in case of `null` value. Omit entirely if this is a notification. | `10`; `request-7`; `` | Recommended |
+| `rpc.jsonrpc.error_code` | int | **Stable**<br>`error.code` property of response if it is an error response. | `-32700`; `100` | Conditionally Required: If response is not successful. |
+| `rpc.jsonrpc.error_message` | string | **Stable**<br>`error.message` property of response if it is an error response. | `Parse error`; `User already exists` | Recommended |
+| `rpc.method` | string | **Stable**<br>The name of the (logical) method being called, must be equal to the $method part in the span name. [1] | `exampleMethod` | Required |
 
 **[1]:** This is always required for jsonrpc. See the note in the general RPC conventions for more information.
 <!-- endsemconv -->
