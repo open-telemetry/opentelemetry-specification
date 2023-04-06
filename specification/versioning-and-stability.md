@@ -227,21 +227,6 @@ convention and are allowed (or expected) to change. A few examples:
 The list of telemetry fields which are covered by stability guarantees MAY be
 extended.
 
-Changes to semantic conventions in this specification are allowed, provided that
-the changes can be described by schema files. The following changes can be
-currently described and are allowed:
-
-- Renaming of span, metric, log and resource attributes.
-- Renaming of metrics.
-- Renaming of span events.
-
-All such changes MUST be described in the OpenTelemetry
-[Schema File Format](schemas/file_format_v1.1.0.md) and published in this repository.
-For details see [how OpenTelemetry Schemas are published](schemas/README.md#opentelemetry-schema).
-
-See the [Telemetry Stability](telemetry-stability.md) document for details on how
-instrumentations can use schemas to change the instrumentation they produce.
-
 **Exception:** Some resource attributes are embedded in various locations of the
 Specification, e.g. the `service.*` attributes which are required by SDKs to be
 produced and have corresponding [environment variables defined in general SDK configuration](sdk-environment-variables.md#general-sdk-configuration). These resource
