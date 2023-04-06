@@ -203,5 +203,8 @@ implementation detail. Both choices are compliant with this specification.
 ### Consistent UpDownCounter timeseries
 
 When recording `UpDownCounter` metrics, the same attribute values used to record an increment SHOULD be used to record
-any associated decrement (e.g. when capturing `http.server.active_requests`), otherwise those increments and decrements
-will end up as different timeseries.
+any associated decrement, otherwise those increments and decrements will end up as different timeseries.
+
+For example, if you are tracking `active_requests` with an `UpDownCounter`, and you are incrementing it each time a
+request starts and decrementing it each time a request ends, then any attributes which are not yet available when
+incrementing the counter at request start should not be used when decrementing the counter at request end.
