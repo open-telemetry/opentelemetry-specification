@@ -65,6 +65,8 @@ release.
   ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
 - Add Trino to Database specific conventions
   ([#3347](https://github.com/open-telemetry/opentelemetry-specification/pull/3347))
+- Remove schema transformations from the concept of telemetry stability for now
+  ([#3372](https://github.com/open-telemetry/opentelemetry-specification/pull/3372))
 
 ### Compatibility
 
