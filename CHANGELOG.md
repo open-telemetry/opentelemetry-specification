@@ -74,6 +74,8 @@ release.
 - BREAKING: Remove `http.status_code` attribute from the
   `http.server.active_requests` metric.
   ([#3366](https://github.com/open-telemetry/opentelemetry-specification/pull/3366))
+- Mark attribute requirement levels as stable
+  ([#3368](https://github.com/open-telemetry/opentelemetry-specification/pull/3368))
 
 ### Compatibility
 
