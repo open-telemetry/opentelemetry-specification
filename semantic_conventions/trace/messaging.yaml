@@ -152,8 +152,6 @@ groups:
       - ref: net.protocol.name
         examples: ['amqp', 'mqtt']
       - ref: net.protocol.version
-    constraints:
-      - include: network
 
   - id: messaging.producer
     prefix: messaging
