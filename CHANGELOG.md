@@ -71,6 +71,9 @@ release.
   ([#3347](https://github.com/open-telemetry/opentelemetry-specification/pull/3347))
 - Change `db.statement` to only be collected if there is sanitization.
   ([#3127](https://github.com/open-telemetry/opentelemetry-specification/pull/3127))
+- BREAKING: Remove `http.status_code` attribute from the
+  `http.server.active_requests` metric.
+  ([#3366](https://github.com/open-telemetry/opentelemetry-specification/pull/3366))
 
 ### Compatibility
 
