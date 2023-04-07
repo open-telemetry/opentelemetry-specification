@@ -27,4 +27,4 @@ groups:
       - id: query
         type: string
         brief: 'The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component'
-        examples: ["?q=OpenTelemetry#SemConv"]
+        examples: ["?q=OpenTelemetry"]

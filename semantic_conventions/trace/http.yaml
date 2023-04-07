@@ -75,6 +75,9 @@ groups:
       - ref: server.socket.address
       - ref: server.socket.port
       - ref: url.full
+        sampling_relevant: true      
+        requirement_level: required
+
 
   - id: trace.http.server
     prefix: http
@@ -132,5 +135,11 @@ groups:
       - ref: client.socket.address
       - ref: client.socket.port
       - ref: url.path
+        requirement_level: required
       - ref: url.query
-
+        requirement_level:
+          conditionally_required: if available.
+      - ref: url.scheme
+        sampling_relevant: true      
+        requirement_level: required
+        examples: ["http", "https"]
