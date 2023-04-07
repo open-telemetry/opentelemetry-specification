@@ -128,7 +128,6 @@ This span type represents an outbound HTTP request. There are two ways this can 
 2. If for some reason it is not possible to emit a span for each send attempt (because e.g. the instrumented library does not expose hooks that would allow this),
    instrumentations MAY create an HTTP span for the top-most operation of the HTTP client.
    In this case, the `http.url` MUST be the originally requested URL, before any HTTP-redirects that may happen when executing the request.
-   The instrumentation MUST NOT set the `http.resend_count` attribute.
 
 For an HTTP client span, `SpanKind` MUST be `Client`.
 
