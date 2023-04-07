@@ -77,7 +77,6 @@ groups:
       - any_of:
           - net.sock.peer.addr
           - net.peer.name
-      - include: network
 
   - id: rpc.server
     prefix: rpc

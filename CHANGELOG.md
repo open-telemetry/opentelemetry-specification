@@ -11,9 +11,11 @@ release.
 
 ### Traces
 
-* Clarify required parent information in ReadableSpan. Technically a relaxation,
+- Clarify required parent information in ReadableSpan. Technically a relaxation,
   but previously it was easy to overlook certain properties were required.
   [#3257](https://github.com/open-telemetry/opentelemetry-specification/pull/3257)
+- Remove underspecified and unused Span decorator from Trace SDK.
+  ([#3363](https://github.com/open-telemetry/opentelemetry-specification/pull/3363))
 
 ### Metrics
 
@@ -34,6 +36,8 @@ release.
   ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
 - Ensure Logs Bridge API doesn't contain SDK implementation details
   ([#3275](https://github.com/open-telemetry/opentelemetry-specification/pull/3275))
+- Add Log Bridge API artifact naming guidance
+  ([#3346](https://github.com/open-telemetry/opentelemetry-specification/pull/3346))
 - Add log appender / bridge to glossary.
   ([#3335](https://github.com/open-telemetry/opentelemetry-specification/pull/3335))
 
@@ -63,6 +67,10 @@ release.
 - Stabilize key components of `service.*` and `telemetry.sdk.*` resource
   semantic conventions.
   ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
+- Add Trino to Database specific conventions
+  ([#3347](https://github.com/open-telemetry/opentelemetry-specification/pull/3347))
+- Change `db.statement` to only be collected if there is sanitization.
+  ([#3127](https://github.com/open-telemetry/opentelemetry-specification/pull/3127))
 - BREAKING: Remove `http.status_code` attribute from the
   `http.server.active_requests` metric.
   ([#3366](https://github.com/open-telemetry/opentelemetry-specification/pull/3366))
