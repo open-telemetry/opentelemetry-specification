@@ -116,10 +116,17 @@ This metric is optional.
 <!-- semconv metric.http.server.active_requests(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
+<<<<<<< HEAD
 | `http.request.method` | string | **Stable**<br>HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Name of the local HTTP server that received the request. [1] | `example.com` | Required |
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | **Stable**<br>Port of the local HTTP server that received the request. [2] | `80`; `8080`; `443` | Conditionally Required: [3] |
 | `url.scheme` | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `https`; `ftp`; `telnet` | Recommended |
+=======
+| `http.request.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
+| [`net.host.name`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [1] | `localhost` | Required |
+| [`net.host.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [2] | `8080` | Conditionally Required: [3] |
+| `url.scheme` | string | The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
+>>>>>>> dc6e044 (more nits)
 
 **[1]:** Determined by using the first of the following that applies
 

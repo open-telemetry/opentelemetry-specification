@@ -22,6 +22,8 @@ groups:
     attributes:
       - ref: http.request.method
       - ref: url.scheme
+        requirement_level: required
+        examples: ["http", "https"]
       - ref: server.address
         requirement_level: required
         brief: >

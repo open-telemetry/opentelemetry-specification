@@ -311,8 +311,15 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
+<<<<<<< HEAD
 * [`server.address`](span-general.md)
 * [`server.port`](span-general.md)
+=======
+* `http.request.method`
+* [`net.host.name`](span-general.md)
+* [`net.host.port`](span-general.md)
+* `url.path`
+>>>>>>> dc6e044 (more nits)
 * `url.scheme`
 <!-- endsemconv -->
 
