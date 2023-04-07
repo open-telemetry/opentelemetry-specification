@@ -75,7 +75,7 @@ groups:
       - ref: server.socket.address
       - ref: server.socket.port
       - ref: url.full
-        sampling_relevant: true      
+        sampling_relevant: true
         requirement_level: required
 
 
@@ -140,7 +140,8 @@ groups:
       - ref: url.query
         requirement_level:
           conditionally_required: if available.
+        sampling_relevant: true
       - ref: url.scheme
-        sampling_relevant: true      
+        sampling_relevant: true
         requirement_level: required
         examples: ["http", "https"]

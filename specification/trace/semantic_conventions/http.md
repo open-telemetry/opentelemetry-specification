@@ -314,6 +314,7 @@ Following attributes MUST be provided **at span creation time** (when provided a
 * [`server.address`](span-general.md)
 * [`server.port`](span-general.md)
 * `url.path`
+* `url.query`
 * `url.scheme`
 <!-- endsemconv -->
 
@@ -329,6 +330,7 @@ As an example, if a browser request for `https://example.com:8080/webshop/articl
 
 Span name: `GET`
 
+<<<<<<< HEAD
 |   Attribute name     |                                       Value             |
 | :------------------- | :-------------------------------------------------------|
 | `http.request.method`| `"GET"`                                                 |
@@ -338,11 +340,23 @@ Span name: `GET`
 | `server.port`        | 8080                                                    |
 | `server.socket.address` | `"192.0.2.5"`                                        |
 | `http.response.status_code` | `200`                                            |
+=======
+|   Attribute name            |                                       Value             |
+| :-------------------------- | :-------------------------------------------------------|
+| `http.request.method`       | `"GET"`                                                 |
+| `net.protocol.version`      | `"1.1"`                                                 |
+| `url.full`                  | `"https://example.com:8080/webshop/articles/4?s=1"`     |
+| `net.peer.name`             | `"example.com"`                                         |
+| `net.peer.port`             | `8080`                                                  |
+| `net.sock.peer.addr`        | `"192.0.2.5"`                                           |
+| `http.response.status_code` | `200`                                                   |
+>>>>>>> a1af2ba (more nits)
 
 The corresponding server Span may look like this:
 
 Span name: `GET /webshop/articles/:article_id`.
 
+<<<<<<< HEAD
 |   Attribute name     |                      Value                      |
 | :------------------- | :---------------------------------------------- |
 | `http.request.method`| `"GET"`                                         |
@@ -357,6 +371,22 @@ Span name: `GET /webshop/articles/:article_id`.
 | `client.address`     | `"192.0.2.4"`                                   |
 | `client.socket.address` | `"192.0.2.5"` (the client goes through a proxy) |
 | `user_agent.original` | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"` |
+=======
+|   Attribute name            |                      Value                      |
+| :-------------------------- | :---------------------------------------------- |
+| `http.request.method`       | `"GET"`                                         |
+| `http.protocol.version`     | `"1.1"`                                         |
+| `url.path`                  | `"/webshop/articles/4"`                         |
+| `url.query`                 | `"?s=1"`                                        |
+| `net.host.name`             | `"example.com"`                                 |
+| `net.host.port`             | `8080`                                          |
+| `url.scheme`                | `"https"`                                       |
+| `http.route`                | `"/webshop/articles/:article_id"`               |
+| `http.response.status_code` | `200`                                           |
+| `http.client_ip`            | `"192.0.2.4"`                                   |
+| `net.sock.peer.addr`        | `"192.0.2.5"` (the client goes through a proxy) |
+| `user_agent.original`       | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
+>>>>>>> a1af2ba (more nits)
 
 ### HTTP client retries examples
 
