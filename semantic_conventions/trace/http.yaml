@@ -74,6 +74,7 @@ groups:
       - ref: server.socket.domain
       - ref: server.socket.address
       - ref: server.socket.port
+      - ref: url.full
 
   - id: trace.http.server
     prefix: http

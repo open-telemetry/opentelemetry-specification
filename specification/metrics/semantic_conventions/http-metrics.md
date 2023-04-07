@@ -261,7 +261,6 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | **Stable**<br>Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
-| `url.full` | string | **Stable**<br>Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [5] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Recommended |
 
 **[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -276,8 +275,6 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 **[3]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
 **[4]:** If not default (`80` for `http` scheme, `443` for `https`).
-
-**[5]:** `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 <!-- endsemconv -->
 
 ### Metric: `http.client.request.size`
@@ -300,7 +297,6 @@ This metric is optional.
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | **Stable**<br>Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
-| `url.full` | string | **Stable**<br>Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [5] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Recommended |
 
 **[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -315,8 +311,6 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 **[3]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
 **[4]:** If not default (`80` for `http` scheme, `443` for `https`).
-
-**[5]:** `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 <!-- endsemconv -->
 
 ### Metric: `http.client.response.size`
@@ -339,7 +333,6 @@ This metric is optional.
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | **Stable**<br>Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
-| `url.full` | string | **Stable**<br>Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`. Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless. [5] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv` | Recommended |
 
 **[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -354,6 +347,4 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 **[3]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
 **[4]:** If not default (`80` for `http` scheme, `443` for `https`).
-
-**[5]:** `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 <!-- endsemconv -->
