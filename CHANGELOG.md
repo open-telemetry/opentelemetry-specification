@@ -11,9 +11,11 @@ release.
 
 ### Traces
 
-* Clarify required parent information in ReadableSpan. Technically a relaxation,
+- Clarify required parent information in ReadableSpan. Technically a relaxation,
   but previously it was easy to overlook certain properties were required.
   [#3257](https://github.com/open-telemetry/opentelemetry-specification/pull/3257)
+- Remove underspecified and unused Span decorator from Trace SDK.
+  ([#3363](https://github.com/open-telemetry/opentelemetry-specification/pull/3363))
 
 ### Metrics
 
