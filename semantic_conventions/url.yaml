@@ -1,27 +1,30 @@
 groups:
   - id: url
-    brief: "Describes URL."
+    brief: Attributes describing URL.
     type: attribute_group
     prefix: url
     attributes:
       - id: scheme
         type: string
-        brief: 'The URI scheme identifying the used protocol.'
-        examples: ["http", "https"]
+        brief: 'The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol.'
+        examples: ["https", "ftp", "telnet"]
       - id: full
         type: string
-        brief: >
-            Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`.
-            Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
+        brief: Full URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986)
         note: >
+          For network calls, URL usually has `scheme://host[:port]/path?query[#fragment]` format, where the fragment
+          is not transmitted over HTTP, but if it is known, it should be included nevertheless.
+
           `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
           In such case the attribute's value should be `https://www.example.com/`.
-        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
+
+          `url.full` SHOULD capture the original URL when it's available and SHOULD not validate or modify it.
+        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv', '//localhost']
       - id: path
         type: string
-        brief: 'The URI path'
+        brief: 'The [URI path](https://www.rfc-editor.org/rfc/rfc3986#section-3.3) component'
         examples: ['/search']
       - id: query
         type: string
-        brief: 'The URI query'
+        brief: 'The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component'
         examples: ["?q=OpenTelemetry#SemConv"]
