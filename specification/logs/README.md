@@ -137,7 +137,7 @@ Given the above state of the logging space we took the following approach:
   translate them to OpenTelemetry log data model.
 
 - OpenTelemetry defines a Logs Bridge API
-  for [emitting LogRecords](./bridge-api.md#emit-logrecord). Application developers are
+  for [emitting LogRecords](./bridge-api.md#emit-a-logrecord). Application developers are
   NOT encouraged to call this API directly. It is provided for library authors
   to build [log appender](../glossary.md#log-appender--bridge), which use
   the API to bridge between existing logging libraries and the OpenTelemetry log

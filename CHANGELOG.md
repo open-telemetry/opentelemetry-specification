@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Clarify parameters for emitting a log record.
+  ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3354))
+
 ### Resource
 
 ### Semantic Conventions
