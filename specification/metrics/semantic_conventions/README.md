@@ -194,8 +194,8 @@ use `{packet}`, `{error}`, `{fault}`, etc.
   unless there is good technical reason to not do so.
   - If using a non-prefixed unit would limit the data that could be
     represented, an instrument SHOULD use an appropriately prefixed unit. For
-    example, an instrument measuring a duration of time as an integer that
-    needs a precision of nanoseconds should use a unit of `ns` instead of `s`.
+    example, an instrument measuring integer timestamps as the nanoseconds
+    elapsed since the Unix epoch should use a unit of `ns` instead of `s`.
 
 ### Instrument Types
 
