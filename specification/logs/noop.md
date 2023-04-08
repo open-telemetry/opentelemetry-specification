@@ -54,4 +54,4 @@ return the same `Logger` instances to all creation requests.
 ### Emit LogRecord
 
 The No-Op `Logger` MUST allow
-for [emitting LogRecords](./bridge-api.md#emit-logrecord).
+for [emitting LogRecords](./bridge-api.md#emit-a-logrecord).
