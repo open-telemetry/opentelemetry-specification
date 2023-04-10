@@ -204,7 +204,7 @@ Semantic Conventions defines the set of fields in the OTLP data model:
       both synchronous and asynchronous instruments.
     - These exist on `NumberDataPoint`, `HistogramDataPoint`,
       `ExponentialHistogramDataPoint` and `SummaryDataPoint`.
-- [Log Records](logs/bridge-api.md#logrecord)
+- [Log Records](logs/data-model.md#log-and-event-record-definition)
   - The attribute keys provided on the LogRecord
   - For log records that are [Log Events](logs/event-api.md)
     - The following data provided to [emit event](logs/event-api.md#emit-event):

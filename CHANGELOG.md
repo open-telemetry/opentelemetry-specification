@@ -13,7 +13,13 @@ release.
 
 ### Metrics
 
+- Add experimental histogram advice API.
+  ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+
 ### Logs
+
+- Clarify parameters for emitting a log record.
+  ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3354))
 
 ### Resource
 
@@ -49,6 +55,8 @@ release.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
 - Remove No-Op instrument and Meter creation requirements.
   ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
+- Fixed attributes requirement level in semantic conventions for hardware metrics
+  ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
 
 ### Logs
 
