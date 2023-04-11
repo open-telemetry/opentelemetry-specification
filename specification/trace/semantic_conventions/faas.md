@@ -254,3 +254,4 @@ This example shows the FaaS attributes for a (non-FaaS) process hosted on Google
 | Resource       | `faas.name`             | n/a                    | `"my-lambda-function"` |
 | Resource       | `faas.version`          | n/a                    | `"semver:2.0.0"` |
 | Resource       | `faas.instance`         | n/a                    | `"my-lambda-function:instance-0001"` |
+| Resource       | `cloud.resource_id`     | n/a                    | `"arn:aws:lambda:us-west-2:123456789012:function:my-lambda-function"` |
