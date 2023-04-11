@@ -14,10 +14,10 @@
     + [Get a Logger](#get-a-logger)
 - [Logger](#logger)
   * [Logger operations](#logger-operations)
-    + [Emit LogRecord](#emit-logrecord)
-- [LogRecord](#logrecord)
+    + [Emit a LogRecord](#emit-a-logrecord)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
+- [Artifact Naming](#artifact-naming)
 - [Usage](#usage)
   * [How to Create a Log4J Log Appender](#how-to-create-a-log4j-log-appender)
   * [Implicit Context Injection](#implicit-context-injection)
@@ -36,7 +36,8 @@ data model.</b>
 The Logs Bridge API consist of these main classes:
 
 * [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
-* [Logger](#logger) is the class responsible for emitting logs as [LogRecords](#logrecord).
+* [Logger](#logger) is the class responsible for emitting logs as
+  [LogRecords](./data-model.md#log-and-event-record-definition).
 
 ```mermaid
 graph TD
@@ -110,27 +111,21 @@ The `Logger` is responsible for emitting `LogRecord`s.
 
 The `Logger` MUST provide functions to:
 
-#### Emit LogRecord
+- Emit a `LogRecord`
 
-Emit a `LogRecord` to the processing pipeline.
+#### Emit a LogRecord
 
-This function MAY be named `logRecord`.
+`LogRecord`s encapsulate the fields identified in the [`LogRecord`
+data model](data-model.md#log-and-event-record-definition) and are emitted to the processing pipeline using
+this API.
 
-**Parameters:**
-
-* `logRecord` - the [LogRecord](#logrecord) to emit.
-
-## LogRecord
-
-The API emits [LogRecords](#emit-logrecord) using the `LogRecord` [data model](data-model.md).
-
-A function receiving this as an argument MUST be able to set the following
-parameters:
+The API MUST accept the following parameters:
 
 - [Timestamp](./data-model.md#field-timestamp)
 - [Observed Timestamp](./data-model.md#field-observedtimestamp)
-- [Context](../context/README.md) that contains the
-  [TraceContext](./data-model.md#trace-context-fields)
+- The [Context](../context/README.md) associated with the `LogRecord`. The API
+  MAY implicitly use the current Context as a default
+  behavior.
 - [Severity Number](./data-model.md#field-severitynumber)
 - [Severity Text](./data-model.md#field-severitytext)
 - [Body](./data-model.md#field-body)
@@ -158,6 +153,15 @@ specific guarantees and safeties.
 
 **Logger** - all methods are safe to be called concurrently.
 
+## Artifact Naming
+
+The Logs Bridge API is not intended to be called by application developers
+directly, and SHOULD include documentation that discourages direct use. However,
+in the event OpenTelemetry were to add a user facing API, the Logs Bridge API would
+be a natural starting point. Therefore, Log Bridge API artifact, package, and class
+names MUST NOT include the terms "bridge", "appender", or any other qualifier
+that would prevent evolution into a user facing API.
+
 ## Usage
 
 ### How to Create a Log4J Log Appender
@@ -171,7 +175,7 @@ approaches.
 
 The log appender implementation will typically acquire a [Logger](#logger) from the
 global [LoggerProvider](#loggerprovider) at startup time, then
-call [Emit LogRecord](#emit-logrecord) for `LogRecord`s received from the
+call [Emit LogRecord](#emit-a-logrecord) for `LogRecord`s received from the
 application.
 
 [Implicit Context Injection](#implicit-context-injection)
