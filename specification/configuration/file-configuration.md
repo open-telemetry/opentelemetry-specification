@@ -54,8 +54,11 @@ to expose to enable file based configuration.
 
 ### In-Memory Configuration Model
 
-SDKs SHOULD define an in-memory representation of
-the [Configuration Model](#configuration-model) called `Configuration`.
+SDKs SHOULD provide an in-memory representation of
+the [Configuration Model](#configuration-model). In general, SDKs are encouraged
+to provide this in-memory representation in a manner that is idiomatic for their
+language. If an SDK needs to expose a class or interface, the
+name `Configuration` is recommended.
 
 ### Operations
 
