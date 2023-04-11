@@ -25,6 +25,9 @@ release.
 
 ### Semantic Conventions
 
+- Clarify the scope of the HTTP client span.
+ ([#3290](https://github.com/open-telemetry/opentelemetry-specification/pull/3290))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
