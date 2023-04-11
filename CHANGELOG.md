@@ -25,6 +25,10 @@ release.
 
 ### Semantic Conventions
 
+- Add transition plan for upcoming breaking changes to the unstable HTTP semantic
+  conventions.
+  ([#3381](https://github.com/open-telemetry/opentelemetry-specification/pull/3381))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
