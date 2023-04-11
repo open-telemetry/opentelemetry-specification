@@ -4,7 +4,7 @@
 
 **type:** `host`
 
-**Description:** A host is defined as a general computing instance.
+**Description:** A host is defined as a computing instance. For example, physical servers, virtual machines, switches or disk array.
 
 <!-- semconv host -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -14,8 +14,8 @@
 | `host.type` | string | Type of host. For Cloud, this must be the machine type. | `n1-standard-1` | Recommended |
 | `host.arch` | string | The CPU architecture the host system is running on. | `amd64` | Recommended |
 | `host.image.name` | string | Name of the VM image or OS install the host was instantiated from. | `infra-ami-eks-worker-node-7d4ec78312`; `CentOS-8-x86_64-1905` | Recommended |
-| `host.image.id` | string | VM image ID. For Cloud, this value is from the provider. | `ami-07b06b442921831e5` | Recommended |
-| `host.image.version` | string | The version string of the VM image as defined in [Version Attributes](README.md#version-attributes). | `0.1` | Recommended |
+| `host.image.id` | string | VM image ID or host OS image ID. For Cloud, this value is from the provider. | `ami-07b06b442921831e5` | Recommended |
+| `host.image.version` | string | The version string of the VM image or host OS as defined in [Version Attributes](README.md#version-attributes). | `0.1` | Recommended |
 
 `host.arch` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
