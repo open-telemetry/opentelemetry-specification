@@ -30,11 +30,11 @@ and various HTTP versions like 1.1, 2 and SPDY.
 > **Warning**
 > HTTP instrumentation SHOULD NOT emit HTTP semantic conventions later than
 > [v1.20.0](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/trace/semantic_conventions/http.md)
-> until October 1, 2023 (an opt-in flag to emit the latest HTTP semantic conventions
+> until August 1, 2023 (an opt-in flag to emit the latest HTTP semantic conventions
 > during this time is ok). The purpose of this time period is to give vendors time
 > to support the new conventions.
 >
-> After October 1, 2023, whenever an HTTP instrumentation published from
+> After August 1, 2023, whenever an HTTP instrumentation published from
 > [OpenTelemetry repositories](https://github.com/orgs/open-telemetry/repositories)
 > adopts the latest HTTP semantic conventions, the prior version SHOULD still be
 > supported (e.g. security patches) for 3-months (an opt-out flag on the latest
