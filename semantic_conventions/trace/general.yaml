@@ -1,5 +1,5 @@
 groups:
-  - id: network
+  - id: network-core
     prefix: net
     type: attribute_group
     brief: >
@@ -108,6 +108,12 @@ groups:
         requirement_level:
           conditionally_required: If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
         examples: 35555
+  - id: network-connection-and-carrier
+    prefix: net
+    type: attribute_group
+    brief: >
+      These attributes may be used for any network related operation.
+    attributes:
       - id: host.connection.type
         type:
           allow_custom_values: true
