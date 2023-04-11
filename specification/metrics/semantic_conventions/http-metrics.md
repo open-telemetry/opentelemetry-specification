@@ -90,7 +90,6 @@ This metric is optional.
 |---|---|---|---|---|
 | `http.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
-| `http.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`net.host.name`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [1] | `localhost` | Required |
 | [`net.host.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [2] | `8080` | Conditionally Required: [3] |
 

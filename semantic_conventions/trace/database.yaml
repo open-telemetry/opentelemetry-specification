@@ -207,11 +207,10 @@ groups:
         tag: call-level
         type: string
         requirement_level:
-          conditionally_required: >
-            If applicable and not explicitly disabled via instrumentation configuration.
+          recommended: >
+            Should be collected by default only if there is sanitization that excludes sensitive information.
         brief: >
           The database statement being executed.
-        note: The value may be sanitized to exclude sensitive information.
         examples: ['SELECT * FROM wuser_table', 'SET mykey "WuValue"']
       - id: operation
         tag: call-level
