@@ -122,7 +122,8 @@ this API.
 The API MUST accept the following parameters:
 
 - [Timestamp](./data-model.md#field-timestamp)
-- [Observed Timestamp](./data-model.md#field-observedtimestamp)
+- [Observed Timestamp](./data-model.md#field-observedtimestamp). If unspecified the
+  implementation SHOULD set it equal to the current time.
 - The [Context](../context/README.md) associated with the `LogRecord`. The API
   MAY implicitly use the current Context as a default
   behavior.
