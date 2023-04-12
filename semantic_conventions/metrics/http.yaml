@@ -21,7 +21,6 @@ groups:
     unit: "{request}"
     attributes:
       - ref: http.method
-      - ref: http.status_code
       - ref: http.scheme
       - ref: net.host.name
         requirement_level: required

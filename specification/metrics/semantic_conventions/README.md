@@ -190,6 +190,8 @@ give additional meaning *without* the leading default unit (`1`). For example,
 use `{packet}`, `{error}`, `{fault}`, etc.
 - Instrument units SHOULD be specified using the UCUM case sensitive ("c/s")
   variant. For example, "Cel" for the unit with full name "degree Celsius".
+- Instruments SHOULD use non-prefixed units (i.e. `By` instead of `MiBy`)
+  unless there is good technical reason to not do so.
 
 ### Instrument Types
 
