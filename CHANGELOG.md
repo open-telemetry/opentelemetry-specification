@@ -31,6 +31,9 @@ release.
 
 ### SDK Configuration
 
+- Lay initial groundwork for file configuration
+  ([#3360](https://github.com/open-telemetry/opentelemetry-specification/pull/3360))
+
 ### Telemetry Schemas
 
 ### Common
