@@ -115,9 +115,7 @@ The `Logger` MUST provide functions to:
 
 #### Emit a LogRecord
 
-`LogRecord`s encapsulate the fields identified in the [`LogRecord`
-data model](data-model.md#log-and-event-record-definition) and are emitted to the processing pipeline using
-this API.
+The effect of calling this API is to emit a `LogRecord` to the processing pipeline.
 
 The API MUST accept the following parameters:
 
