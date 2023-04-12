@@ -25,6 +25,8 @@ release.
 
 ### Resource
 
+- Add GCP-specific resource attributes for Compute Engine under `gcp.gce` ([#3384](https://github.com/open-telemetry/opentelemetry-specification/pull/3384))
+
 ### Semantic Conventions
 
 - Clarify the scope of the HTTP client span.
