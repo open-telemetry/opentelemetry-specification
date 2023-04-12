@@ -25,6 +25,9 @@ release.
 
 ### Semantic Conventions
 
+- Specify that seconds should be used for measuring durations.
+  ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
