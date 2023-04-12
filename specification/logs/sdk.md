@@ -235,9 +235,7 @@ therefore it SHOULD NOT block or throw exceptions.
 * `logRecord` - a [ReadWriteLogRecord](#readwritelogrecord) for the
   emitted `LogRecord`.
 * `context` - the `Context` that the SDK determined (the explicitly
-  passed `Context`, the current `Context`, or an empty `Context` if
-  the [Logger](./bridge-api.md#get-a-logger) was obtained
-  with `include_trace_context=false`)
+  passed `Context` or the current `Context`)
 
 **Returns:** `Void`
 
