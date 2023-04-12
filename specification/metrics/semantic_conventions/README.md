@@ -192,10 +192,6 @@ use `{packet}`, `{error}`, `{fault}`, etc.
   variant. For example, "Cel" for the unit with full name "degree Celsius".
 - Instruments SHOULD use non-prefixed units (i.e. `By` instead of `MiBy`)
   unless there is good technical reason to not do so.
-  - If using a non-prefixed unit would limit the data that could be
-    represented, an instrument SHOULD use an appropriately prefixed unit. For
-    example, an instrument measuring integer timestamps as the nanoseconds
-    elapsed since the Unix epoch should use a unit of `ns` instead of `s`.
 
 ### Instrument Types
 
