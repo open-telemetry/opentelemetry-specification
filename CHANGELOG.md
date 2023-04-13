@@ -125,7 +125,6 @@ release.
   ([#3366](https://github.com/open-telemetry/opentelemetry-specification/pull/3366))
 - Mark attribute requirement levels as stable
   ([#3368](https://github.com/open-telemetry/opentelemetry-specification/pull/3368))
->>>>>>> upstream/main
 
 ### Compatibility
 
