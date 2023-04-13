@@ -85,15 +85,11 @@ This API MUST accept the following parameters:
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
 
-* `include_trace_context` (optional): Specifies whether the Trace Context should
-  automatically be passed on to the `LogRecord`s emitted by the `Logger`.
-  If `include_trace_context` is not specified, it SHOULD be `true` by default.
-
 `Logger`s are identified by `name`, `version`, and `schema_url` fields.  When more
 than one `Logger` of the same `name`, `version`, and `schema_url` is created, it
 is unspecified whether or under which conditions the same or different `Logger`
 instances are returned. It is a user error to create Loggers with different
-`include_trace_context` or `attributes` but the same identity.
+`attributes` but the same identity.
 
 The term *identical* applied to `Logger`s describes instances where all
 identifying fields are equal. The term *distinct* applied to `Logger`s describes
@@ -200,8 +196,7 @@ popular logging library.
 ### Implicit Context Injection
 
 When Context is implicitly available (e.g. in Java) the Appender can rely on
-automatic context propagation by [obtaining a Logger](#get-a-logger)
-with `include_trace_context=true`.
+automatic context propagation by [obtaining a Logger](#get-a-logger).
 
 Some log libraries have mechanisms specifically tailored for injecting contextual
 information into logs, such as MDC in Log4j. When available such mechanisms may
