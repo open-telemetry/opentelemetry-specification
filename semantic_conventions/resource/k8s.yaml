@@ -17,7 +17,7 @@ groups:
           namespace.
         note: |
           K8s does not have support for obtaining a cluster id. If this is ever
-          added, we will recommend collecting the `cluster.uid` through the
+          added, we will recommend collecting the `k8s.cluster.uid` through the
           official APIs. In the meantime, we are able to use the `uid` of the
           `kube-system` namespace as a proxy for cluster id. Read on for the
           rationale.
