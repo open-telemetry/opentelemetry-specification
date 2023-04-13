@@ -25,6 +25,9 @@ release.
 
 ### Semantic Conventions
 
+- Change http.server.duration and http.client.duration units to seconds
+  ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
+
 ### Compatibility
 
 ### OpenTelemetry Protocol
