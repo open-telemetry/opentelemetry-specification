@@ -20,6 +20,8 @@ release.
 
 - Clarify parameters for emitting a log record.
   ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3354))
+- Drop logger include_trace_context parameter.
+  ([#3397](https://github.com/open-telemetry/opentelemetry-specification/pull/3397))
 
 ### Resource
 
