@@ -1,0 +1,14 @@
+groups:
+  - id: client
+    prefix: client
+    type: attribute_group
+    brief: These attributes may be used for client - initiator of a network connection for events regarding sessions, connections, or bidirectional flow records.
+    attributes:
+      - id: socket.address
+        type: string
+        brief: Immediate client address - unix domain socket name, IPv4 or IPv6 address.
+        examples: ['/tmp/my.sock', '127.0.0.1' ]
+      - id: socket.port
+        type: int
+        brief: 'Immediate client port number'
+        examples: [35555]

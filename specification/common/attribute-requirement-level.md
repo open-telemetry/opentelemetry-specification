@@ -34,7 +34,7 @@ For example, Metric attributes that may have high cardinality can only be define
 
 A semantic convention that refers to an attribute from another semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from the referred semantic convention applies.
 
-For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
+For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `network.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
 
 ## Required
 
@@ -50,7 +50,7 @@ All instrumentations MUST populate the attribute when the given condition is sat
 
 When a `Conditionally Required` attribute's condition is not satisfied, and there is no requirement to populate the attribute, semantic conventions MAY provide special instructions on how to handle it. If no instructions are given and if instrumentation can populate the attribute, instrumentation SHOULD use the `Opt-In` requirement level on the attribute.
 
-For example, `net.peer.name` is `Conditionally Required` by the [Database convention](../trace/semantic_conventions/database.md) when available. When `net.sock.peer.addr` is available instead, instrumentation can do a DNS lookup, cache and populate `net.peer.name`, but only if the user explicitly enables the instrumentation to do so, considering the performance issues that DNS lookups introduce.
+For example, `server.address` is `Conditionally Required` by the [Database convention](../trace/semantic_conventions/database.md) when available. When `server.socket.address` is available instead, instrumentation can do a DNS lookup, cache and populate `server.address`, but only if the user explicitly enables the instrumentation to do so, considering the performance issues that DNS lookups introduce.
 
 ## Recommended
 
@@ -69,6 +69,6 @@ This attribute requirement level is recommended for attributes that are particul
 
 Here are several examples of expensive operations to be avoided by default:
 
-- DNS lookups to populate `net.peer.name` when only an IP address is available to the instrumentation. Caching lookup results does not solve the issue for all possible cases and should be avoided by default too.
+- DNS lookups to populate `server.address` when only an IP address is available to the instrumentation. Caching lookup results does not solve the issue for all possible cases and should be avoided by default too.
 - forcing an `http.route` calculation before the HTTP framework calculates it
 - reading response stream to find `http.response_content_length` when `Content-Length` header is not available

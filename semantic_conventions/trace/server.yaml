@@ -1,0 +1,31 @@
+groups:
+  - id: server
+    prefix: server
+    type: attribute_group
+    brief: These attributes may be used for server - responder in a network connection for events regarding sessions, connections, or bidirectional flow records.
+    attributes:
+      - id: address
+        type: string
+        brief: 'Logical server hostname, matches server FQDN if available, and IP or socket address if FQDN is not known.'
+        examples: ['example.com']
+      - id: port
+        type: int
+        brief: 'Server port number'
+        examples: [80, 8080, 443]
+      - id: socket.domain
+        type: string
+        brief: The domain name of an immediate peer.
+        requirement_level:
+          recommended: Only on client side and only if different than `server.address`
+        examples: ['proxy.example.com', '10.5.3.2']
+        note: Usually represents a proxy or intermediary domain name.
+      - id: socket.address
+        type: string
+        brief: Physical server IP address or Unix socket domain name..
+        requirement_level:
+          recommended: Only if different than `server.address`.
+        examples: ['10.5.3.2']
+      - id: socket.port
+        type: int
+        brief: Physical server port.
+        examples: 16456

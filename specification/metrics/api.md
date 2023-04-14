@@ -82,7 +82,7 @@ the metrics API:
         |
         +-- Instrument<Counter, int>(name='client.exception', attributes=['type'], unit='1')
         |
-        +-- Instrument<Histogram, double>(name='client.duration', attributes=['net.peer.host', 'net.peer.port'], unit='ms')
+        +-- Instrument<Histogram, double>(name='client.duration', attributes=['server.address', 'server.port'], unit='ms')
         |
         +-- instruments...
 
