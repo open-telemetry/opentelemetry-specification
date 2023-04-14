@@ -27,12 +27,17 @@ release.
 
 - Clarify the scope of the HTTP client span.
  ([#3290](https://github.com/open-telemetry/opentelemetry-specification/pull/3290))
+- Add moratorium on relying on schema transformations for telemetry stability
+  ([#3380](https://github.com/open-telemetry/opentelemetry-specification/pull/3380))
 
 ### Compatibility
 
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
+
+- Lay initial groundwork for file configuration
+  ([#3360](https://github.com/open-telemetry/opentelemetry-specification/pull/3360))
 
 ### Telemetry Schemas
 
@@ -56,6 +61,8 @@ release.
 
 - Clarify that units should use UCUM case sensitive variant.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
+- Recommended non-prefixed units for metric instrument semantic conventions.
+  ([#3312](https://github.com/open-telemetry/opentelemetry-specification/pull/3312))
 - Remove No-Op instrument and Meter creation requirements.
   ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
 - Fixed attributes requirement level in semantic conventions for hardware metrics
