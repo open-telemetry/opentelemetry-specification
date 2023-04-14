@@ -196,29 +196,33 @@ popular logging library.
 ### Implicit Context Injection
 
 When Context is implicitly available (e.g. in Java) the Appender can rely on
-automatic context propagation by [obtaining a Logger](#get-a-logger).
+automatic context propagation by NOT explicitly setting `Context` when
+calling [emit a LogRecord](#emit-a-logrecord).
 
-Some log libraries have mechanisms specifically tailored for injecting contextual
-information into logs, such as MDC in Log4j. When available such mechanisms may
-be the preferable place to fetch the `TraceContext` and inject it into
-the `LogRecord`, since it usually allows fetching of the context to work
-correctly even when log records are emitted asynchronously, which otherwise can
-result in the incorrect implicit context being fetched.
+Some log libraries have mechanisms specifically tailored for injecting
+contextual information info logs, such as MDC in Log4j. When available, it may
+be preferable to use these mechanisms to set the Context. A log appender can
+then fetch the Context and explicitly set it when
+calling [emit a LogRecord](#emit-a-logrecord). This allows the correct Context
+to be included even when log records are emitted asynchronously, which can
+otherwise lead the Context to be incorrect.
 
 TODO: clarify how works or doesn't work when the log statement call site and the
 log appender are executed on different threads.
 
 ### Explicit Context Injection
 
-In languages where the Context must be provided explicitly (e.g. Go) the end
-user must capture the context and explicitly pass it to the logging subsystem in
-order for `TraceContext` to be recorded in `LogRecord`s.
+In order for `TraceContext` to be recorded in `LogRecord`s in languages where
+the Context must be provided explicitly (e.g. Go), the end user must capture the
+Context and explicitly pass it to the logging subsystem. The log appender must
+take this Context and explicitly set it when
+calling [emit a LogRecord](#emit-a-logrecord).
 
 Support for OpenTelemetry for logging libraries in these languages typically can
 be implemented in the form of logger wrappers that can capture the context once,
 when the span is created and then use the wrapped logger to execute log
 statements in a normal way. The wrapper will be responsible for injecting the
-captured context in the `LogRecord`s.
+captured context in the logs.
 
 This specification does not define how exactly it is achieved since the actual
 mechanism depends on the language and the particular logging library used. In
