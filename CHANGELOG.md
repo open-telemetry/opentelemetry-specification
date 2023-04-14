@@ -25,6 +25,10 @@ release.
 
 ### Semantic Conventions
 
+- Clarify the scope of the HTTP client span.
+ ([#3290](https://github.com/open-telemetry/opentelemetry-specification/pull/3290))
+- Add moratorium on relying on schema transformations for telemetry stability
+  ([#3380](https://github.com/open-telemetry/opentelemetry-specification/pull/3380))
 - Add clarification that UCUM c/s variant applies to all units other than `1` and
   those using [annotations](https://ucum.org/ucum.html#para-curly).
   ([#3393](https://github.com/open-telemetry/opentelemetry-specification/pull/3393))

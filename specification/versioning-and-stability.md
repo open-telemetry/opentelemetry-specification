@@ -155,6 +155,9 @@ A new, incompatible version of an integration SHOULD be released as a separate c
 
 #### Semantic Conventions Stability
 
+> **Warning**
+> There is a moratorium on relying on schema transformations for telemetry stability.
+
 Semantic conventions define a contract between the signals that instrumentation
 will provide and analysis tools that consumes the instrumentation (e.g.
 dashboards, alerts, queries, etc.).
