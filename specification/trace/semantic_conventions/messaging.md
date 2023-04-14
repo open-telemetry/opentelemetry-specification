@@ -481,9 +481,9 @@ Process CB:                           | Span Rcv2 |
 | `messaging.destination.name` | `"T1"` | | | | |
 | `messaging.source.name` |  | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
 | `messaging.operation` |  |  | `"process"` |  | `"receive"` |
+| `messaging.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
 | `messaging.kafka.message.key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
 | `messaging.kafka.consumer.group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
-| `messaging.kafka.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
 | `messaging.kafka.partition` | `"1"` | `"1"` | `"1"` | `"3"` | `"3"` |
 | `messaging.kafka.message.offset` | `"12"` | `"12"` | `"12"` | `"32"` | `"32"` |
 
