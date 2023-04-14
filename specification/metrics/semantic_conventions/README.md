@@ -188,8 +188,10 @@ total) are dimensionless and SHOULD use the default unit `1` (the unity).
 [annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
 give additional meaning *without* the leading default unit (`1`). For example,
 use `{packet}`, `{error}`, `{fault}`, etc.
-- Instrument units SHOULD be specified using the UCUM case sensitive ("c/s")
-  variant. For example, "Cel" for the unit with full name "degree Celsius".
+- Instrument units other than `1` and those that use
+  [annotations](https://ucum.org/ucum.html#para-curly) SHOULD be specified using
+  the UCUM case sensitive ("c/s") variant.
+  For example, "Cel" for the unit with full name "degree Celsius".
 - Instruments SHOULD use non-prefixed units (i.e. `By` instead of `MiBy`)
   unless there is good technical reason to not do so.
 
