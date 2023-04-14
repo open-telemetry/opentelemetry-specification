@@ -194,6 +194,7 @@ use `{packet}`, `{error}`, `{fault}`, etc.
   For example, "Cel" for the unit with full name "degree Celsius".
 - Instruments SHOULD use non-prefixed units (i.e. `By` instead of `MiBy`)
   unless there is good technical reason to not do so.
+- When instruments are measuring durations, seconds (i.e. `s`) SHOULD be used.
 
 ### Instrument Types
 
