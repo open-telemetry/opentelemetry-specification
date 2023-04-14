@@ -32,6 +32,9 @@ release.
 - Mark "Instrumentation Units" and "Instrumentation Types" sections of the general
   metric semantic conventions as stable
   ([#3294](https://github.com/open-telemetry/opentelemetry-specification/pull/3294))
+- Add clarification that UCUM c/s variant applies to all units other than `1` and
+  those using [annotations](https://ucum.org/ucum.html#para-curly).
+  ([#3393](https://github.com/open-telemetry/opentelemetry-specification/pull/3393))
 
 ### Compatibility
 
