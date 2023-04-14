@@ -35,6 +35,8 @@ release.
 - Add clarification that UCUM c/s variant applies to all units other than `1` and
   those using [annotations](https://ucum.org/ucum.html#para-curly).
   ([#3393](https://github.com/open-telemetry/opentelemetry-specification/pull/3393))
+- Specify that seconds should be used for measuring durations.
+  ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
 - Change http.server.duration and http.client.duration units to seconds
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 
