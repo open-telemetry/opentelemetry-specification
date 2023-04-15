@@ -32,10 +32,14 @@ operations. By adding HTTP attributes to metric events it allows for finely tune
 
 This metric is required.
 
+This metric SHOULD be specified with
+[`ExplicitBucketBoundaries`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#instrument-advice)
+of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10 ]`.
+
 <!-- semconv metric.http.server.duration(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `http.server.duration` | Histogram | `ms` | Measures the duration of inbound HTTP requests. |
+| `http.server.duration` | Histogram | `s` | Measures the duration of inbound HTTP requests. |
 <!-- endsemconv -->
 
 <!-- semconv metric.http.server.duration(full) -->
@@ -213,10 +217,14 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 This metric is required.
 
+This metric SHOULD be specified with
+[`ExplicitBucketBoundaries`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#instrument-advice)
+of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10 ]`.
+
 <!-- semconv metric.http.client.duration(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `http.client.duration` | Histogram | `ms` | Measures the duration of outbound HTTP requests. |
+| `http.client.duration` | Histogram | `s` | Measures the duration of outbound HTTP requests. |
 <!-- endsemconv -->
 
 <!-- semconv metric.http.client.duration(full) -->
