@@ -44,16 +44,16 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `db.system` | string | An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Required |
 | `db.connection_string` | string | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | Recommended |
 | `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | Recommended |
-| [`network.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [1] |
-| [`network.type`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [2] |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [1] |
+| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [2] |
 | [`server.address`](span-general.md) | string | Name of the database host. | `example.com` | Conditionally Required: See alternative attributes below. |
 | [`server.port`](span-general.md) | int | Server port number | `80`; `8080`; `443` | Conditionally Required: [3] |
 | [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket domain name.. | `10.5.3.2` | See below |
 | [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended |
 
-**[1]:** If database type is in-process (`"inproc"`), recommended for other database types.
+**[1]:** If different than `inet` and if any of `server.nat.address` or `client.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.nat.address` and `client.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
-**[2]:** If different than `inet` and if any of `server.nat.address` or `client.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.nat.address` and `client.address` if `network.type` is not set. This is to support instrumentations that follow previous versions of this document.
+**[2]:** If database type is in-process (`"inproc"`), recommended for other database types.
 
 **[3]:** If using a port other than the default port for this DBMS and if `server.address` is set.
 
@@ -281,7 +281,7 @@ In addition to Cosmos DB attributes, all spans include
 | `server.address`        | `"shopdb.example.com"` |
 | `server.socket.address` | `"192.0.2.12"` |
 | `server.port`           | `3306` |
-| `network.transport`     | `"IP.TCP"` |
+| `net.transport`     | `"IP.TCP"` |
 | `db.name`               | `"ShopDb"` |
 | `db.statement`          | `"SELECT * FROM orders WHERE order_id = 'o4711'"` |
 | `db.operation`          | `"SELECT"` |
@@ -299,7 +299,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.connection_string`    | not set |
 | `db.user`                 | not set |
 | `server.socket.address`   | `"/tmp/redis.sock"` |
-| `network.transport`       | `"Unix"` |
+| `net.transport`       | `"Unix"` |
 | `db.name`                 | not set |
 | `db.statement`            | `"HMSET myhash field1 'Hello' field2 'World"` |
 | `db.operation`            | not set |
@@ -316,7 +316,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `server.address`        | `"mongodb0.example.com"` |
 | `server.socket.address` | `"192.0.2.14"` |
 | `server.port`           | `27017` |
-| `network.transport`     | `"IP.TCP"` |
+| `net.transport`     | `"IP.TCP"` |
 | `db.name`               | `"shopDb"` |
 | `db.statement`          | not set |
 | `db.operation`          | `"findAndModify"` |

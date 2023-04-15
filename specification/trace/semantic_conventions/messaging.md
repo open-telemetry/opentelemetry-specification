@@ -194,9 +194,9 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [5] |
 | `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [6] |
 | `messaging.message.payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended: [7] |
-| [`network.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
-| [`network.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [8] | `3.1.1` | Recommended |
-| [`network.type`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [9] |
+| [`net.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
+| [`net.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [8] | `3.1.1` | Recommended |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [9] |
 | [`server.address`](span-general.md) | string | Logical server hostname, matches server FQDN if available, and IP or socket address if FQDN is not known. [10] | `example.com` | Conditionally Required: If available. |
 | [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket domain name.. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
 | [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [11] | `proxy.example.com`; `10.5.3.2` | Recommended: [12] |
@@ -216,9 +216,9 @@ The following operations related to messages are defined for these semantic conv
 
 **[7]:** Only if span represents operation on a single message.
 
-**[8]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[8]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[9]:** If different than `inet` and if any of `server.nat.address` or `client.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.nat.address` and `client.address` if `network.type` is not set. This is to support instrumentations that follow previous versions of this document.
+**[9]:** If different than `inet` and if any of `server.nat.address` or `client.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.nat.address` and `client.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 **[10]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
@@ -236,7 +236,7 @@ The following operations related to messages are defined for these semantic conv
 <!-- endsemconv -->
 
 Additionally `server.port` from the [network attributes][] is recommended.
-Furthermore, it is strongly recommended to add the [`network.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
+Furthermore, it is strongly recommended to add the [`net.transport`][] attribute and follow its guidelines, especially for in-process queueing systems (like [Hangfire][], for example).
 These attributes should be set to the broker to which the message is sent/from which it is received.
 
 ### Attribute namespaces
@@ -254,7 +254,7 @@ Messaging system-specific attributes MUST be defined in the corresponding `messa
 as described in [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems).
 
 [network attributes]: span-general.md#general-network-connection-attributes
-[`network.transport`]: span-general.md#network-transport-attributes
+[`net.transport`]: span-general.md#network-transport-attributes
 [Hangfire]: https://www.hangfire.io/
 
 ### Producer attributes

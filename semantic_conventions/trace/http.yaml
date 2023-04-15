@@ -27,7 +27,7 @@ groups:
       - ref: server.socket.address
       - ref: server.socket.port
       - ref: server.socket.domain
-      - ref: network.type
+      - ref: net.sock.family
         examples: ['inet', 'inet6']
       - ref: user_agent.original
 
