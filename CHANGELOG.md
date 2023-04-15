@@ -48,7 +48,7 @@ release.
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
 - Rename `net.peer.*`, `net.host.*`, and `net.sock.*` attributes to align with ECS
-  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+  ([#3402](https://github.com/open-telemetry/opentelemetry-specification/pull/3402))
     BREAKING: rename `net.peer.name` and `net.host.name` to `server.address`,
      `net.peer.port` and `net.host.port` to `server.port`,
      `net.sock.peer.addr` to `server.socket.address` on client side and to `client.socket.address` on server side,
