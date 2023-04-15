@@ -218,7 +218,7 @@ The following operations related to messages are defined for these semantic conv
 
 **[8]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[9]:** If different than `inet` and if any of `server.nat.address` or `client.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.nat.address` and `client.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[9]:** If different than `inet` and if any of `server.socket.address` or `client.socket.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.socket.address` and `client.socket.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 **[10]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
@@ -254,7 +254,7 @@ Messaging system-specific attributes MUST be defined in the corresponding `messa
 as described in [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems).
 
 [network attributes]: span-general.md#general-network-connection-attributes
-[`net.transport`]: span-general.md#network-transport-attributes
+[`net.transport`]: span-general.md#common-network-attributes
 [Hangfire]: https://www.hangfire.io/
 
 ### Producer attributes

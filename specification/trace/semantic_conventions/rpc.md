@@ -117,7 +117,7 @@ In this example, spans representing client request should have their `peer.servi
 Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service name.
 
 [network attributes]: span-general.md#general-network-connection-attributes
-[net.transport]: span-general.md#network-transport-attributes
+[net.transport]: span-general.md#common-network-attributes
 [`service.name`]: ../../resource/semantic_conventions/README.md#service
 [`peer.service`]: span-general.md#general-remote-service-attributes
 
@@ -131,7 +131,7 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 | [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket domain name.. | `10.5.3.2` | See below |
 | [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended |
 
-**[1]:** If different than `inet` and if any of `server.nat.address` or `client.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.nat.address` and `client.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[1]:** If different than `inet` and if any of `server.socket.address` or `client.socket.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.socket.address` and `client.socket.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 <!-- endsemconv -->
 
 ### Events

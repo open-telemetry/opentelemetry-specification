@@ -108,8 +108,8 @@ groups:
               brief: "Unix domain socket path"
         requirement_level:
           conditionally_required: >
-            If different than `inet` and if any of `server.nat.address` or `client.address` are set.
-            Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.nat.address` and `client.address`
+            If different than `inet` and if any of `server.socket.address` or `client.socket.address` are set.
+            Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.socket.address` and `client.socket.address`
             if `net.sock.family` is not set. This is to support instrumentations that follow previous versions
             of this document.
         brief: >

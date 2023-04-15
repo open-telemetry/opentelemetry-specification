@@ -18,8 +18,8 @@ Particular operations may refer to or require some of these attributes.
   * [`server.*` and `client*` attributes](#server-and-client-attributes)
     + [`server.*` attributes](#server-attributes)
       - [`server.address`](#serveraddress)
-      - [`server.nat.*` attributes](#servernat-attributes)
-    + [`client.*` attribute](#client-attribute)
+      - [`server.socket.*` attributes](#serversocket-attributes)
+    + [`client.*` attributes](#client-attributes)
     + [Connecting through intermediary](#connecting-through-intermediary)
 - [General remote service attributes](#general-remote-service-attributes)
 - [General identity attributes](#general-identity-attributes)
@@ -37,9 +37,14 @@ the server is generally the responder in the network transaction),
 while the `client.*` properties describe the initiator of the connection or request.
 
 In an ideal situation, not accounting for proxies, multiple IP addresses or host names,
-the `client.*` and `server.*` properties are the same on the client and server. 
+the `client.*` and `server.*` properties are the same on the client and server.
 
 ### Server attributes
+
+> **Warning**
+> Attributes in this section are in use by the HTTP semantic conventions.
+Once the HTTP semantic conventions are declared stable, changes to the attributes in this section will only be allowed
+if they do not cause breaking changes to HTTP semantic conventions.
 
 <!-- semconv server -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -57,6 +62,12 @@ the `client.*` and `server.*` properties are the same on the client and server.
 
 ### Client attributes
 
+> **Warning**
+> Attributes in this section are in use by the HTTP semantic conventions.
+Once the HTTP semantic conventions are declared stable, changes to the attributes in this section will only be allowed
+if they do not cause breaking changes to HTTP semantic conventions.
+
+
 <!-- semconv client -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
@@ -65,6 +76,11 @@ the `client.*` and `server.*` properties are the same on the client and server.
 <!-- endsemconv -->
 
 ### Common network attributes
+
+> **Warning**
+> Attributes in this section are in use by the HTTP semantic conventions.
+Once the HTTP semantic conventions are declared stable, changes to the attributes in this section will only be allowed
+if they do not cause breaking changes to HTTP semantic conventions.
 
 <!-- semconv network-core -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -76,7 +92,7 @@ the `client.*` and `server.*` properties are the same on the client and server.
 
 **[1]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[2]:** If different than `inet` and if any of `server.nat.address` or `client.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.nat.address` and `client.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[2]:** If different than `inet` and if any of `server.socket.address` or `client.socket.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.socket.address` and `client.socket.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 `net.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -157,7 +173,7 @@ For `Unix` and `pipe`, since the connection goes over the file system instead of
 `server.address` and `server.port` represent logical server name and port. Semantic conventions that refer to these attributes SHOULD
 specify what these attributes mean in their context.
 
-Semantic conventions and instrumentations that populate both logical (`server.address`) and socket-level (`server.nat.*`) attributes SHOULD set socket-level attributes only when they don't match logical ones. For example, when direct connection to the remote destination is established and `server.address` is populated, `server.nat.address` SHOULD NOT be set. Check out [Connecting through intermediary](#connecting-through-intermediary) for more information.
+Semantic conventions and instrumentations that populate both logical (`server.address` and `server.port`) and socket-level (`server.socket.*`) attributes SHOULD set socket-level attributes only when they don't match logical ones. For example, when direct connection to the remote destination is established and `server.address` is populated, `server.socket.address` SHOULD NOT be set. Check out [Connecting through intermediary](#connecting-through-intermediary) for more information.
 
 ##### `server.address`
 
@@ -167,7 +183,7 @@ When connecting to an URL `https://example.com/foo`, `server.address` matches `"
 
 On client side, it's usually passed in form of URL, connection string, host name, etc. Sometimes host name is only available to instrumentation as a string which may contain DNS name or IP address. `server.address` SHOULD be set to the available known hostname (e.g., `"127.0.0.1"` if connecting to an URL `https://127.0.0.1/foo`).
 
-If only IP address is available, it should be populated on `server.nat.address` and `server.address` SHOULD NOT be set. Reverse DNS lookup SHOULD NOT be used to obtain DNS name.
+If only IP address is available, it should be populated on `server.socket.address` and `server.address` SHOULD NOT be set. Reverse DNS lookup SHOULD NOT be used to obtain DNS name.
 
 If `net.transport` is `"pipe"`, the absolute path to the file representing it should be used as `server.address`.
 If there is no such file (e.g., anonymous pipe),
@@ -175,7 +191,7 @@ the name should explicitly be set to the empty string to distinguish it from the
 
 For Unix domain socket, `server.address` attribute represents remote endpoint address on the client side and local endpoint address on the server side.
 
-##### `server.nat.*` attributes
+##### `server.socket.*` attributes
 
 _Note: this section applies to socket connections visible to instrumentations. Instrumentations have limited knowledge about intermediaries communications goes through such as [transparent proxies](https://www.rfc-editor.org/rfc/rfc3040.html#section-2.5) or VPN servers. Higher-level instrumentations such as HTTP don't always have access to the socket-level information and may not be able to populate socket-level attributes._
 
@@ -185,30 +201,27 @@ Socket-level attributes identify peer and host that are directly connected to ea
 
 _Note: Specific structures and methods to obtain socket-level attributes are mentioned here only as examples. Instrumentations would usually use Socket API provided by their environment or sockets implementations._
 
-For IP-based communication, `server.nat.address` represents either fully qualified domain name of immediate peer or it's IP address. When both, FQDN and IP address are available,
-`server.nat.ip` SHOULD be set to immediate peer IP address and `server.nat.address` to it's FQDN.
+For IP-based communication, `server.socket.domain` represents either fully qualified domain name of immediate peer and `server.socket.address` to the IP address (or one specific to network family).
 
-_Note: Telemetry consumers can obtain IP address from telemetry item by first checking `server.nat.ip` and if not present, using back to `server.nat.address`._
-
-`server.nat.address`, `server.nat.ip`, and `server.nat.port` describe server side of socket communication. For example, when connecting using `connect(2)`
+`server.socket.domain`, `server.socket.address`, and `server.socket.port` describe server side of socket communication. For example, when connecting using `connect(2)`
 on [Linux](https://man7.org/linux/man-pages/man2/connect.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-connect)
-with `AF_INET` address family, represent `sin_addr` and `sin_port` fields of [`sockaddr_in`](https://man7.org/linux/man-pages/man7/ip.7.html) structure.
+with `AF_INET` address family, they represent `sin_addr` and `sin_port` fields of [`sockaddr_in`](https://man7.org/linux/man-pages/man7/ip.7.html) structure.
 
-On client side, address and port can be obtained by calling `getpeername` method on [Linux](https://man7.org/linux/man-pages/man2/getpeername.2.html),
+On client side, address and port can be obtained by calling `getpeername` method on [Linux](https://man7.org/linux/man-pages/man2/getpeername.2.html) or
 [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getpeername).
 
-On server side address and port can be obtained by calling `getsockname` method on [Linux](https://man7.org/linux/man-pages/man2/getsockname.2.html),
+On server side address and port can be obtained by calling `getsockname` method on [Linux](https://man7.org/linux/man-pages/man2/getsockname.2.html) or
 [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-getsockname).
 
-`server.nat.port` SHOULD only be populated for families that have notion of port.
+`server.socket.port` SHOULD only be populated for families that have notion of port.
 
-#### `client.*` attribute
+#### `client.*` attributes
 
-`client.address` and `client.port` represent physical client name and port.
+`client.socket.address` and `client.socket.port` represent physical client name and port.
 
-For IP-based communication, the `client.address` should be a IP address, Unix domain name, or another address specific to network type.
+For IP-based communication, the `client.socket.address` should be a IP address, Unix domain name, or another address specific to network type.
 
-On server side, `client.address`  identifies the direct peer endpoint socket address. For example, when using `bind(2)`
+On server side, `client.socket.address` identifies the direct peer endpoint socket address. For example, when using `bind(2)`
 on [Linux](https://man7.org/linux/man-pages/man2/bind.2.html) or [Windows](https://docs.microsoft.com/windows/win32/api/winsock2/nf-winsock2-bind)
 with `AF_INET` address family, represent `sin_addr` and `sin_port` fields of `sockaddr_in` structure.
 
@@ -217,18 +230,20 @@ On client side it represents local socket address and port can be obtained by ca
 
 #### Connecting through intermediary
 
-When connecting to the remote destination through an intermediary (e.g. proxy), client instrumentations SHOULD set `server.address` and `server.port` to logical remote destination address and `server.nat.address`, `server.nat.ip` and `server.nat.port` to the socket peer connection is established with - the intermediary.
+When connecting to the remote destination through an intermediary (e.g. proxy), client instrumentations SHOULD set `server.address` and `server.port` to logical remote destination address and `server.socket.name`, `server.socket.address` and `server.socket.port` to the socket peer connection is established with - the intermediary.
 
-Server instrumentations that use `server.address` and `server.port` SHOULD set them to logical local host; If `server.nat.ip` and `server.nat.port` are used, they SHOULD be set to the address of intermediary connection is established with.
+Server instrumentations that use `server.address` and `server.port` SHOULD set them to logical local host; If `server.socket.address` and `server.socket.port` are used, they SHOULD be set to the address of intermediary connection is established with.
 Server semantic conventions SHOULD define additional attribute(s) representing originating peer address for reverse-proxy scenarios when such information is available.
 
-`server.nat.address` SHOULD be set to the DNS name used to resolve `server.nat.ip` if it's readily available. Instrumentations
-SHOULD NOT do DNS lookups to obtain `server.nat.ip`. If peer information available to instrumentation
-can represent DNS name or IP address, instrumentation SHOULD NOT attempt to parse it and SHOULD only set `server.nat.address`.
+`server.socket.domain` SHOULD be set to the DNS name used to resolve `server.socket.address` if it's readily available. Instrumentations
+SHOULD NOT do DNS lookups to obtain `server.socket.address`. If peer information available to instrumentation
+can represent DNS name or IP address, instrumentation SHOULD NOT attempt to parse it and SHOULD only set `server.socket.domain`.
+
+_Note: Telemetry consumers can obtain IP address from telemetry item by first checking `server.socket.address` and if not present, falling back to `server.socket.domain`._
 
 For example, [URL Host component](https://www.rfc-editor.org/rfc/rfc3986#section-3.2.2) can contain IP address or DNS name and
-instrumentations that don't have access to socket-level communication can only populate `server.nat.address`.
-Instrumentations that have access to socket connection, may be able to populate valid `server.nat.ip` instead of or
+instrumentations that don't have access to socket-level communication can only populate `server.socket.domain`.
+Instrumentations that have access to socket connection, may be able to populate valid `server.socket.address` instead of or
 in addition to DNS name.
 
 ## General remote service attributes

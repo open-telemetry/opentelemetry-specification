@@ -79,7 +79,7 @@ sections below.
 
 **[1]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[2]:** If different than `inet` and if any of `server.nat.address` or `client.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.nat.address` and `client.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[2]:** If different than `inet` and if any of `server.socket.address` or `client.socket.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.socket.address` and `client.socket.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 **[3]:** Usually represents a proxy or intermediary domain name.
 
@@ -100,7 +100,7 @@ Following attributes MUST be provided **at span creation time** (when provided a
 
 It is recommended to also use the general [socket-level attributes][] - `server.socket` when available,  `server.socket.domain`, `server.socket.address` and `server.socket.port` when don't match `server.address` and `server.port` (if [intermediary](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.7) is detected).
 
-[socket-level attributes]: span-general.md#netsock-attributes
+[socket-level attributes]: span-general.md#server-attributes
 
 ### HTTP request and response headers
 
