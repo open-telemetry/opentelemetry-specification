@@ -5,7 +5,7 @@ linkTitle: Semantic Conventions
 <!-- omit in toc -->
 # Metrics Semantic Conventions
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Mixed](../../document-status.md)
 
 <!-- toc -->
 
@@ -173,10 +173,10 @@ instrument creation, but can be added if there is ambiguity.
 
 ### Instrument Units
 
+**Status**: [Stable](../../document-status.md)
+
 Units should follow the
-[Unified Code for Units of Measure](http://unitsofmeasure.org/ucum.html) (need
-more clarification in
-[#705](https://github.com/open-telemetry/opentelemetry-specification/issues/705)).
+[Unified Code for Units of Measure](http://unitsofmeasure.org/ucum.html).
 
 - Instruments for **utilization** metrics (that measure the fraction out of a
 total) are dimensionless and SHOULD use the default unit `1` (the unity).
@@ -188,10 +188,17 @@ total) are dimensionless and SHOULD use the default unit `1` (the unity).
 [annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
 give additional meaning *without* the leading default unit (`1`). For example,
 use `{packet}`, `{error}`, `{fault}`, etc.
-- Instrument units SHOULD be specified using the UCUM case sensitive ("c/s")
-  variant. For example, "Cel" for the unit with full name "degree Celsius".
+- Instrument units other than `1` and those that use
+  [annotations](https://ucum.org/ucum.html#para-curly) SHOULD be specified using
+  the UCUM case sensitive ("c/s") variant.
+  For example, "Cel" for the unit with full name "degree Celsius".
+- Instruments SHOULD use non-prefixed units (i.e. `By` instead of `MiBy`)
+  unless there is good technical reason to not do so.
+- When instruments are measuring durations, seconds (i.e. `s`) SHOULD be used.
 
 ### Instrument Types
+
+**Status**: [Stable](../../document-status.md)
 
 The semantic metric conventions specification is written to use the names of the synchronous instrument types,
 like `Counter` or `UpDownCounter`. However, compliant implementations MAY use the asynchronous equivalent instead,
