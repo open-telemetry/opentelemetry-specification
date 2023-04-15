@@ -67,7 +67,6 @@ if they do not cause breaking changes to HTTP semantic conventions.
 Once the HTTP semantic conventions are declared stable, changes to the attributes in this section will only be allowed
 if they do not cause breaking changes to HTTP semantic conventions.
 
-
 <!-- semconv client -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|

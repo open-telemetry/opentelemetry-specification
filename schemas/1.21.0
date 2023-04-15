@@ -9,6 +9,18 @@ versions:
             attribute_map:
               messaging.kafka.client_id: messaging.client_id
               messaging.rocketmq.client_id: messaging.client_id
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3402
+        - rename_attributes:
+            attribute_map:
+              net.peer.name: server.address
+              net.peer.port: server.port
+              net.host.name: server.address
+              net.host.port: server.port
+              net.sock.peer.addr: server.socket.address            
+              net.sock.peer.name: server.socket.domain
+              net.sock.peer.port: server.socket.port
+              net.sock.host.addr: server.socket.address
+              net.sock.host.port: server.socket.port
   1.20.0:
     spans:
       changes:
