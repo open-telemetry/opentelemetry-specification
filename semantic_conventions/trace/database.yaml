@@ -396,7 +396,7 @@ groups:
         type: string
         requirement_level:
           conditionally_required: when the request targets a specific document by id
-        tag: call-level-tech-specific
+        tag: call-level-tech-specific-elasticsearch
         brief: >
           The document that the request targets.
         examples: [ '123', '456' ]
