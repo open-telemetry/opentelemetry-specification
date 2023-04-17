@@ -630,7 +630,8 @@ overflow will be reflected in a single data point described by (only)
 the overflow attribute.
 
 Views of synchronous instruments with delta aggregation temporality
-MAY choose an arbitrary subset of attributes to output.
+MAY choose an arbitrary subset of attribute sets to output to maintain
+the stated cardinality limit.
 
 Regardless of aggregation temporality, the SDK MUST ensure that every
 metric event is reflected in exactly one Aggregator, which is either
