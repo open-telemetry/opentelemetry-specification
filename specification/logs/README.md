@@ -137,9 +137,9 @@ Given the above state of the logging space we took the following approach:
   translate them to OpenTelemetry log data model.
 
 - OpenTelemetry defines a Logs Bridge API
-  for [emitting LogRecords](./bridge-api.md#emit-logrecord). Application developers are
+  for [emitting LogRecords](./bridge-api.md#emit-a-logrecord). Application developers are
   NOT encouraged to call this API directly. It is provided for library authors
-  to build [Appenders](./bridge-api.md#how-to-create-log4j-style-appender), which use
+  to build [log appender](../glossary.md#log-appender--bridge), which use
   the API to bridge between existing logging libraries and the OpenTelemetry log
   data model. Existing logging libraries generally provide a much richer set of
   features than what is defined in OpenTelemetry. It is NOT a goal of
@@ -292,8 +292,8 @@ collected from all applications that can be instrumented in this manner.
 
 Some logging libraries are designed to be extended in this manner relatively
 easily. There is no need to actually modify the libraries, instead we can
-implement "appender" or "exporter" components for such libraries and implement
-the additional LogRecord enrichment in these components.
+implement "log appender" or "log bridge" components for such libraries and
+implement the additional LogRecord enrichment in these components.
 
 There are typically 2 ways to collect logs from these applications.
 
@@ -358,7 +358,7 @@ To facilitate both approaches described above OpenTelemetry provides
 a [Bridge API](./bridge-api.md) and [SDK](./sdk.md), which can be used together with existing
 logging libraries to automatically inject the trace context in the emitted logs,
 and provide an easy way to send the logs via OTLP. Instead of
-modifying each logging statement, [Appenders](./bridge-api.md#how-to-create-log4j-style-appender)
+modifying each logging statement, [log appenders](../glossary.md#log-appender--bridge)
 use the API to bridge logs from existing logging libraries to the OpenTelemetry
 data model, where the SDK controls how the logs are processed and exported.
 Application developers only need to configure the Appender and SDK at
@@ -369,8 +369,8 @@ application startup.
 These are greenfield developments. OpenTelemetry provides recommendations and
 best practices about how to emit logs (along with traces and metrics) from these
 applications. For applicable languages and frameworks the auto-instrumentation
-or simple configuration of a logging library to use an OpenTelemetry appender or
-extension will still be the easiest way to emit context-enriched logs. As
+or simple configuration of a logging library to use an OpenTelemetry log appender
+will still be the easiest way to emit context-enriched logs. As
 already described earlier we provide extensions to some popular logging
 libraries languages to support the manual instrumentation cases. The extensions
 will support the inclusion of the trace context in the logs and allow to send
