@@ -26,6 +26,20 @@ operations. By adding HTTP attributes to metric events it allows for finely tune
 
 <!-- tocstop -->
 
+> **Warning**
+> v1.21.0 of this document will introduce significant breaking changes to the (not yet stable)
+> HTTP semantic conventions.
+>
+> HTTP instrumentations updating from
+> [v1.20.0 of this document](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/metrics/semantic_conventions/http-metrics.md)
+> (or prior) to this new version SHOULD bump their major version
+> even though the instrumentation has not been declared stable.
+> And the previous major version SHOULD be supported until February 1, 2024
+> (e.g. at least security patches).
+>
+> This major version bump will signal that users should take care when upgrading the
+> instrumentation, including verifying whether their backend supports the new major version.
+
 ## HTTP Server
 
 ### Metric: `http.server.duration`

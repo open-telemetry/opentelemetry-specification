@@ -41,6 +41,9 @@ release.
   ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
 - Change http.server.duration and http.client.duration units to seconds
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
+- Add transition plan for upcoming breaking changes to the unstable HTTP semantic
+  conventions.
+  ([#3404](https://github.com/open-telemetry/opentelemetry-specification/pull/3404))
 
 ### Compatibility
 
