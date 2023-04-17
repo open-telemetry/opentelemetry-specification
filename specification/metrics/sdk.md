@@ -638,7 +638,7 @@ metric event is reflected in exactly one Aggregator, which is either
 an Aggregator associated with the correct attribute set or an
 aggregator associated with the overflow attribute set.
 
-Events MUST NOT be double-counted or dropped during overflow an
+Events MUST NOT be double-counted or dropped during an
 overflow.
 
 #### Asynchronous instrument cardinality limits
