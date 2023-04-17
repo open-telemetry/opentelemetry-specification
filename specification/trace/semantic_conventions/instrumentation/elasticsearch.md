@@ -5,7 +5,7 @@
 This document defines semantic conventions to apply when instrumenting requests to Elasticsearch. They map Elasticsearch
 requests to attributes on a Span.
 
-### Span Name
+## Span Name
 
 The **span name** SHOULD be of the format `<db.elasticsearch.method> <db.elasticsearch.url *with placeholders*>`.
 
