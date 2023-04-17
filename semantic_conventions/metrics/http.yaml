@@ -4,7 +4,7 @@ groups:
     metric_name: http.server.duration
     brief: "Measures the duration of inbound HTTP requests."
     instrument: histogram
-    unit: "ms"
+    unit: "s"
     extends: attributes.http.server
     attributes:
       # todo (lmolkova) build tools don't populate grandparent attributes
@@ -84,7 +84,7 @@ groups:
     metric_name: http.client.duration
     brief: "Measures the duration of outbound HTTP requests."
     instrument: histogram
-    unit: "ms"
+    unit: "s"
     extends: attributes.http.client
     attributes:
       - ref: http.method

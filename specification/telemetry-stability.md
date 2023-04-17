@@ -49,6 +49,9 @@ coming from an unstable instrumentation.
 
 ## Stable Instrumentations
 
+> **Warning**
+> There is a moratorium on relying on schema transformations for telemetry stability.
+
 Stable telemetry-producing instrumentations (stable instrumentations for short) SHOULD
 be clearly labeled so by any means the instrumentations authors consider idiomatic for
 their language, e.g. via version numbers, artifact names, documentation, etc.
@@ -80,10 +83,11 @@ Stable instrumentations that include the Schema URL in the produced telemetry ar
 called Schema-File Driven Telemetry Producers.
 
 Such instrumentations are prohibited from changing the produced telemetry until
-April 1, 2023 and until that date are subject to exactly the same restrictions as
+the moratorium on relying on schema transformations for telemetry stability is lifted
+and until that date are subject to exactly the same restrictions as
 [Fixed Schema Telemetry Producers](#fixed-schema-telemetry-producers).
 
-After April 1, 2023, stable instrumentations are allowed to change the produced telemetry
+After the moratorium is lifted, stable instrumentations are allowed to change the produced telemetry
 if all the following conditions are fulfilled:
 
 - The change is part of OpenTelemetry semantic conventions and is in a released
@@ -91,7 +95,3 @@ if all the following conditions are fulfilled:
 - The change has a corresponding [published](schemas/README.md#opentelemetry-schema)
   OpenTelemetry Schema File that describes the change.
 - The produced telemetry correctly specifies the respective Schema URL.
-
-If the change was introduced in the semantic conventions specification before
-April 1, 2023, the instrumentations must wait until April 1, 2023 before they can adopt
-the change and begin producing the changed telemetry.
