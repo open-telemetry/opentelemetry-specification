@@ -42,6 +42,10 @@ the default resource, they can use [`Merge`](#merge) with their custom resource
 or specify their attributes by implementing
 [Custom resource detectors](#detecting-resource-information-from-the-environment)
 instead of explicitly associating a resource.
+If a user configures the SDK with a resource
+that misses any of the SDK-provided attributes,
+the SDK MUST respect the user configuration
+and not add them.
 
 ## Resource creation
 
