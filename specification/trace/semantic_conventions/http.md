@@ -35,6 +35,9 @@ and various HTTP versions like 1.1, 2 and SPDY.
 > [v1.20.0 of this document](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/trace/semantic_conventions/http.md)
 > (or prior) to this new version SHOULD bump their major version
 > even though the instrumentation has not been declared stable.
+> They SHOULD NOT release a stable version of that new major version until
+> at least August 1, 2023 (this is to give backends some time to support the
+> new changes).
 > And the previous major version SHOULD be supported until February 1, 2024
 > (e.g. at least security patches).
 >
