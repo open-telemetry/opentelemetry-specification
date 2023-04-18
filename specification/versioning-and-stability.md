@@ -155,6 +155,9 @@ A new, incompatible version of an integration SHOULD be released as a separate c
 
 #### Semantic Conventions Stability
 
+> **Warning**
+> There is a moratorium on relying on schema transformations for telemetry stability.
+
 Semantic conventions define a contract between the signals that instrumentation
 will provide and analysis tools that consumes the instrumentation (e.g.
 dashboards, alerts, queries, etc.).
@@ -204,7 +207,7 @@ Semantic Conventions defines the set of fields in the OTLP data model:
       both synchronous and asynchronous instruments.
     - These exist on `NumberDataPoint`, `HistogramDataPoint`,
       `ExponentialHistogramDataPoint` and `SummaryDataPoint`.
-- [Log Records](logs/bridge-api.md#logrecord)
+- [Log Records](logs/data-model.md#log-and-event-record-definition)
   - The attribute keys provided on the LogRecord
   - For log records that are [Log Events](logs/event-api.md)
     - The following data provided to [emit event](logs/event-api.md#emit-event):
