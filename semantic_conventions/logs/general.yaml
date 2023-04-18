@@ -1,0 +1,19 @@
+groups:
+  - id: log.record
+    prefix: log.record
+    type: attribute_group
+    brief: >
+      The attributes described in this section are rather generic. They may be used in any Log Record they apply to.
+    attributes:
+      - id: uid
+        type: string
+        requirement_level: opt_in
+        brief: >
+          A unique identifier for the Log Record.
+        note: >
+          If an id is provided, other log records with the same id will be considered duplicates and can be removed safely.
+          This means, that two distinguishable log records MUST have different values.
+
+          The id MAY be an [Universally Unique Lexicographically Sortable Identifier (ULID)](https://github.com/ulid/spec),
+          but other identifiers (e.g. UUID) may be used as needed.
+        examples: ["01ARZ3NDEKTSV4RRFFQ69G5FAV"]
