@@ -12,6 +12,7 @@ Particular operations may refer to or require some of these attributes.
 
 - [General network connection attributes](#general-network-connection-attributes)
   * [Network transport attributes](#network-transport-attributes)
+  * [`net.host.connection.*` and `net.host.carrier.*` attributes](#nethostconnection-and-nethostcarrier-attributes)
   * [`net.peer.name` and `net.host.name` attributes](#netpeername-and-nethostname-attributes)
     + [`net.peer.name`](#netpeername)
     + [`net.host.name`](#nethostname)
@@ -37,7 +38,12 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 
 ### Network transport attributes
 
-<!-- semconv network -->
+> **Warning**
+> Most of the attributes in this section are in use by the HTTP semantic conventions.
+Once the HTTP semantic conventions are declared stable, changes to the attributes in this section will only be allowed
+if they do not cause breaking changes to HTTP semantic conventions.
+
+<!-- semconv network-core -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | Recommended |
@@ -53,12 +59,6 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `net.host.port` | int | Logical local port number, preferably the one that the peer used to connect | `8080` | Recommended |
 | `net.sock.host.addr` | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
 | `net.sock.host.port` | int | Local socket port number. | `35555` | Conditionally Required: [6] |
-| `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
-| `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
-| `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
-| `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | Recommended |
-| `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
-| `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
 
 **[1]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -91,6 +91,21 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `inet` | IPv4 address |
 | `inet6` | IPv6 address |
 | `unix` | Unix domain socket path |
+<!-- endsemconv -->
+
+For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
+
+### `net.host.connection.*` and `net.host.carrier.*` attributes
+
+<!-- semconv network-connection-and-carrier -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
+| `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
+| `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
+| `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | Recommended |
+| `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
+| `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
 
 `net.host.connection.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -128,8 +143,6 @@ the `net.peer.*` properties of a client are equal to the `net.host.*` properties
 | `nrnsa` | 5G NRNSA (New Radio Non-Standalone) |
 | `lte_ca` | LTE CA |
 <!-- endsemconv -->
-
-For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
 
 ### `net.peer.name` and `net.host.name` attributes
 

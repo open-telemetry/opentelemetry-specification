@@ -119,12 +119,17 @@ Users MAY explicitly configure instrumentations to capture them even though it i
 
 ## HTTP client
 
-This span type represents an outbound HTTP request.
+This span type represents an outbound HTTP request. There are two ways this can be achieved in an instrumentation:
+
+1. Instrumentations SHOULD create an HTTP span for each attempt to send an HTTP request over the wire.
+   In case the request is resent, the resend attempts MUST follow the [HTTP resend spec](#http-request-retries-and-redirects).
+   In this case, instrumentations SHOULD NOT (also) emit a logical encompassing HTTP client span.
+
+2. If for some reason it is not possible to emit a span for each send attempt (because e.g. the instrumented library does not expose hooks that would allow this),
+   instrumentations MAY create an HTTP span for the top-most operation of the HTTP client.
+   In this case, the `http.url` MUST be the originally requested URL, before any HTTP-redirects that may happen when executing the request.
 
 For an HTTP client span, `SpanKind` MUST be `Client`.
-
-If set, `http.url` must be the originally requested URL,
-before any HTTP-redirects that may happen when executing the request.
 
 <!-- semconv trace.http.client(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -165,13 +170,14 @@ Note that in some cases host and port identifiers in the `Host` header might be 
 Retries and redirects cause more than one physical HTTP request to be sent.
 A request is resent when an HTTP client library sends more than one HTTP request to satisfy the same API call.
 This may happen due to following redirects, authorization challenges, 503 Server Unavailable, network issues, or any other.
-A CLIENT span SHOULD be created for each one of these physical requests.
-No span is created corresponding to the "logical" (encompassing) request.
 
-Each time an HTTP request is resent, the `http.resend_count` attribute SHOULD be added to each repeated span
-and set to the ordinal number of the request resend attempt.
+Each time an HTTP request is resent, the `http.resend_count` attribute SHOULD be added to each repeated span and set to the ordinal number of the request resend attempt.
 
-See [examples](#http-client-retries-examples) for more details.
+See the examples for more details about:
+
+* [retrying a server error](#http-client-retries-examples),
+* [redirects](#http-client-redirects-examples),
+* [authorization](#http-client-authorization-retry-examples).
 
 ## HTTP server
 

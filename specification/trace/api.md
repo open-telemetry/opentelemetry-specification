@@ -224,6 +224,9 @@ specification](https://www.w3.org/TR/trace-context/#tracestate-header). For
 specific OTel values in `TraceState`, see the [TraceState Handling](tracestate-handling.md)
 document.
 
+`IsRemote`, a boolean indicating whether the SpanContext was received from somewhere
+else or locally generated, see [IsRemote](#isremote).
+
 The API MUST implement methods to create a `SpanContext`. These methods SHOULD be the only way to
 create a `SpanContext`. This functionality MUST be fully implemented in the API, and SHOULD NOT be
 overridable.

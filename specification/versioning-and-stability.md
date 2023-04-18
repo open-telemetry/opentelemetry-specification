@@ -155,11 +155,80 @@ A new, incompatible version of an integration SHOULD be released as a separate c
 
 #### Semantic Conventions Stability
 
+> **Warning**
+> There is a moratorium on relying on schema transformations for telemetry stability.
+
+Semantic conventions define a contract between the signals that instrumentation
+will provide and analysis tools that consumes the instrumentation (e.g.
+dashboards, alerts, queries, etc.).
+
 Changes to telemetry produced by OpenTelemetry instrumentation SHOULD avoid
 breaking analysis tools, such as dashboards and alerts. To achieve this, while
 allowing the evolution of telemetry and semantic conventions, OpenTelemetry
 relies on the concept of
 [Telemetry Schemas](schemas/README.md).
+
+Semantic Conventions defines breaking changes as those that would break the
+common usage of tooling written against the telemetry it produces. That is, the
+portions of telemetry where specialized tooling (alerts, dashboards, e.g.)
+interact are expected to remain stable for that tooling *after schema
+transformations are applied*. These also assume no user interventions in the
+default configuration, e.g. Samplers, Views, etc.
+
+Semantic Conventions defines the set of fields in the OTLP data model:
+
+- [Resource](resource/sdk.md)
+  - attribute keys. (The key section of attributes key value pairs)
+- InstrumentationScope
+  - Attribute keys
+    - provided to [get a tracer](trace/api.md#get-a-tracer)
+    - provided to [get a meter](metrics/api.md#get-a-meter)
+- [Trace](trace/api.md)
+  - The following data on [span](trace/api.md#span):
+    - The span name
+    - The span kind
+    - The attribute keys provided to the span
+      - Whether these attributes must be provided at span start time, due to
+        sampling concerns.
+  - The following data provided on [span events](trace/api.md#add-events)
+    - The event name
+    - The attribute keys provided for the event
+- [Metrics](metrics/api.md)
+  - The following portions of a Metric
+    (passed when constructing [an instrument](metrics/api.md#instrument)):
+    - The name of the metric (defaults to instrument name).
+    - The kind of metric data (Gauge, Sum, Histogram, ExponentialHistogram)
+      - For `Counter` and `UpDownCounter` instruments, it is
+        acceptable to change between asynchronous and synchronous instruments,
+        as this preserves the metric kind.
+    - The unit of the metric (defaults to instrument unit).
+  - The attribute keys on any `*DataPoint`.
+    - These are provided in the API when recording a measurement, for
+      both synchronous and asynchronous instruments.
+    - These exist on `NumberDataPoint`, `HistogramDataPoint`,
+      `ExponentialHistogramDataPoint` and `SummaryDataPoint`.
+- [Log Records](logs/data-model.md#log-and-event-record-definition)
+  - The attribute keys provided on the LogRecord
+  - For log records that are [Log Events](logs/event-api.md)
+    - The following data provided to [emit event](logs/event-api.md#emit-event):
+      - The event name (the value of the `event.name` attribute)
+      - The event domain (the value of the `event.domain` attribute)
+
+Things not listed in the above are not expected to remain stable via semantic
+convention and are allowed (or expected) to change. A few examples:
+
+- The values of attributes
+  - Specifically for `enums` the list of allowed values is expected to change
+    overtime.
+  - Even for `enums` that limit allowed values to semconv, some may need to
+    updated values in the future. Tooling should expect unknown values.
+- The links attached to a span
+- The recorded measurement type (float or integer) of a metric is not enforced and allowed to change.
+- The description of a metric instrument.
+- The values being recorded by an instrument.
+
+The list of telemetry fields which are covered by stability guarantees MAY be
+extended.
 
 Changes to semantic conventions in this specification are allowed, provided that
 the changes can be described by schema files. The following changes can be
@@ -176,13 +245,20 @@ For details see [how OpenTelemetry Schemas are published](schemas/README.md#open
 See the [Telemetry Stability](telemetry-stability.md) document for details on how
 instrumentations can use schemas to change the instrumentation they produce.
 
+**Exception:** Some resource attributes are embedded in various locations of the
+Specification, e.g. the `service.*` attributes which are required by SDKs to be
+produced and have corresponding [environment variables defined in general SDK configuration](sdk-environment-variables.md#general-sdk-configuration). These resource
+attributes MUST NOT be ever changed. They are considered a hard-coded part of
+this specification.
+
 In addition to the 3 types of changes described above there are certain types
 that are always allowed. Such changes do not need to be described (and are not
 described) by schema files. Here is the list of such changes:
 
 - Adding new attributes to the existing semantic conventions for resources,
-  spans, span events or log records. Note that adding attributes to existing metrics is
-  considered to be a breaking change.
+  spans, span events or log records.
+- Adding new attributes to existing metrics that do not "break apart" existing
+  timeseries, such that alert thresholds would break / need to change.
 - Adding semantic conventions for new types of resources, spans, span events,
   metrics or log records.
 

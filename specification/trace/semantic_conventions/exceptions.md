@@ -82,6 +82,8 @@ to adopt them if they see fit.
 | Language   | Format                                                              |
 | ---------- | ------------------------------------------------------------------- |
 | C#         | the return value of [Exception.ToString()][csharp-stacktrace]       |
+| Elixir     | the return value of [Exception.format/3][elixir-stacktrace]         |
+| Erlang     | the return value of [`erl_error:format`][erlang-stacktrace]         |
 | Go         | the return value of [runtime.Stack][go-stacktrace]                  |
 | Java       | the contents of [Throwable.printStackTrace()][java-stacktrace]      |
 | Javascript | the return value of [error.stack][js-stacktrace] as returned by V8  |
@@ -101,3 +103,5 @@ grained information from a stacktrace, if necessary.
 [csharp-stacktrace]: https://docs.microsoft.com/en-us/dotnet/api/system.exception.tostring
 [go-stacktrace]: https://pkg.go.dev/runtime/debug#Stack
 [telemetry-sdk-resource]: ../../resource/semantic_conventions/README.md#telemetry-sdk
+[erlang-stacktrace]: https://www.erlang.org/doc/man/erl_error.html#format_exception-3
+[elixir-stacktrace]: https://hexdocs.pm/elixir/1.14.3/Exception.html#format/3

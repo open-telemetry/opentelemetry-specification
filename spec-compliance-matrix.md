@@ -115,11 +115,13 @@ formats is required. Implementing more than one format is optional.
 | Instruments have kind.                                                                                                                                                 |          | +  | +    | +   | +      |      |        | +   |      | +   | +    |       |
 | Instruments have an optional unit of measure.                                                                                                                          |          | +  | +    | +   | +      |      |        | +   |      | +   | +    |       |
 | Instruments have an optional description.                                                                                                                              |          | +  | +    | +   | +      |      |        | +   |      | +   | +    |       |
+| Instruments have an optional advice.                                                                                                                                   |          |    |      |     |        |      |        |     |      |     |      |       |
 | A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`.                |          |    | +    | +   | +      |      |        |     |      |     |      |       |
 | It is possible to register two instruments with same `name` under different `Meter`s.                                                                                  |          | +  | +    | +   | +      |      |        |     |      | +   | +    |       |
 | Instrument names conform to the specified syntax.                                                                                                                      |          | -  | +    |     | +      |      |        |     |      | +   | +    |       |
 | Instrument units conform to the specified syntax.                                                                                                                      |          | -  | +    |     | +      |      |        |     |      | +   | +    |       |
 | Instrument descriptions conform to the specified syntax.                                                                                                               |          | -  | +    |     | -      |      |        |     |      | -   | +    |       |
+| Instrument advice supports ExplicitBucketBoundaries.                                                                                                                   |          |    |      |     |        |      |        |     |      |     |      |       |
 | `create_counter` returns a `Counter`.                                                                                                                                  |          | +  | +    | +   | +      |      |        | +   |      | +   | +    |       |
 | The API for `Counter` accepts the name, unit and description of the instrument.                                                                                        |          | +  | +    | +   | +      |      |        | +   |      | +   | +    |       |
 | `Counter` has an `add` method.                                                                                                                                         |          | +  | +    | +   | +      |      |        | +   |      | +   | +    |       |
@@ -215,20 +217,19 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
 | **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        |     |      |     | -    |       |
-| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        |     |      |     |      |       |
-| LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        |     |      |     | -    |       |
-| LoggerProvider.ForceFlush                    |          |     | +    |     |        |      |        |     |      |     | -    |       |
-| Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        |     |      |     | -    |       |
-| SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        |     |      |     |      |       |
-| BatchLogRecordProcessor                      |          |     | +    |     |        |      |        |     |      |     |      |       |
-| Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        |     |      |     |      |       |
-| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
-| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        |     |      |     | +    |       |
+| LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
+| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      |     |      |       |
+| LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
+| LoggerProvider.ForceFlush                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
+| Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        | +   |      |     | -    |       |
+| SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        | +   |      |     |      |       |
+| BatchLogRecordProcessor                      |          |     | +    |     |        |      |        | +   |      |     |      |       |
+| Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        | +   |      |     |      |       |
+| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
+| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
-| Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        |     |      |     |      |       |
-| Implicit Context Injection                   |          |     | -    |     | +      |      |        |     |      |     | +    |       |
-| Explicit Context                             |          |     | +    |     | -      |      |        |     |      |     | -    |       |
+| Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      |     |      |       |
+| Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
 
 ## Resource
 
@@ -274,28 +275,30 @@ Note: Support for environment variables is optional.
 | OTEL_SERVICE_NAME                                        | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
 | OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | -   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
-| OTEL_BSP_*                                               | +   | +    |     | +           | +    | +      | +   | +    | -   | -    | -     |
+| OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    | -     |
 | OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     |      |       |
 | OTEL_EXPORTER_OTLP_*                                     | +   | +    |     | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_EXPORTER_JAEGER_*                                   | +   | +    |     | +           | +    | -      | -   |      | -   | +    | -     |
 | OTEL_EXPORTER_ZIPKIN_*                                   | -   | +    |     | +           | +    | -      | +   | -    | -   | +    | -     |
-| OTEL_TRACES_EXPORTER                                     | -   | +    |     | +           | +    | +      | +   | -    | -   | -    |       |
+| OTEL_TRACES_EXPORTER                                     | -   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_METRICS_EXPORTER                                    | -   | +    |     | +           | -    | -      | +   | -    | -   | -    | -     |
 | OTEL_LOGS_EXPORTER                                       | -   | +    |     | +           |      |        |     |      |     | -    |       |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +   | +    |     | +           | +    | +      | +   | +    | -   | -    |       |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +   | +    |     | +           | +    | +      | +   |      |     | -    |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT                              | +   | +    |     | +           | +    | +      | +   | +    | -   | -    |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT                               | +   | +    |     | +           | +    | +      | +   | +    | -   | -    |       |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +   | +    | +   | +           | +    | +      | +   |      |     | -    |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT                              | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
 | OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +   | -    |     | +           | +    | +      | +   |      |     | -    |       |
 | OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +   | -    |     | +           | +    | +      | +   |      |     | -    |       |
-| OTEL_TRACES_SAMPLER                                      | +   | +    |     | +           | +    | +      | +   | -    | -   | -    |       |
-| OTEL_TRACES_SAMPLER_ARG                                  | +   | +    |     | +           | +    | +      | +   | -    | -   | -    |       |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +   | +    |     | +           | +    | -      | +   |      |     | -    |       |
-| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +   | +    |     | +           | +    | -      | +   |      |     | -    |       |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT                     |     |      |     |             |      |        | +   |      |     |      |       |
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT              |     |      |     |             |      |        | +   |      |     |      |       |
+| OTEL_TRACES_SAMPLER                                      | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
+| OTEL_TRACES_SAMPLER_ARG                                  | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +   | +    | +   | +           | +    | -      | +   |      |     | -    |       |
+| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +   | +    | +   | +           | +    | -      | +   |      |     | -    |       |
 | OTEL_METRIC_EXPORT_INTERVAL                              | -   | +    |     |             |      |        | +   |      |     | -    |       |
 | OTEL_METRIC_EXPORT_TIMEOUT                               | -   | -    |     |             |      |        | +   |      |     | -    |       |
 | OTEL_METRICS_EXEMPLAR_FILTER                             | -   | +    |     |             |      |        | +   |      |     | -    |       |
-| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    |     | +           |      |        |     |      |     | -    |       |
+| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        |     |      |     | -    |       |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |     | +    |     |             |      |        |     |      |     |      |       |
 
 ## Exporters
