@@ -120,10 +120,6 @@ registered [LogRecordProcessors](#logrecordprocessor).
 
 ## Logger
 
-If a `Logger` was obtained with `include_trace_context=true`, the `LogRecord`s
-it [emits](./bridge-api.md#emit-a-logrecord) MUST automatically include the Trace
-Context from the active Context, if Context has not been explicitly set.
-
 Note that `Logger`s should not be responsible for configuration. This should be
 the responsibility of the `LoggerProvider` instead.
 
@@ -139,6 +135,10 @@ information added to the [LogRecord](data-model.md#log-and-event-record-definiti
 access the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
 and [Resource](./data-model.md#field-resource) information (implicitly)
 associated with the `LogRecord`.
+
+The [trace context fields](./data-model.md#trace-context-fields) MUST be populated from
+the resolved `Context` (either the explicitly passed `Context` or the
+current `Context`) when [emitted](./bridge-api.md#emit-a-logrecord).
 
 Counts for attributes due to collection limits MUST be available for exporters
 to report as described in
@@ -234,10 +234,8 @@ therefore it SHOULD NOT block or throw exceptions.
 
 * `logRecord` - a [ReadWriteLogRecord](#readwritelogrecord) for the
   emitted `LogRecord`.
-* `context` - the `Context` that the SDK determined (the explicitly
-  passed `Context`, the current `Context`, or an empty `Context` if
-  the [Logger](./bridge-api.md#get-a-logger) was obtained
-  with `include_trace_context=false`)
+* `context` - the resolved `Context` (the explicitly passed `Context` or the
+  current `Context`)
 
 **Returns:** `Void`
 
