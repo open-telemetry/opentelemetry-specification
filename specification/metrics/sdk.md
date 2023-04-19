@@ -602,9 +602,9 @@ via `MetricReader` configuration.
 View configuration SHOULD support applying per-aggregation cardinality limits.
 
 The cardinality limit is taken as an exact, hard limit on the number
-of data points that can be written per collection, per aggregation.  
+of data points that can be written per collection, per aggregation.
 Each aggregation configured view MUST NOT output more than the
-configured `aggregation_cardinality_limit` number of data points per 
+configured `aggregation_cardinality_limit` number of data points per
 period.
 
 The RECOMMENDED default aggregation cardinality limit is 2000.
