@@ -11,14 +11,72 @@ release.
 
 ### Traces
 
-* Clarify required parent information in ReadableSpan. Technically a relaxation,
+### Metrics
+
+- Add experimental histogram advice API.
+  ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+
+### Logs
+
+- Clarify parameters for emitting a log record.
+  ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3354))
+- Drop logger include_trace_context parameter.
+  ([#3397](https://github.com/open-telemetry/opentelemetry-specification/pull/3397))
+
+### Resource
+
+### Semantic Conventions
+
+- Clarify the scope of the HTTP client span.
+ ([#3290](https://github.com/open-telemetry/opentelemetry-specification/pull/3290))
+- Add moratorium on relying on schema transformations for telemetry stability
+  ([#3380](https://github.com/open-telemetry/opentelemetry-specification/pull/3380))
+- Mark "Instrumentation Units" and "Instrumentation Types" sections of the general
+  metric semantic conventions as stable
+  ([#3294](https://github.com/open-telemetry/opentelemetry-specification/pull/3294))
+- Add clarification that UCUM c/s variant applies to all units other than `1` and
+  those using [annotations](https://ucum.org/ucum.html#para-curly).
+  ([#3393](https://github.com/open-telemetry/opentelemetry-specification/pull/3393))
+- Specify that seconds should be used for measuring durations.
+  ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
+- Change http.server.duration and http.client.duration units to seconds
+  ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+- Lay initial groundwork for file configuration
+  ([#3360](https://github.com/open-telemetry/opentelemetry-specification/pull/3360))
+- Move file configuration schema to `opentelemetry-configuration`.
+  ([#3412](https://github.com/open-telemetry/opentelemetry-specification/pull/3412))
+
+### Telemetry Schemas
+
+### Common
+
+## v1.20.0 (2023-04-07)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Clarify required parent information in ReadableSpan. Technically a relaxation,
   but previously it was easy to overlook certain properties were required.
   [#3257](https://github.com/open-telemetry/opentelemetry-specification/pull/3257)
+- Remove underspecified and unused Span decorator from Trace SDK.
+  ([#3363](https://github.com/open-telemetry/opentelemetry-specification/pull/3363))
 
 ### Metrics
 
 - Clarify that units should use UCUM case sensitive variant.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
+- Recommended non-prefixed units for metric instrument semantic conventions.
+  ([#3312](https://github.com/open-telemetry/opentelemetry-specification/pull/3312))
 - Remove No-Op instrument and Meter creation requirements.
   ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
 - Fixed attributes requirement level in semantic conventions for hardware metrics
@@ -41,8 +99,12 @@ release.
 
 ### Resource
 
+- No changes.
+
 ### Semantic Conventions
 
+- Add k8s.cluster.uid semantic convention
+  ([#3267](https://github.com/open-telemetry/opentelemetry-specification/pull/3267))
 - Clarify that attribute requirement levels apply to the instrumentation library
   ([#3289](https://github.com/open-telemetry/opentelemetry-specification/pull/3289))
 - Fix grammatical number of metric units.
@@ -67,18 +129,42 @@ release.
 - Stabilize key components of `service.*` and `telemetry.sdk.*` resource
   semantic conventions.
   ([#3202](https://github.com/open-telemetry/opentelemetry-specification/pull/3202))
+- Fixed attributes requirement level in semantic conventions for hardware metrics
+  ([#3258](https://github.com/open-telemetry/opentelemetry-specification/pull/3258))
+- Added AWS S3 semantic conventions.
+  ([#3251](https://github.com/open-telemetry/opentelemetry-specification/pull/3251))
+- Fix units in the Kafka metric semantic conventions.
+  ([#3300](https://github.com/open-telemetry/opentelemetry-specification/pull/3300))
 - Add Trino to Database specific conventions
   ([#3347](https://github.com/open-telemetry/opentelemetry-specification/pull/3347))
+- Change `db.statement` to only be collected if there is sanitization.
+  ([#3127](https://github.com/open-telemetry/opentelemetry-specification/pull/3127))
+- BREAKING: Remove `http.status_code` attribute from the
+  `http.server.active_requests` metric.
+  ([#3366](https://github.com/open-telemetry/opentelemetry-specification/pull/3366))
+- Mark attribute requirement levels as stable
+  ([#3368](https://github.com/open-telemetry/opentelemetry-specification/pull/3368))
 
 ### Compatibility
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- Declare OTLP stable.
+  ([#3274](https://github.com/open-telemetry/opentelemetry-specification/pull/3274))
 
 ### SDK Configuration
 
+- No changes.
+
 ### Telemetry Schemas
 
+- No changes.
+
 ### Common
+
+- No changes.
 
 ## v1.19.0 (2023-03-06)
 
