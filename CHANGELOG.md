@@ -41,6 +41,8 @@ release.
   ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
 - Change http.server.duration and http.client.duration units to seconds
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
+- Change process.runtime.jvm.gc.duration units to seconds
+  ([#3413](https://github.com/open-telemetry/opentelemetry-specification/pull/3413))
 
 ### Compatibility
 
