@@ -96,7 +96,7 @@ denote old attribute names in rename operations).
 ## Guidelines for OpenTelemetry authors
 
 - All attribute names that are part of OpenTelemetry semantic conventions for
-  Resources, Traces, and Logs MUST be part of a namespace.
+  Resources, Traces, and Logs SHOULD be part of a namespace.
 
 - When coming up with a new semantic convention make sure to check existing
   namespaces for
