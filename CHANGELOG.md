@@ -15,6 +15,9 @@ release.
 
 - Add experimental histogram advice API.
   ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+- Recommended cardinality limits to protect metrics pipelines against
+  excessive data production from a single instrument.
+  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 
 ### Logs
 
@@ -180,9 +183,6 @@ release.
   ([#3184](https://github.com/open-telemetry/opentelemetry-specification/pull/3184))
 - Add metric requirement levels "Required", "Recommended", and "Opt-In".
   ([#3237](https://github.com/open-telemetry/opentelemetry-specification/pull/3237))
-- Recommended cardinality limits to protect metrics pipelines against
-  excessive data production from a single instrument.
-  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 
 ### Logs
 
