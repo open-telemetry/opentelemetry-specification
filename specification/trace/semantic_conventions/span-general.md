@@ -63,7 +63,7 @@ specify what these attributes mean in their context.
 
 Semantic conventions and instrumentations that populate both logical (`server.address` and `server.port`) and socket-level (`server.socket.*`) attributes SHOULD set socket-level attributes only when they don't match logical ones. For example, when direct connection to the remote destination is established and `server.address` is populated, `server.socket.address` SHOULD NOT be set. Check out [Connecting through intermediary](#connecting-through-intermediary) for more information.
 
-##### `server.address`
+#### `server.address`
 
 For IP-based communication, the name should be a DNS host name of the service. On client side it matches remote service name, on server side, it represents local service name as seen externally on clients.
 
@@ -79,7 +79,7 @@ the name should explicitly be set to the empty string to distinguish it from the
 
 For Unix domain socket, `server.address` attribute represents remote endpoint address on the client side and local endpoint address on the server side.
 
-##### `server.socket.*` attributes
+#### `server.socket.*` attributes
 
 _Note: this section applies to socket connections visible to instrumentations. Instrumentations have limited knowledge about intermediaries communications goes through such as [transparent proxies](https://www.rfc-editor.org/rfc/rfc3040.html#section-2.5) or VPN servers. Higher-level instrumentations such as HTTP don't always have access to the socket-level information and may not be able to populate socket-level attributes._
 
