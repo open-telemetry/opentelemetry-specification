@@ -1,0 +1,185 @@
+groups:
+  - id: attributes.process.runtime.jvm.memory
+    type: attribute_group
+    brief: "Describes JVM memory metric attributes."
+    attributes:
+      - id: type
+        type:
+          allow_custom_values: false
+          members:
+            - id: heap
+              value: 'heap'
+              brief: 'Heap memory.'
+            - id: non_heap
+              value: 'non_heap'
+              brief: 'Non-heap memory'
+        requirement_level: recommended
+        brief: The type of memory.
+        examples: ["heap", "non_heap"]
+      - id: pool
+        type: string
+        requirement_level: recommended
+        brief: Name of the memory pool.
+        examples: ["G1 Old Gen", "G1 Eden space", "G1 Survivor Space"]
+        note: >
+          Pool names are generally obtained via
+          [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
+
+  - id: metric.process.runtime.jvm.memory.usage
+    type: metric
+    metric_name: process.runtime.jvm.memory.usage
+    extends: attributes.process.runtime.jvm.memory
+    brief: "Measure of memory used."
+    instrument: updowncounter
+    unit: "By"
+
+  - id: metric.process.runtime.jvm.memory.init
+    type: metric
+    metric_name: process.runtime.jvm.memory.init
+    extends: attributes.process.runtime.jvm.memory
+    brief: "Measure of initial memory requested."
+    instrument: updowncounter
+    unit: "By"
+
+  - id: metric.process.runtime.jvm.memory.committed
+    type: metric
+    metric_name: process.runtime.jvm.memory.committed
+    extends: attributes.process.runtime.jvm.memory
+    brief: "Measure of memory committed."
+    instrument: updowncounter
+    unit: "By"
+
+  - id: metric.process.runtime.jvm.memory.limit
+    type: metric
+    metric_name: process.runtime.jvm.memory.limit
+    extends: attributes.process.runtime.jvm.memory
+    brief: "Measure of max obtainable memory."
+    instrument: updowncounter
+    unit: "By"
+
+  - id: metric.process.runtime.jvm.memory.usage_after_last_gc
+    type: metric
+    metric_name: process.runtime.jvm.memory.usage_after_last_gc
+    extends: attributes.process.runtime.jvm.memory
+    brief: "Measure of memory used, as measured after the most recent garbage collection event on this pool."
+    instrument: updowncounter
+    unit: "By"
+
+  - id: metric.process.runtime.jvm.gc.duration
+    type: metric
+    metric_name: process.runtime.jvm.gc.duration
+    brief: "Duration of JVM garbage collection actions."
+    instrument: histogram
+    unit: "ms"
+    attributes:
+      - id: gc
+        type: string
+        requirement_level: recommended
+        brief: Name of the garbage collector.
+        examples: ["G1 Young Generation", "G1 Old Generation"]
+        note: >
+          Garbage collector name is generally obtained via
+          [GarbageCollectionNotificationInfo#getGcName()](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.management/com/sun/management/GarbageCollectionNotificationInfo.html#getGcName()).
+      - id: action
+        type: string
+        requirement_level: recommended
+        brief: Name of the garbage collector action.
+        examples: ["end of minor GC", "end of major GC"]
+        note: >
+          Garbage collector action is generally obtained via
+          [GarbageCollectionNotificationInfo#getGcAction()](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.management/com/sun/management/GarbageCollectionNotificationInfo.html#getGcAction()).
+
+  - id: metric.process.runtime.jvm.threads.count
+    type: metric
+    metric_name: process.runtime.jvm.threads.count
+    brief: "Number of executing threads."
+    instrument: updowncounter
+    unit: "{thread}"
+    attributes:
+      - id: daemon
+        brief: "Whether the thread is daemon or not."
+        type: boolean
+        requirement_level: recommended
+
+  - id: metric.process.runtime.jvm.classes.loaded
+    type: metric
+    metric_name: process.runtime.jvm.classes.loaded
+    brief: "Number of classes loaded since JVM start."
+    instrument: counter
+    unit: "{class}"
+
+  - id: metric.process.runtime.jvm.classes.unloaded
+    type: metric
+    metric_name: process.runtime.jvm.classes.unloaded
+    brief: "Number of classes unloaded since JVM start."
+    instrument: counter
+    unit: "{class}"
+
+  - id: metric.process.runtime.jvm.classes.current_loaded
+    type: metric
+    metric_name: process.runtime.jvm.classes.current_loaded
+    brief: "Number of classes currently loaded."
+    instrument: updowncounter
+    unit: "{class}"
+
+  - id: metric.process.runtime.jvm.cpu.utilization
+    type: metric
+    metric_name: process.runtime.jvm.cpu.utilization
+    brief: "Recent CPU utilization for the process."
+    note: >
+      This utilization is not defined as being for the specific interval since last measurement
+      (unlike `system.cpu.utilization`).
+    instrument: gauge
+    unit: "1"
+
+  - id: metric.process.runtime.jvm.system.cpu.utilization
+    type: metric
+    metric_name: process.runtime.jvm.system.cpu.utilization
+    brief: "Recent CPU utilization for the whole system."
+    note: >
+      This utilization is not defined as being for the specific interval since last measurement
+      (unlike `system.cpu.utilization`).
+    instrument: gauge
+    unit: "1"
+
+  - id: metric.process.runtime.jvm.system.cpu.load_1m
+    type: metric
+    metric_name: process.runtime.jvm.system.cpu.load_1m
+    brief: "Average CPU load of the whole system for the last minute."
+    instrument: gauge
+    unit: "1"
+
+  - id: attributes.process.runtime.jvm.buffer
+    type: attribute_group
+    brief: "Describes JVM buffer metric attributes."
+    attributes:
+      - ref: pool
+        brief: Name of the memory pool.
+        examples: [ "mapped", "direct" ]
+        note: >
+          Pool names are generally obtained via
+          [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
+
+  - id: metric.process.runtime.jvm.buffer.usage
+    type: metric
+    metric_name: process.runtime.jvm.buffer.usage
+    extends: attributes.process.runtime.jvm.buffer
+    brief: "Measure of memory used by buffers."
+    instrument: updowncounter
+    unit: "By"
+
+  - id: metric.process.runtime.jvm.buffer.limit
+    type: metric
+    metric_name: process.runtime.jvm.buffer.limit
+    extends: attributes.process.runtime.jvm.buffer
+    brief: "Measure of total memory capacity of buffers."
+    instrument: updowncounter
+    unit: "By"
+
+  - id: metric.process.runtime.jvm.buffer.count
+    type: metric
+    metric_name: process.runtime.jvm.buffer.count
+    extends: attributes.process.runtime.jvm.buffer
+    brief: "Number of buffers in the pool."
+    instrument: updowncounter
+    unit: "{buffer}"
