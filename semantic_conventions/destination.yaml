@@ -2,14 +2,14 @@ groups:
   - id: destination
     prefix: destination
     type: attribute_group
-    brief: These attributes may be used to describe the receiver of a network exchange/packet. 
+    brief: These attributes may be used to describe the receiver of a network exchange/packet.
       These fields are populated from a network event, packet, or other event containing details of a network transaction.
     attributes:
       - id: domain
         type: string
         brief: The domain name of the destination system.
         examples: ['foo.example.com']
-        note: This value may be a host name, a fully qualified domain name, or another host naming format. 
+        note: This value may be a host name, a fully qualified domain name, or another host naming format.
       - id: address
         type: string
         brief: 'Peer address, for example IP address or UNIX socket name.'

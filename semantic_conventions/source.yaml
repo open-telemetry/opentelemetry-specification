@@ -2,7 +2,7 @@ groups:
   - id: source
     prefix: source
     type: attribute_group
-    brief: These attributes may be used to describe the sender of a network exchange/packet. 
+    brief: These attributes may be used to describe the sender of a network exchange/packet.
       These fields are populated from a network event, packet, or other event containing details of a network transaction.
     attributes:
       - id: domain
