@@ -88,8 +88,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.usage(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Required |
-| `type` | string | The type of memory. | `heap`; `non_heap` | Required |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
+| `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
@@ -114,8 +114,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.init(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Required |
-| `type` | string | The type of memory. | `heap`; `non_heap` | Required |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
+| `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
@@ -140,8 +140,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.committed(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Required |
-| `type` | string | The type of memory. | `heap`; `non_heap` | Required |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
+| `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
@@ -166,8 +166,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.limit(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Required |
-| `type` | string | The type of memory. | `heap`; `non_heap` | Required |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
+| `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
@@ -192,8 +192,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.usage_after_last_gc(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Required |
-| `type` | string | The type of memory. | `heap`; `non_heap` | Required |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
+| `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
@@ -222,8 +222,8 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 <!-- semconv metric.process.runtime.jvm.gc.duration(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `gc` | string | Name of the garbage collector. [1] | `G1 Young Generation`; `G1 Old Generation` | Required |
-| `action` | string | Name of the garbage collector action. [2] | `end of minor GC`; `end of major GC` | Required |
+| `gc` | string | Name of the garbage collector. [1] | `G1 Young Generation`; `G1 Old Generation` | Recommended |
+| `action` | string | Name of the garbage collector action. [2] | `end of minor GC`; `end of major GC` | Recommended |
 
 **[1]:** Garbage collector name is generally obtained via [GarbageCollectionNotificationInfo#getGcName()](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.management/com/sun/management/GarbageCollectionNotificationInfo.html#getGcName()).
 
@@ -243,7 +243,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.threads.count(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `daemon` | boolean | Whether the thread is daemon or not. |  | Required |
+| `daemon` | boolean | Whether the thread is daemon or not. |  | Recommended |
 <!-- endsemconv -->
 
 ### Metric: `process.runtime.jvm.classes.loaded`
@@ -337,7 +337,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.buffer.usage(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `TODO` | Required |
+| `pool` | string | Name of the memory pool. [1] | `TODO` | Recommended |
 
 **[1]:** Pool names are generally obtained via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
 <!-- endsemconv -->
@@ -355,7 +355,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.buffer.limit(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `TODO` | Required |
+| `pool` | string | Name of the memory pool. [1] | `TODO` | Recommended |
 
 **[1]:** Pool names are generally obtained via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
 <!-- endsemconv -->
@@ -373,7 +373,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.buffer.count(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `TODO` | Required |
+| `pool` | string | Name of the memory pool. [1] | `TODO` | Recommended |
 
 **[1]:** Pool names are generally obtained via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
 <!-- endsemconv -->

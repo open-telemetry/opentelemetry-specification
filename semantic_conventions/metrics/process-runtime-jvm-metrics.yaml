@@ -13,12 +13,12 @@ groups:
             - id: non_heap
               value: 'non_heap'
               brief: 'Non-heap memory'
-        requirement_level: required
+        requirement_level: recommended
         brief: The type of memory.
         examples: ["heap", "non_heap"]
       - id: pool
         type: string
-        requirement_level: required
+        requirement_level: recommended
         brief: Name of the memory pool.
         examples: ["G1 Old Gen", "G1 Eden space", "G1 Survivor Space"]
         note: >
@@ -84,7 +84,7 @@ groups:
     attributes:
       - id: gc
         type: string
-        requirement_level: required
+        requirement_level: recommended
         brief: Name of the garbage collector.
         examples: ["G1 Young Generation", "G1 Old Generation"]
         note: >
@@ -92,7 +92,7 @@ groups:
           [GarbageCollectionNotificationInfo#getGcName()](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.management/com/sun/management/GarbageCollectionNotificationInfo.html#getGcName()).
       - id: action
         type: string
-        requirement_level: required
+        requirement_level: recommended
         brief: Name of the garbage collector action.
         examples: ["end of minor GC", "end of major GC"]
         note: >
@@ -109,7 +109,7 @@ groups:
       - id: daemon
         brief: "Whether the thread is daemon or not."
         type: boolean
-        requirement_level: required
+        requirement_level: recommended
 
   - id: metric.process.runtime.jvm.classes.loaded
     type: metric
