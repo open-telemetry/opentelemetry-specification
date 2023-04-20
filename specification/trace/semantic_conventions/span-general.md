@@ -116,7 +116,7 @@ if they do not cause breaking changes to HTTP semantic conventions.
 
 ### Source and destination attributes
 
-`source` and `destination` attributes describe network peers exchanging packets and usually populated together. They could also be populated along with `client.*` and `server.*` attributes.
+`source` and `destination` attributes describe network peers exchanging packets and usually populated together.
 
 _Note: `source` and `destination` are applicable on packet level and should not be used to describe bi-directional network calls since each peer plays both `source` and `destination` roles._
 
