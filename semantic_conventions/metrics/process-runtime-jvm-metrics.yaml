@@ -32,8 +32,6 @@ groups:
     brief: "Measure of memory used."
     instrument: updowncounter
     unit: "By"
-    attributes:
-      - ref: type
 
   - id: metric.process.runtime.jvm.memory.init
     type: metric
@@ -42,8 +40,6 @@ groups:
     brief: "Measure of initial memory requested."
     instrument: updowncounter
     unit: "By"
-    attributes:
-      - ref: type
 
   - id: metric.process.runtime.jvm.memory.committed
     type: metric
@@ -52,8 +48,6 @@ groups:
     brief: "Measure of memory committed."
     instrument: updowncounter
     unit: "By"
-    attributes:
-      - ref: type
 
   - id: metric.process.runtime.jvm.memory.limit
     type: metric
@@ -62,8 +56,6 @@ groups:
     brief: "Measure of max obtainable memory."
     instrument: updowncounter
     unit: "By"
-    attributes:
-      - ref: type
 
   - id: metric.process.runtime.jvm.memory.usage_after_last_gc
     type: metric
@@ -72,8 +64,6 @@ groups:
     brief: "Measure of memory used, as measured after the most recent garbage collection event on this pool."
     instrument: updowncounter
     unit: "By"
-    attributes:
-      - ref: type
 
   - id: metric.process.runtime.jvm.gc.duration
     type: metric

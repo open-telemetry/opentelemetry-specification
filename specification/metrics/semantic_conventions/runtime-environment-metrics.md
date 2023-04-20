@@ -88,8 +88,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.usage(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 | `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
@@ -114,8 +114,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.init(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 | `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
@@ -140,8 +140,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.committed(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 | `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
@@ -166,8 +166,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.limit(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 | `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
@@ -192,8 +192,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.memory.usage_after_last_gc(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 | `type` | string | The type of memory. | `heap`; `non_heap` | Recommended |
+| `pool` | string | Name of the memory pool. [1] | `G1 Old Gen`; `G1 Eden space`; `G1 Survivor Space` | Recommended |
 
 **[1]:** Pool names are generally obtained via [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
