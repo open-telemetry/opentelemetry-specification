@@ -12,7 +12,7 @@ groups:
         note: This value may be a host name, a fully qualified domain name, or another host naming format.
       - id: address
         type: string
-        brief: 'Source address, fo example IP address or UNIX socket name.'
+        brief: 'Source address, for example IP address or UNIX socket name.'
         examples: ['10.5.3.2']
       - id: port
         type: int
