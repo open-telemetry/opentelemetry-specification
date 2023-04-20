@@ -162,7 +162,7 @@ For an HTTP client span, `SpanKind` MUST be `Client`.
 | [`server.socket.address`](span-general.md) | string | **Stable**<br>Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
 | [`server.socket.domain`](span-general.md) | string | **Stable**<br>The domain name of an immediate peer. [5] | `proxy.example.com` | Recommended |
 | [`server.socket.port`](span-general.md) | int | **Stable**<br>Physical server port. | `16456` | Recommended: If different than `server.port`. |
-| `url.full` | string | **Stable**<br>Full URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986) [6] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv`; `//localhost` | Required |
+| `url.full` | string | **Stable**<br>Absolute URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986) [6] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv`; `//localhost` | Required |
 
 **[1]:** The resend count SHOULD be updated each time an HTTP request gets resent by the client, regardless of what was the cause of the resending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues, or any other).
 
@@ -183,7 +183,7 @@ If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.
 
 **[6]:** For network calls, URL usually has `scheme://host[:port]/path?query[#fragment]` format, where the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
 `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
-`url.full` SHOULD capture the original URL when it's available and SHOULD not validate or modify it.
+`url.full` SHOULD capture the absolute URL when it's available and SHOULD not validate or modify it except for sanitizing purposes.
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
