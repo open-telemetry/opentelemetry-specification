@@ -36,6 +36,12 @@ semantic conventions when instrumenting runtime environments.
   * [Metric: `process.runtime.jvm.buffer.usage`](#metric-processruntimejvmbufferusage)
   * [Metric: `process.runtime.jvm.buffer.limit`](#metric-processruntimejvmbufferlimit)
   * [Metric: `process.runtime.jvm.buffer.count`](#metric-processruntimejvmbuffercount)
+  * [Metric: `process.runtime.jvm.cpu.monitor.wait`](#metric-processruntimejvmcpumonitorwait)
+  * [Metric: `process.runtime.jvm.cpu.monitor.blocked`](#metric-processruntimejvmcpumonitorblocked)
+  * [Metric: `process.runtime.jvm.cpu.context_switch`](#metric-processruntimejvmcpucontext_swtich)
+  * [Metric: `process.runtime.jvm.memory.allocation`](#metric-processruntimejvmmemoryallocation)
+  * [Metric: `process.runtime.jvm.network.io`](#metric-processruntimejvmnetworkio)
+  * [Metric: `process.runtime.jvm.network.time`](#metric-processruntimejvmnetworktime)
 
 <!-- tocstop -->
 
@@ -372,4 +378,95 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 | `pool` | string | Name of the memory pool. [1] | `mapped`; `direct` | Recommended |
 
 **[1]:** Pool names are generally obtained via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
+<!-- endsemconv -->
+
+
+### Metric: `process.runtime.jvm.cpu.monitor.blocked`
+
+This metric is [recommended](../metric-requirement-level.md#recommended).
+
+<!-- semconv metric.process.runtime.jvm.cpu.monitor.blocked(metric_table) -->
+| Name     | Instrument Type | Unit (UCUM) | Description    |
+| -------- | --------------- | ----------- | -------------- |
+| `process.runtime.jvm.cpu.monitor.blocked` | Histogram | `ms` | Time thread was blocked at a monitor. Only available in JDK 17+. |
+<!-- endsemconv -->
+
+<!-- semconv metric.process.runtime.jvm.cpu.monitor.blocked(full) -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `thread` | int | Thread emitting the metric. | `1`; `2` | Opt-In |
+| `class` | string | Class of the monitor. | `java.lang.Object` | Opt-In |
+<!-- endsemconv -->
+
+### Metric: `process.runtime.jvm.cpu.monitor.wait`
+
+This metric is [recommended](../metric-requirement-level.md#recommended).
+
+<!-- semconv metric.process.runtime.jvm.cpu.monitor.wait(metric_table) -->
+| Name     | Instrument Type | Unit (UCUM) | Description    |
+| -------- | --------------- | ----------- | -------------- |
+| `process.runtime.jvm.cpu.monitor.wait` | Histogram | `ms` | Time thread was waiting at a monitor. Only available in JDK 17+. |
+<!-- endsemconv -->
+
+<!-- semconv metric.process.runtime.jvm.cpu.monitor.wait(full) -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `thread` | int | Thread emitting the metric. | `1`; `2` | Opt-In |
+| `class` | string | Class of the monitor. | `java.lang.Object` | Opt-In |
+<!-- endsemconv -->
+
+### Metric: `process.runtime.jvm.cpu.context_swtich`
+
+This metric is [recommended](../metric-requirement-level.md#recommended).
+
+<!-- semconv metric.process.runtime.jvm.cpu.context_switch(metric_table) -->
+| Name     | Instrument Type | Unit (UCUM) | Description    |
+| -------- | --------------- | ----------- | -------------- |
+| `process.runtime.jvm.cpu.context_switch` | UpDownCounter | `Hz` | Number of context switches per second. Only available in JDK 17+. |
+<!-- endsemconv -->
+
+
+
+### Metric: `process.runtime.jvm.cpu.allocation`
+
+This metric is [recommended](../metric-requirement-level.md#recommended).
+
+<!-- semconv metric.process.runtime.jvm.memory.allocation(metric_table) -->
+| Name     | Instrument Type | Unit (UCUM) | Description    |
+| -------- | --------------- | ----------- | -------------- |
+| `process.runtime.jvm.memory.allocation` | Histogram | `By` | Size of object allocated by thread. Only available in JDK 17+. |
+<!-- endsemconv -->
+
+### Metric: `process.runtime.jvm.network.io`
+
+This metric is [recommended](../metric-requirement-level.md#recommended).
+
+<!-- semconv metric.process.runtime.jvm.network.io(metric_table) -->
+| Name     | Instrument Type | Unit (UCUM) | Description    |
+| -------- | --------------- | ----------- | -------------- |
+| `process.runtime.jvm.network.io` | Histogram | `By` | Bytes read/written by thread. Only available in JDK 17+. |
+<!-- endsemconv -->
+
+<!-- semconv metric.process.runtime.jvm.network.io(full) -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `mode` | string | Read or write. | `read`; `write` | Recommended |
+| `thread` | int | Thread emitting the metric. | `1`; `2` | Opt-In |
+<!-- endsemconv -->
+
+### Metric: `process.runtime.jvm.network.time`
+
+This metric is [recommended](../metric-requirement-level.md#recommended).
+
+<!-- semconv metric.process.runtime.jvm.network.time(metric_table) -->
+| Name     | Instrument Type | Unit (UCUM) | Description    |
+| -------- | --------------- | ----------- | -------------- |
+| `process.runtime.jvm.network.time` | Histogram | `ms` | Duration of network IO operation by thread. Only available in JDK 17+. |
+<!-- endsemconv -->
+
+<!-- semconv metric.process.runtime.jvm.network.time(full) -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `mode` | string | Read or write. | `read`; `write` | Recommended |
+| `thread` | int | Thread emitting the metric. | `1`; `2` | Opt-In |
 <!-- endsemconv -->
