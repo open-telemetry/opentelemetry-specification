@@ -209,10 +209,6 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
 
-This metric SHOULD be specified with
-[`ExplicitBucketBoundaries`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#instrument-advice)
-of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10 ]`.
-
 <!-- semconv metric.process.runtime.jvm.gc.duration(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
