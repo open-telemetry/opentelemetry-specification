@@ -10,7 +10,7 @@ groups:
         examples: ["https", "ftp", "telnet"]
       - id: full
         type: string
-        brief: Full URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986)
+        brief: Absolute URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986)
         note: >
           For network calls, URL usually has `scheme://host[:port]/path?query[#fragment]` format, where the fragment
           is not transmitted over HTTP, but if it is known, it should be included nevertheless.
@@ -18,7 +18,8 @@ groups:
           `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
           In such case the attribute's value should be `https://www.example.com/`.
 
-          `url.full` SHOULD capture the original URL when it's available and SHOULD not validate or modify it.
+          `url.full` SHOULD capture the absolute URL when it's available and SHOULD not validate or modify
+          it except for sanitizing purposes.
         examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv', '//localhost']
       - id: path
         type: string
@@ -28,3 +29,7 @@ groups:
         type: string
         brief: 'The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component'
         examples: ["?q=OpenTelemetry"]
+      - id: fragment
+        type: string
+        brief: 'The [URI fragment](https://www.rfc-editor.org/rfc/rfc3986#section-3.5) component'
+        examples: ["#SemConv"]
