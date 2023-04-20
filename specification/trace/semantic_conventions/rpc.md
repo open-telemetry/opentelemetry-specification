@@ -116,8 +116,8 @@ This process could expose two RPC endpoints, one called `CurrencyQuotes` (= `rpc
 In this example, spans representing client request should have their `peer.service` attribute set to `QuoteService` as well to match the server's `service.name` resource attribute.
 Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service name.
 
-[network attributes]: span-general.md#general-network-connection-attributes
-[net.transport]: span-general.md#common-network-attributes
+[network attributes]: span-general.md#server-and-client-attributes
+[net.transport]: span-general.md#network-attributes
 [`service.name`]: ../../resource/semantic_conventions/README.md#service
 [`peer.service`]: span-general.md#general-remote-service-attributes
 
