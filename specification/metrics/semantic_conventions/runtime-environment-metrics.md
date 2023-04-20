@@ -216,7 +216,7 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 <!-- semconv metric.process.runtime.jvm.gc.duration(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `process.runtime.jvm.gc.duration` | Histogram | `s` | Duration of JVM garbage collection actions. |
+| `process.runtime.jvm.gc.duration` | Histogram | `ms` | Duration of JVM garbage collection actions. |
 <!-- endsemconv -->
 
 <!-- semconv metric.process.runtime.jvm.gc.duration(full) -->

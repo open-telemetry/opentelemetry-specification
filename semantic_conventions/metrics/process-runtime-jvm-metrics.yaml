@@ -80,7 +80,7 @@ groups:
     metric_name: process.runtime.jvm.gc.duration
     brief: "Duration of JVM garbage collection actions."
     instrument: histogram
-    unit: "s"
+    unit: "ms"
     attributes:
       - id: gc
         type: string
