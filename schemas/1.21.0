@@ -12,13 +12,16 @@ versions:
         # https://github.com/open-telemetry/opentelemetry-specification/pull/3402
         - rename_attributes:
             attribute_map:
+              # net.peer.* attributes were only populated on client side
+              # so they always translate to server.*
               net.peer.name: server.address
               net.peer.port: server.port
+              # net.host.* attributes were only populated on server side
               net.host.name: server.address
               net.host.port: server.port
-              net.sock.peer.addr: server.socket.address            
+              # was only populated on client side
               net.sock.peer.name: server.socket.domain
-              net.sock.peer.port: server.socket.port
+              # net.sock.peer.(addr|port) mapping is not possible
               net.sock.host.addr: server.socket.address
               net.sock.host.port: server.socket.port
   1.20.0:

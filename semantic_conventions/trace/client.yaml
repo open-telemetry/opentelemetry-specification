@@ -2,7 +2,7 @@ groups:
   - id: client
     prefix: client
     type: attribute_group
-    brief: These attributes may be used for client - initiator of a network connection for events regarding sessions, connections, or bidirectional flow records.
+    brief: These attributes may be used to describe the client - initiator of a network connection for events regarding sessions, connections, or bidirectional flow records.
     attributes:
       - id: socket.address
         type: string

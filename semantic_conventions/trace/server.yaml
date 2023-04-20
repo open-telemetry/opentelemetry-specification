@@ -2,7 +2,7 @@ groups:
   - id: server
     prefix: server
     type: attribute_group
-    brief: These attributes may be used for server - responder in a network connection for events regarding sessions, connections, or bidirectional flow records.
+    brief: These attributes may be used to describe server - responder in a network connection for events regarding sessions, connections, or bidirectional flow records.
     attributes:
       - id: address
         type: string

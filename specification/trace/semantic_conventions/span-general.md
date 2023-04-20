@@ -10,10 +10,12 @@ Particular operations may refer to or require some of these attributes.
 
 <!-- toc -->
 
-- [General network connection attributes](#general-network-connection-attributes)
+- [Server and client attributes](#server-and-client-attributes)
   * [Server attributes](#server-attributes)
   * [Client attributes](#client-attributes)
+- [Network attributes](#network-attributes)
   * [Common network attributes](#common-network-attributes)
+  * [Source and destination attributes](#source-and-destination-attributes)* 
   * [Network connection and carrier attributes](#network-connection-and-carrier-attributes)
   * [`server.*` and `client*` attributes](#server-and-client-attributes)
     + [`server.*` attributes](#server-attributes)
@@ -28,16 +30,14 @@ Particular operations may refer to or require some of these attributes.
 
 <!-- tocstop -->
 
-## General network connection attributes
+## Server and client attributes
 
-These attributes may be used for any network related operation.
-The `server.*` attributes describe properties of the server side of the network connection
-(usually the receiver of the initial SYN packet(s) of the TCP connection. For other protocols,
-the server is generally the responder in the network transaction),
-while the `client.*` properties describe the initiator of the connection or request.
+These attributes may be used to describe client and server in request-response communication.
+The `server.*` attributes describe properties of the server responding to a network request,
+while the `client.*` attributes describe the initiator of the request.
 
 In an ideal situation, not accounting for proxies, multiple IP addresses or host names,
-the `client.*` and `server.*` properties are the same on the client and server.
+the `server.*` attributes are the same on the client and server.
 
 ### Server attributes
 
@@ -74,7 +74,7 @@ if they do not cause breaking changes to HTTP semantic conventions.
 | `client.socket.port` | int | Immediate client port number | `35555` | Recommended |
 <!-- endsemconv -->
 
-### Common network attributes
+## Common network attributes
 
 > **Warning**
 > Attributes in this section are in use by the HTTP semantic conventions.
@@ -112,6 +112,38 @@ if they do not cause breaking changes to HTTP semantic conventions.
 | `inet` | IPv4 address |
 | `inet6` | IPv6 address |
 | `unix` | Unix domain socket path |
+<!-- endsemconv -->
+
+### Source and destination attributes
+
+`source` and `destination` attributes describe network peers exchanging packets and usually populated together. They could also be populated along with `client.*` and `server.*` attributes.
+
+_Note: `source` and `destination` are applicable on packet level and should not be used to describe bi-directional network calls since each peer plays both `source` and `destination` roles._
+
+#### Source
+
+<!-- semconv source -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `source.domain` | string | The domain name of the source system. [1] | `foo.example.com` | Recommended |
+| `source.address` | string | Source address, fo example IP address or UNIX socket name. | `10.5.3.2` | Recommended |
+| `source.port` | int | Source port number | `3389`; `2888` | Recommended |
+
+**[1]:** This value may be a host name, a fully qualified domain name, or another host naming format.
+<!-- endsemconv -->
+
+#### Destination
+
+Destination fields capture details about the receiver of a network exchange/packet.
+
+<!-- semconv destination -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `destination.domain` | string | The domain name of the destination system. [1] | `foo.example.com` | Recommended |
+| `destination.address` | string | Peer address, for example IP address or UNIX socket name. | `10.5.3.2` | Recommended |
+| `destination.port` | int | Peer port number | `3389`; `2888` | Recommended |
+
+**[1]:** This value may be a host name, a fully qualified domain name, or another host naming format.
 <!-- endsemconv -->
 
 ### Network connection and carrier attributes
