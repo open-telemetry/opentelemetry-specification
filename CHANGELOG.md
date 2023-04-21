@@ -47,7 +47,7 @@ release.
   rename `process.cpu.utilization` metric attribute `state` to `cpu.state`,
   rename `process.disk.io` metric attribute `direction` to `disk.direction`,
   rename `process.network.io` metric attribute `direction` to `network.direction`,
-  rename `process.context_switches` metric attribute `type` to `cpu.context_switch.type`,
+  rename `process.context_switches` metric attribute `type` to `os.context_switch.type`,
   rename `process.paging.faults` metric attribute `type` to `memory.page_fault.type`,
   ([#3431](https://github.com/open-telemetry/opentelemetry-specification/pull/3431))
 
