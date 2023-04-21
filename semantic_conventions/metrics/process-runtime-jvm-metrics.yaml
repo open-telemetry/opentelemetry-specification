@@ -154,7 +154,7 @@ groups:
     brief: "Describes JVM buffer metric attributes."
     attributes:
       - ref: pool
-        brief: Name of the memory pool.
+        brief: Name of the buffer pool.
         examples: [ "mapped", "direct" ]
         note: >
           Pool names are generally obtained via
