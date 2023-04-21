@@ -29,11 +29,8 @@ groups:
     type: attribute_group
     brief: "Describes JVM monitor metric attributes. "
     attributes:
-      - id: thread
-        type: int
+      - ref: thread.id
         requirement_level: opt_in
-        brief: Thread emitting the metric.
-        examples: [1, 2]
       - id: class
         type: string
         requirement_level: opt_in
@@ -44,7 +41,8 @@ groups:
     type: attribute_group
     brief: "Describes JVM network IO metric attributes. "
     attributes:
-      - ref: thread
+      - ref: thread.id
+        requirement_level: opt_in
       - id: mode
         type: string
         requirement_level: recommended
@@ -96,7 +94,7 @@ groups:
     metric_name: process.runtime.jvm.gc.duration
     brief: "Duration of JVM garbage collection actions."
     instrument: histogram
-    unit: "ms"
+    unit: "s"
     attributes:
       - id: gc
         type: string
@@ -216,7 +214,7 @@ groups:
     extends: attributes.process.runtime.jvm.cpu.monitor
     brief: "Time thread was waiting at a monitor. Only available in JDK 17+."
     instrument: histogram
-    unit: "ms"
+    unit: "s"
 
   - id: metric.process.runtime.jvm.cpu.monitor.blocked
     type: metric
@@ -224,7 +222,7 @@ groups:
     extends: attributes.process.runtime.jvm.cpu.monitor
     brief: "Time thread was blocked at a monitor. Only available in JDK 17+."
     instrument: histogram
-    unit: "ms"
+    unit: "s"
 
   - id: metric.process.runtime.jvm.cpu.context_switch
     type: metric
@@ -254,4 +252,4 @@ groups:
     brief: "Duration of network IO operation by thread. Only available in JDK 17+."
     extends: attributes.process.runtime.jvm.network
     instrument: histogram
-    unit: "ms"
+    unit: "s"
