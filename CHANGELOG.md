@@ -41,6 +41,12 @@ release.
   ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
 - Change http.server.duration and http.client.duration units to seconds
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
+- Rename `net.protocol.*` to `network.protocol.*`,
+  `net.transport` to `network.transport`,
+  `net.sock.family` to `network.socket.family`,
+  `net.host.connection.*` to `network.host.connection.*`, and
+  `net.host.carrier.*` to `network.host.carrier.*`
+  ([#9999](https://github.com/open-telemetry/opentelemetry-specification/pull/9999))
 
 ### Compatibility
 
