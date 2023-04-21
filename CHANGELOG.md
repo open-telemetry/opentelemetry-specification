@@ -49,13 +49,13 @@ release.
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
 - Rename `net.peer.*`, `net.host.*`, and `net.sock.*` attributes to align with ECS
   ([#3402](https://github.com/open-telemetry/opentelemetry-specification/pull/3402))
-    BREAKING: rename `net.peer.name` and `net.host.name` to `server.address`,
-     `net.peer.port` and `net.host.port` to `server.port`,
+    BREAKING: rename `net.peer.name` and `net.host.name` to `server.address` (since `net.peer.*` only applied to client instrumentation and `net.host.*` only applied to server instrumentation),
+     `net.peer.port` and `net.host.port` to `server.port` (similarly since `net.peer.*` only applied to client instrumentation and `net.host.*` only applied to server instrumentation),
      `net.sock.peer.addr` to `server.socket.address` on client side and to `client.socket.address` on server side,
      `net.sock.peer.port` to `server.socket.port` on client side and to `client.socket.port` on server side,
-     `net.sock.peer.name` to `server.socket.domain`,
-     `net.sock.host.addr` to `server.socket.address`,
-     `net.sock.host.port` to `server.socket.port`
+     `net.sock.peer.name` to `server.socket.domain` (since `net.sock.peer.name` only applied to client instrumentation),
+     `net.sock.host.addr` to `server.socket.address` (since `net.sock.host.*` only applied to server instrumentation),
+     `net.sock.host.port` to `server.socket.port` (similarly since `net.sock.host.*` only applied to server instrumentation),
 
 ### Compatibility
 
