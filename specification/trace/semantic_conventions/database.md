@@ -285,7 +285,7 @@ In addition to Cosmos DB attributes, all spans include
 | `net.peer.name`         | `"shopdb.example.com"` |
 | `net.sock.peer.addr`    | `"192.0.2.12"` |
 | `net.peer.port`         | `3306` |
-| `network.transport`         | `"IP.TCP"` |
+| `network.transport`     | `"IP.TCP"` |
 | `db.name`               | `"ShopDb"` |
 | `db.statement`          | `"SELECT * FROM orders WHERE order_id = 'o4711'"` |
 | `db.operation`          | `"SELECT"` |
@@ -303,7 +303,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.connection_string`    | not set |
 | `db.user`                 | not set |
 | `net.peer.name`           | `"/tmp/redis.sock"` |
-| `network.transport`           | `"Unix"` |
+| `network.transport`       | `"Unix"` |
 | `db.name`                 | not set |
 | `db.statement`            | `"HMSET myhash field1 'Hello' field2 'World"` |
 | `db.operation`            | not set |
@@ -320,7 +320,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `net.peer.name`         | `"mongodb0.example.com"` |
 | `net.sock.peer.addr`    | `"192.0.2.14"` |
 | `net.peer.port`         | `27017` |
-| `network.transport`         | `"IP.TCP"` |
+| `network.transport`     | `"IP.TCP"` |
 | `db.name`               | `"shopDb"` |
 | `db.statement`          | not set |
 | `db.operation`          | `"findAndModify"` |
