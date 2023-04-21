@@ -53,7 +53,7 @@ groups:
       - ref: net.sock.peer.port
         requirement_level:
           recommended: If different than `net.peer.port` and if `net.sock.peer.addr` is set.
-      - ref: net.sock.family
+      - ref: network.socket.family
         requirement_level:
           conditionally_required: If and only if `net.sock.peer.addr` is set.
       - ref: net.sock.peer.name
@@ -70,7 +70,7 @@ groups:
       - ref: net.peer.port
         requirement_level:
           conditionally_required: See below
-      - ref: net.transport
+      - ref: network.transport
         requirement_level:
           conditionally_required: See below
     constraints:
@@ -88,7 +88,7 @@ groups:
       - ref: net.host.name
       - ref: net.sock.host.addr
       - ref: net.sock.host.port
-      - ref: net.sock.family
+      - ref: network.socket.family
 
   - id: rpc.grpc
     prefix: rpc.grpc

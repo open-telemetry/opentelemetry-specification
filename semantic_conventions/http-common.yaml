@@ -15,11 +15,11 @@ groups:
           conditionally_required: If and only if one was received/sent.
         brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
         examples: [200]
-      - ref: net.protocol.name
+      - ref: network.protocol.name
         examples: ['http', 'spdy']
         requirement_level:
           recommended: if not default (`http`).
-      - ref: net.protocol.version
+      - ref: network.protocol.version
         examples: ['1.0', '1.1', '2.0']
 
   - id: attributes.http.client

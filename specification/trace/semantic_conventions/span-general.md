@@ -12,7 +12,7 @@ Particular operations may refer to or require some of these attributes.
 
 - [General network connection attributes](#general-network-connection-attributes)
   * [Network transport attributes](#network-transport-attributes)
-  * [`net.host.connection.*` and `net.host.carrier.*` attributes](#nethostconnection-and-nethostcarrier-attributes)
+  * [`network.host.connection.*` and `network.host.carrier.*` attributes](#nethostconnection-and-nethostcarrier-attributes)
   * [`net.peer.name` and `net.host.name` attributes](#netpeername-and-nethostname-attributes)
     + [`net.peer.name`](#netpeername)
     + [`net.host.name`](#nethostname)
@@ -46,13 +46,13 @@ if they do not cause breaking changes to HTTP semantic conventions.
 <!-- semconv network-core -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `net.transport` | string | Transport protocol used. See note below. | `ip_tcp` | Recommended |
-| `net.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| `net.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
+| `network.transport` | string | Transport protocol used. See note below. | `ip_tcp` | Recommended |
+| `network.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| `network.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
 | `net.sock.peer.name` | string | Remote socket peer name. | `proxy.example.com` | Recommended: [2] |
 | `net.sock.peer.addr` | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | `net.sock.peer.port` | int | Remote socket peer port. | `16456` | Recommended: [3] |
-| `net.sock.family` | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [4] |
+| `network.socket.family` | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [4] |
 | `net.peer.name` | string | Logical remote hostname, see note below. [5] | `example.com` | Recommended |
 | `net.peer.port` | int | Logical remote port number | `80`; `8080`; `443` | Recommended |
 | `net.host.name` | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
@@ -60,19 +60,19 @@ if they do not cause breaking changes to HTTP semantic conventions.
 | `net.sock.host.addr` | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
 | `net.sock.host.port` | int | Local socket port number. | `35555` | Conditionally Required: [6] |
 
-**[1]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
 **[2]:** If available and different from `net.peer.name` and if `net.sock.peer.addr` is set.
 
 **[3]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
-**[4]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[4]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `network.socket.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 **[5]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
 
-`net.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+`network.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -84,7 +84,7 @@ if they do not cause breaking changes to HTTP semantic conventions.
 
 **[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
 
-`net.sock.family` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+`network.socket.family` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -95,19 +95,19 @@ if they do not cause breaking changes to HTTP semantic conventions.
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
 
-### `net.host.connection.*` and `net.host.carrier.*` attributes
+### `network.host.connection.*` and `network.host.carrier.*` attributes
 
 <!-- semconv network-connection-and-carrier -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `net.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
-| `net.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
-| `net.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
-| `net.host.carrier.mcc` | string | The mobile carrier country code. | `310` | Recommended |
-| `net.host.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
-| `net.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
+| `network.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
+| `network.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
+| `network.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
+| `network.host.carrier.mcc` | string | The mobile carrier country code. | `310` | Recommended |
+| `network.host.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
+| `network.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
 
-`net.host.connection.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+`network.host.connection.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -117,7 +117,7 @@ For `Unix` and `pipe`, since the connection goes over the file system instead of
 | `unavailable` | unavailable |
 | `unknown` | unknown |
 
-`net.host.connection.subtype` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+`network.host.connection.subtype` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -161,7 +161,7 @@ Sometimes host name is only available to instrumentation as a string which may c
 
 If only IP address is available via `net.sock.peer.addr`, `net.peer.name` SHOULD NOT be set. Reverse DNS lookup SHOULD NOT be used to obtain DNS name.
 
-If `net.transport` is `"pipe"`, the absolute path to the file representing it should be used as `net.peer.name` (`net.host.name` doesn't make sense in that context).
+If `network.transport` is `"pipe"`, the absolute path to the file representing it should be used as `net.peer.name` (`net.host.name` doesn't make sense in that context).
 If there is no such file (e.g., anonymous pipe),
 the name should explicitly be set to the empty string to distinguish it from the case where the name is just unknown or not covered by the instrumentation.
 
@@ -183,7 +183,7 @@ _Note: this section applies to socket connections visible to instrumentations. I
 
 Socket-level attributes identify peer and host that are directly connected to each other. Since instrumentations may have limited knowledge on network information, instrumentations SHOULD populate such attributes to the best of their knowledge when populate them at all.
 
-`net.sock.family` identifies address family specified when connecting to the socket. For example, it matches `sa_family` field of `sockaddr` structure on [Linux](https://man7.org/linux/man-pages/man0/sys_socket.h.0p.html) and [Windows](https://docs.microsoft.com/windows/win32/api/winsock/ns-winsock-sockaddr).
+`network.socket.family` identifies address family specified when connecting to the socket. For example, it matches `sa_family` field of `sockaddr` structure on [Linux](https://man7.org/linux/man-pages/man0/sys_socket.h.0p.html) and [Windows](https://docs.microsoft.com/windows/win32/api/winsock/ns-winsock-sockaddr).
 
 _Note: Specific structures and methods to obtain socket-level attributes are mentioned here only as examples. Instrumentations would usually use Socket API provided by their environment or sockets implementations._
 

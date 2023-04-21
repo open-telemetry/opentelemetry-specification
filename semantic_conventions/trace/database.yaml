@@ -242,12 +242,12 @@ groups:
         tag: connection-level
       - ref: net.sock.peer.port
         tag: connection-level
-      - ref: net.sock.family
+      - ref: network.socket.family
         tag: connection-level
       - ref: net.sock.peer.name
         requirement_level:
           recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
-      - ref: net.transport
+      - ref: network.transport
         tag: connection-level
         requirement_level:
           conditionally_required: If database type is in-process (`"inproc"`), recommended for other database types.

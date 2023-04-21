@@ -143,15 +143,15 @@ groups:
         tag: connection-level
       - ref: net.sock.peer.port
         tag: connection-level
-      - ref: net.sock.family
+      - ref: network.socket.family
         tag: connection-level
       - ref: net.sock.peer.name
         tag: connection-level
         requirement_level:
           recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
-      - ref: net.protocol.name
+      - ref: network.protocol.name
         examples: ['amqp', 'mqtt']
-      - ref: net.protocol.version
+      - ref: network.protocol.version
 
   - id: messaging.producer
     prefix: messaging

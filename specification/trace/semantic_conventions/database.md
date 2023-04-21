@@ -46,16 +46,16 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | Recommended |
 | [`net.peer.name`](span-general.md) | string | Name of the database host. [1] | `example.com` | Conditionally Required: See alternative attributes below. |
 | [`net.peer.port`](span-general.md) | int | Logical remote port number | `80`; `8080`; `443` | Conditionally Required: [2] |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [3] |
+| [`network.socket.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [3] |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | See below |
 | [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [4] |
-| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [5] |
+| [`network.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [5] |
 
 **[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **[2]:** If using a port other than the default port for this DBMS and if `net.peer.name` is set.
 
-**[3]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[3]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `network.socket.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
 **[4]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
@@ -285,7 +285,7 @@ In addition to Cosmos DB attributes, all spans include
 | `net.peer.name`         | `"shopdb.example.com"` |
 | `net.sock.peer.addr`    | `"192.0.2.12"` |
 | `net.peer.port`         | `3306` |
-| `net.transport`         | `"IP.TCP"` |
+| `network.transport`         | `"IP.TCP"` |
 | `db.name`               | `"ShopDb"` |
 | `db.statement`          | `"SELECT * FROM orders WHERE order_id = 'o4711'"` |
 | `db.operation`          | `"SELECT"` |
@@ -303,7 +303,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.connection_string`    | not set |
 | `db.user`                 | not set |
 | `net.peer.name`           | `"/tmp/redis.sock"` |
-| `net.transport`           | `"Unix"` |
+| `network.transport`           | `"Unix"` |
 | `db.name`                 | not set |
 | `db.statement`            | `"HMSET myhash field1 'Hello' field2 'World"` |
 | `db.operation`            | not set |
@@ -320,7 +320,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `net.peer.name`         | `"mongodb0.example.com"` |
 | `net.sock.peer.addr`    | `"192.0.2.14"` |
 | `net.peer.port`         | `27017` |
-| `net.transport`         | `"IP.TCP"` |
+| `network.transport`         | `"IP.TCP"` |
 | `db.name`               | `"shopDb"` |
 | `db.statement`          | not set |
 | `db.operation`          | `"findAndModify"` |

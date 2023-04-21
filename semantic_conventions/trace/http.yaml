@@ -27,7 +27,7 @@ groups:
       - ref: net.sock.peer.addr
       - ref: net.sock.peer.port
       - ref: net.sock.peer.name
-      - ref: net.sock.family
+      - ref: network.socket.family
         examples: ['inet', 'inet6']
       - ref: user_agent.original
 
