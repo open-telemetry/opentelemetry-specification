@@ -1,6 +1,6 @@
 # Logs Bridge API
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -85,15 +85,11 @@ This API MUST accept the following parameters:
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
 
-* `include_trace_context` (optional): Specifies whether the Trace Context should
-  automatically be passed on to the `LogRecord`s emitted by the `Logger`.
-  If `include_trace_context` is not specified, it SHOULD be `true` by default.
-
 `Logger`s are identified by `name`, `version`, and `schema_url` fields.  When more
 than one `Logger` of the same `name`, `version`, and `schema_url` is created, it
 is unspecified whether or under which conditions the same or different `Logger`
 instances are returned. It is a user error to create Loggers with different
-`include_trace_context` or `attributes` but the same identity.
+`attributes` but the same identity.
 
 The term *identical* applied to `Logger`s describes instances where all
 identifying fields are equal. The term *distinct* applied to `Logger`s describes
@@ -115,14 +111,13 @@ The `Logger` MUST provide functions to:
 
 #### Emit a LogRecord
 
-`LogRecord`s encapsulate the fields identified in the [`LogRecord`
-data model](data-model.md#log-and-event-record-definition) and are emitted to the processing pipeline using
-this API.
+The effect of calling this API is to emit a `LogRecord` to the processing pipeline.
 
 The API MUST accept the following parameters:
 
 - [Timestamp](./data-model.md#field-timestamp)
-- [Observed Timestamp](./data-model.md#field-observedtimestamp)
+- [Observed Timestamp](./data-model.md#field-observedtimestamp). If unspecified the
+  implementation SHOULD set it equal to the current time.
 - The [Context](../context/README.md) associated with the `LogRecord`. The API
   MAY implicitly use the current Context as a default
   behavior.
@@ -167,7 +162,7 @@ that would prevent evolution into a user facing API.
 ### How to Create a Log4J Log Appender
 
 A [log appender](../glossary.md#log-appender--bridge) implementation can be used
-to can be used to bridge logs into the [Log SDK](./sdk.md)
+to bridge logs into the [Log SDK](./sdk.md)
 OpenTelemetry [LogRecordExporters](sdk.md#logrecordexporter). This approach is
 typically used for applications which are fine with changing the log transport
 and is [one of the supported](README.md#direct-to-collector) log collection
@@ -200,30 +195,33 @@ popular logging library.
 ### Implicit Context Injection
 
 When Context is implicitly available (e.g. in Java) the Appender can rely on
-automatic context propagation by [obtaining a Logger](#get-a-logger)
-with `include_trace_context=true`.
+automatic context propagation by NOT explicitly setting `Context` when
+calling [emit a LogRecord](#emit-a-logrecord).
 
-Some log libraries have mechanisms specifically tailored for injecting contextual
-information into logs, such as MDC in Log4j. When available such mechanisms may
-be the preferable place to fetch the `TraceContext` and inject it into
-the `LogRecord`, since it usually allows fetching of the context to work
-correctly even when log records are emitted asynchronously, which otherwise can
-result in the incorrect implicit context being fetched.
+Some log libraries have mechanisms specifically tailored for injecting
+contextual information info logs, such as MDC in Log4j. When available, it may
+be preferable to use these mechanisms to set the Context. A log appender can
+then fetch the Context and explicitly set it when
+calling [emit a LogRecord](#emit-a-logrecord). This allows the correct Context
+to be included even when log records are emitted asynchronously, which can
+otherwise lead the Context to be incorrect.
 
 TODO: clarify how works or doesn't work when the log statement call site and the
 log appender are executed on different threads.
 
 ### Explicit Context Injection
 
-In languages where the Context must be provided explicitly (e.g. Go) the end
-user must capture the context and explicitly pass it to the logging subsystem in
-order for `TraceContext` to be recorded in `LogRecord`s.
+In order for `TraceContext` to be recorded in `LogRecord`s in languages where
+the Context must be provided explicitly (e.g. Go), the end user must capture the
+Context and explicitly pass it to the logging subsystem. The log appender must
+take this Context and explicitly set it when
+calling [emit a LogRecord](#emit-a-logrecord).
 
 Support for OpenTelemetry for logging libraries in these languages typically can
 be implemented in the form of logger wrappers that can capture the context once,
 when the span is created and then use the wrapped logger to execute log
 statements in a normal way. The wrapper will be responsible for injecting the
-captured context in the `LogRecord`s.
+captured context in the logs.
 
 This specification does not define how exactly it is achieved since the actual
 mechanism depends on the language and the particular logging library used. In
