@@ -56,9 +56,6 @@ groups:
       - ref: net.sock.family
         requirement_level:
           conditionally_required: If and only if `server.socket.address` is set.
-      - ref: server.socket.domain
-        requirement_level:
-          recommended: If different than `server.address` and if `server.socket.address` is set.
       - ref: server.address
         requirement_level: required
         brief: >
@@ -78,6 +75,15 @@ groups:
           - server.socket.address
           - server.address
 
+  - id: rpc.client
+    type: span
+    brief: 'This document defines semantic conventions for remote procedure call client spans.'
+    extends: rpc
+    attributes:
+      - ref: server.socket.domain
+        requirement_level:
+          recommended: If different than `server.address` and if `server.socket.address` is set.
+
   - id: rpc.server
     prefix: rpc
     type: span
@@ -85,10 +91,10 @@ groups:
     span_kind: server
     brief: 'Semantic Convention for RPC server spans'
     attributes:
-      - ref: server.address
-      - ref: server.socket.address
-      - ref: server.socket.port
-      - ref: net.sock.family
+      - ref: client.address
+      - ref: client.port
+      - ref: client.socket.address
+      - ref: client.socket.port
 
   - id: rpc.grpc
     prefix: rpc.grpc

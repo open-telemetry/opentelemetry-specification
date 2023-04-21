@@ -34,7 +34,7 @@ groups:
       - id: host.name
         type: string
         stability: deprecated
-        brief: Deprecated, use `server.address.
+        brief: Deprecated, use `server.address`.
         examples: ['example.com']
       - id: host.port
         type: int

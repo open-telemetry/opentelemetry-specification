@@ -50,7 +50,7 @@ if they do not cause breaking changes to HTTP semantic conventions.
 | `server.address` | string | Logical server hostname, matches server FQDN if available, and IP or socket address if FQDN is not known. | `example.com` | Recommended |
 | `server.port` | int | Server port number | `80`; `8080`; `443` | Recommended |
 | `server.socket.domain` | string | The domain name of an immediate peer. [1] | `proxy.example.com`; `10.5.3.2` | Recommended: [2] |
-| `server.socket.address` | string | Physical server IP address or Unix socket domain name.. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
+| `server.socket.address` | string | Physical server IP address or Unix socket domain name. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
 | `server.socket.port` | int | Physical server port. | `16456` | Recommended |
 
 **[1]:** Usually represents a proxy or intermediary domain name.
@@ -113,8 +113,14 @@ if they do not cause breaking changes to HTTP semantic conventions.
 <!-- semconv client -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `client.socket.address` | string | Immediate client address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended |
-| `client.socket.port` | int | Immediate client port number | `35555` | Recommended |
+| `client.address` | string | Client address - unix domain socket name, IPv4 or IPv6 address. [1] | `/tmp/my.sock`; `10.1.2.80` | Recommended |
+| `client.port` | int | Client port number [2] | `65123` | Recommended |
+| `client.socket.address` | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: Only if different than `client.address`. |
+| `client.socket.port` | int | Immediate client peer port number | `35555` | Recommended: Only if different than `client.port`. |
+
+**[1]:** When communicating through intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available. Otherwise, it SHOULD represent immediate client peer address.
+
+**[2]:** When communicating through intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available. Otherwise, it SHOULD represent immediate client peer port.
 <!-- endsemconv -->
 
 `client.socket.address` and `client.socket.port` represent physical client name and port.

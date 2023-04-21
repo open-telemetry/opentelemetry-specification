@@ -21,7 +21,7 @@ groups:
         note: Usually represents a proxy or intermediary domain name.
       - id: socket.address
         type: string
-        brief: Physical server IP address or Unix socket domain name..
+        brief: Physical server IP address or Unix socket domain name.
         requirement_level:
           recommended: Only if different than `server.address`.
         examples: ['10.5.3.2']

@@ -72,18 +72,13 @@ sections below.
 | [`net.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `http`; `spdy` | Recommended: if not default (`http`). |
 | [`net.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [1] | `1.0`; `1.1`; `2.0` | Recommended |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet`; `inet6` | Conditionally Required: [2] |
-| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket domain name.. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
-| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [3] | `proxy.example.com`; `10.5.3.2` | Recommended: [4] |
+| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket domain name. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
 | [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended |
 | `user_agent.original` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
 
 **[1]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
 **[2]:** If different than `inet` and if any of `server.socket.address` or `client.socket.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.socket.address` and `client.socket.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
-
-**[3]:** Usually represents a proxy or intermediary domain name.
-
-**[4]:** Only on client side and only if different than `server.address`
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
@@ -97,10 +92,6 @@ Following attributes MUST be provided **at span creation time** (when provided a
 | `inet6` | IPv6 address |
 | `unix` | Unix domain socket path |
 <!-- endsemconv -->
-
-It is recommended to also use the general [socket-level attributes][] - `server.socket` when available,  `server.socket.domain`, `server.socket.address` and `server.socket.port` when don't match `server.address` and `server.port` (if [intermediary](https://www.rfc-editor.org/rfc/rfc9110.html#section-3.7) is detected).
-
-[socket-level attributes]: span-general.md#server-attributes
 
 ### HTTP request and response headers
 
@@ -138,6 +129,7 @@ For an HTTP client span, `SpanKind` MUST be `Client`.
 | `http.resend_count` | int | The ordinal number of request resending attempt (for any reason, including redirects). [2] | `3` | Recommended: if and only if request was retried. |
 | [`server.address`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `example.com` | Required |
 | [`server.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
+| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [6] | `proxy.example.com`; `10.5.3.2` | Recommended: [7] |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
@@ -155,6 +147,10 @@ If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.
 **[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+**[6]:** Usually represents a proxy or intermediary domain name.
+
+**[7]:** Only on client side and only if different than `server.address`
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
@@ -243,30 +239,23 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 |---|---|---|---|---|
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
 | `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/users/12314/?q=ddds` | Required |
-| `http.client_ip` | string | The IP address of the original client behind all proxies, if known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)). [2] | `83.164.160.102` | Recommended |
-| [`client.socket.address`](span-general.md) | string | Immediate client address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended |
-| [`client.socket.port`](span-general.md) | int | Immediate client port number | `35555` | Recommended |
+| [`client.address`](span-general.md) | string | Client address - unix domain socket name, IPv4 or IPv6 address. [2] | `8`; `3`; `.`; `1`; `6`; `4`; `.`; `1`; `6`; `0`; `.`; `1`; `0`; `2` | Recommended |
+| [`client.port`](span-general.md) | int | The port of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded) or a similar header).  Otherwise, the immediate client peer port. [3] | `65123` | Recommended |
+| [`client.socket.address`](span-general.md) | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: Only if different than `client.address`. |
+| [`client.socket.port`](span-general.md) | int | Immediate client peer port number | `35555` | Recommended: Only if different than `client.port`. |
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
-| [`server.address`](span-general.md) | string | Name of the local HTTP server that received the request. [3] | `example.com` | Required |
-| [`server.port`](span-general.md) | int | Port of the local HTTP server that received the request. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
-| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket domain name.. | `10.5.3.2` | Opt-In |
+| [`server.address`](span-general.md) | string | Name of the local HTTP server that received the request. [4] | `example.com` | Required |
+| [`server.port`](span-general.md) | int | Port of the local HTTP server that received the request. [5] | `80`; `8080`; `443` | Conditionally Required: [6] |
+| [`server.socket.address`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `10.5.3.2` | Opt-In |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
-**[2]:** This is not necessarily the same as `client.socket.addr`, which would
-identify the network-level peer, which may be a proxy.
+**[2]:** The IP address of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded), [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For), or a similar header).  Otherwise, the immediate client peer address.
 
-This attribute should be set when a source of information different
-from the one used for `client.socket.address`, is available even if that other
-source just confirms the same value as `client.socket.address`.
-Rationale: For `client.socket.address`, one typically does not know if it
-comes from a proxy, reverse proxy, or the actual client. Setting
-`http.client_ip` when it's the same as `client.socket.address` means that
-one is at least somewhat confident that the address is not that of
-the closest proxy.
+**[3]:** When communicating through intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available. Otherwise, it SHOULD represent immediate client peer port.
 
-**[3]:** Determined by using the first of the following that applies
+**[4]:** Determined by using the first of the following that applies
 
 - The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
@@ -276,14 +265,14 @@ the closest proxy.
 
 SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-**[4]:** Determined by using the first of the following that applies
+**[5]:** Determined by using the first of the following that applies
 
 - Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
 
-**[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[6]:** If not default (`80` for `http` scheme, `443` for `https`).
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
