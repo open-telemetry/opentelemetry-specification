@@ -42,7 +42,7 @@ groups:
 
   - id: attributes.process.runtime.jvm.network
     type: attribute_group
-    brief: "Describes JVM network IO metric attributes. "
+    brief: "Describes JVM network IO metric attributes."
     attributes:
       - ref: thread
       - id: mode
