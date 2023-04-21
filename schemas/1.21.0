@@ -22,6 +22,7 @@ versions:
               # was only populated on client side
               net.sock.peer.name: server.socket.domain
               # net.sock.peer.(addr|port) mapping is not possible
+              # since they applied to both client and server side
               net.sock.host.addr: server.socket.address
               net.sock.host.port: server.socket.port
   1.20.0:
