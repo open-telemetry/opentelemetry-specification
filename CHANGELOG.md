@@ -46,7 +46,7 @@ release.
   `net.sock.family` to `network.socket.family`,
   `net.host.connection.*` to `network.host.connection.*`, and
   `net.host.carrier.*` to `network.host.carrier.*`
-  ([#9999](https://github.com/open-telemetry/opentelemetry-specification/pull/9999))
+  ([#3426](https://github.com/open-telemetry/opentelemetry-specification/pull/3426))
 
 ### Compatibility
 

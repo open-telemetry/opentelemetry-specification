@@ -4,7 +4,7 @@ versions:
   1.21.0:
     spans:
       changes:
-        # https://github.com/open-telemetry/opentelemetry-specification/pull/9999
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3426
         - rename_attributes:
             attribute_map:
               net.protocol.name: network.protocol.name
