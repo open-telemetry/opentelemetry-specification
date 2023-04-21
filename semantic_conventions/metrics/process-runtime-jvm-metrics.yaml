@@ -27,7 +27,7 @@ groups:
 
   - id: attributes.process.runtime.jvm.cpu.monitor
     type: attribute_group
-    brief: "Describes JVM monitor metric attributes. "
+    brief: "Describes JVM monitor metric attributes."
     attributes:
       - ref: thread.id
         requirement_level: opt_in
@@ -39,7 +39,7 @@ groups:
 
   - id: attributes.process.runtime.jvm.network
     type: attribute_group
-    brief: "Describes JVM network IO metric attributes. "
+    brief: "Describes JVM network IO metric attributes."
     attributes:
       - ref: thread.id
         requirement_level: opt_in
