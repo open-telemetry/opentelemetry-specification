@@ -27,7 +27,7 @@ groups:
 
   - id: attributes.process.runtime.jvm.cpu.monitor
     type: attribute_group
-    brief: "Describes JVM monitor metric attributes. "
+    brief: "Describes JVM monitor metric attributes."
     attributes:
       - id: thread
         type: int
