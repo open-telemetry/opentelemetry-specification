@@ -12,8 +12,8 @@ Particular operations may refer to or require some of these attributes.
 
 - [Server and client attributes](#server-and-client-attributes)
   * [Server attributes](#server-attributes)
-      - [`server.address`](#serveraddress)
-      - [`server.socket.*` attributes](#serversocket-attributes)
+    + [`server.address`](#serveraddress)
+    + [`server.socket.*` attributes](#serversocket-attributes)
   * [Client attributes](#client-attributes)
     + [Connecting through intermediary](#connecting-through-intermediary)
 - [Network attributes](#network-attributes)
