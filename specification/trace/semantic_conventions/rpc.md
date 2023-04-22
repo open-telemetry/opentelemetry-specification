@@ -13,6 +13,7 @@ This document defines how to describe remote procedure calls
   * [Span name](#span-name)
   * [Common attributes](#common-attributes)
     + [Service name](#service-name)
+  * [Client attributes](#client-attributes)
   * [Server attributes](#server-attributes)
   * [Events](#events)
   * [Distinction from HTTP spans](#distinction-from-http-spans)

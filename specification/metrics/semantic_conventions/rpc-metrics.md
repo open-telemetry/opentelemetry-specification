@@ -110,7 +110,7 @@ For client-side metrics `server.port` is required if the connection is IP-based 
 For server-side spans `server.port` is optional (it describes the port the client is connecting from).
 Furthermore, setting [net.transport][] is required for non-IP connection like named pipe bindings.
 
-[net.transport]: ../../trace/semantic_conventions/span-general.md#common-network-attributes
+[net.transport]: ../../trace/semantic_conventions/span-general.md#network-attributes
 
 ### Service name
 
