@@ -300,8 +300,8 @@ Span name: `GET`
 | `http.flavor`        | `"1.1"`                                                 |
 | `http.url`           | `"https://example.com:8080/webshop/articles/4?s=1"`     |
 | `server.address`     | `example.com`                                           |
-| `server.port`        | 8080                                           |
-| `server.socket.address` | `"192.0.2.5"`                                           |
+| `server.port`        | 8080                                                    |
+| `server.socket.address` | `"192.0.2.5"`                                        |
 | `http.status_code`   | `200`                                                   |
 
 The corresponding server Span may look like this:
@@ -318,9 +318,9 @@ Span name: `GET /webshop/articles/:article_id`.
 | `http.scheme`        | `"https"`                                       |
 | `http.route`         | `"/webshop/articles/:article_id"`               |
 | `http.status_code`   | `200`                                           |
-| `http.client_ip`     | `"192.0.2.4"`                                   |
+| `client.address`     | `"192.0.2.4"`                                   |
 | `client.socket.address` | `"192.0.2.5"` (the client goes through a proxy) |
-| `http.user_agent`    | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
+| `http.user_agent`    | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"` |
 
 ### HTTP client retries examples
 
