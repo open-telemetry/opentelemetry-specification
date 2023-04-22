@@ -26,6 +26,7 @@ versions:
               # were only populated on server side
               net.sock.host.addr: server.socket.address
               net.sock.host.port: server.socket.port
+              http.client_ip: client.address
   1.20.0:
     spans:
       changes:

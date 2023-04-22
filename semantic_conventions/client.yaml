@@ -14,8 +14,8 @@ groups:
       - id: port
         type: int
         brief: 'Client port number'
-        examples: [65123]    
-        note: > 
+        examples: [65123]
+        note: >
           When communicating through intermediary, `client.port` SHOULD represent client port behind
           any intermediaries (e.g. proxies) if it's available. Otherwise, it SHOULD represent immediate client peer port.
       - id: socket.address

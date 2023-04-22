@@ -56,6 +56,7 @@ release.
      `net.sock.peer.name` to `server.socket.domain` (since `net.sock.peer.name` only applied to client instrumentation),
      `net.sock.host.addr` to `server.socket.address` (since `net.sock.host.*` only applied to server instrumentation),
      `net.sock.host.port` to `server.socket.port` (similarly since `net.sock.host.*` only applied to server instrumentation),
+     `http.client_ip` to `client.address`
 
 ### Compatibility
 

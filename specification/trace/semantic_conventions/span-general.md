@@ -138,9 +138,6 @@ On client side it represents local socket address and port can be obtained by ca
 
 When connecting to the remote destination through an intermediary (e.g. proxy), client instrumentations SHOULD set `server.address` and `server.port` to logical remote destination address and `server.socket.name`, `server.socket.address` and `server.socket.port` to the socket peer connection is established with - the intermediary.
 
-Server instrumentations that use `server.address` and `server.port` SHOULD set them to logical local host; If `server.socket.address` and `server.socket.port` are used, they SHOULD be set to the address of intermediary connection is established with.
-Server semantic conventions SHOULD define additional attribute(s) representing originating peer address for reverse-proxy scenarios when such information is available.
-
 `server.socket.domain` SHOULD be set to the DNS name used to resolve `server.socket.address` if it's readily available. Instrumentations
 SHOULD NOT do DNS lookups to obtain `server.socket.address`. If peer information available to instrumentation
 can represent DNS name or IP address, instrumentation SHOULD NOT attempt to parse it and SHOULD only set `server.socket.domain`.
@@ -151,6 +148,11 @@ For example, [URL Host component](https://www.rfc-editor.org/rfc/rfc3986#section
 instrumentations that don't have access to socket-level communication can only populate `server.socket.domain`.
 Instrumentations that have access to socket connection, may be able to populate valid `server.socket.address` instead of or
 in addition to DNS name.
+
+Server instrumentations that leverage `client.address` and `client.port` attributes SHOULD set them to originating client address and port behind all proxies if this information is available.
+The `client.socket.address` and `client.socket.port` attributes then SHOULD contain immediate client peer address and port.
+
+If only immediate peer information is available, it should be set on `client.address` and `client.port` and `client.socket.*` attributes SHOULD NOT be set.
 
 ## Network attributes
 
