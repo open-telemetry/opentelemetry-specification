@@ -104,7 +104,7 @@ always available. The following table lists the possible attributes for
 * Ranking should control the selection order. For example, `server.address` (Rank
   2) should be selected before `peer.address` (Rank 6).
 * `server.socket.domain` and `server.socket.address` can be used by themselves as `remoteEndpoint` but should be combined
-  with `server.socket.addreportss` if it is also present.
+  with `server.socket.port` if it is also present.
 
 #### Zipkin -> OTLP
 

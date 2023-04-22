@@ -136,7 +136,7 @@ groups:
             known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded),
             [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For), or a similar header). 
             Otherwise, the immediate client peer address.
-        examples: '83.164.160.102'
+        examples: ['83.164.160.102']
       - ref: client.port
         brief: >
             The port of the original client behind all proxies, if

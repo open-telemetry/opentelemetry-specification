@@ -239,7 +239,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 |---|---|---|---|---|
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
 | `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/users/12314/?q=ddds` | Required |
-| [`client.address`](span-general.md) | string | Client address - unix domain socket name, IPv4 or IPv6 address. [2] | `8`; `3`; `.`; `1`; `6`; `4`; `.`; `1`; `6`; `0`; `.`; `1`; `0`; `2` | Recommended |
+| [`client.address`](span-general.md) | string | Client address - unix domain socket name, IPv4 or IPv6 address. [2] | `83.164.160.102` | Recommended |
 | [`client.port`](span-general.md) | int | The port of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded) or a similar header).  Otherwise, the immediate client peer port. [3] | `65123` | Recommended |
 | [`client.socket.address`](span-general.md) | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: Only if different than `client.address`. |
 | [`client.socket.port`](span-general.md) | int | Immediate client peer port number | `35555` | Recommended: Only if different than `client.port`. |
