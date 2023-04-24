@@ -34,6 +34,14 @@ struct on an SDK builder class. From that, one could build a CLI that accepts a
 file (YAML, JSON, TOML, ...) and then transforms into that well-defined struct
 consumable by the programmatic interface.
 
+### Environment Variables
+
+See [OpenTelemetry Environment Variable Specification](./sdk-environment-variables.md).
+
+### Configuration File
+
+See [File Configuration](./file-configuration.md).
+
 ### Other Mechanisms
 
 Additional configuration mechanisms SHOULD be provided in whatever
