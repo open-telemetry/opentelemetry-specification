@@ -32,16 +32,14 @@ operations. By adding HTTP attributes to metric events it allows for finely tune
 >
 > HTTP instrumentations updating from
 > [v1.20.0 of this document](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/metrics/semantic_conventions/http-metrics.md)
-> (or prior) to this new version SHOULD bump their major version
-> even though the instrumentation has not been declared stable.
-> They SHOULD NOT release a stable version of that new major version until
-> at least August 1, 2023 (this is to give backends some time to support the
-> new changes).
-> And the previous major version SHOULD be supported until February 1, 2024
-> (e.g. at least security patches).
+> (or prior) to this new version SHOULD either:
 >
-> This major version bump will signal that users should take care when upgrading the
-> instrumentation, including verifying whether their backend supports the new major version.
+> * wait to update until at least October 1, 2023, or
+> * bump their major version and wait to release a stable version of the new major
+>   version until at least October 1, 2023.
+>
+> In both cases, the minor version prior to the update SHOULD be supported until
+> February 1, 2024 (e.g. at least security patches).
 
 ## HTTP Server
 
