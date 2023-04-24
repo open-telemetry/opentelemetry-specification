@@ -25,9 +25,13 @@ cascade:
   - [Baggage](baggage/api.md)
   - [Tracing](trace/api.md)
   - [Metrics](metrics/api.md)
+  - Logs
+    - [Bridge API](logs/bridge-api.md)
+    - [Event API](logs/event-api.md)
 - SDK Specification
   - [Tracing](trace/sdk.md)
   - [Metrics](metrics/sdk.md)
+  - [Logs](logs/sdk.md)
   - [Resource](resource/sdk.md)
   - [Configuration](sdk-configuration.md)
 - Data Specification
@@ -39,6 +43,7 @@ cascade:
     - [OpenCensus](compatibility/opencensus.md)
     - [OpenTracing](compatibility/opentracing.md)
     - [Prometheus and OpenMetrics](compatibility/prometheus_and_openmetrics.md)
+    - [Trace Context in non-OTLP Log Formats](compatibility/logging_trace_context.md)
 
 ## Notation Conventions and Compliance
 
