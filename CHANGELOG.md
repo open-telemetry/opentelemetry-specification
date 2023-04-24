@@ -52,6 +52,8 @@ release.
   ([#3360](https://github.com/open-telemetry/opentelemetry-specification/pull/3360))
 - Move file configuration schema to `opentelemetry-configuration`.
   ([#3412](https://github.com/open-telemetry/opentelemetry-specification/pull/3412))
+- Define file configuration parse and configure operations.
+  ([#3437](https://github.com/open-telemetry/opentelemetry-specification/pull/3437))
 
 ### Telemetry Schemas
 
