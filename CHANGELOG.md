@@ -59,6 +59,9 @@ release.
 
 ### Common
 
+- Add log entries to specification README.md contents.
+  ([#3435](https://github.com/open-telemetry/opentelemetry-specification/pull/3435))
+
 ## v1.20.0 (2023-04-07)
 
 ### Context
