@@ -76,7 +76,7 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 | [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Version of the application layer protocol used. See note below. [2] | `3.1.1` | Recommended |
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Name of the local HTTP server that received the request. [3] | `example.com` | Required |
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | **Stable**<br>Port of the local HTTP server that received the request. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
-| `url.scheme` | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
+| [`url.scheme`](../../common/url.md) | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
@@ -119,7 +119,7 @@ This metric is optional.
 | `http.request.method` | string | **Stable**<br>HTTP request method. | `GET`; `POST`; `HEAD` | Required |
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Name of the local HTTP server that received the request. [1] | `example.com` | Required |
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | **Stable**<br>Port of the local HTTP server that received the request. [2] | `80`; `8080`; `443` | Conditionally Required: [3] |
-| `url.scheme` | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
+| [`url.scheme`](../../common/url.md) | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
 **[1]:** Determined by using the first of the following that applies
 
@@ -161,7 +161,7 @@ This metric is optional.
 | [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Version of the application layer protocol used. See note below. [2] | `3.1.1` | Recommended |
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Name of the local HTTP server that received the request. [3] | `example.com` | Required |
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | **Stable**<br>Port of the local HTTP server that received the request. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
-| `url.scheme` | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
+| [`url.scheme`](../../common/url.md) | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
@@ -208,7 +208,7 @@ This metric is optional.
 | [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Version of the application layer protocol used. See note below. [2] | `3.1.1` | Recommended |
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | **Stable**<br>Name of the local HTTP server that received the request. [3] | `example.com` | Required |
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | **Stable**<br>Port of the local HTTP server that received the request. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
-| `url.scheme` | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
+| [`url.scheme`](../../common/url.md) | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.

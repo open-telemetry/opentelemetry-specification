@@ -18,8 +18,8 @@ groups:
           `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
           In such case the attribute's value should be `https://www.example.com/`.
 
-          `url.full` SHOULD capture the absolute URL when it's available and SHOULD not validate or modify
-          it except for sanitizing purposes.
+          `url.full` SHOULD capture the absolute URL when it is available (or can be reconstructed) 
+          and SHOULD NOT be validated or modified except for sanitizing purposes.
         examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv', '//localhost']
       - id: path
         type: string
@@ -29,6 +29,7 @@ groups:
         type: string
         brief: 'The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component'
         examples: ["?q=OpenTelemetry"]
+        note: Sensitive content provided in query string SHOULD be scrubbed when instrumentations can identify it.
       - id: fragment
         type: string
         brief: 'The [URI fragment](https://www.rfc-editor.org/rfc/rfc3986#section-3.5) component'
