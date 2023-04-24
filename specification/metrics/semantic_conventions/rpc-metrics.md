@@ -74,8 +74,8 @@ measurements.
 | [`net.sock.family`](../../trace/semantic_conventions/span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: If and only if `server.socket.address` is set. |
 | [`net.transport`](../../trace/semantic_conventions/span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: See below |
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html). [3] | `example.com` | Required |
-| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Server port number | `80`; `8080`; `443` | Conditionally Required: See below |
-| [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | Physical server IP address or Unix socket domain name. | `10.5.3.2` | See below |
+| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Logical server port number | `80`; `8080`; `443` | Conditionally Required: See below |
+| [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
 | [`server.socket.port`](../../trace/semantic_conventions/span-general.md) | int | Physical server port. | `16456` | Recommended: [4] |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).

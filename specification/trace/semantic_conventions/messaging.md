@@ -198,9 +198,9 @@ The following operations related to messages are defined for these semantic conv
 | [`net.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [8] | `3.1.1` | Recommended |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [9] |
 | [`server.address`](span-general.md) | string | Logical server hostname, matches server FQDN if available, and IP or socket address if FQDN is not known. [10] | `example.com` | Conditionally Required: If available. |
-| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket domain name. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
-| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [11] | `proxy.example.com`; `10.5.3.2` | Recommended: [12] |
-| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended |
+| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
+| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [11] | `proxy.example.com` | Recommended: [12] |
+| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: Only if different than `server.port`. |
 
 **[1]:** If a custom value is used, it MUST be of low cardinality.
 
@@ -222,7 +222,7 @@ The following operations related to messages are defined for these semantic conv
 
 **[10]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
-**[11]:** Usually represents a proxy or intermediary domain name.
+**[11]:** Usually represents a proxy or other intermediary domain name.
 
 **[12]:** If different than `server.address` and if `server.socket.address` is set.
 

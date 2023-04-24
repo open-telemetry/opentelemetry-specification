@@ -72,8 +72,8 @@ sections below.
 | [`net.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `http`; `spdy` | Recommended: if not default (`http`). |
 | [`net.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [1] | `1.0`; `1.1`; `2.0` | Recommended |
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet`; `inet6` | Conditionally Required: [2] |
-| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket domain name. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
-| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended |
+| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
+| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: Only if different than `server.port`. |
 | `user_agent.original` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
 
 **[1]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
@@ -129,7 +129,7 @@ For an HTTP client span, `SpanKind` MUST be `Client`.
 | `http.resend_count` | int | The ordinal number of request resending attempt (for any reason, including redirects). [2] | `3` | Recommended: if and only if request was retried. |
 | [`server.address`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `example.com` | Required |
 | [`server.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
-| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [6] | `proxy.example.com`; `10.5.3.2` | Recommended: [7] |
+| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [6] | `proxy.example.com` | Recommended |
 
 **[1]:** `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
 
@@ -148,9 +148,7 @@ If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-**[6]:** Usually represents a proxy or intermediary domain name.
-
-**[7]:** Only on client side and only if different than `server.address`
+**[6]:** Usually represents a proxy or other intermediary domain name.
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
@@ -240,7 +238,7 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
 | `http.target` | string | The full request target as passed in a HTTP request line or equivalent. | `/users/12314/?q=ddds` | Required |
 | [`client.address`](span-general.md) | string | Client address - unix domain socket name, IPv4 or IPv6 address. [2] | `83.164.160.102` | Recommended |
-| [`client.port`](span-general.md) | int | The port of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded) or a similar header).  Otherwise, the immediate client peer port. [3] | `65123` | Recommended |
+| [`client.port`](span-general.md) | int | The port of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded) or a similar header). Otherwise, the immediate client peer port. [3] | `65123` | Recommended |
 | [`client.socket.address`](span-general.md) | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: Only if different than `client.address`. |
 | [`client.socket.port`](span-general.md) | int | Immediate client peer port number | `35555` | Recommended: Only if different than `client.port`. |
 | `http.scheme` | string | The URI scheme identifying the used protocol. | `http`; `https` | Required |
@@ -251,9 +249,9 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
-**[2]:** The IP address of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded), [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For), or a similar header).  Otherwise, the immediate client peer address.
+**[2]:** The IP address of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded), [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For), or a similar header). Otherwise, the immediate client peer address.
 
-**[3]:** When communicating through intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available. Otherwise, it SHOULD represent immediate client peer port.
+**[3]:** When communicating through intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available.
 
 **[4]:** Determined by using the first of the following that applies
 

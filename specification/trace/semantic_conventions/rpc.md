@@ -69,8 +69,8 @@ Examples of span names:
 | [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: If and only if `server.socket.address` is set. |
 | [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: See below |
 | [`server.address`](span-general.md) | string | RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html). [3] | `example.com` | Required |
-| [`server.port`](span-general.md) | int | Server port number | `80`; `8080`; `443` | Conditionally Required: See below |
-| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket domain name. | `10.5.3.2` | See below |
+| [`server.port`](span-general.md) | int | Logical server port number | `80`; `8080`; `443` | Conditionally Required: See below |
+| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
 | [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: [4] |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
@@ -122,9 +122,9 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 <!-- semconv rpc.client -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [1] | `proxy.example.com`; `10.5.3.2` | Recommended: [2] |
+| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [1] | `proxy.example.com` | Recommended: [2] |
 
-**[1]:** Usually represents a proxy or intermediary domain name.
+**[1]:** Usually represents a proxy or other intermediary domain name.
 
 **[2]:** If different than `server.address` and if `server.socket.address` is set.
 <!-- endsemconv -->
@@ -139,9 +139,9 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 | [`client.socket.address`](span-general.md) | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: Only if different than `client.address`. |
 | [`client.socket.port`](span-general.md) | int | Immediate client peer port number | `35555` | Recommended: Only if different than `client.port`. |
 
-**[1]:** When communicating through intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available. Otherwise, it SHOULD represent immediate client peer address.
+**[1]:** When communicating through intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available.
 
-**[2]:** When communicating through intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available. Otherwise, it SHOULD represent immediate client peer port.
+**[2]:** When communicating through intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available.
 <!-- endsemconv -->
 
 ### Events

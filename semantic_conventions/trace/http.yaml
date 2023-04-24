@@ -141,6 +141,6 @@ groups:
         brief: >
             The port of the original client behind all proxies, if
             known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded) or a similar header).
-            Otherwise, the immediate client peer port.        
+            Otherwise, the immediate client peer port.
       - ref: client.socket.address
       - ref: client.socket.port
