@@ -18,7 +18,7 @@ groups:
           `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
           In such case the attribute's value should be `https://www.example.com/`.
 
-          `url.full` SHOULD capture the absolute URL when it is available (or can be reconstructed) 
+          `url.full` SHOULD capture the absolute URL when it is available (or can be reconstructed)
           and SHOULD NOT be validated or modified except for sanitizing purposes.
         examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv', '//localhost']
       - id: path

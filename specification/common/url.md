@@ -8,8 +8,10 @@ This document defines semantic conventions that describe URL and its components.
 <summary>Table of Contents</summary>
 
 <!-- toc -->
+
 - [Attributes](#attributes)
 - [Sensitive information](#sensitive-information)
+
 <!-- tocstop -->
 
 </details>
