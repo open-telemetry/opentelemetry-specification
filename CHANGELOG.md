@@ -52,6 +52,9 @@ release.
   ([#3360](https://github.com/open-telemetry/opentelemetry-specification/pull/3360))
 - Move file configuration schema to `opentelemetry-configuration`.
   ([#3412](https://github.com/open-telemetry/opentelemetry-specification/pull/3412))
+- Move `sdk-configuration.md` and `sdk-environment-variables.md`
+  to `/specification/configuration/`.
+  ([#3434](https://github.com/open-telemetry/opentelemetry-specification/pull/3434))
 
 ### Telemetry Schemas
 
