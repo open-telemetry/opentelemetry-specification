@@ -183,7 +183,7 @@ If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.
 
 **[6]:** For network calls, URL usually has `scheme://host[:port]/path?query[#fragment]` format, where the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
 `url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
-`url.full` SHOULD capture the absolute URL when it is available (or can be reconstructed)  and SHOULD NOT be validated or modified except for sanitizing purposes.
+`url.full` SHOULD capture the absolute URL when it is available (or can be reconstructed) and SHOULD NOT be validated or modified except for sanitizing purposes.
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
