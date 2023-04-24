@@ -39,3 +39,6 @@ Capturing URL and its components MAY impose security risk. User and password inf
 Instrumentations that are aware of specific sensitive query string parameters MUST scrub their values before capturing `url.query` attribute. 
 For example, native instrumentation of a client library that passes credentials or user location in URL, must scrub corresponding properties.
 
+_Note: Applications and telemetry consumers should scrub sensitive information from URL attributes on collected telemetry. In systems unable to identify sensitive information, certain attribute values may be redacted entirely._
+
+
