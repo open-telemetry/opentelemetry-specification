@@ -8,6 +8,8 @@
 - [Abstract](#abstract)
 - [Configuration Interface](#configuration-interface)
   * [Programmatic](#programmatic)
+  * [Environment Variables](#environment-variables)
+  * [Configuration File](#configuration-file)
   * [Other Mechanisms](#other-mechanisms)
 
 <!-- tocstop -->
