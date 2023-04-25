@@ -122,21 +122,19 @@ service.name = Shop.shoppingcart
 
 **Description:** The telemetry SDK used to capture data recorded by the instrumentation libraries.
 
-The default OpenTelemetry SDK provided by the OpenTelemetry project MUST set `telemetry.sdk.name`
-to the value `opentelemetry`.
-
-If another SDK, like a fork or a vendor-provided implementation, is used, this SDK MUST set the attribute
-`telemetry.sdk.name` to the fully-qualified class or module name of this SDK's main entry point
-or another suitable identifier depending on the language.
-The identifier `opentelemetry` is reserved and MUST NOT be used in this case.
-All custom identifiers SHOULD be stable across different versions of an implementation.
-
 <!-- semconv telemetry -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. | `opentelemetry` | Required |
+| `telemetry.sdk.name` | string | The name of the telemetry SDK as defined above. [1] | `opentelemetry` | Required |
 | `telemetry.sdk.language` | string | The language of the telemetry SDK. | `cpp` | Required |
 | `telemetry.sdk.version` | string | The version string of the telemetry SDK. | `1.2.3` | Required |
+
+**[1]:** The OpenTelemetry SDK MUST set the `telemetry.sdk.name` attribute to `opentelemetry`.
+If another SDK, like a fork or a vendor-provided implementation, is used, this SDK MUST set the
+`telemetry.sdk.name` attribute to the fully-qualified class or module name of this SDK's main entry point
+or another suitable identifier depending on the language.
+The identifier `opentelemetry` is reserved and MUST NOT be used in this case.
+All custom identifiers SHOULD be stable across different versions of an implementation.
 
 `telemetry.sdk.language` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
