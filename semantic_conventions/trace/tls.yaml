@@ -4,101 +4,140 @@ groups:
     type: span
     brief: 'This document defines semantic conventions for TLS/SSL client and server Spans.'
     attributes:
-      - id: protocol
+      - id: cipher
+        requirement_level: opt_in
+        brief: 'String indicating the [cipher](https://datatracker.ietf.org/doc/html/rfc5246#appendix-A.5) used during the current connection. '
+        type: string
+        examples: ['TLS_RSA_WITH_3DES_EDE_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256']
+      - id: curve
+        requirement_level: opt_in
+        brief: 'String indicating the curve used for the given cipher, when applicable'
+        type: string
+        examples: ['secp256r1']
+      - id: established
+        requirement_level: opt_in
+        brief: 'Boolean flag indicating if the TLS negotiation was successful and transitioned to an encrypted tunnel.'
+        type: boolean
+        examples: [true]
+      - id: next_protocol
+        requirement_level: opt_in
+        brief: 'String indicating the protocol being tunneled. Per the values in the [IANA registry](https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xhtml#alpn-protocol-ids), this string should be lower case.'
+        type: string
+        examples: ['http/1.1']
+      - id: resumed
+        requirement_level: opt_in
+        brief: 'Boolean flag indicating if this TLS connection was resumed from an existing TLS negotiation.'
+        type: boolean
+        examples: [true]
+      - id: version
         requirement_level: required
-        brief: 'The negotiated [SSL/TLS protocol version](https://www.openssl.org/docs/man1.1.1/man3/SSL_get_version.html#RETURN-VALUES) of the current connection.'
+        brief: 'Numeric part of the version parsed from the original string of the negotiated [SSL/TLS protocol version](https://www.openssl.org/docs/man1.1.1/man3/SSL_get_version.html#RETURN-VALUES)'
+        type: string
+        examples: ['1.2', '3']
+      - id: version_protocol
+        requirement_level: required
+        brief: 'Normalized lowercase protocol name parsed from original string of the negotiated [SSL/TLS protocol version](https://www.openssl.org/docs/man1.1.1/man3/SSL_get_version.html#RETURN-VALUES)'
         type:
           allow_custom_values: false
           members:
-            - id: sslv3
-              value: SSLv3
-            - id: tlsv1
-              value: TLSv1
-            - id: tlsv1.1
-              value: TLSv1.1
-            - id: tlsv1.2
-              value: TLSv1.2
-            - id: tlsv1.3
-              value: TLSv1.3
+            - id: ssl
+              value: ssl
+            - id: tls
+              value: tls
             - id: unknown
               value: unknown
-      - id: authorized
-        type: boolean
-        requirement_level: opt_in
-        examples: [true]
-        brief: true, if the peer certificate was signed by one of the CAs specified when creating the socket, otherwise false.
-  - id: tls.cipher
+  - id: tls.client
+    prefix: tls.client
     type: span
-    prefix: tls.cipher
-    brief: 'Details on the negotiated cipher suite'
+    brief: 'The following additional attributes describe the client participating in secure communication.'
     attributes:
-      - id: name
-        requirement_level: opt_in
-        brief: '[IETF name of the cipher suite](https://datatracker.ietf.org/doc/html/rfc5246#appendix-A.5)'
+      - id: issuer
         type: string
-        examples: ['TLS_RSA_WITH_3DES_EDE_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256']
-  - id: tls.certificate
-    prefix: tls
+        requirement_level: opt_in
+        brief: 'Distinguished name of [subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) of the issuer of the x.509 certificate presented by the client.'
+        examples: ['CN=Example Root CA, OU=Infrastructure Team, DC=example, DC=com']
+      - id: ja3
+        type: string
+        requirement_level: opt_in
+        brief: 'A hash that identifies clients based on how they perform an SSL/TLS handshake.'
+        examples: ['d4e5b18d6b55c71272893221c96ba240']
+      - id: not_after
+        type: string
+        requirement_level: opt_in
+        brief: 'Date/Time indicating when client certificate is no longer considered valid.'
+        examples: ['2021-01-01T00:00:00.000Z']
+      - id: not_before
+        type: string
+        requirement_level: opt_in
+        brief: 'Date/Time indicating when client certificate is first considered valid.'
+        examples: ['1970-01-01T00:00:00.000Z']
+      - id: server_name
+        type: string
+        requirement_level: opt_in
+        brief: 'Also called an SNI, this tells the server which hostname to which the client is attempting to connect to. When this value is available, it should get copied to destination.domain.'
+        examples: ['www.opentelemetry.io']
+      - id: subject
+        type: string
+        requirement_level: opt_in
+        brief: 'Distinguished name of subject of the x.509 certificate presented by the client.'
+        examples: ['CN=myclient, OU=Documentation Team, DC=example, DC=com']
+      - id: hash.md5
+        type: string
+        requirement_level: opt_in
+        brief: 'Certificate fingerprint using the MD5 digest of DER-encoded version of certificate offered by the client. For consistency with other hash values, this value should be formatted as an uppercase hash.'
+        examples: ['0F76C7F2C55BFD7D8E8B8F4BFBF0C9EC']
+      - id: hash.sha1
+        type: string
+        requirement_level: opt_in
+        brief: 'Certificate fingerprint using the SHA1 digest of DER-encoded version of certificate offered by the client. For consistency with other hash values, this value should be formatted as an uppercase hash.'
+        examples: ['9E393D93138888D288266C2D915214D1D1CCEB2A']
+      - id: hash.sha256
+        type: string
+        requirement_level: opt_in
+        brief: 'Certificate fingerprint using the SHA256 digest of DER-encoded version of certificate offered by the client. For consistency with other hash values, this value should be formatted as an uppercase hash.'
+        examples: ['0687F666A054EF17A08E2F2162EAB4CBC0D265E1D7875BE74BF3C712CA92DAF0']
+  - id: tls.server
+    prefix: tls.server
     type: span
-    brief: 'Details on the used certificates'
+    brief: 'The following additional attributes describe the server participating in secure communication.'
     attributes:
-      - id: peer.certificate.subject
+      - id: issuer
         type: string
         requirement_level: opt_in
-        brief: 'The peer [certificate subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6)'
-        examples: ['C=US, ST=California, L=San Francisco, O=OpenTelemetry, Inc, CN=*.opentelemetry.io']
-      - id: peer.certificate.fingerprint
-        requirement_level: opt_in
-        brief: The SHA-1 digest of the DER encoded peer certificate
-        type: string
-        examples: ['95:B4:D0:6E:CD:C1:2C:22:92:B8:CD:26:54:79:E4:84:E3:47:34:2E']
-      - id: peer.certificate.fingerprint256
-        requirement_level: opt_in
-        brief: The SHA-256 digest of the DER encoded peer certificate
-        type: string
-        examples: ['10:5A:86:67:BC:22:43:55:62:88:21:31:1B:93:F0:62:7F:05:F2:D8:EE:19:C6:F3:D6:BB:60:91:DD:ED:95:D1']
-      - id: peer.certificate.serial_number
-        requirement_level: opt_in
-        brief: 'The peer [certificate serial number](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.2), as a hex string'
-        type: string
-        examples: ['04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C']
-      - id: peer.certificate.not_before
+        brief: 'Distinguished name of [subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) of the issuer of the x.509 certificate presented by the client.'
+        examples: ['CN=Example Root CA, OU=Infrastructure Team, DC=example, DC=com']
+      - id: ja3s
         type: string
         requirement_level: opt_in
-        brief: The date-time the peer certificate is valid from.
-        examples: ['Mar 9 00:00:00 2021 GMT']
-      - id: peer.certificate.not_after
+        brief: 'A hash that identifies servers based on how they perform an SSL/TLS handshake.'
+        examples: ['d4e5b18d6b55c71272893221c96ba240']
+      - id: not_after
         type: string
         requirement_level: opt_in
-        brief: The date-time after which the peer certificate is no longer valid.
-        examples: ['Mar 1 23:59:59 2022 GMT']
-      - id: host.certificate.subject
+        brief: 'Date/Time indicating when server certificate is no longer considered valid.'
+        examples: ['2021-01-01T00:00:00.000Z']
+      - id: not_before
         type: string
         requirement_level: opt_in
-        brief: 'The host certificate [certificate subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6)'
-        examples: ['C=US, ST=California, L=San Francisco, O=OpenTelemetry, Inc, CN=*.opentelemetry.io']
-      - id: host.certificate.fingerprint
-        brief: The SHA-1 digest of the DER encoded host certificate
+        brief: 'Date/Time indicating when server certificate is first considered valid.'
+        examples: ['1970-01-01T00:00:00.000Z']
+      - id: subject
         type: string
         requirement_level: opt_in
-        examples: ['95:B4:D0:6E:CD:C1:2C:22:92:B8:CD:26:54:79:E4:84:E3:47:34:2E']
-      - id: host.certificate.fingerprint256
-        brief: The SHA-256 digest of the DER encoded host certificate
+        brief: 'Distinguished name of subject of the x.509 certificate presented by the server.'
+        examples: ['CN=myserver, OU=Documentation Team, DC=example, DC=com']
+      - id: hash.md5
         type: string
         requirement_level: opt_in
-        examples: ['10:5A:86:67:BC:22:43:55:62:88:21:31:1B:93:F0:62:7F:05:F2:D8:EE:19:C6:F3:D6:BB:60:91:DD:ED:95:D1']
-      - id: host.certificate.serial_number
-        brief: 'The host certificate [certificate serial number](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.2), as a hex string'
+        brief: 'Certificate fingerprint using the MD5 digest of DER-encoded version of certificate offered by the server. For consistency with other hash values, this value should be formatted as an uppercase hash.'
+        examples: ['0F76C7F2C55BFD7D8E8B8F4BFBF0C9EC']
+      - id: hash.sha1
         type: string
         requirement_level: opt_in
-        examples: ['04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C']
-      - id: host.certificate.not_before
+        brief: 'Certificate fingerprint using the SHA1 digest of DER-encoded version of certificate offered by the server. For consistency with other hash values, this value should be formatted as an uppercase hash.'
+        examples: ['9E393D93138888D288266C2D915214D1D1CCEB2A']
+      - id: hash.sha256
         type: string
         requirement_level: opt_in
-        brief: The date-time the host certificate is valid from.
-        examples: ['Mar 9 00:00:00 2021 GMT']
-      - id: host.certificate.not_after
-        type: string
-        requirement_level: opt_in
-        brief: The date-time after which the peer certificate is no longer valid.
-        examples: ['Mar 1 23:59:59 2022 GMT']
+        brief: 'Certificate fingerprint using the SHA256 digest of DER-encoded version of certificate offered by the server. For consistency with other hash values, this value should be formatted as an uppercase hash.'
+        examples: ['0687F666A054EF17A08E2F2162EAB4CBC0D265E1D7875BE74BF3C712CA92DAF0']

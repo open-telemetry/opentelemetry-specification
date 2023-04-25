@@ -8,9 +8,10 @@ This document defines semantic conventions for TLS/SSL client and server Spans.
 
 <!-- toc -->
 
-- [Common Attributes](#common-attributes)
-- [Cipher suite attributes](#cipher-suite-attributes)
-- [Certificate attributes](#certificate-attributes)
+- [Semantic conventions for TLS spans](#semantic-conventions-for-tls-spans)
+  - [Common Attributes](#common-attributes)
+  - [Client attributes](#client-attributes)
+  - [Server attributes](#server-attributes)
 
 <!-- tocstop -->
 
@@ -21,52 +22,56 @@ These attributes may be used for base information of any TLS/SSL encrypted commu
 <!-- semconv tls -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `tls.protocol` | string | The negotiated [SSL/TLS protocol version](https://www.openssl.org/docs/man1.1.1/man3/SSL_get_version.html#RETURN-VALUES) of the current connection. | `SSLv3` | Required |
-| `tls.authorized` | boolean | true, if the peer certificate was signed by one of the CAs specified when creating the socket, otherwise false. | `True` | Opt-In |
+| `tls.cipher` | string | String indicating the [cipher](https://datatracker.ietf.org/doc/html/rfc5246#appendix-A.5) used during the current connection. | `TLS_RSA_WITH_3DES_EDE_CBC_SHA`; `TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256` | Opt-In |
+| `tls.curve` | string | String indicating the curve used for the given cipher, when applicable | `secp256r1` | Opt-In |
+| `tls.established` | boolean | Boolean flag indicating if the TLS negotiation was successful and transitioned to an encrypted tunnel. | `True` | Opt-In |
+| `tls.next_protocol` | string | String indicating the protocol being tunneled. Per the values in the [IANA registry](https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xhtml#alpn-protocol-ids), this string should be lower case. | `http/1.1` | Opt-In |
+| `tls.resumed` | boolean | Boolean flag indicating if this TLS connection was resumed from an existing TLS negotiation. | `True` | Opt-In |
+| `tls.version` | string | Numeric part of the version parsed from the original string of the negotiated [SSL/TLS protocol version](https://www.openssl.org/docs/man1.1.1/man3/SSL_get_version.html#RETURN-VALUES) | `1.2`; `3` | Required |
+| `tls.version_protocol` | string | Normalized lowercase protocol name parsed from original string of the negotiated [SSL/TLS protocol version](https://www.openssl.org/docs/man1.1.1/man3/SSL_get_version.html#RETURN-VALUES) | `ssl` | Required |
 
-`tls.protocol` MUST be one of the following:
+`tls.version_protocol` MUST be one of the following:
 
 | Value  | Description |
 |---|---|
-| `SSLv3` | sslv3 |
-| `TLSv1` | tlsv1 |
-| `TLSv1.1` | tlsv1.1 |
-| `TLSv1.2` | tlsv1.2 |
-| `TLSv1.3` | tlsv1.3 |
+| `ssl` | ssl |
+| `tls` | tls |
 | `unknown` | unknown |
 <!-- endsemconv -->
 
-## Cipher suite attributes
+The values allowed for `tls.cipher` MUST be one of the `Descriptions` of the [registered TLS Cipher Suits](https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#table-tls-parameters-4).
 
-These attributes may be used for details on the negotiated cipher suite.
+## Client attributes
 
-<!-- semconv tls.cipher -->
+The following additional attributes describe the client participating in secure communication.
+
+<!-- semconv tls.client -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `tls.cipher.name` | string | [IETF name of the cipher suite](https://datatracker.ietf.org/doc/html/rfc5246#appendix-A.5) | `TLS_RSA_WITH_3DES_EDE_CBC_SHA`; `TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256` | Opt-In |
+| `tls.client.issuer` | string | Distinguished name of [subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) of the issuer of the x.509 certificate presented by the client. | `CN=Example Root CA, OU=Infrastructure Team, DC=example, DC=com` | Opt-In |
+| `tls.client.ja3` | string | A hash that identifies clients based on how they perform an SSL/TLS handshake. | `d4e5b18d6b55c71272893221c96ba240` | Opt-In |
+| `tls.client.not_after` | string | Date/Time indicating when client certificate is no longer considered valid. | `2021-01-01T00:00:00.000Z` | Opt-In |
+| `tls.client.not_before` | string | Date/Time indicating when client certificate is first considered valid. | `1970-01-01T00:00:00.000Z` | Opt-In |
+| `tls.client.server_name` | string | Also called an SNI, this tells the server which hostname to which the client is attempting to connect to. When this value is available, it should get copied to destination.domain. | `www.opentelemetry.io` | Opt-In |
+| `tls.client.subject` | string | Distinguished name of subject of the x.509 certificate presented by the client. | `CN=myclient, OU=Documentation Team, DC=example, DC=com` | Opt-In |
+| `tls.client.hash.md5` | string | Certificate fingerprint using the MD5 digest of DER-encoded version of certificate offered by the client. For consistency with other hash values, this value should be formatted as an uppercase hash. | `0F76C7F2C55BFD7D8E8B8F4BFBF0C9EC` | Opt-In |
+| `tls.client.hash.sha1` | string | Certificate fingerprint using the SHA1 digest of DER-encoded version of certificate offered by the client. For consistency with other hash values, this value should be formatted as an uppercase hash. | `9E393D93138888D288266C2D915214D1D1CCEB2A` | Opt-In |
+| `tls.client.hash.sha256` | string | Certificate fingerprint using the SHA256 digest of DER-encoded version of certificate offered by the client. For consistency with other hash values, this value should be formatted as an uppercase hash. | `0687F666A054EF17A08E2F2162EAB4CBC0D265E1D7875BE74BF3C712CA92DAF0` | Opt-In |
 <!-- endsemconv -->
 
-The values allowed for `tls.cipher.name` MUST be one of the `Descriptions` of the [registered TLS Cipher Suits](https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#table-tls-parameters-4).
+## Server attributes
 
-## Certificate attributes
+The following additional attributes describe the server participating in secure communication.
 
-These attributes may be used for any operation for details on the certificates.
-Fingerprints and serial numbers MUST be provided as strings of uppercase hexadecimal numbers with every two characters (every byte) separated by colon (`:`), e.g. `04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C`.
-This is a widely-used notation by CLI tools like `openssl` or browsers to display those certificate details.'
-
-<!-- semconv tls.certificate -->
+<!-- semconv tls.server -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `tls.peer.certificate.subject` | string | The peer [certificate subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) | `C=US, ST=California, L=San Francisco, O=OpenTelemetry, Inc, CN=*.opentelemetry.io` | Opt-In |
-| `tls.peer.certificate.fingerprint` | string | The SHA-1 digest of the DER encoded peer certificate | `95:B4:D0:6E:CD:C1:2C:22:92:B8:CD:26:54:79:E4:84:E3:47:34:2E` | Opt-In |
-| `tls.peer.certificate.fingerprint256` | string | The SHA-256 digest of the DER encoded peer certificate | `10:5A:86:67:BC:22:43:55:62:88:21:31:1B:93:F0:62:7F:05:F2:D8:EE:19:C6:F3:D6:BB:60:91:DD:ED:95:D1` | Opt-In |
-| `tls.peer.certificate.serial_number` | string | The peer [certificate serial number](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.2), as a hex string | `04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C` | Opt-In |
-| `tls.peer.certificate.not_before` | string | The date-time the peer certificate is valid from. | `Mar 9 00:00:00 2021 GMT` | Opt-In |
-| `tls.peer.certificate.not_after` | string | The date-time after which the peer certificate is no longer valid. | `Mar 1 23:59:59 2022 GMT` | Opt-In |
-| `tls.host.certificate.subject` | string | The host certificate [certificate subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) | `C=US, ST=California, L=San Francisco, O=OpenTelemetry, Inc, CN=*.opentelemetry.io` | Opt-In |
-| `tls.host.certificate.fingerprint` | string | The SHA-1 digest of the DER encoded host certificate | `95:B4:D0:6E:CD:C1:2C:22:92:B8:CD:26:54:79:E4:84:E3:47:34:2E` | Opt-In |
-| `tls.host.certificate.fingerprint256` | string | The SHA-256 digest of the DER encoded host certificate | `10:5A:86:67:BC:22:43:55:62:88:21:31:1B:93:F0:62:7F:05:F2:D8:EE:19:C6:F3:D6:BB:60:91:DD:ED:95:D1` | Opt-In |
-| `tls.host.certificate.serial_number` | string | The host certificate [certificate serial number](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.2), as a hex string | `04:C8:04:4B:BB:F2:4E:2B:7A:37:25:91:64:00:54:95:91:2C` | Opt-In |
-| `tls.host.certificate.not_before` | string | The date-time the host certificate is valid from. | `Mar 9 00:00:00 2021 GMT` | Opt-In |
-| `tls.host.certificate.not_after` | string | The date-time after which the peer certificate is no longer valid. | `Mar 1 23:59:59 2022 GMT` | Opt-In |
+| `tls.server.issuer` | string | Distinguished name of [subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) of the issuer of the x.509 certificate presented by the client. | `CN=Example Root CA, OU=Infrastructure Team, DC=example, DC=com` | Opt-In |
+| `tls.server.ja3s` | string | A hash that identifies servers based on how they perform an SSL/TLS handshake. | `d4e5b18d6b55c71272893221c96ba240` | Opt-In |
+| `tls.server.not_after` | string | Date/Time indicating when server certificate is no longer considered valid. | `2021-01-01T00:00:00.000Z` | Opt-In |
+| `tls.server.not_before` | string | Date/Time indicating when server certificate is first considered valid. | `1970-01-01T00:00:00.000Z` | Opt-In |
+| `tls.server.subject` | string | Distinguished name of subject of the x.509 certificate presented by the server. | `CN=myserver, OU=Documentation Team, DC=example, DC=com` | Opt-In |
+| `tls.server.hash.md5` | string | Certificate fingerprint using the MD5 digest of DER-encoded version of certificate offered by the server. For consistency with other hash values, this value should be formatted as an uppercase hash. | `0F76C7F2C55BFD7D8E8B8F4BFBF0C9EC` | Opt-In |
+| `tls.server.hash.sha1` | string | Certificate fingerprint using the SHA1 digest of DER-encoded version of certificate offered by the server. For consistency with other hash values, this value should be formatted as an uppercase hash. | `9E393D93138888D288266C2D915214D1D1CCEB2A` | Opt-In |
+| `tls.server.hash.sha256` | string | Certificate fingerprint using the SHA256 digest of DER-encoded version of certificate offered by the server. For consistency with other hash values, this value should be formatted as an uppercase hash. | `0687F666A054EF17A08E2F2162EAB4CBC0D265E1D7875BE74BF3C712CA92DAF0` | Opt-In |
 <!-- endsemconv -->
