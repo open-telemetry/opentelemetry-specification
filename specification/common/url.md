@@ -8,6 +8,7 @@ This document defines semantic conventions that describe URL and its components.
 <summary>Table of Contents</summary>
 
 <!-- toc -->
+
 - [Attributes](#attributes)
 - [Sensitive information](#sensitive-information)
 
@@ -41,5 +42,3 @@ Instrumentations that are aware of specific sensitive query string parameters MU
 For example, native instrumentation of a client library that passes credentials or user location in URL, must scrub corresponding properties.
 
 _Note: Applications and telemetry consumers should scrub sensitive information from URL attributes on collected telemetry. In systems unable to identify sensitive information, certain attribute values may be redacted entirely._
-
-
