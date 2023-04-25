@@ -9,6 +9,35 @@ versions:
             attribute_map:
               messaging.kafka.client_id: messaging.client_id
               messaging.rocketmq.client_id: messaging.client_id
+    metrics:
+      changes:
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3431
+        - rename_attributes:
+            attribute_map:
+              state: cpu.state
+            apply_to_metrics:
+              - process.cpu.time
+              - process.cpu.utilization
+        - rename_attributes:
+            attribute_map:
+              direction: disk.direction
+            apply_to_metrics:
+              - process.disk.io
+        - rename_attributes:
+            attribute_map:
+              direction: network.direction
+            apply_to_metrics:
+              - process.network.io
+        - rename_attributes:
+            attribute_map:
+              type: context_switch.type
+            apply_to_metrics:
+              - process.context_switches
+        - rename_attributes:
+            attribute_map:
+              type: memory.page_fault.type
+            apply_to_metrics:
+              - process.paging.faults
   1.20.0:
     spans:
       changes:
