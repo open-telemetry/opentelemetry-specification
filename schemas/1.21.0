@@ -4,6 +4,11 @@ versions:
   1.21.0:
     spans:
       changes:
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3336
+        - rename_attributes:
+            attribute_map:
+              messaging.kafka.client_id: messaging.client_id
+              messaging.rocketmq.client_id: messaging.client_id
         # https://github.com/open-telemetry/opentelemetry-specification/pull/3426
         - rename_attributes:
             attribute_map:

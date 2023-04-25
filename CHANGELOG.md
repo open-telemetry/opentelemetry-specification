@@ -41,7 +41,9 @@ release.
   ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
 - Change http.server.duration and http.client.duration units to seconds
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
-- Rename `net.protocol.*` to `network.protocol.*`,
+- BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
+  ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
+- BREAKING: Rename `net.protocol.*` to `network.protocol.*`,
   `net.transport` to `network.transport`,
   `net.sock.family` to `network.socket.family`,
   `net.host.connection.*` to `network.host.connection.*`, and
@@ -62,6 +64,9 @@ release.
 ### Telemetry Schemas
 
 ### Common
+
+- Add log entries to specification README.md contents.
+  ([#3435](https://github.com/open-telemetry/opentelemetry-specification/pull/3435))
 
 ## v1.20.0 (2023-04-07)
 
