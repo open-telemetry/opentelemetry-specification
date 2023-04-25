@@ -150,7 +150,9 @@ groups:
         tag: connection-level
       - ref: net.sock.peer.port
         tag: connection-level
-      - ref: network.socket.family
+      - ref: network.transport
+        tag: connection-level
+      - ref: network.type
         tag: connection-level
       - ref: net.sock.peer.name
         tag: connection-level

@@ -27,8 +27,9 @@ groups:
       - ref: net.sock.peer.addr
       - ref: net.sock.peer.port
       - ref: net.sock.peer.name
-      - ref: network.socket.family
-        examples: ['inet', 'inet6']
+      - ref: network.transport
+      - ref: network.type
+        examples: ['ipv4', 'ipv6']
       - ref: user_agent.original
 
   - id: trace.http.client

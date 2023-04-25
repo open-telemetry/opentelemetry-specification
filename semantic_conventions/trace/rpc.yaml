@@ -53,9 +53,8 @@ groups:
       - ref: net.sock.peer.port
         requirement_level:
           recommended: If different than `net.peer.port` and if `net.sock.peer.addr` is set.
-      - ref: network.socket.family
-        requirement_level:
-          conditionally_required: If and only if `net.sock.peer.addr` is set.
+      - ref: network.transport
+      - ref: network.type
       - ref: net.sock.peer.name
         requirement_level:
           recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
@@ -68,9 +67,6 @@ groups:
           instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set
           `net.peer.name` to the IP address provided in the host component.
       - ref: net.peer.port
-        requirement_level:
-          conditionally_required: See below
-      - ref: network.transport
         requirement_level:
           conditionally_required: See below
     constraints:
@@ -88,7 +84,8 @@ groups:
       - ref: net.host.name
       - ref: net.sock.host.addr
       - ref: net.sock.host.port
-      - ref: network.socket.family
+      - ref: network.transport
+      - ref: network.type
 
   - id: rpc.grpc
     prefix: rpc.grpc

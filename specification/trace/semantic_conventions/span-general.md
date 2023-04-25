@@ -46,19 +46,19 @@ if they do not cause breaking changes to HTTP semantic conventions.
 <!-- semconv network-core -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `network.transport` | string | Transport protocol used. See note below. | `ip_tcp` | Recommended |
+| `network.transport` | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). | `tcp`; `udp` | Recommended |
+| `network.type` | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. | `ipv4`; `ipv6` | Recommended |
 | `network.protocol.name` | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
 | `network.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
 | `net.sock.peer.name` | string | Remote socket peer name. | `proxy.example.com` | Recommended: [2] |
 | `net.sock.peer.addr` | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
 | `net.sock.peer.port` | int | Remote socket peer port. | `16456` | Recommended: [3] |
-| `network.socket.family` | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [4] |
-| `net.peer.name` | string | Logical remote hostname, see note below. [5] | `example.com` | Recommended |
+| `net.peer.name` | string | Logical remote hostname, see note below. [4] | `example.com` | Recommended |
 | `net.peer.port` | int | Logical remote port number | `80`; `8080`; `443` | Recommended |
 | `net.host.name` | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
 | `net.host.port` | int | Logical local port number, preferably the one that the peer used to connect | `8080` | Recommended |
 | `net.sock.host.addr` | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
-| `net.sock.host.port` | int | Local socket port number. | `35555` | Conditionally Required: [6] |
+| `net.sock.host.port` | int | Local socket port number. | `35555` | Conditionally Required: [5] |
 
 **[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -66,31 +66,25 @@ if they do not cause breaking changes to HTTP semantic conventions.
 
 **[3]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
-**[4]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `network.socket.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[4]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[5]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
-
-**[6]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
+**[5]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
 
 `network.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
-| `ip_tcp` | ip_tcp |
-| `ip_udp` | ip_udp |
+| `tcp` | TCP |
+| `udp` | UDP |
 | `pipe` | Named or anonymous pipe. See note below. |
-| `inproc` | In-process communication. [1] |
-| `other` | Something else (non IP-based). |
+| `unix` | Unix domain socket |
 
-**[1]:** Signals that there is only in-process communication not using a "real" network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
-
-`network.socket.family` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+`network.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
-| `inet` | IPv4 address |
-| `inet6` | IPv6 address |
-| `unix` | Unix domain socket path |
+| `ipv4` | IPv4 |
+| `ipv6` | IPv6 |
 <!-- endsemconv -->
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).

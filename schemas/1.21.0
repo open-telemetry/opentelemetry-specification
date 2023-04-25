@@ -14,8 +14,6 @@ versions:
             attribute_map:
               net.protocol.name: network.protocol.name
               net.protocol.version: network.protocol.version
-              net.transport: network.transport
-              net.sock.family: network.socket.family
               net.host.connection.type: network.host.connection.type
               net.host.connection.subtype: network.host.connection.subtype
               net.host.carrier.name: network.host.carrier.name
