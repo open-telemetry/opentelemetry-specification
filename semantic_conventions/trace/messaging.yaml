@@ -122,6 +122,13 @@ groups:
             When a messaging client library supports both batch and single-message API for the same operation, instrumentations SHOULD
             use `messaging.batch.message_count` for batching APIs and SHOULD NOT use it for single-message APIs.
         examples: [0, 1, 2]
+      - id: client_id
+        type: string
+        requirement_level:
+          recommended: If a client id is available
+        brief: >
+          A unique identifier for the client that consumes or produces a message.
+        examples: ['client-5', 'myhost@8742@s8083jm']
       - ref: messaging.message.id
         requirement_level:
           recommended: Only for spans that represent an operation on a single message.
@@ -191,14 +198,6 @@ groups:
     span_kind: consumer
     brief: 'Semantic convention for a consumer of messages received from a messaging system'
     attributes:
-      - id: consumer.id
-        type: string
-        brief: >
-          The identifier for the consumer receiving a message. For Kafka, set it to
-          `{messaging.kafka.consumer.group} - {messaging.kafka.client_id}`, if both are present, or only
-          `messaging.kafka.consumer.group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id`
-          of the client consuming the message.
-        examples: 'mygroup - client-6'
       - ref: messaging.source.name
         requirement_level:
           conditionally_required: If the value applies to all messages in the batch.
@@ -270,11 +269,6 @@ groups:
           Name of the Kafka Consumer Group that is handling the message.
           Only applies to consumers, not producers.
         examples: 'my-group'
-      - id: client_id
-        type: string
-        brief: >
-          Client Id for the Consumer or Producer that is handling the message.
-        examples: 'client-5'
       - id: destination.partition
         type: int
         brief: >
@@ -315,12 +309,6 @@ groups:
         brief: >
           Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind.
         examples: 'myConsumerGroup'
-      - id: client_id
-        type: string
-        requirement_level: required
-        brief: >
-          The unique identifier for each client.
-        examples: 'myhost@8742@s8083jm'
       - id: message.delivery_timestamp
         type: int
         requirement_level:
