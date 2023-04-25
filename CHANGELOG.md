@@ -43,11 +43,10 @@ release.
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
-- BREAKING: Rename `net.protocol.*` to `network.protocol.*`,
-  `net.transport` to `network.transport`,
-  `net.sock.family` to `network.socket.family`,
+- BREAKING: Replace `net.transport` with combination of `network.type` and
+  `network.transport`. Rename `net.protocol.*` to `network.protocol.*`,
   `net.host.connection.*` to `network.host.connection.*`, and
-  `net.host.carrier.*` to `network.host.carrier.*`
+  `net.host.carrier.*` to `network.host.carrier.*`.
   ([#3426](https://github.com/open-telemetry/opentelemetry-specification/pull/3426))
 
 ### Compatibility
