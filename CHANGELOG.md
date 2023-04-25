@@ -41,6 +41,8 @@ release.
   ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
 - Change http.server.duration and http.client.duration units to seconds
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
+- BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
+  ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
 
 ### Compatibility
 
@@ -50,10 +52,15 @@ release.
 
 - Lay initial groundwork for file configuration
   ([#3360](https://github.com/open-telemetry/opentelemetry-specification/pull/3360))
+- Move file configuration schema to `opentelemetry-configuration`.
+  ([#3412](https://github.com/open-telemetry/opentelemetry-specification/pull/3412))
 
 ### Telemetry Schemas
 
 ### Common
+
+- Add log entries to specification README.md contents.
+  ([#3435](https://github.com/open-telemetry/opentelemetry-specification/pull/3435))
 
 ## v1.20.0 (2023-04-07)
 
@@ -101,6 +108,8 @@ release.
 
 ### Semantic Conventions
 
+- Add k8s.cluster.uid semantic convention
+  ([#3267](https://github.com/open-telemetry/opentelemetry-specification/pull/3267))
 - Clarify that attribute requirement levels apply to the instrumentation library
   ([#3289](https://github.com/open-telemetry/opentelemetry-specification/pull/3289))
 - Fix grammatical number of metric units.

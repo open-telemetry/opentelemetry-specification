@@ -1,6 +1,6 @@
 # Logs Bridge API
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -111,9 +111,7 @@ The `Logger` MUST provide functions to:
 
 #### Emit a LogRecord
 
-`LogRecord`s encapsulate the fields identified in the [`LogRecord`
-data model](data-model.md#log-and-event-record-definition) and are emitted to the processing pipeline using
-this API.
+The effect of calling this API is to emit a `LogRecord` to the processing pipeline.
 
 The API MUST accept the following parameters:
 
@@ -164,7 +162,7 @@ that would prevent evolution into a user facing API.
 ### How to Create a Log4J Log Appender
 
 A [log appender](../glossary.md#log-appender--bridge) implementation can be used
-to can be used to bridge logs into the [Log SDK](./sdk.md)
+to bridge logs into the [Log SDK](./sdk.md)
 OpenTelemetry [LogRecordExporters](sdk.md#logrecordexporter). This approach is
 typically used for applications which are fine with changing the log transport
 and is [one of the supported](README.md#direct-to-collector) log collection

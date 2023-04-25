@@ -31,8 +31,8 @@ interpreted to produce configured OpenTelemetry components.
 ## Configuration Model
 
 The configuration model is defined
-in [./schema/](./schema/opentelemetry_configuration.json) using
-the [JSON Schema](https://json-schema.org/).
+in [opentelemetry-configuration](https://github.com/open-telemetry/opentelemetry-configuration)
+using the [JSON Schema](https://json-schema.org/).
 
 ### Stability Definition
 
