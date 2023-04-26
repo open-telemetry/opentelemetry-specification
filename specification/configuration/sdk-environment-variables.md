@@ -121,7 +121,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch LogRecord Processor
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 | Name                            | Description                                                      | Default  | Notes                                                  |
 | ------------------------------- | ---------------------------------------------------------------- | -------  | ------------------------------------------------------ |
@@ -159,7 +159,7 @@ See the SDK [Span Limits](../trace/sdk.md#span-limits) section for the definitio
 
 ## LogRecord Limits
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 See the SDK [LogRecord Limits](../logs/sdk.md#logrecord-limits) section for the definition of the limits.
 
