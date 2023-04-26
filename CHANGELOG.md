@@ -14,13 +14,15 @@ release.
 ### Metrics
 
 - Add experimental histogram advice API.
-  ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+  ([#3376](https://github.com/open-telemetry/opentelemetry-specification/pull/3376))
 
 ### Logs
 
 - Clarify parameters for emitting a log record.
   ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3354))
 - Drop logger include_trace_context parameter.
+  ([#3397](https://github.com/open-telemetry/opentelemetry-specification/pull/3397))
+- Mark logs bridge API / SDK as stable.
   ([#3397](https://github.com/open-telemetry/opentelemetry-specification/pull/3397))
 
 ### Resource
