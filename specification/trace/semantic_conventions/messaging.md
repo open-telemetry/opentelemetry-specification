@@ -189,6 +189,7 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `rocketmq`; `activemq`; `AmazonSQS` | Required |
 | `messaging.operation` | string | A string identifying the kind of messaging operation as defined in the [Operation names](#operation-names) section above. [1] | `publish` | Required |
 | `messaging.batch.message_count` | int | The number of messages sent, received, or processed in the scope of the batching operation. [2] | `0`; `1`; `2` | Conditionally Required: [3] |
+| `messaging.client_id` | string | A unique identifier for the client that consumes or produces a message. | `client-5`; `myhost@8742@s8083jm` | Recommended: If a client id is available |
 | `messaging.message.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended: [4] |
 | `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [5] |
 | `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [6] |
@@ -291,7 +292,6 @@ The following additional attributes describe message consumer operations.
 <!-- semconv messaging.consumer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.consumer.id` | string | The identifier for the consumer receiving a message. For Kafka, set it to `{messaging.kafka.consumer.group} - {messaging.kafka.client_id}`, if both are present, or only `messaging.kafka.consumer.group`. For brokers, such as RabbitMQ and Artemis, set it to the `client_id` of the client consuming the message. | `mygroup - client-6` | Recommended |
 | `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Recommended: If known on consumer |
 | `messaging.destination.name` | string | The message destination name [1] | `MyQueue`; `MyTopic` | Recommended: If known on consumer |
 | `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Recommended: If known on consumer |
@@ -363,7 +363,6 @@ For Apache Kafka, the following additional attributes are defined:
 |---|---|---|---|---|
 | `messaging.kafka.message.key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message.id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | Recommended |
 | `messaging.kafka.consumer.group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
-| `messaging.kafka.client_id` | string | Client Id for the Consumer or Producer that is handling the message. | `client-5` | Recommended |
 | `messaging.kafka.destination.partition` | int | Partition the message is sent to. | `2` | Recommended |
 | `messaging.kafka.source.partition` | int | Partition the message is received from. | `2` | Recommended |
 | `messaging.kafka.message.offset` | int | The offset of a record in the corresponding Kafka partition. | `42` | Recommended |
@@ -378,6 +377,8 @@ For Apache Kafka producers, [`peer.service`](./span-general.md#general-remote-se
 The `service.name` of a Consumer's Resource SHOULD match the `peer.service` of the Producer, when the message is directly passed to another service.
 If an intermediary broker is present, `service.name` and `peer.service` will not be the same.
 
+`messaging.client_id` SHOULD be set to the `client-id` of consumers, or to the `client.id` property of producers.
+
 #### Apache RocketMQ
 
 Specific attributes for Apache RocketMQ are defined below.
@@ -387,7 +388,6 @@ Specific attributes for Apache RocketMQ are defined below.
 |---|---|---|---|---|
 | `messaging.rocketmq.namespace` | string | Namespace of RocketMQ resources, resources in different namespaces are individual. | `myNamespace` | Required |
 | `messaging.rocketmq.client_group` | string | Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind. | `myConsumerGroup` | Required |
-| `messaging.rocketmq.client_id` | string | The unique identifier for each client. | `myhost@8742@s8083jm` | Required |
 | `messaging.rocketmq.message.delivery_timestamp` | int | The timestamp in milliseconds that the delay message is expected to be delivered to consumer. | `1665987217045` | Conditionally Required: [1] |
 | `messaging.rocketmq.message.delay_time_level` | int | The delay time level for delay message, which determines the message delay time. | `3` | Conditionally Required: [2] |
 | `messaging.rocketmq.message.group` | string | It is essential for FIFO message. Messages that belong to the same message group are always processed one by one within the same consumer group. | `myMessageGroup` | Conditionally Required: If the message type is FIFO. |
@@ -416,6 +416,8 @@ Specific attributes for Apache RocketMQ are defined below.
 | `clustering` | Clustering consumption model |
 | `broadcasting` | Broadcasting consumption model |
 <!-- endsemconv -->
+
+`messaging.client_id` SHOULD be set to the client ID that is automatically generated by the Apache RocketMQ SDK.
 
 ## Examples
 
@@ -479,9 +481,9 @@ Process CB:                           | Span Rcv2 |
 | `messaging.destination.name` | `"T1"` | | | | |
 | `messaging.source.name` |  | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
 | `messaging.operation` |  |  | `"process"` |  | `"receive"` |
+| `messaging.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
 | `messaging.kafka.message.key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
 | `messaging.kafka.consumer.group` |  | `"my-group"` | `"my-group"` |  | `"another-group"` |
-| `messaging.kafka.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
 | `messaging.kafka.partition` | `"1"` | `"1"` | `"1"` | `"3"` | `"3"` |
 | `messaging.kafka.message.offset` | `"12"` | `"12"` | `"12"` | `"32"` | `"32"` |
 
