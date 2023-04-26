@@ -41,11 +41,11 @@ groups:
             - id: ruby
               value: "ruby"
             - id: rust
-              value: "rust"                          
+              value: "rust"
             - id: swift
               value: "swift"
             - id: webjs
-            value: "webjs"
+              value: "webjs"
         requirement_level: required
         brief: >
           The language of the telemetry SDK.
