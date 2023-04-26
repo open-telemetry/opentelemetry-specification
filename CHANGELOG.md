@@ -81,8 +81,8 @@ release.
 - BREAKING: Adopt ECS attributes in HTTP semantic conventions. 
   Renames: `http.method` to `http.request.method`,
   `http.status_code` to `http.response.status_code`,
-  `http.request_content_length` to `http.request.body.bytes`,
-  `http.response_content_length` to `http.response.body.bytes`,
+  `http.request_content_length` to `http.request.body.size`,
+  `http.response_content_length` to `http.response.body.size`,
   `http.url` to `url.full`,
   `http.scheme` to `url.scheme`,
   and removes `http.target` breaking it down to `http.target` to `url.path`, `url.query`, and `url.fragment`.

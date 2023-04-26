@@ -31,11 +31,11 @@ groups:
         examples: ['/search?q=OpenTelemetry#SemConv']
       - id: request_content_length
         type: int
-        brief: 'Deprecated, use `http.request.body.bytes` instead.'
+        brief: 'Deprecated, use `http.request.body.size` instead.'
         stability: deprecated
         examples: 3495
       - id: response_content_length
         type: int
-        brief: 'Deprecated, use `http.response.body.bytes` instead.'
+        brief: 'Deprecated, use `http.response.body.size` instead.'
         stability: deprecated
         examples: 3495

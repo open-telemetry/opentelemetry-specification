@@ -8,14 +8,14 @@ groups:
         These conventions can be used for http and https schemes
         and various HTTP versions like 1.1, 2 and SPDY.
     attributes:
-      - id: request.body.bytes
+      - id: request.body.size
         type: int
         brief: >
           The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and
           is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
-      - id: response.body.bytes
+      - id: response.body.size
         type: int
         brief: >
           The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and

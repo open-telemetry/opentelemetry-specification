@@ -71,4 +71,4 @@ Here are several examples of expensive operations to be avoided by default:
 
 - DNS lookups to populate `server.address` when only an IP address is available to the instrumentation. Caching lookup results does not solve the issue for all possible cases and should be avoided by default too.
 - forcing an `http.route` calculation before the HTTP framework calculates it
-- reading response stream to find `http.response.body.bytes` when `Content-Length` header is not available
+- reading response stream to find `http.response.body.size` when `Content-Length` header is not available
