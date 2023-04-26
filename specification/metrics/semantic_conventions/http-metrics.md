@@ -32,7 +32,7 @@ operations. By adding HTTP attributes to metric events it allows for finely tune
 > (or prior) to the latest version SHOULD:
 >
 > * start emitting the latest semantic convention attributes on HTTP metrics
->   _in addition_ to the attributes they are already emitting,
+>   *in addition* to the attributes they are already emitting,
 >   without bumping the major version.
 >   (note: this SHOULD NOT increase cardinality or create new timeseries)
 > * maintain (security patching at a minimum) the existing major version

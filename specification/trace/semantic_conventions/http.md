@@ -33,7 +33,7 @@ and various HTTP versions like 1.1, 2 and SPDY.
 > (or prior) to the latest version SHOULD:
 >
 > * start emitting the latest semantic convention attributes on spans
->   _in addition_ to the attributes they are already emitting,
+>   *in addition* to the attributes they are already emitting,
 >   without bumping the major version.
 > * maintain (security patching at a minimum) the existing major version
 >   for at least six months after it starts emitting both sets of attributes.
