@@ -124,7 +124,7 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 |---|---|---|---|---|
 | [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [1] | `proxy.example.com` | Recommended: [2] |
 
-**[1]:** Usually represents a proxy or other intermediary domain name.
+**[1]:** Typically observed from the client side, and represents a proxy or other intermediary domain name.
 
 **[2]:** If different than `server.address` and if `server.socket.address` is set.
 <!-- endsemconv -->
@@ -139,9 +139,9 @@ Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service
 | [`client.socket.address`](span-general.md) | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: Only if different than `client.address`. |
 | [`client.socket.port`](span-general.md) | int | Immediate client peer port number | `35555` | Recommended: Only if different than `client.port`. |
 
-**[1]:** When communicating through intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available.
+**[1]:** When observed from the server side, and when communicating through an intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available.
 
-**[2]:** When communicating through intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available.
+**[2]:** When observed from the server side, and when communicating through an intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available.
 <!-- endsemconv -->
 
 ### Events

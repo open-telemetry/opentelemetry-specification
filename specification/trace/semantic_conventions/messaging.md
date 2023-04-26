@@ -222,7 +222,7 @@ The following operations related to messages are defined for these semantic conv
 
 **[10]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
-**[11]:** Usually represents a proxy or other intermediary domain name.
+**[11]:** Typically observed from the client side, and represents a proxy or other intermediary domain name.
 
 **[12]:** If different than `server.address` and if `server.socket.address` is set.
 

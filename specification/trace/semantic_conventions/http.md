@@ -148,7 +148,7 @@ If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
-**[6]:** Usually represents a proxy or other intermediary domain name.
+**[6]:** Typically observed from the client side, and represents a proxy or other intermediary domain name.
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 
@@ -252,7 +252,7 @@ SHOULD include the [application root](/specification/trace/semantic_conventions/
 
 **[2]:** The IP address of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded), [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For), or a similar header). Otherwise, the immediate client peer address.
 
-**[3]:** When communicating through intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available.
+**[3]:** When observed from the server side, and when communicating through an intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available.
 
 **[4]:** Determined by using the first of the following that applies
 

@@ -16,7 +16,7 @@ groups:
         type: string
         brief: The domain name of an immediate peer.
         examples: ['proxy.example.com']
-        note: Usually represents a proxy or other intermediary domain name.
+        note: Typically observed from the client side, and represents a proxy or other intermediary domain name.
       - id: socket.address
         type: string
         brief: Physical server IP address or Unix socket address.

@@ -53,7 +53,7 @@ if they do not cause breaking changes to HTTP semantic conventions.
 | `server.socket.address` | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
 | `server.socket.port` | int | Physical server port. | `16456` | Recommended: Only if different than `server.port`. |
 
-**[1]:** Usually represents a proxy or other intermediary domain name.
+**[1]:** Typically observed from the client side, and represents a proxy or other intermediary domain name.
 <!-- endsemconv -->
 
 `server.address` and `server.port` represent logical server name and port. Semantic conventions that refer to these attributes SHOULD
@@ -116,9 +116,9 @@ if they do not cause breaking changes to HTTP semantic conventions.
 | `client.socket.address` | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: Only if different than `client.address`. |
 | `client.socket.port` | int | Immediate client peer port number | `35555` | Recommended: Only if different than `client.port`. |
 
-**[1]:** When communicating through intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available.
+**[1]:** When observed from the server side, and when communicating through an intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available.
 
-**[2]:** When communicating through intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available.
+**[2]:** When observed from the server side, and when communicating through an intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available.
 <!-- endsemconv -->
 
 `client.socket.address` and `client.socket.port` represent physical client name and port.
