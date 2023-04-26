@@ -26,6 +26,20 @@ operations. By adding HTTP attributes to metric events it allows for finely tune
 
 <!-- tocstop -->
 
+> **Warning**
+> HTTP instrumentation updating from
+> [v1.20.0 of this document](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/metrics/semantic_conventions/http-metrics.md)
+> (or prior) to the latest version SHOULD:
+>
+> * start emitting the latest semantic convention attributes on HTTP metrics
+>   _in addition_ to the attributes they are already emitting,
+>   without bumping the major version.
+>   (note: this SHOULD NOT increase cardinality or create new timeseries)
+> * maintain (security patching at a minimum) the existing major version
+>   for at least six months after it starts emitting both sets of attributes.
+> * stop emitting the old set of attributes in the next major version (stable
+>   next major version SHOULD NOT be released prior to October 1, 2023).
+
 ## HTTP Server
 
 ### Metric: `http.server.duration`
