@@ -1,6 +1,6 @@
 # Semantic conventions for HTTP spans
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Feature-freeze](../../document-status.md)
 
 This document defines semantic conventions for HTTP client and server Spans.
 They can be used for http and https schemes
