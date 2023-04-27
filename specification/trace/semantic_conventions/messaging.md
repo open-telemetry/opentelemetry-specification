@@ -11,7 +11,7 @@
   * [Producer](#producer)
   * [Consumer](#consumer)
   * [Intermediary](#intermediary)
-  * [Destinations and sources](#destinations-and-sources)
+  * [Destinations](#destinations)
   * [Message consumption](#message-consumption)
   * [Conversations](#conversations)
   * [Temporary and anonymous destinations](#temporary-and-anonymous-destinations)
@@ -75,14 +75,12 @@ process of notifying an intermediary that a message was processed successfully.
 An "intermediary" receives a message to forward it to the next receiver, which
 might be another intermediary or a consumer.
 
-### Destinations and sources
+### Destinations
 
-A destination is usually uniquely identified by name within the messaging system instance. Examples of a destination name would be a URL or a simple one-word identifier.
-Sending messages to a destination is called "*publish*" in context of this specification.
+A destination represents an entity within messaging system messages are published to and consumed from. A destination
+is usually uniquely identified by name within the messaging system instance. Examples of a destination name would be a URL or a simple one-word identifier.
 
-A source represents an entity within messaging system messages are consumed from. Source and destination for specific message may be the same. However, if message is routed within one or multiple brokers, source and destination can be different.
-
-Typical examples of destinations and sources include Kafka topics, RabbitMQ queues and topics.
+Typical examples of destinations include Kafka topics, RabbitMQ queues and topics.
 
 ### Message consumption
 
@@ -190,17 +188,20 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.operation` | string | A string identifying the kind of messaging operation as defined in the [Operation names](#operation-names) section above. [1] | `publish` | Required |
 | `messaging.batch.message_count` | int | The number of messages sent, received, or processed in the scope of the batching operation. [2] | `0`; `1`; `2` | Conditionally Required: [3] |
 | `messaging.client_id` | string | A unique identifier for the client that consumes or produces a message. | `client-5`; `myhost@8742@s8083jm` | Recommended: If a client id is available |
-| `messaging.message.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended: [4] |
-| `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [5] |
-| `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [6] |
-| `messaging.message.payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended: [7] |
-| [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [8] | `example.com` | Conditionally Required: If available. |
+| `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Conditionally Required: [4] |
+| `messaging.destination.name` | string | The message destination name [5] | `MyQueue`; `MyTopic` | Conditionally Required: [6] |
+| `messaging.destination.template` | string | Low cardinality representation of the messaging destination name [7] | `/customers/{customerId}` | Conditionally Required: [8] |
+| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [9] |
+| `messaging.message.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended: [10] |
+| `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [11] |
+| `messaging.message.payload.size` | int | The size of the message payload in bytes. | `2738` | Recommended: [12] |
+| [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [13] | `example.com` | Conditionally Required: If available. |
 | [`net.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
-| [`net.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [9] | `3.1.1` | Recommended |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [10] |
+| [`net.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [14] | `3.1.1` | Recommended |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [15] |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
-| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [11] |
-| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [12] |
+| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [16] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [17] |
 
 **[1]:** If a custom value is used, it MUST be of low cardinality.
 
@@ -208,23 +209,34 @@ The following operations related to messages are defined for these semantic conv
 
 **[3]:** If the span describes an operation on a batch of messages.
 
-**[4]:** Only if span represents operation on a single message.
+**[4]:** If value is `true`. When missing, the value is assumed to be `false`.
 
-**[5]:** Only for spans that represent an operation on a single message.
+**[5]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
+the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
 
-**[6]:** Only if span represents operation on a single message.
+**[6]:** If span describes operation on a single message or if the value applies to all messages in the batch.
 
-**[7]:** Only if span represents operation on a single message.
+**[7]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
 
-**[8]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+**[8]:** If available. Instrumentations MUST NOT use `messaging.destination.name` as template unless low-cardinality of destination name is guaranteed.
 
-**[9]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[9]:** If value is `true`. When missing, the value is assumed to be `false`.
 
-**[10]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[10]:** Only if span represents operation on a single message.
 
-**[11]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+**[11]:** Only for spans that represent an operation on a single message.
 
-**[12]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
+**[12]:** Only if span represents operation on a single message.
+
+**[13]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+
+**[14]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+
+**[15]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+
+**[16]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+
+**[17]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
 `messaging.operation` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -242,9 +254,9 @@ These attributes should be set to the broker to which the message is sent/from w
 ### Attribute namespaces
 
 - `messaging.message`: Contains attributes that describe individual messages
-- `messaging.destination`: Contains attributes that describe the logical entity messages are published to.
-  See [Destinations and sources](#destinations-and-sources) for more details
-- `messaging.source`: Contains attributes that describe the logical entity messages are received from
+- `messaging.destination`: Contains attributes that describe the logical entity messages are published to and received from.
+  See [Destinations](#destinations) for more details
+- `messaging.destination_original`: Contains attributes that describe the logical entity messages were originally published to.
 - `messaging.batch`: Contains attributes that describe batch operations
 - `messaging.consumer`: Contains attributes that describe application instance that consumes a message. See [consumer](#consumer) for more details
 
@@ -257,64 +269,21 @@ as described in [Attributes specific to certain messaging systems](#attributes-s
 [`net.transport`]: span-general.md#network-transport-attributes
 [Hangfire]: https://www.hangfire.io/
 
-### Producer attributes
-
-The following additional attributes describe message producer operations.
-
-<!-- semconv messaging.producer -->
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Conditionally Required: [1] |
-| `messaging.destination.name` | string | The message destination name [2] | `MyQueue`; `MyTopic` | Conditionally Required: [3] |
-| `messaging.destination.template` | string | Low cardinality representation of the messaging destination name [4] | `/customers/{customerId}` | Conditionally Required: [5] |
-| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [6] |
-
-**[1]:** If value is `true`. When missing, the value is assumed to be `false`.
-
-**[2]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
-the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
-
-**[3]:** If one message is being published or if the value applies to all messages in the batch.
-
-**[4]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
-
-**[5]:** If available. Instrumentations MUST NOT use `messaging.destination.name` as template unless low-cardinality of destination name is guaranteed.
-
-**[6]:** If value is `true`. When missing, the value is assumed to be `false`.
-<!-- endsemconv -->
-
 ### Consumer attributes
 
-The following additional attributes describe message consumer operations.
+The following additional attributes describe message operations on the consumer side.
 
-> Note: Consumer spans can have attributes describing source and destination. Since messages could be routed by brokers, source and destination don't always match. If original destination information is available on the consumer, consumer instrumentations SHOULD populate corresponding `messaging.destination` attributes.
+> Note: Messages could be routed by brokers, destination a message is consumed from doesn't always match the destination it was published to. If original destination information is available on the consumer side, consumer instrumentations SHOULD populate information about original destination on `messaging.destination_original` attributes.
 
 <!-- semconv messaging.consumer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Recommended: If known on consumer |
-| `messaging.destination.name` | string | The message destination name [1] | `MyQueue`; `MyTopic` | Recommended: If known on consumer |
-| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Recommended: If known on consumer |
-| `messaging.source.anonymous` | boolean | A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name). |  | Recommended: [2] |
-| `messaging.source.name` | string | The message source name [3] | `MyQueue`; `MyTopic` | Conditionally Required: [4] |
-| `messaging.source.template` | string | Low cardinality representation of the messaging source name [5] | `/customers/{customerId}` | Conditionally Required: [6] |
-| `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [7] |
+| `messaging.destination_original.anonymous` | boolean | A boolean that is true if the original message destination is anonymous (could be unnamed or have auto-generated name). |  | Recommended |
+| `messaging.destination_original.name` | string | The original destination name [1] | `MyQueue`; `MyTopic` | Recommended |
+| `messaging.destination_original.temporary` | boolean | A boolean that is true if the original message destination is temporary and might not exist anymore after messages are processed. |  | Recommended |
 
-**[1]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
-the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
-
-**[2]:** When supported by messaging system and only if the source is anonymous. When missing, the value is assumed to be `false`.
-
-**[3]:** Source name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
-the broker does not have such notion, the source name SHOULD uniquely identify the broker.
-
-**[4]:** If the value applies to all messages in the batch.
-
-**[5]:** Source names could be constructed from templates. An example would be a source name involving a user name or product id. Although the source name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
-
-**[6]:** If available. Instrumentations MUST NOT use `messaging.source.name` as template unless low-cardinality of source name is guaranteed.
-
-**[7]:** When supported by messaging system and only if the source is temporary. When missing, the value is assumed to be `false`.
+**[1]:** The name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
+the broker does not have such notion, the original destination name SHOULD uniquely identify the broker.
 <!-- endsemconv -->
 
 The *receive* span is be used to track the time used for receiving the message(s), whereas the *process* span(s) track the time for processing the message(s).
@@ -331,15 +300,16 @@ Attributes in the `messaging.message` or `messaging.{system}.message` namespace 
 
 For batch operations, per-message attributes are usually different and cannot be set on the corresponding span. In such cases the attributes MAY be set on links. See [Batch Receiving](#batch-receiving) and [Batch Processing](#batch-processing) for more information on correlation using links.
 
-Some messaging systems (e.g., Kafka, Azure EventGrid) allow publishing a single batch of messages to different topics. In such cases, the attributes in `messaging.destination` and `messaging.source` MAY be
-set on links. Instrumentations MAY set source and destination attributes on the span if all messages in the batch share the same destination or source.
+Some messaging systems (e.g., Kafka, Azure EventGrid) allow publishing a single batch of messages to different topics. In such cases, the attributes in `messaging.destination` and `messaging.destination_original` MAY be
+set on links. Instrumentations MAY set destination attributes on the span if all messages in the batch share the same destination.
 
 ### Attributes specific to certain messaging systems
 
-All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Attributes that describe a message, a destination, a source, a consumer or a batch of messages SHOULD be populated under the corresponding namespace:
+All attributes that are specific for a messaging system SHOULD be populated in `messaging.{system}` namespace. Attributes that describe a message, a destination, a consumer, or a batch of messages SHOULD be populated under the corresponding namespace:
 
 * `messaging.{system}.message`: Describes attributes for individual messages
-* `messaging.{system}.destination` and `messaging.{system}.source`: Describe the destination and source a message (or a batch) are published to and received from respectively. The combination of attributes in these namespaces should uniquely identify the entity and include properties significant for this messaging system. For example, Kafka instrumentations should include partition identifier.
+* `messaging.{system}.destination`: Describe the destination a message (or a batch) are published to and received from respectively. The combination of attributes in these namespaces should uniquely identify the entity and include properties significant for this messaging system. For example, Kafka instrumentations should include partition identifier.
+* `messaging.{system}.destination_original`: Describe the original destination a message (or a batch) were published to.
 * `messaging.{system}.consumer`: Describes message consumer properties
 * `messaging.{system}.batch`: Describes message batch properties
 
@@ -364,7 +334,6 @@ For Apache Kafka, the following additional attributes are defined:
 | `messaging.kafka.message.key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message.id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | Recommended |
 | `messaging.kafka.consumer.group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
 | `messaging.kafka.destination.partition` | int | Partition the message is sent to. | `2` | Recommended |
-| `messaging.kafka.source.partition` | int | Partition the message is received from. | `2` | Recommended |
 | `messaging.kafka.message.offset` | int | The offset of a record in the corresponding Kafka partition. | `42` | Recommended |
 | `messaging.kafka.message.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditionally Required: [2] |
 
@@ -443,8 +412,7 @@ Process CB:                 | Span CB1 |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` |
 | `net.peer.port` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
-| `messaging.destination.name` | `"T"` | | |
-| `messaging.source.name` | | `"T"` | `"T"` |
+| `messaging.destination.name` | `"T"` | `"T"` | `"T"` |
 | `messaging.operation` |  | `"process"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a1"`| `"a1"` |
 
@@ -478,8 +446,7 @@ Process CB:                           | Span Rcv2 |
 | `peer.service` | `"myKafka"` |  |  | `"myKafka"` |  |
 | `service.name` |  | `"myConsumer1"` | `"myConsumer1"` |  | `"myConsumer2"` |
 | `messaging.system` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` | `"kafka"` |
-| `messaging.destination.name` | `"T1"` | | | | |
-| `messaging.source.name` |  | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
+| `messaging.destination.name` | `"T1"` | `"T1"` | `"T1"` | `"T2"` | `"T2"` |
 | `messaging.operation` |  |  | `"process"` |  | `"receive"` |
 | `messaging.client_id` |  | `"5"` | `"5"` | `"5"` | `"8"` |
 | `messaging.kafka.message.key` | `"myKey"` | `"myKey"` | `"myKey"` | `"anotherKey"` | `"anotherKey"` |
@@ -511,8 +478,7 @@ Process C:                      | Span Recv1 |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
 | `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
-| `messaging.destination.name` | `"Q"` | `"Q"` | | | |
-| `messaging.source.name` | | | `"Q"` | `"Q"` | `"Q"` |
+| `messaging.destination.name` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
 | `messaging.operation` |  |  | `"receive"` | `"process"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a2"` | | `"a1"` | `"a2"` |
 | `messaging.batch.message_count` |  |  | 2 |  |  |
@@ -546,8 +512,7 @@ Process C:                              | Span Recv1 | Span Recv2 |
 | `net.peer.name` | `"ms"` | `"ms"` | `"ms"` | `"ms"` | `"ms"` |
 | `net.peer.port` | `1234` | `1234` | `1234` | `1234` | `1234` |
 | `messaging.system` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` | `"rabbitmq"` |
-| `messaging.destination.name` | `"Q"` | `"Q"` | | | |
-| `messaging.source.name` | | | `"Q"` | `"Q"` | `"Q"` |
+| `messaging.destination.name` | `"Q"` | `"Q"` | `"Q"` | `"Q"` | `"Q"` |
 | `messaging.operation` |  |  | `"receive"` | `"receive"` | `"process"` |
 | `messaging.message.id` | `"a1"` | `"a2"` | `"a1"` | `"a2"` | |
 | `messaging.batch.message_count` | | | 1 | 1 | 2 |
