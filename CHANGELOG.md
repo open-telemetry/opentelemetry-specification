@@ -24,6 +24,8 @@ release.
   ([#3397](https://github.com/open-telemetry/opentelemetry-specification/pull/3397))
 - Mark logs bridge API / SDK as stable.
   ([#3376](https://github.com/open-telemetry/opentelemetry-specification/pull/3376))
+- Mark LogRecord Environment Variables as stable.
+  ([#3449](https://github.com/open-telemetry/opentelemetry-specification/pull/3449))
 
 ### Resource
 
