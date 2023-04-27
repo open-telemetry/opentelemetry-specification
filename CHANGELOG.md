@@ -43,8 +43,12 @@ release.
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
-- BREAKING: Replace `net.transport` with combination of `network.type` and
-  `network.transport`. Rename `net.protocol.*` to `network.protocol.*`,
+- BREAKING: Introduce `network.transport` defined as
+  [OSI Transport Layer](https://osi-model.com/transport-layer/) or
+  [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication).
+  Introduce `network.type` defined as [OSI Network Layer](https://osi-model.com/network-layer/)
+  or non-OSI equivalent. Remove `net.transport` and `net.sock.family`.
+  Rename `net.protocol.*` to `network.protocol.*`,
   `net.host.connection.*` to `network.host.connection.*`, and
   `net.host.carrier.*` to `network.host.carrier.*`.
   ([#3426](https://github.com/open-telemetry/opentelemetry-specification/pull/3426))
