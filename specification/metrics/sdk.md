@@ -231,7 +231,7 @@ are the inputs:
     apply a [default aggregation](#default-aggregation) configurable on the
     basis of instrument kind according to the [MetricReader](#metricreader)
     instance.
-  * **Status**: [Feature-freeze](../document-status.md) - the
+  * **Status**: [Frozen](../document-status.md) - the
     `exemplar_reservoir` (optional) to use for storing exemplars. This should be
     a factory or callback similar to aggregation which allows different
     reservoirs to be chosen by the aggregation.
@@ -663,7 +663,7 @@ series and the topic requires further analysis.
 
 ## Exemplar
 
-**Status**: [Feature-freeze](../document-status.md)
+**Status**: [Frozen](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between

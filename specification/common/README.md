@@ -3,7 +3,7 @@ aliases: [/docs/reference/specification/common/common]
 --->
 # Common specification concepts
 
-**Status**: [Stable, Feature-freeze](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
