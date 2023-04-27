@@ -158,7 +158,7 @@ The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXP
 
 Transient errors MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
 
-For OTLP/HTTP, the errors `408 (Request Timeout)` and `5xx (Server Errors)` are defined as transient, detailed information about errors can be found in the [HTTP failures section](otlp.md#failures). For the OTLP/gRPC, the full list of the gRPC retryable status codes can be found in the [gRPC response section](otlp.md#otlpgrpc-response).
+For OTLP/HTTP, the errors `408 (Request Timeout)` and `5xx (Server Errors)` are defined as transient, detailed information about errors can be found in the [HTTP failures section](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures). For the OTLP/gRPC, the full list of the gRPC retryable status codes can be found in the [gRPC response section](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlpgrpc-response).
 
 ## User Agent
 
@@ -171,5 +171,5 @@ OTel-OTLP-Exporter-Python/1.2.3
 The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
 
 [resource-semconv]: ../resource/semantic_conventions/README.md#telemetry-sdk
-[otlphttp-req]: otlp.md#otlphttp-request
+[otlphttp-req]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-request
 [rfc-7231]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3
