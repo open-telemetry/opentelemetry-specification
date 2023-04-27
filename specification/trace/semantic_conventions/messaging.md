@@ -22,7 +22,6 @@
   * [Operation names](#operation-names)
 - [Messaging attributes](#messaging-attributes)
   * [Attribute namespaces](#attribute-namespaces)
-  * [Producer attributes](#producer-attributes)
   * [Consumer attributes](#consumer-attributes)
   * [Per-message attributes](#per-message-attributes)
   * [Attributes specific to certain messaging systems](#attributes-specific-to-certain-messaging-systems)

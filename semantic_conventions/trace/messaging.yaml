@@ -57,7 +57,7 @@ groups:
   - id: messaging.destination_original
     prefix: messaging.destination_original
     type: attribute_group
-    brief: > 
+    brief: >
       Semantic convention for attributes that describe destination messages were originally published to.
       These attributes should be used on the consumer side when original destination is available and different than destination message are consumed from.'
 
