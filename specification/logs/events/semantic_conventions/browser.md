@@ -53,8 +53,8 @@ All events have the following three high-level attributes. The event name is spe
 
 | Value  | Description |
 |---|---|
-| `0` | physical_page |
-| `1` | virtual_page |
+| `0` | physical_page - Initial page load within the browser and will generally also precede a PageNavigationTiming event.|
+| `1` | virtual_page - This is for Single Page Applications (SPA) where the framework provides the ability to perform client side only page "navigation", the exact definition of what a virtual page change is determined by the SPA and the framework it is using.|
 
 <details>
 <summary>Sample PageView Event</summary>
@@ -117,8 +117,8 @@ All events have the following three high-level attributes. The event name is spe
 
 **Event name**:`page_navigation_timing`
 
-This event may be represented in a Span Event on the Span representing the
-loading of a Page.
+This event describes the timing metrics of a page navigation as provided by
+`PerformanceNavigationTiming` Performance API.
 
 | Key  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
@@ -138,6 +138,10 @@ loading of a Page.
 
 **Event name**:`resource_timing`
 
+This event describes the timing metrics as provided by `PerformanceResourceTiming`
+Performance API.  These metrics are related to fetching a resource, such as
+XMLHttpRequest, Fetch, sendBeacon APIs, SVG, image or script.
+
 | Key  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 |fetchStart | long | || Recommended |
@@ -149,27 +153,6 @@ loading of a Page.
 |requestStart | long | || Recommended |
 |responseStart | long | || Recommended |
 |responseEnd | long | || Recommended |
-
-### HttpRequestTiming
-
-**Event name**:`http_request_timing`
-
-This event may be represented using a Span Event on the Spans represening HTTP
-requests made by the browser using XMLHttpRequest or Fetch or sendBeacon APIs.
-
-| Key  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| open | long | || Recommended |
-| send | long | || Recommended |
-| domainLookupStart | long | || Recommended |
-| domainLookupEnd | long | || Recommended |
-| connectStart | long | || Recommended |
-| secureConnectionStart | long | || Recommended |
-| connectEnd | long | || Recommended |
-| requestStart | long | || Recommended |
-| responseStart | long | || Recommended |
-| responseEnd | long | || Recommended |
-| loaded | long | || Recommended |
 
 ### Exception
 
