@@ -32,12 +32,15 @@ and various HTTP versions like 1.1, 2 and SPDY.
 > [v1.20.0 of this document](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/trace/semantic_conventions/http.md)
 > (or prior) to the latest version SHOULD:
 >
-> * start emitting the latest semantic convention attributes on spans
->   *in addition* to the attributes they are already emitting,
->   without bumping the major version.
+> * introduce an environment variable `OTEL_SEMCONV_V1_21_0_TRANSITION_PLAN`
+>   in the existing major version which supports the follow values:
+>   * `false` (default) - continue emitting whatever semantic attributes the
+>     instrumentation was emitting previously
+>   * `latest` - emit `v1.21.0` (or later) semantic attributes
+>   * `both` - emit both sets of attributes
 > * maintain (security patching at a minimum) the existing major version
 >   for at least six months after it starts emitting both sets of attributes.
-> * stop emitting the old set of attributes in the next major version (stable
+> * drop the environment variable in the next major version (stable
 >   next major version SHOULD NOT be released prior to October 1, 2023).
 
 ## Name

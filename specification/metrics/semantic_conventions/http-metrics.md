@@ -31,10 +31,13 @@ operations. By adding HTTP attributes to metric events it allows for finely tune
 > [v1.20.0 of this document](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/metrics/semantic_conventions/http-metrics.md)
 > (or prior) to the latest version SHOULD:
 >
-> * start emitting the latest semantic convention attributes on HTTP metrics
->   *in addition* to the attributes they are already emitting,
->   without bumping the major version.
->   (note: this SHOULD NOT increase cardinality or create new timeseries)
+> * introduce an environment variable `OTEL_SEMCONV_V1_21_0_TRANSITION_PLAN`
+>   in the existing major version which supports the follow values:
+>   * `false` (default) - continue emitting whatever semantic attributes the
+>     instrumentation was emitting previously
+>   * `latest` - emit `v1.21.0` (or later) semantic attributes
+>   * `both` - emit both sets of attributes
+>     (note: this SHOULD NOT increase cardinality or create new timeseries)
 > * maintain (security patching at a minimum) the existing major version
 >   for at least six months after it starts emitting both sets of attributes.
 > * stop emitting the old set of attributes in the next major version (stable
