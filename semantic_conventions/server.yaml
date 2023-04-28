@@ -22,10 +22,10 @@ groups:
         brief: Physical server IP address or Unix socket address.
         examples: ['10.5.3.2']
         requirement_level:
-          recommended: Only if different than `server.address`.
+          recommended: If different than `server.address`.
       - id: socket.port
         type: int
         brief: Physical server port.
         examples: [16456]
         requirement_level:
-          recommended: Only if different than `server.port`.
+          recommended: If different than `server.port`.

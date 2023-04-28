@@ -50,8 +50,8 @@ if they do not cause breaking changes to HTTP semantic conventions.
 | `server.address` | string | Logical server hostname, matches server FQDN if available, and IP or socket address if FQDN is not known. | `example.com` | Recommended |
 | `server.port` | int | Logical server port number | `80`; `8080`; `443` | Recommended |
 | `server.socket.domain` | string | The domain name of an immediate peer. [1] | `proxy.example.com` | Recommended |
-| `server.socket.address` | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: Only if different than `server.address`. |
-| `server.socket.port` | int | Physical server port. | `16456` | Recommended: Only if different than `server.port`. |
+| `server.socket.address` | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
+| `server.socket.port` | int | Physical server port. | `16456` | Recommended: If different than `server.port`. |
 
 **[1]:** Typically observed from the client side, and represents a proxy or other intermediary domain name.
 <!-- endsemconv -->
@@ -113,8 +113,8 @@ if they do not cause breaking changes to HTTP semantic conventions.
 |---|---|---|---|---|
 | `client.address` | string | Client address - unix domain socket name, IPv4 or IPv6 address. [1] | `/tmp/my.sock`; `10.1.2.80` | Recommended |
 | `client.port` | int | Client port number [2] | `65123` | Recommended |
-| `client.socket.address` | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: Only if different than `client.address`. |
-| `client.socket.port` | int | Immediate client peer port number | `35555` | Recommended: Only if different than `client.port`. |
+| `client.socket.address` | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: If different than `client.address`. |
+| `client.socket.port` | int | Immediate client peer port number | `35555` | Recommended: If different than `client.port`. |
 
 **[1]:** When observed from the server side, and when communicating through an intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available.
 

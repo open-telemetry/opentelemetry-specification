@@ -23,10 +23,10 @@ groups:
         brief: Immediate client peer address - unix domain socket name, IPv4 or IPv6 address.
         examples: ['/tmp/my.sock', '127.0.0.1']
         requirement_level:
-          recommended: Only if different than `client.address`.
+          recommended: If different than `client.address`.
       - id: socket.port
         type: int
         brief: 'Immediate client peer port number'
         examples: [35555]
         requirement_level:
-          recommended: Only if different than `client.port`.
+          recommended: If different than `client.port`.
