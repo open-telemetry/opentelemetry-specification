@@ -14,7 +14,7 @@ groups:
         type: string
         stability: deprecated
         brief: >
-          Deprecated. On client spans use `server.socket.address`, on server spans use `client.socket.address`
+          Deprecated, use `server.socket.address` on client spans and `client.socket.address` on server spans.
         examples: ['192.168.0.1']
       - id: sock.peer.port
         type: int
