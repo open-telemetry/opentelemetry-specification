@@ -59,7 +59,7 @@ if they do not cause breaking changes to HTTP semantic conventions.
 `server.address` and `server.port` represent logical server name and port. Semantic conventions that refer to these attributes SHOULD
 specify what these attributes mean in their context.
 
-Semantic conventions and instrumentations that populate both logical (`server.address` and `server.port`) and socket-level (`server.socket.*`) attributes SHOULD set socket-level attributes only when they don't match logical ones. For example, when direct connection to the remote destination is established and `server.address` is populated, `server.socket.address` SHOULD NOT be set. Check out [Connecting through intermediary](#connecting-through-intermediary) for more information.
+Semantic conventions and instrumentations that populate both logical (`server.address` and `server.port`) and socket-level (`server.socket.*`) attributes SHOULD set socket-level attributes only when they don't match logical ones. For example, when direct connection to the remote destination is established and `server.address` is populated, `server.socket.domain` SHOULD NOT be set. Check out [Connecting through intermediary](#connecting-through-intermediary) for more information.
 
 #### `server.address`
 
@@ -69,7 +69,7 @@ When connecting to an URL `https://example.com/foo`, `server.address` matches `"
 
 On client side, it's usually passed in form of URL, connection string, host name, etc. Sometimes host name is only available to instrumentation as a string which may contain DNS name or IP address. `server.address` SHOULD be set to the available known hostname (e.g., `"127.0.0.1"` if connecting to an URL `https://127.0.0.1/foo`).
 
-If only IP address is available, it should be populated on `server.socket.address` and `server.address` SHOULD NOT be set. Reverse DNS lookup SHOULD NOT be used to obtain DNS name.
+If only IP address is available, it should be populated on `server.address`. Reverse DNS lookup SHOULD NOT be used to obtain DNS name.
 
 If `net.transport` is `"pipe"`, the absolute path to the file representing it should be used as `server.address`.
 If there is no such file (e.g., anonymous pipe),

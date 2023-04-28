@@ -24,12 +24,12 @@ groups:
       - id: peer.name
         type: string
         stability: deprecated
-        brief: Deprecated, use `server.address`.
+        brief: Deprecated, use `server.address` on client spans and `client.address` on server spans.
         examples: ['example.com']
       - id: peer.port
         type: int
         stability: deprecated
-        brief: Deprecated, use `server.port`.
+        brief: Deprecated, use `server.port` on client spans and `client.port` on server spans.
         examples: [8080]
       - id: host.name
         type: string

@@ -12,10 +12,8 @@ versions:
         # https://github.com/open-telemetry/opentelemetry-specification/pull/3402
         - rename_attributes:
             attribute_map:
-              # net.peer.* attributes were only populated on client side
-              # so they always translate to server.*
-              net.peer.name: server.address
-              net.peer.port: server.port
+              # net.peer.(name|port) attributes were usually populated on client side
+              # so they should be usually translated to server.(address|port)
               # net.host.* attributes were only populated on server side
               net.host.name: server.address
               net.host.port: server.port
