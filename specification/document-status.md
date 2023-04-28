@@ -7,7 +7,7 @@ documents. The following table describes what the statuses mean.
 
 ## Lifecycle status
 
-The support guarantees and allowed changes are governed by the lifecycle of the document.Lifecycle stages are defined in the [Versioning and Stability](versioning-and-stability.md) document.
+The support guarantees and allowed changes are governed by the lifecycle of the document. Lifecycle stages are defined in the [Versioning and Stability](versioning-and-stability.md) document.
 
 | Status               | Explanation                                                                                                         |
 |----------------------|---------------------------------------------------------------------------------------------------------------------|
