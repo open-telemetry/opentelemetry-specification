@@ -204,7 +204,7 @@ _Note: `source` and `destination` are applicable on packet level and should not 
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `source.domain` | string | The domain name of the source system. [1] | `foo.example.com` | Recommended |
-| `source.address` | string | Source address, for example IP address or UNIX socket name. | `10.5.3.2` | Recommended |
+| `source.address` | string | Source address, for example IP address or Unix socket name. | `10.5.3.2` | Recommended |
 | `source.port` | int | Source port number | `3389`; `2888` | Recommended |
 
 **[1]:** This value may be a host name, a fully qualified domain name, or another host naming format.
