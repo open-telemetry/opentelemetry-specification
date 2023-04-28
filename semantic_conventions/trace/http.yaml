@@ -29,7 +29,6 @@ groups:
       - ref: net.sock.peer.name
       - ref: network.transport
       - ref: network.type
-        examples: ['ipv4', 'ipv6']
       - ref: user_agent.original
 
   - id: trace.http.client
