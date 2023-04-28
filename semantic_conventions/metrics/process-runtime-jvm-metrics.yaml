@@ -226,7 +226,7 @@ groups:
 
   - id: metric.process.runtime.jvm.cpu.context_switch
     type: metric
-    metric_name: process.runtime.jvm.cpu.context_switch
+    metric_name: process.runtime.jvm.context_switches
     brief: "Number of context switches per second. Only available in JDK 17+."
     instrument: updowncounter
     unit: "Hz"
