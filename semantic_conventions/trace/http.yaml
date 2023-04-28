@@ -28,6 +28,8 @@ groups:
       - ref: net.sock.peer.port
       - ref: net.sock.peer.name
       - ref: network.transport
+        requirement_level:
+          conditionally_required: If not default (`tcp` for `HTTP/1.1` and `HTTP/2`, `udp` for `HTTP/3`).
       - ref: network.type
       - ref: user_agent.original
 
