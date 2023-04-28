@@ -23,15 +23,17 @@ This document defines semantic conventions that describe URL and its components.
 |---|---|---|---|---|
 | `url.scheme` | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `https`; `ftp`; `telnet` | Recommended |
 | `url.full` | string | **Stable**<br>Absolute URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986) [1] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv`; `//localhost` | Recommended |
-| `url.path` | string | **Stable**<br>The [URI path](https://www.rfc-editor.org/rfc/rfc3986#section-3.3) component | `/search` | Recommended |
-| `url.query` | string | **Stable**<br>The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component [2] | `?q=OpenTelemetry` | Recommended |
-| `url.fragment` | string | **Stable**<br>The [URI fragment](https://www.rfc-editor.org/rfc/rfc3986#section-3.5) component | `#SemConv` | Recommended |
+| `url.path` | string | **Stable**<br>The [URI path](https://www.rfc-editor.org/rfc/rfc3986#section-3.3) component [2] | `/search` | Recommended |
+| `url.query` | string | **Stable**<br>The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component [3] | `q=OpenTelemetry` | Recommended |
+| `url.fragment` | string | **Stable**<br>The [URI fragment](https://www.rfc-editor.org/rfc/rfc3986#section-3.5) component | `SemConv` | Recommended |
 
-**[1]:** For network calls, URL usually has `scheme://host[:port]/path?query[#fragment]` format, where the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
-`url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case the attribute's value should be `https://www.example.com/`.
+**[1]:** For network calls, URL usually has `scheme://host[:port][path][?query][#fragment]` format, where the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
+`url.full` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`. In such case username and password should be redacted and attribute's value should be `https://[REDACTED]:[REDACTED]@www.example.com/`.
 `url.full` SHOULD capture the absolute URL when it is available (or can be reconstructed) and SHOULD NOT be validated or modified except for sanitizing purposes.
 
-**[2]:** Sensitive content provided in query string SHOULD be scrubbed when instrumentations can identify it.
+**[2]:** When missing, the value is assumed to be `/`
+
+**[3]:** Sensitive content provided in query string SHOULD be scrubbed when instrumentations can identify it.
 <!-- endsemconv -->
 
 ## Sensitive information

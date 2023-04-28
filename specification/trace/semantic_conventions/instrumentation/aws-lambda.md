@@ -168,7 +168,6 @@ Function F:    | Span Function |
 | `server.port` | `413` |  |
 | `http.method` | `GET` | `GET` |
 | `user_agent.original` | `okhttp 3.0` | `okhttp 3.0` |
-| `url.full` | `https://foo.execute-api.us-east-1.amazonaws.com/pets/10` |  |
 | `url.scheme` | | `https` |
 | `url.path` | | `/pets/10` |
 | `http.response.status_code` | `200` | `200` |
