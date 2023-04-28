@@ -79,6 +79,7 @@ groups:
         brief: >
           [OSI Transport Layer](https://osi-model.com/transport-layer/) or
           [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication).
+          The value SHOULD be normalized to lowercase.
         examples: ['tcp', 'udp']
       - id: network.type
         type:
@@ -92,10 +93,13 @@ groups:
               brief: "IPv6"
         brief: >
           [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent.
+          The value SHOULD be normalized to lowercase.
         examples: ['ipv4', 'ipv6']
       - id: network.protocol.name
         type: string
-        brief: 'Application layer protocol used. The value SHOULD be normalized to lowercase.'
+        brief: >
+          [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent.
+          The value SHOULD be normalized to lowercase.
         examples: ['amqp', 'http', 'mqtt']
       - id: network.protocol.version
         type: string
