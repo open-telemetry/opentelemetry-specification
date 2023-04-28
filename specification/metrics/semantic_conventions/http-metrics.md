@@ -4,7 +4,7 @@ linkTitle: HTTP
 
 # Semantic Conventions for HTTP Metrics
 
-**Status**: [Mixed](../../document-status.md)
+**Status**: [Experimental, partial feature-freeze](../../document-status.md)
 
 The conventions described in this section are HTTP specific. When HTTP operations occur,
 metric events about those operations will be generated and reported to provide insight into the
@@ -30,7 +30,7 @@ operations. By adding HTTP attributes to metric events it allows for finely tune
 
 ### Metric: `http.server.duration`
 
-**Status**: [Feature-freeze](../../document-status.md)
+**Status**: [Experimental, Feature-freeze](../../document-status.md)
 
 This metric is required.
 
@@ -223,7 +223,7 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 ### Metric: `http.client.duration`
 
-**Status**: [Feature-freeze](../../document-status.md)
+**Status**: [Experimental, Feature-freeze](../../document-status.md)
 
 This metric is required.
 
