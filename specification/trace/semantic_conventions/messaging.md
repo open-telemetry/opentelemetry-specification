@@ -193,14 +193,15 @@ The following operations related to messages are defined for these semantic conv
 | `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [9] |
 | `messaging.message.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended: [10] |
 | `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [11] |
-| `messaging.message.payload.size` | int | The size of the message payload in bytes. | `2738` | Recommended: [12] |
-| [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [13] | `example.com` | Conditionally Required: If available. |
+| `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [12] |
+| `messaging.message.payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended: [13] |
+| [`net.peer.name`](span-general.md) | string | Logical remote hostname, see note below. [14] | `example.com` | Conditionally Required: If available. |
 | [`net.protocol.name`](span-general.md) | string | Application layer protocol used. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
-| [`net.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [14] | `3.1.1` | Recommended |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [15] |
+| [`net.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [15] | `3.1.1` | Recommended |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [16] |
 | [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | Recommended |
-| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [16] |
-| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [17] |
+| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [17] |
+| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [18] |
 
 **[1]:** If a custom value is used, it MUST be of low cardinality.
 
@@ -227,15 +228,17 @@ the broker does not have such notion, the destination name SHOULD uniquely ident
 
 **[12]:** Only if span represents operation on a single message.
 
-**[13]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
+**[13]:** Only if span represents operation on a single message.
 
-**[14]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[14]:** This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
 
-**[15]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[15]:** `net.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[16]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+**[16]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
-**[17]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
+**[17]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+
+**[18]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
 
 `messaging.operation` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -279,10 +282,13 @@ The following additional attributes describe message operations on the consumer 
 |---|---|---|---|---|
 | `messaging.destination_original.anonymous` | boolean | A boolean that is true if the original message destination is anonymous (could be unnamed or have auto-generated name). |  | Recommended |
 | `messaging.destination_original.name` | string | The original destination name [1] | `MyQueue`; `MyTopic` | Recommended |
+| `messaging.destination_original.template` | string | Low cardinality representation of the original messaging destination name [2] | `/customers/{customerId}` | Recommended |
 | `messaging.destination_original.temporary` | boolean | A boolean that is true if the original message destination is temporary and might not exist anymore after messages are processed. |  | Recommended |
 
 **[1]:** The name SHOULD uniquely identify a specific queue, topic, or other entity within the broker. If
 the broker does not have such notion, the original destination name SHOULD uniquely identify the broker.
+
+**[2]:** Destination names could be constructed from templates. An example would be a destination name involving a user name or product id. Although the destination name in this case is of high cardinality, the underlying template is of low cardinality and can be effectively used for grouping and aggregation.
 <!-- endsemconv -->
 
 The *receive* span is be used to track the time used for receiving the message(s), whereas the *process* span(s) track the time for processing the message(s).

@@ -16,10 +16,16 @@ groups:
           The [conversation ID](#conversations) identifying the conversation to which the message belongs,
           represented as a string. Sometimes called "Correlation ID".
         examples: 'MyConversationId'
-      - id: message.payload.size
+      - id: message.payload_size_bytes
         type: int
-        brief: The size of the message payload in bytes.
+        brief: >
+          The (uncompressed) size of the message payload in bytes.
+          Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported.
         examples: 2738
+      - id: message.payload_compressed_size_bytes
+        type: int
+        brief: 'The compressed size of the message payload in bytes.'
+        examples: 2048
 
   - id: messaging.destination
     prefix: messaging.destination
@@ -64,7 +70,6 @@ groups:
       Original destination attributes SHOULD be set on publish, receive, or other span describing messaging messaging operation
       if it operates with single message or if the attribute value applies to all messages in the batch.
       In other cases, destination attributes MAY be set on links.
-
     attributes:
       - id: name
         type: string
@@ -154,7 +159,10 @@ groups:
       - ref: messaging.message.conversation_id
         requirement_level:
           recommended: Only if span represents operation on a single message.
-      - ref: messaging.message.payload.size
+      - ref: messaging.message.payload_size_bytes
+        requirement_level:
+          recommended: Only if span represents operation on a single message.
+      - ref: messaging.message.payload_compressed_size_bytes
         requirement_level:
           recommended: Only if span represents operation on a single message.
       - ref: net.peer.name
@@ -176,13 +184,6 @@ groups:
         examples: ['amqp', 'mqtt']
       - ref: net.protocol.version
 
-  - id: messaging.producer
-    prefix: messaging
-    type: span
-    extends: messaging
-    span_kind: producer
-    brief: 'Semantic convention for producers of messages sent to a messaging systems.'
-
   - id: messaging.consumer
     prefix: messaging
     type: span
@@ -191,6 +192,7 @@ groups:
     brief: 'Semantic convention for a consumer of messages received from a messaging system'
     attributes:
       - ref: messaging.destination_original.name
+      - ref: messaging.destination_original.template
       - ref: messaging.destination_original.temporary
       - ref: messaging.destination_original.anonymous
 

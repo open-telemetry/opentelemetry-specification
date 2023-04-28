@@ -45,6 +45,9 @@ release.
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
+- BREAKING: Remove `messaging.source.*` attributes and use `messaging.destination.*`
+  attributes on producer and consumer to describe messaging queue or topic.
+  ([#3450](https://github.com/open-telemetry/opentelemetry-specification/pull/3450))
 
 ### Compatibility
 

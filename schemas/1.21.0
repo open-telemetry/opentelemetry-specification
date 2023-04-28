@@ -9,6 +9,13 @@ versions:
             attribute_map:
               messaging.kafka.client_id: messaging.client_id
               messaging.rocketmq.client_id: messaging.client_id
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3450
+        - rename_attributes:
+            attribute_map:
+              messaging.source.name: messaging.destination.name
+              messaging.source.template: messaging.destination.template
+              messaging.source.temporary: messaging.destination.temporary
+              messaging.source.anonymous: messaging.destination.anonymous              
   1.20.0:
     spans:
       changes:
