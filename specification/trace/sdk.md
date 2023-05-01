@@ -312,7 +312,7 @@ the `ParentBased` sampler specified below.
   represented as a decimal number. The precision of the number SHOULD follow
   implementation language standards and SHOULD be high enough to identify when
   Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
-  had a sampling ratio of 1 to every 10,000 spans it COULD return
+  had a sampling ratio of 1 to every 10,000 traces it COULD return
   `"TraceIdRatioBased{0.000100}"` as its description.
 
 TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
