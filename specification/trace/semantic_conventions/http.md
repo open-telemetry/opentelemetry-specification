@@ -28,19 +28,21 @@ and various HTTP versions like 1.1, 2 and SPDY.
 <!-- tocstop -->
 
 > **Warning**
-> HTTP instrumentation updating from
+> Existing HTTP instrumentations using
 > [v1.20.0 of this document](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/trace/semantic_conventions/http.md)
-> (or prior) to the latest version SHOULD:
+> (or prior):
 >
-> * introduce an environment variable `OTEL_SEMCONV_V1_21_0_TRANSITION_PLAN`
+> * SHOULD NOT change the version of the telemetry they are emitting until
+>   the HTTP semantic conventions are marked stable.
+> * SHOULD introduce an environment variable `OTEL_SEMCONV_STABILITY`
 >   in the existing major version which supports the follow values:
->   * `false` (default) - continue emitting whatever semantic attributes the
->     instrumentation was emitting previously
->   * `latest` - emit `v1.21.0` (or later) semantic attributes
->   * `both` - emit both sets of attributes
-> * maintain (security patching at a minimum) the existing major version
+>   * `legacy` (default) - continue emitting the older experimental
+>     semantic attributes the instrumentation was using, prior to stability.
+>   * `stable` - emit the new, stable attributes only.
+>   * `both` - emit both legacy and stable attributes, to allow for a seamless transition.
+> * SHOULD maintain (security patching at a minimum) the existing major version
 >   for at least six months after it starts emitting both sets of attributes.
-> * drop the environment variable in the next major version (stable
+> * SHOULD drop the environment variable in the next major version (stable
 >   next major version SHOULD NOT be released prior to October 1, 2023).
 
 ## Name
