@@ -41,6 +41,8 @@ Conventions](../../resource/semantic_conventions/README.md).
 
 ## General Guidelines
 
+**Status**: [Experimental](../../document-status.md)
+
 Metric names and attributes exist within a single universe and a single
 hierarchy. Metric names and attributes MUST be considered within the universe of
 all existing metric names. When defining new metric names and attributes,
@@ -125,11 +127,15 @@ to the processes then to represent the count of the processes we can have a metr
 
 ## General Metric Semantic Conventions
 
+**Status**: [Mixed](../../document-status.md)
+
 The following semantic conventions aim to keep naming consistent. They
 provide guidelines for most of the cases in this specification and should be
 followed for other instruments not explicitly defined in this document.
 
 ### Instrument Naming
+
+**Status**: [Experimental](../../document-status.md)
 
 - **limit** - an instrument that measures the constant, known total amount of
 something should be called `entity.limit`. For example, `system.memory.limit`
@@ -208,6 +214,8 @@ Whether implementations choose the synchronous type or the asynchronous equivale
 implementation detail. Both choices are compliant with this specification.
 
 ### Consistent UpDownCounter timeseries
+
+**Status**: [Experimental](../../document-status.md)
 
 When recording `UpDownCounter` metrics, the same attribute values used to record an increment SHOULD be used to record
 any associated decrement, otherwise those increments and decrements will end up as different timeseries.
