@@ -105,7 +105,7 @@ The API MUST accept the following parameters:
 Interpret `configuration` and return SDK components (`TracerProvider`,
 `MeterProvider`, `LoggerProvider`). The SDK components MUST strictly reflect
 the `Configuration` and ignore
-the [environment variable configuration scheme](../sdk-environment-variables.md).
+the [environment variable configuration scheme](./sdk-environment-variables.md).
 
 // TODO: Extend ConfigurationProvider with ability to update SDK components with
 // new configuration for usage with OpAmp
