@@ -11,8 +11,8 @@
 - [SDK Configuration](#sdk-configuration)
   * [In-Memory Configuration Model](#in-memory-configuration-model)
     + [Parse File to Configuration](#parse-file-to-configuration)
-  * [Configurer](#configurer)
-    + [Create Configurer](#create-configurer)
+  * [ConfigurationProvider](#configurationprovider)
+    + [Create ConfigurationProvider](#create-configurationprovider)
     + [Get TracerProvider, MeterProvider, LoggerProvider](#get-tracerprovider-meterprovider-loggerprovider)
 - [References](#references)
 
@@ -72,28 +72,29 @@ corresponding [Configuration Model](#in-memory-configuration-model).
 The API MUST accept the following parameters:
 
 * `file`: The [configuration file](#configuration-file) to parse. This MAY be a
-  file path, or language specific file class, or a stream of a file's contents.
+  file path, or language specific file class, or a stream of a file's content.
 
 The API MAY return an error if:
 
 * The `file` doesn't exist or is invalid
-* The parsed `file` contents do not conform to
+* The parsed `file` content does not conform to
   the [configuration model](#configuration-model) schema.
 
-### Configurer
+### ConfigurationProvider
 
-`Configurer` is a class responsible for
+`ConfigurationProvider` is responsible for
 interpreting [Configuration](#in-memory-configuration-model) and producing
 configured SDK components.
 
-It MUST be possible to [create](#create-configurer) multiple `Configurer`s with
-different configurations. It is the caller's responsibility to ensure the
+It MUST be possible to [create](#create-configurationprovider)
+multiple `ConfigurationProvider`s with different configurations. It is the
+caller's responsibility to ensure the
 resulting [SDK components](#get-tracerprovider-meterprovider-loggerprovider) are
 correctly wired into the application and instrumentation.
 
-#### Create Configurer
+#### Create ConfigurationProvider
 
-Create a `Configurer` from a configuration model.
+Create a `Configurationprovider` from a configuration model.
 
 The API MUST accept the following parameters:
 
@@ -106,8 +107,8 @@ Interpret `configuration` and return SDK components (`TracerProvider`,
 the `Configuration` and ignore
 the [environment variable configuration scheme](../sdk-environment-variables.md).
 
-// TODO: Extend Configurer with ability to update SDK components with new
-// configuration for usage with OpAmp
+// TODO: Extend ConfigurationProvider with ability to update SDK components with
+// new configuration for usage with OpAmp
 
 ## References
 
