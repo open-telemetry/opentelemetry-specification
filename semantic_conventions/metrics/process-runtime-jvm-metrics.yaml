@@ -3,7 +3,7 @@ groups:
     type: attribute_group
     brief: "Describes JVM memory metric attributes."
     attributes:
-      - id: type
+      - id: memory.type
         type:
           allow_custom_values: false
           members:
@@ -16,7 +16,7 @@ groups:
         requirement_level: recommended
         brief: The type of memory.
         examples: ["heap", "non_heap"]
-      - id: pool
+      - id: memory_pool.name
         type: string
         requirement_level: recommended
         brief: Name of the memory pool.
@@ -72,7 +72,7 @@ groups:
     instrument: histogram
     unit: "ms"
     attributes:
-      - id: gc
+      - id: gc.name
         type: string
         requirement_level: recommended
         brief: Name of the garbage collector.
@@ -80,7 +80,7 @@ groups:
         note: >
           Garbage collector name is generally obtained via
           [GarbageCollectionNotificationInfo#getGcName()](https://docs.oracle.com/en/java/javase/11/docs/api/jdk.management/com/sun/management/GarbageCollectionNotificationInfo.html#getGcName()).
-      - id: action
+      - id: gc.action
         type: string
         requirement_level: recommended
         brief: Name of the garbage collector action.
@@ -96,7 +96,7 @@ groups:
     instrument: updowncounter
     unit: "{thread}"
     attributes:
-      - id: daemon
+      - id: thread.daemon
         brief: "Whether the thread is daemon or not."
         type: boolean
         requirement_level: recommended
@@ -153,7 +153,9 @@ groups:
     type: attribute_group
     brief: "Describes JVM buffer metric attributes."
     attributes:
-      - ref: pool
+      - id: buffer_pool.name
+        type: string
+        requirement_level: recommended
         brief: Name of the buffer pool.
         examples: [ "mapped", "direct" ]
         note: >
