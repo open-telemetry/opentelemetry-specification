@@ -52,7 +52,7 @@ Given their significance some resource attributes are treated specifically as de
 ### Semantic Attributes with Dedicated Environment Variable
 
 These are the attributes which MAY be configurable via a dedicated environment variable
-as specified in [OpenTelemetry Environment Variable Specification](../../sdk-environment-variables.md):
+as specified in [OpenTelemetry Environment Variable Specification](../../configuration/sdk-environment-variables.md):
 
 - [`service.name`](#service)
 
@@ -149,8 +149,9 @@ All custom identifiers SHOULD be stable across different versions of an implemen
 | `php` | php |
 | `python` | python |
 | `ruby` | ruby |
-| `webjs` | webjs |
+| `rust` | rust |
 | `swift` | swift |
+| `webjs` | webjs |
 <!-- endsemconv -->
 
 ## Telemetry SDK (Experimental)

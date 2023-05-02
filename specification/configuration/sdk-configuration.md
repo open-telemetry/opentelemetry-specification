@@ -8,6 +8,8 @@
 - [Abstract](#abstract)
 - [Configuration Interface](#configuration-interface)
   * [Programmatic](#programmatic)
+  * [Environment Variables](#environment-variables)
+  * [Configuration File](#configuration-file)
   * [Other Mechanisms](#other-mechanisms)
 
 <!-- tocstop -->
@@ -33,6 +35,14 @@ An example of this programmatic interface is accepting a well-defined
 struct on an SDK builder class. From that, one could build a CLI that accepts a
 file (YAML, JSON, TOML, ...) and then transforms into that well-defined struct
 consumable by the programmatic interface.
+
+### Environment Variables
+
+See [OpenTelemetry Environment Variable Specification](./sdk-environment-variables.md).
+
+### Configuration File
+
+See [File Configuration](./file-configuration.md).
 
 ### Other Mechanisms
 
