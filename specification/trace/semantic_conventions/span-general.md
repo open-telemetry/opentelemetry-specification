@@ -30,9 +30,12 @@ Particular operations may refer to or require some of these attributes.
 
 ## Server and client attributes
 
-These attributes may be used to describe client and server in request-response communication.
-The `server.*` attributes describe properties of the server responding to a network request,
-while the `client.*` attributes describe the initiator of the request.
+These attributes may be used to describe the client and server in a connection-based network interaction
+where there is one side that initiates the connection (the client is the side that initiates the connection).
+This covers all TCP network interactions since TCP is connection-based and one side initiates the
+connection (an exception is made for peer-to-peer communication over TCP where the "user-facing" surface of the
+protocol / API does not expose a clear notion of client and server).
+This also covers UDP network interactions where one side initiates the interaction, e.g. QUIC (HTTP/3) and DNS.
 
 In an ideal situation, not accounting for proxies, multiple IP addresses or host names,
 the `server.*` attributes are the same on the client and server.
@@ -194,9 +197,12 @@ if they do not cause breaking changes to HTTP semantic conventions.
 
 ### Source and destination attributes
 
-`source` and `destination` attributes describe network peers exchanging packets and usually populated together.
-
-_Note: `source` and `destination` are applicable on packet level and should not be used to describe bi-directional network calls since each peer plays both `source` and `destination` roles._
+These attributes may be used to describe the sender and receiver of a network exchange/packet. These should be used
+when there is no client/server relationship between the two sides, or when that relationship is unknown.
+This covers low-level network interactions (e.g. packet tracing) where you don't know if
+there was a connection or which side initiated it.
+This also covers unidirectional UDP flows and peer-to-peer communication where the
+"user-facing" surface of the protocol / API does not expose a clear notion of client and server.
 
 #### Source
 
