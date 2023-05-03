@@ -11,7 +11,9 @@
 |---|---|---|---|---|
 | `container.name` | string | Container name used by container runtime. | `opentelemetry-autoconf` | Recommended |
 | `container.id` | string | Container ID. Usually a UUID, as for example used to [identify Docker containers](https://docs.docker.com/engine/reference/run/#container-identification). The UUID might be abbreviated. | `a3bf90e006b2` | Recommended |
+| `container.command_line` | string | The full command executed by the container. | `nginx -g daemon off;` | Recommended |
 | `container.runtime` | string | The container runtime managing this container. | `docker`; `containerd`; `rkt` | Recommended |
 | `container.image.name` | string | Name of the image the container was built on. | `gcr.io/opentelemetry/operator` | Recommended |
+| `container.image.id` | string | The ID of the container image. Usually a hash algorithm followed by a UUID. The UUID might be abbreviated. | `sha256:f90d814248a0` | Recommended |
 | `container.image.tag` | string | Container image tag. | `0.1` | Recommended |
 <!-- endsemconv -->
