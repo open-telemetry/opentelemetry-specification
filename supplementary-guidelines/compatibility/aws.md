@@ -1,7 +1,8 @@
 # Compatibility Considerations for AWS
 
-This document highlights compatibility considerations for OpenTelemetry instrumentations when interacting with AWS
-managed services using an aws-sdk, a third-party library, or a direct HTTP request.
+This document highlights compatibility considerations for OpenTelemetry
+instrumentations when interacting with AWS managed services using an aws-sdk,
+a third-party library, or a direct HTTP request.
 
 ## Context Propagation
 
@@ -20,10 +21,15 @@ replace their call to the X-Ray propagator with a call to another propagator (as
 that would only send HTTP headers in the API REST call that would be immediately
 ignored by the receiving AWS service), but will need to introduce per-service-call
 implementations where it makes sense (e.g., for SQS send and SQS receive).
-This can allow for transporting additional context that may not be supported by X-Ray, such as baggage or tracestate, or supporting certain legacy propagation formats.
+This can allow for transporting additional context that may not be supported by X-Ray,
+such as baggage or tracestate, or supporting certain legacy propagation formats.
 Documentation should advise that doing so is subject to attribute limits and billing impacts.
 
-Propagation headers must be added before the signature is calculated to prevent errors on signed requests. If injecting into the request itself (not just adding additional HTTP headers), additional considerations may apply (for example, the .NET AWS SDK calculates a hash of the attributes it sends and compares it with the  `MD5OfMessageAttributes ` that it receives).
+Propagation headers must be added before the signature is calculated to prevent
+errors on signed requests. If injecting into the request itself (not just adding
+additional HTTP headers), additional considerations may apply (for example, the
+.NET AWS SDK calculates a hash of the attributes it sends and compares it with
+the  `MD5OfMessageAttributes` that it receives).
 
 The following formats are currently natively supported by AWS services for propagation:
 
