@@ -49,8 +49,8 @@ release.
   Introduce `network.type` defined as [OSI Network Layer](https://osi-model.com/network-layer/)
   or non-OSI equivalent. Remove `net.transport` and `net.sock.family`.
   Rename `net.protocol.*` to `network.protocol.*`,
-  `net.host.connection.*` to `network.host.connection.*`, and
-  `net.host.carrier.*` to `network.host.carrier.*`.
+  `net.host.connection.*` to `network.connection.*`, and
+  `net.host.carrier.*` to `network.carrier.*`.
   ([#3426](https://github.com/open-telemetry/opentelemetry-specification/pull/3426))
 
 ### Compatibility

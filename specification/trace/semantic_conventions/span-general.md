@@ -12,7 +12,7 @@ Particular operations may refer to or require some of these attributes.
 
 - [General network connection attributes](#general-network-connection-attributes)
   * [Network transport attributes](#network-transport-attributes)
-  * [`network.host.connection.*` and `network.host.carrier.*` attributes](#networkhostconnection-and-networkhostcarrier-attributes)
+  * [`network.connection.*` and `network.carrier.*` attributes](#networkhostconnection-and-networkhostcarrier-attributes)
   * [`net.peer.name` and `net.host.name` attributes](#netpeername-and-nethostname-attributes)
     + [`net.peer.name`](#netpeername)
     + [`net.host.name`](#nethostname)
@@ -89,19 +89,19 @@ if they do not cause breaking changes to HTTP semantic conventions.
 
 For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `net.peer.name` is the only attribute that usually makes sense (see description of `net.peer.name` below).
 
-### `network.host.connection.*` and `network.host.carrier.*` attributes
+### `network.connection.*` and `network.carrier.*` attributes
 
 <!-- semconv network-connection-and-carrier -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `network.host.connection.type` | string | The internet connection type currently being used by the host. | `wifi` | Recommended |
-| `network.host.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
-| `network.host.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
-| `network.host.carrier.mcc` | string | The mobile carrier country code. | `310` | Recommended |
-| `network.host.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
-| `network.host.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
+| `network.connection.type` | string | The internet connection type. | `wifi` | Recommended |
+| `network.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
+| `network.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
+| `network.carrier.mcc` | string | The mobile carrier country code. | `310` | Recommended |
+| `network.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
+| `network.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
 
-`network.host.connection.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+`network.connection.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|
@@ -111,7 +111,7 @@ For `Unix` and `pipe`, since the connection goes over the file system instead of
 | `unavailable` | unavailable |
 | `unknown` | unknown |
 
-`network.host.connection.subtype` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+`network.connection.subtype` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
 | Value  | Description |
 |---|---|

@@ -14,12 +14,12 @@ versions:
             attribute_map:
               net.protocol.name: network.protocol.name
               net.protocol.version: network.protocol.version
-              net.host.connection.type: network.host.connection.type
-              net.host.connection.subtype: network.host.connection.subtype
-              net.host.carrier.name: network.host.carrier.name
-              net.host.carrier.mcc: network.host.carrier.mcc
-              net.host.carrier.mnc: network.host.carrier.mnc
-              net.host.carrier.icc: network.host.carrier.icc
+              net.host.connection.type: network.connection.type
+              net.host.connection.subtype: network.connection.subtype
+              net.host.carrier.name: network.carrier.name
+              net.host.carrier.mcc: network.carrier.mcc
+              net.host.carrier.mnc: network.carrier.mnc
+              net.host.carrier.icc: network.carrier.icc
   1.20.0:
     spans:
       changes:
