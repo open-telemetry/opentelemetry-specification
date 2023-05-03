@@ -50,6 +50,11 @@ release.
 
 ### Compatibility
 
+### Supplemenatary Guidelines
+
+- Add guidance to use service-supported propagation formats as default for AWS SDK client calls.
+  ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
+
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
@@ -123,8 +128,6 @@ release.
   ([#3298](https://github.com/open-telemetry/opentelemetry-specification/pull/3298))
 - Rename `net.app.protocol.(name|version)` to `net.protocol.(name|version)`
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
-- Add recommendation to use service-supported propagation formats as default for AWS SDK client calls.
-  ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
 - Replace `http.flavor` with `net.protocol.(name|version)`
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
 - Metric requirement levels are now stable
