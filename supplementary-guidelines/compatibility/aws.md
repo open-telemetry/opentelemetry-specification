@@ -6,9 +6,9 @@ managed services using an aws-sdk, a third-party library, or a direct HTTP reque
 ## Context Propagation
 
 When making calls to AWS managed services using an AWS SDK, a third-party
-library, or a direct HTTP request, an AWS service-supported propagation format must
+library, or a direct HTTP request, an AWS service-supported propagation format should
 be used to add context propagation to HTTP headers on the outgoing request in order
-to propagate the context to services (AWS Lambda) indirectly triggered by such call.
+to propagate the context to services indirectly invoked by such call.
 
 Instrumentation may allow a different propagator to be explicitly configured for
 the instrumentation (e.g. an explicitly provided propagator, or an option to use the

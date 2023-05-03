@@ -111,7 +111,7 @@ release.
   ([#3298](https://github.com/open-telemetry/opentelemetry-specification/pull/3298))
 - Rename `net.app.protocol.(name|version)` to `net.protocol.(name|version)`
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
-- Add requirement to use X-Ray propagation as default for aws-sdk client calls.
+- Add recommendation to use service-supported propagation formats as default for AWS SDK client calls.
   ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
 - Replace `http.flavor` with `net.protocol.(name|version)`
   ([#3272](https://github.com/open-telemetry/opentelemetry-specification/pull/3272))
