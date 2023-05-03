@@ -12,7 +12,7 @@ Particular operations may refer to or require some of these attributes.
 
 - [General network connection attributes](#general-network-connection-attributes)
   * [Network transport attributes](#network-transport-attributes)
-  * [`network.connection.*` and `network.carrier.*` attributes](#networkhostconnection-and-networkhostcarrier-attributes)
+  * [`network.connection.*` and `network.carrier.*` attributes](#networkconnection-and-networkcarrier-attributes)
   * [`net.peer.name` and `net.host.name` attributes](#netpeername-and-nethostname-attributes)
     + [`net.peer.name`](#netpeername)
     + [`net.host.name`](#nethostname)
