@@ -78,7 +78,7 @@ consider, for example pthreads vs green thread implementations.
 ### Metric: `process.runtime.jvm.memory.usage`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
-This metric is obtained from [MemoryPoolMXBean#getUsage()](https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryPoolMXBean.html#getUsage--).
+This metric is obtained from [`MemoryPoolMXBean#getUsage()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryPoolMXBean.html#getUsage--).
 
 <!-- semconv metric.process.runtime.jvm.memory.usage(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
