@@ -47,6 +47,8 @@ The following additional attributes describe the client participating in secure 
 <!-- semconv tls.client -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
+| `tls.client.certificate` | string | PEM-encoded stand-alone certificate offered by the client. This is usually mutually-exclusive of `client.certificate_chain` since this value also exists in that list. | `MII...` | Opt-In |
+| `tls.client.certificate_chain` | string[] | Array of PEM-encoded certificates that make up the certificate chain offered by the client. This is usually mutually-exclusive of `client.certificate` since that value should be the first certificate in the chain. | `[MII..., MI...]` | Opt-In |
 | `tls.client.issuer` | string | Distinguished name of [subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) of the issuer of the x.509 certificate presented by the client. | `CN=Example Root CA, OU=Infrastructure Team, DC=example, DC=com` | Opt-In |
 | `tls.client.ja3` | string | A hash that identifies clients based on how they perform an SSL/TLS handshake. | `d4e5b18d6b55c71272893221c96ba240` | Opt-In |
 | `tls.client.not_after` | string | Date/Time indicating when client certificate is no longer considered valid. | `2021-01-01T00:00:00.000Z` | Opt-In |
@@ -64,6 +66,8 @@ The following additional attributes describe the server participating in secure 
 <!-- semconv tls.server -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
+| `tls.server.certificate` | string | PEM-encoded stand-alone certificate offered by the server. This is usually mutually-exclusive of `server.certificate_chain` since this value also exists in that list. | `MII...` | Opt-In |
+| `tls.server.certificate_chain` | string[] | Array of PEM-encoded certificates that make up the certificate chain offered by the server. This is usually mutually-exclusive of `server.certificate` since that value should be the first certificate in the chain. | `[MII..., MI...]` | Opt-In |
 | `tls.server.issuer` | string | Distinguished name of [subject](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6) of the issuer of the x.509 certificate presented by the client. | `CN=Example Root CA, OU=Infrastructure Team, DC=example, DC=com` | Opt-In |
 | `tls.server.ja3s` | string | A hash that identifies servers based on how they perform an SSL/TLS handshake. | `d4e5b18d6b55c71272893221c96ba240` | Opt-In |
 | `tls.server.not_after` | string | Date/Time indicating when server certificate is no longer considered valid. | `2021-01-01T00:00:00.000Z` | Opt-In |

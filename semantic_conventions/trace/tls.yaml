@@ -64,6 +64,22 @@ groups:
     type: span
     brief: "The following additional attributes describe the client participating in secure communication."
     attributes:
+      - id: certificate
+        type: string
+        requirement_level: opt_in
+        brief: >
+          PEM-encoded stand-alone certificate offered by the client.
+          This is usually mutually-exclusive of `client.certificate_chain` since this value also exists in that list.
+        examples:
+          ['MII...']
+      - id: certificate_chain
+        type: string[]
+        requirement_level: opt_in
+        brief: >
+          Array of PEM-encoded certificates that make up the certificate chain offered by the client.
+          This is usually mutually-exclusive of `client.certificate` since that value should be the first certificate in the chain.
+        examples:
+          ['MII...', 'MI...']
       - id: issuer
         type: string
         requirement_level: opt_in
@@ -117,6 +133,22 @@ groups:
     type: span
     brief: "The following additional attributes describe the server participating in secure communication."
     attributes:
+      - id: certificate
+        type: string
+        requirement_level: opt_in
+        brief: >
+          PEM-encoded stand-alone certificate offered by the server.
+          This is usually mutually-exclusive of `server.certificate_chain` since this value also exists in that list.
+        examples:
+          ['MII...']
+      - id: certificate_chain
+        type: string[]
+        requirement_level: opt_in
+        brief: >
+          Array of PEM-encoded certificates that make up the certificate chain offered by the server.
+          This is usually mutually-exclusive of `server.certificate` since that value should be the first certificate in the chain.
+        examples:
+          ['MII...', 'MI...']
       - id: issuer
         type: string
         requirement_level: opt_in
