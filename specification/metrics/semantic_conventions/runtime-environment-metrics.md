@@ -257,7 +257,7 @@ This metric is obtained from [`ThreadMXBean#getDaemonThreadCount()`](https://doc
 ### Metric: `process.runtime.jvm.classes.loaded`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
-This metric is obtained from [ClassLoadingMXBean#getTotalLoadedClassCount()](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ClassLoadingMXBean.html#getTotalLoadedClassCount--).
+This metric is obtained from [`ClassLoadingMXBean#getTotalLoadedClassCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ClassLoadingMXBean.html#getTotalLoadedClassCount--).
 
 <!-- semconv metric.process.runtime.jvm.classes.loaded(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
