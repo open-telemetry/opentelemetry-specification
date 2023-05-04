@@ -381,7 +381,7 @@ This metric is obtained from [`BufferPoolMXBean#getTotalCapacity()`](https://doc
 ### Metric: `process.runtime.jvm.buffer.count`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
-This metric is obtained from [BufferPoolMXBean#getCount()](https://docs.oracle.com/javase/8/docs/api/java/lang/management/BufferPoolMXBean.html#getCount--).
+This metric is obtained from [`BufferPoolMXBean#getCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/BufferPoolMXBean.html#getCount--).
 
 <!-- semconv metric.process.runtime.jvm.buffer.count(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
