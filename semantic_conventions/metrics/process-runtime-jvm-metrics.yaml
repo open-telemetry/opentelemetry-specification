@@ -16,7 +16,7 @@ groups:
         requirement_level: recommended
         brief: The type of memory.
         examples: ["heap", "non_heap"]
-      - id: memory_pool.name
+      - id: memory.pool.name
         type: string
         requirement_level: recommended
         brief: Name of the memory pool.
