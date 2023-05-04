@@ -299,8 +299,8 @@ This metric is obtained from [`ClassLoadingMXBean#getLoadedClassCount()`](https:
 ### Metric: `process.runtime.jvm.cpu.utilization`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
-This metric is obtained from [com.sun.management.OperatingSystemMXBean#getProcessCpuLoad()](https://docs.oracle.com/en/java/javase/17/docs/api/jdk.management/com/sun/management/OperatingSystemMXBean.html#getProcessCpuLoad()) on HotSpot
-and [com.ibm.lang.management.OperatingSystemMXBean#getCpuLoad()](https://www.ibm.com/docs/hr/sdk-java-technology/8?topic=SSYKE2_8.0.0/openj9/api/jdk8/jre/management/extension/com/ibm/lang/management/OperatingSystemMXBean.htm) on J9.
+This metric is obtained from [`com.sun.management.OperatingSystemMXBean#getProcessCpuLoad()`](https://docs.oracle.com/en/java/javase/17/docs/api/jdk.management/com/sun/management/OperatingSystemMXBean.html#getProcessCpuLoad()) on HotSpot
+and [`com.ibm.lang.management.OperatingSystemMXBean#getCpuLoad()`](https://www.ibm.com/docs/hr/sdk-java-technology/8?topic=SSYKE2_8.0.0/openj9/api/jdk8/jre/management/extension/com/ibm/lang/management/OperatingSystemMXBean.htm) on J9.
 
 <!-- semconv metric.process.runtime.jvm.cpu.utilization(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
