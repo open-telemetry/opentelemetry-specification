@@ -190,12 +190,14 @@ registered or the global OpenTelemetry `Propagator`s, as configured at construct
 - `TextMap` and `HttpHeaders` formats MUST use their explicitly specified `TextMapPropagator`,
   if any, or else use the global `TextMapPropagator`.
 
-If the extracted `SpanContext` is invalid AND the extracted `Baggage` is empty, this operation
-MUST return a null value, and otherwise it MUST return a `SpanContext` Shim instance with
-the extracted values.
+If the extracted `SpanContext` is invalid AND it is not sampled AND the extracted `Baggage`
+is empty, this operation MUST return a null value,
+and otherwise it MUST return a `SpanContext` Shim instance with the extracted values.
 
 ```java
-if (!extractedSpanContext.isValid() && extractedBaggage.isEmpty()) {
+if (!extractedSpanContext.isValid()
+    && !extractedSpanContext.isSampled()
+    && extractedBaggage.isEmpty()) {
   return null;
 }
 
@@ -205,6 +207,10 @@ return SpanContextShim(extractedSpanContext, extractedBaggage);
 Errors MAY be raised if either the `Format` is not recognized
 or no value could be extracted, depending on the specific OpenTracing Language API
 (e.g. Go and Python do, but Java may not).
+
+Note: Invalid but sampled `SpanContext` instances are returned as a way to support
+`jaeger-debug-id` [headers](https://github.com/jaegertracing/jaeger-client-java#via-http-headers),
+which are used to force propagation of debug information.
 
 ## Close
 
