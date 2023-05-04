@@ -213,7 +213,7 @@ This metric is obtained from [`MemoryPoolMXBean#getCollectionUsage()`](https://d
 ### Metric: `process.runtime.jvm.gc.duration`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
-This metric is obtained from [GarbageCollectorMXBean](https://docs.oracle.com/javase/8/docs/api/java/lang/management/GarbageCollectorMXBean.html).
+This metric is obtained from [`GarbageCollectorMXBean`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/GarbageCollectorMXBean.html).
 
 This metric SHOULD be specified with
 [`ExplicitBucketBoundaries`](../../metrics/api.md#instrument-advice)
