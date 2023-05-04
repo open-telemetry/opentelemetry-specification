@@ -101,6 +101,11 @@ groups:
         requirement_level: opt_in
         brief: "Date/Time indicating when client certificate is first considered valid."
         examples: ["1970-01-01T00:00:00.000Z"]
+      - id: server_name
+        type: string
+        requirement_level: opt_in
+        brief: 'Also called an SNI, this tells the server which hostname to which the client is attempting to connect to.'
+        examples: ["opentelemetry.io"]
       - id: subject
         type: string
         requirement_level: opt_in

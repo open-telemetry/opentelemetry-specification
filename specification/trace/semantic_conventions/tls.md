@@ -53,6 +53,7 @@ The following additional attributes describe the client participating in secure 
 | `tls.client.ja3` | string | A hash that identifies clients based on how they perform an SSL/TLS handshake. | `d4e5b18d6b55c71272893221c96ba240` | Opt-In |
 | `tls.client.not_after` | string | Date/Time indicating when client certificate is no longer considered valid. | `2021-01-01T00:00:00.000Z` | Opt-In |
 | `tls.client.not_before` | string | Date/Time indicating when client certificate is first considered valid. | `1970-01-01T00:00:00.000Z` | Opt-In |
+| `tls.client.server_name` | string | Also called an SNI, this tells the server which hostname to which the client is attempting to connect to. | `opentelemetry.io` | Opt-In |
 | `tls.client.subject` | string | Distinguished name of subject of the x.509 certificate presented by the client. | `CN=myclient, OU=Documentation Team, DC=example, DC=com` | Opt-In |
 | `tls.client.hash.md5` | string | Certificate fingerprint using the MD5 digest of DER-encoded version of certificate offered by the client. For consistency with other hash values, this value should be formatted as an uppercase hash. | `0F76C7F2C55BFD7D8E8B8F4BFBF0C9EC` | Opt-In |
 | `tls.client.hash.sha1` | string | Certificate fingerprint using the SHA1 digest of DER-encoded version of certificate offered by the client. For consistency with other hash values, this value should be formatted as an uppercase hash. | `9E393D93138888D288266C2D915214D1D1CCEB2A` | Opt-In |
