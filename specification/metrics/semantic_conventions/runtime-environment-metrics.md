@@ -186,7 +186,7 @@ This metric is obtained from [`MemoryPoolMXBean#getUsage()`](https://docs.oracle
 ### Metric: `process.runtime.jvm.memory.usage_after_last_gc`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
-This metric is obtained from [MemoryPoolMXBean#getCollectionUsage()](https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryPoolMXBean.html#getCollectionUsage--).
+This metric is obtained from [`MemoryPoolMXBean#getCollectionUsage()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryPoolMXBean.html#getCollectionUsage--).
 
 <!-- semconv metric.process.runtime.jvm.memory.usage_after_last_gc(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
