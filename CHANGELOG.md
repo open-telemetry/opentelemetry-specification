@@ -313,7 +313,7 @@ release.
   [#3158](https://github.com/open-telemetry/opentelemetry-specification/pull/3158)
 - `http.route` SHOULD contain the "application root" if there is one.
   ([#3164](https://github.com/open-telemetry/opentelemetry-specification/pull/3164))
-- Add semantic conventions for TLS/SSL encrypted communication
+- Add semantic conventions from ECS for TLS/SSL encrypted communication
   ([#2992](https://github.com/open-telemetry/opentelemetry-specification/pull/2992))
 
 ### Compatibility
