@@ -239,8 +239,8 @@ of `[]` (single bucket histogram capturing count, sum, min, max).
 ### Metric: `process.runtime.jvm.threads.count`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
-This metric is obtained from [ThreadMXBean#getDaemonThreadCount()](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html#getDaemonThreadCount--) and
-[ThreadMXBean#getThreadCount()](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html#getThreadCount--).
+This metric is obtained from [`ThreadMXBean#getDaemonThreadCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html#getDaemonThreadCount--) and
+[`ThreadMXBean#getThreadCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html#getThreadCount--).
 
 <!-- semconv metric.process.runtime.jvm.threads.count(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
