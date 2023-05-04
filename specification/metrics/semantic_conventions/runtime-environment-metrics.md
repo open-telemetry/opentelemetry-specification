@@ -271,7 +271,7 @@ This metric is obtained from [`ClassLoadingMXBean#getTotalLoadedClassCount()`](h
 ### Metric: `process.runtime.jvm.classes.unloaded`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
-This metric is obtained from [ClassLoadingMXBean#getUnloadedClassCount()](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ClassLoadingMXBean.html#getUnloadedClassCount--).
+This metric is obtained from [`ClassLoadingMXBean#getUnloadedClassCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ClassLoadingMXBean.html#getUnloadedClassCount--).
 
 <!-- semconv metric.process.runtime.jvm.classes.unloaded(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
