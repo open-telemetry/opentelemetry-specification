@@ -329,7 +329,7 @@ and [`com.ibm.lang.management.OperatingSystemMXBean#getCpuLoad()`](https://www.i
 ### Metric: `process.runtime.jvm.system.cpu.load_1m`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
-This metric is obtained from [OperatingSystemMXBean#getSystemLoadAverage()](https://docs.oracle.com/javase/8/docs/api/java/lang/management/OperatingSystemMXBean.html#getSystemLoadAverage--).
+This metric is obtained from [`OperatingSystemMXBean#getSystemLoadAverage()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/OperatingSystemMXBean.html#getSystemLoadAverage--).
 
 <!-- semconv metric.process.runtime.jvm.system.cpu.load_1m(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
