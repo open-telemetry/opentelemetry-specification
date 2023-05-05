@@ -1328,7 +1328,7 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 ## Defaults and configuration
 
 The SDK MUST provide configuration according to the [SDK environment
-variables](../sdk-environment-variables.md) specification.
+variables](../configuration/sdk-environment-variables.md) specification.
 
 ## Numerical limits handling
 
