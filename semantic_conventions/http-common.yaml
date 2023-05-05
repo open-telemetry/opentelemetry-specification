@@ -10,7 +10,7 @@ groups:
             - id: connect
               value: "CONNECT"
             - id: delete
-              value: "DELETE"            
+              value: "DELETE"
             - id: get
               value: "GET"
             - id: head
@@ -18,11 +18,11 @@ groups:
             - id: options
               value: "OPTIONS"
             - id: patch
-              value: "PATCH"            
+              value: "PATCH"          
             - id: post
-              value: "POST"             
+              value: "POST"
             - id: put
-              value: "PUT"             
+              value: "PUT"
             - id: trace
               value: "TRACE"
             - id: other
@@ -31,8 +31,10 @@ groups:
         brief: 'HTTP request method.'
         examples: ["GET", "POST", "HEAD"]
         note: >
-          HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
-          Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry. 
+          HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods)
+          or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
+          Instrumentation MAY additionally support a closet set of custom HTTP methods defined in
+          [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
           Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
       - id: status_code
         type: int

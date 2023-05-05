@@ -81,7 +81,7 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
-**[2]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
+**[2]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry. Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -193,7 +193,7 @@ This metric is optional.
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
 | [`url.scheme`](../../common/url.md) | string | The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
-**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
+**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry. Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
 
 **[2]:** Determined by using the first of the following that applies
 
@@ -255,7 +255,7 @@ This metric is optional.
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
-**[2]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
+**[2]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry. Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -319,7 +319,7 @@ This metric is optional.
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
-**[2]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
+**[2]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry. Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -385,7 +385,7 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
 
-**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
+**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry. Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -438,7 +438,7 @@ This metric is optional.
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
 
-**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
+**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry. Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -491,7 +491,7 @@ This metric is optional.
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
 
-**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
+**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closet set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry. Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
