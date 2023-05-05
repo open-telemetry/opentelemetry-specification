@@ -9,6 +9,12 @@ versions:
             attribute_map:
               messaging.kafka.client_id: messaging.client_id
               messaging.rocketmq.client_id: messaging.client_id
+    metrics:
+      changes:
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3472
+        - rename_metrics:
+            process.runtime.jvm.cpu.utilization: process.runtime.jvm.cpu.recent_utilization
+            process.runtime.jvm.system.cpu.utilization: process.runtime.jvm.system.cpu.recent_utilization
   1.20.0:
     spans:
       changes:

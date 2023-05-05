@@ -285,30 +285,30 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.classes.current_loaded(full) -->
 <!-- endsemconv -->
 
-### Metric: `process.runtime.jvm.cpu.utilization`
+### Metric: `process.runtime.jvm.cpu.recent_utilization`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
 
-<!-- semconv metric.process.runtime.jvm.cpu.utilization(metric_table) -->
+<!-- semconv metric.process.runtime.jvm.cpu.recent_utilization(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `process.runtime.jvm.cpu.utilization` | Gauge | `1` | Recent CPU utilization for the process. |
+| `process.runtime.jvm.cpu.recent_utilization` | Gauge | `1` | Recent CPU utilization for the process. |
 <!-- endsemconv -->
 
-<!-- semconv metric.process.runtime.jvm.cpu.utilization(full) -->
+<!-- semconv metric.process.runtime.jvm.cpu.recent_utilization(full) -->
 <!-- endsemconv -->
 
-### Metric: `process.runtime.jvm.system.cpu.utilization`
+### Metric: `process.runtime.jvm.system.cpu.recent_utilization`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
 
-<!-- semconv metric.process.runtime.jvm.system.cpu.utilization(metric_table) -->
+<!-- semconv metric.process.runtime.jvm.system.cpu.recent_utilization(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `process.runtime.jvm.system.cpu.utilization` | Gauge | `1` | Recent CPU utilization for the whole system. |
+| `process.runtime.jvm.system.cpu.recent_utilization` | Gauge | `1` | Recent CPU utilization for the whole system. |
 <!-- endsemconv -->
 
-<!-- semconv metric.process.runtime.jvm.system.cpu.utilization(full) -->
+<!-- semconv metric.process.runtime.jvm.system.cpu.recent_utilization(full) -->
 <!-- endsemconv -->
 
 ### Metric: `process.runtime.jvm.system.cpu.load_1m`

@@ -122,9 +122,9 @@ groups:
     instrument: updowncounter
     unit: "{class}"
 
-  - id: metric.process.runtime.jvm.cpu.utilization
+  - id: metric.process.runtime.jvm.cpu.recent_utilization
     type: metric
-    metric_name: process.runtime.jvm.cpu.utilization
+    metric_name: process.runtime.jvm.cpu.recent_utilization
     brief: "Recent CPU utilization for the process."
     note: >
       This utilization is not defined as being for the specific interval since last measurement
@@ -132,9 +132,9 @@ groups:
     instrument: gauge
     unit: "1"
 
-  - id: metric.process.runtime.jvm.system.cpu.utilization
+  - id: metric.process.runtime.jvm.system.cpu.recent_utilization
     type: metric
-    metric_name: process.runtime.jvm.system.cpu.utilization
+    metric_name: process.runtime.jvm.system.cpu.recent_utilization
     brief: "Recent CPU utilization for the whole system."
     note: >
       This utilization is not defined as being for the specific interval since last measurement

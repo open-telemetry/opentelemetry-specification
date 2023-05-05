@@ -50,6 +50,11 @@ release.
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
+- BREAKING: Rename metric `process.runtime.jvm.cpu.utilization` to
+  `process.runtime.jvm.cpu.recent_utilization`, and rename metric
+  `process.runtime.jvm.system.cpu.utilization` to
+  `process.runtime.jvm.system.cpu.recent_utilization`
+  ([#3472](https://github.com/open-telemetry/opentelemetry-specification/pull/3472))
 
 ### Compatibility
 
