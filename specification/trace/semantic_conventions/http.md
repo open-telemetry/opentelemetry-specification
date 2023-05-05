@@ -109,7 +109,11 @@ Following attributes MUST be provided **at span creation time** (when provided a
 
 * `http.request.method`
 
+<<<<<<< HEAD
 `http.request.method` MUST be one of the following:
+=======
+`http.method` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+>>>>>>> 4b65b19 (allow custom values)
 
 | Value  | Description |
 |---|---|

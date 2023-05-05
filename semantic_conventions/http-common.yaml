@@ -6,6 +6,7 @@ groups:
     attributes:
       - id: request.method
         type:
+          allow_custom_values: true
           members:
             - id: connect
               value: "CONNECT"

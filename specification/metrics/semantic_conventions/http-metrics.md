@@ -104,7 +104,11 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[6]:** If not default (`80` for `http` scheme, `443` for `https`).
 
+<<<<<<< HEAD
 `http.request.method` MUST be one of the following:
+=======
+`http.method` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+>>>>>>> 4b65b19 (allow custom values)
 
 | Value  | Description |
 |---|---|
@@ -214,7 +218,11 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[4]:** If not default (`80` for `http` scheme, `443` for `https`).
 
+<<<<<<< HEAD
 `http.request.method` MUST be one of the following:
+=======
+`http.method` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+>>>>>>> 4b65b19 (allow custom values)
 
 | Value  | Description |
 |---|---|
@@ -278,7 +286,11 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[6]:** If not default (`80` for `http` scheme, `443` for `https`).
 
+<<<<<<< HEAD
 `http.request.method` MUST be one of the following:
+=======
+`http.method` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+>>>>>>> 4b65b19 (allow custom values)
 
 | Value  | Description |
 |---|---|
@@ -342,7 +354,11 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 **[6]:** If not default (`80` for `http` scheme, `443` for `https`).
 
+<<<<<<< HEAD
 `http.request.method` MUST be one of the following:
+=======
+`http.method` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+>>>>>>> 4b65b19 (allow custom values)
 
 | Value  | Description |
 |---|---|
@@ -401,7 +417,11 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
+<<<<<<< HEAD
 `http.request.method` MUST be one of the following:
+=======
+`http.method` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+>>>>>>> 4b65b19 (allow custom values)
 
 | Value  | Description |
 |---|---|
@@ -454,7 +474,11 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
+<<<<<<< HEAD
 `http.request.method` MUST be one of the following:
+=======
+`http.method` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+>>>>>>> 4b65b19 (allow custom values)
 
 | Value  | Description |
 |---|---|
@@ -507,7 +531,11 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 **[5]:** If not default (`80` for `http` scheme, `443` for `https`).
 
+<<<<<<< HEAD
 `http.request.method` MUST be one of the following:
+=======
+`http.method` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
+>>>>>>> 4b65b19 (allow custom values)
 
 | Value  | Description |
 |---|---|
