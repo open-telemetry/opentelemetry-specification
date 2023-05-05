@@ -50,6 +50,8 @@ release.
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
+- Clarification: metric namespaces are not allowed to be metric names
+  ([#3476](https://github.com/open-telemetry/opentelemetry-specification/pull/3476))
 
 ### Compatibility
 
