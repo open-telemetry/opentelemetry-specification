@@ -209,10 +209,14 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
 
+This metric SHOULD be specified with
+[`ExplicitBucketBoundaries`](../../metrics/api.md#instrument-advice)
+of `[]` (single bucket histogram capturing count, sum, min, max).
+
 <!-- semconv metric.process.runtime.jvm.gc.duration(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `process.runtime.jvm.gc.duration` | Histogram | `ms` | Duration of JVM garbage collection actions. |
+| `process.runtime.jvm.gc.duration` | Histogram | `s` | Duration of JVM garbage collection actions. |
 <!-- endsemconv -->
 
 <!-- semconv metric.process.runtime.jvm.gc.duration(full) -->
