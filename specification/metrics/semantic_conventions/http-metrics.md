@@ -70,20 +70,22 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
-| `http.request.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
+| `http.request.method` | string | HTTP request method. [2] | `GET`; `POST`; `HEAD` | Required |
 | `http.response.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`network.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [2] | `3.1.1` | Recommended |
-| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [3] | `example.com` | Required |
-| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
+| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [3] | `3.1.1` | Recommended |
+| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [4] | `example.com` | Required |
+| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [5] | `80`; `8080`; `443` | Conditionally Required: [6] |
 | [`url.scheme`](../../common/url.md) | string | The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
-**[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[2]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentations MAY support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or another registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not listed in the supported HTTP method set.
 
-**[3]:** Determined by using the first of the following that applies
+**[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+
+**[4]:** Determined by using the first of the following that applies
 
 - The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
@@ -93,14 +95,29 @@ SHOULD include the [application root](/specification/trace/semantic_conventions/
 
 SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-**[4]:** Determined by using the first of the following that applies
+**[5]:** Determined by using the first of the following that applies
 
 - Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
 
-**[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[6]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+`http.request.method` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `CONNECT` | connect |
+| `DELETE` | delete |
+| `GET` | get |
+| `HEAD` | head |
+| `OPTIONS` | options |
+| `PATCH` | patch |
+| `POST` | post |
+| `PUT` | put |
+| `TRACE` | trace |
+| `OTHER` | other |
 <!-- endsemconv -->
 
 ### Metric: `http.server.active_requests`
@@ -116,12 +133,14 @@ This metric is optional.
 <!-- semconv metric.http.server.active_requests(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.request.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
-| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [1] | `example.com` | Required |
-| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [2] | `80`; `8080`; `443` | Conditionally Required: [3] |
+| `http.request.method` | string | HTTP request method. [1] | `GET`; `POST`; `HEAD` | Required |
+| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [2] | `example.com` | Required |
+| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
 | [`url.scheme`](../../common/url.md) | string | The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
-**[1]:** Determined by using the first of the following that applies
+**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentations MAY support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or another registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not listed in the supported HTTP method set.
+
+**[2]:** Determined by using the first of the following that applies
 
 - The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
@@ -131,14 +150,84 @@ This metric is optional.
 
 SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-**[2]:** Determined by using the first of the following that applies
+**[3]:** Determined by using the first of the following that applies
 
 - Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
 
-**[3]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[4]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+`http.request.method` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `CONNECT` | connect |
+| `DELETE` | delete |
+| `GET` | get |
+| `HEAD` | head |
+| `OPTIONS` | options |
+| `PATCH` | patch |
+| `POST` | post |
+| `PUT` | put |
+| `TRACE` | trace |
+| `OTHER` | other |
+<!-- endsemconv -->
+
+### Metric: `http.server.active_requests`
+
+This metric is optional.
+
+<!-- semconv metric.http.server.active_requests(metric_table) -->
+| Name     | Instrument Type | Unit (UCUM) | Description    |
+| -------- | --------------- | ----------- | -------------- |
+| `http.server.active_requests` | UpDownCounter | `{request}` | Measures the number of concurrent HTTP requests that are currently in-flight. |
+<!-- endsemconv -->
+
+<!-- semconv metric.http.server.active_requests(full) -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| `http.request.method` | string | HTTP request method. [1] | `GET`; `POST`; `HEAD` | Required |
+| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [2] | `example.com` | Required |
+| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
+| [`url.scheme`](../../common/url.md) | string | The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
+
+**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentations MAY support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or another registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not listed in the supported HTTP method set.
+
+**[2]:** Determined by using the first of the following that applies
+
+- The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
+  include host identifier.
+- Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+  if it's sent in absolute-form.
+- Host identifier of the `Host` header
+
+SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
+
+**[3]:** Determined by using the first of the following that applies
+
+- Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
+- Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
+  if it's sent in absolute-form.
+- Port identifier of the `Host` header
+
+**[4]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+`http.request.method` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `CONNECT` | connect |
+| `DELETE` | delete |
+| `GET` | get |
+| `HEAD` | head |
+| `OPTIONS` | options |
+| `PATCH` | patch |
+| `POST` | post |
+| `PUT` | put |
+| `TRACE` | trace |
+| `OTHER` | other |
 <!-- endsemconv -->
 
 ### Metric: `http.server.request.size`
@@ -155,20 +244,22 @@ This metric is optional.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
-| `http.request.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
+| `http.request.method` | string | HTTP request method. [2] | `GET`; `POST`; `HEAD` | Required |
 | `http.response.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`network.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [2] | `3.1.1` | Recommended |
-| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [3] | `example.com` | Required |
-| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
+| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [3] | `3.1.1` | Recommended |
+| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [4] | `example.com` | Required |
+| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [5] | `80`; `8080`; `443` | Conditionally Required: [6] |
 | [`url.scheme`](../../common/url.md) | string | The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
-**[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[2]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentations MAY support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or another registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not listed in the supported HTTP method set.
 
-**[3]:** Determined by using the first of the following that applies
+**[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+
+**[4]:** Determined by using the first of the following that applies
 
 - The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
@@ -178,14 +269,29 @@ SHOULD include the [application root](/specification/trace/semantic_conventions/
 
 SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-**[4]:** Determined by using the first of the following that applies
+**[5]:** Determined by using the first of the following that applies
 
 - Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
 
-**[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[6]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+`http.request.method` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `CONNECT` | connect |
+| `DELETE` | delete |
+| `GET` | get |
+| `HEAD` | head |
+| `OPTIONS` | options |
+| `PATCH` | patch |
+| `POST` | post |
+| `PUT` | put |
+| `TRACE` | trace |
+| `OTHER` | other |
 <!-- endsemconv -->
 
 ### Metric: `http.server.response.size`
@@ -202,20 +308,22 @@ This metric is optional.
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
-| `http.request.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
+| `http.request.method` | string | HTTP request method. [2] | `GET`; `POST`; `HEAD` | Required |
 | `http.response.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`network.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [2] | `3.1.1` | Recommended |
-| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [3] | `example.com` | Required |
-| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
+| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [3] | `3.1.1` | Recommended |
+| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [4] | `example.com` | Required |
+| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [5] | `80`; `8080`; `443` | Conditionally Required: [6] |
 | [`url.scheme`](../../common/url.md) | string | The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
 
-**[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[2]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentations MAY support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or another registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not listed in the supported HTTP method set.
 
-**[3]:** Determined by using the first of the following that applies
+**[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+
+**[4]:** Determined by using the first of the following that applies
 
 - The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
   include host identifier.
@@ -225,14 +333,29 @@ SHOULD include the [application root](/specification/trace/semantic_conventions/
 
 SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-**[4]:** Determined by using the first of the following that applies
+**[5]:** Determined by using the first of the following that applies
 
 - Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
 - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form.
 - Port identifier of the `Host` header
 
-**[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[6]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+`http.request.method` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `CONNECT` | connect |
+| `DELETE` | delete |
+| `GET` | get |
+| `HEAD` | head |
+| `OPTIONS` | options |
+| `PATCH` | patch |
+| `POST` | post |
+| `PUT` | put |
+| `TRACE` | trace |
+| `OTHER` | other |
 <!-- endsemconv -->
 
 ## HTTP Client
@@ -254,17 +377,19 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 <!-- semconv metric.http.client.duration(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.request.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
+| `http.request.method` | string | HTTP request method. [1] | `GET`; `POST`; `HEAD` | Required |
 | `http.response.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`network.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
-| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
-| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
+| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [2] | `3.1.1` | Recommended |
+| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `example.com` | Required |
+| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
 
-**[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentations MAY support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or another registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not listed in the supported HTTP method set.
 
-**[2]:** Determined by using the first of the following that applies
+**[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+
+**[3]:** Determined by using the first of the following that applies
 
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form
@@ -272,9 +397,24 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 
 SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[3]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
+**[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
-**[4]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+`http.request.method` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `CONNECT` | connect |
+| `DELETE` | delete |
+| `GET` | get |
+| `HEAD` | head |
+| `OPTIONS` | options |
+| `PATCH` | patch |
+| `POST` | post |
+| `PUT` | put |
+| `TRACE` | trace |
+| `OTHER` | other |
 <!-- endsemconv -->
 
 ### Metric: `http.client.request.size`
@@ -290,17 +430,19 @@ This metric is optional.
 <!-- semconv metric.http.client.request.size(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.request.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
+| `http.request.method` | string | HTTP request method. [1] | `GET`; `POST`; `HEAD` | Required |
 | `http.response.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`network.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
-| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
-| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
+| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [2] | `3.1.1` | Recommended |
+| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `example.com` | Required |
+| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
 
-**[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentations MAY support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or another registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not listed in the supported HTTP method set.
 
-**[2]:** Determined by using the first of the following that applies
+**[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+
+**[3]:** Determined by using the first of the following that applies
 
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form
@@ -308,9 +450,24 @@ This metric is optional.
 
 SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[3]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
+**[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
-**[4]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+`http.request.method` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `CONNECT` | connect |
+| `DELETE` | delete |
+| `GET` | get |
+| `HEAD` | head |
+| `OPTIONS` | options |
+| `PATCH` | patch |
+| `POST` | post |
+| `PUT` | put |
+| `TRACE` | trace |
+| `OTHER` | other |
 <!-- endsemconv -->
 
 ### Metric: `http.client.response.size`
@@ -326,17 +483,19 @@ This metric is optional.
 <!-- semconv metric.http.client.response.size(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.request.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
+| `http.request.method` | string | HTTP request method. [1] | `GET`; `POST`; `HEAD` | Required |
 | `http.response.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | [`network.protocol.name`](../../trace/semantic_conventions/span-general.md) | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
-| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
-| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
+| [`network.protocol.version`](../../trace/semantic_conventions/span-general.md) | string | Version of the application layer protocol used. See note below. [2] | `3.1.1` | Recommended |
+| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `example.com` | Required |
+| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [4] | `80`; `8080`; `443` | Conditionally Required: [5] |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
 
-**[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentations MAY support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or another registry.  Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not listed in the supported HTTP method set.
 
-**[2]:** Determined by using the first of the following that applies
+**[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+
+**[3]:** Determined by using the first of the following that applies
 
 - Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
   if it's sent in absolute-form
@@ -344,7 +503,22 @@ This metric is optional.
 
 SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
-**[3]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
+**[4]:** When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match URI port identifier, otherwise it MUST match `Host` header port identifier.
 
-**[4]:** If not default (`80` for `http` scheme, `443` for `https`).
+**[5]:** If not default (`80` for `http` scheme, `443` for `https`).
+
+`http.request.method` MUST be one of the following:
+
+| Value  | Description |
+|---|---|
+| `CONNECT` | connect |
+| `DELETE` | delete |
+| `GET` | get |
+| `HEAD` | head |
+| `OPTIONS` | options |
+| `PATCH` | patch |
+| `POST` | post |
+| `PUT` | put |
+| `TRACE` | trace |
+| `OTHER` | other |
 <!-- endsemconv -->

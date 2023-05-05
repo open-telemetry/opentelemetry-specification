@@ -5,10 +5,35 @@ groups:
     prefix: http
     attributes:
       - id: request.method
-        type: string
+        type:
+          members:
+            - id: connect
+              value: "CONNECT"
+            - id: delete
+              value: "DELETE"            
+            - id: get
+              value: "GET"
+            - id: head
+              value: "HEAD"
+            - id: options
+              value: "OPTIONS"
+            - id: patch
+              value: "PATCH"            
+            - id: post
+              value: "POST"             
+            - id: put
+              value: "PUT"             
+            - id: trace
+              value: "TRACE"
+            - id: other
+              value: "OTHER"
         requirement_level: required
         brief: 'HTTP request method.'
         examples: ["GET", "POST", "HEAD"]
+        note: >
+          HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
+          Instrumentations MAY support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or another registry. 
+          Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not listed in the supported HTTP method set.
       - id: response.status_code
         type: int
         requirement_level:
