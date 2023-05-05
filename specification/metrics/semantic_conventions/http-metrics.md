@@ -108,16 +108,16 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 | Value  | Description |
 |---|---|
-| `CONNECT` | connect |
-| `DELETE` | delete |
-| `GET` | get |
-| `HEAD` | head |
-| `OPTIONS` | options |
-| `PATCH` | patch |
-| `POST` | post |
-| `PUT` | put |
-| `TRACE` | trace |
-| `OTHER` | other |
+| `CONNECT` | CONNECT method. |
+| `DELETE` | DELETE method. |
+| `GET` | GET method. |
+| `HEAD` | HEAD method. |
+| `OPTIONS` | OPTIONS method. |
+| `PATCH` | PATCH method. |
+| `POST` | POST method. |
+| `PUT` | PUT method. |
+| `TRACE` | TRACE method. |
+| `OTHER` | Any custom HTTP method instrumentation has not prior knowledge of. |
 <!-- endsemconv -->
 
 ### Metric: `http.server.active_requests`
@@ -218,16 +218,16 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 | Value  | Description |
 |---|---|
-| `CONNECT` | connect |
-| `DELETE` | delete |
-| `GET` | get |
-| `HEAD` | head |
-| `OPTIONS` | options |
-| `PATCH` | patch |
-| `POST` | post |
-| `PUT` | put |
-| `TRACE` | trace |
-| `OTHER` | other |
+| `CONNECT` | CONNECT method. |
+| `DELETE` | DELETE method. |
+| `GET` | GET method. |
+| `HEAD` | HEAD method. |
+| `OPTIONS` | OPTIONS method. |
+| `PATCH` | PATCH method. |
+| `POST` | POST method. |
+| `PUT` | PUT method. |
+| `TRACE` | TRACE method. |
+| `OTHER` | Any custom HTTP method instrumentation has not prior knowledge of. |
 <!-- endsemconv -->
 
 ### Metric: `http.server.request.size`
@@ -282,16 +282,16 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 | Value  | Description |
 |---|---|
-| `CONNECT` | connect |
-| `DELETE` | delete |
-| `GET` | get |
-| `HEAD` | head |
-| `OPTIONS` | options |
-| `PATCH` | patch |
-| `POST` | post |
-| `PUT` | put |
-| `TRACE` | trace |
-| `OTHER` | other |
+| `CONNECT` | CONNECT method. |
+| `DELETE` | DELETE method. |
+| `GET` | GET method. |
+| `HEAD` | HEAD method. |
+| `OPTIONS` | OPTIONS method. |
+| `PATCH` | PATCH method. |
+| `POST` | POST method. |
+| `PUT` | PUT method. |
+| `TRACE` | TRACE method. |
+| `OTHER` | Any custom HTTP method instrumentation has not prior knowledge of. |
 <!-- endsemconv -->
 
 ### Metric: `http.server.response.size`
@@ -346,16 +346,16 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 
 | Value  | Description |
 |---|---|
-| `CONNECT` | connect |
-| `DELETE` | delete |
-| `GET` | get |
-| `HEAD` | head |
-| `OPTIONS` | options |
-| `PATCH` | patch |
-| `POST` | post |
-| `PUT` | put |
-| `TRACE` | trace |
-| `OTHER` | other |
+| `CONNECT` | CONNECT method. |
+| `DELETE` | DELETE method. |
+| `GET` | GET method. |
+| `HEAD` | HEAD method. |
+| `OPTIONS` | OPTIONS method. |
+| `PATCH` | PATCH method. |
+| `POST` | POST method. |
+| `PUT` | PUT method. |
+| `TRACE` | TRACE method. |
+| `OTHER` | Any custom HTTP method instrumentation has not prior knowledge of. |
 <!-- endsemconv -->
 
 ## HTTP Client
@@ -405,16 +405,16 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 | Value  | Description |
 |---|---|
-| `CONNECT` | connect |
-| `DELETE` | delete |
-| `GET` | get |
-| `HEAD` | head |
-| `OPTIONS` | options |
-| `PATCH` | patch |
-| `POST` | post |
-| `PUT` | put |
-| `TRACE` | trace |
-| `OTHER` | other |
+| `CONNECT` | CONNECT method. |
+| `DELETE` | DELETE method. |
+| `GET` | GET method. |
+| `HEAD` | HEAD method. |
+| `OPTIONS` | OPTIONS method. |
+| `PATCH` | PATCH method. |
+| `POST` | POST method. |
+| `PUT` | PUT method. |
+| `TRACE` | TRACE method. |
+| `OTHER` | Any custom HTTP method instrumentation has not prior knowledge of. |
 <!-- endsemconv -->
 
 ### Metric: `http.client.request.size`
@@ -458,16 +458,16 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 | Value  | Description |
 |---|---|
-| `CONNECT` | connect |
-| `DELETE` | delete |
-| `GET` | get |
-| `HEAD` | head |
-| `OPTIONS` | options |
-| `PATCH` | patch |
-| `POST` | post |
-| `PUT` | put |
-| `TRACE` | trace |
-| `OTHER` | other |
+| `CONNECT` | CONNECT method. |
+| `DELETE` | DELETE method. |
+| `GET` | GET method. |
+| `HEAD` | HEAD method. |
+| `OPTIONS` | OPTIONS method. |
+| `PATCH` | PATCH method. |
+| `POST` | POST method. |
+| `PUT` | PUT method. |
+| `TRACE` | TRACE method. |
+| `OTHER` | Any custom HTTP method instrumentation has not prior knowledge of. |
 <!-- endsemconv -->
 
 ### Metric: `http.client.response.size`
@@ -511,14 +511,14 @@ SHOULD NOT be set if capturing it would require an extra DNS lookup.
 
 | Value  | Description |
 |---|---|
-| `CONNECT` | connect |
-| `DELETE` | delete |
-| `GET` | get |
-| `HEAD` | head |
-| `OPTIONS` | options |
-| `PATCH` | patch |
-| `POST` | post |
-| `PUT` | put |
-| `TRACE` | trace |
-| `OTHER` | other |
+| `CONNECT` | CONNECT method. |
+| `DELETE` | DELETE method. |
+| `GET` | GET method. |
+| `HEAD` | HEAD method. |
+| `OPTIONS` | OPTIONS method. |
+| `PATCH` | PATCH method. |
+| `POST` | POST method. |
+| `PUT` | PUT method. |
+| `TRACE` | TRACE method. |
+| `OTHER` | Any custom HTTP method instrumentation has not prior knowledge of. |
 <!-- endsemconv -->

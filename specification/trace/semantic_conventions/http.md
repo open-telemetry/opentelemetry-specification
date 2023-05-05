@@ -113,16 +113,16 @@ Following attributes MUST be provided **at span creation time** (when provided a
 
 | Value  | Description |
 |---|---|
-| `CONNECT` | connect |
-| `DELETE` | delete |
-| `GET` | get |
-| `HEAD` | head |
-| `OPTIONS` | options |
-| `PATCH` | patch |
-| `POST` | post |
-| `PUT` | put |
-| `TRACE` | trace |
-| `OTHER` | other |
+| `CONNECT` | CONNECT method. |
+| `DELETE` | DELETE method. |
+| `GET` | GET method. |
+| `HEAD` | HEAD method. |
+| `OPTIONS` | OPTIONS method. |
+| `PATCH` | PATCH method. |
+| `POST` | POST method. |
+| `PUT` | PUT method. |
+| `TRACE` | TRACE method. |
+| `OTHER` | Any custom HTTP method instrumentation has not prior knowledge of. |
 
 `network.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 

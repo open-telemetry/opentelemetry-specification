@@ -9,24 +9,34 @@ groups:
           members:
             - id: connect
               value: "CONNECT"
+              brief: 'CONNECT method.'
             - id: delete
               value: "DELETE"
+              brief: 'DELETE method.'
             - id: get
               value: "GET"
+              brief: 'GET method.'
             - id: head
               value: "HEAD"
+              brief: 'HEAD method.'
             - id: options
               value: "OPTIONS"
+              brief: 'OPTIONS method.'
             - id: patch
-              value: "PATCH"          
+              value: "PATCH"
+              brief: 'PATCH method.'
             - id: post
               value: "POST"
+              brief: 'POST method.'
             - id: put
               value: "PUT"
+              brief: 'PUT method.'
             - id: trace
               value: "TRACE"
+              brief: 'TRACE method.'
             - id: other
               value: "OTHER"
+              brief: 'Any custom HTTP method instrumentation has not prior knowledge of.'
         requirement_level: required
         brief: 'HTTP request method.'
         examples: ["GET", "POST", "HEAD"]
