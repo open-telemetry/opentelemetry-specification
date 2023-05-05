@@ -240,7 +240,7 @@ are the inputs:
     reservoirs to be chosen by the aggregation.
   * **Status**: [Experimental](../document-status.md) - the
     `aggregation_cardinality_limit` (optional) associated with the view.  This
-    should be an positive integer to be taken as a hard limit on the
+    should be a positive integer to be taken as a hard limit on the
     number of data points that will be emitted during a single
     collection by a single instrument.  See [cardinality limits](#cardinality-limits),
     below.
