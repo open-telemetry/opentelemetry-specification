@@ -50,6 +50,19 @@ release.
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
+- Memory metric attribute renames
+  - Applies to metrics 
+    - `metric.process.runtime.jvm.memory.usage`
+    - `metric.process.runtime.jvm.memory.init` 
+    - `metric.process.runtime.jvm.memory.committed` 
+    - `metric.process.runtime.jvm.memory.limit` 
+    - `metric.process.runtime.jvm.memory.usage_after_last_gc` 
+  - Rename `memory` to `memory.type`
+  - Rename `pool` to `memory.pool.name`
+- Rename `process.runtime.jvm.gc.duration` metric attribute `gc` to `gc.name`
+- Rename `process.runtime.jvm.gc.duration` metric attribute `action` to `gc.action`
+- Rename `process.runtime.jvm.threads.count` metric attribute `daemon` to `thread.daemon`
+- Rename `attributes.process.runtime.jvm.buffer` metric attribute `pool` to `buffer.pool.name`
 
 ### Compatibility
 
