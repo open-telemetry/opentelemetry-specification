@@ -337,7 +337,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.buffer.usage(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `buffer_pool.name` | string | Name of the buffer pool. [1] | `mapped`; `direct` | Recommended |
+| `buffer.pool.name` | string | Name of the buffer pool. [1] | `mapped`; `direct` | Recommended |
 
 **[1]:** Pool names are generally obtained via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
 <!-- endsemconv -->
@@ -355,7 +355,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.buffer.limit(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `buffer_pool.name` | string | Name of the buffer pool. [1] | `mapped`; `direct` | Recommended |
+| `buffer.pool.name` | string | Name of the buffer pool. [1] | `mapped`; `direct` | Recommended |
 
 **[1]:** Pool names are generally obtained via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
 <!-- endsemconv -->
@@ -373,7 +373,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- semconv metric.process.runtime.jvm.buffer.count(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `buffer_pool.name` | string | Name of the buffer pool. [1] | `mapped`; `direct` | Recommended |
+| `buffer.pool.name` | string | Name of the buffer pool. [1] | `mapped`; `direct` | Recommended |
 
 **[1]:** Pool names are generally obtained via [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
 <!-- endsemconv -->
