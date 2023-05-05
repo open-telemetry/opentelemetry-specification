@@ -31,7 +31,7 @@
 >   include stabilization of a core set of networking attributes which are also used
 >   in Database instrumentations).
 > * SHOULD introduce an environment variable `OTEL_SEMCONV_STABILITY_OPT_IN`
->   in the existing major version which supports the follow values:
+>   in the existing major version which supports the following values:
 >   * `none` - continue emitting whatever version of the old experimental
 >     database attributes the instrumentation was emitting previously.
 >     This is the default value.
