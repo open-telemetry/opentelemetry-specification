@@ -61,6 +61,10 @@ OpenTelemetry artifacts define the metric structures and hierarchies for some
 categories of metrics, and these can assist decisions when creating future
 metrics.
 
+Metric names MAY coincide with namespaces. For example if
+`system.processes.created` is a metric name then it is still valid to have
+a metric named `system.processes`.
+
 Common attributes SHOULD be consistently named. This aids in discoverability and
 disambiguates similar attributes to metric names.
 
