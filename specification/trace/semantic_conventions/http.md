@@ -99,7 +99,7 @@ sections below.
 | [`network.type`](span-general.md) | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
 | `user_agent.original` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
 
-**[1]:** HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
+**[1]:** HTTP request method SHOULD be one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods) or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html). Instrumentation MAY additionally support a closed set of custom HTTP methods defined in [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry. Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -122,7 +122,7 @@ Following attributes MUST be provided **at span creation time** (when provided a
 | `POST` | POST method. |
 | `PUT` | PUT method. |
 | `TRACE` | TRACE method. |
-| `OTHER` | Any custom HTTP method instrumentation has not prior knowledge of. |
+| `OTHER` | Any custom HTTP method that the instrumentation has no prior knowledge of. |
 
 `network.transport` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 

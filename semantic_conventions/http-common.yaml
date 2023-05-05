@@ -36,14 +36,16 @@ groups:
               brief: 'TRACE method.'
             - id: other
               value: "OTHER"
-              brief: 'Any custom HTTP method instrumentation has not prior knowledge of.'
+              brief: 'Any custom HTTP method that the instrumentation has no prior knowledge of.'
         requirement_level: required
         brief: 'HTTP request method.'
         examples: ["GET", "POST", "HEAD"]
         note: >
-          HTTP request method SHOULD match one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods)
-          or a PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
-          Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to this instrumentation.
+          HTTP request method SHOULD be one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods)
+          or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
+          Instrumentation MAY additionally support a closed set of custom HTTP methods defined in
+          [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
+          Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
       - id: status_code
         type: int
         requirement_level:
