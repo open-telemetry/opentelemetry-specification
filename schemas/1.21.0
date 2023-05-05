@@ -9,7 +9,35 @@ versions:
             attribute_map:
               messaging.kafka.client_id: messaging.client_id
               messaging.rocketmq.client_id: messaging.client_id
-    metric
+    metrics:
+      changes:
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3464
+        - rename_attributes:
+            attribute_map:
+              memory: memory.type
+              pool: memory.pool.name
+            apply_to_metrics:
+              - metric.process.runtime.jvm.memory.usage
+              - metric.process.runtime.jvm.memory.init
+              - metric.process.runtime.jvm.memory.committed
+              - metric.process.runtime.jvm.memory.limit
+              - metric.process.runtime.jvm.memory.usage_after_last_gc
+        - rename_attributes:
+            attribute_map:
+              name: gc.name
+              action: gc.action
+            apply_to_metrics:
+              - process.runtime.jvm.gc.duration
+        - rename_attributes:
+            attribute_map:
+              daemon: thread.daemon
+            apply_to_metrics:
+              - process.runtime.jvm.threads.count
+        - rename_attributes:
+            attribute_map:
+              pool: buffer.pool.name
+            apply_to_metrics:
+              - attributes.process.runtime.jvm.buffer
   1.20.0:
     spans:
       changes:
