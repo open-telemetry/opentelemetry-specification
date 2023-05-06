@@ -77,37 +77,38 @@ backends that don't know how to work well together.
 
 ## OpenTelemetry Solution
 
-Distributed tracing introduced the notion of trace context propagation.
+Distributed metrics and tracing introduced the notion of trace context propagation.
 
-Fundamentally, though, nothing prevents the logs to adopt the same context
-propagation concepts. If the recorded logs contained trace context identifiers
-(such as trace and span ids or user-defined baggage) it would result
-in much richer correlation between logs and traces, as well as correlation
-between logs emitted by different components of a distributed system. This would
-make logs significantly more valuable in distributed systems.
+However, nothing fundamentally prevents logs from adopting the same context
+propagation concepts. When logs contain trace context identifiers
+(such as trace and span ids or user-defined baggage) it results in much
+richer correlations between logs, metrics, and traces, as well as correlations
+between logs emitted by different components of distributed systems. This makes
+distributed system logs significantly more valuable.
 
 This is one of the promising evolutionary directions for observability tools.
 Standardizing log correlation with traces and metrics, adding support for
 distributed context propagation for logs, unification of source attribution of
-logs, traces and metrics will increase the individual and combined value of
+logs, traces and metrics increases the individual and combined value of
 observability information for legacy and modern systems. This is the vision of
 OpenTelemetry's collection of logs, traces and metrics:
 
 ![Unified Collection Diagram](img/unified-collection.png)
 
-We emit logs, traces and metrics in a way that is compliant with OpenTelemetry
-data models, send the data through OpenTelemetry Collector, where it can be
-enriched and processed in a uniform manner. For example, Collector can add to
-all telemetry data coming from a Kubernetes Pod several attributes that describe
-the pod and it can be done automatically using
+OpenTelemetry emits logs, traces and metrics in a way that is compliant with OpenTelemetry
+data models, sending the data through OpenTelemetry Collector, where it is
+enriched and processed in a uniform manner. For example, Collector can add several
+attributes to telemetry data coming from Kubernetes Pods that describe
+the Pods. This can be done automatically today using
 [k8sprocessor](https://pkg.go.dev/github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sprocessor?tab=doc)
 without the need for the Application to do anything special. Most importantly
 such enrichment is completely uniform for all 3 signals. The Collector
 guarantees that logs, traces and metrics have precisely the same attribute names
 and values describing the Kubernetes Pod that they come from. This enables exact
-and unambiguous correlation of the signals by the Pod in the backend.
+and unambiguous correlation of metrics, traces, and logs originating from Kubernetes
+Pods.
 
-For traces and metrics OpenTelemetry defines a new API that application
+For traces and metrics OpenTelemetry defined a new API that application
 developers must use to emit traces and metrics.
 
 For logs we did not take the same path. We realized that there is a much bigger
@@ -145,7 +146,7 @@ Given the above state of the logging space we took the following approach:
   features than what is defined in OpenTelemetry. It is NOT a goal of
   OpenTelemetry to ship a feature-rich logging library.
 
-- OpenTelemetry defines an [SDK](./sdk.md) implementation of the [Bridge API](./bridge-api.md),
+- OpenTelemetry defines a [SDK](./sdk.md) implementation of the [Bridge API](./bridge-api.md),
   which enables configuration of [processing](./sdk.md#logrecordprocessor)
   and [exporting](./sdk.md#logrecordexporter) LogRecords.
 
@@ -155,51 +156,47 @@ OpenTelemetry-compliant logs, and ensures that all logs are eventually
 represented according to a uniform log data model on which the backends can
 operate.
 
-Later in this document we will discuss in more details
+Later in this document we will discuss in detail
 [how various log sources are handled](#legacy-and-modern-log-sources) by
-OpenTelemetry, but first we need to describe in more details an important
-concept: the log correlation.
+OpenTelemetry, but first we need to describe an important concept: log correlation.
 
 ## Log Correlation
 
-Logs can be correlated with the rest of observability data in a few dimensions:
+Logs can be correlated with the rest of telemetry data in a few dimensions:
 
-- By the **time of execution**. Logs, traces and metrics can record the moment
+- **Time of execution**: Logs, traces and metrics can record the moment
   of time or the range of time the execution took place. This is the most basic
   form of correlation.
 
-- By the **execution context**, also known as the trace context. It is a
-  standard practice to record the execution context (trace and span ids as well
-  as user-defined context) in the spans. OpenTelemetry extends this practice to
-  logs where possible by including [TraceId](data-model.md#field-traceid) and
-  [SpanId](data-model.md#field-spanid) in the LogRecords. This allows to
-  directly correlate logs and traces that correspond to the same execution
-  context. It also allows to correlate logs from different components of a
-  distributed system that participated in the particular request execution.
+- **Execution context (trace context)**: It is standard practice to record the
+  execution context (trace and span ids as well as user-defined context) in
+  the spans. OpenTelemetry extends this practice to logs where possible by
+  including [TraceId](data-model.md#field-traceid) and
+  [SpanId](data-model.md#field-spanid) in the LogRecords.
+  This allows logs and traces that correspond to the same execution context to
+  be directly correlated. It also enables log correlation between distribured
+  system components when they participate in serving the same requests.
 
-- By the **origin of the telemetry**, also known as the Resource context.
-  OpenTelemetry traces and metrics contain information about the Resource they
-  come from. We extend this practice to logs by including the
-  [Resource](data-model.md#field-resource) in LogRecords.
+- **Origin of telemetry (Resource context)**: OpenTelemetry traces and metrics
+  contain information about the Resource they come from. We extend this practice
+  to logs by including [Resource](data-model.md#field-resource) in LogRecords.
 
 These 3 correlations can be the foundation of powerful navigational, filtering,
-querying and analytical capabilities. OpenTelemetry aims to record and collects
+querying and analytical capabilities. OpenTelemetry aims to record and collect
 logs in a manner that enables such correlations.
 
 ## Legacy and Modern Log Sources
 
-It is important to distinguish several sorts of legacy and modern log sources.
-Firstly, this directly affects how exactly we get access to these logs and how
-we collect them. Secondly, we have varying levels of control over how these logs
-are generated and whether we can amend the information that can be included in
-the logs.
+It is important to distinguish several modern and legacy Log Source categories.
+Log Sources may collect and make logs available in a variety of ways that
+that affect OpenTelemetry's ability to process and enrich them.
 
-Below we list several categories of logs and describe what can be possibly done
-for each category to have better experience in the observability solutions.
+Below we list several Log Source categories and describe what can be done
+for each category to to improve their observability.
 
 ### System Logs
 
-These are logs generated by the operating system and over which we have no
+These are logs generated by operating system over which OpenTelemetry has no
 control. We cannot change the format or affect what information is included.
 Examples of system format are Syslog and Windows Event Logs.
 
@@ -238,7 +235,7 @@ common infrastructure controllers.
 
 Applications typically write logs to standard output, to files or other
 specialized medium (e.g. Windows Event Logs for applications). These logs can be
-in many different formats, spanning a spectrum along these variations:
+in many different formats, spanning a wide spectrum which may include:
 
 - Free-form text formats with no easily automatable and reliable way to parse
   structured data from them.
@@ -257,7 +254,7 @@ describe the host and infrastructure as well as application-level attributes
 (such as the application name, version, name of the database - if it is a DBMS,
 etc).
 
-OpenTelemetry recommends to collect application logs using Collector's
+OpenTelemetry recommends collecting application logs using Collector's
 [filelog receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver).
 Alternatively, another log collection agent, such as FluentBit, can collect
 logs,
@@ -323,7 +320,7 @@ to OpenTelemetry Collector.
 The benefit of using an intermediary medium is that how logs are produced and
 where they are written by the application requires no or minimal changes. The
 downside is that it requires the often non-trivial log file reading and parsing
-functionality. Parsing may also be not reliable if the output format is not
+functionality. Parsing may also be unreliable if the output format is not
 well-defined. For details on recording and parsing trace context,
 see [Trace Context in Non-OTLP Log Formats](../compatibility/logging_trace_context.md).
 
@@ -345,11 +342,11 @@ correlation information across all context dimensions.
 
 The downside of this approach is that the simplicity of having the logs in a
 local file is lost (e.g. ability to easily inspect the log file locally) and
-requires a full buy-in in OpenTelemetry's logging approach. This approach also
-only works if the destination that the logs need to be delivered is able to
-receive logs via the network protocol that OpenTelemetry can send in.
+requires complete adoption of OpenTelemetry's logging approach. This approach also
+only works if the log's target destination is available over one of OpenTelemetry's
+supported network protocols.
 
-The benefits of this approach is that it emits the logs in well-defined, formal,
+The benefits of this approach is that applications emit logs in a well-defined, formal,
 highly structured format, removes all complexity associated with file logs, such
 as parsers, log tailing and rotation. It also enables the possibility to send
 logs directly to the logging backend without using a log collection agent.
@@ -367,18 +364,17 @@ application startup.
 ### New First-Party Application Logs
 
 These are greenfield developments. OpenTelemetry provides recommendations and
-best practices about how to emit logs (along with traces and metrics) from these
+best practices for how to emit logs (along with traces and metrics) from these
 applications. For applicable languages and frameworks the auto-instrumentation
 or simple configuration of a logging library to use an OpenTelemetry log appender
 will still be the easiest way to emit context-enriched logs. As
 already described earlier we provide extensions to some popular logging
 libraries languages to support the manual instrumentation cases. The extensions
-will support the inclusion of the trace context in the logs and allow to send
-logs using OTLP protocol to the backend or to the Collector, bypassing the need
-to have the logs represented as text files. Emitted logs are automatically
+support including trace contexts in logs and sending logs using the OTLP protocol directly
+to backend Collectors, bypassing the need for file logs. Emitted logs are automatically
 augmented by application-specific resource context (e.g. process id, programming
-language, logging library name and version, etc). Full correlation across all
-context dimensions will be available for these logs.
+language, logging library name and version, etc). Full correlations across all
+context dimensions are available for these logs.
 
 This is how a typical new application uses OpenTelemetry API, SDK and the
 existing log libraries:
@@ -420,8 +416,8 @@ The following functionality exists to enable log collection:
 
 ## Auto-Instrumenting Existing Logging
 
-We can provide auto-instrumentation for most popular logging libraries. The
-auto-instrumented logging statements will do the following:
+We provide auto-instrumentation for most popular logging libraries. Auto-instrumented
+logging statements do the following:
 
 - Read incoming trace context (this is part of broader instrumentation that
   auto-instrumenting libraries perform).
@@ -434,7 +430,7 @@ This is possible to do for certain languages (e.g. in Java) and we can reuse
 [existing open-source libraries](https://docs.datadoghq.com/tracing/connect_logs_and_traces/java/?tab=log4j2)
 that do this.
 
-A further optional modification would be to auto-instrument loggers to send logs
+A further optional modification is to auto-instrument loggers to send logs
 directly to the backend via OTLP instead or in addition to writing to a file or
 standard output.
 
