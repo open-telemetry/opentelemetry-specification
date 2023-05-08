@@ -25,18 +25,6 @@ groups:
           Pool names are generally obtained via
           [MemoryPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/MemoryPoolMXBean.html#getName()).
 
-  - id: attributes.process.runtime.jvm.cpu.monitor
-    type: attribute_group
-    brief: "Describes JVM monitor metric attributes."
-    attributes:
-      - ref: thread.id
-        requirement_level: opt_in
-      - id: class
-        type: string
-        requirement_level: opt_in
-        brief: Class of the monitor.
-        examples: ["java.lang.Object"]
-
   - id: attributes.process.runtime.jvm.network
     type: attribute_group
     brief: "Describes JVM network IO metric attributes."
@@ -208,21 +196,25 @@ groups:
     instrument: updowncounter
     unit: "{buffer}"
 
-  - id: metric.process.runtime.jvm.cpu.monitor.wait
+  - id: metric.process.runtime.jvm.cpu.monitor.time
     type: metric
-    metric_name: process.runtime.jvm.cpu.monitor.wait
-    extends: attributes.process.runtime.jvm.cpu.monitor
-    brief: "Time thread was waiting at a monitor. Only available in JDK 17+."
+    metric_name: process.runtime.jvm.cpu.monitor.time
+    brief: "Time monitor was used bya  thread. Only available in JDK 17+."
     instrument: histogram
     unit: "s"
-
-  - id: metric.process.runtime.jvm.cpu.monitor.blocked
-    type: metric
-    metric_name: process.runtime.jvm.cpu.monitor.blocked
-    extends: attributes.process.runtime.jvm.cpu.monitor
-    brief: "Time thread was blocked at a monitor. Only available in JDK 17+."
-    instrument: histogram
-    unit: "s"
+    attributes:
+      - ref: thread.id
+        requirement_level: opt_in
+      - id: class
+        type: string
+        requirement_level: opt_in
+        brief: Class of the monitor.
+        examples: [ "java.lang.Object" ]
+      - id: state
+        type: string
+        requirement_level: recommended
+        brief: Action taken at monitor.
+        examples: [ "blocked", "wait" ]
 
   - id: metric.process.runtime.jvm.cpu.context_switch
     type: metric

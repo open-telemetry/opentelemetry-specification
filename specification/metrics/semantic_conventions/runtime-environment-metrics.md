@@ -385,37 +385,21 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 <!-- endsemconv -->
 
 
-### Metric: `process.runtime.jvm.cpu.monitor.blocked`
+### Metric: `process.runtime.jvm.cpu.monitor.time`
 
 This metric is [recommended](../metric-requirement-level.md#recommended). Only available with JDK 17+.
 
-<!-- semconv metric.process.runtime.jvm.cpu.monitor.blocked(metric_table) -->
+<!-- semconv metric.process.runtime.jvm.cpu.monitor.time(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `process.runtime.jvm.cpu.monitor.blocked` | Histogram | `s` | Time thread was blocked at a monitor. Only available in JDK 17+. |
+| `process.runtime.jvm.cpu.monitor.time` | Histogram | `s` | Time monitor was used bya  thread. Only available in JDK 17+. |
 <!-- endsemconv -->
 
-<!-- semconv metric.process.runtime.jvm.cpu.monitor.blocked(full) -->
+<!-- semconv metric.process.runtime.jvm.cpu.monitor.time(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
 | `class` | string | Class of the monitor. | `java.lang.Object` | Opt-In |
-| [`thread.id`](../../trace/semantic_conventions/span-general.md) | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | Opt-In |
-<!-- endsemconv -->
-
-### Metric: `process.runtime.jvm.cpu.monitor.wait`
-
-This metric is [recommended](../metric-requirement-level.md#recommended). Only available with JDK 17+.
-
-<!-- semconv metric.process.runtime.jvm.cpu.monitor.wait(metric_table) -->
-| Name     | Instrument Type | Unit (UCUM) | Description    |
-| -------- | --------------- | ----------- | -------------- |
-| `process.runtime.jvm.cpu.monitor.wait` | Histogram | `s` | Time thread was waiting at a monitor. Only available in JDK 17+. |
-<!-- endsemconv -->
-
-<!-- semconv metric.process.runtime.jvm.cpu.monitor.wait(full) -->
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `class` | string | Class of the monitor. | `java.lang.Object` | Opt-In |
+| `state` | string | Action taken at monitor. | `blocked`; `wait` | Recommended |
 | [`thread.id`](../../trace/semantic_conventions/span-general.md) | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | Opt-In |
 <!-- endsemconv -->
 
