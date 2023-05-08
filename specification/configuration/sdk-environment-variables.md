@@ -121,11 +121,11 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch LogRecord Processor
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 | Name                            | Description                                                      | Default  | Notes                                                  |
 | ------------------------------- | ---------------------------------------------------------------- | -------  | ------------------------------------------------------ |
-| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000     |                                                        |
+| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 1000     |                                                        |
 | OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000    |                                                        |
 | OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048     |                                                        |
 | OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512      | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE |
@@ -159,7 +159,7 @@ See the SDK [Span Limits](../trace/sdk.md#span-limits) section for the definitio
 
 ## LogRecord Limits
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 See the SDK [LogRecord Limits](../logs/sdk.md#logrecord-limits) section for the definition of the limits.
 

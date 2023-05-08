@@ -149,8 +149,9 @@ All custom identifiers SHOULD be stable across different versions of an implemen
 | `php` | php |
 | `python` | python |
 | `ruby` | ruby |
-| `webjs` | webjs |
+| `rust` | rust |
 | `swift` | swift |
+| `webjs` | webjs |
 <!-- endsemconv -->
 
 ## Telemetry SDK (Experimental)
