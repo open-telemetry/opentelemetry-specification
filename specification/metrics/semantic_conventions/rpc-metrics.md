@@ -28,6 +28,30 @@ metrics can be filtered for finer grain analysis.
 
 <!-- tocstop -->
 
+> **Warning**
+> Existing RPC instrumentations that are using
+> [v1.20.0 of this document](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/metrics/semantic_conventions/rpc-metrics.md)
+> (or prior):
+>
+> * SHOULD NOT change the version of the networking attributes that they emit
+>   until the HTTP semantic conventions are marked stable (HTTP stabilization will
+>   include stabilization of a core set of networking attributes which are also used
+>   in RPC instrumentations).
+> * SHOULD introduce an environment variable `OTEL_SEMCONV_STABILITY_OPT_IN`
+>   in the existing major version which supports the following values:
+>   * `none` - continue emitting whatever version of the old experimental
+>     networking attributes the instrumentation was emitting previously.
+>     This is the default value.
+>   * `http` - emit the new, stable networking attributes,
+>     and stop emitting the old experimental networking attributes
+>     that the instrumentation emitted previously.
+>   * `http/dup` - emit both the old and the stable networking attributes,
+>     allowing for a seamless transition.
+> * SHOULD maintain (security patching at a minimum) the existing major version
+>   for at least six months after it starts emitting both sets of attributes.
+> * SHOULD drop the environment variable in the next major version (stable
+>   next major version SHOULD NOT be released prior to October 1, 2023).
+
 ## Metric instruments
 
 The following metric instruments MUST be used to describe RPC operations. They

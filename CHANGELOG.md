@@ -15,6 +15,14 @@ release.
 
 - Add experimental histogram advice API.
   ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+- Recommended cardinality limits to protect metrics pipelines against
+  excessive data production from a single instrument.
+  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
+- Specify second unit (`s`) and advice bucket boundaries of `[]`
+  for `process.runtime.jvm.gc.duration`.
+  ([#3458](https://github.com/open-telemetry/opentelemetry-specification/pull/3458))
+- Add links to the JMX APIs that are the JVM runtime metric sources.
+  ([#3463](https://github.com/open-telemetry/opentelemetry-specification/pull/3463))
 
 ### Logs
 
@@ -47,6 +55,9 @@ release.
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
+- Add transition plan for upcoming breaking changes to the unstable HTTP semantic
+  conventions.
+  ([#3443](https://github.com/open-telemetry/opentelemetry-specification/pull/3443))
 - Rename `net.peer.*`, `net.host.*`, and `net.sock.*` attributes to align with ECS
   ([#3402](https://github.com/open-telemetry/opentelemetry-specification/pull/3402))
     BREAKING: rename `net.peer.name` to `server.address` on client side and to `client.address` on server side,
