@@ -74,7 +74,7 @@ On client side, it's usually passed in form of URL, connection string, host name
 
 If only IP address is available, it should be populated on `server.address`. Reverse DNS lookup SHOULD NOT be used to obtain DNS name.
 
-If `net.transport` is `"pipe"`, the absolute path to the file representing it should be used as `server.address`.
+If `network.transport` is `"pipe"`, the absolute path to the file representing it should be used as `server.address`.
 If there is no such file (e.g., anonymous pipe),
 the name should explicitly be set to the empty string to distinguish it from the case where the name is just unknown or not covered by the instrumentation.
 
@@ -85,8 +85,6 @@ For Unix domain socket, `server.address` attribute represents remote endpoint ad
 _Note: this section applies to socket connections visible to instrumentations. Instrumentations have limited knowledge about intermediaries communications goes through such as [transparent proxies](https://www.rfc-editor.org/rfc/rfc3040.html#section-2.5) or VPN servers. Higher-level instrumentations such as HTTP don't always have access to the socket-level information and may not be able to populate socket-level attributes._
 
 Socket-level attributes identify peer and host that are directly connected to each other. Since instrumentations may have limited knowledge on network information, instrumentations SHOULD populate such attributes to the best of their knowledge when populate them at all.
-
-`net.sock.family` identifies address family specified when connecting to the socket. For example, it matches `sa_family` field of `sockaddr` structure on [Linux](https://man7.org/linux/man-pages/man0/sys_socket.h.0p.html) and [Windows](https://docs.microsoft.com/windows/win32/api/winsock/ns-winsock-sockaddr).
 
 _Note: Specific structures and methods to obtain socket-level attributes are mentioned here only as examples. Instrumentations would usually use Socket API provided by their environment or sockets implementations._
 
@@ -224,7 +222,7 @@ Destination fields capture details about the receiver of a network exchange/pack
 **[1]:** This value may be a host name, a fully qualified domain name, or another host naming format.
 <!-- endsemconv -->
 
-### `network.connection.*` and `network.carrier.*` attributes
+### Network connection and carrier attributes
 
 <!-- semconv network-connection-and-carrier -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
@@ -272,6 +270,8 @@ Destination fields capture details about the receiver of a network exchange/pack
 | `nrnsa` | 5G NRNSA (New Radio Non-Standalone) |
 | `lte_ca` | LTE CA |
 <!-- endsemconv -->
+
+For `Unix` and `pipe`, since the connection goes over the file system instead of being directly to a known peer, `server.address` is the only attribute that usually makes sense (see description of `server.address` below).
 
 ## General remote service attributes
 
