@@ -1,18 +1,18 @@
 # OpenTelemetry Environment Variable Specification
 
-**Status**: [Mixed](document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
 
 ## Parsing empty value
 
-**Status**: [Stable](document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The SDK MUST interpret an empty value of an environment variable the same way as when the variable is unset.
 
 ## Special configuration types
 
-**Status**: [Stable](document-status.md)
+**Status**: [Stable](../document-status.md)
 
 ### Boolean value
 
@@ -64,24 +64,24 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 ## General SDK Configuration
 
-**Status**: [Stable](document-status.md)
+**Status**: [Stable](../document-status.md)
 
-| Name                     | Description                                       | Default                           | Notes                               |
-| ------------------------ | ------------------------------------------------- | --------------------------------- | ----------------------------------- |
-| OTEL_SDK_DISABLED         | Disable the SDK for all signals | false | Boolean value. If "true", a no-op SDK implementation will be used for all telemetry signals. Any other value or absence of the variable will have no effect and the SDK will remain enabled. This setting has no effect on propagators configured through the OTEL_PROPAGATORS variable.|
-| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes | See [Resource semantic conventions](resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for details. | See [Resource SDK](./resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details. |
-| OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](./resource/semantic_conventions/README.md#service) resource attribute | | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence. |
-| OTEL_LOG_LEVEL           | Log level used by the SDK logger                  | "info"                            |                                     |
-| OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list  | "tracecontext,baggage"            | Values MUST be deduplicated in order to register a `Propagator` only once. |
-| OTEL_TRACES_SAMPLER       | Sampler to be used for traces                     | "parentbased_always_on"                       | See [Sampling](./trace/sdk.md#sampling) |
-| OTEL_TRACES_SAMPLER_ARG   | String value to be used as the sampler argument   |                                   | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set. |
+| Name                     | Description                                                                                                   | Default                                                                                                                                          | Notes                                                                                                                                                                                                                                                                                    |
+|--------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| OTEL_SDK_DISABLED        | Disable the SDK for all signals                                                                               | false                                                                                                                                            | Boolean value. If "true", a no-op SDK implementation will be used for all telemetry signals. Any other value or absence of the variable will have no effect and the SDK will remain enabled. This setting has no effect on propagators configured through the OTEL_PROPAGATORS variable. |
+| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes                                                             | See [Resource semantic conventions](../resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for details. | See [Resource SDK](../resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details.                                                                                                                                                                     |
+| OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](../resource/semantic_conventions/README.md#service) resource attribute |                                                                                                                                                  | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence.                                                                                                                                                                             |
+| OTEL_LOG_LEVEL           | Log level used by the SDK logger                                                                              | "info"                                                                                                                                           |                                                                                                                                                                                                                                                                                          |
+| OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list                                                              | "tracecontext,baggage"                                                                                                                           | Values MUST be deduplicated in order to register a `Propagator` only once.                                                                                                                                                                                                               |
+| OTEL_TRACES_SAMPLER      | Sampler to be used for traces                                                                                 | "parentbased_always_on"                                                                                                                          | See [Sampling](../trace/sdk.md#sampling)                                                                                                                                                                                                                                                 |
+| OTEL_TRACES_SAMPLER_ARG  | String value to be used as the sampler argument                                                               |                                                                                                                                                  | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.            |
 
 Known values for `OTEL_PROPAGATORS` are:
 
 - `"tracecontext"`: [W3C Trace Context](https://www.w3.org/TR/trace-context/)
 - `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
-- `"b3"`: [B3 Single](./context/api-propagators.md#configuration)
-- `"b3multi"`: [B3 Multi](./context/api-propagators.md#configuration)
+- `"b3"`: [B3 Single](../context/api-propagators.md#configuration)
+- `"b3multi"`: [B3 Multi](../context/api-propagators.md#configuration)
 - `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
 - `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
@@ -110,7 +110,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch Span Processor
 
-**Status**: [Stable](document-status.md)
+**Status**: [Stable](../document-status.md)
 
 | Name                           | Description                                                      | Default  | Notes                                                 |
 | ------------------------------ | ---------------------------------------------------------------- | -------  | ----------------------------------------------------- |
@@ -121,11 +121,11 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch LogRecord Processor
 
-**Status**: [Experimental](document-status.md)
+**Status**: [Stable](../document-status.md)
 
 | Name                            | Description                                                      | Default  | Notes                                                  |
 | ------------------------------- | ---------------------------------------------------------------- | -------  | ------------------------------------------------------ |
-| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000     |                                                        |
+| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 1000     |                                                        |
 | OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000    |                                                        |
 | OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048     |                                                        |
 | OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512      | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE |
@@ -135,7 +135,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 SDKs SHOULD only offer environment variables for the types of attributes, for
 which that SDK implements truncation mechanism.
 
-See the SDK [Attribute Limits](common/README.md#attribute-limits) section for the definition of the limits.
+See the SDK [Attribute Limits](../common/README.md#attribute-limits) section for the definition of the limits.
 
 | Name                              | Description                          | Default | Notes |
 | --------------------------------- | ------------------------------------ | ------- | ----- |
@@ -144,9 +144,9 @@ See the SDK [Attribute Limits](common/README.md#attribute-limits) section for th
 
 ## Span Limits
 
-**Status**: [Stable](document-status.md)
+**Status**: [Stable](../document-status.md)
 
-See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition of the limits.
+See the SDK [Span Limits](../trace/sdk.md#span-limits) section for the definition of the limits.
 
 | Name                                   | Description                                    | Default | Notes |
 | -------------------------------------- | ---------------------------------------------- | ------- | ----- |
@@ -159,9 +159,9 @@ See the SDK [Span Limits](trace/sdk.md#span-limits) section for the definition o
 
 ## LogRecord Limits
 
-**Status**: [Experimental](document-status.md)
+**Status**: [Stable](../document-status.md)
 
-See the SDK [LogRecord Limits](logs/sdk.md#logrecord-limits) section for the definition of the limits.
+See the SDK [LogRecord Limits](../logs/sdk.md#logrecord-limits) section for the definition of the limits.
 
 | Name                                        | Description                                | Default  | Notes |
 | ------------------------------------------- | -------------------------------------------| -------- | ----- |
@@ -170,11 +170,11 @@ See the SDK [LogRecord Limits](logs/sdk.md#logrecord-limits) section for the def
 
 ## OTLP Exporter
 
-See [OpenTelemetry Protocol Exporter Configuration Options](./protocol/exporter.md).
+See [OpenTelemetry Protocol Exporter Configuration Options](../protocol/exporter.md).
 
 ## Jaeger Exporter
 
-**Status**: [Deprecated](document-status.md)
+**Status**: [Deprecated](../document-status.md)
 
 Jaeger exporter support will be removed from OpenTelemetry in July 2023.
 
@@ -238,7 +238,7 @@ Environment variables specific for the `udp/thrift.binary` transport protocol:
 
 ## Zipkin Exporter
 
-**Status**: [Stable](document-status.md)
+**Status**: [Stable](../document-status.md)
 
 | Name                          | Description                                                                        | Default                              |
 | ----------------------------- | ---------------------------------------------------------------------------------- |------------------------------------- |
@@ -256,7 +256,7 @@ _is no specified default, or configuration via environment variables_.
 
 ## Prometheus Exporter
 
-**Status**: [Experimental](document-status.md)
+**Status**: [Experimental](../document-status.md)
 
 | Name                          | Description                     | Default                      |
 | ----------------------------- | --------------------------------| ---------------------------- |
@@ -265,7 +265,7 @@ _is no specified default, or configuration via environment variables_.
 
 ## Exporter Selection
 
-**Status**: [Stable](document-status.md)
+**Status**: [Stable](../document-status.md)
 
 We define environment variables for setting one or more exporters per signal.
 
@@ -279,25 +279,25 @@ The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 
 Known values for `OTEL_TRACES_EXPORTER` are:
 
-- `"otlp"`: [OTLP](./protocol/otlp.md)
+- `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"jaeger"`: export in Jaeger data model
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"none"`: No automatically configured exporter for traces.
 
 Known values for `OTEL_METRICS_EXPORTER` are:
 
-- `"otlp"`: [OTLP](./protocol/otlp.md)
+- `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 - `"none"`: No automatically configured exporter for metrics.
 
 Known values for `OTEL_LOGS_EXPORTER` are:
 
-- `"otlp"`: [OTLP](./protocol/otlp.md)
+- `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"none"`: No automatically configured exporter for logs.
 
 ## Metrics SDK Configuration
 
-**Status**: [Mixed](document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
@@ -305,16 +305,16 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
-- `"always_on"`: [AlwaysOn](./metrics/sdk.md#alwayson)
-- `"always_off"`: [AlwaysOff](./metrics/sdk.md#alwaysoff)
-- `"trace_based"`: [TraceBased](./metrics/sdk.md#tracebased)
+- `"always_on"`: [AlwaysOn](../metrics/sdk.md#alwayson)
+- `"always_off"`: [AlwaysOff](../metrics/sdk.md#alwaysoff)
+- `"trace_based"`: [TraceBased](../metrics/sdk.md#tracebased)
 
 ### Periodic exporting MetricReader
 
-**Status**: [Stable](document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Environment variables specific for the push metrics exporters (OTLP, stdout, in-memory)
-that use [periodic exporting MetricReader](metrics/sdk.md#periodic-exporting-metricreader).
+that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-metricreader).
 
 | Name                          | Description                                                                   | Default | Notes |
 | ----------------------------- | ----------------------------------------------------------------------------- | ------- | ----- |

@@ -15,6 +15,9 @@ release.
 
 - Add experimental histogram advice API.
   ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+- Specify second unit (`s`) and advice bucket boundaries of `[]`
+  for `process.runtime.jvm.gc.duration`.
+  ([#3458](https://github.com/open-telemetry/opentelemetry-specification/pull/3458))
 
 ### Logs
 
@@ -22,6 +25,10 @@ release.
   ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3354))
 - Drop logger include_trace_context parameter.
   ([#3397](https://github.com/open-telemetry/opentelemetry-specification/pull/3397))
+- Mark logs bridge API / SDK as stable.
+  ([#3376](https://github.com/open-telemetry/opentelemetry-specification/pull/3376))
+- Mark LogRecord Environment Variables as stable.
+  ([#3449](https://github.com/open-telemetry/opentelemetry-specification/pull/3449))
 
 ### Resource
 
@@ -41,6 +48,8 @@ release.
   ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
 - Change http.server.duration and http.client.duration units to seconds
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
+- BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
+  ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
 
 ### Compatibility
 
@@ -52,10 +61,16 @@ release.
   ([#3360](https://github.com/open-telemetry/opentelemetry-specification/pull/3360))
 - Move file configuration schema to `opentelemetry-configuration`.
   ([#3412](https://github.com/open-telemetry/opentelemetry-specification/pull/3412))
+- Move `sdk-configuration.md` and `sdk-environment-variables.md`
+  to `/specification/configuration/`.
+  ([#3434](https://github.com/open-telemetry/opentelemetry-specification/pull/3434))
 
 ### Telemetry Schemas
 
 ### Common
+
+- Add log entries to specification README.md contents.
+  ([#3435](https://github.com/open-telemetry/opentelemetry-specification/pull/3435))
 
 ## v1.20.0 (2023-04-07)
 

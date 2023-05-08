@@ -19,9 +19,9 @@
 
 File configuration provides a mechanism for configuring OpenTelemetry which is
 more expressive and full-featured than
-the [environment variable](../sdk-environment-variables.md) based scheme, and
+the [environment variable](sdk-environment-variables.md) based scheme, and
 language agnostic in a way not possible
-with [programmatic configuration](../sdk-configuration.md#programmatic).
+with [programmatic configuration](sdk-configuration.md#programmatic).
 
 File configuration defines a [Configuration Model](#configuration-model),
 which can be expressed in a [configuration file](#configuration-file).
