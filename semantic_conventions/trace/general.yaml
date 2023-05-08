@@ -40,24 +40,6 @@ groups:
           `net.protocol.version` refers to the version of the protocol used and might be
           different from the protocol client's version. If the HTTP client used has a version
           of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
-      - id: sock.peer.name
-        type: string
-        brief: Remote socket peer name.
-        requirement_level:
-          recommended: If available and different from `net.peer.name` and if `net.sock.peer.addr` is set.
-        examples: proxy.example.com
-      - id: sock.peer.addr
-        type: string
-        brief: >
-          Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication,
-          [etc](https://man7.org/linux/man-pages/man7/address_families.7.html).
-        examples: ['127.0.0.1', '/tmp/mysql.sock' ]
-      - id: sock.peer.port
-        type: int
-        brief: Remote socket peer port.
-        requirement_level:
-          recommended: If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
-        examples: 16456
       - id: sock.family
         type:
           allow_custom_values: true
@@ -73,41 +55,14 @@ groups:
               brief: "Unix domain socket path"
         requirement_level:
           conditionally_required: >
-            If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set.
-            Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr`
+            If different than `inet` and if any of `server.socket.address` or `client.socket.address` are set.
+            Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.socket.address` and `client.socket.address`
             if `net.sock.family` is not set. This is to support instrumentations that follow previous versions
             of this document.
         brief: >
           Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication.
         examples: ['inet6', 'bluetooth']
-      - id: peer.name
-        type: string
-        brief: 'Logical remote hostname, see note below.'
-        examples: 'example.com'
-        note: >
-          `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
-      - id: peer.port
-        type: int
-        brief: 'Logical remote port number'
-        examples: [80, 8080, 443]
-      - id: host.name
-        type: string
-        brief: 'Logical local hostname or similar, see note below.'
-        examples: 'localhost'
-      - id: host.port
-        type: int
-        brief: 'Logical local port number, preferably the one that the peer used to connect'
-        examples: 8080
-      - id: sock.host.addr
-        type: string
-        brief: Local socket address. Useful in case of a multi-IP host.
-        examples: '192.168.0.1'
-      - id: sock.host.port
-        type: int
-        brief: 'Local socket port number.'
-        requirement_level:
-          conditionally_required: If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
-        examples: 35555
+
   - id: network-connection-and-carrier
     prefix: net
     type: attribute_group

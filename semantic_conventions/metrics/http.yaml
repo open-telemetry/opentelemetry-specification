@@ -22,7 +22,7 @@ groups:
     attributes:
       - ref: http.method
       - ref: http.scheme
-      - ref: net.host.name
+      - ref: server.address
         requirement_level: required
         brief: >
           Name of the local HTTP server that received the request.
@@ -37,7 +37,7 @@ groups:
 
           SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-      - ref: net.host.port
+      - ref: server.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
         brief: >
@@ -91,7 +91,7 @@ groups:
       - ref: http.status_code
       - ref: net.protocol.name
       - ref: net.protocol.version
-      - ref: net.sock.peer.addr
+      - ref: server.socket.address
 
   - id: metric.http.client.request.size
     type: metric
@@ -106,7 +106,7 @@ groups:
       - ref: http.status_code
       - ref: net.protocol.name
       - ref: net.protocol.version
-      - ref: net.sock.peer.addr
+      - ref: server.socket.address
 
   - id: metric.http.client.response.size
     type: metric
@@ -121,4 +121,4 @@ groups:
       - ref: http.status_code
       - ref: net.protocol.name
       - ref: net.protocol.version
-      - ref: net.sock.peer.addr
+      - ref: server.socket.address

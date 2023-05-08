@@ -196,8 +196,8 @@ attributes, and MUST NOT be added as metric attributes:
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
-| `net.host.name` | The `<host>` portion of the target's URL that was scraped |
-| `net.host.port` | The `<port>` portion of the target's URL that was scraped |
+| `server.address` | The `<host>` portion of the target's URL that was scraped |
+| `server.port` | The `<port>` portion of the target's URL that was scraped |
 | `http.scheme` | `http` or `https` |
 
 In addition to the attributes above, the

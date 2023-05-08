@@ -141,21 +141,21 @@ groups:
       - ref: messaging.message.payload_compressed_size_bytes
         requirement_level:
           recommended: Only if span represents operation on a single message.
-      - ref: net.peer.name
+      - ref: server.address
         note: >
           This should be the IP/hostname of the broker (or other network-level peer) this specific message is sent to/received from.
         requirement_level:
           conditionally_required: If available.
-      - ref: net.sock.peer.addr
+      - ref: server.socket.address
         tag: connection-level
-      - ref: net.sock.peer.port
+      - ref: server.socket.port
         tag: connection-level
       - ref: net.sock.family
         tag: connection-level
-      - ref: net.sock.peer.name
+      - ref: server.socket.domain
         tag: connection-level
         requirement_level:
-          recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+          recommended: If different than `server.address` and if `server.socket.address` is set.
       - ref: net.protocol.name
         examples: ['amqp', 'mqtt']
       - ref: net.protocol.version
