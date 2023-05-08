@@ -9,6 +9,13 @@ versions:
             attribute_map:
               messaging.kafka.client_id: messaging.client_id
               messaging.rocketmq.client_id: messaging.client_id
+    metrics:
+      changes:
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3482
+        - rename_metrics:
+            process.runtime.jvm.buffer.usage: process.runtime.jvm.buffers.usage
+            process.runtime.jvm.buffer.limit: process.runtime.jvm.buffers.limit
+            process.runtime.jvm.buffer.count: process.runtime.jvm.buffers.count
   1.20.0:
     spans:
       changes:

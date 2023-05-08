@@ -149,7 +149,7 @@ groups:
     instrument: gauge
     unit: "1"
 
-  - id: attributes.process.runtime.jvm.buffer
+  - id: attributes.process.runtime.jvm.buffers
     type: attribute_group
     brief: "Describes JVM buffer metric attributes."
     attributes:
@@ -160,26 +160,26 @@ groups:
           Pool names are generally obtained via
           [BufferPoolMXBean#getName()](https://docs.oracle.com/en/java/javase/11/docs/api/java.management/java/lang/management/BufferPoolMXBean.html#getName()).
 
-  - id: metric.process.runtime.jvm.buffer.usage
+  - id: metric.process.runtime.jvm.buffers.usage
     type: metric
-    metric_name: process.runtime.jvm.buffer.usage
-    extends: attributes.process.runtime.jvm.buffer
+    metric_name: process.runtime.jvm.buffers.usage
+    extends: attributes.process.runtime.jvm.buffers
     brief: "Measure of memory used by buffers."
     instrument: updowncounter
     unit: "By"
 
-  - id: metric.process.runtime.jvm.buffer.limit
+  - id: metric.process.runtime.jvm.buffers.limit
     type: metric
-    metric_name: process.runtime.jvm.buffer.limit
-    extends: attributes.process.runtime.jvm.buffer
+    metric_name: process.runtime.jvm.buffers.limit
+    extends: attributes.process.runtime.jvm.buffers
     brief: "Measure of total memory capacity of buffers."
     instrument: updowncounter
     unit: "By"
 
-  - id: metric.process.runtime.jvm.buffer.count
+  - id: metric.process.runtime.jvm.buffers.count
     type: metric
-    metric_name: process.runtime.jvm.buffer.count
-    extends: attributes.process.runtime.jvm.buffer
+    metric_name: process.runtime.jvm.buffers.count
+    extends: attributes.process.runtime.jvm.buffers
     brief: "Number of buffers in the pool."
     instrument: updowncounter
     unit: "{buffer}"

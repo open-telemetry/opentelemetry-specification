@@ -58,6 +58,9 @@ release.
 - Add transition plan for upcoming breaking changes to the unstable HTTP semantic
   conventions.
   ([#3443](https://github.com/open-telemetry/opentelemetry-specification/pull/3443))
+- BREAKING: Rename `process.runtime.jvm.buffer.*` metrics to
+  `process.runtime.jvm.buffers.*`
+  ([#3482](https://github.com/open-telemetry/opentelemetry-specification/pull/3482))
 
 ### Compatibility
 
