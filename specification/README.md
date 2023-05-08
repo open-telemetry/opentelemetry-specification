@@ -1,5 +1,5 @@
 <!--- Hugo front matter used to generate the website version of this page:
-linkTitle: Specification
+linkTitle: OTel spec
 no_list: true
 cascade:
   body_class: otel-docs-spec
