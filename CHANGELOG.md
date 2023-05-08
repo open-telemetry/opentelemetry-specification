@@ -15,6 +15,9 @@ release.
 
 - Add experimental histogram advice API.
   ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+- Recommended cardinality limits to protect metrics pipelines against
+  excessive data production from a single instrument.
+  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 - Specify second unit (`s`) and advice bucket boundaries of `[]`
   for `process.runtime.jvm.gc.duration`.
   ([#3458](https://github.com/open-telemetry/opentelemetry-specification/pull/3458))
