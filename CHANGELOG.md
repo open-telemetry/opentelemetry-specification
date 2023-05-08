@@ -15,6 +15,14 @@ release.
 
 - Add experimental histogram advice API.
   ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+- Recommended cardinality limits to protect metrics pipelines against
+  excessive data production from a single instrument.
+  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
+- Specify second unit (`s`) and advice bucket boundaries of `[]`
+  for `process.runtime.jvm.gc.duration`.
+  ([#3458](https://github.com/open-telemetry/opentelemetry-specification/pull/3458))
+- Add links to the JMX APIs that are the JVM runtime metric sources.
+  ([#3463](https://github.com/open-telemetry/opentelemetry-specification/pull/3463))
 
 ### Logs
 
@@ -22,6 +30,10 @@ release.
   ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3354))
 - Drop logger include_trace_context parameter.
   ([#3397](https://github.com/open-telemetry/opentelemetry-specification/pull/3397))
+- Mark logs bridge API / SDK as stable.
+  ([#3376](https://github.com/open-telemetry/opentelemetry-specification/pull/3376))
+- Mark LogRecord Environment Variables as stable.
+  ([#3449](https://github.com/open-telemetry/opentelemetry-specification/pull/3449))
 
 ### Resource
 
@@ -43,6 +55,20 @@ release.
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
+- Add transition plan for upcoming breaking changes to the unstable HTTP semantic
+  conventions.
+  ([#3443](https://github.com/open-telemetry/opentelemetry-specification/pull/3443))
+- Rename `net.peer.*`, `net.host.*`, and `net.sock.*` attributes to align with ECS
+  ([#3402](https://github.com/open-telemetry/opentelemetry-specification/pull/3402))
+    BREAKING: rename `net.peer.name` to `server.address` on client side and to `client.address` on server side,
+     `net.peer.port` to `server.port` on client side and to `client.port` on server side,
+     `net.host.name` and `net.host.port` to `server.name` and `server.port` (since `net.host.*` attributes only applied to server instrumentation)
+     `net.sock.peer.addr` to `server.socket.address` on client side and to `client.socket.address` on server side,
+     `net.sock.peer.port` to `server.socket.port` on client side and to `client.socket.port` on server side,
+     `net.sock.peer.name` to `server.socket.domain` (since `net.sock.peer.name` only applied to client instrumentation),
+     `net.sock.host.addr` to `server.socket.address` (since `net.sock.host.*` only applied to server instrumentation),
+     `net.sock.host.port` to `server.socket.port` (similarly since `net.sock.host.*` only applied to server instrumentation),
+     `http.client_ip` to `client.address`
 - BREAKING: Introduce `network.transport` defined as
   [OSI Transport Layer](https://osi-model.com/transport-layer/) or
   [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication).
@@ -63,6 +89,9 @@ release.
   ([#3360](https://github.com/open-telemetry/opentelemetry-specification/pull/3360))
 - Move file configuration schema to `opentelemetry-configuration`.
   ([#3412](https://github.com/open-telemetry/opentelemetry-specification/pull/3412))
+- Move `sdk-configuration.md` and `sdk-environment-variables.md`
+  to `/specification/configuration/`.
+  ([#3434](https://github.com/open-telemetry/opentelemetry-specification/pull/3434))
 
 ### Telemetry Schemas
 

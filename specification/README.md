@@ -1,5 +1,5 @@
 <!--- Hugo front matter used to generate the website version of this page:
-linkTitle: Specification
+linkTitle: OTel spec
 no_list: true
 cascade:
   body_class: otel-docs-spec
@@ -33,7 +33,7 @@ cascade:
   - [Metrics](metrics/sdk.md)
   - [Logs](logs/sdk.md)
   - [Resource](resource/sdk.md)
-  - [Configuration](sdk-configuration.md)
+  - [Configuration](configuration/sdk-configuration.md)
 - Data Specification
   - [Semantic Conventions](overview.md#semantic-conventions)
   - [Protocol](protocol/README.md)

@@ -27,7 +27,7 @@ groups:
     type: attribute_group
     brief: 'HTTP Client spans attributes'
     attributes:
-      - ref: net.peer.name
+      - ref: server.address
         requirement_level: required
         brief: >
           Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
@@ -39,13 +39,13 @@ groups:
           - Host identifier of the `Host` header
 
           SHOULD NOT be set if capturing it would require an extra DNS lookup.
-      - ref: net.peer.port
+      - ref: server.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
         brief: >
           Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
         note: >
-          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match
           URI port identifier, otherwise it MUST match `Host` header port identifier.
 
   - id: attributes.http.server
@@ -69,7 +69,7 @@ groups:
           MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 
           SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
-      - ref: net.host.name
+      - ref: server.address
         requirement_level: required
         brief: >
           Name of the local HTTP server that received the request.
@@ -84,7 +84,7 @@ groups:
 
           SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-      - ref: net.host.port
+      - ref: server.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
         brief: >
