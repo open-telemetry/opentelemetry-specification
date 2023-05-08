@@ -33,6 +33,7 @@ semantic conventions when instrumenting runtime environments.
   * [Metric: `process.runtime.jvm.cpu.utilization`](#metric-processruntimejvmcpuutilization)
   * [Metric: `process.runtime.jvm.system.cpu.utilization`](#metric-processruntimejvmsystemcpuutilization)
   * [Metric: `process.runtime.jvm.system.cpu.load_1m`](#metric-processruntimejvmsystemcpuload_1m)
+  * [Metric: `process.runtime.jvm.available_processors`](#metric-processruntimejvmavailable_processors)
   * [Metric: `process.runtime.jvm.buffer.usage`](#metric-processruntimejvmbufferusage)
   * [Metric: `process.runtime.jvm.buffer.limit`](#metric-processruntimejvmbufferlimit)
   * [Metric: `process.runtime.jvm.buffer.count`](#metric-processruntimejvmbuffercount)
