@@ -1,6 +1,6 @@
 # OpenCensus Compatibility
 
-**Status**: [Experimental](../document-status.md), Unless otherwise specified.
+**Status**: [Stable](../document-status.md), Unless otherwise specified.
 
 The OpenTelemetry project aims to provide backwards compatibility with the
 [OpenCensus](https://opencensus.io) project in order to ease migration of
@@ -79,8 +79,6 @@ Starting with a library using OpenCensus Instrumentation:
 5. After a deprecation period, remove the option to use OpenCensus instrumentation.
 
 ## Trace Bridge
-
-**Status**: [Experimental, Feature Freeze](../document-status.md)
 
 The trace bridge is provided as a shim layer implementing the
 [OpenCensus Trace API](https://github.com/census-instrumentation/opencensus-specs)

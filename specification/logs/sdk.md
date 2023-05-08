@@ -1,6 +1,6 @@
 # Logs SDK
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -120,25 +120,25 @@ registered [LogRecordProcessors](#logrecordprocessor).
 
 ## Logger
 
-If a `Logger` was obtained with `include_trace_context=true`, the `LogRecord`s
-it [emits](./bridge-api.md#emit-logrecord) MUST automatically include the Trace
-Context from the active Context, if Context has not been explicitly set.
-
 Note that `Logger`s should not be responsible for configuration. This should be
 the responsibility of the `LoggerProvider` instead.
 
 ## Additional LogRecord interfaces
 
-In addition to the [API-level definition for LogRecord](bridge-api.md#logrecord), the
+In addition to the [definition for LogRecord](data-model.md#log-and-event-record-definition), the
 following `LogRecord`-like interfaces are defined in the SDK:
 
 ### ReadableLogRecord
 
 A function receiving this as an argument MUST be able to access all the
-information added to the [LogRecord](bridge-api.md#logrecord). It MUST also be able to
+information added to the [LogRecord](data-model.md#log-and-event-record-definition). It MUST also be able to
 access the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
 and [Resource](./data-model.md#field-resource) information (implicitly)
 associated with the `LogRecord`.
+
+The [trace context fields](./data-model.md#trace-context-fields) MUST be populated from
+the resolved `Context` (either the explicitly passed `Context` or the
+current `Context`) when [emitted](./bridge-api.md#emit-a-logrecord).
 
 Counts for attributes due to collection limits MUST be available for exporters
 to report as described in
@@ -151,7 +151,7 @@ value type.
 ### ReadWriteLogRecord
 
 A function receiving this as an argument MUST be able to write to the
-full [LogRecord](bridge-api.md#logrecord) and additionally MUST be able to retrieve all
+full [LogRecord](data-model.md#log-and-event-record-definition) and additionally MUST be able to retrieve all
 information
 that was added to the `LogRecord` (as with
 [ReadableLogRecord](#readablelogrecord)).
@@ -226,7 +226,7 @@ components in the SDK:
 
 #### OnEmit
 
-`OnEmit` is called when a `LogRecord` is [emitted](bridge-api.md#emit-logrecord). This
+`OnEmit` is called when a `LogRecord` is [emitted](bridge-api.md#emit-a-logrecord). This
 method is called synchronously on the thread that emitted the `LogRecord`,
 therefore it SHOULD NOT block or throw exceptions.
 
@@ -234,10 +234,8 @@ therefore it SHOULD NOT block or throw exceptions.
 
 * `logRecord` - a [ReadWriteLogRecord](#readwritelogrecord) for the
   emitted `LogRecord`.
-* `context` - the `Context` that the SDK determined (the explicitly
-  passed `Context`, the current `Context`, or an empty `Context` if
-  the [Logger](./bridge-api.md#get-a-logger) was obtained
-  with `include_trace_context=false`)
+* `context` - the resolved `Context` (the explicitly passed `Context` or the
+  current `Context`)
 
 **Returns:** `Void`
 

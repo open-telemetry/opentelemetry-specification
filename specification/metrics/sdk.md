@@ -30,11 +30,15 @@ linkTitle: SDK
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
         * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
+  * [Cardinality limits](#cardinality-limits)
+    + [Synchronous instrument cardinality limits](#synchronous-instrument-cardinality-limits)
+    + [Asynchronous instrument cardinality limits](#asynchronous-instrument-cardinality-limits)
 - [Meter](#meter)
   * [Duplicate instrument registration](#duplicate-instrument-registration)
   * [Instrument name](#instrument-name)
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
+  * [Instrument advice](#instrument-advice)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -234,6 +238,12 @@ are the inputs:
     `exemplar_reservoir` (optional) to use for storing exemplars. This should be
     a factory or callback similar to aggregation which allows different
     reservoirs to be chosen by the aggregation.
+  * **Status**: [Experimental](../document-status.md) - the
+    `aggregation_cardinality_limit` (optional) associated with the view.  This
+    should be a positive integer to be taken as a hard limit on the
+    number of data points that will be emitted during a single
+    collection by a single instrument.  See [cardinality limits](#cardinality-limits),
+    below.
 
 In order to avoid conflicts, views which specify a name SHOULD have an
 instrument selector that selects at most one instrument. For the registration
@@ -396,18 +406,18 @@ This Aggregation does not have any configuration parameters.
 
 #### Default Aggregation
 
-The Default Aggregation informs the SDK to use the Instrument Kind
-(e.g. at View registration OR at first seen measurement)
-to select an aggregation and configuration parameters.
+The Default Aggregation informs the SDK to use the Instrument `kind` to select
+an aggregation and `advice` to influence aggregation configuration parameters
+(as noted in the "Selected Aggregation" column).
 
-| Instrument Kind | Selected Aggregation                                                                    |
-| --- |-----------------------------------------------------------------------------------------|
-| [Counter](./api.md#counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [UpDownCounter](./api.md#updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                             |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | [Last Value Aggregation](./sdk.md#last-value-aggregation)                               |
-| [Histogram](./api.md#histogram) | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation) |
+| Instrument Kind                                                   | Selected Aggregation                                                                                                                                                           |
+|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Counter](./api.md#counter)                                       | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
+| [Asynchronous Counter](./api.md#asynchronous-counter)             | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
+| [UpDownCounter](./api.md#updowncounter)                           | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                      |
+| [Histogram](./api.md#histogram)                                   | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation), with `ExplicitBucketBoundaries` from [advice](./api.md#instrument-advice) if provided |
 
 This Aggregation does not have any configuration parameters.
 
@@ -581,6 +591,62 @@ execution.
 The implementation MUST complete the execution of all callbacks for a
 given instrument before starting a subsequent round of collection.
 
+### Cardinality limits
+
+**Status**: [Experimental](../document-status.md)
+
+Views SHOULD support being configured with a cardinality limit to be
+applied to all aggregators not configured by a specific view, specified
+via `MetricReader` configuration.
+
+View configuration SHOULD support applying per-aggregation cardinality limits.
+
+The cardinality limit is taken as an exact, hard limit on the number
+of data points that can be written per collection, per aggregation.
+Each aggregation configured view MUST NOT output more than the
+configured `aggregation_cardinality_limit` number of data points per
+period.
+
+The RECOMMENDED default aggregation cardinality limit is 2000.
+
+An overflow attribute set is defined, containing a single attribute
+`otel.metric.overflow` having (boolean) value `true`, which is used to
+report a synthetic aggregation of the metric events that could not be
+independently aggregated because of the limit.
+
+The SDK MUST create an Aggregator with the overflow attribute set
+prior to reaching the cardinality limit and use it to aggregate events
+for which the correct Aggregator could not be created.  The maximum
+number of distinct, non-overflow attributes is one less than the
+limit, as a result.
+
+#### Synchronous instrument cardinality limits
+
+Views of synchronous instruments with cumulative aggregation
+temporality MUST continue to export the all attribute sets that were
+observed prior to the beginning of overflow.  Metric events
+corresponding with attribute sets that were not observed prior to the
+overflow will be reflected in a single data point described by (only)
+the overflow attribute.
+
+Views of synchronous instruments with delta aggregation temporality
+MAY choose an arbitrary subset of attribute sets to output to maintain
+the stated cardinality limit.
+
+Regardless of aggregation temporality, the SDK MUST ensure that every
+metric event is reflected in exactly one Aggregator, which is either
+an Aggregator associated with the correct attribute set or an
+aggregator associated with the overflow attribute set.
+
+Events MUST NOT be double-counted or dropped during an
+overflow.
+
+#### Asynchronous instrument cardinality limits
+
+Views of asynchronous instruments SHOULD prefer the first-observed
+attributes in the callback when limiting cardinality, regardless of
+aggregation temporality.
+
 ## Meter
 
 Distinct meters MUST be treated as separate namespaces for the purposes of detecting
@@ -642,6 +708,14 @@ as an empty unit string.
 When a Meter creates an instrument, it SHOULD NOT validate the instrument
 description. If a description is not provided or the description is null, the
 Meter MUST treat it the same as an empty description string.
+
+### Instrument advice
+
+**Status**: [Experimental](../document-status.md)
+
+When a Meter creates an instrument, it SHOULD validate the instrument advice
+parameters. If an advice parameter is not valid, the Meter SHOULD emit an error
+notifying the user and proceed as if the parameter was not provided.
 
 ## Attribute limits
 
@@ -853,6 +927,7 @@ SHOULD provide at least the following:
 * The `exporter` to use, which is a `MetricExporter` instance.
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
+* The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1253,7 +1328,7 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 ## Defaults and configuration
 
 The SDK MUST provide configuration according to the [SDK environment
-variables](../sdk-environment-variables.md) specification.
+variables](../configuration/sdk-environment-variables.md) specification.
 
 ## Numerical limits handling
 

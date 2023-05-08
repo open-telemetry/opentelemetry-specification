@@ -42,7 +42,7 @@ OpenTelemetry events. In some logging libraries, producing records shaped as
 OpenTelemetry events is clunky or error-prone.
 
 The Event API offers convenience methods
-for [emitting LogRecords](./bridge-api.md#emit-logrecord) that conform
+for [emitting LogRecords](./bridge-api.md#emit-a-logrecord) that conform
 to the [semantic conventions for Events](./semantic_conventions/events.md).
 Unlike the [Logs Bridge API](./bridge-api.md), application developers and
 instrumentation authors are encouraged to call this API directly.
@@ -80,11 +80,11 @@ This function MAY be named `logEvent`.
   attribute with the key `event.name`. Care MUST be taken by the implementation
   to not override or delete this attribute while the Event is emitted to
   preserve its identity.
-* `logRecord` - the [LogRecord](./bridge-api.md#logrecord) representing the Event.
+* `logRecord` - the [LogRecord](./data-model.md#log-and-event-record-definition) representing the Event.
 
 **Implementation Requirements:**
 
-The implementation MUST [emit](./bridge-api.md#emit-logrecord) the `logRecord` to
+The implementation MUST [emit](./bridge-api.md#emit-a-logrecord) the `logRecord` to
 the `logger` specified when [creating the EventLogger](#create-eventlogger)
 after making the following changes:
 

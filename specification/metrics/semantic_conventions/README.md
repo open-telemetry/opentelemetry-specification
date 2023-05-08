@@ -5,7 +5,7 @@ linkTitle: Semantic Conventions
 <!-- omit in toc -->
 # Metrics Semantic Conventions
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Mixed](../../document-status.md)
 
 <!-- toc -->
 
@@ -18,6 +18,7 @@ linkTitle: Semantic Conventions
   * [Instrument Naming](#instrument-naming)
   * [Instrument Units](#instrument-units)
   * [Instrument Types](#instrument-types)
+  * [Consistent UpDownCounter timeseries](#consistent-updowncounter-timeseries)
 
 <!-- tocstop -->
 
@@ -39,6 +40,8 @@ their own [Resource Semantic
 Conventions](../../resource/semantic_conventions/README.md).
 
 ## General Guidelines
+
+**Status**: [Experimental](../../document-status.md)
 
 Metric names and attributes exist within a single universe and a single
 hierarchy. Metric names and attributes MUST be considered within the universe of
@@ -124,11 +127,15 @@ to the processes then to represent the count of the processes we can have a metr
 
 ## General Metric Semantic Conventions
 
+**Status**: [Mixed](../../document-status.md)
+
 The following semantic conventions aim to keep naming consistent. They
 provide guidelines for most of the cases in this specification and should be
 followed for other instruments not explicitly defined in this document.
 
 ### Instrument Naming
+
+**Status**: [Experimental](../../document-status.md)
 
 - **limit** - an instrument that measures the constant, known total amount of
 something should be called `entity.limit`. For example, `system.memory.limit`
@@ -173,10 +180,10 @@ instrument creation, but can be added if there is ambiguity.
 
 ### Instrument Units
 
+**Status**: [Stable](../../document-status.md)
+
 Units should follow the
-[Unified Code for Units of Measure](http://unitsofmeasure.org/ucum.html) (need
-more clarification in
-[#705](https://github.com/open-telemetry/opentelemetry-specification/issues/705)).
+[Unified Code for Units of Measure](http://unitsofmeasure.org/ucum.html).
 
 - Instruments for **utilization** metrics (that measure the fraction out of a
 total) are dimensionless and SHOULD use the default unit `1` (the unity).
@@ -188,13 +195,31 @@ total) are dimensionless and SHOULD use the default unit `1` (the unity).
 [annotations](https://ucum.org/ucum.html#para-curly) with curly braces to
 give additional meaning *without* the leading default unit (`1`). For example,
 use `{packet}`, `{error}`, `{fault}`, etc.
-- Instrument units SHOULD be specified using the UCUM case sensitive ("c/s")
-  variant. For example, "Cel" for the unit with full name "degree Celsius".
+- Instrument units other than `1` and those that use
+  [annotations](https://ucum.org/ucum.html#para-curly) SHOULD be specified using
+  the UCUM case sensitive ("c/s") variant.
+  For example, "Cel" for the unit with full name "degree Celsius".
+- Instruments SHOULD use non-prefixed units (i.e. `By` instead of `MiBy`)
+  unless there is good technical reason to not do so.
+- When instruments are measuring durations, seconds (i.e. `s`) SHOULD be used.
 
 ### Instrument Types
+
+**Status**: [Stable](../../document-status.md)
 
 The semantic metric conventions specification is written to use the names of the synchronous instrument types,
 like `Counter` or `UpDownCounter`. However, compliant implementations MAY use the asynchronous equivalent instead,
 like `Asynchronous Counter` or `Asynchronous UpDownCounter`.
 Whether implementations choose the synchronous type or the asynchronous equivalent is considered to be an
 implementation detail. Both choices are compliant with this specification.
+
+### Consistent UpDownCounter timeseries
+
+**Status**: [Experimental](../../document-status.md)
+
+When recording `UpDownCounter` metrics, the same attribute values used to record an increment SHOULD be used to record
+any associated decrement, otherwise those increments and decrements will end up as different timeseries.
+
+For example, if you are tracking `active_requests` with an `UpDownCounter`, and you are incrementing it each time a
+request starts and decrementing it each time a request ends, then any attributes which are not yet available when
+incrementing the counter at request start should not be used when decrementing the counter at request end.

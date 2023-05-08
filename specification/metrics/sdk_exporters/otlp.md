@@ -21,7 +21,7 @@ Exporter](../../protocol/exporter.md) specification.
 If a language provides a mechanism to automatically configure a
 [MetricReader](../sdk.md#metricreader) to pair with the associated
 Exporter (e.g., using the [`OTEL_METRICS_EXPORTER` environment
-variable](../../sdk-environment-variables.md#exporter-selection)),
+variable](../../configuration/sdk-environment-variables.md#exporter-selection)),
 then by default:
 
 * The exporter MUST be paired with a [periodic exporting
