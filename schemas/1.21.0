@@ -9,6 +9,22 @@ versions:
             attribute_map:
               messaging.kafka.client_id: messaging.client_id
               messaging.rocketmq.client_id: messaging.client_id
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3402
+        - rename_attributes:
+            attribute_map:
+              # net.peer.(name|port) attributes were usually populated on client side
+              # so they should be usually translated to server.(address|port)
+              # net.host.* attributes were only populated on server side
+              net.host.name: server.address
+              net.host.port: server.port
+              # was only populated on client side
+              net.sock.peer.name: server.socket.domain
+              # net.sock.peer.(addr|port) mapping is not possible
+              # since they applied to both client and server side
+              # were only populated on server side
+              net.sock.host.addr: server.socket.address
+              net.sock.host.port: server.socket.port
+              http.client_ip: client.address
   1.20.0:
     spans:
       changes:

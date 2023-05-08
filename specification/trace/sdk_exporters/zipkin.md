@@ -94,17 +94,17 @@ always available. The following table lists the possible attributes for
 |Rank|Attribute Name|Reason|
 |---|---|---|
 |1|peer.service|[OpenTelemetry adopted attribute for remote service.](../semantic_conventions/span-general.md#general-remote-service-attributes)|
-|2|net.peer.name|[OpenTelemetry adopted attribute for remote hostname, or similar.](../semantic_conventions/span-general.md#general-network-connection-attributes)|
-|3|net.sock.peer.name|[OpenTelemetry adopted attribute for remote socket hostname of the peer.](../semantic_conventions/span-general.md#general-network-connection-attributes)|
-|4|net.sock.peer.addr & net.sock.peer.port|[OpenTelemetry adopted attribute for remote socket address of the peer.](../semantic_conventions/span-general.md#general-network-connection-attributes)|
+|2|server.address|[OpenTelemetry adopted attribute for remote hostname, or similar.](../semantic_conventions/span-general.md#server-and-client-attributes)|
+|3|server.socket.domain|[OpenTelemetry adopted attribute for remote socket hostname of the peer.](../semantic_conventions/span-general.md#server-and-client-attributes)|
+|4|server.socket.address & server.socket.port|[OpenTelemetry adopted attribute for remote socket address of the peer.](../semantic_conventions/span-general.md#server-and-client-attributes)|
 |5|peer.hostname|Remote hostname defined in OpenTracing specification.|
 |6|peer.address|Remote address defined in OpenTracing specification.|
 |7|db.name|Commonly used database name attribute for DB Spans.|
 
-* Ranking should control the selection order. For example, `net.peer.name` (Rank
+* Ranking should control the selection order. For example, `server.address` (Rank
   2) should be selected before `peer.address` (Rank 6).
-* `net.sock.peer.name` and `net.sock.peer.addr` can be used by themselves as `remoteEndpoint` but should be combined
-  with `net.sock.peer.port` if it is also present.
+* `server.socket.domain` and `server.socket.address` can be used by themselves as `remoteEndpoint` but should be combined
+  with `server.socket.port` if it is also present.
 
 #### Zipkin -> OTLP
 

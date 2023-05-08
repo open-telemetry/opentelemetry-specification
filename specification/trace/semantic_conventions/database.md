@@ -68,27 +68,23 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `db.system` | string | An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Required |
 | `db.connection_string` | string | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | Recommended |
 | `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | Recommended |
-| [`net.peer.name`](span-general.md) | string | Name of the database host. [1] | `example.com` | Conditionally Required: See alternative attributes below. |
-| [`net.peer.port`](span-general.md) | int | Logical remote port number | `80`; `8080`; `443` | Conditionally Required: [2] |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [3] |
-| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | See below |
-| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [4] |
-| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [5] |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [1] |
+| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [2] |
+| [`server.address`](span-general.md) | string | Name of the database host. | `example.com` | Conditionally Required: See alternative attributes below. |
+| [`server.port`](span-general.md) | int | Logical server port number | `80`; `8080`; `443` | Conditionally Required: [3] |
+| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
+| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: If different than `server.port`. |
 
-**[1]:** `net.peer.name` SHOULD NOT be set if capturing it would require an extra DNS lookup.
+**[1]:** If different than `inet` and if any of `server.socket.address` or `client.socket.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.socket.address` and `client.socket.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
 
-**[2]:** If using a port other than the default port for this DBMS and if `net.peer.name` is set.
+**[2]:** If database type is in-process (`"inproc"`), recommended for other database types.
 
-**[3]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
-
-**[4]:** If defined for the address family and if different than `net.peer.port` and if `net.sock.peer.addr` is set.
-
-**[5]:** If database type is in-process (`"inproc"`), recommended for other database types.
+**[3]:** If using a port other than the default port for this DBMS and if `server.address` is set.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
-* [`net.peer.name`](span-general.md)
-* [`net.sock.peer.addr`](span-general.md)
+* [`server.address`](span-general.md)
+* [`server.socket.address`](span-general.md)
 
 `db.system` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -174,7 +170,7 @@ When additional attributes are added that only apply to a specific DBMS, its ide
 | `db.jdbc.driver_classname` | string | The fully-qualified class name of the [Java Database Connectivity (JDBC)](https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/) driver used to connect. | `org.postgresql.Driver`; `com.microsoft.sqlserver.jdbc.SQLServerDriver` | Recommended |
 | `db.mssql.instance_name` | string | The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15) connecting to. This name is used to determine the port of a named instance. [1] | `MSSQLSERVER` | Recommended |
 
-**[1]:** If setting a `db.mssql.instance_name`, `net.peer.port` is no longer required (but still recommended if non-standard).
+**[1]:** If setting a `db.mssql.instance_name`, `server.port` is no longer required (but still recommended if non-standard).
 <!-- endsemconv -->
 
 ## Call-level attributes
@@ -306,10 +302,10 @@ In addition to Cosmos DB attributes, all spans include
 | `db.system`             | `"mysql"` |
 | `db.connection_string`  | `"Server=shopdb.example.com;Database=ShopDb;Uid=billing_user;TableCache=true;UseCompression=True;MinimumPoolSize=10;MaximumPoolSize=50;"` |
 | `db.user`               | `"billing_user"` |
-| `net.peer.name`         | `"shopdb.example.com"` |
-| `net.sock.peer.addr`    | `"192.0.2.12"` |
-| `net.peer.port`         | `3306` |
-| `net.transport`         | `"IP.TCP"` |
+| `server.address`        | `"shopdb.example.com"` |
+| `server.socket.address` | `"192.0.2.12"` |
+| `server.port`           | `3306` |
+| `net.transport`     | `"IP.TCP"` |
 | `db.name`               | `"ShopDb"` |
 | `db.statement`          | `"SELECT * FROM orders WHERE order_id = 'o4711'"` |
 | `db.operation`          | `"SELECT"` |
@@ -317,7 +313,7 @@ In addition to Cosmos DB attributes, all spans include
 
 ### Redis
 
-In this example, Redis is connected using a unix domain socket and therefore the connection string and `net.sock.peer.addr` are left out.
+In this example, Redis is connected using a unix domain socket and therefore the connection string and `server.address` are left out.
 Furthermore, `db.name` is not specified as there is no database name in Redis and `db.redis.database_index` is set instead.
 
 | Key | Value |
@@ -326,8 +322,8 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.system`               | `"redis"` |
 | `db.connection_string`    | not set |
 | `db.user`                 | not set |
-| `net.peer.name`           | `"/tmp/redis.sock"` |
-| `net.transport`           | `"Unix"` |
+| `server.socket.address`   | `"/tmp/redis.sock"` |
+| `net.transport`       | `"Unix"` |
 | `db.name`                 | not set |
 | `db.statement`            | `"HMSET myhash field1 'Hello' field2 'World"` |
 | `db.operation`            | not set |
@@ -341,10 +337,10 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.system`             | `"mongodb"` |
 | `db.connection_string`  | not set |
 | `db.user`               | `"the_user"` |
-| `net.peer.name`         | `"mongodb0.example.com"` |
-| `net.sock.peer.addr`    | `"192.0.2.14"` |
-| `net.peer.port`         | `27017` |
-| `net.transport`         | `"IP.TCP"` |
+| `server.address`        | `"mongodb0.example.com"` |
+| `server.socket.address` | `"192.0.2.14"` |
+| `server.port`           | `27017` |
+| `net.transport`     | `"IP.TCP"` |
 | `db.name`               | `"shopDb"` |
 | `db.statement`          | not set |
 | `db.operation`          | `"findAndModify"` |
@@ -360,7 +356,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `db.system`                          | `"cosmosdb"` |
 | `db.name`                            | `"database name"` |
 | `db.operation`                       | `"ReadItemsAsync"` |
-| `net.peer.name`                      |  `"account.documents.azure.com"`  |
+| `server.address`                     |  `"account.documents.azure.com"`  |
 | `db.cosmosdb.client_id`              | `3ba4827d-4422-483f-b59f-85b74211c11d` |
 | `db.cosmosdb.operation_type`         | `Read` |
 | `user_agent.original`                | `cosmos-netstandard-sdk/3.23.0\|3.23.1\|1\|X64\|Linux 5.4.0-1098-azure 104 18\|.NET Core 3.1.32\|S\|` |

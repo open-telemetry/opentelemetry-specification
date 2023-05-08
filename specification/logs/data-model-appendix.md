@@ -93,7 +93,7 @@ Can include data that describes particular occurrence of the event.
 Can be meta-information, e.g. quality of timestamp value.</td>
     <td>SDID origin.swVersion map to Resource["service.version"]
 
-SDID origin.ip map to attribute["net.sock.host.addr"]
+SDID origin.ip map to attribute["client.address"]
 
 Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
@@ -391,19 +391,19 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>%a</td>
     <td>string</td>
     <td>Client address</td>
-    <td>Attributes["net.sock.peer.addr"]</td>
+    <td>Attributes["client.address"]</td>
   </tr>
   <tr>
     <td>%A</td>
     <td>string</td>
     <td>Server address</td>
-    <td>Attributes["net.sock.host.addr"]</td>
+    <td>Attributes["server.socket.address"]</td>
   </tr>
   <tr>
     <td>%h</td>
     <td>string</td>
     <td>Client hostname.</td>
-    <td>Attributes["net.peer.name"]</td>
+    <td>Attributes["server.address"]</td>
   </tr>
   <tr>
     <td>%m</td>
@@ -462,7 +462,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>sourceIPAddress</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>Attributes["net.sock.peer.addr"] or Attributes["net.sock.host.addr"]</td>
+    <td>Attributes["client.address"]</td>
   </tr>
   <tr>
     <td>errorCode</td>
@@ -580,7 +580,7 @@ All other fields |                    |                                         
     <td>source.ip, client.ip</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>Attributes["net.sock.peer.addr"] or Attributes["net.sock.host.addr"]</td>
+    <td>Attributes["client.address"]</td>
   </tr>
   <tr>
     <td>cloud.account.id</td>

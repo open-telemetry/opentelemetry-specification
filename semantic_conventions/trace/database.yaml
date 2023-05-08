@@ -228,33 +228,33 @@ groups:
           If the SQL statement has an ambiguous operation, or performs more
           than one operation, this value may be omitted.
         examples: ['findAndModify', 'HMSET', 'SELECT']
-      - ref: net.peer.name
+      - ref: server.address
         tag: connection-level
         requirement_level:
           conditionally_required: See alternative attributes below.
         brief: >
           Name of the database host.
-      - ref: net.peer.port
+      - ref: server.port
         tag: connection-level
         requirement_level:
-          conditionally_required: If using a port other than the default port for this DBMS and if `net.peer.name` is set.
-      - ref: net.sock.peer.addr
+          conditionally_required: If using a port other than the default port for this DBMS and if `server.address` is set.
+      - ref: server.socket.address
         tag: connection-level
-      - ref: net.sock.peer.port
+      - ref: server.socket.port
         tag: connection-level
       - ref: net.sock.family
         tag: connection-level
-      - ref: net.sock.peer.name
+      - ref: server.socket.domain
         requirement_level:
-          recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
+          recommended: If different than `server.address` and if `server.socket.address` is set.
       - ref: net.transport
         tag: connection-level
         requirement_level:
           conditionally_required: If database type is in-process (`"inproc"`), recommended for other database types.
     constraints:
       - any_of:
-          - 'net.peer.name'
-          - 'net.sock.peer.addr'
+          - 'server.address'
+          - 'server.socket.address'
 
   - id: db.mssql
     prefix: db.mssql
@@ -267,7 +267,7 @@ groups:
         tag: connection-level-tech-specific
         type: string
         note: >
-          If setting a `db.mssql.instance_name`, `net.peer.port` is no longer
+          If setting a `db.mssql.instance_name`, `server.port` is no longer
           required (but still recommended if non-standard).
         brief: >
           The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15)

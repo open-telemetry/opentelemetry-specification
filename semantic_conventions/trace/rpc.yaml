@@ -49,25 +49,22 @@ groups:
           (e.g., method actually executing the call on the server side,
           RPC client stub method on the client side).
         examples: "exampleMethod"
-      - ref: net.sock.peer.addr
-      - ref: net.sock.peer.port
+      - ref: server.socket.address
+      - ref: server.socket.port
         requirement_level:
-          recommended: If different than `net.peer.port` and if `net.sock.peer.addr` is set.
+          recommended: If different than `server.port` and if `server.socket.address` is set.
       - ref: net.sock.family
         requirement_level:
-          conditionally_required: If and only if `net.sock.peer.addr` is set.
-      - ref: net.sock.peer.name
-        requirement_level:
-          recommended: If different than `net.peer.name` and if `net.sock.peer.addr` is set.
-      - ref: net.peer.name
+          conditionally_required: If and only if `server.socket.address` is set.
+      - ref: server.address
         requirement_level: required
         brief: >
           RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html).
         note: >
           May contain server IP address, DNS name, or local socket name. When host component is an IP address,
           instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set
-          `net.peer.name` to the IP address provided in the host component.
-      - ref: net.peer.port
+          `server.address` to the IP address provided in the host component.
+      - ref: server.port
         requirement_level:
           conditionally_required: See below
       - ref: net.transport
@@ -75,8 +72,17 @@ groups:
           conditionally_required: See below
     constraints:
       - any_of:
-          - net.sock.peer.addr
-          - net.peer.name
+          - server.socket.address
+          - server.address
+
+  - id: rpc.client
+    type: span
+    brief: 'This document defines semantic conventions for remote procedure call client spans.'
+    extends: rpc
+    attributes:
+      - ref: server.socket.domain
+        requirement_level:
+          recommended: If different than `server.address` and if `server.socket.address` is set.
 
   - id: rpc.server
     prefix: rpc
@@ -85,10 +91,10 @@ groups:
     span_kind: server
     brief: 'Semantic Convention for RPC server spans'
     attributes:
-      - ref: net.host.name
-      - ref: net.sock.host.addr
-      - ref: net.sock.host.port
-      - ref: net.sock.family
+      - ref: client.address
+      - ref: client.port
+      - ref: client.socket.address
+      - ref: client.socket.port
 
   - id: rpc.grpc
     prefix: rpc.grpc

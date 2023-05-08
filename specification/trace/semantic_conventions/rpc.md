@@ -13,6 +13,7 @@ This document defines how to describe remote procedure calls
   * [Span name](#span-name)
   * [Common attributes](#common-attributes)
     + [Service name](#service-name)
+  * [Client attributes](#client-attributes)
   * [Server attributes](#server-attributes)
   * [Events](#events)
   * [Distinction from HTTP spans](#distinction-from-http-spans)
@@ -89,28 +90,25 @@ Examples of span names:
 | `rpc.system` | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Required |
 | `rpc.service` | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | Recommended |
 | `rpc.method` | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | Recommended |
-| [`net.peer.name`](span-general.md) | string | RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html). [3] | `example.com` | Required |
-| [`net.peer.port`](span-general.md) | int | Logical remote port number | `80`; `8080`; `443` | Conditionally Required: See below |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: If and only if `net.sock.peer.addr` is set. |
-| [`net.sock.peer.addr`](span-general.md) | string | Remote socket peer address: IPv4 or IPv6 for internet protocols, path for local communication, [etc](https://man7.org/linux/man-pages/man7/address_families.7.html). | `127.0.0.1`; `/tmp/mysql.sock` | See below |
-| [`net.sock.peer.name`](span-general.md) | string | Remote socket peer name. | `proxy.example.com` | Recommended: [4] |
-| [`net.sock.peer.port`](span-general.md) | int | Remote socket peer port. | `16456` | Recommended: [5] |
+| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: If and only if `server.socket.address` is set. |
 | [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: See below |
+| [`server.address`](span-general.md) | string | RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html). [3] | `example.com` | Required |
+| [`server.port`](span-general.md) | int | Logical server port number | `80`; `8080`; `443` | Conditionally Required: See below |
+| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
+| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: [4] |
 
 **[1]:** This is the logical name of the service from the RPC interface perspective, which can be different from the name of any implementing class. The `code.namespace` attribute may be used to store the latter (despite the attribute name, it may include a class name; e.g., class with method actually executing the call on the server side, RPC client stub class on the client side).
 
 **[2]:** This is the logical name of the method from the RPC interface perspective, which can be different from the name of any implementing method/function. The `code.function` attribute may be used to store the latter (e.g., method actually executing the call on the server side, RPC client stub method on the client side).
 
-**[3]:** May contain server IP address, DNS name, or local socket name. When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set `net.peer.name` to the IP address provided in the host component.
+**[3]:** May contain server IP address, DNS name, or local socket name. When host component is an IP address, instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set `server.address` to the IP address provided in the host component.
 
-**[4]:** If different than `net.peer.name` and if `net.sock.peer.addr` is set.
-
-**[5]:** If different than `net.peer.port` and if `net.sock.peer.addr` is set.
+**[4]:** If different than `server.port` and if `server.socket.address` is set.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
-* [`net.sock.peer.addr`](span-general.md)
-* [`net.peer.name`](span-general.md)
+* [`server.socket.address`](span-general.md)
+* [`server.address`](span-general.md)
 
 `rpc.system` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -123,8 +121,8 @@ Examples of span names:
 | `connect_rpc` | Connect RPC |
 <!-- endsemconv -->
 
-For client-side spans `net.peer.port` is required if the connection is IP-based and the port is available (it describes the server port they are connecting to).
-For server-side spans `net.peer.port` is optional (it describes the port the client is connecting from).
+For client-side spans `server.port` is required if the connection is IP-based and the port is available (it describes the server port they are connecting to).
+For server-side spans `client.socket.port` is optional (it describes the port the client is connecting from).
 Furthermore, setting [net.transport][] is required for non-IP connection like named pipe bindings.
 
 #### Service name
@@ -138,24 +136,36 @@ This process could expose two RPC endpoints, one called `CurrencyQuotes` (= `rpc
 In this example, spans representing client request should have their `peer.service` attribute set to `QuoteService` as well to match the server's `service.name` resource attribute.
 Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service name.
 
-[network attributes]: span-general.md#general-network-connection-attributes
-[net.transport]: span-general.md#network-transport-attributes
+[network attributes]: span-general.md#server-and-client-attributes
+[net.transport]: span-general.md#network-attributes
 [`service.name`]: ../../resource/semantic_conventions/README.md#service
 [`peer.service`]: span-general.md#general-remote-service-attributes
+
+### Client attributes
+
+<!-- semconv rpc.client -->
+| Attribute  | Type | Description  | Examples  | Requirement Level |
+|---|---|---|---|---|
+| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [1] | `proxy.example.com` | Recommended: [2] |
+
+**[1]:** Typically observed from the client side, and represents a proxy or other intermediary domain name.
+
+**[2]:** If different than `server.address` and if `server.socket.address` is set.
+<!-- endsemconv -->
 
 ### Server attributes
 
 <!-- semconv rpc.server -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| [`net.host.name`](span-general.md) | string | Logical local hostname or similar, see note below. | `localhost` | Recommended |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [1] |
-| [`net.sock.host.addr`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `192.168.0.1` | Recommended |
-| [`net.sock.host.port`](span-general.md) | int | Local socket port number. | `35555` | Conditionally Required: [2] |
+| [`client.address`](span-general.md) | string | Client address - unix domain socket name, IPv4 or IPv6 address. [1] | `/tmp/my.sock`; `10.1.2.80` | Recommended |
+| [`client.port`](span-general.md) | int | Client port number [2] | `65123` | Recommended |
+| [`client.socket.address`](span-general.md) | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: If different than `client.address`. |
+| [`client.socket.port`](span-general.md) | int | Immediate client peer port number | `35555` | Recommended: If different than `client.port`. |
 
-**[1]:** If different than `inet` and if any of `net.sock.peer.addr` or `net.sock.host.addr` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `net.sock.peer.addr` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
+**[1]:** When observed from the server side, and when communicating through an intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available.
 
-**[2]:** If defined for the address family and if different than `net.host.port` and if `net.sock.host.addr` is set. In other cases, it is still recommended to set this.
+**[2]:** When observed from the server side, and when communicating through an intermediary, `client.port` SHOULD represent client port behind any intermediaries (e.g. proxies) if it's available.
 <!-- endsemconv -->
 
 ### Events
