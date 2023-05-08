@@ -47,7 +47,6 @@ groups:
           Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
           [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
           Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
-
           HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
       - id: response.status_code
         type: int
