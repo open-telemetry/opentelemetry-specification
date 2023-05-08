@@ -341,6 +341,17 @@ This metric is obtained from [`OperatingSystemMXBean#getSystemLoadAverage()`](ht
 <!-- semconv metric.process.runtime.jvm.system.cpu.load_1m(full) -->
 <!-- endsemconv -->
 
+### Metric: `process.runtime.jvm.available_processors`
+
+This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`OperatingSystemMXBean#getAvailableProcessors()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/OperatingSystemMXBean.html#getAvailableProcessors--).
+
+<!-- semconv metric.process.runtime.jvm.available_processors(metric_table) -->
+| Name     | Instrument Type | Unit (UCUM) | Description    |
+| -------- | --------------- | ----------- | -------------- |
+| `process.runtime.jvm.available_processors` | UpDownCounter | `{processor}` | The number of processors available to the JVM. |
+<!-- endsemconv -->
+
 ### Metric: `process.runtime.jvm.buffer.usage`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).

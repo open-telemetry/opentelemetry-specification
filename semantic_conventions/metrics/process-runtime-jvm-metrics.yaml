@@ -149,6 +149,13 @@ groups:
     instrument: gauge
     unit: "1"
 
+  - id: metric.process.runtime.jvm.available_processors
+    type: metric
+    metric_name: process.runtime.jvm.available_processors
+    brief: "The number of processors available to the JVM."
+    instrument: updowncounter
+    unit: "{processor}"
+
   - id: attributes.process.runtime.jvm.buffer
     type: attribute_group
     brief: "Describes JVM buffer metric attributes."

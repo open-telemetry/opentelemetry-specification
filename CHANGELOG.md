@@ -58,6 +58,8 @@ release.
 - Add transition plan for upcoming breaking changes to the unstable HTTP semantic
   conventions.
   ([#3443](https://github.com/open-telemetry/opentelemetry-specification/pull/3443))
+- Add `process.runtime.jvm.available_processors` metric.
+  ([#3484](https://github.com/open-telemetry/opentelemetry-specification/pull/3484))
 
 ### Compatibility
 
