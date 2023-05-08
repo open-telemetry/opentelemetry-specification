@@ -55,6 +55,9 @@ release.
   ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
 - BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
+- Add transition plan for upcoming breaking changes to the unstable HTTP semantic
+  conventions.
+  ([#3443](https://github.com/open-telemetry/opentelemetry-specification/pull/3443))
 
 ### Compatibility
 
