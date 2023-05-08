@@ -43,7 +43,7 @@ groups:
     attributes:
       - ref: thread.id
         requirement_level: opt_in
-      - id: mode
+      - id: network.direction
         type: string
         requirement_level: recommended
         brief: Read or write.

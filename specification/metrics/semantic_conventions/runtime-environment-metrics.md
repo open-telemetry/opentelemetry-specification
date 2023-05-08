@@ -426,7 +426,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended). Only a
 <!-- semconv metric.process.runtime.jvm.cpu.context_switch(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
 | -------- | --------------- | ----------- | -------------- |
-| `process.runtime.jvm.cpu.context_switch` | UpDownCounter | `Hz` | Number of context switches per second. Only available in JDK 17+. |
+| `process.runtime.jvm.context_switches` | UpDownCounter | `Hz` | Number of context switches per second. Only available in JDK 17+. |
 <!-- endsemconv -->
 
 
@@ -454,7 +454,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended). Only a
 <!-- semconv metric.process.runtime.jvm.network.io(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `mode` | string | Read or write. | `read`; `write` | Recommended |
+| `network.direction` | string | Read or write. | `read`; `write` | Recommended |
 | [`thread.id`](../../trace/semantic_conventions/span-general.md) | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | Opt-In |
 <!-- endsemconv -->
 
@@ -471,6 +471,6 @@ This metric is [recommended](../metric-requirement-level.md#recommended). Only a
 <!-- semconv metric.process.runtime.jvm.network.time(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `mode` | string | Read or write. | `read`; `write` | Recommended |
+| `network.direction` | string | Read or write. | `read`; `write` | Recommended |
 | [`thread.id`](../../trace/semantic_conventions/span-general.md) | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | Opt-In |
 <!-- endsemconv -->
