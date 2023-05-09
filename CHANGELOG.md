@@ -57,7 +57,8 @@ release.
   ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
 - Add transition plan for upcoming breaking changes to the unstable HTTP semantic
   conventions.
-  ([#3443](https://github.com/open-telemetry/opentelemetry-specification/pull/3443))
+  ([#3443](https://github.com/open-telemetry/opentelemetry-specification/pull/3443),
+   [#3492](https://github.com/open-telemetry/opentelemetry-specification/pull/3492))
 - Rename `net.peer.*`, `net.host.*`, and `net.sock.*` attributes to align with ECS
   ([#3402](https://github.com/open-telemetry/opentelemetry-specification/pull/3402))
     BREAKING: rename `net.peer.name` to `server.address` on client side and to `client.address` on server side,
