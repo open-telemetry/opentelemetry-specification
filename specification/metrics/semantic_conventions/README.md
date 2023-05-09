@@ -137,7 +137,7 @@ which would lead to `_total_total`. The reason that the Prometheus mapping canno
 suppress adding the duplicate `_total` is because then the mapping wouldn't be
 bidirectional.
 
-UpDownCounters should not use `_total` either because then they will look like
+UpDownCounters SHOULD NOT use `_total` either because then they will look like
 monotonic sums in Prometheus.
 
 ## General Metric Semantic Conventions
