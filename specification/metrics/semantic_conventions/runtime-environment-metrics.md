@@ -78,6 +78,7 @@ consider, for example pthreads vs green thread implementations.
 ### Metric: `process.runtime.jvm.memory.usage`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`MemoryPoolMXBean#getUsage()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryPoolMXBean.html#getUsage--).
 
 <!-- semconv metric.process.runtime.jvm.memory.usage(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -104,6 +105,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.memory.init`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`MemoryPoolMXBean#getUsage()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryPoolMXBean.html#getUsage--).
 
 <!-- semconv metric.process.runtime.jvm.memory.init(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -130,6 +132,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.memory.committed`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`MemoryPoolMXBean#getUsage()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryPoolMXBean.html#getUsage--).
 
 <!-- semconv metric.process.runtime.jvm.memory.committed(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -156,6 +159,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.memory.limit`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`MemoryPoolMXBean#getUsage()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryPoolMXBean.html#getUsage--).
 
 <!-- semconv metric.process.runtime.jvm.memory.limit(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -182,6 +186,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.memory.usage_after_last_gc`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`MemoryPoolMXBean#getCollectionUsage()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/MemoryPoolMXBean.html#getCollectionUsage--).
 
 <!-- semconv metric.process.runtime.jvm.memory.usage_after_last_gc(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -208,6 +213,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.gc.duration`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained by subscribing to
+[`GarbageCollectionNotificationInfo`](https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/GarbageCollectionNotificationInfo.html) events provided by [`GarbageCollectorMXBean`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/GarbageCollectorMXBean.html). The duration value is obtained from [`GcInfo`](https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/GcInfo.html#getDuration--)
 
 This metric SHOULD be specified with
 [`ExplicitBucketBoundaries`](../../metrics/api.md#instrument-advice)
@@ -233,6 +240,8 @@ of `[]` (single bucket histogram capturing count, sum, min, max).
 ### Metric: `process.runtime.jvm.threads.count`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`ThreadMXBean#getDaemonThreadCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html#getDaemonThreadCount--) and
+[`ThreadMXBean#getThreadCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html#getThreadCount--).
 
 <!-- semconv metric.process.runtime.jvm.threads.count(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -249,6 +258,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.classes.loaded`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`ClassLoadingMXBean#getTotalLoadedClassCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ClassLoadingMXBean.html#getTotalLoadedClassCount--).
 
 <!-- semconv metric.process.runtime.jvm.classes.loaded(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -262,6 +272,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.classes.unloaded`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`ClassLoadingMXBean#getUnloadedClassCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ClassLoadingMXBean.html#getUnloadedClassCount--).
 
 <!-- semconv metric.process.runtime.jvm.classes.unloaded(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -275,6 +286,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.classes.current_loaded`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`ClassLoadingMXBean#getLoadedClassCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/ClassLoadingMXBean.html#getLoadedClassCount--).
 
 <!-- semconv metric.process.runtime.jvm.classes.current_loaded(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -288,6 +300,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.cpu.utilization`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`com.sun.management.OperatingSystemMXBean#getProcessCpuLoad()`](https://docs.oracle.com/en/java/javase/17/docs/api/jdk.management/com/sun/management/OperatingSystemMXBean.html#getProcessCpuLoad()) on HotSpot
+and [`com.ibm.lang.management.OperatingSystemMXBean#getProcessCpuLoad()`](https://www.ibm.com/docs/api/v1/content/SSYKE2_8.0.0/com.ibm.java.api.80.doc/com.ibm.lang.management/com/ibm/lang/management/OperatingSystemMXBean.html#getProcessCpuLoad--) on J9.
 
 <!-- semconv metric.process.runtime.jvm.cpu.utilization(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -301,6 +315,8 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.system.cpu.utilization`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`com.sun.management.OperatingSystemMXBean#getSystemCpuLoad()`](https://docs.oracle.com/en/java/javase/17/docs/api/jdk.management/com/sun/management/OperatingSystemMXBean.html#getSystemCpuLoad()) on Java version 8..13, [`com.sun.management.OperatingSystemMXBean#getCpuLoad()`](https://docs.oracle.com/en/java/javase/17/docs/api/jdk.management/com/sun/management/OperatingSystemMXBean.html#getCpuLoad()) on Java version 14+,
+and [`com.ibm.lang.management.OperatingSystemMXBean#getSystemCpuLoad()`](https://www.ibm.com/docs/api/v1/content/SSYKE2_8.0.0/com.ibm.java.api.80.doc/com.ibm.lang.management/com/ibm/lang/management/OperatingSystemMXBean.html#getSystemCpuLoad--) on J9.
 
 <!-- semconv metric.process.runtime.jvm.system.cpu.utilization(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -314,6 +330,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.system.cpu.load_1m`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`OperatingSystemMXBean#getSystemLoadAverage()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/OperatingSystemMXBean.html#getSystemLoadAverage--).
 
 <!-- semconv metric.process.runtime.jvm.system.cpu.load_1m(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -327,6 +344,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.buffer.usage`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`BufferPoolMXBean#getMemoryUsed()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/BufferPoolMXBean.html#getMemoryUsed--).
 
 <!-- semconv metric.process.runtime.jvm.buffer.usage(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -345,6 +363,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.buffer.limit`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`BufferPoolMXBean#getTotalCapacity()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/BufferPoolMXBean.html#getTotalCapacity--).
 
 <!-- semconv metric.process.runtime.jvm.buffer.limit(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |
@@ -363,6 +382,7 @@ This metric is [recommended](../metric-requirement-level.md#recommended).
 ### Metric: `process.runtime.jvm.buffer.count`
 
 This metric is [recommended](../metric-requirement-level.md#recommended).
+This metric is obtained from [`BufferPoolMXBean#getCount()`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/BufferPoolMXBean.html#getCount--).
 
 <!-- semconv metric.process.runtime.jvm.buffer.count(metric_table) -->
 | Name     | Instrument Type | Unit (UCUM) | Description    |

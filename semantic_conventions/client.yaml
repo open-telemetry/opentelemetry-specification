@@ -1,0 +1,38 @@
+groups:
+  - id: client
+    prefix: client
+    type: attribute_group
+    brief: >
+      These attributes may be used to describe the client in a connection-based network interaction
+      where there is one side that initiates the connection (the client is the side that initiates the connection).
+      This covers all TCP network interactions since TCP is connection-based and one side initiates the
+      connection (an exception is made for peer-to-peer communication over TCP where the "user-facing" surface of the
+      protocol / API does not expose a clear notion of client and server).
+      This also covers UDP network interactions where one side initiates the interaction, e.g. QUIC (HTTP/3) and DNS.
+    attributes:
+      - id: address
+        type: string
+        brief: Client address - unix domain socket name, IPv4 or IPv6 address.
+        note: >
+          When observed from the server side, and when communicating through an intermediary, `client.address` SHOULD represent
+          client address behind any intermediaries (e.g. proxies) if it's available.
+        examples: ['/tmp/my.sock', '10.1.2.80']
+      - id: port
+        type: int
+        brief: 'Client port number'
+        examples: [65123]
+        note: >
+          When observed from the server side, and when communicating through an intermediary, `client.port` SHOULD represent
+          client port behind any intermediaries (e.g. proxies) if it's available.
+      - id: socket.address
+        type: string
+        brief: Immediate client peer address - unix domain socket name, IPv4 or IPv6 address.
+        examples: ['/tmp/my.sock', '127.0.0.1']
+        requirement_level:
+          recommended: If different than `client.address`.
+      - id: socket.port
+        type: int
+        brief: 'Immediate client peer port number'
+        examples: [35555]
+        requirement_level:
+          recommended: If different than `client.port`.

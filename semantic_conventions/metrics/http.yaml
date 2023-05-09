@@ -8,10 +8,10 @@ groups:
     extends: attributes.http.server
     attributes:
       # todo (lmolkova) build tools don't populate grandparent attributes
-      - ref: http.method
-      - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
+      - ref: http.request.method
+      - ref: http.response.status_code
+      - ref: network.protocol.name
+      - ref: network.protocol.version
 
   - id: metric.http.server.active_requests
     type: metric
@@ -20,9 +20,11 @@ groups:
     instrument: updowncounter
     unit: "{request}"
     attributes:
-      - ref: http.method
-      - ref: http.scheme
-      - ref: net.host.name
+      - ref: http.request.method
+      - ref: url.scheme
+        requirement_level: required
+        examples: ["http", "https"]
+      - ref: server.address
         requirement_level: required
         brief: >
           Name of the local HTTP server that received the request.
@@ -37,7 +39,7 @@ groups:
 
           SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
 
-      - ref: net.host.port
+      - ref: server.port
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
         brief: >
@@ -60,10 +62,10 @@ groups:
     # TODO (trask) below attributes are identical to above in metric.http.server.duration
     attributes:
       # todo (lmolkova) build tools don't populate grandparent attributes
-      - ref: http.method
-      - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
+      - ref: http.request.method
+      - ref: http.response.status_code
+      - ref: network.protocol.name
+      - ref: network.protocol.version
 
   - id: metric.http.server.response.size
     type: metric
@@ -74,10 +76,10 @@ groups:
     extends: attributes.http.server
     # TODO (trask) below attributes are identical to above in metric.http.server.duration
     attributes:
-      - ref: http.method
-      - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
+      - ref: http.request.method
+      - ref: http.response.status_code
+      - ref: network.protocol.name
+      - ref: network.protocol.version
 
   - id: metric.http.client.duration
     type: metric
@@ -87,12 +89,11 @@ groups:
     unit: "s"
     extends: attributes.http.client
     attributes:
-      - ref: http.method
-      - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
-      - ref: net.sock.peer.addr
-
+      - ref: http.request.method
+      - ref: http.response.status_code
+      - ref: network.protocol.name
+      - ref: network.protocol.version
+      - ref: server.socket.address
   - id: metric.http.client.request.size
     type: metric
     metric_name: http.client.request.size
@@ -102,11 +103,11 @@ groups:
     extends: attributes.http.client
     # TODO (trask) below attributes are identical to above in metric.http.client.duration
     attributes:
-      - ref: http.method
-      - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
-      - ref: net.sock.peer.addr
+      - ref: http.request.method
+      - ref: http.response.status_code
+      - ref: network.protocol.name
+      - ref: network.protocol.version
+      - ref: server.socket.address
 
   - id: metric.http.client.response.size
     type: metric
@@ -117,8 +118,8 @@ groups:
     extends: attributes.http.client
     # TODO (trask) below attributes are identical to above in metric.http.client.duration
     attributes:
-      - ref: http.method
-      - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
-      - ref: net.sock.peer.addr
+      - ref: http.request.method
+      - ref: http.response.status_code
+      - ref: network.protocol.name
+      - ref: network.protocol.version
+      - ref: server.socket.address
