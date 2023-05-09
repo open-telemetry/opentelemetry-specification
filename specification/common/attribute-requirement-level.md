@@ -34,7 +34,7 @@ For example, Metric attributes that may have high cardinality can only be define
 
 A semantic convention that refers to an attribute from another semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from the referred semantic convention applies.
 
-For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
+For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `network.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
 
 ## Required
 

@@ -68,18 +68,14 @@ Some database systems may allow a connection to switch to a different `db.user`,
 | `db.system` | string | An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Required |
 | `db.connection_string` | string | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | Recommended |
 | `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | Recommended |
-| [`net.sock.family`](span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: [1] |
-| [`net.transport`](span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: [2] |
+| [`network.transport`](span-general.md) | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
+| [`network.type`](span-general.md) | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
 | [`server.address`](span-general.md) | string | Name of the database host. | `example.com` | Conditionally Required: See alternative attributes below. |
-| [`server.port`](span-general.md) | int | Logical server port number | `80`; `8080`; `443` | Conditionally Required: [3] |
+| [`server.port`](span-general.md) | int | Logical server port number | `80`; `8080`; `443` | Conditionally Required: [1] |
 | [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
 | [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: If different than `server.port`. |
 
-**[1]:** If different than `inet` and if any of `server.socket.address` or `client.socket.address` are set. Consumers of telemetry SHOULD accept both IPv4 and IPv6 formats for the address in `server.socket.address` and `client.socket.address` if `net.sock.family` is not set. This is to support instrumentations that follow previous versions of this document.
-
-**[2]:** If database type is in-process (`"inproc"`), recommended for other database types.
-
-**[3]:** If using a port other than the default port for this DBMS and if `server.address` is set.
+**[1]:** If using a port other than the default port for this DBMS and if `server.address` is set.
 
 **Additional attribute requirements:** At least one of the following sets of attributes is required:
 
@@ -296,8 +292,8 @@ In addition to Cosmos DB attributes, all spans include
 
 ### MySQL
 
-| Key | Value |
-| :---------------------- | :----------------------------------------------------------- |
+| Key                     | Value |
+|:------------------------| :----------------------------------------------------------- |
 | Span name               | `"SELECT ShopDb.orders"` |
 | `db.system`             | `"mysql"` |
 | `db.connection_string`  | `"Server=shopdb.example.com;Database=ShopDb;Uid=billing_user;TableCache=true;UseCompression=True;MinimumPoolSize=10;MaximumPoolSize=50;"` |
@@ -305,7 +301,7 @@ In addition to Cosmos DB attributes, all spans include
 | `server.address`        | `"shopdb.example.com"` |
 | `server.socket.address` | `"192.0.2.12"` |
 | `server.port`           | `3306` |
-| `net.transport`     | `"IP.TCP"` |
+| `network.transport`     | `"IP.TCP"` |
 | `db.name`               | `"ShopDb"` |
 | `db.statement`          | `"SELECT * FROM orders WHERE order_id = 'o4711'"` |
 | `db.operation`          | `"SELECT"` |
@@ -316,14 +312,14 @@ In addition to Cosmos DB attributes, all spans include
 In this example, Redis is connected using a unix domain socket and therefore the connection string and `server.address` are left out.
 Furthermore, `db.name` is not specified as there is no database name in Redis and `db.redis.database_index` is set instead.
 
-| Key | Value |
-| :------------------------ | :-------------------------------------------- |
+| Key                       | Value |
+|:--------------------------| :-------------------------------------------- |
 | Span name                 | `"HMSET myhash"` |
 | `db.system`               | `"redis"` |
 | `db.connection_string`    | not set |
 | `db.user`                 | not set |
 | `server.socket.address`   | `"/tmp/redis.sock"` |
-| `net.transport`       | `"Unix"` |
+| `network.transport`       | `"Unix"` |
 | `db.name`                 | not set |
 | `db.statement`            | `"HMSET myhash field1 'Hello' field2 'World"` |
 | `db.operation`            | not set |
@@ -340,7 +336,7 @@ Furthermore, `db.name` is not specified as there is no database name in Redis an
 | `server.address`        | `"mongodb0.example.com"` |
 | `server.socket.address` | `"192.0.2.14"` |
 | `server.port`           | `27017` |
-| `net.transport`     | `"IP.TCP"` |
+| `network.transport`     | `"IP.TCP"` |
 | `db.name`               | `"shopDb"` |
 | `db.statement`          | not set |
 | `db.operation`          | `"findAndModify"` |

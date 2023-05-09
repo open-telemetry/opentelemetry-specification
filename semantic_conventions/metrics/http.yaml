@@ -10,8 +10,8 @@ groups:
       # todo (lmolkova) build tools don't populate grandparent attributes
       - ref: http.method
       - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
+      - ref: network.protocol.name
+      - ref: network.protocol.version
 
   - id: metric.http.server.active_requests
     type: metric
@@ -62,8 +62,8 @@ groups:
       # todo (lmolkova) build tools don't populate grandparent attributes
       - ref: http.method
       - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
+      - ref: network.protocol.name
+      - ref: network.protocol.version
 
   - id: metric.http.server.response.size
     type: metric
@@ -76,8 +76,8 @@ groups:
     attributes:
       - ref: http.method
       - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
+      - ref: network.protocol.name
+      - ref: network.protocol.version
 
   - id: metric.http.client.duration
     type: metric
@@ -89,8 +89,8 @@ groups:
     attributes:
       - ref: http.method
       - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
+      - ref: network.protocol.name
+      - ref: network.protocol.version
       - ref: server.socket.address
 
   - id: metric.http.client.request.size
@@ -104,8 +104,8 @@ groups:
     attributes:
       - ref: http.method
       - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
+      - ref: network.protocol.name
+      - ref: network.protocol.version
       - ref: server.socket.address
 
   - id: metric.http.client.response.size
@@ -119,6 +119,6 @@ groups:
     attributes:
       - ref: http.method
       - ref: http.status_code
-      - ref: net.protocol.name
-      - ref: net.protocol.version
+      - ref: network.protocol.name
+      - ref: network.protocol.version
       - ref: server.socket.address

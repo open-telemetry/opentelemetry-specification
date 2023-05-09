@@ -150,15 +150,17 @@ groups:
         tag: connection-level
       - ref: server.socket.port
         tag: connection-level
-      - ref: net.sock.family
+      - ref: network.transport
+        tag: connection-level
+      - ref: network.type
         tag: connection-level
       - ref: server.socket.domain
         tag: connection-level
         requirement_level:
           recommended: If different than `server.address` and if `server.socket.address` is set.
-      - ref: net.protocol.name
+      - ref: network.protocol.name
         examples: ['amqp', 'mqtt']
-      - ref: net.protocol.version
+      - ref: network.protocol.version
 
   - id: messaging.producer
     prefix: messaging

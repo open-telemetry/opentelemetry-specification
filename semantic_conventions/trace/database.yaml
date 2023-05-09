@@ -242,15 +242,13 @@ groups:
         tag: connection-level
       - ref: server.socket.port
         tag: connection-level
-      - ref: net.sock.family
+      - ref: network.transport
+        tag: connection-level
+      - ref: network.type
         tag: connection-level
       - ref: server.socket.domain
         requirement_level:
           recommended: If different than `server.address` and if `server.socket.address` is set.
-      - ref: net.transport
-        tag: connection-level
-        requirement_level:
-          conditionally_required: If database type is in-process (`"inproc"`), recommended for other database types.
     constraints:
       - any_of:
           - 'server.address'

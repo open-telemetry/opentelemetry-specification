@@ -25,6 +25,17 @@ versions:
               net.sock.host.addr: server.socket.address
               net.sock.host.port: server.socket.port
               http.client_ip: client.address
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3426
+        - rename_attributes:
+            attribute_map:
+              net.protocol.name: network.protocol.name
+              net.protocol.version: network.protocol.version
+              net.host.connection.type: network.connection.type
+              net.host.connection.subtype: network.connection.subtype
+              net.host.carrier.name: network.carrier.name
+              net.host.carrier.mcc: network.carrier.mcc
+              net.host.carrier.mnc: network.carrier.mnc
+              net.host.carrier.icc: network.carrier.icc
   1.20.0:
     spans:
       changes:

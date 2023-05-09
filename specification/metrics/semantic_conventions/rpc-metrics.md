@@ -95,8 +95,8 @@ measurements.
 | [`rpc.system`](../../trace/semantic_conventions/rpc.md) | string | A string identifying the remoting system. See below for a list of well-known identifiers. | `grpc` | Required |
 | [`rpc.service`](../../trace/semantic_conventions/rpc.md) | string | The full (logical) name of the service being called, including its package name, if applicable. [1] | `myservice.EchoService` | Recommended |
 | [`rpc.method`](../../trace/semantic_conventions/rpc.md) | string | The name of the (logical) method being called, must be equal to the $method part in the span name. [2] | `exampleMethod` | Recommended |
-| [`net.sock.family`](../../trace/semantic_conventions/span-general.md) | string | Protocol [address family](https://man7.org/linux/man-pages/man7/address_families.7.html) which is used for communication. | `inet6`; `bluetooth` | Conditionally Required: If and only if `server.socket.address` is set. |
-| [`net.transport`](../../trace/semantic_conventions/span-general.md) | string | Transport protocol used. See note below. | `ip_tcp` | Conditionally Required: See below |
+| [`network.transport`](../../trace/semantic_conventions/span-general.md) | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
+| [`network.type`](../../trace/semantic_conventions/span-general.md) | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
 | [`server.address`](../../trace/semantic_conventions/span-general.md) | string | RPC server [host name](https://grpc.github.io/grpc/core/md_doc_naming.html). [3] | `example.com` | Required |
 | [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Logical server port number | `80`; `8080`; `443` | Conditionally Required: See below |
 | [`server.socket.address`](../../trace/semantic_conventions/span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
@@ -132,9 +132,8 @@ To avoid high cardinality, implementations should prefer the most stable of `ser
 
 For client-side metrics `server.port` is required if the connection is IP-based and the port is available (it describes the server port they are connecting to).
 For server-side spans `server.port` is optional (it describes the port the client is connecting from).
-Furthermore, setting [net.transport][] is required for non-IP connection like named pipe bindings.
 
-[net.transport]: ../../trace/semantic_conventions/span-general.md#network-attributes
+[network.transport]: ../../trace/semantic_conventions/span-general.md#network-attributes
 
 ### Service name
 
