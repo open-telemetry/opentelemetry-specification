@@ -123,7 +123,6 @@ Examples of span names:
 
 For client-side spans `server.port` is required if the connection is IP-based and the port is available (it describes the server port they are connecting to).
 For server-side spans `client.socket.port` is optional (it describes the port the client is connecting from).
-Furthermore, setting [network.transport][] is required for non-IP connection like named pipe bindings.
 
 #### Service name
 
@@ -137,7 +136,6 @@ In this example, spans representing client request should have their `peer.servi
 Generally, a user SHOULD NOT set `peer.service` to a fully qualified RPC service name.
 
 [network attributes]: span-general.md#server-and-client-attributes
-[network.transport]: span-general.md#network-attributes
 [`service.name`]: ../../resource/semantic_conventions/README.md#service
 [`peer.service`]: span-general.md#general-remote-service-attributes
 

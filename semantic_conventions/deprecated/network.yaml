@@ -65,6 +65,10 @@ groups:
             - id: inproc
               value: "inproc"
               brief: 'In-process communication.'
+              note: >
+                Signals that there is only in-process communication not using a "real" network protocol
+                in cases where network attributes would normally be expected. Usually all other network
+                attributes can be left out in that case.
             - id: other
               value: "other"
               brief: 'Something else (non IP-based).'
