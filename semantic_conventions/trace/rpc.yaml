@@ -53,9 +53,8 @@ groups:
       - ref: server.socket.port
         requirement_level:
           recommended: If different than `server.port` and if `server.socket.address` is set.
-      - ref: net.sock.family
-        requirement_level:
-          conditionally_required: If and only if `server.socket.address` is set.
+      - ref: network.transport
+      - ref: network.type
       - ref: server.address
         requirement_level: required
         brief: >
@@ -65,9 +64,6 @@ groups:
           instrumentations SHOULD NOT do a reverse proxy lookup to obtain DNS name and SHOULD set
           `server.address` to the IP address provided in the host component.
       - ref: server.port
-        requirement_level:
-          conditionally_required: See below
-      - ref: net.transport
         requirement_level:
           conditionally_required: See below
     constraints:
@@ -95,6 +91,8 @@ groups:
       - ref: client.port
       - ref: client.socket.address
       - ref: client.socket.port
+      - ref: network.transport
+      - ref: network.type
 
   - id: rpc.grpc
     prefix: rpc.grpc

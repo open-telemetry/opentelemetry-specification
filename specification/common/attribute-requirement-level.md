@@ -34,11 +34,11 @@ For example, Metric attributes that may have high cardinality can only be define
 
 A semantic convention that refers to an attribute from another semantic convention MAY modify the requirement level within its own scope. Otherwise, requirement level from the referred semantic convention applies.
 
-For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `net.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
+For example, [Database semantic convention](../trace/semantic_conventions/database.md) references `network.transport` attribute defined in [General attributes](../trace/semantic_conventions/span-general.md) with `Conditionally Required` level on it.
 
 ## Required
 
-All instrumentations MUST populate the attribute. A semantic convention defining a Required attribute expects an absolute majority of instrumentation libraries and applications are able to efficiently retrieve and populate it, and can additionally meet requirements for cardinality, security, and any others specific to the signal defined by the convention. `http.method` is an example of a Required attribute.
+All instrumentations MUST populate the attribute. A semantic convention defining a Required attribute expects an absolute majority of instrumentation libraries and applications are able to efficiently retrieve and populate it, and can additionally meet requirements for cardinality, security, and any others specific to the signal defined by the convention. `http.request.method` is an example of a Required attribute.
 
 _Note: Consumers of telemetry can detect if a telemetry item follows a specific semantic convention by checking for the presence of a `Required` attribute defined by such convention. For example, the presence of the `db.system` attribute on a span can be used as an indication that the span follows database semantics._
 
@@ -71,4 +71,4 @@ Here are several examples of expensive operations to be avoided by default:
 
 - DNS lookups to populate `server.address` when only an IP address is available to the instrumentation. Caching lookup results does not solve the issue for all possible cases and should be avoided by default too.
 - forcing an `http.route` calculation before the HTTP framework calculates it
-- reading response stream to find `http.response_content_length` when `Content-Length` header is not available
+- reading response stream to find `http.response.body.size` when `Content-Length` header is not available

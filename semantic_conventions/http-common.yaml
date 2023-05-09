@@ -4,22 +4,22 @@ groups:
     brief: "Describes HTTP attributes."
     prefix: http
     attributes:
-      - id: method
+      - id: request.method
         type: string
         requirement_level: required
         brief: 'HTTP request method.'
         examples: ["GET", "POST", "HEAD"]
-      - id: status_code
+      - id: response.status_code
         type: int
         requirement_level:
           conditionally_required: If and only if one was received/sent.
         brief: '[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).'
         examples: [200]
-      - ref: net.protocol.name
+      - ref: network.protocol.name
         examples: ['http', 'spdy']
         requirement_level:
           recommended: if not default (`http`).
-      - ref: net.protocol.version
+      - ref: network.protocol.version
         examples: ['1.0', '1.1', '2.0']
 
   - id: attributes.http.client
@@ -53,11 +53,6 @@ groups:
     type: attribute_group
     brief: 'HTTP Server spans attributes'
     attributes:
-      - id: scheme
-        type: string
-        brief: 'The URI scheme identifying the used protocol.'
-        requirement_level: required
-        examples: ["http", "https"]
       - id: route
         type: string
         requirement_level:
@@ -96,3 +91,6 @@ groups:
           - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
             if it's sent in absolute-form.
           - Port identifier of the `Host` header
+      - ref: url.scheme
+        requirement_level: required
+        examples: ["http", "https"]

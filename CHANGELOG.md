@@ -70,8 +70,31 @@ release.
      `net.sock.host.addr` to `server.socket.address` (since `net.sock.host.*` only applied to server instrumentation),
      `net.sock.host.port` to `server.socket.port` (similarly since `net.sock.host.*` only applied to server instrumentation),
      `http.client_ip` to `client.address`
+- BREAKING: Introduce `network.transport` defined as
+  [OSI Transport Layer](https://osi-model.com/transport-layer/) or
+  [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication).
+  Introduce `network.type` defined as [OSI Network Layer](https://osi-model.com/network-layer/)
+  or non-OSI equivalent. Remove `net.transport` and `net.sock.family`.
+  Rename `net.protocol.*` to `network.protocol.*`,
+  `net.host.connection.*` to `network.connection.*`, and
+  `net.host.carrier.*` to `network.carrier.*`.
+  ([#3426](https://github.com/open-telemetry/opentelemetry-specification/pull/3426))
+- BREAKING: Adopt ECS attributes in HTTP semantic conventions.
+  Renames: `http.method` to `http.request.method`,
+  `http.status_code` to `http.response.status_code`,
+  `http.request_content_length` to `http.request.body.size`,
+  `http.response_content_length` to `http.response.body.size`,
+  `http.url` to `url.full`,
+  `http.scheme` to `url.scheme`,
+  and removes `http.target` breaking it down to `http.target` to `url.path`, `url.query`, and `url.fragment`.
+  ([#3355](https://github.com/open-telemetry/opentelemetry-specification/pull/3355))
 
 ### Compatibility
+
+### Supplemenatary Guidelines
+
+- Add guidance to use service-supported propagation formats as default for AWS SDK client calls.
+  ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
 
 ### OpenTelemetry Protocol
 
