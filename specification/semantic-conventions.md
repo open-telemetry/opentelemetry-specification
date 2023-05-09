@@ -5,7 +5,7 @@
 The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications.
 
 OpenTelemetry defines its semantic conventions in a separate repository:
-https://github.com/open-telemetry/semantic-conventions.
+[https://github.com/open-telemetry/semantic-conventions](https://github.com/open-telemetry/semantic-conventions).
 
 ## Reserved Attributes
 
