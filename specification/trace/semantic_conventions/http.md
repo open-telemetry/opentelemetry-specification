@@ -89,26 +89,31 @@ sections below.
 <!-- semconv trace.http.common(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
+| `http.request.original_method` | string | Original HTTP method sent by the client in the request line. | `GeT`; `ACL`; `foo` | Recommended: [1] |
 | `http.response.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
 | `http.request.body.size` | int | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
 | `http.response.body.size` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
-| `http.request.method` | string | HTTP request method. [1] | `GET`; `POST`; `HEAD` | Required |
+| `http.request.method` | string | HTTP request method. [2] | `GET`; `POST`; `HEAD` | Required |
 | [`network.protocol.name`](span-general.md) | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `http`; `spdy` | Recommended: if not default (`http`). |
-| [`network.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [2] | `1.0`; `1.1`; `2.0` | Recommended |
-| [`network.transport`](span-general.md) | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Conditionally Required: [3] |
+| [`network.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [3] | `1.0`; `1.1`; `2.0` | Recommended |
+| [`network.transport`](span-general.md) | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Conditionally Required: [4] |
 | [`network.type`](span-general.md) | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
 | `user_agent.original` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
 
-**[1]:** HTTP request method SHOULD be one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods)
+**[1]:** If and only if it's different than `http.request.method`.
+
+**[2]:** HTTP request method SHOULD be one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods)
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+populate the exact method passed by client on `http.request.original_method` attribute.
+
 HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
-**[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
+**[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
-**[3]:** If not default (`tcp` for `HTTP/1.1` and `HTTP/2`, `udp` for `HTTP/3`).
+**[4]:** If not default (`tcp` for `HTTP/1.1` and `HTTP/2`, `udp` for `HTTP/3`).
 
 Following attributes MUST be provided **at span creation time** (when provided at all), so they can be considered for sampling decisions:
 

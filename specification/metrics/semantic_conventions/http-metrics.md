@@ -85,7 +85,9 @@ SHOULD include the [application root](/specification/trace/semantic_conventions/
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+populate the exact method passed by client on `http.request.original_method` attribute.
+
 HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
@@ -147,7 +149,9 @@ This metric is optional.
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+populate the exact method passed by client on `http.request.original_method` attribute.
+
 HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** Determined by using the first of the following that applies
@@ -207,7 +211,9 @@ This metric is optional.
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+populate the exact method passed by client on `http.request.original_method` attribute.
+
 HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** Determined by using the first of the following that applies
@@ -274,7 +280,9 @@ SHOULD include the [application root](/specification/trace/semantic_conventions/
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+populate the exact method passed by client on `http.request.original_method` attribute.
+
 HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
@@ -343,7 +351,9 @@ SHOULD include the [application root](/specification/trace/semantic_conventions/
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+populate the exact method passed by client on `http.request.original_method` attribute.
+
 HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
@@ -414,7 +424,9 @@ of `[ 0, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+populate the exact method passed by client on `http.request.original_method` attribute.
+
 HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
@@ -472,7 +484,9 @@ This metric is optional.
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+populate the exact method passed by client on `http.request.original_method` attribute.
+
 HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
@@ -530,7 +544,9 @@ This metric is optional.
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-Instrumentation MUST set the `http.method` attribute to `OTHER` if the HTTP request method is not known to the instrumentation.
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+populate the exact method passed by client on `http.request.original_method` attribute.
+
 HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
