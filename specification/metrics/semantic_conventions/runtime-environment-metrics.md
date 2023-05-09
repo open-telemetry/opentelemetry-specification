@@ -4,6 +4,11 @@ linkTitle: Runtime Environment
 
 # Semantic Conventions for Runtime Environment Metrics
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Experimental](../../document-status.md)
 
 This document includes semantic conventions for runtime environment level

@@ -2,6 +2,11 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 Useful resources to understand Kubernetes objects and metadata:
 
 * [Namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)

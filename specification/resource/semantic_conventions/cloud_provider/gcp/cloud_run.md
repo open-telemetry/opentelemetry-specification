@@ -1,5 +1,10 @@
 # Google Cloud Run
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 These conventions are recommended for resources running on Cloud Run.
 
 **Type:** `gcp.cloud_run`

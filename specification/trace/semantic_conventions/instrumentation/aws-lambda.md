@@ -1,5 +1,10 @@
 # Instrumenting AWS Lambda
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Experimental](../../../document-status.md)
 
 This document defines how to apply semantic conventions when instrumenting an AWS Lambda request handler. AWS
