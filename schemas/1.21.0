@@ -36,6 +36,15 @@ versions:
               net.host.carrier.mcc: network.carrier.mcc
               net.host.carrier.mnc: network.carrier.mnc
               net.host.carrier.icc: network.carrier.icc
+        # https://github.com/open-telemetry/opentelemetry-specification/pull/3355
+        - rename_attributes:
+            attribute_map:
+              http.method: http.request.method
+              http.status_code: http.response.status_code
+              http.scheme: url.scheme
+              http.url: url.full
+              http.request_content_length: http.request.body.size
+              http.response_content_length: http.response.body.size  
   1.20.0:
     spans:
       changes:

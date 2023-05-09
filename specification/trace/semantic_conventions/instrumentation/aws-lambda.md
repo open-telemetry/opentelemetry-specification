@@ -167,13 +167,11 @@ Function F:    | Span Function |
 | `server.address` | `foo.execute-api.us-east-1.amazonaws.com` |  |
 | `server.port` | `413` |  |
 | `http.method` | `GET` | `GET` |
-| `http.user_agent` | `okhttp 3.0` | `okhttp 3.0` |
-| `http.url` | `https://foo.execute-api.us-east-1.amazonaws.com/pets/10` |  |
-| `http.scheme` | | `https` |
-| `http.host` | | `foo.execute-api.us-east-1.amazonaws.com` |
-| `http.target` | | `/pets/10` |
+| `user_agent.original` | `okhttp 3.0` | `okhttp 3.0` |
+| `url.scheme` | | `https` |
+| `url.path` | | `/pets/10` |
 | `http.route` | | `/pets/{petId}` |
-| `http.status_code` | `200` | `200` |
+| `http.response.status_code` | `200` | `200` |
 
 ### API Gateway Request Proxy (Lambda tracing active)
 

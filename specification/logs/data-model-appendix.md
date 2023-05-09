@@ -409,19 +409,19 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>%m</td>
     <td>string</td>
     <td>The request method.</td>
-    <td>Attributes["http.method"]</td>
+    <td>Attributes["http.request.method"]</td>
   </tr>
   <tr>
     <td>%v,%p,%U,%q</td>
     <td>string</td>
     <td>Multiple fields that can be composed into URL.</td>
-    <td>Attributes["http.url"]</td>
+    <td>Attributes["url.full"]</td>
   </tr>
   <tr>
     <td>%>s</td>
     <td>string</td>
     <td>Response status.</td>
-    <td>Attributes["http.status_code"]</td>
+    <td>Attributes["http.response.status_code"]</td>
   </tr>
   <tr>
     <td>All other fields</td>

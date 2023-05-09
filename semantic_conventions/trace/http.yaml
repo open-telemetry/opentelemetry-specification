@@ -8,21 +8,21 @@ groups:
         These conventions can be used for http and https schemes
         and various HTTP versions like 1.1, 2 and SPDY.
     attributes:
-      - id: request_content_length
+      - id: request.body.size
         type: int
         brief: >
           The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and
           is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
-      - id: response_content_length
+      - id: response.body.size
         type: int
         brief: >
           The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and
           is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
-      - ref: http.method
+      - ref: http.request.method
         sampling_relevant: true
       - ref: network.transport
         requirement_level:
@@ -37,17 +37,6 @@ groups:
     span_kind: client
     brief: 'Semantic Convention for HTTP Client'
     attributes:
-      - id: url
-        type: string
-        requirement_level: required
-        brief: >
-            Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`.
-            Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
-        note: >
-          `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
-          In such case the attribute's value should be `https://www.example.com/`.
-        sampling_relevant: true
-        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
       - id: resend_count
         type: int
         brief: >
@@ -85,6 +74,10 @@ groups:
       - ref: server.socket.domain
       - ref: server.socket.address
       - ref: server.socket.port
+      - ref: url.full
+        sampling_relevant: true
+        requirement_level: required
+
 
   - id: trace.http.server
     prefix: http
@@ -93,14 +86,6 @@ groups:
     span_kind: server
     brief: 'Semantic Convention for HTTP Server'
     attributes:
-      - id: target
-        type: string
-        brief: 'The full request target as passed in a HTTP request line or equivalent.'
-        requirement_level: required
-        sampling_relevant: true
-        examples: ['/users/12314/?q=ddds']
-      - ref: http.scheme
-        sampling_relevant: true
       - ref: server.address
         requirement_level: required
         sampling_relevant: true
@@ -149,3 +134,12 @@ groups:
             Otherwise, the immediate client peer port.
       - ref: client.socket.address
       - ref: client.socket.port
+      - ref: url.path
+        requirement_level: required
+        sampling_relevant: true
+      - ref: url.query
+        sampling_relevant: true
+      - ref: url.scheme
+        sampling_relevant: true
+        requirement_level: required
+        examples: ["http", "https"]

@@ -757,14 +757,14 @@ API](../overview.md#api) authors might consider:
 ```python
 # Python
 
-http_server_duration.Record(50, {"http.method": "POST", "http.scheme": "https"})
+http_server_duration.Record(50, {"http.request.method": "POST", "url.scheme": "https"})
 http_server_duration.Record(100, http_method="GET", http_scheme="http")
 ```
 
 ```csharp
 // C#
 
-httpServerDuration.Record(50, ("http.method", "POST"), ("http.scheme", "https"));
+httpServerDuration.Record(50, ("http.request.method", "POST"), ("url.scheme", "https"));
 httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
 ```
 
