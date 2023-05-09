@@ -220,7 +220,7 @@ Valid cloud providers are:
 
 - [Alibaba Cloud](https://www.alibabacloud.com/) (`alibaba_cloud`)
 - [Amazon Web Services](https://aws.amazon.com/) ([`aws`](cloud_provider/aws/README.md))
-- [Google Cloud Platform](https://cloud.google.com/) (`gcp`)
+- [Google Cloud Platform](https://cloud.google.com/) ([`gcp`](cloud_provider/gcp/README.md))
 - [Microsoft Azure](https://azure.microsoft.com/) (`azure`)
 - [Tencent Cloud](https://www.tencentcloud.com/) (`tencent_cloud`)
 - [Heroku dyno](./cloud_provider/heroku.md)

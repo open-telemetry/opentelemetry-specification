@@ -1,0 +1,101 @@
+groups:
+  - id: network-deprecated
+    prefix: net
+    type: attribute_group
+    brief: >
+        These attributes may be used for any network related operation.
+    attributes:
+      - id: sock.peer.name
+        type: string
+        stability: deprecated
+        brief: Deprecated, use `server.socket.domain` on client spans.
+        examples: ['/var/my.sock']
+      - id: sock.peer.addr
+        type: string
+        stability: deprecated
+        brief: >
+          Deprecated, use `server.socket.address` on client spans and `client.socket.address` on server spans.
+        examples: ['192.168.0.1']
+      - id: sock.peer.port
+        type: int
+        stability: deprecated
+        examples: [65531]
+        brief: Deprecated, use `server.socket.port` on client spans and `client.socket.port` on server spans.
+      - id: peer.name
+        type: string
+        stability: deprecated
+        brief: Deprecated, use `server.address` on client spans and `client.address` on server spans.
+        examples: ['example.com']
+      - id: peer.port
+        type: int
+        stability: deprecated
+        brief: Deprecated, use `server.port` on client spans and `client.port` on server spans.
+        examples: [8080]
+      - id: host.name
+        type: string
+        stability: deprecated
+        brief: Deprecated, use `server.address`.
+        examples: ['example.com']
+      - id: host.port
+        type: int
+        stability: deprecated
+        brief: Deprecated, use `server.port`.
+        examples: [8080]
+      - id: sock.host.addr
+        type: string
+        stability: deprecated
+        brief: Deprecated, use `server.socket.address`.
+        examples: ['/var/my.sock']
+      - id: sock.host.port
+        type: int
+        stability: deprecated
+        brief: Deprecated, use `server.socket.port`.
+        examples: [8080]
+      - id: transport
+        type:
+          allow_custom_values: true
+          members:
+            - id: ip_tcp
+              value: "ip_tcp"
+            - id: ip_udp
+              value: "ip_udp"
+            - id: pipe
+              value: "pipe"
+              brief: 'Named or anonymous pipe.'
+            - id: inproc
+              value: "inproc"
+              brief: 'In-process communication.'
+              note: >
+                Signals that there is only in-process communication not using a "real" network protocol
+                in cases where network attributes would normally be expected. Usually all other network
+                attributes can be left out in that case.
+            - id: other
+              value: "other"
+              brief: 'Something else (non IP-based).'
+        stability: deprecated
+        brief: Deprecated, use `network.transport`.
+      - id: protocol.name
+        type: string
+        stability: deprecated
+        brief: Deprecated, use `network.protocol.name`.
+        examples: ['amqp', 'http', 'mqtt']
+      - id: protocol.version
+        type: string
+        stability: deprecated
+        brief: Deprecated, use `network.protocol.version`.
+        examples: '3.1.1'
+      - id: sock.family
+        type:
+          allow_custom_values: true
+          members:
+            - id: inet
+              value: 'inet'
+              brief: "IPv4 address"
+            - id: inet6
+              value: 'inet6'
+              brief: "IPv6 address"
+            - id: unix
+              value: 'unix'
+              brief: "Unix domain socket path"
+        stability: deprecated
+        brief: Deprecated, use `network.transport` and `network.type`.
