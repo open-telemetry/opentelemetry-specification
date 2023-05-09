@@ -13,25 +13,23 @@ Semantic conventions MUST provide the following attributes:
 
 - Resource
   - `service.name`
-  - `telemetry.sdk.name`
   - `telemetry.sdk.language`
+  - `telemetry.sdk.name`
   - `telemetry.sdk.version`
 - Event
   - `exception.escaped`
   - `exception.message`
   - `exception.stacktrace`
   - `exception.type`
-  - `exception.message`
 
 ## Experimental Reserved Attributes
 
 Semantic conventions MUST provide the following attributes:
 
 - Resource
-  - `service.name`
-  - `service.instance.id`
   - `server.address`
   - `server.port`
+  - `service.instance.id`
   - `url.scheme`
 
 ## Reserved Namespace

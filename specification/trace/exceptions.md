@@ -45,7 +45,6 @@ filled out:
 - `exception.message`
 - `exception.stacktrace`
 - `exception.type`
-- `exception.message`
 
 The format and semantics of these attributes are
 defined in [semantic conventions](semantic_conventions/exceptions.md).

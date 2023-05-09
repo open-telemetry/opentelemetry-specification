@@ -72,13 +72,13 @@ Application owners use the SDK constructors; [plugin authors](glossary.md#plugin
 
 The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications.
 
-* [Semantic Convention Repository](https://github.com/open-telemetry/semantic-conventions/tree/main/README.md)
+**Note: Semantic conventions will be moving to a new repository.**
 
 Both the collector and the client libraries SHOULD autogenerate semantic
 convention keys and enum values into constants (or language idiomatic
 equivalent). Generated values shouldn't be distributed in stable packages
 until semantic conventions are stable.
-The [YAML](https://github.com/open-telemetry/semantic-conventions/tree/main//semantic_conventions/README.md) files MUST be used as the
+The [YAML](../semantic_conventions/README.md) files MUST be used as the
 source of truth for generation. Each language implementation SHOULD
 provide language-specific support to the
 [code generator](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#code-generator).
