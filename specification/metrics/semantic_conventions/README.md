@@ -127,7 +127,7 @@ to the processes then to represent the count of the processes we can have a metr
 `system.processes`.
 
 This rule should only be applied to UpDownCounters, since (monotonic) Counters have
-`_total` appended to their names when they are mapped to Prometheus, which would lead to
+`_total` appended to their names when they are [mapped to Prometheus](../../compatibility/prometheus_and_openmetrics.md#otlp-metric-points-to-prometheus), which would lead to
 `_count_total`.
 
 #### Do not use `total`
