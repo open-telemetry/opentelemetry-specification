@@ -90,6 +90,11 @@ release.
 
 ### Compatibility
 
+### Supplemenatary Guidelines
+
+- Add guidance to use service-supported propagation formats as default for AWS SDK client calls.
+  ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
+
 ### OpenTelemetry Protocol
 
 ### SDK Configuration

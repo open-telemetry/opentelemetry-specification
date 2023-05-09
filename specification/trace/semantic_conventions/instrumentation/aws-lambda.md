@@ -109,6 +109,7 @@ For every message in the event, the [message system attributes][] (not message a
 the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an OpenTelemetry `Context` SHOULD be
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span. This means the span may have as many links as messages in the batch.
+See [compatibility](../../../../supplementary-guidelines/compatibility/aws.md#context-propagation) for more info.
 
 - [`faas.trigger`][faas] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md) MUST be set to `process`.
@@ -122,6 +123,7 @@ corresponding to the SQS event. The [message system attributes][] (not message a
 the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an OpenTelemetry `Context` SHOULD be
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span.
+See [compatibility](../../../../supplementary-guidelines/compatibility/aws.md#context-propagation) for more info.
 
 - [`faas.trigger`][faas] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
