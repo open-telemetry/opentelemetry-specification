@@ -14,6 +14,7 @@ linkTitle: Semantic Conventions
   * [Units](#units)
   * [Pluralization](#pluralization)
     + [Use `count` Instead of Pluralization for UpDownCounters](#use-count-instead-of-pluralization-for-updowncounters)
+    + [Do not use `total`](#do-not-use-total)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
   * [Instrument Naming](#instrument-naming)
   * [Instrument Units](#instrument-units)
