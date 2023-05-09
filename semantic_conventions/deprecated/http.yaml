@@ -1,0 +1,41 @@
+groups:
+  - id: attributes.http.deprecated
+    type: attribute_group
+    brief: "Describes deprecated HTTP attributes."
+    prefix: http
+    attributes:
+      - id: method
+        type: string
+        brief: 'Deprecated, use `http.request.method` instead.'
+        stability: deprecated
+        examples: ["GET", "POST", "HEAD"]
+      - id: status_code
+        type: int
+        brief: 'Deprecated, use `http.response.status_code` instead.'
+        stability: deprecated
+        examples: [200]
+      - id: scheme
+        type: string
+        brief: 'Deprecated, use `url.scheme` instead.'
+        stability: deprecated
+        examples: ['http', 'https']
+      - id: url
+        type: string
+        brief: 'Deprecated, use `url.full` instead.'
+        stability: deprecated
+        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
+      - id: target
+        type: string
+        brief: 'Deprecated, use `url.path` and `url.query` instead.'
+        stability: deprecated
+        examples: ['/search?q=OpenTelemetry#SemConv']
+      - id: request_content_length
+        type: int
+        brief: 'Deprecated, use `http.request.body.size` instead.'
+        stability: deprecated
+        examples: 3495
+      - id: response_content_length
+        type: int
+        brief: 'Deprecated, use `http.response.body.size` instead.'
+        stability: deprecated
+        examples: 3495
