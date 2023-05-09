@@ -1,11 +1,11 @@
 groups:
   - id: network-core
-    # TODO (trask) bring back prefix after https://github.com/open-telemetry/opentelemetry-specification/pull/3402
+    prefix: network
     type: attribute_group
     brief: >
         These attributes may be used for any network related operation.
     attributes:
-      - id: network.transport
+      - id: transport
         type:
           allow_custom_values: true
           members:
@@ -26,7 +26,7 @@ groups:
           [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication).
           The value SHOULD be normalized to lowercase.
         examples: ['tcp', 'udp']
-      - id: network.type
+      - id: type
         type:
           allow_custom_values: true
           members:
@@ -40,13 +40,13 @@ groups:
           [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent.
           The value SHOULD be normalized to lowercase.
         examples: ['ipv4', 'ipv6']
-      - id: network.protocol.name
+      - id: protocol.name
         type: string
         brief: >
           [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent.
           The value SHOULD be normalized to lowercase.
         examples: ['amqp', 'http', 'mqtt']
-      - id: network.protocol.version
+      - id: protocol.version
         type: string
         brief: 'Version of the application layer protocol used. See note below.'
         examples: '3.1.1'
