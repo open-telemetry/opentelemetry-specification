@@ -132,7 +132,7 @@ This rule SHOULD only be applied to UpDownCounters, since (monotonic) Counters h
 
 #### Do not use `total`
 
-Counters have `_total` appended to their names when they are [mapped to Prometheus](../../compatibility/prometheus_and_openmetrics.md#otlp-metric-points-to-prometheus),
+Counters SHOULD NOT append `_total`  to their names. Counters have `_total` appended to their names when they are [mapped to Prometheus](../../compatibility/prometheus_and_openmetrics.md#otlp-metric-points-to-prometheus),
 which would lead to `_total_total`. The reason that the Prometheus mapping cannot
 suppress adding the duplicate `_total` is because then the mapping wouldn't be
 bidirectional.
