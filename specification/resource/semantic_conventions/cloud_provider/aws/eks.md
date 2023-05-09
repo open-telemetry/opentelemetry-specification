@@ -9,5 +9,5 @@
 <!-- semconv aws.eks -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `aws.eks.cluster.arn` | string | **Stable**<br>The ARN of an EKS cluster. | `arn:aws:ecs:us-west-2:123456789123:cluster/my-cluster` | Recommended |
+| `aws.eks.cluster.arn` | string | The ARN of an EKS cluster. | `arn:aws:ecs:us-west-2:123456789123:cluster/my-cluster` | Recommended |
 <!-- endsemconv -->

@@ -30,8 +30,8 @@ pairs associated with the Span, Metric Data Point or LogRecord using the followi
 <!-- semconv otel.scope -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `otel.scope.name` | string | **Stable**<br>The name of the instrumentation scope - (`InstrumentationScope.Name` in OTLP). | `io.opentelemetry.contrib.mongodb` | Recommended |
-| `otel.scope.version` | string | **Stable**<br>The version of the instrumentation scope - (`InstrumentationScope.Version` in OTLP). | `1.0.0` | Recommended |
+| `otel.scope.name` | string | The name of the instrumentation scope - (`InstrumentationScope.Name` in OTLP). | `io.opentelemetry.contrib.mongodb` | Recommended |
+| `otel.scope.version` | string | The version of the instrumentation scope - (`InstrumentationScope.Version` in OTLP). | `1.0.0` | Recommended |
 <!-- endsemconv -->
 
 The following deprecated aliases MUST also be reported with exact same values for
@@ -55,8 +55,8 @@ key-value pairs:
 <!-- semconv otel_span -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `otel.status_code` | string | **Stable**<br>Name of the code, either "OK" or "ERROR". MUST NOT be set if the status code is UNSET. | `OK` | Recommended |
-| `otel.status_description` | string | **Stable**<br>Description of the Status if it has a value, otherwise not set. | `resource not found` | Recommended |
+| `otel.status_code` | string | Name of the code, either "OK" or "ERROR". MUST NOT be set if the status code is UNSET. | `OK` | Recommended |
+| `otel.status_description` | string | Description of the Status if it has a value, otherwise not set. | `resource not found` | Recommended |
 
 `otel.status_code` MUST be one of the following:
 

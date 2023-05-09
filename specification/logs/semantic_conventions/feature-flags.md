@@ -38,9 +38,9 @@ The event name MUST be `feature_flag`.
 
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| [`feature_flag.key`](../../trace/semantic_conventions/feature-flags.md) | string | **Stable**<br>The unique identifier of the feature flag. | `logo-color` | Required |
-| [`feature_flag.provider_name`](../../trace/semantic_conventions/feature-flags.md) | string | **Stable**<br>The name of the service provider that performs the flag evaluation. | `Flag Manager` | Recommended |
-| [`feature_flag.variant`](../../trace/semantic_conventions/feature-flags.md) | string | **Stable**<br>SHOULD be a semantic identifier for a value. If one is unavailable, a stringified version of the value can be used. [1] | `red`; `true`; `on` | Recommended |
+| [`feature_flag.key`](../../trace/semantic_conventions/feature-flags.md) | string | The unique identifier of the feature flag. | `logo-color` | Required |
+| [`feature_flag.provider_name`](../../trace/semantic_conventions/feature-flags.md) | string | The name of the service provider that performs the flag evaluation. | `Flag Manager` | Recommended |
+| [`feature_flag.variant`](../../trace/semantic_conventions/feature-flags.md) | string | SHOULD be a semantic identifier for a value. If one is unavailable, a stringified version of the value can be used. [1] | `red`; `true`; `on` | Recommended |
 
 **[1]:** A semantic identifier, commonly referred to as a variant, provides a means
 for referring to a value without including the value itself. This can

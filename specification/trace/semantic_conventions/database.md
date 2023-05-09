@@ -65,15 +65,15 @@ Some database systems may allow a connection to switch to a different `db.user`,
 <!-- semconv db(tag=connection-level) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.system` | string | **Stable**<br>An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Required |
-| `db.connection_string` | string | **Stable**<br>The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | Recommended |
-| `db.user` | string | **Stable**<br>Username for accessing the database. | `readonly_user`; `reporting_user` | Recommended |
-| [`network.transport`](span-general.md) | string | **Stable**<br>[OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
-| [`network.type`](span-general.md) | string | **Stable**<br>[OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
-| [`server.address`](span-general.md) | string | **Stable**<br>Name of the database host. | `example.com` | Conditionally Required: See alternative attributes below. |
-| [`server.port`](span-general.md) | int | **Stable**<br>Logical server port number | `80`; `8080`; `443` | Conditionally Required: [1] |
-| [`server.socket.address`](span-general.md) | string | **Stable**<br>Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
-| [`server.socket.port`](span-general.md) | int | **Stable**<br>Physical server port. | `16456` | Recommended: If different than `server.port`. |
+| `db.system` | string | An identifier for the database management system (DBMS) product being used. See below for a list of well-known identifiers. | `other_sql` | Required |
+| `db.connection_string` | string | The connection string used to connect to the database. It is recommended to remove embedded credentials. | `Server=(localdb)\v11.0;Integrated Security=true;` | Recommended |
+| `db.user` | string | Username for accessing the database. | `readonly_user`; `reporting_user` | Recommended |
+| [`network.transport`](span-general.md) | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
+| [`network.type`](span-general.md) | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
+| [`server.address`](span-general.md) | string | Name of the database host. | `example.com` | Conditionally Required: See alternative attributes below. |
+| [`server.port`](span-general.md) | int | Logical server port number | `80`; `8080`; `443` | Conditionally Required: [1] |
+| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | See below |
+| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: If different than `server.port`. |
 
 **[1]:** If using a port other than the default port for this DBMS and if `server.address` is set.
 
@@ -163,8 +163,8 @@ When additional attributes are added that only apply to a specific DBMS, its ide
 <!-- semconv db.mssql(tag=connection-level-tech-specific,remove_constraints) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.jdbc.driver_classname` | string | **Stable**<br>The fully-qualified class name of the [Java Database Connectivity (JDBC)](https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/) driver used to connect. | `org.postgresql.Driver`; `com.microsoft.sqlserver.jdbc.SQLServerDriver` | Recommended |
-| `db.mssql.instance_name` | string | **Stable**<br>The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15) connecting to. This name is used to determine the port of a named instance. [1] | `MSSQLSERVER` | Recommended |
+| `db.jdbc.driver_classname` | string | The fully-qualified class name of the [Java Database Connectivity (JDBC)](https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/) driver used to connect. | `org.postgresql.Driver`; `com.microsoft.sqlserver.jdbc.SQLServerDriver` | Recommended |
+| `db.mssql.instance_name` | string | The Microsoft SQL Server [instance name](https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15) connecting to. This name is used to determine the port of a named instance. [1] | `MSSQLSERVER` | Recommended |
 
 **[1]:** If setting a `db.mssql.instance_name`, `server.port` is no longer required (but still recommended if non-standard).
 <!-- endsemconv -->
@@ -177,9 +177,9 @@ Usually only one `db.name` will be used per connection though.
 <!-- semconv db(tag=call-level,remove_constraints) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.name` | string | **Stable**<br>This attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`; `main` | Conditionally Required: If applicable. |
-| `db.statement` | string | **Stable**<br>The database statement being executed. | `SELECT * FROM wuser_table`; `SET mykey "WuValue"` | Recommended: [2] |
-| `db.operation` | string | **Stable**<br>The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [3] | `findAndModify`; `HMSET`; `SELECT` | Conditionally Required: If `db.statement` is not applicable. |
+| `db.name` | string | This attribute is used to report the name of the database being accessed. For commands that switch the database, this should be set to the target database (even if the command fails). [1] | `customers`; `main` | Conditionally Required: If applicable. |
+| `db.statement` | string | The database statement being executed. | `SELECT * FROM wuser_table`; `SET mykey "WuValue"` | Recommended: [2] |
+| `db.operation` | string | The name of the operation being executed, e.g. the [MongoDB command name](https://docs.mongodb.com/manual/reference/command/#database-operations) such as `findAndModify`, or the SQL keyword. [3] | `findAndModify`; `HMSET`; `SELECT` | Conditionally Required: If `db.statement` is not applicable. |
 
 **[1]:** In some SQL databases, the database name to be used is called "schema name". In case there are multiple layers that could be considered for database name (e.g. Oracle instance name and schema name), the database name to be used is the more specific layer (e.g. Oracle schema name).
 
@@ -207,9 +207,9 @@ In **HBase**, `db.name` SHOULD be set to the HBase namespace.
 <!-- semconv db.tech(tag=call-level-tech-specific) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.redis.database_index` | int | **Stable**<br>The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`; `1`; `15` | Conditionally Required: If other than the default database (`0`). |
-| `db.mongodb.collection` | string | **Stable**<br>The collection being accessed within the database stated in `db.name`. | `customers`; `products` | Required |
-| `db.sql.table` | string | **Stable**<br>The name of the primary table that the operation is acting upon, including the database name (if applicable). [1] | `public.users`; `customers` | Recommended |
+| `db.redis.database_index` | int | The index of the database being accessed as used in the [`SELECT` command](https://redis.io/commands/select), provided as an integer. To be used instead of the generic `db.name` attribute. | `0`; `1`; `15` | Conditionally Required: If other than the default database (`0`). |
+| `db.mongodb.collection` | string | The collection being accessed within the database stated in `db.name`. | `customers`; `products` | Required |
+| `db.sql.table` | string | The name of the primary table that the operation is acting upon, including the database name (if applicable). [1] | `public.users`; `customers` | Recommended |
 
 **[1]:** It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
 <!-- endsemconv -->
@@ -221,13 +221,13 @@ Separated for clarity.
 <!-- semconv db.tech(tag=call-level-tech-specific-cassandra) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.cassandra.page_size` | int | **Stable**<br>The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | Recommended |
-| `db.cassandra.consistency_level` | string | **Stable**<br>The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `all` | Recommended |
-| `db.cassandra.table` | string | **Stable**<br>The name of the primary table that the operation is acting upon, including the keyspace name (if applicable). [1] | `mytable` | Recommended |
-| `db.cassandra.idempotence` | boolean | **Stable**<br>Whether or not the query is idempotent. |  | Recommended |
-| `db.cassandra.speculative_execution_count` | int | **Stable**<br>The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | Recommended |
-| `db.cassandra.coordinator.id` | string | **Stable**<br>The ID of the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | Recommended |
-| `db.cassandra.coordinator.dc` | string | **Stable**<br>The data center of the coordinating node for a query. | `us-west-2` | Recommended |
+| `db.cassandra.page_size` | int | The fetch size used for paging, i.e. how many rows will be returned at once. | `5000` | Recommended |
+| `db.cassandra.consistency_level` | string | The consistency level of the query. Based on consistency values from [CQL](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html). | `all` | Recommended |
+| `db.cassandra.table` | string | The name of the primary table that the operation is acting upon, including the keyspace name (if applicable). [1] | `mytable` | Recommended |
+| `db.cassandra.idempotence` | boolean | Whether or not the query is idempotent. |  | Recommended |
+| `db.cassandra.speculative_execution_count` | int | The number of times a query was speculatively executed. Not set or `0` if the query was not executed speculatively. | `0`; `2` | Recommended |
+| `db.cassandra.coordinator.id` | string | The ID of the coordinating node for a query. | `be13faa2-8574-4d71-926d-27f16cf8a7af` | Recommended |
+| `db.cassandra.coordinator.dc` | string | The data center of the coordinating node for a query. | `us-west-2` | Recommended |
 
 **[1]:** This mirrors the db.sql.table attribute but references cassandra rather than sql. It is not recommended to attempt any client-side parsing of `db.statement` just to get this property, but it should be set if it is provided by the library being instrumented. If the operation is acting upon an anonymous table, or more than one table, this value MUST NOT be set.
 <!-- endsemconv -->
@@ -239,15 +239,15 @@ Cosmos DB instrumentation includes call-level (public API) surface spans and net
 <!-- semconv db.cosmosdb -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `db.cosmosdb.client_id` | string | **Stable**<br>Unique Cosmos client instance id. | `3ba4827d-4422-483f-b59f-85b74211c11d` | Recommended |
-| `db.cosmosdb.operation_type` | string | **Stable**<br>CosmosDB Operation Type. | `Invalid` | Conditionally Required: [1] |
-| `db.cosmosdb.connection_mode` | string | **Stable**<br>Cosmos client connection mode. | `gateway` | Conditionally Required: if not `direct` (or pick gw as default) |
-| `db.cosmosdb.container` | string | **Stable**<br>Cosmos DB container name. | `anystring` | Conditionally Required: if available |
-| `db.cosmosdb.request_content_length` | int | **Stable**<br>Request payload size in bytes |  | Recommended |
-| `db.cosmosdb.status_code` | int | **Stable**<br>Cosmos DB status code. | `200`; `201` | Conditionally Required: if response was received |
-| `db.cosmosdb.sub_status_code` | int | **Stable**<br>Cosmos DB sub status code. | `1000`; `1002` | Conditionally Required: [2] |
-| `db.cosmosdb.request_charge` | double | **Stable**<br>RU consumed for that operation | `46.18`; `1.0` | Conditionally Required: when available |
-| `user_agent.original` | string | **Stable**<br>Full user-agent string is generated by Cosmos DB SDK [3] | `cosmos-netstandard-sdk/3.23.0\|3.23.1\|1\|X64\|Linux 5.4.0-1098-azure 104 18\|.NET Core 3.1.32\|S\|` | Recommended |
+| `db.cosmosdb.client_id` | string | Unique Cosmos client instance id. | `3ba4827d-4422-483f-b59f-85b74211c11d` | Recommended |
+| `db.cosmosdb.operation_type` | string | CosmosDB Operation Type. | `Invalid` | Conditionally Required: [1] |
+| `db.cosmosdb.connection_mode` | string | Cosmos client connection mode. | `gateway` | Conditionally Required: if not `direct` (or pick gw as default) |
+| `db.cosmosdb.container` | string | Cosmos DB container name. | `anystring` | Conditionally Required: if available |
+| `db.cosmosdb.request_content_length` | int | Request payload size in bytes |  | Recommended |
+| `db.cosmosdb.status_code` | int | Cosmos DB status code. | `200`; `201` | Conditionally Required: if response was received |
+| `db.cosmosdb.sub_status_code` | int | Cosmos DB sub status code. | `1000`; `1002` | Conditionally Required: [2] |
+| `db.cosmosdb.request_charge` | double | RU consumed for that operation | `46.18`; `1.0` | Conditionally Required: when available |
+| `user_agent.original` | string | Full user-agent string is generated by Cosmos DB SDK [3] | `cosmos-netstandard-sdk/3.23.0\|3.23.1\|1\|X64\|Linux 5.4.0-1098-azure 104 18\|.NET Core 3.1.32\|S\|` | Recommended |
 
 **[1]:** when performing one of the operations in this list
 

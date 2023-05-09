@@ -50,11 +50,11 @@ if they do not cause breaking changes to HTTP semantic conventions.
 <!-- semconv server -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `server.address` | string | **Stable**<br>Logical server hostname, matches server FQDN if available, and IP or socket address if FQDN is not known. | `example.com` | Recommended |
-| `server.port` | int | **Stable**<br>Logical server port number | `80`; `8080`; `443` | Recommended |
-| `server.socket.domain` | string | **Stable**<br>The domain name of an immediate peer. [1] | `proxy.example.com` | Recommended |
-| `server.socket.address` | string | **Stable**<br>Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
-| `server.socket.port` | int | **Stable**<br>Physical server port. | `16456` | Recommended: If different than `server.port`. |
+| `server.address` | string | Logical server hostname, matches server FQDN if available, and IP or socket address if FQDN is not known. | `example.com` | Recommended |
+| `server.port` | int | Logical server port number | `80`; `8080`; `443` | Recommended |
+| `server.socket.domain` | string | The domain name of an immediate peer. [1] | `proxy.example.com` | Recommended |
+| `server.socket.address` | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
+| `server.socket.port` | int | Physical server port. | `16456` | Recommended: If different than `server.port`. |
 
 **[1]:** Typically observed from the client side, and represents a proxy or other intermediary domain name.
 <!-- endsemconv -->
@@ -112,10 +112,10 @@ if they do not cause breaking changes to HTTP semantic conventions.
 <!-- semconv client -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `client.address` | string | **Stable**<br>Client address - unix domain socket name, IPv4 or IPv6 address. [1] | `/tmp/my.sock`; `10.1.2.80` | Recommended |
-| `client.port` | int | **Stable**<br>Client port number [2] | `65123` | Recommended |
-| `client.socket.address` | string | **Stable**<br>Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: If different than `client.address`. |
-| `client.socket.port` | int | **Stable**<br>Immediate client peer port number | `35555` | Recommended: If different than `client.port`. |
+| `client.address` | string | Client address - unix domain socket name, IPv4 or IPv6 address. [1] | `/tmp/my.sock`; `10.1.2.80` | Recommended |
+| `client.port` | int | Client port number [2] | `65123` | Recommended |
+| `client.socket.address` | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: If different than `client.address`. |
+| `client.socket.port` | int | Immediate client peer port number | `35555` | Recommended: If different than `client.port`. |
 
 **[1]:** When observed from the server side, and when communicating through an intermediary, `client.address` SHOULD represent client address behind any intermediaries (e.g. proxies) if it's available.
 
@@ -163,10 +163,10 @@ if they do not cause breaking changes to HTTP semantic conventions.
 <!-- semconv network-core -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `network.transport` | string | **Stable**<br>[OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
-| `network.type` | string | **Stable**<br>[OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
-| `network.protocol.name` | string | **Stable**<br>[OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
-| `network.protocol.version` | string | **Stable**<br>Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
+| `network.transport` | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
+| `network.type` | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
+| `network.protocol.name` | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `http`; `mqtt` | Recommended |
+| `network.protocol.version` | string | Version of the application layer protocol used. See note below. [1] | `3.1.1` | Recommended |
 
 **[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -201,9 +201,9 @@ This also covers unidirectional UDP flows and peer-to-peer communication where t
 <!-- semconv source -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `source.domain` | string | **Stable**<br>The domain name of the source system. [1] | `foo.example.com` | Recommended |
-| `source.address` | string | **Stable**<br>Source address, for example IP address or Unix socket name. | `10.5.3.2` | Recommended |
-| `source.port` | int | **Stable**<br>Source port number | `3389`; `2888` | Recommended |
+| `source.domain` | string | The domain name of the source system. [1] | `foo.example.com` | Recommended |
+| `source.address` | string | Source address, for example IP address or Unix socket name. | `10.5.3.2` | Recommended |
+| `source.port` | int | Source port number | `3389`; `2888` | Recommended |
 
 **[1]:** This value may be a host name, a fully qualified domain name, or another host naming format.
 <!-- endsemconv -->
@@ -215,9 +215,9 @@ Destination fields capture details about the receiver of a network exchange/pack
 <!-- semconv destination -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `destination.domain` | string | **Stable**<br>The domain name of the destination system. [1] | `foo.example.com` | Recommended |
-| `destination.address` | string | **Stable**<br>Peer address, for example IP address or UNIX socket name. | `10.5.3.2` | Recommended |
-| `destination.port` | int | **Stable**<br>Peer port number | `3389`; `2888` | Recommended |
+| `destination.domain` | string | The domain name of the destination system. [1] | `foo.example.com` | Recommended |
+| `destination.address` | string | Peer address, for example IP address or UNIX socket name. | `10.5.3.2` | Recommended |
+| `destination.port` | int | Peer port number | `3389`; `2888` | Recommended |
 
 **[1]:** This value may be a host name, a fully qualified domain name, or another host naming format.
 <!-- endsemconv -->
@@ -227,12 +227,12 @@ Destination fields capture details about the receiver of a network exchange/pack
 <!-- semconv network-connection-and-carrier -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `network.connection.type` | string | **Stable**<br>The internet connection type. | `wifi` | Recommended |
-| `network.connection.subtype` | string | **Stable**<br>This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
-| `network.carrier.name` | string | **Stable**<br>The name of the mobile carrier. | `sprint` | Recommended |
-| `network.carrier.mcc` | string | **Stable**<br>The mobile carrier country code. | `310` | Recommended |
-| `network.carrier.mnc` | string | **Stable**<br>The mobile carrier network code. | `001` | Recommended |
-| `network.carrier.icc` | string | **Stable**<br>The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
+| `network.connection.type` | string | The internet connection type. | `wifi` | Recommended |
+| `network.connection.subtype` | string | This describes more details regarding the connection.type. It may be the type of cell technology connection, but it could be used for describing details about a wifi connection. | `LTE` | Recommended |
+| `network.carrier.name` | string | The name of the mobile carrier. | `sprint` | Recommended |
+| `network.carrier.mcc` | string | The mobile carrier country code. | `310` | Recommended |
+| `network.carrier.mnc` | string | The mobile carrier network code. | `001` | Recommended |
+| `network.carrier.icc` | string | The ISO 3166-1 alpha-2 2-character country code associated with the mobile carrier network. | `DE` | Recommended |
 
 `network.connection.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
@@ -282,7 +282,7 @@ Instrumentations SHOULD provide a way for users to configure this name.
 <!-- semconv peer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `peer.service` | string | **Stable**<br>The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. | `AuthTokenCache` | Recommended |
+| `peer.service` | string | The [`service.name`](../../resource/semantic_conventions/README.md#service) of the remote service. SHOULD be equal to the actual `service.name` resource attribute of the remote service if any. | `AuthTokenCache` | Recommended |
 <!-- endsemconv -->
 
 Examples of `peer.service` that users may specify:
@@ -297,9 +297,9 @@ These attributes may be used for any operation with an authenticated and/or auth
 <!-- semconv identity -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `enduser.id` | string | **Stable**<br>Username or client_id extracted from the access token or [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2) header in the inbound request from outside the system. | `username` | Recommended |
-| `enduser.role` | string | **Stable**<br>Actual/assumed role the client is making the request under extracted from token or application security context. | `admin` | Recommended |
-| `enduser.scope` | string | **Stable**<br>Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3) or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html). | `read:message, write:files` | Recommended |
+| `enduser.id` | string | Username or client_id extracted from the access token or [Authorization](https://tools.ietf.org/html/rfc7235#section-4.2) header in the inbound request from outside the system. | `username` | Recommended |
+| `enduser.role` | string | Actual/assumed role the client is making the request under extracted from token or application security context. | `admin` | Recommended |
+| `enduser.scope` | string | Scopes or granted authorities the client currently possesses extracted from token or application security context. The value would come from the scope associated with an [OAuth 2.0 Access Token](https://tools.ietf.org/html/rfc6749#section-3.3) or an attribute value in a [SAML 2.0 Assertion](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html). | `read:message, write:files` | Recommended |
 <!-- endsemconv -->
 
 These attributes describe the authenticated user driving the user agent making requests to the instrumented
@@ -346,8 +346,8 @@ a thread that started a span.
 <!-- semconv thread -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `thread.id` | int | **Stable**<br>Current "managed" thread ID (as opposed to OS thread ID). | `42` | Recommended |
-| `thread.name` | string | **Stable**<br>Current thread name. | `main` | Recommended |
+| `thread.id` | int | Current "managed" thread ID (as opposed to OS thread ID). | `42` | Recommended |
+| `thread.name` | string | Current thread name. | `main` | Recommended |
 <!-- endsemconv -->
 
 Examples of where `thread.id` and `thread.name` can be extracted from:
@@ -372,9 +372,9 @@ about the span.
 <!-- semconv code -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `code.function` | string | **Stable**<br>The method or function name, or equivalent (usually rightmost part of the code unit's name). | `serveRequest` | Recommended |
-| `code.namespace` | string | **Stable**<br>The "namespace" within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit. | `com.example.MyHttpService` | Recommended |
-| `code.filepath` | string | **Stable**<br>The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/content_root/app/index.php` | Recommended |
-| `code.lineno` | int | **Stable**<br>The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | Recommended |
-| `code.column` | int | **Stable**<br>The column number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `16` | Recommended |
+| `code.function` | string | The method or function name, or equivalent (usually rightmost part of the code unit's name). | `serveRequest` | Recommended |
+| `code.namespace` | string | The "namespace" within which `code.function` is defined. Usually the qualified class or module name, such that `code.namespace` + some separator + `code.function` form a unique identifier for the code unit. | `com.example.MyHttpService` | Recommended |
+| `code.filepath` | string | The source code file name that identifies the code unit as uniquely as possible (preferably an absolute file path). | `/usr/local/MyApplication/content_root/app/index.php` | Recommended |
+| `code.lineno` | int | The line number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `42` | Recommended |
+| `code.column` | int | The column number in `code.filepath` best representing the operation. It SHOULD point within the code unit named in `code.function`. | `16` | Recommended |
 <!-- endsemconv -->

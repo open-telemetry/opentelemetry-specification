@@ -9,9 +9,9 @@
 <!-- semconv container -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `container.name` | string | **Stable**<br>Container name used by container runtime. | `opentelemetry-autoconf` | Recommended |
-| `container.id` | string | **Stable**<br>Container ID. Usually a UUID, as for example used to [identify Docker containers](https://docs.docker.com/engine/reference/run/#container-identification). The UUID might be abbreviated. | `a3bf90e006b2` | Recommended |
-| `container.runtime` | string | **Stable**<br>The container runtime managing this container. | `docker`; `containerd`; `rkt` | Recommended |
-| `container.image.name` | string | **Stable**<br>Name of the image the container was built on. | `gcr.io/opentelemetry/operator` | Recommended |
-| `container.image.tag` | string | **Stable**<br>Container image tag. | `0.1` | Recommended |
+| `container.name` | string | Container name used by container runtime. | `opentelemetry-autoconf` | Recommended |
+| `container.id` | string | Container ID. Usually a UUID, as for example used to [identify Docker containers](https://docs.docker.com/engine/reference/run/#container-identification). The UUID might be abbreviated. | `a3bf90e006b2` | Recommended |
+| `container.runtime` | string | The container runtime managing this container. | `docker`; `containerd`; `rkt` | Recommended |
+| `container.image.name` | string | Name of the image the container was built on. | `gcr.io/opentelemetry/operator` | Recommended |
+| `container.image.tag` | string | Container image tag. | `0.1` | Recommended |
 <!-- endsemconv -->

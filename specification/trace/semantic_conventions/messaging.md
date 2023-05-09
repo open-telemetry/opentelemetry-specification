@@ -210,22 +210,22 @@ The following operations related to messages are defined for these semantic conv
 <!-- semconv messaging -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.system` | string | **Stable**<br>A string identifying the messaging system. | `kafka`; `rabbitmq`; `rocketmq`; `activemq`; `AmazonSQS` | Required |
-| `messaging.operation` | string | **Stable**<br>A string identifying the kind of messaging operation as defined in the [Operation names](#operation-names) section above. [1] | `publish` | Required |
-| `messaging.batch.message_count` | int | **Stable**<br>The number of messages sent, received, or processed in the scope of the batching operation. [2] | `0`; `1`; `2` | Conditionally Required: [3] |
-| `messaging.client_id` | string | **Stable**<br>A unique identifier for the client that consumes or produces a message. | `client-5`; `myhost@8742@s8083jm` | Recommended: If a client id is available |
-| `messaging.message.conversation_id` | string | **Stable**<br>The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended: [4] |
-| `messaging.message.id` | string | **Stable**<br>A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [5] |
-| `messaging.message.payload_compressed_size_bytes` | int | **Stable**<br>The compressed size of the message payload in bytes. | `2048` | Recommended: [6] |
-| `messaging.message.payload_size_bytes` | int | **Stable**<br>The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended: [7] |
-| [`network.protocol.name`](span-general.md) | string | **Stable**<br>[OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
-| [`network.protocol.version`](span-general.md) | string | **Stable**<br>Version of the application layer protocol used. See note below. [8] | `3.1.1` | Recommended |
-| [`network.transport`](span-general.md) | string | **Stable**<br>[OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
-| [`network.type`](span-general.md) | string | **Stable**<br>[OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
-| [`server.address`](span-general.md) | string | **Stable**<br>Logical server hostname, matches server FQDN if available, and IP or socket address if FQDN is not known. [9] | `example.com` | Conditionally Required: If available. |
-| [`server.socket.address`](span-general.md) | string | **Stable**<br>Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
-| [`server.socket.domain`](span-general.md) | string | **Stable**<br>The domain name of an immediate peer. [10] | `proxy.example.com` | Recommended: [11] |
-| [`server.socket.port`](span-general.md) | int | **Stable**<br>Physical server port. | `16456` | Recommended: If different than `server.port`. |
+| `messaging.system` | string | A string identifying the messaging system. | `kafka`; `rabbitmq`; `rocketmq`; `activemq`; `AmazonSQS` | Required |
+| `messaging.operation` | string | A string identifying the kind of messaging operation as defined in the [Operation names](#operation-names) section above. [1] | `publish` | Required |
+| `messaging.batch.message_count` | int | The number of messages sent, received, or processed in the scope of the batching operation. [2] | `0`; `1`; `2` | Conditionally Required: [3] |
+| `messaging.client_id` | string | A unique identifier for the client that consumes or produces a message. | `client-5`; `myhost@8742@s8083jm` | Recommended: If a client id is available |
+| `messaging.message.conversation_id` | string | The [conversation ID](#conversations) identifying the conversation to which the message belongs, represented as a string. Sometimes called "Correlation ID". | `MyConversationId` | Recommended: [4] |
+| `messaging.message.id` | string | A value used by the messaging system as an identifier for the message, represented as a string. | `452a7c7c7c7048c2f887f61572b18fc2` | Recommended: [5] |
+| `messaging.message.payload_compressed_size_bytes` | int | The compressed size of the message payload in bytes. | `2048` | Recommended: [6] |
+| `messaging.message.payload_size_bytes` | int | The (uncompressed) size of the message payload in bytes. Also use this attribute if it is unknown whether the compressed or uncompressed payload size is reported. | `2738` | Recommended: [7] |
+| [`network.protocol.name`](span-general.md) | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `amqp`; `mqtt` | Recommended |
+| [`network.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [8] | `3.1.1` | Recommended |
+| [`network.transport`](span-general.md) | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Recommended |
+| [`network.type`](span-general.md) | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
+| [`server.address`](span-general.md) | string | Logical server hostname, matches server FQDN if available, and IP or socket address if FQDN is not known. [9] | `example.com` | Conditionally Required: If available. |
+| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
+| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [10] | `proxy.example.com` | Recommended: [11] |
+| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: If different than `server.port`. |
 
 **[1]:** If a custom value is used, it MUST be of low cardinality.
 
@@ -287,10 +287,10 @@ The following additional attributes describe message producer operations.
 <!-- semconv messaging.producer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.destination.anonymous` | boolean | **Stable**<br>A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Conditionally Required: [1] |
-| `messaging.destination.name` | string | **Stable**<br>The message destination name [2] | `MyQueue`; `MyTopic` | Conditionally Required: [3] |
-| `messaging.destination.template` | string | **Stable**<br>Low cardinality representation of the messaging destination name [4] | `/customers/{customerId}` | Conditionally Required: [5] |
-| `messaging.destination.temporary` | boolean | **Stable**<br>A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [6] |
+| `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Conditionally Required: [1] |
+| `messaging.destination.name` | string | The message destination name [2] | `MyQueue`; `MyTopic` | Conditionally Required: [3] |
+| `messaging.destination.template` | string | Low cardinality representation of the messaging destination name [4] | `/customers/{customerId}` | Conditionally Required: [5] |
+| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Conditionally Required: [6] |
 
 **[1]:** If value is `true`. When missing, the value is assumed to be `false`.
 
@@ -315,13 +315,13 @@ The following additional attributes describe message consumer operations.
 <!-- semconv messaging.consumer -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.destination.anonymous` | boolean | **Stable**<br>A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Recommended: If known on consumer |
-| `messaging.destination.name` | string | **Stable**<br>The message destination name [1] | `MyQueue`; `MyTopic` | Recommended: If known on consumer |
-| `messaging.destination.temporary` | boolean | **Stable**<br>A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Recommended: If known on consumer |
-| `messaging.source.anonymous` | boolean | **Stable**<br>A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name). |  | Recommended: [2] |
-| `messaging.source.name` | string | **Stable**<br>The message source name [3] | `MyQueue`; `MyTopic` | Conditionally Required: [4] |
-| `messaging.source.template` | string | **Stable**<br>Low cardinality representation of the messaging source name [5] | `/customers/{customerId}` | Conditionally Required: [6] |
-| `messaging.source.temporary` | boolean | **Stable**<br>A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [7] |
+| `messaging.destination.anonymous` | boolean | A boolean that is true if the message destination is anonymous (could be unnamed or have auto-generated name). |  | Recommended: If known on consumer |
+| `messaging.destination.name` | string | The message destination name [1] | `MyQueue`; `MyTopic` | Recommended: If known on consumer |
+| `messaging.destination.temporary` | boolean | A boolean that is true if the message destination is temporary and might not exist anymore after messages are processed. |  | Recommended: If known on consumer |
+| `messaging.source.anonymous` | boolean | A boolean that is true if the message source is anonymous (could be unnamed or have auto-generated name). |  | Recommended: [2] |
+| `messaging.source.name` | string | The message source name [3] | `MyQueue`; `MyTopic` | Conditionally Required: [4] |
+| `messaging.source.template` | string | Low cardinality representation of the messaging source name [5] | `/customers/{customerId}` | Conditionally Required: [6] |
+| `messaging.source.temporary` | boolean | A boolean that is true if the message source is temporary and might not exist anymore after messages are processed. |  | Recommended: [7] |
 
 **[1]:** Destination name SHOULD uniquely identify a specific queue, topic or other entity within the broker. If
 the broker does not have such notion, the destination name SHOULD uniquely identify the broker.
@@ -374,7 +374,7 @@ In RabbitMQ, the destination is defined by an *exchange* and a *routing key*.
 <!-- semconv messaging.rabbitmq -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.rabbitmq.destination.routing_key` | string | **Stable**<br>RabbitMQ message routing key. | `myKey` | Conditionally Required: If not empty. |
+| `messaging.rabbitmq.destination.routing_key` | string | RabbitMQ message routing key. | `myKey` | Conditionally Required: If not empty. |
 <!-- endsemconv -->
 
 #### Apache Kafka
@@ -384,12 +384,12 @@ For Apache Kafka, the following additional attributes are defined:
 <!-- semconv messaging.kafka -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.kafka.message.key` | string | **Stable**<br>Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message.id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | Recommended |
-| `messaging.kafka.consumer.group` | string | **Stable**<br>Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
-| `messaging.kafka.destination.partition` | int | **Stable**<br>Partition the message is sent to. | `2` | Recommended |
-| `messaging.kafka.source.partition` | int | **Stable**<br>Partition the message is received from. | `2` | Recommended |
-| `messaging.kafka.message.offset` | int | **Stable**<br>The offset of a record in the corresponding Kafka partition. | `42` | Recommended |
-| `messaging.kafka.message.tombstone` | boolean | **Stable**<br>A boolean that is true if the message is a tombstone. |  | Conditionally Required: [2] |
+| `messaging.kafka.message.key` | string | Message keys in Kafka are used for grouping alike messages to ensure they're processed on the same partition. They differ from `messaging.message.id` in that they're not unique. If the key is `null`, the attribute MUST NOT be set. [1] | `myKey` | Recommended |
+| `messaging.kafka.consumer.group` | string | Name of the Kafka Consumer Group that is handling the message. Only applies to consumers, not producers. | `my-group` | Recommended |
+| `messaging.kafka.destination.partition` | int | Partition the message is sent to. | `2` | Recommended |
+| `messaging.kafka.source.partition` | int | Partition the message is received from. | `2` | Recommended |
+| `messaging.kafka.message.offset` | int | The offset of a record in the corresponding Kafka partition. | `42` | Recommended |
+| `messaging.kafka.message.tombstone` | boolean | A boolean that is true if the message is a tombstone. |  | Conditionally Required: [2] |
 
 **[1]:** If the key type is not string, it's string representation has to be supplied for the attribute. If the key has no unambiguous, canonical string form, don't include its value.
 
@@ -409,15 +409,15 @@ Specific attributes for Apache RocketMQ are defined below.
 <!-- semconv messaging.rocketmq -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `messaging.rocketmq.namespace` | string | **Stable**<br>Namespace of RocketMQ resources, resources in different namespaces are individual. | `myNamespace` | Required |
-| `messaging.rocketmq.client_group` | string | **Stable**<br>Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind. | `myConsumerGroup` | Required |
-| `messaging.rocketmq.message.delivery_timestamp` | int | **Stable**<br>The timestamp in milliseconds that the delay message is expected to be delivered to consumer. | `1665987217045` | Conditionally Required: [1] |
-| `messaging.rocketmq.message.delay_time_level` | int | **Stable**<br>The delay time level for delay message, which determines the message delay time. | `3` | Conditionally Required: [2] |
-| `messaging.rocketmq.message.group` | string | **Stable**<br>It is essential for FIFO message. Messages that belong to the same message group are always processed one by one within the same consumer group. | `myMessageGroup` | Conditionally Required: If the message type is FIFO. |
-| `messaging.rocketmq.message.type` | string | **Stable**<br>Type of message. | `normal` | Recommended |
-| `messaging.rocketmq.message.tag` | string | **Stable**<br>The secondary classifier of message besides topic. | `tagA` | Recommended |
-| `messaging.rocketmq.message.keys` | string[] | **Stable**<br>Key(s) of message, another way to mark message besides message id. | `[keyA, keyB]` | Recommended |
-| `messaging.rocketmq.consumption_model` | string | **Stable**<br>Model of message consumption. This only applies to consumer spans. | `clustering` | Recommended |
+| `messaging.rocketmq.namespace` | string | Namespace of RocketMQ resources, resources in different namespaces are individual. | `myNamespace` | Required |
+| `messaging.rocketmq.client_group` | string | Name of the RocketMQ producer/consumer group that is handling the message. The client type is identified by the SpanKind. | `myConsumerGroup` | Required |
+| `messaging.rocketmq.message.delivery_timestamp` | int | The timestamp in milliseconds that the delay message is expected to be delivered to consumer. | `1665987217045` | Conditionally Required: [1] |
+| `messaging.rocketmq.message.delay_time_level` | int | The delay time level for delay message, which determines the message delay time. | `3` | Conditionally Required: [2] |
+| `messaging.rocketmq.message.group` | string | It is essential for FIFO message. Messages that belong to the same message group are always processed one by one within the same consumer group. | `myMessageGroup` | Conditionally Required: If the message type is FIFO. |
+| `messaging.rocketmq.message.type` | string | Type of message. | `normal` | Recommended |
+| `messaging.rocketmq.message.tag` | string | The secondary classifier of message besides topic. | `tagA` | Recommended |
+| `messaging.rocketmq.message.keys` | string[] | Key(s) of message, another way to mark message besides message id. | `[keyA, keyB]` | Recommended |
+| `messaging.rocketmq.consumption_model` | string | Model of message consumption. This only applies to consumer spans. | `clustering` | Recommended |
 
 **[1]:** If the message type is delay and delay time level is not specified.
 

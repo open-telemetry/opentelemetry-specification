@@ -89,15 +89,15 @@ sections below.
 <!-- semconv trace.http.common(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.response.status_code` | int | **Stable**<br>[HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
-| `http.request.body.size` | int | **Stable**<br>The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
-| `http.response.body.size` | int | **Stable**<br>The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
-| `http.request.method` | string | **Stable**<br>HTTP request method. | `GET`; `POST`; `HEAD` | Required |
-| [`network.protocol.name`](span-general.md) | string | **Stable**<br>[OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `http`; `spdy` | Recommended: if not default (`http`). |
-| [`network.protocol.version`](span-general.md) | string | **Stable**<br>Version of the application layer protocol used. See note below. [1] | `1.0`; `1.1`; `2.0` | Recommended |
-| [`network.transport`](span-general.md) | string | **Stable**<br>[OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Conditionally Required: [2] |
-| [`network.type`](span-general.md) | string | **Stable**<br>[OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
-| `user_agent.original` | string | **Stable**<br>Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
+| `http.response.status_code` | int | [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6). | `200` | Conditionally Required: If and only if one was received/sent. |
+| `http.request.body.size` | int | The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
+| `http.response.body.size` | int | The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size. | `3495` | Recommended |
+| `http.request.method` | string | HTTP request method. | `GET`; `POST`; `HEAD` | Required |
+| [`network.protocol.name`](span-general.md) | string | [OSI Application Layer](https://osi-model.com/application-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `http`; `spdy` | Recommended: if not default (`http`). |
+| [`network.protocol.version`](span-general.md) | string | Version of the application layer protocol used. See note below. [1] | `1.0`; `1.1`; `2.0` | Recommended |
+| [`network.transport`](span-general.md) | string | [OSI Transport Layer](https://osi-model.com/transport-layer/) or [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication). The value SHOULD be normalized to lowercase. | `tcp`; `udp` | Conditionally Required: [2] |
+| [`network.type`](span-general.md) | string | [OSI Network Layer](https://osi-model.com/network-layer/) or non-OSI equivalent. The value SHOULD be normalized to lowercase. | `ipv4`; `ipv6` | Recommended |
+| `user_agent.original` | string | Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client. | `CERN-LineMode/2.15 libwww/2.17b3` | Recommended |
 
 **[1]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -156,13 +156,13 @@ For an HTTP client span, `SpanKind` MUST be `Client`.
 <!-- semconv trace.http.client(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.resend_count` | int | **Stable**<br>The ordinal number of request resending attempt (for any reason, including redirects). [1] | `3` | Recommended: if and only if request was retried. |
-| [`server.address`](span-general.md) | string | **Stable**<br>Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
-| [`server.port`](span-general.md) | int | **Stable**<br>Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
-| [`server.socket.address`](span-general.md) | string | **Stable**<br>Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
-| [`server.socket.domain`](span-general.md) | string | **Stable**<br>The domain name of an immediate peer. [5] | `proxy.example.com` | Recommended |
-| [`server.socket.port`](span-general.md) | int | **Stable**<br>Physical server port. | `16456` | Recommended: If different than `server.port`. |
-| [`url.full`](../../common/url.md) | string | **Stable**<br>Absolute URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986) [6] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv`; `//localhost` | Required |
+| `http.resend_count` | int | The ordinal number of request resending attempt (for any reason, including redirects). [1] | `3` | Recommended: if and only if request was retried. |
+| [`server.address`](span-general.md) | string | Host identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [2] | `example.com` | Required |
+| [`server.port`](span-general.md) | int | Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
+| [`server.socket.address`](span-general.md) | string | Physical server IP address or Unix socket address. | `10.5.3.2` | Recommended: If different than `server.address`. |
+| [`server.socket.domain`](span-general.md) | string | The domain name of an immediate peer. [5] | `proxy.example.com` | Recommended |
+| [`server.socket.port`](span-general.md) | int | Physical server port. | `16456` | Recommended: If different than `server.port`. |
+| [`url.full`](../../common/url.md) | string | Absolute URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986) [6] | `https://www.foo.bar/search?q=OpenTelemetry#SemConv`; `//localhost` | Required |
 
 **[1]:** The resend count SHOULD be updated each time an HTTP request gets resent by the client, regardless of what was the cause of the resending (e.g. redirection, authorization failure, 503 Server Unavailable, network issues, or any other).
 
@@ -270,18 +270,18 @@ If the route cannot be determined, the `name` attribute MUST be set as defined i
 <!-- semconv trace.http.server(full) -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `http.route` | string | **Stable**<br>The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
-| [`client.address`](span-general.md) | string | **Stable**<br>Client address - unix domain socket name, IPv4 or IPv6 address. [2] | `83.164.160.102` | Recommended |
-| [`client.port`](span-general.md) | int | **Stable**<br>The port of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded) or a similar header). Otherwise, the immediate client peer port. [3] | `65123` | Recommended |
-| [`client.socket.address`](span-general.md) | string | **Stable**<br>Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: If different than `client.address`. |
-| [`client.socket.port`](span-general.md) | int | **Stable**<br>Immediate client peer port number | `35555` | Recommended: If different than `client.port`. |
-| [`server.address`](span-general.md) | string | **Stable**<br>Name of the local HTTP server that received the request. [4] | `example.com` | Required |
-| [`server.port`](span-general.md) | int | **Stable**<br>Port of the local HTTP server that received the request. [5] | `80`; `8080`; `443` | Conditionally Required: [6] |
-| [`server.socket.address`](span-general.md) | string | **Stable**<br>Local socket address. Useful in case of a multi-IP host. | `10.5.3.2` | Opt-In |
-| [`server.socket.port`](span-general.md) | int | **Stable**<br>Local socket port. Useful in case of a multi-port host. | `16456` | Opt-In |
-| [`url.path`](../../common/url.md) | string | **Stable**<br>The [URI path](https://www.rfc-editor.org/rfc/rfc3986#section-3.3) component [7] | `/search` | Required |
-| [`url.query`](../../common/url.md) | string | **Stable**<br>The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component [8] | `q=OpenTelemetry` | Conditionally Required: if available. |
-| [`url.scheme`](../../common/url.md) | string | **Stable**<br>The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
+| `http.route` | string | The matched route (path template in the format used by the respective server framework). See note below [1] | `/users/:userID?`; `{controller}/{action}/{id?}` | Conditionally Required: If and only if it's available |
+| [`client.address`](span-general.md) | string | Client address - unix domain socket name, IPv4 or IPv6 address. [2] | `83.164.160.102` | Recommended |
+| [`client.port`](span-general.md) | int | The port of the original client behind all proxies, if known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded) or a similar header). Otherwise, the immediate client peer port. [3] | `65123` | Recommended |
+| [`client.socket.address`](span-general.md) | string | Immediate client peer address - unix domain socket name, IPv4 or IPv6 address. | `/tmp/my.sock`; `127.0.0.1` | Recommended: If different than `client.address`. |
+| [`client.socket.port`](span-general.md) | int | Immediate client peer port number | `35555` | Recommended: If different than `client.port`. |
+| [`server.address`](span-general.md) | string | Name of the local HTTP server that received the request. [4] | `example.com` | Required |
+| [`server.port`](span-general.md) | int | Port of the local HTTP server that received the request. [5] | `80`; `8080`; `443` | Conditionally Required: [6] |
+| [`server.socket.address`](span-general.md) | string | Local socket address. Useful in case of a multi-IP host. | `10.5.3.2` | Opt-In |
+| [`server.socket.port`](span-general.md) | int | Local socket port. Useful in case of a multi-port host. | `16456` | Opt-In |
+| [`url.path`](../../common/url.md) | string | The [URI path](https://www.rfc-editor.org/rfc/rfc3986#section-3.3) component [7] | `/search` | Required |
+| [`url.query`](../../common/url.md) | string | The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component [8] | `q=OpenTelemetry` | Recommended |
+| [`url.scheme`](../../common/url.md) | string | The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
 
 **[1]:** MUST NOT be populated when this is not supported by the HTTP server framework as the route attribute should have low-cardinality and the URI path can NOT substitute it.
 SHOULD include the [application root](/specification/trace/semantic_conventions/http.md#http-server-definitions) if there is one.
@@ -334,33 +334,20 @@ As an example, if a browser request for `https://example.com:8080/webshop/articl
 
 Span name: `GET`
 
-<<<<<<< HEAD
 |   Attribute name     |                                       Value             |
 | :------------------- | :-------------------------------------------------------|
 | `http.request.method`| `"GET"`                                                 |
-| `network.protocol.version` | ` "1.1"`                                          |
+| `network.protocol.version` | `"1.1"`                                          |
 | `url.full`           | `"https://example.com:8080/webshop/articles/4?s=1"`     |
 | `server.address`     | `example.com`                                           |
 | `server.port`        | 8080                                                    |
 | `server.socket.address` | `"192.0.2.5"`                                        |
 | `http.response.status_code` | `200`                                            |
-=======
-|   Attribute name            |                                       Value             |
-| :-------------------------- | :-------------------------------------------------------|
-| `http.request.method`       | `"GET"`                                                 |
-| `net.protocol.version`      | `"1.1"`                                                 |
-| `url.full`                  | `"https://example.com:8080/webshop/articles/4?s=1"`     |
-| `net.peer.name`             | `"example.com"`                                         |
-| `net.peer.port`             | `8080`                                                  |
-| `net.sock.peer.addr`        | `"192.0.2.5"`                                           |
-| `http.response.status_code` | `200`                                                   |
->>>>>>> a1af2ba (more nits)
 
 The corresponding server Span may look like this:
 
 Span name: `GET /webshop/articles/:article_id`.
 
-<<<<<<< HEAD
 |   Attribute name     |                      Value                      |
 | :------------------- | :---------------------------------------------- |
 | `http.request.method`| `"GET"`                                         |
@@ -375,22 +362,6 @@ Span name: `GET /webshop/articles/:article_id`.
 | `client.address`     | `"192.0.2.4"`                                   |
 | `client.socket.address` | `"192.0.2.5"` (the client goes through a proxy) |
 | `user_agent.original` | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"` |
-=======
-|   Attribute name            |                      Value                      |
-| :-------------------------- | :---------------------------------------------- |
-| `http.request.method`       | `"GET"`                                         |
-| `http.protocol.version`     | `"1.1"`                                         |
-| `url.path`                  | `"/webshop/articles/4"`                         |
-| `url.query`                 | `"?s=1"`                                        |
-| `net.host.name`             | `"example.com"`                                 |
-| `net.host.port`             | `8080`                                          |
-| `url.scheme`                | `"https"`                                       |
-| `http.route`                | `"/webshop/articles/:article_id"`               |
-| `http.response.status_code` | `200`                                           |
-| `http.client_ip`            | `"192.0.2.4"`                                   |
-| `net.sock.peer.addr`        | `"192.0.2.5"` (the client goes through a proxy) |
-| `user_agent.original`       | `"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"`                               |
->>>>>>> a1af2ba (more nits)
 
 ### HTTP client retries examples
 

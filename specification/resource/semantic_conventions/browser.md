@@ -11,11 +11,11 @@ All of these attributes can be provided by the user agent itself in the form of 
 <!-- semconv browser -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `browser.brands` | string[] | **Stable**<br>Array of brand name and version separated by a space [1] | `[ Not A;Brand 99, Chromium 99, Chrome 99]` | Recommended |
-| `browser.platform` | string | **Stable**<br>The platform on which the browser is running [2] | `Windows`; `macOS`; `Android` | Recommended |
-| `browser.mobile` | boolean | **Stable**<br>A boolean that is true if the browser is running on a mobile device [3] |  | Recommended |
-| `browser.language` | string | **Stable**<br>Preferred language of the user using the browser [4] | `en`; `en-US`; `fr`; `fr-FR` | Recommended |
-| `user_agent.original` | string | **Stable**<br>Full user-agent string provided by the browser [5] | `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36` | Recommended |
+| `browser.brands` | string[] | Array of brand name and version separated by a space [1] | `[ Not A;Brand 99, Chromium 99, Chrome 99]` | Recommended |
+| `browser.platform` | string | The platform on which the browser is running [2] | `Windows`; `macOS`; `Android` | Recommended |
+| `browser.mobile` | boolean | A boolean that is true if the browser is running on a mobile device [3] |  | Recommended |
+| `browser.language` | string | Preferred language of the user using the browser [4] | `en`; `en-US`; `fr`; `fr-FR` | Recommended |
+| `user_agent.original` | string | Full user-agent string provided by the browser [5] | `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36` | Recommended |
 
 **[1]:** This value is intended to be taken from the [UA client hints API](https://wicg.github.io/ua-client-hints/#interface) (`navigator.userAgentData.brands`).
 

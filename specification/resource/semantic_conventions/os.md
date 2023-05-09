@@ -11,10 +11,10 @@ In case of virtualized environments, this is the operating system as it is obser
 <!-- semconv os -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `os.type` | string | **Stable**<br>The operating system type. | `windows` | Required |
-| `os.description` | string | **Stable**<br>Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands. | `Microsoft Windows [Version 10.0.18363.778]`; `Ubuntu 18.04.1 LTS` | Recommended |
-| `os.name` | string | **Stable**<br>Human readable operating system name. | `iOS`; `Android`; `Ubuntu` | Recommended |
-| `os.version` | string | **Stable**<br>The version string of the operating system as defined in [Version Attributes](../../resource/semantic_conventions/README.md#version-attributes). | `14.2.1`; `18.04.1` | Recommended |
+| `os.type` | string | The operating system type. | `windows` | Required |
+| `os.description` | string | Human readable (not intended to be parsed) OS version information, like e.g. reported by `ver` or `lsb_release -a` commands. | `Microsoft Windows [Version 10.0.18363.778]`; `Ubuntu 18.04.1 LTS` | Recommended |
+| `os.name` | string | Human readable operating system name. | `iOS`; `Android`; `Ubuntu` | Recommended |
+| `os.version` | string | The version string of the operating system as defined in [Version Attributes](../../resource/semantic_conventions/README.md#version-attributes). | `14.2.1`; `18.04.1` | Recommended |
 
 `os.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 

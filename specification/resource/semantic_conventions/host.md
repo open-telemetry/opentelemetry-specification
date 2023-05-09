@@ -9,13 +9,13 @@
 <!-- semconv host -->
 | Attribute  | Type | Description  | Examples  | Requirement Level |
 |---|---|---|---|---|
-| `host.id` | string | **Stable**<br>Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider. For non-containerized systems, this should be the `machine-id`. See the table below for the sources to use to determine the `machine-id` based on operating system. | `fdbf79e8af94cb7f9e8df36789187052` | Recommended |
-| `host.name` | string | **Stable**<br>Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. | `opentelemetry-test` | Recommended |
-| `host.type` | string | **Stable**<br>Type of host. For Cloud, this must be the machine type. | `n1-standard-1` | Recommended |
-| `host.arch` | string | **Stable**<br>The CPU architecture the host system is running on. | `amd64` | Recommended |
-| `host.image.name` | string | **Stable**<br>Name of the VM image or OS install the host was instantiated from. | `infra-ami-eks-worker-node-7d4ec78312`; `CentOS-8-x86_64-1905` | Recommended |
-| `host.image.id` | string | **Stable**<br>VM image ID or host OS image ID. For Cloud, this value is from the provider. | `ami-07b06b442921831e5` | Recommended |
-| `host.image.version` | string | **Stable**<br>The version string of the VM image or host OS as defined in [Version Attributes](README.md#version-attributes). | `0.1` | Recommended |
+| `host.id` | string | Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider. For non-containerized systems, this should be the `machine-id`. See the table below for the sources to use to determine the `machine-id` based on operating system. | `fdbf79e8af94cb7f9e8df36789187052` | Recommended |
+| `host.name` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. | `opentelemetry-test` | Recommended |
+| `host.type` | string | Type of host. For Cloud, this must be the machine type. | `n1-standard-1` | Recommended |
+| `host.arch` | string | The CPU architecture the host system is running on. | `amd64` | Recommended |
+| `host.image.name` | string | Name of the VM image or OS install the host was instantiated from. | `infra-ami-eks-worker-node-7d4ec78312`; `CentOS-8-x86_64-1905` | Recommended |
+| `host.image.id` | string | VM image ID or host OS image ID. For Cloud, this value is from the provider. | `ami-07b06b442921831e5` | Recommended |
+| `host.image.version` | string | The version string of the VM image or host OS as defined in [Version Attributes](README.md#version-attributes). | `0.1` | Recommended |
 
 `host.arch` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
 
