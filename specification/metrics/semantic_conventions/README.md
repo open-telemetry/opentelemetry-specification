@@ -13,7 +13,7 @@ linkTitle: Semantic Conventions
   * [Name Reuse Prohibition](#name-reuse-prohibition)
   * [Units](#units)
   * [Pluralization](#pluralization)
-    + [Use `count` Instead of Pluralization](#use-count-instead-of-pluralization)
+    + [Use `count` Instead of Pluralization for UpDownCounters](#use-count-instead-of-pluralization-for-updowncounters)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
   * [Instrument Naming](#instrument-naming)
   * [Instrument Units](#instrument-units)
@@ -114,7 +114,7 @@ should not be pluralized, even if many data points are recorded.
 * `system.paging.faults`, `system.disk.operations`, and `system.network.packets`
 should be pluralized, even if only a single data point is recorded.
 
-#### Use `count` Instead of Pluralization
+#### Use `count` Instead of Pluralization for UpDownCounters
 
 If the value being recorded represents the count of concepts signified
 by the namespace then the metric should be named `count` (within its namespace).
@@ -124,6 +124,10 @@ For example if we have a namespace `system.processes` which contains all metrics
 to the processes then to represent the count of the processes we can have a metric named
 `system.processes.count`. The suffix `count` here indicates that it is the count of
 `system.processes`.
+
+This rule should only be applied to UpDownCounters, since (monotonic) Counters have
+`_total` appended to their names when they are mapped to Prometheus, which would lead to
+`_count_total`.
 
 ## General Metric Semantic Conventions
 

@@ -87,6 +87,8 @@ release.
   `http.scheme` to `url.scheme`,
   and removes `http.target` breaking it down to `http.target` to `url.path`, `url.query`, and `url.fragment`.
   ([#3355](https://github.com/open-telemetry/opentelemetry-specification/pull/3355))
+- Update `.count` metric naming convention so that it only applies to UpDownCounters
+  ([#3493](https://github.com/open-telemetry/opentelemetry-specification/pull/3493))
 
 ### Compatibility
 
