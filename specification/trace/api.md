@@ -681,7 +681,7 @@ so for anything not specified here, the same requirements as for `AddEvent` appl
 The signature of the method is to be determined by each language
 and can be overloaded as appropriate.
 The method MUST record an exception as an `Event` with the conventions outlined in
-the [exception semantic conventions](semantic_conventions/exceptions.md) document.
+the [exceptions](exceptions.md) document.
 The minimum required argument SHOULD be no more than only an exception object.
 
 If `RecordException` is provided, the method MUST accept an optional parameter

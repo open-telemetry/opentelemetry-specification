@@ -16,7 +16,12 @@ Semantic conventions MUST provide the following attributes:
   - `telemetry.sdk.name`
   - `telemetry.sdk.language`
   - `telemetry.sdk.version`
-
+- Event
+  - `exception.escaped`
+  - `exception.message`
+  - `exception.stacktrace`
+  - `exception.type`
+  - `exception.message`
 
 ## Experimental Reserved Attributes
 
