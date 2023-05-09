@@ -129,6 +129,16 @@ This rule should only be applied to UpDownCounters, since (monotonic) Counters h
 `_total` appended to their names when they are mapped to Prometheus, which would lead to
 `_count_total`.
 
+#### Do not use `total`
+
+Counters have `_total` appended to their names when they are mapped to Prometheus,
+which would lead to `_total_total`. The reason that the Prometheus mapping cannot
+suppress adding the duplicate `_total` is because then the mapping wouldn't be
+bidirectional.
+
+UpDownCounters should not use `_total` either because then they will look like
+monotonic sums in Prometheus.
+
 ## General Metric Semantic Conventions
 
 **Status**: [Mixed](../../document-status.md)
