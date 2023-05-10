@@ -189,68 +189,6 @@ SHOULD NOT be set if only IP address is available and capturing name would requi
 | `OTHER` | Any custom HTTP method that the instrumentation has no prior knowledge of. |
 <!-- endsemconv -->
 
-### Metric: `http.server.active_requests`
-
-This metric is optional.
-
-<!-- semconv metric.http.server.active_requests(metric_table) -->
-| Name     | Instrument Type | Unit (UCUM) | Description    |
-| -------- | --------------- | ----------- | -------------- |
-| `http.server.active_requests` | UpDownCounter | `{request}` | Measures the number of concurrent HTTP requests that are currently in-flight. |
-<!-- endsemconv -->
-
-<!-- semconv metric.http.server.active_requests(full) -->
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `http.request.method` | string | HTTP request method. [1] | `GET`; `POST`; `HEAD` | Required |
-| [`server.address`](../../trace/semantic_conventions/span-general.md) | string | Name of the local HTTP server that received the request. [2] | `example.com` | Required |
-| [`server.port`](../../trace/semantic_conventions/span-general.md) | int | Port of the local HTTP server that received the request. [3] | `80`; `8080`; `443` | Conditionally Required: [4] |
-| [`url.scheme`](../../common/url.md) | string | The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol. | `http`; `https` | Required |
-
-**[1]:** HTTP request method SHOULD be one of the methods defined in [RFC9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-methods)
-or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
-Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
-[HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD
-populate the exact method passed by client on `http.request.original_method` attribute.
-
-HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
-
-**[2]:** Determined by using the first of the following that applies
-
-- The [primary server name](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host. MUST only
-  include host identifier.
-- Host identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
-  if it's sent in absolute-form.
-- Host identifier of the `Host` header
-
-SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
-
-**[3]:** Determined by using the first of the following that applies
-
-- Port identifier of the [primary server host](/specification/trace/semantic_conventions/http.md#http-server-definitions) of the matched virtual host.
-- Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
-  if it's sent in absolute-form.
-- Port identifier of the `Host` header
-
-**[4]:** If not default (`80` for `http` scheme, `443` for `https`).
-
-`http.request.method` has the following list of well-known values. If one of them applies, then the respective value MUST be used, otherwise a custom value MAY be used.
-
-| Value  | Description |
-|---|---|
-| `CONNECT` | CONNECT method. |
-| `DELETE` | DELETE method. |
-| `GET` | GET method. |
-| `HEAD` | HEAD method. |
-| `OPTIONS` | OPTIONS method. |
-| `PATCH` | PATCH method. |
-| `POST` | POST method. |
-| `PUT` | PUT method. |
-| `TRACE` | TRACE method. |
-| `OTHER` | Any custom HTTP method that the instrumentation has no prior knowledge of. |
-<!-- endsemconv -->
-
 ### Metric: `http.server.request.size`
 
 This metric is optional.
