@@ -1,6 +1,6 @@
 # Semantic Conventions
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](document-status.md)
 
 The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications.
 

@@ -18,7 +18,7 @@ An exception SHOULD be recorded as an `Event` on the span during which it occurr
 The name of the event MUST be `"exception"`.
 
 A typical template for an auto-instrumentation implementing this semantic convention
-using an [API-provided `recordException` method](../api.md#record-exception)
+using an [API-provided `recordException` method](api.md#record-exception)
 could look like this (pseudo-Java):
 
 ```java

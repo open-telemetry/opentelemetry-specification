@@ -5,7 +5,7 @@
 
 No changes to this document are allowed.
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Experimental](../document-status.md)
 
 This document defines semantic conventions for recording exceptions on
 [logs](../bridge-api.md#emit-a-logrecord) and [events](../event-api.md#emit-event)
