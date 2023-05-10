@@ -106,7 +106,7 @@ sections below.
 or the PATCH method defined in [RFC5789](https://www.rfc-editor.org/rfc/rfc5789.html).
 Instrumentation MAY additionally support the closed set of custom HTTP methods defined in
 [HTTP method registry](https://www.iana.org/assignments/http-methods/http-methods.xhtml) or a private registry.
-If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
+If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD
 populate the exact method passed by client on `http.request.original_method` attribute.
 
 HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
