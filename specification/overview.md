@@ -74,6 +74,10 @@ The **Semantic Conventions** define the keys and values which describe commonly 
 
 **Note: Semantic conventions will be moving to a new repository.**
 
+* [Resource Conventions](resource/semantic_conventions/README.md)
+* [Span Conventions](trace/semantic_conventions/README.md)
+* [Metrics Conventions](metrics/semantic_conventions/README.md)
+
 Both the collector and the client libraries SHOULD autogenerate semantic
 convention keys and enum values into constants (or language idiomatic
 equivalent). Generated values shouldn't be distributed in stable packages
