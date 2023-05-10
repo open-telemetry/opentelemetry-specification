@@ -1,6 +1,6 @@
 # Exceptions
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Experimental](../document-status.md)
 
 This document defines how to record exceptions and
 their required attributes.
