@@ -56,11 +56,11 @@ and various HTTP versions like 1.1, 2 and SPDY.
 HTTP spans MUST follow the overall [guidelines for span names](../api.md#span).
 HTTP server span names SHOULD be `{http.request.method} {http.route}` if there is a
 (low-cardinality) `http.route` available.
-HTTP server span names SHOULD be `{http.method}` if there is no (low-cardinality)
+HTTP server span names SHOULD be `{http.request.method}` if there is no (low-cardinality)
 `http.route` available.
 HTTP client spans have no `http.route` attribute since client-side instrumentation
 is not generally aware of the "route", and therefore HTTP client spans SHOULD use
-`{http.method}`.
+`{http.request.method}`.
 Instrumentation MUST NOT default to using URI
 path as span name, but MAY provide hooks to allow custom logic to override the
 default span name.
@@ -109,7 +109,7 @@ Instrumentation MAY additionally support the closed set of custom HTTP methods d
 If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
 populate the exact method passed by client on `http.request.original_method` attribute.
 
-HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
+HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 

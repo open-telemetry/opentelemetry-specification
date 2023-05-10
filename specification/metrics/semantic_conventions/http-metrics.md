@@ -88,7 +88,7 @@ Instrumentation MAY additionally support the closed set of custom HTTP methods d
 If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
 populate the exact method passed by client on `http.request.original_method` attribute.
 
-HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
+HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -152,7 +152,7 @@ Instrumentation MAY additionally support the closed set of custom HTTP methods d
 If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
 populate the exact method passed by client on `http.request.original_method` attribute.
 
-HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
+HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** Determined by using the first of the following that applies
 
@@ -214,7 +214,7 @@ Instrumentation MAY additionally support the closed set of custom HTTP methods d
 If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
 populate the exact method passed by client on `http.request.original_method` attribute.
 
-HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
+HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** Determined by using the first of the following that applies
 
@@ -283,7 +283,7 @@ Instrumentation MAY additionally support the closed set of custom HTTP methods d
 If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
 populate the exact method passed by client on `http.request.original_method` attribute.
 
-HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
+HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -354,7 +354,7 @@ Instrumentation MAY additionally support the closed set of custom HTTP methods d
 If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
 populate the exact method passed by client on `http.request.original_method` attribute.
 
-HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
+HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[3]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -427,7 +427,7 @@ Instrumentation MAY additionally support the closed set of custom HTTP methods d
 If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
 populate the exact method passed by client on `http.request.original_method` attribute.
 
-HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
+HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -487,7 +487,7 @@ Instrumentation MAY additionally support the closed set of custom HTTP methods d
 If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
 populate the exact method passed by client on `http.request.original_method` attribute.
 
-HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
+HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 
@@ -547,7 +547,7 @@ Instrumentation MAY additionally support the closed set of custom HTTP methods d
 If the HTTP request method is not known to the instrumentation, it MUST set the `http.request.method` attribute to `OTHER` and SHOULD 
 populate the exact method passed by client on `http.request.original_method` attribute.
 
-HTTP method names are case-sensitive and `http.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
+HTTP method names are case-sensitive and `http.request.method` attribute value MUST match a standard (or documented elsewhere) HTTP method name exactly.
 
 **[2]:** `network.protocol.version` refers to the version of the protocol used and might be different from the protocol client's version. If the HTTP client used has a version of `0.27.2`, but sends HTTP version `1.1`, this attribute should be set to `1.1`.
 

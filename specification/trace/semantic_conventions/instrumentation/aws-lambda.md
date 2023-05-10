@@ -168,7 +168,7 @@ Function F:    | Span Function |
 | `cloud.account.id` | | `12345678912` |
 | `server.address` | `foo.execute-api.us-east-1.amazonaws.com` |  |
 | `server.port` | `413` |  |
-| `http.method` | `GET` | `GET` |
+| `http.request.method` | `GET` | `GET` |
 | `user_agent.original` | `okhttp 3.0` | `okhttp 3.0` |
 | `url.scheme` | | `https` |
 | `url.path` | | `/pets/10` |
