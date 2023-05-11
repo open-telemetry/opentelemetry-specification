@@ -72,11 +72,8 @@ Application owners use the SDK constructors; [plugin authors](glossary.md#plugin
 
 The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications.
 
-**Note: Semantic conventions will be moving to a new repository.**
-
-* [Resource Conventions](resource/semantic_conventions/README.md)
-* [Span Conventions](trace/semantic_conventions/README.md)
-* [Metrics Conventions](metrics/semantic_conventions/README.md)
+Semantic Conventions are now located in their own repository:
+[https://github.com/open-telemetry/semantic-conventions](https://github.com/open-telemetry/semantic-conventions)
 
 Both the collector and the client libraries SHOULD autogenerate semantic
 convention keys and enum values into constants (or language idiomatic
