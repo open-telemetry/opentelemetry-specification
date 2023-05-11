@@ -4,6 +4,11 @@ linkTitle: RPC
 
 # General RPC conventions
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Experimental](../../document-status.md)
 
 The conventions described in this section are RPC specific. When RPC operations
