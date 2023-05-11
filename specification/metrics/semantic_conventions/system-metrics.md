@@ -4,6 +4,11 @@ linkTitle: System
 
 # Semantic Conventions for System Metrics
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Experimental](../../document-status.md)
 
 This document describes instruments and attributes for common system level
