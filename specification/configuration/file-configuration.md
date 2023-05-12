@@ -13,7 +13,7 @@
     + [Parse File to Configuration](#parse-file-to-configuration)
   * [ConfigurationProvider](#configurationprovider)
     + [Create ConfigurationProvider](#create-configurationprovider)
-    + [Get TracerProvider, MeterProvider, LoggerProvider](#get-tracerprovider-meterprovider-loggerprovider)
+    + [Get TracerProvider, MeterProvider, LoggerProvider, Propagator](#get-tracerprovider-meterprovider-loggerprovider-propagator)
 - [References](#references)
 
 <!-- tocstop -->
@@ -74,11 +74,13 @@ The API MUST accept the following parameters:
 * `file`: The [configuration file](#configuration-file) to parse. This MAY be a
   file path, or language specific file class, or a stream of a file's content.
 
-The API MAY return an error if:
+The API SHOULD return an error if:
 
 * The `file` doesn't exist or is invalid
 * The parsed `file` content does not conform to
   the [configuration model](#configuration-model) schema.
+
+TODO: define behavior if some portion of configuration model is not supported
 
 ### ConfigurationProvider
 
@@ -89,22 +91,22 @@ configured SDK components.
 It MUST be possible to [create](#create-configurationprovider)
 multiple `ConfigurationProvider`s with different configurations. It is the
 caller's responsibility to ensure the
-resulting [SDK components](#get-tracerprovider-meterprovider-loggerprovider) are
+resulting [SDK components](#get-tracerprovider-meterprovider-loggerprovider-propagator) are
 correctly wired into the application and instrumentation.
 
 #### Create ConfigurationProvider
 
-Create a `Configurationprovider` from a configuration model.
+Create a `ConfigurationProvider` from a configuration model.
 
 The API MUST accept the following parameters:
 
 * `configuration` - The [configuration model](#in-memory-configuration-model).
 
-#### Get TracerProvider, MeterProvider, LoggerProvider
+#### Get TracerProvider, MeterProvider, LoggerProvider, Propagator
 
 Interpret `configuration` and return SDK components (`TracerProvider`,
-`MeterProvider`, `LoggerProvider`). The SDK components MUST strictly reflect
-the `Configuration` and ignore
+`MeterProvider`, `LoggerProvider`, `Propagator`). The SDK components MUST
+strictly reflect the `Configuration` and ignore
 the [environment variable configuration scheme](./sdk-environment-variables.md).
 
 // TODO: Extend ConfigurationProvider with ability to update SDK components with
