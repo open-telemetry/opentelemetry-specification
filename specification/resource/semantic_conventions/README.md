@@ -1,5 +1,10 @@
 # Resource Semantic Conventions
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Mixed](../../document-status.md)
 
 This document defines standard attributes for resources. These attributes are typically used in the [Resource](../sdk.md) and are also recommended to be used anywhere else where there is a need to describe a resource in a consistent manner. The majority of these attributes are inherited from
@@ -220,7 +225,7 @@ Valid cloud providers are:
 
 - [Alibaba Cloud](https://www.alibabacloud.com/) (`alibaba_cloud`)
 - [Amazon Web Services](https://aws.amazon.com/) ([`aws`](cloud_provider/aws/README.md))
-- [Google Cloud Platform](https://cloud.google.com/) (`gcp`)
+- [Google Cloud Platform](https://cloud.google.com/) ([`gcp`](cloud_provider/gcp/README.md))
 - [Microsoft Azure](https://azure.microsoft.com/) (`azure`)
 - [Tencent Cloud](https://www.tencentcloud.com/) (`tencent_cloud`)
 - [Heroku dyno](./cloud_provider/heroku.md)
