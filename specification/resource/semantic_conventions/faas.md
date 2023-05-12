@@ -2,6 +2,11 @@
 
 **Status**: [Experimental](../../document-status.md)
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **type:** `faas`
 
 **Description:** A "function as a service" aka "serverless function" instance.
@@ -43,7 +48,7 @@ definition of function name MUST be used for this attribute
 
 * **AWS Lambda:** The [function version](https://docs.aws.amazon.com/lambda/latest/dg/configuration-versions.html)
   (an integer represented as a decimal string).
-* **Google Cloud Run:** The [revision](https://cloud.google.com/run/docs/managing/revisions)
+* **Google Cloud Run (Services):** The [revision](https://cloud.google.com/run/docs/managing/revisions)
   (i.e., the function name plus the revision suffix).
 * **Google Cloud Functions:** The value of the
   [`K_REVISION` environment variable](https://cloud.google.com/functions/docs/env-var#runtime_environment_variables_set_automatically).
