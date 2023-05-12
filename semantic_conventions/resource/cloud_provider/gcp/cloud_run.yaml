@@ -1,0 +1,23 @@
+groups:
+  - id: gcp.cloud_run
+    prefix: gcp.cloud_run
+    type: resource
+    brief: >
+      Resource used by Google Cloud Run.
+    attributes:
+      - id: job.execution
+        type: string
+        brief: >
+          The name of the Cloud Run
+          [execution](https://cloud.google.com/run/docs/managing/job-executions)
+          being run for the Job, as set by the
+          [`CLOUD_RUN_EXECUTION`](https://cloud.google.com/run/docs/container-contract#jobs-env-vars)
+          environment variable.
+        examples: ['job-name-xxxx', 'sample-job-mdw84']
+      - id: job.task_index
+        type: int
+        brief: >
+          The index for a task within an execution as provided by the
+          [`CLOUD_RUN_TASK_INDEX`](https://cloud.google.com/run/docs/container-contract#jobs-env-vars)
+          environment variable.
+        examples: [0, 1]

@@ -1,5 +1,10 @@
 # Instrumenting AWS Lambda
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Experimental](../../../document-status.md)
 
 This document defines how to apply semantic conventions when instrumenting an AWS Lambda request handler. AWS
@@ -109,6 +114,7 @@ For every message in the event, the [message system attributes][] (not message a
 the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an OpenTelemetry `Context` SHOULD be
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span. This means the span may have as many links as messages in the batch.
+See [compatibility](../../../../supplementary-guidelines/compatibility/aws.md#context-propagation) for more info.
 
 - [`faas.trigger`][faas] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md) MUST be set to `process`.
@@ -122,6 +128,7 @@ corresponding to the SQS event. The [message system attributes][] (not message a
 the user) SHOULD be checked for the key `AWSTraceHeader`. If it is present, an OpenTelemetry `Context` SHOULD be
 parsed from the value of the attribute using the [AWS X-Ray Propagator](../../../context/api-propagators.md) and
 added as a link to the span.
+See [compatibility](../../../../supplementary-guidelines/compatibility/aws.md#context-propagation) for more info.
 
 - [`faas.trigger`][faas] MUST be set to `pubsub`.
 - [`messaging.operation`](../messaging.md#messaging-attributes) MUST be set to `process`.
@@ -164,16 +171,14 @@ Function F:    | Span Function |
 | `faas.invocation_id` | | `79104EXAMPLEB723` |
 | `faas.trigger` | | `http` |
 | `cloud.account.id` | | `12345678912` |
-| `net.peer.name` | `foo.execute-api.us-east-1.amazonaws.com` |  |
-| `net.peer.port` | `413` |  |
+| `server.address` | `foo.execute-api.us-east-1.amazonaws.com` |  |
+| `server.port` | `413` |  |
 | `http.method` | `GET` | `GET` |
-| `http.user_agent` | `okhttp 3.0` | `okhttp 3.0` |
-| `http.url` | `https://foo.execute-api.us-east-1.amazonaws.com/pets/10` |  |
-| `http.scheme` | | `https` |
-| `http.host` | | `foo.execute-api.us-east-1.amazonaws.com` |
-| `http.target` | | `/pets/10` |
+| `user_agent.original` | `okhttp 3.0` | `okhttp 3.0` |
+| `url.scheme` | | `https` |
+| `url.path` | | `/pets/10` |
 | `http.route` | | `/pets/{petId}` |
-| `http.status_code` | `200` | `200` |
+| `http.response.status_code` | `200` | `200` |
 
 ### API Gateway Request Proxy (Lambda tracing active)
 

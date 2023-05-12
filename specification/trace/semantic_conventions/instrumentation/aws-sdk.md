@@ -1,5 +1,10 @@
 # Semantic conventions for AWS SDK
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Experimental](../../../document-status.md)
 
 This document defines semantic conventions to apply when instrumenting the AWS SDK. They map request or response
@@ -8,6 +13,10 @@ on feedback from AWS users of tracing and will continue to increase as new inter
 are found.
 
 Some descriptions are also provided for populating general OpenTelemetry semantic conventions based on these APIs.
+
+## Context Propagation
+
+See [compatibility](../../../../supplementary-guidelines/compatibility/aws.md#context-propagation).
 
 ## Common Attributes
 

@@ -1,5 +1,10 @@
 # Log Attribute Semantic Conventions
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Experimental](../../document-status.md)
 
 The following semantic conventions for logs are defined:
