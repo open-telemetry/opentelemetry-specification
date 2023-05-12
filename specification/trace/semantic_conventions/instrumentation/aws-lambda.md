@@ -63,7 +63,7 @@ and the [cloud resource conventions][cloud]. The following AWS Lambda-specific a
 
 There are two common ways to read the tracing information if AWS X-Ray is enabled for a lambda function:
 
-1. Via the system property `com.amazonaws.xray.traceHeader` in the event of a Java function.  More information on Java system properties can be found [here](https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html) 
+1. Via the system property `com.amazonaws.xray.traceHeader` in the event of a Java function.  More information on Java system properties can be found at the following link [Java System Properties][] 
 2. Via an environment variable that is set, titled `_X_AMZN_TRACE_ID`.
 
 If the system property `com.amazonaws.xray.traceHeader` is set, instrumentation SHOULD try to parse an OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../context/api-propagators.md). 
@@ -74,6 +74,7 @@ If the resulting `Context` is [valid](../../api.md#isvalid) then a [Span Link][]
 disable AWS X-Ray for the function if the X-Ray Span Link is not desired.
 
 [Span Link]: https://opentelemetry.io/docs/concepts/signals/traces/#span-links
+[Java System Properties]: https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
 
 ## API Gateway
 
