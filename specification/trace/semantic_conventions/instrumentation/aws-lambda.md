@@ -56,13 +56,17 @@ and the [cloud resource conventions][cloud]. The following AWS Lambda-specific a
 
 ### AWS X-Ray Environment Span Link
 
-If the `_X_AMZN_TRACE_ID` environment variable is set, instrumentation SHOULD try to parse an
-OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../context/api-propagators.md). If the
-resulting `Context` is [valid](../../api.md#isvalid) then a [Span Link][] SHOULD be added to the new Span's
-[start options](../../api.md#specifying-links) with an associated attribute of `source=x-ray-env` to
-indicate the source of the linked span.
-Instrumentation MUST check if the context is valid before using it because the `_X_AMZN_TRACE_ID` environment variable can
-contain an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable will be set and the
+There are two common ways to read the tracing information if AWS X-Ray is enabled for a lambda function:
+
+1. Via the system property `com.amazonaws.xray.traceHeader`.
+2. Via an environment variable that is set, titled `_X_AMZN_TRACE_ID`.
+
+If the system property `com.amazonaws.xray.traceHeader` is set, instrumentation SHOULD try to parse an OpenTelemetry `Context` out of it using the [AWS X-Ray Propagator](../../../context/api-propagators.md). 
+Alternatively, if the system property is not set then instrumentation SHOULD try to parse an OpenTelemetry `Context` out of the `_X_AMZN_TRACE_ID` environment variable using the [AWS X-Ray Propagator](../../../context/api-propagators.md). 
+If the resulting `Context` is [valid](../../api.md#isvalid) then a [Span Link][] SHOULD be added to the new Span's
+[start options](../../api.md#specifying-links) with an associated attribute of `source=x-ray-env` to indicate the source of the linked span.
+Instrumentation MUST check if the context is valid before using it because the `_X_AMZN_TRACE_ID` environment variable or the system property `com.amazonaws.xray.traceHeader` can
+contain an incomplete trace context which indicates X-Ray isn’t enabled. The environment variable or system property will be set and the
 `Context` will be valid and sampled only if AWS X-Ray has been enabled for the Lambda function. A user can
 disable AWS X-Ray for the function if the X-Ray Span Link is not desired.
 
