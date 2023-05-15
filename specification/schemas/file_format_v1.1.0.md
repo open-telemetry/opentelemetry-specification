@@ -339,6 +339,63 @@ When converting in the opposite direction, from newer version Y to older version
 X the order of transformation listed above is exactly the reverse, with each
 individual transformation also performing the reverse conversion.
 
+### Transformation Conflicts
+
+Some schema changes may describe a transformation that results in the conflicts with
+the input data. In situations like this **the transformations described by Schema File
+SHOULD take precedence** over the conflicting data present in the input.
+
+Let's look at an example to understand how this works.
+
+For example Schema change from version 1.0.0 to 1.1.0 may describe renaming of a
+resource attribute `host` to `host.name`:
+
+```yaml
+versions:
+  1.1.0:
+    resources:
+      changes:
+        - rename_attributes:
+            attribute_map:
+              host: host.name
+```
+
+Let's assume we are attempting to apply this schema transformation to a resource that has
+both attributes `host` and `host.name`:
+
+```json
+{
+  "attributes": { "host":  "spool", "host.name": "spool.example.com" }
+}
+```
+
+Applying the schema transformation the attribute `host.name` will be overwritten by
+the attribute `host` and the resulting data will look like this:
+
+```json
+{
+  "attributes": { "host.name":  "spool" }
+}
+```
+
+This rule also applies if the transformation is performed in the backwards
+direction (from newer version to older). Applying the transformation SHOULD overwrite
+any conflicting data. For example with input data of:
+
+```json
+{
+  "attributes": { "host":  "spool", "host.name": "spool.example.com" }
+}
+```
+
+Transforming from schema 1.1.0 to schema 1.0.0 the output will be:
+
+```json
+{
+  "attributes": { "host": "spool.example.com" }
+}
+```
+
 ### Schema File Format Number
 
 The "file_format" setting in the schema file specifies the format version of the
