@@ -9,7 +9,7 @@ The **[OpenTelemetry][] specification** describes the cross-language
 requirements and expectations for all OpenTelemetry implementations.
 
 - The [latest release][] is hosted at
-  [opentelemetry.io/docs/reference/specification][]
+  [opentelemetry.io/docs/specs/otel][]
 - Markdown sources are under [specification](./specification/README.md)
 
 ## Change / contribution process
@@ -56,4 +56,4 @@ By contributing to OpenTelemetry Specification repository, you agree that your c
 
 [OpenTelemetry]: https://opentelemetry.io
 [latest release]: https://github.com/open-telemetry/opentelemetry-specification/releases/latest
-[opentelemetry.io/docs/reference/specification]: https://opentelemetry.io/docs/reference/specification/
+[opentelemetry.io/docs/specs/otel]: https://opentelemetry.io/docs/specs/otel/
