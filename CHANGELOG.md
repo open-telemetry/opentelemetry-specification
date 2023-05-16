@@ -69,7 +69,12 @@ release.
 
 ### Resource
 
-- No changes.
+### Semantic Conventions
+
+- The Semantic Conventions have moved to a separate repository
+  [github.com/open-telemetry/semantic-conventions](https://github.com/open-telemetry/semantic-conventions).
+  There will be no future semantic conventions release from this repository.
+  ([#3489](https://github.com/open-telemetry/opentelemetry-specification/pull/3489))
 
 ### Compatibility
 
