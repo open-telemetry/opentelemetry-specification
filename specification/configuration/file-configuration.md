@@ -11,8 +11,8 @@
 - [SDK Configuration](#sdk-configuration)
   * [In-Memory Configuration Model](#in-memory-configuration-model)
     + [Parse File to Configuration](#parse-file-to-configuration)
-  * [ConfigurationProvider](#configurationprovider)
-    + [Create ConfigurationProvider](#create-configurationprovider)
+  * [ConfigurationInterpreter](#configurationinterpreter)
+    + [Create ConfigurationInterpreter](#create-configurationinterpreter)
     + [Get TracerProvider, MeterProvider, LoggerProvider, Propagator](#get-tracerprovider-meterprovider-loggerprovider-propagator)
 - [References](#references)
 
@@ -82,21 +82,21 @@ The API SHOULD return an error if:
 
 TODO: define behavior if some portion of configuration model is not supported
 
-### ConfigurationProvider
+### ConfigurationInterpreter
 
-`ConfigurationProvider` is responsible for
+`ConfigurationInterpreter` is responsible for
 interpreting [Configuration](#in-memory-configuration-model) and producing
 configured SDK components.
 
-It MUST be possible to [create](#create-configurationprovider)
-multiple `ConfigurationProvider`s with different configurations. It is the
+It MUST be possible to [create](#create-configurationinterpreter)
+multiple `ConfigurationInterpreter`s with different configurations. It is the
 caller's responsibility to ensure the
 resulting [SDK components](#get-tracerprovider-meterprovider-loggerprovider-propagator) are
 correctly wired into the application and instrumentation.
 
-#### Create ConfigurationProvider
+#### Create ConfigurationInterpreter
 
-Create a `ConfigurationProvider` from a configuration model.
+Create a `ConfigurationInterpreter` from a configuration model.
 
 The API MUST accept the following parameters:
 
@@ -109,7 +109,7 @@ Interpret `configuration` and return SDK components (`TracerProvider`,
 strictly reflect the `Configuration` and ignore
 the [environment variable configuration scheme](./sdk-environment-variables.md).
 
-// TODO: Extend ConfigurationProvider with ability to update SDK components with
+// TODO: Extend ConfigurationInterpreter with ability to update SDK components with
 // new configuration for usage with OpAmp
 
 ## References
