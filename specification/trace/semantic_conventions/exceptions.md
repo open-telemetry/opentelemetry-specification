@@ -1,5 +1,10 @@
 # Semantic Conventions for Exceptions
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Experimental](../../document-status.md)
 
 This document defines semantic conventions for recording application

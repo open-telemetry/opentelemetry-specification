@@ -8,27 +8,26 @@ groups:
         These conventions can be used for http and https schemes
         and various HTTP versions like 1.1, 2 and SPDY.
     attributes:
-      - id: request_content_length
+      - id: request.body.size
         type: int
         brief: >
           The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and
           is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
-      - id: response_content_length
+      - id: response.body.size
         type: int
         brief: >
           The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and
           is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length)
           header. For requests using transport encoding, this should be the compressed size.
         examples: 3495
-      - ref: http.method
+      - ref: http.request.method
         sampling_relevant: true
-      - ref: net.sock.peer.addr
-      - ref: net.sock.peer.port
-      - ref: net.sock.peer.name
-      - ref: net.sock.family
-        examples: ['inet', 'inet6']
+      - ref: network.transport
+        requirement_level:
+          conditionally_required: If not default (`tcp` for `HTTP/1.1` and `HTTP/2`, `udp` for `HTTP/3`).
+      - ref: network.type
       - ref: user_agent.original
 
   - id: trace.http.client
@@ -38,17 +37,6 @@ groups:
     span_kind: client
     brief: 'Semantic Convention for HTTP Client'
     attributes:
-      - id: url
-        type: string
-        requirement_level: required
-        brief: >
-            Full HTTP request URL in the form `scheme://host[:port]/path?query[#fragment]`.
-            Usually the fragment is not transmitted over HTTP, but if it is known, it should be included nevertheless.
-        note: >
-          `http.url` MUST NOT contain credentials passed via URL in form of `https://username:password@www.example.com/`.
-          In such case the attribute's value should be `https://www.example.com/`.
-        sampling_relevant: true
-        examples: ['https://www.foo.bar/search?q=OpenTelemetry#SemConv']
       - id: resend_count
         type: int
         brief: >
@@ -60,7 +48,7 @@ groups:
         requirement_level:
           recommended: if and only if request was retried.
         examples: 3
-      - ref: net.peer.name
+      - ref: server.address
         sampling_relevant: true
         requirement_level: required
         brief: >
@@ -73,16 +61,23 @@ groups:
           - Host identifier of the `Host` header
 
           If an HTTP client request is explicitly made to an IP address, e.g. `http://x.x.x.x:8080`, then
-          `net.peer.name` SHOULD be the IP address `x.x.x.x`. A DNS lookup SHOULD NOT be used.
-      - ref: net.peer.port
+          `server.address` SHOULD be the IP address `x.x.x.x`. A DNS lookup SHOULD NOT be used.
+      - ref: server.port
         sampling_relevant: true
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
         brief: >
           Port identifier of the ["URI origin"](https://www.rfc-editor.org/rfc/rfc9110.html#name-uri-origin) HTTP request is sent to.
         note: >
-          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `net.peer.name` MUST match
+          When [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource) is absolute URI, `server.port` MUST match
           URI port identifier, otherwise it MUST match `Host` header port identifier.
+      - ref: server.socket.domain
+      - ref: server.socket.address
+      - ref: server.socket.port
+      - ref: url.full
+        sampling_relevant: true
+        requirement_level: required
+
 
   - id: trace.http.server
     prefix: http
@@ -91,33 +86,7 @@ groups:
     span_kind: server
     brief: 'Semantic Convention for HTTP Server'
     attributes:
-      - id: target
-        type: string
-        brief: 'The full request target as passed in a HTTP request line or equivalent.'
-        requirement_level: required
-        sampling_relevant: true
-        examples: ['/users/12314/?q=ddds']
-      - id: client_ip
-        type: string
-        brief: >
-            The IP address of the original client behind all proxies, if
-            known (e.g. from [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)).
-        note: |
-            This is not necessarily the same as `net.sock.peer.addr`, which would
-            identify the network-level peer, which may be a proxy.
-
-            This attribute should be set when a source of information different
-            from the one used for `net.sock.peer.addr`, is available even if that other
-            source just confirms the same value as `net.sock.peer.addr`.
-            Rationale: For `net.sock.peer.addr`, one typically does not know if it
-            comes from a proxy, reverse proxy, or the actual client. Setting
-            `http.client_ip` when it's the same as `net.sock.peer.addr` means that
-            one is at least somewhat confident that the address is not that of
-            the closest proxy.
-        examples: '83.164.160.102'
-      - ref: http.scheme
-        sampling_relevant: true
-      - ref: net.host.name
+      - ref: server.address
         requirement_level: required
         sampling_relevant: true
         brief: >
@@ -132,8 +101,7 @@ groups:
           - Host identifier of the `Host` header
 
           SHOULD NOT be set if only IP address is available and capturing name would require a reverse DNS lookup.
-
-      - ref: net.host.port
+      - ref: server.port
         sampling_relevant: true
         requirement_level:
           conditionally_required: If not default (`80` for `http` scheme, `443` for `https`).
@@ -146,6 +114,32 @@ groups:
           - Port identifier of the [request target](https://www.rfc-editor.org/rfc/rfc9110.html#target.resource)
             if it's sent in absolute-form.
           - Port identifier of the `Host` header
-      - ref: net.sock.host.addr
+      - ref: server.socket.address
         requirement_level: opt_in
-      - ref: net.sock.host.port
+        brief: Local socket address. Useful in case of a multi-IP host.
+      - ref: server.socket.port
+        requirement_level: opt_in
+        brief: Local socket port. Useful in case of a multi-port host.
+      - ref: client.address
+        note: >
+            The IP address of the original client behind all proxies, if
+            known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded),
+            [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For), or a similar header).
+            Otherwise, the immediate client peer address.
+        examples: ['83.164.160.102']
+      - ref: client.port
+        brief: >
+            The port of the original client behind all proxies, if
+            known (e.g. from [Forwarded](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded) or a similar header).
+            Otherwise, the immediate client peer port.
+      - ref: client.socket.address
+      - ref: client.socket.port
+      - ref: url.path
+        requirement_level: required
+        sampling_relevant: true
+      - ref: url.query
+        sampling_relevant: true
+      - ref: url.scheme
+        sampling_relevant: true
+        requirement_level: required
+        examples: ["http", "https"]
