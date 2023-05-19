@@ -4,6 +4,11 @@ linkTitle: Database
 
 # Semantic Conventions for Database Metrics
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
 **Status**: [Experimental](../../document-status.md)
 
 The conventions described in this section are specific to SQL and NoSQL clients.

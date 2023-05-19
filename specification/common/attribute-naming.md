@@ -44,7 +44,7 @@ Names SHOULD follow these rules:
   purpose should primarily drive the decision about forming nested namespaces.
 
 - For each multi-word dot-delimited component of the attribute name separate the
-  words by underscores (i.e. use snake_case). For example `http.status_code`
+  words by underscores (i.e. use snake_case). For example `http.response.status_code`
   denotes the status code in the http namespace.
 
 - Names SHOULD NOT coincide with namespaces. For example if
@@ -96,8 +96,8 @@ denote old attribute names in rename operations).
 - Semantic conventions exist for four areas: for Resource, Span, Log, and Metric
   attribute names. In addition, for spans we have two more areas: Event and Link
   attribute names. Identical namespaces or names in all these areas MUST have
-  identical meanings. For example the `http.method` span attribute name denotes
-  exactly the same concept as the `http.method` metric attribute, has the same
+  identical meanings. For example the `http.request.method` span attribute name denotes
+  exactly the same concept as the `http.request.method` metric attribute, has the same
   data type and the same set of possible values (in both cases it records the
   value of the HTTP protocol's request method as a string).
 

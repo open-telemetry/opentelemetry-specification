@@ -13,11 +13,46 @@ release.
 
 ### Metrics
 
+### Logs
+
+### Resource
+
+### Compatibility
+
+### OpenTelemetry Protocol
+
+### SDK Configuration
+
+### Telemetry Schemas
+
+### Common
+
+### Supplemenatary Guidelines
+
+## v1.21.0 (2023-05-09)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
 - Add experimental histogram advice API.
   ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+- Recommended non-prefixed units for metric instrument semantic conventions.
+  ([#3312](https://github.com/open-telemetry/opentelemetry-specification/pull/3312))
+- Recommended cardinality limits to protect metrics pipelines against
+  excessive data production from a single instrument.
+  ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
 - Specify second unit (`s`) and advice bucket boundaries of `[]`
   for `process.runtime.jvm.gc.duration`.
   ([#3458](https://github.com/open-telemetry/opentelemetry-specification/pull/3458))
+- Add links to the JMX APIs that are the JVM runtime metric sources.
+  ([#3463](https://github.com/open-telemetry/opentelemetry-specification/pull/3463))
 
 ### Logs
 
@@ -25,6 +60,8 @@ release.
   ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3354))
 - Drop logger include_trace_context parameter.
   ([#3397](https://github.com/open-telemetry/opentelemetry-specification/pull/3397))
+- Clarify how ObservedTimestamp field is set if unspecified
+  ([#3385](https://github.com/open-telemetry/opentelemetry-specification/pull/3385))
 - Mark logs bridge API / SDK as stable.
   ([#3376](https://github.com/open-telemetry/opentelemetry-specification/pull/3376))
 - Mark LogRecord Environment Variables as stable.
@@ -34,26 +71,19 @@ release.
 
 ### Semantic Conventions
 
-- Clarify the scope of the HTTP client span.
- ([#3290](https://github.com/open-telemetry/opentelemetry-specification/pull/3290))
-- Add moratorium on relying on schema transformations for telemetry stability
-  ([#3380](https://github.com/open-telemetry/opentelemetry-specification/pull/3380))
-- Mark "Instrumentation Units" and "Instrumentation Types" sections of the general
-  metric semantic conventions as stable
-  ([#3294](https://github.com/open-telemetry/opentelemetry-specification/pull/3294))
-- Add clarification that UCUM c/s variant applies to all units other than `1` and
-  those using [annotations](https://ucum.org/ucum.html#para-curly).
-  ([#3393](https://github.com/open-telemetry/opentelemetry-specification/pull/3393))
-- Specify that seconds should be used for measuring durations.
-  ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
-- Change http.server.duration and http.client.duration units to seconds
-  ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
-- BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
-  ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
+- The Semantic Conventions have moved to a separate repository
+  [github.com/open-telemetry/semantic-conventions](https://github.com/open-telemetry/semantic-conventions).
+  There will be no future semantic conventions release from this repository.
+  ([#3489](https://github.com/open-telemetry/opentelemetry-specification/pull/3489))
 
 ### Compatibility
 
+- Mark OpenCensus compatibility spec as stable
+  ([#3425](https://github.com/open-telemetry/opentelemetry-specification/pull/3425))
+
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### SDK Configuration
 
@@ -67,10 +97,17 @@ release.
 
 ### Telemetry Schemas
 
+- No changes.
+
 ### Common
 
 - Add log entries to specification README.md contents.
   ([#3435](https://github.com/open-telemetry/opentelemetry-specification/pull/3435))
+
+### Supplemenatary Guidelines
+
+- Add guidance to use service-supported propagation formats as default for AWS SDK client calls.
+  ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
 
 ## v1.20.0 (2023-04-07)
 
@@ -90,8 +127,6 @@ release.
 
 - Clarify that units should use UCUM case sensitive variant.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
-- Recommended non-prefixed units for metric instrument semantic conventions.
-  ([#3312](https://github.com/open-telemetry/opentelemetry-specification/pull/3312))
 - Remove No-Op instrument and Meter creation requirements.
   ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
 - Fixed attributes requirement level in semantic conventions for hardware metrics
@@ -118,8 +153,6 @@ release.
 
 ### Semantic Conventions
 
-- Add k8s.cluster.uid semantic convention
-  ([#3267](https://github.com/open-telemetry/opentelemetry-specification/pull/3267))
 - Clarify that attribute requirement levels apply to the instrumentation library
   ([#3289](https://github.com/open-telemetry/opentelemetry-specification/pull/3289))
 - Fix grammatical number of metric units.

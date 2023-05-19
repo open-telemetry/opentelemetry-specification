@@ -1,5 +1,12 @@
 # Webengine
 
+**NOTICE** Semantic Conventions are moving to a
+[new location](http://github.com/open-telemetry/semantic-conventions).
+
+No changes to this document are allowed.
+
+**Status**: [Experimental](../../document-status.md)
+
 **type:** `webengine`
 
 **Description:** Resource describing the packaged software running the application code. Web engines are typically executed using process.runtime.
