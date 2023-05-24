@@ -42,7 +42,7 @@ There is no guarantee in particular that timestamps will be monotonically increa
 This defines the first version of the serialization scheme.
 
 The data must be encoded according to the format specified in the
-[OTLP JSON Encoding](../../specification/protocol/otlp.md#json-protobuf-encoding).
+[OTLP JSON Encoding](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#json-protobuf-encoding).
 
 Only top-level objects, `ExportTraceServiceRequest`, `ExportMetricsServiceRequest`, and `ExportLogsServiceRequest` are supported.
 
