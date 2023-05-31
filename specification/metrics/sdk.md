@@ -95,9 +95,10 @@ suggestions regarding how to implement this efficiently.
 The SDK SHOULD allow the creation of multiple independent `MeterProvider`s.
 
 MeterProvider configuration (i.e. the passed [MetricExporters](#metricexporter),
-[MetricReaders](#metricreader) and [Views](#view)) are owned by the `MeterProvider`
-and the SDK MUST provide a way to configure all options that are implemented by
-the SDK. This MAY be done at the time of MeterProvider creation if appropriate.
+[MetricReaders](#metricreader) and [Views](#view)) are owned by the
+`MeterProvider`. The SDK MUST provide a way to configure all options that are
+implemented by the SDK. This MAY be done at the time of MeterProvider creation
+if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MetricReader`), the updated
