@@ -116,7 +116,7 @@ that the emitted data format is capable of representing such association.
 
 Configuration (i.e. [MetricExporters](#metricexporter),
 [MetricReaders](#metricreader) and [Views](#view)) MUST be owned by the
-`MeterProvider`. The configuration MAY be applied at the time of MeterProvider
+`MeterProvider`. The configuration MAY be applied at the time of `MeterProvider`
 creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
