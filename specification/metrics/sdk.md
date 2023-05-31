@@ -14,6 +14,7 @@ linkTitle: SDK
 - [MeterProvider](#meterprovider)
   * [MeterProvider Creation](#meterprovider-creation)
   * [Meter Creation](#meter-creation)
+  * [Configuration](#configuration)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
   * [View](#view)
