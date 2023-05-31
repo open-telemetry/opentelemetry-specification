@@ -94,6 +94,19 @@ suggestions regarding how to implement this efficiently.
 
 The SDK SHOULD allow the creation of multiple independent `MeterProvider`s.
 
+MeterProvider configuration (i.e. the passed [MetricExporters](#metricexporter),
+[MetricReaders](#metricreader) and [Views](#view)) are owned by the `MeterProvider`
+and the SDK MUST provide a way to configure all options that are implemented by
+the SDK. This MAY be done at the time of MeterProvider creation if appropriate.
+
+The `MeterProvider` MAY provide methods to update the configuration. If
+configuration is updated (e.g., adding a `MetricReader`), the updated
+configuration MUST also apply to all already returned `Meters` (i.e. it MUST NOT
+matter whether a `Meter` was obtained from the `MeterProvider` before or after
+the configuration change). Note: Implementation-wise, this could mean that
+`Meter` instances have a reference to their `MeterProvider` and access
+configuration only via this reference.
+
 ### Meter Creation
 
 New `Meter` instances are always created through a `MeterProvider`
@@ -111,20 +124,6 @@ message reporting that the specified value is invalid SHOULD be logged.
 When a Schema URL is passed as an argument when creating a `Meter` the emitted
 telemetry for that `Meter` MUST be associated with the Schema URL, provided
 that the emitted data format is capable of representing such association.
-
-Configuration (i.e., [MetricExporters](#metricexporter),
-[MetricReaders](#metricreader) and [Views](#view)) MUST be managed solely by the
-`MeterProvider` and the SDK MUST provide a way to configure all options that are
-implemented by the SDK. This MAY be done at the time of MeterProvider creation
-if appropriate.
-
-The `MeterProvider` MAY provide methods to update the configuration. If
-configuration is updated (e.g., adding a `MetricReader`), the updated
-configuration MUST also apply to all already returned `Meters` (i.e. it MUST NOT
-matter whether a `Meter` was obtained from the `MeterProvider` before or after
-the configuration change). Note: Implementation-wise, this could mean that
-`Meter` instances have a reference to their `MeterProvider` and access
-configuration only via this reference.
 
 ### Shutdown
 
