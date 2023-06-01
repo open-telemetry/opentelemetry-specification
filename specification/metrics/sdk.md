@@ -207,6 +207,8 @@ If no Instrument selection criteria is provided by the user, the SDK SHOULD
 treat it as an error. It is RECOMMENDED that the SDK fail fast. Refer to [Error
 handling in OpenTelemetry](../error-handling.md) for the general guidance.
 
+The SDK MUST provide the means to register Views with a `MeterProvider`.
+
 #### Instrument selection criteria
 
 Instrument selection criteria are the predicate that determine if a View will
