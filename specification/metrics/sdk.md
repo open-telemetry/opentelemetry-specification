@@ -21,7 +21,7 @@ linkTitle: SDK
     + [Stream configuration](#stream-configuration)
     + [View name](#view-name)
     + [Measurement processing](#measurement-processing)
-    + [Examples](#examples)
+    + [View examples](#view-examples)
   * [Aggregation](#aggregation)
     + [Drop Aggregation](#drop-aggregation)
     + [Default Aggregation](#default-aggregation)
@@ -329,7 +329,7 @@ made with an Instrument:
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
     to disable instruments by default.
 
-#### Examples
+#### View examples
 
 The following are examples of an SDK's functionality to create Views for a
 `MeterProvider`.
