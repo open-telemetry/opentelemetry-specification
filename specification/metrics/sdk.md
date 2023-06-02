@@ -96,7 +96,7 @@ The SDK SHOULD allow the creation of multiple independent `MeterProvider`s.
 
 ### Meter Creation
 
-New `Meter` instances are always created through a `MeterProvider`
+It SHOULD be possible to create `Meter` instances only through a `MeterProvider`
 (see [API](./api.md#meterprovider)).
 
 The `MeterProvider` MUST implement the 
