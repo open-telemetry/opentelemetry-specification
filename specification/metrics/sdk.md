@@ -97,9 +97,12 @@ The SDK SHOULD allow the creation of multiple independent `MeterProvider`s.
 ### Meter Creation
 
 New `Meter` instances are always created through a `MeterProvider`
-(see [API](./api.md#meterprovider)). The `name`, `version` (optional),
-`schema_url` (optional), and `attributes` (optional) arguments supplied to
-the `MeterProvider` MUST be used to create
+(see [API](./api.md#meterprovider)).
+
+The `MeterProvider` MUST implement the 
+[Get a Meter API](api.md#get-a-meter).
+
+The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
 
