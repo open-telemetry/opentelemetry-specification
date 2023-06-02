@@ -342,7 +342,7 @@ informs the SDK on the ways and means to compute
 [Aggregated Metrics](./data-model.md#opentelemetry-protocol-data-model)
 from incoming Instrument [Measurements](./api.md#measurement).
 
-Note: the term _aggregation_ is used instead of _aggregator_. It is recommended
+Note: the term _aggregation_ is used instead of _aggregator_. It is RECOMMENDED
 that implementors reserve the "aggregator" term for the future when the SDK
 allows custom aggregation implementations.
 
