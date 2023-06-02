@@ -18,6 +18,9 @@ release.
 
 ### Metrics
 
+- Mark Metrics SDK Configuration Environment Variables as stable.
+  ([#3530](https://github.com/open-telemetry/opentelemetry-specification/pull/3530))
+
 ### Logs
 
 ### Resource
