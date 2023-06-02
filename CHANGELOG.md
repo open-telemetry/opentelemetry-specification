@@ -10,7 +10,7 @@ release.
 ### Protocol
 
 - Move OTLP specification to github.com/open-telemetry/opentelemetry-proto.
-  ([#](https://github.com/open-telemetry/opentelemetry-specification/pull/))
+  ([#3454](https://github.com/open-telemetry/opentelemetry-specification/pull/3454))
 
 ### Context
 
