@@ -37,6 +37,10 @@ linkTitle: API
     + [Histogram creation](#histogram-creation)
     + [Histogram operations](#histogram-operations)
       - [Record](#record)
+  * [Gauge](#gauge)
+    + [Gauge creation](#gauge-creation)
+    + [Gauge operations](#gauge-operations)
+      - [Set](#set)
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
@@ -766,6 +770,96 @@ http_server_duration.Record(100, http_method="GET", http_scheme="http")
 
 httpServerDuration.Record(50, ("http.request.method", "POST"), ("url.scheme", "https"));
 httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
+```
+
+### Gauge
+
+**Status**: [Experimental](../document-status.md)
+
+`Gauge` is a [synchronous Instrument](#synchronous-instrument-api) which can be
+used to synchronously report non-additive value(s) (e.g. the room temperature -
+it makes no sense ot report the temperature value from multiple room and sum
+them up) when changes occur.
+
+Note: If the values are additive (e.g. the process heap size - it makes sense to
+report the heap size from multiple processes and sum them up, so we get the
+total heap usage), use [Asynchronous Counter](#asynchronous-counter)
+or [Asynchronous UpDownCounter](#asynchronous-updowncounter).
+
+Note: Synchronous Gauge is normally used when the measurements are exposed via a
+subscription. If the measurement is exposed via an accessor,
+use [Asynchronous Gauge](#asynchronous-gauge) to invoke the accessor in a
+callback function.
+
+Example uses for Gauge:
+
+* subscribe to change events for the room temperature
+* subscribe to change events for the CPU fan speed
+
+#### Gauge creation
+
+There MUST NOT be any API for creating a `Gauge` other than with a
+[`Meter`](#meter). This MAY be called `CreateGauge`. If strong type is
+desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the language
+idiomatic name(s), for example `CreateUInt64Gauge`, `CreateDoubleGauge`,
+`CreateGauge<UInt64>`, `CreateGauge<double>`.
+
+See the [general requirements for synchronous instruments](#synchronous-instrument-api).
+
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
+
+```java
+// Java
+
+DoubleGauge componentTemperature = meter.gaugeBuilder("hw.temperature")
+        .setDescription("Temperature of hardware component")
+        .setUnit("C")
+        .build();
+```
+
+#### Gauge operations
+
+##### Set
+
+Set the Gauge current value.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* A numeric value.
+
+  The value needs to be provided by a user. If possible, this API
+  SHOULD be structured so a user is obligated to provide this parameter. If it
+  is not possible to structurally enforce this obligation, this API MUST be
+  documented in a way to communicate to users that this parameter is needed.
+* [Attributes](../common/README.md#attribute) to associate with the increment
+  value.
+
+  Users can provide attributes to associate with the increment value, but it is
+  up to their discretion. Therefore, this API MUST be structured to accept a
+  variable number of attributes, including none.
+
+The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
+[attributes](../common/README.md#attribute) to be passed in as arguments. If
+the attribute names and types are provided during the [gauge
+creation](#gauge-creation), the [OpenTelemetry API](../overview.md#api)
+authors MAY allow attribute values to be passed in using a more efficient way
+(e.g. strong typed struct allocated on the callstack, tuple). The API MUST allow
+callers to provide flexible attributes at invocation time rather than having to
+register all the possible attribute names during the instrument creation. Here
+are some examples that [OpenTelemetry API](../overview.md#api) authors might
+consider:
+
+```java
+// Java
+Attributes memoryA = Attributes.builder().put("id", "P0 Channel A");
+Attributes memoryB = Attributes.builder().put("id", "P0 Channel B");
+
+componentTemperature.set(32.5, memoryA);
+componentTemperature.set(31.9, memoryB);
 ```
 
 ### Asynchronous Gauge
