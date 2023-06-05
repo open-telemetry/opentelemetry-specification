@@ -203,15 +203,15 @@ selection criteria](#instrument-selection-criteria) and the resulting [stream
 configuration](#stream-configuration), and it MAY also accept as an input the
 [View name](#view-name).
 
-If no Instrument selection criteria is provided by the user, the SDK SHOULD
-treat it as an error. It is RECOMMENDED that the SDK fail fast. Refer to [Error
+If no Instrument selection criteria are provided by the user, the SDK SHOULD
+treat it as an error. It is RECOMMENDED that the SDK fails fast. Refer to [Error
 handling in OpenTelemetry](../error-handling.md) for the general guidance.
 
 The SDK MUST provide the means to register Views with a `MeterProvider`.
 
 #### Instrument selection criteria
 
-Instrument selection criteria are the predicate that determine if a View will
+Instrument selection criteria are the predicates that determine if a View will
 be applied to an Instrument or not.
 
 Criteria SHOULD be treated as additive. This means an Instrument has to match
@@ -259,12 +259,12 @@ based on whether the underlying number is integral or rational).
 
 #### Stream configuration
 
-Stream configuration are the parameters that defines the [metric
+Stream configuration are the parameters that define the [metric
 stream](./data-model.md#events--data-stream--timeseries) a `MeterProvider` will
 use to define telemetry pipelines.
 
 The SDK MUST accept a `description` as a stream configuration parameter. The
-`description` value be used to define the metric stream description. If the
+`description` value SHOULD be used to define the metric stream description. If the
 user does not provide a `description` value, the description from the
 Instrument a View matches MUST be used by default.
 
