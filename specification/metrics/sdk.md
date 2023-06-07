@@ -583,9 +583,8 @@ performing collection, such that observations made or produced by
 executing callbacks only apply to the intended `MetricReader` during
 collection.
 
-The implementation SHOULD disregard the accidental use of APIs
-appurtenant to asynchronous instruments outside of registered
-callbacks in the context of a single `MetricReader` collection.
+The implementation SHOULD disregard the use of asynchronous instrument
+APIs outside of registered callbacks.
 
 The implementation SHOULD use a timeout to prevent indefinite callback
 execution.
