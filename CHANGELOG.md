@@ -28,6 +28,9 @@ release.
 
 ### SDK Configuration
 
+- Extract Examplar section and mark it as Experimental.
+  ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
+
 ### Telemetry Schemas
 
 ### Common
