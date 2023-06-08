@@ -44,6 +44,7 @@ instruments not explicitly defined in the specification.
 |                        |                                                                                                          |       |                                                   |            | cpu              | CPU number [0..n-1]                 |
 | system.cpu.utilization | Difference in system.cpu.time since the last measurement, divided by the elapsed time and number of CPUs | 1     | Gauge                                             | Double     | state            | idle, user, system, interrupt, etc. |
 |                        |                                                                                                          |       |                                                   |            | cpu              | CPU number (0..n)                   |
+| system.cpu.count       | Reports the and number of available CPUs - may changes over time                                         | 1     | UpDownCounters                                    | Int64      | device           | (identifier e.g. `machine-id`)      |
 
 ### `system.memory.` - Memory metrics
 

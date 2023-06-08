@@ -58,6 +58,9 @@ release.
   ([#3458](https://github.com/open-telemetry/opentelemetry-specification/pull/3458))
 - Add links to the JMX APIs that are the JVM runtime metric sources.
   ([#3463](https://github.com/open-telemetry/opentelemetry-specification/pull/3463))
+- Add `system.cpu.count` metric.
+  ([#0](https://github.com/open-telemetry/opentelemetry-specification/pull/0))
+
 
 ### Logs
 
