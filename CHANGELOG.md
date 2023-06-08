@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Add experimental metric attributes advice API.
+
 ### Logs
 
 ### Resource
