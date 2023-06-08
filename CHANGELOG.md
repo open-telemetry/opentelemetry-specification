@@ -18,6 +18,9 @@ release.
 
 ### Metrics
 
+- Add attribute filter function to view metric stream configuration.
+  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/####))
+
 ### Logs
 
 ### Resource
