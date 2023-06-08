@@ -228,9 +228,9 @@ are the inputs:
     used by default.
   * The attributes to preserve or drop. This MUST be defined using at least
     one, but MAY be defined using multiple, of the following ways. If multiple
-    of the following ways are used in an implementation, it is left to the
-    implementation to handle how a user providing more than one value is
-    resolved. If a user provides no value for the way(s) implemented, all
+    of the following ways are used in an implementation, the last one
+    configured by the use MUST take precedence and all others MUST NOT be
+    applied. If a user provides no value for the way(s) implemented, all
     measurement attributes MUST be used (TODO: once the Hint API is available,
     the default behavior should respect the Hint if it is available).
     * A list of `attribute keys` (optional). If provided, the attributes that
