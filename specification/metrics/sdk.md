@@ -226,10 +226,21 @@ are the inputs:
   stream](./data-model.md#events--data-stream--timeseries):
   * The `description`. If not provided, the Instrument `description` MUST be
     used by default.
-  * A list of `attribute keys` (optional). If provided, the attributes that are
-    not in the list will be ignored. If not provided, all the attribute keys
-    will be used by default (TODO: once the Hint API is available, the default
-    behavior should respect the Hint if it is available).
+  * The attributes to preserve or drop. This MUST be defined using at least
+    one, but MAY be defined using multiple, of the following ways. If multiple
+    of the following ways are used in an implementation, it is left to the
+    implementation to handle how a user providing more than one value is
+    resolved. If a user provides no value for the way(s) implemented, all
+    measurement attributes MUST be used (TODO: once the Hint API is available,
+    the default behavior should respect the Hint if it is available).
+    * A list of `attribute keys` (optional). If provided, the attributes that
+      are not in the list will be ignored.
+    * An attribute filtering function (optional). The filtering function MUST
+      accept as an argument an attribute key-value and returns a filtering
+      decision. The filtering decision can be as simple as a boolean value or a
+      more appropriate response idiomatic to the implementation language. If
+      provided, the attributes that are passed to the function for which a
+      filtering decision to drop them is returned will be ignored.
   * The `aggregation` (optional) to be used. If not provided, the SDK MUST
     apply a [default aggregation](#default-aggregation) configurable on the
     basis of instrument kind according to the [MetricReader](#metricreader)
