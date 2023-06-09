@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: API
+--->
+
 # Tracing API
 
 **Status**: [Stable, Feature-freeze](../document-status.md)
