@@ -16,9 +16,19 @@ release.
 
 ### Traces
 
+- Make SDK Tracer Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+
 ### Metrics
 
+
+- Make SDK Meter Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+
 ### Logs
+
+- Make SDK Logger Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 
 ### Resource
 
