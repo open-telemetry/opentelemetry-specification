@@ -57,7 +57,7 @@ The SDK SHOULD allow the creation of multiple independent `LoggerProviders`s.
 It SHOULD be possible to create `Logger` instances only through a `LoggerProvider`
 (see [Bridge API](bridge-api.md)).
 
-The `LoggerProvider` MUST implement the [Get a Logger Bridge API](bridge-api.md#get-a-logger).
+The `LoggerProvider` MUST implement the [Get a Logger API](bridge-api.md#get-a-logger).
 
 The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
