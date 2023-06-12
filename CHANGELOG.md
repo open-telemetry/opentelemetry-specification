@@ -7,11 +7,6 @@ release.
 
 ## Unreleased
 
-### Protocol
-
-- Move OTLP specification to github.com/open-telemetry/opentelemetry-proto.
-  ([#3454](https://github.com/open-telemetry/opentelemetry-specification/pull/3454))
-
 ### Context
 
 ### Traces
@@ -38,11 +33,64 @@ release.
 
 ### SDK Configuration
 
+- Extract Examplar section and mark it as Experimental.
+  ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
+
 ### Telemetry Schemas
 
 ### Common
 
 ### Supplemenatary Guidelines
+
+## v1.22.0 (2023-06-09)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Make recommendation to reserve aggregator normative.
+  ([#3526](https://github.com/open-telemetry/opentelemetry-specification/pull/3526))
+
+### Logs
+
+- No changes.
+
+### Resource
+
+- No changes.
+
+### Compatibility
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- Move OTLP specification to github.com/open-telemetry/opentelemetry-proto.
+  ([#3454](https://github.com/open-telemetry/opentelemetry-specification/pull/3454))
+
+### SDK Configuration
+
+- No changes.
+
+### Telemetry Schemas
+
+- No changes.
+
+### Common
+
+- Explain why custom attributes are not recommended to be placed in OTel
+  namespaces.
+  ([#3507](https://github.com/open-telemetry/opentelemetry-specification/pull/3507))
+
+### Supplemenatary Guidelines
+
+- No changes.
 
 ## v1.21.0 (2023-05-09)
 
