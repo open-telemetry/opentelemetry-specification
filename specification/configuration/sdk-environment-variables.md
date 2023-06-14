@@ -305,6 +305,10 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 
 **Status**: [Mixed](../document-status.md)
 
+### Exemplar
+
+**Status**: [Experimental](../document-status.md)
+
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
 | `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"trace_based"` | |
