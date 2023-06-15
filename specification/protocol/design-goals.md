@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Design Goals
+--->
+
 # Design Goals for OpenTelemetry Wire Protocol
 
 This page has moved to

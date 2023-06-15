@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Zipkin
+--->
+
 # OpenTelemetry to Zipkin Transformation
 
 **Status**: [Stable](../../document-status.md)
