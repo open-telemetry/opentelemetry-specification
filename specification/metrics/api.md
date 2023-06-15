@@ -40,7 +40,7 @@ linkTitle: API
   * [Gauge](#gauge)
     + [Gauge creation](#gauge-creation)
     + [Gauge operations](#gauge-operations)
-      - [Set](#set)
+      - [Record](#record-1)
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
@@ -777,23 +777,26 @@ httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", schem
 **Status**: [Experimental](../document-status.md)
 
 `Gauge` is a [synchronous Instrument](#synchronous-instrument-api) which can be
-used to synchronously report non-additive value(s) (e.g. the room temperature -
-it makes no sense ot report the temperature value from multiple room and sum
+used to record non-additive value(s) (e.g. the background noise level - it makes
+no sense to record the background noise level value from multiple rooms and sum
 them up) when changes occur.
 
 Note: If the values are additive (e.g. the process heap size - it makes sense to
 report the heap size from multiple processes and sum them up, so we get the
-total heap usage), use [Asynchronous Counter](#asynchronous-counter)
-or [Asynchronous UpDownCounter](#asynchronous-updowncounter).
+total heap usage), use [Counter](#counter)
+or [UpDownCounter](#asynchronous-updowncounter).
 
 Note: Synchronous Gauge is normally used when the measurements are exposed via a
-subscription. If the measurement is exposed via an accessor,
+subscription to change events (
+i.e. `backgroundNoiseLevel.onChange(value -> gauge.record(value))`). If the
+measurement is exposed via an accessor,
 use [Asynchronous Gauge](#asynchronous-gauge) to invoke the accessor in a
-callback function.
+callback function (
+i.e. `createObservableGauge(observable -> observable.record(backgroundNoiseLevel.getCurrentValue()))`.
 
 Example uses for Gauge:
 
-* subscribe to change events for the room temperature
+* subscribe to change events for the background noise level
 * subscribe to change events for the CPU fan speed
 
 #### Gauge creation
@@ -813,23 +816,23 @@ might consider:
 // Java
 
 DoubleGauge componentTemperature = meter.gaugeBuilder("hw.temperature")
-        .setDescription("Temperature of hardware component")
-        .setUnit("C")
-        .build();
+    .setDescription("Temperature of hardware component")
+    .setUnit("C")
+    .build();
 ```
 
 #### Gauge operations
 
-##### Set
+##### Record
 
-Set the Gauge current value.
+Record the Gauge current value.
 
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
 This API MUST accept the following parameter:
 
-* A numeric value.
+* A numeric value. The current absolute value.
 
   The value needs to be provided by a user. If possible, this API
   SHOULD be structured so a user is obligated to provide this parameter. If it
@@ -838,7 +841,7 @@ This API MUST accept the following parameter:
 * [Attributes](../common/README.md#attribute) to associate with the increment
   value.
 
-  Users can provide attributes to associate with the increment value, but it is
+  Users can provide attributes to associate with the value, but it is
   up to their discretion. Therefore, this API MUST be structured to accept a
   variable number of attributes, including none.
 
@@ -858,8 +861,8 @@ consider:
 Attributes memoryA = Attributes.builder().put("id", "P0 Channel A");
 Attributes memoryB = Attributes.builder().put("id", "P0 Channel B");
 
-componentTemperature.set(32.5, memoryA);
-componentTemperature.set(31.9, memoryB);
+componentTemperature.record(32.5, memoryA);
+componentTemperature.record(31.9, memoryB);
 ```
 
 ### Asynchronous Gauge
