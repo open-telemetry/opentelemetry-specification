@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Probability Sampling
+--->
+
 # TraceState: Probability Sampling
 
 **Status**: [Experimental](../document-status.md)

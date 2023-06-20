@@ -14,6 +14,7 @@ linkTitle: SDK
 - [MeterProvider](#meterprovider)
   * [MeterProvider Creation](#meterprovider-creation)
   * [Meter Creation](#meter-creation)
+  * [Configuration](#configuration)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
   * [View](#view)
@@ -112,11 +113,12 @@ When a Schema URL is passed as an argument when creating a `Meter` the emitted
 telemetry for that `Meter` MUST be associated with the Schema URL, provided
 that the emitted data format is capable of representing such association.
 
-Configuration (i.e., [MetricExporters](#metricexporter),
-[MetricReaders](#metricreader) and [Views](#view)) MUST be managed solely by the
-`MeterProvider` and the SDK MUST provide a way to configure all options that are
-implemented by the SDK. This MAY be done at the time of MeterProvider creation
-if appropriate.
+### Configuration
+
+Configuration (i.e. [MetricExporters](#metricexporter),
+[MetricReaders](#metricreader) and [Views](#view)) MUST be owned by the
+`MeterProvider`. The configuration MAY be applied at the time of `MeterProvider`
+creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MetricReader`), the updated
@@ -581,9 +583,8 @@ performing collection, such that observations made or produced by
 executing callbacks only apply to the intended `MetricReader` during
 collection.
 
-The implementation SHOULD disregard the accidental use of APIs
-appurtenant to asynchronous instruments outside of registered
-callbacks in the context of a single `MetricReader` collection.
+The implementation SHOULD disregard the use of asynchronous instrument
+APIs outside of registered callbacks.
 
 The implementation SHOULD use a timeout to prevent indefinite callback
 execution.
