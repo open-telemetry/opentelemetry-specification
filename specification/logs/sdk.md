@@ -10,6 +10,7 @@
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider Creation](#loggerprovider-creation)
   * [Logger Creation](#logger-creation)
+  * [Configuration](#configuration)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
@@ -66,10 +67,11 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-Configuration (i.e. [LogRecordProcessors](#logrecordprocessor)) MUST be managed
-solely by the `LoggerProvider` and the SDK MUST provide some way to configure
-all options that are implemented by the SDK. This MAY be done at the time
-of `LoggerProvider` creation if appropriate.
+### Configuration
+
+Configuration (i.e. [LogRecordProcessors](#logrecordprocessor)) MUST be owned
+by the the `LoggerProvider`. The configuration MAY be applied at the time of
+`LoggerProvider` creation if appropriate.
 
 The `LoggerProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `LogRecordProcessor`), the updated
