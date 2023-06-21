@@ -64,7 +64,7 @@ this data model.
     <td>HOSTNAME</td>
     <td>string</td>
     <td>Describes the location where the event originated. Possible values are FQDN, IP address, etc.</td>
-    <td>Resource["host.hostname"]</td>
+    <td>Resource["host.name"]</td>
   </tr>
   <tr>
     <td>APP-NAME</td>
@@ -130,7 +130,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>Computer</td>
     <td>string</td>
     <td>The name of the computer on which the event occurred.</td>
-    <td>Resource["host.hostname"]</td>
+    <td>Resource["host.name"]</td>
   </tr>
   <tr>
     <td>EventID</td>
@@ -712,13 +712,13 @@ For example, on Windows this could be the host’s Active Directory domain or Ne
 <td>**Resource</td>
   </tr>
   <tr>
-    <td>host.hostname</td>
+    <td>host.name</td>
     <td>string</td>
     <td>Hostname of the host.
 
 It normally contains what the hostname command returns on the host machine.</td>
 
-<td>Resource["host.hostname"]</td>
+<td>Resource["host.name"]</td>
 
   </tr>
   <tr>

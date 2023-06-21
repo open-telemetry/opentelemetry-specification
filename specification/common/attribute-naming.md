@@ -133,6 +133,13 @@ To do that consider a few options:
   `myuniquemapapp.longitude` is likely fine). Make sure the application name
   does not clash with an existing semantic convention namespace.
 
+- It is not recommended to use existing OpenTelemetry semantic convention namespace
+  as a prefix for a new company- or application-specific attribute name. Doing so
+  may result in a name clash in the future, if OpenTelemetry decides to use that
+  same name for a different purpose or if some other third party instrumentation
+  decides to use that exact same attribute name and you combine that instrumentation
+  with your own.
+
 - The name may be generally applicable to applications in the industry. In that
   case consider submitting a proposal to this specification to add a new name to
   the semantic conventions, and if necessary also to add a new namespace.

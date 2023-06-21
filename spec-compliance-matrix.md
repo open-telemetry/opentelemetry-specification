@@ -258,11 +258,13 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | -     |
+| OT Propagator                                                                    |          | +  | +    | +  | +      |      |        |     |      |     |      |       |
+| OpenCensus Binary Propagator                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  | +    |    |        | +    |        | +   |      |     |      |       |
 | Fields                                                                           |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
-| Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | +    | +     |
-| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      |     | N/A  | +   | -    | +     |
+| Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      | +   | N/A  | +   | +    | +     |
+| Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      | +   | N/A  | +   | +    | +     |
+| Getter argument returning Keys                                                   | X        | N/A| +    | +  | +      | +    | +      | +   | N/A  | +   | -    | +     |
 
 ## Environment Variables
 
@@ -282,7 +284,7 @@ Note: Support for environment variables is optional.
 | OTEL_EXPORTER_ZIPKIN_*                                   | -   | +    |     | +           | +    | -      | +   | -    | -   | +    | -     |
 | OTEL_TRACES_EXPORTER                                     | -   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_METRICS_EXPORTER                                    | -   | +    |     | +           | -    | -      | +   | -    | -   | -    | -     |
-| OTEL_LOGS_EXPORTER                                       | -   | +    |     | +           |      |        |     |      |     | -    |       |
+| OTEL_LOGS_EXPORTER                                       | -   | +    |     | +           |      |        | +   |      |     | -    |       |
 | OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
 | OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +   | +    | +   | +           | +    | +      | +   |      |     | -    |       |
 | OTEL_SPAN_EVENT_COUNT_LIMIT                              | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
@@ -298,7 +300,7 @@ Note: Support for environment variables is optional.
 | OTEL_METRIC_EXPORT_INTERVAL                              | -   | +    |     |             |      |        | +   |      |     | -    |       |
 | OTEL_METRIC_EXPORT_TIMEOUT                               | -   | -    |     |             |      |        | +   |      |     | -    |       |
 | OTEL_METRICS_EXEMPLAR_FILTER                             | -   | +    |     |             |      |        | +   |      |     | -    |       |
-| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        |     |      |     | -    |       |
+| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | -    |       |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |     | +    |     |             |      |        |     |      |     |      |       |
 
 ## Exporters
@@ -319,9 +321,9 @@ Note: Support for environment variables is optional.
 | Honors non-retryable responses                                                 | X        | +  | -    | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Honors throttling response                                                     | X        | +  | -    | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Multi-destination spec compliance                                              | X        | +  | -    |    | [-][py1109] |      | -      |     |      | -   | -    | -     |
-| SchemaURL in ResourceSpans and ScopeSpans                                      |          | +  | +    |    | +           |      | +      |     |      |     | -    |       |
-| SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    | +           |      | -      |     |      |     | -    |       |
-| SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    | +           |      | -      |     |      |     | -    |       |
+| SchemaURL in ResourceSpans and ScopeSpans                                      |          | +  | +    |    | +           |      | +      | +   |      |     | -    |       |
+| SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
+| SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        | +   |      |     |      |       |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | +    |    | +           | -    | -      | -   | -    | -   | -    | -     |
@@ -360,12 +362,12 @@ Languages not covered by the OpenTracing project do not need to be listed here, 
 
 | Feature                                                                                                 |Go |Java|JS |Python|Ruby|PHP|Rust|C++|.NET|Swift|
 |---------------------------------------------------------------------------------------------------------|---|----|---|------|----|---|----|---|----|-----|
-| [Create OpenTracing Shim](specification/compatibility/opentracing.md#create-an-opentracing-tracer-shim) |   |    |   |      |    |   |    |   |    |     |
-| [Tracer](specification/compatibility/opentracing.md#tracer-shim)                                        |   |    |   |      |    |   |    |   |    |     |
-| [Span](specification/compatibility/opentracing.md#span-shim)                                            |   |    |   |      |    |   |    |   |    |     |
-| [SpanContext](specification/compatibility/opentracing.md#spancontext-shim)                              |   |    |   |      |    |   |    |   |    |     |
-| [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim)                            |   |    |   |      |    |   |    |   |    |     |
-| Error mapping for attributes/events                                                                     |   |    |   |      |    |   |    |   |    |     |
+| [Create OpenTracing Shim](specification/compatibility/opentracing.md#create-an-opentracing-tracer-shim) |   |    |   |      |    | + |    |   |    |     |
+| [Tracer](specification/compatibility/opentracing.md#tracer-shim)                                        |   |    |   |      |    | + |    |   |    |     |
+| [Span](specification/compatibility/opentracing.md#span-shim)                                            |   |    |   |      |    | + |    |   |    |     |
+| [SpanContext](specification/compatibility/opentracing.md#spancontext-shim)                              |   |    |   |      |    | + |    |   |    |     |
+| [ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim)                            |   |    |   |      |    | + |    |   |    |     |
+| Error mapping for attributes/events                                                                     |   |    |   |      |    | + |    |   |    |     |
 | Migration to OpenTelemetry guide                                                                        |   |    |   |      |    |   |    |   |    |     |
 
 [py1003]: https://github.com/open-telemetry/opentelemetry-python/issues/1003

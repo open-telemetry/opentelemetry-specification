@@ -1,8 +1,11 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Protocol
+--->
+
 # OpenTelemetry Protocol
 
-This is the specification of new OpenTelemetry protocol (OTLP).
+The OpenTelemetry protocol (OTLP) specification has moved to
+[github.com/open-telemetry/opentelemetry-proto/docs/README.md](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/README.md).
 
-- [Design Goals](design-goals.md).
-- [Requirements](requirements.md).
-- [Specification](otlp.md).
-- [SDK Exporter](exporter.md).
+For additional OTLP implementation requirements in the OpenTelemetry SDKs, see
+[SDK Exporter](exporter.md).
