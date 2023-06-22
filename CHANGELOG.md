@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Add ocbinary to known values for OTEL_PROPAGATORS. ([#3561](https://github.com/open-telemetry/opentelemetry-specification/pull/3561))
+
 ### Metrics
 
 - Refine SDK MeterProvider configuration section.
