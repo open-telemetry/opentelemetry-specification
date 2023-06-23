@@ -15,6 +15,8 @@ release.
 
 - Refine SDK MeterProvider configuration section.
   ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3522))
+- `MetricReader.ForceFlush` should be concurrent safe.
+  ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
 
 ### Logs
 
