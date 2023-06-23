@@ -1373,7 +1373,7 @@ called concurrently.
 
 **ExemplarReservoir** - all methods are safe to be called concurrently.
 
-**MetricReader** - `Collect` and `Shutdown` are safe to be called concurrently.
+**MetricReader** - `Collect`, `ForceFlush` and `Shutdown` are safe to be called concurrently.
 
 **MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
 concurrently.
