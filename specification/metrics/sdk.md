@@ -1294,7 +1294,7 @@ modeled to interact with other components in the SDK:
 **Status**: [Experimental](../document-status.md)
 
 `MetricProducer` defines the interface which bridges to third-party metric
-sources MUST implement, so they can be plugged into an OpenTelemetry
+sources MUST implement so they can be plugged into an OpenTelemetry
 [MetricReader](#metricreader) as a source of aggregated metric data. The SDK's
 in-memory state MAY implement the `MetricProducer` interface for convenience.
 
