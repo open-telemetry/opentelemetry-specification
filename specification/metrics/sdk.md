@@ -931,9 +931,10 @@ SHOULD provide at least the following:
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 * The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 
-A `MetricReader` SHOULD allow providing a `predicate`, a boolean function, 
-accepting metric data point properties, whose result determines if the data point 
+A `MetricReader` SHOULD allow providing a `predicate`, a boolean function,
+accepting metric data point properties, whose result determines if the data point
 be returned in the result of `Collect` operation. The arguments should include the following:
+
 - `instrumentationScope`: the instrument's instrumentation scope
 - `name`: the name of the instrument
 - `description`: the instrument's description
@@ -1018,7 +1019,7 @@ to be registered with the same MetricReader.
 Collects the metrics from the SDK and any registered
 [MetricProducers](#metricproducer). If there are
 [asynchronous SDK Instruments](./api.md#asynchronous-instrument-api) involved,
-their callback functions will be triggered. 
+their callback functions will be triggered.
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Collect` operation fails or times out on
@@ -1304,6 +1305,7 @@ libraries to facilitate conversion between delta and cumulative temporalities.
 `MetricProducer` implementations SHOULD allow providing a `predicate`, a boolean function,
 accepting metric data point properties, whose result determines if the data point
 be returned in the result of `Collect` operation. The arguments should include the following:
+
 - `instrumentationScope`: the instrument's instrumentation scope
 - `name`: the name of the instrument
 - `description`: the instrument's description
@@ -1339,7 +1341,7 @@ A `MetricProducer` MUST support the following functions:
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
 MUST return a batch of [Metric points](./data-model.md#metric-points).
-Implementation SHOULD use the predicate to filter (instrument, attributes) pairs 
+Implementation SHOULD use the predicate to filter (instrument, attributes) pairs
 which the predicate did not allow.  
 `Produce` does not have any required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
