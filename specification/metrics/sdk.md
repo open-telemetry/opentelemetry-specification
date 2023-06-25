@@ -919,6 +919,7 @@ determines the following capabilities:
 * Registering [MetricProducer](#metricproducer)(s)
 * Collecting metrics from the SDK and any registered
   [MetricProducers](#metricproducer) on demand.
+* Providing a Predicate which enables choosing which aggregated data points should be collected
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
@@ -929,6 +930,19 @@ SHOULD provide at least the following:
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 * The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+
+A `MetricReader` SHOULD allow providing a `predicate`, a boolean function, 
+accepting metric data point properties, whose result determines if the data point 
+be returned in the result of `Collect` operation. The arguments should include the following:
+- `instrumentationScope`: the instrument's instrumentation scope
+- `name`: the name of the instrument
+- `description`: the instrument's description
+- `kind`: the instrument's kind
+- `unit`: the instrument's unit
+- `attributes`: The data point's attributes
+
+A `MetricReader` SHOULD allow changing the `predicate`, which will be used in subsequent `Collect` operations.
+A `MetricReader` SHOULD provide the `predicate` to the SDK or registered [MetricProducer](#metricproducer)(s).
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1004,7 +1018,7 @@ to be registered with the same MetricReader.
 Collects the metrics from the SDK and any registered
 [MetricProducers](#metricproducer). If there are
 [asynchronous SDK Instruments](./api.md#asynchronous-instrument-api) involved,
-their callback functions will be triggered.
+their callback functions will be triggered. 
 
 `Collect` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Collect` operation fails or times out on
@@ -1279,13 +1293,25 @@ modeled to interact with other components in the SDK:
 **Status**: [Experimental](../document-status.md)
 
 `MetricProducer` defines the interface which bridges to third-party metric
-sources MUST implement so they can be plugged into an OpenTelemetry
+sources MUST implement, so they can be plugged into an OpenTelemetry
 [MetricReader](#metricreader) as a source of aggregated metric data. The SDK's
 in-memory state MAY implement the `MetricProducer` interface for convenience.
 
 `MetricProducer` implementations SHOULD accept configuration for the
 `AggregationTemporality` of produced metrics. SDK authors MAY provide utility
 libraries to facilitate conversion between delta and cumulative temporalities.
+
+`MetricProducer` implementations SHOULD allow providing a `predicate`, a boolean function,
+accepting metric data point properties, whose result determines if the data point
+be returned in the result of `Collect` operation. The arguments should include the following:
+- `instrumentationScope`: the instrument's instrumentation scope
+- `name`: the name of the instrument
+- `description`: the instrument's description
+- `kind`: the instrument's kind
+- `unit`: the instrument's unit
+- `attributes`: The data point's attributes
+
+A `MetricProducer` SHOULD allow changing the `predicate`, which will be used in subsequent `Produce` operations.
 
 If the batch of [Metric points](./data-model.md#metric-points) returned by
 `Produce()` includes a [Resource](../resource/sdk.md), the `MetricProducer` MUST
@@ -1313,6 +1339,8 @@ A `MetricProducer` MUST support the following functions:
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
 MUST return a batch of [Metric points](./data-model.md#metric-points).
+Implementation SHOULD use the predicate to filter (instrument, attributes) pairs 
+which the predicate did not allow.  
 `Produce` does not have any required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
 
