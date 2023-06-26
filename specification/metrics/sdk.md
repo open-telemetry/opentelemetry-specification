@@ -257,7 +257,7 @@ The SDK MAY also accept the following criteria:
   as the Meter that created an Instrument, then the criterion matches that
   Instrument.
 
-The SDK MAY accept additional criteria. For example, a strong typed language
+The SDK MAY accept additional criteria. For example, a strongly typed language
 may support point type criterion (e.g. allow the users to select Instruments
 based on whether the underlying number is integral or rational).
 
