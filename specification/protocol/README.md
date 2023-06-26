@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Protocol
+--->
+
 # OpenTelemetry Protocol
 
 The OpenTelemetry protocol (OTLP) specification has moved to
