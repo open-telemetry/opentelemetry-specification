@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Remove the Jaeger Propagator
+  ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
+
 ### Metrics
 
 - Refine SDK MeterProvider configuration section.
@@ -28,6 +31,9 @@ release.
 
 - Extract Examplar section and mark it as Experimental.
   ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
+
+- Remove the Jaeger Exporter
+  ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
 
 ### Telemetry Schemas
 
