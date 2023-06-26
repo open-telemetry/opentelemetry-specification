@@ -483,7 +483,7 @@ in the SDK:
   +-----+--------------+   +-------------------------+   +-------------------+
   |     |              |   |                         |   |                   |
   |     |              |   | Batching Span Processor |   |    SpanExporter   |
-  |     |              +---> Simple Span Processor   +--->  (JaegerExporter) |
+  |     |              +---> Simple Span Processor   +--->  (ZipkinExporter) |
   |     |              |   |                         |   |                   |
   | SDK | Span.start() |   +-------------------------+   +-------------------+
   |     | Span.end()   |

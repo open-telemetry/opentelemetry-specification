@@ -88,7 +88,6 @@ Known values for `OTEL_PROPAGATORS` are:
 - `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
 - `"b3"`: [B3 Single](../context/api-propagators.md#configuration)
 - `"b3multi"`: [B3 Multi](../context/api-propagators.md#configuration)
-- `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
 - `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
 - `"none"`: No automatically configured propagator.
@@ -222,7 +221,6 @@ The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
-- `"jaeger"`: export in Jaeger data model
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"none"`: No automatically configured exporter for traces.
 
