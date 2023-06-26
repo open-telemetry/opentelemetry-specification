@@ -215,8 +215,8 @@ Required arguments:
 The `Keys` function can be called by `Propagator`s which are using variable key names in order to
 iterate over all the keys in the specified carrier.
 
-For example, it can be used to detect all keys following the `X-B3-{key}` pattern, as defined by the
-[B3 Propagation Format](https://github.com/openzipkin/b3-propagation).
+For example, it can be used to detect all keys following the `uberctx-{user-defined-key}` pattern, as defined by the
+[Jaeger Propagation Format](https://www.jaegertracing.io/docs/1.18/client-libraries/#baggage).
 
 ##### Get
 
@@ -338,6 +338,7 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 * [W3C Baggage](https://w3c.github.io/baggage). MAY alternatively
   be distributed as part of the OpenTelemetry API.
 * [B3](https://github.com/openzipkin/b3-propagation).
+* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
 
 This is a list of additional propagators that MAY be maintained and distributed
 as OpenTelemetry extension packages:
