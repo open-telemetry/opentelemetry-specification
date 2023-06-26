@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Specification
+--->
+
 # OpenTelemetry Protocol Specification
 
 This page has moved to

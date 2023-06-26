@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Refine SDK MeterProvider configuration section.
+  ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3522))
+
 ### Logs
 
 ### Resource
