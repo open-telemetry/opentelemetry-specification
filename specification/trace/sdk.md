@@ -59,7 +59,7 @@ linkTitle: SDK
 
 ### Tracer Creation
 
-It SHOULD be possible to create `Tracer` instances only through a `TracerProvider`
+It SHOULD only be possible to create `Tracer` instances through a `TracerProvider`
 (see [API](./api.md#tracerprovider)).
 
 The `TracerProvider` MUST implement the [Get a Tracer API](api.md#get-a-tracer).
