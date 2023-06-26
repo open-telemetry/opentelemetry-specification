@@ -14,6 +14,7 @@ linkTitle: SDK
 - [MeterProvider](#meterprovider)
   * [MeterProvider Creation](#meterprovider-creation)
   * [Meter Creation](#meter-creation)
+  * [Configuration](#configuration)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
   * [View](#view)
@@ -96,10 +97,12 @@ The SDK SHOULD allow the creation of multiple independent `MeterProvider`s.
 
 ### Meter Creation
 
-New `Meter` instances are always created through a `MeterProvider`
-(see [API](./api.md#meterprovider)). The `name`, `version` (optional),
-`schema_url` (optional), and `attributes` (optional) arguments supplied to
-the `MeterProvider` MUST be used to create
+It SHOULD only be possible to create `Meter` instances through a `MeterProvider`
+(see [API](./api.md#meterprovider)).
+
+The `MeterProvider` MUST implement the [Get a Meter API](api.md#get-a-meter).
+
+The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
 
@@ -112,11 +115,12 @@ When a Schema URL is passed as an argument when creating a `Meter` the emitted
 telemetry for that `Meter` MUST be associated with the Schema URL, provided
 that the emitted data format is capable of representing such association.
 
-Configuration (i.e., [MetricExporters](#metricexporter),
-[MetricReaders](#metricreader) and [Views](#view)) MUST be managed solely by the
-`MeterProvider` and the SDK MUST provide a way to configure all options that are
-implemented by the SDK. This MAY be done at the time of MeterProvider creation
-if appropriate.
+### Configuration
+
+Configuration (i.e. [MetricExporters](#metricexporter),
+[MetricReaders](#metricreader) and [Views](#view)) MUST be owned by the
+`MeterProvider`. The configuration MAY be applied at the time of `MeterProvider`
+creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MetricReader`), the updated
