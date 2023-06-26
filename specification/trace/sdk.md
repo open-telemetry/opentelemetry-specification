@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: SDK
+--->
+
 # Tracing SDK
 
 **Status**: [Stable](../document-status.md)
@@ -55,10 +59,12 @@
 
 ### Tracer Creation
 
-New `Tracer` instances are always created through a `TracerProvider`
-(see [API](api.md#tracerprovider)). The `name`, `version` (optional),
-`schema_url` (optional), and `attributes` (optional) arguments supplied to
-the `TracerProvider` must be used to create
+It SHOULD only be possible to create `Tracer` instances through a `TracerProvider`
+(see [API](./api.md#tracerprovider)).
+
+The `TracerProvider` MUST implement the [Get a Tracer API](api.md#get-a-tracer).
+
+The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.
 
