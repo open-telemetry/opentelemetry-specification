@@ -28,7 +28,6 @@ _Note to OpenTelemetry client Authors:_ OpenTelemetry specification, API and SDK
     - metrics
         - Prometheus.
     - trace
-        - Jaeger.
         - Zipkin.
 
     Note: some of these support multiple protocols (e.g. gRPC, Thrift, etc). The exact list of protocols to implement in the exporters is TBD.
@@ -93,8 +92,8 @@ name of the library should be prefixed with the terms "OpenTelemetry" and "Expor
 
 For example:
 
-- Python and Java: opentelemetry-exporter-jaeger
-- Javascript: @opentelemetry/exporter-jeager
+- Python and Java: opentelemetry-exporter-{vendor_name}
+- Javascript: @opentelemetry/exporter-{vendor_name}
 
 #### Resource Detection
 
