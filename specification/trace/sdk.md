@@ -482,12 +482,12 @@ The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
 
 ```
-  +-----+--------------+   +-------------------------+   +-------------------+
-  |     |              |   |                         |   |                   |
-  |     |              |   | Batching Span Processor |   |    SpanExporter   |
-  |     |              +---> Simple Span Processor   +--->  (JaegerExporter) |
-  |     |              |   |                         |   |                   |
-  | SDK | Span.start() |   +-------------------------+   +-------------------+
+  +-----+--------------+   +-------------------------+   +----------------+
+  |     |              |   |                         |   |                |
+  |     |              |   | Batching Span Processor |   |  SpanExporter  |
+  |     |              +---> Simple Span Processor   +---> (OTLPExporter) |
+  |     |              |   |                         |   |                |
+  | SDK | Span.start() |   +-------------------------+   +----------------+
   |     | Span.end()   |
   |     |              |
   |     |              |
