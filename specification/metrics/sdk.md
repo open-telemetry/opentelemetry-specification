@@ -658,10 +658,10 @@ Distinct meters MUST be treated as separate namespaces for the purposes of detec
 ### Duplicate instrument registration
 
 When more than one Instrument of the same `name` is created for identical
-Meters, denoted _duplicate instrument registration_, the Meter MUST create a
-valid Instrument in every case. Here, "valid" means an instrument that is
-functional and can be expected to export data, despite potentially creating a
-[semantic error in the data
+Meters from the same MeterProvider, denoted _duplicate instrument
+registration_, the Meter MUST create a valid Instrument in every case. Here,
+"valid" means an instrument that is functional and can be expected to export
+data, despite potentially creating a [semantic error in the data
 model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations).
 
 It is unspecified whether or under which conditions the same or
