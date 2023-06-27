@@ -9,7 +9,7 @@ status of the feature is not known.
 
 For the `Optional` column, `X` means the feature is optional, blank means the
 feature is required, and columns marked with `*` mean that for each type of
-exporter (OTLP, Zipkin, and Jaeger), implementing at least one of the supported
+exporter (OTLP and Zipkin), implementing at least one of the supported
 formats is required. Implementing more than one format is optional.
 
 ## Traces
@@ -280,7 +280,6 @@ Note: Support for environment variables is optional.
 | OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    | -     |
 | OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     |      |       |
 | OTEL_EXPORTER_OTLP_*                                     | +   | +    |     | +           | +    | +      | +   | +    | +   | +    | -     |
-| OTEL_EXPORTER_JAEGER_*                                   | +   | +    |     | +           | +    | -      | -   |      | -   | +    | -     |
 | OTEL_EXPORTER_ZIPKIN_*                                   | -   | +    |     | +           | +    | -      | +   | -    | -   | +    | -     |
 | OTEL_TRACES_EXPORTER                                     | -   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_METRICS_EXPORTER                                    | -   | +    |     | +           | -    | -      | +   | -    | -   | -    | -     |
@@ -340,17 +339,6 @@ Note: Support for environment variables is optional.
 | Error Status mapping                                                           |          | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | -     |
 | Event attributes mapping to Annotations                                        |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Integer microseconds in timestamps                                             |          | N/A| +    |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | X        | +  |      |    | +           | +    | -      | -   | +    | +   | +    | +     |
-| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | X        | -  | +    |    | +           | -    | -      | -   |      | -   | -    | -     |
-| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | X        | +  | -    |    | +           | +    | -      | -   | +    | +   | +    | -     |
-| Service name mapping                                                           |          | +  | +    |    | +           | +    | -      | -   |      | +   | +    | +     |
-| Resource to Process mapping                                                    |          | +  | +    |    | +           | +    | -      | -   | +    | -   | +    | -     |
-| InstrumentationLibrary mapping                                                 |          | +  | +    |    | +           | +    | -      | -   | +    | -   | +    | -     |
-| InstrumentationScope mapping                                                   |          |    | +    |    | +           |      |        |     |      |     |      |       |
-| Status mapping                                                                 |          | +  | +    |    | +           | +    | -      | -   | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | +    |    | +           | +    | -      | -   | +    | +   | +    | -     |
-| Events converted to Logs                                                       |          | +  | +    |    | +           | +    | -      | -   | +    | -   | +    | +     |
 | **OpenCensus**                                                                 |          |    |      |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |      |    |             |      |        |     |      |     |      |       |
 | **Prometheus**                                                                 |          |    |      |    |             |      |        |     |      |     |      |       |
@@ -377,6 +365,3 @@ Languages not covered by the OpenTracing project do not need to be listed here, 
 [py1174]: https://github.com/open-telemetry/opentelemetry-python/issues/1174
 [py1779]: https://github.com/open-telemetry/opentelemetry-python/issues/1779
 [php225]: https://github.com/open-telemetry/opentelemetry-php/issues/225
-[jaegerThriftUDP]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
-[jaegerProtobuf]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
-[jaegerThriftHTTP]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-http-stable
