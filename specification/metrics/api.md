@@ -257,9 +257,7 @@ minimal configuration.
       [explicit bucket Histogram metric data point](./data-model.md#histogram).
   * All instruments:
     * `Attributes` (a list of [attribute keys](../common/README.md#attribute)):
-      The recommended set of attribute keys to keep when recording a metric
-      measurement. Attribute values whose corresponding keys do not appear in
-      this list will be discarded.
+      The recommended set of attribute keys to be used for the resulting metrics.
 
 #### Synchronous and Asynchronous instruments
 
