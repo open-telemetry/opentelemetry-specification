@@ -838,8 +838,7 @@ This API MUST accept the following parameter:
   SHOULD be structured so a user is obligated to provide this parameter. If it
   is not possible to structurally enforce this obligation, this API MUST be
   documented in a way to communicate to users that this parameter is needed.
-* [Attributes](../common/README.md#attribute) to associate with the increment
-  value.
+* [Attributes](../common/README.md#attribute) to associate with the value.
 
   Users can provide attributes to associate with the value, but it is
   up to their discretion. Therefore, this API MUST be structured to accept a
