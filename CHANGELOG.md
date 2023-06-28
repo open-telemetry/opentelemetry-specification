@@ -12,7 +12,7 @@ release.
 ### Traces
 
 - Refine SDK TracerProvider configuration section.
-  ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
+  ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
 
 ### Metrics
 
@@ -22,7 +22,7 @@ release.
 ### Logs
 
 - Refine SDK LoggerProvider configuration section.
-  ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
+  ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
 
 ### Resource
 
