@@ -45,13 +45,13 @@ this data model.
   <tr>
     <td>SEVERITY</td>
     <td>enum</td>
-    <td>Defines the importance of the event. Example: `Debug`</td>
+    <td>Defines the importance of the event. Example: <code>Debug</code></td>
     <td>Severity</td>
   </tr>
   <tr>
     <td>FACILITY</td>
     <td>enum</td>
-    <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: `mail system`</td>
+    <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: <code>mail system</code></td>
     <td>Attributes["syslog.facility"]</td>
   </tr>
   <tr>
@@ -87,15 +87,11 @@ this data model.
   <tr>
     <td>STRUCTURED-DATA</td>
     <td>array of maps of string to string</td>
-    <td>A variety of use cases depending on the SDID:
-Can describe event source identity
-Can include data that describes particular occurrence of the event.
+    <td>A variety of use cases depending on the SDID:<br>
+Can describe event source identity.<br>
+Can include data that describes particular occurrence of the event.<br>
 Can be meta-information, e.g. quality of timestamp value.</td>
-    <td>SDID origin.swVersion map to Resource["service.version"]
-
-SDID origin.ip map to attribute["client.address"]
-
-Rest of SDIDs -> Attributes["syslog.*"]</td>
+    <td>SDID origin.swVersion map to Resource["service.version"]. SDID origin.ip map to Attributes["client.address"]. Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
   <tr>
     <td>MSG</td>
@@ -705,21 +701,14 @@ All other fields |                    |                                         
   <tr>
     <td>host.domain</td>
     <td>string</td>
-    <td>Name of the domain of which the host is a member.
-
-For example, on Windows this could be the host’s Active Directory domain or NetBIOS domain name. For Linux this could be the domain of the host’s LDAP provider.</td>
-
-<td>**Resource</td>
+    <td>Name of the domain of which the host is a member.<br>For example, on Windows this could be the host’s Active Directory domain or NetBIOS domain name. For Linux this could be the domain of the host’s LDAP provider.</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>host.name</td>
     <td>string</td>
-    <td>Hostname of the host.
-
-It normally contains what the hostname command returns on the host machine.</td>
-
-<td>Resource["host.name"]</td>
-
+    <td>Hostname of the host.<br>It normally contains what the hostname command returns on the host machine.</td>
+    <td>Resource["host.name"]</td>
   </tr>
   <tr>
     <td>host.id</td>
@@ -742,12 +731,8 @@ It normally contains what the hostname command returns on the host machine.</td>
   <tr>
     <td>host.name</td>
     <td>string</td>
-    <td>Name of the host.
-
-It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
-
-<td>Resource["host.name"]</td>
-
+    <td>Name of the host.<br>It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
+    <td>Resource["host.name"]</td>
   </tr>
   <tr>
     <td>host.type</td>
@@ -762,9 +747,7 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
     <td>?</td>
   </tr>
   <tr>
-    <td>service.ephemeral_id
-
-</td>
+    <td>service.ephemeral_id</td>
     <td>string</td>
     <td>Ephemeral identifier of this service</td>
     <td>**Resource</td>
