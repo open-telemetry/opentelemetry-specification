@@ -20,7 +20,6 @@ linkTitle: SDK
   * [View](#view)
     + [Instrument selection criteria](#instrument-selection-criteria)
     + [Stream configuration](#stream-configuration)
-    + [View name](#view-name)
     + [Measurement processing](#measurement-processing)
     + [View examples](#view-examples)
   * [Aggregation](#aggregation)
@@ -296,6 +295,20 @@ use to define telemetry pipelines.
 
 The SDK MUST accept the following stream configuration parameters:
 
+* `name`: The metric stream name that SHOULD be used.
+
+  In order to avoid conflicts, if a `name` is provided the View SHOULD have an
+  instrument selector that selects at most one instrument. If the Instrument
+  selection criteria for a View with a stream configuration `name` parameter
+  can select more than one instrument (i.e. wildcards) the SDK MAY fail fast in
+  accordance with initialization [error handling
+  principles](../error-handling.md#basic-error-handling-principles).
+
+  Users can provide a `name`, but it is up to their descretion. Therefore, the
+  stream configuration parameter needs to be structured to accept a `name`, but
+  MUST NOT obligate a user to provide one. If the user does not provide a
+  `name` value, name from the Instrument the View matches MUST be used by
+  default.
 * `description`: The metric stream description that SHOULD be used.
   
   Users can provide a `description`, but it is up to their descretion.
@@ -346,19 +359,6 @@ The SDK MUST accept the following stream configuration parameters:
   `aggregation_cardinality_limit` value, the `MeterProvider` MUST apply the
   [default aggregation cardinality limit](#metricreader) the `MetricReader` is
   configured with.
-
-#### View name
-
-Views can be given a name.
-
-If an SDK allows for Views to be named, and a user does not provide one, then
-the Instrument name the View matches MUST be used as a default name.
-
-In order to avoid conflicts, Views that have a name SHOULD have an instrument
-selector that selects at most one instrument. If the Instrument selection
-criteria for a View with a name can select more than one instrument (i.e.
-wildcards) the SDK MAY fail fast in accordance with initialization [error
-handling principles](../error-handling.md#basic-error-handling-principles).
 
 #### Measurement processing
 
