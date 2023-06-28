@@ -54,13 +54,14 @@ linkTitle: SDK
     + [RegisterProducer(metricProducer)](#registerproducermetricproducer)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
+    + [forceflush](#forceflush-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
       - [Export(batch)](#exportbatch)
-      - [ForceFlush()](#forceflush)
-      - [Shutdown()](#shutdown)
+      - [ForceFlush()](#forceflush-2)
+      - [Shutdown()](#shutdown-2)
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
   * [Interface Definition](#interface-definition-1)
@@ -1035,6 +1036,21 @@ failed or timed out.
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
+
+#### ForceFlush
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
+is an error condition; and if there is no error condition, it should return some
+**NO ERROR** status, language implementations MAY decide how to model **ERROR**
+and **NO ERROR**.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event. 
+
+`ForceFlush` MUST invoke [`ForceFlush()`](#forceflush-2) on all registered
+[Push Metric Exporter](#push-metric-exporter) instances.
 
 ### Periodic exporting MetricReader
 
