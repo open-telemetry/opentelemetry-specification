@@ -282,9 +282,8 @@ The SDK MAY accept additional criteria. For example, a strongly typed language
 may support point type criterion (e.g. allow the users to select Instruments
 based on whether the underlying number is integral or rational). Users can
 provide these additional criteria the SDK accepts, but it is up to their
-descretion. Therefore, the instrument selection criteria parameter can to be
-structured to accept the criteria, but MUST NOT obligate a user to provide
-them.
+descretion. Therefore, the instrument selection criteria can be structured to
+accept the criteria, but MUST NOT obligate a user to provide them.
 
 #### Stream configuration
 
