@@ -203,8 +203,7 @@ are output by the SDK. Here are some examples when a `View` might be needed:
 The SDK MUST provide functionality for a user to create Views for a
 `MeterProvider`. This functionality MUST accept as inputs the [Instrument
 selection criteria](#instrument-selection-criteria) and the resulting [stream
-configuration](#stream-configuration), and it MAY also accept as an input the
-[View name](#view-name).
+configuration](#stream-configuration).
 
 If no Instrument selection criteria are provided by the user, the SDK SHOULD
 treat it as an error. It is RECOMMENDED that the SDK fails fast. Refer to [Error
