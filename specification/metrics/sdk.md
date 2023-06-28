@@ -54,8 +54,8 @@ linkTitle: SDK
     + [RegisterProducer(metricProducer)](#registerproducermetricproducer)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
-    + [ForceFlush](#forceflush-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
+    + [ForceFlush](#forceflush-1)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
@@ -1039,21 +1039,6 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
 
-#### ForceFlush
-
-`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
-failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
-is an error condition; and if there is no error condition, it should return some
-**NO ERROR** status, language implementations MAY decide how to model **ERROR**
-and **NO ERROR**.
-
-`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
-implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event.
-
-`ForceFlush` MUST invoke [`ForceFlush()`](#forceflush-2) on all registered
-[Push Metric Exporter](#push-metric-exporter) instances.
-
 ### Periodic exporting MetricReader
 
 This is an implementation of the `MetricReader` which collects metrics based on
@@ -1081,6 +1066,21 @@ from `MetricReader` and start a background task which calls the inherited
 * After another 15 seconds (at the end of the second 30 second interval),
   the background task calls `Collect()` which passes metrics to the push
   exporter.
+
+#### ForceFlush
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
+is an error condition; and if there is no error condition, it should return some
+**NO ERROR** status, language implementations MAY decide how to model **ERROR**
+and **NO ERROR**.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event.
+
+`ForceFlush` MUST invoke [`ForceFlush()`](#forceflush-2) on all registered
+[Push Metric Exporter](#push-metric-exporter) instances.
 
 ## MetricExporter
 
