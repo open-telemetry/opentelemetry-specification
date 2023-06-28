@@ -275,6 +275,7 @@ Note: Support for environment variables is optional.
 | OTEL_SDK_DISABLED                                        | -   | +    | -   | -           | -    | -      | +   | -    | -   | -    | -     |
 | OTEL_RESOURCE_ATTRIBUTES                                 | +   | +    | +   | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_SERVICE_NAME                                        | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
+| OTEL_SERVICE_VERSION                                     |     |      |     |             |      |        |     |      |     |      |       |
 | OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | -   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
 | OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    | -     |
