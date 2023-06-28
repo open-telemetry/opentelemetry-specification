@@ -98,10 +98,12 @@ The SDK SHOULD allow the creation of multiple independent `MeterProvider`s.
 
 ### Meter Creation
 
-New `Meter` instances are always created through a `MeterProvider`
-(see [API](./api.md#meterprovider)). The `name`, `version` (optional),
-`schema_url` (optional), and `attributes` (optional) arguments supplied to
-the `MeterProvider` MUST be used to create
+It SHOULD only be possible to create `Meter` instances through a `MeterProvider`
+(see [API](./api.md#meterprovider)).
+
+The `MeterProvider` MUST implement the [Get a Meter API](api.md#get-a-meter).
+
+The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
 
@@ -657,10 +659,10 @@ Distinct meters MUST be treated as separate namespaces for the purposes of detec
 ### Duplicate instrument registration
 
 When more than one Instrument of the same `name` is created for identical
-Meters, denoted _duplicate instrument registration_, the Meter MUST create a
-valid Instrument in every case. Here, "valid" means an instrument that is
-functional and can be expected to export data, despite potentially creating a
-[semantic error in the data
+Meters from the same MeterProvider, denoted _duplicate instrument
+registration_, the Meter MUST create a valid Instrument in every case. Here,
+"valid" means an instrument that is functional and can be expected to export
+data, despite potentially creating a [semantic error in the data
 model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations).
 
 It is unspecified whether or under which conditions the same or
