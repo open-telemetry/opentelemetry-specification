@@ -224,42 +224,69 @@ criteria are _instrument name == "Foobar"_ and _instrument type is Histogram_,
 it will be treated as _(instrument name == "Foobar") AND (instrument type is
 Histogram)_.
 
-The SDK MUST accept a `name` as a criterion. This `name` is evaluated to match
-an Instrument in the following manner.
+The SDK MUST accept the following criteria:
 
-1. If the value of `name` is `*`, the criterion matches all Instruments.
-2. If the value of `name` is exactly the same as an Instrument, then the
-   criterion matches that instrument.
+* `name`: The name of the Instrument(s) to match. This `name` is evaluated to
+  match an Instrument in the following manner.
 
-Additionally, the SDK MAY support wildcard pattern matching for the `name`
-criterion using the following characters.
+  1. If the value of `name` is `*`, the criterion matches all Instruments.
+  2. If the value of `name` is exactly the same as an Instrument, then the
+     criterion matches that instrument.
 
-* A question mark (`?`): matches any single character
-* An asterisk (`*`): matches any number of any characters including none
+  Additionally, the SDK MAY support wildcard pattern matching for the `name`
+  criterion using the following characters.
 
-If wildcard pattern matching is supported, the `name` criterion will match if
-the wildcard pattern is evaluated to match the Instrument name.
+  * A question mark (`?`): matches any single character
+  * An asterisk (`*`): matches any number of any characters including none
 
-If the SDK does not support wildcards in general, it MUST still recognize the
-special single asterisk (`*`) character as matching all Instruments.
+  If wildcard pattern matching is supported, the `name` criterion will match if
+  the wildcard pattern is evaluated to match the Instrument name.
 
-The SDK MAY also accept the following criteria:
+  If the SDK does not support wildcards in general, it MUST still recognize the
+  special single asterisk (`*`) character as matching all Instruments.
 
-* `type`: If the value of `type` is the same as an Instrument's type, then the
-  criterion matches that Instrument.
+  Users can provide a `name`, but it is up to their descretion. Therefore, the
+  instrument selection criteria parameter needs to be structured to accept a
+  `name`, but MUST NOT obligate a user to provide one.
+* `type`: The type of Instruments to match. If the value of `type` is the same
+  as an Instrument's type, then the criterion matches that Instrument.
+
+  Users can provide a `type`, but it is up to their descretion. Therefore, the
+  instrument selection criteria parameter needs to be structured to accept a
+  `type`, but MUST NOT obligate a user to provide one.
 * `unit`: If the value of `unit` is the same as an Instrument's unit, then the
   criterion matches that Instrument.
+
+  Users can provide a `unit`, but it is up to their descretion. Therefore, the
+  instrument selection criteria parameter needs to be structured to accept a
+  `unit`, but MUST NOT obligate a user to provide one.
 * `meter_name`: If the value of `meter_name` is the same as the Meter that
   created an Instrument, then the criterion matches that Instrument.
+
+  Users can provide a `meter_name`, but it is up to their descretion.
+  Therefore, the instrument selection criteria parameter needs to be structured
+  to accept a `meter_name`, but MUST NOT obligate a user to provide one.
 * `meter_version`: If the value of `meter_version` is the same version as the
   Meter that created an Instrument, then the criterion matches that Instrument.
+
+  Users can provide a `meter_version`, but it is up to their descretion.
+  Therefore, the instrument selection criteria parameter needs to be structured
+  to accept a `meter_version`, but MUST NOT obligate a user to provide one.
 * `meter_schema_url`: If the value of `meter_schema_url` is the same schema URL
   as the Meter that created an Instrument, then the criterion matches that
   Instrument.
 
+  Users can provide a `meter_schema_url`, but it is up to their descretion.
+  Therefore, the instrument selection criteria parameter needs to be structured
+  to accept a `meter_schema_url`, but MUST NOT obligate a user to provide one.
+
 The SDK MAY accept additional criteria. For example, a strongly typed language
 may support point type criterion (e.g. allow the users to select Instruments
-based on whether the underlying number is integral or rational).
+based on whether the underlying number is integral or rational). Users can
+provide these additional criteria the SDK accepts, but it is up to their
+descretion. Therefore, the instrument selection criteria parameter can to be
+structured to accept the criteria, but MUST NOT obligate a user to provide
+them.
 
 #### Stream configuration
 
@@ -267,31 +294,58 @@ Stream configuration are the parameters that define the [metric
 stream](./data-model.md#events--data-stream--timeseries) a `MeterProvider` will
 use to define telemetry pipelines.
 
-The SDK MUST accept a `description` as a stream configuration parameter. The
-`description` value SHOULD be used to define the metric stream description. If the
-user does not provide a `description` value, the description from the
-Instrument a View matches MUST be used by default.
+The SDK MUST accept the following stream configuration parameters:
 
-The SDK MAY also accept the following stream configuration parameters:
+* `description`: The metric stream description that SHOULD be used.
+  
+  Users can provide a `description`, but it is up to their descretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept a `description`, but MUST NOT obligate a user to provide one. If the
+  user does not provide a `description` value, the description from the
+  Instrument a View matches MUST be used by default.
+* `attribute_keys`: A list of attribute keys that MUST be kept, if provided by
+  the user during the measurement, for the metric stream. All attributes with
+  keys other than those in the list MUST be ignored.
 
-* `attribute_keys`: A list of attribute key values. If the user provides this
-  parameter, attributes whose keys are not in the list will be ignored. If the
-  user does not provide any values, all of the attributes will be used (TODO:
+  Users can provide `attribute_keys`, but it is up to their descretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept `attribute_keys`, but MUST NOT obligate a user to provide them. If the
+  user does not provide any values, all of the attributes MUST be kept (TODO:
   once the Hint API is available, the default behavior should respect the Hint
   if it is available).
-* `aggregation`: The name of an aggregation function to be used. If the user
-  does not provide a value, the `MeterProvider` MUST apply a [default
-  aggregation](#default-aggregation) configurable on the basis of instrument
-  type according to the [MetricReader](#metricreader) instance.
+* `aggregation`: The name of an [aggregation](#aggregation) function to use in
+  aggregating the metric stream data.
+
+  Users can provide an `aggregation`, but it is up to their descretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept an `aggregation`, but MUST NOT obligate a user to provide one. If the
+  user does not provide an `aggregation` value, the `MeterProvider` MUST apply
+  a [default aggregation](#default-aggregation) configurable on the basis of
+  instrument type according to the [MetricReader](#metricreader) instance.
 * **Status**: [Feature-freeze](../document-status.md) - `exemplar_reservoir`: A
   functional type that generates an exemplar reservoir a `MeterProvider` will
   use when storing exemplars. This functional type needs to be a factory or
   callback similar to aggregation selection functionality which allows
   different reservoirs to be chosen by the aggregation.
+
+  Users can provide an `exemplar_reservoir`, but it is up to their descretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept an `exemplar_reservoir`, but MUST NOT obligate a user to provide one.
+  If the user does not provide an `exemplar_reservoir` value, the
+  `MeterProvider` MUST apply a [default exemplar
+  reservoir](#exemplar-defaults).
 * **Status**: [Experimental](../document-status.md) -
   `aggregation_cardinality_limit`: A positive integer value defining the
   maximum number of data points allowed to be emitted in a collection cycle by
   a single instrument. See [cardinality limits](#cardinality-limits), below.
+
+  Users can provide an `aggregation_cardinality_limit`, but it is up to their
+  descretion. Therefore, the stream configuration parameter needs to be
+  structured to accept an `aggregation_cardinality_limit`, but MUST NOT
+  obligate a user to provide one. If the user does not provide an
+  `aggregation_cardinality_limit` value, the `MeterProvider` MUST apply the
+  [default aggregation cardinality limit](#metricreader) the `MetricReader` is
+  configured with.
 
 #### View name
 
