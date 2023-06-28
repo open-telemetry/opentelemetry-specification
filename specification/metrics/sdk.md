@@ -54,7 +54,7 @@ linkTitle: SDK
     + [RegisterProducer(metricProducer)](#registerproducermetricproducer)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
-    + [forceflush](#forceflush-1)
+    + [ForceFlush](#forceflush-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
