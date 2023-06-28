@@ -4,8 +4,14 @@ Fixes #
 
 Please provide a brief description of the changes here.
 
-For non-trivial changes, follow the [change proposal process](https://github.com/open-telemetry/opentelemetry-specification/blob/main/CONTRIBUTING.md#proposing-a-change) and link to the related issue(s) and/or [OTEP(s)](https://github.com/open-telemetry/oteps), update the [`CHANGELOG.md`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/CHANGELOG.md), and also be sure to update [`spec-compliance-matrix.md`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/spec-compliance-matrix.md) if necessary.
+For non-trivial changes, follow the [change proposal
+process](https://github.com/open-telemetry/opentelemetry-specification/blob/main/CONTRIBUTING.md#proposing-a-change).
 
-Related issues #
-
-Related [OTEP(s)](https://github.com/open-telemetry/oteps) #
+* [ ] Related issues #
+* [ ] Related [OTEP(s)](https://github.com/open-telemetry/oteps) #
+* [ ] Links to the prototypes (when adding or changing features)
+* [ ]
+  [`CHANGELOG.md`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/CHANGELOG.md)
+  file updated for non-trivial changes
+* [ ]
+  [`spec-compliance-matrix.md`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/spec-compliance-matrix.md) updated if necessary
