@@ -920,6 +920,7 @@ determines the following capabilities:
 * Collecting metrics from the SDK and any registered
   [MetricProducers](#metricproducer) on demand.
 * Providing a Predicate which enables choosing which aggregated data points should be collected
+  (**Status**: [Experimental](../document-status.md))
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
@@ -1301,6 +1302,9 @@ in-memory state MAY implement the `MetricProducer` interface for convenience.
 `AggregationTemporality` of produced metrics. SDK authors MAY provide utility
 libraries to facilitate conversion between delta and cumulative temporalities.
 
+----------
+**Status**: [Experimental](../document-status.md)
+
 `MetricProducer` implementations SHOULD allow providing a `predicate`, a boolean function,
 accepting metric data point properties, whose result determines if the data point
 be returned in the result of `Collect` operation. The arguments should include the following:
@@ -1312,6 +1316,8 @@ be returned in the result of `Collect` operation. The arguments should include t
 - `attributes`: The data point's attributes
 
 A `MetricProducer` SHOULD allow changing the `predicate`, which will be used in subsequent `Produce` operations.
+
+-------
 
 If the batch of [Metric points](./data-model.md#metric-points) returned by
 `Produce()` includes a [Resource](../resource/sdk.md), the `MetricProducer` MUST
