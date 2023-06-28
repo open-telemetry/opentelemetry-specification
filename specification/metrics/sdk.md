@@ -1049,7 +1049,7 @@ and **NO ERROR**.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
-via a callback or an event. 
+via a callback or an event.
 
 `ForceFlush` MUST invoke [`ForceFlush()`](#forceflush-2) on all registered
 [Push Metric Exporter](#push-metric-exporter) instances.
