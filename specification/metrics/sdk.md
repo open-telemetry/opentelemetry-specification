@@ -937,7 +937,6 @@ be returned in the result of `Collect` operation. The arguments should include t
 
 - `instrumentationScope`: the instrument's instrumentation scope
 - `name`: the name of the instrument
-- `description`: the instrument's description
 - `kind`: the instrument's kind
 - `unit`: the instrument's unit
 - `attributes`: The data point's attributes
@@ -1308,7 +1307,6 @@ be returned in the result of `Collect` operation. The arguments should include t
 
 - `instrumentationScope`: the instrument's instrumentation scope
 - `name`: the name of the instrument
-- `description`: the instrument's description
 - `kind`: the instrument's kind
 - `unit`: the instrument's unit
 - `attributes`: The data point's attributes
