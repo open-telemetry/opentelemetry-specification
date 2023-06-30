@@ -34,6 +34,8 @@ release.
 
 ### Compatibility
 
+- Prometheus type and unit suffixes are not trimmed by default. ([#3580](https://github.com/open-telemetry/opentelemetry-specification/pull/3580))
+
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
