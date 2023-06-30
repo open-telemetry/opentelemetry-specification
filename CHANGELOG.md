@@ -18,6 +18,10 @@ release.
 
 - Refine SDK MeterProvider configuration section.
   ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3522))
+- Clarify metric view requirements and recommendations.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
+- Change the view name to be the view's stream configuration name.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
 - Make SDK Meter Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 - Define ForceFlush for periodic exporting MetricReader.
