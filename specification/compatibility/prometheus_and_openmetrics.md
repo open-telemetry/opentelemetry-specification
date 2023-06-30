@@ -279,7 +279,7 @@ An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to a 
   - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues](../metrics/data-model.md#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
 
-Monotonic Sum metric points MUST have `_total` added as a suffix to the metric name.
+Monotonic Sum metric points MUST have `_total` added as a suffix to the metric name, if it does not already end in `_total`.
 Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_created` metric as well.
 
 ### Histograms
