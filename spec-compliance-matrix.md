@@ -183,8 +183,8 @@ formats is required. Implementing more than one format is optional.
 | The `LastValue` aggregation performs as specified.                                                                                                                     |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | The `ExplicitBucketHistogram` aggregation is available.                                                                                                                |          | -  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | The `ExplicitBucketHistogram` aggregation performs as specified.                                                                                                       |          | -  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
-| The `ExponentialBucketHistogram` aggregation is available.                                                                                                             |          |    |      |     |        |      |        |     |      |     |      |       |
-| The `ExponentialBucketHistogram` aggregation performs as specified.                                                                                                    |          |    |      |     |        |      |        |     |      |     |      |       |
+| The `ExponentialBucketHistogram` aggregation is available.                                                                                                             |          |    |      |     |        |      |        |     |      |     | +    |       |
+| The `ExponentialBucketHistogram` aggregation performs as specified.                                                                                                    |          |    |      |     |        |      |        |     |      |     | +    |       |
 | The metrics Reader implementation supports registering metric Exporters                                                                                                |          |    | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.                                                        |          |    | +    |     | +      |      |        |     |      | -   | -    |       |
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.                                                        |          |    | +    | +   | +      |      |        |     |  +   | +   |      |       |
@@ -277,35 +277,35 @@ Note: Support for environment variables is optional.
 | OTEL_SERVICE_NAME                                        | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
 | OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | -   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
-| OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    | -     |
+| OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    | -     |
 | OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     |      |       |
 | OTEL_EXPORTER_OTLP_*                                     | +   | +    |     | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_EXPORTER_ZIPKIN_*                                   | -   | +    |     | +           | +    | -      | +   | -    | -   | +    | -     |
 | OTEL_TRACES_EXPORTER                                     | -   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_METRICS_EXPORTER                                    | -   | +    |     | +           | -    | -      | +   | -    | -   | -    | -     |
 | OTEL_LOGS_EXPORTER                                       | -   | +    |     | +           |      |        | +   |      |     | -    |       |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +   | +    | +   | +           | +    | +      | +   |      |     | -    |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT                              | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +   | -    |     | +           | +    | +      | +   |      |     | -    |       |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +   | -    |     | +           | +    | +      | +   |      |     | -    |       |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    |       |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT                              | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    |       |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +   | -    |     | +           | +    | +      | +   |      |     | +    |       |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +   | -    |     | +           | +    | +      | +   |      |     | +    |       |
 | OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT                     |     |      |     |             |      |        | +   |      |     |      |       |
 | OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT              |     |      |     |             |      |        | +   |      |     |      |       |
 | OTEL_TRACES_SAMPLER                                      | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_TRACES_SAMPLER_ARG                                  | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +   | +    | +   | +           | +    | -      | +   |      |     | -    |       |
-| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +   | +    | +   | +           | +    | -      | +   |      |     | -    |       |
-| OTEL_METRIC_EXPORT_INTERVAL                              | -   | +    |     |             |      |        | +   |      |     | -    |       |
-| OTEL_METRIC_EXPORT_TIMEOUT                               | -   | -    |     |             |      |        | +   |      |     | -    |       |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +   | +    | +   | +           | +    | -      | +   |      |     | +    |       |
+| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +   | +    | +   | +           | +    | -      | +   |      |     | +    |       |
+| OTEL_METRIC_EXPORT_INTERVAL                              | -   | +    |     |             |      |        | +   |      |     | +    |       |
+| OTEL_METRIC_EXPORT_TIMEOUT                               | -   | -    |     |             |      |        | +   |      |     | +    |       |
 | OTEL_METRICS_EXEMPLAR_FILTER                             | -   | +    |     |             |      |        | +   |      |     | -    |       |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | -    |       |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |     | +    |     |             |      |        |     |      |     |      |       |
 
 ## Exporters
 
-| Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-|--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
+| Feature                                                                        | Optional | Go | Java | JS | Python      | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|--------------------------------------------------------------------------------|----------|----|------|----|-------------|------|--------|-----|------|-----|------|-------|
 | [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | +    |    | +           | +    | +      | +   | +    | +   | +    |       |
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | +    |    | [-][py1779] | +    | +      | +   | -    |     | +    |       |
 | Standard output (logging)                                                      |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
@@ -323,8 +323,8 @@ Note: Support for environment variables is optional.
 | SchemaURL in ResourceSpans and ScopeSpans                                      |          | +  | +    |    | +           |      | +      | +   |      |     | -    |       |
 | SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
 | SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
-| Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        | +   |      |     |      |       |
-| **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        | +   |      |     | +    |       |
+| **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python    | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | +    |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | +    |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V2 JSON                                                                 | *        | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | +     |
