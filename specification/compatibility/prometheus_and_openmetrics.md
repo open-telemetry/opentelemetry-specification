@@ -79,15 +79,15 @@ A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/
 
 ### Info
 
-An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the target_info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.  If it has an `_info` suffix, the suffix MUST be removed from the metric name.
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum with the `prometheus_info` subtype unless it is the target_info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.  If it has an `_info` suffix, the suffix MUST be removed from the metric name.
 
 ### StateSet
 
-An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Non-Monotonic Sum. An OpenMetrics StateSet can be thought of as a special-case of the OpenMetrics Gauge which has a 0 or 1 value, and has one metric point for every possible state. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
+An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Non-Monotonic Sum with the `prometheus_stateset` subtype. An OpenMetrics StateSet can be thought of as a special-case of the OpenMetrics Gauge which has a 0 or 1 value, and has one metric point for every possible state. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 
 ### Unknown-typed
 
-A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge.
+A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge with the `prometheus_unknown` subtype.
 
 ### Histograms
 
@@ -266,13 +266,15 @@ Prometheus exporters SHOULD provide a configuration option to disable the
 
 ### Gauges
 
-An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to a Prometheus Gauge.
+An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to a Prometheus Unknown metric if it has the `prometheus_unknown` subtype.  Otherwise, it MUST be converted to a Prometheus Gauge.
 
 ### Sums
 
 [OpenTelemetry Sums](../metrics/data-model.md#sums) follows this logic:
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
+- If the aggregation temporality is cumulative, the sum is non-monotonic, and it has the `prometheus_info` subtype, it MUST be converted to a Prometheus Info.
+- If the aggregation temporality is cumulative, the sum is non-monotonic, and it has the `prometheus_stateset` subtype, it MUST be converted to a Prometheus StateSet.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Counter. The following behaviors are expected:
   - The new data point type must be the same as the accumulated data point type.
