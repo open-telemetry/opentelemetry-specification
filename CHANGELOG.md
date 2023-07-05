@@ -29,6 +29,8 @@ release.
 
 - Make SDK Logger Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+- Clarify how log appender use Scope name and attributes.
+  ([#3583](https://github.com/open-telemetry/opentelemetry-specification/pull/3583))
 
 ### Resource
 
