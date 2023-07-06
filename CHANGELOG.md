@@ -11,6 +11,28 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplemenatary Guidelines
+
+## v1.23.0 (2023-07-07)
+
+### Context
+
+-  No changes.
+
+### Traces
+
 - Make SDK Tracer Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 
@@ -32,23 +54,25 @@ release.
 
 ### Resource
 
+-  No changes.
+
 ### Compatibility
-
-### OpenTelemetry Protocol
-
-### SDK Configuration
-
-- Extract Examplar section and mark it as Experimental.
-  ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
 
 - BREAKING: Remove the Jaeger Exporter
   ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
 
-### Telemetry Schemas
+### SDK Configuration
+
+- Extract Exemplar section and mark it as Experimental.
+  ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
 
 ### Common
 
+-  No changes.
+
 ### Supplemenatary Guidelines
+
+-  No changes.
 
 ## v1.22.0 (2023-06-09)
 
