@@ -59,10 +59,12 @@ linkTitle: SDK
 
 ### Tracer Creation
 
-New `Tracer` instances are always created through a `TracerProvider`
-(see [API](api.md#tracerprovider)). The `name`, `version` (optional),
-`schema_url` (optional), and `attributes` (optional) arguments supplied to
-the `TracerProvider` must be used to create
+It SHOULD only be possible to create `Tracer` instances through a `TracerProvider`
+(see [API](./api.md#tracerprovider)).
+
+The `TracerProvider` MUST implement the [Get a Tracer API](api.md#get-a-tracer).
+
+The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.
 
@@ -480,12 +482,12 @@ The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
 
 ```
-  +-----+--------------+   +-------------------------+   +-------------------+
-  |     |              |   |                         |   |                   |
-  |     |              |   | Batching Span Processor |   |    SpanExporter   |
-  |     |              +---> Simple Span Processor   +--->  (JaegerExporter) |
-  |     |              |   |                         |   |                   |
-  | SDK | Span.start() |   +-------------------------+   +-------------------+
+  +-----+--------------+   +-------------------------+   +----------------+
+  |     |              |   |                         |   |                |
+  |     |              |   | Batching Span Processor |   |  SpanExporter  |
+  |     |              +---> Simple Span Processor   +---> (OTLPExporter) |
+  |     |              |   |                         |   |                |
+  | SDK | Span.start() |   +-------------------------+   +----------------+
   |     | Span.end()   |
   |     |              |
   |     |              |

@@ -13,16 +13,26 @@ release.
 
 - Refine SDK TracerProvider configuration section.
   ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
+- Make SDK Tracer Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 
 ### Metrics
 
 - Refine SDK MeterProvider configuration section.
   ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3522))
+- Clarify metric view requirements and recommendations.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
+- Change the view name to be the view's stream configuration name.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
+- Make SDK Meter Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 
 ### Logs
 
 - Refine SDK LoggerProvider configuration section.
   ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
+- Make SDK Logger Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 
 ### Resource
 
@@ -34,6 +44,9 @@ release.
 
 - Extract Examplar section and mark it as Experimental.
   ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
+
+- BREAKING: Remove the Jaeger Exporter
+  ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
 
 ### Telemetry Schemas
 
