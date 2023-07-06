@@ -38,6 +38,9 @@ release.
 
 ### Compatibility
 
+- Prometheus: Do not add `_total` suffix if the metric already ends in `_total`.
+  ([#3581](https://github.com/open-telemetry/opentelemetry-specification/pull/3581))
+
 ### OpenTelemetry Protocol
 
 ### SDK Configuration
