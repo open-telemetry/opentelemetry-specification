@@ -29,7 +29,7 @@ release.
 
 ### Context
 
--  No changes.
+- No changes.
 
 ### Traces
 
@@ -54,7 +54,7 @@ release.
 
 ### Resource
 
--  No changes.
+- No changes.
 
 ### Compatibility
 
@@ -68,11 +68,11 @@ release.
 
 ### Common
 
--  No changes.
+- No changes.
 
 ### Supplemenatary Guidelines
 
--  No changes.
+- No changes.
 
 ## v1.22.0 (2023-06-09)
 
