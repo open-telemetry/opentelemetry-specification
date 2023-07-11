@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Refine SDK TracerProvider configuration section.
+  ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
 - Make SDK Tracer Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 
@@ -18,17 +20,27 @@ release.
 
 - Refine SDK MeterProvider configuration section.
   ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3522))
+- Clarify metric view requirements and recommendations.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
+- Change the view name to be the view's stream configuration name.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
 - Make SDK Meter Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 
 ### Logs
 
+- Refine SDK LoggerProvider configuration section.
+  ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
 - Make SDK Logger Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 
 ### Resource
 
 ### Compatibility
+
+- Prometheus: Do not add `_total` suffix if the metric already ends in `_total`.
+  ([#3581](https://github.com/open-telemetry/opentelemetry-specification/pull/3581))
+- Prometheus type and unit suffixes are not trimmed by default. ([#3580](https://github.com/open-telemetry/opentelemetry-specification/pull/3580))
 
 ### OpenTelemetry Protocol
 
