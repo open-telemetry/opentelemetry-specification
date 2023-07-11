@@ -25,7 +25,7 @@ release.
 
 ### Supplemenatary Guidelines
 
-## v1.23.0 (2023-07-10)
+## v1.23.0 (2023-07-11)
 
 ### Context
 
@@ -48,6 +48,8 @@ release.
   ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
 - Make SDK Meter Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+- Clarify duplicate instrument registration scope to be a MeterProvider.
+  ([#3538](https://github.com/open-telemetry/opentelemetry-specification/pull/3538))
 
 ### Logs
 
