@@ -704,19 +704,24 @@ given instrument before starting a subsequent round of collection.
 
 **Status**: [Experimental](../document-status.md)
 
-Views SHOULD support being configured with a cardinality limit to be
-applied to all aggregators not configured by a specific view, specified
-via `MetricReader` configuration.
+SDKs SHOULD support being configured with a cardinality limit. A cardinality
+limit is the hard limits on the number of data points that can be written per
+collection, per aggregation.
 
-View configuration SHOULD support applying per-aggregation cardinality limits.
+#### Configuration
 
-The cardinality limit is taken as an exact, hard limit on the number
-of data points that can be written per collection, per aggregation.
-Each aggregation configured view MUST NOT output more than the
-configured `aggregation_cardinality_limit` number of data points per
-period.
+The cardinality limit for an aggregation is defined one of three ways:
 
-The RECOMMENDED default aggregation cardinality limit is 2000.
+1. A [view](#view) with criteria matching the instrument an aggregation is
+   created for has an `aggregation_cardinality_limit` value defined for the
+   stream, that value SHOULD be used.
+2. If there is no matching view, but the `MetricReader` defines a default
+   cardinality limit value based on the instrument an aggregation is created
+   for, that value SHOULD be used.
+3. If none of the previous values are deinfed, the default value of 2000 SHOULD
+   be used.
+
+#### Overflow attribute
 
 An overflow attribute set is defined, containing a single attribute
 `otel.metric.overflow` having (boolean) value `true`, which is used to
@@ -731,16 +736,15 @@ limit, as a result.
 
 #### Synchronous instrument cardinality limits
 
-Views of synchronous instruments with cumulative aggregation
-temporality MUST continue to export the all attribute sets that were
-observed prior to the beginning of overflow.  Metric events
-corresponding with attribute sets that were not observed prior to the
-overflow will be reflected in a single data point described by (only)
-the overflow attribute.
+Aggregators for synchronous instruments with cumulative temporality MUST
+continue to export the all attribute sets that were observed prior to the
+beginning of overflow.  Metric events corresponding with attribute sets that
+were not observed prior to the overflow will be reflected in a single data
+point described by (only) the overflow attribute.
 
-Views of synchronous instruments with delta aggregation temporality
-MAY choose an arbitrary subset of attribute sets to output to maintain
-the stated cardinality limit.
+Aggregators of synchronous instruments with delta aggregation temporality MAY
+choose an arbitrary subset of attribute sets to output to maintain the stated
+cardinality limit.
 
 Regardless of aggregation temporality, the SDK MUST ensure that every
 metric event is reflected in exactly one Aggregator, which is either
@@ -752,9 +756,9 @@ overflow.
 
 #### Asynchronous instrument cardinality limits
 
-Views of asynchronous instruments SHOULD prefer the first-observed
+Aggregators of asynchronous instruments SHOULD prefer the first-observed
 attributes in the callback when limiting cardinality, regardless of
-aggregation temporality.
+temporality.
 
 ## Meter
 
