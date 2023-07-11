@@ -68,6 +68,7 @@ release.
   ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
 - Prometheus: Do not add `_total` suffix if the metric already ends in `_total`.
   ([#3581](https://github.com/open-telemetry/opentelemetry-specification/pull/3581))
+- Prometheus type and unit suffixes are not trimmed by default. ([#3580](https://github.com/open-telemetry/opentelemetry-specification/pull/3580))
 
 ### SDK Configuration
 
