@@ -40,6 +40,7 @@ release.
 
 - Prometheus: Do not add `_total` suffix if the metric already ends in `_total`.
   ([#3581](https://github.com/open-telemetry/opentelemetry-specification/pull/3581))
+- Prometheus type and unit suffixes are not trimmed by default. ([#3580](https://github.com/open-telemetry/opentelemetry-specification/pull/3580))
 
 ### OpenTelemetry Protocol
 
@@ -1704,7 +1705,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 - Implementations can ignore links with invalid SpanContext([#1492](https://github.com/open-telemetry/opentelemetry-specification/pull/1492))
 - Add `none` as a possible value for OTEL_TRACES_EXPORTER to disable export
   ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
-- Add [`ForceFlush`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
+- Add [`ForceFlush`](/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
 
 ### Metrics
 
