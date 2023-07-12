@@ -36,6 +36,8 @@ linkTitle: SDK
         * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Cardinality limits](#cardinality-limits)
+    + [Configuration](#configuration-1)
+    + [Overflow attribute](#overflow-attribute)
     + [Synchronous instrument cardinality limits](#synchronous-instrument-cardinality-limits)
     + [Asynchronous instrument cardinality limits](#asynchronous-instrument-cardinality-limits)
 - [Meter](#meter)
