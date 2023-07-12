@@ -50,6 +50,8 @@ release.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
 - Clarify duplicate instrument registration scope to be a MeterProvider.
   ([#3538](https://github.com/open-telemetry/opentelemetry-specification/pull/3538))
+- Clarify identical instrument definition for SDK.
+  ([#3585](https://github.com/open-telemetry/opentelemetry-specification/pull/3585))
 
 ### Logs
 
