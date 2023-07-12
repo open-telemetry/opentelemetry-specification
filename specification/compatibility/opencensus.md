@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: OpenCensus
+--->
+
 # OpenCensus Compatibility
 
 **Status**: [Stable](../document-status.md), Unless otherwise specified.

@@ -1,7 +1,9 @@
 <!--- Hugo front matter used to generate the website version of this page:
 title: Environment Variable Specification
 linkTitle: Env var
-aliases: [/docs/reference/specification/sdk-environment-variables]
+aliases:
+  - /docs/reference/specification/sdk-environment-variables
+  - /docs/specs/otel/sdk-environment-variables
 --->
 
 # OpenTelemetry Environment Variable Specification
