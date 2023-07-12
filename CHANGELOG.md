@@ -26,6 +26,8 @@ release.
   ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
 - Make SDK Meter Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+- Clarify identical instrument definition for SDK.
+  ([#3585](https://github.com/open-telemetry/opentelemetry-specification/pull/3585))
 
 ### Logs
 
