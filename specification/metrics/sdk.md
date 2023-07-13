@@ -719,7 +719,7 @@ The cardinality limit for an aggregation is defined one of three ways:
 2. If there is no matching view, but the `MetricReader` defines a default
    cardinality limit value based on the instrument an aggregation is created
    for, that value SHOULD be used.
-3. If none of the previous values are deinfed, the default value of 2000 SHOULD
+3. If none of the previous values are defined, the default value of 2000 SHOULD
    be used.
 
 #### Overflow attribute
