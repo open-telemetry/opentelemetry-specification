@@ -339,10 +339,17 @@ Note: Support for environment variables is optional.
 | Error Status mapping                                                           |          | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | -     |
 | Event attributes mapping to Annotations                                        |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Integer microseconds in timestamps                                             |          | N/A| +    |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| **OpenCensus**                                                                 |          |    |      |    |             |      |        |     |      |     |      |       |
-| TBD                                                                            |          |    |      |    |             |      |        |     |      |     |      |       |
 | **Prometheus**                                                                 |          |    |      |    |             |      |        |     |      |     |      |       |
 | TBD                                                                            |          |    |      |    |             |      |        |     |      |     |      |       |
+
+## OpenCensus Compatibility
+
+Languages not covered by the OpenCensus project, or that did not reach Alpha, are not listed here.
+
+| Feature                                                                                                 |Go |Java|JS |Python|C++|.NET|Erlang|
+|---------------------------------------------------------------------------------------------------------|---|----|---|------|----|---|----|
+| [Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)   |  + |  +  | +  |   +   |  -  | -  |  -  |
+| [Metric Bridge](specification/compatibility/opencensus.md#metrics--stats) |  + |  +  | -  |   -   |  -  | -  |  -  |
 
 ## OpenTracing Compatibility
 
