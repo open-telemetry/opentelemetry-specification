@@ -11,6 +11,31 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### Compatibility
+
+- Prometheus exporters SHOULD provide configuration to disable the addition of `_total` suffixes.
+  ([#3590](https://github.com/open-telemetry/opentelemetry-specification/pull/3590))
+
+### SDK Configuration
+
+### Common
+
+### Supplemenatary Guidelines
+
+## v1.23.0 (2023-07-12)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Refine SDK TracerProvider configuration section.
   ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
 - Make SDK Tracer Creation more normative.
@@ -26,6 +51,10 @@ release.
   ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
 - Make SDK Meter Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+- Clarify duplicate instrument registration scope to be a MeterProvider.
+  ([#3538](https://github.com/open-telemetry/opentelemetry-specification/pull/3538))
+- Clarify identical instrument definition for SDK.
+  ([#3585](https://github.com/open-telemetry/opentelemetry-specification/pull/3585))
 
 ### Logs
 
@@ -36,27 +65,29 @@ release.
 
 ### Resource
 
+- No changes.
+
 ### Compatibility
 
+- NOTICE: Remove the Jaeger Exporter
+  ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
 - Prometheus: Do not add `_total` suffix if the metric already ends in `_total`.
   ([#3581](https://github.com/open-telemetry/opentelemetry-specification/pull/3581))
-- Prometheus type and unit suffixes are not trimmed by default. ([#3580](https://github.com/open-telemetry/opentelemetry-specification/pull/3580))
-
-### OpenTelemetry Protocol
+- Prometheus type and unit suffixes are not trimmed by default.
+  ([#3580](https://github.com/open-telemetry/opentelemetry-specification/pull/3580))
 
 ### SDK Configuration
 
-- Extract Examplar section and mark it as Experimental.
+- Extract Exemplar section and mark it as Experimental.
   ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
-
-- BREAKING: Remove the Jaeger Exporter
-  ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
-
-### Telemetry Schemas
 
 ### Common
 
+- No changes.
+
 ### Supplemenatary Guidelines
+
+- No changes.
 
 ## v1.22.0 (2023-06-09)
 

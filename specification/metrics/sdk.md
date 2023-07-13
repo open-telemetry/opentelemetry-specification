@@ -784,10 +784,10 @@ fields](./api.md#instrument) are equal.  The term _distinct_ applied
 to Instruments describes instances where at least one field value is
 different.
 
-Based on [the recommendations from the data
+To accomidate [the recommendations from the data
 model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations),
-the SDK MUST aggregate data from identical Instruments together in its export
-pipeline.
+the SDK MUST aggregate data from [identical Instruments](api.md#instrument)
+together in its export pipeline.
 
 When a duplicate instrument registration occurs, and it is not corrected with a
 View, a warning SHOULD be emitted. The emitted warning SHOULD include
