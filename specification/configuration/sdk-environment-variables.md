@@ -1,7 +1,9 @@
 <!--- Hugo front matter used to generate the website version of this page:
 title: Environment Variable Specification
 linkTitle: Env var
-aliases: [/docs/reference/specification/sdk-environment-variables]
+aliases:
+  - /docs/reference/specification/sdk-environment-variables
+  - /docs/specs/otel/sdk-environment-variables
 --->
 
 # OpenTelemetry Environment Variable Specification
@@ -178,70 +180,6 @@ See the SDK [LogRecord Limits](../logs/sdk.md#logrecord-limits) section for the 
 
 See [OpenTelemetry Protocol Exporter Configuration Options](../protocol/exporter.md).
 
-## Jaeger Exporter
-
-**Status**: [Deprecated](../document-status.md)
-
-Jaeger exporter support will be removed from OpenTelemetry in July 2023.
-
-_Note: Jaeger supports the [OpenTelemetry protocol natively][jaeger_otlp] and most users
-should export to Jaeger using OTLP. These environment variables remain here
-only for backwards compatibility and will be removed in a future version. SDKs MAY include
-Jaeger exporters, but Jaeger export is not required._
-
-The `OTEL_EXPORTER_JAEGER_PROTOCOL` environment variable
-MAY by used to specify the transport protocol.
-The value MUST be one of:
-
-- `http/thrift.binary` - [Thrift over HTTP][jaeger_http]
-- `grpc` - [gRPC][jaeger_grpc]
-- `udp/thrift.compact` - [Thrift with compact encoding over UDP][jaeger_udp]
-- `udp/thrift.binary` - [Thrift with binary encoding over UDP][jaeger_udp]
-
-[jaeger_http]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-http-stable
-[jaeger_grpc]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
-[jaeger_udp]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
-[jaeger_otlp]: https://www.jaegertracing.io/docs/latest/apis/#opentelemetry-protocol-stable
-
-The default transport protocol SHOULD be `http/thrift.binary` unless
-SDKs have good reasons to choose other as the default
-(e.g. for backward compatibility reasons).
-
-Environment variables specific for the `http/thrift.binary` transport protocol:
-
-| Name                          | Description                                                                        | Default                             |
-|-------------------------------|------------------------------------------------------------------------------------|-------------------------------------|
-| OTEL_EXPORTER_JAEGER_ENDPOINT | Full URL of the [Jaeger HTTP endpoint][jaeger_collector]                           | `http://localhost:14268/api/traces` |
-| OTEL_EXPORTER_JAEGER_TIMEOUT  | Maximum time (in milliseconds) the Jaeger exporter will wait for each batch export | 10000                               |
-| OTEL_EXPORTER_JAEGER_USER     | Username to be used for HTTP basic authentication                                  |                                     |
-| OTEL_EXPORTER_JAEGER_PASSWORD | Password to be used for HTTP basic authentication                                  |                                     |
-
-Environment variables specific for the `grpc` transport protocol:
-
-| Name                          | Description                                                                        | Default                  |
-|-------------------------------|------------------------------------------------------------------------------------|--------------------------|
-| OTEL_EXPORTER_JAEGER_ENDPOINT | URL of the [Jaeger gRPC endpoint][jaeger_collector]                                | `http://localhost:14250` |
-| OTEL_EXPORTER_JAEGER_TIMEOUT  | Maximum time (in milliseconds) the Jaeger exporter will wait for each batch export | 10000                    |
-| OTEL_EXPORTER_JAEGER_USER     | Username to be used for HTTP basic authentication                                  |                          |
-| OTEL_EXPORTER_JAEGER_PASSWORD | Password to be used for HTTP basic authentication                                  |                          |
-
-Environment variables specific for the `udp/thrift.compact` transport protocol:
-
-| Name                            | Description                                                   | Default     |
-|---------------------------------|---------------------------------------------------------------|-------------|
-| OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname of the [Jaeger agent][jaeger_agent]                  | `localhost` |
-| OTEL_EXPORTER_JAEGER_AGENT_PORT | `udp/thrift.compact` port of the [Jaeger agent][jaeger_agent] | `6831`      |
-
-Environment variables specific for the `udp/thrift.binary` transport protocol:
-
-| Name                            | Description                                                  | Default     |
-|---------------------------------|--------------------------------------------------------------|-------------|
-| OTEL_EXPORTER_JAEGER_AGENT_HOST | Hostname of the [Jaeger agent][jaeger_agent]                 | `localhost` |
-| OTEL_EXPORTER_JAEGER_AGENT_PORT | `udp/thrift.binary` port of the [Jaeger agent][jaeger_agent] | `6832`      |
-
-[jaeger_collector]: https://www.jaegertracing.io/docs/latest/deployment/#collector
-[jaeger_agent]: https://www.jaegertracing.io/docs/latest/deployment/#agent
-
 ## Zipkin Exporter
 
 **Status**: [Stable](../document-status.md)
@@ -286,7 +224,6 @@ The SDK MAY accept a comma-separated list to enable setting multiple exporters.
 Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
-- `"jaeger"`: export in Jaeger data model
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"none"`: No automatically configured exporter for traces.
 

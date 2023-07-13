@@ -28,6 +28,10 @@ Smaller changes can follow a shorter process:
   may be opened and linked to the issue even before the proposed idea is accepted there.
 - Once the issue is accepted the assignee can work on it and create a PR that implements
   the change described in the issue.
+- In the PR description, provide links to the prototypes. Depending on the scope
+  of the change, prototyping in multiple programming languages might be required
+  by the [specification
+  approvers](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto).
 
 Trivial changes, such as clarifications, wording changes, spelling/grammar
 corrections, etc. can be made directly via pull requests and do not require an associated
