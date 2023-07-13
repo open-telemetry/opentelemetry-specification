@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: OpenTracing
+--->
+
 # OpenTracing Compatibility
 
 **Status**: [Stable](../document-status.md).
