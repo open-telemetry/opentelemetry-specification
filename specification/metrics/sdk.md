@@ -738,7 +738,7 @@ limit, as a result.
 #### Synchronous instrument cardinality limits
 
 Aggregators for synchronous instruments with cumulative temporality MUST
-continue to export the all attribute sets that were observed prior to the
+continue to export all attribute sets that were observed prior to the
 beginning of overflow.  Metric events corresponding with attribute sets that
 were not observed prior to the overflow will be reflected in a single data
 point described by (only) the overflow attribute.
