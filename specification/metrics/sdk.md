@@ -707,8 +707,7 @@ given instrument before starting a subsequent round of collection.
 **Status**: [Experimental](../document-status.md)
 
 SDKs SHOULD support being configured with a cardinality limit. A cardinality
-limit is the hard limits on the number of data points that can be written per
-collection, per aggregation.
+limit is the hard limit on the number of metric streams that can be collected.
 
 #### Configuration
 
