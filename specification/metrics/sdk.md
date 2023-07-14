@@ -1094,7 +1094,7 @@ functions.
 
 #### RegisterProducer(metricProducer)
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Feature-freeze](../document-status.md)
 
 RegisterProducer causes the MetricReader to use the provided
 [MetricProducer](#metricproducer) as a source of aggregated metric data in
@@ -1384,7 +1384,7 @@ modeled to interact with other components in the SDK:
 
 ## MetricProducer
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Feature-freeze](../document-status.md)
 
 `MetricProducer` defines the interface which bridges to third-party metric
 sources MUST implement so they can be plugged into an OpenTelemetry

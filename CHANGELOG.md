@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Promote MetricProducer and MetricReader.RegisterProducer specification to feature-freeze.
+  ([#3600](https://github.com/open-telemetry/opentelemetry-specification/pull/3600))
+
 ### Logs
 
 ### Resource
