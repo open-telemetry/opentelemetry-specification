@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Specify how to handle instrument name conflicts.
+  ([#3606](https://github.com/open-telemetry/opentelemetry-specification/pull/3606))
+
 ### Logs
 
 ### Resource
