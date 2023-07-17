@@ -42,6 +42,7 @@ linkTitle: SDK
     + [Asynchronous instrument cardinality limits](#asynchronous-instrument-cardinality-limits)
 - [Meter](#meter)
   * [Duplicate instrument registration](#duplicate-instrument-registration)
+    + [Name conflict](#name-conflict)
   * [Instrument name](#instrument-name)
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
@@ -768,39 +769,56 @@ Distinct meters MUST be treated as separate namespaces for the purposes of detec
 
 ### Duplicate instrument registration
 
-When more than one Instrument of the same `name` is created for identical
-Meters from the same MeterProvider, denoted _duplicate instrument
-registration_, the Meter MUST create a valid Instrument in every case. Here,
-"valid" means an instrument that is functional and can be expected to export
-data, despite potentially creating a [semantic error in the data
+A _duplicate instrument registration_ occurs when more than one Instrument of
+the same [`name`](./api.md#instrument-name-syntax) is created for identical
+Meters from the same MeterProvider but they have different [identifying
+fields](./api.md#instrument).
+
+Whenever this occurs, users still need to be able to make measurements with the
+duplicate instrument. This means that the Meter MUST return a functional
+instrument that can be expected to export data even if this will cause
+[semantic error in the data
 model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations).
 
-It is unspecified whether or under which conditions the same or
-different Instrument instance will be returned as a result of
-duplicate instrument registration. The term _identical_ applied to
-Instruments describes instances where all [identifying
-fields](./api.md#instrument) are equal.  The term _distinct_ applied
-to Instruments describes instances where at least one field value is
-different.
-
-To accomidate [the recommendations from the data
-model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations),
-the SDK MUST aggregate data from [identical Instruments](api.md#instrument)
-together in its export pipeline.
-
-When a duplicate instrument registration occurs, and it is not corrected with a
-View, a warning SHOULD be emitted. The emitted warning SHOULD include
-information for the user on how to resolve the conflict, if possible.
+Additionally, users need to be informed about this error. Therefore, when a
+duplicate instrument registration occurs, and it is not corrected with a View,
+a warning SHOULD be emitted. The emitted warning SHOULD include information for
+the user on how to resolve the conflict, if possible.
 
 1. If the potential conflict involves multiple `description`
    properties, setting the `description` through a configured View
    SHOULD avoid the warning.
-2. If the potential conflict involves instruments that can be
-   distinguished by a supported View selector (e.g., instrument type)
-   a renaming View recipe SHOULD be included in the warning.
+2. If the potential conflict involves instruments that can be distinguished by
+   a supported View selector (e.g. name, instrument kind) a renaming View
+   recipe SHOULD be included in the warning.
 3. Otherwise (e.g., use of multiple units), the SDK SHOULD pass through the
    data by reporting both `Metric` objects and emit a generic warning
    describing the duplicate instrument registration.
+
+Outside of the following [sub-section](#name-conflict), it is unspecified
+whether or under which conditions the same or different Instrument instance
+will be returned as a result of duplicate instrument registration. The term
+_identical_ applied to Instruments describes instances where all [identifying
+fields](./api.md#instrument) are equal.  The term _distinct_ applied to
+Instruments describes instances where at least one field value is different.
+
+To accommodate [the recommendations from the data
+model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations),
+the SDK MUST aggregate data from [identical Instruments](api.md#instrument)
+together in its export pipeline.
+
+#### Name conflict
+
+The [`name`](./api.md#instrument-name-syntax) of an Instrument is defined to be
+case-insensitive. If an SDK uses a case-sensitive encoding to represent this
+`name`, a duplicate instrument registration will occur when a user passes
+multiple casings of the same `name`.
+
+If a duplicate instrument registration occurs due to an Instrument name
+conflict, the Meter MUST return distinct instruments for each casing and log an
+appropriate error as described above. Unifying of the names is expected to be
+better handled "downstream" in an exporter or collection system that will have
+better context for how to handle the conflict.
 
 ### Instrument name
 
