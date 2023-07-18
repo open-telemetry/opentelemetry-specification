@@ -19,6 +19,9 @@ release.
 
 ### Compatibility
 
+- Prometheus exporters SHOULD provide configuration to disable the addition of `_total` suffixes.
+  ([#3590](https://github.com/open-telemetry/opentelemetry-specification/pull/3590))
+
 ### SDK Configuration
 
 ### Common
