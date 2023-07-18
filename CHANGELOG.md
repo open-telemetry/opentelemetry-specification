@@ -13,7 +13,7 @@ release.
 
 ### Metrics
 
-- Remove `MetricReader.ForceFlush`.
+- Do not relate `ForceFlush` with `MetricReader`.
   ([#3609](https://github.com/open-telemetry/opentelemetry-specification/pull/3609))
 
 ### Logs
