@@ -1482,5 +1482,5 @@ called concurrently.
 
 **MetricReader** - `Collect` and `Shutdown` are safe to be called concurrently.
 
-**MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
+**Push Metric Exporter** - `ForceFlush` and `Shutdown` are safe to be called
 concurrently.
