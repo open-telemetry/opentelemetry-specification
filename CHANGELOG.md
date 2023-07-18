@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- `MetricReader.ForceFlush` is removed.
+  ([#3609](https://github.com/open-telemetry/opentelemetry-specification/pull/3609))
+
 ### Logs
 
 ### Resource
