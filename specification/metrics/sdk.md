@@ -176,7 +176,6 @@ via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
 
 
-
 ### View
 
 A `View` provides SDK users with the flexibility to customize the metrics that
