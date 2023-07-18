@@ -1311,7 +1311,7 @@ possible, preferably before returning from this method.
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
-`Flush` SHOULD only be called in cases where it is absolutely necessary,
+`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
 such as when using some FaaS providers that may suspend the process after an
 invocation, but before the exporter exports the completed metrics.
 
