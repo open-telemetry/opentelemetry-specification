@@ -158,12 +158,11 @@ decide if they want to make the shutdown timeout configurable.
 ### ForceFlush
 
 This method provides a way for provider to notify the registered
-[MetricReader](#metricreader) and [MetricExporter](#metricexporter) instances,
-so they can do as much as they could to consume or send the metrics. Note:
-unlike [Push Metric Exporter](#push-metric-exporter) which can send data on its
-own schedule, [Pull Metric Exporter](#pull-metric-exporter) can only send the
-data when it is being asked by the scraper, so `ForceFlush` would not make much
-sense.
+[Push Metric Exporter](#push-metric-exporter) instances, so they can do as much
+as they could to consume or send the metrics.
+
+`ForceFlush` MUST invoke `ForceFlush` on all registered
+[Push Metric Exporter](#push-metric-exporter) instances.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
@@ -176,9 +175,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
 
-`ForceFlush` MUST invoke `ForceFlush` on all registered
-[MetricReader](#metricreader) and [Push Metric Exporter](#push-metric-exporter)
-instances.
+
 
 ### View
 
@@ -1032,7 +1029,7 @@ determines the following capabilities:
 * Registering [MetricProducer](#metricproducer)(s)
 * Collecting metrics from the SDK and any registered
   [MetricProducers](#metricproducer) on demand.
-* Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
+* Handling the [Shutdown](#shutdown) signals from
   the SDK.
 
 To construct a `MetricReader` when setting up an SDK, the caller
@@ -1090,10 +1087,9 @@ one `MeterProvider` instance.
 ```
 
 The SDK SHOULD provide a way to allow `MetricReader` to respond to
-[MeterProvider.ForceFlush](#forceflush) and [MeterProvider.Shutdown](#shutdown).
+[MeterProvider.Shutdown](#shutdown).
 [OpenTelemetry SDK](../overview.md#sdk) authors MAY decide the language
-idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
-functions.
+idiomatic approach, for example, as and `OnShutdown` callback function.
 
 ### MetricReader operations
 
@@ -1317,7 +1313,7 @@ possible, preferably before returning from this method.
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
-`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
+`Flush` SHOULD only be called in cases where it is absolutely necessary,
 such as when using some FaaS providers that may suspend the process after an
 invocation, but before the exporter exports the completed metrics.
 
