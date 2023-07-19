@@ -812,13 +812,11 @@ together in its export pipeline.
 The [`name`](./api.md#instrument-name-syntax) of an Instrument is defined to be
 case-insensitive. If an SDK uses a case-sensitive encoding to represent this
 `name`, a duplicate instrument registration will occur when a user passes
-multiple casings of the same `name`.
-
-If a duplicate instrument registration occurs due to an Instrument name
-conflict, the Meter MUST return distinct instruments for each casing and log an
-appropriate error as described above. Unifying of the names is expected to be
-better handled "downstream" in an exporter or collection system that will have
-better context for how to handle the conflict.
+multiple casings of the same `name`. When this happens, the Meter MUST return
+distinct instruments for each casing and log an appropriate error as described
+above. Unifying of the names is expected to be better handled "downstream" in
+an exporter or collection system that will have better context for how to
+handle the conflict.
 
 ### Instrument name
 
