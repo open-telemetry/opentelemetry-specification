@@ -17,6 +17,8 @@ release.
   ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
 - Revise the exemplar default reservoirs.
   ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
+- MetricProducers are provided as config to MetricReaders instead of through a RegisterProducer operation.
+  ([#3613](https://github.com/open-telemetry/opentelemetry-specification/pull/3613))
 
 ### Logs
 
