@@ -1041,7 +1041,7 @@ SHOULD provide at least the following:
 * The `exporter` to use, which is a `MetricExporter` instance.
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
-* The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+* **Status**: [Experimental](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
