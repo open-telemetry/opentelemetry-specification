@@ -1427,7 +1427,8 @@ A `MetricProducer` MUST support the following functions:
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
 MUST return a batch of [Metric points](./data-model.md#metric-points).
 `Produce` does not have any required parameters, however, [OpenTelemetry
-SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
+SDK](../overview.md#sdk) authors MAY choose to add required or optional
+parameters (e.g. timeout).
 
 `Produce` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Produce` operation fails, the `MetricProducer`
