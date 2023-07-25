@@ -1057,6 +1057,8 @@ decide if they want to make the shutdown timeout configurable.
 
 ### FilterRules
 
+(**Status**: [Experimental](../document-status.md))
+
 `FilterRules` provides SDK users the ability to specify which instruments and attributes
 should be filtered out when [MetricProducer](#metricproducer)(s) (be it the SDK's or 
 registered ones) traverse instruments and their attributes during its `Produce` operation. 
