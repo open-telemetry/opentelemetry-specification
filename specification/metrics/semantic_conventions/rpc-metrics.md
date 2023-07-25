@@ -208,20 +208,20 @@ Below is a table of attributes that SHOULD be included on client and server RPC 
 
 | Value  | Description |
 |---|---|
-| `cancelled` | cancelled |
-| `unknown` | unknown |
-| `invalid_argument` | invalid_argument |
-| `deadline_exceeded` | deadline_exceeded |
-| `not_found` | not_found |
-| `already_exists` | already_exists |
-| `permission_denied` | permission_denied |
-| `resource_exhausted` | resource_exhausted |
-| `failed_precondition` | failed_precondition |
-| `aborted` | aborted |
-| `out_of_range` | out_of_range |
-| `unimplemented` | unimplemented |
-| `internal` | internal |
-| `unavailable` | unavailable |
-| `data_loss` | data_loss |
-| `unauthenticated` | unauthenticated |
+| `cancelled` | The operation was cancelled (typically by the caller) |
+| `unknown` | Unknown error |
+| `invalid_argument` | Client specified an invalid argument.  Note that this differs from FAILED_PRECONDITION |
+| `deadline_exceeded` | Deadline expired before operation could complete |
+| `not_found` | Some requested entity (e.g., file or directory) was not found |
+| `already_exists` | Some entity that we attempted to create (e.g., file or directory) already exists |
+| `permission_denied` | The caller does not have permission to execute the specified operation |
+| `resource_exhausted` | Some resource has been exhausted, perhaps a per-user quota, or perhaps the entire file system is out of space |
+| `failed_precondition` | Operation was rejected because the system is not in a state required for the operation's execution |
+| `aborted` | The operation was aborted, typically due to a concurrency issue like sequencer check failures, transaction aborts, etc |
+| `out_of_range` | Operation was attempted past the valid range.  E.g., seeking or reading past end of file |
+| `unimplemented` | Operation is not implemented or not supported/enabled in this service |
+| `internal` | Internal errors.  Means some invariants expected by underlying system has been broken.  If you see one of these errors, something is very broken |
+| `unavailable` | The service is currently unavailable.  This is a most likely a transient condition and may be corrected by retrying with a backoff |
+| `data_loss` | Unrecoverable data loss or corruption |
+| `unauthenticated` | The request does not have valid authentication credentials for the operation |
 <!-- endsemconv -->
