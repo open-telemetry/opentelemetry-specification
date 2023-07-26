@@ -567,10 +567,6 @@ calls it has made to achieve this goal.
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
 
-`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
-such as when using some FaaS providers that may suspend the process after an
-invocation, but before the `SpanProcessor` exports the completed spans.
-
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry client authors can decide if they want to
@@ -716,10 +712,6 @@ returning from this method.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
-
-`ForceFlush` SHOULD only be called in cases where it is absolutely necessary,
-such as when using some FaaS providers that may suspend the process after an
-invocation, but before the exporter exports the completed spans.
 
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be
 implemented as a blocking API or an asynchronous API which notifies the caller
