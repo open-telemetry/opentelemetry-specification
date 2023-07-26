@@ -792,12 +792,13 @@ the user on how to resolve the conflict, if possible.
    data by reporting both `Metric` objects and emit a generic warning
    describing the duplicate instrument registration.
 
-Outside of the following [sub-section](#name-conflict), it is unspecified
-whether or under which conditions the same or different Instrument instance
-will be returned as a result of duplicate instrument registration. The term
-_identical_ applied to Instruments describes instances where all [identifying
-fields](./api.md#instrument) are equal.  The term _distinct_ applied to
-Instruments describes instances where at least one field value is different.
+It is unspecified whether or under which conditions the same or
+different Instrument instance will be returned as a result of
+duplicate instrument registration. The term _identical_ applied to
+Instruments describes instances where all [identifying
+fields](./api.md#instrument) are equal.  The term _distinct_ applied
+to Instruments describes instances where at least one field value is
+different.
 
 To accommodate [the recommendations from the data
 model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations),
