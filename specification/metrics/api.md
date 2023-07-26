@@ -255,6 +255,9 @@ minimal configuration.
     * `ExplicitBucketBoundaries` (`double[]`): The recommended set of bucket
       boundaries to use if aggregating to
       [explicit bucket Histogram metric data point](./data-model.md#histogram).
+  * All instruments:
+    * `Attributes` (a list of [attribute keys](../common/README.md#attribute)):
+      The recommended set of attribute keys to be used for the resulting metrics.
 
 #### Synchronous and Asynchronous instruments
 
