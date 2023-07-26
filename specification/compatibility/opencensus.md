@@ -212,8 +212,9 @@ default, but SHOULD provide configuration to allow users to enable it.
 ## Metrics / Stats
 
 OpenTelemetry will provide an OpenCensus-Metrics-Shim component which
-implements the OpenTelemetry [MetricProducer](../metrics/sdk.md#metricproducer)
-interface. When Produce() is invoked, the shim collects metrics from the
+accepts a MetricProducer, and registers an
+[asynchronous bridge callback](../metrics/api.md#asynchronous-bridge-callback)
+function. When the callback is invoked, the shim collects metrics from the
 OpenCensus global state, converts the metrics to an OpenTelemetry metrics
 batch, and returns.
 

@@ -26,6 +26,7 @@ linkTitle: API
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
       - [Synchronous Instrument API](#synchronous-instrument-api)
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
+    + [Asynchronous Bridge Callback](#asynchronous-bridge-callback)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -172,6 +173,11 @@ The `Meter` MUST provide functions to create new [Instruments](#instrument):
 * [Create a new Asynchronous UpDownCounter](#asynchronous-updowncounter-creation)
 
 Also see the respective sections below for more information on instrument creation.
+
+**Status**: [Experimental](../document-status.md)
+
+The `Meter` MUST provide a function to register a new
+[Asynchronous Bridge Callback](#asynchronous-bridge-callback).
 
 ## Instrument
 
@@ -442,6 +448,42 @@ callback. [OpenTelemetry API](../overview.md#api) authors MAY decide
 what is the idiomatic approach (e.g.  it could be an additional
 parameter to the callback function, or captured by the lambda closure,
 or something else).
+
+#### Asynchronous Bridge Callback
+
+**Status**: [Experimental](../document-status.md)
+
+An Asynchronous bridge callback gives the user a way to supply batches of
+aggregated [metric points](./data-model.md#metric-points). The callback function will be
+invoked only on demand (see SDK [collection](sdk.md#collect) for reference).
+The order of callback execution is not specified.
+
+The API SHOULD support registration of `bridge callback` functions associated
+with meters after they are created.
+
+Where the API supports registration of `callback` functions after
+asynchronous instrumentation creation, the user MUST be able to undo
+registration of the specific callback after its registration by some means.
+
+Bridge callback functions MUST be documented as follows for the end user:
+
+- Callback functions SHOULD be reentrant safe.  The SDK expects to evaluate
+  callbacks for each MetricReader independently.
+- Callback functions SHOULD NOT take an indefinite amount of time.
+- Callback functions SHOULD NOT provide duplicate
+  [metric points](./data-model.md#metric-points) across all registered callbacks.
+
+The resulting behavior when a callback violates any of these
+RECOMMENDATIONS is explicitly not specified at the API level.
+
+[OpenTelemetry API](../overview.md#api) authors MAY decide what is the idiomatic
+approach for capturing aggregated [metric points](./data-model.md#metric-points) from bridge
+callback functions. Here are some examples:
+
+* Return a list (or tuple, generator, enumerator, etc.) of individual
+  [metric points](./data-model.md#metric-points).
+* Pass an *Observable Result* as a formal parameter of the callback,
+  where `result.Observe()` captures individual [metric points](./data-model.md#metric-points).
 
 ### Counter
 
