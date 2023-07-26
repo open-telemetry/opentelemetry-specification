@@ -14,7 +14,9 @@ release.
 ### Metrics
 
 - Specify how to handle instrument name conflicts.
-  ([#3606](https://github.com/open-telemetry/opentelemetry-specification/pull/3606))
+  ([#TBD](https://github.com/open-telemetry/opentelemetry-specification/pull/TBD))
+- Add experimental metric attributes advice API.
+  ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
 
 ### Logs
 
