@@ -202,10 +202,6 @@ The SDK MUST provide functionality for a user to create Views for a
 selection criteria](#instrument-selection-criteria) and the resulting [stream
 configuration](#stream-configuration).
 
-If no Instrument selection criteria are provided by the user, the SDK SHOULD
-treat it as an error. It is RECOMMENDED that the SDK fails fast. Refer to [Error
-handling in OpenTelemetry](../error-handling.md) for the general guidance.
-
 The SDK MUST provide the means to register Views with a `MeterProvider`.
 
 #### Instrument selection criteria
@@ -317,10 +313,11 @@ The SDK MUST accept the following stream configuration parameters:
 
   Users can provide `attribute_keys`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
-  accept `attribute_keys`, but MUST NOT obligate a user to provide them. If the
-  user does not provide any values, all of the attributes MUST be kept (TODO:
-  once the Hint API is available, the default behavior should respect the Hint
-  if it is available).
+  accept `attribute_keys`, but MUST NOT obligate a user to provide them.
+  If the user does not provide any value, the SDK SHOULD use
+  the [`advice`](./api.md#instrument-advice) configured on the instrument
+  instead. If the `advice` is absent, all attributes MUST be kept.
+
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
 
@@ -1421,7 +1418,8 @@ A `MetricProducer` MUST support the following functions:
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
 MUST return a batch of [Metric points](./data-model.md#metric-points).
 `Produce` does not have any required parameters, however, [OpenTelemetry
-SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
+SDK](../overview.md#sdk) authors MAY choose to add required or optional
+parameters (e.g. timeout).
 
 `Produce` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Produce` operation fails, the `MetricProducer`

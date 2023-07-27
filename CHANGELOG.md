@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Add experimental metric attributes advice API.
+  ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
 - Do not relate `ForceFlush` with `MetricReader`.
   ([#3609](https://github.com/open-telemetry/opentelemetry-specification/pull/3609))
 
