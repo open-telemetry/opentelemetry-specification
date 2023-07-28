@@ -1088,7 +1088,7 @@ calls to [MetricReader.Collect](#collect) MUST advance the starting timestamp (
 e.g. `(T0, T1], (T1, T2], (T2, T3]`). The ending timestamp (i.e. `TimeUnixNano`)
 MUST always be equal to time the metric data point took effect, which is equal
 to when [MetricReader.Collect](#collect) was invoked. These rules apply to all
-metrics, not just those whose [point kinds](./data-model#point-kinds) includes
+metrics, not just those whose [point kinds](./data-model.md#point-kinds) includes
 an aggregation temporality field.
 See [data model temporality](./data-model.md#temporality) for more details.
 
