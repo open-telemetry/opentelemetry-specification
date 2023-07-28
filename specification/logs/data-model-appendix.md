@@ -495,6 +495,7 @@ trace            | string             | The trace associated with the log entry,
 span_id          | string             | The span ID within the trace associated with the log entry. | SpanId
 labels           | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes
 http_request     | HttpRequest        | The HTTP request associated with the log entry, if any. | Attributes["gcp.http_request"]
+trace_sampled    | boolean            | The sampling decision of the trace associated with the log entry. | Flags
 All other fields |                    |                                                         | Attributes["gcp.*"]
 
 ### Elastic Common Schema
