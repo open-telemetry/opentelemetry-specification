@@ -985,10 +985,10 @@ use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
 
 #### SimpleFixedSizeExemplarReservoir
 
-This reservoir MUST use an uniformly-weighted sampling algorithm to determine
-if the offered measurements should be sampled. For example, the [simple
-reservoir sampling algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
-can be used:
+This reservoir MUST use an uniformly-weighted sampling algorithm based on the
+number of samples the reservoir has seen so far to determine if the offered
+measurements should be sampled. For example, the [simple reservoir sampling
+algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
 
   ```
   bucket = random_integer(0, num_measurements_seen)
@@ -997,9 +997,9 @@ can be used:
   end
   ```
 
-The reservoir SHOULD be reset for every collection cycle. So, following the
-above example, the `num_measurements_seen` count would be reset every time the
-reservoir is collected.
+Any stateful portion of sampling computation SHOULD be reset every collection
+cycle. For the above example, that would mean that the `num_measurements_seen`
+count is reset every time the reservoir is collected.
 
 This Exemplar reservoir MAY take a configuration parameter for the size of the
 reservoir pool.
