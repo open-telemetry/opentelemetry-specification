@@ -1042,9 +1042,10 @@ SHOULD provide at least the following:
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
-used with pull-based metrics collection.  A common sub-class of
-`MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
-to be used typically with push-based metrics collection.
+used with pull-based metrics collection.  A common implementation of
+`MetricReader`, the [periodic exporting
+`MetricReader`](#periodic-exporting-metricreader) SHOULD be provided to be used
+typically with push-based metrics collection.
 
 The `MetricReader` MUST ensure that data points from OpenTelemetry
 [instruments](./api.md#instrument) are output in the configured aggregation
