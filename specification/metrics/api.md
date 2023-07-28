@@ -783,8 +783,7 @@ them up) when changes occur.
 
 Note: If the values are additive (e.g. the process heap size - it makes sense to
 report the heap size from multiple processes and sum them up, so we get the
-total heap usage), use [Counter](#counter)
-or [UpDownCounter](#asynchronous-updowncounter).
+total heap usage), use [UpDownCounter](#asynchronous-updowncounter).
 
 Note: Synchronous Gauge is normally used when the measurements are exposed via a
 subscription to change events (
@@ -815,9 +814,9 @@ might consider:
 ```java
 // Java
 
-DoubleGauge componentTemperature = meter.gaugeBuilder("hw.temperature")
-    .setDescription("Temperature of hardware component")
-    .setUnit("C")
+DoubleGauge backgroundNoiseLevel = meter.gaugeBuilder("facility.noise.level")
+    .setDescription("Background noise level of rooms")
+    .setUnit("B")
     .build();
 ```
 
@@ -857,11 +856,11 @@ consider:
 
 ```java
 // Java
-Attributes memoryA = Attributes.builder().put("id", "P0 Channel A");
-Attributes memoryB = Attributes.builder().put("id", "P0 Channel B");
+Attributes roomA = Attributes.builder().put("room.id", "Rack A");
+Attributes roomB = Attributes.builder().put("room.id", "Rack B");
 
-componentTemperature.record(32.5, memoryA);
-componentTemperature.record(31.9, memoryB);
+backgroundNoiseLevel.record(4.3, roomA);
+backgroundNoiseLevel.record(2.5, roomB);
 ```
 
 ### Asynchronous Gauge

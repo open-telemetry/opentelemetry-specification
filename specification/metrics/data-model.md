@@ -436,10 +436,10 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
 - A set of data points, each containing:
   - An independent set of Attribute name-value pairs.
   - A sampled value (e.g. current CPU temperature)
-  - A time window (of `(start, end]`) time for which the Gauge was calculated.
-    - The time interval is inclusive of the end time.
-    - Times are specified in Value is UNIX Epoch time in nanoseconds since
-        `00:00:00 UTC on 1 January 1970`
+  - A timestamp when the value was sampled (`time_unix_nano`)
+  - (optional) A timestamp (`start_time_unix_nano`) which best represents the
+    first possible moment a measurement could be recorded.  This is commonly
+    set to the timestamp when a metric collection system started.
   - (optional) a set of examplars (see [Exemplars](#exemplars)).
 
 In OTLP, a point within a Gauge stream represents the last-sampled event for a
