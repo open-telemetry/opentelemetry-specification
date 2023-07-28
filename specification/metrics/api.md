@@ -485,6 +485,29 @@ callback functions. Here are some examples:
 * Pass an *Observable Result* as a formal parameter of the callback,
   where `result.Observe()` captures individual [metric points](./data-model.md#metric-points).
 
+Example usage:
+
+```java
+meter.registerBridge((metrics) -> {
+  metrics.histogramBuilder("my-histogram")
+    .attributes(...)
+    .startTime(...)
+    .time(...)
+    .sum(100)
+    .bucketCounts(...)
+    .bucketBounds(...)
+    .exemplars(...)
+    .writePoint();
+  metrics.sumBuilder("my-sum")
+    .attributes(...)
+    .startTime(...)
+    .time(...)
+    .count(5)
+    .exemplars(...)
+    .writePoint();
+});
+```
+
 ### Counter
 
 `Counter` is a [synchronous Instrument](#synchronous-instrument-api) which supports
