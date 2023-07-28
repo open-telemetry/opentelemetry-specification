@@ -10,6 +10,7 @@
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider Creation](#loggerprovider-creation)
   * [Logger Creation](#logger-creation)
+  * [Configuration](#configuration)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
@@ -54,10 +55,12 @@ The SDK SHOULD allow the creation of multiple independent `LoggerProviders`s.
 
 ### Logger Creation
 
-New `Logger` instances are always created through a `LoggerProvider`
-(see [Bridge API](bridge-api.md)). The `name`, `version` (optional),
-`schema_url` (optional), and `attributes` (optional) supplied to
-the `LoggerProvider` must be used to create
+It SHOULD only be possible to create `Logger` instances through a `LoggerProvider`
+(see [Bridge API](bridge-api.md)).
+
+The `LoggerProvider` MUST implement the [Get a Logger API](bridge-api.md#get-a-logger).
+
+The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Logger`.
 
@@ -66,10 +69,11 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-Configuration (i.e. [LogRecordProcessors](#logrecordprocessor)) MUST be managed
-solely by the `LoggerProvider` and the SDK MUST provide some way to configure
-all options that are implemented by the SDK. This MAY be done at the time
-of `LoggerProvider` creation if appropriate.
+### Configuration
+
+Configuration (i.e. [LogRecordProcessors](#logrecordprocessor)) MUST be owned
+by the the `LoggerProvider`. The configuration MAY be applied at the time of
+`LoggerProvider` creation if appropriate.
 
 The `LoggerProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `LogRecordProcessor`), the updated

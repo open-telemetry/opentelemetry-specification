@@ -13,8 +13,8 @@ release.
 
 ### Metrics
 
-- Refine SDK MeterProvider configuration section.
-  ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3522))
+- Add experimental metric attributes advice API.
+  ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
 
 ### Logs
 
@@ -22,18 +22,75 @@ release.
 
 ### Compatibility
 
-### OpenTelemetry Protocol
+- Prometheus exporters SHOULD provide configuration to disable the addition of `_total` suffixes.
+  ([#3590](https://github.com/open-telemetry/opentelemetry-specification/pull/3590))
 
 ### SDK Configuration
-
-- Extract Examplar section and mark it as Experimental.
-  ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
-
-### Telemetry Schemas
 
 ### Common
 
 ### Supplemenatary Guidelines
+
+## v1.23.0 (2023-07-12)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Refine SDK TracerProvider configuration section.
+  ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
+- Make SDK Tracer Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+
+### Metrics
+
+- Refine SDK MeterProvider configuration section.
+  ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3522))
+- Clarify metric view requirements and recommendations.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
+- Change the view name to be the view's stream configuration name.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
+- Make SDK Meter Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+- Clarify duplicate instrument registration scope to be a MeterProvider.
+  ([#3538](https://github.com/open-telemetry/opentelemetry-specification/pull/3538))
+- Clarify identical instrument definition for SDK.
+  ([#3585](https://github.com/open-telemetry/opentelemetry-specification/pull/3585))
+
+### Logs
+
+- Refine SDK LoggerProvider configuration section.
+  ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
+- Make SDK Logger Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+
+### Resource
+
+- No changes.
+
+### Compatibility
+
+- NOTICE: Remove the Jaeger Exporter
+  ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
+- Prometheus: Do not add `_total` suffix if the metric already ends in `_total`.
+  ([#3581](https://github.com/open-telemetry/opentelemetry-specification/pull/3581))
+- Prometheus type and unit suffixes are not trimmed by default.
+  ([#3580](https://github.com/open-telemetry/opentelemetry-specification/pull/3580))
+
+### SDK Configuration
+
+- Extract Exemplar section and mark it as Experimental.
+  ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
+
+### Common
+
+- No changes.
+
+### Supplemenatary Guidelines
+
+- No changes.
 
 ## v1.22.0 (2023-06-09)
 
@@ -1682,7 +1739,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 - Implementations can ignore links with invalid SpanContext([#1492](https://github.com/open-telemetry/opentelemetry-specification/pull/1492))
 - Add `none` as a possible value for OTEL_TRACES_EXPORTER to disable export
   ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
-- Add [`ForceFlush`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
+- Add [`ForceFlush`](/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
 
 ### Metrics
 
