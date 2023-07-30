@@ -1233,6 +1233,12 @@ components in the SDK:
                                +---------------------------------+
 ```
 
+The SDK SHOULD provide a way to allow Push Metric Exporter to respond to
+[MeterProvider.ForceFlush](#forceflush) and [MeterProvider.Shutdown](#shutdown).
+[OpenTelemetry SDK](../overview.md#sdk) authors MAY decide the language
+idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
+functions.
+
 #### Interface Definition
 
 A Push Metric Exporter MUST support the following functions:
