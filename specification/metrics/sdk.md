@@ -158,12 +158,13 @@ decide if they want to make the shutdown timeout configurable.
 ### ForceFlush
 
 This method provides a way for provider to notify the registered
-[Push Metric Exporters](#push-metric-exporter) and their related
-[MetricReader](#metricreader) instances, so they can do as much
+[MetricReader](#metricreader) instances that have an associated 
+[Push Metric Exporters](#push-metric-exporter), so they can do as much
 as they could to collect and send the metrics.
 
-`ForceFlush` MUST invoke `ForceFlush` on all registered
-[Push Metric Exporter](#push-metric-exporter) instances.
+`ForceFlush` MUST invoke `ForceFlush` on all
+[Push Metric Exporter](#push-metric-exporter) instances
+that are associated with registered [MetricReader](#metricreader) instances.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
