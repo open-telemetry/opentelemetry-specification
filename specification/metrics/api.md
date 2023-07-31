@@ -191,6 +191,9 @@ are identified by all of these fields.
 Language-level features such as the distinction between integer and
 floating point numbers SHOULD be considered as identifying.
 
+The term *identical* applied to an Instrument describes instances where all
+identifying fields are equal.
+
 ### General characteristics
 
 #### Instrument name syntax
@@ -252,6 +255,9 @@ minimal configuration.
     * `ExplicitBucketBoundaries` (`double[]`): The recommended set of bucket
       boundaries to use if aggregating to
       [explicit bucket Histogram metric data point](./data-model.md#histogram).
+  * All instruments:
+    * `Attributes` (a list of [attribute keys](../common/README.md#attribute)):
+      The recommended set of attribute keys to be used for the resulting metrics.
 
 #### Synchronous and Asynchronous instruments
 

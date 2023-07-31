@@ -1,5 +1,5 @@
 <!--- Hugo front matter used to generate the website version of this page:
-linkTitle: noop
+linkTitle: No-Op
 --->
 
 # Logs Bridge API No-Op Implementation
