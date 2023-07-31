@@ -34,8 +34,7 @@ and is [one of the supported](README.md#direct-to-collector) log collection
 approaches.
 
 The log appender implementation will typically acquire a
-[Logger](./bridge-api.md#logger) from the global
-[LoggerProvider](./bridge-api.md#loggerprovider) at startup time, then
+[Logger](./bridge-api.md#logger), then
 call [Emit LogRecord](./bridge-api.md#emit-a-logrecord) for `LogRecord`s
 received from the application.
 
@@ -62,18 +61,18 @@ popular logging library.
 
 If the logging library has a concept that is similar to OpenTelemetry's
 definition of the [Instrumentation Scope's](../glossary.md#instrumentation-scope)
-name then the appender's implementation should use that value as the
+name, then the appender's implementation should use that value as the
 name parameter when [obtaining the Logger](./bridge-api.md#get-a-logger).
 
 This is for example applicable to:
 
 - Logger name in [Log4J](https://javadoc.io/doc/org.apache.logging.log4j/log4j-api/latest/org.apache.logging.log4j/org/apache/logging/log4j/Logger.html)
-- Channel name in [Monolog](https://github.com/Seldaek/monolog/blob/main/doc/01-usage.md#leveraging-channels)
+- Channel name in [Monolog](https://github.com/Seldaek/monolog/blob/3.4.0/doc/01-usage.md#leveraging-channels)
 
-Appender's should avoid setting other attributes of the Instrumentation Scope.
+Appenders should avoid setting any attributes of the Instrumentation Scope.
 Doing so may result in different appenders setting different attributes on the
 same Instrumentation Scope, obtained with the same identity of the
-[Logger](./bridge-api.md#get-a-logger), which according to the specification
+[Logger](./bridge-api.md#get-a-logger), which, according to the specification,
 is an error.
 
 ### Context
