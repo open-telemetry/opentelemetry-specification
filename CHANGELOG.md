@@ -15,6 +15,8 @@ release.
 
 - Add experimental metric attributes advice API.
   ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
+- Revise the exemplar default reservoirs.
+  ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
 
 ### Logs
 
