@@ -21,8 +21,8 @@ For details, see [CONTRIBUTING.md](CONTRIBUTING.md), in particular read
 
 Questions that need additional attention can be brought to the regular
 specifications meeting. EU and US timezone friendly meeting is held every
-Tuesday at 8 AM pacific time. Meeting notes are held in the [google
-doc](https://docs.google.com/document/d/1-bCYkN-DWJq4jw1ybaDZYYmx-WAe6HnwfWbkm8d57v8/edit?usp=sharing).
+Tuesday at 8 AM pacific time. Meeting notes are held in the [Google
+doc](https://docs.google.com/document/d/1pdvPeKjA8v8w_fGKAN68JjWBmVJtPCpqdi9IZrd6eEo).
 APAC timezone friendly meeting is held Tuesdays, 4PM pacific time. See
 [OpenTelemetry calendar](https://github.com/open-telemetry/community#calendar).
 
