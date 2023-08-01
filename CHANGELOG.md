@@ -17,6 +17,8 @@ release.
   ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
 - Revise the exemplar default reservoirs.
   ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
+- Remove experimental MetricProducer from the metric SDK specification.
+  ([#3635](https://github.com/open-telemetry/opentelemetry-specification/pull/3635))
 
 ### Logs
 
@@ -26,6 +28,8 @@ release.
 
 - Prometheus exporters SHOULD provide configuration to disable the addition of `_total` suffixes.
   ([#3590](https://github.com/open-telemetry/opentelemetry-specification/pull/3590))
+- OpenCensus bridges should wrap MetricExporter and MetricReader instead of implementing MetricProducer.
+  ([#3635](https://github.com/open-telemetry/opentelemetry-specification/pull/3635))
 
 ### SDK Configuration
 

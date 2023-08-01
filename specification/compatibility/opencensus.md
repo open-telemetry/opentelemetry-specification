@@ -211,11 +211,41 @@ default, but SHOULD provide configuration to allow users to enable it.
 
 ## Metrics / Stats
 
-OpenTelemetry will provide an OpenCensus-Metrics-Shim component which
-implements the OpenTelemetry [MetricProducer](../metrics/sdk.md#metricproducer)
-interface. When Produce() is invoked, the shim collects metrics from the
-OpenCensus global state, converts the metrics to an OpenTelemetry metrics
-batch, and returns.
+OpenTelemetry will provide two OpenCensus-Metrics-Shim components. One which
+implements the OpenTelemetry [MetricExporter](../metrics/sdk.md#metricexporter)
+interface, and is used to and another which implements the
+[MetricReader](../metrics/sdk.md#metricreader) interface.
+
+### MetricExporter bridge
+
+To construct the `MetricExporter` bridge, the caller MUST provide a
+`MetricExporter`, and authors MAY include other required or optional
+parameters.
+
+With the exception of [Export(batch)](../metrics/sdk.md#exportbatch), the
+bridge MUST delegate all calls directly to this MetricExporter. When
+[Export(batch)](../metrics/sdk.md#exportbatch) is invoked, the bridge collects
+metrics from the global OpenCensus store, translates and integrates them to the
+provided batch of OpenTelemetry [Metric points](../metrics/data-model.md#metric-points),
+and invokes the "wrapped" exporter's [Export(batch)](../metrics/sdk.md#exportbatch)
+function with the merged batch. All metrics from OpenCensus MUST be associated
+a single instrumentation scope.
+
+### MetricReader bridge
+
+Constructing the `MetricReader` bridge does not have any required parameters,
+although SDK authors MAY require callers to provide a `MetricReader` or other
+required or optional parameters. If the bridge does not require a
+`MetricReader`, it should construct one.
+
+With the exception of [Collect()](../metrics/sdk.md#collect), the bridge
+SHOULD delegate all calls to its underlying `MetricReader`. When
+[Collect()](../metrics/sdk.md#collect) is invoked, the bridge invokes
+[Collect()](../metrics/sdk.md#collect) on its underlying MetricReader.
+It then collects metrics from the global OpenCensus store, and translate and integrate
+them into the batch of OpenTelmeetry [Metric points](../metrics/data-model.md#metric-points)
+from [Collect()](../metrics/sdk.md#collect). All metrics from OpenCensus
+MUST be associated a single instrumentation scope.
 
 ### Requirements
 
