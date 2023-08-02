@@ -161,8 +161,7 @@ decide if they want to make the shutdown timeout configurable.
 ### ForceFlush
 
 This method provides a way for provider to notify the registered
-[MetricReader](#metricreader)
-instances that have an associated
+[MetricReader](#metricreader) instances that have an associated
 [Push Metric Exporter](#push-metric-exporter), so they can do as much
 as they could to collect and send the metrics.
 Note: [Pull Metric Exporter](#pull-metric-exporter) can only send the
