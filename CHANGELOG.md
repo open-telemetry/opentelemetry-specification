@@ -17,7 +17,7 @@ release.
   ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
 - Revise the exemplar default reservoirs.
   ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
-- Define ForceFlush for periodic exporting MetricReader.
+- Refine `MetricProvider.ForceFlush` and define `ForceFlush` for periodic exporting MetricReader.
   ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
 
 ### Logs
