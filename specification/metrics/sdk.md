@@ -161,10 +161,10 @@ decide if they want to make the shutdown timeout configurable.
 ### ForceFlush
 
 This method provides a way for provider to notify the registered
-[MetricReader](#metricreader) and [MetricExporter](#metricexporter) instances,
-so they can do as much as they could to consume or send the metrics. Note:
-unlike [Push Metric Exporter](#push-metric-exporter) which can send data on its
-own schedule, [Pull Metric Exporter](#pull-metric-exporter) can only send the
+[MetricReader](#metricreader) instances that have an associated
+[Push Metric Exporters](#push-metric-exporter), so they can do as much
+as they could to collect and send the metrics.
+Note: [Pull Metric Exporter](#pull-metric-exporter) can only send the
 data when it is being asked by the scraper, so `ForceFlush` would not make much
 sense.
 
