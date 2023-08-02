@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Add experimental metric attributes advice API.
+  ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
+- Revise the exemplar default reservoirs.
+  ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
 - Define ForceFlush for periodic exporting MetricReader.
   ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
 
@@ -21,6 +25,9 @@ release.
 ### Resource
 
 ### Compatibility
+
+- Prometheus exporters SHOULD provide configuration to disable the addition of `_total` suffixes.
+  ([#3590](https://github.com/open-telemetry/opentelemetry-specification/pull/3590))
 
 ### SDK Configuration
 
@@ -62,6 +69,8 @@ release.
   ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
 - Make SDK Logger Creation more normative.
   ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+- Clarify how log appender use Scope name and attributes.
+  ([#3583](https://github.com/open-telemetry/opentelemetry-specification/pull/3583))
 
 ### Resource
 

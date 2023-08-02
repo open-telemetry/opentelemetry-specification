@@ -36,6 +36,8 @@ linkTitle: SDK
         * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
   * [Cardinality limits](#cardinality-limits)
+    + [Configuration](#configuration-1)
+    + [Overflow attribute](#overflow-attribute)
     + [Synchronous instrument cardinality limits](#synchronous-instrument-cardinality-limits)
     + [Asynchronous instrument cardinality limits](#asynchronous-instrument-cardinality-limits)
 - [Meter](#meter)
@@ -53,6 +55,8 @@ linkTitle: SDK
     + [TraceBased](#tracebased)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
+    + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
+    + [AlignedHistogramBucketExemplarReservoir](#alignedhistogrambucketexemplarreservoir)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [RegisterProducer(metricProducer)](#registerproducermetricproducer)
@@ -206,10 +210,6 @@ The SDK MUST provide functionality for a user to create Views for a
 selection criteria](#instrument-selection-criteria) and the resulting [stream
 configuration](#stream-configuration).
 
-If no Instrument selection criteria are provided by the user, the SDK SHOULD
-treat it as an error. It is RECOMMENDED that the SDK fails fast. Refer to [Error
-handling in OpenTelemetry](../error-handling.md) for the general guidance.
-
 The SDK MUST provide the means to register Views with a `MeterProvider`.
 
 #### Instrument selection criteria
@@ -244,38 +244,38 @@ The SDK MUST accept the following criteria:
   If the SDK does not support wildcards in general, it MUST still recognize the
   special single asterisk (`*`) character as matching all Instruments.
 
-  Users can provide a `name`, but it is up to their descretion. Therefore, the
+  Users can provide a `name`, but it is up to their discretion. Therefore, the
   instrument selection criteria parameter needs to be structured to accept a
   `name`, but MUST NOT obligate a user to provide one.
 * `type`: The type of Instruments to match. If the value of `type` is the same
   as an Instrument's type, then the criterion matches that Instrument.
 
-  Users can provide a `type`, but it is up to their descretion. Therefore, the
+  Users can provide a `type`, but it is up to their discretion. Therefore, the
   instrument selection criteria parameter needs to be structured to accept a
   `type`, but MUST NOT obligate a user to provide one.
 * `unit`: If the value of `unit` is the same as an Instrument's unit, then the
   criterion matches that Instrument.
 
-  Users can provide a `unit`, but it is up to their descretion. Therefore, the
+  Users can provide a `unit`, but it is up to their discretion. Therefore, the
   instrument selection criteria parameter needs to be structured to accept a
   `unit`, but MUST NOT obligate a user to provide one.
 * `meter_name`: If the value of `meter_name` is the same as the Meter that
   created an Instrument, then the criterion matches that Instrument.
 
-  Users can provide a `meter_name`, but it is up to their descretion.
+  Users can provide a `meter_name`, but it is up to their discretion.
   Therefore, the instrument selection criteria parameter needs to be structured
   to accept a `meter_name`, but MUST NOT obligate a user to provide one.
 * `meter_version`: If the value of `meter_version` is the same version as the
   Meter that created an Instrument, then the criterion matches that Instrument.
 
-  Users can provide a `meter_version`, but it is up to their descretion.
+  Users can provide a `meter_version`, but it is up to their discretion.
   Therefore, the instrument selection criteria parameter needs to be structured
   to accept a `meter_version`, but MUST NOT obligate a user to provide one.
 * `meter_schema_url`: If the value of `meter_schema_url` is the same schema URL
   as the Meter that created an Instrument, then the criterion matches that
   Instrument.
 
-  Users can provide a `meter_schema_url`, but it is up to their descretion.
+  Users can provide a `meter_schema_url`, but it is up to their discretion.
   Therefore, the instrument selection criteria parameter needs to be structured
   to accept a `meter_schema_url`, but MUST NOT obligate a user to provide one.
 
@@ -283,7 +283,7 @@ The SDK MAY accept additional criteria. For example, a strongly typed language
 may support point type criterion (e.g. allow the users to select Instruments
 based on whether the underlying number is integral or rational). Users can
 provide these additional criteria the SDK accepts, but it is up to their
-descretion. Therefore, the instrument selection criteria can be structured to
+discretion. Therefore, the instrument selection criteria can be structured to
 accept the criteria, but MUST NOT obligate a user to provide them.
 
 #### Stream configuration
@@ -303,14 +303,14 @@ The SDK MUST accept the following stream configuration parameters:
   accordance with initialization [error handling
   principles](../error-handling.md#basic-error-handling-principles).
 
-  Users can provide a `name`, but it is up to their descretion. Therefore, the
+  Users can provide a `name`, but it is up to their discretion. Therefore, the
   stream configuration parameter needs to be structured to accept a `name`, but
   MUST NOT obligate a user to provide one. If the user does not provide a
   `name` value, name from the Instrument the View matches MUST be used by
   default.
 * `description`: The metric stream description that SHOULD be used.
   
-  Users can provide a `description`, but it is up to their descretion.
+  Users can provide a `description`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
   accept a `description`, but MUST NOT obligate a user to provide one. If the
   user does not provide a `description` value, the description from the
@@ -319,16 +319,17 @@ The SDK MUST accept the following stream configuration parameters:
   the user during the measurement, for the metric stream. All attributes with
   keys other than those in the list MUST be ignored.
 
-  Users can provide `attribute_keys`, but it is up to their descretion.
+  Users can provide `attribute_keys`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
-  accept `attribute_keys`, but MUST NOT obligate a user to provide them. If the
-  user does not provide any values, all of the attributes MUST be kept (TODO:
-  once the Hint API is available, the default behavior should respect the Hint
-  if it is available).
+  accept `attribute_keys`, but MUST NOT obligate a user to provide them.
+  If the user does not provide any value, the SDK SHOULD use
+  the [`advice`](./api.md#instrument-advice) configured on the instrument
+  instead. If the `advice` is absent, all attributes MUST be kept.
+
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
 
-  Users can provide an `aggregation`, but it is up to their descretion.
+  Users can provide an `aggregation`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
   accept an `aggregation`, but MUST NOT obligate a user to provide one. If the
   user does not provide an `aggregation` value, the `MeterProvider` MUST apply
@@ -340,7 +341,7 @@ The SDK MUST accept the following stream configuration parameters:
   callback similar to aggregation selection functionality which allows
   different reservoirs to be chosen by the aggregation.
 
-  Users can provide an `exemplar_reservoir`, but it is up to their descretion.
+  Users can provide an `exemplar_reservoir`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
   accept an `exemplar_reservoir`, but MUST NOT obligate a user to provide one.
   If the user does not provide an `exemplar_reservoir` value, the
@@ -352,7 +353,7 @@ The SDK MUST accept the following stream configuration parameters:
   a single instrument. See [cardinality limits](#cardinality-limits), below.
 
   Users can provide an `aggregation_cardinality_limit`, but it is up to their
-  descretion. Therefore, the stream configuration parameter needs to be
+  discretion. Therefore, the stream configuration parameter needs to be
   structured to accept an `aggregation_cardinality_limit`, but MUST NOT
   obligate a user to provide one. If the user does not provide an
   `aggregation_cardinality_limit` value, the `MeterProvider` MUST apply the
@@ -705,19 +706,23 @@ given instrument before starting a subsequent round of collection.
 
 **Status**: [Experimental](../document-status.md)
 
-Views SHOULD support being configured with a cardinality limit to be
-applied to all aggregators not configured by a specific view, specified
-via `MetricReader` configuration.
+SDKs SHOULD support being configured with a cardinality limit. A cardinality
+limit is the hard limit on the number of metric streams that can be collected.
 
-View configuration SHOULD support applying per-aggregation cardinality limits.
+#### Configuration
 
-The cardinality limit is taken as an exact, hard limit on the number
-of data points that can be written per collection, per aggregation.
-Each aggregation configured view MUST NOT output more than the
-configured `aggregation_cardinality_limit` number of data points per
-period.
+The cardinality limit for an aggregation is defined in one of three ways:
 
-The RECOMMENDED default aggregation cardinality limit is 2000.
+1. A [view](#view) with criteria matching the instrument an aggregation is
+   created for has an `aggregation_cardinality_limit` value defined for the
+   stream, that value SHOULD be used.
+2. If there is no matching view, but the `MetricReader` defines a default
+   cardinality limit value based on the instrument an aggregation is created
+   for, that value SHOULD be used.
+3. If none of the previous values are defined, the default value of 2000 SHOULD
+   be used.
+
+#### Overflow attribute
 
 An overflow attribute set is defined, containing a single attribute
 `otel.metric.overflow` having (boolean) value `true`, which is used to
@@ -732,16 +737,15 @@ limit, as a result.
 
 #### Synchronous instrument cardinality limits
 
-Views of synchronous instruments with cumulative aggregation
-temporality MUST continue to export the all attribute sets that were
-observed prior to the beginning of overflow.  Metric events
-corresponding with attribute sets that were not observed prior to the
-overflow will be reflected in a single data point described by (only)
-the overflow attribute.
+Aggregators for synchronous instruments with cumulative temporality MUST
+continue to export all attribute sets that were observed prior to the
+beginning of overflow.  Metric events corresponding with attribute sets that
+were not observed prior to the overflow will be reflected in a single data
+point described by (only) the overflow attribute.
 
-Views of synchronous instruments with delta aggregation temporality
-MAY choose an arbitrary subset of attribute sets to output to maintain
-the stated cardinality limit.
+Aggregators of synchronous instruments with delta aggregation temporality MAY
+choose an arbitrary subset of attribute sets to output to maintain the stated
+cardinality limit.
 
 Regardless of aggregation temporality, the SDK MUST ensure that every
 metric event is reflected in exactly one Aggregator, which is either
@@ -753,9 +757,9 @@ overflow.
 
 #### Asynchronous instrument cardinality limits
 
-Views of asynchronous instruments SHOULD prefer the first-observed
+Aggregators of asynchronous instruments SHOULD prefer the first-observed
 attributes in the callback when limiting cardinality, regardless of
-aggregation temporality.
+temporality.
 
 ## Meter
 
@@ -779,7 +783,7 @@ fields](./api.md#instrument) are equal.  The term _distinct_ applied
 to Instruments describes instances where at least one field value is
 different.
 
-To accomidate [the recommendations from the data
+To accommodate [the recommendations from the data
 model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations),
 the SDK MUST aggregate data from [identical Instruments](api.md#instrument)
 together in its export pipeline.
@@ -971,20 +975,21 @@ The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
 ### Exemplar defaults
 
-The SDK will come with two types of built-in exemplar reservoirs:
+The SDK SHOULD include two types of built-in exemplar reservoirs:
 
-1. SimpleFixedSizeExemplarReservoir
-2. AlignedHistogramBucketExemplarReservoir
+1. `SimpleFixedSizeExemplarReservoir`
+2. `AlignedHistogramBucketExemplarReservoir`
 
 By default, explicit bucket histogram aggregation with more than 1 bucket will
 use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
 `SimpleFixedSizeExemplarReservoir`.
 
-_SimpleExemplarReservoir_
-This Exemplar reservoir MAY take a configuration parameter for the size of the
-reservoir pool.  The reservoir will accept measurements using an equivalent of
-the [naive reservoir sampling
-algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
+#### SimpleFixedSizeExemplarReservoir
+
+This reservoir MUST use an uniformly-weighted sampling algorithm based on the
+number of samples the reservoir has seen so far to determine if the offered
+measurements should be sampled. For example, the [simple reservoir sampling
+algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
 
   ```
   bucket = random_integer(0, num_measurements_seen)
@@ -993,10 +998,15 @@ algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
   end
   ```
 
-Additionally, the `num_measurements_seen` count SHOULD be reset at every
-collection cycle.
+Any stateful portion of sampling computation SHOULD be reset every collection
+cycle. For the above example, that would mean that the `num_measurements_seen`
+count is reset every time the reservoir is collected.
 
-_AlignedHistogramBucketExemplarReservoir_
+This Exemplar reservoir MAY take a configuration parameter for the size of the
+reservoir pool.
+
+#### AlignedHistogramBucketExemplarReservoir
+
 This Exemplar reservoir MUST take a configuration parameter that is the
 configuration of a Histogram.  This implementation MUST keep the last seen
 measurement that falls within a histogram bucket.  The reservoir will accept
@@ -1037,13 +1047,14 @@ SHOULD provide at least the following:
 * The `exporter` to use, which is a `MetricExporter` instance.
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
-* The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+* **Status**: [Experimental](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
-used with pull-based metrics collection.  A common sub-class of
-`MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
-to be used typically with push-based metrics collection.
+used with pull-based metrics collection.  A common implementation of
+`MetricReader`, the [periodic exporting
+`MetricReader`](#periodic-exporting-metricreader) SHOULD be provided to be used
+typically with push-based metrics collection.
 
 The `MetricReader` MUST ensure that data points from OpenTelemetry
 [instruments](./api.md#instrument) are output in the configured aggregation
@@ -1203,7 +1214,7 @@ Exporters through their associated MetricReader.  OpenTelemetry
 language implementations MAY support automatically configuring the
 [MetricReader](#metricreader) to use for an Exporter.
 
-The goal of the interface is to minimize burden of implementation for
+The goal of the interface is to minimize the burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
@@ -1438,7 +1449,8 @@ A `MetricProducer` MUST support the following functions:
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
 MUST return a batch of [Metric points](./data-model.md#metric-points).
 `Produce` does not have any required parameters, however, [OpenTelemetry
-SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
+SDK](../overview.md#sdk) authors MAY choose to add required or optional
+parameters (e.g. timeout).
 
 `Produce` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Produce` operation fails, the `MetricProducer`
