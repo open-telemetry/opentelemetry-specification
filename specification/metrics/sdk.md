@@ -161,12 +161,16 @@ decide if they want to make the shutdown timeout configurable.
 ### ForceFlush
 
 This method provides a way for provider to notify the registered
-[MetricReader](#metricreader) instances that have an associated
-[Push Metric Exporters](#push-metric-exporter), so they can do as much
+[MetricReader](#metricreader)
+instances that have an associated
+[Push Metric Exporter](#push-metric-exporter), so they can do as much
 as they could to collect and send the metrics.
 Note: [Pull Metric Exporter](#pull-metric-exporter) can only send the
 data when it is being asked by the scraper, so `ForceFlush` would not make much
 sense.
+
+`ForceFlush` MUST invoke `ForceFlush` on all registered
+[Periodic exporting MetricReader](#periodic-exporting-metricreader) instances.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
@@ -178,10 +182,6 @@ and **NO ERROR**.
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
-
-`ForceFlush` MUST invoke `ForceFlush` on all registered
-[MetricReader](#metricreader) and [Push Metric Exporter](#push-metric-exporter)
-instances.
 
 ### View
 
@@ -1186,6 +1186,13 @@ from `MetricReader` and start a background task which calls the inherited
 
 #### ForceFlush
 
+This method provides a way for the periodic exporting MetricReader
+so it can do as much as they could to collect and send the metrics.
+
+`ForceFlush` SHOULD collect metrics, call [`Export(batch)`](#exportbatch)
+and [`ForceFlush()`](#forceflush-2) on the configured
+[Push Metric Exporter](#push-metric-exporter).
+
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
 is an error condition; and if there is no error condition, it should return some
@@ -1195,9 +1202,6 @@ and **NO ERROR**.
 `ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event.
-
-`ForceFlush` MUST invoke [`ForceFlush()`](#forceflush-2) on all registered
-[Push Metric Exporter](#push-metric-exporter) instances.
 
 ## MetricExporter
 
