@@ -1136,10 +1136,10 @@ filter, timeout). [OpenTelemetry SDK](../overview.md#sdk) authors MAY choose the
 return value type, or do not return anything.
 
 `Collect` SHOULD invoke [Produce](#produce-batch) on registered
-[MetricProducers](#metricproducer). If the bastch of metric points from
-`Produce` includes [Resource](../resource/sdk.md) information, `Collect` SHOULD
-ignore `Resource` from `Produce`, and use the `Resource` provided when
-constructing the MeterProvider instead.
+[MetricProducers](#metricproducer). If the batch of metric points from
+`Produce` includes [Resource](../resource/sdk.md) information, `Collect` MAY
+replace the `Resource` from the MetricProducer with the `Resource` provided
+when constructing the MeterProvider instead.
 
 Note: it is expected that the `MetricReader.Collect` implementations will be
 provided by the SDK, so it is RECOMMENDED to prevent the user from accidentally
@@ -1434,7 +1434,9 @@ A `MetricProducer` MUST support the following functions:
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
 MUST return a batch of [Metric points](./data-model.md#metric-points).
-`Produce` does not have any required parameters, however, [OpenTelemetry
+If the batch of [Metric points](./data-model.md#metric-points) includes
+resource information, `Produce` SHOULD require a resource as a parameter.
+`Produce` does not have any other required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add required or optional
 parameters (e.g. timeout).
 
