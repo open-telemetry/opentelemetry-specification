@@ -169,7 +169,7 @@ data when it is being asked by the scraper, so `ForceFlush` would not make much
 sense.
 
 `ForceFlush` MUST invoke `ForceFlush` on all registered
-[Periodic exporting MetricReader](#periodic-exporting-metricreader) instances.
+[MetricReader](#metricreader) instances that implement `ForceFlush`.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
