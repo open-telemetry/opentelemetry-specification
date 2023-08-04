@@ -64,6 +64,13 @@ Names SHOULD follow these rules:
   and the value type SHOULD be an array. E.g. `process.command_args` might include multiple
   values: the executable name and command arguments.
 
+- An exception to the above can occur when the attribute name in the plural form conflicts
+  with another possible meaning. For example, using `host.ip` instead of `host.ips` is preferred
+  since 'ip' has widespread acceptance as an abbreviation ('Internet Protocol') whereas
+  'ips' could introduce ambiguity, potentially conflicting with 'Intrusion Prevention System' or other interpretations.
+  In such cases, opting for the more familiar and widely accepted term ensures clarity and minimizes
+  the risk of confusion when defining attribute names.
+
 - When an attribute represents a measurement,
   [Metric Name Pluralization Guidelines](../metrics/semantic_conventions/README.md#pluralization)
   SHOULD be followed for the attribute name.
