@@ -55,6 +55,8 @@ linkTitle: SDK
     + [TraceBased](#tracebased)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
+    + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
+    + [AlignedHistogramBucketExemplarReservoir](#alignedhistogrambucketexemplarreservoir)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [RegisterProducer(metricProducer)](#registerproducermetricproducer)
@@ -207,10 +209,6 @@ The SDK MUST provide functionality for a user to create Views for a
 selection criteria](#instrument-selection-criteria) and the resulting [stream
 configuration](#stream-configuration).
 
-If no Instrument selection criteria are provided by the user, the SDK SHOULD
-treat it as an error. It is RECOMMENDED that the SDK fails fast. Refer to [Error
-handling in OpenTelemetry](../error-handling.md) for the general guidance.
-
 The SDK MUST provide the means to register Views with a `MeterProvider`.
 
 #### Instrument selection criteria
@@ -322,10 +320,11 @@ The SDK MUST accept the following stream configuration parameters:
 
   Users can provide `attribute_keys`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
-  accept `attribute_keys`, but MUST NOT obligate a user to provide them. If the
-  user does not provide any values, all of the attributes MUST be kept (TODO:
-  once the Hint API is available, the default behavior should respect the Hint
-  if it is available).
+  accept `attribute_keys`, but MUST NOT obligate a user to provide them.
+  If the user does not provide any value, the SDK SHOULD use
+  the [`advice`](./api.md#instrument-advice) configured on the instrument
+  instead. If the `advice` is absent, all attributes MUST be kept.
+
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
 
@@ -975,20 +974,21 @@ The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
 ### Exemplar defaults
 
-The SDK will come with two types of built-in exemplar reservoirs:
+The SDK SHOULD include two types of built-in exemplar reservoirs:
 
-1. SimpleFixedSizeExemplarReservoir
-2. AlignedHistogramBucketExemplarReservoir
+1. `SimpleFixedSizeExemplarReservoir`
+2. `AlignedHistogramBucketExemplarReservoir`
 
 By default, explicit bucket histogram aggregation with more than 1 bucket will
 use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
 `SimpleFixedSizeExemplarReservoir`.
 
-_SimpleExemplarReservoir_
-This Exemplar reservoir MAY take a configuration parameter for the size of the
-reservoir pool.  The reservoir will accept measurements using an equivalent of
-the [naive reservoir sampling
-algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
+#### SimpleFixedSizeExemplarReservoir
+
+This reservoir MUST use an uniformly-weighted sampling algorithm based on the
+number of samples the reservoir has seen so far to determine if the offered
+measurements should be sampled. For example, the [simple reservoir sampling
+algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
 
   ```
   bucket = random_integer(0, num_measurements_seen)
@@ -997,10 +997,15 @@ algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
   end
   ```
 
-Additionally, the `num_measurements_seen` count SHOULD be reset at every
-collection cycle.
+Any stateful portion of sampling computation SHOULD be reset every collection
+cycle. For the above example, that would mean that the `num_measurements_seen`
+count is reset every time the reservoir is collected.
 
-_AlignedHistogramBucketExemplarReservoir_
+This Exemplar reservoir MAY take a configuration parameter for the size of the
+reservoir pool.
+
+#### AlignedHistogramBucketExemplarReservoir
+
 This Exemplar reservoir MUST take a configuration parameter that is the
 configuration of a Histogram.  This implementation MUST keep the last seen
 measurement that falls within a histogram bucket.  The reservoir will accept
@@ -1045,9 +1050,10 @@ SHOULD provide at least the following:
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
-used with pull-based metrics collection.  A common sub-class of
-`MetricReader`, the periodic exporting `MetricReader` SHOULD be provided
-to be used typically with push-based metrics collection.
+used with pull-based metrics collection.  A common implementation of
+`MetricReader`, the [periodic exporting
+`MetricReader`](#periodic-exporting-metricreader) SHOULD be provided to be used
+typically with push-based metrics collection.
 
 The `MetricReader` MUST ensure that data points from OpenTelemetry
 [instruments](./api.md#instrument) are output in the configured aggregation
