@@ -194,9 +194,11 @@ registered or the global OpenTelemetry `Propagator`s, as configured at construct
 - `TextMap` and `HttpHeaders` formats MUST use their explicitly specified `TextMapPropagator`,
   if any, or else use the global `TextMapPropagator`.
 
-If the extracted `SpanContext` is invalid AND it is not sampled AND the extracted `Baggage`
-is empty, this operation MUST return a null value,
-and otherwise it MUST return a `SpanContext` Shim instance with the extracted values.
+The operation MUST return a `SpanContext` Shim instance with the extracted values if any of these conditions are met:
+  * `SpanContext` is valid
+  * `SpanContext` is sampled
+  * `SpanContext` contains non-empty extracted `Baggage`
+Otherwise, the operation MUST return null or empty value.
 
 ```java
 if (!extractedSpanContext.isValid()
