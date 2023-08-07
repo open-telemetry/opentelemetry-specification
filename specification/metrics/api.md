@@ -19,7 +19,6 @@ linkTitle: API
   * [Meter operations](#meter-operations)
 - [Instrument](#instrument)
   * [General characteristics](#general-characteristics)
-    + [Instrument name syntax](#instrument-name-syntax)
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
     + [Instrument advice](#instrument-advice)
@@ -49,6 +48,7 @@ linkTitle: API
     + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
 - [Measurement](#measurement)
   * [Multiple-instrument callbacks](#multiple-instrument-callbacks)
+- [Name syntax](#name-syntax)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
 
@@ -124,6 +124,10 @@ This API MUST accept the following parameters:
   library](../glossary.md#instrumentation-library) can refer to the same
   library. In that scenario, the `name` denotes a module name or component name
   within that library or application.
+
+  The API SHOULD be documented in a way to communicate to users that the `name`
+  parameter needs to conform to the [name syntax](#name-syntax). The API SHOULD
+  NOT validate the `name`; that is left to implementations of the API.
 * `version`: Specifies the version of the instrumentation scope if the scope
   has a version (e.g. a library version). Example value: `1.0.0`.
   
@@ -195,25 +199,6 @@ The term *identical* applied to an Instrument describes instances where all
 identifying fields are equal.
 
 ### General characteristics
-
-#### Instrument name syntax
-
-The instrument name syntax is defined below using the [Augmented Backus-Naur
-Form](https://tools.ietf.org/html/rfc5234):
-
-```abnf
-instrument-name = ALPHA 0*62 ("_" / "." / "-" / ALPHA / DIGIT)
-
-ALPHA = %x41-5A / %x61-7A; A-Z / a-z
-DIGIT = %x30-39 ; 0-9
-```
-
-* They are not null or empty strings.
-* They are case-insensitive, ASCII strings.
-* The first character must be an alphabetic character.
-* Subsequent characters must belong to the alphanumeric characters, '_', '.',
-  and '-'.
-* They can have a maximum length of 63 characters.
 
 #### Instrument unit
 
@@ -294,9 +279,8 @@ The API to construct synchronous instruments MUST accept the following parameter
   in a way to communicate to users that this parameter is needed.
   
   The API SHOULD be documented in a way to communicate to users that the `name`
-  parameter needs to conform to the [instrument name
-  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`;
-  that is left to implementations of the API.
+  parameter needs to conform to the [name syntax](#name-syntax). The API SHOULD
+  NOT validate the `name`; that is left to implementations of the API.
 * A `unit` of measure.
   
   Users can provide a `unit`, but it is up to their discretion. Therefore, this
@@ -347,9 +331,8 @@ The API to construct asynchronous instruments MUST accept the following paramete
   in a way to communicate to users that this parameter is needed.
   
   The API SHOULD be documented in a way to communicate to users that the `name`
-  parameter needs to conform to the [instrument name
-  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`,
-  that is left to implementations of the API.
+  parameter needs to conform to the [name syntax](#name-syntax). The API SHOULD
+  NOT validate the `name`; that is left to implementations of the API.
 * A `unit` of measure.
   
   Users can provide a `unit`, but it is up to their discretion. Therefore, this
@@ -1188,6 +1171,25 @@ class Device:
         result.observe(self.usage, usage, {'property', self.property})
         result.observe(self.pressure, pressure, {'property', self.property})
 ```
+
+## Name syntax
+
+The meter and instrument name syntax is defined below using the
+[Augmented Backus-Naur Form](https://tools.ietf.org/html/rfc5234):
+
+```abnf
+name = ALPHA 0*62 ("_" / "." / "-" / ALPHA / DIGIT)
+
+ALPHA = %x41-5A / %x61-7A; A-Z / a-z
+DIGIT = %x30-39 ; 0-9
+```
+
+* They are not null or empty strings.
+* They are case-insensitive, ASCII strings.
+* The first character must be an alphabetic character.
+* Subsequent characters must belong to the alphanumeric characters, '_', '.',
+  and '-'.
+* They can have a maximum length of 63 characters.
 
 ## Compatibility requirements
 

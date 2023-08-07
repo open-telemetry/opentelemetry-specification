@@ -114,10 +114,13 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
 
-In the case where an invalid `name` (null or empty string) is specified, a
-working Meter MUST be returned as a fallback rather than returning null or
-throwing an exception, its `name` SHOULD keep the original invalid value, and a
-message reporting that the specified value is invalid SHOULD be logged.
+When a MeterProvider creates a Meter, it SHOULD validate the meter name
+conforms to the [name syntax](./api.md#name-syntax).
+
+If the instrument name does not conform to this syntax, a working Meter MUST be
+returned as a fallback rather than returning null or throwing an exception,
+its `name` SHOULD keep the original invalid value, and a message reporting that
+the specified value is invalid SHOULD be logged.
 
 When a Schema URL is passed as an argument when creating a `Meter` the emitted
 telemetry for that `Meter` MUST be associated with the Schema URL, provided
@@ -804,7 +807,7 @@ information for the user on how to resolve the conflict, if possible.
 ### Instrument name
 
 When a Meter creates an instrument, it SHOULD validate the instrument name
-conforms to the [instrument name syntax](./api.md#instrument-name-syntax)
+conforms to the [name syntax](./api.md#name-syntax).
 
 If the instrument name does not conform to this syntax, the Meter SHOULD emit
 an error notifying the user about the invalid name. It is left unspecified if a
