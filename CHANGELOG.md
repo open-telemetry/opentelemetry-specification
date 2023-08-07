@@ -18,7 +18,7 @@ release.
 - Revise the exemplar default reservoirs.
   ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
 - Have the same name syntax for meter name and instrument name.
-  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+  ([#3643](https://github.com/open-telemetry/opentelemetry-specification/pull/3643))
 
 ### Logs
 
