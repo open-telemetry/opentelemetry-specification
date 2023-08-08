@@ -19,6 +19,8 @@ release.
   ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
 - Mark Metric No-Op API as stable.
   ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
+- MetricProducers are provided as config to MetricReaders instead of through a RegisterProducer operation.
+  ([#3613](https://github.com/open-telemetry/opentelemetry-specification/pull/3613))
 - Refine `MetricProvider.ForceFlush` and define `ForceFlush` for periodic exporting MetricReader.
   ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
 
