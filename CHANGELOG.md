@@ -23,6 +23,8 @@ release.
   ([#3613](https://github.com/open-telemetry/opentelemetry-specification/pull/3613))
 - Refine `MetricProvider.ForceFlush` and define `ForceFlush` for periodic exporting MetricReader.
   ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
+- Increase metric name maximum length from 63 to 255 characters.
+  ([#9999](https://github.com/open-telemetry/opentelemetry-specification/pull/9999))
 
 ### Logs
 
