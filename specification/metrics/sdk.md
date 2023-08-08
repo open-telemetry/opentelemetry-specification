@@ -60,7 +60,6 @@ linkTitle: SDK
     + [AlignedHistogramBucketExemplarReservoir](#alignedhistogrambucketexemplarreservoir)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
-    + [RegisterProducer(metricProducer)](#registerproducermetricproducer)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
@@ -1068,6 +1067,7 @@ SHOULD provide at least the following:
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 * **Status**: [Experimental](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+* **Status**: [Experimental](../document-status.md) - Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1123,21 +1123,6 @@ idiomatic approach, for example, as `OnForceFlush` and `OnShutdown` callback
 functions.
 
 ### MetricReader operations
-
-#### RegisterProducer(metricProducer)
-
-**Status**: [Experimental](../document-status.md)
-
-RegisterProducer causes the MetricReader to use the provided
-[MetricProducer](#metricproducer) as a source of aggregated metric data in
-subsequent invocations of Collect. RegisterProducer is expected to be called
-during initialization, but MAY be invoked later. Multiple registrations
-of the same MetricProducer MAY result in duplicate metric data being collected.
-
-If the [MeterProvider](#meterprovider) is an instance of
-[MetricProducer](#metricproducer), this MAY be used to register the
-MeterProvider, but MUST NOT allow multiple [MeterProviders](#meterprovider)
-to be registered with the same MetricReader.
 
 #### Collect
 
