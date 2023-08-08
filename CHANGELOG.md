@@ -43,11 +43,15 @@ release.
   ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
 - Mark the default aggregation cardinality Experimental in MetricReader.
   ([#3619](https://github.com/open-telemetry/opentelemetry-specification/pull/3619))
+- Mark Metric No-Op API as stable.
+  ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
 
 ### Logs
 
 - Clarify how log appender use Scope name and attributes.
   ([#3583](https://github.com/open-telemetry/opentelemetry-specification/pull/3583))
+- Mark No-Op Logs Bridge API as stable.
+  ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
 
 ### Resource
 
