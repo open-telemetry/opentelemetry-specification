@@ -218,19 +218,19 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
 | **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
-| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      |     |      |       |
+| LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
+| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      | +   |      |       |
 | LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
 | LoggerProvider.ForceFlush                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
-| Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        | +   |      |     | -    |       |
-| SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        | +   |      |     |      |       |
-| BatchLogRecordProcessor                      |          |     | +    |     |        |      |        | +   |      |     |      |       |
-| Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        | +   |      |     |      |       |
-| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
-| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
+| Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
+| SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        | +   |      | +   |      |       |
+| BatchLogRecordProcessor                      |          |     | +    |     |        |      |        | +   |      | +   |      |       |
+| Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        | +   |      | +   |      |       |
+| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
+| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
-| Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      |     |      |       |
-| Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
+| Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      | +   |      |       |
+| Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 
 ## Resource
 
@@ -325,6 +325,8 @@ Note: Support for environment variables is optional.
 | SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
 | SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        | +   |      |     | +    |       |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC   | X        | +  |      |    |             |      |        |     |      |     |      |       |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X        | +  |      |    |             |      |        |     |      |     |      |       |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python    | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | +    |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | +    |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |

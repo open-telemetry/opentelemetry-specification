@@ -17,10 +17,15 @@ release.
   ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
 - Revise the exemplar default reservoirs.
   ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
+- Mark Metric No-Op API as stable.
+  ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
 - MetricReader.Collect ignores Resource from MetricProducer.Produce.
   ([#3636](https://github.com/open-telemetry/opentelemetry-specification/pull/3636))
 
 ### Logs
+
+- Mark No-Op Logs Bridge API as stable.
+  ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
 
 ### Resource
 
