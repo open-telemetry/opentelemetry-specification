@@ -195,9 +195,11 @@ registered or the global OpenTelemetry `Propagator`s, as configured at construct
   if any, or else use the global `TextMapPropagator`.
 
 The operation MUST return a `SpanContext` Shim instance with the extracted values if any of these conditions are met:
-  * `SpanContext` is valid
-  * `SpanContext` is sampled
-  * `SpanContext` contains non-empty extracted `Baggage`
+
+* `SpanContext` is valid.
+* `SpanContext` is sampled.
+* `SpanContext` contains non-empty extracted `Baggage`.
+
 Otherwise, the operation MUST return null or empty value.
 
 ```java
