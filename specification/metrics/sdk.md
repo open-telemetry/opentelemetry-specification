@@ -42,6 +42,7 @@ linkTitle: SDK
     + [Asynchronous instrument cardinality limits](#asynchronous-instrument-cardinality-limits)
 - [Meter](#meter)
   * [Duplicate instrument registration](#duplicate-instrument-registration)
+    + [Name conflict](#name-conflict)
   * [Instrument name](#instrument-name)
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
@@ -55,12 +56,14 @@ linkTitle: SDK
     + [TraceBased](#tracebased)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
+    + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
+    + [AlignedHistogramBucketExemplarReservoir](#alignedhistogrambucketexemplarreservoir)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
-    + [RegisterProducer(metricProducer)](#registerproducermetricproducer)
     + [Collect](#collect)
     + [Shutdown](#shutdown-1)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
+    + [ForceFlush](#forceflush-1)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
@@ -158,12 +161,15 @@ decide if they want to make the shutdown timeout configurable.
 ### ForceFlush
 
 This method provides a way for provider to notify the registered
-[MetricReader](#metricreader) and [MetricExporter](#metricexporter) instances,
-so they can do as much as they could to consume or send the metrics. Note:
-unlike [Push Metric Exporter](#push-metric-exporter) which can send data on its
-own schedule, [Pull Metric Exporter](#pull-metric-exporter) can only send the
+[MetricReader](#metricreader) instances that have an associated
+[Push Metric Exporter](#push-metric-exporter), so they can do as much
+as they could to collect and send the metrics.
+Note: [Pull Metric Exporter](#pull-metric-exporter) can only send the
 data when it is being asked by the scraper, so `ForceFlush` would not make much
 sense.
+
+`ForceFlush` MUST invoke `ForceFlush` on all registered
+[MetricReader](#metricreader) instances that implement `ForceFlush`.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
@@ -175,10 +181,6 @@ and **NO ERROR**.
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
-
-`ForceFlush` MUST invoke `ForceFlush` on all registered
-[MetricReader](#metricreader) and [Push Metric Exporter](#push-metric-exporter)
-instances.
 
 ### View
 
@@ -766,12 +768,31 @@ Distinct meters MUST be treated as separate namespaces for the purposes of detec
 
 ### Duplicate instrument registration
 
-When more than one Instrument of the same `name` is created for identical
-Meters from the same MeterProvider, denoted _duplicate instrument
-registration_, the Meter MUST create a valid Instrument in every case. Here,
-"valid" means an instrument that is functional and can be expected to export
-data, despite potentially creating a [semantic error in the data
+A _duplicate instrument registration_ occurs when more than one Instrument of
+the same [`name`](./api.md#instrument-name-syntax) is created for identical
+Meters from the same MeterProvider but they have different [identifying
+fields](./api.md#instrument).
+
+Whenever this occurs, users still need to be able to make measurements with the
+duplicate instrument. This means that the Meter MUST return a functional
+instrument that can be expected to export data even if this will cause
+[semantic error in the data
 model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations).
+
+Additionally, users need to be informed about this error. Therefore, when a
+duplicate instrument registration occurs, and it is not corrected with a View,
+a warning SHOULD be emitted. The emitted warning SHOULD include information for
+the user on how to resolve the conflict, if possible.
+
+1. If the potential conflict involves multiple `description`
+   properties, setting the `description` through a configured View
+   SHOULD avoid the warning.
+2. If the potential conflict involves instruments that can be distinguished by
+   a supported View selector (e.g. name, instrument kind) a renaming View
+   recipe SHOULD be included in the warning.
+3. Otherwise (e.g., use of multiple units), the SDK SHOULD pass through the
+   data by reporting both `Metric` objects and emit a generic warning
+   describing the duplicate instrument registration.
 
 It is unspecified whether or under which conditions the same or
 different Instrument instance will be returned as a result of
@@ -786,19 +807,20 @@ model](data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
 the SDK MUST aggregate data from [identical Instruments](api.md#instrument)
 together in its export pipeline.
 
-When a duplicate instrument registration occurs, and it is not corrected with a
-View, a warning SHOULD be emitted. The emitted warning SHOULD include
-information for the user on how to resolve the conflict, if possible.
+#### Name conflict
 
-1. If the potential conflict involves multiple `description`
-   properties, setting the `description` through a configured View
-   SHOULD avoid the warning.
-2. If the potential conflict involves instruments that can be
-   distinguished by a supported View selector (e.g., instrument type)
-   a renaming View recipe SHOULD be included in the warning.
-3. Otherwise (e.g., use of multiple units), the SDK SHOULD pass through the
-   data by reporting both `Metric` objects and emit a generic warning
-   describing the duplicate instrument registration.
+The [`name`](./api.md#instrument-name-syntax) of an Instrument is defined to be
+case-insensitive. If an SDK uses a case-sensitive encoding to represent this
+`name`, a duplicate instrument registration will occur when a user passes
+multiple casings of the same `name`. When this happens, the Meter MUST return
+an instrument using the first-seen instrument name and log an appropriate error
+as described above.
+
+For example, if a user creates an instrument with the name `requestCount` and
+then makes another request to the same `Meter` to create an instrument with the
+name `RequestCount`, in both cases an instrument with the name `requestCount`
+needs to be returned to the user and a log message needs to be emitted for the
+second request.
 
 ### Instrument name
 
@@ -973,20 +995,21 @@ The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
 ### Exemplar defaults
 
-The SDK will come with two types of built-in exemplar reservoirs:
+The SDK SHOULD include two types of built-in exemplar reservoirs:
 
-1. SimpleFixedSizeExemplarReservoir
-2. AlignedHistogramBucketExemplarReservoir
+1. `SimpleFixedSizeExemplarReservoir`
+2. `AlignedHistogramBucketExemplarReservoir`
 
 By default, explicit bucket histogram aggregation with more than 1 bucket will
 use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
 `SimpleFixedSizeExemplarReservoir`.
 
-_SimpleExemplarReservoir_
-This Exemplar reservoir MAY take a configuration parameter for the size of the
-reservoir pool.  The reservoir will accept measurements using an equivalent of
-the [naive reservoir sampling
-algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
+#### SimpleFixedSizeExemplarReservoir
+
+This reservoir MUST use an uniformly-weighted sampling algorithm based on the
+number of samples the reservoir has seen so far to determine if the offered
+measurements should be sampled. For example, the [simple reservoir sampling
+algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
 
   ```
   bucket = random_integer(0, num_measurements_seen)
@@ -995,10 +1018,15 @@ algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling)
   end
   ```
 
-Additionally, the `num_measurements_seen` count SHOULD be reset at every
-collection cycle.
+Any stateful portion of sampling computation SHOULD be reset every collection
+cycle. For the above example, that would mean that the `num_measurements_seen`
+count is reset every time the reservoir is collected.
 
-_AlignedHistogramBucketExemplarReservoir_
+This Exemplar reservoir MAY take a configuration parameter for the size of the
+reservoir pool.
+
+#### AlignedHistogramBucketExemplarReservoir
+
 This Exemplar reservoir MUST take a configuration parameter that is the
 configuration of a Histogram.  This implementation MUST keep the last seen
 measurement that falls within a histogram bucket.  The reservoir will accept
@@ -1040,6 +1068,7 @@ SHOULD provide at least the following:
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 * **Status**: [Experimental](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+* **Status**: [Experimental](../document-status.md) - Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1126,21 +1155,6 @@ functions.
 
 ### MetricReader operations
 
-#### RegisterProducer(metricProducer)
-
-**Status**: [Experimental](../document-status.md)
-
-RegisterProducer causes the MetricReader to use the provided
-[MetricProducer](#metricproducer) as a source of aggregated metric data in
-subsequent invocations of Collect. RegisterProducer is expected to be called
-during initialization, but MAY be invoked later. Multiple registrations
-of the same MetricProducer MAY result in duplicate metric data being collected.
-
-If the [MeterProvider](#meterprovider) is an instance of
-[MetricProducer](#metricproducer), this MAY be used to register the
-MeterProvider, but MUST NOT allow multiple [MeterProviders](#meterprovider)
-to be registered with the same MetricReader.
-
 #### Collect
 
 Collects the metrics from the SDK and any registered
@@ -1205,6 +1219,25 @@ from `MetricReader` and start a background task which calls the inherited
 * After another 15 seconds (at the end of the second 30 second interval),
   the background task calls `Collect()` which passes metrics to the push
   exporter.
+
+#### ForceFlush
+
+This method provides a way for the periodic exporting MetricReader
+so it can do as much as it could to collect and send the metrics.
+
+`ForceFlush` SHOULD collect metrics, call [`Export(batch)`](#exportbatch)
+and [`ForceFlush()`](#forceflush-2) on the configured
+[Push Metric Exporter](#push-metric-exporter).
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
+failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
+is an error condition; and if there is no error condition, it should return some
+**NO ERROR** status, language implementations MAY decide how to model **ERROR**
+and **NO ERROR**.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` MAY be
+implemented as a blocking API or an asynchronous API which notifies the caller
+via a callback or an event.
 
 ## MetricExporter
 
@@ -1516,7 +1549,8 @@ called concurrently.
 
 **ExemplarReservoir** - all methods are safe to be called concurrently.
 
-**MetricReader** - `Collect` and `Shutdown` are safe to be called concurrently.
+**MetricReader** - `Collect`, `ForceFlush` (for periodic exporting MetricReader)
+and `Shutdown` are safe to be called concurrently.
 
 **MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
 concurrently.
