@@ -25,7 +25,7 @@ release.
 
 ### Supplemenatary Guidelines
 
-## v1.24.0 (2023-08-08)
+## v1.24.0 (2023-08-09)
 
 ### Context
 
@@ -37,6 +37,8 @@ release.
 
 ### Metrics
 
+- Specify how to handle instrument name conflicts.
+  ([#3626](https://github.com/open-telemetry/opentelemetry-specification/pull/3626))
 - Add experimental metric attributes advice API.
   ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
 - Revise the exemplar default reservoirs.
@@ -45,6 +47,10 @@ release.
   ([#3619](https://github.com/open-telemetry/opentelemetry-specification/pull/3619))
 - Mark Metric No-Op API as stable.
   ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
+- MetricProducers are provided as config to MetricReaders instead of through a RegisterProducer operation.
+  ([#3613](https://github.com/open-telemetry/opentelemetry-specification/pull/3613))
+- Refine `MetricProvider.ForceFlush` and define `ForceFlush` for periodic exporting MetricReader.
+  ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
 
 ### Logs
 
