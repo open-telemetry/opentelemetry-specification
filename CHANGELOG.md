@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Specify how to handle instrument name conflicts.
+  ([#3626](https://github.com/open-telemetry/opentelemetry-specification/pull/3626))
 - Add experimental metric attributes advice API.
   ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
 - Revise the exemplar default reservoirs.
