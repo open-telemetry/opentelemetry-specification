@@ -187,6 +187,6 @@ The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions use
 [resource-semconv]: ../resource/semantic_conventions/README.md#telemetry-sdk
 [otlphttp-req]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-request
 [rfc-7231]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3
-[protocol-spec]: (https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md)
-[retryable-grpc-status-codes]: (https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures)
-[retryable-http-status-codes]: (https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures-1)
+[protocol-spec]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md
+[retryable-grpc-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures
+[retryable-http-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures-1
