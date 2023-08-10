@@ -33,6 +33,11 @@ release.
 
 ### Resource
 
+### Protocol
+
+- Fix and clarify definition of "transient error" in the OTLP exporter specification.
+  ([#3653](https://github.com/open-telemetry/opentelemetry-specification/pull/3653))
+
 ### Compatibility
 
 - Prometheus exporters SHOULD provide configuration to disable the addition of `_total` suffixes.
