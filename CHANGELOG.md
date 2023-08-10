@@ -19,6 +19,9 @@ release.
 
 ### Compatibility
 
+- OpenTracing Shim: Allow invalid but sampled SpanContext to be returned.
+  ([#3471](https://github.com/open-telemetry/opentelemetry-specification/pull/3471))
+
 ### SDK Configuration
 
 ### Common
