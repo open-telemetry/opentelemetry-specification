@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Increase metric name maximum length from 63 to 255 characters.
+  ([#3648](https://github.com/open-telemetry/opentelemetry-specification/pull/3648))
+
 ### Logs
 
 ### Resource
