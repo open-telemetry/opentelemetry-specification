@@ -15,6 +15,10 @@ release.
 
 - Increase metric name maximum length from 63 to 255 characters.
   ([#3648](https://github.com/open-telemetry/opentelemetry-specification/pull/3648))
+- MetricReader.Collect ignores Resource from MetricProducer.Produce.
+  ([#3636](https://github.com/open-telemetry/opentelemetry-specification/pull/3636))
+- Attribute sets not observed during async callbacks are not exported.
+  ([#3242](https://github.com/open-telemetry/opentelemetry-specification/pull/3242))
 
 ### Logs
 
