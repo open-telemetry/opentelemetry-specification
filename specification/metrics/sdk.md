@@ -701,6 +701,10 @@ execution.
 The implementation MUST complete the execution of all callbacks for a
 given instrument before starting a subsequent round of collection.
 
+The implementation SHOULD NOT produce aggregated metric data for a
+previously-observed attribute set which is not observed during a successful
+callback.
+
 ### Cardinality limits
 
 **Status**: [Experimental](../document-status.md)
