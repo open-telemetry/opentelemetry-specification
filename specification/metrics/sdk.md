@@ -704,7 +704,8 @@ given instrument before starting a subsequent round of collection.
 
 The implementation SHOULD NOT produce aggregated metric data for a
 previously-observed attribute set which is not observed during a successful
-callback.
+callback. See [MetricReader](#metricreader) for more details on the persistence
+of metrics across successive collections.
 
 ### Cardinality limits
 
