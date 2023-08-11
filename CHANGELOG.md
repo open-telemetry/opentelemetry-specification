@@ -13,8 +13,12 @@ release.
 
 ### Metrics
 
-- Add experimental metric attributes advice API.
-  ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
+- Increase metric name maximum length from 63 to 255 characters.
+  ([#3648](https://github.com/open-telemetry/opentelemetry-specification/pull/3648))
+- MetricReader.Collect ignores Resource from MetricProducer.Produce.
+  ([#3636](https://github.com/open-telemetry/opentelemetry-specification/pull/3636))
+- Attribute sets not observed during async callbacks are not exported.
+  ([#3242](https://github.com/open-telemetry/opentelemetry-specification/pull/3242))
 
 ### Logs
 
@@ -25,14 +29,69 @@ release.
 
 ### Compatibility
 
-- Prometheus exporters SHOULD provide configuration to disable the addition of `_total` suffixes.
-  ([#3590](https://github.com/open-telemetry/opentelemetry-specification/pull/3590))
+- OpenTracing Shim: Allow invalid but sampled SpanContext to be returned.
+  ([#3471](https://github.com/open-telemetry/opentelemetry-specification/pull/3471))
 
 ### SDK Configuration
 
 ### Common
 
 ### Supplemenatary Guidelines
+
+## v1.24.0 (2023-08-10)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Specify how to handle instrument name conflicts.
+  ([#3626](https://github.com/open-telemetry/opentelemetry-specification/pull/3626))
+- Add experimental metric attributes advice API.
+  ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
+- Revise the exemplar default reservoirs.
+  ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
+- Mark the default aggregation cardinality Experimental in MetricReader.
+  ([#3619](https://github.com/open-telemetry/opentelemetry-specification/pull/3619))
+- Mark Metric No-Op API as stable.
+  ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
+- MetricProducers are provided as config to MetricReaders instead of through a RegisterProducer operation.
+  ([#3613](https://github.com/open-telemetry/opentelemetry-specification/pull/3613))
+- Refine `MetricProvider.ForceFlush` and define `ForceFlush` for periodic exporting MetricReader.
+  ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
+
+### Logs
+
+- Clarify how log appender use Scope name and attributes.
+  ([#3583](https://github.com/open-telemetry/opentelemetry-specification/pull/3583))
+- Mark No-Op Logs Bridge API as stable.
+  ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
+
+### Resource
+
+- No changes.
+
+### Compatibility
+
+- Prometheus exporters SHOULD provide configuration to disable the addition of `_total` suffixes.
+  ([#3590](https://github.com/open-telemetry/opentelemetry-specification/pull/3590))
+
+### SDK Configuration
+
+- No changes.
+
+### Common
+
+- No changes.
+
+### Supplemenatary Guidelines
+
+- No changes.
 
 ## v1.23.0 (2023-07-12)
 
