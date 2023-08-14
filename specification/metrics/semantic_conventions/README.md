@@ -106,29 +106,7 @@ using the OpenMetrics exposition format, use the
 
 ### Pluralization
 
-Metric names SHOULD NOT be pluralized, unless the value being recorded
-represents discrete instances of a
-[countable quantity](https://en.wikipedia.org/wiki/Count_noun).
-Generally, the name SHOULD be pluralized only if the unit of the metric in
-question is a non-unit (like `{fault}` or `{operation}`).
-
-Examples:
-
-* `system.filesystem.utilization`, `http.server.duration`, and `system.cpu.time`
-should not be pluralized, even if many data points are recorded.
-* `system.paging.faults`, `system.disk.operations`, and `system.network.packets`
-should be pluralized, even if only a single data point is recorded.
-
-#### Use `count` Instead of Pluralization
-
-If the value being recorded represents the count of concepts signified
-by the namespace then the metric should be named `count` (within its namespace).
-The pluralization rule does not apply in this case.
-
-For example if we have a namespace `system.processes` which contains all metrics related
-to the processes then to represent the count of the processes we can have a metric named
-`system.processes.count`. The suffix `count` here indicates that it is the count of
-`system.processes`.
+Metric names and namespaces SHOULD NOT be pluralized
 
 ## General Metric Semantic Conventions
 
@@ -141,6 +119,10 @@ followed for other instruments not explicitly defined in this document.
 ### Instrument Naming
 
 **Status**: [Experimental](../../document-status.md)
+
+- **count** - an instrument that measures the count of concepts signified
+by the namespace should be called `entity.count`. For example,
+`system.process.count`.
 
 - **limit** - an instrument that measures the constant, known total amount of
 something should be called `entity.limit`. For example, `system.memory.limit`
