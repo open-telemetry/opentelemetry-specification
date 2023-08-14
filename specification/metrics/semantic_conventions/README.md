@@ -18,7 +18,6 @@ No changes to this document are allowed.
   * [Name Reuse Prohibition](#name-reuse-prohibition)
   * [Units](#units)
   * [Pluralization](#pluralization)
-    + [Use `count` Instead of Pluralization](#use-count-instead-of-pluralization)
 - [General Metric Semantic Conventions](#general-metric-semantic-conventions)
   * [Instrument Naming](#instrument-naming)
   * [Instrument Units](#instrument-units)
