@@ -19,6 +19,8 @@ release.
   ([#3636](https://github.com/open-telemetry/opentelemetry-specification/pull/3636))
 - Attribute sets not observed during async callbacks are not exported.
   ([#3242](https://github.com/open-telemetry/opentelemetry-specification/pull/3242))
+- Promote MetricProducer specification to feature-freeze.
+  ([#3600](https://github.com/open-telemetry/opentelemetry-specification/pull/3600))
 - Metric names and namespaces should not be pluralized.
   ([#3658](https://github.com/open-telemetry/opentelemetry-specification/pull/3658))
 
