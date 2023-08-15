@@ -105,7 +105,7 @@ using the OpenMetrics exposition format, use the
 
 ### Pluralization
 
-Metric names and namespaces SHOULD NOT be pluralized
+Metric names and namespaces SHOULD NOT be pluralized.
 
 ## General Metric Semantic Conventions
 
