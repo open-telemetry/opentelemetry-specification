@@ -35,6 +35,8 @@ release.
 
 - OpenTracing Shim: Allow invalid but sampled SpanContext to be returned.
   ([#3471](https://github.com/open-telemetry/opentelemetry-specification/pull/3471))
+- Prometheus exporters omit empty resources and scopes without attributes.
+  ([#3660](https://github.com/open-telemetry/opentelemetry-specification/pull/3660))
 
 ### SDK Configuration
 
