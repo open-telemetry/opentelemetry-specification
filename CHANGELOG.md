@@ -21,6 +21,8 @@ release.
   ([#3242](https://github.com/open-telemetry/opentelemetry-specification/pull/3242))
 - Promote MetricProducer specification to feature-freeze.
   ([#3600](https://github.com/open-telemetry/opentelemetry-specification/pull/3600))
+- Clarify that advice is non-identifying.
+  ([#3661](https://github.com/open-telemetry/opentelemetry-specification/pull/3661))
 
 ### Logs
 
