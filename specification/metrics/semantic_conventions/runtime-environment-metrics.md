@@ -222,7 +222,7 @@ This metric is obtained by subscribing to
 [`GarbageCollectionNotificationInfo`](https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/GarbageCollectionNotificationInfo.html) events provided by [`GarbageCollectorMXBean`](https://docs.oracle.com/javase/8/docs/api/java/lang/management/GarbageCollectorMXBean.html). The duration value is obtained from [`GcInfo`](https://docs.oracle.com/javase/8/docs/jre/api/management/extension/com/sun/management/GcInfo.html#getDuration--)
 
 This metric SHOULD be specified with
-[`ExplicitBucketBoundaries`](../../metrics/api.md#instrument-advice)
+[`ExplicitBucketBoundaries`](../../metrics/api.md#instrument-advisory-parameters)
 of `[]` (single bucket histogram capturing count, sum, min, max).
 
 <!-- semconv metric.process.runtime.jvm.gc.duration(metric_table) -->

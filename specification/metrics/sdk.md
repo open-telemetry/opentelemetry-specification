@@ -46,7 +46,7 @@ linkTitle: SDK
   * [Instrument name](#instrument-name)
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
-  * [Instrument advice](#instrument-advice)
+  * [Instrument advisory parameters](#instrument-advisory-parameters)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -322,8 +322,9 @@ The SDK MUST accept the following stream configuration parameters:
   Therefore, the stream configuration parameter needs to be structured to
   accept `attribute_keys`, but MUST NOT obligate a user to provide them.
   If the user does not provide any value, the SDK SHOULD use
-  the [`advice`](./api.md#instrument-advice) configured on the instrument
-  instead. If the `advice` is absent, all attributes MUST be kept.
+  the [`Attributes`](./api.md#instrument-advisory-parameters) advisory
+  parameter configured on the instrument instead. If the `Attributes`
+  advisory parameter is absent, all attributes MUST be kept.
 
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
@@ -518,8 +519,8 @@ This Aggregation does not have any configuration parameters.
 #### Default Aggregation
 
 The Default Aggregation informs the SDK to use the Instrument `kind` to select
-an aggregation and `advice` to influence aggregation configuration parameters
-(as noted in the "Selected Aggregation" column).
+an aggregation and `advisory` parameters to influence aggregation configuration
+parameters (as noted in the "Selected Aggregation" column).
 
 | Instrument Kind                                                   | Selected Aggregation                                                                                                                                                           |
 |-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -529,7 +530,7 @@ an aggregation and `advice` to influence aggregation configuration parameters
 | [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
 | [Gauge](./api.md#gauge)                                           | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                      |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                      |
-| [Histogram](./api.md#histogram)                                   | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation), with `ExplicitBucketBoundaries` from [advice](./api.md#instrument-advice) if provided |
+| [Histogram](./api.md#histogram)                                   | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation), with the `ExplicitBucketBoundaries` [advisory parameter](./api.md#instrument-advisory-parameters) if provided |
 
 This Aggregation does not have any configuration parameters.
 
@@ -848,12 +849,12 @@ When a Meter creates an instrument, it SHOULD NOT validate the instrument
 description. If a description is not provided or the description is null, the
 Meter MUST treat it the same as an empty description string.
 
-### Instrument advice
+### Instrument advisory parameters
 
 **Status**: [Experimental](../document-status.md)
 
-When a Meter creates an instrument, it SHOULD validate the instrument advice
-parameters. If an advice parameter is not valid, the Meter SHOULD emit an error
+When a Meter creates an instrument, it SHOULD validate the instrument advisory
+parameters. If an advisory parameter is not valid, the Meter SHOULD emit an error
 notifying the user and proceed as if the parameter was not provided.
 
 If multiple [identical Instruments](api.md#instrument) are created with
