@@ -22,6 +22,9 @@ release.
 
 ### Logs
 
+- Update GCP data model to use `TraceFlags` instead of
+  `gcp.trace_sampled`. ([#3629](https://github.com/open-telemetry/opentelemetry-specification/pull/3629))
+
 ### Resource
 
 ### Compatibility
