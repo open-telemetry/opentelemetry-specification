@@ -21,6 +21,8 @@ release.
   ([#3242](https://github.com/open-telemetry/opentelemetry-specification/pull/3242))
 - Promote MetricProducer specification to feature-freeze.
   ([#3600](https://github.com/open-telemetry/opentelemetry-specification/pull/3600))
+- Metric namespaces SHOULD NOT be pluralized.
+  ([#3663](https://github.com/open-telemetry/opentelemetry-specification/pull/3663))
 
 ### Logs
 

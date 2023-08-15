@@ -106,6 +106,8 @@ using the OpenMetrics exposition format, use the
 
 ### Pluralization
 
+Metric namespaces SHOULD NOT be pluralized.
+
 Metric names SHOULD NOT be pluralized, unless the value being recorded
 represents discrete instances of a
 [countable quantity](https://en.wikipedia.org/wiki/Count_noun).
