@@ -190,7 +190,7 @@ will have the following fields:
 * Optional `advice` (**experimental**)
 
 Instruments are associated with the Meter during creation. Instruments
-are identified by all of these fields.
+are identified by the `name`, `kind`, `unit`, and `description`.
 
 Language-level features such as the distinction between integer and
 floating point numbers SHOULD be considered as identifying.
