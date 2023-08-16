@@ -527,6 +527,7 @@ an aggregation and `advice` to influence aggregation configuration parameters
 | [Asynchronous Counter](./api.md#asynchronous-counter)             | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
 | [UpDownCounter](./api.md#updowncounter)                           | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
 | [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
+| [Gauge](./api.md#gauge)                                           | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                      |
 | [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                      |
 | [Histogram](./api.md#histogram)                                   | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation), with `ExplicitBucketBoundaries` from [advice](./api.md#instrument-advice) if provided |
 
@@ -703,7 +704,8 @@ given instrument before starting a subsequent round of collection.
 
 The implementation SHOULD NOT produce aggregated metric data for a
 previously-observed attribute set which is not observed during a successful
-callback.
+callback. See [MetricReader](#metricreader) for more details on the persistence
+of metrics across successive collections.
 
 ### Cardinality limits
 
@@ -1086,17 +1088,47 @@ typically with push-based metrics collection.
 
 The `MetricReader` MUST ensure that data points from OpenTelemetry
 [instruments](./api.md#instrument) are output in the configured aggregation
-temporality for each instrument kind. For synchronous instruments being output
-with Cumulative temporality, this means converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
-aggregation temporality.  For asynchronous instruments being output
-with Delta temporality, this means converting [Cumulative to
-Delta](supplementary-guidelines.md#asynchronous-example-delta-temporality) aggregation
-temporality.
+temporality for each instrument kind. For synchronous instruments with
+Cumulative aggregation temporality, this means
+converting [Delta to Cumulative](supplementary-guidelines.md#synchronous-example-cumulative-aggregation-temporality)
+aggregation temporality. For asynchronous instruments with Delta temporality,
+this means
+converting [Cumulative to Delta](supplementary-guidelines.md#asynchronous-example-delta-temporality)
+aggregation temporality.
 
 The `MetricReader` is not required to ensure data points from a non-SDK
 [MetricProducer](#metricproducer) are output in the configured aggregation
 temporality, as these data points are not collected using OpenTelemetry
 instruments.
+
+The `MetricReader` selection of `temporality` as a function of instrument kind
+influences the persistence of metric data points across collections. For
+synchronous instruments with Cumulative aggregation
+temporality, [MetricReader.Collect](#collect) MUST receive data points exposed
+in previous collections regardless of whether new measurements have been
+recorded. For synchronous instruments with Delta aggregation
+temporality, [MetricReader.Collect](#collect) MUST only receive data points with
+measurements recorded since the previous collection. For asynchronous
+instruments with Delta or Cumulative aggregation
+temporality, [MetricReader.Collect](#collect) MUST only receive data points with
+measurements recorded since the previous collection. These rules apply to all
+metrics, not just those whose [point kinds](./data-model.md#point-kinds)
+includes an aggregation temporality field.
+
+The `MetricReader` selection of `temporality` as a function of instrument kind
+influences the starting timestamp (i.e. `StartTimeUnixNano`) of metrics data
+points received by [MetricReader.Collect](#collect). For instruments with
+Cumulative aggregation temporality, successive data points received by
+successive calls to [MetricReader.Collect](#collect) MUST repeat the same
+starting timestamps (e.g. `(T0, T1], (T0, T2], (T0, T3]`). For instruments with
+Delta aggregation temporality, successive data points received by successive
+calls to [MetricReader.Collect](#collect) MUST advance the starting timestamp (
+e.g. `(T0, T1], (T1, T2], (T2, T3]`). The ending timestamp (i.e. `TimeUnixNano`)
+MUST always be equal to time the metric data point took effect, which is equal
+to when [MetricReader.Collect](#collect) was invoked. These rules apply to all
+metrics, not just those whose [point kinds](./data-model.md#point-kinds) includes
+an aggregation temporality field.
+See [data model temporality](./data-model.md#temporality) for more details.
 
 The SDK MUST support multiple `MetricReader` instances to be registered on the
 same `MeterProvider`, and the [MetricReader.Collect](#collect) invocation on one
