@@ -101,7 +101,7 @@ Multiple Prometheus histogram metrics MUST be merged together into a single OTLP
 
 * The `le` label on the `_bucket`-suffixed metric is used to identify and order histogram bucket boundaries. Each Prometheus line produces one bucket count on the resulting histogram. Each value for the `le` label except `+Inf` produces one bucket boundary.
 * Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
-* If `_count` is not present, the metric MUST be dropped.
+* If `_count` is not present, the histogram's count must be set to zero.
 * If `_sum` is not present, the histogram's sum MUST be unset.
 
 ### Summaries
@@ -112,7 +112,7 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 
 * The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus line produces one quantile on the resulting summary.
 * Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
-* If `_count` is not present, the metric MUST be dropped.
+* If `_count` is not present, the summary's count must be set to zero.
 * If `_sum` is not present, the summary's sum MUST be [set to zero.](https://github.com/open-telemetry/opentelemetry-proto/blob/d8729d40f629dba12694b44c4c32c1eab109b00a/opentelemetry/proto/metrics/v1/metrics.proto#L601)
 
 ### Dropped Types
