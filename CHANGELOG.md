@@ -21,6 +21,8 @@ release.
   ([#3242](https://github.com/open-telemetry/opentelemetry-specification/pull/3242))
 - Promote MetricProducer specification to feature-freeze.
   ([#3600](https://github.com/open-telemetry/opentelemetry-specification/pull/3600))
+- Clarify that advice is non-identifying.
+  ([#3661](https://github.com/open-telemetry/opentelemetry-specification/pull/3661))
 
 ### Logs
 
@@ -66,6 +68,9 @@ release.
   ([#3613](https://github.com/open-telemetry/opentelemetry-specification/pull/3613))
 - Refine `MetricProvider.ForceFlush` and define `ForceFlush` for periodic exporting MetricReader.
   ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
+- Add synchronous gauge instrument, clarify temporality selection influence on
+  metric point persistence.
+  ([#3540](https://github.com/open-telemetry/opentelemetry-specification/pull/3540))
 
 ### Logs
 
