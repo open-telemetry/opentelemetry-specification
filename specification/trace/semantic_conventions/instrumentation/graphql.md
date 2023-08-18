@@ -16,19 +16,25 @@ span SHOULD be named `<graphql.operation.type>`. When `<graphql.operation.type>`
 MAY be used as span name.
 
 <!-- semconv graphql -->
-| Attribute  | Type | Description  | Examples  | Requirement Level |
-|---|---|---|---|---|
-| `graphql.operation.name` | string | The name of the operation being executed. | `findBookById` | Recommended |
-| `graphql.operation.type` | string | The type of the operation being executed. | `query`; `mutation`; `subscription` | Recommended |
-| `graphql.document` | string | The GraphQL document being executed. [1] | `query findBookById { bookById(id: ?) { name } }` | Recommended |
+
+| Attribute                      | Type   | Description                               | Examples                                           | Requirement Level |
+| ------------------------------ | ------ | ----------------------------------------- | -------------------------------------------------- | ----------------- |
+| `graphql.operation.name`       | string | The name of the operation being executed. | `findBookById`                                     | Required          |
+| `graphql.operation.type`       | string | The type of the operation being executed. | `query`; `mutation`; `subscription`                | Recommended       |
+| `graphql.operation.returnType` | string | The type of the object being resolved.    | `Book`                                             | Required          |
+| `graphql.operation.args`       | string | JSON string of the operation args. [1]    | `{ "bookId": "some-book" }`                        | Recommended       |
+| `graphql.operation.context`    | string | JSON string of the operation context. [1] | `{ "org_id": "123" }`                              | Recommended       |
+| `graphql.operation.result`     | string | JSON string of the operation result. [1]  | `{{ "bookId": "some-book", "name": "Some Book" }}` | Recommended       |
+| `graphql.document`             | string | The GraphQL document being executed. [1]  | `query findBookById { bookById(id: ?) { name } }`  | Recommended       |
 
 **[1]:** The value may be sanitized to exclude sensitive information.
 
 `graphql.operation.type` MUST be one of the following:
 
-| Value  | Description |
-|---|---|
-| `query` | GraphQL query |
-| `mutation` | GraphQL mutation |
+| Value          | Description          |
+| -------------- | -------------------- |
+| `query`        | GraphQL query        |
+| `mutation`     | GraphQL mutation     |
 | `subscription` | GraphQL subscription |
+
 <!-- endsemconv -->
