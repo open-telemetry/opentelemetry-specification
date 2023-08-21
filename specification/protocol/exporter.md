@@ -162,17 +162,22 @@ The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXP
 
 Transient errors MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
 
-Transient errors are defined by a set of retryable response status codes
-received from the server. Refer to the
-[protocol specification][protocol-spec] for the set of retryable status codes:
+### Transient errors
 
-* [OTLP/HTTP retryable status codes][retryable-http-status-codes]
-* [OTLP/gRPC retryable status codes][retryable-grpc-status-codes]
+Transient errors are defined by the
+[OTLP protocol specification][protocol-spec].
 
-For OTLP/HTTP, the following scenarios are also considered a transient error:
+For [OTLP/gRPC](otlpgrpc), transient errors are defined by a set of
+[retryable gRPC status codes][retryable-grpc-status-codes].
 
-* The server disconnects without returning a response.
-* The exporter cannot connect to the server.
+For [OTLP/HTTP](otlphttp), transient errors are defined by:
+
+1. A set of [retryable HTTP status codes][retryable-http-status-codes] received
+   from the server.
+2. The scenarios described in:
+   [All other responses](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#all-other-responses)
+   and
+   [OTLP/HTTP Connection](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-connection).
 
 ## User Agent
 
@@ -188,5 +193,7 @@ The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions use
 [otlphttp-req]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-request
 [rfc-7231]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3
 [protocol-spec]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md
+[oltpgrpc]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlpgrpc
+[otlphttp]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp
 [retryable-grpc-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures
 [retryable-http-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures-1
