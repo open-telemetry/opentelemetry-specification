@@ -37,6 +37,10 @@ linkTitle: API
     + [Histogram creation](#histogram-creation)
     + [Histogram operations](#histogram-operations)
       - [Record](#record)
+  * [Gauge](#gauge)
+    + [Gauge creation](#gauge-creation)
+    + [Gauge operations](#gauge-operations)
+      - [Record](#record-1)
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
@@ -186,7 +190,7 @@ will have the following fields:
 * Optional `advice` (**experimental**)
 
 Instruments are associated with the Meter during creation. Instruments
-are identified by all of these fields.
+are identified by the `name`, `kind`, `unit`, and `description`.
 
 Language-level features such as the distinction between integer and
 floating point numbers SHOULD be considered as identifying.
@@ -202,7 +206,7 @@ The instrument name syntax is defined below using the [Augmented Backus-Naur
 Form](https://tools.ietf.org/html/rfc5234):
 
 ```abnf
-instrument-name = ALPHA 0*62 ("_" / "." / "-" / ALPHA / DIGIT)
+instrument-name = ALPHA 0*254 ("_" / "." / "-" / ALPHA / DIGIT)
 
 ALPHA = %x41-5A / %x61-7A; A-Z / a-z
 DIGIT = %x30-39 ; 0-9
@@ -213,7 +217,7 @@ DIGIT = %x30-39 ; 0-9
 * The first character must be an alphabetic character.
 * Subsequent characters must belong to the alphanumeric characters, '_', '.',
   and '-'.
-* They can have a maximum length of 63 characters.
+* They can have a maximum length of 255 characters.
 
 #### Instrument unit
 
@@ -772,6 +776,97 @@ http_server_duration.Record(100, http_method="GET", http_scheme="http")
 
 httpServerDuration.Record(50, ("http.request.method", "POST"), ("url.scheme", "https"));
 httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
+```
+
+### Gauge
+
+**Status**: [Experimental](../document-status.md)
+
+`Gauge` is a [synchronous Instrument](#synchronous-instrument-api) which can be
+used to record non-additive value(s) (e.g. the background noise level - it makes
+no sense to record the background noise level value from multiple rooms and sum
+them up) when changes occur.
+
+Note: If the values are additive (e.g. the process heap size - it makes sense to
+report the heap size from multiple processes and sum them up, so we get the
+total heap usage), use [UpDownCounter](#asynchronous-updowncounter).
+
+Note: Synchronous Gauge is normally used when the measurements are exposed via a
+subscription to change events (
+i.e. `backgroundNoiseLevel.onChange(value -> gauge.record(value))`). If the
+measurement is exposed via an accessor,
+use [Asynchronous Gauge](#asynchronous-gauge) to invoke the accessor in a
+callback function (
+i.e. `createObservableGauge(observable -> observable.record(backgroundNoiseLevel.getCurrentValue()))`.
+
+Example uses for Gauge:
+
+* subscribe to change events for the background noise level
+* subscribe to change events for the CPU fan speed
+
+#### Gauge creation
+
+There MUST NOT be any API for creating a `Gauge` other than with a
+[`Meter`](#meter). This MAY be called `CreateGauge`. If strong type is
+desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the language
+idiomatic name(s), for example `CreateUInt64Gauge`, `CreateDoubleGauge`,
+`CreateGauge<UInt64>`, `CreateGauge<double>`.
+
+See the [general requirements for synchronous instruments](#synchronous-instrument-api).
+
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
+
+```java
+// Java
+
+DoubleGauge backgroundNoiseLevel = meter.gaugeBuilder("facility.noise.level")
+    .setDescription("Background noise level of rooms")
+    .setUnit("B")
+    .build();
+```
+
+#### Gauge operations
+
+##### Record
+
+Record the Gauge current value.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* A numeric value. The current absolute value.
+
+  The value needs to be provided by a user. If possible, this API
+  SHOULD be structured so a user is obligated to provide this parameter. If it
+  is not possible to structurally enforce this obligation, this API MUST be
+  documented in a way to communicate to users that this parameter is needed.
+* [Attributes](../common/README.md#attribute) to associate with the value.
+
+  Users can provide attributes to associate with the value, but it is
+  up to their discretion. Therefore, this API MUST be structured to accept a
+  variable number of attributes, including none.
+
+The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
+[attributes](../common/README.md#attribute) to be passed in as arguments. If
+the attribute names and types are provided during the [gauge
+creation](#gauge-creation), the [OpenTelemetry API](../overview.md#api)
+authors MAY allow attribute values to be passed in using a more efficient way
+(e.g. strong typed struct allocated on the callstack, tuple). The API MUST allow
+callers to provide flexible attributes at invocation time rather than having to
+register all the possible attribute names during the instrument creation. Here
+are some examples that [OpenTelemetry API](../overview.md#api) authors might
+consider:
+
+```java
+// Java
+Attributes roomA = Attributes.builder().put("room.id", "Rack A");
+Attributes roomB = Attributes.builder().put("room.id", "Rack B");
+
+backgroundNoiseLevel.record(4.3, roomA);
+backgroundNoiseLevel.record(2.5, roomB);
 ```
 
 ### Asynchronous Gauge
