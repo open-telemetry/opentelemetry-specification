@@ -533,7 +533,7 @@ data model.
 If we export the metrics using **Delta Temporality**:
 
 * (T<sub>0</sub>, T<sub>1</sub>]
-  * attributes: {pid = `1001`}, delta: `50` 
+  * attributes: {pid = `1001`}, delta: `50`
   * attributes: {pid = `1002`}, delta: `30`
 * (T<sub>1</sub>, T<sub>2</sub>]
   * attributes: {pid = `1001`}, delta: `3`
