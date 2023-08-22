@@ -533,6 +533,7 @@ data model.
 If we export the metrics using **Delta Temporality**:
 
 * (T<sub>0</sub>, T<sub>1</sub>]
+  * attributes: {pid = `1001`}, delta: `50` 
   * attributes: {pid = `1002`}, delta: `30`
 * (T<sub>1</sub>, T<sub>2</sub>]
   * attributes: {pid = `1001`}, delta: `3`
@@ -627,7 +628,7 @@ reset some time later:
    itself in this case, otherwise the View will be calculated incorrectly.
 2. When the cost of remembering all streams `attributes` becomes too
    high, reset the View and all its state, give it a new start
-   timestamp, and let the caller see a a gap in the stream.
+   timestamp, and let the caller see a gap in the stream.
 
 When considering this matter, note also that the metrics API has a
 recommendation for each asynchronous instrument: [User code is
