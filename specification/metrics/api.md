@@ -1140,7 +1140,7 @@ decide the language idiomatic name(s), for example
 
 It is highly recommended that implementations use the name
 `ObservableUpDownCounter` (or any language idiomatic variation, e.g.
-`observable_updowncounter`) unless there is a strong reason not to do so. Please
+`observable_up_down_counter`) unless there is a strong reason not to do so. Please
 note that the name has nothing to do with [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
@@ -1166,7 +1166,7 @@ def ws_callback():
         (126032, ("pid", 880), ("bitness", 32)),
     )
 
-meter.create_observable_updowncounter(
+meter.create_observable_up_down_counter(
     name="process.workingset",
     description="process working set",
     callback=ws_callback,
@@ -1183,7 +1183,7 @@ def ws_callback(result):
     result.Observe(20,     ("pid", 4),   ("bitness", 64))
     result.Observe(126032, ("pid", 880), ("bitness", 32))
 
-meter.create_observable_updowncounter(
+meter.create_observable_up_down_counter(
     name="process.workingset",
     description="process working set",
     callback=ws_callback,
@@ -1213,17 +1213,17 @@ can support an `unregister()` method directly.
 ```python
 # Python
 class Device:
-    """A device with one updowncounter"""
+    """A device with one up_down_counter"""
 
     def __init__(self, meter, x):
         self.x = x
-        updowncounter = meter.create_observable_updowncounter(name="queue_size", description="items in process")
-        self.cb = updowncounter.register_callback(self.updowncounter_callback)
+        updowncounter = meter.create_observable_up_down_counter(name="queue_size", description="items in process")
+        self.cb = updowncounter.register_callback(self.up_down_counter_callback)
 
-    def updowncounter_callback(self, result):
-        result.Observe(self.read_updowncounter(), {'x', self.x})
+    def up_down_counter_callback(self, result):
+        result.Observe(self.read_up_down_counter(), {'x', self.x})
 
-    def read_updowncounter(self):
+    def read_up_down_counter(self):
         return 100  # ...
 
     def stop(self):
