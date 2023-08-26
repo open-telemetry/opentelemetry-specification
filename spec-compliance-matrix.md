@@ -281,7 +281,7 @@ Note: Support for environment variables is optional.
 | OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | -   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
 | OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    | -     |
-| OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     |      |       |
+| OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     | +    |       |
 | OTEL_EXPORTER_OTLP_*                                     | +   | +    |     | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_EXPORTER_ZIPKIN_*                                   | -   | +    |     | +           | +    | -      | +   | -    | -   | +    | -     |
 | OTEL_TRACES_EXPORTER                                     | -   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
@@ -302,7 +302,7 @@ Note: Support for environment variables is optional.
 | OTEL_METRIC_EXPORT_INTERVAL                              | -   | +    |     |             |      |        | +   |      |     | +    |       |
 | OTEL_METRIC_EXPORT_TIMEOUT                               | -   | -    |     |             |      |        | +   |      |     | +    |       |
 | OTEL_METRICS_EXEMPLAR_FILTER                             | -   | +    |     |             |      |        | +   |      |     | -    |       |
-| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | -    |       |
+| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | +    |       |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |     | +    |     |             |      |        |     |      |     |      |       |
 
 ## Exporters
