@@ -538,9 +538,7 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 #### Add Link
 
 A `Span` MUST have the ability to add `Link`s associated with it after its creation - see [Links](#link).
-
-Observe that `Link`s added after `Span` creation are not considered by [Samplers](sdk.md#sampler)
-to make a sampling decision.
+`Link`s added after `Span` creation may not be considered by [Samplers](sdk.md#sampler)
 
 #### Set Status
 
