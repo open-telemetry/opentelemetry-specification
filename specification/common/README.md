@@ -123,7 +123,7 @@ at this time, as discussed in
 [data points](../metrics/data-model.md#metric-points),
 [Spans](../trace/api.md#set-attributes), Span
 [Events](../trace/api.md#add-events), Span
-[Links](../trace/api.md#specifying-links) and
+[Links](../trace/api.md#link) and
 [Log Records](../logs/data-model.md) may contain a collection of attributes. The
 keys in each such collection are unique, i.e. there MUST NOT exist more than one
 key-value pair with the same key. The enforcement of uniqueness may be performed
