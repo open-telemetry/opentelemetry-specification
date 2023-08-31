@@ -805,7 +805,9 @@ The Span creation API MUST provide:
   the `Span` to link to and optional `Attributes` and `timestamp`, either as individual
   parameters or as an immutable object encapsulating them, whichever is most
   appropriate for the language. Implementations MAY ignore links with an
-  [invalid](#isvalid) `SpanContext`.
+  [invalid](#isvalid) `SpanContext`. Alternatively, this functionality MAY be provided
+  through the `AddEvent` operation instead with the respective addition of the new
+  parameters, e.g. the `SpanContext` to link to.
 
 The Span interface MAY provide:
 
