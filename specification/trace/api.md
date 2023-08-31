@@ -538,7 +538,7 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 #### Add Link
 
 A `Span` MUST have the ability to add `Link`s associated with it after its creation - see [Links](#link).
-`Link`s added after `Span` creation may not be considered by [Samplers](sdk.md#sampler)
+`Link`s added after `Span` creation may not be considered by [Samplers](sdk.md#sampler).
 
 #### Set Status
 
@@ -810,11 +810,11 @@ The Span interface MAY provide:
 - An API to add multiple `Link`s at once, where the `Link`s are passed in a
   single method call.
 
-Links SHOULD preserve the order in which they're set.
+Span SHOULD preserve the order in which `Link`s are set.
 
-Note that [Samplers](sdk.md#sampler) can only consider information already
-present during span creation. Any `Link`s added later cannot change their
-decisions.
+Note that [Samplers](sdk.md#sampler) may only consider information already
+present during span creation. Any `Link`s added later may not change the sampling
+decision.
 
 ## Concurrency
 
