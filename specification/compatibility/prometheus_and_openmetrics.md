@@ -55,7 +55,7 @@ OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types
 ### Metric Metadata
 
 The [OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
-MUST be added as the Name of the OTLP metric.  By default, the name MUST be unaltered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
+MUST be added as the Name of the OTLP metric.  By default, the name SHOULD be unaltered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
 
 The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
 if present, MUST be converted to the unit of the OTLP metric.  The unit SHOULD
