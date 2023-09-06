@@ -22,7 +22,7 @@ linkTitle: API
     + [Instrument name syntax](#instrument-name-syntax)
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
-    + [Instrument advice](#instrument-advice)
+    + [Instrument advisory parameters](#instrument-advisory-parameters)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
       - [Synchronous Instrument API](#synchronous-instrument-api)
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
@@ -180,14 +180,14 @@ Also see the respective sections below for more information on instrument creati
 ## Instrument
 
 Instruments are used to report [Measurements](#measurement). Each Instrument
-will have the following fields:
+will have the following parameters:
 
 * The `name` of the Instrument
 * The `kind` of the Instrument - whether it is a [Counter](#counter) or
   one of the other kinds, whether it is synchronous or asynchronous
 * An optional `unit` of measure
 * An optional `description`
-* Optional `advice` (**experimental**)
+* Optional `advisory` parameters (**experimental**)
 
 Instruments are associated with the Meter during creation. Instruments
 are identified by the `name`, `kind`, `unit`, and `description`.
@@ -244,17 +244,19 @@ instrument. The API MUST treat it as an opaque string.
 * It MUST support at least 1023 characters. [OpenTelemetry
   API](../overview.md#api) authors MAY decide if they want to support more.
 
-#### Instrument advice
+#### Instrument advisory parameters
 
 **Status**: [Experimental](../document-status.md)
 
-`advice` are an optional set of recommendations provided by the author of the
-Instrument, aimed at assisting implementations in providing useful output with
-minimal configuration.
+`advisory` parameters are an optional set of recommendations provided by the
+author of the Instrument, aimed at assisting implementations in providing
+useful output with minimal configuration. They differ from other parameters
+in that Implementations MAY ignore `advisory` parameters.
 
-* Implementations MAY ignore `advice`. However, OpenTelemetry SDKs
-  handle `advice` as described [here](./sdk.md#instrument-advice).
-* `advice` parameters may be general, or vary by instrument `kind`.
+* OpenTelemetry SDKs MUST handle `advisory` parameters as described
+  [here](./sdk.md#instrument-advisory-parameters).
+* `advisory` parameters may be general, or may be accepted only for specific
+  instrument `kind`s.
   * `Histogram`:
     * `ExplicitBucketBoundaries` (`double[]`): The recommended set of bucket
       boundaries to use if aggregating to
@@ -323,16 +325,16 @@ The API to construct synchronous instruments MUST accept the following parameter
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane)
   encoded characters and hold at least 1023 characters.
 
-* `advice` for implementations.
+* `advisory` parameters associated with the instrument `kind`.
 
-  Users can provide `advice`, but its up to their discretion. Therefore, this
-  API needs to be structured to accept `advice`, but MUST NOT obligate the user
-  to provide it.
+  Users can provide `advisory` parameters, but its up to their discretion.
+  Therefore, this API needs to be structured to accept `advisory` parameters,
+  but MUST NOT obligate the user to provide it.
 
-  `advice` needs to be structured as described
-  in [instrument advice](#instrument-advice), with parameters that are general
-  and specific to a particular instrument `kind`. The API SHOULD NOT
-  validate `advice`.
+  `advisory` parameters need to be structured as described in
+  [instrument advisory parameters](#instrument-advisory-parameters), with
+  parameters that are general and specific to a particular instrument `kind`.
+  The API SHOULD NOT validate `advisory` parameters.
 
 ##### Asynchronous Instrument API
 
@@ -375,6 +377,16 @@ The API to construct asynchronous instruments MUST accept the following paramete
   supports at least [BMP (Unicode Plane
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane)
   encoded characters and hold at least 1023 characters.
+* `advisory` parameters associated with the instrument `kind`.
+
+  Users can provide `advisory` parameters, but its up to their discretion.
+  Therefore, this API needs to be structured to accept `advisory` parameters,
+  but MUST NOT obligate the user to provide it.
+
+  `advisory` parameters need to be structured as described in
+  [instrument advisory parameters](#instrument-advisory-parameters), with
+  parameters that are general and specific to a particular instrument `kind`.
+  The API SHOULD NOT validate `advisory` parameters.
 * `callback` functions that report [Measurements](#measurement) of the created
   instrument.
   
@@ -1140,7 +1152,7 @@ decide the language idiomatic name(s), for example
 
 It is highly recommended that implementations use the name
 `ObservableUpDownCounter` (or any language idiomatic variation, e.g.
-`observable_updowncounter`) unless there is a strong reason not to do so. Please
+`observable_up_down_counter`) unless there is a strong reason not to do so. Please
 note that the name has nothing to do with [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
@@ -1166,7 +1178,7 @@ def ws_callback():
         (126032, ("pid", 880), ("bitness", 32)),
     )
 
-meter.create_observable_updowncounter(
+meter.create_observable_up_down_counter(
     name="process.workingset",
     description="process working set",
     callback=ws_callback,
@@ -1183,7 +1195,7 @@ def ws_callback(result):
     result.Observe(20,     ("pid", 4),   ("bitness", 64))
     result.Observe(126032, ("pid", 880), ("bitness", 32))
 
-meter.create_observable_updowncounter(
+meter.create_observable_up_down_counter(
     name="process.workingset",
     description="process working set",
     callback=ws_callback,
@@ -1213,17 +1225,17 @@ can support an `unregister()` method directly.
 ```python
 # Python
 class Device:
-    """A device with one updowncounter"""
+    """A device with one up_down_counter"""
 
     def __init__(self, meter, x):
         self.x = x
-        updowncounter = meter.create_observable_updowncounter(name="queue_size", description="items in process")
-        self.cb = updowncounter.register_callback(self.updowncounter_callback)
+        updowncounter = meter.create_observable_up_down_counter(name="queue_size", description="items in process")
+        self.cb = updowncounter.register_callback(self.up_down_counter_callback)
 
-    def updowncounter_callback(self, result):
-        result.Observe(self.read_updowncounter(), {'x', self.x})
+    def up_down_counter_callback(self, result):
+        result.Observe(self.read_up_down_counter(), {'x', self.x})
 
-    def read_updowncounter(self):
+    def read_up_down_counter(self):
         return 100  # ...
 
     def stop(self):

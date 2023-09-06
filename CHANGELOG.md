@@ -23,6 +23,10 @@ release.
   ([#3600](https://github.com/open-telemetry/opentelemetry-specification/pull/3600))
 - Clarify that advice is non-identifying.
   ([#3661](https://github.com/open-telemetry/opentelemetry-specification/pull/3661))
+- Define the default size of the `SimpleFixedSizeExemplarReservoir` to be `1`.
+  ([#3670](https://github.com/open-telemetry/opentelemetry-specification/pull/3670))
+- Rename "advice" to "advisory parameters".
+  ([#3662](https://github.com/open-telemetry/opentelemetry-specification/pull/3662))
 
 ### Logs
 
@@ -40,6 +44,8 @@ release.
 
 - OpenTracing Shim: Allow invalid but sampled SpanContext to be returned.
   ([#3471](https://github.com/open-telemetry/opentelemetry-specification/pull/3471))
+- Prometheus: Allow changing metric names by default when translating from Prometheus to OpenTelemetry.
+  ([#3679](https://github.com/open-telemetry/opentelemetry-specification/pull/3679))
 
 ### SDK Configuration
 

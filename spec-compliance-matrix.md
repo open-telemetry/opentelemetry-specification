@@ -115,15 +115,14 @@ formats is required. Implementing more than one format is optional.
 | Instruments have kind.                                                                                                                                                 |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | Instruments have an optional unit of measure.                                                                                                                          |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | Instruments have an optional description.                                                                                                                              |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
-| Instruments have an optional advice.                                                                                                                                   |          |    |      |     |        |      |        |     |      |     |      |       |
 | A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`.                |          |    | +    | +   | +      |      |        |     |      |     |      |       |
 | Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name.                                                             |          |    | +    |     |        |      |        |     |      |     |      |       |
 | It is possible to register two instruments with same `name` under different `Meter`s.                                                                                  |          | +  | +    | +   | +      |      |        |     |  +   | +   | +    |       |
 | Instrument names conform to the specified syntax.                                                                                                                      |          | -  | +    |     | +      |      |        |     | +   | +   | +    |       |
 | Instrument units conform to the specified syntax.                                                                                                                      |          | -  | +    |     | +      |      |        |     | +    | +   | +    |       |
 | Instrument descriptions conform to the specified syntax.                                                                                                               |          | -  | +    |     | -      |      |        |     |      | -   | +    |       |
-| Instrument advice supports ExplicitBucketBoundaries.                                                                                                                   |          |    |      |     |        |      |        |     |      |     |      |       |
-| Instrument advice supports Attributes.                                                                                                                                 |          |    |      |     |        |      |        |     |      |     |      |       |
+| Instrument supports the advisory ExplicitBucketBoundaries parameter.                                                                                                   |          |    | +    |     |        |      |        |     |      |     |      |       |
+| Instrument supports the advisory Attributes parameter.                                                                                                                 |          |    | +    |     |        |      |        |     |      |     |      |       |
 | `create_counter` returns a `Counter`.                                                                                                                                  |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | The API for `Counter` accepts the name, unit and description of the instrument.                                                                                        |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | `Counter` has an `add` method.                                                                                                                                         |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
@@ -208,6 +207,7 @@ formats is required. Implementing more than one format is optional.
 | The metrics SDK provides an `ExemplarReservoir` interface or extension point.                                                                                          | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
 | An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.                                                | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
 | The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`.                           |          |    | +    |     | -      |      |        | +   |      |     | -    |       |
+| The default size of the `SimpleFixedSizeExemplarReservoir` is `1`.                                                                                                     |          |    |      |     |        |      |        |     |      |     |      |       |
 | The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation.                               |          |    | +    |     | -      |      |        |     |      |     | -    |       |
 | The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                             | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
 | An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                          | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
@@ -280,7 +280,7 @@ Note: Support for environment variables is optional.
 | OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | -   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
 | OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    | -     |
-| OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     |      |       |
+| OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     | +    |       |
 | OTEL_EXPORTER_OTLP_*                                     | +   | +    |     | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_EXPORTER_ZIPKIN_*                                   | -   | +    |     | +           | +    | -      | +   | -    | -   | +    | -     |
 | OTEL_TRACES_EXPORTER                                     | -   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
@@ -301,7 +301,7 @@ Note: Support for environment variables is optional.
 | OTEL_METRIC_EXPORT_INTERVAL                              | -   | +    |     |             |      |        | +   |      |     | +    |       |
 | OTEL_METRIC_EXPORT_TIMEOUT                               | -   | -    |     |             |      |        | +   |      |     | +    |       |
 | OTEL_METRICS_EXEMPLAR_FILTER                             | -   | +    |     |             |      |        | +   |      |     | -    |       |
-| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | -    |       |
+| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | +    |       |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |     | +    |     |             |      |        |     |      |     |      |       |
 
 ## Exporters
