@@ -27,6 +27,8 @@ release.
   ([#3670](https://github.com/open-telemetry/opentelemetry-specification/pull/3670))
 - Rename "advice" to "advisory parameters".
   ([#3662](https://github.com/open-telemetry/opentelemetry-specification/pull/3662))
+- Add "/" to valid characters for instrument names
+  ([#3684](https://github.com/open-telemetry/opentelemetry-specification/pull/3684))
 
 ### Logs
 
