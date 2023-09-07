@@ -35,6 +35,11 @@ release.
 
 ### Resource
 
+### Protocol
+
+- Fix and clarify definition of "transient error" in the OTLP exporter specification.
+  ([#3653](https://github.com/open-telemetry/opentelemetry-specification/pull/3653))
+
 ### Compatibility
 
 - OpenTracing Shim: Allow invalid but sampled SpanContext to be returned.
