@@ -167,10 +167,10 @@ Transient errors MUST be handled with a retry strategy. This retry strategy MUST
 Transient errors are defined by the
 [OTLP protocol specification][protocol-spec].
 
-For [OTLP/gRPC](otlp-grpc), transient errors are defined by a set of
+For [OTLP/gRPC][otlp-grpc], transient errors are defined by a set of
 [retryable gRPC status codes][retryable-grpc-status-codes].
 
-For [OTLP/HTTP](otlp-http), transient errors are defined by:
+For [OTLP/HTTP][otlp-http], transient errors are defined by:
 
 1. A set of [retryable HTTP status codes][retryable-http-status-codes] received
    from the server.
