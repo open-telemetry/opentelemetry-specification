@@ -27,6 +27,8 @@ release.
   ([#3670](https://github.com/open-telemetry/opentelemetry-specification/pull/3670))
 - Rename "advice" to "advisory parameters".
   ([#3662](https://github.com/open-telemetry/opentelemetry-specification/pull/3662))
+- Stabilize the `MetricProducer`.
+  ([#3685](https://github.com/open-telemetry/opentelemetry-specification/pull/3685))
 
 ### Logs
 
