@@ -1493,7 +1493,7 @@ libraries to facilitate conversion between delta and cumulative temporalities.
 +-----------------+            +--------------+
 ```
 
-When new OpenTelemetry integrations are added, the SDK is the preferred
+When new OpenTelemetry integrations are added, the API is the preferred
 integration point. The `MetricProducer` is only meant for integrations that
 bridge pre-processed data.
 
