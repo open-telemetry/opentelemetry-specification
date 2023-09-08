@@ -27,6 +27,8 @@ release.
   ([#3670](https://github.com/open-telemetry/opentelemetry-specification/pull/3670))
 - Rename "advice" to "advisory parameters".
   ([#3662](https://github.com/open-telemetry/opentelemetry-specification/pull/3662))
+- Clarify the minimal implementation of a `View`'s `attribute_keys` is an allow-list.
+  ([#3680](https://github.com/open-telemetry/opentelemetry-specification/pull/3680))
 
 ### Logs
 
