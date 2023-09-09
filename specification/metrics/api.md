@@ -226,7 +226,7 @@ API SHOULD treat it as an opaque string.
 
 * It MUST be case-sensitive (e.g. `kb` and `kB` are different units), ASCII
   string.
-* It can have a maximum length of 63 characters. The number 63 is chosen to
+* It can have a maximum length of 255 characters. The number 255 is chosen to
   allow the unit strings (including the `\0` terminator on certain language
   runtimes) to be stored and compared as fixed size array/struct when
   performance is critical.
@@ -311,7 +311,7 @@ The API to construct synchronous instruments MUST accept the following parameter
   
   The `unit` parameter needs to support the [instrument unit
   rule](#instrument-unit). Meaning, the API MUST accept a case-sensitive string
-  that supports ASCII character encoding and can hold at least 63 characters.
+  that supports ASCII character encoding and can hold at least 255 characters.
   The API SHOULD NOT validate the `unit`.
 * A `description` describing the Instrument in human-readable terms.
   
@@ -364,7 +364,7 @@ The API to construct asynchronous instruments MUST accept the following paramete
   
   The `unit` parameter needs to support the [instrument unit
   rule](#instrument-unit). Meaning, the API MUST accept a case-sensitive string
-  that supports ASCII character encoding and can hold at least 63 characters.
+  that supports ASCII character encoding and can hold at least 255 characters.
   The API SHOULD NOT validate the `unit`.
 * A `description` describing the Instrument in human-readable terms.
   
