@@ -314,9 +314,13 @@ The SDK MUST accept the following stream configuration parameters:
   accept a `description`, but MUST NOT obligate a user to provide one. If the
   user does not provide a `description` value, the description from the
   Instrument a View matches MUST be used by default.
-* `attribute_keys`: A list of attribute keys that MUST be kept, if provided by
-  the user during the measurement, for the metric stream. All attributes with
-  keys other than those in the list MUST be ignored.
+* `attribute_keys`: This is, at a minimum, an allow-list of attribute keys for
+  measurements captured in the metric stream. The allow-list contains attribute
+  keys that identify the attributes that MUST be kept, and all other attributes
+  MUST be ignored.
+
+  Implementations MAY accept additional attribute filtering functionality for
+  this parameter.
 
   Users can provide `attribute_keys`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
