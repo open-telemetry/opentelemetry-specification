@@ -25,9 +25,9 @@ release.
 
 ### Common
 
-### Supplemenatary Guidelines
+### Supplementary Guidelines
 
-## v1.25.0 (2023-09-07)
+## v1.25.0 (2023-09-11)
 
 ### Context
 
