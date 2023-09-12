@@ -1083,7 +1083,7 @@ SHOULD provide at least the following:
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 * **Status**: [Experimental](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
-* **Status**: [Feature-freeze](../document-status.md) - Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
+* Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1472,7 +1472,7 @@ modeled to interact with other components in the SDK:
 
 ## MetricProducer
 
-**Status**: [Feature-freeze](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 `MetricProducer` defines the interface which bridges to third-party metric
 sources MUST implement so they can be plugged into an OpenTelemetry
@@ -1496,6 +1496,10 @@ libraries to facilitate conversion between delta and cumulative temporalities.
 |                 |            |              |
 +-----------------+            +--------------+
 ```
+
+When new OpenTelemetry integrations are added, the API is the preferred
+integration point. The `MetricProducer` is only meant for integrations that
+bridge pre-processed data.
 
 ### Interface Definition
 
