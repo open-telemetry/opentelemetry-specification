@@ -27,6 +27,12 @@ release.
   ([#3670](https://github.com/open-telemetry/opentelemetry-specification/pull/3670))
 - Rename "advice" to "advisory parameters".
   ([#3662](https://github.com/open-telemetry/opentelemetry-specification/pull/3662))
+- Clarify the minimal implementation of a `View`'s `attribute_keys` is an allow-list.
+  ([#3680](https://github.com/open-telemetry/opentelemetry-specification/pull/3680))
+- Add "/" to valid characters for instrument names
+  ([#3684](https://github.com/open-telemetry/opentelemetry-specification/pull/3684))
+- Stabilize the `MetricProducer`.
+  ([#3685](https://github.com/open-telemetry/opentelemetry-specification/pull/3685))
 
 ### Logs
 
@@ -35,10 +41,17 @@ release.
 
 ### Resource
 
+### Protocol
+
+- Fix and clarify definition of "transient error" in the OTLP exporter specification.
+  ([#3653](https://github.com/open-telemetry/opentelemetry-specification/pull/3653))
+
 ### Compatibility
 
 - OpenTracing Shim: Allow invalid but sampled SpanContext to be returned.
   ([#3471](https://github.com/open-telemetry/opentelemetry-specification/pull/3471))
+- Prometheus: Allow changing metric names by default when translating from Prometheus to OpenTelemetry.
+  ([#3679](https://github.com/open-telemetry/opentelemetry-specification/pull/3679))
 - Prometheus exporters omit empty resources and scopes without attributes.
   ([#3660](https://github.com/open-telemetry/opentelemetry-specification/pull/3660))
 
