@@ -58,6 +58,10 @@ release.
   ([#3662](https://github.com/open-telemetry/opentelemetry-specification/pull/3662))
 - Clarify the minimal implementation of a `View`'s `attribute_keys` is an allow-list.
   ([#3680](https://github.com/open-telemetry/opentelemetry-specification/pull/3680))
+- Add "/" to valid characters for instrument names
+  ([#3684](https://github.com/open-telemetry/opentelemetry-specification/pull/3684))
+- Stabilize the `MetricProducer`.
+  ([#3685](https://github.com/open-telemetry/opentelemetry-specification/pull/3685))
 
 ### Logs
 
