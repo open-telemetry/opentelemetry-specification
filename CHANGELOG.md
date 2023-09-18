@@ -13,6 +13,32 @@ release.
 
 ### Metrics
 
+### Logs
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.25.0 (2023-09-13)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
 - Increase metric name maximum length from 63 to 255 characters.
   ([#3648](https://github.com/open-telemetry/opentelemetry-specification/pull/3648))
 - MetricReader.Collect ignores Resource from MetricProducer.Produce.
@@ -20,7 +46,10 @@ release.
 - Attribute sets not observed during async callbacks are not exported.
   ([#3242](https://github.com/open-telemetry/opentelemetry-specification/pull/3242))
 - Promote MetricProducer specification to feature-freeze.
-  ([#3600](https://github.com/open-telemetry/opentelemetry-specification/pull/3600))
+  ([#3655](https://github.com/open-telemetry/opentelemetry-specification/pull/3655))
+- Add synchronous gauge instrument, clarify temporality selection influence on
+  metric point persistence.
+  ([#3540](https://github.com/open-telemetry/opentelemetry-specification/pull/3540))
 - Clarify that advice is non-identifying.
   ([#3661](https://github.com/open-telemetry/opentelemetry-specification/pull/3661))
 - Define the default size of the `SimpleFixedSizeExemplarReservoir` to be `1`.
@@ -41,7 +70,9 @@ release.
 
 ### Resource
 
-### Protocol
+- No changes.
+
+### OpenTelemetry Protocol
 
 - Fix and clarify definition of "transient error" in the OTLP exporter specification.
   ([#3653](https://github.com/open-telemetry/opentelemetry-specification/pull/3653))
@@ -57,9 +88,15 @@ release.
 
 ### SDK Configuration
 
+- No changes.
+
 ### Common
 
+- No changes.
+
 ### Supplemenatary Guidelines
+
+- No changes.
 
 ## v1.24.0 (2023-08-10)
 
@@ -87,9 +124,6 @@ release.
   ([#3613](https://github.com/open-telemetry/opentelemetry-specification/pull/3613))
 - Refine `MetricProvider.ForceFlush` and define `ForceFlush` for periodic exporting MetricReader.
   ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
-- Add synchronous gauge instrument, clarify temporality selection influence on
-  metric point persistence.
-  ([#3540](https://github.com/open-telemetry/opentelemetry-specification/pull/3540))
 
 ### Logs
 
