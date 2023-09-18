@@ -798,7 +798,7 @@ A `Link` is structurally defined by the following properties:
   when span creation time has already passed. If API is called at a moment of
   a Span logical start, API user MUST NOT explicitly set this argument.
 
-The Span creation API MUST provide:
+The API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
