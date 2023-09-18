@@ -14,10 +14,9 @@ linkTitle: File
 - [Configuration file](#configuration-file)
 - [SDK Configuration](#sdk-configuration)
   * [In-Memory Configuration Model](#in-memory-configuration-model)
-    + [Parse File to Configuration](#parse-file-to-configuration)
-  * [ConfigurationInterpreter](#configurationinterpreter)
-    + [Create ConfigurationInterpreter](#create-configurationinterpreter)
-    + [Get TracerProvider, MeterProvider, LoggerProvider, Propagator](#get-tracerprovider-meterprovider-loggerprovider-propagator)
+  * [ConfigurationFactory](#configurationfactory)
+    + [Parse](#parse)
+    + [Create](#create)
 - [References](#references)
 
 <!-- tocstop -->
@@ -67,16 +66,24 @@ to provide this in-memory representation in a manner that is idiomatic for their
 language. If an SDK needs to expose a class or interface, the
 name `Configuration` is RECOMMENDED.
 
-#### Parse File to Configuration
+### ConfigurationFactory
 
-SDKs MUST provide an API to parse and validate
-a [configuration file](#configuration-file) and return a
-corresponding [Configuration Model](#in-memory-configuration-model).
+`ConfigurationFactory` is responsible parsing configuration files and interpreting [Configuration](#in-memory-configuration-model) to produce
+configured SDK components.
 
-The API MUST accept the following parameters:
+TODO: Extend ConfigurationFactory with ability to update SDK components with
+new configuration for usage with OpAmp
+
+#### Parse
+
+Parse and validate a [configuration file](#configuration-file).
+
+**Parameters:**
 
 * `file`: The [configuration file](#configuration-file) to parse. This MAY be a
-  file path, or language specific file class, or a stream of a file's content.
+  file path, or language specific file data structure, or a stream of a file's content.
+
+**Returns:** [configuration model](#in-memory-configuration-model)
 
 The API SHOULD return an error if:
 
@@ -86,35 +93,24 @@ The API SHOULD return an error if:
 
 TODO: define behavior if some portion of configuration model is not supported
 
-### ConfigurationInterpreter
+#### Create
 
-`ConfigurationInterpreter` is responsible for
-interpreting [Configuration](#in-memory-configuration-model) and producing
-configured SDK components.
+Interpret [configuration model](#in-memory-configuration-model) and return SDK components.
 
-It MUST be possible to [create](#create-configurationinterpreter)
-multiple `ConfigurationInterpreter`s with different configurations. It is the
-caller's responsibility to ensure the
-resulting [SDK components](#get-tracerprovider-meterprovider-loggerprovider-propagator) are
-correctly wired into the application and instrumentation.
+**Parameters:**
 
-#### Create ConfigurationInterpreter
+* `configuration` - The configuration model.
 
-Create a `ConfigurationInterpreter` from a configuration model.
+**Returns:** Top level SDK components:
 
-The API MUST accept the following parameters:
+* `TracerProvider`
+* `MeterProvider`
+* `LoggerProvider`
+* `Propagators`
 
-* `configuration` - The [configuration model](#in-memory-configuration-model).
+The multiple responses MAY be returned using a tuple, or some other data structure encapsulating the components.
 
-#### Get TracerProvider, MeterProvider, LoggerProvider, Propagator
-
-Interpret `configuration` and return SDK components (`TracerProvider`,
-`MeterProvider`, `LoggerProvider`, `Propagator`). The SDK components MUST
-strictly reflect the `Configuration` and ignore
-the [environment variable configuration scheme](./sdk-environment-variables.md).
-
-// TODO: Extend ConfigurationInterpreter with ability to update SDK components with
-// new configuration for usage with OpAmp
+The API SHOULD return an error if it encounters an error in `configuration` (i.e. fail fast).
 
 ## References
 
