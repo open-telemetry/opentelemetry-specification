@@ -794,20 +794,17 @@ A `Link` is structurally defined by the following properties:
 - `SpanContext` of the `Span` to link to.
 - Zero or more [`Attributes`](../common/README.md#attribute) further describing
   the link.
-- `timestamp`, default to current time. This argument SHOULD only be set
-  when span creation time has already passed. If API is called at a moment of
-  a Span logical start, API user MUST NOT explicitly set this argument.
 
 The API MUST provide:
 
 - An API to record a single `Link` where the `Link` properties are passed as
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
-  the `Span` to link to and optional `Attributes` and `timestamp`, either as individual
+  the `Span` to link to and optional `Attributes`, either as individual
   parameters or as an immutable object encapsulating them, whichever is most
   appropriate for the language. Implementations MAY ignore links with an
   [invalid](#isvalid) `SpanContext`. Alternatively, this functionality MAY be provided
   through the `AddEvent` operation instead with the respective addition of the new
-  parameters, e.g. the `SpanContext` to link to.
+  parameters, e.g. the `SpanContext` to link to, and with event name being dropped.
 
 The Span interface MAY provide:
 
