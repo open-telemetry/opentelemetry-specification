@@ -82,17 +82,3 @@ jobs:
 
     - name: run docfx
       run: docfx build --dry-run
-
-  semantic-conventions:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: verify semantic convention tables
-      run: make table-check
-
-  schemas-check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: verify schemas
-      run: make schema-check

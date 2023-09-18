@@ -1,3 +1,10 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Prometheus and OpenMetrics
+aliases:
+  - /docs/reference/specification/compatibility/openmetrics
+  - /docs/specs/otel/compatibility/openmetrics
+--->
+
 # Prometheus and OpenMetrics Compatibility
 
 **Status**: [Experimental](../document-status.md)
@@ -48,13 +55,10 @@ OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types
 ### Metric Metadata
 
 The [OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
-MUST be added as the Name of the OTLP metric after the removal of unit and type
-suffixes described below.
+MUST be added as the Name of the OTLP metric.  By default, the name SHOULD be unaltered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
 
 The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
-if present, MUST be converted to the unit of the OTLP metric.  After trimming
-type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed
-from the suffix as well, if the metric suffix matches the unit. The unit SHOULD
+if present, MUST be converted to the unit of the OTLP metric.  The unit SHOULD
 be translated from Prometheus conventions to OpenTelemetry conventions by:
 
 * Converting from full words to abbreviations (e.g. "milliseconds" to "ms").
@@ -71,7 +75,7 @@ metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
 
 ### Counters
 
-A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.  If the counter has a `_total` suffix, it MUST be removed.
+A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
 
 ### Gauges
 
@@ -79,7 +83,7 @@ A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/
 
 ### Info
 
-An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the target_info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.  If it has an `_info` suffix, the suffix MUST be removed from the metric name.
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the target_info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 
 ### StateSet
 
@@ -231,7 +235,7 @@ consecutive `_` characters MUST be replaced with a single `_` character.
 The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible.  This includes:
 
 * Converting from abbreviations to full words (e.g. "ms" to "milliseconds").
-* Dropping the portions of the Unit within brackets (e.g. {packets}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
+* Dropping the portions of the Unit within brackets (e.g. {packet}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
 * Special case: Converting "1" to "ratio".
 * Converting "foo/bar" to "foo_per_bar".
 
@@ -279,7 +283,7 @@ An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to a 
   - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues](../metrics/data-model.md#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
 
-Monotonic Sum metric points MUST have `_total` added as a suffix to the metric name.
+If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` MUST be added by default, otherwise the name MUST remain unchanged. Exporters SHOULD provide a configuration option to disable the addition of `_total` suffixes.
 Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_created` metric as well.
 
 ### Histograms

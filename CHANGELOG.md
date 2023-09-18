@@ -13,8 +13,271 @@ release.
 
 ### Metrics
 
+### Logs
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.25.0 (2023-09-13)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Increase metric name maximum length from 63 to 255 characters.
+  ([#3648](https://github.com/open-telemetry/opentelemetry-specification/pull/3648))
+- MetricReader.Collect ignores Resource from MetricProducer.Produce.
+  ([#3636](https://github.com/open-telemetry/opentelemetry-specification/pull/3636))
+- Attribute sets not observed during async callbacks are not exported.
+  ([#3242](https://github.com/open-telemetry/opentelemetry-specification/pull/3242))
+- Promote MetricProducer specification to feature-freeze.
+  ([#3655](https://github.com/open-telemetry/opentelemetry-specification/pull/3655))
+- Add synchronous gauge instrument, clarify temporality selection influence on
+  metric point persistence.
+  ([#3540](https://github.com/open-telemetry/opentelemetry-specification/pull/3540))
+- Clarify that advice is non-identifying.
+  ([#3661](https://github.com/open-telemetry/opentelemetry-specification/pull/3661))
+- Define the default size of the `SimpleFixedSizeExemplarReservoir` to be `1`.
+  ([#3670](https://github.com/open-telemetry/opentelemetry-specification/pull/3670))
+- Rename "advice" to "advisory parameters".
+  ([#3662](https://github.com/open-telemetry/opentelemetry-specification/pull/3662))
+- Clarify the minimal implementation of a `View`'s `attribute_keys` is an allow-list.
+  ([#3680](https://github.com/open-telemetry/opentelemetry-specification/pull/3680))
+- Add "/" to valid characters for instrument names
+  ([#3684](https://github.com/open-telemetry/opentelemetry-specification/pull/3684))
+- Stabilize the `MetricProducer`.
+  ([#3685](https://github.com/open-telemetry/opentelemetry-specification/pull/3685))
+
+### Logs
+
+- Update GCP data model to use `TraceFlags` instead of
+  `gcp.trace_sampled`. ([#3629](https://github.com/open-telemetry/opentelemetry-specification/pull/3629))
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- Fix and clarify definition of "transient error" in the OTLP exporter specification.
+  ([#3653](https://github.com/open-telemetry/opentelemetry-specification/pull/3653))
+
+### Compatibility
+
+- OpenTracing Shim: Allow invalid but sampled SpanContext to be returned.
+  ([#3471](https://github.com/open-telemetry/opentelemetry-specification/pull/3471))
+- Prometheus: Allow changing metric names by default when translating from Prometheus to OpenTelemetry.
+  ([#3679](https://github.com/open-telemetry/opentelemetry-specification/pull/3679))
+
+### SDK Configuration
+
+- No changes.
+
+### Common
+
+- No changes.
+
+### Supplemenatary Guidelines
+
+- No changes.
+
+## v1.24.0 (2023-08-10)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Specify how to handle instrument name conflicts.
+  ([#3626](https://github.com/open-telemetry/opentelemetry-specification/pull/3626))
+- Add experimental metric attributes advice API.
+  ([#3546](https://github.com/open-telemetry/opentelemetry-specification/pull/3546))
+- Revise the exemplar default reservoirs.
+  ([#3627](https://github.com/open-telemetry/opentelemetry-specification/pull/3627))
+- Mark the default aggregation cardinality Experimental in MetricReader.
+  ([#3619](https://github.com/open-telemetry/opentelemetry-specification/pull/3619))
+- Mark Metric No-Op API as stable.
+  ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
+- MetricProducers are provided as config to MetricReaders instead of through a RegisterProducer operation.
+  ([#3613](https://github.com/open-telemetry/opentelemetry-specification/pull/3613))
+- Refine `MetricProvider.ForceFlush` and define `ForceFlush` for periodic exporting MetricReader.
+  ([#3563](https://github.com/open-telemetry/opentelemetry-specification/pull/3563))
+
+### Logs
+
+- Clarify how log appender use Scope name and attributes.
+  ([#3583](https://github.com/open-telemetry/opentelemetry-specification/pull/3583))
+- Mark No-Op Logs Bridge API as stable.
+  ([#3642](https://github.com/open-telemetry/opentelemetry-specification/pull/3642))
+
+### Resource
+
+- No changes.
+
+### Compatibility
+
+- Prometheus exporters SHOULD provide configuration to disable the addition of `_total` suffixes.
+  ([#3590](https://github.com/open-telemetry/opentelemetry-specification/pull/3590))
+
+### SDK Configuration
+
+- No changes.
+
+### Common
+
+- No changes.
+
+### Supplemenatary Guidelines
+
+- No changes.
+
+## v1.23.0 (2023-07-12)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Refine SDK TracerProvider configuration section.
+  ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
+- Make SDK Tracer Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+
+### Metrics
+
+- Refine SDK MeterProvider configuration section.
+  ([#3522](https://github.com/open-telemetry/opentelemetry-specification/pull/3522))
+- Clarify metric view requirements and recommendations.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
+- Change the view name to be the view's stream configuration name.
+  ([#3524](https://github.com/open-telemetry/opentelemetry-specification/pull/3524))
+- Make SDK Meter Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+- Clarify duplicate instrument registration scope to be a MeterProvider.
+  ([#3538](https://github.com/open-telemetry/opentelemetry-specification/pull/3538))
+- Clarify identical instrument definition for SDK.
+  ([#3585](https://github.com/open-telemetry/opentelemetry-specification/pull/3585))
+
+### Logs
+
+- Refine SDK LoggerProvider configuration section.
+  ([#3559](https://github.com/open-telemetry/opentelemetry-specification/pull/3559))
+- Make SDK Logger Creation more normative.
+  ([#3529](https://github.com/open-telemetry/opentelemetry-specification/pull/3529))
+
+### Resource
+
+- No changes.
+
+### Compatibility
+
+- NOTICE: Remove the Jaeger Exporter
+  ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
+- Prometheus: Do not add `_total` suffix if the metric already ends in `_total`.
+  ([#3581](https://github.com/open-telemetry/opentelemetry-specification/pull/3581))
+- Prometheus type and unit suffixes are not trimmed by default.
+  ([#3580](https://github.com/open-telemetry/opentelemetry-specification/pull/3580))
+
+### SDK Configuration
+
+- Extract Exemplar section and mark it as Experimental.
+  ([#3533](https://github.com/open-telemetry/opentelemetry-specification/pull/3533))
+
+### Common
+
+- No changes.
+
+### Supplemenatary Guidelines
+
+- No changes.
+
+## v1.22.0 (2023-06-09)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Make recommendation to reserve aggregator normative.
+  ([#3526](https://github.com/open-telemetry/opentelemetry-specification/pull/3526))
+
+### Logs
+
+- No changes.
+
+### Resource
+
+- No changes.
+
+### Compatibility
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- Move OTLP specification to github.com/open-telemetry/opentelemetry-proto.
+  ([#3454](https://github.com/open-telemetry/opentelemetry-specification/pull/3454))
+
+### SDK Configuration
+
+- No changes.
+
+### Telemetry Schemas
+
+- No changes.
+
+### Common
+
+- Explain why custom attributes are not recommended to be placed in OTel
+  namespaces.
+  ([#3507](https://github.com/open-telemetry/opentelemetry-specification/pull/3507))
+
+### Supplemenatary Guidelines
+
+- No changes.
+
+## v1.21.0 (2023-05-09)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
 - Add experimental histogram advice API.
   ([#3216](https://github.com/open-telemetry/opentelemetry-specification/pull/3216))
+- Recommended non-prefixed units for metric instrument semantic conventions.
+  ([#3312](https://github.com/open-telemetry/opentelemetry-specification/pull/3312))
 - Recommended cardinality limits to protect metrics pipelines against
   excessive data production from a single instrument.
   ([#2960](https://github.com/open-telemetry/opentelemetry-specification/pull/2960))
@@ -30,6 +293,8 @@ release.
   ([#3345](https://github.com/open-telemetry/opentelemetry-specification/pull/3354))
 - Drop logger include_trace_context parameter.
   ([#3397](https://github.com/open-telemetry/opentelemetry-specification/pull/3397))
+- Clarify how ObservedTimestamp field is set if unspecified
+  ([#3385](https://github.com/open-telemetry/opentelemetry-specification/pull/3385))
 - Mark logs bridge API / SDK as stable.
   ([#3376](https://github.com/open-telemetry/opentelemetry-specification/pull/3376))
 - Mark LogRecord Environment Variables as stable.
@@ -39,63 +304,19 @@ release.
 
 ### Semantic Conventions
 
-- Clarify the scope of the HTTP client span.
- ([#3290](https://github.com/open-telemetry/opentelemetry-specification/pull/3290))
-- Add moratorium on relying on schema transformations for telemetry stability
-  ([#3380](https://github.com/open-telemetry/opentelemetry-specification/pull/3380))
-- Mark "Instrumentation Units" and "Instrumentation Types" sections of the general
-  metric semantic conventions as stable
-  ([#3294](https://github.com/open-telemetry/opentelemetry-specification/pull/3294))
-- Add clarification that UCUM c/s variant applies to all units other than `1` and
-  those using [annotations](https://ucum.org/ucum.html#para-curly).
-  ([#3393](https://github.com/open-telemetry/opentelemetry-specification/pull/3393))
-- Specify that seconds should be used for measuring durations.
-  ([#3388](https://github.com/open-telemetry/opentelemetry-specification/pull/3388))
-- Change http.server.duration and http.client.duration units to seconds
-  ([#3390](https://github.com/open-telemetry/opentelemetry-specification/pull/3390))
-- BREAKING: Remove `messaging.consumer.id`, make `messaging.client_id` generic
-  ([#3336](https://github.com/open-telemetry/opentelemetry-specification/pull/3336))
-- Add transition plan for upcoming breaking changes to the unstable HTTP semantic
-  conventions.
-  ([#3443](https://github.com/open-telemetry/opentelemetry-specification/pull/3443))
-- Rename `net.peer.*`, `net.host.*`, and `net.sock.*` attributes to align with ECS
-  ([#3402](https://github.com/open-telemetry/opentelemetry-specification/pull/3402))
-    BREAKING: rename `net.peer.name` to `server.address` on client side and to `client.address` on server side,
-     `net.peer.port` to `server.port` on client side and to `client.port` on server side,
-     `net.host.name` and `net.host.port` to `server.name` and `server.port` (since `net.host.*` attributes only applied to server instrumentation)
-     `net.sock.peer.addr` to `server.socket.address` on client side and to `client.socket.address` on server side,
-     `net.sock.peer.port` to `server.socket.port` on client side and to `client.socket.port` on server side,
-     `net.sock.peer.name` to `server.socket.domain` (since `net.sock.peer.name` only applied to client instrumentation),
-     `net.sock.host.addr` to `server.socket.address` (since `net.sock.host.*` only applied to server instrumentation),
-     `net.sock.host.port` to `server.socket.port` (similarly since `net.sock.host.*` only applied to server instrumentation),
-     `http.client_ip` to `client.address`
-- BREAKING: Introduce `network.transport` defined as
-  [OSI Transport Layer](https://osi-model.com/transport-layer/) or
-  [Inter-process Communication method](https://en.wikipedia.org/wiki/Inter-process_communication).
-  Introduce `network.type` defined as [OSI Network Layer](https://osi-model.com/network-layer/)
-  or non-OSI equivalent. Remove `net.transport` and `net.sock.family`.
-  Rename `net.protocol.*` to `network.protocol.*`,
-  `net.host.connection.*` to `network.connection.*`, and
-  `net.host.carrier.*` to `network.carrier.*`.
-  ([#3426](https://github.com/open-telemetry/opentelemetry-specification/pull/3426))
-- BREAKING: Adopt ECS attributes in HTTP semantic conventions.
-  Renames: `http.method` to `http.request.method`,
-  `http.status_code` to `http.response.status_code`,
-  `http.request_content_length` to `http.request.body.size`,
-  `http.response_content_length` to `http.response.body.size`,
-  `http.url` to `url.full`,
-  `http.scheme` to `url.scheme`,
-  and removes `http.target` breaking it down to `http.target` to `url.path`, `url.query`, and `url.fragment`.
-  ([#3355](https://github.com/open-telemetry/opentelemetry-specification/pull/3355))
+- The Semantic Conventions have moved to a separate repository
+  [github.com/open-telemetry/semantic-conventions](https://github.com/open-telemetry/semantic-conventions).
+  There will be no future semantic conventions release from this repository.
+  ([#3489](https://github.com/open-telemetry/opentelemetry-specification/pull/3489))
 
 ### Compatibility
 
-### Supplemenatary Guidelines
-
-- Add guidance to use service-supported propagation formats as default for AWS SDK client calls.
-  ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
+- Mark OpenCensus compatibility spec as stable
+  ([#3425](https://github.com/open-telemetry/opentelemetry-specification/pull/3425))
 
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### SDK Configuration
 
@@ -111,10 +332,17 @@ release.
 
 ### Telemetry Schemas
 
+- No changes.
+
 ### Common
 
 - Add log entries to specification README.md contents.
   ([#3435](https://github.com/open-telemetry/opentelemetry-specification/pull/3435))
+
+### Supplemenatary Guidelines
+
+- Add guidance to use service-supported propagation formats as default for AWS SDK client calls.
+  ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
 
 ## v1.20.0 (2023-04-07)
 
@@ -134,8 +362,6 @@ release.
 
 - Clarify that units should use UCUM case sensitive variant.
   ([#3306](https://github.com/open-telemetry/opentelemetry-specification/pull/3306))
-- Recommended non-prefixed units for metric instrument semantic conventions.
-  ([#3312](https://github.com/open-telemetry/opentelemetry-specification/pull/3312))
 - Remove No-Op instrument and Meter creation requirements.
   ([#3322](https://github.com/open-telemetry/opentelemetry-specification/pull/3322))
 - Fixed attributes requirement level in semantic conventions for hardware metrics
@@ -162,8 +388,6 @@ release.
 
 ### Semantic Conventions
 
-- Add k8s.cluster.uid semantic convention
-  ([#3267](https://github.com/open-telemetry/opentelemetry-specification/pull/3267))
 - Clarify that attribute requirement levels apply to the instrumentation library
   ([#3289](https://github.com/open-telemetry/opentelemetry-specification/pull/3289))
 - Fix grammatical number of metric units.
@@ -1637,7 +1861,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 - Implementations can ignore links with invalid SpanContext([#1492](https://github.com/open-telemetry/opentelemetry-specification/pull/1492))
 - Add `none` as a possible value for OTEL_TRACES_EXPORTER to disable export
   ([#1439](https://github.com/open-telemetry/opentelemetry-specification/pull/1439))
-- Add [`ForceFlush`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
+- Add [`ForceFlush`](/specification/trace/sdk.md#forceflush) to SDK's `TracerProvider` ([#1452](https://github.com/open-telemetry/opentelemetry-specification/pull/1452))
 
 ### Metrics
 

@@ -1,5 +1,5 @@
 # All documents to be used in spell check.
-ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' | sort)
+ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' -not -path '*semantic_conventions*' | sort)
 PWD := $(shell pwd)
 
 TOOLS_DIR := ./internal/tools
@@ -12,7 +12,7 @@ SEMCONVGEN_VERSION=0.17.0
 
 # TODO: add `yamllint` step to `all` after making sure it works on Mac.
 .PHONY: all
-all: install-tools markdownlint markdown-link-check misspell table-check schema-check
+all: install-tools markdownlint markdown-link-check misspell
 
 $(MISSPELL):
 	cd $(TOOLS_DIR) && go build -o $(MISSPELL_BINARY) github.com/client9/misspell/cmd/misspell
@@ -71,22 +71,6 @@ install-yamllint:
 yamllint:
 	yamllint .
 
-# Generate markdown tables from YAML definitions
-.PHONY: table-generation
-table-generation:
-	docker run --rm -v $(PWD)/semantic_conventions:/source -v $(PWD)/specification:/spec \
-		otel/semconvgen:$(SEMCONVGEN_VERSION) -f /source markdown -md /spec
-
-# Check if current markdown tables differ from the ones that would be generated from YAML definitions
-.PHONY: table-check
-table-check:
-	docker run --rm -v $(PWD)/semantic_conventions:/source -v $(PWD)/specification:/spec \
-		otel/semconvgen:$(SEMCONVGEN_VERSION) -f /source markdown -md /spec --md-check
-
-.PHONY: schema-check
-schema-check:
-	$(TOOLS_DIR)/schema_check.sh
-
 # Run all checks in order of speed / likely failure.
 .PHONY: check
 check: misspell markdownlint markdown-link-check
@@ -94,7 +78,7 @@ check: misspell markdownlint markdown-link-check
 
 # Attempt to fix issues / regenerate tables.
 .PHONY: fix
-fix: table-generation misspell-correction
+fix: misspell-correction
 	@echo "All autofixes complete"
 
 .PHONY: install-tools

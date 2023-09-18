@@ -72,17 +72,14 @@ Application owners use the SDK constructors; [plugin authors](glossary.md#plugin
 
 The **Semantic Conventions** define the keys and values which describe commonly observed concepts, protocols, and operations used by applications.
 
-**Note: Semantic conventions will be moving to a new repository.**
-
-* [Resource Conventions](resource/semantic_conventions/README.md)
-* [Span Conventions](trace/semantic_conventions/README.md)
-* [Metrics Conventions](metrics/semantic_conventions/README.md)
+Semantic Conventions are now located in their own repository:
+[https://github.com/open-telemetry/semantic-conventions](https://github.com/open-telemetry/semantic-conventions)
 
 Both the collector and the client libraries SHOULD autogenerate semantic
 convention keys and enum values into constants (or language idiomatic
 equivalent). Generated values shouldn't be distributed in stable packages
 until semantic conventions are stable.
-The [YAML](../semantic_conventions/README.md) files MUST be used as the
+The [YAML](https://github.com/open-telemetry/semantic-conventions/tree/main/model) files MUST be used as the
 source of truth for generation. Each language implementation SHOULD
 provide language-specific support to the
 [code generator](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#code-generator).
@@ -191,7 +188,7 @@ propagated from parent to child **Spans**.
 - **Tracestate** carries tracing-system specific context in a list of key value
   pairs. **Tracestate** allows different vendors propagate additional
   information and inter-operate with their legacy Id formats. For more details
-  see [this](https://w3c.github.io/trace-context/#tracestate-field).
+  see [this](https://www.w3.org/TR/trace-context/#tracestate-header).
 
 ### Links between spans
 
