@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Stabilize `ExplicitBucketBoundaries` instrument advisory parameter.
+  ([#3694](https://github.com/open-telemetry/opentelemetry-specification/pull/3694))
+
 ### Logs
 
 ### Resource
