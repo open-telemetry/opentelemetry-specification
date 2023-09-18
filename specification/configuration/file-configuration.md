@@ -85,7 +85,7 @@ Parse and validate a [configuration file](#configuration-file).
 
 **Returns:** [configuration model](#in-memory-configuration-model)
 
-The API SHOULD return an error if:
+This SHOULD return an error if:
 
 * The `file` doesn't exist or is invalid
 * The parsed `file` content does not conform to
@@ -110,7 +110,7 @@ Interpret [configuration model](#in-memory-configuration-model) and return SDK c
 
 The multiple responses MAY be returned using a tuple, or some other data structure encapsulating the components.
 
-The API SHOULD return an error if it encounters an error in `configuration` (i.e. fail fast).
+This SHOULD return an error if it encounters an error in `configuration` (i.e. fail fast).
 
 ## References
 
