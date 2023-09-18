@@ -388,7 +388,7 @@ The API MUST accept the following parameters:
   already present during span creation.
 
 - `Link`s - an ordered sequence of Links, see [API definition](#link).
-  `Link`s added at `Span` creation are considered by [Samplers](sdk.md#sampler)
+  `Link`s added at `Span` creation may be considered by [Samplers](sdk.md#sampler)
    to make a sampling decision
 - `Start timestamp`, default to current time. This argument SHOULD only be set
   when span creation time has already passed. If API is called at a moment of
