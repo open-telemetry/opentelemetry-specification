@@ -3,13 +3,27 @@
 This document describes common performance benchmark guidelines on how to
 measure and report the performance of OpenTelemetry SDKs.
 
+## Microbenchmarks
+
+Microbenchmarks are defined as tests that measure performance of small units of
+code. SDKs MAY implement any number of microbechmark tests as needed.
+However, all SDKs SHOULD implement the following:
+
+### Create Spans
+
+Number of spans which could be created and ended in 1 second per logical core.
+Each must contain 10 attributes, and each attribute must contain two
+20-character strings - one as attribute name and the other as value.
+
+## End-to-end benchmark
+
 The goal of this benchmark is to provide a tool to get the basic performance
 overhead of the OpenTelemetry SDK for given events throughput on the target
 platform.
 
-## Benchmark Configuration
+### Benchmark Configuration
 
-### Span Configuration
+#### Span Configuration
 
 - No parent `Span` or parent `SpanContext`.
 - Default Span [Kind](./trace/api.md#spankind) and
@@ -24,24 +38,24 @@ platform.
 - The `AlwaysOn` sampler should be enabled.
 - Each `Span` is created and immediately ended.
 
-### Measurement Configuration
+#### Measurement Configuration
 
 For the languages with bootstrap cost like JIT compilation, a warm-up phase is
 recommended to take place before the measurement, which runs under the same
 `Span` [configuration](#span-configuration).
 
-## Throughput Measurement
+### Throughput Measurement
 
-### Create Spans
+#### Create Spans
 
 Number of spans which could be created and exported via OTLP exporter in 1
 second per logical core and average number over all logical cores, with each
 span containing 10 attributes, and each attribute containing two 20 characters
 strings, one as attribute name the other as value.
 
-## Instrumentation Cost
+### Instrumentation Cost
 
-### CPU Usage Measurement
+#### CPU Usage Measurement
 
 With given number of span throughput specified by user, or 10,000 spans per
 second as default if user does not input the number, measure and report the CPU
@@ -57,14 +71,14 @@ of SDK's CPU consumption.
 The total running time for one test iteration is suggested to be at least 15
 seconds. The average and peak CPU usage should be reported.
 
-### Memory Usage Measurement
+#### Memory Usage Measurement
 
 Measure dynamic memory consumption, e.g. heap, for the same scenario as above
 CPU Usage section with 15 seconds duration.
 
-## Report
+### Report
 
-### Report Format
+#### Report Format
 
 All the numbers above should be measured multiple times (suggest 10 times at
 least) and reported.
