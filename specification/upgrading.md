@@ -3,6 +3,7 @@
 Managing widely distributed software at scale requires careful design related to backwards compatibility, versioning, and upgrading. The OpenTelemetry approach is described below. If you are planning on using OpenTelemetry, it can be helpful to understand how we approach this problem.
 
 ## Dependency Management
+
 It is very important that OpenTelemetry users and implementors stay up to date with the latest version of the OpenTelemetry API. OpenTelemetry follows strict rules in regards to backwards compatibility. It is always safe to upgrade to the latest minor version of an OpenTelemetry package.
 
 ### Application Developers
@@ -13,7 +14,7 @@ Likewise, application developers are encouraged to depend upon all future versio
 
 ### Library Maintainers
 
-Developers who maintain OSS libraries are encouraged to use the OpenTelemetry API to add instrumentation directly into their library code. We refer to this approach as "native instrumentation." 
+Developers who maintain OSS libraries are encouraged to use the OpenTelemetry API to add instrumentation directly into their library code. We refer to this approach as "native instrumentation."
 
 When adding the OpenTelemetry API as a dependency to your library, it is very important to depend upon to ***all future versions*** of the current major version.
 
