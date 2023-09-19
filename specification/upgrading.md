@@ -59,7 +59,7 @@ API implementations are expected to always target the latest version of the API.
 
 Bugs fixes, security patches, and performance improvements are released as patch versions of the SDK. Support for new versions of the API are released as minor versions. New Plugin Interfaces and configuration options are also released as minor versions.
 
-Breaking changes to Plugin Interfaces are handled through deprecation. Instead of breaking a Plugin Interface, a new interface is created and the existing interface is marked as deprecated. Plugins which target the deprecated interface continue to work, and the SDK provides default implementations of any missing functionality. After one year, the deprecated Plugin Interface is removed as a major version release of the SDK.
+Breaking changes to Plugin Interfaces are handled through deprecation. Instead of breaking a Plugin Interface, a new interface is created and the existing interface is marked as deprecated. Plugins which target the deprecated interface continue to work, and the SDK provides default implementations of any missing functionality. After one year, the deprecated Plugin Interface may be removed in a major version release of the SDK.
 
 ## Design requirements and explanations
 
