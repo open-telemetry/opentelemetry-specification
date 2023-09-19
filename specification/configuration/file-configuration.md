@@ -14,7 +14,7 @@ linkTitle: File
 - [Configuration file](#configuration-file)
 - [SDK Configuration](#sdk-configuration)
   * [In-Memory Configuration Model](#in-memory-configuration-model)
-  * [ConfigurationFactory](#configurationfactory)
+  * [Configurator](#configurator)
     + [Parse](#parse)
     + [Create](#create)
 - [References](#references)
@@ -66,9 +66,9 @@ to provide this in-memory representation in a manner that is idiomatic for their
 language. If an SDK needs to expose a class or interface, the
 name `Configuration` is RECOMMENDED.
 
-### ConfigurationFactory
+### Configurator
 
-`ConfigurationFactory` is responsible parsing configuration files and interpreting [Configuration](#in-memory-configuration-model) to produce
+`Configurator` is responsible parsing configuration files and interpreting [Configuration](#in-memory-configuration-model) to produce
 configured SDK components.
 
 TODO: Extend ConfigurationFactory with ability to update SDK components with
