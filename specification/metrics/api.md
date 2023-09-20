@@ -23,6 +23,8 @@ linkTitle: API
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
     + [Instrument advisory parameters](#instrument-advisory-parameters)
+      - [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
+      - [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
       - [Synchronous Instrument API](#synchronous-instrument-api)
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
@@ -246,24 +248,37 @@ instrument. The API MUST treat it as an opaque string.
 
 #### Instrument advisory parameters
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 `advisory` parameters are an optional set of recommendations provided by the
 author of the Instrument, aimed at assisting implementations in providing
 useful output with minimal configuration. They differ from other parameters
 in that Implementations MAY ignore `advisory` parameters.
 
-* OpenTelemetry SDKs MUST handle `advisory` parameters as described
-  [here](./sdk.md#instrument-advisory-parameters).
-* `advisory` parameters may be general, or may be accepted only for specific
-  instrument `kind`s.
-  * `Histogram`:
-    * `ExplicitBucketBoundaries` (`double[]`): The recommended set of bucket
-      boundaries to use if aggregating to
-      [explicit bucket Histogram metric data point](./data-model.md#histogram).
-  * All instruments:
-    * `Attributes` (a list of [attribute keys](../common/README.md#attribute)):
-      The recommended set of attribute keys to be used for the resulting metrics.
+OpenTelemetry SDKs MUST handle `advisory` parameters as described
+[here](./sdk.md#instrument-advisory-parameters).
+
+`advisory` parameters may be general, or may be accepted only for specific
+instrument `kind`s.
+
+##### Instrument advisory parameter: `ExplicitBucketBoundaries`
+
+**Status**: [Stable](../document-status.md)
+
+Applies to Histogram instrument type.
+
+`ExplicitBucketBoundaries` (`double[]`) is the recommended set of bucket
+boundaries to use if aggregating to
+[explicit bucket Histogram metric data point](./data-model.md#histogram).
+
+##### Instrument advisory parameter: `Attributes`
+
+**Status**: [Experimental](../document-status.md)
+
+Applies to all instrument types.
+
+`Attributes` (a list of [attribute keys](../common/README.md#attribute)) is
+the recommended set of attribute keys to be used for the resulting metrics.
 
 #### Synchronous and Asynchronous instruments
 
