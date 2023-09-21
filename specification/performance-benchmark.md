@@ -12,8 +12,16 @@ However, all SDKs SHOULD implement the following:
 ### Create Spans
 
 Number of spans which could be created and ended in 1 second per logical core.
-Each must contain 10 attributes, and each attribute must contain two
-20-character strings - one as attribute name and the other as value.
+The configuration of the span should be as follows:
+
+- No parent `Span` or parent `SpanContext`.
+- Default Span [Kind](./trace/api.md#spankind) and
+  [Status](./trace/api.md#set-status).
+- 10 [attributes](./common/README.md#attribute) with two 20-character strings -
+  one as attribute name and the other as value.
+- The `AlwaysOn` sampler should be enabled.
+- No `SpanProcessor`s are enabled.
+- Each `Span` is created and immediately ended.
 
 ## End-to-end benchmark
 
