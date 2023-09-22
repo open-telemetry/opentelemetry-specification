@@ -6,8 +6,8 @@ measure and report the performance of OpenTelemetry SDKs.
 ## Microbenchmarks
 
 Microbenchmarks are defined as tests that measure performance of small units of
-code. SDKs MAY implement any number of microbechmark tests as needed.
-However, all SDKs SHOULD implement the following:
+code. SDKs may implement any number of microbechmark tests as needed.
+SDKs can use the following tests as a guideline to get started:
 
 ### Create Spans
 
