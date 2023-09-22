@@ -862,8 +862,8 @@ parameters. If an advisory parameter is not valid, the Meter SHOULD emit an erro
 notifying the user and proceed as if the parameter was not provided.
 
 If multiple [identical Instruments](api.md#instrument) are created with
-different advice parameters, the Meter MUST return an instrument using the
-first-seen advice parameters and log an appropriate error as described in
+different advisory parameters, the Meter MUST return an instrument using the
+first-seen advisory parameters and log an appropriate error as described in
 [duplicate instrument registrations](#duplicate-instrument-registration).
 
 ## Attribute limits
