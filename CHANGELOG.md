@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- `ParentBased` sampler is a decorator (not a composite).
+  ([#3706](https://github.com/open-telemetry/opentelemetry-specification/pull/3706))
+
 ### Metrics
 
 - Stabilize `ExplicitBucketBoundaries` instrument advisory parameter.
