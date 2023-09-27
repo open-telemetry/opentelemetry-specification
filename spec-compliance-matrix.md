@@ -277,7 +277,7 @@ Note: Support for environment variables is optional.
 | OTEL_SDK_DISABLED                                        | -   | +    | -   | -           | -    | -      | +   | -    | -   | -    | -     |
 | OTEL_RESOURCE_ATTRIBUTES                                 | +   | +    | +   | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_SERVICE_NAME                                        | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
-| OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | -   |      | -   | -    | -     |
+| OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | +   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
 | OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    | -     |
 | OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     | +    |       |
@@ -326,8 +326,8 @@ Note: Support for environment variables is optional.
 | SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
 | SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        | +   |      |     | +    |       |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC   | X        | +  |      |    |             |      |        |     |      |     |      |       |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X        | +  |      |    |             |      |        |     |      |     |      |       |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC   | X        | +  |      |    |             |      |        | +   |      |     |      |       |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X        | +  |      |    |             |      |        | +   |      |     |      |       |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python    | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | +    |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | +    |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
