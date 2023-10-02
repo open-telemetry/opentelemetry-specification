@@ -8,7 +8,7 @@ For example, a process producing telemetry that is running in a
 container on Kubernetes has a Pod name, it is in a namespace and possibly is
 part of a Deployment which also has a name. All three of these attributes can be
 included in the `Resource`. Note that there are certain
-["standard attributes"](semantic_conventions/README.md) that have prescribed meanings.
+["standard attributes"](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md) that have prescribed meanings.
 
 The primary purpose of resources as a first-class concept in the SDK is
 decoupling of discovery of resource information from exporters. This allows for
@@ -31,7 +31,7 @@ associated with this `Resource`.
 ## SDK-provided resource attributes
 
 The SDK MUST provide access to a Resource with at least the attributes listed at
-[Semantic Attributes with SDK-provided Default Value](semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value).
+[Semantic Attributes with SDK-provided Default Value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-sdk-provided-default-value).
 This resource MUST be associated with a `TracerProvider` or `MeterProvider`
 if another resource was not explicitly specified.
 

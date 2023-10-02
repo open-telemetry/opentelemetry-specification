@@ -402,7 +402,7 @@ labels distinguish targets and are expected to be present on metrics exposed on
 a Prometheus pull exporter (a ["federated"](https://prometheus.io/docs/prometheus/latest/federation/)
 Prometheus endpoint) or pushed via Prometheus remote-write. In OTLP, the
 `service.name`, `service.namespace`, and `service.instance.id` triplet is
-[required to be unique](../resource/semantic_conventions/README.md#service),
+[required to be unique](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#service),
 which makes them good candidates to use to construct `job` and `instance`. In
 the collector Prometheus exporters, the `service.name` and `service.namespace`
 attributes MUST be combined as `<service.namespace>/<service.name>`, or
