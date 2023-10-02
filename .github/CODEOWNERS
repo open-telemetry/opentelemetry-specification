@@ -29,6 +29,6 @@ specification/logs/     @open-telemetry/technical-committee @open-telemetry/spec
 
 # Semantic Conventions owners (global)
 specification/semantic-conventions.md @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-semconv-approvers
-specification/telemetry-stability.md @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/
+specification/telemetry-stability.md @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-semconv-approvers
 # Note: Common is about naming conventions, relevant to semconv
-specification/common/ @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/
+specification/common/ @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-semconv-approvers
