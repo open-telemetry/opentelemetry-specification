@@ -34,7 +34,7 @@ LogRecords and Events: Events are LogRecords which have a `name` and `domain`.
 Within a particular `domain`, the `name` uniquely defines a particular class or
 type of event. Events with the same `domain` / `name` follow the same schema
 which assists in analysis in observability platforms. Events are described in
-more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md.
+more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
 While the logging space has a diverse legacy with many existing logging
 libraries in different languages, there is not ubiquitous alignment with
