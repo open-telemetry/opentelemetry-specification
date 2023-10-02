@@ -89,6 +89,8 @@ release.
   ([#3471](https://github.com/open-telemetry/opentelemetry-specification/pull/3471))
 - Prometheus: Allow changing metric names by default when translating from Prometheus to OpenTelemetry.
   ([#3679](https://github.com/open-telemetry/opentelemetry-specification/pull/3679))
+- Prometheus exporters omit empty resources and scopes without attributes.
+  ([#3660](https://github.com/open-telemetry/opentelemetry-specification/pull/3660))
 
 ### SDK Configuration
 
