@@ -425,7 +425,7 @@ A `SpanContext` cannot be set as active in a `Context` directly, but by
 [wrapping it into a Span](#wrapping-a-spancontext-in-a-span).
 For example, a `Propagator` performing context extraction may need this.
 
-### Specifying links
+#### Specifying links
 
 During `Span` creation, a user MUST have the ability to record links to other `Span`s.
 Linked `Span`s can be from the same or a different trace -- see [links](#link).
