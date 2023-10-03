@@ -29,6 +29,7 @@ linkTitle: API
 - [Span](#span)
   * [Span Creation](#span-creation)
     + [Determining the Parent Span from a Context](#determining-the-parent-span-from-a-context)
+    + [Specifying links](#specifying-links)
   * [Span operations](#span-operations)
     + [Get Context](#get-context)
     + [IsRecording](#isrecording)
@@ -423,6 +424,11 @@ If there is no `Span` in the `Context`, the newly created `Span` will be a root 
 A `SpanContext` cannot be set as active in a `Context` directly, but by
 [wrapping it into a Span](#wrapping-a-spancontext-in-a-span).
 For example, a `Propagator` performing context extraction may need this.
+
+### Specifying links
+
+During `Span` creation, a user MUST have the ability to record links to other `Span`s.
+Linked `Span`s can be from the same or a different trace -- see [links](#link).
 
 ### Span operations
 
