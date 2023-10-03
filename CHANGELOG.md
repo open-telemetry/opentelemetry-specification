@@ -31,6 +31,9 @@ release.
 
 ### Common
 
+- Rename/replace `(client|server).socket.(address|port)` attributes with `network.(peer|local).(address|port)`.
+  ([#3713](https://github.com/open-telemetry/opentelemetry-specification/pull/3713))
+
 ### Supplementary Guidelines
 
 ## v1.25.0 (2023-09-13)

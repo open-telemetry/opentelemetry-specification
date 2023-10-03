@@ -387,13 +387,13 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>%a</td>
     <td>string</td>
     <td>Client address</td>
-    <td>Attributes["client.address"]</td>
+    <td>Attributes["network.peer.address"]</td>
   </tr>
   <tr>
     <td>%A</td>
     <td>string</td>
     <td>Server address</td>
-    <td>Attributes["server.socket.address"]</td>
+    <td>Attributes["network.local.address"]</td>
   </tr>
   <tr>
     <td>%h</td>

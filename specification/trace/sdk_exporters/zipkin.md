@@ -99,16 +99,15 @@ always available. The following table lists the possible attributes for
 |---|---|---|
 |1|peer.service|[OpenTelemetry adopted attribute for remote service.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
 |2|server.address|[OpenTelemetry adopted attribute for remote hostname, or similar.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
-|3|server.socket.domain|[OpenTelemetry adopted attribute for remote socket hostname of the peer.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
-|4|server.socket.address & server.socket.port|[OpenTelemetry adopted attribute for remote socket address of the peer.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
-|5|peer.hostname|Remote hostname defined in OpenTracing specification.|
-|6|peer.address|Remote address defined in OpenTracing specification.|
-|7|db.name|Commonly used database name attribute for DB Spans.|
+|3|network.peer.address & network.peer.port|[OpenTelemetry adopted attribute for remote socket address of the peer.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
+|4|peer.hostname|Remote hostname defined in OpenTracing specification.|
+|5|peer.address|Remote address defined in OpenTracing specification.|
+|6|db.name|Commonly used database name attribute for DB Spans.|
 
 * Ranking should control the selection order. For example, `server.address` (Rank
-  2) should be selected before `peer.address` (Rank 6).
-* `server.socket.domain` and `server.socket.address` can be used by themselves as `remoteEndpoint` but should be combined
-  with `server.socket.port` if it is also present.
+  2) should be selected before `peer.address` (Rank 5).
+* `network.peer.address` can be used by itself as `remoteEndpoint` but should be combined
+  with `network.peer.port` if it is also present.
 
 #### Zipkin -> OTLP
 
