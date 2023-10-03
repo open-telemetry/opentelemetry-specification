@@ -47,4 +47,4 @@ filled out:
 - `exception.type`
 
 The format and semantics of these attributes are
-defined in [semantic conventions](semantic_conventions/exceptions.md).
+defined in [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-spans.md).

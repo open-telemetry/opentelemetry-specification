@@ -60,7 +60,7 @@ and Zipkin.
 ### Service name
 
 Zipkin service name MUST be set to the value of the
-[resource attribute](../../resource/semantic_conventions/README.md):
+[resource attribute](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md):
 `service.name`. If no `service.name` is contained in a Span's Resource, it MUST be populated from the
 [default](../../resource/sdk.md#sdk-provided-resource-attributes) `Resource`.
 In Zipkin it is important that the service name is consistent
@@ -97,10 +97,10 @@ always available. The following table lists the possible attributes for
 
 |Rank|Attribute Name|Reason|
 |---|---|---|
-|1|peer.service|[OpenTelemetry adopted attribute for remote service.](../semantic_conventions/span-general.md#general-remote-service-attributes)|
-|2|server.address|[OpenTelemetry adopted attribute for remote hostname, or similar.](../semantic_conventions/span-general.md#server-and-client-attributes)|
-|3|server.socket.domain|[OpenTelemetry adopted attribute for remote socket hostname of the peer.](../semantic_conventions/span-general.md#server-and-client-attributes)|
-|4|server.socket.address & server.socket.port|[OpenTelemetry adopted attribute for remote socket address of the peer.](../semantic_conventions/span-general.md#server-and-client-attributes)|
+|1|peer.service|[OpenTelemetry adopted attribute for remote service.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
+|2|server.address|[OpenTelemetry adopted attribute for remote hostname, or similar.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
+|3|server.socket.domain|[OpenTelemetry adopted attribute for remote socket hostname of the peer.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
+|4|server.socket.address & server.socket.port|[OpenTelemetry adopted attribute for remote socket address of the peer.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
 |5|peer.hostname|Remote hostname defined in OpenTracing specification.|
 |6|peer.address|Remote address defined in OpenTracing specification.|
 |7|db.name|Commonly used database name attribute for DB Spans.|
@@ -121,7 +121,7 @@ OpenTelemetry Span `Attribute`(s) MUST be reported as `tags` to
 Zipkin.
 
 Some attributes defined in [semantic
-convention](../semantic_conventions/README.md)
+convention](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md)
 document maps to the strongly-typed fields of Zipkin spans.
 
 Primitive types MUST be converted to string using en-US culture settings.

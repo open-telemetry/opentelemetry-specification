@@ -38,5 +38,5 @@ The following formats are currently natively supported by AWS services for propa
 AWS service-supported context propagation is necessary to allow context propagation
 through AWS managed services, for example: `S3 -> SNS -> SQS -> Lambda`.
 
-(See the [aws-lambda sqs-event semantic convention](../../specification/trace/semantic_conventions/instrumentation/aws-lambda.md#sqs-event)
+(See the [aws-lambda sqs-event semantic convention](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/faas/aws-lambda.md#sqs-event)
 doc for details on how this context propagation is consumed by Lambda instrumentation.)
