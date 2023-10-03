@@ -136,7 +136,7 @@ with **Child Of** type in the entire list is used as parent, else the
 the first `SpanContext` is used as parent. All values in the list
 MUST be added as [Link](../trace/api.md)s with the reference type value
 as a `Link` attribute, i.e.
-[opentracing.ref_type](../trace/semantic_conventions/compatibility.md#opentracing)
+[opentracing.ref_type](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/trace-compatibility.md#opentracing)
 set to `follows_from` or `child_of`.
 
 If a list of `Span` references is specified, the union of their
@@ -396,7 +396,7 @@ the pair set, or else fallback to use the `log` literal string.
 If pair set contains an `event=error` entry, the values MUST be
 [mapped](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#log-fields-table)
 to an `Event` with the conventions outlined in the
-[Exception semantic conventions](../trace/semantic_conventions/exceptions.md) document:
+[Exception semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-spans.md) document:
 
 - If an entry with `error.object` key exists and the value is a language-specific
   error object, a call to `RecordException(e)` is performed along the rest of
