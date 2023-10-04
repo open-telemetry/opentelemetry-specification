@@ -794,7 +794,7 @@ All other fields |                    |                                         
 \* Not yet formalized into ECS.
 
 \*\* A resource that doesn’t exist in the
-[OpenTelemetry resource semantic convention](../resource/semantic_conventions/README.md).
+[OpenTelemetry resource semantic convention](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
 
 This is a selection of the most relevant fields. See
 [for the full reference](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html)

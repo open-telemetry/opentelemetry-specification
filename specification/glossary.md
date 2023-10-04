@@ -117,7 +117,7 @@ Synonym: *Auto-instrumentation*.
 Denotes the library that implements the *OpenTelemetry API*.
 
 See [Library Guidelines](library-guidelines.md#sdk-implementation) and
-[Library resource semantic conventions](resource/semantic_conventions/README.md#telemetry-sdk).
+[Library resource semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#telemetry-sdk).
 
 ### Constructors
 
