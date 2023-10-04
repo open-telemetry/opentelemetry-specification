@@ -510,7 +510,7 @@ Setting an attribute with the same key as an existing attribute SHOULD overwrite
 the existing attribute's value.
 
 Note that the OpenTelemetry project documents certain ["standard
-attributes"](semantic_conventions/README.md) that have prescribed semantic meanings.
+attributes"](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) that have prescribed semantic meanings.
 
 Note that [Samplers](sdk.md#sampler) can only consider information already
 present during span creation. Any changes done later, including new or changed
@@ -551,7 +551,7 @@ The specification does not require any normalization if provided timestamps are
 out of range.
 
 Note that the OpenTelemetry project documents certain ["standard event names and
-keys"](semantic_conventions/README.md) which have prescribed semantic meanings.
+keys"](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) which have prescribed semantic meanings.
 
 Note that [`RecordException`](#record-exception) is a specialized variant of
 `AddEvent` for recording exception events.
