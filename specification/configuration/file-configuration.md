@@ -68,7 +68,8 @@ name `Configuration` is RECOMMENDED.
 
 ### Configurator
 
-`Configurator` is responsible parsing configuration files and interpreting [Configuration](#in-memory-configuration-model) to produce
+`Configurator` is responsible for parsing configuration files and
+interpreting [Configuration](#in-memory-configuration-model) to produce
 configured SDK components.
 
 TODO: Extend ConfigurationFactory with ability to update SDK components with
