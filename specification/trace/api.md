@@ -428,7 +428,7 @@ For example, a `Propagator` performing context extraction may need this.
 During `Span` creation, a user MUST have the ability to record links to other `Span`s.
 Linked `Span`s can be from the same or a different trace -- see [links](#link).
 `Link`s added at `Span` creation may be considered by [Samplers](sdk.md#sampler)
-to make a sampling decision
+to make a sampling decision.
 
 ### Span operations
 
