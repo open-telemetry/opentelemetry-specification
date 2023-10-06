@@ -791,7 +791,7 @@ To summarize the interpretation of these kinds:
 
 ## Link
 
-A user MUST have the ability to record links to other `Span`s.
+A user MUST have the ability to record links to other `SpanContext`s.
 Linked `SpanContext`s can be from the same or a different trace -- see [Links
 between spans](../overview.md#links-between-spans).
 
