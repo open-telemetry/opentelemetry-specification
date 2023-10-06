@@ -792,7 +792,7 @@ To summarize the interpretation of these kinds:
 ## Link
 
 A user MUST have the ability to record links to other `Span`s.
-Linked `Span`s can be from the same or a different trace -- see [Links
+Linked `SpanContext`s can be from the same or a different trace -- see [Links
 between spans](../overview.md#links-between-spans).
 
 A `Link` is structurally defined by the following properties:
