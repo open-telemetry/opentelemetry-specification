@@ -65,7 +65,8 @@ release.
 
 ### SDK Configuration
 
-- No changes.
+- Fix description of OTEL_ATTRIBUTE_COUNT_LIMIT
+  ([#3714](https://github.com/open-telemetry/opentelemetry-specification/pull/3714))
 
 ### Common
 
