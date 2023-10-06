@@ -13,6 +13,8 @@ release.
 
 - `ParentBased` sampler is a decorator (not a composite).
   ([#3706](https://github.com/open-telemetry/opentelemetry-specification/pull/3706))
+- Add a new AddLink() operation to Span (experimental).
+  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
 
 ### Metrics
 
