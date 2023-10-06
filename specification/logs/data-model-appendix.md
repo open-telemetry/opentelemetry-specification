@@ -387,7 +387,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>%a</td>
     <td>string</td>
     <td>Client address</td>
-    <td>Attributes["client.address"]</td>
+    <td>Attributes["client.socket.address"]</td>
   </tr>
   <tr>
     <td>%A</td>
@@ -399,7 +399,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>%h</td>
     <td>string</td>
     <td>Client hostname.</td>
-    <td>Attributes["server.address"]</td>
+    <td>Attributes["client.address"]</td>
   </tr>
   <tr>
     <td>%m</td>
@@ -794,7 +794,7 @@ All other fields |                    |                                         
 \* Not yet formalized into ECS.
 
 \*\* A resource that doesn’t exist in the
-[OpenTelemetry resource semantic convention](../resource/semantic_conventions/README.md).
+[OpenTelemetry resource semantic convention](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
 
 This is a selection of the most relevant fields. See
 [for the full reference](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html)
