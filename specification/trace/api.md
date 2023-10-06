@@ -817,10 +817,7 @@ The Span interface MAY provide:
 
 Span SHOULD preserve the order in which `Link`s are set.
 
-Note that [Samplers](sdk.md#sampler) may only consider information already
-present during span creation. Any `Link`s added later may not change the sampling
-decision.
-
+The API documentation MUST state that adding links at span creation is preferred to calling `AddLink` later, for contexts that are available during span creation, because head sampling decisions can only consider information present during span creation.
 ## Concurrency
 
 For languages which support concurrent execution the Tracing APIs provide
