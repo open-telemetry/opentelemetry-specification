@@ -11,9 +11,18 @@ release.
 
 ### Traces
 
+- `ParentBased` sampler is a decorator (not a composite).
+  ([#3706](https://github.com/open-telemetry/opentelemetry-specification/pull/3706))
+
 ### Metrics
 
+- Stabilize `ExplicitBucketBoundaries` instrument advisory parameter.
+  ([#3694](https://github.com/open-telemetry/opentelemetry-specification/pull/3694))
+
 ### Logs
+
+- Update two apache access logs mappings.
+  ([#3712](https://github.com/open-telemetry/opentelemetry-specification/pull/3712))
 
 ### Resource
 
@@ -86,6 +95,8 @@ release.
   ([#3471](https://github.com/open-telemetry/opentelemetry-specification/pull/3471))
 - Prometheus: Allow changing metric names by default when translating from Prometheus to OpenTelemetry.
   ([#3679](https://github.com/open-telemetry/opentelemetry-specification/pull/3679))
+- Prometheus exporters omit empty resources and scopes without attributes.
+  ([#3660](https://github.com/open-telemetry/opentelemetry-specification/pull/3660))
 
 ### SDK Configuration
 

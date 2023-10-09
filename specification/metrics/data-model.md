@@ -1175,7 +1175,7 @@ When more than one process writes the same metric data stream, OTLP data points
 may appear to overlap. This condition typically results from misconfiguration, but
 can also result from running identical processes (indicative of operating system
 or SDK bugs, like missing
-[process attributes](../resource/semantic_conventions/process.md)). When there
+[process attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md#process)). When there
 are overlapping points, receivers SHOULD eliminate points so that there are no
 overlaps. Which data to select in overlapping cases is not specified.
 
