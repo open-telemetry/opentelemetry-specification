@@ -34,6 +34,9 @@ release.
 
 ### Common
 
+- Add upgrading and version management documentation
+  ([#3695](https://github.com/open-telemetry/opentelemetry-specification/pull/3695))
+
 ### Supplementary Guidelines
 
 ## v1.25.0 (2023-09-13)
