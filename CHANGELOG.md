@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add a new AddLink() operation to Span (experimental).
+  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
+
 ### Metrics
 
 ### Logs
