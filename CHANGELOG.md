@@ -49,7 +49,7 @@ release.
 
 - Update two apache access logs mappings.
   ([#3712](https://github.com/open-telemetry/opentelemetry-specification/pull/3712))
-  
+
 ### Resource
 
 - No changes.
