@@ -25,9 +25,6 @@ release.
 
 ### Common
 
-- Add upgrading and version management documentation
-  ([#3695](https://github.com/open-telemetry/opentelemetry-specification/pull/3695))
-
 ### Supplementary Guidelines
 
 ## v1.26.0 (2023-10-10)
@@ -73,7 +70,8 @@ release.
 
 ### Common
 
-- No changes.
+- Add upgrading and version management documentation
+  ([#3695](https://github.com/open-telemetry/opentelemetry-specification/pull/3695))
 
 ### Supplementary Guidelines
 
