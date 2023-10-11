@@ -14,7 +14,7 @@ linkTitle: File
 - [Configuration file](#configuration-file)
 - [SDK Configuration](#sdk-configuration)
   * [In-Memory Configuration Model](#in-memory-configuration-model)
-  * [Configurator](#configurator)
+  * [Operations](#operations)
     + [Parse](#parse)
     + [Create](#create)
 - [References](#references)
@@ -66,14 +66,16 @@ to provide this in-memory representation in a manner that is idiomatic for their
 language. If an SDK needs to expose a class or interface, the
 name `Configuration` is RECOMMENDED.
 
-### Configurator
+### Operations
 
-`Configurator` is responsible for parsing configuration files and
-interpreting [Configuration](#in-memory-configuration-model) to produce
-configured SDK components.
+SDK implementations of configuration MUST provide the following operations.
 
-TODO: Extend ConfigurationFactory with ability to update SDK components with
-new configuration for usage with OpAmp
+Note: Because these operations are stateless pure functions, they are not
+defined as part of any type, class, interface, etc. SDKs may organize them in
+whatever manner is idiomatic for the language.
+
+TODO: Add operation to update SDK components with new configuration for usage
+with OpAmp
 
 #### Parse
 
@@ -109,9 +111,11 @@ Interpret [configuration model](#in-memory-configuration-model) and return SDK c
 * `LoggerProvider`
 * `Propagators`
 
-The multiple responses MAY be returned using a tuple, or some other data structure encapsulating the components.
+The multiple responses MAY be returned using a tuple, or some other data
+structure encapsulating the components.
 
-This SHOULD return an error if it encounters an error in `configuration` (i.e. fail fast).
+This SHOULD return an error if it encounters an error in `configuration` (i.e.
+fail fast).
 
 ## References
 
