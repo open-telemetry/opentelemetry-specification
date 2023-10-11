@@ -399,7 +399,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>%h</td>
     <td>string</td>
     <td>Client hostname.</td>
-    <td>Attributes["server.address"]</td>
+    <td>Attributes["client.address"]</td>
   </tr>
   <tr>
     <td>%m</td>
