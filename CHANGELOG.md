@@ -26,6 +26,9 @@ release.
 
 ### SDK Configuration
 
+- Define file configuration parse and create operations.
+  ([#3437](https://github.com/open-telemetry/opentelemetry-specification/pull/3437))
+
 ### Common
 
 ### Supplementary Guidelines
@@ -380,8 +383,6 @@ release.
 - Move `sdk-configuration.md` and `sdk-environment-variables.md`
   to `/specification/configuration/`.
   ([#3434](https://github.com/open-telemetry/opentelemetry-specification/pull/3434))
-- Define file configuration parse and configure operations.
-  ([#3437](https://github.com/open-telemetry/opentelemetry-specification/pull/3437))
 
 ### Telemetry Schemas
 
