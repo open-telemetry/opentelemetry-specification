@@ -50,7 +50,7 @@ version of an OpenTelemetry package.
 ### Application Developers
 
 Developers who plan to install the OpenTelemetry SDK in their application are advised
-to are advised to accept all minor version upgrades. This will ensure that applications
+to accept all minor version upgrades. This will ensure that applications
 will always be built with the latest optimizations and security patches.
 
 Likewise, application developers are encouraged to depend upon all future versions
