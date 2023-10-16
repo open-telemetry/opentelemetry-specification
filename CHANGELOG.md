@@ -26,6 +26,9 @@ release.
 
 ### SDK Configuration
 
+- Define file configuration parse and create operations.
+  ([#3437](https://github.com/open-telemetry/opentelemetry-specification/pull/3437))
+
 ### Common
 
 ### Supplementary Guidelines
