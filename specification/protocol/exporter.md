@@ -154,9 +154,9 @@ unless SDKs have good reasons to choose `grpc` as the default (e.g. for backward
 compatibility reasons when `grpc` was already the default in a stable SDK
 release).
 
-The exporter SHOULD NOT depend on any transport protocol.
-The exporter SHOULD have a mechanism to register transport protocols.
-The caller SHOULD explictly register the default transport protocol if one wants to support it.
+The exporter SHOULD NOT depend on any transport protocol driver.
+The exporter SHOULD have a mechanism to register transport protocol driver.
+The caller SHOULD explictly register the driver for the default transport protocol if one wants to support it.
 
 ### Specifying headers via environment variables
 
