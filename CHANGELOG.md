@@ -22,7 +22,7 @@ release.
 
 ### OpenTelemetry Protocol
 
-- Define OTLP protocol driver registration mechanism.
+- Define protocol driver registration mechanism.
   ([#3722](https://github.com/open-telemetry/opentelemetry-specification/pull/3722))
 
 ### Compatibility
