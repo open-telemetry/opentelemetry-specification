@@ -153,6 +153,7 @@ release).
 The exporter SHOULD NOT depend on any transport protocol driver.
 The exporter SHOULD have a mechanism to register transport protocol driver.
 The caller SHOULD explicitly register the driver for the default transport protocol if one wants to support it.
+In a stable SDK release, the properties described above can be different for backward compatibility reasons.
 
 SDKs SHOULD provide drivers for both `grpc` and `http/protobuf` transport protocols.
 SDKs MUST provide at least one of them. If they provide only one, it SHOULD be a driver for `http/protobuf`.
