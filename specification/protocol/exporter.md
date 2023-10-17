@@ -59,7 +59,7 @@ The following configuration options MUST be available to configure the OTLP expo
 **[2]**: The environment variables `OTEL_EXPORTER_OTLP_SPAN_INSECURE`
 and `OTEL_EXPORTER_OTLP_METRIC_INSECURE` are obsolete because they do not follow
 the common naming scheme of the other environment variables. However, if they are already implemented,
-they should continue to be supported as they were part of a stable release of the specification.
+they SHOULD continue to be supported as they were part of a stable release of the specification.
 
 **[3]**: If no compression value is explicitly specified, SIGs can default to the value they deem
 most useful among the supported options. This is especially important in the presence of technical constraints,
