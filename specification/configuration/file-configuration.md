@@ -15,6 +15,8 @@ linkTitle: File
 - [SDK Configuration](#sdk-configuration)
   * [In-Memory Configuration Model](#in-memory-configuration-model)
   * [Operations](#operations)
+    + [Parse](#parse)
+    + [Create](#create)
 - [References](#references)
 
 <!-- tocstop -->
@@ -66,10 +68,54 @@ name `Configuration` is RECOMMENDED.
 
 ### Operations
 
-TODO: define how to parse configuration file to configuration model
+SDK implementations of configuration MUST provide the following operations.
 
-TODO: define how to apply configuration model to produce configured sdk
-components
+Note: Because these operations are stateless pure functions, they are not
+defined as part of any type, class, interface, etc. SDKs may organize them in
+whatever manner is idiomatic for the language.
+
+TODO: Add operation to update SDK components with new configuration for usage
+with OpAmp
+
+#### Parse
+
+Parse and validate a [configuration file](#configuration-file).
+
+**Parameters:**
+
+* `file`: The [configuration file](#configuration-file) to parse. This MAY be a
+  file path, or language specific file data structure, or a stream of a file's content.
+
+**Returns:** [configuration model](#in-memory-configuration-model)
+
+This SHOULD return an error if:
+
+* The `file` doesn't exist or is invalid
+* The parsed `file` content does not conform to
+  the [configuration model](#configuration-model) schema.
+
+TODO: define behavior if some portion of configuration model is not supported
+
+#### Create
+
+Interpret [configuration model](#in-memory-configuration-model) and return SDK components.
+
+**Parameters:**
+
+* `configuration` - The configuration model.
+
+**Returns:** Top level SDK components:
+
+* `TracerProvider`
+* `MeterProvider`
+* `LoggerProvider`
+* `Propagators`
+
+The multiple responses MAY be returned using a tuple, or some other data
+structure encapsulating the components.
+
+This SHOULD return an error if it encounters an error in `configuration` (i.e.
+fail fast).
 
 ## References
 
