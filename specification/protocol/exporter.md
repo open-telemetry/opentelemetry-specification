@@ -145,10 +145,6 @@ The `OTEL_EXPORTER_OTLP_PROTOCOL`, `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL`, and `OT
 - `http/protobuf` for protobuf-encoded data over HTTP connection
 - `http/json` for JSON-encoded data over HTTP connection
 
-SDKs SHOULD support both `grpc` and `http/protobuf` transports and MUST
-support at least one of them. If they support only one, it SHOULD be
-`http/protobuf`. They also MAY support `http/json`.
-
 If no configuration is provided the default transport SHOULD be `http/protobuf`
 unless SDKs have good reasons to choose `grpc` as the default (e.g. for backward
 compatibility reasons when `grpc` was already the default in a stable SDK
@@ -156,7 +152,11 @@ release).
 
 The exporter SHOULD NOT depend on any transport protocol driver.
 The exporter SHOULD have a mechanism to register transport protocol driver.
-The caller SHOULD explictly register the driver for the default transport protocol if one wants to support it.
+The caller SHOULD explicitly register the driver for the default transport protocol if one wants to support it.
+
+SDKs SHOULD provide drivers for both `grpc` and `http/protobuf` transport protocols.
+SDKs MUST provide at least one of them. If they provide only one, it SHOULD be a driver for `http/protobuf`.
+SDKs MAY provide a driver for `http/json`.
 
 ### Specifying headers via environment variables
 
