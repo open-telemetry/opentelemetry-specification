@@ -1032,8 +1032,9 @@ algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
 
   ```
   bucket = random_integer(0, num_measurements_seen)
-  if bucket < num_buckets && reservoir[bucket] == null then
+  if bucket < num_buckets then
     reservoir[bucket] = measurement
+    current_span.set_attribute("otel.example", true)
   end
   ```
 
@@ -1056,6 +1057,7 @@ measurements using the equivalent of the following naive algorithm:
   bucket = find_histogram_bucket(measurement)
   if bucket < num_buckets && reservoir[bucket] == null then
     reservoir[bucket] = measurement
+    current_span.set_attribute("otel.example", true)
   end
 
   def find_histogram_bucket(measurement):
