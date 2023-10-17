@@ -1032,7 +1032,7 @@ algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
 
   ```
   bucket = random_integer(0, num_measurements_seen)
-  if bucket < num_buckets then
+  if bucket < num_buckets && reservoir[bucket] == null then
     reservoir[bucket] = measurement
   end
   ```
@@ -1054,7 +1054,7 @@ measurements using the equivalent of the following naive algorithm:
 
   ```
   bucket = find_histogram_bucket(measurement)
-  if bucket < num_buckets then
+  if bucket < num_buckets && reservoir[bucket] == null then
     reservoir[bucket] = measurement
   end
 
