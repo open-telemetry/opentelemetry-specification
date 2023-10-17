@@ -993,6 +993,10 @@ span context and baggage can be inspected at this point.
 The "offer" method does not need to store all measurements it is given and
 MAY further sample beyond the `ExemplarFilter`.
 
+If a span is to be used as an exemplar, the ExemplarReservoir MUST set the
+span attribute `"otel.exemplar"` to the value `true`, otherwise it MUST
+not change the attribute.
+
 The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
 to abide by the `AggregationTemporality` of any metric point they are recorded
 with. In other words, Exemplars reported against a metric data point SHOULD have
@@ -1044,7 +1048,7 @@ SHOULD be used.
 #### AlignedHistogramBucketExemplarReservoir
 
 This Exemplar reservoir MUST take a configuration parameter that is the
-configuration of a Histogram.  This implementation MUST keep the last seen
+configuration of a Histogram.  This implementation MUST keep the first seen
 measurement that falls within a histogram bucket.  The reservoir will accept
 measurements using the equivalent of the following naive algorithm:
 
