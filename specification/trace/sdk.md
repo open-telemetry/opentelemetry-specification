@@ -349,7 +349,7 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
 
 #### ParentBased
 
-* This is a composite sampler. `ParentBased` helps distinguish between the
+* This is a sampler decorator. `ParentBased` helps distinguish between the
 following cases:
   * No parent (root span).
   * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` set

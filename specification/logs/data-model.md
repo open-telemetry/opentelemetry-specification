@@ -425,7 +425,7 @@ the record or about the infrastructure where the application runs. Data formats
 that represent this data model may be designed in a manner that allows the
 `Resource` field to be recorded only once per batch of log records that come
 from the same source. SHOULD follow OpenTelemetry
-[semantic conventions for Resources](../resource/semantic_conventions/README.md).
+[semantic conventions for Resources](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
 This field is optional.
 
 ### Field: `InstrumentationScope`
@@ -450,8 +450,7 @@ Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
 information about the request context (other than TraceId/SpanId). SHOULD follow
-OpenTelemetry [semantic conventions for Log Attributes](./semantic_conventions/README.md) or
-[semantic conventions for Span Attributes](../trace/semantic_conventions/README.md).
+OpenTelemetry [semantic conventions for attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md).
 This field is optional.
 
 #### Errors and Exceptions
@@ -460,7 +459,7 @@ Additional information about errors and/or exceptions that are associated with
 a log record MAY be included in the structured data in the `Attributes` section
 of the record.
 If included, they MUST follow the OpenTelemetry
-[semantic conventions for exception-related attributes](./semantic_conventions/exceptions.md#attributes).
+[semantic conventions for exception-related attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
 
 ## Example Log Records
 

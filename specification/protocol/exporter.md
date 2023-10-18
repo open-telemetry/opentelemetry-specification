@@ -41,7 +41,7 @@ The following configuration options MUST be available to configure the OTLP expo
   - Env vars: `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` `OTEL_EXPORTER_OTLP_LOGS_HEADERS`
 
 - **Compression**: Compression key for supported compression types. Supported compression: `gzip`.
-  - Default: No value [2]
+  - Default: No value [3]
   - Env vars: `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` `OTEL_EXPORTER_OTLP_LOGS_COMPRESSION`
 
 - **Timeout**: Maximum time the OTLP exporter will wait for each batch export.
@@ -50,7 +50,7 @@ The following configuration options MUST be available to configure the OTLP expo
 
 - **Protocol**: The transport protocol. Options MUST be one of: `grpc`, `http/protobuf`, `http/json`.
   See [Specify Protocol](./exporter.md#specify-protocol) for more details.
-  - Default: `http/protobuf` [3]
+  - Default: `http/protobuf`
   - Env vars: `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` `OTEL_EXPORTER_OTLP_LOGS_PROTOCOL`
 
 **[1]**: SDKs SHOULD default endpoint variables to use `http` scheme unless they have good reasons to choose
@@ -189,7 +189,7 @@ OTel-OTLP-Exporter-Python/1.2.3
 
 The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
 
-[resource-semconv]: ../resource/semantic_conventions/README.md#telemetry-sdk
+[resource-semconv]: https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#telemetry-sdk
 [otlphttp-req]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-request
 [rfc-7231]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3
 [protocol-spec]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md

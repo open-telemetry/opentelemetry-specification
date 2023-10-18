@@ -65,7 +65,7 @@ Names SHOULD follow these rules:
   values: the executable name and command arguments.
 
 - When an attribute represents a measurement,
-  [Metric Name Pluralization Guidelines](../metrics/semantic_conventions/README.md#pluralization)
+  [Metric Name Pluralization Guidelines](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/metrics.md#pluralization)
   SHOULD be followed for the attribute name.
 
 ## Name Reuse Prohibition
@@ -83,11 +83,7 @@ denote old attribute names in rename operations).
   of a namespace.
 
 - When coming up with a new semantic convention make sure to check existing
-  namespaces for
-  [Resources](../resource/semantic_conventions/README.md),
-  [Spans](../trace/semantic_conventions/README.md),
-  and
-  [Metrics](../metrics/semantic_conventions/README.md)
+  namespaces ([Semantic Conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md))
   to see if the new name fits.
 
 - When a new namespace is necessary consider whether it should be a top-level
@@ -111,11 +107,7 @@ denote old attribute names in rename operations).
 ## Recommendations for Application Developers
 
 As an application developer when you need to record an attribute first consult
-existing semantic conventions for
-[Resources](../resource/semantic_conventions/README.md),
-[Spans](../trace/semantic_conventions/README.md),
-and
-[Metrics](../metrics/semantic_conventions/README.md).
+existing [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md).
 If an appropriate name does not exists you will need to come up with a new name.
 To do that consider a few options:
 

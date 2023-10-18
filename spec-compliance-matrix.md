@@ -67,6 +67,7 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation                                                           |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
+| Links can be recorded after span creation                                                        |          |     |      |     |        |      |        |     |      |     |      |       |
 | Links order is preserved                                                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
 | AddEvent                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -241,7 +242,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          | +  | +    |    | +      | +    | +      | +   | +    | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      | +   |      | +   | +    |       |
+| [Default value](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource#semantic-attributes-with-dedicated-environment-variable) for service.name |          | +  | +    |    | +      | +    | +      | +   |      | +   | +    |       |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  | +    |    |        |      | -      | +   |      |     | -    |       |
 
@@ -277,7 +278,7 @@ Note: Support for environment variables is optional.
 | OTEL_SDK_DISABLED                                        | -   | +    | -   | -           | -    | -      | +   | -    | -   | -    | -     |
 | OTEL_RESOURCE_ATTRIBUTES                                 | +   | +    | +   | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_SERVICE_NAME                                        | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
-| OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | -   |      | -   | -    | -     |
+| OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | +   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
 | OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    | -     |
 | OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     | +    |       |
@@ -326,8 +327,8 @@ Note: Support for environment variables is optional.
 | SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
 | SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        | +   |      |     | +    |       |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC   | X        | +  |      |    |             |      |        |     |      |     |      |       |
-| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X        | +  |      |    |             |      |        |     |      |     |      |       |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC   | X        | +  |      |    |             |      |        | +   |      |     |      |       |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X        | +  |      |    |             |      |        | +   |      |     |      |       |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python    | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | +    |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | +    |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
