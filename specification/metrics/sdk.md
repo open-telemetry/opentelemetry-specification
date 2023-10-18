@@ -993,9 +993,12 @@ span context and baggage can be inspected at this point.
 The "offer" method does not need to store all measurements it is given and
 MAY further sample beyond the `ExemplarFilter`.
 
-If a span is to be used as an exemplar, the ExemplarReservoir MUST set the
-span attribute `"otel.exemplar"` to the value `true`, otherwise it MUST
-not change the attribute.
+If a span might be used as an exemplar, the ExemplarReservoir MUST set the
+span attribute `otel.exemplar` to the value `true`, otherwise it MUST
+not change the attribute. The number of spans with this annotation
+that are not being used as exemplars SHOULD be kept as small as possible. This
+allows tail-based span sampling to keep spans that are used as exemplars,
+without unnecessarily keeping too many spans.
 
 The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
 to abide by the `AggregationTemporality` of any metric point they are recorded
