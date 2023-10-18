@@ -22,6 +22,9 @@ release.
 
 ### OpenTelemetry Protocol
 
+- New exporter implementations do not need to support
+  `OTEL_EXPORTER_OTLP_SPAN_INSECURE` and `OTEL_EXPORTER_OTLP_METRIC_INSECURE`.
+  ([#3719](https://github.com/open-telemetry/opentelemetry-specification/pull/3719))
 - Define protocol driver registration mechanism.
   ([#3722](https://github.com/open-telemetry/opentelemetry-specification/pull/3722))
 

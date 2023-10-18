@@ -22,7 +22,7 @@ The following configuration options MUST be available to configure the OTLP expo
 
 - **Insecure**: Whether to enable client transport security for the exporter's gRPC connection. This option only applies to OTLP/gRPC when an endpoint is provided without the `http` or `https` scheme - OTLP/HTTP always uses the scheme provided for the `endpoint`. Implementations MAY choose to not implement the `insecure` option if it is not required or supported by the underlying gRPC client implementation.
   - Default: `false`
-  - Env vars: `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_TRACES_INSECURE` `OTEL_EXPORTER_OTLP_METRICS_INSECURE` `OTEL_EXPORTER_OTLP_LOGS_INSECURE` `OTEL_EXPORTER_OTLP_SPAN_INSECURE` `OTEL_EXPORTER_OTLP_METRIC_INSECURE` [2]
+  - Env vars: `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_TRACES_INSECURE` `OTEL_EXPORTER_OTLP_METRICS_INSECURE` `OTEL_EXPORTER_OTLP_LOGS_INSECURE` [2]
 
 - **Certificate File**: The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection.
   - Default: n/a
@@ -58,10 +58,8 @@ The following configuration options MUST be available to configure the OTLP expo
 
 **[2]**: The environment variables `OTEL_EXPORTER_OTLP_SPAN_INSECURE`
 and `OTEL_EXPORTER_OTLP_METRIC_INSECURE` are obsolete because they do not follow
-the common naming scheme of the other environment variables. They are still
-supported because they were part of a stable release of the specification.
-
-Use `OTEL_EXPORTER_OTLP_TRACES_INSECURE` instead of `OTEL_EXPORTER_OTLP_SPAN_INSECURE` and `OTEL_EXPORTER_OTLP_METRICS_INSECURE` instead of `OTEL_EXPORTER_OTLP_METRIC_INSECURE`.
+the common naming scheme of the other environment variables. However, if they are already implemented,
+they SHOULD continue to be supported as they were part of a stable release of the specification.
 
 **[3]**: If no compression value is explicitly specified, SIGs can default to the value they deem
 most useful among the supported options. This is especially important in the presence of technical constraints,
