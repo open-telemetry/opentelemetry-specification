@@ -143,7 +143,7 @@ The `OTEL_EXPORTER_OTLP_PROTOCOL`, `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL`, and `OT
 - `http/protobuf` for protobuf-encoded data over HTTP connection
 - `http/json` for JSON-encoded data over HTTP connection
 
-**[2]**: SDKs SHOULD support both `grpc` and `http/protobuf` transports and MUST
+SDKs SHOULD support both `grpc` and `http/protobuf` transports and MUST
 support at least one of them. If they support only one, it SHOULD be
 `http/protobuf`. They also MAY support `http/json`.
 
