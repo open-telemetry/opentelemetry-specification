@@ -25,6 +25,9 @@ release.
 - New exporter implementations do not need to support
   `OTEL_EXPORTER_OTLP_SPAN_INSECURE` and `OTEL_EXPORTER_OTLP_METRIC_INSECURE`.
   ([#3719](https://github.com/open-telemetry/opentelemetry-specification/pull/3719))
+- Clarify that the configuration options MAY be implemented by the exporter,
+  the SDK, or a seperate component (e.g. environment-based autoconfiguration component).
+  ([#3719](https://github.com/open-telemetry/opentelemetry-specification/pull/3719))
 
 ### Compatibility
 
