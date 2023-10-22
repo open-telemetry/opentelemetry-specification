@@ -935,8 +935,8 @@ SHOULD provide at least the following:
 A `MetricReader` SHOULD allow providing a [MetricFilter](#metricfilter), which determines if an aggregated data point
 be returned in the result of `Collect` operation. 
 
-A `MetricReader` SHOULD allow changing the `predicate`, which will be used in subsequent `Collect` operations.
-A `MetricReader` SHOULD provide the `predicate` to the SDK or registered [MetricProducer](#metricproducer)(s).
+A `MetricReader` SHOULD allow changing the [MetricFilter](#metricfilter), which will be used in subsequent `Collect` operations.
+A `MetricReader` SHOULD provide the [MetricFilter](#metricfilter) to the SDK or registered [MetricProducer](#metricproducer)(s).
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1299,7 +1299,7 @@ libraries to facilitate conversion between delta and cumulative temporalities.
 **Status**: [Experimental](../document-status.md)
 
 `MetricProducer` implementations SHOULD allow providing a [MetricFilter](#metricfilter), 
-whose result determines if a data point be returned in the result of `Collect` operation. 
+whose result determines if a data point be returned in the result of `Produce` operation. 
 
 A `MetricProducer` SHOULD allow changing the [MetricFilter](#metricfilter), which will be used 
 in subsequent `Produce` operations.
