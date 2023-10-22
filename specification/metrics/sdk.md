@@ -919,7 +919,7 @@ determines the following capabilities:
 * Registering [MetricProducer](#metricproducer)(s)
 * Collecting metrics from the SDK and any registered
   [MetricProducers](#metricproducer) on demand.
-* Providing a Predicate which enables choosing which aggregated data points should be collected
+* Providing a [MetricFilter](#metricfilter) which enables choosing which aggregated data points should be collected
   (**Status**: [Experimental](../document-status.md))
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
@@ -932,15 +932,8 @@ SHOULD provide at least the following:
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 * The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 
-A `MetricReader` SHOULD allow providing a `predicate`, a boolean function,
-accepting metric data point properties, whose result determines if the data point
-be returned in the result of `Collect` operation. The arguments should include the following:
-
-- `instrumentationScope`: the instrument's instrumentation scope
-- `name`: the name of the instrument
-- `kind`: the instrument's kind
-- `unit`: the instrument's unit
-- `attributes`: The data point's attributes
+A `MetricReader` SHOULD allow providing a [MetricFilter](#metricfilter), which determines if an aggregated data point
+be returned in the result of `Collect` operation. 
 
 A `MetricReader` SHOULD allow changing the `predicate`, which will be used in subsequent `Collect` operations.
 A `MetricReader` SHOULD provide the `predicate` to the SDK or registered [MetricProducer](#metricproducer)(s).
@@ -1294,7 +1287,7 @@ modeled to interact with other components in the SDK:
 **Status**: [Experimental](../document-status.md)
 
 `MetricProducer` defines the interface which bridges to third-party metric
-sources MUST implement so they can be plugged into an OpenTelemetry
+sources MUST implement, so they can be plugged into an OpenTelemetry
 [MetricReader](#metricreader) as a source of aggregated metric data. The SDK's
 in-memory state MAY implement the `MetricProducer` interface for convenience.
 
@@ -1305,18 +1298,11 @@ libraries to facilitate conversion between delta and cumulative temporalities.
 ----------
 **Status**: [Experimental](../document-status.md)
 
-`MetricProducer` implementations SHOULD allow providing a `predicate`, a boolean function,
-accepting metric data point properties, whose result determines if the data point
-be returned in the result of `Collect` operation. The arguments should include the following:
+`MetricProducer` implementations SHOULD allow providing a [MetricFilter](#metricfilter), 
+whose result determines if a data point be returned in the result of `Collect` operation. 
 
-- `instrumentationScope`: the instrument's instrumentation scope
-- `name`: the name of the instrument
-- `kind`: the instrument's kind
-- `unit`: the instrument's unit
-- `attributes`: The data point's attributes
-
-A `MetricProducer` SHOULD allow changing the `predicate`, which will be used in subsequent `Produce` operations.
-
+A `MetricProducer` SHOULD allow changing the [MetricFilter](#metricfilter), which will be used 
+in subsequent `Produce` operations.
 -------
 
 If the batch of [Metric points](./data-model.md#metric-points) returned by
@@ -1345,8 +1331,15 @@ A `MetricProducer` MUST support the following functions:
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
 MUST return a batch of [Metric points](./data-model.md#metric-points).
-Implementation SHOULD use the predicate to filter (instrument, attributes) pairs
-which the predicate did not allow.  
+
+----------
+**Status**: [Experimental](../document-status.md)
+
+Implementation SHOULD use the provided [MetricFilter](#metricfilter) to determine if a 
+data point is to be included in the result, per the operations defined in the
+[MetricFilter](#metricfilter).
+----------
+
 `Produce` does not have any required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add parameters (e.g. timeout).
 
@@ -1359,6 +1352,65 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 [`InstrumentationScope`](../glossary.md#instrumentation-scope) information,
 `Produce` SHOULD include a single InstrumentationScope which identifies the
 `MetricProducer`.
+
+## MetricFilter
+
+**Status**: [Experimental](../document-status.md)
+
+`MetricFilter` defines the interface which enables the [MetricReader](#metricreader)'s
+registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#metricproducer) to filter aggregated data points 
+([Metric points](./data-model.md#metric-points)) inside its `Produce` operation. 
+The filtering is done at the [MetricProducer](#metricproducer) for performance reasons, 
+by avoiding allocating a data point, or executing an Asynchronous instrument's callback function.
+
+The `MetricFilter` allows filtering an entire instrument - rejecting or allowing all its attribute sets - 
+by its `FilterInstrument` operation, which accepts the instrument information
+(scope, name, kind and unit)  and returns an enumeration: `AllowAllAttributes`, `RejectAllAttributes` 
+or `AllowSomeAttributes`. If the latter returned, the `AllowInstrumentAttributes` operation
+is to be called per attribute set of that instrument, with its boolean result determining if the 
+data point for that (instrument, attributes) pair is to be included in the result of the [MetricProducer](#metricproducer)
+`Produce` operation.
+
+### Interface Definition
+
+A `MetricFilter` MUST support the following functions:
+
+#### FilterInstrument(instrumentationScope, name, kind, unit) 
+
+This operation is called once for every instrument, in each [MetricProducer](#metricproducer) `Produce`
+operation. 
+
+**Parameters:**
+- `instrumentationScope`: the instrument's instrumentation scope
+- `name`: the name of the instrument
+- `kind`: the instrument's kind
+- `unit`: the instrument's unit
+
+Returns: `InstrumentFilterResult`
+
+`InstrumentFilterResult` is one of:
+* `AllowAllAttributes` - All attributes of the given instrument are allowed (not to be filtered). 
+   This provides a "short-circuit" as there is no need to call `AllowInstrumentAttributes` operation
+   for each attribute set.
+* `RejectAllAttributes` - All attributes of the given instrument are NOT allowed (filtered out).
+  This provides a "short-circuit" as there is no need to call `AllowInstrumentAttributes` operation
+  for each attribute set, and no need to collect those data points be it synchronous or asynchronous: 
+  e.g. the callback for this given instrument does not need to be invoked.
+* `AllowSomeAttributes` - Some attributes are allowed and some aren't, hence `AllowInstrumentAttributes`
+  operation must be called for each attribute set of that instrument.
+
+#### AllowInstrumentAttributes(instrumentationScope, name, kind, unit, attributes)
+
+A boolean function, which determines for a given instrument and attribute set if it should be allowed
+(true) or filtered out (false). 
+
+**Parameters:**
+- `instrumentationScope`: the instrument's instrumentation scope
+- `name`: the name of the instrument
+- `kind`: the instrument's kind
+- `unit`: the instrument's unit
+- `attributes`: the attributes
+
 
 ## Defaults and configuration
 
