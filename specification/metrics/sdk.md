@@ -919,7 +919,7 @@ determines the following capabilities:
 * Registering [MetricProducer](#metricproducer)(s)
 * Collecting metrics from the SDK and any registered
   [MetricProducers](#metricproducer) on demand.
-* Setting [FilterRules](#filterrules), determining what metrics will be collected via filter rules
+* Providing a Predicate which enables choosing which aggregated data points should be collected
   (**Status**: [Experimental](../document-status.md))
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
@@ -932,12 +932,18 @@ SHOULD provide at least the following:
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 * The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 
-A `MetricReader` SHOULD allow setting [FilterRules](#filterrules), used to filter data points returned by `Collect`
-operation. 
-A `MetricReader` SHOULD allow setting the [FilterRules](#filterrules) more than once. After
-[FilterRules](#filterrules) are set, they will be used in subsequent `Collect` operations.
-A `MetricReader` SHOULD provide the implementation of [FilterRules](#filterrules) to the SDK's or registered
-[MetricProducer](#metricproducer)(s), as [MetricFilter](#MetricFilter) interface.
+A `MetricReader` SHOULD allow providing a `predicate`, a boolean function,
+accepting metric data point properties, whose result determines if the data point
+be returned in the result of `Collect` operation. The arguments should include the following:
+
+- `instrumentationScope`: the instrument's instrumentation scope
+- `name`: the name of the instrument
+- `kind`: the instrument's kind
+- `unit`: the instrument's unit
+- `attributes`: The data point's attributes
+
+A `MetricReader` SHOULD allow changing the `predicate`, which will be used in subsequent `Collect` operations.
+A `MetricReader` SHOULD provide the `predicate` to the SDK or registered [MetricProducer](#metricproducer)(s).
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1008,16 +1014,6 @@ If the [MeterProvider](#meterprovider) is an instance of
 MeterProvider, but MUST NOT allow multiple [MeterProviders](#meterprovider)
 to be registered with the same MetricReader.
 
-#### SetFilterRules(filterRules)
-
-**Status**: [Experimental](../document-status.md)
-
-SetFilterRules allows setting the [FilterRules](#filterrules), which dictates which metric 
-data points should be returned in the `Collect` operation. 
-
-This operation can be called multiple times, allowing changing the rules in runtime. The set rules
-will be used in subsequent `Collect` operations.
-
 #### Collect
 
 Collects the metrics from the SDK and any registered
@@ -1054,169 +1050,6 @@ failed or timed out.
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
-
-### FilterRules
-
-`FilterRules` provides SDK users the ability to specify which instruments and attributes
-should be filtered out when [MetricProducer](#metricproducer)(s) (be it the SDK's or 
-registered ones) traverse instruments and their attributes during its `Produce` operation. 
-
-A typical use case is when an application records metrics at detailed granularity (e.g. high cardinality), 
-and exports only a portion of them when needed, for certain period of time. The 
-ability to call `SetFilterRules` operation on a `MetricReader` multiple times, in runtime, is what
-enables toggling the export of those detailed granularity metrics. 
-
-`FilterRules` are composed of the following elements:
-   - `rules` : A list of `FilterRule`(s). Order is meaningful here, as explained below. 
-
-`FilterRule` is composed of the following elements:
-   - An optional rule `name`
-   - An instrument selection criteria composed of:
-     - The `type` of the instrument(s) (optional)
-     - The `name` of the Meter (optional)
-     - The `unit` of the instrument(s) (optional)
-     - The `name` of the instrument(s). The SDK MUST support wildcard character asterisk (`*`)
-       matching zero or more characters, and MAY support the question mark (`?`) matching
-       exactly one character
-     - Notes:
-       - The criteria should be treated as additive, which means the instrument has to meet
-         _all_ the provided criteria. For example, if the criteria is
-         _instrument name == "Foobar"_ and _instrument type is Histogram_, it will be treated
-         as _(instrument name == "Foobar") AND (instrument type is Histogram)_
-       - If no criteria is provided, the SDK SHOULD treat it as an error. It is
-         recommended that the SDK implementations fail fast. Please refer to [Error
-         handling in OpenTelemetry](../error-handling.md) for the general guidance.
-   - An optional attributes selection criteria, which is a set of single attribute 
-     selection criteria defined as:
-     - The `name` of the attribute
-     - A `condition` on the attribute's value. An [Attribute](../common/README.md#attribute)'s 
-       value can be a primitive type or an array of homogeneous primitive types, and as such 
-       for each type there are different conditions:    
-        - A `wildcard_match` condition, for type string. The SDK MUST support wildcard character asterisk (`*`)
-          matching zero or more characters, and MAY support the question mark (`?`) matching
-          exactly one character. This condition can be applied to any primitive type, as each type can be 
-          transformed into a string.
-        - `greater_than` condition, for number types: double floating point or signed 64 bit integer.
-        - `greater_or_equal_to` condition for number types: double floating point or signed 64 bit integer.
-        - `less_than` condition, for number types: double floating point or signed 64 bit integer.
-        - `less_than_or_equal_to` condition for number types: double floating point or signed 64 bit integer.
-        - `is` condition for boolean type.
-        - Notes:
-          - The SDK MUST support the `wildcard_match` condition.
-          - If an attribute value is an array of values, a single value match satisfies the condition. For 
-            example, if the value is `[NY, CA, TX]` and the condition is _country = "NY"_, then the 
-            condition evaluates to true since the value `NY` satisfies the condition.
-          - If the condition can not be applied to the attribute value type, it is
-            treated as no match (false evaluation). For example, if the condition is `is: true` but the
-            attribute value is a number, it will be considered a no match.
-     - Notes:
-       - The criteria should be considered additive, which means, the attribute set has to 
-         meet _all_ the provided single attribute criteria. For example, if the criteria is
-         _status >= 400_ and _host == "study*.io"_, it will be treated as 
-         _(status >= 400) AND (host == "study*.io")_.
-       - If no attributes selection criteria was supplied, it means all attribute sets for that instrument are selected
-         for that rule.
-   - A `filter` decision enumeration which can either be `drop`, which means that all selected (instrument, attributes)
-     pairs are skipped during `MetricProducer` iterative `Produce` operation,, or `keep` which means all  
-     (instrument, attributes) pairs are included and will appear in the `Produce` operation result.
-
-The order of the `FilterRule`(s) in `rules` has meaning, as it allows to set default filtering decision on a wide 
-criteria selection, and override it for a more narrow selection, by adding another rule _after_ the "wide" rule.
-
-Here's an example:
-
-This example is for a distributed relational database, which has namespaces, each containing tables. A table
-can have 30 different instruments: write latency, written record size, read latency, etc. Namespaces can be in 
-hundreds and tables can be in thousands, therefor, there are namespace granularity instruments (`namespace_*`) and
-table granularity instruments (`table_*`). For example: `namespace_write_size_bytes` and 
-`table_write_size_bytes`. Exporting all instruments across all namespaces and tables can be quite expensive, 
-hence you can use the `FilterRule`(s) to control it:
-
-```
-{
-  rules: [
-    {
-      name: "Drop all table-level instruments by default",
-      instrument_select: {
-        name: "table_*"
-      },
-      filter: "drop"
-    },
-    
-    // For a certain namespace (billing), you want to export `write_size_bytes`   
-    {
-      name: "Expose write size bytes for billing",
-      instrument_select: {
-        name: "table_write_size_bytes"
-      },
-      attribute_select: {
-        "namespace": {
-          wildcard_match: "billing"
-        }
-      },
-      filter: "keep"
-    },
-    
-    // For orders table in ecommerce namespace, we need all instruments
-    {
-      name: "All instruments for orders table",
-      instrument_select: {
-        name: "table_*"
-      },
-      attributes_select: {
-        "namespace": {
-          wildcard_match: "ecommerce" 
-        },
-        "table": {
-          wildcard_match: "orders"
-      },
-      filter: "keep"
-    }
-  ]
-}
-```
-
-
-### `MetricFilter`
-
-**Status**: [Experimental](../document-status.md)
-
-A `MetricFilter` is an interface, offering an efficient representation of [FilterRules](#filterrules) 
-implementation.
-
-It allows a `MetricProducer` to make a decision whether an (instrument, attributes) pair should be 
-rejected (filtered out) or allowed. Some instruments may have all of their attribute sets completely 
-rejected or allowed, allowing a `MetricProducer` to "short circuit" and completely skip an instrument 
-and all of its attribute sets. 
-
-#### MetricFilter operations
-
-##### FilterInstrument
-
-For a given instrument, returns a filter decision, that can be one of the following:
-* Allow All Attributes - All attribute sets for the given instruments are allowed. 
-* Reject All Attributes - All attribute sets for the given instruments are rejected. This allows the 
-`MetricProducer` to skip this instrument while collecting data points.
-* Allow Some Attributes - Some attribute sets may be allowed. This means each attribute set must
-be checked if allowed or rejected using the `AllowInstrumentAttributes` operation.
-
-The instrument properties are passed as arguments to the function: 
-* Meter name
-* Instrument name
-* Instrument type
-* Instrument unit
-
-##### AllowInstrumentAttributes
-
-For a given (instrument, attributes), returns a boolean filtering decision, in which true means allowed and
-false means rejected (filtered out). 
-
-The instrument properties are passed as arguments to the function:
-* Meter name
-* Instrument name
-* Instrument type
-* Instrument unit
-
 
 ### Periodic exporting MetricReader
 
@@ -1472,13 +1305,17 @@ libraries to facilitate conversion between delta and cumulative temporalities.
 ----------
 **Status**: [Experimental](../document-status.md)
 
-`MetricProducer` implementations SHOULD allow providing it with a [MetricFilter](#MetricFilter). It should
-be used to decide, during `Produce` operation, whether to skip an instrument (including all of its attribute sets),
-include the instrument entirely (all of its attribute sets) or allow only some attribute sets for an instrument,
-by checking if each attribute set should be filtered.
+`MetricProducer` implementations SHOULD allow providing a `predicate`, a boolean function,
+accepting metric data point properties, whose result determines if the data point
+be returned in the result of `Collect` operation. The arguments should include the following:
 
-A `MetricProducer` SHOULD allow changing the [MetricFilter](#MetricFilter), which will be used in 
-subsequent `Produce` operations.
+- `instrumentationScope`: the instrument's instrumentation scope
+- `name`: the name of the instrument
+- `kind`: the instrument's kind
+- `unit`: the instrument's unit
+- `attributes`: The data point's attributes
+
+A `MetricProducer` SHOULD allow changing the `predicate`, which will be used in subsequent `Produce` operations.
 
 -------
 
