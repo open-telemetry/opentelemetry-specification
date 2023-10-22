@@ -920,7 +920,7 @@ determines the following capabilities:
 * Collecting metrics from the SDK and any registered
   [MetricProducers](#metricproducer) on demand.
 * Setting [FilterRules](#filterrules), determining what metrics will be collected via filter rules
-  (**Status**: [Experimental](../document-status.md)).
+  (**Status**: [Experimental](../document-status.md))
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
