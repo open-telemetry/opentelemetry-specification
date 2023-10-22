@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: OpenCensus
+--->
+
 # OpenCensus Compatibility
 
 **Status**: [Stable](../document-status.md), Unless otherwise specified.
@@ -13,7 +17,7 @@ instrumented codebases.
 Migrating from OpenCensus to OpenTelemetry may require breaking changes to the telemetry produced
 because of:
 
-* Different or new semantic conventions for names and attributes (e.g. [`grpc.io/server/server_latency`](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/gRPC.md#server) vs [`rpc.server.duration`](/specification/metrics/semantic_conventions/rpc-metrics.md#rpc-server))
+* Different or new semantic conventions for names and attributes (e.g. [`grpc.io/server/server_latency`](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/gRPC.md#server) vs [`rpc.server.duration`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/rpc/rpc-metrics.md#metric-rpcserverduration))
 * Data model differences (e.g. OpenCensus supports [SumOfSquaredDeviations](https://github.com/census-instrumentation/opencensus-proto/blob/v0.3.0/src/opencensus/proto/metrics/v1/metrics.proto#L195), OTLP does not)
 * Instrumentation API feature differences (e.g. OpenCensus supports [context-based attributes](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/Record.md#recording-stats)), OTel does not)
 * Differences between equivalent OC and OTel exporters (e.g. the OpenTelemetry Prometheus exporter [adds type and unit suffixes](prometheus_and_openmetrics.md#metric-metadata-1); OpenCensus [does not](https://github.com/census-ecosystem/opencensus-go-exporter-prometheus/blob/v0.4.1/prometheus.go#L227))
@@ -176,7 +180,7 @@ using the OpenCensus <-> OpenTelemetry bridge.
    This leads to some issues with OpenCensus APIs that allowed flexible
    specification of parent spans post-initialization.
 2. Links added to spans after the spans are created. This is [not supported in
-   OpenTelemetry](../trace/api.md#specifying-links), therefore OpenCensus spans
+   OpenTelemetry](../trace/api.md#link), therefore OpenCensus spans
    that have links added to them after creation will be mapped to OpenTelemetry
    spans without the links.
 3. OpenTelemetry specifies that samplers are

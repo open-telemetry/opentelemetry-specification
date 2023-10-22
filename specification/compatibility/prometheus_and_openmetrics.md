@@ -1,3 +1,10 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Prometheus and OpenMetrics
+aliases:
+  - /docs/reference/specification/compatibility/openmetrics
+  - /docs/specs/otel/compatibility/openmetrics
+--->
+
 # Prometheus and OpenMetrics Compatibility
 
 **Status**: [Experimental](../document-status.md)
@@ -48,13 +55,10 @@ OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types
 ### Metric Metadata
 
 The [OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
-MUST be added as the Name of the OTLP metric after the removal of unit and type
-suffixes described below.
+MUST be added as the Name of the OTLP metric.  By default, the name SHOULD be unaltered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
 
 The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
-if present, MUST be converted to the unit of the OTLP metric.  After trimming
-type-specific suffixes, such as `_total` for counters, the unit MUST be trimmed
-from the suffix as well, if the metric suffix matches the unit. The unit SHOULD
+if present, MUST be converted to the unit of the OTLP metric.  The unit SHOULD
 be translated from Prometheus conventions to OpenTelemetry conventions by:
 
 * Converting from full words to abbreviations (e.g. "milliseconds" to "ms").
@@ -71,7 +75,7 @@ metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
 
 ### Counters
 
-A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.  If the counter has a `_total` suffix, it MUST be removed.
+A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
 
 ### Gauges
 
@@ -79,7 +83,7 @@ A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/
 
 ### Info
 
-An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the target_info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.  If it has an `_info` suffix, the suffix MUST be removed from the metric name.
+An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the target_info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 
 ### StateSet
 
@@ -135,15 +139,13 @@ exemplar as attributes.
 
 ### Instrumentation Scope
 
-Each `otel_scope_info` metric point present in a batch of metrics
-SHOULD be dropped from the incoming scrape, and converted to an instrumentation
-scope. The `otel_scope_name` and `otel_scope_version` labels, if present, MUST
-be converted to the Name and Version of the Instrumentation Scope. Additional
-labels MUST be added as scope attributes, with keys and values unaltered. Other
-metrics in the batch which have `otel_scope_name` and `otel_scope_version`
-labels that match an instrumentation scope MUST be placed within the matching
-instrumentation scope, and MUST remove those labels. For example, the
-OpenMetrics metrics:
+The `otel_scope_name` and `otel_scope_version` lables, if present, SHOULD be
+dropped from all metric points and used as the Instrumentation Scope name and
+version respectively. All `otel_scope_info` metrics present in a batch
+of metrics SHOULD be dropped from the incoming scrape. Labels on
+`otel_scope_info` metric points other than `otel_scope_name` and
+`otel_scope_version`, MUST be added as scope attributes to the scope with the
+matching name and version. For example, the OpenMetrics metrics:
 
 ```
 # TYPE otel_scope_info info
@@ -170,9 +172,10 @@ scope_metrics:
         - value: 1
 ```
 
-Metrics which are not found to be associated with an instrumentation scope MUST
-all be placed within an empty instrumentation scope, and MUST not have any labels
-removed.
+Metrics which do not have an `otel_scope_name` or `otel_scope_version` label
+MUST be assigned an instrumentation scope identifying the entity performing
+the translation from Prometheus to OpenTelemetry (e.g. the collector's
+prometheus receiver).
 
 ### Resource Attributes
 
@@ -251,11 +254,11 @@ It also dictates type-specific conversion rules listed below.
 ### Instrumentation Scope
 
 Prometheus exporters SHOULD generate an [Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info)-typed
-metric named `otel_scope_info`. If present, Instrumentation Scope
-`name` and `version` MUST be added as `otel_scope_name` and
-`otel_scope_version` labels. Scope attributes MUST also be added as labels
-following the rules described in the [`Metric Attributes`](#metric-attributes)
-section below.
+metric named `otel_scope_info` for each Instrumentation Scope with non-empty
+scope attributes. If present, Instrumentation Scope `name` and `version` MUST
+be added as `otel_scope_name` and `otel_scope_version` labels. Scope attributes
+MUST also be added as labels following the rules described in the
+[`Metric Attributes`](#metric-attributes) section below.
 
 Prometheus exporters MUST add the scope name as the `otel_scope_name` label and
 the scope version as the `otel_scope_version` label on all metric points by
@@ -279,7 +282,7 @@ An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to a 
   - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues](../metrics/data-model.md#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
 
-Monotonic Sum metric points MUST have `_total` added as a suffix to the metric name.
+If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` MUST be added by default, otherwise the name MUST remain unchanged. Exporters SHOULD provide a configuration option to disable the addition of `_total` suffixes.
 Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_created` metric as well.
 
 ### Histograms
@@ -380,7 +383,14 @@ OpenMetrics exemplar unless they would exceed the OpenMetrics
 
 ### Resource Attributes
 
-In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to a single [`target_info` metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems); otherwise, they MUST be dropped, and MUST NOT be attached as labels to other metric families. The target_info metric MUST be an info-typed metric  whose labels MUST include the resource attributes, and MUST NOT include any other labels. There MUST be at most one target_info metric exposed on an SDK Prometheus endpoint.
+In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to
+a single [`target_info` metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+if the resource is not [empty](../resource/sdk.md#the-empty-resource);
+otherwise, they MUST be dropped, and MUST NOT be attached as labels to other
+metric families. The target_info metric MUST be an info-typed metric whose
+labels MUST include the resource attributes, and MUST NOT include any other
+labels. There MUST be at most one target_info metric exposed on an SDK
+Prometheus endpoint.
 
 In the Collector's Prometheus pull and push (remote-write) exporters, it is
 possible for metrics from multiple targets to be sent together, so targets must
@@ -392,7 +402,7 @@ labels distinguish targets and are expected to be present on metrics exposed on
 a Prometheus pull exporter (a ["federated"](https://prometheus.io/docs/prometheus/latest/federation/)
 Prometheus endpoint) or pushed via Prometheus remote-write. In OTLP, the
 `service.name`, `service.namespace`, and `service.instance.id` triplet is
-[required to be unique](../resource/semantic_conventions/README.md#service),
+[required to be unique](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#service),
 which makes them good candidates to use to construct `job` and `instance`. In
 the collector Prometheus exporters, the `service.name` and `service.namespace`
 attributes MUST be combined as `<service.namespace>/<service.name>`, or

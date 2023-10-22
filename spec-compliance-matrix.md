@@ -9,7 +9,7 @@ status of the feature is not known.
 
 For the `Optional` column, `X` means the feature is optional, blank means the
 feature is required, and columns marked with `*` mean that for each type of
-exporter (OTLP, Zipkin, and Jaeger), implementing at least one of the supported
+exporter (OTLP and Zipkin), implementing at least one of the supported
 formats is required. Implementing more than one format is optional.
 
 ## Traces
@@ -67,6 +67,7 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation                                                           |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
+| Links can be recorded after span creation                                                        |          |     |      |     |        |      |        |     |      |     |      |       |
 | Links order is preserved                                                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
 | AddEvent                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -115,13 +116,14 @@ formats is required. Implementing more than one format is optional.
 | Instruments have kind.                                                                                                                                                 |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | Instruments have an optional unit of measure.                                                                                                                          |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | Instruments have an optional description.                                                                                                                              |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
-| Instruments have an optional advice.                                                                                                                                   |          |    |      |     |        |      |        |     |      |     |      |       |
 | A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`.                |          |    | +    | +   | +      |      |        |     |      |     |      |       |
+| Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name.                                                             |          |    | +    |     |        |      |        |     |      |     |      |       |
 | It is possible to register two instruments with same `name` under different `Meter`s.                                                                                  |          | +  | +    | +   | +      |      |        |     |  +   | +   | +    |       |
-| Instrument names conform to the specified syntax.                                                                                                                      |          | -  | +    |     | +      |      |        |     | +   | +   | +    |       |
+| Instrument names conform to the specified syntax.                                                                                                                      |          | +  | +    | +   | +      |      |        |     |      | +   |      |       |
 | Instrument units conform to the specified syntax.                                                                                                                      |          | -  | +    |     | +      |      |        |     | +    | +   | +    |       |
 | Instrument descriptions conform to the specified syntax.                                                                                                               |          | -  | +    |     | -      |      |        |     |      | -   | +    |       |
-| Instrument advice supports ExplicitBucketBoundaries.                                                                                                                   |          |    |      |     |        |      |        |     |      |     |      |       |
+| Instrument supports the advisory ExplicitBucketBoundaries parameter.                                                                                                   |          |    | +    |     |        |      |        |     |      |     |      |       |
+| Instrument supports the advisory Attributes parameter.                                                                                                                 |          |    | +    |     |        |      |        |     |      |     |      |       |
 | `create_counter` returns a `Counter`.                                                                                                                                  |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | The API for `Counter` accepts the name, unit and description of the instrument.                                                                                        |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | `Counter` has an `add` method.                                                                                                                                         |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
@@ -168,7 +170,7 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria is as specified.                                                                                                              |          |    | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | The `View` instrument selection criteria supports wildcards.                                                                                                           | X        |    | +    | +   | +      |      |        |     |  +   | +   | +    |       |
 | The `View` instrument selection criteria supports the match-all wildcard.                                                                                              |          |    | +    | +   | +      |      |        |     |  +   | +   | +    |       |
-| The `View` instrument selection criteria supports a unit.                                                                                                              |          | +  |      |     |        |      |        |     |  +   |     |      |       |
+| The `View` instrument selection criteria supports a unit.                                                                                                              |          | +  |      |     | +      |      |        |     |  +   |     |      |       |
 | The name of the `View` can be specified.                                                                                                                               |          |    | +    | +   | +      |      |        | +   |      | +   | +    |       |
 | The `View` allows configuring the name description, attributes keys and aggregation of the resulting metric stream.                                                    |          |    | +    | +   | +      |      |        | +   |  +   | +   | -    |       |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream.                                                                                       | X        |    | -    |     | -      |      |        |     |      |     | -    |       |
@@ -183,8 +185,8 @@ formats is required. Implementing more than one format is optional.
 | The `LastValue` aggregation performs as specified.                                                                                                                     |          | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | The `ExplicitBucketHistogram` aggregation is available.                                                                                                                |          | -  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | The `ExplicitBucketHistogram` aggregation performs as specified.                                                                                                       |          | -  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
-| The `ExponentialBucketHistogram` aggregation is available.                                                                                                             |          |    |      |     |        |      |        |     |      |     |      |       |
-| The `ExponentialBucketHistogram` aggregation performs as specified.                                                                                                    |          |    |      |     |        |      |        |     |      |     |      |       |
+| The `ExponentialBucketHistogram` aggregation is available.                                                                                                             |          |    |      |     |        |      |        |     |      |     | +    |       |
+| The `ExponentialBucketHistogram` aggregation performs as specified.                                                                                                    |          |    |      |     |        |      |        |     |      |     | +    |       |
 | The metrics Reader implementation supports registering metric Exporters                                                                                                |          |    | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.                                                        |          |    | +    |     | +      |      |        |     |      | -   | -    |       |
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.                                                        |          |    | +    | +   | +      |      |        |     |  +   | +   |      |       |
@@ -206,6 +208,7 @@ formats is required. Implementing more than one format is optional.
 | The metrics SDK provides an `ExemplarReservoir` interface or extension point.                                                                                          | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
 | An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.                                                | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
 | The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`.                           |          |    | +    |     | -      |      |        | +   |      |     | -    |       |
+| The default size of the `SimpleFixedSizeExemplarReservoir` is `1`.                                                                                                     |          |    |      |     |        |      |        |     |      |     |      |       |
 | The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation.                               |          |    | +    |     | -      |      |        |     |      |     | -    |       |
 | The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                             | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
 | An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                          | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
@@ -217,19 +220,19 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
 | **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
-| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      |     |      |       |
+| LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
+| LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      | +   |      |       |
 | LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
 | LoggerProvider.ForceFlush                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
-| Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        | +   |      |     | -    |       |
-| SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        | +   |      |     |      |       |
-| BatchLogRecordProcessor                      |          |     | +    |     |        |      |        | +   |      |     |      |       |
-| Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        | +   |      |     |      |       |
-| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
-| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
+| Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
+| SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        | +   |      | +   |      |       |
+| BatchLogRecordProcessor                      |          |     | +    |     |        |      |        | +   |      | +   |      |       |
+| Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        | +   |      | +   |      |       |
+| OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
+| OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
-| Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      |     |      |       |
-| Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      |     | +    |       |
+| Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      | +   |      |       |
+| Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 
 ## Resource
 
@@ -239,7 +242,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Create empty                                                                                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Merge (v2)](specification/resource/sdk.md#merge)                                                                                           |          | +  | +    |    | +      | +    | +      | +   | +    | +   | +    |       |
 | Retrieve attributes                                                                                                                         |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Default value](specification/resource/semantic_conventions/README.md#semantic-attributes-with-sdk-provided-default-value) for service.name |          | +  | +    |    | +      | +    | +      | +   |      | +   | +    |       |
+| [Default value](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource#semantic-attributes-with-dedicated-environment-variable) for service.name |          | +  | +    |    | +      | +    | +      | +   |      | +   | +    |       |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                  |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                 |          | +  | +    |    |        |      | -      | +   |      |     | -    |       |
 
@@ -257,7 +260,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Global Propagator                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | -     |
+| Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
 | OT Propagator                                                                    |          | +  | +    | +  | +      |      |        |     |      |     |      |       |
 | OpenCensus Binary Propagator                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  | +    |    |        | +    |        | +   |      |     |      |       |
@@ -275,38 +278,37 @@ Note: Support for environment variables is optional.
 | OTEL_SDK_DISABLED                                        | -   | +    | -   | -           | -    | -      | +   | -    | -   | -    | -     |
 | OTEL_RESOURCE_ATTRIBUTES                                 | +   | +    | +   | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_SERVICE_NAME                                        | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
-| OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | -   |      | -   | -    | -     |
+| OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | +   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
-| OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    | -     |
-| OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     |      |       |
+| OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    | -     |
+| OTEL_BLRP_*                                              |     | +    |     |             |      |        |     |      |     | +    |       |
 | OTEL_EXPORTER_OTLP_*                                     | +   | +    |     | +           | +    | +      | +   | +    | +   | +    | -     |
-| OTEL_EXPORTER_JAEGER_*                                   | +   | +    |     | +           | +    | -      | -   |      | -   | +    | -     |
 | OTEL_EXPORTER_ZIPKIN_*                                   | -   | +    |     | +           | +    | -      | +   | -    | -   | +    | -     |
 | OTEL_TRACES_EXPORTER                                     | -   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_METRICS_EXPORTER                                    | -   | +    |     | +           | -    | -      | +   | -    | -   | -    | -     |
 | OTEL_LOGS_EXPORTER                                       | -   | +    |     | +           |      |        | +   |      |     | -    |       |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +   | +    | +   | +           | +    | +      | +   |      |     | -    |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT                              | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | -    |       |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +   | -    |     | +           | +    | +      | +   |      |     | -    |       |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +   | -    |     | +           | +    | +      | +   |      |     | -    |       |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    |       |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT                              | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    |       |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +   | -    |     | +           | +    | +      | +   |      |     | +    |       |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +   | -    |     | +           | +    | +      | +   |      |     | +    |       |
 | OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT                     |     |      |     |             |      |        | +   |      |     |      |       |
 | OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT              |     |      |     |             |      |        | +   |      |     |      |       |
 | OTEL_TRACES_SAMPLER                                      | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_TRACES_SAMPLER_ARG                                  | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +   | +    | +   | +           | +    | -      | +   |      |     | -    |       |
-| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +   | +    | +   | +           | +    | -      | +   |      |     | -    |       |
-| OTEL_METRIC_EXPORT_INTERVAL                              | -   | +    |     |             |      |        | +   |      |     | -    |       |
-| OTEL_METRIC_EXPORT_TIMEOUT                               | -   | -    |     |             |      |        | +   |      |     | -    |       |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +   | +    | +   | +           | +    | -      | +   |      |     | +    |       |
+| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +   | +    | +   | +           | +    | -      | +   |      |     | +    |       |
+| OTEL_METRIC_EXPORT_INTERVAL                              | -   | +    |     |             |      |        | +   |      |     | +    |       |
+| OTEL_METRIC_EXPORT_TIMEOUT                               | -   | -    |     |             |      |        | +   |      |     | +    |       |
 | OTEL_METRICS_EXEMPLAR_FILTER                             | -   | +    |     |             |      |        | +   |      |     | -    |       |
-| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | -    |       |
+| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | +    |       |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |     | +    |     |             |      |        |     |      |     |      |       |
 
 ## Exporters
 
-| Feature                                                                        | Optional | Go | Java | JS | Python   | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-|--------------------------------------------------------------------------------|----------|----|------|----|----------|------|--------|-----|------|-----|------|-------|
+| Feature                                                                        | Optional | Go | Java | JS | Python      | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|--------------------------------------------------------------------------------|----------|----|------|----|-------------|------|--------|-----|------|-----|------|-------|
 | [Exporter interface](specification/trace/sdk.md#span-exporter)                 |          |    | +    |    | +           | +    | +      | +   | +    | +   | +    |       |
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | +    |    | [-][py1779] | +    | +      | +   | -    |     | +    |       |
 | Standard output (logging)                                                      |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
@@ -324,8 +326,10 @@ Note: Support for environment variables is optional.
 | SchemaURL in ResourceSpans and ScopeSpans                                      |          | +  | +    |    | +           |      | +      | +   |      |     | -    |       |
 | SchemaURL in ResourceMetrics and ScopeMetrics                                  |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
 | SchemaURL in ResourceLogs and ScopeLogs                                        |          |    | +    |    | +           |      | -      | +   |      |     | -    |       |
-| Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        | +   |      |     |      |       |
-| **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| Honors the [user agent spec](specification/protocol/exporter.md#user-agent)    |          |    |      |    |             |      |        | +   |      |     | +    |       |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC   | X        | +  |      |    |             |      |        | +   |      |     |      |       |
+| [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X        | +  |      |    |             |      |        | +   |      |     |      |       |
+| **[Zipkin](specification/trace/sdk_exporters/zipkin.md)**                      | Optional | Go  | Java | JS  | Python    | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON                                                                 | X        | -  | +    |    | +           | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V1 Thrift                                                               | X        | -  | +    |    | [-][py1174] | -    | -      | -   | -    | -   | -    | -     |
 | Zipkin V2 JSON                                                                 | *        | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | +     |
@@ -340,21 +344,38 @@ Note: Support for environment variables is optional.
 | Error Status mapping                                                           |          | +  | +    |    | +           | +    | -      | +   | +    | +   | +    | -     |
 | Event attributes mapping to Annotations                                        |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | Integer microseconds in timestamps                                             |          | N/A| +    |    | +           | +    | -      | +   | +    | +   | +    | +     |
-| **[Jaeger](specification/trace/sdk_exporters/jaeger.md)**                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| [Jaeger Thrift over UDP][jaegerThriftUDP]                                      | X        | +  |      |    | +           | +    | -      | -   | +    | +   | +    | +     |
-| [Jaeger Protobuf via gRPC][jaegerProtobuf]                                     | X        | -  | +    |    | +           | -    | -      | -   |      | -   | -    | -     |
-| [Jaeger Thrift over HTTP][jaegerThriftHTTP]                                    | X        | +  | -    |    | +           | +    | -      | -   | +    | +   | +    | -     |
-| Service name mapping                                                           |          | +  | +    |    | +           | +    | -      | -   |      | +   | +    | +     |
-| Resource to Process mapping                                                    |          | +  | +    |    | +           | +    | -      | -   | +    | -   | +    | -     |
-| InstrumentationLibrary mapping                                                 |          | +  | +    |    | +           | +    | -      | -   | +    | -   | +    | -     |
-| InstrumentationScope mapping                                                   |          |    | +    |    | +           |      |        |     |      |     |      |       |
-| Status mapping                                                                 |          | +  | +    |    | +           | +    | -      | -   | +    | +   | +    | +     |
-| Error Status mapping                                                           |          | +  | +    |    | +           | +    | -      | -   | +    | +   | +    | -     |
-| Events converted to Logs                                                       |          | +  | +    |    | +           | +    | -      | -   | +    | -   | +    | +     |
-| **OpenCensus**                                                                 |          |    |      |    |             |      |        |     |      |     |      |       |
-| TBD                                                                            |          |    |      |    |             |      |        |     |      |     |      |       |
-| **Prometheus**                                                                 |          |    |      |    |             |      |        |     |      |     |      |       |
-| TBD                                                                            |          |    |      |    |             |      |        |     |      |     |      |       |
+| **Prometheus**                                                                                                                                    | Optional | Go  | Java  | JS  | Python  | Ruby  | Erlang  | PHP  | Rust  | C++  | .NET  | Swift |
+| [Metadata Deduplication](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                             |          |  +  |   +   |  -  |    -    |   -   |    -    |   -  |   +   |  -   |   -   |   -   |
+| [Name Sanitization](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                  |          |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  +   |   +   |   +   |
+| [UNIT Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                      |     X    |  -  |   -   |  +  |    +    |   -   |    -    |   -  |   -   |  -   |   +   |   -   |
+| [Unit Suffixes](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                      |     X    |  +  |   +   |  -  |    +    |   -   |    -    |   -  |   +   |  +   |   +   |   -   |
+| [Unit Full Words](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                    |     X    |  +  |   +   |  -  |    -    |   -   |    -    |   -  |   +   |  -   |   -   |   -   |
+| [HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                      |          |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  +   |   +   |   +   |
+| [TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                      |          |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  +   |   +   |   +   |
+| [otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) |          |  +  |   +   |  -  |    -    |   -   |    -    |   -  |   +   |  -   |   -   |   -   |
+| [otel_scope_info metric](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                                       |     X    |  +  |   +   |  -  |    -    |   -   |    -    |   -  |   +   |  -   |   -   |   -   |
+| [otel_scope_info and labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                   |     X    |  +  |   -   |  -  |    -    |   -   |    -    |   -  |   +   |  -   |   -   |   -   |
+| [Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1)                                             |          |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  +   |   +   |   -   |
+| [Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)                            |          |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  +   |   +   |   +   |
+| [Prometheus Counters have _total suffix by default](specification/compatibility/prometheus_and_openmetrics.md#sums)                               |          |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  -   |   -   |   -   |
+| [Prometheus Counters _total suffixing can be disabled](specification/compatibility/prometheus_and_openmetrics.md#sums)                            |     X    |  +  |   -   |  -  |    -    |   -   |    -    |   -  |   -   |  -   |   -   |   -   |
+| [Cumulative Non-Monotonic Sums become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#sums)                          |          |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  +   |   +   |   -   |
+| [Delta Non-Monotonic Sums become Cumulative Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)                  |     X    |  -  |   -   |  -  |    -    |   -   |    -    |   -  |   -   |  -   |   -   |   -   |
+| [Cumulative Histograms become Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1)                      |          |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  +   |   +   |   +   |
+| [Delta Histograms become Cumulative Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1)                |     X    |  -  |   -   |  -  |    -    |   -   |    -    |   -  |   -   |  -   |   -   |   -   |
+| [Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)                                      |          |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  +   |   +   |   +   |
+| [Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)                      |          |  +  |   +   |  -  |    -    |   -   |    -    |   -  |   +   |  -   |   -   |   -   |
+| [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)                              |     X    |  -  |   -   |  -  |    -    |   -   |    -    |   -  |   -   |  -   |   -   |   -   |
+| [`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)                             |     X    |  +  |   +   |  +  |    +    |   -   |    -    |   -  |   +   |  -   |   -   |   -   |
+
+## OpenCensus Compatibility
+
+Languages not covered by the OpenCensus project, or that did not reach Alpha, are not listed here.
+
+| Feature                                                                                                 |Go |Java|JS |Python|C++|.NET|Erlang|
+|---------------------------------------------------------------------------------------------------------|---|----|---|------|----|---|----|
+| [Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)   |  + |  +  | +  |   +   |  -  | -  |  -  |
+| [Metric Bridge](specification/compatibility/opencensus.md#metrics--stats) |  + |  +  | -  |   -   |  -  | -  |  -  |
 
 ## OpenTracing Compatibility
 
@@ -377,6 +398,3 @@ Languages not covered by the OpenTracing project do not need to be listed here, 
 [py1174]: https://github.com/open-telemetry/opentelemetry-python/issues/1174
 [py1779]: https://github.com/open-telemetry/opentelemetry-python/issues/1779
 [php225]: https://github.com/open-telemetry/opentelemetry-php/issues/225
-[jaegerThriftUDP]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-udp-stable
-[jaegerProtobuf]: https://www.jaegertracing.io/docs/latest/apis/#protobuf-via-grpc-stable
-[jaegerThriftHTTP]: https://www.jaegertracing.io/docs/latest/apis/#thrift-over-http-stable

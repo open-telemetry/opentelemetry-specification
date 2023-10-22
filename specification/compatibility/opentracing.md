@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: OpenTracing
+--->
+
 # OpenTracing Compatibility
 
 **Status**: [Stable](../document-status.md).
@@ -132,7 +136,7 @@ with **Child Of** type in the entire list is used as parent, else the
 the first `SpanContext` is used as parent. All values in the list
 MUST be added as [Link](../trace/api.md)s with the reference type value
 as a `Link` attribute, i.e.
-[opentracing.ref_type](../trace/semantic_conventions/compatibility.md#opentracing)
+[opentracing.ref_type](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/trace-compatibility.md#opentracing)
 set to `follows_from` or `child_of`.
 
 If a list of `Span` references is specified, the union of their
@@ -190,12 +194,18 @@ registered or the global OpenTelemetry `Propagator`s, as configured at construct
 - `TextMap` and `HttpHeaders` formats MUST use their explicitly specified `TextMapPropagator`,
   if any, or else use the global `TextMapPropagator`.
 
-If the extracted `SpanContext` is invalid AND the extracted `Baggage` is empty, this operation
-MUST return a null value, and otherwise it MUST return a `SpanContext` Shim instance with
-the extracted values.
+The operation MUST return a `SpanContext` Shim instance with the extracted values if any of these conditions are met:
+
+* `SpanContext` is valid.
+* `SpanContext` is sampled.
+* `SpanContext` contains non-empty extracted `Baggage`.
+
+Otherwise, the operation MUST return null or empty value.
 
 ```java
-if (!extractedSpanContext.isValid() && extractedBaggage.isEmpty()) {
+if (!extractedSpanContext.isValid()
+    && !extractedSpanContext.isSampled()
+    && extractedBaggage.isEmpty()) {
   return null;
 }
 
@@ -205,6 +215,10 @@ return SpanContextShim(extractedSpanContext, extractedBaggage);
 Errors MAY be raised if either the `Format` is not recognized
 or no value could be extracted, depending on the specific OpenTracing Language API
 (e.g. Go and Python do, but Java may not).
+
+Note: Invalid but sampled `SpanContext` instances are returned as a way to support
+`jaeger-debug-id` [headers](https://github.com/jaegertracing/jaeger-client-java#via-http-headers),
+which are used to force propagation of debug information.
 
 ## Close
 
@@ -382,7 +396,7 @@ the pair set, or else fallback to use the `log` literal string.
 If pair set contains an `event=error` entry, the values MUST be
 [mapped](https://github.com/opentracing/specification/blob/master/semantic_conventions.md#log-fields-table)
 to an `Event` with the conventions outlined in the
-[Exception semantic conventions](../trace/semantic_conventions/exceptions.md) document:
+[Exception semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-spans.md) document:
 
 - If an entry with `error.object` key exists and the value is a language-specific
   error object, a call to `RecordException(e)` is performed along the rest of
@@ -530,7 +544,7 @@ OpenTracing defines two types of references:
 
 OpenTelemetry does not define strict equivalent semantics for these
 references. These reference types must not be confused with the
-[Link](../trace/api.md#specifying-links) functionality. This information
+[Link](../trace/api.md#link) functionality. This information
 is however preserved as the `opentracing.ref_type` attribute.
 
 ## In process Propagation exceptions

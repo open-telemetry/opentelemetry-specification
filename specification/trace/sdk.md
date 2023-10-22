@@ -13,6 +13,7 @@ linkTitle: SDK
 
 - [Tracer Provider](#tracer-provider)
   * [Tracer Creation](#tracer-creation)
+  * [Configuration](#configuration)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Additional Span Interfaces](#additional-span-interfaces)
@@ -29,7 +30,6 @@ linkTitle: SDK
       - [Requirements for `TraceIdRatioBased` sampler algorithm](#requirements-for-traceidratiobased-sampler-algorithm)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
-      - [Configuration](#configuration)
 - [Span Limits](#span-limits)
 - [Id Generators](#id-generators)
 - [Span processor](#span-processor)
@@ -59,17 +59,21 @@ linkTitle: SDK
 
 ### Tracer Creation
 
-New `Tracer` instances are always created through a `TracerProvider`
-(see [API](api.md#tracerprovider)). The `name`, `version` (optional),
-`schema_url` (optional), and `attributes` (optional) arguments supplied to
-the `TracerProvider` must be used to create
+It SHOULD only be possible to create `Tracer` instances through a `TracerProvider`
+(see [API](./api.md#tracerprovider)).
+
+The `TracerProvider` MUST implement the [Get a Tracer API](api.md#get-a-tracer).
+
+The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.
 
+### Configuration
+
 Configuration (i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators),
-[SpanLimits](#span-limits) and [`Sampler`](#sampling)) MUST be managed solely by
-the `TracerProvider` and it MUST provide some way to configure all of them that
-are implemented in the SDK, at least when creating or initializing it.
+[SpanLimits](#span-limits) and [`Sampler`](#sampling)) MUST be owned by the
+the `TracerProvider`. The configuration MAY be applied at the time of `TracerProvider`
+creation if appropriate.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -345,7 +349,7 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
 
 #### ParentBased
 
-* This is a composite sampler. `ParentBased` helps distinguish between the
+* This is a sampler decorator. `ParentBased` helps distinguish between the
 following cases:
   * No parent (root span).
   * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` set
@@ -377,8 +381,6 @@ Optional parameters:
 [Jaeger remote sampler][jaeger-remote-sampling] allows remotely controlling the sampling configuration for the SDKs. The sampling configuration is periodically loaded from the backend (see [Remote Sampling API][jaeger-remote-sampling-api]), where it can be managed by operators via configuration files or even automatically calculated (see [Adaptive Sampling][jaeger-adaptive-sampling]). The sampling configuration retrieved by the remote sampler can instruct it to  use either a single sampling method for the whole service (e.g., `TraceIdRatioBased`), or different methods for different endpoints (span names), for example, sample `/product` endpoint at 10%, `/admin` endpoint at 100%, and never sample `/metrics` endpoint.
 
 The full Protobuf definition can be found at [jaegertracing/jaeger-idl/api_v2/sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/main/proto/api_v2/sampling.proto).
-
-##### Configuration
 
 The following configuration properties should be available when creating the sampler:
 
@@ -480,12 +482,12 @@ The following diagram shows `SpanProcessor`'s relationship to other components
 in the SDK:
 
 ```
-  +-----+--------------+   +-------------------------+   +-------------------+
-  |     |              |   |                         |   |                   |
-  |     |              |   | Batching Span Processor |   |    SpanExporter   |
-  |     |              +---> Simple Span Processor   +--->  (JaegerExporter) |
-  |     |              |   |                         |   |                   |
-  | SDK | Span.start() |   +-------------------------+   +-------------------+
+  +-----+--------------+   +-------------------------+   +----------------+
+  |     |              |   |                         |   |                |
+  |     |              |   | Batching Span Processor |   |  SpanExporter  |
+  |     |              +---> Simple Span Processor   +---> (OTLPExporter) |
+  |     |              |   |                         |   |                |
+  | SDK | Span.start() |   +-------------------------+   +----------------+
   |     | Span.end()   |
   |     |              |
   |     |              |

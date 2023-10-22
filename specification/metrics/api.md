@@ -22,7 +22,9 @@ linkTitle: API
     + [Instrument name syntax](#instrument-name-syntax)
     + [Instrument unit](#instrument-unit)
     + [Instrument description](#instrument-description)
-    + [Instrument advice](#instrument-advice)
+    + [Instrument advisory parameters](#instrument-advisory-parameters)
+      - [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
+      - [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
       - [Synchronous Instrument API](#synchronous-instrument-api)
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
@@ -37,6 +39,10 @@ linkTitle: API
     + [Histogram creation](#histogram-creation)
     + [Histogram operations](#histogram-operations)
       - [Record](#record)
+  * [Gauge](#gauge)
+    + [Gauge creation](#gauge-creation)
+    + [Gauge operations](#gauge-operations)
+      - [Record](#record-1)
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
@@ -176,20 +182,23 @@ Also see the respective sections below for more information on instrument creati
 ## Instrument
 
 Instruments are used to report [Measurements](#measurement). Each Instrument
-will have the following fields:
+will have the following parameters:
 
 * The `name` of the Instrument
 * The `kind` of the Instrument - whether it is a [Counter](#counter) or
   one of the other kinds, whether it is synchronous or asynchronous
 * An optional `unit` of measure
 * An optional `description`
-* Optional `advice` (**experimental**)
+* Optional `advisory` parameters (**experimental**)
 
 Instruments are associated with the Meter during creation. Instruments
-are identified by all of these fields.
+are identified by the `name`, `kind`, `unit`, and `description`.
 
 Language-level features such as the distinction between integer and
 floating point numbers SHOULD be considered as identifying.
+
+The term *identical* applied to an Instrument describes instances where all
+identifying fields are equal.
 
 ### General characteristics
 
@@ -199,7 +208,7 @@ The instrument name syntax is defined below using the [Augmented Backus-Naur
 Form](https://tools.ietf.org/html/rfc5234):
 
 ```abnf
-instrument-name = ALPHA 0*62 ("_" / "." / "-" / ALPHA / DIGIT)
+instrument-name = ALPHA 0*254 ("_" / "." / "-" / "/" / ALPHA / DIGIT)
 
 ALPHA = %x41-5A / %x61-7A; A-Z / a-z
 DIGIT = %x30-39 ; 0-9
@@ -208,9 +217,9 @@ DIGIT = %x30-39 ; 0-9
 * They are not null or empty strings.
 * They are case-insensitive, ASCII strings.
 * The first character must be an alphabetic character.
-* Subsequent characters must belong to the alphanumeric characters, '_', '.',
-  and '-'.
-* They can have a maximum length of 63 characters.
+* Subsequent characters must belong to the alphanumeric characters, '_', '.', '-',
+  and '/'.
+* They can have a maximum length of 255 characters.
 
 #### Instrument unit
 
@@ -237,21 +246,39 @@ instrument. The API MUST treat it as an opaque string.
 * It MUST support at least 1023 characters. [OpenTelemetry
   API](../overview.md#api) authors MAY decide if they want to support more.
 
-#### Instrument advice
+#### Instrument advisory parameters
+
+**Status**: [Mixed](../document-status.md)
+
+`advisory` parameters are an optional set of recommendations provided by the
+author of the Instrument, aimed at assisting implementations in providing
+useful output with minimal configuration. They differ from other parameters
+in that Implementations MAY ignore `advisory` parameters.
+
+OpenTelemetry SDKs MUST handle `advisory` parameters as described
+[here](./sdk.md#instrument-advisory-parameters).
+
+`advisory` parameters may be general, or may be accepted only for specific
+instrument `kind`s.
+
+##### Instrument advisory parameter: `ExplicitBucketBoundaries`
+
+**Status**: [Stable](../document-status.md)
+
+Applies to Histogram instrument type.
+
+`ExplicitBucketBoundaries` (`double[]`) is the recommended set of bucket
+boundaries to use if aggregating to
+[explicit bucket Histogram metric data point](./data-model.md#histogram).
+
+##### Instrument advisory parameter: `Attributes`
 
 **Status**: [Experimental](../document-status.md)
 
-`advice` are an optional set of recommendations provided by the author of the
-Instrument, aimed at assisting implementations in providing useful output with
-minimal configuration.
+Applies to all instrument types.
 
-* Implementations MAY ignore `advice`. However, OpenTelemetry SDKs
-  handle `advice` as described [here](./sdk.md#instrument-advice).
-* `advice` parameters may be general, or vary by instrument `kind`.
-  * `Histogram`:
-    * `ExplicitBucketBoundaries` (`double[]`): The recommended set of bucket
-      boundaries to use if aggregating to
-      [explicit bucket Histogram metric data point](./data-model.md#histogram).
+`Attributes` (a list of [attribute keys](../common/README.md#attribute)) is
+the recommended set of attribute keys to be used for the resulting metrics.
 
 #### Synchronous and Asynchronous instruments
 
@@ -313,16 +340,16 @@ The API to construct synchronous instruments MUST accept the following parameter
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane)
   encoded characters and hold at least 1023 characters.
 
-* `advice` for implementations.
+* `advisory` parameters associated with the instrument `kind`.
 
-  Users can provide `advice`, but its up to their discretion. Therefore, this
-  API needs to be structured to accept `advice`, but MUST NOT obligate the user
-  to provide it.
+  Users can provide `advisory` parameters, but its up to their discretion.
+  Therefore, this API needs to be structured to accept `advisory` parameters,
+  but MUST NOT obligate the user to provide it.
 
-  `advice` needs to be structured as described
-  in [instrument advice](#instrument-advice), with parameters that are general
-  and specific to a particular instrument `kind`. The API SHOULD NOT
-  validate `advice`.
+  `advisory` parameters need to be structured as described in
+  [instrument advisory parameters](#instrument-advisory-parameters), with
+  parameters that are general and specific to a particular instrument `kind`.
+  The API SHOULD NOT validate `advisory` parameters.
 
 ##### Asynchronous Instrument API
 
@@ -365,6 +392,16 @@ The API to construct asynchronous instruments MUST accept the following paramete
   supports at least [BMP (Unicode Plane
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane)
   encoded characters and hold at least 1023 characters.
+* `advisory` parameters associated with the instrument `kind`.
+
+  Users can provide `advisory` parameters, but its up to their discretion.
+  Therefore, this API needs to be structured to accept `advisory` parameters,
+  but MUST NOT obligate the user to provide it.
+
+  `advisory` parameters need to be structured as described in
+  [instrument advisory parameters](#instrument-advisory-parameters), with
+  parameters that are general and specific to a particular instrument `kind`.
+  The API SHOULD NOT validate `advisory` parameters.
 * `callback` functions that report [Measurements](#measurement) of the created
   instrument.
   
@@ -768,6 +805,97 @@ httpServerDuration.Record(50, ("http.request.method", "POST"), ("url.scheme", "h
 httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
 ```
 
+### Gauge
+
+**Status**: [Experimental](../document-status.md)
+
+`Gauge` is a [synchronous Instrument](#synchronous-instrument-api) which can be
+used to record non-additive value(s) (e.g. the background noise level - it makes
+no sense to record the background noise level value from multiple rooms and sum
+them up) when changes occur.
+
+Note: If the values are additive (e.g. the process heap size - it makes sense to
+report the heap size from multiple processes and sum them up, so we get the
+total heap usage), use [UpDownCounter](#asynchronous-updowncounter).
+
+Note: Synchronous Gauge is normally used when the measurements are exposed via a
+subscription to change events (
+i.e. `backgroundNoiseLevel.onChange(value -> gauge.record(value))`). If the
+measurement is exposed via an accessor,
+use [Asynchronous Gauge](#asynchronous-gauge) to invoke the accessor in a
+callback function (
+i.e. `createObservableGauge(observable -> observable.record(backgroundNoiseLevel.getCurrentValue()))`.
+
+Example uses for Gauge:
+
+* subscribe to change events for the background noise level
+* subscribe to change events for the CPU fan speed
+
+#### Gauge creation
+
+There MUST NOT be any API for creating a `Gauge` other than with a
+[`Meter`](#meter). This MAY be called `CreateGauge`. If strong type is
+desired, [OpenTelemetry API](../overview.md#api) authors MAY decide the language
+idiomatic name(s), for example `CreateUInt64Gauge`, `CreateDoubleGauge`,
+`CreateGauge<UInt64>`, `CreateGauge<double>`.
+
+See the [general requirements for synchronous instruments](#synchronous-instrument-api).
+
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors
+might consider:
+
+```java
+// Java
+
+DoubleGauge backgroundNoiseLevel = meter.gaugeBuilder("facility.noise.level")
+    .setDescription("Background noise level of rooms")
+    .setUnit("B")
+    .build();
+```
+
+#### Gauge operations
+
+##### Record
+
+Record the Gauge current value.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* A numeric value. The current absolute value.
+
+  The value needs to be provided by a user. If possible, this API
+  SHOULD be structured so a user is obligated to provide this parameter. If it
+  is not possible to structurally enforce this obligation, this API MUST be
+  documented in a way to communicate to users that this parameter is needed.
+* [Attributes](../common/README.md#attribute) to associate with the value.
+
+  Users can provide attributes to associate with the value, but it is
+  up to their discretion. Therefore, this API MUST be structured to accept a
+  variable number of attributes, including none.
+
+The [OpenTelemetry API](../overview.md#api) authors MAY decide to allow flexible
+[attributes](../common/README.md#attribute) to be passed in as arguments. If
+the attribute names and types are provided during the [gauge
+creation](#gauge-creation), the [OpenTelemetry API](../overview.md#api)
+authors MAY allow attribute values to be passed in using a more efficient way
+(e.g. strong typed struct allocated on the callstack, tuple). The API MUST allow
+callers to provide flexible attributes at invocation time rather than having to
+register all the possible attribute names during the instrument creation. Here
+are some examples that [OpenTelemetry API](../overview.md#api) authors might
+consider:
+
+```java
+// Java
+Attributes roomA = Attributes.builder().put("room.id", "Rack A");
+Attributes roomB = Attributes.builder().put("room.id", "Rack B");
+
+backgroundNoiseLevel.record(4.3, roomA);
+backgroundNoiseLevel.record(2.5, roomB);
+```
+
 ### Asynchronous Gauge
 
 Asynchronous Gauge is an [asynchronous Instrument](#asynchronous-instrument-api)
@@ -1039,7 +1167,7 @@ decide the language idiomatic name(s), for example
 
 It is highly recommended that implementations use the name
 `ObservableUpDownCounter` (or any language idiomatic variation, e.g.
-`observable_updowncounter`) unless there is a strong reason not to do so. Please
+`observable_up_down_counter`) unless there is a strong reason not to do so. Please
 note that the name has nothing to do with [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
@@ -1065,7 +1193,7 @@ def ws_callback():
         (126032, ("pid", 880), ("bitness", 32)),
     )
 
-meter.create_observable_updowncounter(
+meter.create_observable_up_down_counter(
     name="process.workingset",
     description="process working set",
     callback=ws_callback,
@@ -1082,7 +1210,7 @@ def ws_callback(result):
     result.Observe(20,     ("pid", 4),   ("bitness", 64))
     result.Observe(126032, ("pid", 880), ("bitness", 32))
 
-meter.create_observable_updowncounter(
+meter.create_observable_up_down_counter(
     name="process.workingset",
     description="process working set",
     callback=ws_callback,
@@ -1112,17 +1240,17 @@ can support an `unregister()` method directly.
 ```python
 # Python
 class Device:
-    """A device with one updowncounter"""
+    """A device with one up_down_counter"""
 
     def __init__(self, meter, x):
         self.x = x
-        updowncounter = meter.create_observable_updowncounter(name="queue_size", description="items in process")
-        self.cb = updowncounter.register_callback(self.updowncounter_callback)
+        updowncounter = meter.create_observable_up_down_counter(name="queue_size", description="items in process")
+        self.cb = updowncounter.register_callback(self.up_down_counter_callback)
 
-    def updowncounter_callback(self, result):
-        result.Observe(self.read_updowncounter(), {'x', self.x})
+    def up_down_counter_callback(self, result):
+        result.Observe(self.read_up_down_counter(), {'x', self.x})
 
-    def read_updowncounter(self):
+    def read_up_down_counter(self):
         return 100  # ...
 
     def stop(self):

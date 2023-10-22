@@ -45,13 +45,13 @@ this data model.
   <tr>
     <td>SEVERITY</td>
     <td>enum</td>
-    <td>Defines the importance of the event. Example: `Debug`</td>
+    <td>Defines the importance of the event. Example: <code>Debug</code></td>
     <td>Severity</td>
   </tr>
   <tr>
     <td>FACILITY</td>
     <td>enum</td>
-    <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: `mail system`</td>
+    <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: <code>mail system</code></td>
     <td>Attributes["syslog.facility"]</td>
   </tr>
   <tr>
@@ -87,15 +87,11 @@ this data model.
   <tr>
     <td>STRUCTURED-DATA</td>
     <td>array of maps of string to string</td>
-    <td>A variety of use cases depending on the SDID:
-Can describe event source identity
-Can include data that describes particular occurrence of the event.
+    <td>A variety of use cases depending on the SDID:<br>
+Can describe event source identity.<br>
+Can include data that describes particular occurrence of the event.<br>
 Can be meta-information, e.g. quality of timestamp value.</td>
-    <td>SDID origin.swVersion map to Resource["service.version"]
-
-SDID origin.ip map to attribute["client.address"]
-
-Rest of SDIDs -> Attributes["syslog.*"]</td>
+    <td>SDID origin.swVersion map to Resource["service.version"]. SDID origin.ip map to Attributes["client.address"]. Rest of SDIDs -> Attributes["syslog.*"]</td>
   </tr>
   <tr>
     <td>MSG</td>
@@ -391,7 +387,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>%a</td>
     <td>string</td>
     <td>Client address</td>
-    <td>Attributes["client.address"]</td>
+    <td>Attributes["client.socket.address"]</td>
   </tr>
   <tr>
     <td>%A</td>
@@ -403,7 +399,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>%h</td>
     <td>string</td>
     <td>Client hostname.</td>
-    <td>Attributes["server.address"]</td>
+    <td>Attributes["client.address"]</td>
   </tr>
   <tr>
     <td>%m</td>
@@ -499,6 +495,7 @@ trace            | string             | The trace associated with the log entry,
 span_id          | string             | The span ID within the trace associated with the log entry. | SpanId
 labels           | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes
 http_request     | HttpRequest        | The HTTP request associated with the log entry, if any. | Attributes["gcp.http_request"]
+trace_sampled    | boolean            | The sampling decision of the trace associated with the log entry. | TraceFlags.SAMPLED
 All other fields |                    |                                                         | Attributes["gcp.*"]
 
 ### Elastic Common Schema
@@ -705,21 +702,14 @@ All other fields |                    |                                         
   <tr>
     <td>host.domain</td>
     <td>string</td>
-    <td>Name of the domain of which the host is a member.
-
-For example, on Windows this could be the host’s Active Directory domain or NetBIOS domain name. For Linux this could be the domain of the host’s LDAP provider.</td>
-
-<td>**Resource</td>
+    <td>Name of the domain of which the host is a member.<br>For example, on Windows this could be the host’s Active Directory domain or NetBIOS domain name. For Linux this could be the domain of the host’s LDAP provider.</td>
+    <td>**Resource</td>
   </tr>
   <tr>
     <td>host.name</td>
     <td>string</td>
-    <td>Hostname of the host.
-
-It normally contains what the hostname command returns on the host machine.</td>
-
-<td>Resource["host.name"]</td>
-
+    <td>Hostname of the host.<br>It normally contains what the hostname command returns on the host machine.</td>
+    <td>Resource["host.name"]</td>
   </tr>
   <tr>
     <td>host.id</td>
@@ -742,12 +732,8 @@ It normally contains what the hostname command returns on the host machine.</td>
   <tr>
     <td>host.name</td>
     <td>string</td>
-    <td>Name of the host.
-
-It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
-
-<td>Resource["host.name"]</td>
-
+    <td>Name of the host.<br>It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
+    <td>Resource["host.name"]</td>
   </tr>
   <tr>
     <td>host.type</td>
@@ -762,9 +748,7 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
     <td>?</td>
   </tr>
   <tr>
-    <td>service.ephemeral_id
-
-</td>
+    <td>service.ephemeral_id</td>
     <td>string</td>
     <td>Ephemeral identifier of this service</td>
     <td>**Resource</td>
@@ -810,7 +794,7 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
 \* Not yet formalized into ECS.
 
 \*\* A resource that doesn’t exist in the
-[OpenTelemetry resource semantic convention](../resource/semantic_conventions/README.md).
+[OpenTelemetry resource semantic convention](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
 
 This is a selection of the most relevant fields. See
 [for the full reference](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html)
