@@ -52,7 +52,7 @@ All instrumentations MUST populate the attribute when the given condition is sat
 When a `Conditionally Required` attribute's condition is not satisfied, and there is no requirement to populate the attribute, semantic conventions MAY provide special instructions on how to handle it. If no instructions are given and if instrumentation can populate the attribute, instrumentation SHOULD use the `Opt-In` requirement level on the attribute.
 
 <!-- TODO(jsuereth) - make examples not break on changes to semconv -->
-For example, `server.address` is `Conditionally Required` by the [Database convention](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/README.md) when available. When `server.socket.address` is available instead, instrumentation can do a DNS lookup, cache and populate `server.address`, but only if the user explicitly enables the instrumentation to do so, considering the performance issues that DNS lookups introduce.
+For example, `server.address` is `Conditionally Required` by the [Database convention](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/README.md) when available. When `network.peer.address` is available instead, instrumentation can do a DNS lookup, cache and populate `server.address`, but only if the user explicitly enables the instrumentation to do so, considering the performance issues that DNS lookups introduce.
 
 ## Recommended
 
