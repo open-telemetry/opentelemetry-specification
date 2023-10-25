@@ -1480,7 +1480,7 @@ modeled to interact with other components in the SDK:
 
 ## MetricProducer
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md) except where otherwise specified
 
 `MetricProducer` defines the interface which bridges to third-party metric
 sources MUST implement, so they can be plugged into an OpenTelemetry
@@ -1491,15 +1491,13 @@ in-memory state MAY implement the `MetricProducer` interface for convenience.
 `AggregationTemporality` of produced metrics. SDK authors MAY provide utility
 libraries to facilitate conversion between delta and cumulative temporalities.
 
-----------
-**Status**: [Experimental](../document-status.md)
 
-`MetricProducer` implementations SHOULD allow providing a [MetricFilter](#metricfilter), 
-whose result determines if a data point be returned in the result of `Produce` operation. 
+`MetricProducer` implementations SHOULD allow accepting a [MetricFilter](#metricfilter), 
+whose result determines if a data point be returned in the result of `Produce` operation. **Status**: [Experimental](../document-status.md) 
 
 A `MetricProducer` SHOULD allow changing the [MetricFilter](#metricfilter), which will be used 
-in subsequent `Produce` operations.
--------
+in subsequent `Produce` operations. **Status**: [Experimental](../document-status.md)
+
 
 ```text
 +-----------------+            +--------------+
@@ -1533,13 +1531,9 @@ resource information, `Produce` SHOULD require a resource as a parameter.
 SDK](../overview.md#sdk) authors MAY choose to add required or optional
 parameters (e.g. timeout).
 
-----------
-**Status**: [Experimental](../document-status.md)
-
 Implementation SHOULD use the provided [MetricFilter](#metricfilter) to determine if a 
 data point is to be included in the result, per the operations defined in the
-[MetricFilter](#metricfilter).
-----------
+[MetricFilter](#metricfilter). **Status**: [Experimental](../document-status.md)
 
 
 `Produce` SHOULD provide a way to let the caller know whether it succeeded,
@@ -1562,52 +1556,55 @@ registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#met
 The filtering is done at the [MetricProducer](#metricproducer) for performance reasons, 
 by avoiding allocating a data point, or executing an Asynchronous instrument's callback function.
 
-The `MetricFilter` allows filtering an entire instrument - rejecting or allowing all its attribute sets - 
-by its `FilterInstrument` operation, which accepts the instrument information
+The `MetricFilter` allows filtering an entire metric stream - rejecting or allowing all its attribute sets - 
+by its `FilterMetric` operation, which accepts the metric stream information
 (scope, name, kind and unit)  and returns an enumeration: `AllowAllAttributes`, `RejectAllAttributes` 
 or `AllowSomeAttributes`. If the latter returned, the `AllowInstrumentAttributes` operation
-is to be called per attribute set of that instrument, with its boolean result determining if the 
-data point for that (instrument, attributes) pair is to be included in the result of the [MetricProducer](#metricproducer)
+is to be called per attribute set of that metric stream, with its boolean result determining if the 
+data point for that (metric stream, attributes) pair is to be included in the result of the [MetricProducer](#metricproducer)
 `Produce` operation.
 
 ### Interface Definition
 
 A `MetricFilter` MUST support the following functions:
 
-#### FilterInstrument(instrumentationScope, name, kind, unit) 
+#### FilterMetric(instrumentationScope, name, kind, unit) 
 
-This operation is called once for every instrument, in each [MetricProducer](#metricproducer) `Produce`
+This operation is called once for every metric stream, in each [MetricProducer](#metricproducer) `Produce`
 operation. 
 
 **Parameters:**
-- `instrumentationScope`: the instrument's instrumentation scope
-- `name`: the name of the instrument
-- `kind`: the instrument's kind
-- `unit`: the instrument's unit
+- `instrumentationScope`: the metric stream instrumentation scope
+- `name`: the name of the metric stream
+- `kind`: the metric stream kind
+- `unit`: the metric stream unit
 
 Returns: `InstrumentFilterResult`
 
 `InstrumentFilterResult` is one of:
-* `AllowAllAttributes` - All attributes of the given instrument are allowed (not to be filtered). 
-   This provides a "short-circuit" as there is no need to call `AllowInstrumentAttributes` operation
+* `AllowAllAttributes` - All attributes of the given metric stream are allowed (not to be filtered). 
+   This provides a "short-circuit" as there is no need to call `AllowAttributes` operation
    for each attribute set.
-* `RejectAllAttributes` - All attributes of the given instrument are NOT allowed (filtered out).
-  This provides a "short-circuit" as there is no need to call `AllowInstrumentAttributes` operation
+* `RejectAllAttributes` - All attributes of the given metric stream are NOT allowed (filtered out).
+  This provides a "short-circuit" as there is no need to call `AllowAttributes` operation
   for each attribute set, and no need to collect those data points be it synchronous or asynchronous: 
   e.g. the callback for this given instrument does not need to be invoked.
-* `AllowSomeAttributes` - Some attributes are allowed and some aren't, hence `AllowInstrumentAttributes`
+* `AllowSomeAttributes` - Some attributes are allowed and some aren't, hence `AllowAttributes`
   operation must be called for each attribute set of that instrument.
 
-#### AllowInstrumentAttributes(instrumentationScope, name, kind, unit, attributes)
+#### AllowAttributes(instrumentationScope, name, kind, unit, attributes)
 
-A boolean function, which determines for a given instrument and attribute set if it should be allowed
+A boolean function, which determines for a given metric stream and attribute set if it should be allowed
 (true) or filtered out (false). 
 
+This function should only be called if `FilterMetric` operation returned `AllowSomeAttributes` for 
+the given metric stream arguments (`instrumentationScope`, `name`, `kind`, `unit`).
+
 **Parameters:**
-- `instrumentationScope`: the instrument's instrumentation scope
-- `name`: the name of the instrument
-- `kind`: the instrument's kind
-- `unit`: the instrument's unit
+- `instrumentationScope`: the metric stream instrumentation scope
+- `name`: the name of the metric stream
+- `kind`: the metric stream kind
+- `unit`: the metric stream unit
 - `attributes`: the attributes
 
 
