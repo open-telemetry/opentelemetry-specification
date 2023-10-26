@@ -236,17 +236,20 @@ Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
+- `"console`: [Standard Output](../traces/sdk_exporters/stdout.md)
 - `"none"`: No automatically configured exporter for traces.
 
 Known values for `OTEL_METRICS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
+- `"console`: [Standard Output](../metrics/sdk_exporters/stdout.md)
 - `"none"`: No automatically configured exporter for metrics.
 
 Known values for `OTEL_LOGS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
+- `"console`: [Standard Output](../logs/sdk_exporters/stdout.md)
 - `"none"`: No automatically configured exporter for logs.
 
 ## Metrics SDK Configuration

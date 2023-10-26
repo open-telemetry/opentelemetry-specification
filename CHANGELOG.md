@@ -77,6 +77,8 @@ release.
 
 - Rename/replace `(client|server).socket.(address|port)` attributes with `network.(peer|local).(address|port)`.
   ([#3713](https://github.com/open-telemetry/opentelemetry-specification/pull/3713))
+- Add `console` as an exporter type that is supported via environment variable configuration.
+  ([#3742](https://github.com/open-telemetry/opentelemetry-specification/pull/3742))
 
 ### Supplementary Guidelines
 
