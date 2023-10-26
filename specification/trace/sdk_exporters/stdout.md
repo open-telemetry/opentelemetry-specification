@@ -7,7 +7,7 @@ linkTitle: Stdout
 **Status**: [Stable](../../document-status.md)
 
 "Standard output" Span Exporter is a [Span
-Exporter](../sdk.md#span-exporter) which outputs the metrics to
+Exporter](../sdk.md#span-exporter) which outputs the spans to
 stdout/console.
 
 [OpenTelemetry SDK](../../overview.md#sdk) authors MAY choose the best idiomatic
