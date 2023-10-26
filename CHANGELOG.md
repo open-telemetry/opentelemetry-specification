@@ -32,6 +32,8 @@ release.
 
 - Define file configuration parse and create operations.
   ([#3437](https://github.com/open-telemetry/opentelemetry-specification/pull/3437))
+- Add environment variable implementation guidelines.
+  ([#3738](https://github.com/open-telemetry/opentelemetry-specification/pull/3738))
 
 ### Common
 
