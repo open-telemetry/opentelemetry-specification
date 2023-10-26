@@ -12,6 +12,8 @@ linkTitle: File
 - [Configuration Model](#configuration-model)
   * [Stability Definition](#stability-definition)
 - [Configuration file](#configuration-file)
+  * [YAML file format](#yaml-file-format)
+  * [Environment variable substitution](#environment-variable-substitution)
 - [SDK Configuration](#sdk-configuration)
   * [In-Memory Configuration Model](#in-memory-configuration-model)
   * [Operations](#operations)
@@ -46,12 +48,80 @@ TODO: define stability guarantees and backwards compatibility
 
 ## Configuration file
 
-A configuration file is a file representation of
+A configuration file is a serialized file-based representation of
 the [Configuration Model](#configuration-model).
 
-TODO: define acceptable file formats
+Configuration files SHOULD use one the following serialization formats:
 
-TODO: define environment variable substitution
+### YAML file format
+
+[YAML](https://yaml.org/spec/1.2.2/) configuration files SHOULD follow YAML spec
+revision >= 1.2.
+
+YAML configuration files MUST use file extensions `.yaml` or `.yml`.
+
+TODO: define JSON file format once prototypes are available
+
+### Environment variable substitution
+
+Configuration files support environment variables substitution for references
+which match the following regular expression:
+
+```regexp
+\$\{env:(?<ENV_NAME>[a-zA-Z_]+[a-zA-Z0-9_]*)}
+```
+
+The `ENV_NAME` MUST start with an alphabetic or `_` character, and is followed
+by 0 or more alphanumeric or `_` characters.
+
+For example, `${env:API_KEY}` is valid, while `${env:1API_KEY}`
+and `${env:API_$KEY}` are invalid.
+
+Environment variable substitution MUST only apply to scalar values. NOTE,
+mapping keys are not candidates for substitution.
+
+If a referenced environment variable is not defined, it MUST be replaced with an
+empty value.
+
+Node types MUST be interpreted after environment variable substitution takes
+place. This ensures the environment string representation of boolean, integer,
+or floating point fields can be properly converted to expected types.
+
+For example, consider the following environment variables,
+and [YAML](#yaml-file-format) configuration file:
+
+```shell
+export STRING_VALUE="value"
+export BOOl_VALUE="true"
+export INT_VALUE="1"
+export FLOAT_VALUE="1.1"
+```
+
+```yaml
+string_key: ${env:STRING_VALUE}                               # Valid reference to STRING_VALUE
+other_string_key: "${env:STRING_VALUE}"                       # Valid reference to STRING_VALUE inside double quotes
+another_string_key: "${env:BOOl_VALUE}"                       # Valid reference to BOOl_VALUE inside double quotes
+bool_key: ${env:BOOl_VALUE}                                   # Valid reference to BOOl_VALUE
+int_key: ${env:INT_VALUE}                                     # Valid reference to INT_VALUE
+float_key: ${env:FLOAT_VALUE}                                 # Valid reference to FLOAT_VALUE
+combo_string_key: foo ${env:STRING_VALUE} ${env:FLOAT_VALUE}  # Valid reference to STRING_VALUE and FLOAT_VALUE
+undefined_key: ${env:UNDEFINED_KEY}                           # Invalid reference, UNDEFINED_KEY is not defined and is replaced with ""
+${env:STRING_VALUE}: value                                    # Invalid reference, substitution is not valid in mapping keys and reference is ignored
+```
+
+Environment variable substitution results in the following YAML:
+
+```yaml
+string_key: value                # Interpreted as type string, tag URI tag:yaml.org,2002:str
+other_string_key: "value"        # Interpreted as type string, tag URI tag:yaml.org,2002:str
+another_string_key: "true"       # Interpreted as type string, tag URI tag:yaml.org,2002:str
+bool_key: true                   # Interpreted as type bool, tag URI tag:yaml.org,2002:bool
+int_key: 1                       # Interpreted as type int, tag URI tag:yaml.org,2002:int
+float_key: 1.1                   # Interpreted as type float, tag URI tag:yaml.org,2002:float
+combo_string_key: foo value 1.1  # Interpreted as type string, tag URI tag:yaml.org,2002:str
+undefined_key:                   # Interpreted as type null, tag URI tag:yaml.org,2002:null
+${env:STRING_VALUE}: value       # Interpreted as type string, tag URI tag:yaml.org,2002:str
+```
 
 ## SDK Configuration
 
@@ -81,10 +151,19 @@ with OpAmp
 
 Parse and validate a [configuration file](#configuration-file).
 
+Parse MUST perform [environment variable substitution](#environment-variable-substitution).
+
+Parse MUST interpret null as equivalent to unset.
+
 **Parameters:**
 
 * `file`: The [configuration file](#configuration-file) to parse. This MAY be a
   file path, or language specific file data structure, or a stream of a file's content.
+* `file_format`: The file format of the `file` (e.g. [yaml](#yaml-file-format)).
+  Implementations MAY accept a `file_format` parameter, or infer it from
+  the `file` extension, or include file format specific overloads of `parse`,
+  e.g. `parseYaml(file)`. If `parse` accepts `file_format`, the API SHOULD be
+  structured so a user is obligated to provide it.
 
 **Returns:** [configuration model](#in-memory-configuration-model)
 
@@ -94,11 +173,18 @@ This SHOULD return an error if:
 * The parsed `file` content does not conform to
   the [configuration model](#configuration-model) schema.
 
-TODO: define behavior if some portion of configuration model is not supported
-
 #### Create
 
 Interpret [configuration model](#in-memory-configuration-model) and return SDK components.
+
+If a field is null or unset and a default value is defined, Create MUST ensure
+the SDK component is configured with the default value. If a field is null or
+unset and no default value is defined, Create SHOULD return an error. For
+example, if configuring
+the [span batching processor](../trace/sdk.md#batching-processor) and
+the `scheduleDelayMillis` field is null or unset, the component is configured
+with the default value of `5000`. However, if the `exporter` field is null or
+unset, Create fails fast since there is no default value for `exporter`.
 
 **Parameters:**
 
@@ -115,7 +201,10 @@ The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
 
 This SHOULD return an error if it encounters an error in `configuration` (i.e.
-fail fast).
+fail fast) in accordance with
+initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
+
+TODO: define behavior if some portion of configuration model is not supported
 
 ## References
 
