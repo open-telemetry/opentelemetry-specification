@@ -1,0 +1,22 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Stdout
+--->
+
+# OpenTelemetry Span Exporter - Standard output
+
+**Status**: [Stable](../../document-status.md)
+
+"Standard output" Span Exporter is a [Span
+Exporter](../sdk.md#span-exporter) which outputs the metrics to
+stdout/console.
+
+[OpenTelemetry SDK](../../overview.md#sdk) authors MAY choose the best idiomatic
+name for their language. For example, ConsoleExporter, StdoutExporter,
+StreamExporter, etc.
+
+If a language provides a mechanism to automatically configure a
+[Span processor](../sdk.md#span-processor) to pair with the associated
+exporter (e.g., using the [`OTEL_TRACES_EXPORTER` environment
+variable](../../configuration/sdk-environment-variables.md#exporter-selection)), by
+default the exporter MUST be paired with a [batching
+processor](../sdk.md#batching-processor).

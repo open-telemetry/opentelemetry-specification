@@ -13,6 +13,8 @@ release.
 
 - Add a new AddLink() operation to Span (experimental).
   ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
+- Add definition for standard output trace exporter.
+  ([#3740](https://github.com/open-telemetry/opentelemetry-specification/pull/3740))
 
 ### Metrics
 
