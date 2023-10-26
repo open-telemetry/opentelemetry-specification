@@ -10,7 +10,18 @@ aliases:
 
 **Status**: [Mixed](../document-status.md)
 
-The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
+The goal of this specification is to unify the environment variable names between different OpenTelemetry implementations.
+
+Implementations MAY choose to allow configuration via the environment variables in this specification, but are not required to.
+If they do, they SHOULD use the names listed in this document.
+
+## Implementation guidelines
+
+**Status**: [Experimental](../document-status.md)
+
+Environment variables MAY be handled directly by a component, in the SDK, or in a separate component (e.g. environment-based autoconfiguration component).
+
+The environment-based configuration SHOULD have a direct code configuration equivalent.
 
 ## Parsing empty value
 
