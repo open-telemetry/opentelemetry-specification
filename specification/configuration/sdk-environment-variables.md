@@ -17,7 +17,7 @@ If they do, they SHOULD use the names listed in this document.
 
 ## Implementation guidelines
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Environment variables MAY be handled (implemented) directly by a component, in the SDK, or in a separate component (e.g. environment-based autoconfiguration component).
 
