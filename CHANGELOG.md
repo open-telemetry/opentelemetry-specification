@@ -27,7 +27,7 @@ release.
   ([#3719](https://github.com/open-telemetry/opentelemetry-specification/pull/3719))
 - Clarify that the configuration options MAY be implemented by the exporter,
   the SDK, or a separate component (e.g. environment-based autoconfiguration component).
-  ([#3719](https://github.com/open-telemetry/opentelemetry-specification/pull/3719))
+  ([#3730](https://github.com/open-telemetry/opentelemetry-specification/pull/3730))
 
 ### Compatibility
 
