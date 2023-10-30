@@ -21,7 +21,7 @@ If they do, they SHOULD use the names listed in this document.
 
 Environment variables MAY be handled (implemented) directly by a component, in the SDK, or in a separate component (e.g. environment-based autoconfiguration component).
 
-The environment-based configuration SHOULD have a direct code configuration equivalent.
+The environment-based configuration MUST have a direct code configuration equivalent.
 
 ## Parsing empty value
 
