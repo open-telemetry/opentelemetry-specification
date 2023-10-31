@@ -10,7 +10,9 @@ This document specifies the configuration options available to the OpenTelemetry
 
 ## Configuration Options
 
-The following configuration options MUST be available to configure the OTLP exporter. Each configuration option MUST be overridable by a signal specific option.
+The following configuration options MUST be available to configure the OTLP exporter.
+The configuration options MAY be implemented directly in the OTLP exporter, in the SDK, or in a separate component (e.g. environment-based autoconfiguration component).
+Each configuration option MUST be overridable by a signal specific option.
 
 - **Endpoint (OTLP/HTTP)**: Target URL to which the exporter is going to send spans or metrics.
   The option:
