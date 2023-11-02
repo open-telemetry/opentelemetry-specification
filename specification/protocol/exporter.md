@@ -15,13 +15,18 @@ The configuration options MAY be implemented directly in the OTLP exporter, in t
 Each configuration option MUST be overridable by a signal specific option.
 
 - **Endpoint (OTLP/HTTP)**: Target URL to which the exporter is going to send spans or metrics.
-  The option:
-  - MUST accept a scheme (`http` or `https`),
-  - MUST accept a host,
-  - MUST accept an optional port,
-  - MUST accept an optional path,
-  - MAY not accept a query string,
-  - MAY not accept a fragment.
+  The option MUST honor the following [URL components](https://datatracker.ietf.org/doc/html/rfc3986#section-3):
+  - scheme (`http` or `https`),
+  - host,
+  - port,
+  - path.
+
+  The option SHOULD honor the following [URL components](https://datatracker.ietf.org/doc/html/rfc3986#section-3):
+  - userinfo.
+
+  The option MAY not honor the following [URL components](https://datatracker.ietf.org/doc/html/rfc3986#section-3):
+  - query,
+  - fragment.
 
   A scheme of `https` indicates a secure connection.
   When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters MUST construct per-signal URLs as [described below](#endpoint-urls-for-otlphttp). The per-signal endpoint configuration options take precedence and can be used to override this behavior (the URL is used as-is for them, without any modifications). See the [OTLP Specification][otlphttp-req] for more details.
