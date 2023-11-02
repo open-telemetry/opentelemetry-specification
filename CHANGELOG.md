@@ -11,14 +11,44 @@ release.
 
 ### Traces
 
-- Add a new AddLink() operation to Span (experimental).
-  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
-
 ### Metrics
 
 ### Logs
 
 ### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.27.0 (2023-11-03)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Add a new AddLink() operation to Span (experimental).
+  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
+
+### Metrics
+
+- No changes.
+
+### Logs
+
+- No changes.
+
+### Resource
+
+- No changes.
 
 ### OpenTelemetry Protocol
 
@@ -31,6 +61,8 @@ release.
 
 ### Compatibility
 
+- No changes.
+
 ### SDK Configuration
 
 - Define file configuration parse and create operations.
@@ -42,6 +74,8 @@ release.
   ([#3713](https://github.com/open-telemetry/opentelemetry-specification/pull/3713))
 
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.26.0 (2023-10-10)
 
