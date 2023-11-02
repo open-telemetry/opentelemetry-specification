@@ -16,7 +16,8 @@ Each configuration option MUST be overridable by a signal specific option.
 
 - **Endpoint (OTLP/HTTP)**: Target URL to which the exporter is going to send spans or metrics.
   The option:
-  - MUST accept be a valid URL with scheme (`http` or `https`) and host,
+  - MUST accept a scheme (`http` or `https`),
+  - MUST accept a host,
   - MUST accept an optional port,
   - MUST accept an optional path,
   - MAY not accept a query string,
