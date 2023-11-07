@@ -55,9 +55,6 @@ release.
 - New exporter implementations do not need to support
   `OTEL_EXPORTER_OTLP_SPAN_INSECURE` and `OTEL_EXPORTER_OTLP_METRIC_INSECURE`.
   ([#3719](https://github.com/open-telemetry/opentelemetry-specification/pull/3719))
-- Clarify that the configuration options MAY be implemented by the exporter,
-  the SDK, or a separate component (e.g. environment-based autoconfiguration component).
-  ([#3730](https://github.com/open-telemetry/opentelemetry-specification/pull/3730))
 
 ### Compatibility
 
@@ -67,6 +64,8 @@ release.
 
 - Define file configuration parse and create operations.
   ([#3437](https://github.com/open-telemetry/opentelemetry-specification/pull/3437))
+- Add environment variable implementation guidelines.
+  ([#3738](https://github.com/open-telemetry/opentelemetry-specification/pull/3738))
 
 ### Common
 
