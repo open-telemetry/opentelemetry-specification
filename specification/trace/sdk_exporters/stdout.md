@@ -12,7 +12,7 @@ stdout/console.
 
 [OpenTelemetry SDK](../../overview.md#sdk) authors MAY choose the best idiomatic
 name for their language. For example, ConsoleExporter, StdoutExporter,
-StreamExporter, etc.
+StreamExporter, LoggingExporter etc.
 
 If a language provides a mechanism to automatically configure a
 [Span processor](../sdk.md#span-processor) to pair with the associated
