@@ -1073,8 +1073,6 @@ determines the following capabilities:
 
 * Collecting metrics from the SDK and any registered
   [MetricProducers](#metricproducer) on demand.
-* Providing a [MetricFilter](#metricfilter) which enables choosing which aggregated data points should be collected
-  (**Status**: [Experimental](../document-status.md))
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
@@ -1085,13 +1083,11 @@ SHOULD provide at least the following:
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 * **Status**: [Experimental](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+* **Status**: [Experimental](../document-status.md) - The [MetricFilter](#metricfilter) to apply to metrics and attributes during `MetricReader#Collect`.
 * Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
 
-A `MetricReader` SHOULD allow providing a [MetricFilter](#metricfilter), which determines if an aggregated data point
-be returned in the result of `Collect` operation. 
-
-A `MetricReader` SHOULD allow changing the [MetricFilter](#metricfilter), which will be used in subsequent `Collect` operations.
-A `MetricReader` SHOULD provide the [MetricFilter](#metricfilter) to the SDK or registered [MetricProducer](#metricproducer)(s).
+**Status**: [Experimental](../document-status.md) - A `MetricReader` SHOULD provide the [MetricFilter](#metricfilter) to the SDK or registered [MetricProducer](#metricproducer)(s) 
+when calling the `Produce` operation. 
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1492,13 +1488,6 @@ in-memory state MAY implement the `MetricProducer` interface for convenience.
 libraries to facilitate conversion between delta and cumulative temporalities.
 
 
-`MetricProducer` implementations SHOULD allow accepting a [MetricFilter](#metricfilter), 
-whose result determines if a data point be returned in the result of `Produce` operation. **Status**: [Experimental](../document-status.md) 
-
-A `MetricProducer` SHOULD allow changing the [MetricFilter](#metricfilter), which will be used 
-in subsequent `Produce` operations. **Status**: [Experimental](../document-status.md)
-
-
 ```text
 +-----------------+            +--------------+
 |                 | Metrics... |              |
@@ -1521,20 +1510,19 @@ bridge pre-processed data.
 
 A `MetricProducer` MUST support the following functions:
 
-#### Produce() batch
+#### Produce(metricFilter) batch
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
-MUST return a batch of [Metric points](./data-model.md#metric-points).
+MUST return a batch of [Metric points](./data-model.md#metric-points), filtered by the optional
+`metricFilter` parameter. Implementation SHOULD use the filter as early as 
+possible to gain as much performance gain possible (memory allocation, 
+internal metric fetching, etc).
+
 If the batch of [Metric points](./data-model.md#metric-points) includes
 resource information, `Produce` SHOULD require a resource as a parameter.
 `Produce` does not have any other required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add required or optional
 parameters (e.g. timeout).
-
-Implementation SHOULD use the provided [MetricFilter](#metricfilter) to determine if a 
-data point is to be included in the result, per the operations defined in the
-[MetricFilter](#metricfilter). **Status**: [Experimental](../document-status.md)
-
 
 `Produce` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. When the `Produce` operation fails, the `MetricProducer`
@@ -1545,6 +1533,10 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 [`InstrumentationScope`](../glossary.md#instrumentation-scope) information,
 `Produce` SHOULD include a single InstrumentationScope which identifies the
 `MetricProducer`.
+
+**Parameters:**
+- **Status**: [Experimental](../document-status.md) `metricFilter`: An optional [MetricFilter](#metricfilter).
+
 
 ## MetricFilter
 
