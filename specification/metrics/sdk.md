@@ -1027,7 +1027,11 @@ measurements should be sampled. For example, the [simple reservoir sampling
 algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
 
   ```
-  bucket = random_integer(0, num_measurements_seen)
+  if num_measurements_seen < num_buckets then
+    bucket = num_measurements_seen
+  else
+    bucket = random_integer(0, num_measurements_seen)
+  end
   if bucket < num_buckets then
     reservoir[bucket] = measurement
   end
