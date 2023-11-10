@@ -983,6 +983,10 @@ an SDK. The default value for the filter SHOULD follow the
 The `ExemplarReservoir` interface MUST provide a method to offer measurements
 to the reservoir and another to collect accumulated Exemplars.
 
+A new `ExemplarReservoir` MUST be created for every known timeseries data point,
+as determined by aggregation and view configuration. This data point, and its
+set of defining attributes, are referred to as the associated timeseries point.
+
 The "offer" method SHOULD accept measurements, including:
 
 - The `value` of the measurement.
@@ -999,18 +1003,25 @@ span context and baggage can be inspected at this point.
 The "offer" method does not need to store all measurements it is given and
 MAY further sample beyond the `ExemplarFilter`.
 
+The "offer" method MAY accept a filtered subset of `Attributes` which diverge
+from the timeseries the reservoir is associated with. This MUST be clearly
+documented in the API interface and the reservoir MUST be given the `Attributes`
+associated with its timeseries point either at construction or in the "collect"
+method. SDK authors are encouraged to benchmark whether this option works best
+for their implementation.
+
 The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
 to abide by the `AggregationTemporality` of any metric point they are recorded
 with. In other words, Exemplars reported against a metric data point SHOULD have
-occurred within the start/stop timestamps of that point.  SDKs are free to
+occurred within the start/stop timestamps of that point. SDKs are free to
 decide whether "collect" should also reset internal storage for delta temporal
 aggregation collection, or use a more optimal implementation.
 
 `Exemplar`s MUST retain any attributes available in the measurement that
-are not preserved by aggregation or view configuration. Specifically, at a
-minimum, joining together attributes on an `Exemplar` with those available
-on its associated metric data point should result in the full set of attributes
-from the original sample measurement.
+are not preserved by aggregation or view configuration for the associated
+timeseries. Specifically, at a minimum, joining together attributes on an
+`Exemplar` with those available on its associated metric data point should
+result in the full set of attributes from the original sample measurement.
 
 The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
