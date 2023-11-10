@@ -972,6 +972,12 @@ Using this ExemplarFilter is as good as disabling Exemplar feature.
 An ExemplarFilter which makes those measurements eligible for being an
 Exemplar, which are recorded in the context of a sampled parent span.
 
+#### Configuration
+
+The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
+an SDK. The default value for the filter SHOULD follow the
+[environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
+
 ### ExemplarReservoir
 
 The `ExemplarReservoir` interface MUST provide a method to offer measurements
