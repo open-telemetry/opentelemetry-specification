@@ -11,9 +11,6 @@ release.
 
 ### Traces
 
-- Add a new AddLink() operation to Span (experimental).
-  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
-
 ### Metrics
 
 ### Logs
@@ -22,19 +19,53 @@ release.
 
 ### OpenTelemetry Protocol
 
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.27.0 (2023-11-08)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Add a new AddLink() operation to Span (experimental).
+  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
+
+### Metrics
+
+- No changes.
+
+### Logs
+
+- No changes.
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
 - New exporter implementations do not need to support
   `OTEL_EXPORTER_OTLP_SPAN_INSECURE` and `OTEL_EXPORTER_OTLP_METRIC_INSECURE`.
   ([#3719](https://github.com/open-telemetry/opentelemetry-specification/pull/3719))
-- Clarify that the configuration options MAY be implemented by the exporter,
-  the SDK, or a separate component (e.g. environment-based autoconfiguration component).
-  ([#3730](https://github.com/open-telemetry/opentelemetry-specification/pull/3730))
 
 ### Compatibility
+
+- No changes.
 
 ### SDK Configuration
 
 - Define file configuration parse and create operations.
   ([#3437](https://github.com/open-telemetry/opentelemetry-specification/pull/3437))
+- Add environment variable implementation guidelines.
+  ([#3738](https://github.com/open-telemetry/opentelemetry-specification/pull/3738))
 
 ### Common
 
@@ -42,6 +73,8 @@ release.
   ([#3713](https://github.com/open-telemetry/opentelemetry-specification/pull/3713))
 
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.26.0 (2023-10-10)
 
