@@ -54,6 +54,7 @@ linkTitle: SDK
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceBased](#tracebased)
+    + [Configuration](#configuration-2)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
     + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
@@ -1032,7 +1033,7 @@ The SDK SHOULD include two types of built-in exemplar reservoirs:
 1. `SimpleFixedSizeExemplarReservoir`
 2. `AlignedHistogramBucketExemplarReservoir`
 
-By default, 
+By default:
 
 - Explicit bucket histogram aggregation with more than 1 bucket will
 use `AlignedHistogramBucketExemplarReservoir`.
