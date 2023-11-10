@@ -1015,9 +1015,15 @@ The SDK SHOULD include two types of built-in exemplar reservoirs:
 1. `SimpleFixedSizeExemplarReservoir`
 2. `AlignedHistogramBucketExemplarReservoir`
 
-By default, explicit bucket histogram aggregation with more than 1 bucket will
-use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
-`SimpleFixedSizeExemplarReservoir`.
+By default, 
+
+- Explicit bucket histogram aggregation with more than 1 bucket will
+use `AlignedHistogramBucketExemplarReservoir`.
+- Base2 Exponential Histogram Aggregation SHOULD use a
+  `SimpleFixedSizeExemplarReservoir` with a reservoir equal to the
+  smaller of the maximum number of buckets configured on the aggregation or
+  twenty (e.g. `min(20, max_buckets)`).
+- All other aggregations will use `SimpleFixedSizeExemplarReservoir`.
 
 #### SimpleFixedSizeExemplarReservoir
 
@@ -1042,8 +1048,9 @@ cycle. For the above example, that would mean that the `num_measurements_seen`
 count is reset every time the reservoir is collected.
 
 This Exemplar reservoir MAY take a configuration parameter for the size of the
-reservoir pool. If no size configuration is provided, the default size of `1`
-SHOULD be used.
+reservoir pool. If no size configuration is provided, the default size MAY be
+the number of possible concurrent threads (e.g. numer of CPUs) to help reduce
+contention. Otherwise, a default size of `1` SHOULD be used.
 
 #### AlignedHistogramBucketExemplarReservoir
 
