@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Clarifications and flexibility in Exemplar speicification.
+  ([#3760](https://github.com/open-telemetry/opentelemetry-specification/pull/3760))
+
 ### Logs
 
 ### Resource
