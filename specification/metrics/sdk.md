@@ -1296,6 +1296,9 @@ can run at different schedule, for example:
 * Exporter D is a pull exporter which reacts to another scraper over a named
   pipe.
 
+Exporters MAY offer configuration to add resource attributes as metric attributes. 
+By default, it MUST not add any resource attributes as metric attributes.
+
 ### Push Metric Exporter
 
 Push Metric Exporter sends metric data it receives from a paired
