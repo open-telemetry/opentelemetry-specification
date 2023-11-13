@@ -1086,8 +1086,8 @@ SHOULD provide at least the following:
 * **Status**: [Experimental](../document-status.md) - The [MetricFilter](#metricfilter) to apply to metrics and attributes during `MetricReader#Collect`.
 * Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
 
-**Status**: [Experimental](../document-status.md) - A `MetricReader` SHOULD provide the [MetricFilter](#metricfilter) to the SDK or registered [MetricProducer](#metricproducer)(s) 
-when calling the `Produce` operation. 
+**Status**: [Experimental](../document-status.md) - A `MetricReader` SHOULD provide the [MetricFilter](#metricfilter) to the SDK or registered [MetricProducer](#metricproducer)(s)
+when calling the `Produce` operation.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1509,12 +1509,12 @@ bridge pre-processed data.
 
 A `MetricProducer` MUST support the following functions:
 
-#### Produce(metricFilter) batch
+#### Produce batch
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
 MUST return a batch of [Metric points](./data-model.md#metric-points), filtered by the optional
-`metricFilter` parameter. Implementation SHOULD use the filter as early as 
-possible to gain as much performance gain possible (memory allocation, 
+`metricFilter` parameter. Implementation SHOULD use the filter as early as
+possible to gain as much performance gain possible (memory allocation,
 internal metric fetching, etc).
 
 If the batch of [Metric points](./data-model.md#metric-points) includes
@@ -1534,37 +1534,38 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 `MetricProducer`.
 
 **Parameters:**
-- **Status**: [Experimental](../document-status.md) `metricFilter`: An optional [MetricFilter](#metricfilter).
 
+- **Status**: [Experimental](../document-status.md) `metricFilter`: An optional [MetricFilter](#metricfilter).
 
 ## MetricFilter
 
 **Status**: [Experimental](../document-status.md)
 
 `MetricFilter` defines the interface which enables the [MetricReader](#metricreader)'s
-registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#metricproducer) to filter aggregated data points 
-([Metric points](./data-model.md#metric-points)) inside its `Produce` operation. 
-The filtering is done at the [MetricProducer](#metricproducer) for performance reasons, 
+registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#metricproducer) to filter aggregated data points
+([Metric points](./data-model.md#metric-points)) inside its `Produce` operation.
+The filtering is done at the [MetricProducer](#metricproducer) for performance reasons,
 by avoiding allocating a data point, or executing an Asynchronous instrument's callback function.
 
-The `MetricFilter` allows filtering an entire metric stream - rejecting or allowing all its attribute sets - 
+The `MetricFilter` allows filtering an entire metric stream - rejecting or allowing all its attribute sets -
 by its `TestMetric` operation, which accepts the metric stream information
-(scope, name, kind and unit)  and returns an enumeration: `Accept`, `Reject` 
+(scope, name, kind and unit)  and returns an enumeration: `Accept`, `Reject`
 or `Allow_Partial`. If the latter returned, the `TestAttributes` operation
 is to be called per attribute set of that metric stream, returning an enumeration
-determining if the data point for that (metric stream, attributes) pair is to be 
+determining if the data point for that (metric stream, attributes) pair is to be
 allowed in the result of the [MetricProducer](#metricproducer) `Produce` operation.
 
 ### Interface Definition
 
 A `MetricFilter` MUST support the following functions:
 
-#### TestMetric(instrumentationScope, name, kind, unit) 
+#### TestMetric
 
 This operation is called once for every metric stream, in each [MetricProducer](#metricproducer) `Produce`
-operation. 
+operation.
 
 **Parameters:**
+
 - `instrumentationScope`: the metric stream instrumentation scope
 - `name`: the name of the metric stream
 - `kind`: the metric stream kind
@@ -1573,25 +1574,27 @@ operation.
 Returns: `MetricFilterResult`
 
 `MetricFilterResult` is one of:
-* `Accept` - All attributes of the given metric stream are allowed (not to be filtered). 
+
+* `Accept` - All attributes of the given metric stream are allowed (not to be filtered).
    This provides a "short-circuit" as there is no need to call `TestAttributes` operation
    for each attribute set.
 * `Reject` - All attributes of the given metric stream are NOT allowed (filtered out).
   This provides a "short-circuit" as there is no need to call `TestAttributes` operation
-  for each attribute set, and no need to collect those data points be it synchronous or asynchronous: 
+  for each attribute set, and no need to collect those data points be it synchronous or asynchronous:
   e.g. the callback for this given instrument does not need to be invoked.
 * `Accept_Partial` - Some attributes are allowed and some aren't, hence `TestAttributes`
   operation must be called for each attribute set of that instrument.
 
-#### TestAttributes(instrumentationScope, name, kind, unit, attributes)
+#### TestAttributes
 
 An operation which determines for a given metric stream and attribute set if it should be allowed
-or filtered out. 
+or filtered out.
 
-This operation should only be called if `TestMetric` operation returned `Accept_Partial` for 
+This operation should only be called if `TestMetric` operation returned `Accept_Partial` for
 the given metric stream arguments (`instrumentationScope`, `name`, `kind`, `unit`).
 
 **Parameters:**
+
 - `instrumentationScope`: the metric stream instrumentation scope
 - `name`: the name of the metric stream
 - `kind`: the metric stream kind
@@ -1601,6 +1604,7 @@ the given metric stream arguments (`instrumentationScope`, `name`, `kind`, `unit
 Returns: `AttributesFilterResult`
 
 `AttributesFilterResult` is one of:
+
 * `Accept` - This given `attributes` are allowed (not to be filtered).
 * `Reject` - This given `attributes` are NOT allowed (filtered out).
 
