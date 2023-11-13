@@ -1487,7 +1487,6 @@ in-memory state MAY implement the `MetricProducer` interface for convenience.
 `AggregationTemporality` of produced metrics. SDK authors MAY provide utility
 libraries to facilitate conversion between delta and cumulative temporalities.
 
-
 ```text
 +-----------------+            +--------------+
 |                 | Metrics... |              |
@@ -1549,18 +1548,18 @@ The filtering is done at the [MetricProducer](#metricproducer) for performance r
 by avoiding allocating a data point, or executing an Asynchronous instrument's callback function.
 
 The `MetricFilter` allows filtering an entire metric stream - rejecting or allowing all its attribute sets - 
-by its `FilterMetric` operation, which accepts the metric stream information
-(scope, name, kind and unit)  and returns an enumeration: `AllowAllAttributes`, `RejectAllAttributes` 
-or `AllowSomeAttributes`. If the latter returned, the `AllowInstrumentAttributes` operation
-is to be called per attribute set of that metric stream, with its boolean result determining if the 
-data point for that (metric stream, attributes) pair is to be included in the result of the [MetricProducer](#metricproducer)
-`Produce` operation.
+by its `TestMetric` operation, which accepts the metric stream information
+(scope, name, kind and unit)  and returns an enumeration: `Accept`, `Reject` 
+or `Allow_Partial`. If the latter returned, the `TestAttributes` operation
+is to be called per attribute set of that metric stream, returning an enumeration
+determining if the data point for that (metric stream, attributes) pair is to be 
+allowed in the result of the [MetricProducer](#metricproducer) `Produce` operation.
 
 ### Interface Definition
 
 A `MetricFilter` MUST support the following functions:
 
-#### FilterMetric(instrumentationScope, name, kind, unit) 
+#### TestMetric(instrumentationScope, name, kind, unit) 
 
 This operation is called once for every metric stream, in each [MetricProducer](#metricproducer) `Produce`
 operation. 
@@ -1571,25 +1570,25 @@ operation.
 - `kind`: the metric stream kind
 - `unit`: the metric stream unit
 
-Returns: `InstrumentFilterResult`
+Returns: `MetricFilterResult`
 
-`InstrumentFilterResult` is one of:
-* `AllowAllAttributes` - All attributes of the given metric stream are allowed (not to be filtered). 
-   This provides a "short-circuit" as there is no need to call `AllowAttributes` operation
+`MetricFilterResult` is one of:
+* `Accept` - All attributes of the given metric stream are allowed (not to be filtered). 
+   This provides a "short-circuit" as there is no need to call `TestAttributes` operation
    for each attribute set.
-* `RejectAllAttributes` - All attributes of the given metric stream are NOT allowed (filtered out).
-  This provides a "short-circuit" as there is no need to call `AllowAttributes` operation
+* `Reject` - All attributes of the given metric stream are NOT allowed (filtered out).
+  This provides a "short-circuit" as there is no need to call `TestAttributes` operation
   for each attribute set, and no need to collect those data points be it synchronous or asynchronous: 
   e.g. the callback for this given instrument does not need to be invoked.
-* `AllowSomeAttributes` - Some attributes are allowed and some aren't, hence `AllowAttributes`
+* `Accept_Partial` - Some attributes are allowed and some aren't, hence `TestAttributes`
   operation must be called for each attribute set of that instrument.
 
-#### AllowAttributes(instrumentationScope, name, kind, unit, attributes)
+#### TestAttributes(instrumentationScope, name, kind, unit, attributes)
 
-A boolean function, which determines for a given metric stream and attribute set if it should be allowed
-(true) or filtered out (false). 
+An operation which determines for a given metric stream and attribute set if it should be allowed
+or filtered out. 
 
-This function should only be called if `FilterMetric` operation returned `AllowSomeAttributes` for 
+This operation should only be called if `TestMetric` operation returned `Accept_Partial` for 
 the given metric stream arguments (`instrumentationScope`, `name`, `kind`, `unit`).
 
 **Parameters:**
@@ -1599,6 +1598,11 @@ the given metric stream arguments (`instrumentationScope`, `name`, `kind`, `unit
 - `unit`: the metric stream unit
 - `attributes`: the attributes
 
+Returns: `AttributesFilterResult`
+
+`AttributesFilterResult` is one of:
+* `Accept` - This given `attributes` are allowed (not to be filtered).
+* `Reject` - This given `attributes` are NOT allowed (filtered out).
 
 ## Defaults and configuration
 
