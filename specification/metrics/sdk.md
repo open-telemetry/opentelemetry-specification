@@ -1544,8 +1544,7 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 `MetricFilter` defines the interface which enables the [MetricReader](#metricreader)'s
 registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#metricproducer) to filter aggregated data points
 ([Metric points](./data-model.md#metric-points)) inside its `Produce` operation.
-The filtering is done at the [MetricProducer](#metricproducer) for performance reasons,
-by avoiding allocating a data point, or executing an Asynchronous instrument's callback function.
+The filtering is done at the [MetricProducer](#metricproducer) for performance reasons.
 
 The `MetricFilter` allows filtering an entire metric stream - dropping or allowing all its attribute sets -
 by its `TestMetric` operation, which accepts the metric stream information
