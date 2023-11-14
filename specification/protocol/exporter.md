@@ -23,7 +23,7 @@ Each configuration option MUST be overridable by a signal specific option.
   The option SHOULD honor the following [URL components](https://datatracker.ietf.org/doc/html/rfc3986#section-3):
   - userinfo
 
-  The option MAY not honor the following [URL components](https://datatracker.ietf.org/doc/html/rfc3986#section-3):
+  The option MAY ignore the following [URL components](https://datatracker.ietf.org/doc/html/rfc3986#section-3):
   - query
   - fragment
 
