@@ -1535,7 +1535,7 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 
 **Parameters:**
 
-- **Status**: [Experimental](../document-status.md) `metricFilter`: An optional [MetricFilter](#metricfilter).
+**Status**: [Experimental](../document-status.md) `metricFilter`: An optional [MetricFilter](#metricfilter).
 
 ## MetricFilter
 
@@ -1547,9 +1547,9 @@ registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#met
 The filtering is done at the [MetricProducer](#metricproducer) for performance reasons,
 by avoiding allocating a data point, or executing an Asynchronous instrument's callback function.
 
-The `MetricFilter` allows filtering an entire metric stream - rejecting or allowing all its attribute sets -
+The `MetricFilter` allows filtering an entire metric stream - dropping or allowing all its attribute sets -
 by its `TestMetric` operation, which accepts the metric stream information
-(scope, name, kind and unit)  and returns an enumeration: `Accept`, `Reject`
+(scope, name, kind and unit)  and returns an enumeration: `Accept`, `Drop`
 or `Allow_Partial`. If the latter returned, the `TestAttributes` operation
 is to be called per attribute set of that metric stream, returning an enumeration
 determining if the data point for that (metric stream, attributes) pair is to be
@@ -1578,7 +1578,7 @@ Returns: `MetricFilterResult`
 * `Accept` - All attributes of the given metric stream are allowed (not to be filtered).
    This provides a "short-circuit" as there is no need to call `TestAttributes` operation
    for each attribute set.
-* `Reject` - All attributes of the given metric stream are NOT allowed (filtered out).
+* `Drop` - All attributes of the given metric stream are NOT allowed (filtered out - dropped).
   This provides a "short-circuit" as there is no need to call `TestAttributes` operation
   for each attribute set, and no need to collect those data points be it synchronous or asynchronous:
   e.g. the callback for this given instrument does not need to be invoked.
@@ -1606,7 +1606,7 @@ Returns: `AttributesFilterResult`
 `AttributesFilterResult` is one of:
 
 * `Accept` - This given `attributes` are allowed (not to be filtered).
-* `Reject` - This given `attributes` are NOT allowed (filtered out).
+* `Drop` - This given `attributes` are NOT allowed (filtered out - dropped).
 
 ## Defaults and configuration
 
