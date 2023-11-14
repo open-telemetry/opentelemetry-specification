@@ -28,4 +28,3 @@ including the
 
 A Prometheus Exporter MAY offer configuration to add resource attributes as metric attributes.
 By default, it MUST NOT add any resource attributes as metric attributes.
-
