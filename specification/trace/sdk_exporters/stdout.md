@@ -18,5 +18,5 @@ If a language provides a mechanism to automatically configure a
 [Span processor](../sdk.md#span-processor) to pair with the associated
 exporter (e.g., using the [`OTEL_TRACES_EXPORTER` environment
 variable](../../configuration/sdk-environment-variables.md#exporter-selection)), by
-default the standard output exporter MUST be paired with a [batching
-processor](../sdk.md#batching-processor).
+default the standard output exporter SHOULD be paired with a [simple
+processor](../sdk.md#simple-processor).
