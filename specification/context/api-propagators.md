@@ -333,9 +333,9 @@ Required parameters:
 The official list of propagators that MUST be maintained by the OpenTelemetry
 organization and MUST be distributed as OpenTelemetry extension packages:
 
-* [W3C TraceContext](https://www.w3.org/TR/trace-context/). MAY alternatively
+* [W3C TraceContext](https://www.w3.org/TR/trace-context). MAY alternatively
   be distributed as part of the OpenTelemetry API.
-* [W3C Baggage](https://w3c.github.io/baggage). MAY alternatively
+* [W3C Baggage](https://www.w3.org/TR/baggage). MAY alternatively
   be distributed as part of the OpenTelemetry API.
 * [B3](https://github.com/openzipkin/b3-propagation).
 * [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
