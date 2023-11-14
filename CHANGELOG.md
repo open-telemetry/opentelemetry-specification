@@ -19,7 +19,7 @@ release.
 
 ### OpenTelemetry Protocol
 
-- Clarify exporter's endpoints configuration options handling.
+- Clarify HTTP endpoint configuration option handling.
   ([#3739](https://github.com/open-telemetry/opentelemetry-specification/pull/3739))
 
 ### Compatibility
