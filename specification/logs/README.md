@@ -284,7 +284,7 @@ auto-instrumenting solutions that modify trace logging libraries used by the
 application to automatically output the trace context such as the trace id or
 span id with every log statement. The trace context can be automatically
 extracted from incoming requests if standard compliant request propagation is
-used, e.g. via [W3C TraceContext](https://w3c.github.io/trace-context/). In
+used, e.g. via [W3C TraceContext](https://www.w3.org/TR/trace-context). In
 addition, the requests outgoing from the application may be injected with the
 same trace context data, thus resulting in context propagation through the
 application and creating an opportunity to have full trace context in logs
