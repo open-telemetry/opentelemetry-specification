@@ -37,6 +37,8 @@ release.
 
 - Add a new AddLink() operation to Span (experimental).
   ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
+- Stabilize SDK exception handling.
+  ([#????](https://github.com/open-telemetry/opentelemetry-specification/pull/????))
 
 ### Metrics
 
