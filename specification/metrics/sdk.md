@@ -1020,9 +1020,9 @@ aggregation collection, or use a more optimal implementation.
 
 `Exemplar`s MUST retain any attributes available in the measurement that
 are not preserved by aggregation or view configuration for the associated
-timeseries. Specifically, at a minimum, joining together attributes on an
-`Exemplar` with those available on its associated metric data point should
-result in the full set of attributes from the original sample measurement.
+timeseries. Joining together attributes on an `Exemplar` with
+those available on its associated metric data point should result in the
+full set of attributes from the original sample measurement.
 
 The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
