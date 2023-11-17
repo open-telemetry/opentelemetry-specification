@@ -1008,9 +1008,9 @@ The "offer" method MAY accept a filtered subset of `Attributes` which diverge
 from the timeseries the reservoir is associated with. This MUST be clearly
 documented in the API interface and the reservoir MUST be given the `Attributes`
 associated with its timeseries point either at construction so that additonal
-sampling performed by the reservoir has access to all attributes in the "offer"
-method. SDK authors are encouraged to benchmark whether this option works best
-for their implementation.
+sampling performed by the reservoir has access to all attributes from a
+measurement in the "offer" method. SDK authors are encouraged to benchmark
+whether this option works best for their implementation.
 
 The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
 to abide by the `AggregationTemporality` of any metric point they are recorded
