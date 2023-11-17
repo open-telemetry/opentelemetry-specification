@@ -30,12 +30,7 @@ From OpenTelemetry's perspective LogRecords and Events are both represented
 using the same [data model](./data-model.md).
 
 However, OpenTelemetry does recognize a subtle semantic difference between
-LogRecords and Events: Events are LogRecords which have a unique `name` that
-includes a `namespace`. The `namespace` and name are separated by a period.
-The unique `name` defined a particular class or type of event. All events with
-the same `name` follow the same schema which assists in analysis in observability
-platforms. Events are described in more detail in the
-[semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+LogRecords and Events: Events are LogRecords which have a `name` which uniquely defines a particular class or type of event. All events with the same `name` follow the same schema which assists in analysis in observability platforms. Events are described in more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
 While the logging space has a diverse legacy with many existing logging
 libraries in different languages, there is not ubiquitous alignment with
