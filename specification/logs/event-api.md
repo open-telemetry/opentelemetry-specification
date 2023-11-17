@@ -104,8 +104,9 @@ specified when [creating the EventLogger](#create-eventlogger) as follows:
 * If provided by the user, the `Timestamp` MUST be used to set
   the [Timestamp](./data-model.md#field-timestamp). If not provided, `Timestamp`
   MUST be set to the current time when [emit](#emit-event) was called.
-* The [Observed Timestamp](./data-model.md#field-observedtimestamp) MUST be set
-  to the current time when [emit](#emit-event) was called.
+* The [Observed Timestamp](./data-model.md#field-observedtimestamp) MUST not be
+  set. (NOTE: [emit a logRecord](./bridge-api.md#emit-a-logrecord) will
+  set `ObservedTimestamp` to the current time when unset.)
 * If provided by the user, the `Context` MUST be used to set
   the [Context](./bridge-api.md#emit-a-logrecord). If not provided, `Context`
   MUST be set to the current Context.
