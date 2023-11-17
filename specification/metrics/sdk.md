@@ -1066,7 +1066,7 @@ cycle. For the above example, that would mean that the `num_measurements_seen`
 count is reset every time the reservoir is collected.
 
 This Exemplar reservoir MAY take a configuration parameter for the size of the
-reservoir pool. If no size configuration is provided, the default size MAY be
+reservoir. If no size configuration is provided, the default size MAY be
 the number of possible concurrent threads (e.g. numer of CPUs) to help reduce
 contention. Otherwise, a default size of `1` SHOULD be used.
 
