@@ -11,13 +11,15 @@ release.
 
 ### Traces
 
-- Add a new AddLink() operation to Span (experimental).
-  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
+- Add definition for standard output span exporter.
+  ([#3740](https://github.com/open-telemetry/opentelemetry-specification/pull/3740))
 
 ### Metrics
 
 ### Logs
 
+- Add definition for standard output log record exporter.
+  ([#3741](https://github.com/open-telemetry/opentelemetry-specification/pull/3741))
 - BREAKING: Remove `event.domain` from log event attributes.
   ([#473](https://github.com/open-telemetry/semantic-conventions/pull/473))
 - BREAKING: Change `event.name` definition to include `namespace`.
@@ -27,11 +29,46 @@ release.
 
 ### OpenTelemetry Protocol
 
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.27.0 (2023-11-08)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Add a new AddLink() operation to Span (experimental).
+  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
+
+### Metrics
+
+- No changes.
+
+### Logs
+
+- No changes.
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
 - New exporter implementations do not need to support
   `OTEL_EXPORTER_OTLP_SPAN_INSECURE` and `OTEL_EXPORTER_OTLP_METRIC_INSECURE`.
   ([#3719](https://github.com/open-telemetry/opentelemetry-specification/pull/3719))
 
 ### Compatibility
+
+- No changes.
 
 ### SDK Configuration
 
@@ -46,6 +83,8 @@ release.
   ([#3713](https://github.com/open-telemetry/opentelemetry-specification/pull/3713))
 
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.26.0 (2023-10-10)
 
