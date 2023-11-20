@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add definition for standard output span exporter.
+  ([#3740](https://github.com/open-telemetry/opentelemetry-specification/pull/3740))
+
 ### Metrics
 
 - Add optional configuration for Prometheus exporters to promote resource attributes to metric attributes
