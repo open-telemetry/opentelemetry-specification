@@ -79,7 +79,7 @@ This function MAY be named `logEvent`.
 **Parameters:**
 
 * The `Name` of the Event.
-* The (`AnyValue`) `Payload` of the Event.
+* The (`AnyValue`) (optional) `Payload` of the Event.
 * The `Timestamp` (optional) of the Event.
 * The [Context](../context/README.md) (optional) associated with the Event.
 * The `SeverityNumber` (optional) of the Event.
@@ -97,10 +97,12 @@ specified when [creating the EventLogger](#create-eventlogger) as follows:
   implementation MUST ensure that the `event_domain` takes precedence over any
   additional `Attributes` recorded with the Event.
 * The `Name` MUST be used to set
-  the `event.name` [Attribute](./data-model.md#field-attributes). The
-  implementation MUST ensure that the `event.name` takes precedence over any
-  additional `Attributes` recorded with the Event.
-* The `Payload` MUST be used to set the [Body](./data-model.md#field-body).
+  the `event.name` [Attribute](./data-model.md#field-attributes). If
+  the `Attributes` provided by the user contain an `event.name` attribute the
+  value provided in the `Name` takes precedence.
+* If provided by the user, the `Payload` MUST be used to set
+  the [Body](./data-model.md#field-body). If not provided, `Body` MUST not be
+  set.
 * If provided by the user, the `Timestamp` MUST be used to set
   the [Timestamp](./data-model.md#field-timestamp). If not provided, `Timestamp`
   MUST be set to the current time when [emit](#emit-event) was called.
@@ -112,7 +114,7 @@ specified when [creating the EventLogger](#create-eventlogger) as follows:
   MUST be set to the current Context.
 * If provided by the user, the `SeverityNumber` MUST be used to set
   the [Severity Number](./data-model.md#field-severitynumber) when emitting the
-  logRecord. If not provided, `SeverityNumber` MUST be set to `10`.
+  logRecord. If not provided, `SeverityNumber` MUST be set to `9`.
 * The [Severity Text](./data-model.md#field-severitytext) MUST not be set.
 * If provided by the user, the `Attributes` MUST be used to set
   the [Attributes](./data-model.md#field-attributes). The user
