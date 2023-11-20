@@ -21,9 +21,9 @@ release.
 - Add definition for standard output log record exporter.
   ([#3741](https://github.com/open-telemetry/opentelemetry-specification/pull/3741))
 - BREAKING: Remove `event.domain` from log event attributes.
-  ([#473](https://github.com/open-telemetry/semantic-conventions/pull/473))
+  ([#3749](https://github.com/open-telemetry/opentelemetry-specification/pull/3749))
 - BREAKING: Change `event.name` definition to include `namespace`.
-  ([#473](https://github.com/open-telemetry/semantic-conventions/pull/473))
+  ([#3749](https://github.com/open-telemetry/opentelemetry-specification/pull/3749))
 
 ### Resource
 
