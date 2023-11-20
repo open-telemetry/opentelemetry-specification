@@ -18,6 +18,11 @@ release.
 
 ### Logs
 
+- BREAKING: Remove `event.domain` from log event attributes.
+  ([#473](https://github.com/open-telemetry/semantic-conventions/pull/473))
+- BREAKING: Change `event.name` definition to include `namespace`.
+  ([#473](https://github.com/open-telemetry/semantic-conventions/pull/473))
+
 ### Resource
 
 ### OpenTelemetry Protocol
