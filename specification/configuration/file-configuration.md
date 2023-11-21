@@ -68,14 +68,14 @@ Configuration files support environment variables substitution for references
 which match the following regular expression:
 
 ```regexp
-\$\{env:(?<ENV_NAME>[a-zA-Z_]+[a-zA-Z0-9_]*)}
+\$\{(?<ENV_NAME>[a-zA-Z_]+[a-zA-Z0-9_]*)}
 ```
 
 The `ENV_NAME` MUST start with an alphabetic or `_` character, and is followed
 by 0 or more alphanumeric or `_` characters.
 
-For example, `${env:API_KEY}` is valid, while `${env:1API_KEY}`
-and `${env:API_$KEY}` are invalid.
+For example, `${API_KEY}` is valid, while `${1API_KEY}` and `${API_$KEY}` are
+invalid.
 
 Environment variable substitution MUST only apply to scalar values. NOTE,
 mapping keys are not candidates for substitution.
@@ -98,15 +98,15 @@ export FLOAT_VALUE="1.1"
 ```
 
 ```yaml
-string_key: ${env:STRING_VALUE}                               # Valid reference to STRING_VALUE
-other_string_key: "${env:STRING_VALUE}"                       # Valid reference to STRING_VALUE inside double quotes
-another_string_key: "${env:BOOl_VALUE}"                       # Valid reference to BOOl_VALUE inside double quotes
-bool_key: ${env:BOOl_VALUE}                                   # Valid reference to BOOl_VALUE
-int_key: ${env:INT_VALUE}                                     # Valid reference to INT_VALUE
-float_key: ${env:FLOAT_VALUE}                                 # Valid reference to FLOAT_VALUE
-combo_string_key: foo ${env:STRING_VALUE} ${env:FLOAT_VALUE}  # Valid reference to STRING_VALUE and FLOAT_VALUE
-undefined_key: ${env:UNDEFINED_KEY}                           # Invalid reference, UNDEFINED_KEY is not defined and is replaced with ""
-${env:STRING_VALUE}: value                                    # Invalid reference, substitution is not valid in mapping keys and reference is ignored
+string_key: ${STRING_VALUE}                           # Valid reference to STRING_VALUE
+other_string_key: "${STRING_VALUE}"                   # Valid reference to STRING_VALUE inside double quotes
+another_string_key: "${BOOl_VALUE}"                   # Valid reference to BOOl_VALUE inside double quotes
+bool_key: ${BOOl_VALUE}                               # Valid reference to BOOl_VALUE
+int_key: ${INT_VALUE}                                 # Valid reference to INT_VALUE
+float_key: ${FLOAT_VALUE}                             # Valid reference to FLOAT_VALUE
+combo_string_key: foo ${STRING_VALUE} ${FLOAT_VALUE}  # Valid reference to STRING_VALUE and FLOAT_VALUE
+undefined_key: ${UNDEFINED_KEY}                       # Invalid reference, UNDEFINED_KEY is not defined and is replaced with ""
+${STRING_VALUE}: value                                # Invalid reference, substitution is not valid in mapping keys and reference is ignored
 ```
 
 Environment variable substitution results in the following YAML:
@@ -120,7 +120,7 @@ int_key: 1                       # Interpreted as type int, tag URI tag:yaml.org
 float_key: 1.1                   # Interpreted as type float, tag URI tag:yaml.org,2002:float
 combo_string_key: foo value 1.1  # Interpreted as type string, tag URI tag:yaml.org,2002:str
 undefined_key:                   # Interpreted as type null, tag URI tag:yaml.org,2002:null
-${env:STRING_VALUE}: value       # Interpreted as type string, tag URI tag:yaml.org,2002:str
+${STRING_VALUE}: value           # Interpreted as type string, tag URI tag:yaml.org,2002:str
 ```
 
 ## SDK Configuration
