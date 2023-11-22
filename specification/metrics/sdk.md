@@ -1571,7 +1571,7 @@ operation.
 
 - `instrumentationScope`: the metric stream instrumentation scope
 - `name`: the name of the metric stream
-- `kind`: the metric stream [kind](./data-model.md#point-kinds) 
+- `kind`: the metric stream [kind](./data-model.md#point-kinds)
 - `unit`: the metric stream unit
 
 Returns: `MetricFilterResult`
