@@ -30,4 +30,4 @@ A Prometheus Exporter MAY offer configuration to add resource attributes as metr
 By default, it MUST NOT add any resource attributes as metric attributes.
 The configuration SHOULD allow the user to select which resource attributes to copy (e.g.
 include / exclude or regular expression based). Copied Resource attributes MUST NOT be
-excluded from target_info, if target_info is enabled.
+excluded from target_info.
