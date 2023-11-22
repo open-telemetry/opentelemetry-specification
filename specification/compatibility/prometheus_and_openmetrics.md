@@ -386,7 +386,7 @@ OpenMetrics exemplar unless they would exceed the OpenMetrics
 In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to
 a single [`target_info` metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 if the resource is not [empty](../resource/sdk.md#the-empty-resource).
-The resource attributes MAY be copied to labels of exported metric families,
+The resource attributes MAY be copied to labels of exported metric families
 if required by the exporter configuration, or MUST be dropped. The target_info metric MUST be an info-typed
 metric whose labels MUST include the resource attributes, and MUST NOT include
 any other labels. There MUST be at most one target_info metric exposed on an SDK
