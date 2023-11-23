@@ -16,9 +16,6 @@ release.
 
 ### Metrics
 
-- - Define Experimental MetricProducer as a third-party provider of metric data to MetricReaders.
-    ([#2951](https://github.com/open-telemetry/opentelemetry-specification/pull/2951))
-
 - Define experimental MetricFilter as a mechanism to filter collected metrics by the MetricReader
   ([#3566](https://github.com/open-telemetry/opentelemetry-specification/pull/3566))
 
