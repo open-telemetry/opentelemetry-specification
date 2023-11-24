@@ -237,6 +237,8 @@ Known values for `OTEL_TRACES_EXPORTER` are:
 - `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"console`: [Standard Output](../trace/sdk_exporters/stdout.md)
+- `"logging`: [Standard Output](../trace/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
+NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for traces.
 
 Known values for `OTEL_METRICS_EXPORTER` are:
@@ -244,16 +246,17 @@ Known values for `OTEL_METRICS_EXPORTER` are:
 - `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 - `"console`: [Standard Output](../metrics/sdk_exporters/stdout.md)
+- `"logging`: [Standard Output](../metrics/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
+NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for metrics.
 
 Known values for `OTEL_LOGS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"console`: [Standard Output](../logs/sdk_exporters/stdout.md)
+- `"logging`: [Standard Output](../logs/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
+NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for logs.
-
-Note that `"logging"` is a reserved keyword and shouldn't be assigned for future use. Implementations that use `"logging"` as a value to configure the
-standard output exporter MAY continue to do so for backwards compatibility.
 
 ## Metrics SDK Configuration
 
