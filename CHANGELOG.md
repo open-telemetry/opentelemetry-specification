@@ -11,9 +11,15 @@ release.
 
 ### Traces
 
+- Add definition for standard output span exporter.
+  ([#3740](https://github.com/open-telemetry/opentelemetry-specification/pull/3740))
+
 ### Metrics
 
 ### Logs
+
+- Add definition for standard output log record exporter.
+  ([#3741](https://github.com/open-telemetry/opentelemetry-specification/pull/3741))
 
 ### Resource
 
