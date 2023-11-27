@@ -25,3 +25,9 @@ A Prometheus Exporter MAY support [OpenMetrics Text
 Format](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#openmetrics-text-format),
 including the
 [Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars).
+
+A Prometheus Exporter MAY offer configuration to add resource attributes as metric attributes.
+By default, it MUST NOT add any resource attributes as metric attributes.
+The configuration SHOULD allow the user to select which resource attributes to copy (e.g.
+include / exclude or regular expression based). Copied Resource attributes MUST NOT be
+excluded from target_info.
