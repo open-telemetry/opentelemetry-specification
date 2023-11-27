@@ -31,3 +31,7 @@ By default, it MUST NOT add any resource attributes as metric attributes.
 The configuration SHOULD allow the user to select which resource attributes to copy (e.g.
 include / exclude or regular expression based). Copied Resource attributes MUST NOT be
 excluded from target_info.
+
+A Prometheus Exporter MAY support a configuration option to produce metrics without a [unit suffix](../../compatibility/prometheus_and_openmetrics.md#metric-metadata).
+
+A Prometheus Exporter MAY support a configuration option to produce metrics without a [type suffix](../../compatibility/prometheus_and_openmetrics.md#metric-metadata).
