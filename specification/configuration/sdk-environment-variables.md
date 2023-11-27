@@ -253,8 +253,8 @@ NOT be supported by new implementations.
 Known values for `OTEL_LOGS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
-- `"console`: [Standard Output](../logs/sdk_exporters/stdout.md)
-- `"logging`: [Standard Output](../logs/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
+- `"console"`: [Standard Output](../logs/sdk_exporters/stdout.md)
+- `"logging"`: [Standard Output](../logs/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
 NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for logs.
 
