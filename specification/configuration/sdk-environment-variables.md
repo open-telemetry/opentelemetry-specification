@@ -245,8 +245,8 @@ Known values for `OTEL_METRICS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
-- `"console`: [Standard Output](../metrics/sdk_exporters/stdout.md)
-- `"logging`: [Standard Output](../metrics/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
+- `"console"`: [Standard Output](../metrics/sdk_exporters/stdout.md)
+- `"logging"`: [Standard Output](../metrics/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
 NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for metrics.
 
