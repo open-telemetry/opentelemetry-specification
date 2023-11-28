@@ -25,10 +25,15 @@ release.
 
 - Add definition for standard output log record exporter.
   ([#3741](https://github.com/open-telemetry/opentelemetry-specification/pull/3741))
+- BREAKING: Change `event.name` definition to include `namespace` and removed `event.domain` from log event attributes.
+  ([#3749](https://github.com/open-telemetry/opentelemetry-specification/pull/3749))
 
 ### Resource
 
 ### OpenTelemetry Protocol
+
+- Clarify HTTP endpoint configuration option handling.
+  ([#3739](https://github.com/open-telemetry/opentelemetry-specification/pull/3739))
 
 ### Compatibility
 
