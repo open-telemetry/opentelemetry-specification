@@ -31,11 +31,10 @@ From OpenTelemetry's perspective LogRecords and Events are both represented
 using the same [data model](./data-model.md).
 
 However, OpenTelemetry does recognize a subtle semantic difference between
-LogRecords and Events: Events are LogRecords which have a `name` and `domain`.
-Within a particular `domain`, the `name` uniquely defines a particular class or
-type of event. Events with the same `domain` / `name` have `Payloads` that
-conform to the same schema, which assists in analysis in observability platforms.
-Events are described in more detail in
+LogRecords and Events: Events are LogRecords which have a `name` which uniquely
+defines a particular class or type of event. All events with the same `name`
+have `Payloads` that conform to the same schema, which assists in analysis in
+observability platforms. Events are described in more detail in
 the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
 While the logging space has a diverse legacy with many existing logging
@@ -67,8 +66,6 @@ on `EventLogger`.
 
 * `logger` - the delegate [Logger](./bridge-api.md#logger) used to emit `Events`
   as `LogRecord`s.
-* `event_domain` - the domain of emitted events, used to set the `event.domain`
-  attribute.
 
 #### Emit Event
 
@@ -78,12 +75,15 @@ This function MAY be named `logEvent`.
 
 **Parameters:**
 
-* The `Name` of the Event.
+* The `Name` of the Event, as described
+  in [event.name semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 * The (`AnyValue`) (optional) `Payload` of the Event.
 * The `Timestamp` (optional) of the Event.
 * The [Context](../context/README.md) (optional) associated with the Event.
 * The `SeverityNumber` (optional) of the Event.
-* The `Attributes` (optional) of the Event. Event `Attributes` provide additional details about the Event which are not part of the well-defined `Payload`.
+* The `Attributes` (optional) of the Event. Event `Attributes` provide
+  additional details about the Event which are not part of the
+  well-defined `Payload`.
 
 **Implementation Requirements:**
 
@@ -91,11 +91,6 @@ The implementation MUST use the parameters
 to [emit a logRecord](./bridge-api.md#emit-a-logrecord) using the `logger`
 specified when [creating the EventLogger](#create-eventlogger) as follows:
 
-* The `event_domain` specified
-  when [creating the EventLogger](#create-eventlogger) MUST be used to set
-  the `event.domain` [attribute](./data-model.md#field-attributes). The
-  implementation MUST ensure that the `event_domain` takes precedence over any
-  additional `Attributes` recorded with the Event.
 * The `Name` MUST be used to set
   the `event.name` [Attribute](./data-model.md#field-attributes). If
   the `Attributes` provided by the user contain an `event.name` attribute the
@@ -114,7 +109,8 @@ specified when [creating the EventLogger](#create-eventlogger) as follows:
   MUST be set to the current Context.
 * If provided by the user, the `SeverityNumber` MUST be used to set
   the [Severity Number](./data-model.md#field-severitynumber) when emitting the
-  logRecord. If not provided, `SeverityNumber` MUST be set to `9`.
+  logRecord. If not provided, `SeverityNumber` MUST be set
+  to `SEVERITY_NUMBER_INFO=9`.
 * The [Severity Text](./data-model.md#field-severitytext) MUST not be set.
 * If provided by the user, the `Attributes` MUST be used to set
   the [Attributes](./data-model.md#field-attributes). The user

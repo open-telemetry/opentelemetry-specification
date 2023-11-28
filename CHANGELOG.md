@@ -16,11 +16,22 @@ release.
 
 ### Metrics
 
+- Add optional configuration for Prometheus exporters to promote resource attributes to metric attributes
+  ([#3761](https://github.com/open-telemetry/opentelemetry-specification/pull/3761))
+
 ### Logs
+
+- Add definition for standard output log record exporter.
+  ([#3741](https://github.com/open-telemetry/opentelemetry-specification/pull/3741))
+- BREAKING: Change `event.name` definition to include `namespace` and removed `event.domain` from log event attributes.
+  ([#3749](https://github.com/open-telemetry/opentelemetry-specification/pull/3749))
 
 ### Resource
 
 ### OpenTelemetry Protocol
+
+- Clarify HTTP endpoint configuration option handling.
+  ([#3739](https://github.com/open-telemetry/opentelemetry-specification/pull/3739))
 
 ### Compatibility
 
@@ -74,6 +85,8 @@ release.
 
 - Rename/replace `(client|server).socket.(address|port)` attributes with `network.(peer|local).(address|port)`.
   ([#3713](https://github.com/open-telemetry/opentelemetry-specification/pull/3713))
+- Add `console` as an exporter type that is supported via environment variable configuration.
+  ([#3742](https://github.com/open-telemetry/opentelemetry-specification/pull/3742))
 
 ### Supplementary Guidelines
 
