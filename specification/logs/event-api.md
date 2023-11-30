@@ -30,11 +30,11 @@ From OpenTelemetry's perspective LogRecords and Events are both represented
 using the same [data model](./data-model.md).
 
 However, OpenTelemetry does recognize a subtle semantic difference between
-LogRecords and Events: Events are LogRecords which have a `name` and `domain`.
-Within a particular `domain`, the `name` uniquely defines a particular class or
-type of event. Events with the same `domain` / `name` follow the same schema
-which assists in analysis in observability platforms. Events are described in
-more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+LogRecords and Events: Events are LogRecords which have a `name` which uniquely
+defines a particular class or type of event. All events with the same `name`
+follow the same schema which assists in analysis in observability platforms.
+Events are described in more detail in the
+[semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
 While the logging space has a diverse legacy with many existing logging
 libraries in different languages, there is not ubiquitous alignment with
@@ -65,8 +65,6 @@ on `EventLogger`.
 
 * `logger` - the delegate [Logger](./bridge-api.md#logger) used to emit `Events`
   as `LogRecord`s.
-* `event_domain` - the domain of emitted events, used to set the `event.domain`
-  attribute.
 
 #### Emit Event
 
@@ -80,7 +78,8 @@ This function MAY be named `logEvent`.
   attribute with the key `event.name`. Care MUST be taken by the implementation
   to not override or delete this attribute while the Event is emitted to
   preserve its identity.
-* `logRecord` - the [LogRecord](./data-model.md#log-and-event-record-definition) representing the Event.
+* `logRecord` - the [LogRecord](./data-model.md#log-and-event-record-definition) representing
+  the Event.
 
 **Implementation Requirements:**
 
@@ -88,7 +87,4 @@ The implementation MUST [emit](./bridge-api.md#emit-a-logrecord) the `logRecord`
 the `logger` specified when [creating the EventLogger](#create-eventlogger)
 after making the following changes:
 
-* The `event_domain` specified
-  when [creating the EventLogger](#create-eventlogger) MUST be set as
-  the `event.domain` attribute on the `logRecord`.
 * The `event_name` MUST be set as the `event.name` attribute on the `logRecord`.
