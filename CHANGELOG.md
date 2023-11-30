@@ -25,6 +25,10 @@ release.
   ([#3741](https://github.com/open-telemetry/opentelemetry-specification/pull/3741))
 - BREAKING: Change `event.name` definition to include `namespace` and removed `event.domain` from log event attributes.
   ([#3749](https://github.com/open-telemetry/opentelemetry-specification/pull/3749))
+- BREAKING: Refine the arguments of the emit Event API. Instead of accepting
+  a `LogRecord`, the individual arguments are enumerated along with the
+  implementation requirements on how those arguments map to `LogRecord`.
+  ([#3772](https://github.com/open-telemetry/opentelemetry-specification/pull/3772))
 
 ### Resource
 
