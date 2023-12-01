@@ -11,16 +11,33 @@ release.
 
 ### Traces
 
+- Add definition for standard output span exporter.
+  ([#3740](https://github.com/open-telemetry/opentelemetry-specification/pull/3740))
+
 ### Metrics
 
+- Add optional configuration for Prometheus exporters to promote resource attributes to metric attributes
+  ([#3761](https://github.com/open-telemetry/opentelemetry-specification/pull/3761))
 - Clarifications and flexibility in Exemplar speicification.
   ([#3760](https://github.com/open-telemetry/opentelemetry-specification/pull/3760))
 
 ### Logs
 
+- Add definition for standard output log record exporter.
+  ([#3741](https://github.com/open-telemetry/opentelemetry-specification/pull/3741))
+- BREAKING: Change `event.name` definition to include `namespace` and removed `event.domain` from log event attributes.
+  ([#3749](https://github.com/open-telemetry/opentelemetry-specification/pull/3749))
+- BREAKING: Refine the arguments of the emit Event API. Instead of accepting
+  a `LogRecord`, the individual arguments are enumerated along with the
+  implementation requirements on how those arguments map to `LogRecord`.
+  ([#3772](https://github.com/open-telemetry/opentelemetry-specification/pull/3772))
+
 ### Resource
 
 ### OpenTelemetry Protocol
+
+- Clarify HTTP endpoint configuration option handling.
+  ([#3739](https://github.com/open-telemetry/opentelemetry-specification/pull/3739))
 
 ### Compatibility
 
@@ -40,6 +57,8 @@ release.
 
 - Add a new AddLink() operation to Span (experimental).
   ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
+- Stabilize how exceptions are recorded using the Trace SDK.
+  ([#3769](https://github.com/open-telemetry/opentelemetry-specification/pull/3769))
 
 ### Metrics
 
@@ -74,6 +93,8 @@ release.
 
 - Rename/replace `(client|server).socket.(address|port)` attributes with `network.(peer|local).(address|port)`.
   ([#3713](https://github.com/open-telemetry/opentelemetry-specification/pull/3713))
+- Add `console` as an exporter type that is supported via environment variable configuration.
+  ([#3742](https://github.com/open-telemetry/opentelemetry-specification/pull/3742))
 
 ### Supplementary Guidelines
 
