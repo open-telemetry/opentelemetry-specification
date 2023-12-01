@@ -54,6 +54,7 @@ linkTitle: SDK
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceBased](#tracebased)
+    + [Configuration](#configuration-2)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
     + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
@@ -972,10 +973,20 @@ Using this ExemplarFilter is as good as disabling Exemplar feature.
 An ExemplarFilter which makes those measurements eligible for being an
 Exemplar, which are recorded in the context of a sampled parent span.
 
+#### Configuration
+
+The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
+an SDK. The default value SHOULD be `TraceBased`. The filter configuration
+SHOULD follow the [environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
+
 ### ExemplarReservoir
 
 The `ExemplarReservoir` interface MUST provide a method to offer measurements
 to the reservoir and another to collect accumulated Exemplars.
+
+A new `ExemplarReservoir` MUST be created for every known timeseries data point,
+as determined by aggregation and view configuration. This data point, and its
+set of defining attributes, are referred to as the associated timeseries point.
 
 The "offer" method SHOULD accept measurements, including:
 
@@ -993,18 +1004,26 @@ span context and baggage can be inspected at this point.
 The "offer" method does not need to store all measurements it is given and
 MAY further sample beyond the `ExemplarFilter`.
 
+The "offer" method MAY accept a filtered subset of `Attributes` which diverge
+from the timeseries the reservoir is associated with. This MUST be clearly
+documented in the API interface and the reservoir MUST be given the `Attributes`
+associated with its timeseries point either at construction so that additional
+sampling performed by the reservoir has access to all attributes from a
+measurement in the "offer" method. SDK authors are encouraged to benchmark
+whether this option works best for their implementation.
+
 The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
 to abide by the `AggregationTemporality` of any metric point they are recorded
 with. In other words, Exemplars reported against a metric data point SHOULD have
-occurred within the start/stop timestamps of that point.  SDKs are free to
+occurred within the start/stop timestamps of that point. SDKs are free to
 decide whether "collect" should also reset internal storage for delta temporal
 aggregation collection, or use a more optimal implementation.
 
 `Exemplar`s MUST retain any attributes available in the measurement that
-are not preserved by aggregation or view configuration. Specifically, at a
-minimum, joining together attributes on an `Exemplar` with those available
-on its associated metric data point should result in the full set of attributes
-from the original sample measurement.
+are not preserved by aggregation or view configuration for the associated
+timeseries. Joining together attributes on an `Exemplar` with
+those available on its associated metric data point should result in the
+full set of attributes from the original sample measurement.
 
 The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
@@ -1015,9 +1034,15 @@ The SDK SHOULD include two types of built-in exemplar reservoirs:
 1. `SimpleFixedSizeExemplarReservoir`
 2. `AlignedHistogramBucketExemplarReservoir`
 
-By default, explicit bucket histogram aggregation with more than 1 bucket will
-use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
-`SimpleFixedSizeExemplarReservoir`.
+By default:
+
+- Explicit bucket histogram aggregation with more than 1 bucket will
+use `AlignedHistogramBucketExemplarReservoir`.
+- Base2 Exponential Histogram Aggregation SHOULD use a
+  `SimpleFixedSizeExemplarReservoir` with a reservoir equal to the
+  smaller of the maximum number of buckets configured on the aggregation or
+  twenty (e.g. `min(20, max_buckets)`).
+- All other aggregations will use `SimpleFixedSizeExemplarReservoir`.
 
 #### SimpleFixedSizeExemplarReservoir
 
@@ -1027,7 +1052,11 @@ measurements should be sampled. For example, the [simple reservoir sampling
 algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
 
   ```
-  bucket = random_integer(0, num_measurements_seen)
+  if num_measurements_seen < num_buckets then
+    bucket = num_measurements_seen
+  else
+    bucket = random_integer(0, num_measurements_seen)
+  end
   if bucket < num_buckets then
     reservoir[bucket] = measurement
   end
@@ -1038,8 +1067,9 @@ cycle. For the above example, that would mean that the `num_measurements_seen`
 count is reset every time the reservoir is collected.
 
 This Exemplar reservoir MAY take a configuration parameter for the size of the
-reservoir pool. If no size configuration is provided, the default size of `1`
-SHOULD be used.
+reservoir. If no size configuration is provided, the default size MAY be
+the number of possible concurrent threads (e.g. numer of CPUs) to help reduce
+contention. Otherwise, a default size of `1` SHOULD be used.
 
 #### AlignedHistogramBucketExemplarReservoir
 

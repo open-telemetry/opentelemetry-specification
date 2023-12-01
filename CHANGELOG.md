@@ -18,6 +18,8 @@ release.
 
 - Add optional configuration for Prometheus exporters to promote resource attributes to metric attributes
   ([#3761](https://github.com/open-telemetry/opentelemetry-specification/pull/3761))
+- Clarifications and flexibility in Exemplar speicification.
+  ([#3760](https://github.com/open-telemetry/opentelemetry-specification/pull/3760))
 
 ### Logs
 
