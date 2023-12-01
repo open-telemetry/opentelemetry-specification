@@ -114,8 +114,8 @@ specified when [creating the EventLogger](#create-eventlogger) as follows:
 * The [Severity Text](./data-model.md#field-severitytext) MUST not be set.
 * If provided by the user, the `Attributes` MUST be used to set
   the [Attributes](./data-model.md#field-attributes). The user
-  provided `Attributes` MUST not take over the `event.domain` and `event.name`
-  attributes previously discussed.
+  provided `Attributes` MUST not take over the `event.name`
+  attribute previously discussed.
 
 ## Optional and required parameters
 
