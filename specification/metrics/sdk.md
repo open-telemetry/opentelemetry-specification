@@ -976,8 +976,8 @@ Exemplar, which are recorded in the context of a sampled parent span.
 #### Configuration
 
 The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
-an SDK. The default value for the filter SHOULD follow the
-[environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
+an SDK. The default value SHOULD be `TraceBased`. The filter configuration
+SHOULD follow the [environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
 
 ### ExemplarReservoir
 
