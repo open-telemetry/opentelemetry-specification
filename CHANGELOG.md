@@ -45,6 +45,9 @@ release.
 
 ### Common
 
+- Clarify that attribute keys are case-sensitive.
+  ([#3784](https://github.com/open-telemetry/opentelemetry-specification/pull/3784))
+
 ### Supplementary Guidelines
 
 ## v1.27.0 (2023-11-08)
