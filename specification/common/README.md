@@ -28,7 +28,7 @@ aliases: [/docs/reference/specification/common/common]
 An `Attribute` is a key-value pair, which MUST have the following properties:
 
 - The attribute key MUST be a non-`null` and non-empty string.
-  - Attribute keys are case-sensitive.
+  - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
 - The attribute value is either:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
