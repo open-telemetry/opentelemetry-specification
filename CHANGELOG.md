@@ -11,6 +11,32 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.28.0 (2023-12-07)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Stabilize how exceptions are recorded using the Trace SDK.
+  ([#3769](https://github.com/open-telemetry/opentelemetry-specification/pull/3769))
 - Add definition for standard output span exporter.
   ([#3740](https://github.com/open-telemetry/opentelemetry-specification/pull/3740))
 
@@ -36,6 +62,8 @@ release.
 
 ### Resource
 
+- No changes.
+
 ### OpenTelemetry Protocol
 
 - Clarify HTTP endpoint configuration option handling.
@@ -43,11 +71,20 @@ release.
 
 ### Compatibility
 
+- No changes.
+
 ### SDK Configuration
+
+- Add `console` as an exporter type that is supported via environment variable configuration.
+  ([#3742](https://github.com/open-telemetry/opentelemetry-specification/pull/3742))
 
 ### Common
 
+- No changes.
+
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.27.0 (2023-11-08)
 
@@ -59,8 +96,6 @@ release.
 
 - Add a new AddLink() operation to Span (experimental).
   ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
-- Stabilize how exceptions are recorded using the Trace SDK.
-  ([#3769](https://github.com/open-telemetry/opentelemetry-specification/pull/3769))
 
 ### Metrics
 
@@ -95,8 +130,6 @@ release.
 
 - Rename/replace `(client|server).socket.(address|port)` attributes with `network.(peer|local).(address|port)`.
   ([#3713](https://github.com/open-telemetry/opentelemetry-specification/pull/3713))
-- Add `console` as an exporter type that is supported via environment variable configuration.
-  ([#3742](https://github.com/open-telemetry/opentelemetry-specification/pull/3742))
 
 ### Supplementary Guidelines
 
