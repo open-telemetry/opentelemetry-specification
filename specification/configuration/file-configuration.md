@@ -60,7 +60,7 @@ revision >= 1.2.
 
 YAML configuration files MUST use file extensions `.yaml` or `.yml`.
 
-TODO: define JSON file format once prototypes are available
+TODO: decide if JSON file format is required
 
 ### Environment variable substitution
 
@@ -85,7 +85,10 @@ empty value.
 
 Node types MUST be interpreted after environment variable substitution takes
 place. This ensures the environment string representation of boolean, integer,
-or floating point fields can be properly converted to expected types.
+or floating point fields can be properly converted to expected types. 
+
+It MUST NOT be possible to inject YAML structures by environment variables. For
+example, references to `INVALID_MAP_VALUE` environment variable below.
 
 For example, consider the following environment variables,
 and [YAML](#yaml-file-format) configuration file:
@@ -95,12 +98,14 @@ export STRING_VALUE="value"
 export BOOl_VALUE="true"
 export INT_VALUE="1"
 export FLOAT_VALUE="1.1"
+export INVALID_MAP_VALUE"value\nkey:value" # An invalid attempt to inject a map key into the YAML
 ```
 
 ```yaml
 string_key: ${STRING_VALUE}                           # Valid reference to STRING_VALUE
 other_string_key: "${STRING_VALUE}"                   # Valid reference to STRING_VALUE inside double quotes
 another_string_key: "${BOOl_VALUE}"                   # Valid reference to BOOl_VALUE inside double quotes
+yet_another_string_key: ${INVALID_MAP_VALUE}          # Valid reference to INVALID_MAP_VALUE, but YAML structure from INVALID_MAP_VALUE MUST NOT be injected
 bool_key: ${BOOl_VALUE}                               # Valid reference to BOOl_VALUE
 int_key: ${INT_VALUE}                                 # Valid reference to INT_VALUE
 float_key: ${FLOAT_VALUE}                             # Valid reference to FLOAT_VALUE
@@ -112,15 +117,16 @@ ${STRING_VALUE}: value                                # Invalid reference, subst
 Environment variable substitution results in the following YAML:
 
 ```yaml
-string_key: value                # Interpreted as type string, tag URI tag:yaml.org,2002:str
-other_string_key: "value"        # Interpreted as type string, tag URI tag:yaml.org,2002:str
-another_string_key: "true"       # Interpreted as type string, tag URI tag:yaml.org,2002:str
-bool_key: true                   # Interpreted as type bool, tag URI tag:yaml.org,2002:bool
-int_key: 1                       # Interpreted as type int, tag URI tag:yaml.org,2002:int
-float_key: 1.1                   # Interpreted as type float, tag URI tag:yaml.org,2002:float
-combo_string_key: foo value 1.1  # Interpreted as type string, tag URI tag:yaml.org,2002:str
-undefined_key:                   # Interpreted as type null, tag URI tag:yaml.org,2002:null
-${STRING_VALUE}: value           # Interpreted as type string, tag URI tag:yaml.org,2002:str
+string_key: value                           # Interpreted as type string, tag URI tag:yaml.org,2002:str
+other_string_key: "value"                   # Interpreted as type string, tag URI tag:yaml.org,2002:str
+another_string_key: "true"                  # Interpreted as type string, tag URI tag:yaml.org,2002:str
+yet_another_string_key: "value\nkey:value"  # Interpreted as type string, tag URI tag:yaml.org,2002:str
+bool_key: true                              # Interpreted as type bool, tag URI tag:yaml.org,2002:bool
+int_key: 1                                  # Interpreted as type int, tag URI tag:yaml.org,2002:int
+float_key: 1.1                              # Interpreted as type float, tag URI tag:yaml.org,2002:float
+combo_string_key: foo value 1.1             # Interpreted as type string, tag URI tag:yaml.org,2002:str
+undefined_key:                              # Interpreted as type null, tag URI tag:yaml.org,2002:null
+${STRING_VALUE}: value                      # Interpreted as type string, tag URI tag:yaml.org,2002:str
 ```
 
 ## SDK Configuration
