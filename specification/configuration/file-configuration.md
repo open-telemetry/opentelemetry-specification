@@ -68,7 +68,7 @@ Configuration files support environment variables substitution for references
 which match the following regular expression:
 
 ```regexp
-\$\{(?<ENV_NAME>[a-zA-Z_]+[a-zA-Z0-9_]*)}
+\$\{(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)}
 ```
 
 The `ENV_NAME` MUST start with an alphabetic or `_` character, and is followed
@@ -77,8 +77,8 @@ by 0 or more alphanumeric or `_` characters.
 For example, `${API_KEY}` is valid, while `${1API_KEY}` and `${API_$KEY}` are
 invalid.
 
-Environment variable substitution MUST only apply to scalar values. NOTE,
-mapping keys are not candidates for substitution.
+Environment variable substitution MUST only apply to scalar values. Mapping keys
+are not candidates for substitution.
 
 If a referenced environment variable is not defined, it MUST be replaced with an
 empty value.
