@@ -212,6 +212,9 @@ formats is required. Implementing more than one format is optional.
 | The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation.                               |          |    | +    |     | -      |      |        |     |      |     | -    |       |
 | The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                             | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
 | An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                          | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
+| A metric Producer accepts an optional metric Filter                                                                                                                    |          |    |      |     |        |      |        |     |      |     |      |       |
+| The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers                                                  |          |    |      |     |        |      |        |     |      |     |      |       |
+| The metric SDK's metric Producer implementations uses the metric Filter                                                                                                |          |    |      |     |        |      |        |     |      |     |      |       |
 
 ## Logs
 

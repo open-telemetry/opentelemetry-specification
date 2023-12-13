@@ -45,6 +45,8 @@ release.
 
 ### Metrics
 
+- Define experimental MetricFilter as a mechanism to filter collected metrics by the MetricReader
+  ([#3566](https://github.com/open-telemetry/opentelemetry-specification/pull/3566))
 - Add optional configuration for Prometheus exporters to promote resource attributes to metric attributes
   ([#3761](https://github.com/open-telemetry/opentelemetry-specification/pull/3761))
 - Clarifications and flexibility in Exemplar speicification.
