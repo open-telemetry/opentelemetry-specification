@@ -54,6 +54,7 @@ linkTitle: SDK
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceBased](#tracebased)
+    + [Configuration](#configuration-2)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
     + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
@@ -73,7 +74,11 @@ linkTitle: SDK
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
   * [Interface Definition](#interface-definition-1)
-    + [Produce() batch](#produce-batch)
+    + [Produce batch](#produce-batch)
+- [MetricFilter](#metricfilter)
+  * [Interface Definition](#interface-definition-2)
+    + [TestMetric](#testmetric)
+    + [TestAttributes](#testattributes)
 - [Defaults and configuration](#defaults-and-configuration)
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
@@ -972,10 +977,20 @@ Using this ExemplarFilter is as good as disabling Exemplar feature.
 An ExemplarFilter which makes those measurements eligible for being an
 Exemplar, which are recorded in the context of a sampled parent span.
 
+#### Configuration
+
+The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
+an SDK. The default value SHOULD be `TraceBased`. The filter configuration
+SHOULD follow the [environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
+
 ### ExemplarReservoir
 
 The `ExemplarReservoir` interface MUST provide a method to offer measurements
 to the reservoir and another to collect accumulated Exemplars.
+
+A new `ExemplarReservoir` MUST be created for every known timeseries data point,
+as determined by aggregation and view configuration. This data point, and its
+set of defining attributes, are referred to as the associated timeseries point.
 
 The "offer" method SHOULD accept measurements, including:
 
@@ -993,18 +1008,26 @@ span context and baggage can be inspected at this point.
 The "offer" method does not need to store all measurements it is given and
 MAY further sample beyond the `ExemplarFilter`.
 
+The "offer" method MAY accept a filtered subset of `Attributes` which diverge
+from the timeseries the reservoir is associated with. This MUST be clearly
+documented in the API interface and the reservoir MUST be given the `Attributes`
+associated with its timeseries point either at construction so that additional
+sampling performed by the reservoir has access to all attributes from a
+measurement in the "offer" method. SDK authors are encouraged to benchmark
+whether this option works best for their implementation.
+
 The "collect" method MUST return accumulated `Exemplar`s. Exemplars are expected
 to abide by the `AggregationTemporality` of any metric point they are recorded
 with. In other words, Exemplars reported against a metric data point SHOULD have
-occurred within the start/stop timestamps of that point.  SDKs are free to
+occurred within the start/stop timestamps of that point. SDKs are free to
 decide whether "collect" should also reset internal storage for delta temporal
 aggregation collection, or use a more optimal implementation.
 
 `Exemplar`s MUST retain any attributes available in the measurement that
-are not preserved by aggregation or view configuration. Specifically, at a
-minimum, joining together attributes on an `Exemplar` with those available
-on its associated metric data point should result in the full set of attributes
-from the original sample measurement.
+are not preserved by aggregation or view configuration for the associated
+timeseries. Joining together attributes on an `Exemplar` with
+those available on its associated metric data point should result in the
+full set of attributes from the original sample measurement.
 
 The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
@@ -1015,9 +1038,15 @@ The SDK SHOULD include two types of built-in exemplar reservoirs:
 1. `SimpleFixedSizeExemplarReservoir`
 2. `AlignedHistogramBucketExemplarReservoir`
 
-By default, explicit bucket histogram aggregation with more than 1 bucket will
-use `AlignedHistogramBucketExemplarReservoir`. All other aggregations will use
-`SimpleFixedSizeExemplarReservoir`.
+By default:
+
+- Explicit bucket histogram aggregation with more than 1 bucket will
+use `AlignedHistogramBucketExemplarReservoir`.
+- Base2 Exponential Histogram Aggregation SHOULD use a
+  `SimpleFixedSizeExemplarReservoir` with a reservoir equal to the
+  smaller of the maximum number of buckets configured on the aggregation or
+  twenty (e.g. `min(20, max_buckets)`).
+- All other aggregations will use `SimpleFixedSizeExemplarReservoir`.
 
 #### SimpleFixedSizeExemplarReservoir
 
@@ -1027,7 +1056,11 @@ measurements should be sampled. For example, the [simple reservoir sampling
 algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
 
   ```
-  bucket = random_integer(0, num_measurements_seen)
+  if num_measurements_seen < num_buckets then
+    bucket = num_measurements_seen
+  else
+    bucket = random_integer(0, num_measurements_seen)
+  end
   if bucket < num_buckets then
     reservoir[bucket] = measurement
   end
@@ -1038,8 +1071,9 @@ cycle. For the above example, that would mean that the `num_measurements_seen`
 count is reset every time the reservoir is collected.
 
 This Exemplar reservoir MAY take a configuration parameter for the size of the
-reservoir pool. If no size configuration is provided, the default size of `1`
-SHOULD be used.
+reservoir. If no size configuration is provided, the default size MAY be
+the number of possible concurrent threads (e.g. numer of CPUs) to help reduce
+contention. Otherwise, a default size of `1` SHOULD be used.
 
 #### AlignedHistogramBucketExemplarReservoir
 
@@ -1083,7 +1117,11 @@ SHOULD provide at least the following:
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
 * **Status**: [Experimental](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+* **Status**: [Experimental](../document-status.md) - The [MetricFilter](#metricfilter) to apply to metrics and attributes during `MetricReader#Collect`.
 * Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
+
+**Status**: [Experimental](../document-status.md) - A `MetricReader` SHOULD provide the [MetricFilter](#metricfilter) to the SDK or registered [MetricProducer](#metricproducer)(s)
+when calling the `Produce` operation.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
 `MetricExporter` instances to explicitly initiate collection, commonly
@@ -1472,10 +1510,10 @@ modeled to interact with other components in the SDK:
 
 ## MetricProducer
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md) except where otherwise specified
 
 `MetricProducer` defines the interface which bridges to third-party metric
-sources MUST implement so they can be plugged into an OpenTelemetry
+sources MUST implement, so they can be plugged into an OpenTelemetry
 [MetricReader](#metricreader) as a source of aggregated metric data. The SDK's
 in-memory state MAY implement the `MetricProducer` interface for convenience.
 
@@ -1505,10 +1543,14 @@ bridge pre-processed data.
 
 A `MetricProducer` MUST support the following functions:
 
-#### Produce() batch
+#### Produce batch
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
-MUST return a batch of [Metric points](./data-model.md#metric-points).
+MUST return a batch of [Metric points](./data-model.md#metric-points), filtered by the optional
+`metricFilter` parameter. Implementation SHOULD use the filter as early as
+possible to gain as much performance gain possible (memory allocation,
+internal metric fetching, etc).
+
 If the batch of [Metric points](./data-model.md#metric-points) includes
 resource information, `Produce` SHOULD require a resource as a parameter.
 `Produce` does not have any other required parameters, however, [OpenTelemetry
@@ -1524,6 +1566,80 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 [`InstrumentationScope`](../glossary.md#instrumentation-scope) information,
 `Produce` SHOULD include a single InstrumentationScope which identifies the
 `MetricProducer`.
+
+**Parameters:**
+
+**Status**: [Experimental](../document-status.md) `metricFilter`: An optional [MetricFilter](#metricfilter).
+
+## MetricFilter
+
+**Status**: [Experimental](../document-status.md)
+
+`MetricFilter` defines the interface which enables the [MetricReader](#metricreader)'s
+registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#metricproducer) to filter aggregated data points
+([Metric points](./data-model.md#metric-points)) inside its `Produce` operation.
+The filtering is done at the [MetricProducer](#metricproducer) for performance reasons.
+
+The `MetricFilter` allows filtering an entire metric stream - dropping or allowing all its attribute sets -
+by its `TestMetric` operation, which accepts the metric stream information
+(scope, name, kind and unit)  and returns an enumeration: `Accept`, `Drop`
+or `Allow_Partial`. If the latter returned, the `TestAttributes` operation
+is to be called per attribute set of that metric stream, returning an enumeration
+determining if the data point for that (metric stream, attributes) pair is to be
+allowed in the result of the [MetricProducer](#metricproducer) `Produce` operation.
+
+### Interface Definition
+
+A `MetricFilter` MUST support the following functions:
+
+#### TestMetric
+
+This operation is called once for every metric stream, in each [MetricProducer](#metricproducer) `Produce`
+operation.
+
+**Parameters:**
+
+- `instrumentationScope`: the metric stream instrumentation scope
+- `name`: the name of the metric stream
+- `kind`: the metric stream [kind](./data-model.md#point-kinds)
+- `unit`: the metric stream unit
+
+Returns: `MetricFilterResult`
+
+`MetricFilterResult` is one of:
+
+* `Accept` - All attributes of the given metric stream are allowed (not to be filtered).
+   This provides a "short-circuit" as there is no need to call `TestAttributes` operation
+   for each attribute set.
+* `Drop` - All attributes of the given metric stream are NOT allowed (filtered out - dropped).
+  This provides a "short-circuit" as there is no need to call `TestAttributes` operation
+  for each attribute set, and no need to collect those data points be it synchronous or asynchronous:
+  e.g. the callback for this given instrument does not need to be invoked.
+* `Accept_Partial` - Some attributes are allowed and some aren't, hence `TestAttributes`
+  operation must be called for each attribute set of that instrument.
+
+#### TestAttributes
+
+An operation which determines for a given metric stream and attribute set if it should be allowed
+or filtered out.
+
+This operation should only be called if `TestMetric` operation returned `Accept_Partial` for
+the given metric stream arguments (`instrumentationScope`, `name`, `kind`, `unit`).
+
+**Parameters:**
+
+- `instrumentationScope`: the metric stream instrumentation scope
+- `name`: the name of the metric stream
+- `kind`: the metric stream kind
+- `unit`: the metric stream unit
+- `attributes`: the attributes
+
+Returns: `AttributesFilterResult`
+
+`AttributesFilterResult` is one of:
+
+* `Accept` - This given `attributes` are allowed (not to be filtered).
+* `Drop` - This given `attributes` are NOT allowed (filtered out - dropped).
 
 ## Defaults and configuration
 

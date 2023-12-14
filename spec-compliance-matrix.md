@@ -20,7 +20,7 @@ formats is required. Implementing more than one format is optional.
 | Create TracerProvider                                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer with schema_url                                                                     |          | +   | +    |     | +      |      |        | +   |      | +   |      |       |
-| Get a Tracer with scope attributes                                                               |          |     |      |     |        |      |        | +   |      |     |      |       |
+| Get a Tracer with scope attributes                                                               |          |     |      |     |        |      |        | +   |      | +   |      |       |
 | Associate Tracer with InstrumentationScope                                                       |          |     |      |     | +      |      |        | +   |      |     |      |       |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -67,7 +67,7 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation                                                           |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
-| Links can be recorded after span creation                                                        |          |     |      |     |        |      |        |     |      |     |      |       |
+| Links can be recorded after span creation                                                        |          |     |      |     |        |      |        |     |      | +   |      |       |
 | Links order is preserved                                                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
 | AddEvent                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -102,7 +102,7 @@ formats is required. Implementing more than one format is optional.
 | It is possible to create any number of `MeterProvider`s.                                                                                                               | X        | +  | +    | +   | +      |      |        | +   |  +   | +   | +    |       |
 | `MeterProvider` provides a way to get a `Meter`.                                                                                                                       |          | +  | +    | +   | +      |      |        | +   |  +   | +   | -    |       |
 | `get_meter` accepts name, `version` and `schema_url`.                                                                                                                  |          | +  | +    | +   | +      |      |        | +   |  +   | +   | -    |       |
-| `get_meter` accepts `attributes`.                                                                                                                                      |          |    |      |     |        |      |        | +   |  +   |     |      |       |
+| `get_meter` accepts `attributes`.                                                                                                                                      |          |    |      |     |        |      |        | +   |  +   | +   |      |       |
 | When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.                                                                        |          | +  | +    | +   | +      |      |        |     |  +   | +   | -    |       |
 | The fallback `Meter` `name` property keeps its original invalid value.                                                                                                 | X        | -  | -    | +   | +      |      |        |     |  +   | -   | -    |       |
 | Associate `Meter` with `InstrumentationScope`.                                                                                                                         |          |    | +    | +   | +      |      |        |     |  +   | +   |      |       |
@@ -212,6 +212,9 @@ formats is required. Implementing more than one format is optional.
 | The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation.                               |          |    | +    |     | -      |      |        |     |      |     | -    |       |
 | The metrics SDK provides an `ExemplarFilter` interface or extension point.                                                                                             | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
 | An `ExemplarFilter` has access to the measurement value, attributes, `Context` and timestamp.                                                                          | X        |    | -    |     | -      |      |        | +   |      |     | -    |       |
+| A metric Producer accepts an optional metric Filter                                                                                                                    |          |    |      |     |        |      |        |     |      |     |      |       |
+| The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers                                                  |          |    |      |     |        |      |        |     |      |     |      |       |
+| The metric SDK's metric Producer implementations uses the metric Filter                                                                                                |          |    |      |     |        |      |        |     |      |     |      |       |
 
 ## Logs
 

@@ -11,14 +11,105 @@ release.
 
 ### Traces
 
-- Add a new AddLink() operation to Span (experimental).
-  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
-
 ### Metrics
 
 ### Logs
 
 ### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.28.0 (2023-12-07)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Stabilize how exceptions are recorded using the Trace SDK.
+  ([#3769](https://github.com/open-telemetry/opentelemetry-specification/pull/3769))
+- Add definition for standard output span exporter.
+  ([#3740](https://github.com/open-telemetry/opentelemetry-specification/pull/3740))
+
+### Metrics
+
+- Define experimental MetricFilter as a mechanism to filter collected metrics by the MetricReader
+  ([#3566](https://github.com/open-telemetry/opentelemetry-specification/pull/3566))
+- Add optional configuration for Prometheus exporters to promote resource attributes to metric attributes
+  ([#3761](https://github.com/open-telemetry/opentelemetry-specification/pull/3761))
+- Clarifications and flexibility in Exemplar speicification.
+  ([#3760](https://github.com/open-telemetry/opentelemetry-specification/pull/3760))
+- Add optional configuration for Prometheus exporters to optionally remove unit and type suffixes
+  ([#3777](https://github.com/open-telemetry/opentelemetry-specification/pull/3777))
+
+### Logs
+
+- Add definition for standard output log record exporter.
+  ([#3741](https://github.com/open-telemetry/opentelemetry-specification/pull/3741))
+- BREAKING: Change `event.name` definition to include `namespace` and removed `event.domain` from log event attributes.
+  ([#3749](https://github.com/open-telemetry/opentelemetry-specification/pull/3749))
+- BREAKING: Refine the arguments of the emit Event API. Instead of accepting
+  a `LogRecord`, the individual arguments are enumerated along with the
+  implementation requirements on how those arguments map to `LogRecord`.
+  ([#3772](https://github.com/open-telemetry/opentelemetry-specification/pull/3772))
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- Clarify HTTP endpoint configuration option handling.
+  ([#3739](https://github.com/open-telemetry/opentelemetry-specification/pull/3739))
+
+### Compatibility
+
+- No changes.
+
+### SDK Configuration
+
+- Add `console` as an exporter type that is supported via environment variable configuration.
+  ([#3742](https://github.com/open-telemetry/opentelemetry-specification/pull/3742))
+
+### Common
+
+- No changes.
+
+### Supplementary Guidelines
+
+- No changes.
+
+## v1.27.0 (2023-11-08)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Add a new AddLink() operation to Span (experimental).
+  ([#3678](https://github.com/open-telemetry/opentelemetry-specification/pull/3678))
+
+### Metrics
+
+- No changes.
+
+### Logs
+
+- No changes.
+
+### Resource
+
+- No changes.
 
 ### OpenTelemetry Protocol
 
@@ -28,10 +119,14 @@ release.
 
 ### Compatibility
 
+- No changes.
+
 ### SDK Configuration
 
 - Define file configuration parse and create operations.
   ([#3437](https://github.com/open-telemetry/opentelemetry-specification/pull/3437))
+- Add environment variable implementation guidelines.
+  ([#3738](https://github.com/open-telemetry/opentelemetry-specification/pull/3738))
 
 ### Common
 
@@ -39,6 +134,8 @@ release.
   ([#3713](https://github.com/open-telemetry/opentelemetry-specification/pull/3713))
 
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.26.0 (2023-10-10)
 

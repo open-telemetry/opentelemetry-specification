@@ -10,7 +10,18 @@ aliases:
 
 **Status**: [Mixed](../document-status.md)
 
-The goal of this specification is to unify the environment variable names between different OpenTelemetry SDK implementations. SDKs MAY choose to allow configuration via the environment variables in this specification, but are not required to. If they do, they SHOULD use the names listed in this document.
+The goal of this specification is to unify the environment variable names between different OpenTelemetry implementations.
+
+Implementations MAY choose to allow configuration via the environment variables in this specification, but are not required to.
+If they do, they SHOULD use the names listed in this document.
+
+## Implementation guidelines
+
+**Status**: [Stable](../document-status.md)
+
+Environment variables MAY be handled (implemented) directly by a component, in the SDK, or in a separate component (e.g. environment-based autoconfiguration component).
+
+The environment-based configuration MUST have a direct code configuration equivalent.
 
 ## Parsing empty value
 
@@ -25,7 +36,7 @@ The SDK MUST interpret an empty value of an environment variable the same way as
 ### Boolean value
 
 Any value that represents a Boolean MUST be set to true only by the case-insensitive string `"true"`, meaning `"True"` or `"TRUE"` are also accepted, as true.
-An SDK MUST NOT extend this definition and define additional values that are interpreted as true.
+An implementation MUST NOT extend this definition and define additional values that are interpreted as true.
 Any value not explicitly defined here as a true value, including unset and empty values, MUST be interpreted as false.
 If any value other than a true value, case-insensitive string `"false"`, empty, or unset is used, a warning SHOULD be logged to inform users about the fallback to false being applied.
 All Boolean environment variables SHOULD be named and defined such that false is the expected safe default behavior.
@@ -33,17 +44,17 @@ Renaming or changing the default value MUST NOT happen without a major version u
 
 ### Numeric value
 
-If an SDK chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
+If an implementation chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
 
 > The following paragraph was added after stabilization and the requirements are
-thus qualified as "SHOULD" to allow SDKs to avoid breaking changes.
+thus qualified as "SHOULD" to allow implementations to avoid breaking changes.
 For new
 implementations, these should be treated as MUST requirements.
 
-For variables accepting a numeric value, if the user provides a value the SDK cannot parse,
-or which is outside the valid range for the configuration item, the SDK SHOULD
+For variables accepting a numeric value, if the user provides a value the implementation cannot parse,
+or which is outside the valid range for the configuration item, the implementation SHOULD
 generate a warning and gracefully ignore the setting, i.e., treat them as not set.
-In particular, SDKs
+In particular, implementations
 SHOULD NOT assign a custom interpretation e.g. to negative values if a negative
 value does not naturally apply to a configuration and does not have an explicitly specified meaning, but treat it like any other
 invalid value.
@@ -57,15 +68,15 @@ because it might reset a value set from other configuration sources with the def
 
 ### Enum value
 
-For variables which accept a known value out of a set, i.e., an enum value, SDK implementations MAY support additional values not listed here.
-For variables accepting an enum value, if the user provides a value the SDK does not recognize, the SDK MUST generate a warning and gracefully ignore the setting.
+For variables which accept a known value out of a set, i.e., an enum value, implementations MAY support additional values not listed here.
+For variables accepting an enum value, if the user provides a value the implementation does not recognize, the implementation MUST generate a warning and gracefully ignore the setting.
 
 If a null object (empty, no-op) value is acceptable, then the enum value representing it MUST be `"none"`.
 
 ### Duration
 
 Any value that represents a duration, for example a timeout, MUST be an integer representing a number of
-milliseconds. The value is non-negative - if a negative value is provided, the SDK MUST generate a warning,
+milliseconds. The value is non-negative - if a negative value is provided, the implementation MUST generate a warning,
 gracefully ignore the setting and use the default value if it is defined.
 
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
@@ -82,7 +93,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 | OTEL_LOG_LEVEL           | Log level used by the SDK logger                                                                              | "info"                                                                                                                                           |                                                                                                                                                                                                                                                                                          |
 | OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list                                                              | "tracecontext,baggage"                                                                                                                           | Values MUST be deduplicated in order to register a `Propagator` only once.                                                                                                                                                                                                               |
 | OTEL_TRACES_SAMPLER      | Sampler to be used for traces                                                                                 | "parentbased_always_on"                                                                                                                          | See [Sampling](../trace/sdk.md#sampling)                                                                                                                                                                                                                                                 |
-| OTEL_TRACES_SAMPLER_ARG  | String value to be used as the sampler argument                                                               |                                                                                                                                                  | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the SDK MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.            |
+| OTEL_TRACES_SAMPLER_ARG  | String value to be used as the sampler argument                                                               |                                                                                                                                                  | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the implementation MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.            |
 
 Known values for `OTEL_PROPAGATORS` are:
 
@@ -140,7 +151,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Attribute Limits
 
-SDKs SHOULD only offer environment variables for the types of attributes, for
+Implementations SHOULD only offer environment variables for the types of attributes, for
 which that SDK implements truncation mechanism.
 
 See the SDK [Attribute Limits](../common/README.md#attribute-limits) section for the definition of the limits.
@@ -219,23 +230,32 @@ We define environment variables for setting one or more exporters per signal.
 | OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  |
 | OTEL_LOGS_EXPORTER | Logs exporter to be used | "otlp"  |
 
-The SDK MAY accept a comma-separated list to enable setting multiple exporters.
+The implementation MAY accept a comma-separated list to enable setting multiple exporters.
 
 Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
+- `"console"`: [Standard Output](../trace/sdk_exporters/stdout.md)
+- `"logging"`: [Standard Output](../trace/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
+NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for traces.
 
 Known values for `OTEL_METRICS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
+- `"console"`: [Standard Output](../metrics/sdk_exporters/stdout.md)
+- `"logging"`: [Standard Output](../metrics/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
+NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for metrics.
 
 Known values for `OTEL_LOGS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
+- `"console"`: [Standard Output](../logs/sdk_exporters/stdout.md)
+- `"logging"`: [Standard Output](../logs/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
+NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for logs.
 
 ## Metrics SDK Configuration
