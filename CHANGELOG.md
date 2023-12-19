@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add optional configuration for Prometheus exporters to optionally drop `otel_scope_info` metric.
+  ([#3796](https://github.com/open-telemetry/opentelemetry-specification/pull/3796))
+
 ### Logs
 
 ### Resource
@@ -51,7 +54,7 @@ release.
   ([#3761](https://github.com/open-telemetry/opentelemetry-specification/pull/3761))
 - Clarifications and flexibility in Exemplar speicification.
   ([#3760](https://github.com/open-telemetry/opentelemetry-specification/pull/3760))
-- Add optional configuration for Prometheus exporters to optionally remove unit and type suffixes
+- Add optional configuration for Prometheus exporters to optionally remove unit and type suffixes.
   ([#3777](https://github.com/open-telemetry/opentelemetry-specification/pull/3777))
 
 ### Logs
