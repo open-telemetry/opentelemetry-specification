@@ -7,7 +7,9 @@ release.
 
 ## Unreleased
 
-### Context
+### Context & Baggage
+
+- Specify allowed characters for Baggage keys and values.
 
 ### Traces
 

@@ -29,6 +29,16 @@ metrics, traces, and logs. It is a set of name/value pairs describing
 user-defined properties. Each name in `Baggage` MUST be associated with
 exactly one value.
 
+Baggage **names** are strings that satisfy the `token` definition from
+[RFC7230, Section 3.2.6](https://tools.ietf.org/html/rfc7230#section-3.2.6).
+Alpha-numeric names are strongly recommended. Language API MAY return
+an error when given a baggage name that is not a `token`.
+
+Baggage **values** are any valid UTF-8 strings. Language API MUST accept
+any valid UTF-8 string as baggage value. Language API MUST guarantee that
+`Get` and `Set` operations are symmetrical with respect to name and value,
+i.e. `Get` MUST return the same **value** string as received in `Set`.
+
 The Baggage API consists of:
 
 - the `Baggage`
