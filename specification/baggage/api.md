@@ -32,7 +32,7 @@ telemetry, adding contextual information to metrics, traces, and logs.
 In OpenTelemetry `Baggage` is represented as a set of name/value pairs
 describing user-defined properties. Each name in `Baggage` MUST be associated
 with _exactly one value_. This is more restrictive than the [W3C Baggage
-Specification, § 3.2.1.1][https://www.w3.org/TR/baggage/#baggage-string]
+Specification, § 3.2.1.1](https://www.w3.org/TR/baggage/#baggage-string)
 which allows duplicate entries for a given name.
 
 The Baggage API consists of:

@@ -10,6 +10,7 @@ release.
 ### Context & Baggage
 
 - Align definition of Baggage with W3C Specification.
+  ([#3800](https://github.com/open-telemetry/opentelemetry-specification/pull/3800))
 
 ### Traces
 
