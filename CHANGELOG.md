@@ -7,7 +7,9 @@ release.
 
 ## Unreleased
 
-### Context
+### Context & Baggage
+
+- Align definition of Baggage with W3C Specification.
 
 ### Traces
 
