@@ -10,6 +10,7 @@ release.
 ### Context & Baggage
 
 - Specify allowed characters for Baggage keys and values.
+  ([#3801](https://github.com/open-telemetry/opentelemetry-specification/pull/3801))
 
 ### Traces
 
