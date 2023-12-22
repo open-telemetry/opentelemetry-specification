@@ -39,6 +39,9 @@ any valid UTF-8 string as baggage value. Language API MUST guarantee that
 `Get` and `Set` operations are symmetrical with respect to name and value,
 i.e. `Get` MUST return the same **value** string as received in `Set`.
 
+Language API MUST treat both baggage names and values as case sensitive.
+See also [W3C Baggage -- Case sensitivity of keys](https://github.com/w3c/baggage/blob/main/baggage/HTTP_HEADER_FORMAT_RATIONALE.md#case-sensitivity-of-keys).
+
 The Baggage API consists of:
 
 - the `Baggage`
