@@ -24,14 +24,20 @@
 
 ## Overview
 
-`Baggage` is used to annotate telemetry, adding context and information to
-metrics, traces, and logs. It is a set of name/value pairs describing
-user-defined properties. Each name in `Baggage` MUST be associated with
-exactly one value.
+`Baggage` is a set of application-defined properties contextually associated
+with a distributed request or workflow execution (see also the [W3C Baggage
+Specification][w3c]). Baggage can be used, among other things, to annotate
+telemetry, adding contextual information to metrics, traces, and logs.
+
+In OpenTelemetry `Baggage` is represented as a set of name/value pairs
+describing user-defined properties. Each name in `Baggage` MUST be associated
+with _exactly one value_. This is more restrictive than the [W3C Baggage
+Specification, § 3.2.1.1](https://www.w3.org/TR/baggage/#baggage-string)
+which allows duplicate entries for a given name.
 
 The Baggage API consists of:
 
-- the `Baggage`
+- the `Baggage` as a logical container
 - functions to interact with the `Baggage` in a `Context`
 
 The functions described here are one way to approach interacting with the
@@ -146,7 +152,7 @@ reasons.
 
 The API layer or an extension package MUST include the following `Propagator`s:
 
-* A `TextMapPropagator` implementing the [W3C Baggage Specification](https://www.w3.org/TR/baggage).
+* A `TextMapPropagator` implementing the [W3C Baggage Specification][w3c].
 
 See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
 for how propagators are to be distributed.
@@ -165,3 +171,5 @@ additional requirements these operations need to follow.
 If a new name/value pair is added and its name is the same as an existing name,
 than the new pair MUST take precedence. The value is replaced with the added
 value (regardless if it is locally generated or received from a remote peer).
+
+[w3c]: https://www.w3.org/TR/baggage
