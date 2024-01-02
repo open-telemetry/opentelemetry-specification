@@ -209,7 +209,7 @@ interface.
   the [configuration file](#configuration-file), including the ability to access
   scalars, mappings, and sequences (of scalars and other structures). It MUST be
   possible to determine if a particular property is present. It SHOULD be
-  possible to access properties in a type safe manor, based on what is idiomatic
+  possible to access properties in a type safe manner, based on what is idiomatic
   in the language.
 
 **Returns:** A configured SDK extension plugin interface implementation.
