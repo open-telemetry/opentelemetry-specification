@@ -40,6 +40,7 @@ linkTitle: SDK
     + [Overflow attribute](#overflow-attribute)
     + [Synchronous instrument cardinality limits](#synchronous-instrument-cardinality-limits)
     + [Asynchronous instrument cardinality limits](#asynchronous-instrument-cardinality-limits)
+    + [Interaction with filtering](#interaction-with-filtering)
 - [Meter](#meter)
   * [Duplicate instrument registration](#duplicate-instrument-registration)
     + [Name conflict](#name-conflict)
@@ -775,6 +776,13 @@ overflow.
 Aggregators of asynchronous instruments SHOULD prefer the first-observed
 attributes in the callback when limiting cardinality, regardless of
 temporality.
+
+#### Interaction with filtering
+
+It is left unspecified if attribute filtering from a user provided view needs
+to be applied before or after applying the cardinality limit. While this can
+lead to inconsistent telemetry across implementations, this will only happen in
+an error scenario where a cardinality limit is used.
 
 ## Meter
 
