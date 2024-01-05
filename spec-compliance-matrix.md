@@ -308,6 +308,18 @@ Note: Support for environment variables is optional.
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | +    |       |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |     | +    |     |             |      |        |     |      |     |      |       |
 
+## File Configuration
+
+| Feature                                                                                 | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|-----------------------------------------------------------------------------------------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
+| `Parse` a configuration file                                                            |    |      |    |        |      |        |     |      |     |      |       |
+| The `parse` operation returns configuration model                                       |    |      |    |        |      |        |     |      |     |      |       |
+| The `parse` operation performs environment variable substitution                        |    |      |    |        |      |        |     |      |     |      |       |
+| The `parse` operation accepts the configuration YAML file format                        |    |      |    |        |      |        |     |      |     |      |       |
+| `Create` SDK components                                                                 |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation accepts configuration model                                      |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` returns `TracerProvider`, `MeterProvider`, `LoggerProvider`, `Propagators` |    |      |    |        |      |        |     |      |     |      |       |
+
 ## Exporters
 
 | Feature                                                                        | Optional | Go | Java | JS | Python      | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
