@@ -31,7 +31,7 @@ exactly one value.
 
 Baggage **names** are strings that satisfy the `token` definition from
 [RFC7230, Section 3.2.6](https://tools.ietf.org/html/rfc7230#section-3.2.6).
-Alpha-numeric names are strongly recommended. Language API MAY return
+Alpha-numeric names are strongly recommended. Language API SHOULD return
 an error when given a baggage name that is not a `token`.
 
 Baggage **values** are any valid UTF-8 strings. Language API MUST accept
