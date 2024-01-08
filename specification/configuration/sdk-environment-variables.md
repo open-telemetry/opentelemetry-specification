@@ -313,7 +313,7 @@ used to call [Create](file-configuration.md#create) to produce fully configured
 SDK components.
 
 When `OTEL_CONFIG_FILE` is set, all other environment variables besides those
-reference in the configuration file
+referenced in the configuration file
 for [environment variable substitution](file-configuration.md#environment-variable-substitution)
 MUST be ignored. Ignoring the environment variables is necessary because
 there is no intuitive way to merge the flat environment variable scheme with the
