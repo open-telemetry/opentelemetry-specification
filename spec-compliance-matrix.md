@@ -310,15 +310,18 @@ Note: Support for environment variables is optional.
 
 ## File Configuration
 
-| Feature                                                                                 | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-|-----------------------------------------------------------------------------------------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| `Parse` a configuration file                                                            |    |      |    |        |      |        |     |      |     |      |       |
-| The `parse` operation returns configuration model                                       |    |      |    |        |      |        |     |      |     |      |       |
-| The `parse` operation performs environment variable substitution                        |    |      |    |        |      |        |     |      |     |      |       |
-| The `parse` operation accepts the configuration YAML file format                        |    |      |    |        |      |        |     |      |     |      |       |
-| `Create` SDK components                                                                 |    |      |    |        |      |        |     |      |     |      |       |
-| The `Create` operation accepts configuration model                                      |    |      |    |        |      |        |     |      |     |      |       |
-| The `Create` returns `TracerProvider`, `MeterProvider`, `LoggerProvider`, `Propagators` |    |      |    |        |      |        |     |      |     |      |       |
+| Feature                                                          | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|------------------------------------------------------------------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
+| `Parse` a configuration file                                     |    |      |    |        |      |        |     |      |     |      |       |
+| The `parse` operation returns configuration model                |    |      |    |        |      |        |     |      |     |      |       |
+| The `parse` operation performs environment variable substitution |    |      |    |        |      |        |     |      |     |      |       |
+| The `parse` operation accepts the configuration YAML file format |    |      |    |        |      |        |     |      |     |      |       |
+| `Create` SDK components                                          |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation accepts configuration model               |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation returns `TracerProvider`                  |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation returns `MeterProvider`                   |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation returns `LoggerProvider`                  |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation returns `Propagators`                     |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Exporters
 
