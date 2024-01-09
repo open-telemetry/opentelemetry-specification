@@ -10,7 +10,7 @@
       "replacement": "{{BASEURL}}/"
     },
     {
-      "pattern": "^https://github.com/open-telemetry/opentelemetry-specification/(blob|tree)/[^/]+/(specification|supplementary-guidelines)/",
+      "pattern": "^https://github.com/open-telemetry/opentelemetry-specification/(blob|tree)/main/(specification|supplementary-guidelines)/",
       "replacement": "LINK-CHECK-ERROR-USE-LOCAL-PATH-TO-DOC-PAGE-NOT-EXTERNAL-URL/"
     }
   ],

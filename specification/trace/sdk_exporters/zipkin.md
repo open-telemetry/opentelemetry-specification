@@ -99,13 +99,18 @@ always available. The following table lists the possible attributes for
 |---|---|---|
 |1|peer.service|[OpenTelemetry adopted attribute for remote service.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
 |2|server.address|[OpenTelemetry adopted attribute for remote hostname, or similar.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
-|3|network.peer.address & network.peer.port|[OpenTelemetry adopted attribute for remote socket address of the peer.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
-|4|peer.hostname|Remote hostname defined in OpenTracing specification.|
-|5|peer.address|Remote address defined in OpenTracing specification.|
-|6|db.name|Commonly used database name attribute for DB Spans.|
+|3|net.peer.name|[Legacy OpenTelemetry adopted attribute for remote hostname, or similar.](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/trace/semantic_conventions/span-general.md#general-network-connection-attributes)|
+|4|network.peer.address & network.peer.port|[OpenTelemetry adopted attribute for remote socket address of the peer.](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attributes.md#server-client-and-shared-network-attributes)|
+|5|server.socket.domain|[Legacy OpenTelemetry adopted attribute for remote socket hostname of the peer.](https://github.com/open-telemetry/semantic-conventions/blob/v1.21.0/docs/general/general-attributes.md#server-and-client-attributes)|
+|6|server.socket.address & server.socket.port|[Legacy OpenTelemetry adopted attribute for remote socket address of the peer.](https://github.com/open-telemetry/semantic-conventions/blob/v1.21.0/docs/general/general-attributes.md#server-and-client-attributes)|
+|7|net.sock.peer.name|[Legacy OpenTelemetry adopted attribute for remote socket hostname of the peer.](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/trace/semantic_conventions/span-general.md#general-network-connection-attributes)|
+|8|net.sock.peer.addr & net.sock.peer.port|[Legacy OpenTelemetry adopted attribute for remote socket address of the peer.](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.20.0/specification/trace/semantic_conventions/span-general.md#general-network-connection-attributes)|
+|9|peer.hostname|Remote hostname defined in OpenTracing specification.|
+|10|peer.address|Remote address defined in OpenTracing specification.|
+|11|db.name|Commonly used database name attribute for DB Spans.|
 
 * Ranking should control the selection order. For example, `server.address` (Rank
-  2) should be selected before `peer.address` (Rank 5).
+  2) should be selected before `peer.address` (Rank 11).
 * `network.peer.address` can be used by itself as `remoteEndpoint` but should be combined
   with `network.peer.port` if it is also present.
 
