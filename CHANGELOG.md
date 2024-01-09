@@ -14,6 +14,9 @@ release.
 
 ### Traces
 
+- Update OpenTelemetry to Zipkin Transformation to handle attributes from older semantic conventions in a backwards compatible way.
+  ([#3794](https://github.com/open-telemetry/opentelemetry-specification/pull/3794))
+
 ### Metrics
 
 - Add optional configuration for Prometheus exporters to optionally drop `otel_scope_info` metric.
