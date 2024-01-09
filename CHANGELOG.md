@@ -25,6 +25,8 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Use `TracesData`, `MetricsData` and `LogsData` proto messages for file exporter.
+
 ### Compatibility
 
 ### SDK Configuration
