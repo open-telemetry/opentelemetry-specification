@@ -9,48 +9,66 @@ linkTitle: File Exporter
 This document provides a placeholder for specifying an OTLP exporter capable of
 exporting to either a file or stdout.
 
-Currently, it only describes the serialization of OpenTelemetry data to the OTLP JSON format.
-
 ## Table of Contents
 
-- [JSON File serialization](#json-file-serialization)
-  - [File storage requirements](#file-storage-requirements)
+- [Protobuf serialization](#protobuf-serialization)
+  - [File storage requirements](#protobuf-file-requirements)
+- [JSON serialization](#json-serialization)
+  - [JSON file requirements](#json-file-requirements)
     - [JSON lines file](#json-lines-file)
     - [Streaming appending](#streaming-appending)
-  - [Telemetry data requirements](#telemetry-data-requirements)
   - [Examples](#examples)
 
-## JSON File serialization
+## Protobuf serialization
 
-This document describes the serialization of OpenTelemetry data as JSON objects that can be stored in files.
+This section describes the serialization of OpenTelemetry data as Protobuf objects that can be stored in files or streamed (e.g. `stdout`).
 
-### File storage requirements
+The data MUST be encoded according to the format specified in the
+[Binary Protobuf Encoding](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#binary-protobuf-encoding).
 
-#### JSON lines file
+Only top-level proto objects, `TracesData`, `MetricsData`, and `LogsData` are supported.
 
-This file is a JSON lines file (jsonlines.org), and therefore follows those requirements:
+Implementation MAY expose helpers to serialize from SDK readable types
+(e.g. [readable spans](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#additional-span-interfaces))
+to the binary protobuf encoding (avoid exposing the protobuf generated code by returning bytes or output to a stream),
+so other streaming like exporters can be implemented.
 
-* UTF-8 encoding
-* Each line is a valid JSON value
-* The line separator is `\n`
-* The preferred file extension is `jsonl`.
+### Protobuf file requirements
 
-#### Streaming appending
+This file is a binary file with the following guarantees:
 
-There is no guarantee that the data in the file is ordered.
+* Messages MUST be written [delimited](https://protobuf.dev/programming-guides/techniques/#streaming) to the file.
+  * For java see [here](https://protobuf.dev/reference/java/api-docs/com/google/protobuf/MessageLite#writeDelimitedTo-java.io.OutputStream-).
+  * For C++ see [here](https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/util/delimited_message_util.cc).
+* MUST contain exactly one type of data: traces, metrics, or logs.
+* There is no guarantee that the data in the file is ordered.
+* There is no guarantee in particular that timestamps will be monotonically increasing.
 
-There is no guarantee in particular that timestamps will be monotonically increasing.
+## JSON serialization
 
-### Telemetry data requirements
+This section describes the serialization of OpenTelemetry data as JSON objects that can be stored in files.
 
-This defines the first version of the serialization scheme.
-
-The data must be encoded according to the format specified in the
-[OTLP JSON Encoding](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#json-protobuf-encoding).
+The data MUST be encoded according to the format specified in the
+[JSON Protobuf Encoding](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#json-protobuf-encoding).
 
 Only top-level objects, `TracesData`, `MetricsData`, and `LogsData` are supported.
 
-Files must contain exactly one type of data: traces, metrics, or logs.
+Implementation MAY expose helpers to serialize from SDK readable types 
+(e.g. [readable spans](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#additional-span-interfaces))
+to the JSON protobuf encoding (avoid exposing the protobuf generated code by returning a string or output to a stream),
+so other streaming like exporters can be implemented.
+
+### JSON file requirements
+
+This file is a JSON lines file (jsonlines.org), and therefore follows those requirements:
+
+* UTF-8 encoding.
+* Each line is a valid JSON value.
+* The line separator is `\n`.
+* The preferred file extension is `jsonl`.
+* MUST contain exactly one type of data: traces, metrics, or logs.
+* There is no guarantee that the data in the file is ordered.
+* There is no guarantee in particular that timestamps will be monotonically increasing.
 
 ### Examples
 
