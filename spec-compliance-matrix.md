@@ -310,6 +310,9 @@ Note: Support for environment variables is optional.
 
 ## File Configuration
 
+See [File Configuration](./specification/configuration/file-configuration.md)
+for details.
+
 | Feature                                                          | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |------------------------------------------------------------------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | `Parse` a configuration file                                     |    |      |    |        |      |        |     |      |     |      |       |
