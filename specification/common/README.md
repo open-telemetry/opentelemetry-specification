@@ -33,7 +33,8 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - A homogeneous array of values of primitive type [before 1.29.0].
   - An array of `any` values [since 1.29.0].
-  - A key/value map, where key is string and value is `any` value [since 1.29.0].
+  - A key/value map, where key is string and value is `any` value. Any form of reference
+    loops is disallowed. [since 1.29.0].
 
 Complex attribute types (such as arrays and maps):
 
