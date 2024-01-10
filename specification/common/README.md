@@ -35,13 +35,14 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
   - An array of `any` values [since 1.29.0].
   - A key/value map, where key is string and value is `any` value [since 1.29.0].
 
-Complex attribute types (such as homogenous arrays, arrays of any, and maps) SHOULD be
-used sparingly, in situations where their use minimizes manipulation of the data’s
-original structure.
+Complex attribute types (such as arrays and maps):
+
+- SHOULD be used sparingly, in situations where their use minimizes manipulation of
+  the data’s original structure.
+- SHOULD NOT be used with metrics.
 
 When exporting to protocols that do not natively support a particular non-string
 value type the value should be converted to a string JSON-encoding of the value.
-
 For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will
 be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
