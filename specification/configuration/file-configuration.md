@@ -306,7 +306,7 @@ TODO: define behavior if some portion of configuration model is not supported
 
 #### Register Component Provider
 
-The SDK MUST provide a mechanism to
+The file configuration implementation MUST provide a mechanism to
 register [component providers](#component-provider).
 
 **Parameters:**
