@@ -194,7 +194,7 @@ An umbrella term for the smallest unit of sequential code execution, used in dif
 
 ### Service
 
-OpenTelemetry has adopted a broad interpretation such that every telemetry source is a service. Examples include, but are not limited to: web services, hosts, mobile applications, browser application, edge computing devices, functions as a service, databases, message brokers, etc. See the [semantic conventions for `service`](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource#service) for more details.
+A source of telemetry, broadly interpreted. Examples include, but are not limited to: web services, hosts, mobile applications, browser application, edge computing devices, functions as a service, databases, message brokers, etc. See the [semantic conventions for `service`](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource#service) for more details.
 
 ## Logs
 
