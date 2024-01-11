@@ -34,7 +34,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
   - An array of values of primitive type [before 1.29.0].
   - An array of `any` values [since 1.29.0].
   - A key/value map, where key is string and value is `any` value. Any form of reference
-    loops is disallowed. [since 1.29.0].
+    cycle is disallowed. [since 1.29.0].
 
 Complex attribute types (such as arrays and maps) SHOULD be used sparingly. They may
 be useful for example in situations where their use minimizes manipulation
