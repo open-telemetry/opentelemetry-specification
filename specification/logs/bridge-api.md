@@ -120,7 +120,8 @@ The API MUST accept the following parameters:
   behavior.
 - [Severity Number](./data-model.md#field-severitynumber)
 - [Severity Text](./data-model.md#field-severitytext)
-- [Body](./data-model.md#field-body)
+- [Body](./data-model.md#field-body). The API MUST support passing Body as `string`.
+  The API MAY support passing Body as a type representing [`any`](./data-model.md#type-any).
 - [Attributes](./data-model.md#field-attributes)
 
 All parameters are optional.

@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Clarify Body representation in Log Bridge API.
+  ([#3814](https://github.com/open-telemetry/opentelemetry-specification/pull/3814))
+
 ### Resource
 
 ### OpenTelemetry Protocol
