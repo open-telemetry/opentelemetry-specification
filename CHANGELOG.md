@@ -25,6 +25,9 @@ release.
 
 ### Common
 
+- Add service to glossary
+  ([#3815](https://github.com/open-telemetry/opentelemetry-specification/pull/3815))
+
 ### Supplementary Guidelines
 
 ## v1.29.0 (2024-01-10)
