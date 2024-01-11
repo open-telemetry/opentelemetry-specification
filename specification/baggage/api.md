@@ -41,12 +41,19 @@ Alpha-numeric names are strongly recommended. Language API SHOULD return
 an error when given a baggage name that is not a `token`.
 
 Baggage **values** are any valid UTF-8 strings. Language API MUST accept
-any valid UTF-8 string as baggage value. Language API MUST guarantee that
-`Get` and `Set` operations are symmetrical with respect to name and value,
-i.e. `Get` MUST return the same **value** string as received in `Set`.
+any valid UTF-8 string as baggage **value** in `Set` and return the same
+value from `Get`.
 
 Language API MUST treat both baggage names and values as case sensitive.
 See also [W3C Baggage -- Case sensitivity of keys](https://github.com/w3c/baggage/blob/main/baggage/HTTP_HEADER_FORMAT_RATIONALE.md#case-sensitivity-of-keys).
+
+Example:
+```
+baggage.Set('a', 'B% 💼');
+baggage.Set('A', 'c');
+baggage.Get('a'); // returns "B% 💼"
+baggage.Get('A'); // returns "c"
+```
 
 The Baggage API consists of:
 
