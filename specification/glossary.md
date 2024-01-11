@@ -9,36 +9,38 @@ Some other fundamental terms are documented in the [overview document](overview.
 
 <!-- toc -->
 
-- [User Roles](#user-roles)
-  * [Application Owner](#application-owner)
-  * [Library Author](#library-author)
-  * [Instrumentation Author](#instrumentation-author)
-  * [Plugin Author](#plugin-author)
-- [Common](#common)
-  * [Signals](#signals)
-  * [Packages](#packages)
-  * [ABI Compatibility](#abi-compatibility)
-  * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
-  * [Manual Instrumentation](#manual-instrumentation)
-  * [Automatic Instrumentation](#automatic-instrumentation)
-  * [Telemetry SDK](#telemetry-sdk)
-  * [Constructors](#constructors)
-  * [SDK Plugins](#sdk-plugins)
-  * [Exporter Library](#exporter-library)
-  * [Instrumented Library](#instrumented-library)
-  * [Instrumentation Library](#instrumentation-library)
-  * [Instrumentation Scope](#instrumentation-scope)
-  * [Tracer Name / Meter Name](#tracer-name--meter-name)
-  * [Execution Unit](#execution-unit)
-- [Logs](#logs)
-  * [Log Record](#log-record)
-  * [Log](#log)
-  * [Embedded Log](#embedded-log)
-  * [Standalone Log](#standalone-log)
-  * [Log Attributes](#log-attributes)
-  * [Structured Logs](#structured-logs)
-  * [Flat File Logs](#flat-file-logs)
-  * [Log Appender / Bridge](#log-appender--bridge)
+- [Glossary](#glossary)
+  - [User Roles](#user-roles)
+    - [Application Owner](#application-owner)
+    - [Library Author](#library-author)
+    - [Instrumentation Author](#instrumentation-author)
+    - [Plugin Author](#plugin-author)
+  - [Common](#common)
+    - [Signals](#signals)
+    - [Packages](#packages)
+    - [ABI Compatibility](#abi-compatibility)
+    - [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
+    - [Manual Instrumentation](#manual-instrumentation)
+    - [Automatic Instrumentation](#automatic-instrumentation)
+    - [Telemetry SDK](#telemetry-sdk)
+    - [Constructors](#constructors)
+    - [SDK Plugins](#sdk-plugins)
+    - [Exporter Library](#exporter-library)
+    - [Instrumented Library](#instrumented-library)
+    - [Instrumentation Library](#instrumentation-library)
+    - [Instrumentation Scope](#instrumentation-scope)
+    - [Tracer Name / Meter Name](#tracer-name--meter-name)
+    - [Execution Unit](#execution-unit)
+    - [Service](#service)
+  - [Logs](#logs)
+    - [Log Record](#log-record)
+    - [Log](#log)
+    - [Embedded Log](#embedded-log)
+    - [Standalone Log](#standalone-log)
+    - [Log Attributes](#log-attributes)
+    - [Structured Logs](#structured-logs)
+    - [Flat File Logs](#flat-file-logs)
+    - [Log Appender / Bridge](#log-appender--bridge)
 
 <!-- tocstop -->
 
@@ -190,6 +192,10 @@ application in the scope of which the telemetry is emitted.
 ### Execution Unit
 
 An umbrella term for the smallest unit of sequential code execution, used in different concepts of multitasking. Examples are threads, coroutines or fibers.
+
+### Service
+
+OpenTelemetry has adopted a broad interpretation such that every telemetry source is a service. Examples include, but are not limited to: web services, hosts, mobile applications, browser application, edge computing devices, functions as a service, databases, message brokers, etc. See the [semantic conventions for `service`](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource#service) for more details.
 
 ## Logs
 
