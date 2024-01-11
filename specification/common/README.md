@@ -31,7 +31,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
   - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
 - The attribute value can be of `any` type, where any is defined as one of the following:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
-  - A homogeneous array of values of primitive type [before 1.29.0].
+  - An array of values of primitive type [before 1.29.0].
   - An array of `any` values [since 1.29.0].
   - A key/value map, where key is string and value is `any` value. Any form of reference
     loops is disallowed. [since 1.29.0].
@@ -51,9 +51,9 @@ value type the value should be converted to a string JSON-encoding of the value.
 For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will
 be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
-Attribute values expressing a numerical value of zero, an empty string, or an
-empty array are considered meaningful and MUST be stored and passed on to
-processors / exporters.
+Attribute values expressing a numerical value of zero, an empty string, an
+empty array or empty key/value map are considered meaningful and MUST be stored and
+passed on to processors / exporters.
 
 Attribute values of `null` are not valid and attempting to set a `null` value is
 undefined behavior.
