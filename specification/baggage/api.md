@@ -48,6 +48,7 @@ Language API MUST treat both baggage names and values as case sensitive.
 See also [W3C Baggage -- Case sensitivity of keys](https://github.com/w3c/baggage/blob/main/baggage/HTTP_HEADER_FORMAT_RATIONALE.md#case-sensitivity-of-keys).
 
 Example:
+
 ```
 baggage.Set('a', 'B% 💼');
 baggage.Set('A', 'c');
