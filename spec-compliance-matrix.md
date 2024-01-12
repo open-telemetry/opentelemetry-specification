@@ -237,6 +237,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
 | Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
+| Non-homogeneous arrays and maps (including nested) for attribute values| | | | |    |      |        |     |      |     |      |       |
 
 ## Resource
 
