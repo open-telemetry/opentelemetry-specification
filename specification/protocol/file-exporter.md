@@ -48,7 +48,7 @@ This defines the first version of the serialization scheme.
 The data must be encoded according to the format specified in the
 [OTLP JSON Encoding](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#json-protobuf-encoding).
 
-Only top-level objects, `ExportTraceServiceRequest`, `ExportMetricsServiceRequest`, and `ExportLogsServiceRequest` are supported.
+Only top-level objects, `TracesData`, `MetricsData`, and `LogsData` are supported.
 
 Files must contain exactly one type of data: traces, metrics, or logs.
 
