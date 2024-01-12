@@ -500,9 +500,10 @@ meterProviderBuilder
   );
 ```
 
-TODO: after we release the initial Stable version of Metrics SDK specification,
-we will explore how to allow configuring custom
-[ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
+In addition to `Aggregation`, the SDK MUST allow the optional configuring of
+the [`ExemplarReservoir`](#exemplarreservoir) type when defining a view.
+If no `ExemplarReservoir` is specified, then a default is chosen using
+[Exemplar Default](#exemplar-defaults).
 
 The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./data-model.md#metric-points) in the
@@ -1033,7 +1034,7 @@ The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
 ### Exemplar defaults
 
-The SDK SHOULD include two types of built-in exemplar reservoirs:
+The SDK MUST include two types of built-in exemplar reservoirs:
 
 1. `SimpleFixedSizeExemplarReservoir`
 2. `AlignedHistogramBucketExemplarReservoir`
@@ -1096,6 +1097,20 @@ measurements using the equivalent of the following naive algorithm:
     end
     return boundaries.length
   ```
+
+This Exemplar reservoir MAY take a configuration parameter for the bucket
+boundaries used by the reserovoir. The size of the reservoir is always the
+number of bucket boundaries plus one. This configuration parameter SHOULD have
+the same format as specifying bucket boundaries to
+[Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
+
+### Custom ExemplarReservoir
+
+The SDK SHOULD provide a mechanism for SDK users to provide their own
+ExemplarReservoir implementation. This extension SHOULD be configurable on
+a metric [View](#view), although individual reservoirs MUST still be
+instantiated per metric-timeseries (see
+[Exemplar Reservoir - Paragraph 2](#exemplarreservoir)).
 
 ## MetricReader
 
