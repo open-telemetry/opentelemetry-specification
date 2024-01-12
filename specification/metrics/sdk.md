@@ -59,6 +59,7 @@ linkTitle: SDK
   * [Exemplar defaults](#exemplar-defaults)
     + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
     + [AlignedHistogramBucketExemplarReservoir](#alignedhistogrambucketexemplarreservoir)
+  * [Custom ExemplarReservoir](#custom-exemplarreservoir)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [Collect](#collect)
