@@ -23,6 +23,9 @@ release.
 
 ### SDK Configuration
 
+- Add file configuration section to spec compliance matrix.
+  ([#3804](https://github.com/open-telemetry/opentelemetry-specification/pull/3804))
+
 ### Common
 
 ### Supplementary Guidelines
