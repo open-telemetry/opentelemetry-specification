@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Expose `ExemplarReservoir` as configuration parameter for views.
+  ([#3820](https://github.com/open-telemetry/opentelemetry-specification/pull/3820))
+
 ### Logs
 
 ### Resource
