@@ -316,9 +316,9 @@ for details.
 | Feature                                                          | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |------------------------------------------------------------------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | `Parse` a configuration file                                     |    |      |    |        |      |        |     |      |     |      |       |
-| The `parse` operation returns configuration model                |    |      |    |        |      |        |     |      |     |      |       |
-| The `parse` operation performs environment variable substitution |    |      |    |        |      |        |     |      |     |      |       |
-| The `parse` operation accepts the configuration YAML file format |    |      |    |        |      |        |     |      |     |      |       |
+| The `Parse` operation returns configuration model                |    |      |    |        |      |        |     |      |     |      |       |
+| The `Parse` operation performs environment variable substitution |    |      |    |        |      |        |     |      |     |      |       |
+| The `Parse` operation accepts the configuration YAML file format |    |      |    |        |      |        |     |      |     |      |       |
 | `Create` SDK components                                          |    |      |    |        |      |        |     |      |     |      |       |
 | The `Create` operation accepts configuration model               |    |      |    |        |      |        |     |      |     |      |       |
 | The `Create` operation returns `TracerProvider`                  |    |      |    |        |      |        |     |      |     |      |       |
