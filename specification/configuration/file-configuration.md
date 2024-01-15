@@ -290,6 +290,7 @@ Interpret [configuration model](#in-memory-configuration-model) and return SDK c
 * `MeterProvider`
 * `LoggerProvider`
 * `Propagators`
+* `ClientPropagators`
 
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
