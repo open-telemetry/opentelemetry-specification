@@ -71,9 +71,9 @@ in process in chain
 * `ClientPropagator` (optional), a newer specialization of `Propagator`, which
 sends trace context back to the caller.
 
-The API is the same for both classes, but SDKs MUST NOT call `ClientPropagator`s
-to propagate the context to the next process, and MUST NOT call `Propagator`s
-when propagating the context back to the caller.
+The API is the same for both classes, but instrumentation libraries MUST NOT
+call `ClientPropagator`s to propagate the context to the next process, and MUST
+NOT call `Propagator`s when propagating the context back to the caller.
 
 For historical reasons, whenever "Propagator" is used, a forward propagator is
 implied.
