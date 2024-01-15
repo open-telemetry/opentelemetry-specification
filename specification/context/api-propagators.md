@@ -8,6 +8,8 @@
 <!-- toc -->
 
 - [Overview](#overview)
+- [Propagator Classes](#propagator-classes)
+  * [Client Propagator](#client-propagator)
 - [Propagator Types](#propagator-types)
   * [Carrier](#carrier)
   * [Operations](#operations)
@@ -30,6 +32,8 @@
 - [Global Propagators](#global-propagators)
   * [Get Global Propagator](#get-global-propagator)
   * [Set Global Propagator](#set-global-propagator)
+  * [Get Global ClientPropagator](#get-global-clientpropagator)
+  * [Set Global ClientPropagator](#set-global-clientpropagator)
 - [Propagators Distribution](#propagators-distribution)
   * [B3 Requirements](#b3-requirements)
     + [B3 Extract](#b3-extract)
