@@ -10,7 +10,7 @@ release.
 ### Context
 
 - Context propagation to client instrumentation.
-  ([#nnn](https://github.com/open-telemetry/opentelemetry-specification/pull/nnn))
+  ([#3825](https://github.com/open-telemetry/opentelemetry-specification/pull/3825))
 
 ### Traces
 
