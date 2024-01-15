@@ -343,13 +343,19 @@ See the [Context](context/README.md)
 
 ## Propagators
 
-OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting concern values
-such as `Span`s (usually only the `SpanContext` portion) and `Baggage`. Different `Propagator` types define the restrictions
-imposed by a specific transport and bound to a data type.
+OpenTelemetry uses `Propagators` to serialize and deserialize cross-cutting
+concern values such as `Span`s (usually only the `SpanContext` portion) and
+`Baggage`. Different `Propagator` classes and types define the restrictions
+imposed by a specific direction, transport, and are bound to a data type.
+
+Propagators can be of one of two classes: `Propagator` (classic, forward), or
+`ClientPropagator` (backward). See [Propagator
+Classes](context/api-propagators.md#propagator-classes).
 
 The Propagators API currently defines one `Propagator` type:
 
-- `TextMapPropagator` injects values into and extracts values from carriers as text.
+- `TextMapPropagator` injects values into and extracts values from carriers as
+  text.
 
 ## Collector
 
