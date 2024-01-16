@@ -15,7 +15,7 @@ release.
 
 ### Logs
 
-- Update types of Resource and Attributes fields in Logs Data Model.
+- Update `Attributes` field type in Logs Data Model to reference common attributes collection.
   ([#3814](https://github.com/open-telemetry/opentelemetry-specification/pull/3814))
 
 ### Resource

@@ -415,7 +415,7 @@ source. This field is optional.
 
 ### Field: `Resource`
 
-Type: [Resource](../resource/sdk.md).
+Type: `map<string, any>`.
 
 Description: Describes the source of the log, aka
 [resource](../overview.md#resources). Multiple occurrences of events coming from
