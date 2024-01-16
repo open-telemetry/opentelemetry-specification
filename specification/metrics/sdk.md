@@ -345,7 +345,7 @@ The SDK MUST accept the following stream configuration parameters:
   user does not provide an `aggregation` value, the `MeterProvider` MUST apply
   a [default aggregation](#default-aggregation) configurable on the basis of
   instrument type according to the [MetricReader](#metricreader) instance.
-* **Status**: [Feature-freeze](../document-status.md) - `exemplar_reservoir`: A
+* **Status**: [Experimental, Feature-freeze](../document-status.md) - `exemplar_reservoir`: A
   functional type that generates an exemplar reservoir a `MeterProvider` will
   use when storing exemplars. This functional type needs to be a factory or
   callback similar to aggregation selection functionality which allows
@@ -500,12 +500,6 @@ meterProviderBuilder
     )
   );
 ```
-
-> **Status**: [Feature-freeze](../document-status.md) -
-> In addition to `Aggregation`, the SDK MUST allow the optional configuring of
-> the [`ExemplarReservoir`](#exemplarreservoir) type when defining a view.
-> If no `ExemplarReservoir` is specified, then a default is chosen using
-> [Exemplar Default](#exemplar-defaults).
 
 The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./data-model.md#metric-points) in the
