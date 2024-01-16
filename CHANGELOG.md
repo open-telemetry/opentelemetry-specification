@@ -16,7 +16,7 @@ release.
 ### Logs
 
 - Fix `Resource` field type in Logs Data Model.
-  ([#3814](https://github.com/open-telemetry/opentelemetry-specification/pull/3814))
+  ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
 
 ### Resource
 
