@@ -15,7 +15,7 @@ release.
 
 ### Logs
 
-- Remove confusing description from `Body`` field in Logs Data Model to make it clear the Bridge API must support a strucutred body.
+- Remove confusing description from `Body`` field in Logs Data Model to make it clear the Bridge API must support a structured body.
   ([#3827](https://github.com/open-telemetry/opentelemetry-specification/pull/3827))
 
 ### Resource
