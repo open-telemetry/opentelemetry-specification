@@ -308,6 +308,24 @@ Note: Support for environment variables is optional.
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | +    |       |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |     | +    |     |             |      |        |     |      |     |      |       |
 
+## File Configuration
+
+See [File Configuration](./specification/configuration/file-configuration.md)
+for details.
+
+| Feature                                                          | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|------------------------------------------------------------------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
+| `Parse` a configuration file                                     |    |      |    |        |      |        |     |      |     |      |       |
+| The `Parse` operation accepts the configuration YAML file format |    |      |    |        |      |        |     |      |     |      |       |
+| The `Parse` operation performs environment variable substitution |    |      |    |        |      |        |     |      |     |      |       |
+| The `Parse` operation returns configuration model                |    |      |    |        |      |        |     |      |     |      |       |
+| `Create` SDK components                                          |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation accepts configuration model               |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation returns `TracerProvider`                  |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation returns `MeterProvider`                   |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation returns `LoggerProvider`                  |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation returns `Propagators`                     |    |      |    |        |      |        |     |      |     |      |       |
+
 ## Exporters
 
 | Feature                                                                        | Optional | Go | Java | JS | Python      | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
