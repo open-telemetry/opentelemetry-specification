@@ -501,10 +501,11 @@ meterProviderBuilder
   );
 ```
 
-In addition to `Aggregation`, the SDK MUST allow the optional configuring of
-the [`ExemplarReservoir`](#exemplarreservoir) type when defining a view.
-If no `ExemplarReservoir` is specified, then a default is chosen using
-[Exemplar Default](#exemplar-defaults).
+> **Status**: [Feature-freeze](../document-status.md) -
+> In addition to `Aggregation`, the SDK MUST allow the optional configuring of
+> the [`ExemplarReservoir`](#exemplarreservoir) type when defining a view.
+> If no `ExemplarReservoir` is specified, then a default is chosen using
+> [Exemplar Default](#exemplar-defaults).
 
 The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./data-model.md#metric-points) in the
