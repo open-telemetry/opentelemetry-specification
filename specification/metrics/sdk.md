@@ -940,8 +940,8 @@ A Metric SDK SHOULD provide configuration for Exemplar sampling, specifically:
 ### ExemplarFilter
 
 The `ExemplarFilter` configuration MUST allow users to select between one of the
-built-in ExemplarFilters. While `ExemplarFilter` detrmines which measurements
-are *eligible* for becoming an `Exemplar`, the `ExemplarReservoir` makes the
+built-in ExemplarFilters. While `ExemplarFilter` determines which measurements
+are _eligible_ for becoming an `Exemplar`, the `ExemplarReservoir` makes the
 final decision if a measurement becomes an exemplar and is stored.
 
 The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
