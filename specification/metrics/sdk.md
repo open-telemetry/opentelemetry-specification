@@ -879,7 +879,7 @@ series and the topic requires further analysis.
 
 ## Exemplar
 
-**Status**: [Feature-freeze](../document-status.md)
+**Status**: [Experimental, Feature-freeze](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
@@ -934,51 +934,41 @@ A Metric SDK MUST allow exemplar sampling to leverage the configuration of
 metric aggregation. For example, Exemplar sampling of histograms should be able
 to leverage bucket boundaries.
 
-A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
+A Metric SDK SHOULD provide configuration for Exemplar sampling, specifically:
 
 - `ExemplarFilter`: filter which measurements can become exemplars.
 - `ExemplarReservoir`: storage and sampling of exemplars.
 
 ### ExemplarFilter
 
-The `ExemplarFilter` interface MUST provide a method to determine if a
-measurement should be sampled. Sampled here simply makes the measurement
-eligible for being included as an exemplar. `ExemplarReservoir` makes the final
-decision if a measurement becomes an exemplar.
-
-This interface SHOULD have access to:
-
-- The `value` of the measurement.
-- The complete set of `Attributes` of the measurement.
-- The [Context](../context/README.md) of the measurement, which covers the
-  [Baggage](../baggage/api.md) and the current active
-  [Span](../trace/api.md#span).
-- A `timestamp` that best represents when the measurement was taken.
-
-### Built-in ExemplarFilters
-
-OpenTelemetry supports a number of built-in exemplar filters to choose from.
-The default is `TraceBased`.
-
-#### AlwaysOn
-
-An ExemplarFilter which makes all measurements eligible for being an Exemplar.
-
-#### AlwaysOff
-
-An ExemplarFilter which makes no measurements eligible for being an Exemplar.
-Using this ExemplarFilter is as good as disabling Exemplar feature.
-
-#### TraceBased
-
-An ExemplarFilter which makes those measurements eligible for being an
-Exemplar, which are recorded in the context of a sampled parent span.
-
-#### Configuration
+The `ExemplarFilter` configuration MUST allow users to select between one of the
+built-in ExemplarFilters. While `ExemplarFilter` detrmines which measurements
+are *eligible* for becoming an `Exemplar`, the `ExemplarReservoir` makes the
+final decision if a measurement becomes an exemplar and is stored.
 
 The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
 an SDK. The default value SHOULD be `TraceBased`. The filter configuration
 SHOULD follow the [environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
+
+An OpenTelemetry SDK MUST support the following filters: 
+
+- [AlwaysOn](#alwayson)
+- [AlwaysOff](#alwaysoff)
+- [TraceBased](#tracebased)
+
+### AlwaysOn
+
+An ExemplarFilter which makes all measurements eligible for being an Exemplar.
+
+### AlwaysOff
+
+An ExemplarFilter which makes no measurements eligible for being an Exemplar.
+Using this ExemplarFilter is as good as disabling Exemplar feature.
+
+### TraceBased
+
+An ExemplarFilter which makes those measurements eligible for being an
+Exemplar, which are recorded in the context of a sampled parent span.
 
 ### ExemplarReservoir
 
@@ -1694,8 +1684,6 @@ specific guarantees and safeties.
 
 **MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` are safe to be
 called concurrently.
-
-**ExemplarFilter** - all methods are safe to be called concurrently.
 
 **ExemplarReservoir** - all methods are safe to be called concurrently.
 
