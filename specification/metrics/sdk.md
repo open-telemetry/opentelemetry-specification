@@ -50,11 +50,9 @@ linkTitle: SDK
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
-  * [Built-in ExemplarFilters](#built-in-exemplarfilters)
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceBased](#tracebased)
-    + [Configuration](#configuration-2)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
     + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
@@ -950,22 +948,22 @@ The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
 an SDK. The default value SHOULD be `TraceBased`. The filter configuration
 SHOULD follow the [environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
 
-An OpenTelemetry SDK MUST support the following filters: 
+An OpenTelemetry SDK MUST support the following filters:
 
 - [AlwaysOn](#alwayson)
 - [AlwaysOff](#alwaysoff)
 - [TraceBased](#tracebased)
 
-### AlwaysOn
+#### AlwaysOn
 
 An ExemplarFilter which makes all measurements eligible for being an Exemplar.
 
-### AlwaysOff
+#### AlwaysOff
 
 An ExemplarFilter which makes no measurements eligible for being an Exemplar.
 Using this ExemplarFilter is as good as disabling Exemplar feature.
 
-### TraceBased
+#### TraceBased
 
 An ExemplarFilter which makes those measurements eligible for being an
 Exemplar, which are recorded in the context of a sampled parent span.
