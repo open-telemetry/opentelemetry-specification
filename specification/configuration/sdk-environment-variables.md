@@ -302,9 +302,9 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 
 Environment variables involved in [file configuration](file-configuration.md).
 
-| Name             | Description                                                   | Default | Notes     |
-|------------------|---------------------------------------------------------------|---------|-----------|
-| OTEL_CONFIG_FILE | The path of the configuration file used to configure the SDK. |         | See below |
+| Name             | Description                                                                                                                                                                   | Default | Notes     |
+|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
+| OTEL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | See below |
 
 If `OTEL_CONFIG_FILE` is set, the file at the specified path is used to
 call [Parse](file-configuration.md#parse). The
