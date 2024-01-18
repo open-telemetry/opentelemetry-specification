@@ -7,19 +7,16 @@ release.
 
 ## Unreleased
 
-### Context & Baggage
-
-- Align definition of Baggage with W3C Specification.
-  ([#3800](https://github.com/open-telemetry/opentelemetry-specification/pull/3800))
+### Context
 
 ### Traces
 
 ### Metrics
 
-- Add optional configuration for Prometheus exporters to optionally drop `otel_scope_info` metric.
-  ([#3796](https://github.com/open-telemetry/opentelemetry-specification/pull/3796))
-
 ### Logs
+
+- Fix `Resource` field type in Logs Data Model.
+  ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
 
 ### Resource
 
@@ -29,8 +26,50 @@ release.
 
 ### SDK Configuration
 
+- Add file configuration section to spec compliance matrix.
+  ([#3804](https://github.com/open-telemetry/opentelemetry-specification/pull/3804))
 - Define `OTEL_CONFIG_FILE` environment variable.
-   ([#3805](https://github.com/open-telemetry/opentelemetry-specification/pull/3805))
+  ([#3805](https://github.com/open-telemetry/opentelemetry-specification/pull/3805))
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.29.0 (2024-01-10)
+
+### Context & Baggage
+
+- Align definition of Baggage with W3C Specification.
+  ([#3800](https://github.com/open-telemetry/opentelemetry-specification/pull/3800))
+
+### Traces
+
+- Update OpenTelemetry to Zipkin Transformation to handle attributes from older semantic conventions in a backwards compatible way.
+  ([#3794](https://github.com/open-telemetry/opentelemetry-specification/pull/3794))
+
+### Metrics
+
+- Define experimental MetricFilter as a mechanism to filter collected metrics by the MetricReader
+  ([#3566](https://github.com/open-telemetry/opentelemetry-specification/pull/3566))
+- Add optional configuration for Prometheus exporters to optionally remove unit and type suffixes.
+  ([#3777](https://github.com/open-telemetry/opentelemetry-specification/pull/3777))
+- Add optional configuration for Prometheus exporters to optionally drop `otel_scope_info` metric.
+  ([#3796](https://github.com/open-telemetry/opentelemetry-specification/pull/3796))
+
+### Logs
+
+### Resource
+
+### OpenTelemetry Protocol
+
+- Use `TracesData`, `MetricsData` and `LogsData` proto messages for file exporter.
+
+### Compatibility
+
+### SDK Configuration
+
+- Define file configuration file format and env var substitution
+  ([#3744](https://github.com/open-telemetry/opentelemetry-specification/pull/3744))
 
 ### Common
 
@@ -54,14 +93,10 @@ release.
 
 ### Metrics
 
-- Define experimental MetricFilter as a mechanism to filter collected metrics by the MetricReader
-  ([#3566](https://github.com/open-telemetry/opentelemetry-specification/pull/3566))
 - Add optional configuration for Prometheus exporters to promote resource attributes to metric attributes
   ([#3761](https://github.com/open-telemetry/opentelemetry-specification/pull/3761))
 - Clarifications and flexibility in Exemplar speicification.
   ([#3760](https://github.com/open-telemetry/opentelemetry-specification/pull/3760))
-- Add optional configuration for Prometheus exporters to optionally remove unit and type suffixes.
-  ([#3777](https://github.com/open-telemetry/opentelemetry-specification/pull/3777))
 
 ### Logs
 
