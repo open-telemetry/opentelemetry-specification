@@ -14,6 +14,8 @@ release.
 ### Metrics
 
 - Expose `ExemplarReservoir` as configuration parameter for views.
+  Remove `ExemplarFilter` as an interface, now it is only configuration
+  parameter.
   ([#3820](https://github.com/open-telemetry/opentelemetry-specification/pull/3820))
 
 ### Logs
