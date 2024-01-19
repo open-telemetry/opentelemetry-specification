@@ -1083,15 +1083,15 @@ measurements using the equivalent of the following naive algorithm:
   ```
 
 This Exemplar reservoir MAY take a configuration parameter for the bucket
-boundaries used by the reserovoir. The size of the reservoir is always the
+boundaries used by the reservoir. The size of the reservoir is always the
 number of bucket boundaries plus one. This configuration parameter SHOULD have
 the same format as specifying bucket boundaries to
 [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
 
 ### Custom ExemplarReservoir
 
-The SDK SHOULD provide a mechanism for SDK users to provide their own
-ExemplarReservoir implementation. This extension SHOULD be configurable on
+The SDK MUST provide a mechanism for SDK users to provide their own
+ExemplarReservoir implementation. This extension MUST be configurable on
 a metric [View](#view), although individual reservoirs MUST still be
 instantiated per metric-timeseries (see
 [Exemplar Reservoir - Paragraph 2](#exemplarreservoir)).
