@@ -176,10 +176,13 @@ paired with a custom span exporter named `my-exporter`, which is configured
 with `config-parameter: value`. For this configuration to succeed,
 a [component provider](#component-provider) must
 be [registered](#register-component-provider) with `type: SpanExporter`,
-and `name: my-exporter`. When [create](#create) is called, the implementation
-will encounter `my-exporter` and invoke [create plugin](#create-plugin)
-with `properties: {config-parameter: value}` on the registered component
-provider.
+and `name: my-exporter`. When [parse](#parse) is called, the implementation will
+encounter `my-exporter` and translate the corresponding configuration to an
+equivalent generic `properties` representation (
+i.e. `properties: {config-parameter: value}`). When [create](#create) is called,
+the implementation will encounter `my-exporter` and
+invoke [create plugin](#create-plugin) on the registered component provider
+with the configuration `properties` determined during `parse`.
 
 #### Component Provider
 
@@ -240,10 +243,6 @@ with OpAmp
 
 Parse and validate a [configuration file](#configuration-file).
 
-Parse MUST perform [environment variable substitution](#environment-variable-substitution).
-
-Parse MUST interpret null as equivalent to unset.
-
 **Parameters:**
 
 * `file`: The [configuration file](#configuration-file) to parse. This MAY be a
@@ -256,7 +255,17 @@ Parse MUST interpret null as equivalent to unset.
 
 **Returns:** [configuration model](#in-memory-configuration-model)
 
-This SHOULD return an error if:
+Parse MUST perform [environment variable substitution](#environment-variable-substitution).
+
+Parse MUST interpret null as equivalent to unset.
+
+When encountering a reference to
+a [SDK extension component](#sdk-extension-components) which is not built in to
+the SDK, Parse MUST resolve corresponding configuration to a
+generic `properties` representation as described
+in [Create Plugin](#create-plugin).
+
+Parse SHOULD return an error if:
 
 * The `file` doesn't exist or is invalid
 * The parsed `file` content does not conform to
@@ -293,10 +302,11 @@ When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to
 the SDK, Create MUST resolve the component using [Create Plugin](#create-plugin)
 of the [component provider](#component-provider) of the corresponding `type`
-and `name` used to [register](#register-component-provider). If no component
-provider is registered with the `type` and `name`, Create SHOULD return an
-error. If [Create Plugin](#create-plugin) returns an error, Create SHOULD
-propagate the error.
+and `name` used to [register](#register-component-provider), including the
+configuration `properties` as an argument. If no component provider is
+registered with the `type` and `name`, Create SHOULD return an error.
+If [Create Plugin](#create-plugin) returns an error, Create SHOULD propagate the
+error.
 
 This SHOULD return an error if it encounters an error in `configuration` (i.e.
 fail fast) in accordance with
