@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add name suggestion for option to apply resource attributes as metric attributes in Prometheus exporter.
+  ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
+
 ### Logs
 
 ### Events
