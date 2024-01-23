@@ -68,7 +68,7 @@ There are two classes of propagators:
 
 * `Propagator`, or "forward propagator", which sends data forward to the next
 in process in chain
-* `ResponsePropagator` (optional), a newer specialization of `Propagator`, which
+* `ResponsePropagator` (experimental), a newer specialization of `Propagator`, which
 sends trace context back to the caller.
 
 The API is the same for both classes, but instrumentation libraries MUST NOT
@@ -79,6 +79,8 @@ For historical reasons, whenever "Propagator" is used, a forward propagator is
 implied.
 
 ### Response Propagator
+
+**Status**: [Experimental](../document-status.md)
 
 While the classic context propagation was designed to carry values to the next
 process in the chain of execution, there are cases where we want to send the
@@ -373,11 +375,15 @@ Required parameters:
 
 ### Get Global ResponsePropagator
 
+**Status**: [Experimental](../document-status.md)
+
 This method MUST exist for each supported `ResponsePropagator` type.
 
 Returns a global `ResponsePropagator`. This usually will be composite instance.
 
 ### Set Global ResponsePropagator
+
+**Status**: [Experimental](../document-status.md)
 
 This method MUST exist for each supported `ResponsePropagator` type.
 
