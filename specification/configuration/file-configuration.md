@@ -179,6 +179,80 @@ This SHOULD return an error if:
 * The parsed `file` content does not conform to
   the [configuration model](#configuration-model) schema.
 
+#### Merge Environment
+
+Apply overrides from
+the [environment variable scheme](./sdk-environment-variables.md) to
+a [configuration model](#configuration-model).
+
+**Parameters:**
+
+* `configuration` - The configuration model.
+
+**Returns:** A configuration model with environment variable overrides applied.
+
+It MUST be possible for a caller to determine if the input `configuration` model
+is different from the output. This facilitates a workflow where the caller can
+determine that environment variables changed the resolved configuration model,
+and log details.
+
+The implementation MUST interpret the environment variable scheme and merge into
+a `configuration` according the rules in the table below.
+
+The "Impacted Fields" column describes the portions of the configuration
+impacted by the respective environment variable, using a dot notation where:
+
+* `.` references an object child
+* `[*]` references all elements of an array
+
+For example, consider the following YAML:
+
+```yaml
+parent:
+  child_string: value1
+  child_array:
+    - grand_child_string: value2
+    - grand_child_string: value3
+```
+
+The dot notation 
+
+* `.parent` selects the full object nested under `parent`
+* `.parent.child_string` selects the `value1` field
+* `.parent.child_array[*]` selects the full objects of `child_array`
+* `.parent.child_array[*].grand_child_string` selects value fields `value2`
+  and `value3` contained within the objects of `child_array`
+
+| Environment Variable                                     | Impacted fields                                                                                                                                                       | Rules                                                                                                                                                                                                   |
+|----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| OTEL_SDK_DISABLED                                        | `.disabled`                                                                                                                                                           | Replaces model.                                                                                                                                                                                         |
+| OTEL_RESOURCE_ATTRIBUTES                                 | `.resource.attributes`                                                                                                                                                | Merges with model, taking higher priority.                                                                                                                                                              |
+| OTEL_SERVICE_NAME                                        | `.resource.attributes."service.name"`                                                                                                                                 | Replaces model. Takes priority over `OTEL_RESOURCE_ATTRIBUTES`.                                                                                                                                         |
+| OTEL_LOG_LEVEL                                           | TODO: define when configuration added to model                                                                                                                        |                                                                                                                                                                                                         |
+| OTEL_PROPAGATORS                                         | `.propagator.composite`                                                                                                                                               | Replaces model.                                                                                                                                                                                         |
+| OTEL_BSP_*                                               | `.tracer_provider.processors[*].batch`                                                                                                                                | Merges with model, taking higher priority. Applies after `OTEL_TRACES_EXPORTER`.                                                                                                                        |
+| OTEL_BLRP_*                                              | `.logger_provider.processors[*].batch`                                                                                                                                | Merges with model, taking higher priority. Applies after `OTEL_LOGS_EXPORTER`.                                                                                                                          |
+| OTEL_METRIC_EXPORT_*                                     | `.meter_provider.readers[*].periodic`                                                                                                                                 | Merges with model, taking higher priority. Applies after `OTEL_METRICS_EXPORTER`.                                                                                                                       |
+| OTEL_EXPORTER_OTLP_*                                     | `.tracer_provider.processors[*].batch.exporter.otlp`</br>`.logger_provider.processors[*].batch.exporter.otlp`</br>`.meter_provider.readers[*].periodic.exporter.otlp` | Merges with model, taking higher priority. Applies after `OTEL_TRACES_EXPORTER`, `OTEL_LOGS_EXPORTER`, `OTEL_METRICS_EXPORTER`.                                                                         |
+| OTEL_EXPORTER_ZIPKIN_*                                   | `.tracer_provider.processors[*].batch.exporter.zipkin`                                                                                                                | Merges with model, taking higher priority. Applies after `OTEL_TRACES_EXPORTER`.                                                                                                                        |
+| OTEL_EXPORTER_PROMETHEUS_*                               | `.meter_provider.readers[*].pull.prometheus`                                                                                                                          | Merges with model, taking higher priority. Applies after `OTEL_METRICS_EXPORTER`.                                                                                                                       |
+| OTEL_TRACES_EXPORTER                                     | `.tracer_provider.processors[*].batch.exporter`                                                                                                                       | Removes all batch processors where exporter is not an environment variable entry. Ensures at least one batch processor exists for each entry.                                                           |
+| OTEL_METRICS_EXPORTER                                    | `.meter_provider.readers[*].periodic.exporter`, `.meter_provider.readers[*].pull.exporter`                                                                            | Removes all periodic and pull readers (for `prometheus`) where exporter is not an environment variable entry. Ensures at least one periodic or pull (for `prometheus`) processor exists for each entry. |
+| OTEL_LOGS_EXPORTER                                       | `.logger_provider.processors[*].batch.exporter`                                                                                                                       | Removes all batch processors where exporter is not an environment variable entry. Ensures at least one batch processor exists for each entry.                                                           |
+| OTEL_SPAN_*_LIMIT                                        | `.tracer_provider.limits`                                                                                                                                             | Merges with model, taking higher priority.                                                                                                                                                              |
+| OTEL_LOGRECORD_*_LIMIT                                   | `.logger_provider.limits`                                                                                                                                             | Merges with model, taking higher priority.                                                                                                                                                              |
+| OTEL_TRACES_SAMPLER                                      | `.tracer_provider.sampler`                                                                                                                                            | Replaces model.                                                                                                                                                                                         |
+| OTEL_TRACES_SAMPLER_ARG                                  | `.tracer_provider.sampler`                                                                                                                                            | Configures sampler as set via `OTEL_TRACES_SAMPLER`. Ignored if `OTEL_TRACES_SAMPLER` is unset.                                                                                                         |
+| OTEL_ATTRIBUTE_*_LIMIT                                   | `.attribute_limits`                                                                                                                                                   | Merges with model, taking higher priority.                                                                                                                                                              |
+| OTEL_METRICS_EXEMPLAR_FILTER                             | TODO: define when configuration added to model                                                                                                                        |                                                                                                                                                                                                         |
+| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | `meter_provider.readers[*].periodic.exporter.otlp.temporality_preference`                                                                                             | Replaces model.                                                                                                                                                                                         |
+| OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | `meter_provider.readers[*].periodic.exporter.otlp.default_histogram_aggregation`                                                                                      | Replaces model.                                                                                                                                                                                         |
+
+NOTE: The contents of this table reference specific schema definitions from the
+schema defined
+in [opentelemetry-configuration](https://github.com/open-telemetry/opentelemetry-configuration).
+Care must be taken to ensure they are kept in sync.
+
 #### Create
 
 Interpret [configuration model](#in-memory-configuration-model) and return SDK components.
