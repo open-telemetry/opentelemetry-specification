@@ -9,7 +9,7 @@
 
 - [Overview](#overview)
 - [Propagator Classes](#propagator-classes)
-  * [Client Propagator](#client-propagator)
+  * [Response Propagator](#response-propagator)
 - [Propagator Types](#propagator-types)
   * [Carrier](#carrier)
   * [Operations](#operations)
@@ -32,8 +32,8 @@
 - [Global Propagators](#global-propagators)
   * [Get Global Propagator](#get-global-propagator)
   * [Set Global Propagator](#set-global-propagator)
-  * [Get Global ClientPropagator](#get-global-clientpropagator)
-  * [Set Global ClientPropagator](#set-global-clientpropagator)
+  * [Get Global ResponsePropagator](#get-global-responsepropagator)
+  * [Set Global ResponsePropagator](#set-global-responsepropagator)
 - [Propagators Distribution](#propagators-distribution)
   * [B3 Requirements](#b3-requirements)
     + [B3 Extract](#b3-extract)
@@ -68,24 +68,24 @@ There are two classes of propagators:
 
 * `Propagator`, or "forward propagator", which sends data forward to the next
 in process in chain
-* `ClientPropagator` (optional), a newer specialization of `Propagator`, which
+* `ResponsePropagator` (optional), a newer specialization of `Propagator`, which
 sends trace context back to the caller.
 
 The API is the same for both classes, but instrumentation libraries MUST NOT
-call `ClientPropagator`s to propagate the context to the next process, and MUST
+call `ResponsePropagator`s to propagate the context to the next process, and MUST
 NOT call `Propagator`s when propagating the context back to the caller.
 
 For historical reasons, whenever "Propagator" is used, a forward propagator is
 implied.
 
-### Client Propagator
+### Response Propagator
 
 While the classic context propagation was designed to carry values to the next
 process in the chain of execution, there are cases where we want to send the
 trace context back to the caller. For instance, when a client has made an
 initial document request to a backend, the backend might have generated a trace
 context. Once the client loads the document, it can record the timings and use
-the same trace conterxt it got from the initial document headers. This trace
+the same trace context it got from the initial document headers. This trace
 context might be used as a link to/from a new trace, or might be directly reused
 as the parent of new spans.
 
@@ -325,8 +325,8 @@ to extract and inject the context on all outgoing remote calls. Propagators,
 depending on the language, MAY be set up using various dependency injection
 techniques or available as global accessors.
 
-The OpenTelemetry API SHOULD provide similar facilities for `ClientPropagator`s,
-and instrumentation libraries SHOULD call client propagators to inject the
+The OpenTelemetry API SHOULD provide similar facilities for `ResponsePropagator`s,
+and instrumentation libraries SHOULD call response propagators to inject the
 context on the response to remote calls.
 
 **Note:** It is a discouraged practice, but certain instrumentation libraries
@@ -347,7 +347,7 @@ propagators. If pre-configured, `Propagator`s SHOULD default to a composite
 `Propagator` specified in the [Baggage API](../baggage/api.md#propagation).
 These platforms MUST also allow pre-configured propagators to be disabled or overridden.
 
-Platforms MUST NOT pre-configure `ClientPropagator`s, those should be explicitly
+Platforms MUST NOT pre-configure `ResponsePropagator`s, those should be explicitly
 enabled by service owners in order to not leak unintended information to
 callers, which might be untrusted clients, like web browsers over the public
 internet.
@@ -368,21 +368,21 @@ Required parameters:
 
 - A `Propagator`. This usually will be a composite instance.
 
-### Get Global ClientPropagator
+### Get Global ResponsePropagator
 
-This method MUST exist for each supported `ClientPropagator` type.
+This method MUST exist for each supported `ResponsePropagator` type.
 
-Returns a global `ClientPropagator`. This usually will be composite instance.
+Returns a global `ResponsePropagator`. This usually will be composite instance.
 
-### Set Global ClientPropagator
+### Set Global ResponsePropagator
 
-This method MUST exist for each supported `ClientPropagator` type.
+This method MUST exist for each supported `ResponsePropagator` type.
 
-Sets the global `ClientPropagator` instance.
+Sets the global `ResponsePropagator` instance.
 
 Required parameters:
 
-- A `ClientPropagator`. This usually will be a composite instance.
+- A `ResponsePropagator`. This usually will be a composite instance.
 
 ## Propagators Distribution
 
@@ -411,8 +411,8 @@ Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
 the Core OpenTelemetry repositories.
 
-At the moment, no `ClientPropagator`s are available. A candidate for the
-near-future are W3C TraceContext's `traceresponse`.
+At the moment, no `ResponsePropagator`s are available. A candidate for the
+near-future is W3C TraceContext's `traceresponse`.
 
 ### B3 Requirements
 
