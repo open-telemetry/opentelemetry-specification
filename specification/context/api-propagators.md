@@ -89,6 +89,9 @@ the same trace context it got from the initial document headers. This trace
 context might be used as a link to/from a new trace, or might be directly reused
 as the parent of new spans.
 
+The trace context obtained from response propagators are meant to be consumed
+only by the caller and shouldn't be propagated further back.
+
 ## Propagator Types
 
 A `Propagator` type defines the restrictions imposed by a specific transport
