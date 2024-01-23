@@ -254,7 +254,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Get current Context                                                              |          | N/A| +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Composite Propagator                                                             |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Global Propagator                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| [ClientPropagator](specification/context/api-propagators.md#client-propagator)   |          | -  | -    | -  | -      | -    | -      | -   | -    | -   | -    | -     |
+| [ResponsePropagator](specification/context/api-propagators.md#response-propagator)|         | -  | -    | -  | -      | -    | -      | -   | -    | -   | -    | -     |
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
