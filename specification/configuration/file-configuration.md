@@ -148,7 +148,7 @@ name `Configuration` is RECOMMENDED.
 
 ### SDK Extension Components
 
-The SDK supports a variety
+The SDK supports a variety of
 extension [plugin interfaces](../glossary.md#sdk-plugins), allowing users and
 libraries to customize behaviors including the sampling, processing, and
 exporting of data. In general, the [configuration model](#configuration-model)
