@@ -384,7 +384,7 @@ made with an Instrument:
     View:
     * Try to apply the View's stream configuration independently of any other
       Views registered for the same matching Instrument (i.e. Views are not
-      merged). This MAY result in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
+      merged). This may result in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
       even if stream configurations specify non-overlapping properties (e.g.
       one View setting `aggregation` and another View setting `attribute_keys`,
       both leaving the stream `name` as the default configured by the
@@ -451,8 +451,8 @@ meter_provider
 ```python
 # Counter X will be exported as a delta sum and the default attributes
 # Counter X, Histogram Y, and Gauge Z will be exported with 2 attributes (a and b)
-# A warning will be emitted for conflicting metric identities on Counter X (two Views configured with the same) and
-# streams from both views will be exported
+# A warning will be emitted for conflicting metric identities on Counter X (as two Views matching that Instrument
+# are configured with the same default name X) and streams from both views will be exported
 meter_provider
     .add_view("X", aggregation=SumAggregation())
     .add_view("*", attribute_keys=["a", "b"]) # wildcard view matches everything, including X
