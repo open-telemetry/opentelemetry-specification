@@ -184,6 +184,11 @@ the implementation will encounter `my-exporter` and
 invoke [create plugin](#create-plugin) on the registered component provider
 with the configuration `properties` determined during `parse`.
 
+Given the inherent differences across languages, the details of extension
+component mechanisms are likely to vary to a greater degree than is the case
+with other APIs defined by OpenTelemetry. This is to be expected and is
+acceptable so long as the implementation results in the defined behaviors.
+
 #### Component Provider
 
 A component provider is responsible for interpreting configuration and returning
