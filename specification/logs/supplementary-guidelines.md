@@ -91,9 +91,6 @@ calling [emit a LogRecord](./bridge-api.md#emit-a-logrecord). This allows the co
 to be included even when log records are emitted asynchronously, which can
 otherwise lead the Context to be incorrect.
 
-TODO: clarify how works or doesn't work when the log statement call site and the
-log appender are executed on different threads.
-
 #### Explicit Context Injection
 
 In order for `TraceContext` to be recorded in `LogRecord`s in languages where
