@@ -31,6 +31,11 @@ release.
 
 ### Common
 
+### Telemetry Schemas
+
+- Stabilize the `v1.0.0` and `v1.1.0` schema file formats.
+  ([#3845](https://github.com/open-telemetry/opentelemetry-specification/pull/3845))
+
 ### Supplementary Guidelines
 
 ## v1.29.0 (2024-01-10)
