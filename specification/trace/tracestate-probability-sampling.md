@@ -67,9 +67,9 @@ linkTitle: Probability Sampling
       - [Example: Two consistent probability samplers](#example-two-consistent-probability-samplers)
   * [Producer and consumer recommendations](#producer-and-consumer-recommendations)
     + [Trace producer: completeness](#trace-producer-completeness)
-      - [Recommenendation: use non-descending power-of-two probabilities](#recommenendation-use-non-descending-power-of-two-probabilities)
+      - [Recommendation: use non-descending power-of-two probabilities](#recommendation-use-non-descending-power-of-two-probabilities)
     + [Trace producer: correctness](#trace-producer-correctness)
-      - [Recommenendation: sampler delegation](#recommenendation-sampler-delegation)
+      - [Recommendation: sampler delegation](#recommendation-sampler-delegation)
     + [Trace producer: interoperability with `ParentBased` sampler](#trace-producer-interoperability-with-parentbased-sampler)
     + [Trace producer: interoperability with `TraceIDRatioBased` sampler](#trace-producer-interoperability-with-traceidratiobased-sampler)
     + [Trace consumer](#trace-consumer)
@@ -739,7 +739,7 @@ non-power-of-two sampling probabilities for non-root spans, because
 completeness is not guaranteed for non-power-of-two sampling
 probabilities.
 
-##### Recommenendation: use non-descending power-of-two probabilities
+##### Recommendation: use non-descending power-of-two probabilities
 
 Complete subtraces will be produced when the sequence of sampling
 probabilities from the root of a trace to its leaves consists of
@@ -771,7 +771,7 @@ context is remote or non-remote, sampled or unsampled.  If a
 sampler only for unsampled contexts, the resulting Span-to-metrics
 pipeline will (probably) overcount spans.
 
-##### Recommenendation: sampler delegation
+##### Recommendation: sampler delegation
 
 For non-root spans, composite samplers SHOULD NOT condition the choice
 of delegated-to sampler based on the parent's sampled flag or
