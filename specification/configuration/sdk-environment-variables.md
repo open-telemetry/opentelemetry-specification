@@ -302,28 +302,41 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 
 Environment variables involved in [file configuration](file-configuration.md).
 
-| Name             | Description                                                                                                                                                                   | Default | Notes     |
-|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
-| OTEL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | See below |
+| Name             | Description                                                                                                                        | Default | Notes     |
+|------------------|------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
+| OTEL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set other environment variables defined in this file are ignored. |         | See below |
 
 If `OTEL_CONFIG_FILE` is set, the file at the specified path is used to
-call [Parse](file-configuration.md#parse). The
-resulting [configuration model](./file-configuration.md#configuration-model) is
-used to call [Create](file-configuration.md#create) to produce fully configured
-SDK components.
+call [Parse](file-configuration.md#parse), [Merge Environment](./file-configuration#merge-environment), [Create](file-configuration.md#create).
+The implementation SHOULD log a warning if calling Merge Environment results in
+changes to
+the [configuration model](./file-configuration.md#configuration-model).
+Implementations MAY provide a mechanism to further customize the configuration
+model parsed from `OTEL_CONFIG_FILE`. It SHOULD be possible to opt-in to logging
+the resolved configuration model.
 
-When `OTEL_CONFIG_FILE` is set, all other environment variables besides those
-referenced in the configuration file
-for [environment variable substitution](file-configuration.md#environment-variable-substitution)
-MUST be ignored. Ignoring the environment variables is necessary because
-there is no intuitive way to merge the flat environment variable scheme with the
-structured file configuration scheme in all cases. Users that require merging
-multiple sources of configuration are encouraged to customize the configuration
-model returned by `Parse` before `Create` is called. For example, a user may
-call `Parse` on multiple files and define logic from merging the resulting
-configuration models, or overlay values from environment variables on top of a
-configuration model. Implementations MAY provide a mechanism to customize the
-configuration model parsed from `OTEL_CONFIG_FILE`.
+Note: Environment variable overrides are available as defined
+in [Merge Environment](./file-configuration.md#merge-environment), but the
+environment variables described in this file are ignored.
+
+An example Java implementation:
+
+```java
+OpenTelemetryConfiguration parsedModel = parse("/path/to/config.yaml");
+OpenTelemetryConfiguration modelWithEnvironment = mergeEnvironment(parsedModel);
+if (parsedModel.equals(modelWithEnvironment)) {
+    logger.warn("Environment variables were set that overrode the configuration specified at /path/to/config.yaml");
+}
+// Log at debug level so user has to opt-in to logging effective configuration
+logger.debug("Effective configuration: \n" + toString(modelWithEnvironment));
+OpenTelemetrySdk sdk = create(modelWithEnvironment);
+```
+
+Users with complex configuration requirements (e.g. merging multiple
+configuration files or non-standard merging of environment variables) are
+encouraged to directly use [Parse](./file-configuration.md#parse) and
+programmatically manipulate the configuration model before
+calling [Create](./file-configuration.md#create).
 
 ## Language Specific Environment Variables
 

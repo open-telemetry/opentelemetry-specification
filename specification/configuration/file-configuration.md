@@ -179,6 +179,11 @@ This SHOULD return an error if:
 * The parsed `file` content does not conform to
   the [configuration model](#configuration-model) schema.
 
+#### Merge Environment
+
+TODO: define environment variable naming scheme with names derived from the
+configuration model
+
 #### Create
 
 Interpret [configuration model](#in-memory-configuration-model) and return SDK components.
