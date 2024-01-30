@@ -300,17 +300,17 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 
 **Status**: [Experimental](../document-status.md)
 
-Environment variables involved in [file configuration](file-configuration.md).
+Environment variables involved in [file configuration](./file-configuration.md).
 
 | Name             | Description                                                                                                                        | Default | Notes     |
 |------------------|------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
 | OTEL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set other environment variables defined in this file are ignored. |         | See below |
 
 If `OTEL_CONFIG_FILE` is set, the file at the specified path is used to
-call [Parse](file-configuration.md#parse), [Merge Environment](./file-configuration#merge-environment), [Create](file-configuration.md#create).
+call [Parse](file-configuration.md#parse), [Merge Environment](./file-configuration.md#merge-environment), [Create](file-configuration.md#create).
 The implementation SHOULD log a warning if calling Merge Environment results in
 changes to
-the [configuration model](./file-configuration.md#configuration-model).
+the [configuration model](file-configuration.md#configuration-model).
 Implementations MAY provide a mechanism to further customize the configuration
 model parsed from `OTEL_CONFIG_FILE`. It SHOULD be possible to opt-in to logging
 the resolved configuration model.
