@@ -28,6 +28,8 @@ release.
 
 - Add file configuration section to spec compliance matrix.
   ([#3804](https://github.com/open-telemetry/opentelemetry-specification/pull/3804))
+- Define mechanism for SDK extension components.
+  ([#3802](https://github.com/open-telemetry/opentelemetry-specification/pull/3802))
 - Define `OTEL_CONFIG_FILE` environment variable.
   ([#3805](https://github.com/open-telemetry/opentelemetry-specification/pull/3805))
 
