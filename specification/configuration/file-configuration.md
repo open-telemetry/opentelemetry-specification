@@ -21,6 +21,7 @@ linkTitle: File
     + [Create Plugin](#create-plugin)
   * [Operations](#operations)
     + [Parse](#parse)
+    + [Merge Environment](#merge-environment)
     + [Create](#create)
     + [Register Component Provider](#register-component-provider)
 - [References](#references)
