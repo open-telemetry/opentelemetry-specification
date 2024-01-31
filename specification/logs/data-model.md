@@ -411,7 +411,9 @@ structured data composed of arrays and maps of other values. First-party
 Applications SHOULD use a string message. However, a structured body SHOULD be
 used to preserve the semantics of structured logs emitted by Third-party
 Applications. Can vary for each occurrence of the event coming from the same
-source. This field is optional.
+source.
+
+This field is optional.
 
 ### Field: `Resource`
 
@@ -426,6 +428,7 @@ that represent this data model may be designed in a manner that allows the
 `Resource` field to be recorded only once per batch of log records that come
 from the same source. SHOULD follow OpenTelemetry
 [semantic conventions for Resources](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
+
 This field is optional.
 
 ### Field: `InstrumentationScope`
@@ -449,8 +452,10 @@ Type: `map<string, any>`.
 Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
-information about the request context (other than TraceId/SpanId). SHOULD follow
-OpenTelemetry [semantic conventions for attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md).
+information about the request context (other than [Trace Context Fields](#trace-context-fields)).
+The log attribute model MUST be of [`any` type](#type-any),
+which is different from [Common Attribute](../common/README.md#attribute) (a superset),
+so that [Logs Bridge API](bridge-api.md) is able to support structured attributes.
 This field is optional.
 
 #### Errors and Exceptions
