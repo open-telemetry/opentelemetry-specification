@@ -54,6 +54,13 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
+Attribute values MUST NOT be evolved to support complex types (e.g. maps and
+heterogeneous arrays). Note: the log data model
+defines [attributes](../logs/data-model.md#field-attributes) with values of
+type `Any`. This is an intentional divergence from the standard definition of
+attributes defined here. Log record attributes are a super set of standard
+attributes.
+
 See [Attribute Naming](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-naming.md) for naming guidelines.
 
 See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-requirement-level.md) for requirement levels guidelines.
