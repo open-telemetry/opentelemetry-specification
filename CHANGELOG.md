@@ -17,6 +17,8 @@ release.
 
 - Fix `Resource` field type in Logs Data Model.
   ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
+- Refine description of Instrumentation Scope.
+  ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
 
 ### Resource
 
