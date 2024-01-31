@@ -112,13 +112,15 @@ Value of type `any` can be one of the following:
 
 - An array (a list) of `any` values,
 
-- A `map<string, any>`.
+- A `map<string, any>`,
+
+- An empty value (e.g. `null`).
 
 #### Type `map<string, any>`
 
 Value of type `map<string, any>` is a map of string keys to `any` values. The
-keys in the map are unique (duplicate keys are not allowed). The representation
-of the map is language-dependent.
+keys in the map are non-`null`, non-empty, unique (duplicate keys are not allowed).
+The representation of the map is language-dependent.
 
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
 allows to represent an equivalent of a JSON object).
