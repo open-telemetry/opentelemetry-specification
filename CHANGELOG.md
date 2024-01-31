@@ -17,6 +17,8 @@ release.
 
 - Fix `Resource` field type in Logs Data Model.
   ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
+- Deconstruct number scalar type to double and signed integer.
+  ([#3854](https://github.com/open-telemetry/opentelemetry-specification/pull/3854))
 
 ### Resource
 
