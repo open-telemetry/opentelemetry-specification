@@ -452,7 +452,7 @@ vary for each occurrence of the event coming from the same source. Can contain
 information about the request context (other than [Trace Context Fields](#trace-context-fields)).
 The log attribute model MUST be of [`any` type](#type-any),
 which is different from [Common Attribute](../common/README.md#attribute) (a superset),
-so that [Logs Bridge API](bridge-api.md) is able to support structured attributes.
+so that is able to support structured attributes emitted by the applications.
 This field is optional.
 
 #### Errors and Exceptions
