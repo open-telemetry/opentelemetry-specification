@@ -444,7 +444,7 @@ is optional.
 
 ### Field: `Attributes`
 
-Type: `map<string, any>`.
+Type: [`map<string, any>`](#type-mapstring-any).
 
 Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can
