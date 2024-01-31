@@ -434,10 +434,7 @@ Type: [Instrumentation Scope](../glossary.md#instrumentation-scope).
 
 Description: the [instrumentation scope](../glossary.md#instrumentation-scope).
 Multiple occurrences of events coming from the same scope can happen across time and
-they all have the same value of `InstrumentationScope`.
-
-Version is optional. Name should be specified if version is specified, otherwise Name
-is optional.
+they all have the same value of `InstrumentationScope`. This field is required.
 
 ### Field: `Attributes`
 
