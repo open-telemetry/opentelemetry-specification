@@ -404,12 +404,11 @@ corresponding short names).
 
 Type: [`any`](#type-any).
 
-Description: A value containing the body of the log record (see the description
-of `any` type above). Can be for example a human-readable string message
-(including multi-line) describing the event in a free form or it can be a
-structured data composed of arrays and maps of other values. A structured body
-can be used to preserve the semantics of structured logs emitted by the applications.
-This field is optional.
+Description: A value containing the body of the log record. Can be for example
+a human-readable string message (including multi-line) describing the event in
+a free form or it can be a structured data composed of arrays and maps of other
+values. A structured body can be used to preserve the semantics of structured logs
+emitted by the applications. This field is optional.
 
 ### Field: `Resource`
 
