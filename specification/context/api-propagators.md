@@ -8,7 +8,7 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [Propagator Classes](#propagator-classes)
+- [Propagator Categories](#propagator-categories)
   * [Response Propagator](#response-propagator)
 - [Propagator Types](#propagator-types)
   * [Carrier](#carrier)
