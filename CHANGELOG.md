@@ -17,6 +17,8 @@ release.
 
 - Fix `Resource` field type in Logs Data Model.
   ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
+- Define handling of empty keys and values.
+  ([#3853](https://github.com/open-telemetry/opentelemetry-specification/pull/3853))
 
 ### Resource
 
