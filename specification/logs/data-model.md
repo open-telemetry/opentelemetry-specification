@@ -450,9 +450,9 @@ Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
 information about the request context (other than [Trace Context Fields](#trace-context-fields)).
-The log attribute model MUST be of [`any` type](#type-any),
-which is different from [Common Attribute](../common/README.md#attribute) (a superset),
-so that is able to support structured attributes emitted by the applications.
+The log attribute model MUST support [`any` type](#type-any),
+distinct from [Common Attribute](../common/README.md#attribute) (a superset),
+to preserve the semantics of structured attributes emitted by the applications.
 This field is optional.
 
 #### Errors and Exceptions
