@@ -379,11 +379,15 @@ made with an Instrument:
     according to the [MetricReader](#metricreader) instance's
     `aggregation` property.
 * If the `MeterProvider` has one or more `View`(s) registered:
-  * For each View, if the Instrument could match the instrument selection
-    criteria:
-    * Try to apply the View's stream configuration. If applying the View
-      results in [conflicting metric
-      identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
+  * If the Instrument could match the instrument selection criteria, for each
+    View:
+    * Try to apply the View's stream configuration independently of any other
+      Views registered for the same matching Instrument (i.e. Views are not
+      merged). This may result in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
+      even if stream configurations specify non-overlapping properties (e.g.
+      one View setting `aggregation` and another View setting `attribute_keys`,
+      both leaving the stream `name` as the default configured by the
+      Instrument). If applying the View results in conflicting metric identities
       the implementation SHOULD apply the View and emit a warning. If it is not
       possible to apply the View without producing semantic errors (e.g. the
       View sets an asynchronous instrument to use the [Explicit bucket
@@ -444,13 +448,24 @@ meter_provider
 ```
 
 ```python
-# Counter X will be exported as delta sum
-# Histogram Y and Gauge Z will be exported with 2 attributes (a and b)
+# Counter X will be exported as a delta sum and the default attributes
+# Counter X, Histogram Y, and Gauge Z will be exported with 2 attributes (a and b)
+# A warning will be emitted for conflicting metric identities on Counter X (as two Views matching that Instrument
+# are configured with the same default name X) and streams from both views will be exported
 meter_provider
     .add_view("X", aggregation=SumAggregation())
-    .add_view("*", attribute_keys=["a", "b"])
+    .add_view("*", attribute_keys=["a", "b"]) # wildcard view matches everything, including X
     .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()),
               temporality=lambda kind: Delta if kind in [Counter, AsyncCounter, Histogram] else Cumulative)
+```
+
+```python
+# Only Counter X will be exported, with the default configuration (match-all drop aggregation does not result in
+# conflicting metric identities)
+meter_provider
+    .add_view("X")
+    .add_view("*", aggregation=DropAggregation()) # a wildcard view to disable all instruments
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ### Aggregation
