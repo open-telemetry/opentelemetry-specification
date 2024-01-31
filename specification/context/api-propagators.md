@@ -1,6 +1,6 @@
 # Propagators API
 
-**Status**: [Stable, Feature-Freeze](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -62,16 +62,16 @@ interceptors and `Propagators`, where the interceptors detect incoming and outgo
 The Propagators API is expected to be leveraged by users writing
 instrumentation libraries.
 
-## Propagator Classes
+## Propagator Categories
 
-There are two classes of propagators:
+There are two categories of propagators:
 
 * `Propagator`, or "forward propagator", which sends data forward to the next
 in process in chain
 * `ResponsePropagator` (experimental), a newer specialization of `Propagator`, which
 sends trace context back to the caller.
 
-The API is the same for both classes, but instrumentation libraries MUST NOT
+The API is the same for both categories, but instrumentation libraries MUST NOT
 call `ResponsePropagator`s to propagate the context to the next process, and MUST
 NOT call `Propagator`s when propagating the context back to the caller.
 
