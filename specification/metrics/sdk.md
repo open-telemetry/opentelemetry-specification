@@ -731,8 +731,10 @@ of metrics across successive collections.
 
 **Status**: [Experimental](../document-status.md)
 
-SDKs SHOULD support being configured with a cardinality limit. A cardinality
-limit is the hard limit on the number of metric streams that can be collected.
+SDKs SHOULD support being configured with a cardinality limit. The number of
+unique combinations of attributes is called cardinality. For a given metric
+stream, the cardinality limit is a hard limit on the number of metric points
+that can be collected during a collection cycle.
 
 #### Configuration
 
