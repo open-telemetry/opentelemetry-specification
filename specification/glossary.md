@@ -28,7 +28,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Instrumented Library](#instrumented-library)
   * [Instrumentation Library](#instrumentation-library)
   * [Instrumentation Scope](#instrumentation-scope)
-  * [Tracer Name / Meter Name/ Logger Name](#tracer-name--meter-name--logger-name)
+  * [Tracer Name / Meter Name / Logger Name](#tracer-name--meter-name--logger-name)
   * [Execution Unit](#execution-unit)
 - [Logs](#logs)
   * [Log Record](#log-record)
