@@ -411,9 +411,7 @@ structured data composed of arrays and maps of other values. First-party
 Applications SHOULD use a string message. However, a structured body SHOULD be
 used to preserve the semantics of structured logs emitted by Third-party
 Applications. Can vary for each occurrence of the event coming from the same
-source.
-
-This field is optional.
+source. This field is optional.
 
 ### Field: `Resource`
 
@@ -428,7 +426,6 @@ that represent this data model may be designed in a manner that allows the
 `Resource` field to be recorded only once per batch of log records that come
 from the same source. SHOULD follow OpenTelemetry
 [semantic conventions for Resources](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
-
 This field is optional.
 
 ### Field: `InstrumentationScope`
