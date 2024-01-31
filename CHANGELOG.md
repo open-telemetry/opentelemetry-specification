@@ -17,7 +17,7 @@ release.
 
 - Fix `Resource` field type in Logs Data Model.
   ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
-- Clarify that logs attributes are a superset of common attributes.
+- Clarify that logs attributes are a superset of standard attributes.
   ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
 
 ### Resource
