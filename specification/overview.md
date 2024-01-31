@@ -345,12 +345,12 @@ See the [Context](context/README.md)
 
 OpenTelemetry uses `Propagators` to serialize and deserialize payloads for
 cross-cutting applications, such as `Span`s (usually only the `SpanContext` portion) and
-`Baggage`. Different `Propagator` classes and types define the restrictions
+`Baggage`. Different `Propagator` categories and types define the restrictions
 imposed by a specific direction, transport, and are bound to a data type.
 
-Propagators can be of one of two classes: `Propagator` (classic, forward), or
+Propagators can be of one of two categories: `Propagator` (classic, forward), or
 `ResponsePropagator` (backward). See [Propagator
-Classes](context/api-propagators.md#propagator-classes).
+Categories](context/api-propagators.md#propagator-categories).
 
 The Propagators API currently defines one `Propagator` type:
 
