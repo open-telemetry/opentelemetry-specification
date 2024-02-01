@@ -409,6 +409,7 @@ of `any` type above). Can be for example a human-readable string message
 (including multi-line) describing the event in a free form or it can be a
 structured data composed of arrays and maps of other values. A structured body
 is used to preserve the semantics of structured logs emitted by the applications.
+Can vary for each occurrence of the event coming from the same source.
 This field is optional.
 
 ### Field: `Resource`
