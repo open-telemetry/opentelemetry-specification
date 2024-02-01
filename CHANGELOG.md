@@ -15,7 +15,9 @@ release.
 
 ### Logs
 
-- Remove confusing description from `Body`` field in Logs Data Model to make it clear the Bridge API must support a structured body.
+- Fix `Resource` field type in Logs Data Model.
+  ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
+- Remove confusing description from `Body` field in Logs Data Model to make it clear the Bridge API must support a structured body.
   ([#3827](https://github.com/open-telemetry/opentelemetry-specification/pull/3827))
 
 ### Resource
@@ -28,6 +30,8 @@ release.
 
 - Add file configuration section to spec compliance matrix.
   ([#3804](https://github.com/open-telemetry/opentelemetry-specification/pull/3804))
+- Define mechanism for SDK extension components.
+  ([#3802](https://github.com/open-telemetry/opentelemetry-specification/pull/3802))
 
 ### Common
 

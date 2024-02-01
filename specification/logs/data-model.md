@@ -404,17 +404,16 @@ corresponding short names).
 
 Type: [`any`](#type-any).
 
-Description: A value containing the body of the log record (see the description
-of `any` type above). Can be for example a human-readable string message
-(including multi-line) describing the event in a free form or it can be a
-structured data composed of arrays and maps of other values. A structured body
-is used to preserve the semantics of structured logs emitted by the applications.
-Can vary for each occurrence of the event coming from the same source.
-This field is optional.
+Description: A value containing the body of the log record. Can be for example
+a human-readable string message (including multi-line) describing the event in
+a free form or it can be a structured data composed of arrays and maps of other
+values. Body MUST support [`any` type](#type-any) to preserve the semantics of
+structured logs emitted by the applications. Can vary for each occurrence of the
+event coming from the same source. This field is optional.
 
 ### Field: `Resource`
 
-Type: `map<string, any>`.
+Type: [Resource](../resource/sdk.md).
 
 Description: Describes the source of the log, aka
 [resource](../overview.md#resources). Multiple occurrences of events coming from
