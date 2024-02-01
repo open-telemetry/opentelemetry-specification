@@ -16,9 +16,9 @@ path_base_for_github_subdir:
 <!-- toc -->
 
 - [Attribute](#attribute)
-  * [Attribute Limits](#attribute-limits)
-    + [Configurable Parameters](#configurable-parameters)
-    + [Exempt Entities](#exempt-entities)
+- [Attribute Limits](#attribute-limits)
+  * [Configurable Parameters](#configurable-parameters)
+  * [Exempt Entities](#exempt-entities)
 - [Attribute Collections](#attribute-collections)
 
 <!-- tocstop -->
@@ -65,7 +65,7 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
 
-### Attribute Limits
+## Attribute Limits
 
 Execution of erroneous code can result in unintended attributes. If there are no
 limits placed on attributes, they can quickly exhaust available memory, resulting
@@ -103,12 +103,12 @@ use the model-specific limit, if it isn't set, then the SDK MUST attempt to use
 the general limit. If neither are defined, then the SDK MUST try to use the
 model-specific limit default value, followed by the global limit default value.
 
-#### Configurable Parameters
+### Configurable Parameters
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
 
-#### Exempt Entities
+### Exempt Entities
 
 Resource attributes SHOULD be exempt from the limits described above as resources
 are not susceptible to the scenarios (auto-instrumentation) that result in
