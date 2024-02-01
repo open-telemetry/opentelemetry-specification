@@ -11,7 +11,7 @@ release.
 
 ### Context
 
-- Context propagation to client instrumentation.
+- Add response propagators.
   ([#3825](https://github.com/open-telemetry/opentelemetry-specification/pull/3825))
 
 ### Traces
