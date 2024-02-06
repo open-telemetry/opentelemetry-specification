@@ -16,9 +16,13 @@ linkTitle: File
   * [Environment variable substitution](#environment-variable-substitution)
 - [SDK Configuration](#sdk-configuration)
   * [In-Memory Configuration Model](#in-memory-configuration-model)
+  * [SDK Extension Components](#sdk-extension-components)
+    + [Component Provider](#component-provider)
+    + [Create Plugin](#create-plugin)
   * [Operations](#operations)
     + [Parse](#parse)
     + [Create](#create)
+    + [Register Component Provider](#register-component-provider)
 - [References](#references)
 
 <!-- tocstop -->
@@ -142,6 +146,93 @@ to provide this in-memory representation in a manner that is idiomatic for their
 language. If an SDK needs to expose a class or interface, the
 name `Configuration` is RECOMMENDED.
 
+### SDK Extension Components
+
+The SDK supports a variety of
+extension [plugin interfaces](../glossary.md#sdk-plugins), allowing users and
+libraries to customize behaviors including the sampling, processing, and
+exporting of data. In general, the [configuration model](#configuration-model)
+defines specific types for built-in implementations of these plugin interfaces.
+For example,
+the [BatchSpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/f38ac7c3a499ae5f81924ef9c455c27a56130562/schema/tracer_provider.json#L22)
+type refers to the
+built-in [Batching span processor](../trace/sdk.md#batching-processor). The
+schema SHOULD also support the ability to specify custom implementations of
+plugin interfaces defined by libraries or users.
+
+For example, a custom [span exporter](../trace/sdk.md#span-exporter) might be configured as follows:
+
+```yaml
+tracer_provider:
+  processors:
+    - batch:
+        exporter:
+          my-exporter:
+            config-parameter: value
+```
+
+Here we specify that the tracer provider has a batch span processor
+paired with a custom span exporter named `my-exporter`, which is configured
+with `config-parameter: value`. For this configuration to succeed,
+a [component provider](#component-provider) must
+be [registered](#register-component-provider) with `type: SpanExporter`,
+and `name: my-exporter`. When [parse](#parse) is called, the implementation will
+encounter `my-exporter` and translate the corresponding configuration to an
+equivalent generic `properties` representation (
+i.e. `properties: {config-parameter: value}`). When [create](#create) is called,
+the implementation will encounter `my-exporter` and
+invoke [create plugin](#create-plugin) on the registered component provider
+with the configuration `properties` determined during `parse`.
+
+Given the inherent differences across languages, the details of extension
+component mechanisms are likely to vary to a greater degree than is the case
+with other APIs defined by OpenTelemetry. This is to be expected and is
+acceptable so long as the implementation results in the defined behaviors.
+
+#### Component Provider
+
+A component provider is responsible for interpreting configuration and returning
+an implementation of a particular type of SDK extension plugin interface.
+
+Component providers are registered with an SDK implementation of configuration
+via [register](#register-component-provider). This MAY be done automatically or
+require manual intervention by the user based on what is possible and idiomatic
+in the language ecosystem. For example in Java, component providers might be
+registered automatically using
+the [service provider interface (SPI)](https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html)
+mechanism.
+
+See [create](#create), which details component provider usage in file
+configuration interpretation.
+
+#### Create Plugin
+
+Interpret configuration to create a instance of a SDK extension plugin
+interface.
+
+**Parameters:**
+
+* `properties` - The configuration properties. Properties MUST fully represent
+  the configuration as specified in
+  the [configuration file](#configuration-file), including the ability to access
+  scalars, mappings, and sequences (of scalars and other structures). It MUST be
+  possible to determine if a particular property is present. It SHOULD be
+  possible to access properties in a type safe manner, based on what is idiomatic
+  in the language.
+
+**Returns:** A configured SDK extension plugin interface implementation.
+
+The plugin interface MAY have properties which are optional or required, and
+have specific requirements around type or format. The set of properties a
+component provider accepts, along with their requirement level and expected
+type, comprise a configuration schema. A component provider SHOULD document its
+configuration schema.
+
+When Create Plugin is invoked, the component provider interprets `properties`
+and attempts to extract data according to its configuration schema. If this
+fails (e.g. a required property is not present, a type is mismatches, etc.),
+Create Plugin SHOULD return an error.
+
 ### Operations
 
 SDK implementations of configuration MUST provide the following operations.
@@ -157,10 +248,6 @@ with OpAmp
 
 Parse and validate a [configuration file](#configuration-file).
 
-Parse MUST perform [environment variable substitution](#environment-variable-substitution).
-
-Parse MUST interpret null as equivalent to unset.
-
 **Parameters:**
 
 * `file`: The [configuration file](#configuration-file) to parse. This MAY be a
@@ -173,7 +260,17 @@ Parse MUST interpret null as equivalent to unset.
 
 **Returns:** [configuration model](#in-memory-configuration-model)
 
-This SHOULD return an error if:
+Parse MUST perform [environment variable substitution](#environment-variable-substitution).
+
+Parse MUST interpret null as equivalent to unset.
+
+When encountering a reference to
+a [SDK extension component](#sdk-extension-components) which is not built in to
+the SDK, Parse MUST resolve corresponding configuration to a
+generic `properties` representation as described
+in [Create Plugin](#create-plugin).
+
+Parse SHOULD return an error if:
 
 * The `file` doesn't exist or is invalid
 * The parsed `file` content does not conform to
@@ -182,15 +279,6 @@ This SHOULD return an error if:
 #### Create
 
 Interpret [configuration model](#in-memory-configuration-model) and return SDK components.
-
-If a field is null or unset and a default value is defined, Create MUST ensure
-the SDK component is configured with the default value. If a field is null or
-unset and no default value is defined, Create SHOULD return an error. For
-example, if configuring
-the [span batching processor](../trace/sdk.md#batching-processor) and
-the `scheduleDelayMillis` field is null or unset, the component is configured
-with the default value of `5000`. However, if the `exporter` field is null or
-unset, Create fails fast since there is no default value for `exporter`.
 
 **Parameters:**
 
@@ -206,11 +294,47 @@ unset, Create fails fast since there is no default value for `exporter`.
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
 
+If a field is null or unset and a default value is defined, Create MUST ensure
+the SDK component is configured with the default value. If a field is null or
+unset and no default value is defined, Create SHOULD return an error. For
+example, if configuring
+the [span batching processor](../trace/sdk.md#batching-processor) and
+the `scheduleDelayMillis` field is null or unset, the component is configured
+with the default value of `5000`. However, if the `exporter` field is null or
+unset, Create fails fast since there is no default value for `exporter`.
+
+When encountering a reference to
+a [SDK extension component](#sdk-extension-components) which is not built in to
+the SDK, Create MUST resolve the component using [Create Plugin](#create-plugin)
+of the [component provider](#component-provider) of the corresponding `type`
+and `name` used to [register](#register-component-provider), including the
+configuration `properties` as an argument. If no component provider is
+registered with the `type` and `name`, Create SHOULD return an error.
+If [Create Plugin](#create-plugin) returns an error, Create SHOULD propagate the
+error.
+
 This SHOULD return an error if it encounters an error in `configuration` (i.e.
 fail fast) in accordance with
 initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
 TODO: define behavior if some portion of configuration model is not supported
+
+#### Register Component Provider
+
+The file configuration implementation MUST provide a mechanism to
+register [component providers](#component-provider).
+
+**Parameters:**
+
+* `component_provider` - The [component provider](#component-provider).
+* `type` - The type of plugin interface it provides (e.g. SpanExporter, Sampler,
+  etc).
+* `name` - The name used to identify the type of component. This is used
+  in [configuration files](#configuration-file) to specify that the
+  corresponding `component_provider` is to provide the component.
+
+The `type` and `name` comprise a unique key. Register MUST return an error if it
+is called multiple times with the same `type` and `name` combination.
 
 ## References
 

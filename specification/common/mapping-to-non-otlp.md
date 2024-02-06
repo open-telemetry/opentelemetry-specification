@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Mapping to non-OTLP Formats
+--->
+
 # OpenTelemetry Transformation to non-OTLP Formats
 
 **Status**: [Stable](../document-status.md)

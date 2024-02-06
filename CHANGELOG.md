@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Expose `ExemplarReservoir` as configuration parameter for views.
+  Remove `ExemplarFilter` as an interface, now it is only configuration
+  parameter.
+  ([#3820](https://github.com/open-telemetry/opentelemetry-specification/pull/3820))
 - Add name suggestion for option to apply resource attributes as metric attributes in Prometheus exporter.
   ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
 
@@ -20,6 +24,8 @@ release.
 
 - Fix `Resource` field type in Logs Data Model.
   ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
+- Deconstruct number scalar type to double and signed integer.
+  ([#3854](https://github.com/open-telemetry/opentelemetry-specification/pull/3854))
 
 ### Resource
 
@@ -31,6 +37,8 @@ release.
 
 - Add file configuration section to spec compliance matrix.
   ([#3804](https://github.com/open-telemetry/opentelemetry-specification/pull/3804))
+- Define mechanism for SDK extension components.
+  ([#3802](https://github.com/open-telemetry/opentelemetry-specification/pull/3802))
 
 ### Common
 
