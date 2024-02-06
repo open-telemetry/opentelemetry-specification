@@ -24,6 +24,8 @@ release.
   ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
 - Remove confusing description from `Body` field in Logs Data Model to make it clear the Bridge API must support a structured body.
   ([#3827](https://github.com/open-telemetry/opentelemetry-specification/pull/3827))
+- Deconstruct number scalar type to double and signed integer.
+  ([#3854](https://github.com/open-telemetry/opentelemetry-specification/pull/3854))
 
 ### Resource
 
