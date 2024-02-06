@@ -106,7 +106,7 @@ follows.
 
 Value of type `any` can be one of the following:
 
-- A scalar value: number, string or boolean,
+- A scalar value: string, boolean, signed 64 bit integer, or double precision floating point (IEEE 754-1985)
 
 - A byte array,
 

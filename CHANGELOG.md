@@ -24,6 +24,8 @@ release.
   ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
 - Clarify that logs attributes are a superset of standard attributes.
   ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
+- Deconstruct number scalar type to double and signed integer.
+  ([#3854](https://github.com/open-telemetry/opentelemetry-specification/pull/3854))
 
 ### Resource
 
