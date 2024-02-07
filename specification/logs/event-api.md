@@ -10,9 +10,9 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [EventLogger](#eventlogger)
-  * [EventLogger Operations](#eventlogger-operations)
-    + [Create EventLogger](#create-eventlogger)
+- [EventEmitter](#EventEmitter)
+  * [EventEmitter Operations](#EventEmitter-operations)
+    + [Create EventEmitter](#create-EventEmitter)
     + [Emit Event](#emit-event)
 - [Optional and required parameters](#optional-and-required-parameters)
 
@@ -48,19 +48,19 @@ to the [semantic conventions for Events](https://github.com/open-telemetry/seman
 Unlike the [Logs Bridge API](./bridge-api.md), application developers and
 instrumentation authors are encouraged to call this API directly.
 
-## EventLogger
+## EventEmitter
 
-The `EventLogger` is the entrypoint of the Event API, and is responsible for
+The `EventEmitter` is the entrypoint of the Event API, and is responsible for
 emitting `Events` as `LogRecord`s.
 
-### EventLogger Operations
+### EventEmitter Operations
 
-The `EventLogger` MUST provide functions to:
+The `EventEmitter` MUST provide functions to:
 
-#### Create EventLogger
+#### Create EventEmitter
 
-New `EventLogger` instances are created though a constructor or factory method
-on `EventLogger`.
+New `EventEmitter` instances are created though a constructor or factory method
+on `EventEmitter`.
 
 **Parameters:**
 
@@ -89,7 +89,7 @@ This function MAY be named `logEvent`.
 
 The implementation MUST use the parameters
 to [emit a logRecord](./bridge-api.md#emit-a-logrecord) using the `logger`
-specified when [creating the EventLogger](#create-eventlogger) as follows:
+specified when [creating the EventEmitter](#create-EventEmitter) as follows:
 
 * The `Name` MUST be used to set
   the `event.name` [Attribute](./data-model.md#field-attributes). If
