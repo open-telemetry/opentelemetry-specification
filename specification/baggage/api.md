@@ -35,10 +35,15 @@ with _exactly one value_. This is more restrictive than the [W3C Baggage
 Specification, § 3.2.1.1](https://www.w3.org/TR/baggage/#baggage-string)
 which allows duplicate entries for a given name.
 
-Baggage **names** are strings that satisfy the `token` definition from
-[RFC7230, Section 3.2.6](https://tools.ietf.org/html/rfc7230#section-3.2.6).
-Alpha-numeric names are strongly recommended. Language API SHOULD return
-an error when given a baggage name that is not a `token`.
+Baggage **names** are any valid UTF-8 strings. Language API SHOULD NOT
+restrict which strings are used as baggage **names**. However, the
+specific `Propagator`s that are used to transmit baggage entries across
+component boundaries may impost their own restrictions on baggage names.
+For example, the [W3C Baggage specification](https://github.com/w3c/baggage/blob/main/baggage/HTTP_HEADER_FORMAT.md#key)
+restricts the baggage keys to strings that satisfy the `token` definition
+from [RFC7230, Section 3.2.6](https://tools.ietf.org/html/rfc7230#section-3.2.6).
+For maximum compatibility, alpha-numeric names are strongly recommended
+to be used as baggage names.
 
 Baggage **values** are any valid UTF-8 strings. Language API MUST accept
 any valid UTF-8 string as baggage **value** in `Set` and return the same
