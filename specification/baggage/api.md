@@ -38,7 +38,7 @@ which allows duplicate entries for a given name.
 Baggage **names** are any valid UTF-8 strings. Language API SHOULD NOT
 restrict which strings are used as baggage **names**. However, the
 specific `Propagator`s that are used to transmit baggage entries across
-component boundaries may impost their own restrictions on baggage names.
+component boundaries may impose their own restrictions on baggage names.
 For example, the [W3C Baggage specification](https://github.com/w3c/baggage/blob/main/baggage/HTTP_HEADER_FORMAT.md#key)
 restricts the baggage keys to strings that satisfy the `token` definition
 from [RFC7230, Section 3.2.6](https://tools.ietf.org/html/rfc7230#section-3.2.6).
