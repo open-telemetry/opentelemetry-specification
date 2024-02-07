@@ -21,6 +21,9 @@ release.
 
 ### Compatibility
 
+- Prometheus: represent Prometheus Info, StateSet and Unknown-typed metrics in OTLP.
+  ([#3868](https://github.com/open-telemetry/opentelemetry-specification/pull/3868))
+
 ### SDK Configuration
 
 ### Common
