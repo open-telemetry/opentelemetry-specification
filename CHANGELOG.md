@@ -13,7 +13,19 @@ release.
 
 ### Metrics
 
+- Expose `ExemplarReservoir` as configuration parameter for views.
+  Remove `ExemplarFilter` as an interface, now it is only configuration
+  parameter.
+  ([#3820](https://github.com/open-telemetry/opentelemetry-specification/pull/3820))
+
 ### Logs
+
+- Fix `Resource` field type in Logs Data Model.
+  ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
+- Remove confusing description from `Body` field in Logs Data Model to make it clear the Bridge API must support a structured body.
+  ([#3827](https://github.com/open-telemetry/opentelemetry-specification/pull/3827))
+- Deconstruct number scalar type to double and signed integer.
+  ([#3854](https://github.com/open-telemetry/opentelemetry-specification/pull/3854))
 
 ### Resource
 
@@ -22,6 +34,11 @@ release.
 ### Compatibility
 
 ### SDK Configuration
+
+- Add file configuration section to spec compliance matrix.
+  ([#3804](https://github.com/open-telemetry/opentelemetry-specification/pull/3804))
+- Define mechanism for SDK extension components.
+  ([#3802](https://github.com/open-telemetry/opentelemetry-specification/pull/3802))
 
 ### Common
 
@@ -55,6 +72,8 @@ release.
 ### Resource
 
 ### OpenTelemetry Protocol
+
+- Use `TracesData`, `MetricsData` and `LogsData` proto messages for file exporter.
 
 ### Compatibility
 

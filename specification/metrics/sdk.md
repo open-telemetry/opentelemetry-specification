@@ -50,15 +50,14 @@ linkTitle: SDK
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
-  * [Built-in ExemplarFilters](#built-in-exemplarfilters)
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceBased](#tracebased)
-    + [Configuration](#configuration-2)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
     + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
     + [AlignedHistogramBucketExemplarReservoir](#alignedhistogrambucketexemplarreservoir)
+  * [Custom ExemplarReservoir](#custom-exemplarreservoir)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [Collect](#collect)
@@ -344,7 +343,7 @@ The SDK MUST accept the following stream configuration parameters:
   user does not provide an `aggregation` value, the `MeterProvider` MUST apply
   a [default aggregation](#default-aggregation) configurable on the basis of
   instrument type according to the [MetricReader](#metricreader) instance.
-* **Status**: [Feature-freeze](../document-status.md) - `exemplar_reservoir`: A
+* **Status**: [Experimental, Feature-freeze](../document-status.md) - `exemplar_reservoir`: A
   functional type that generates an exemplar reservoir a `MeterProvider` will
   use when storing exemplars. This functional type needs to be a factory or
   callback similar to aggregation selection functionality which allows
@@ -380,11 +379,15 @@ made with an Instrument:
     according to the [MetricReader](#metricreader) instance's
     `aggregation` property.
 * If the `MeterProvider` has one or more `View`(s) registered:
-  * For each View, if the Instrument could match the instrument selection
-    criteria:
-    * Try to apply the View's stream configuration. If applying the View
-      results in [conflicting metric
-      identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
+  * If the Instrument could match the instrument selection criteria, for each
+    View:
+    * Try to apply the View's stream configuration independently of any other
+      Views registered for the same matching Instrument (i.e. Views are not
+      merged). This may result in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
+      even if stream configurations specify non-overlapping properties (e.g.
+      one View setting `aggregation` and another View setting `attribute_keys`,
+      both leaving the stream `name` as the default configured by the
+      Instrument). If applying the View results in conflicting metric identities
       the implementation SHOULD apply the View and emit a warning. If it is not
       possible to apply the View without producing semantic errors (e.g. the
       View sets an asynchronous instrument to use the [Explicit bucket
@@ -445,13 +448,24 @@ meter_provider
 ```
 
 ```python
-# Counter X will be exported as delta sum
-# Histogram Y and Gauge Z will be exported with 2 attributes (a and b)
+# Counter X will be exported as a delta sum and the default attributes
+# Counter X, Histogram Y, and Gauge Z will be exported with 2 attributes (a and b)
+# A warning will be emitted for conflicting metric identities on Counter X (as two Views matching that Instrument
+# are configured with the same default name X) and streams from both views will be exported
 meter_provider
     .add_view("X", aggregation=SumAggregation())
-    .add_view("*", attribute_keys=["a", "b"])
+    .add_view("*", attribute_keys=["a", "b"]) # wildcard view matches everything, including X
     .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()),
               temporality=lambda kind: Delta if kind in [Counter, AsyncCounter, Histogram] else Cumulative)
+```
+
+```python
+# Only Counter X will be exported, with the default configuration (match-all drop aggregation does not result in
+# conflicting metric identities)
+meter_provider
+    .add_view("X")
+    .add_view("*", aggregation=DropAggregation()) # a wildcard view to disable all instruments
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ### Aggregation
@@ -499,10 +513,6 @@ meterProviderBuilder
     )
   );
 ```
-
-TODO: after we release the initial Stable version of Metrics SDK specification,
-we will explore how to allow configuring custom
-[ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
 
 The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./data-model.md#metric-points) in the
@@ -882,7 +892,7 @@ series and the topic requires further analysis.
 
 ## Exemplar
 
-**Status**: [Feature-freeze](../document-status.md)
+**Status**: [Experimental, Feature-freeze](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
@@ -937,31 +947,27 @@ A Metric SDK MUST allow exemplar sampling to leverage the configuration of
 metric aggregation. For example, Exemplar sampling of histograms should be able
 to leverage bucket boundaries.
 
-A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
+A Metric SDK SHOULD provide configuration for Exemplar sampling, specifically:
 
 - `ExemplarFilter`: filter which measurements can become exemplars.
 - `ExemplarReservoir`: storage and sampling of exemplars.
 
 ### ExemplarFilter
 
-The `ExemplarFilter` interface MUST provide a method to determine if a
-measurement should be sampled. Sampled here simply makes the measurement
-eligible for being included as an exemplar. `ExemplarReservoir` makes the final
-decision if a measurement becomes an exemplar.
+The `ExemplarFilter` configuration MUST allow users to select between one of the
+built-in ExemplarFilters. While `ExemplarFilter` determines which measurements
+are _eligible_ for becoming an `Exemplar`, the `ExemplarReservoir` makes the
+final decision if a measurement becomes an exemplar and is stored.
 
-This interface SHOULD have access to:
+The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
+an SDK. The default value SHOULD be `TraceBased`. The filter configuration
+SHOULD follow the [environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
 
-- The `value` of the measurement.
-- The complete set of `Attributes` of the measurement.
-- The [Context](../context/README.md) of the measurement, which covers the
-  [Baggage](../baggage/api.md) and the current active
-  [Span](../trace/api.md#span).
-- A `timestamp` that best represents when the measurement was taken.
+An OpenTelemetry SDK MUST support the following filters:
 
-### Built-in ExemplarFilters
-
-OpenTelemetry supports a number of built-in exemplar filters to choose from.
-The default is `TraceBased`.
+- [AlwaysOn](#alwayson)
+- [AlwaysOff](#alwaysoff)
+- [TraceBased](#tracebased)
 
 #### AlwaysOn
 
@@ -976,12 +982,6 @@ Using this ExemplarFilter is as good as disabling Exemplar feature.
 
 An ExemplarFilter which makes those measurements eligible for being an
 Exemplar, which are recorded in the context of a sampled parent span.
-
-#### Configuration
-
-The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
-an SDK. The default value SHOULD be `TraceBased`. The filter configuration
-SHOULD follow the [environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
 
 ### ExemplarReservoir
 
@@ -1033,7 +1033,7 @@ The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
 ### Exemplar defaults
 
-The SDK SHOULD include two types of built-in exemplar reservoirs:
+The SDK MUST include two types of built-in exemplar reservoirs:
 
 1. `SimpleFixedSizeExemplarReservoir`
 2. `AlignedHistogramBucketExemplarReservoir`
@@ -1096,6 +1096,20 @@ measurements using the equivalent of the following naive algorithm:
     end
     return boundaries.length
   ```
+
+This Exemplar reservoir MAY take a configuration parameter for the bucket
+boundaries used by the reservoir. The size of the reservoir is always the
+number of bucket boundaries plus one. This configuration parameter SHOULD have
+the same format as specifying bucket boundaries to
+[Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
+
+### Custom ExemplarReservoir
+
+The SDK MUST provide a mechanism for SDK users to provide their own
+ExemplarReservoir implementation. This extension MUST be configurable on
+a metric [View](#view), although individual reservoirs MUST still be
+instantiated per metric-timeseries (see
+[Exemplar Reservoir - Paragraph 2](#exemplarreservoir)).
 
 ## MetricReader
 
@@ -1683,8 +1697,6 @@ specific guarantees and safeties.
 
 **MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` are safe to be
 called concurrently.
-
-**ExemplarFilter** - all methods are safe to be called concurrently.
 
 **ExemplarReservoir** - all methods are safe to be called concurrently.
 

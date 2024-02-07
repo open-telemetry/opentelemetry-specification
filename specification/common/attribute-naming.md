@@ -1,4 +1,8 @@
+<!--- Hugo front matter used to generate the website version of this page:
+redirect: /docs/specs/semconv/general/attribute-naming/ 301!
+--->
+
 # Attribute Naming
 
 This page has moved to
-[github.com/open-telemetry/semantic-conventions/docs/general/attribute-naming.md](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-naming.md).
+[Attribute Naming](https://opentelemetry.io/docs/specs/semconv/general/attribute-naming/).
