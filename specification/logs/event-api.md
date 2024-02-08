@@ -10,9 +10,9 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [EventEmitter](#EventEmitter)
-  * [EventEmitter Operations](#EventEmitter-operations)
-    + [Create EventEmitter](#create-EventEmitter)
+- [EventEmitter](#eventemitter)
+  * [EventEmitter Operations](#eventemitter-operations)
+    + [Create EventEmitter](#create-eventemitter)
     + [Emit Event](#emit-event)
 - [Optional and required parameters](#optional-and-required-parameters)
 
@@ -89,7 +89,7 @@ This function MAY be named `logEvent`.
 
 The implementation MUST use the parameters
 to [emit a logRecord](./bridge-api.md#emit-a-logrecord) using the `logger`
-specified when [creating the EventEmitter](#create-EventEmitter) as follows:
+specified when [creating the EventEmitter](#create-eventemitter) as follows:
 
 * The `Name` MUST be used to set
   the `event.name` [Attribute](./data-model.md#field-attributes). If
