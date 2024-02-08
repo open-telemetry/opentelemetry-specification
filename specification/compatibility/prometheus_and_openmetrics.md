@@ -14,6 +14,7 @@ aliases:
 
 <!-- toc -->
 
+- [Differences between Prometheus Formats](#differences-between-prometheus-formats)
 - [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
   * [Metric Metadata](#metric-metadata)
   * [Counters](#counters)
