@@ -50,12 +50,14 @@ aliases:
 This document covers OpenTelemetry compatibility with various Prometheus-related formats, including:
 
 Formats used for Scraping metrics (pull):
+
 * [Prometheus text exposition format](https://github.com/Prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#exposition-formats)
 * [Prometheus protobuf format](https://github.com/prometheus/client_model/blob/master/io/prometheus/client/metrics.proto)
 * [OpenMetrics text format](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#text-format)
 * (Not yet supported by Prometheus) [OpenMetrics protobuf format](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#protobuf-format)
 
 Formats used for Pushing metrics:
+
 * [Prometheus Remote Write foramt](https://github.com/prometheus/prometheus/blob/main/prompb/remote.proto)
 
 The document below uses "Prometheus" to refer to the union of all of these
@@ -66,12 +68,12 @@ all Prometheus formats. The following features are not consistently supported
 at the time of writing:
 
 * Exemplars are not currently supported in the Prometheus text exposition format.
-    * Exemplars MUST be dropped if they are not supported.
+  * Exemplars MUST be dropped if they are not supported.
 * Info and StateSet-typed metrics are not currently supported by the Prometheus text exposition format or Prometheus protobuf format.
-    * If the specification below requires producing a Prometheus Info-typed metric, a Prometheus Gauge with an additional `_info` name suffix MUST be produced if Info-typed metrics are not supported.
-    * If the specification below requires producing a Prometheus StateSet-typed metric, a Prometheus Gauge MUST be produced instead if StateSet-typed metrics are not supported.
+  * If the specification below requires producing a Prometheus Info-typed metric, a Prometheus Gauge with an additional `_info` name suffix MUST be produced if Info-typed metrics are not supported.
+  * If the specification below requires producing a Prometheus StateSet-typed metric, a Prometheus Gauge MUST be produced instead if StateSet-typed metrics are not supported.
 * Exponential (Native) Histograms are not currently supported in the Prometheus text exposition format or the OpenMetrics text or proto formats.
-    * Exponential (Native) Histograms SHOULD be dropped if they are not supported, or MAY be converted to fixed-bucket histograms.
+  * Exponential (Native) Histograms SHOULD be dropped if they are not supported, or MAY be converted to fixed-bucket histograms.
 
 ## Prometheus Metric points to OTLP
 
