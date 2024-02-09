@@ -17,7 +17,7 @@ A Prometheus Exporter SHOULD use
 for serving Prometheus metrics, including negotiating the
 [format](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#openmetrics-text-format)
 of the response using the Content-Type header. Regardless of whether a
-Prometheus client libary is used, the Prometheus Exporter MUST support version
+Prometheus client library is used, the Prometheus Exporter MUST support version
 `0.0.4` of the [Text-based format](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#text-based-format).
 A Prometheus Exporter MAY support Exemplars and Exponential Histograms,
 which are [not currently supported by the Prometheus text format](../../compatibility/prometheus_and_openmetrics.md#differences-between-prometheus-formats),
