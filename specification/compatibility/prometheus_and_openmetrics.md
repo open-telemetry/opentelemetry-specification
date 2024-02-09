@@ -80,7 +80,7 @@ at the time of writing:
 ### Metric Metadata
 
 The [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information)
-MUST be added as the Name of the OTLP metric. By default, the name SHOULD be unaltered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
+MUST be added as the Name of the OTLP metric. By default, the name SHOULD NOT be altered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
 
 [Prometheus UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
 if present, MUST be converted to the unit of the OTLP metric. The unit SHOULD
