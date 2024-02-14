@@ -29,7 +29,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
 
 - The attribute key MUST be a non-`null` and non-empty string.
   - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
-- The attribute value is either:
+- The attribute value is either[1]:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e., it MUST NOT contain values of different types.
@@ -54,19 +54,30 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
-Attribute values MUST NOT be evolved to support complex types (e.g. maps and
-heterogeneous arrays). Note: the log data model
-defines [attributes](../logs/data-model.md#field-attributes) with values of
-type `Any`. This is an intentional divergence from the standard definition of
-attributes defined here. Log record attributes are a super set of standard
-attributes.
-
 See [Attribute Naming](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-naming.md) for naming guidelines.
 
 See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-requirement-level.md) for requirement levels guidelines.
 
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
+
+**[1]**: Note: extending the set of allowable attribute value types is a
+breaking change.
+
+### Standard Attribute
+
+Attributes are used in various places throughout the OpenTelemetry data model.
+We designate the [previous attribute section](#attribute) as the standard
+attribute definition, in order to facilitate more intuitive and consistent API /
+SDK design.
+
+The standard attribute definition SHOULD be used to represent attributes in data
+modeling unless there is a strong justification to diverge. For example, the log
+data model has an extended [attributes](../logs/data-model.md#field-attributes)
+definition allowing values of type `Any`. This reflects that log record
+attributes are expected to model data produced from external log APIs, which do
+not necessarily have the same value type restrictions as the standard attribute
+definition.
 
 ### Attribute Limits
 
