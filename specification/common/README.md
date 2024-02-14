@@ -12,6 +12,7 @@ aliases: [/docs/reference/specification/common/common]
 <!-- toc -->
 
 - [Attribute](#attribute)
+  * [Standard Attribute](#standard-attribute)
   * [Attribute Limits](#attribute-limits)
     + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
