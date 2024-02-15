@@ -361,8 +361,6 @@ A W3C Trace Context propagator is expected to implement the
 `traceparent` and `tracestate` contexts fields specified in [W3C Trace
 Context Level 2](https://www.w3.org/TR/trace-context-2/).
 
-#### W3C Trace Context Inject and Extract
-
 When injecting and extracting trace context to ro from a carrier, the
 following fields are propagated.
 
@@ -371,25 +369,7 @@ following fields are propagated.
 - TraceFlags (8 bits)
 - TraceState (string)
 
-Propagators SHOULD  all 8 valid bits in the Trace flags field
-from the `traceparent` header, even those not recognized at the time
-the implementation was prepared.  All 8 bits of the trace flags are
-expected to propagate.
-
-#### W3C Trace Context Inject
-
-When injecting trace context into a carrier, the following fields are
-taken from the Context and .
-
-- TraceID (16 bytes)
-- SpanID (8 bytes)
-- TraceFlags (8 bits)
-- Trace
-
-#### W3C Trace Context Fields
-
-Fields MUST return the list of header names containing `traceparent`
-and `tracestate`.
+Propagators MUST NOT assume that bits 2-7 (6 most significant bits) will be zero.
 
 ### B3 Requirements
 

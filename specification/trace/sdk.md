@@ -244,6 +244,27 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    `Span` is created without an SDK installed or as described in
    [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
 
+#### Span flags
+
+The OTLP representation for Span and Span Link include a 32-bit field
+declared as Span Flags.
+
+Bits 0-7 of the Span Flags field are reserved for the 8 bits of Trace
+Context flags, specified in [W3C Trace
+Context](https://www.w3.org/TR/trace-context-2/).  [See the list of
+recognized flags](./api.md#spancontext).
+
+Bits 8 and 9 are defined to report the Remote property associated with
+the SpanContext `IsRemote` property.  SDKs should report this
+information as follows:
+
+- IsRemote = `true`: Bits 8 and 9 are set in the flags (i.e., `0x300`).
+- IsRemote = `false`: Bits 8 is set in the flags (i.e., `0x100`).
+
+For example, if the Span's incoming context has flags 0x3 (indicating
+`Sampled` and `Random`) and the parent SpanContext `IsRemote`, the
+resulting Span Flags will equal `0x303`.
+
 ### Sampler
 
 `Sampler` interface allows users to create custom samplers which will return a
@@ -313,20 +334,51 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 #### TraceIdRatioBased
 
 * The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
-parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
-the `ParentBased` sampler specified below.
-* Description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
+  parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
+  the `ParentBased` sampler specified below.
+* Description MAY return a string of the form `"TraceIdRatioBased{RATIO}"`
   with `RATIO` replaced with the Sampler instance's trace sampling ratio
   represented as a decimal number. The precision of the number SHOULD follow
   implementation language standards and SHOULD be high enough to identify when
   Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
-  had a sampling ratio of 1 to every 10,000 spans it COULD return
+  had a sampling ratio of 1 to every 10,000 spans it could return
   `"TraceIdRatioBased{0.000100}"` as its description.
 
-TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
-of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
+##### `TraceIdRatioBased` sampler implementation overview
 
-##### Requirements for `TraceIdRatioBased` sampler algorithm
+SDKs MAY use an implementation that matches the specification
+referenced below as the `TraceIdRatioBased` Sampler, which based on
+the [W3C Trace Context Level 2 Random TraceID
+flag](https://www.w3.org/TR/trace-context-2/#random-trace-id-flag).
+When a TraceID has the `Random` bit set, samplers are able to use 56
+specific bits of consistent randomness for sampling decisions.
+
+The implementation has the following steps:
+
+* Ratio values are restricted to the range `2**-56` through 1
+* A rejection threshold is calculated, expressing as an integer how
+  many out of 2**56 trace IDs should be sampled.
+* The threshold is encoded as a "T-value", expressing the threshold
+  using 5 hexadecimal digits of precision.
+* Sampler decisions are made by comparing the Trace ID randomness
+  against the rejection threshold.
+* When Sampled, T-value is included in the [OpenTelemetry TraceState
+  header](./tracestate-handling.md), identified by sub-key `th`,
+  indicating the sampling probability of the associated Context.  See
+  [Randomness requirements](#randomness-requirements), below.
+
+For more detailed information, see the
+[tracestate-probability-sampling](./tracestate-probability-sampling.md)
+specification.
+
+When this implementation is used, the Sampler description SHOULD
+return a string of the form `"TraceIdRatioBased{tv:TVALUE}"` with
+`TVALUE` replaced by the encoded T-Value as the Sampler Description.
+
+##### Former requirements for `TraceIdRatioBased` sampler algorithm
+
+SDKs MAY use the former requirements of the `TraceIdRatioBased`
+Sampler before transitioning to the modern requirements stated above.
 
 * The sampling algorithm MUST be deterministic. A trace identified by a given
   `TraceId` is sampled or not independent of language, time, etc. To achieve this,
@@ -338,14 +390,6 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
   sample. This is important when a backend system may want to run with a higher
   sampling rate than the frontend system, this way all frontend traces will
   still be sampled and extra traces will be sampled on the backend only.
-* **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
-  there will probably be changes to it in any language SDK once it is, which
-  would break code that relies on the algorithm results.
-  Only the configuration and creation APIs can be considered stable.
-  It is recommended to use this sampler algorithm only for root spans
-  (in combination with [`ParentBased`](#parentbased)) because different language
-  SDKs or even different versions of the same language SDKs may produce inconsistent
-  results for the same input.
 
 #### ParentBased
 
@@ -460,7 +504,7 @@ Additional `IdGenerator` implementing vendor-specific protocols such as AWS
 X-Ray trace id generator MUST NOT be maintained or distributed as part of the
 Core OpenTelemetry repositories.
 
-### Randomness requirement
+### Randomness requirements
 
 The SDK SHOULD implement the TraceID randomness requirements specified
 in the W3C [Trace Context Level
