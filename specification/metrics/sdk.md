@@ -842,7 +842,7 @@ It consists of the following parameters:
   i.e. `Meter`s are enabled by default).
 
   If a `Meter` is disabled, it MUST behave equivalently
-  to [No-op Meter](./noop.md#Meter).
+  to [No-op Meter](./noop.md#meter).
 
 ### Duplicate instrument registration
 
