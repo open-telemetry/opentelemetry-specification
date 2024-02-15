@@ -460,6 +460,30 @@ Additional `IdGenerator` implementing vendor-specific protocols such as AWS
 X-Ray trace id generator MUST NOT be maintained or distributed as part of the
 Core OpenTelemetry repositories.
 
+### Randomness requirement
+
+The SDK SHOULD implement the TraceID randomness requirements specified
+in the W3C [Trace Context Level
+2](https://www.w3.org/TR/trace-context-2/#randomness-of-trace-id)
+Candidate Recommendation.
+
+This states that the SDK should fill least significant 7 bytes (i.e., 56
+bits) of the TraceID are genuinely random or pseudo-random., so they
+can be used for probability sampling.
+
+#### Randomness trace context flag
+
+The Trace Context `Random` flag, having value `0x2`, SHOULD be set in
+the W3C Trace Context that is propagated when the SDK originates a new
+TraceID that meets the Randomness requirement.
+
+#### Randomness requirements for IdGenerators
+
+If the SDK uses an `IdGenerator` extension point, the SDK SHOULD
+enable it to declare whether it meets the Randomness requirement, in
+which case the `Random` flag SHOULD be set in the W3C Trace Context
+that is propagated when the SDK originates a new TraceID.
+
 ## Span processor
 
 Span processor is an interface which allows hooks for span start and end method
