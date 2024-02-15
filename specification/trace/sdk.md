@@ -333,16 +333,9 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### TraceIdRatioBased
 
-* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
-  parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
-  the `ParentBased` sampler specified below.
-* Description MAY return a string of the form `"TraceIdRatioBased{RATIO}"`
-  with `RATIO` replaced with the Sampler instance's trace sampling ratio
-  represented as a decimal number. The precision of the number SHOULD follow
-  implementation language standards and SHOULD be high enough to identify when
-  Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
-  had a sampling ratio of 1 to every 10,000 spans it could return
-  `"TraceIdRatioBased{0.000100}"` as its description.
+The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
+parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
+the `ParentBased` sampler specified below.
 
 ##### `TraceIdRatioBased` sampler implementation overview
 
@@ -390,6 +383,15 @@ Sampler before transitioning to the modern requirements stated above.
   sample. This is important when a backend system may want to run with a higher
   sampling rate than the frontend system, this way all frontend traces will
   still be sampled and extra traces will be sampled on the backend only.
+
+When this implementation is used, Description MAY return a string of
+the form `"TraceIdRatioBased{RATIO}"` with `RATIO` replaced with the
+Sampler instance's trace sampling ratio represented as a decimal
+number. The precision of the number SHOULD follow implementation
+language standards and SHOULD be high enough to identify when Samplers
+have different ratios. For example, if a TraceIdRatioBased Sampler had
+a sampling ratio of 1 to every 10,000 spans it could return
+`"TraceIdRatioBased{0.000100}"` as its description.
 
 #### ParentBased
 
