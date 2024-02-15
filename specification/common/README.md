@@ -73,12 +73,12 @@ attribute definition, in order to facilitate more intuitive and consistent API /
 SDK design.
 
 The standard attribute definition SHOULD be used to represent attributes in data
-modeling unless there is a strong justification to diverge. For example, the log
-data model has an extended [attributes](../logs/data-model.md#field-attributes)
-definition allowing values of type `Any`. This reflects that log record
-attributes are expected to model data produced from external log APIs, which do
-not necessarily have the same value type restrictions as the standard attribute
-definition.
+modeling unless there is a strong justification to diverge. For example, the Log
+Data Model has an extended [attributes](../logs/data-model.md#field-attributes)
+definition allowing values of [type `Any`](../logs/data-model.md#type-any). This
+reflects that LogRecord attributes are expected to model data produced from
+external log APIs, which do not necessarily have the same value type
+restrictions as the standard attribute definition.
 
 ### Attribute Limits
 
