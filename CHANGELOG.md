@@ -54,6 +54,8 @@ release.
   ([#3827](https://github.com/open-telemetry/opentelemetry-specification/pull/3827))
 - Deconstruct number scalar type to double and signed integer.
   ([#3854](https://github.com/open-telemetry/opentelemetry-specification/pull/3854))
+- Remove use of Object-Oriented term `class` in log signal.
+  ([#3882](https://github.com/open-telemetry/opentelemetry-specification/pull/3882))
 
 ### Resource
 
