@@ -222,7 +222,7 @@ Things not listed in the above are not expected to remain stable via semantic
 convention and are allowed (or expected) to change. A few examples:
 
 - The values of attributes
-  - An exception are existing values for `enums`, However, new values for
+  - An exception are existing values for `enums`. However, new values for
     `enums` can be added. Tooling should expect unknown values.
 - The links attached to a span
 - The recorded measurement type (float or integer) of a metric is not enforced and allowed to change.
