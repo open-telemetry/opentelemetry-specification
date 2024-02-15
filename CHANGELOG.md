@@ -42,6 +42,9 @@ release.
 
 ### Common
 
+- Clarify stability requirements for enum attribute values
+  ([#3879](https://github.com/open-telemetry/opentelemetry-specification/pull/3879))
+
 ### Supplementary Guidelines
 
 ## v1.29.0 (2024-01-10)
