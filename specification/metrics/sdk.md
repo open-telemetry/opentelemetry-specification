@@ -15,6 +15,7 @@ linkTitle: SDK
   * [MeterProvider Creation](#meterprovider-creation)
   * [Meter Creation](#meter-creation)
   * [Configuration](#configuration)
+    + [MeterConfigProvider](#meterconfigprovider)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
   * [View](#view)
@@ -41,6 +42,7 @@ linkTitle: SDK
     + [Synchronous instrument cardinality limits](#synchronous-instrument-cardinality-limits)
     + [Asynchronous instrument cardinality limits](#asynchronous-instrument-cardinality-limits)
 - [Meter](#meter)
+  * [MeterConfig](#meterconfig)
   * [Duplicate instrument registration](#duplicate-instrument-registration)
     + [Name conflict](#name-conflict)
   * [Instrument name](#instrument-name)
@@ -128,10 +130,14 @@ When a Schema URL is passed as an argument when creating a `Meter` the emitted
 telemetry for that `Meter` MUST be associated with the Schema URL, provided
 that the emitted data format is capable of representing such association.
 
+The `MeterProvider` MUST compute the relevant [MeterConfig](#meterconfig)
+using the configured [MeterConfigProvider](#meterconfigprovider), and adjust
+the `Meter`'s behavior to conform to the `MeterConfig`.
+
 ### Configuration
 
 Configuration (i.e. [MetricExporters](#metricexporter),
-[MetricReaders](#metricreader) and [Views](#view)) MUST be owned by the
+[MetricReaders](#metricreader), [Views](#view), and [MeterConfigProvider](#meterconfigprovider)) MUST be owned by the
 `MeterProvider`. The configuration MAY be applied at the time of `MeterProvider`
 creation if appropriate.
 
@@ -142,6 +148,35 @@ matter whether a `Meter` was obtained from the `MeterProvider` before or after
 the configuration change). Note: Implementation-wise, this could mean that
 `Meter` instances have a reference to their `MeterProvider` and access
 configuration only via this reference.
+
+#### MeterConfigProvider
+
+A `MeterConfigProvider` is a function which computes
+the [MeterConfig](#meterconfig) for a [Meter](#meter).
+
+The function MUST accept the following parameter:
+
+* `meter_scope`:
+  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  the `Meter`.
+
+The function MUST return the relevant `MeterConfig`, or some signal indicating
+that the [default MeterConfig](#meterconfig) should be used. This signal MAY
+be nil, null, empty, or an instance of the default `MeterConfig` depending on
+what is idiomatic in the language.
+
+This function is called when a `Meter` is first created, and for each
+outstanding `Meter` when a `MeterProvider`'s `MeterConfigProvider` is
+updated (if updating is supported). Therefore, it is important that it returns
+quickly.
+
+`MeterConfigProvider` is modeled as a function to maximize flexibility.
+However, implementations MAY provide shorthand or helper functions to
+accommodate common use cases:
+
+* Select one or more Meters by name, with exact match or pattern matching.
+* Disable one or more specific Meters.
+* Disable all Meters, and selectively enable one or more specific Meters.
 
 ### Shutdown
 
@@ -790,6 +825,24 @@ temporality.
 
 Distinct meters MUST be treated as separate namespaces for the purposes of detecting
 [duplicate instrument registrations](#duplicate-instrument-registration).
+
+`Meter` MUST behave according to the [MeterConfig](#meterconfig) computing
+during [Meter creation](#meter-creation). If the `MeterProvider` supports
+updating the [MeterConfigProvider](#meterconfigprovider), then upon update
+the `Meter` MUST be updated to behave according to the new `MeterConfig`.
+
+### MeterConfig
+
+A `MeterConfig` defines various configurable aspects of a `Meter`'s behavior.
+It consists of the following parameters:
+
+* `disabled`: A boolean indication of whether the Meter is enabled.
+
+  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  i.e. `Meter`s are enabled by default).
+
+  If a `Meter` is disabled, it MUST behave equivalently
+  to [No-op Meter](./noop.md#Meter).
 
 ### Duplicate instrument registration
 
