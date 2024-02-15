@@ -10,9 +10,9 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [EventLogger](#eventlogger)
-  * [EventLogger Operations](#eventlogger-operations)
-    + [Create EventLogger](#create-eventlogger)
+- [EventEmitter](#EventEmitter)
+  * [EventEmitter Operations](#EventEmitter-operations)
+    + [Create EventEmitter](#create-EventEmitter)
     + [Emit Event](#emit-event)
 - [Optional and required parameters](#optional-and-required-parameters)
 
@@ -48,30 +48,78 @@ to the [semantic conventions for Events](https://github.com/open-telemetry/seman
 Unlike the [Logs Bridge API](./bridge-api.md), application developers and
 instrumentation authors are encouraged to call this API directly.
 
-## EventLogger
+The Event API consist of these main classes:
 
-The `EventLogger` is the entrypoint of the Event API, and is responsible for
+* [EventEmitterProvider](#eventemitterprovider) is the entry point of the API. It provides access to `EventEmitter`s.
+* [EventEmitter](#eventemitter) is the class responsible for emitting events as
+  [LogRecords](./data-model.md#log-and-event-record-definition).
+
+## EventEmitterProvider
+
+`EventEmitter`s can be accessed with a `EventEmitterProvider`.
+
+In implementations of the API, the `EventEmitterProvider` is expected to be the stateful
+object that holds any configuration.
+
+Normally, the `EventEmitterProvider` is expected to be accessed from a central place.
+Thus, the API SHOULD provide a way to set/register and access a global default
+`EventEmitterProvider`.
+
+### EventEmitterProvider operations
+
+The `EventEmitterProvider` MUST provide the following functions:
+
+* Get an `EventEmitter`
+
+#### Get an EventEmitter
+
+This API MUST accept the following parameters:
+
+* `name`: This name uniquely identifies the [instrumentation scope](../glossary.md#instrumentation-scope),
+  such as the [instrumentation library](../glossary.md#instrumentation-library)
+  (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
+  If an application or library has built-in OpenTelemetry instrumentation, both
+  [Instrumented library](../glossary.md#instrumented-library) and
+  [Instrumentation library](../glossary.md#instrumentation-library) may refer to
+  the same library. In that scenario, the `name` denotes a module name or component
+  name within that library or application.
+
+* `version` (optional): Specifies the version of the instrumentation scope if
+  the scope has a version (e.g. a library version). Example value: 1.0.0.
+
+* `schema_url` (optional): Specifies the Schema URL that should be recorded in
+  the emitted telemetry.
+
+* `attributes` (optional): Specifies the instrumentation scope attributes to
+  associate with emitted telemetry. This API MUST be structured to accept a
+  variable number of attributes, including none.
+
+`EventEmitter`s are identified by `name`, `version`, and `schema_url` fields.  When more
+than one `EventEmitter` of the same `name`, `version`, and `schema_url` is created, it
+is unspecified whether or under which conditions the same or different `EventEmitter`
+instances are returned. It is a user error to create EventEmitters with different
+`attributes` but the same identity.
+
+The term *identical* applied to `EventEmitter`s describes instances where all
+identifying fields are equal. The term *distinct* applied to `EventEmitter`s describes
+instances where at least one identifying field has a different value.
+
+The effect of associating a Schema URL with a `EventEmitter` MUST be that the telemetry
+emitted using the `EventEmitter` will be associated with the Schema URL, provided that
+the emitted data format is capable of representing such association.
+
+## EventEmitter
+
+The `EventEmitter` is the entrypoint of the Event API, and is responsible for
 emitting `Events` as `LogRecord`s.
 
-### EventLogger Operations
+### EventEmitter Operations
 
-The `EventLogger` MUST provide functions to:
-
-#### Create EventLogger
-
-New `EventLogger` instances are created though a constructor or factory method
-on `EventLogger`.
-
-**Parameters:**
-
-* `logger` - the delegate [Logger](./bridge-api.md#logger) used to emit `Events`
-  as `LogRecord`s.
+The `EventEmitter` MUST provide functions to:
 
 #### Emit Event
 
-Emit a `LogRecord` representing an `Event` to the delegate `Logger`.
-
-This function MAY be named `logEvent`.
+The effect of calling this API is to emit an `Event` to the processing pipeline.
 
 **Parameters:**
 
@@ -88,8 +136,8 @@ This function MAY be named `logEvent`.
 **Implementation Requirements:**
 
 The implementation MUST use the parameters
-to [emit a logRecord](./bridge-api.md#emit-a-logrecord) using the `logger`
-specified when [creating the EventLogger](#create-eventlogger) as follows:
+to [emit a logRecord](./bridge-api.md#emit-a-logrecord) using the `EventEmitter`
+specified when [creating the EventEmitter](#create-EventEmitter) as follows:
 
 * The `Name` MUST be used to set
   the `event.name` [Attribute](./data-model.md#field-attributes). If
