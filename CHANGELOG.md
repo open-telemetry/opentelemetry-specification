@@ -45,8 +45,6 @@ release.
   Remove `ExemplarFilter` as an interface, now it is only configuration
   parameter.
   ([#3820](https://github.com/open-telemetry/opentelemetry-specification/pull/3820))
-- Remove use of Object-Oriented term `class` in metric API.
-  ([#3881](https://github.com/open-telemetry/opentelemetry-specification/pull/3881))
 
 ### Logs
 
