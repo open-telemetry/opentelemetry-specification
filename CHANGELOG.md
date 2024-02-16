@@ -11,9 +11,6 @@ release.
 
 ### Traces
 
-- Remove use of Object-Oriented term `class` in trace API.
-  ([#3880](https://github.com/open-telemetry/opentelemetry-specification/pull/3880))
-
 ### Metrics
 
 ### Logs
