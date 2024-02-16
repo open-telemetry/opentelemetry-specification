@@ -732,7 +732,7 @@ of metrics across successive collections.
 **Status**: [Experimental](../document-status.md)
 
 SDKs SHOULD support configurable cardinality limits. The number of
-unique attributes sets passed by a user is called cardinality. For a given
+unique attribute sets passed by a user is called cardinality. For a given
 metric, the cardinality limit is a hard limit on the number of metric points
 that can be collected during a collection cycle.
 
