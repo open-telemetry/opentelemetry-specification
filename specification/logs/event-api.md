@@ -57,9 +57,6 @@ The Event API consists of these main components:
 
 `EventLogger`s can be accessed with a `EventLoggerProvider`.
 
-In implementations of the API, the `EventLoggerProvider` is expected to be the stateful
-object that holds any configuration.
-
 Normally, the `EventLoggerProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
 `EventLoggerProvider`.
@@ -136,7 +133,7 @@ The effect of calling this API is to emit an `Event` to the processing pipeline.
 
 The implementation MUST use the parameters
 to [emit a logRecord](./bridge-api.md#emit-a-logrecord) using the `EventLogger`
-specified when [creating the EventLogger](#create-EventLogger) as follows:
+specified when [creating the EventLogger](#create-eventlogger) as follows:
 
 * The `Name` MUST be used to set
   the `event.name` [Attribute](./data-model.md#field-attributes). If
