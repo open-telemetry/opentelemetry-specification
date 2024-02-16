@@ -48,7 +48,7 @@ to the [semantic conventions for Events](https://github.com/open-telemetry/seman
 Unlike the [Logs Bridge API](./bridge-api.md), application developers and
 instrumentation authors are encouraged to call this API directly.
 
-The Event API consist of these main classes:
+The Event API consists of these main components:
 
 * [EventEmitterProvider](#eventemitterprovider) is the entry point of the API. It provides access to `EventEmitter`s.
 * [EventEmitter](#eventemitter) is the class responsible for emitting events as
