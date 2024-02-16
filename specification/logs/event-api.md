@@ -10,9 +10,9 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [EventEmitter](#EventEmitter)
-  * [EventEmitter Operations](#EventEmitter-operations)
-    + [Create EventEmitter](#create-EventEmitter)
+- [EventLogger](#eventlogger)
+  * [EventLogger Operations](#eventlogger-operations)
+    + [Create EventLogger](#create-eventlogger)
     + [Emit Event](#emit-event)
 - [Optional and required parameters](#optional-and-required-parameters)
 
@@ -50,28 +50,27 @@ instrumentation authors are encouraged to call this API directly.
 
 The Event API consists of these main components:
 
-* [EventEmitterProvider](#eventemitterprovider) is the entry point of the API. It provides access to `EventEmitter`s.
-* [EventEmitter](#eventemitter) is the class responsible for emitting events as
-  [LogRecords](./data-model.md#log-and-event-record-definition).
+* [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It provides access to `EventLogger`s.
+* [EventLogger](#eventlogger) is the component responsible for emitting events.
 
-## EventEmitterProvider
+## EventLoggerProvider
 
-`EventEmitter`s can be accessed with a `EventEmitterProvider`.
+`EventLogger`s can be accessed with a `EventLoggerProvider`.
 
-In implementations of the API, the `EventEmitterProvider` is expected to be the stateful
+In implementations of the API, the `EventLoggerProvider` is expected to be the stateful
 object that holds any configuration.
 
-Normally, the `EventEmitterProvider` is expected to be accessed from a central place.
+Normally, the `EventLoggerProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
-`EventEmitterProvider`.
+`EventLoggerProvider`.
 
-### EventEmitterProvider operations
+### EventLoggerProvider operations
 
-The `EventEmitterProvider` MUST provide the following functions:
+The `EventLoggerProvider` MUST provide the following functions:
 
-* Get an `EventEmitter`
+* Get an `EventLogger`
 
-#### Get an EventEmitter
+#### Get an EventLogger
 
 This API MUST accept the following parameters:
 
@@ -94,28 +93,28 @@ This API MUST accept the following parameters:
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
 
-`EventEmitter`s are identified by `name`, `version`, and `schema_url` fields.  When more
-than one `EventEmitter` of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different `EventEmitter`
-instances are returned. It is a user error to create EventEmitters with different
+`EventLogger`s are identified by `name`, `version`, and `schema_url` fields.  When more
+than one `EventLogger` of the same `name`, `version`, and `schema_url` is created, it
+is unspecified whether or under which conditions the same or different `EventLogger`
+instances are returned. It is a user error to create EventLoggers with different
 `attributes` but the same identity.
 
-The term *identical* applied to `EventEmitter`s describes instances where all
-identifying fields are equal. The term *distinct* applied to `EventEmitter`s describes
+The term *identical* applied to `EventLogger`s describes instances where all
+identifying fields are equal. The term *distinct* applied to `EventLogger`s describes
 instances where at least one identifying field has a different value.
 
-The effect of associating a Schema URL with a `EventEmitter` MUST be that the telemetry
-emitted using the `EventEmitter` will be associated with the Schema URL, provided that
+The effect of associating a Schema URL with a `EventLogger` MUST be that the telemetry
+emitted using the `EventLogger` will be associated with the Schema URL, provided that
 the emitted data format is capable of representing such association.
 
-## EventEmitter
+## EventLogger
 
-The `EventEmitter` is the entrypoint of the Event API, and is responsible for
+The `EventLogger` is the entrypoint of the Event API, and is responsible for
 emitting `Events` as `LogRecord`s.
 
-### EventEmitter Operations
+### EventLogger Operations
 
-The `EventEmitter` MUST provide functions to:
+The `EventLogger` MUST provide functions to:
 
 #### Emit Event
 
@@ -136,8 +135,8 @@ The effect of calling this API is to emit an `Event` to the processing pipeline.
 **Implementation Requirements:**
 
 The implementation MUST use the parameters
-to [emit a logRecord](./bridge-api.md#emit-a-logrecord) using the `EventEmitter`
-specified when [creating the EventEmitter](#create-EventEmitter) as follows:
+to [emit a logRecord](./bridge-api.md#emit-a-logrecord) using the `EventLogger`
+specified when [creating the EventLogger](#create-EventLogger) as follows:
 
 * The `Name` MUST be used to set
   the `event.name` [Attribute](./data-model.md#field-attributes). If
