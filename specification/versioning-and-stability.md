@@ -223,7 +223,7 @@ convention and are allowed (or expected) to change. A few examples:
 
 - The values of attributes
   - An exception are existing values for `enums`. However, new values for
-    `enums` can be added. Tooling should expect unknown values.
+    `enums` can be added. Consumers should expect unknown values.
 - The links attached to a span
 - The recorded measurement type (float or integer) of a metric is not enforced and allowed to change.
 - The description of a metric instrument.
