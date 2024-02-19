@@ -65,8 +65,10 @@ This API MUST accept the following [instrumentation scope](data-model.md#field-i
 parameters:
 
 * `name`: This name uniquely identifies the [instrumentation scope](../glossary.md#instrumentation-scope),
-  such as the bridge implementation name. For log sources which define
-  a logger name (e.g. Java [Logger Name](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html#getLogger(java.lang.String)))
+  such as the [instrumentation library](../glossary.md#instrumentation-library)
+  (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
+  For log sources which define a logger name (e.g. Java
+  [Logger Name](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html#getLogger(java.lang.String)))
   the Logger Name should be recorded as the instrumentation scope name.
 
 * `version` (optional): Specifies the version of the instrumentation scope if
