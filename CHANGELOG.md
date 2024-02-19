@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Clarify that logs attributes are a superset of standard attributes.
+  ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
+
 ### Resource
 
 ### OpenTelemetry Protocol
@@ -50,8 +53,6 @@ release.
 
 - Fix `Resource` field type in Logs Data Model.
   ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
-- Clarify that logs attributes are a superset of standard attributes.
-  ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
 - Remove confusing description from `Body` field in Logs Data Model to make it clear the Bridge API must support a structured body.
   ([#3827](https://github.com/open-telemetry/opentelemetry-specification/pull/3827))
 - Deconstruct number scalar type to double and signed integer.
