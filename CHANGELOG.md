@@ -13,6 +13,37 @@ release.
 
 ### Metrics
 
+### Logs
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+- Tighten stability requirements for enum attribute values
+  ([#3879](https://github.com/open-telemetry/opentelemetry-specification/pull/3879))
+
+### Supplementary Guidelines
+
+## v1.30.0 (2024-02-15)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Clarify metric view measurement processing.
+  ([#3842](https://github.com/open-telemetry/opentelemetry-specification/pull/3842))
 - Expose `ExemplarReservoir` as configuration parameter for views.
   Remove `ExemplarFilter` as an interface, now it is only configuration
   parameter.
@@ -26,12 +57,21 @@ release.
   ([#3827](https://github.com/open-telemetry/opentelemetry-specification/pull/3827))
 - Deconstruct number scalar type to double and signed integer.
   ([#3854](https://github.com/open-telemetry/opentelemetry-specification/pull/3854))
+- Remove use of Object-Oriented term `class` in log signal.
+  ([#3882](https://github.com/open-telemetry/opentelemetry-specification/pull/3882))
 
 ### Resource
 
+- No changes.
+
 ### OpenTelemetry Protocol
 
+- Use `TracesData`, `MetricsData` and `LogsData` proto messages for file exporter.
+  ([#3809](https://github.com/open-telemetry/opentelemetry-specification/pull/3809))
+
 ### Compatibility
+
+- No changes.
 
 ### SDK Configuration
 
@@ -42,10 +82,11 @@ release.
 
 ### Common
 
-- Tighten stability requirements for enum attribute values
-  ([#3879](https://github.com/open-telemetry/opentelemetry-specification/pull/3879))
+- No changes.
 
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.29.0 (2024-01-10)
 
@@ -73,8 +114,6 @@ release.
 ### Resource
 
 ### OpenTelemetry Protocol
-
-- Use `TracesData`, `MetricsData` and `LogsData` proto messages for file exporter.
 
 ### Compatibility
 
