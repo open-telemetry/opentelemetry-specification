@@ -114,7 +114,7 @@ Value of type `any` can be one of the following:
 
 - A `map<string, any>`,
 
-- [since 1.30.0] An empty value (e.g. `null`).
+- [since 1.31.0] An empty value (e.g. `null`).
 
 #### Type `map<string, any>`
 
