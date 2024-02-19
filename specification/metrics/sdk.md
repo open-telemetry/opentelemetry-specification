@@ -731,8 +731,10 @@ of metrics across successive collections.
 
 **Status**: [Experimental](../document-status.md)
 
-SDKs SHOULD support being configured with a cardinality limit. A cardinality
-limit is the hard limit on the number of metric streams that can be collected.
+SDKs SHOULD support being configured with a cardinality limit. The number of
+unique combinations of attributes is called cardinality. For a given metric, the
+cardinality limit is a hard limit on the number of metric points that can be
+collected during a collection cycle.
 
 #### Configuration
 
@@ -1597,7 +1599,7 @@ The filtering is done at the [MetricProducer](#metricproducer) for performance r
 The `MetricFilter` allows filtering an entire metric stream - dropping or allowing all its attribute sets -
 by its `TestMetric` operation, which accepts the metric stream information
 (scope, name, kind and unit)  and returns an enumeration: `Accept`, `Drop`
-or `Allow_Partial`. If the latter returned, the `TestAttributes` operation
+or `Accept_Partial`. If the latter returned, the `TestAttributes` operation
 is to be called per attribute set of that metric stream, returning an enumeration
 determining if the data point for that (metric stream, attributes) pair is to be
 allowed in the result of the [MetricProducer](#metricproducer) `Produce` operation.
