@@ -52,11 +52,11 @@ linkTitle: API
 
 </details>
 
-The Tracing API consist of these main classes:
+The Tracing API consist of these main components:
 
 - [`TracerProvider`](#tracerprovider) is the entry point of the API.
   It provides access to `Tracer`s.
-- [`Tracer`](#tracer) is the class responsible for creating `Span`s.
+- [`Tracer`](#tracer) is responsible for creating `Span`s.
 - [`Span`](#span) is the API to trace an operation.
 
 ## Data types
