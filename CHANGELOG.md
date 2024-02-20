@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Remove implementation specific specification from metric API.
+  ([#3890](https://github.com/open-telemetry/opentelemetry-specification/pull/3890))
+
 ### Logs
 
 ### Resource
