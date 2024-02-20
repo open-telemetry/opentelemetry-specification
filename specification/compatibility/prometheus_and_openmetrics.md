@@ -58,7 +58,7 @@ Formats used for Scraping metrics (pull):
 
 Formats used for Pushing metrics:
 
-* [Prometheus Remote Write foramt](https://github.com/prometheus/prometheus/blob/main/prompb/remote.proto)
+* [Prometheus Remote Write format](https://github.com/prometheus/prometheus/blob/main/prompb/remote.proto)
 
 The document below uses "Prometheus" to refer to the union of all of these
 formats, even though support for particular features may be missing from the
