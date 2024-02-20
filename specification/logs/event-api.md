@@ -9,10 +9,12 @@
 
 <!-- toc -->
 
-- [Overview](#overview)
+- [Data model](#data-model)
+- [EventLoggerProvider](#eventloggerprovider)
+  * [EventLoggerProvider operations](#eventloggerprovider-operations)
+    + [Get an EventLogger](#get-an-eventlogger)
 - [EventLogger](#eventlogger)
   * [EventLogger Operations](#eventlogger-operations)
-    + [Create EventLogger](#create-eventlogger)
     + [Emit Event](#emit-event)
 - [Optional and required parameters](#optional-and-required-parameters)
 
