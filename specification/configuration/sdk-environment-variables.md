@@ -304,7 +304,7 @@ Environment variables involved in [file configuration](./file-configuration.md).
 
 | Name             | Description                                                                                                                        | Default | Notes     |
 |------------------|------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
-| OTEL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set other environment variables defined in this file are ignored. |         | See below |
+| OTEL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set other environment variables defined in the sdk environment variables specifications are ignored. |         | See below |
 
 If `OTEL_CONFIG_FILE` is set, the file at the specified path is used to
 call [Parse](file-configuration.md#parse), [Merge Environment](./file-configuration.md#merge-environment), [Create](file-configuration.md#create).
