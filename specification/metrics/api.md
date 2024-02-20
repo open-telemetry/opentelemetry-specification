@@ -68,7 +68,7 @@ The Metrics API consists of these main components:
 
 * [MeterProvider](#meterprovider) is the entry point of the API. It provides
   access to `Meters`.
-* [Meter](#meter) is the class responsible for creating `Instruments`.
+* [Meter](#meter) is responsible for creating `Instruments`.
 * [Instrument](#instrument) is responsible for reporting
   [Measurements](#measurement).
 
