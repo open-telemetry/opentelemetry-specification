@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Define case sensitivity of `map<string, any>` keys.
+  ([#3889](https://github.com/open-telemetry/opentelemetry-specification/pull/3889))
+
 ### Resource
 
 ### OpenTelemetry Protocol
