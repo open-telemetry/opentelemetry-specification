@@ -1,6 +1,6 @@
 # Propagators API
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
