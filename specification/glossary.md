@@ -191,6 +191,13 @@ application in the scope of which the telemetry is emitted.
 
 An umbrella term for the smallest unit of sequential code execution, used in different concepts of multitasking. Examples are threads, coroutines or fibers.
 
+### Platform
+
+Platforms are environments that provide developers with the tools and resources
+they need to build, deploy, and manage applications. One example of such a
+platform is .NET. Platforms might provide opinionated defaults and tools related
+to how telemetry should be generated and handled.
+
 ## Logs
 
 ### Log Record
