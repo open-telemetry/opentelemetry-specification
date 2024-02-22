@@ -93,7 +93,6 @@ as the parent of new spans.
 
 ![ResponsePropagator Use-Case](../../internal/img/response-propagator-use-case.png)
 
-
 The trace context obtained from response propagators are meant to be consumed
 only by the caller and shouldn't be propagated further back.
 
