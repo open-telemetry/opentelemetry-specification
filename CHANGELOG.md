@@ -27,6 +27,8 @@ release.
 
 ### Supplementary Guidelines
 
+- Add "Platform" to Glossary ([#3897](https://github.com/open-telemetry/opentelemetry-specification/pull/3897))
+
 ## v1.30.0 (2024-02-15)
 
 ### Context
