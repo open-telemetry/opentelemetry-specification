@@ -15,6 +15,9 @@ release.
 
 ### Metrics
 
+- Remove implementation specific specification from metric API.
+  ([#3890](https://github.com/open-telemetry/opentelemetry-specification/pull/3890))
+
 ### Logs
 
 ### Resource
@@ -93,6 +96,8 @@ release.
 
 - Align definition of Baggage with W3C Specification.
   ([#3800](https://github.com/open-telemetry/opentelemetry-specification/pull/3800))
+- Specify allowed characters for Baggage keys and values.
+  ([#3801](https://github.com/open-telemetry/opentelemetry-specification/pull/3801))
 
 ### Traces
 
