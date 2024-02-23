@@ -25,7 +25,7 @@ release.
 
 ### Common
 
-- Tighten stability requirements for enum attribute values
+- Tighten stability requirements for well-known attribute values.
   ([#3879](https://github.com/open-telemetry/opentelemetry-specification/pull/3879))
 
 ### Supplementary Guidelines
