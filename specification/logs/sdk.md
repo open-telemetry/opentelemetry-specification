@@ -7,6 +7,9 @@
 
 <!-- toc -->
 
+- [Definitions Used in this Document](#definitions-used-in-this-document)
+  * [ReadableLogRecord](#readablelogrecord)
+  * [ReadWriteLogRecord](#readwritelogrecord)
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider Creation](#loggerprovider-creation)
   * [Logger Creation](#logger-creation)
@@ -14,9 +17,6 @@
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
-- [Additional LogRecord interfaces](#additional-logrecord-interfaces)
-  * [ReadableLogRecord](#readablelogrecord)
-  * [ReadWriteLogRecord](#readwritelogrecord)
 - [LogRecord Limits](#logrecord-limits)
 - [LogRecordProcessor](#logrecordprocessor)
   * [LogRecordProcessor operations](#logrecordprocessor-operations)
@@ -42,6 +42,35 @@ OpenTelemetry API to actually produce telemetry. The OpenTelemetry Logging SDK
 API that provides users with this functionally.
 
 All language implementations of OpenTelemetry MUST provide an SDK.
+
+## Definitions Used in this Document
+
+In this document we refer to `ReadableLogRecord` and `ReadWriteLogRecord` defined as follows.
+
+### ReadableLogRecord
+
+A function receiving this as an argument MUST be able to access all the
+information added to the [LogRecord](data-model.md#log-and-event-record-definition). It MUST also be able to
+access the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
+and [Resource](./data-model.md#field-resource) information (implicitly)
+associated with the `LogRecord`.
+
+The [trace context fields](./data-model.md#trace-context-fields) MUST be populated from
+the resolved `Context` (either the explicitly passed `Context` or the
+current `Context`) when [emitted](./bridge-api.md#emit-a-logrecord).
+
+Counts for attributes due to collection limits MUST be available for exporters
+to report as described in
+the [transformation to non-OTLP formats](../common/mapping-to-non-otlp.md#dropped-attributes-count)
+specification.
+
+### ReadWriteLogRecord
+
+A function receiving this as an argument MUST be able to write to the
+full [LogRecord](data-model.md#log-and-event-record-definition) and additionally MUST be able to retrieve all
+information
+that was added to the `LogRecord` (as with
+[ReadableLogRecord](#readablelogrecord)).
 
 ## LoggerProvider
 
@@ -126,39 +155,6 @@ registered [LogRecordProcessors](#logrecordprocessor).
 
 Note that `Logger`s should not be responsible for configuration. This should be
 the responsibility of the `LoggerProvider` instead.
-
-## Additional LogRecord interfaces
-
-In addition to the [definition for LogRecord](data-model.md#log-and-event-record-definition), the
-following `LogRecord`-like interfaces are defined in the SDK:
-
-### ReadableLogRecord
-
-A function receiving this as an argument MUST be able to access all the
-information added to the [LogRecord](data-model.md#log-and-event-record-definition). It MUST also be able to
-access the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
-and [Resource](./data-model.md#field-resource) information (implicitly)
-associated with the `LogRecord`.
-
-The [trace context fields](./data-model.md#trace-context-fields) MUST be populated from
-the resolved `Context` (either the explicitly passed `Context` or the
-current `Context`) when [emitted](./bridge-api.md#emit-a-logrecord).
-
-Counts for attributes due to collection limits MUST be available for exporters
-to report as described in
-the [transformation to non-OTLP formats](../common/mapping-to-non-otlp.md#dropped-attributes-count)
-specification.
-
-Note: Typically this will be implemented with a new interface or (immutable)
-value type.
-
-### ReadWriteLogRecord
-
-A function receiving this as an argument MUST be able to write to the
-full [LogRecord](data-model.md#log-and-event-record-definition) and additionally MUST be able to retrieve all
-information
-that was added to the `LogRecord` (as with
-[ReadableLogRecord](#readablelogrecord)).
 
 ## LogRecord Limits
 
