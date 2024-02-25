@@ -130,16 +130,18 @@ When a Schema URL is passed as an argument when creating a `Meter` the emitted
 telemetry for that `Meter` MUST be associated with the Schema URL, provided
 that the emitted data format is capable of representing such association.
 
-The `MeterProvider` MUST compute the relevant [MeterConfig](#meterconfig)
-using the configured [MeterConfigProvider](#meterconfigprovider), and adjust
-the `Meter`'s behavior to conform to the `MeterConfig`.
+**Status**: [Experimental](../document-status.md) - The `MeterProvider` MUST
+compute the relevant [MeterConfig](#meterconfig) using the
+configured [MeterConfigProvider](#meterconfigprovider), and adjust the `Meter`'s
+behavior to conform to the `MeterConfig`.
 
 ### Configuration
 
-Configuration (i.e. [MetricExporters](#metricexporter),
-[MetricReaders](#metricreader), [Views](#view), and [MeterConfigProvider](#meterconfigprovider)) MUST be owned by the
-`MeterProvider`. The configuration MAY be applied at the time of `MeterProvider`
-creation if appropriate.
+Configuration (
+i.e. [MetricExporters](#metricexporter), [MetricReaders](#metricreader), [Views](#view),
+and (**experimental**) [MeterConfigProvider](#meterconfigprovider)) MUST be
+owned by the `MeterProvider`. The configuration MAY be applied at the time
+of `MeterProvider` creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MetricReader`), the updated
@@ -150,6 +152,8 @@ the configuration change). Note: Implementation-wise, this could mean that
 configuration only via this reference.
 
 #### MeterConfigProvider
+
+**Status**: [Experimental](../document-status.md)
 
 A `MeterConfigProvider` is a function which computes
 the [MeterConfig](#meterconfig) for a [Meter](#meter).
@@ -826,12 +830,15 @@ temporality.
 Distinct meters MUST be treated as separate namespaces for the purposes of detecting
 [duplicate instrument registrations](#duplicate-instrument-registration).
 
-`Meter` MUST behave according to the [MeterConfig](#meterconfig) computing
+**Status**: [Experimental](../document-status.md) - `Meter` MUST behave
+according to the [MeterConfig](#meterconfig) computing
 during [Meter creation](#meter-creation). If the `MeterProvider` supports
 updating the [MeterConfigProvider](#meterconfigprovider), then upon update
 the `Meter` MUST be updated to behave according to the new `MeterConfig`.
 
 ### MeterConfig
+
+**Status**: [Experimental](../document-status.md)
 
 A `MeterConfig` defines various configurable aspects of a `Meter`'s behavior.
 It consists of the following parameters:

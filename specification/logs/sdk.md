@@ -1,6 +1,6 @@
 # Logs SDK
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -71,14 +71,15 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-The `LoggerProvider` MUST compute the relevant [LoggerConfig](#loggerconfig)
-using the configured [LoggerConfigProvider](#loggerconfigprovider), and adjust
+**Status**: [Experimental](../document-status.md) - The `LoggerProvider` MUST
+compute the relevant [LoggerConfig](#loggerconfig) using the
+configured [LoggerConfigProvider](#loggerconfigprovider), and adjust
 the `Logger`'s behavior to conform to the `LoggerConfig`.
 
 ### Configuration
 
 Configuration (
-i.e. [LogRecordProcessors](#logrecordprocessor) and [LoggerConfigProvider](#loggerconfigprovider))
+i.e. [LogRecordProcessors](#logrecordprocessor) and (**experimental**) [LoggerConfigProvider](#loggerconfigprovider))
 MUST be owned by the `LoggerProvider`. The configuration MAY be applied at the
 time of `LoggerProvider` creation if appropriate.
 
@@ -91,6 +92,8 @@ that `Logger` instances have a reference to their `LoggerProvider` and access
 configuration only via this reference.
 
 #### LoggerConfigProvider
+
+**Status**: [Experimental](../document-status.md)
 
 A `LoggerConfigProvider` is a function which computes
 the [LoggerConfig](#loggerconfig) for a [Logger](#logger).
@@ -160,12 +163,15 @@ registered [LogRecordProcessors](#logrecordprocessor).
 
 ## Logger
 
-`Logger` MUST behave according to the [LoggerConfig](#loggerconfig) computing
+**Status**: [Experimental](../document-status.md) - `Logger` MUST behave
+according to the [LoggerConfig](#loggerconfig) computing
 during [logger creation](#logger-creation). If the `LoggerProvider` supports
 updating the [LoggerConfigProvider](#loggerconfigprovider), then upon update
 the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
 
 ### LoggerConfig
+
+**Status**: [Experimental](../document-status.md)
 
 A `LoggerConfig` defines various configurable aspects of a `Logger`'s behavior.
 It consists of the following parameters:

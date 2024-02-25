@@ -4,7 +4,7 @@ linkTitle: SDK
 
 # Tracing SDK
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -71,16 +71,18 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.
 
-The `TracerProvider` MUST compute the relevant [TracerConfig](#tracerconfig)
-using the configured [TracerConfigProvider](#tracerconfigprovider), and adjust
+**Status**: [Experimental](../document-status.md) - The `TracerProvider` MUST
+compute the relevant [TracerConfig](#tracerconfig) using the
+configured [TracerConfigProvider](#tracerconfigprovider), and adjust
 the `Tracer`'s behavior to conform to the `TracerConfig`.
 
 ### Configuration
 
-Configuration (i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators),
-[SpanLimits](#span-limits), [`Sampler`](#sampling), and [TracerConfigProvider](#tracerconfigprovider)) MUST be owned by the
- `TracerProvider`. The configuration MAY be applied at the time of `TracerProvider`
-creation if appropriate.
+Configuration (
+i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators), [SpanLimits](#span-limits), [`Sampler`](#sampling),
+and (**experimental**) [TracerConfigProvider](#tracerconfigprovider)) MUST be
+owned by the `TracerProvider`. The configuration MAY be applied at the time
+of `TracerProvider` creation if appropriate.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -92,6 +94,8 @@ reference to their `TracerProvider` and access configuration only via this
 reference.
 
 #### TracerConfigProvider
+
+**Status**: [Experimental](../document-status.md)
 
 A `TracerConfigProvider` is a function which computes
 the [TracerConfig](#tracerconfig) for a [Tracer](#tracer).
@@ -154,14 +158,15 @@ make the flush timeout configurable.
 
 ## Tracer
 
-Note that `Tracer`s should not be responsible for configuration. This should be
-the responsibility of the `TracerProvider` instead.
-`Tracer` MUST behave according to the [TracerConfig](#tracerconfig) computing
+**Status**: [Experimental](../document-status.md) - `Tracer` MUST behave
+according to the [TracerConfig](#tracerconfig) computing
 during [Tracer creation](#tracer-creation). If the `TracerProvider` supports
 updating the [TracerConfigProvider](#tracerconfigprovider), then upon update
 the `Tracer` MUST be updated to behave according to the new `TracerConfig`.
 
 ### TracerConfig
+
+**Status**: [Experimental](../document-status.md)
 
 A `TracerConfig` defines various configurable aspects of a `Tracer`'s behavior.
 It consists of the following parameters:
