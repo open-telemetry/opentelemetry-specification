@@ -7,11 +7,16 @@ release.
 
 ## Unreleased
 
+- Fix: remove `name` from LogRecord example in the File Exporter example [#3886](https://github.com/open-telemetry/opentelemetry-specification/pull/3886)
+
 ### Context
 
 ### Traces
 
 ### Metrics
+
+- Remove implementation specific specification from metric API.
+  ([#3890](https://github.com/open-telemetry/opentelemetry-specification/pull/3890))
 
 ### Logs
 
