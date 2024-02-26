@@ -93,34 +93,41 @@ Probability sampling allows OpenTelemetry tracing users to lower span
 collection costs by the use of randomized sampling techniques.  The
 objectives are:
 
-- Compatible with the existing W3C trace context `sampled` flag
+- Compatible with the W3C Trace Context Level 1 `sampled` flag
+- Compatible with the W3C Trace Context Level 2 `random` flag
 - Spans can be accurately counted using a Span-to-metrics pipeline
-- Traces tend to be complete, even though spans may make independent sampling decisions.
+- Traces tend to be complete, even though Spans make independent sampling decisions.
 
-This document specifies an approach based on an "r-value" and a
-"p-value".  At a very high level, r-value is a source of randomness
-and p-value encodes the sampling probability.  A context is sampled
-when `p <= r`.
+This document specifies an approach based on an "R-value" and a
+"T-value".  At a very high level, R-value is a source of randomness
+and T-value encodes the sampling probability in the form of a
+"rejection threshold".  A context is sampled when the randomness value
+is greater than or equal to the rejection threshold (i.e., `R >= T`).
 
-Significantly, by including the r-value and p-value in the
+Ordinarily, R-value is derived from the TraceID; it can be explicitly
+set as a field in the TraceState, where T-value is set.
+
+Significantly, by including the T-value and (optionally) R-value in the
 OpenTelemetry `tracestate`, these two values automatically propagate
-through the context and are recorded on every Span.  This allows Trace
-consumers to correctly count spans simply by interpreting the p-value
-on a given span.
+through the context and are recorded with every Span.  This allows Trace
+consumers to accurately count spans by interpreting the T-value
+encoded within themselves.
 
-For efficiency, the supported sampling probabilities are limited to
-powers of two.  P-value is derived from sampling probability, which
-equals `2**-p`, thus p-value is encoded using an unsigned integer.
+T-value and R-value are represented using 56 bits, the number
+specified in the W3C Trace Context Level 2 specification.
 
-For example, a p-value of 3 indicates a sampling probability of 1/8.
+T-value is encoded using one to 14 hexadecimal digits, expressing the
+rejection threshold as an unsigned integer between `0` and
+`ffffffffffffff`.  At the boundaries, T-value `0` indicates that
+zero spans are being rejected (i.e., 100% sampling), and T-value
+`ffffffffffffff` indicates that all except one out of `2**56` spans
+are being rejected (i.e., `2**-56` sampling).
 
-Since the W3C trace context does not specify that any of the 128 bits
-in a TraceID are true uniform-distributed random bits, the r-value is
-introduced as an additional source of randomness.
-
-The recommended method of generating an "r-value" is to count the
-number of leading 0s in a string of 62 random bits, however, it is not
-required to use this approach.
+When T-value is less than 14 digits, it is zero-padded on the right.
+For example, a T-value of `d` encodes a hexadecimal rejection
+threshold value `0xd0000000000000`; it can be read as "rejecting 14
+(i.e., `0xd`) out of 16 (i.e., `0x10`) spans" and corresponds with
+1-in-8 sampling.
 
 ### Definitions
 
@@ -153,17 +160,12 @@ For probability sampling, adjusted count is defined as the reciprocal
 
 For non-probability sampling, adjusted count is unknown.
 
-Zero adjusted count is defined in a way that supports composition of
-probability and non-probability sampling.  Zero is assigned as the
-adjusted count when a probability sampler does not select a span.
-
-Thus, there are three meaningfully distinct categories of adjusted count:
+Thus, there are two meaningfully distinct categories of adjusted count:
 
 | Adjusted count is | Interpretation                                                                                                                     |
-| --                | --                                                                                                                                 |
-| _Unknown_         | The adjusted count is not known, possibly as a result of a non-probability sampler.  Items in this category should not be counted. |
-| _Zero_            | The adjusted count is known; the effective count of the item is zero.                                                              |
-| _Non-zero_        | The adjusted count is known; the effective count of the item is greater than zero.                                                 |
+|-------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| _Unknown_         | The adjusted count is not known, possibly the result of a legacy or non-probability sampler.  Items in this category should not be counted. |
+| _Non-zero_        | The adjusted count is known and greater than or equal to one.                                                                      |
 
 #### Sampler
 
@@ -189,11 +191,11 @@ flag from the context is said to use parent-based sampling.
 #### Probability sampler
 
 A probability Sampler is a Sampler that knows immediately, for each
-of its decisions, the probability that the span had of being selected.
+of its decisions, the probability that the span has of being selected.
 
 Sampling probability is defined as a number less than or equal to 1
 and greater than 0 (i.e., `0 < probability <= 1`).  The case of 0
-probability is treated as a special, non-probabilistic case.
+probability is not defined, since no spans are counted.
 
 #### Consistent probability sampler
 
@@ -245,47 +247,36 @@ sampler with probability equal to one.
 #### Always-off sampler
 
 An always-off Sampler has the effect of disabling a span completely,
-effectively excluding it from the population.  This is defined as a
-non-probability sampler, not a zero-percent probability sampler,
-because the spans are effectively unrepresented.
+effectively excluding it from the population.  This is not defined as a
+probability sampler.
 
 ## Consistent Probability sampling
 
-The consistent sampling scheme adopted by OpenTelemetry propagates two
-values via the context, termed "p-value" and "r-value".
+The consistent sampling scheme adopted by OpenTelemetry propagates one
+or two values via the context, termed T-value and (optionally)
+R-value.  These fields are propagated via the OpenTelemetry
+`tracestate` using the `ot` vendor tag, as stated in the rules for
+[tracestate handling](tracestate-handling.md).
 
-Both fields are propagated via the OpenTelemetry `tracestate` under
-the `ot` vendor tag using the rules for [tracestate
-handling](tracestate-handling.md).  Both fields are represented as
-unsigned decimal integers requiring at most 6 bits of information.
+This sampling scheme selects items from among a fixed set of `2**56`
+distinct probability values.  The set of supported probabilities are
+expressed in terms of a "rejection threshold", with values between 0
+and `(2**56)-1` indicating how many out of `2**56` trace contexts
+should be rejected by sampling.
 
-This sampling scheme selects items from among a fixed set of 63
-distinct probability values. The set of supported probabilities
-includes the integer powers of two between 1 and 2**-62.  Zero
-probability and probabilities smaller than 2**-62 are treated as a
-special case of "ConsistentAlwaysOff" sampler, just as unit
-probability (i.e., 100%) describes a special case of
-"ConsistentAlwaysOn" sampler.
+R-value determines which among the `2**56` distinct sampling
+probabilities will consistently decide to sample for a given trace.
+R-value can be derived from the TraceID, in which case it is defined
+by the least-significant 7 bytes (i.e., 56 bits) of the identifier.
 
-R-value encodes which among the 63 possibilities will consistently
-decide to sample for a given trace.  Specifically, r-value specifies
-the smallest probability that will decide to sample a given trace in
-terms of the corresponding p-value.  For example, a trace with r-value
-0 will sample spans configured for 100% sampling, while r-value 1 will
-sample spans configured for 50% or 100% sampling, and so on through
-r-value 62, for which a consistent probability sampler will decide
-"yes" at every supported probability (i.e., greater than or equal to
-2**-62).
-
-P-value encodes the adjusted count for child contexts (i.e., consumers
-of `tracestate`) and consumers of sampled spans to record for use in
-Span-to-metrics pipelines.  A special p-value of 63 is defined to mean
-zero adjusted count, which helps define composition rules for
-non-probability samplers.
+Either way, R-value defines the input for the sampling decision, based
+on the rejection threshold expressed by T-value.  A trace context is
+sampled when `R >= T` (i.e., when the randomness value is greater than
+or equal to the rejection threshold).
 
 An invariant will be stated that connects the `sampled` trace flag
-found in `traceparent` context to the r-value and p-value found in
-`tracestate` context.
+found in `traceparent` header to the T-value and (optional) R-value
+found in the `tracestate` header.
 
 ### Conformance
 
@@ -295,69 +286,101 @@ applies to the two samplers specified here as well as consumers of
 span data, who are expected to validate `tracestate` before
 interpreting span adjusted counts.
 
-Producers of OpenTelemetry `tracestate` containing p-value and r-value
+Producers of OpenTelemetry `tracestate` containing T-value and R-value
 fields are required to meet the behavioral requirements stated for the
 `ConsistentProbabilityBased` sampler and to ensure statistically valid
 outcomes.  A test suite is included in this specification so that
 users and consumers of OpenTelemetry `tracestate` can be assured of
 accuracy in Span-to-metrics pipelines.
 
-### Completeness guarantee
-
-This specification defines consistent sampling for power-of-two
-sampling probabilities.  When a sampler is configured with a
-non-power-of-two sampling probability, the sampler will
-probabilistically choose between the nearest powers of two.
-
-When a single consistent probability sampler is used at the root of a
-trace and all other spans use a parent-based sampler, the resulting
-traces are always complete (ignoring collection errors).  This
-property holds even for non-power-of-two sampling probabilities.
-
-When multiple consistent probability samplers are used in the same
-trace, in general, trace completeness is ensured at the smallest power
-of two greater than or equal to the minimum sampling probability
-across the trace.
-
 ### Context invariants
 
-The W3C `traceparent` (version 0) contains three fields of
-information: the TraceId, the SpanId, and the trace flags.  The
-`sampled` trace flag has been defined by W3C to signal an intent to
-sample the context.
+The W3C Trace Context Level 2 `traceparent` header contains three
+fields of information: the TraceID, the SpanID, and the trace flags.
+The flags are:
+
+- `sampled` (value `0x1`): signals an intent to sample the context
+- `random` (value `0x2`): signals that the least-significant 56 bits of the TraceID are random.
 
 The [Sampler API](sdk.md#sampler) is responsible for setting the
-`sampled` flag and the `tracestate`.
+`sampled` and `random` flags and the `tracestate`.
 
-P-value and r-value are set in the OpenTelemetry `tracestate`, under
-the vendor tag `ot`, using the identifiers `p` and `r`.  P-value is an
-unsigned integer valid in the inclusive range `[0, 63]` (i.e., there
-are 64 valid values).  R-value is an unsigned integer valid in the
-inclusive range `[0, 62]` (i.e., there are 63 valid values).  P-value
-and r-value are independent settings, each can be meaningfully set
-without the other present.
+T-value and (optionally) R-value are set in the OpenTelemetry
+`tracestate` entry, under the vendor tag `ot`, using the identifiers
+`th` and `rv`, respectively.  Both T-value and R-value are encoded
+using exclusively hexadecimal digits.
+
+T-value and R-value fields each carry 56-bits of information,
+expressing an unsigned value in network byte order.  When T-value is
+less than 14 hexadecimal digits, the value is extended with trailing
+zeros so that it contains 56 bits.  R-value fields are expressed in
+exactly 14 hexadecimal digits.
+
+The R-value field is optional.  When R-value is omitted, an effective
+R-value can be calculated from the TraceID, using the trailing 7 bytes
+(56 bits) of the identifier in network byte order. Equivalently, the
+effective R-value can be calculating using the trailing 14 hexadecimal
+digits, specified by OpenTelemetry as the JSON-encoding for TraceID
+values.
 
 #### Sampled flag
 
-Probability sampling uses additional information to enable consistent
-decision making and to record the adjusted count of sampled spans.
-When both values are defined and in the specified range, the invariant
-between r-value and p-value and the `sampled` trace flag states that
-`((p <= r) == sampled) OR (sampled AND (p == 63)) == TRUE`.
+The invariant between T-value, (effective) R-value, and the Sampled
+flag can be stated as `sampled == (R >= T)`.
 
-The invariant between `sampled`, `p`, and `r` only applies when both
-`p` and `r` are present.  When the invariant is violated, the
-`sampled` flag takes precedence and `p` is unset from `tracestate` in
-order to signal unknown adjusted count.
+The invariant between `sampled`, `T`, and `R` only applies when
+T-value is present in the `tracestate`.  When the invariant is
+violated, the `sampled` flag takes precedence and the T-value is unset
+from `tracestate` in order to signal unknown adjusted count.
 
-##### Requirement: Inconsistent p-values are unset
+##### Requirement: Inconsistent T-values are unset
 
-Samplers SHOULD unset `p` when the invariant between the `sampled`,
-`p`, and `r` values is violated before using the `tracestate` to make
-a sampling decision or interpret adjusted count.
+Samplers SHOULD unset T-value (by erasing the `tv` field) when the
+invariant between the `sampled` flag, T-value, and (effective) R-value
+is violated, before using the `tracestate` to make a sampling decision
+or interpret adjusted count.
 
-#### P-value
+#### Random flag
 
+The Random flag was introduced in W3C Trace Context Level 2
+specification, which also stated which bits of the 128 bit TraceID
+would be random when the flag was set.
+
+At the time of this specification:
+
+- No implementations set the Random flag
+- All OpenTelemetry trace SDKs generate 128 random bits, except when there is a user-supplied IdGenerator
+- Some OpenTelemetry propagation SDK components do not propagate
+  unrecognized trace flags.
+
+It is this third point which strongly suggests treating the Random
+flag as advisory in nature, that OpenTelemetry components presume
+TraceIDs are random by default.  After the first and second points
+have been addressed and new code has been widely deployed, we may
+reconsider this recommendation.
+
+##### Requirement: Head Samplers set required randomness in TraceID
+
+Head Samplers (i.e., trace SDKs) SHOULD by default generate the 56
+random bits specified by the W3C Trace Context Level 2, along with the
+Random flag, when generating new TraceIDs.
+
+##### Requirement: Tail Samplers assume random TraceIDs
+
+Tail Samplers SHOULD ignore the W3C Trace Context Level 2 Random flag
+when interpreting span data.
+
+When there is an explicit R-value set, the Sampler will anyway
+disregard the Random flag.  However, when there is no explicit R-value
+set and the Sampler operates on Span data alone, there is not a local
+modification that would be effective and yield consistent sampling.
+
+This recommendation may be revisited after OpenTelemetry SDKs
+generally propagate Trace Context flags correctly.
+
+#### T-value
+
+WIP:@@@
 Zero adjusted count is represented by the special p-value 63,
 otherwise the p-value is set to the negative base-2 logarithm of
 sampling probability:

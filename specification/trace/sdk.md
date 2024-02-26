@@ -339,9 +339,9 @@ the `ParentBased` sampler specified below.
 
 ##### `TraceIdRatioBased` sampler implementation overview
 
-SDKs MAY use an implementation that matches the specification
-referenced below as the `TraceIdRatioBased` Sampler, which based on
-the [W3C Trace Context Level 2 Random TraceID
+SDKs SHOULD use an implementation that is equivalent to the
+specification referenced below as the `TraceIdRatioBased` Sampler,
+which is based on the [W3C Trace Context Level 2 Random TraceID
 flag](https://www.w3.org/TR/trace-context-2/#random-trace-id-flag).
 When a TraceID has the `Random` bit set, samplers are able to use 56
 specific bits of consistent randomness for sampling decisions.
@@ -352,7 +352,7 @@ The implementation has the following steps:
 * A rejection threshold is calculated, expressing as an integer how
   many out of 2**56 trace IDs should be sampled.
 * The threshold is encoded as a "T-value", expressing the threshold
-  using 5 hexadecimal digits of precision.
+  using up to 5 hexadecimal digits of precision.
 * Sampler decisions are made by comparing the Trace ID randomness
   against the rejection threshold.
 * When Sampled, T-value is included in the [OpenTelemetry TraceState
@@ -365,8 +365,9 @@ For more detailed information, see the
 specification.
 
 When this implementation is used, the Sampler description SHOULD
-return a string of the form `"TraceIdRatioBased{tv:TVALUE}"` with
-`TVALUE` replaced by the encoded T-Value as the Sampler Description.
+return a string of the form `"TraceIdRatioBased{RATIO;tv:TVALUE}"`
+with `RATIO` the configured probability and `TVALUE` replaced by the
+encoded T-Value, as the Sampler Description.
 
 ##### Former requirements for `TraceIdRatioBased` sampler algorithm
 
