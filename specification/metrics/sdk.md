@@ -733,8 +733,9 @@ of metrics across successive collections.
 
 SDKs SHOULD support being configured with a cardinality limit. The number of
 unique combinations of attributes is called cardinality. For a given metric, the
-cardinality limit is a hard limit on the number of metric points that can be
-collected during a collection cycle.
+cardinality limit is a hard limit on the number of [Metric
+Points](./data-model.md#metric-points) that can be collected during a collection
+cycle.
 
 #### Configuration
 
@@ -1383,12 +1384,12 @@ A Push Metric Exporter MUST support the following functions:
 
 ##### Export(batch)
 
-Exports a batch of [Metric points](./data-model.md#metric-points). Protocol
+Exports a batch of [Metric Points](./data-model.md#metric-points). Protocol
 exporters that will implement this function are typically expected to serialize
 and transmit the data to the destination.
 
 The SDK MUST provide a way for the exporter to get the [Meter](./api.md#meter)
-information (e.g. name, version, etc.) associated with each `Metric point`.
+information (e.g. name, version, etc.) associated with each `Metric Point`.
 
 `Export` will never be called concurrently for the same exporter instance.
 `Export` can be called again only after the current call returns.
@@ -1403,10 +1404,10 @@ are being sent to.
 
 **Parameters:**
 
-`batch` - a batch of `Metric point`s. The exact data type of the batch is
-language specific, typically it is some kind of list. The exact type of `Metric
-point` is language specific, and is typically optimized for high performance.
-Here are some examples:
+`batch` - a batch of [Metric Points](./data-model.md#metric-points). The exact
+data type of the batch is language specific, typically it is some kind of list.
+The exact type of `Metric Point` is language specific, and is typically
+optimized for high performance. Here are some examples:
 
 ```text
        +--------+ +--------+     +--------+
@@ -1422,7 +1423,7 @@ Batch: | Metric | | Metric | ... | Metric |
                                     +--> timestamps, attributes, value (or buckets), exemplars, ...
 ```
 
-Refer to the [Metric points](./data-model.md#metric-points) section from the
+Refer to the [Metric Points](./data-model.md#metric-points) section from the
 Metrics Data Model specification for more details.
 
 Note: it is highly recommended that implementors design the `Metric` data type
@@ -1562,12 +1563,12 @@ A `MetricProducer` MUST support the following functions:
 #### Produce batch
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
-MUST return a batch of [Metric points](./data-model.md#metric-points), filtered by the optional
+MUST return a batch of [Metric Points](./data-model.md#metric-points), filtered by the optional
 `metricFilter` parameter. Implementation SHOULD use the filter as early as
 possible to gain as much performance gain possible (memory allocation,
 internal metric fetching, etc).
 
-If the batch of [Metric points](./data-model.md#metric-points) includes
+If the batch of [Metric Points](./data-model.md#metric-points) includes
 resource information, `Produce` SHOULD require a resource as a parameter.
 `Produce` does not have any other required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add required or optional
@@ -1578,7 +1579,7 @@ failed or timed out. When the `Produce` operation fails, the `MetricProducer`
 MAY return successfully collected results and a failed reasons list to the
 caller.
 
-If a batch of [Metric points](./data-model.md#metric-points) can include
+If a batch of [Metric Points](./data-model.md#metric-points) can include
 [`InstrumentationScope`](../glossary.md#instrumentation-scope) information,
 `Produce` SHOULD include a single InstrumentationScope which identifies the
 `MetricProducer`.
@@ -1593,7 +1594,7 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 
 `MetricFilter` defines the interface which enables the [MetricReader](#metricreader)'s
 registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#metricproducer) to filter aggregated data points
-([Metric points](./data-model.md#metric-points)) inside its `Produce` operation.
+([Metric Points](./data-model.md#metric-points)) inside its `Produce` operation.
 The filtering is done at the [MetricProducer](#metricproducer) for performance reasons.
 
 The `MetricFilter` allows filtering an entire metric stream - dropping or allowing all its attribute sets -
