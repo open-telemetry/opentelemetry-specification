@@ -729,7 +729,7 @@ of metrics across successive collections.
 
 ### Cardinality limits
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Experimental](../document-status.md) except where otherwise specified
 
 SDKs SHOULD support being configured with a cardinality limit. The number of
 unique combinations of attributes is called cardinality. For a given metric, the
@@ -750,6 +750,8 @@ The cardinality limit for an aggregation is defined in one of three ways:
    be used.
 
 #### Overflow attribute
+
+**Status**: [Stable](../document-status.md)
 
 An overflow attribute set is defined, containing a single attribute
 `otel.metric.overflow` having (boolean) value `true`, which is used to
