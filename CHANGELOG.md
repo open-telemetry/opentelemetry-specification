@@ -20,6 +20,9 @@ release.
 
 ### Logs
 
+- `ReadableLogRecord` is able to access the passed context.
+  ([#3908](https://github.com/open-telemetry/opentelemetry-specification/pull/3908))
+
 ### Resource
 
 ### OpenTelemetry Protocol
