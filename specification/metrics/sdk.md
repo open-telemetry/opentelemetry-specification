@@ -731,10 +731,10 @@ of metrics across successive collections.
 
 **Status**: [Experimental](../document-status.md)
 
-SDKs SHOULD support being configured with a cardinality limit. The number of
-unique combinations of attributes is called cardinality. For a given metric, the
-cardinality limit is a hard limit on the number of metric points that can be
-collected during a collection cycle.
+SDKs SHOULD support configurable cardinality limits. The number of
+unique attribute sets passed by a user is called cardinality. For a given
+metric, the cardinality limit is a hard limit on the number of metric points
+that can be collected during a collection cycle.
 
 #### Configuration
 
