@@ -20,6 +20,9 @@ release.
 
 ### Logs
 
+- Explicitly define what can be modified via ReadWriteLogRecord.
+  ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
+
 ### Resource
 
 ### OpenTelemetry Protocol
