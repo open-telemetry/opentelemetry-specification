@@ -20,6 +20,9 @@ release.
 
 ### Logs
 
+- Clarify that logs attributes are a superset of standard attributes.
+  ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
+
 ### Resource
 
 ### OpenTelemetry Protocol
