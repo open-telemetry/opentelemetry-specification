@@ -135,8 +135,9 @@ following `LogRecord`-like interfaces are defined in the SDK:
 ### ReadableLogRecord
 
 A function receiving this as an argument MUST be able to access all the
-information added to the [LogRecord](data-model.md#log-and-event-record-definition). It MUST also be able to
-access the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
+information added to the [LogRecord](data-model.md#log-and-event-record-definition).
+
+It MUST also be able to access the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
 and [Resource](./data-model.md#field-resource) information (implicitly)
 associated with the `LogRecord`.
 
@@ -154,11 +155,17 @@ value type.
 
 ### ReadWriteLogRecord
 
-A function receiving this as an argument MUST be able to write to the
-full [LogRecord](data-model.md#log-and-event-record-definition) and additionally MUST be able to retrieve all
-information
-that was added to the `LogRecord` (as with
-[ReadableLogRecord](#readablelogrecord)).
+ReadWriteLogRecord is a superset of [ReadableLogRecord](#readablelogrecord).
+
+A function receiving this as an argument MUST additionally be able to modify the
+following information added to the [LogRecord](data-model.md#log-and-event-record-definition):
+
+* [`Timestamp`](data-model.md#field-timestamp)
+* [`ObservedTimestamp`](data-model.md#field-observedtimestamp)
+* [`SeverityText`](data-model.md#field-severitytext)
+* [`SeverityNumber`](data-model.md#field-severitynumber)
+* [`Body`](data-model.md#field-body)
+* [`Attributes`](data-model.md#field-attributes)
 
 ## LogRecord Limits
 
