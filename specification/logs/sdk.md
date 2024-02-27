@@ -165,7 +165,7 @@ following information added to the [LogRecord](data-model.md#log-and-event-recor
 * [`SeverityText`](data-model.md#field-severitytext)
 * [`SeverityNumber`](data-model.md#field-severitynumber)
 * [`Body`](data-model.md#field-body)
-* [`Attributes`](data-model.md#field-attributes)
+* [`Attributes`](data-model.md#field-attributes) (it includes: adding, modifying, removing)
 
 ## LogRecord Limits
 
