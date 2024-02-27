@@ -232,12 +232,13 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
    use the sampling decision of the parent,
    translating a set SampledFlag to RECORD and an unset one to DROP).
-3. If there isn't currently a span (i.e the span being created will become the root
-   span), SDKs MUST generate a new span ID for the `Span`, independently of the
-   sampling decision. This is done so other components (such as logs or
+3. If there isn't currently a span (i.e the span being created will become the
+   root span), SDKs MUST generate a new span ID for the `Span`, independently of
+   the sampling decision. This is done so other components (such as logs or
    exception handling) can rely on a unique span ID, even if the `Span` is a
-   non-recording instance. For non-root spans, SDKs MAY skip creation of spans if
-   `ShouldSample` results in a non-recording instance (`DROP`). This is done to optimize the performance by avoiding creating a span when unnecessary.
+   non-recording instance. For non-root spans, SDKs MAY skip creation of spans
+   if `ShouldSample` results in a non-recording instance (`DROP`). This is done
+   to optimize the performance by avoiding creating a span when unnecessary.
 4. Create a span depending on the decision returned by `ShouldSample`:
    see description of [`ShouldSample`'s](#shouldsample) return value below
    for how to set `IsRecording` and `Sampled` on the Span,
