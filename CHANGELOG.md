@@ -33,6 +33,9 @@ release.
 
 ### Common
 
+- Tighten stability requirements for well-known attribute values.
+  ([#3879](https://github.com/open-telemetry/opentelemetry-specification/pull/3879))
+
 ### Supplementary Guidelines
 
 ## v1.30.0 (2024-02-15)
