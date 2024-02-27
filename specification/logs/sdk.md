@@ -135,9 +135,8 @@ following `LogRecord`-like interfaces are defined in the SDK:
 ### ReadableLogRecord
 
 A function receiving this as an argument MUST be able to access all the
-information added via [Emit a LogRecord](bridge-api.md#emit-a-logrecord).
-
-It MUST also be able to access the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
+information added to the [LogRecord](data-model.md#log-and-event-record-definition). It MUST also be able to
+access the [Instrumentation Scope](./data-model.md#field-instrumentationscope)
 and [Resource](./data-model.md#field-resource) information (implicitly)
 associated with the `LogRecord`.
 
