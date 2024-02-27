@@ -157,7 +157,8 @@ value type.
 ReadWriteLogRecord is a superset of [ReadableLogRecord](#readablelogrecord).
 
 A function receiving this as an argument MUST additionally be able to modify
-all the information added via [Emit a LogRecord](bridge-api.md#emit-a-logrecord).
+all the information added via [Emit a LogRecord](bridge-api.md#emit-a-logrecord)
+except `Context`.
 
 ## LogRecord Limits
 
