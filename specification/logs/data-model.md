@@ -119,8 +119,8 @@ Value of type `any` can be one of the following:
 Value of type `map<string, any>` is a map of string keys to `any` values.
 Case sensitivity of keys MUST be preserved.
 The keys in the map MUST be unique (duplicate keys are not allowed).
-The enforcement of uniqueness may be performed in a variety of ways as it best
-fits the limitations of the particular implementation.
+The enforcement of uniqueness may be performed in a variety of ways and implementations
+may choose how to enforce this requirement within their limitations.
 The representation of the map is language-dependent.
 
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
