@@ -71,7 +71,7 @@ linkTitle: Probability Sampling
     + [Trace producer: correctness](#trace-producer-correctness)
       - [Recommendation: sampler delegation](#recommendation-sampler-delegation)
     + [Trace producer: interoperability with `ParentBased` sampler](#trace-producer-interoperability-with-parentbased-sampler)
-    + [Trace producer: interoperability with `TraceIDRatioBased` sampler](#trace-producer-interoperability-with-traceidratiobased-sampler)
+    + [Trace producer: interoperability with `TraceIdRatioBased` sampler](#trace-producer-interoperability-with-traceidratiobased-sampler)
     + [Trace consumer](#trace-consumer)
       - [Recommendation: Recognize inconsistent r-values](#recommendation-recognize-inconsistent-r-values)
   * [Appendix: Statistical test requirements](#appendix-statistical-test-requirements)
@@ -353,22 +353,23 @@ At the time of this specification:
 - Some OpenTelemetry propagation SDK components do not propagate
   unrecognized trace flags.
 
-It is this third point which strongly suggests treating the Random
-flag as advisory in nature, that OpenTelemetry components presume
-TraceIDs are random by default.  After the first and second points
-have been addressed and new code has been widely deployed, we may
-reconsider this recommendation.
+These points, taken together, means there will be a long delay before
+the Random trace flag functions as intended in ther OpenTelemetry
+tracing ecosystem.  This is the reason why Head Samplers (inside
+tracing SDKs) are required to set the flag and respect its meaning,
+while Tail Samplers (inside Collectors) are not recommended to make
+use of the flag.
 
 ##### Requirement: Head Samplers set required randomness in TraceID
 
 Head Samplers (i.e., trace SDKs) SHOULD by default generate the 56
-random bits specified by the W3C Trace Context Level 2, along with the
-Random flag, when generating new TraceIDs.
+random bits specified for TraceIDs by the W3C Trace Context Level 2,
+and set the Random trace flag, when generating new contexts.
 
 ##### Requirement: Tail Samplers assume random TraceIDs
 
 Tail Samplers SHOULD ignore the W3C Trace Context Level 2 Random flag
-when interpreting span data.
+when interpreting span data.  This is a compromise 
 
 When there is an explicit R-value set, the Sampler will anyway
 disregard the Random flag.  However, when there is no explicit R-value
@@ -376,75 +377,123 @@ set and the Sampler operates on Span data alone, there is not a local
 modification that would be effective and yield consistent sampling.
 
 This recommendation may be revisited after OpenTelemetry SDKs
-generally propagate Trace Context flags correctly.
+generally propagate and record Trace Context flags according to the
+Trace Context Level 2 specification.  Until such time, Tail Samplers
+are encouraged, optionally, to support a "strict" operating mode in
+which the Random flag is respected, meaning to treat contexts without
+the Random flag and without an explicit R-value as an error condition.
 
 #### T-value
 
-WIP:@@@
-Zero adjusted count is represented by the special p-value 63,
-otherwise the p-value is set to the negative base-2 logarithm of
-sampling probability:
+T-value is encoded using the sub-key `th` in the OpenTelemetry
+tracestate section, conveying a 56-bit rejection threshold using
+between one and 14 hexadecimal digits.  T-value encodings less than 14
+digits are padded with trailing zero digits, giving implementations a
+choice how much precision they want to use, especially when converting
+probability values expressed as percentages, or in decimal form.
 
-| p-value | Parent Probability | Adjusted count |
-| -----   | -----------        | --             |
-| 0       | 1                  | 1              |
-| 1       | 1/2                | 2              |
-| 2       | 1/4                | 4              |
-| ...     | ...                | ...            |
-| N       | 2**-N              | 2**N           |
-| ...     | ...                | ...            |
-| 61      | 2**-61             | 2**61          |
-| 62      | 2**-62             | 2**62          |
-| 63      | 0                  | 0              |
+Here is an example tracestate value encoding 25% sampling:
 
-##### Requirement: Out-of-range p-values are unset
+```
+tracestate: ot=tv:c
+```
 
-Consumers SHOULD unset `p` from the `tracestate` if the unsigned
-decimal value is greater than 63 before using the `tracestate` to make
-a sampling decision or interpret adjusted count.
+where `ot` indicates the OpenTelemetry section, `tv` indicates
+T-value, and `c` indicates a rejection threshold of 0xc0000000000000
+after trailing zeros are removed.
+
+The use of variable precision is significant when expressing
+percent-based sampling configuration into an exact T-value.  For
+example, a sampling rate of 1/3 translates into a rejection threshold
+of 2/3, which can be approximated as a repeating decimal fraction like
+`666/1000` or `6666/10000`, can also be expressed as a hexadecimal
+fraction like `0xaab/0x1000` or `0xaaab/0x10000`.  Implementations are
+recommended to limit precision to 3 or 4 hexadecimal digits, meaning
+12 or 16 bits of precision are recommended so that T-values are
+reduced to 3 or 4 characters, so that 1/3 sampling may be encoded
+as:
+
+```
+tracestate: ot=tv:aaab
+```
+
+Here is a table of T-value encoding, sampling probability, and
+adjusted count as an exact expression and as a floating point value,
+for probabilities in the range range between 1 to 1/16.  Rejection
+thresholds which cannot be expressed as powers of two are approximate,
+as shown.
+
+
+| T-value | Probability (rational) | Adjusted count (exact)   | Adjusted count (floating point) |
+|---------|------------------------|--------------------------|---------------------------------|
+| 0       | 1                      | 1                        | 1                               |
+| 4       | 3/4                    | 4 / 3                    | 1.33333333333                   |
+| 555     | 2/3                    | 1 / (1 - 0x555/0x1000)   | 1.49981691688                   |
+| 5555    | 2/3                    | 1 / (1 - 0x5555/0x10000) | 1.499988556                     |
+| 8       | 1/2                    | 2                        | 2                               |
+| aab     | 1/3                    | 1 / (1 - 0xaab/0x1000)   | 3.00073260073                   |
+| aaab    | 1/3                    | 1 / (1 - 0xaaab/0x10000) | 3.00004577707                   |
+| c       | 1/4                    | 4                        | 4                               |
+| ccd     | 1/5                    | 1 / (1 - 0xccd/0x1000)   | 5.00122100122                   |
+| cccd    | 1/5                    | 1 / (1 - 0xcccd/0x10000) | 5.00007629511                   |
+| d       | 3/16                   | 1 / (1 - 0xd/0x10)       | 5.33333333333                   |
+| e       | 1/8                    | 8                        | 8                               |
+| f       | 1/16                   | 16                       | 16                              |
+
+Here is a table covering smaller sampling probabilities, which
+generally have leading `f` digits.  Note the use of variable precision
+for non-power-of-two values, such as 1/24 which can be successively
+approximated using `f` followed by one or more `5` digits.
+
+| T-value        | Probability (rational) | Adjusted count (exact)         | Adjusted count (floating point) |
+|----------------|------------------------|--------------------------------|---------------------------------|
+| f0f            | 1/17                   | 1/(1 - 0xf0f/0x100)            | 16.9958506224                   |
+| f555           | 1/24                   | 1/(1 - 0xf555/0x10000)         | 23.9970706701                   |
+| f555555        | 1/24                   | 1/(1 - 0xf555555/0x10000000)   | 23.9999992847                   |
+| f8             | 1/32                   | 32                             | 32                              |
+| faab           | 1/48                   | 1/(1 - 0xfaab/0x10000)         | 48.0117216117                   |
+| faaaaab        | 1/48                   | 1/(1 - 0xfaaaaab/0x10000000)   | 48.000002861                    |
+| fc             | 1/64                   | 64                             | 64                              |
+| fd27d          | 1/90                   | 1/(1 - 0xfd27d/0x100000)       | 89.9987983864                   |
+| fd27d27d       | 1/90                   | 1/(1 - 0xfd27d27d/0x100000000) | 89.9999997066                   |
+| fe             | 1/128                  | 128                            | 128                             |
+| ff             | 1/256                  | 256                            | 256                             |
+| ffff           | 2**-16                 | 2**16                          | 2**16                           |
+| ffffff         | 2**-24                 | 2**24                          | 2**24                           |
+| ffffffff       | 2**-32                 | 2**32                          | 2**32                           |
+| ffffffffff     | 2**-40                 | 2**40                          | 2**40                           |
+| ffffffffffff   | 2**-48                 | 2**48                          | 2**48                           |
+| ffffffffffffff | 2**-56                 | 2**56                          | 2**56                           |
+
+##### Requirement: Out-of-range T-values are unset
+
+Consumers SHOULD unset T-value from the `tracestate` if the encoded
+value encoding is not between one and 14 bytes, all valid hexadecimal
+digits, before using the `tracestate` to make a sampling decision or
+interpret adjusted count.
 
 #### R-value
 
-R-value is set in the `tracestate` by the Sampler at the root of the
-trace, in order to support consistent probability sampling.  When the
-value is omitted or not present, child spans in the trace are not able
-to participate in consistent probability sampling.
+R-value is optionally set in the `tracestate` by the Sampler at the
+root of the trace, in order to support consistent probability sampling
+without the use of TraceID randomness.  R-value is encoded using the
+sub-key `rv` in the OpenTelemetry tracestate section, conveying a
+56-bit random number using 14 hexadecimal digits.
 
-R-value determines which sampling probabilities will decide to sample
-or not decide to sample for spans of a given trace, as follows:
+By making R-value optional in this way, it is possible for
+special-purpose instrumentation to achieve consistent probability
+sampling across multiple traced contexts.
 
-| r-value          | Implied sampling probabilities |
-| ---------------- | ----------------------         |
-| 0                | 1                              |
-| 1                | 1/2 and above                  |
-| 2                | 1/4 and above                  |
-| 3                | 1/8 and above                  |
-| ...              | ...                            |
-| 0 <= r <= 61     | 2**-r and above                |
-| ...              | ...                            |
-| 59               | 2**-59 and above               |
-| 60               | 2**-60 and above               |
-| 61               | 2**-61 and above               |
-| 62               | 2**-62 and above               |
+##### Requirement: Out-of-range R-values unset both T-value and R-value
 
-These probabilities are specified to ensure that conforming Sampler
-implementations record spans with correct adjusted counts.  The
-recommended method of generating r-values is to count the number of
-leading 0s in a string of 62 random bits, however it is not required
-to use this approach.
+Samplers SHOULD unset both T-value and R-value from the `tracestate`
+if the value of `rv` is not exactly 14 hexadecimal digits, before
+using the `tracestate` to make a sampling decision.
 
-##### Requirement: Out-of-range r-values unset both p and r
+##### Requirement: R-value is generated using 56 random bits
 
-Samplers SHOULD unset both `r` and `p` from the `tracestate` if the
-unsigned decimal value of `r` is greater than 62 before using the
-`tracestate` to make a sampling decision.
-
-##### Requirement: R-value is generated with the correct probabilities
-
-Samplers MUST generate r-values using a randomized scheme that
-produces each value with the probabilities equivalent to those
-produced by counting the number of leading 0s in a string of 62 random
-bits.
+Samplers MUST generate R-values using a randomized scheme that
+produces each bit using a uniform, independent source of randomness.
 
 #### Examples: Context invariants
 
@@ -453,8 +502,8 @@ bits.
 Consider a trace context with the following headers:
 
 ```
-traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
-tracestate: ot=r:3;p:2
+traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-03
+tracestate: ot=tv:c
 ```
 
 The `traceparent` contents in this example example are repeated from
@@ -465,194 +514,110 @@ and have the following base64-encoded field values:
 base16(version) = 00
 base16(trace-id) = 4bf92f3577b34da6a3ce929d0e0e4736
 base16(parent-id) = 00f067aa0ba902b7
-base16(trace-flags) = 01  // (i.e., sampled)
+base16(trace-flags) = 03  // (i.e., sampled, random)
 ```
 
-The `tracestate` header contains OpenTelemetry string `r:3;p:2`,
-containing decimal-encoded p-value and r-value:
+The `tracestate` header contains OpenTelemetry string `tv:c`,
+containing a hex-encoded T-value (`c`).  Because it has no explicit
+R-value, the R-value can be derived from the trailing 14 digits of
+hexadecimal-encoded TraceID, which is `ce929d0e0e4736` in this example.
 
 ```
-base10(r) = 3
-base10(p) = 2
+base16(rv) = ce929d0e0e4736
+base10(th) = c0000000000000
 ```
 
-Here, r-value 3 indicates that a consistent probability sampler
-configured with probability 12.5% (i.e., 1-in-8) or greater will
-sample the trace.  The p-value 2 indicates that the parent that set
-the `sampled` flag was configured to sample at 25% (i.e., 1-in-4).
-This trace context is consistent because `p <= r` is true and the
-`sampled` flag is set.
+Here, R-value ce929d0e0e4736 indicates that a consistent probability
+sampler configured with probability greater than approximately 19.3%,
+the exact probability threshold being expressed as `1 - 0xce929d0e0e4736 / 0x100000000000000`.
 
-##### Example: Probability unsampled
+Since the T-value is less than or equal to the R-value, in this case
+(i.e., `T <= R`), we expect the `sampled` flag to be set.
 
-This example has an unsampled context where only the r-value is set.
+##### Example: Probability unsampled context
+
+This example has an unsampled context where no tracestate is provided,
+with the random flag set.
 
 ```
-traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00
-tracestate: ot=r:3
+traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-02
 ```
 
-This supports consistent probability sampling in child contexts by
-virtue of having an r-value.  P-value is not set, consistent with an
-unsampled context.
+T-value is not set, consistent with an unsampled context.  In this
+case, the parent context could have been sampled at less than 19.3%
+probability or used the `AlwaysOff` sampler.
+
+##### Example: Probability sampled, explicit R-value context
+
+This example has an sampled context with an explicit R-value and no
+random flag set.
+
+```
+traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+tracestate: ot=tv:8;rv:8d64684bac31e
+```
+
+T-value indicates 50% sampling, which is consistent with the explicit
+R-value and `sampled` flag being set.
+
+```
+base16(rv) = 8d64684bac31e
+base10(th) = 80000000000000
+```
 
 ### Samplers
 
-#### ParentConsistentProbabilityBased sampler
+#### ParentBased sampler extensions
 
-The `ParentConsistentProbabilityBased` sampler is meant as an optional
-replacement for the [`ParentBased` Sampler](sdk.md#parentbased). It is
-required to first validate the `tracestate` and then respect the
-`sampled` flag in the W3C traceparent.
+A consistent-probability `ParentBased` sampler is is required to first
+validate `tracestate` invariants and then respect the `sampled` flag
+in the W3C traceparent.
 
-##### Requirement: ParentConsistentProbabilityBased API
+##### Requirement: ParentBased does not modify valid tracestate
 
-The `ParentConsistentProbabilityBased` Sampler constructor SHOULD take
-a single Sampler argument, which is the Sampler to use in case the
-`ParentConsistentProbabilityBased` Sampler is called for a root span.
+A consistent-probability `ParentBased` Sampler MUST NOT modify a valid `tracestate`.
 
-##### Requirement: ParentConsistentProbabilityBased does not modify valid tracestate
+##### Requirement: ParentBased calls the configured root sampler for root spans
 
-The `ParentConsistentProbabilityBased` Sampler MUST NOT modify a
-valid `tracestate`.
+A consistent-probability `ParentBased` Sampler MUST delegate to the
+configured root Sampler when there is not a valid parent trace
+context.
 
-##### Requirement: ParentConsistentProbabilityBased calls the configured root sampler for root spans
+##### Requirement: ParentBased respects the sampled flag for non-root spans
 
-The `ParentConsistentProbabilityBased` Sampler MUST delegate to the
-configured root Sampler when there is not a valid parent trace context.
-
-##### Requirement: ParentConsistentProbabilityBased respects the sampled flag for non-root spans
-
-The `ParentConsistentProbabilityBased` Sampler MUST decide to sample
+A consistent-probability `ParentBased` Sampler MUST decide to sample
 the span according to the value of the `sampled` flag in the W3C
 traceparent header.
 
-#### ConsistentProbabilityBased sampler
+#### TraceIdRatioBased sampler extensions
 
-The `ConsistentProbabilityBased` sampler is meant as an optional
-replacement for the [`TraceIdRatioBased`
-Sampler](sdk.md#traceidratiobased).  In the case where it is used as a
-root sampler, the `ConsistentProbabilityBased` sampler is required to
-produce a valid `tracestate`.  In the case where it is used in a
-non-root context, it is required to validate the incoming `tracestate`
-and to produce a valid `tracestate` for the outgoing context.
+A consistent-probability `TraceIdRatioBased` sampler is required to
+produce a valid `tracestate` containing T-value and optional R-value
+when it decides to sample a context.  In the case where it is used in
+a non-root context, it is required to validate the incoming
+`tracestate` and to produce a valid `tracestate` for the outgoing
+context.
 
-The `ConsistentProbabilityBased` sampler is required to support
-probabilities that are not exact powers of two.  To do so,
-implementations are required to select between the nearest powers of
-two probabilistically.  For example, 5% sampling can be achieved by
-selecting 1/16 sampling 60% of the time and 1/32 sampling 40% of the
-time.
+##### Requirement: TraceIdRatioBased sampler unsets T-value when not sampled
 
-##### Requirement: TraceIdRatioBased API compatibility
-
-The `ConsistentProbabilityBased` Sampler MUST have the same
-constructor signature as the built-in `TraceIdRatioBased` sampler in
-each OpenTelemetry SDK.
-
-##### Requirement: ConsistentProbabilityBased sampler sets r for root span
-
-The `ConsistentProbabilityBased` Sampler MUST set `r` when it makes a
-root sampling decision.
-
-##### Requirement: ConsistentProbabilityBased sampler unsets p when not sampled
-
-The `ConsistentProbabilityBased` Sampler MUST unset `p` from the
+The `TraceIdRatioBased` Sampler MUST unset T-value from the
 `tracestate` when it decides not to sample.
 
-##### Requirement: ConsistentProbabilityBased sampler sets p when sampled
+##### Requirement: TraceIdRatioBased sampler sets T-value when sampled
 
-The `ConsistentProbabilityBased` Sampler MUST set `p` when it decides
-to sample according to its configured sampling probability.
+The `TraceIdRatioBased` Sampler MUST set T-value when it decides to
+sample according to its configured sampling probability.
 
-##### Requirement: ConsistentProbabilityBased sampler records unbiased adjusted counts
+##### Requirement: TraceIdRatioBased sampler records unbiased adjusted counts
 
-The `ConsistentProbabilityBased` Sampler with non-zero probability
-MUST set `p` so that the adjusted count interpreted from the
-`tracestate` is an unbiased estimate of the number of representative
-spans in the population.
+The `TraceIdRatioBased` Sampler MUST set T-value so that the adjusted
+count interpreted from the `tracestate` is an unbiased estimate of the
+number of representative spans in the population.
 
-##### Requirement: ConsistentProbabilityBased sampler sets r for non-root span
+##### Requirement: TraceIdRatioBased sampler supports probabilities between 1 and than 2**-56
 
-If `r` is not set on the input `tracecontext` and the Span is not a
-root span, `ConsistentProbabilityBased` SHOULD set `r` as if it were a
-root span and warn the user that a potentially inconsistent trace
-is being produced.
-
-##### Requirement: ConsistentProbabilityBased sampler decides not to sample for probabilities less than 2**-62
-
-If the configured sampling probability is in the interval `[0,
-2**-62)`, the Sampler MUST decide not to sample.
-
-#### Examples: Consistent probability samplers
-
-##### Example: Setting R-value for a root span
-
-A new root span is sampled by a consistent probability sampler at 25%.
-A new r-value should be generated (see the appendix for suitable
-methods), in this example r-value 5 is used which happens 1.5625% of
-the time and indicates to sample:
-
-```
-tracestate: ot=r:5;p:2
-```
-
-The span would be sampled because p-value 2 is less than or equal to
-r-value 5.  An example `tracestate` where r-value 1 indicates not to
-sample at 25%:
-
-```
-tracestate: ot=r:1
-```
-
-This span would not be sampled because p-value 2 (corresponding with
-25% sampling) is greater than r-value 1.
-
-##### Example: Handling inconsistent P-value
-
-When either the consistent probability sampler or the parent-based
-consistent probability sampler receives a sampled context but
-invalid p-value, for example,
-
-```
-tracestate: ot=r:4;p:73
-```
-
-the `tracestate` will have its p-value stripped.  The r-value is kept,
-and the sampler should act as if the following had been received:
-
-```
-tracestate: ot=r:4
-```
-
-The consistent probability sampler will make its own (consistent)
-decision using the r-value that was received.
-
-The parent-based consistent probability sampler will in this case
-follow the `sampled` flag.  If the context is sampled, the resulting
-span will have an r-value without a p-value, which indicates unknown
-adjusted count.
-
-##### Example: Handling corrupt R-value
-
-A non-root span receives:
-
-```
-tracestate: ot=r:100;p:10
-```
-
-where the r-value is out of its valid range. The r-value and p-value
-are stripped during validation, according to the invariants.  In this
-case, the sampler will act as though no `tracestate` were received.
-
-The parent-based consistent probability sampler will sample or not
-sample based on the `sampled` flag, in this case.  If the context is
-sampled, the recorded span will have an r-value without a p-value,
-which indicates unknown adjusted count.
-
-The consistent probability sampler will generate a new r-value and
-make a new sampling decision while warning the user of a corrupt and
-potentially inconsistent r-value.
+If the configured sampling probability is not in the interval `[1,
+2**-56)`, the Sampler MUST be replaced by an `AlwaysOff` sampler.
 
 ### Composition rules
 
@@ -662,88 +627,14 @@ all cases, the combined decision to sample is the logical-OR of the
 Samplers' decisions (i.e., sample if at least one of the composite
 Samplers decides to sample).
 
-To combine p-values from two consistent probability Sampler decisions,
+To combine T-values from two consistent probability Sampler decisions,
 the Sampler with the greater probability takes effect.  The output
-p-value becomes the minimum of the two values for `p`.
+T-value becomes the minimum of the two T-values.
 
 To combine a consistent probability Sampler decision with a
-non-probability Sampler decision, p-value 63 is used to signify zero
-adjusted count.  If the probability Sampler decides to sample, its
-p-value takes effect.  If the probability Sampler decides not to
-sample when the non-probability sample does sample, p-value 63 takes
-effect signifying zero adjusted count.
-
-#### List of requirements
-
-##### Requirement: Combining multiple sampling decisions using logical `or`
-
-When multiple samplers are combined using composition, the sampling
-decision MUST be to sample if at least one of the combined samplers
-decides to sample.
-
-##### Requirement: Combine multiple consistent probability samplers using the minimum p-value
-
-When combining Sampler decisions for multiple consistent probability
-Samplers and at least one decides to sample, the minimum of the "yes"
-decision `p` values MUST be set in the `tracestate`.
-
-##### Requirement: Unset p when multiple consistent probability samplers decide not to sample
-
-When combining Sampler decisions for multiple consistent probability
-Samplers and none decides to sample, p-value MUST be unset in the
-`tracestate`.
-
-##### Requirement: Use probability sampler p-value when its decision to sample is combined with non-probability samplers
-
-When combining Sampler decisions for a consistent probability Sampler
-and a non-probability Sampler, and the probability Sampler decides to
-sample, its p-value MUST be set in the `tracestate` regardless of the
-non-probability Sampler decision.
-
-##### Requirement: Use p-value 63 when a probability sampler decision not to sample is combined with a non-probability sampler decision to sample
-
-When combining Sampler decisions for a consistent probability Sampler
-and a non-probability Sampler, and the probability Sampler decides not
-to sample but the non-probability does sample, p-value 63 MUST be set
-in the `tracestate`.
-
-#### Examples: Composition
-
-##### Example: Probability and non-probability sampler in a root context
-
-In a new root context, a consistent probability sampler decides not to
-set the sampled flag, adds `r:4` indicating that the trace is
-consistently sampled at 6.5% (i.e., 1-in-16) and larger probabilities.
-
-The probability sampler decision is composed with a non-probability
-sampler that decides to sample the context.  Setting `sampled` when
-the probability sampler has not sampled requires setting `p:63`,
-indicating zero adjusted count.
-
-The resulting context:
-
-```
-traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
-tracestate: ot=r:4;p:63
-```
-
-##### Example: Two consistent probability samplers
-
-Whether a root or non-root, if multiple consistent probability
-samplers make a decision to sample a given context, the minimum
-p-value is output in the tracestate.
-
-If a root context, the first of the samplers generates `r:15` and its
-own p-value `p:10` (i.e., adjusted count 1024).  The second of the two
-probability samplers outputs a smaller adjusted count `p:8` (i.e.,
-adjusted count 256).
-
-The resulting context takes the smaller p-value:
-
-```
-traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
-tracestate: ot=r:15;p:8
-```
+non-probability Sampler decision, T-value should be set according to
+the probability sampler(s).  If no probability sampler decides to
+sample, no T-value should be set.
 
 ### Producer and consumer recommendations
 
@@ -758,18 +649,16 @@ root spans.
 There is a simple test for trace incompleteness, but it is a one-way
 test and does not detect when child spans are uncollected.  One way to
 avoid producing incomplete traces is to avoid configuring
-non-power-of-two sampling probabilities for non-root spans, because
-completeness is not guaranteed for non-power-of-two sampling
-probabilities.
+TraceIdRatioBased Samplers for non-root spans (i.e., always use
+ParentBased Samplers).
 
-##### Recommendation: use non-descending power-of-two probabilities
+##### Recommendation: use non-descending probabilities
 
 Complete subtraces will be produced when the sequence of sampling
 probabilities from the root of a trace to its leaves consists of
-non-descending powers of two.  To ensure complete sub-traces are
-produced, child samplers SHOULD be configured with a power-of-two
-probability greater than or equal to the parent span's sampling
-probability.
+non-descending.  To ensure complete sub-traces are produced, child
+samplers SHOULD be configured with a probability greater than or equal
+to the parent span's sampling probability.
 
 #### Trace producer: correctness
 
@@ -778,77 +667,57 @@ trust between participants in a trace.  Users are advised not to use a
 Span-to-metrics pipeline when the parent sampling decision's
 corresponding adjusted count is untrustworthy.
 
-The `ConsistentProbabilityBased` and
-`ParentConsistentProbabilityBased` samplers can be used as delegates
-of another sampler, for conditioning the choice of sampler on span and
-other fixed attributes.  However, for adjusted counts to be
-trustworthy, the choice of non-root sampler cannot be conditioned on
-the parent's sampled trace flag or the OpenTelemetry tracestate
-r-value and p-value, as these decisions would lead to incorrect
+The `TraceIdRatioBased` and `ParentBased` samplers can be used as
+delegates of another sampler, for conditioning the choice of sampler
+on span and other fixed attributes.  However, for adjusted counts to
+be trustworthy, the choice of non-root sampler cannot be conditioned
+on the parent's sampled trace flag or the OpenTelemetry tracestate
+R-value or T-value, as these decisions would lead to incorrect
 adjusted counts.
 
 For example, the built-in [`ParentBased` sampler](sdk.md#parentbased)
-supports configuring the delegated-to sampler based on whether the parent
-context is remote or non-remote, sampled or unsampled.  If a
-`ParentBased` sampler delegates to a `ConsistentProbabilityBased`
-sampler only for unsampled contexts, the resulting Span-to-metrics
-pipeline will (probably) overcount spans.
+supports configuring the delegated-to sampler based on whether the
+parent context is remote or non-remote, sampled or unsampled.  If a
+`ParentBased` sampler delegates to a `TraceIdRatioBased` sampler only
+for unsampled contexts, the resulting Span-to-metrics pipeline will
+(probably) overcount spans.
 
-##### Recommendation: sampler delegation
+#### Trace producer: interoperability with legacy `ParentBased` sampler
 
-For non-root spans, composite samplers SHOULD NOT condition the choice
-of delegated-to sampler based on the parent's sampled flag or
-OpenTelemetry tracestate.
-
-#### Trace producer: interoperability with `ParentBased` sampler
-
-The OpenTelemetry built-in `ParentBased` sampler is interoperable with
-the `ConsistentProbabilityBased` sampler, provided that the
+The legacy built-in `ParentBased` sampler is interoperable with the
+consistent-probability `TraceIdRatioBased` sampler, provided that the
 delegated-to sampler does not change the decision that determined its
 selection.  For example, it is safe to configure an alternate
 `ParentBased` sampler delegate for unsampled spans, provided the
 decision does not change to sampled.
 
 Because the `ParentBased` sampler honors the sampled trace flag, and
-OpenTelemetry SDKs include the tracestate in the `Span` data, which
-means a system can be upgraded to probability sampling by just
-replacing `TraceIDRatioBased` samplers with conforming
-`ConsistentProbabilityBased` samplers everywhere in the trace.
+OpenTelemetry SDKs include the tracestate in the `Span` data, a system
+can be upgraded to probability sampling by just replacing
+`TraceIdRatioBased` samplers with conforming consistent-probability
+`TraceIdRatioBased` samplers everywhere in the trace and it is not
+necessary to upgrade legacy `ParentBased` samplers.
 
-#### Trace producer: interoperability with `TraceIDRatioBased` sampler
+#### Trace producer: interoperability with legacy `TraceIdRatioBased` sampler
 
-The [`TraceIDRatioBased` specification](sdk.md#traceidratiobased)
+The [`TraceIdRatioBased` specification](sdk.md#traceidratiobased)
 includes a RECOMMENDATION against being used for non-root spans
 because it does not specify how to make the sampler decision
-consistent across the trace.  A `TraceIDRatioBased` sampler at the
-root span is interoperable with a `ConsistentParentProbabilityBased`
-sampler in terms of completeness, although the resulting spans will
-have unknown adjusted count.
+consistent across the trace.
 
-When a `TraceIDRatioBased` sampler is configured for a non-root span,
-several cases arise where an incorrect OpenTelemetry tracestate can be
-generated.  Consider for example a trace with three spans where the
-root (R) has a `ConsistentProbabilityBased` sampler, the root's child
-(P) has a `TraceIDRatioBased` sampler, and the grand-child (C) has a
-`ParentBased` sampler.  Because the `TraceIDRatioBased` sampler change
-the intermediate sampled flag without updating the OpenTelemetry
-tracestate, we have the following cases:
-
-1. If `TraceIDRatioBased` does not change P's decision, the trace is
-   complete and all spans' adjusted counts are correct.
-2. If `TraceIDRatioBased` changes P's decision from no to yes, the
-   consumer will observe a (definitely) incomplete trace containing P
-   and C.  Both spans will have invalid OpenTelemetry tracestate,
-   leading to unknown adjusted count in this case.
-3. If `TraceIDRatioBased` changes the sampling decision from yes to
-   no, the consumer will observe singleton trace with correct adjusted
-   count. The consumer cannot determine that R has two unsampled
-   descendents.
+When a legacy `TraceIdRatioBased` sampler is configured for a non-root
+span, cases arise where an incorrect OpenTelemetry tracestate can be
+generated.  For example, when a root uses a consistent-probability
+`TraceIdRatioBased` sampler but the child uses a legacy
+`TraceIdRatioBased` sampler, the grand-child's trace context may carry
+the T-value from the root despite being effectively sampled by the
+child.
 
 As these cases demonstrate, users can expect incompleteness and
-unknown adjusted count when using `TraceIDRatioBased` samplers for
-non-root spans, but this goes against the originally specified
-warning.
+incorrect adjusted count when combining legacy `TraceIdRatioBased`
+samplers for non-root spans with consistent-probability
+`TraceIdRatioBased` samplers, but this goes against the originally
+specified warning.
 
 #### Trace consumer
 
@@ -861,224 +730,11 @@ across the system.
 
 Ignoring accidental data loss, a trace will be complete if all its
 spans are sampled with consistent probability samplers and the trace's
-r-value is larger than the corresponding smallest power of two greater
-than or equal to the minimum sampling probability across the trace.
+effective or explicit R-value is greater than or equal to the greatest
+rejection threshold across spans in the trace.
 
-Due to the `ConsistentProbabilityBased` Sampler requirement about
-setting `r` when it is unset for a non-root span, trace consumers are
-advised to check traces for r-value consistency.  When a single trace
-contains more than a single distinct `r` value, it means the trace was
-not correctly sampled at the root for probability sampling.  While the
-adjusted count of each span is correct in this scenario, it may be
-impossible to detect complete traces.
-
-##### Recommendation: Recognize inconsistent r-values
+##### Recommendation: Recognize inconsistent R-values
 
 When a single trace contains spans with `tracestate` values containing
-more than one distinct value for `r`, the consumer SHOULD recognize
-the trace as inconsistently sampled.
-
-### Appendix: Statistical test requirements
-
-This section specifies a test that can be implemented to ensure basic
-conformance with the requirement that sampling decisions are unbiased.
-
-The goal of this test specification is to be simple to implement and
-not require advanced statistical skills or libraries to be successful.
-
-This test is not meant to evaluate the performance of a random number
-generator.  This test assumes the underlying RNG is of good quality
-and checks that the sampler produces the expected proportionality with
-a high degree of statistical confidence.
-
-One of the challenges of this kind of test is that probabilistic tests
-are expected to occasionally produce exceptional results.  To make
-this a strict test for random behavior, we take the following approach:
-
-- Generate a pre-determined list of 20 random seeds
-- Use fixed values for significance level (5%) and trials (20)
-- Use a population size of 100,000 spans
-- For each trial, simulate the population and compute ChiSquared
-  test statistic
-- Locate the first seed value in the ordered list such that the
-  Chi-Squared significance test fails exactly once out of 20 trials
-
-To create this test, perform the above sequence using the seed values
-from the predetermined list, in order, until a seed value is found
-with exactly one failure.  This is expected to happen fairly often and
-is required to happen once among the 20 available seeds.  After
-calculating the index of the first seed with exactly one ChiSquared
-failure, record it in the test.  For continuous integration testing,
-it is only necessary to re-run the test using the predetermined seed
-index.
-
-As specified, the Chi-Squared test has either one or two degrees of
-freedom, depending on whether the sampling probability is an exact
-power of two or not.
-
-#### Test procedure: non-powers of two
-
-In this case there are two degrees of freedom for the Chi-Squared test.
-The following table summarizes the test parameters.
-
-| Test case | Sampling probability | Lower, Upper p-value when sampled | Expect<sub>lower</sub> | Expect<sub>upper</sub> | Expect<sub>unsampled</sub> |
-|-----------|----------------------|-----------------------------------|------------------------|------------------------|----------------------------|
-| 1         | 0.900000             | 0, 1                              | 10000                  | 80000                  | 10000                      |
-| 2         | 0.600000             | 0, 1                              | 40000                  | 20000                  | 40000                      |
-| 3         | 0.330000             | 1, 2                              | 17000                  | 16000                  | 67000                      |
-| 4         | 0.130000             | 2, 3                              | 12000                  | 1000                   | 87000                      |
-| 5         | 0.100000             | 3, 4                              | 2500                   | 7500                   | 90000                      |
-| 6         | 0.050000             | 4, 5                              | 1250                   | 3750                   | 95000                      |
-| 7         | 0.017000             | 5, 6                              | 1425                   | 275                    | 98300                      |
-| 8         | 0.010000             | 6, 7                              | 562.5                  | 437.5                  | 99000                      |
-| 9         | 0.005000             | 7, 8                              | 281.25                 | 218.75                 | 99500                      |
-| 10        | 0.002900             | 8, 9                              | 100.625                | 189.375                | 99710                      |
-| 11        | 0.001000             | 9, 10                             | 95.3125                | 4.6875                 | 99900                      |
-| 12        | 0.000500             | 10, 11                            | 47.65625               | 2.34375                | 99950                      |
-
-The formula for computing Chi-Squared in this case is:
-
-```
-ChiSquared = math.Pow(sampled_lowerP - expect_lowerP, 2) / expect_lowerP +
-             math.Pow(sampled_upperP - expect_upperP, 2) / expect_upperP +
-             math.Pow(100000 - sampled_lowerP - sampled_upperP - expect_unsampled, 2) / expect_unsampled
-```
-
-This should be compared with 0.102587, the value of the Chi-Squared
-distribution for two degrees of freedom with significance level 5%.
-For each probability in the table above, the test is required to
-demonstrate a seed that produces exactly one ChiSquared value less
-than 0.102587.
-
-##### Requirement: Pass 12 non-power-of-two statistical tests
-
-For the test with 20 trials and 100,000 spans each, the test MUST
-demonstrate a random number generator seed such that the ChiSquared
-test statistic is below 0.102587 exactly 1 out of 20 times.
-
-#### Test procedure: exact powers of two
-
-In this case there is one degree of freedom for the Chi-Squared test.
-The following table summarizes the test parameters.
-
-| Test case | Sampling probability | P-value when sampled | Expect<sub>sampled</sub> | Expect<sub>unsampled</sub> |
-|-----------|----------------------|----------------------|--------------------------|----------------------------|
-| 13        | 0x1p-01 (0.500000)   | 1                    | 50000                    | 50000                      |
-| 14        | 0x1p-04 (0.062500)   | 4                    | 6250                     | 93750                      |
-| 15        | 0x1p-07 (0.007812)   | 7                    | 781.25                   | 99218.75                   |
-
-The formula for computing Chi-Squared in this case is:
-
-```
-ChiSquared = math.Pow(sampled - expect_sampled, 2) / expect_sampled +
-             math.Pow(100000 - sampled - expect_unsampled, 2) / expect_unsampled
-```
-
-This should be compared with 0.003932, the value of the Chi-Squared
-distribution for one degree of freedom with significance level 5%.
-For each probability in the table above, the test is required to
-demonstrate a seed that produces exactly one ChiSquared value less
-than 0.003932.
-
-##### Requirement: Pass 3 power-of-two statistical tests
-
-For the test with 20 trials and 100,000 spans each, the test MUST
-demonstrate a random number generator seed such that the ChiSquared
-test statistic is below 0.003932 exactly 1 out of 20 times.
-
-#### Test implementation
-
-The recommended structure for this test uses a table listing the 15
-probability values, the expected p-values, whether the ChiSquared
-statistic has one or two degrees of freedom, and the index into the
-predetermined list of seeds.
-
-```
-    for _, test := range []testCase{
-        // Non-powers of two
-        {0.90000, 1, twoDegrees, 3},
-        {0.60000, 1, twoDegrees, 2},
-        {0.33000, 2, twoDegrees, 2},
-        {0.13000, 3, twoDegrees, 1},
-        {0.10000, 4, twoDegrees, 0},
-        {0.05000, 5, twoDegrees, 0},
-        {0.01700, 6, twoDegrees, 2},
-        {0.01000, 7, twoDegrees, 2},
-        {0.00500, 8, twoDegrees, 2},
-        {0.00290, 9, twoDegrees, 4},
-        {0.00100, 10, twoDegrees, 6},
-        {0.00050, 11, twoDegrees, 0},
-
-        // Powers of two
-        {0x1p-1, 1, oneDegree, 0},
-        {0x1p-4, 4, oneDegree, 0},
-        {0x1p-7, 7, oneDegree, 1},
-    } {
-```
-
-Note that seed indexes in the example above have what appears to be
-the correct distribution.  The five 0s, two 1s, five 2s, one 3s, and
-one 4 demonstrate that it is relatively easy to find examples where
-there is exactly one failure.  Probability 0.001, with seed index 6 in
-this case, is a reminder that outliers exist.  Further significance
-testing of this distribution is not recommended.
-
-## Appendix
-
-### Methods for generating R-values
-
-The method used for generating r-values is not specified, in order to
-leave the implementation freedom to optimize.  Typically, when the
-TraceId is known to contain at a 62-bit substring of random bits,
-R-values can be derived directly from the 62 random bits of TraceId
-by:
-
-1. Count the leading zeros
-2. Count the leading ones
-3. Count the trailing zeros
-4. Count the trailing ones.
-
-```golang
-import (
-    "math/rand"
-    "math/bits"
-)
-
-func nextRValueLeading() int {
-    x := uint64(rand.Int63()) // 63 least-significant bits are random
-    y := x << 1 | 0x3         // 62 most-significant bits are random
-    return bits.LeadingZeros64(y)
-}
-```
-
-If the TraceId contains unknown or insufficient randomness, another
-approach is to generate random bits until the first true or false
-value.
-
-```
-func nextRValueGenerated() int {
-    for r := 0; r < 62; r++ {
-        if rand.Bool() == true {
-            return r
-        }
-    }
-    return 62
-}
-```
-
-Any scheme that produces r-values shown in the following table is
-considered conforming.
-
-| r-value          | Probability of r-value   |
-| ---------------- | ------------------------ |
-| 0                | 1/2                      |
-| 1                | 1/4                      |
-| 2                | 1/8                      |
-| 3                | 1/16                     |
-| ...              | ...                      |
-| 0 <= r <= 61     | 2**-(r+1)                |
-| ...              | ...                      |
-| 59               | 2**-60                   |
-| 60               | 2**-61                   |
-| 61               | 2**-62                   |
-| 62               | 2**-62                   |
+more than one distinct, explicit value for R-value, the consumer
+SHOULD recognize the trace as inconsistently sampled.
