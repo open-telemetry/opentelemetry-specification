@@ -22,9 +22,9 @@ weight: 1
   * [Links between spans](#links-between-spans)
 - [Metric Signal](#metric-signal)
   * [Recording raw measurements](#recording-raw-measurements)
-    + [Measure](#measure)
-    + [Measurement](#measurement)
-  * [Recording metrics with predefined aggregation](#recording-metrics-with-predefined-aggregation)
+    + [Instruments](#instruments)
+    + [Measurements](#measurements)
+  * [Views](#views)
   * [Metrics data model and SDK](#metrics-data-model-and-sdk)
 - [Log Signal](#log-signal)
   * [Data model](#data-model)
@@ -218,61 +218,73 @@ scenarios.
 
 ## Metric Signal
 
-OpenTelemetry allows recording raw measurements or metrics with predefined
-aggregations and a [set of attributes](./common/README.md#attribute).
+A metric is a collection of raw measurements that can be aggregated alongside
+a [set of attributes](./common/README.md#attribute).
 
 Using the OpenTelemetry API to record raw measurements gives end-users the
-flexibility to choose the aggregation algorithm for a given metric, as well
-as to define its attributes (dimensions). This functionality is particularly
-useful in client libraries such as gRPC, where it enables the recording of raw
-measurements like "server_latency" or "received_bytes." End-users have the
-autonomy to decide on the aggregation method for these raw measurements, options
-for which range from straightforward averages to more complex histogram calculations.
-
-Similarly, capturing metrics with predefined aggregation strategies through the
-OpenTelemetry API is useful for working with metrics such as CPU and memory usage,
-as well as simpler metrics like queue length.
+flexibility to choose the aggregation algorithm for a given metric. This functionality
+is particularly useful in client libraries such as gRPC, where it enables the
+recording of raw measurements like "server_latency" or "received_bytes." End-users
+then have the autonomy to decide on the aggregation method for these raw measurements,
+options for which range from straightforward averages to more complex histogram calculations.
 
 ### Recording raw measurements
 
-The primary classes for recording raw measurements are `Measure` and `Measurement`.
-The OpenTelemetry API allows for the recording of a list of `Measurement`s along with
-additional context. Users can then aggregate these `Measurement`s and utilize the
-accompanying context to define extra attributes for the resulting metric.
+The primary components involved in recording raw measurements using the OpenTelemetry
+API are `Measurement`, `Instrument` and `Meter`. A `Meter` is obtained from a
+`MeterProvider` and used to create `Instrument`s, which are then responsible for capturing
+`Measurement`s. There are several types of metric instruments for specific use cases,
+such as counters for incrementing values, gauges for capturing current values, and histograms
+for capturing distributions of measurements.
 
-#### Measure
+```
+                  +-------------------+
+                  |   MeterProvider   |
+                  +-------------------+
+                            |
+                  +-------------------+
+                  |       Meter       |
+                  +-------------------+
+                            |
+                +-----------+-----------+
+                |                       |
+       +-------------------+   +--------------------+
+       |     Instrument    |   |     Instrument     |
+       |  (e.g., Counter)  |   |  (e.g., Histogram) |
+       +-------------------+   +--------------------+
+                |                         |
+         +-------------+            +-------------+ 
+         | Measurement |            | Measurement | 
+         +-------------+            +-------------+ 
+         +-------------+            +-------------+ 
+         | Measurement |            | Measurement | 
+         +-------------+            +-------------+ 
+```
 
-`Measure` describes the type of the individual values recorded by a library. It
+#### Instruments
+
+An `Instrument` describes the type of the individual values recorded by a library. It
 defines a contract between the library exposing the measurements and an
-application that will aggregate those individual measurements into a `Metric`.
-`Measure` is identified by name, description and a unit of values.
+application that will aggregate those individual measurements into a metric.
+An `Instrument` is identified by a name, kind, description and a unit of values.
 
-#### Measurement
+There are several types of metric instruments for specific use cases, such as counters for
+incrementing values, gauges for capturing current values, and histograms for capturing
+distributions of measurements. Instruments can be synchronous, meaning that they are invoked
+inline by application logic, or asynchronous where the user registers a callback
+function that is invoked on demand by the SDK.
 
-`Measurement` describes a single value to be collected for a `Measure`.
-`Measurement` is an empty interface in API surface. This interface is defined in
-SDK.
+#### Measurements
 
-### Recording metrics with predefined aggregation
+A `Measurement` represents a data point for an `Instrument` and is composed of a
+value and associated attributes.
 
-The base class for all types of pre-aggregated metrics is called `Metric`. It
-defines basic metric properties like a name and attributes. Classes inheriting from
-the `Metric` define their aggregation type as well as a structure of individual
-measurements or Points. The API defines the following types of pre-aggregated
-metrics:
+### Views
 
-- Counter metric to report instantaneous measurement. Counter values can go
-  up or stay the same, but can never go down. Counter values cannot be
-  negative. There are two types of counter metric values - `double` and `long`.
-- Gauge metric to report instantaneous measurement of a numeric value. Gauges can
-  go both up and down. The gauges values can be negative. There are two types of
-  gauge metric values - `double` and `long`.
-
-The API enables the construction of a `Metric` of a chosen type, while the SDK
-outlines how to query the current value of a `Metric` for export.
-
-Each type of `Metric` has its own API for recording values that will be aggregated.
-The API supports both push and pull models for setting the `Metric` value.
+`View`s are configurations that specify how the data from `Instrument`s should be processed,
+aggregated, and exported. They can be applied globally through the `MeterProvider` or more
+specifically at the `Meter` level. `View`s allow customization of metric data beyond the default
+collection behavior, enabling specific aggregations, transformations, and filtering of metrics.
 
 ### Metrics data model and SDK
 
