@@ -20,6 +20,10 @@ release.
 
 ### Logs
 
+- Remove implementation detail from Logs Bridge API.
+  ([#3884](https://github.com/open-telemetry/opentelemetry-specification/pull/3884))
+- Clarify that logs attributes are a superset of standard attributes.
+  ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
 - Fix what can be modified via `ReadWriteLogRecord`.
   ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
 
@@ -32,6 +36,9 @@ release.
 ### SDK Configuration
 
 ### Common
+
+- Tighten stability requirements for well-known attribute values.
+  ([#3879](https://github.com/open-telemetry/opentelemetry-specification/pull/3879))
 
 ### Supplementary Guidelines
 
