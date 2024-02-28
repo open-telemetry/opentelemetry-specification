@@ -760,7 +760,7 @@ independently aggregated because of the limit.
 The SDK MUST create an Aggregator with the overflow attribute set
 prior to reaching the cardinality limit and use it to aggregate events
 for which the correct Aggregator could not be created.  The SDK MUST provide the
-guarantee that overflow does not happen if the the maximum number of distinct,
+guarantee that overflow does not happen if the maximum number of distinct,
 non-overflow attributes is less than or equal to the limit.
 
 #### Synchronous instrument cardinality limits
