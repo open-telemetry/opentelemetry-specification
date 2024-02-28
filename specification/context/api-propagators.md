@@ -348,16 +348,16 @@ traces, metrics, logging and more. Therefore, context propagation MAY be enabled
 for any of them independently. For instance, a span exporter may be left
 unconfigured, although the trace context propagation was configured to enrich logs or metrics.
 
-Platforms such as ASP.NET may pre-configure out-of-the-box
+Instrumentation Libraries such as ASP.NET may pre-configure out-of-the-box
 propagators. If pre-configured, `Propagator`s SHOULD default to a composite
 `Propagator` containing the W3C Trace Context Propagator and the Baggage
 `Propagator` specified in the [Baggage API](../baggage/api.md#propagation).
 These platforms MUST also allow pre-configured propagators to be disabled or overridden.
 
-Platforms MUST NOT pre-configure `ResponsePropagator`s, those should be explicitly
-enabled by service owners in order to not leak unintended information to
-callers, which might be untrusted clients, like web browsers over the public
-internet.
+Instrumentation Libraries MUST NOT pre-configure `ResponsePropagator`s, those
+should be explicitly enabled by service owners in order to not leak unintended
+information to callers, which might be untrusted clients, like web browsers over
+the public internet.
 
 ### Get Global Propagator
 
