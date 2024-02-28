@@ -20,10 +20,12 @@ release.
 
 ### Logs
 
-- Define case sensitivity of `map<string, any>` keys.
-  ([#3889](https://github.com/open-telemetry/opentelemetry-specification/pull/3889))
+- Remove implementation detail from Logs Bridge API.
+  ([#3884](https://github.com/open-telemetry/opentelemetry-specification/pull/3884))
 - Clarify that logs attributes are a superset of standard attributes.
   ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
+- Define case sensitivity of `map<string, any>` keys.
+  ([#3889](https://github.com/open-telemetry/opentelemetry-specification/pull/3889))
 
 ### Resource
 
