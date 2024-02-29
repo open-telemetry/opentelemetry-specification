@@ -23,9 +23,8 @@ weight: 1
 - [Metric Signal](#metric-signal)
   * [Recording raw measurements](#recording-raw-measurements)
     + [Instruments](#instruments)
-    + [Measurements](#measurements)
-  * [Views](#views)
   * [Metrics data model and SDK](#metrics-data-model-and-sdk)
+    + [Views](#views)
 - [Log Signal](#log-signal)
   * [Data model](#data-model)
 - [Baggage Signal](#baggage-signal)
@@ -218,8 +217,8 @@ scenarios.
 
 ## Metric Signal
 
-A metric is a collection of raw measurements that can be aggregated alongside
-a [set of attributes](./common/README.md#attribute).
+OpenTelemetry allows recording raw measurements or metrics with predefined
+aggregations and a [set of attributes](common/README.md#attribute).
 
 Using the OpenTelemetry API to record raw measurements gives end-users the
 flexibility to choose the aggregation algorithm for a given metric. This functionality
@@ -232,57 +231,35 @@ options for which range from straightforward averages to more complex histogram 
 
 The primary components involved in recording raw measurements using the OpenTelemetry
 API are `Measurement`, `Instrument` and `Meter`. A `Meter` is obtained from a
-`MeterProvider` and used to create `Instrument`s, which are then responsible for capturing
-`Measurement`s.
+`MeterProvider` and used to create an `Instrument`, which is then responsible for capturing
+[measurements](metrics/api.md#measurement).
 
 ```
-                  +-------------------+
-                  |   MeterProvider   |
-                  +-------------------+
-                            |
-                  +-------------------+
-                  |       Meter       |
-                  +-------------------+
-                            |
-                +-----------+-----------+
-                |                       |
-       +-------------------+   +--------------------+
-       |     Instrument    |   |     Instrument     |
-       |  (e.g., Counter)  |   |  (e.g., Histogram) |
-       +-------------------+   +--------------------+
-                |                         |
-         +-------------+            +-------------+ 
-         | Measurement |            | Measurement | 
-         +-------------+            +-------------+ 
-         +-------------+            +-------------+ 
-         | Measurement |            | Measurement | 
-         +-------------+            +-------------+ 
++------------------+
+| MeterProvider    |                 +-----------------+             +--------------+
+|   Meter A        | Measurements... |                 | Metrics...  |              |
+|     Instrument X +-----------------> In-memory state +-------------> MetricReader |
+|     Instrument Y |                 |                 |             |              |
+|   Meter B        |                 +-----------------+             +--------------+
+|     Instrument Z |
+|     ...          |                 +-----------------+             +--------------+
+|     ...          | Measurements... |                 | Metrics...  |              |
+|     ...          +-----------------> In-memory state +-------------> MetricReader |
+|     ...          |                 |                 |             |              |
+|     ...          |                 +-----------------+             +--------------+
++------------------+
 ```
 
 #### Instruments
 
-An `Instrument` describes the type of the individual values recorded by a library. It
-defines a contract between the library exposing the measurements and an
-application that will aggregate those individual measurements into a metric.
-An `Instrument` is identified by a name, kind, description and a unit of values.
+[Instruments](metrics/api.md#instrument) are used to report `Measurement`s, and are identified
+by a name, kind, description and a unit of values.
 
 There are several types of metric instruments for specific use cases, such as counters for
 incrementing values, gauges for capturing current values, and histograms for capturing
 distributions of measurements. Instruments can be synchronous, meaning that they are invoked
 inline by application logic, or asynchronous where the user registers a callback
 function that is invoked on demand by the SDK.
-
-#### Measurements
-
-A `Measurement` represents a data point for an `Instrument` and is composed of a
-value and associated attributes.
-
-### Views
-
-`View`s are configurations that specify how the data from `Instrument`s should be processed,
-aggregated, and exported. They can be applied globally through the `MeterProvider` or more
-specifically at the `Meter` level. `View`s allow customization of metric data beyond the default
-collection behavior, enabling specific aggregations, transformations, and filtering of metrics.
 
 ### Metrics data model and SDK
 
@@ -306,6 +283,13 @@ from the backend.
 
 See [Metrics Data Model Specification](metrics/data-model.md) for more
 information.
+
+#### Views
+
+[Views](metrics/sdk.md#view) are configurations that specify how the data from an `Instrument` should be processed,
+aggregated, and exported. They can be applied globally through the `MeterProvider` or more
+specifically at the `Meter` level. A `View` allows the customization of metric data beyond the default
+collection behavior, enabling specific aggregations, transformations, and filtering of metrics.
 
 ## Log Signal
 
