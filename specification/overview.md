@@ -233,9 +233,7 @@ options for which range from straightforward averages to more complex histogram 
 The primary components involved in recording raw measurements using the OpenTelemetry
 API are `Measurement`, `Instrument` and `Meter`. A `Meter` is obtained from a
 `MeterProvider` and used to create `Instrument`s, which are then responsible for capturing
-`Measurement`s. There are several types of metric instruments for specific use cases,
-such as counters for incrementing values, gauges for capturing current values, and histograms
-for capturing distributions of measurements.
+`Measurement`s.
 
 ```
                   +-------------------+
