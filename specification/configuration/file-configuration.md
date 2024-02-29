@@ -137,7 +137,7 @@ float_key: 1.1                              # Interpreted as type float, tag URI
 combo_string_key: foo value 1.1             # Interpreted as type string, tag URI tag:yaml.org,2002:str
 undefined_key:                              # Interpreted as type null, tag URI tag:yaml.org,2002:null
 ${STRING_VALUE}: value                      # Interpreted as type string, tag URI tag:yaml.org,2002:str
-reccursive_key: ${DO_NOT_REPLACE_ME}        # Interpreted as type string, tag URI tag:yaml.org,2002:str
+recursive_key: ${DO_NOT_REPLACE_ME}         # Interpreted as type string, tag URI tag:yaml.org,2002:str
 ```
 
 ## SDK Configuration
