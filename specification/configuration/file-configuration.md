@@ -121,7 +121,7 @@ float_key: ${FLOAT_VALUE}                             # Valid reference to FLOAT
 combo_string_key: foo ${STRING_VALUE} ${FLOAT_VALUE}  # Valid reference to STRING_VALUE and FLOAT_VALUE
 undefined_key: ${UNDEFINED_KEY}                       # Invalid reference, UNDEFINED_KEY is not defined and is replaced with ""
 ${STRING_VALUE}: value                                # Invalid reference, substitution is not valid in mapping keys and reference is ignored
-reccursive_key: ${REPLACE_ME}                         # Valid reference to REPLACE_ME
+recursive_key: ${REPLACE_ME}                          # Valid reference to REPLACE_ME
 ```
 
 Environment variable substitution results in the following YAML:
