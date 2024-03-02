@@ -106,8 +106,8 @@ export BOOl_VALUE="true"
 export INT_VALUE="1"
 export FLOAT_VALUE="1.1"
 export INVALID_MAP_VALUE="value\nkey:value"           # An invalid attempt to inject a map key into the YAML
-export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text
-export DO_NOT_REPLACE_ME="Never use this value"
+export DO_NOT_REPLACE_ME="Never use this value"       # An unused environment variable
+export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text, used verbatim, not replaced with "Never use this value"
 ```
 
 ```yaml
