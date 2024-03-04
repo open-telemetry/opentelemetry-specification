@@ -339,30 +339,23 @@ the `ParentBased` sampler specified below.
 
 ##### `TraceIdRatioBased` sampler implementation overview
 
-SDKs SHOULD use an implementation that is equivalent to the
-specification referenced below as the `TraceIdRatioBased` Sampler,
-which is based on the [W3C Trace Context Level 2 Random TraceID
-flag](https://www.w3.org/TR/trace-context-2/#random-trace-id-flag).
-When a TraceID has the `Random` bit set, samplers are able to use 56
-specific bits of consistent randomness for sampling decisions.
+SDKs SHOULD conform with the [consistent-probability
+`TraceIdRatioBased` Sampler
+requirements](./tracestate-probability-sampling.md).
 
 The implementation has the following steps:
 
-* Ratio values are restricted to the range `2**-56` through 1
+* Sampling probabilities are restricted to the range `2**-56` through 1.
 * A rejection threshold is calculated, expressing as an integer how
-  many out of 2**56 trace IDs should be sampled.
+  many out of 2**56 trace IDs should be selected.
 * The threshold is encoded as a "T-value", expressing the threshold
-  using up to 5 hexadecimal digits of precision.
+  using up to 4 recommended digits of precision.
 * Sampler decisions are made by comparing the Trace ID randomness
   against the rejection threshold.
 * When Sampled, T-value is included in the [OpenTelemetry TraceState
   header](./tracestate-handling.md), identified by sub-key `th`,
   indicating the sampling probability of the associated Context.  See
   [Randomness requirements](#randomness-requirements), below.
-
-For more detailed information, see the
-[tracestate-probability-sampling](./tracestate-probability-sampling.md)
-specification.
 
 When this implementation is used, the Sampler description SHOULD
 return a string of the form `"TraceIdRatioBased{RATIO;tv:TVALUE}"`
@@ -396,7 +389,10 @@ a sampling ratio of 1 to every 10,000 spans it could return
 
 #### ParentBased
 
-* This is a sampler decorator. `ParentBased` helps distinguish between the
+SDKs SHOULD conform with the [consistent-probability `ParentBased`
+Sampler requirements](./tracestate-probability-sampling.md).
+
+This is a sampler decorator. `ParentBased` helps distinguish between the
 following cases:
   * No parent (root span).
   * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` set

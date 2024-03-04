@@ -369,7 +369,10 @@ and set the Random trace flag, when generating new contexts.
 ##### Requirement: Tail Samplers assume random TraceIDs
 
 Tail Samplers SHOULD ignore the W3C Trace Context Level 2 Random flag
-when interpreting span data.  This is a compromise 
+when interpreting span data.  This is a compromise, based in the fact
+that the W3C Trace Context Level 2 specification selected which
+56-bits would become standard based aiming for compatibility with
+existing tracing systems.
 
 When there is an explicit R-value set, the Sampler will anyway
 disregard the Random flag.  However, when there is no explicit R-value
