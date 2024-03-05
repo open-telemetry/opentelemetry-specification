@@ -23,7 +23,7 @@ OpenTelemetry API to actually produce telemetry. The OpenTelemetry SDK
 (henceforth referred to as the SDK) is an implementation of the OpenTelemetry
 API that provides users with this functionally.
 
-All language implementations of OpenTelemetry MUST provide an SDK.
+All implementations of the OpenTelemetry API MUST provide an SDK.
 
 ## Overview
 
