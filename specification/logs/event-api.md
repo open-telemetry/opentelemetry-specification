@@ -90,10 +90,6 @@ is unspecified whether or under which conditions the same or different `EventLog
 instances are returned. It is a user error to create `EventLogger`s with different
 `attributes` but the same identity.
 
-The term *identical* applied to `EventLogger`s describes instances where all
-identifying fields are equal. The term *distinct* applied to `EventLogger`s describes
-instances where at least one identifying field has a different value.
-
 The effect of associating a Schema URL with a `EventLogger` MUST be that the telemetry
 emitted using the `EventLogger` will be associated with the Schema URL, provided that
 the emitted data format is capable of representing such association.
