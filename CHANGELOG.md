@@ -26,6 +26,8 @@ release.
   ([#3884](https://github.com/open-telemetry/opentelemetry-specification/pull/3884))
 - Clarify that logs attributes are a superset of standard attributes.
   ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
+- Mark standard output log record exporter as stable.
+  ([#3822](https://github.com/open-telemetry/opentelemetry-specification/pull/3922))
 
 ### Resource
 
