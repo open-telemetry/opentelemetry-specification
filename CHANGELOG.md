@@ -7,13 +7,25 @@ release.
 
 ## Unreleased
 
+- Fix: remove `name` from LogRecord example in the File Exporter example [#3886](https://github.com/open-telemetry/opentelemetry-specification/pull/3886)
+
 ### Context
 
 ### Traces
 
 ### Metrics
 
+- Remove implementation specific specification from metric API.
+  ([#3890](https://github.com/open-telemetry/opentelemetry-specification/pull/3890))
+- Formalize the interaction between cardinality limit and overflow attribute.
+  ([#3912](https://github.com/open-telemetry/opentelemetry-specification/pull/3912))
+
 ### Logs
+
+- Remove implementation detail from Logs Bridge API.
+  ([#3884](https://github.com/open-telemetry/opentelemetry-specification/pull/3884))
+- Clarify that logs attributes are a superset of standard attributes.
+  ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
 
 ### Resource
 
@@ -24,6 +36,9 @@ release.
 ### SDK Configuration
 
 ### Common
+
+- Tighten stability requirements for well-known attribute values.
+  ([#3879](https://github.com/open-telemetry/opentelemetry-specification/pull/3879))
 
 ### Supplementary Guidelines
 
@@ -91,6 +106,8 @@ release.
 
 - Align definition of Baggage with W3C Specification.
   ([#3800](https://github.com/open-telemetry/opentelemetry-specification/pull/3800))
+- Specify allowed characters for Baggage keys and values.
+  ([#3801](https://github.com/open-telemetry/opentelemetry-specification/pull/3801))
 
 ### Traces
 
