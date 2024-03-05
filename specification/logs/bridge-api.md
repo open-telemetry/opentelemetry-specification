@@ -46,9 +46,6 @@ graph TD
 
 `Logger`s can be accessed with a `LoggerProvider`.
 
-In implementations of the API, the `LoggerProvider` is expected to be the stateful
-object that holds any configuration.
-
 Normally, the `LoggerProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
 `LoggerProvider`.
