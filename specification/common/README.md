@@ -34,7 +34,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
 
 - The attribute key MUST be a non-`null` and non-empty string.
   - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
-- The attribute value is either[1]:
+- The attribute value is either:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e., it MUST NOT contain values of different types.
@@ -81,7 +81,7 @@ reflects that LogRecord attributes are expected to model data produced from
 external log APIs, which do not necessarily have the same value type
 restrictions as the standard attribute definition.
 
-**[1]**: NOTE: extending the set of standard attribute value types is a breaking change.
+NOTE: extending the set of standard attribute value types is a breaking change.
 This was decided after extensive debate, with arguments as follows:
 
 * Limiting the types of attribute values to a set which has proved sufficient
