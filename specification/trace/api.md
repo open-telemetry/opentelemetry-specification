@@ -221,7 +221,10 @@ byte.
 
 `TraceFlags` contain details about the trace. Unlike TraceState values,
 TraceFlags are present in all traces. The current version of the specification
-only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
+supports two flags:
+
+- [Sampled](https://www.w3.org/TR/trace-context/#sampled-flag)
+- [Random](https://www.w3.org/TR/trace-context-2/#random-trace-id-flag)
 
 `TraceState` carries vendor-specific trace identification data, represented as a list
 of key-value pairs. TraceState allows multiple tracing
