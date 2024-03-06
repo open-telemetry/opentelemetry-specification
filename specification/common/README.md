@@ -66,23 +66,6 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
 
-**[1]**: NOTE: extending the set of attribute value types is a breaking change.
-This was decided after extensive debate, with arguments as follows:
-
-* Limiting the types of attribute values to a set which has proved sufficient
-  during several years of OpenTelemetry's development is a useful guardrail for
-  design. In taking additional value types off the table, we narrow the solution
-  space and have more productive design conversations.
-* We proposed extending support for complex value types and received significant
-  pushback. Removing the bounds significantly increases the burden on data
-  consumers. Adding additional simple value types doesn't cause the same level
-  of burden, but these can be encoded using existing primitive types. For
-  example, datetime can be encoded as a string or 64 bit integer.
-* Limiting attribute value types to primitives and arrays of primitives supports
-  OpenTelemetry's intent that attributes are metadata, and facilitates the
-  ability for data consumers to create search indexes and perform other
-  statistical analysis.
-
 ### Standard Attribute
 
 Attributes are used in various places throughout the OpenTelemetry data model.
@@ -97,6 +80,21 @@ definition allowing values of [type `Any`](../logs/data-model.md#type-any). This
 reflects that LogRecord attributes are expected to model data produced from
 external log APIs, which do not necessarily have the same value type
 restrictions as the standard attribute definition.
+
+**[1]**: NOTE: extending the set of standard attribute value types is a breaking change.
+This was decided after extensive debate, with arguments as follows:
+
+* Limiting the types of attribute values to a set which has proved sufficient
+  during several years of OpenTelemetry's development is a useful guardrail for
+  design. In taking additional value types off the table, we narrow the solution
+  space and have more productive design conversations.
+* We proposed extending support for complex value types and received significant
+  pushback. Removing the bounds significantly increases the burden on data
+  consumers. Adding additional simple value types doesn't cause the same level
+  of burden, but these can be encoded using existing primitive types. For
+  example, datetime can be encoded as a string or 64 bit integer.
+* Limiting attribute value types to primitives and arrays of primitives simplifies
+  data consumers' efforts to create search indexes and perform statistical analysis.
 
 ### Attribute Limits
 
