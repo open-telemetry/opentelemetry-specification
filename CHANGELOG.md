@@ -52,7 +52,7 @@ release.
 ### Logs
 
 - Fix: remove `name` from LogRecord example in the File Exporter example.
-  ([#3879](https://github.com/open-telemetry/opentelemetry-specification/pull/3879))
+  ([#3886](https://github.com/open-telemetry/opentelemetry-specification/pull/3886))
 - Remove implementation detail from Logs Bridge API.
   ([#3884](https://github.com/open-telemetry/opentelemetry-specification/pull/3884))
 - Clarify that logs attributes are a superset of standard attributes.
