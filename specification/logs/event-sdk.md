@@ -13,6 +13,7 @@
 - [EventLoggerProvider](#eventloggerprovider)
 - [EventLogger](#eventlogger)
   * [Emit Event](#emit-event)
+- [Additional Interfaces](#additional-interfaces)
 
 <!-- tocstop -->
 
