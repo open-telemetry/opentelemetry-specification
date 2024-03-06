@@ -238,10 +238,12 @@ is optional.
 
 Type: byte.
 
-Description: Trace flag as defined in
-[W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-flags)
-specification. At the time of writing the specification defines one flag - the
-SAMPLED flag. This field is optional.
+Description: Trace flags as defined in [W3C Trace Context Level
+2](https://www.w3.org/TR/trace-context-2/#trace-flags)
+specification. At the time of writing the specification defines two
+flags - the SAMPLED flag and the RANDOM flag.  This field is logical-OR
+combined into the least-significant 8-bits of the `Flags` field.  This
+field is optional.
 
 ### Severity Fields
 
@@ -452,6 +454,16 @@ The log attribute model MUST support [`any` type](#type-any),
 a superset of [standard Attribute](../common/README.md#attribute),
 to preserve the semantics of structured attributes emitted by the applications.
 This field is optional.
+
+### Field: `Flags`
+
+Type: `fixed32`
+
+Description: The 8 least significant bits are the trace flags as
+defined in W3C Trace Context Level 2 specification. 24 most significant bits are reserved
+and must be set to 0. Readers must not assume that 24 most significant bits
+will be zero and must correctly mask the bits when reading 8-bit trace flag (use
+flags & LOG_RECORD_FLAGS_TRACE_FLAGS_MASK or 0xFF). This field is optional.
 
 #### Errors and Exceptions
 
