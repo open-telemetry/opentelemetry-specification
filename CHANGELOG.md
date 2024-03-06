@@ -13,6 +13,10 @@ release.
 
 ### Traces
 
+- Specify how span flags, trace context flags, and the tracestate
+  field are propagated and exported by trace
+  SDKs. ([#3924](https://github.com/open-telemetry/opentelemetry-specification/pull/3924))
+
 ### Metrics
 
 - Remove implementation specific specification from metric API.
