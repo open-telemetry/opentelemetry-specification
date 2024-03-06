@@ -27,10 +27,23 @@ To summarize, the following field names should be used in legacy formats:
 - "trace_id" for [TraceId](../logs/data-model.md#field-traceid), hex-encoded.
 - "span_id" for [SpanId](../logs/data-model.md#field-spanid), hex-encoded.
 - "trace_flags" for [trace flags](../logs/data-model.md#field-traceflags), formatted
-  according to W3C traceflags format.
+  according to [W3C Trace Context flags format](https://www.w3.org/TR/trace-context/#trace-flags),
+  two hex-encoded digits.
 
 All 3 fields are optional (see the [data model](../logs/data-model.md) for details of
 which combination of fields is considered valid).
+
+Note the `trace_flags` field carries 8 bits of information, while the
+`flags` field is 32-bits wide.  When interpreting `trace_flags` from
+non-OTLP Log Formats, receivers SHOULD NOT allow `trace_flags` to
+cause the most-significant 24 bits of the `flags` field to be set.
+
+Note that the W3C Trace Context `tracestate` field is not specifically
+meant to be recorded in logs records, and users are not advised to include
+the trace context's `tracestate` in legacy formats as an attribute.
+OpenTelemetry's definitions for `tracestate` fields SHOULD have
+equivalent semantic conventions defined in case there are meaningful
+attributes that can be recorded from in logs from the `tracestate`.
 
 ### Syslog RFC5424
 
