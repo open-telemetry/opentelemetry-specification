@@ -16,6 +16,7 @@ path_base_for_github_subdir:
 <!-- toc -->
 
 - [Attribute](#attribute)
+  * [Standard Attribute](#standard-attribute)
   * [Attribute Limits](#attribute-limits)
     + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
@@ -33,7 +34,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
 
 - The attribute key MUST be a non-`null` and non-empty string.
   - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
-- The attribute value is either:
+- The attribute value is either[1]:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e., it MUST NOT contain values of different types.
@@ -64,6 +65,38 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
+
+**[1]**: NOTE: extending the set of attribute value types is a breaking change.
+This was decided after extensive debate, with arguments as follows:
+
+* Limiting the types of attribute values to a set which has proved sufficient
+  during several years of OpenTelemetry's development is a useful guardrail for
+  design. In taking additional value types off the table, we narrow the solution
+  space and have more productive design conversations.
+* We proposed extending support for complex value types and received significant
+  pushback. Removing the bounds significantly increases the burden on data
+  consumers. Adding additional simple value types doesn't cause the same level
+  of burden, but these can be encoded using existing primitive types. For
+  example, datetime can be encoded as a string or 64 bit integer.
+* Limiting attribute value types to primitives and arrays of primitives supports
+  OpenTelemetry's intent that attributes are metadata, and facilitates the
+  ability for data consumers to create search indexes and perform other
+  statistical analysis.
+
+### Standard Attribute
+
+Attributes are used in various places throughout the OpenTelemetry data model.
+We designate the [previous attribute section](#attribute) as the standard
+attribute definition, in order to facilitate more intuitive and consistent API /
+SDK design.
+
+The standard attribute definition SHOULD be used to represent attributes in data
+modeling unless there is a strong justification to diverge. For example, the Log
+Data Model has an extended [attributes](../logs/data-model.md#field-attributes)
+definition allowing values of [type `Any`](../logs/data-model.md#type-any). This
+reflects that LogRecord attributes are expected to model data produced from
+external log APIs, which do not necessarily have the same value type
+restrictions as the standard attribute definition.
 
 ### Attribute Limits
 
