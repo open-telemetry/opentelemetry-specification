@@ -106,7 +106,7 @@ follows.
 
 Value of type `any` can be one of the following:
 
-- A scalar value: number, string or boolean,
+- A scalar value: string, boolean, signed 64 bit integer, or double precision floating point (IEEE 754-1985)
 
 - A byte array,
 
@@ -402,16 +402,14 @@ corresponding short names).
 
 ### Field: `Body`
 
-Type: any.
+Type: [`any`](#type-any).
 
-Description: A value containing the body of the log record (see the description
-of `any` type above). Can be for example a human-readable string message
-(including multi-line) describing the event in a free form or it can be a
-structured data composed of arrays and maps of other values. First-party
-Applications SHOULD use a string message. However, a structured body SHOULD be
-used to preserve the semantics of structured logs emitted by Third-party
-Applications. Can vary for each occurrence of the event coming from the same
-source. This field is optional.
+Description: A value containing the body of the log record. Can be for example
+a human-readable string message (including multi-line) describing the event in
+a free form or it can be a structured data composed of arrays and maps of other
+values. Body MUST support [`any` type](#type-any) to preserve the semantics of
+structured logs emitted by the applications. Can vary for each occurrence of the
+event coming from the same source. This field is optional.
 
 ### Field: `Resource`
 
@@ -444,13 +442,15 @@ is optional.
 
 ### Field: `Attributes`
 
-Type: `map<string, any>`.
+Type: [`map<string, any>`](#type-mapstring-any).
 
 Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
-information about the request context (other than TraceId/SpanId). SHOULD follow
-OpenTelemetry [semantic conventions for attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md).
+information about the request context (other than [Trace Context Fields](#trace-context-fields)).
+The log attribute model MUST support [`any` type](#type-any),
+a superset of [standard Attribute](../common/README.md#attribute),
+to preserve the semantics of structured attributes emitted by the applications.
 This field is optional.
 
 #### Errors and Exceptions
