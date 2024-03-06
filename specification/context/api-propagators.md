@@ -68,15 +68,15 @@ There are two categories of propagators:
 
 * `Propagator`, or "forward propagator", which sends data forward to the next
 process in the chain.
-* `ResponsePropagator` (experimental), a newer specialization of `Propagator`, which
+* `ResponsePropagator` (experimental), a specialization of `Propagator`, which
 sends trace context back to the caller.
 
 The API is the same for both categories, but instrumentation libraries MUST NOT
 call `ResponsePropagator`s to propagate the context to the next process, and MUST
 NOT call `Propagator`s when propagating the context back to the caller.
 
-For historical reasons, whenever "Propagator" is used, a forward propagator is
-implied.
+For historical reasons, whenever the term "Propagator" is used, a forward
+propagator is implied.
 
 ### Response Propagator
 
@@ -94,7 +94,10 @@ as the parent of new spans.
 ![ResponsePropagator Use-Case](../../internal/img/response-propagator-use-case.png)
 
 The trace context obtained from response propagators are meant to be consumed
-only by the caller and shouldn't be propagated further back.
+only by the caller and shouldn't be propagated further back. For example, on the
+scenario where a service (A) makes a call to a service (B), which in turns makes
+a call to (C), means that the context from the service (C) should be used by
+(B), and (B) should not propagate the same context to (A).
 
 ## Propagator Types
 
