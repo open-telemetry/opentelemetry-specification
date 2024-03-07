@@ -81,7 +81,7 @@ reflects that LogRecord attributes are expected to model data produced from
 external log APIs, which do not necessarily have the same value type
 restrictions as the standard attribute definition.
 
-NOTE: extending the set of standard attribute value types is a breaking change.
+Note: Extending the set of standard attribute value types is a breaking change.
 This was decided after extensive debate, with arguments as follows:
 
 * Limiting the types of attribute values to a set which has proved sufficient
