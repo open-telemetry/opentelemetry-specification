@@ -88,13 +88,13 @@ This was decided after extensive debate, with arguments as follows:
   during several years of OpenTelemetry's development is a useful guardrail for
   design. In taking additional value types off the table, we narrow the solution
   space and have more productive design conversations.
-* We proposed extending support for complex value types and received significant
-  pushback. Removing the bounds significantly increases the burden on data
-  consumers. Adding additional simple value types doesn't cause the same level
-  of burden, but these can be encoded using existing primitive types. For
-  example, datetime can be encoded as a string or 64 bit integer.
-* Limiting attribute value types to primitives and arrays of primitives simplifies
-  data consumers' efforts to create search indexes and perform statistical analysis.
+* Upon proposing to extend support for complex value types, we received significant
+  pushback. Limiting attribute value types to primitives and arrays of primitives
+  simplifies data consumers' efforts to create search indexes and perform statistical
+  analysis.
+* To addess concerns of restricting standard attributes to primitive types, it was raised
+  that complex types can be encoded as exisitng primitive types, such as representing
+  datetime as a string or 64 bit integer.
 
 ### Attribute Limits
 
