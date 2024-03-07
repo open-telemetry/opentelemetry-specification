@@ -32,6 +32,7 @@
   * [Field: `Resource`](#field-resource)
   * [Field: `InstrumentationScope`](#field-instrumentationscope)
   * [Field: `Attributes`](#field-attributes)
+  * [Field: `Flags`](#field-flags)
     + [Errors and Exceptions](#errors-and-exceptions)
 - [Example Log Records](#example-log-records)
 - [Example Mappings](#example-mappings)
