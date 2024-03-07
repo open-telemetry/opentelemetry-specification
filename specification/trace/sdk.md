@@ -173,7 +173,7 @@ Thus, the SDK specification defines sets of possible requirements for
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
 
-#### Span flags
+### Span flags
 
 The OTLP representation for Span and Span Link include a 32-bit field
 declared as Span Flags.
