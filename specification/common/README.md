@@ -93,7 +93,7 @@ This was decided after extensive debate, with arguments as follows:
   simplifies data consumers' efforts to create search indexes and perform statistical
   analysis.
 * To addess concerns of restricting standard attributes to primitive types, it was raised
-  that complex types can be encoded as exisitng primitive types, such as representing
+  that complex types can be encoded as existing primitive types, such as representing
   datetime as a string or 64 bit integer.
 
 ### Attribute Limits
