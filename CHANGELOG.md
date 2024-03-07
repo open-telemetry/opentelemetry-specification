@@ -26,6 +26,8 @@ release.
   ([#3884](https://github.com/open-telemetry/opentelemetry-specification/pull/3884))
 - Clarify that logs attributes are a superset of standard attributes.
   ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
+- Clarify how trace context is to be extracted from legacy logs formats.
+  ([#3923](https://github.com/open-telemetry/opentelemetry-specification/pull/3923))
 
 ### Resource
 
