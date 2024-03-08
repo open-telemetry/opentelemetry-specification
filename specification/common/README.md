@@ -92,9 +92,9 @@ This was decided after extensive debate, with arguments as follows:
   pushback. Limiting attribute value types to primitives and arrays of primitives
   simplifies data consumers' efforts to create search indexes and perform statistical
   analysis.
-* To addess concerns of restricting standard attributes to primitive types, it was raised
-  that complex types can be encoded as existing primitive types, such as representing
-  datetime as a string or 64 bit integer.
+* To addess concerns over restricting standard attributes to primitive types, it was
+  called out that complex types can be encoded as existing primitive types, such as
+  representing datetime as a string or 64 bit integer.
 
 ### Attribute Limits
 
