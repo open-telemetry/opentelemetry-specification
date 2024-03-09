@@ -17,6 +17,8 @@ release.
 
 - Remove implementation specific specification from metric API.
   ([#3890](https://github.com/open-telemetry/opentelemetry-specification/pull/3890))
+- Formalize the interaction between cardinality limit and overflow attribute.
+  ([#3912](https://github.com/open-telemetry/opentelemetry-specification/pull/3912))
 
 ### Logs
 
@@ -24,6 +26,8 @@ release.
   ([#3884](https://github.com/open-telemetry/opentelemetry-specification/pull/3884))
 - Clarify that logs attributes are a superset of standard attributes.
   ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
+- Add support for empty values.
+  ([#3853](https://github.com/open-telemetry/opentelemetry-specification/pull/3853))
 
 ### Resource
 
