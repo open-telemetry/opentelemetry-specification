@@ -64,6 +64,8 @@ instrumentation libraries.
 
 ## Propagator Categories
 
+**Status**: [Experimental](../document-status.md)
+
 There are two categories of propagators:
 
 * `Propagator`, or "forward propagator", which sends data forward to the next
@@ -101,6 +103,8 @@ a call to (C), means that the context from the service (C) should be used by
 
 ## Propagator Types
 
+**Status**: [Stable](../document-status.md)
+
 A `Propagator` type defines the restrictions imposed by a specific transport
 and is bound to a data type, in order to propagate in-band context data across process boundaries.
 
@@ -113,6 +117,8 @@ A binary `Propagator` type will be added in the future (see [#437](https://githu
 
 ### Carrier
 
+**Status**: [Stable](../document-status.md)
+
 A carrier is the medium used by `Propagator`s to read values from and write values to.
 Each specific `Propagator` type defines its expected carrier type, such as a string map
 or a byte array.
@@ -121,11 +127,15 @@ Carriers used at [Inject](#inject) are expected to be mutable.
 
 ### Operations
 
+**Status**: [Stable](../document-status.md)
+
 `Propagator`s MUST define `Inject` and `Extract` operations, in order to write
 values to and read values from carriers respectively. Each `Propagator` type MUST define the specific carrier type
 and MAY define additional parameters.
 
 #### Inject
+
+**Status**: [Stable](../document-status.md)
 
 Injects the value into a carrier. For example, into the headers of an HTTP request.
 
@@ -136,6 +146,8 @@ Required arguments:
 - The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
 #### Extract
+
+**Status**: [Stable](../document-status.md)
 
 Extracts the value from an incoming request. For example, from the headers of an HTTP request.
 
@@ -153,6 +165,8 @@ containing the extracted value, which can be a `SpanContext`,
 `Baggage` or another cross-cutting concern context.
 
 ## TextMap Propagator
+
+**Status**: [Stable](../document-status.md)
 
 `TextMapPropagator` performs the injection and extraction of a cross-cutting concern
 value as string key/values pairs into carriers that travel in-band across process boundaries.
@@ -172,6 +186,8 @@ to access its contents.
 avoid runtime allocations.
 
 ### Fields
+
+**Status**: [Stable](../document-status.md)
 
 The predefined propagation fields. If your carrier is reused, you should delete the fields here
 before calling [Inject](#inject).
@@ -195,6 +211,8 @@ variable names. To get a full list of fields for a specific carrier object, use 
 
 ### TextMap Inject
 
+**Status**: [Stable](../document-status.md)
+
 Injects the value into a carrier. The required arguments are the same as defined by
 the base [Inject](#inject) operation.
 
@@ -205,6 +223,8 @@ Optional arguments:
 
 #### Setter argument
 
+**Status**: [Stable](../document-status.md)
+
 Setter is an argument in `Inject` that sets values into given fields.
 
 `Setter` allows a `TextMapPropagator` to set propagated fields into a carrier.
@@ -212,6 +232,8 @@ Setter is an argument in `Inject` that sets values into given fields.
 One of the ways to implement it is `Setter` class with `Set` method as described below.
 
 ##### Set
+
+**Status**: [Stable](../document-status.md)
 
 Replaces a propagated field with the given value.
 
@@ -225,6 +247,8 @@ The implementation SHOULD preserve casing (e.g. it should not transform `Content
 
 ### TextMap Extract
 
+**Status**: [Stable](../document-status.md)
+
 Extracts the value from an incoming request. The required arguments are the same as defined by
 the base [Extract](#extract) operation.
 
@@ -237,6 +261,8 @@ Returns a new `Context` derived from the `Context` passed as argument.
 
 #### Getter argument
 
+**Status**: [Stable](../document-status.md)
+
 Getter is an argument in `Extract` that get value from given field
 
 `Getter` allows a `TextMapPropagator` to read propagated fields from a carrier.
@@ -246,6 +272,8 @@ as described below. Languages may decide on alternative implementations and
 expose corresponding methods as delegates or other ways.
 
 ##### Keys
+
+**Status**: [Stable](../document-status.md)
 
 The `Keys` function MUST return the list of all the keys in the carrier.
 
@@ -261,6 +289,8 @@ For example, it can be used to detect all keys following the `uberctx-{user-defi
 
 ##### Get
 
+**Status**: [Stable](../document-status.md)
+
 The Get function MUST return the first value of the given propagation key or return null if the key doesn't exist.
 
 Required arguments:
@@ -272,6 +302,8 @@ The Get function is responsible for handling case sensitivity. If the getter is 
 
 ## Injectors and Extractors as Separate Interfaces
 
+**Status**: [Stable](../document-status.md)
+
 Languages can choose to implement a `Propagator` type as a single object
 exposing `Inject` and `Extract` methods, or they can opt to divide the
 responsibilities further into individual `Injector`s and `Extractor`s. A
@@ -279,6 +311,8 @@ responsibilities further into individual `Injector`s and `Extractor`s. A
 `Extractors`.
 
 ## Composite Propagator
+
+**Status**: [Stable](../document-status.md)
 
 Implementations MUST offer a facility to group multiple `Propagator`s
 from different cross-cutting concerns in order to leverage them as a
@@ -299,6 +333,8 @@ There MUST be functions to accomplish the following operations.
 
 ### Create a Composite Propagator
 
+**Status**: [Stable](../document-status.md)
+
 Required arguments:
 
 - A list of `Propagator`s or a list of `Injector`s and `Extractor`s.
@@ -306,6 +342,8 @@ Required arguments:
 Returns a new composite `Propagator` with the specified `Propagator`s.
 
 ### Composite Extract
+
+**Status**: [Stable](../document-status.md)
 
 Required arguments:
 
@@ -318,6 +356,8 @@ If the `TextMapPropagator`'s `Extract` implementation accepts the optional `Gett
 
 ### Composite Inject
 
+**Status**: [Stable](../document-status.md)
+
 Required arguments:
 
 - A `Context`.
@@ -329,15 +369,13 @@ If the `TextMapPropagator`'s `Inject` implementation accepts the optional `Sette
 
 ## Global Propagators
 
+**Status**: [Stable](../document-status.md)
+
 The OpenTelemetry API MUST provide a way to obtain a propagator for each
 supported `Propagator` type. Instrumentation libraries SHOULD call propagators
 to extract and inject the context on all outgoing remote calls. Propagators,
 depending on the language, MAY be set up using various dependency injection
 techniques or available as global accessors.
-
-The OpenTelemetry API SHOULD provide similar facilities for `ResponsePropagator`s,
-and instrumentation libraries SHOULD call response propagators to inject the
-context on the response to remote calls.
 
 **Note:** It is a discouraged practice, but certain instrumentation libraries
 might use proprietary context propagation protocols or be hardcoded to use a
@@ -357,6 +395,14 @@ propagators. If pre-configured, `Propagator`s SHOULD default to a composite
 `Propagator` specified in the [Baggage API](../baggage/api.md#propagation).
 These platforms MUST also allow pre-configured propagators to be disabled or overridden.
 
+### Response Propagators
+
+**Status**: [Experimental](../document-status.md)
+
+The OpenTelemetry API SHOULD provide similar facilities for `ResponsePropagator`s,
+and instrumentation libraries SHOULD call response propagators to inject the
+context on the response to remote calls.
+
 Instrumentation Libraries MUST NOT pre-configure `ResponsePropagator`s, those
 should be explicitly enabled by service owners in order to not leak unintended
 information to callers, which might be untrusted clients, like web browsers over
@@ -364,11 +410,15 @@ the public internet.
 
 ### Get Global Propagator
 
+**Status**: [Stable](../document-status.md)
+
 This method MUST exist for each supported `Propagator` type.
 
 Returns a global `Propagator`. This usually will be composite instance.
 
 ### Set Global Propagator
+
+**Status**: [Stable](../document-status.md)
 
 This method MUST exist for each supported `Propagator` type.
 
@@ -400,6 +450,8 @@ Required parameters:
 
 ## Propagators Distribution
 
+**Status**: [Stable](../document-status.md)
+
 The official list of propagators that MUST be maintained by the OpenTelemetry
 organization and MUST be distributed as OpenTelemetry extension packages:
 
@@ -425,10 +477,16 @@ Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
 the Core OpenTelemetry repositories.
 
+## Response Propagators Distribution
+
+**Status**: [Experimental](../document-status.md)
+
 At the moment, no `ResponsePropagator`s are available. A candidate for the
 near-future is W3C TraceContext's `traceresponse`.
 
 ### B3 Requirements
+
+**Status**: [Stable](../document-status.md)
 
 B3 has both single and multi-header encodings. It also has semantics that do not
 map directly to OpenTelemetry such as a debug trace flag, and allowing spans
@@ -437,6 +495,8 @@ between OpenTelemetry and Zipkin implementations, the following guidelines have
 been established for B3 context propagation.
 
 #### B3 Extract
+
+**Status**: [Stable](../document-status.md)
 
 When extracting B3, propagators:
 
@@ -450,6 +510,8 @@ When extracting B3, propagators:
 
 #### B3 Inject
 
+**Status**: [Stable](../document-status.md)
+
 When injecting B3, propagators:
 
 * MUST default to injecting B3 using the single-header format
@@ -460,10 +522,14 @@ When injecting B3, propagators:
 
 #### Fields
 
+**Status**: [Stable](../document-status.md)
+
 Fields MUST return the header names that correspond to the configured format,
 i.e., the headers used for the inject operation.
 
 #### Configuration
+
+**Status**: [Stable](../document-status.md)
 
 | Option    | Extract Order | Inject Format | Specification     |
 |-----------|---------------|---------------| ------------------|
