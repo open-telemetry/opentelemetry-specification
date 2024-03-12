@@ -157,8 +157,14 @@ value type.
 ReadWriteLogRecord is a superset of [ReadableLogRecord](#readablelogrecord).
 
 A function receiving this as an argument MUST additionally be able to modify
-all the information added via [Emit a LogRecord](bridge-api.md#emit-a-logrecord)
-except `Context`.
+the following information added to the [LogRecord](data-model.md#log-and-event-record-definition):
+
+* `Timestamp`
+* `ObservedTimestamp`
+* `SeverityText`
+* `SeverityNumber`
+* `Body`
+* `Attributes` (addition, modification, removal)
 
 ## LogRecord Limits
 
