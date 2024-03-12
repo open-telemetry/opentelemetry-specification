@@ -165,6 +165,9 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * `SeverityNumber`
 * `Body`
 * `Attributes` (addition, modification, removal)
+* `TraceId`
+* `SpanId`
+* `TraceFlags`
 
 ## LogRecord Limits
 
