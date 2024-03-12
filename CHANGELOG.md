@@ -37,6 +37,9 @@ release.
 
 ### SDK Configuration
 
+- Clarify environment variable substitution is not recursive
+  ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
+
 ### Common
 
 - Tighten stability requirements for well-known attribute values.
