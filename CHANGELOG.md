@@ -13,12 +13,21 @@ release.
 
 ### Traces
 
+- Clarify STDOUT exporter format is unspecified.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
+- Recommend documentation of the STDOUT exporter format.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
+
 ### Metrics
 
 - Remove implementation specific specification from metric API.
   ([#3890](https://github.com/open-telemetry/opentelemetry-specification/pull/3890))
 - Formalize the interaction between cardinality limit and overflow attribute.
   ([#3912](https://github.com/open-telemetry/opentelemetry-specification/pull/3912))
+- Clarify STDOUT exporter format is unspecified.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
+- Recommend documentation of the STDOUT exporter format.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
 
 ### Logs
 
@@ -28,6 +37,10 @@ release.
   ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
 - Add support for empty values.
   ([#3853](https://github.com/open-telemetry/opentelemetry-specification/pull/3853))
+- Clarify STDOUT exporter format is unspecified.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
+- Require documentation of the STDOUT exporter format.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
 
 ### Resource
 

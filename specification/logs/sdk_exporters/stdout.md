@@ -10,6 +10,11 @@ linkTitle: Stdout
 Exporter](../sdk.md#logrecordexporter) which outputs the logs to
 stdout/console.
 
+The output format of the exporter is unspecified. The exporter MUST be
+documented that its output is not a standardized format across OpenTelemetry
+nor is it a stable format. The documentation SHOULD suggest the OTLP exporter
+for users that want a stable and standarized output format.
+
 [OpenTelemetry SDK](../../overview.md#sdk) authors MAY choose the best idiomatic
 name for their language. For example, ConsoleExporter, StdoutExporter,
 StreamExporter, etc.
