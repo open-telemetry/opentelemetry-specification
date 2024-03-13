@@ -15,6 +15,8 @@ release.
 
 ### Logs
 
+### Events
+
 ### Resource
 
 ### OpenTelemetry Protocol
@@ -36,18 +38,13 @@ release.
 
 ### Traces
 
-- No changes.
+- Mark the AddLink() operation as stable.
+  ([#3887](https://github.com/open-telemetry/opentelemetry-specification/pull/3887))
 
 ### Metrics
 
-- Clarify metric point.
-  ([#3906](https://github.com/open-telemetry/opentelemetry-specification/pull/3906))
-- Remove implementation specific specification from metric API.
-  ([#3890](https://github.com/open-telemetry/opentelemetry-specification/pull/3890))
 - Formalize the interaction between cardinality limit and overflow attribute.
   ([#3912](https://github.com/open-telemetry/opentelemetry-specification/pull/3912))
-- Rework metric signal overview.
-  ([#3916](https://github.com/open-telemetry/opentelemetry-specification/pull/3916))
 
 ### Logs
 
@@ -57,6 +54,15 @@ release.
   ([#3884](https://github.com/open-telemetry/opentelemetry-specification/pull/3884))
 - Clarify that logs attributes are a superset of standard attributes.
   ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
+- Add support for empty values.
+  ([#3853](https://github.com/open-telemetry/opentelemetry-specification/pull/3853))
+- Mark standard output log record exporter as stable.
+  ([#3922](https://github.com/open-telemetry/opentelemetry-specification/pull/3922))
+
+### Events
+
+- Add Provider to the Event API.
+  ([#3878](https://github.com/open-telemetry/opentelemetry-specification/pull/3878))
 
 ### Resource
 

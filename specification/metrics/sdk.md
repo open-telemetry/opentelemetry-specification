@@ -753,35 +753,36 @@ The cardinality limit for an aggregation is defined in one of three ways:
 #### Overflow attribute
 
 An overflow attribute set is defined, containing a single attribute
-`otel.metric.overflow` having (boolean) value `true`, which is used to
-report a synthetic aggregation of the metric events that could not be
-independently aggregated because of the limit.
+`otel.metric.overflow` having (boolean) value `true`, which is used to report a
+synthetic aggregation of the [Measurements](./api.md#measurement) that could not
+be independently aggregated because of the limit.
 
-The SDK MUST create an Aggregator with the overflow attribute set
-prior to reaching the cardinality limit and use it to aggregate events
-for which the correct Aggregator could not be created.  The SDK MUST provide the
-guarantee that overflow would not happen if the maximum number of distinct,
-non-overflow attribute sets is less than or equal to the limit.
+The SDK MUST create an Aggregator with the overflow attribute set prior to
+reaching the cardinality limit and use it to aggregate
+[Measurements](./api.md#measurement) for which the correct Aggregator could not
+be created.  The SDK MUST provide the guarantee that overflow would not happen
+if the maximum number of distinct, non-overflow attribute sets is less than or
+equal to the limit.
 
 #### Synchronous instrument cardinality limits
 
 Aggregators for synchronous instruments with cumulative temporality MUST
-continue to export all attribute sets that were observed prior to the
-beginning of overflow.  Metric events corresponding with attribute sets that
-were not observed prior to the overflow will be reflected in a single data
-point described by (only) the overflow attribute.
+continue to export all attribute sets that were observed prior to the beginning
+of overflow.  [Measurements](./api.md#measurement) corresponding with attribute
+sets that were not observed prior to the overflow will be reflected in a single
+data point described by (only) the overflow attribute.
 
 Aggregators of synchronous instruments with delta aggregation temporality MAY
 choose an arbitrary subset of attribute sets to output to maintain the stated
 cardinality limit.
 
 Regardless of aggregation temporality, the SDK MUST ensure that every
-metric event is reflected in exactly one Aggregator, which is either
-an Aggregator associated with the correct attribute set or an
+[Measurement](./api.md#measurement) is reflected in exactly one Aggregator,
+which is either an Aggregator associated with the correct attribute set or an
 aggregator associated with the overflow attribute set.
 
-Events MUST NOT be double-counted or dropped during an
-overflow.
+[Measurements](./api.md#measurement) MUST NOT be double-counted or dropped
+during an overflow.
 
 #### Asynchronous instrument cardinality limits
 

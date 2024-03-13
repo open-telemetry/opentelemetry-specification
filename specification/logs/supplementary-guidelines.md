@@ -84,7 +84,7 @@ automatic context propagation by NOT explicitly setting `Context` when
 calling [emit a LogRecord](./bridge-api.md#emit-a-logrecord).
 
 Some log libraries have mechanisms specifically tailored for injecting
-contextual information info logs, such as MDC in Log4j. When available, it may
+contextual information into logs, such as MDC in Log4j. When available, it may
 be preferable to use these mechanisms to set the Context. A log appender can
 then fetch the Context and explicitly set it when
 calling [emit a LogRecord](./bridge-api.md#emit-a-logrecord). This allows the correct Context
