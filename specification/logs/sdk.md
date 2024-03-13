@@ -64,6 +64,9 @@ to report as described in
 the [transformation to non-OTLP formats](../common/mapping-to-non-otlp.md#dropped-attributes-count)
 specification.
 
+Note: Typically this will be implemented with a new interface or (immutable)
+value type.
+
 ### ReadWriteLogRecord
 
 A function receiving this as an argument MUST be able to write to the
