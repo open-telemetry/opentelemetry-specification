@@ -129,8 +129,7 @@ the responsibility of the `LoggerProvider` instead.
 
 ## Additional LogRecord interfaces
 
-In addition to the [definition for LogRecord](data-model.md#log-and-event-record-definition), the
-following `LogRecord`-like interfaces are defined in the SDK:
+In this document we refer to `ReadableLogRecord` and `ReadWriteLogRecord`, defined as follows.
 
 ### ReadableLogRecord
 
