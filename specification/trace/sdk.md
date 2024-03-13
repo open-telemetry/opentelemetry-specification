@@ -14,7 +14,7 @@ linkTitle: SDK
 - [Tracer Provider](#tracer-provider)
   * [Tracer Creation](#tracer-creation)
   * [Configuration](#configuration)
-    + [TracerConfigProvider](#tracerconfigprovider)
+    + [TracerConfigurator](#tracerconfigurator)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Tracer](#tracer)
@@ -73,14 +73,14 @@ is stored on the created `Tracer`.
 
 **Status**: [Experimental](../document-status.md) - The `TracerProvider` MUST
 compute the relevant [TracerConfig](#tracerconfig) using the
-configured [TracerConfigProvider](#tracerconfigprovider), and adjust
+configured [TracerConfigurator](#tracerconfigurator), and adjust
 the `Tracer`'s behavior to conform to the `TracerConfig`.
 
 ### Configuration
 
 Configuration (
 i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators), [SpanLimits](#span-limits), [`Sampler`](#sampling),
-and (**experimental**) [TracerConfigProvider](#tracerconfigprovider)) MUST be
+and (**experimental**) [TracerConfigurator](#tracerconfigurator)) MUST be
 owned by the `TracerProvider`. The configuration MAY be applied at the time
 of `TracerProvider` creation if appropriate.
 
@@ -93,11 +93,11 @@ Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
 
-#### TracerConfigProvider
+#### TracerConfigurator
 
 **Status**: [Experimental](../document-status.md)
 
-A `TracerConfigProvider` is a function which computes
+A `TracerConfigurator` is a function which computes
 the [TracerConfig](#tracerconfig) for a [Tracer](#tracer).
 
 The function MUST accept the following parameter:
@@ -112,11 +112,11 @@ be nil, null, empty, or an instance of the default `TracerConfig` depending on
 what is idiomatic in the language.
 
 This function is called when a `Tracer` is first created, and for each
-outstanding `Tracer` when a `TracerProvider`'s `TracerConfigProvider` is
+outstanding `Tracer` when a `TracerProvider`'s `TracerConfigurator` is
 updated (if updating is supported). Therefore, it is important that it returns
 quickly.
 
-`TracerConfigProvider` is modeled as a function to maximize flexibility.
+`TracerConfigurator` is modeled as a function to maximize flexibility.
 However, implementations MAY provide shorthand or helper functions to
 accommodate common use cases:
 
@@ -161,7 +161,7 @@ make the flush timeout configurable.
 **Status**: [Experimental](../document-status.md) - `Tracer` MUST behave
 according to the [TracerConfig](#tracerconfig) computing
 during [Tracer creation](#tracer-creation). If the `TracerProvider` supports
-updating the [TracerConfigProvider](#tracerconfigprovider), then upon update
+updating the [TracerConfigurator](#tracerconfigurator), then upon update
 the `Tracer` MUST be updated to behave according to the new `TracerConfig`.
 
 ### TracerConfig

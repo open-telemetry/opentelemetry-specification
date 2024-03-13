@@ -11,7 +11,7 @@
   * [LoggerProvider Creation](#loggerprovider-creation)
   * [Logger Creation](#logger-creation)
   * [Configuration](#configuration)
-    + [LoggerConfigProvider](#loggerconfigprovider)
+    + [LoggerConfigurator](#loggerconfigurator)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
@@ -73,13 +73,13 @@ message reporting that the specified value is invalid SHOULD be logged.
 
 **Status**: [Experimental](../document-status.md) - The `LoggerProvider` MUST
 compute the relevant [LoggerConfig](#loggerconfig) using the
-configured [LoggerConfigProvider](#loggerconfigprovider), and adjust
+configured [LoggerConfigurator](#loggerconfigurator), and adjust
 the `Logger`'s behavior to conform to the `LoggerConfig`.
 
 ### Configuration
 
 Configuration (
-i.e. [LogRecordProcessors](#logrecordprocessor) and (**experimental**) [LoggerConfigProvider](#loggerconfigprovider))
+i.e. [LogRecordProcessors](#logrecordprocessor) and (**experimental**) [LoggerConfigurator](#loggerconfigurator))
 MUST be owned by the `LoggerProvider`. The configuration MAY be applied at the
 time of `LoggerProvider` creation if appropriate.
 
@@ -91,11 +91,11 @@ after the configuration change). Note: Implementation-wise, this could mean
 that `Logger` instances have a reference to their `LoggerProvider` and access
 configuration only via this reference.
 
-#### LoggerConfigProvider
+#### LoggerConfigurator
 
 **Status**: [Experimental](../document-status.md)
 
-A `LoggerConfigProvider` is a function which computes
+A `LoggerConfigurator` is a function which computes
 the [LoggerConfig](#loggerconfig) for a [Logger](#logger).
 
 The function MUST accept the following parameter:
@@ -110,11 +110,11 @@ be nil, null, empty, or an instance of the default `LoggerConfig` depending on
 what is idiomatic in the language.
 
 This function is called when a `Logger` is first created, and for each
-outstanding `Logger` when a `LoggerProvider`'s `LoggerConfigProvider` is
+outstanding `Logger` when a `LoggerProvider`'s `LoggerConfigurator` is
 updated (if updating is supported). Therefore, it is important that it returns
 quickly.
 
-`LoggerConfigProvider` is modeled as a function to maximize flexibility.
+`LoggerConfigurator` is modeled as a function to maximize flexibility.
 However, implementations MAY provide shorthand or helper functions to
 accommodate common use cases:
 
@@ -166,7 +166,7 @@ registered [LogRecordProcessors](#logrecordprocessor).
 **Status**: [Experimental](../document-status.md) - `Logger` MUST behave
 according to the [LoggerConfig](#loggerconfig) computing
 during [logger creation](#logger-creation). If the `LoggerProvider` supports
-updating the [LoggerConfigProvider](#loggerconfigprovider), then upon update
+updating the [LoggerConfigurator](#loggerconfigurator), then upon update
 the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
 
 ### LoggerConfig
