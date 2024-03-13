@@ -2,9 +2,9 @@
 linkTitle: Stdout
 --->
 
-# OpenTelemetry LogRecord Exporter - Standard output
+# Logs Exporter - Standard output
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 "Standard output" LogRecord Exporter is a [LogRecord
 Exporter](../sdk.md#logrecordexporter) which outputs the logs to
