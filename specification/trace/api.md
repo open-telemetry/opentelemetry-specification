@@ -4,7 +4,7 @@ linkTitle: API
 
 # Tracing API
 
-**Status**: [Stable, Feature-freeze](../document-status.md), except where otherwise specified
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -52,11 +52,11 @@ linkTitle: API
 
 </details>
 
-The Tracing API consist of these main classes:
+The Tracing API consist of these main components:
 
 - [`TracerProvider`](#tracerprovider) is the entry point of the API.
   It provides access to `Tracer`s.
-- [`Tracer`](#tracer) is the class responsible for creating `Span`s.
+- [`Tracer`](#tracer) is responsible for creating `Span`s.
 - [`Span`](#span) is the API to trace an operation.
 
 ## Data types
@@ -542,8 +542,6 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 `AddEvent` for recording exception events.
 
 #### Add Link
-
-**Status**: [Experimental](../document-status.md)
 
 A `Span` MUST have the ability to add `Link`s associated with it after its creation - see [Links](#link).
 `Link`s added after `Span` creation may not be considered by [Samplers](sdk.md#sampler).

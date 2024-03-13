@@ -112,7 +112,9 @@ Value of type `any` can be one of the following:
 
 - An array (a list) of `any` values,
 
-- A `map<string, any>`.
+- A `map<string, any>`,
+
+- [since 1.31.0] An empty value (e.g. `null`).
 
 #### Type `map<string, any>`
 
@@ -442,13 +444,15 @@ is optional.
 
 ### Field: `Attributes`
 
-Type: `map<string, any>`.
+Type: [`map<string, any>`](#type-mapstring-any).
 
 Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
-information about the request context (other than TraceId/SpanId). SHOULD follow
-OpenTelemetry [semantic conventions for attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md).
+information about the request context (other than [Trace Context Fields](#trace-context-fields)).
+The log attribute model MUST support [`any` type](#type-any),
+a superset of [standard Attribute](../common/README.md#attribute),
+to preserve the semantics of structured attributes emitted by the applications.
 This field is optional.
 
 #### Errors and Exceptions

@@ -770,8 +770,11 @@ of metrics across successive collections.
 
 **Status**: [Experimental](../document-status.md)
 
-SDKs SHOULD support being configured with a cardinality limit. A cardinality
-limit is the hard limit on the number of metric streams that can be collected.
+SDKs SHOULD support being configured with a cardinality limit. The number of
+unique combinations of attributes is called cardinality. For a given metric, the
+cardinality limit is a hard limit on the number of [Metric
+Points](./data-model.md#metric-points) that can be collected during a collection
+cycle.
 
 #### Configuration
 
@@ -789,35 +792,36 @@ The cardinality limit for an aggregation is defined in one of three ways:
 #### Overflow attribute
 
 An overflow attribute set is defined, containing a single attribute
-`otel.metric.overflow` having (boolean) value `true`, which is used to
-report a synthetic aggregation of the metric events that could not be
-independently aggregated because of the limit.
+`otel.metric.overflow` having (boolean) value `true`, which is used to report a
+synthetic aggregation of the [Measurements](./api.md#measurement) that could not
+be independently aggregated because of the limit.
 
-The SDK MUST create an Aggregator with the overflow attribute set
-prior to reaching the cardinality limit and use it to aggregate events
-for which the correct Aggregator could not be created.  The maximum
-number of distinct, non-overflow attributes is one less than the
-limit, as a result.
+The SDK MUST create an Aggregator with the overflow attribute set prior to
+reaching the cardinality limit and use it to aggregate
+[Measurements](./api.md#measurement) for which the correct Aggregator could not
+be created.  The SDK MUST provide the guarantee that overflow would not happen
+if the maximum number of distinct, non-overflow attribute sets is less than or
+equal to the limit.
 
 #### Synchronous instrument cardinality limits
 
 Aggregators for synchronous instruments with cumulative temporality MUST
-continue to export all attribute sets that were observed prior to the
-beginning of overflow.  Metric events corresponding with attribute sets that
-were not observed prior to the overflow will be reflected in a single data
-point described by (only) the overflow attribute.
+continue to export all attribute sets that were observed prior to the beginning
+of overflow.  [Measurements](./api.md#measurement) corresponding with attribute
+sets that were not observed prior to the overflow will be reflected in a single
+data point described by (only) the overflow attribute.
 
 Aggregators of synchronous instruments with delta aggregation temporality MAY
 choose an arbitrary subset of attribute sets to output to maintain the stated
 cardinality limit.
 
 Regardless of aggregation temporality, the SDK MUST ensure that every
-metric event is reflected in exactly one Aggregator, which is either
-an Aggregator associated with the correct attribute set or an
+[Measurement](./api.md#measurement) is reflected in exactly one Aggregator,
+which is either an Aggregator associated with the correct attribute set or an
 aggregator associated with the overflow attribute set.
 
-Events MUST NOT be double-counted or dropped during an
-overflow.
+[Measurements](./api.md#measurement) MUST NOT be double-counted or dropped
+during an overflow.
 
 #### Asynchronous instrument cardinality limits
 
@@ -1441,12 +1445,12 @@ A Push Metric Exporter MUST support the following functions:
 
 ##### Export(batch)
 
-Exports a batch of [Metric points](./data-model.md#metric-points). Protocol
+Exports a batch of [Metric Points](./data-model.md#metric-points). Protocol
 exporters that will implement this function are typically expected to serialize
 and transmit the data to the destination.
 
 The SDK MUST provide a way for the exporter to get the [Meter](./api.md#meter)
-information (e.g. name, version, etc.) associated with each `Metric point`.
+information (e.g. name, version, etc.) associated with each `Metric Point`.
 
 `Export` will never be called concurrently for the same exporter instance.
 `Export` can be called again only after the current call returns.
@@ -1461,10 +1465,10 @@ are being sent to.
 
 **Parameters:**
 
-`batch` - a batch of `Metric point`s. The exact data type of the batch is
-language specific, typically it is some kind of list. The exact type of `Metric
-point` is language specific, and is typically optimized for high performance.
-Here are some examples:
+`batch` - a batch of [Metric Points](./data-model.md#metric-points). The exact
+data type of the batch is language specific, typically it is some kind of list.
+The exact type of `Metric Point` is language specific, and is typically
+optimized for high performance. Here are some examples:
 
 ```text
        +--------+ +--------+     +--------+
@@ -1480,7 +1484,7 @@ Batch: | Metric | | Metric | ... | Metric |
                                     +--> timestamps, attributes, value (or buckets), exemplars, ...
 ```
 
-Refer to the [Metric points](./data-model.md#metric-points) section from the
+Refer to the [Metric Points](./data-model.md#metric-points) section from the
 Metrics Data Model specification for more details.
 
 Note: it is highly recommended that implementors design the `Metric` data type
@@ -1620,12 +1624,12 @@ A `MetricProducer` MUST support the following functions:
 #### Produce batch
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
-MUST return a batch of [Metric points](./data-model.md#metric-points), filtered by the optional
+MUST return a batch of [Metric Points](./data-model.md#metric-points), filtered by the optional
 `metricFilter` parameter. Implementation SHOULD use the filter as early as
 possible to gain as much performance gain possible (memory allocation,
 internal metric fetching, etc).
 
-If the batch of [Metric points](./data-model.md#metric-points) includes
+If the batch of [Metric Points](./data-model.md#metric-points) includes
 resource information, `Produce` SHOULD require a resource as a parameter.
 `Produce` does not have any other required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add required or optional
@@ -1636,7 +1640,7 @@ failed or timed out. When the `Produce` operation fails, the `MetricProducer`
 MAY return successfully collected results and a failed reasons list to the
 caller.
 
-If a batch of [Metric points](./data-model.md#metric-points) can include
+If a batch of [Metric Points](./data-model.md#metric-points) can include
 [`InstrumentationScope`](../glossary.md#instrumentation-scope) information,
 `Produce` SHOULD include a single InstrumentationScope which identifies the
 `MetricProducer`.
@@ -1651,13 +1655,13 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 
 `MetricFilter` defines the interface which enables the [MetricReader](#metricreader)'s
 registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#metricproducer) to filter aggregated data points
-([Metric points](./data-model.md#metric-points)) inside its `Produce` operation.
+([Metric Points](./data-model.md#metric-points)) inside its `Produce` operation.
 The filtering is done at the [MetricProducer](#metricproducer) for performance reasons.
 
 The `MetricFilter` allows filtering an entire metric stream - dropping or allowing all its attribute sets -
 by its `TestMetric` operation, which accepts the metric stream information
 (scope, name, kind and unit)  and returns an enumeration: `Accept`, `Drop`
-or `Allow_Partial`. If the latter returned, the `TestAttributes` operation
+or `Accept_Partial`. If the latter returned, the `TestAttributes` operation
 is to be called per attribute set of that metric stream, returning an enumeration
 determining if the data point for that (metric stream, attributes) pair is to be
 allowed in the result of the [MetricProducer](#metricproducer) `Produce` operation.

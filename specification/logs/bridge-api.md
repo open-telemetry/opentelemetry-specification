@@ -30,10 +30,10 @@ library authors to build
 which use this API to bridge between existing logging libraries and the
 OpenTelemetry log data model.</b>
 
-The Logs Bridge API consist of these main classes:
+The Logs Bridge API consist of these main components:
 
 * [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
-* [Logger](#logger) is the class responsible for emitting logs as
+* [Logger](#logger) is responsible for emitting logs as
   [LogRecords](./data-model.md#log-and-event-record-definition).
 
 ```mermaid
@@ -45,9 +45,6 @@ graph TD
 ## LoggerProvider
 
 `Logger`s can be accessed with a `LoggerProvider`.
-
-In implementations of the API, the `LoggerProvider` is expected to be the stateful
-object that holds any configuration.
 
 Normally, the `LoggerProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
