@@ -9,10 +9,12 @@
 
 <!-- toc -->
 
-- [Overview](#overview)
+- [Data model](#data-model)
+- [EventLoggerProvider](#eventloggerprovider)
+  * [EventLoggerProvider operations](#eventloggerprovider-operations)
+    + [Get an EventLogger](#get-an-eventlogger)
 - [EventLogger](#eventlogger)
   * [EventLogger Operations](#eventlogger-operations)
-    + [Create EventLogger](#create-eventlogger)
     + [Emit Event](#emit-event)
 - [Optional and required parameters](#optional-and-required-parameters)
 
@@ -20,7 +22,12 @@
 
 </details>
 
-## Overview
+The Event API consists of these main components:
+
+* [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It provides access to `EventLogger`s.
+* [EventLogger](#eventlogger) is the component responsible for emitting events.
+
+## Data model
 
 Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
 
@@ -37,16 +44,55 @@ have `Payloads` that conform to the same schema, which assists in analysis in
 observability platforms. Events are described in more detail in
 the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
-While the logging space has a diverse legacy with many existing logging
-libraries in different languages, there is not ubiquitous alignment with
-OpenTelemetry events. In some logging libraries, producing records shaped as
-OpenTelemetry events is clunky or error-prone.
-
-The Event API offers convenience methods
-for [emitting LogRecords](./bridge-api.md#emit-a-logrecord) that conform
-to the [semantic conventions for Events](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 Unlike the [Logs Bridge API](./bridge-api.md), application developers and
 instrumentation authors are encouraged to call this API directly.
+
+## EventLoggerProvider
+
+`EventLogger`s can be accessed with a `EventLoggerProvider`.
+
+Normally, the `EventLoggerProvider` is expected to be accessed from a central place.
+Thus, the API SHOULD provide a way to set/register and access a global default
+`EventLoggerProvider`.
+
+### EventLoggerProvider operations
+
+The `EventLoggerProvider` MUST provide the following functions:
+
+* Get an `EventLogger`
+
+#### Get an EventLogger
+
+This API MUST accept the following parameters:
+
+* `name`: This name uniquely identifies the [instrumentation scope](../glossary.md#instrumentation-scope),
+  such as the [instrumentation library](../glossary.md#instrumentation-library)
+  (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
+  If an application or library has built-in OpenTelemetry instrumentation, both
+  [Instrumented library](../glossary.md#instrumented-library) and
+  [Instrumentation library](../glossary.md#instrumentation-library) may refer to
+  the same library. In that scenario, the `name` denotes a module name or component
+  name within that library or application.
+
+* `version` (optional): Specifies the version of the instrumentation scope if
+  the scope has a version (e.g. a library version). Example value: 1.0.0.
+
+* `schema_url` (optional): Specifies the Schema URL that should be recorded in
+  the emitted telemetry.
+
+* `attributes` (optional): Specifies the instrumentation scope attributes to
+  associate with emitted telemetry. This API MUST be structured to accept a
+  variable number of attributes, including none.
+
+`EventLogger`s are identified by `name`, `version`, and `schema_url` fields.  When more
+than one `EventLogger` of the same `name`, `version`, and `schema_url` is created, it
+is unspecified whether or under which conditions the same or different `EventLogger`
+instances are returned. It is a user error to create `EventLogger`s with different
+`attributes` but the same identity.
+
+The effect of associating a Schema URL with a `EventLogger` MUST be that the telemetry
+emitted using the `EventLogger` will be associated with the Schema URL, provided that
+the emitted data format is capable of representing such association.
 
 ## EventLogger
 
@@ -57,21 +103,9 @@ emitting `Events` as `LogRecord`s.
 
 The `EventLogger` MUST provide functions to:
 
-#### Create EventLogger
-
-New `EventLogger` instances are created though a constructor or factory method
-on `EventLogger`.
-
-**Parameters:**
-
-* `logger` - the delegate [Logger](./bridge-api.md#logger) used to emit `Events`
-  as `LogRecord`s.
-
 #### Emit Event
 
-Emit a `LogRecord` representing an `Event` to the delegate `Logger`.
-
-This function MAY be named `logEvent`.
+The effect of calling this API is to emit an `Event` to the processing pipeline.
 
 **Parameters:**
 
@@ -84,38 +118,6 @@ This function MAY be named `logEvent`.
 * The `Attributes` (optional) of the Event. Event `Attributes` provide
   additional details about the Event which are not part of the
   well-defined `Payload`.
-
-**Implementation Requirements:**
-
-The implementation MUST use the parameters
-to [emit a logRecord](./bridge-api.md#emit-a-logrecord) using the `logger`
-specified when [creating the EventLogger](#create-eventlogger) as follows:
-
-* The `Name` MUST be used to set
-  the `event.name` [Attribute](./data-model.md#field-attributes). If
-  the `Attributes` provided by the user contain an `event.name` attribute the
-  value provided in the `Name` takes precedence.
-* If provided by the user, the `Payload` MUST be used to set
-  the [Body](./data-model.md#field-body). If not provided, `Body` MUST not be
-  set.
-* If provided by the user, the `Timestamp` MUST be used to set
-  the [Timestamp](./data-model.md#field-timestamp). If not provided, `Timestamp`
-  MUST be set to the current time when [emit](#emit-event) was called.
-* The [Observed Timestamp](./data-model.md#field-observedtimestamp) MUST not be
-  set. (NOTE: [emit a logRecord](./bridge-api.md#emit-a-logrecord) will
-  set `ObservedTimestamp` to the current time when unset.)
-* If provided by the user, the `Context` MUST be used to set
-  the [Context](./bridge-api.md#emit-a-logrecord). If not provided, `Context`
-  MUST be set to the current Context.
-* If provided by the user, the `SeverityNumber` MUST be used to set
-  the [Severity Number](./data-model.md#field-severitynumber) when emitting the
-  logRecord. If not provided, `SeverityNumber` MUST be set
-  to `SEVERITY_NUMBER_INFO=9`.
-* The [Severity Text](./data-model.md#field-severitytext) MUST not be set.
-* If provided by the user, the `Attributes` MUST be used to set
-  the [Attributes](./data-model.md#field-attributes). The user
-  provided `Attributes` MUST not take over the `event.name`
-  attribute previously discussed.
 
 ## Optional and required parameters
 
