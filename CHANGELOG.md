@@ -30,6 +30,8 @@ release.
   ([#3853](https://github.com/open-telemetry/opentelemetry-specification/pull/3853))
 - Mark standard output log record exporter as stable.
   ([#3922](https://github.com/open-telemetry/opentelemetry-specification/pull/3922))
+- Change map to key-value pair collection in Logs Data Model.
+  ([#3938](https://github.com/open-telemetry/opentelemetry-specification/pull/3938))
 
 ### Resource
 
