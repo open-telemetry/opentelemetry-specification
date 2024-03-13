@@ -28,6 +28,8 @@ release.
   ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
 - Add support for empty values.
   ([#3853](https://github.com/open-telemetry/opentelemetry-specification/pull/3853))
+- Mark standard output log record exporter as stable.
+  ([#3922](https://github.com/open-telemetry/opentelemetry-specification/pull/3922))
 - Fix what can be modified via `ReadWriteLogRecord`.
   ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
 
