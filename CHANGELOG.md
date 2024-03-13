@@ -30,6 +30,8 @@ release.
   ([#3853](https://github.com/open-telemetry/opentelemetry-specification/pull/3853))
 - Mark standard output log record exporter as stable.
   ([#3922](https://github.com/open-telemetry/opentelemetry-specification/pull/3922))
+- Clarify that `ReadableLogRecord` and `ReadWriteLogRecord` can be represented using a single type.
+  ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
 
 ### Resource
 
