@@ -14,6 +14,7 @@ aliases:
 
 <!-- toc -->
 
+- [Differences between Prometheus formats](#differences-between-prometheus-formats)
 - [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
   * [Metric Metadata](#metric-metadata)
   * [Counters](#counters)
@@ -44,58 +45,82 @@ aliases:
 
 </details>
 
-This section denotes how to convert metrics scraped in the
-[Prometheus exposition](https://github.com/Prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#exposition-formats)
-or [OpenMetrics](https://openmetrics.io/) formats to the OpenTelemetry metric
-data model and how to create Prometheus metrics from
-OpenTelemetry metric data. Since OpenMetrics has a superset of Prometheus' types, "Prometheus" is taken to mean "Prometheus or OpenMetrics".  "OpenMetrics" refers to OpenMetrics-only concepts.
+## Differences between Prometheus formats
+
+This document covers OpenTelemetry compatibility with various Prometheus-related formats, including:
+
+Formats used for Scraping metrics (pull):
+
+* [Prometheus text exposition format](https://github.com/Prometheus/docs/blob/777846211d502a287ab2b304cb515dc779de3474/content/docs/instrumenting/exposition_formats.md#exposition-formats)
+* [Prometheus protobuf format](https://github.com/prometheus/client_model/blob/01ca24cafc7877ed5ce091083068cde086b7c3dc/io/prometheus/client/metrics.proto)
+* [OpenMetrics text format](https://github.com/OpenObservability/OpenMetrics/blob/1386544931307dff279688f332890c31b6c5de36/specification/OpenMetrics.md#text-format)
+* (Not yet supported by Prometheus) [OpenMetrics protobuf format](https://github.com/OpenObservability/OpenMetrics/blob/1386544931307dff279688f332890c31b6c5de36/specification/OpenMetrics.md#protobuf-format)
+
+Formats used for Pushing metrics:
+
+* [Prometheus Remote Write format](https://github.com/prometheus/prometheus/blob/main/prompb/remote.proto)
+
+The document below uses "Prometheus" to refer to the union of all of these
+formats, even though support for particular features may be missing from the
+specific format. To avoid duplicating the specification for each format, this
+document will include requirements which may not be feasible to implement in
+all Prometheus formats. The following features are not consistently supported
+at the time of writing:
+
+* Exemplars are not currently supported in the Prometheus text exposition format.
+  * Exemplars MUST be dropped if they are not supported.
+* Info and StateSet-typed metrics are not currently supported by the Prometheus text exposition format or Prometheus protobuf format.
+  * If the specification below requires producing a Prometheus Info-typed metric, a Prometheus Gauge with an additional `_info` name suffix MUST be produced if Info-typed metrics are not supported.
+  * If the specification below requires producing a Prometheus StateSet-typed metric, a Prometheus Gauge MUST be produced instead if StateSet-typed metrics are not supported.
+* Exponential (Native) Histograms are not currently supported in the Prometheus text exposition format or the OpenMetrics text or proto formats.
+  * Exponential (Native) Histograms SHOULD be dropped if they are not supported, or MAY be converted to fixed-bucket histograms.
 
 ## Prometheus Metric points to OTLP
 
 ### Metric Metadata
 
-The [OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
-MUST be added as the Name of the OTLP metric.  By default, the name SHOULD be unaltered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
+The [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information)
+MUST be added as the Name of the OTLP metric. By default, the name SHOULD NOT be altered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
 
-The [OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
-if present, MUST be converted to the unit of the OTLP metric.  The unit SHOULD
+[Prometheus UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+if present, MUST be converted to the unit of the OTLP metric. The unit SHOULD
 be translated from Prometheus conventions to OpenTelemetry conventions by:
 
 * Converting from full words to abbreviations (e.g. "milliseconds" to "ms").
 * Special case: Converting "ratio" to "1".
 * Converting "foo_per_bar" to "foo/bar".
 
-The [OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+[Prometheus HELP metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information),
 if present, MUST be added as the description of the OTLP metric.
 
-The [OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+[Prometheus TYPE metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information),
 if present, MUST be used to determine the OTLP data type, and dictates
 type-specific conversion rules listed below. Metric families without type
 metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
 
 ### Counters
 
-A [Prometheus Counter](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
+A [Prometheus Counter](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
 
 ### Gauges
 
-A [Prometheus Gauge](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gauge) MUST be converted to an OTLP Gauge.
+A [Prometheus Gauge](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Gauge.
 
 ### Info
 
-An [OpenMetrics Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the target_info metric, which is used to populate [resource attributes](#resource-attributes). An OpenMetrics Info can be thought of as a special-case of the OpenMetrics Gauge which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
+A [Prometheus Info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the `target` info metric, which is used to populate [resource attributes](#resource-attributes). A Prometheus Info metric can be thought of as a special-case of the Prometheus Gauge metric which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a OTLP Non-Monotonic Sum, rather than an OTLP Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 
 ### StateSet
 
-An [OpenMetrics StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Non-Monotonic Sum. An OpenMetrics StateSet can be thought of as a special-case of the OpenMetrics Gauge which has a 0 or 1 value, and has one metric point for every possible state. It is converted to a Non-Monotonic Sum, rather than a Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
+A [Prometheus StateSet](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Non-Monotonic Sum. A Prometheus StateSet metric can be thought of as a special-case of the Prometheus Gauge which has a 0 or 1 value, and has one metric point for every possible state. It is converted to an OTLP Non-Monotonic Sum, rather than an OTLP Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 
 ### Unknown-typed
 
-A [Prometheus Unknown](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown) MUST be converted to an OTLP Gauge.
+A [Prometheus Unknown](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Gauge.
 
 ### Histograms
 
-A [Prometheus Histogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#histogram) MUST be converted to an OTLP Histogram.
+A [Prometheus Histogram](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Histogram.
 
 Multiple Prometheus histogram metrics MUST be merged together into a single OTLP Histogram:
 
@@ -106,7 +131,7 @@ Multiple Prometheus histogram metrics MUST be merged together into a single OTLP
 
 ### Summaries
 
-[Prometheus Summary](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#summary) MUST be converted to an OTLP Summary.
+[Prometheus Summary](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Summary.
 
 Multiple Prometheus metrics are merged together into a single OTLP Summary:
 
@@ -119,15 +144,15 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 
 The following Prometheus types MUST be dropped:
 
-* [OpenMetrics GaugeHistogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gaugehistogram)
+* [Prometheus GaugeHistogram](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gaugehistogram)
 
 ### Start Time
 
-Prometheus Cumulative metrics can include the start time using the [`_created` metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter-1) as specified in OpenMetrics. When converting Prometheus Counters to OTLP, conversion SHOULD use `_created` where available. When no `_created` metric is available, conversion MUST follow [Cumulative streams: handling unknown start time](../metrics/data-model.md#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
+Prometheus Cumulative metrics can include the start time using the [`_created` sample series](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter-1). When converting Prometheus Counters to OTLP, conversion SHOULD use `_created` where available. When no `_created` metric is available, conversion MUST follow [Cumulative streams: handling unknown start time](../metrics/data-model.md#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
 
 ### Exemplars
 
-[OpenMetrics Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars)
+[Prometheus Exemplars](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars)
 can be attached to Prometheus Histogram bucket metric points and counter metric
 points. Exemplars on histogram buckets SHOULD be converted to exemplars on
 OpenTelemetry histograms. Exemplars on counter metric points SHOULD be
@@ -145,7 +170,7 @@ version respectively. All `otel_scope_info` metrics present in a batch
 of metrics SHOULD be dropped from the incoming scrape. Labels on
 `otel_scope_info` metric points other than `otel_scope_name` and
 `otel_scope_version`, MUST be added as scope attributes to the scope with the
-matching name and version. For example, the OpenMetrics metrics:
+matching name and version. For example, the OpenMetrics text-formatted metrics:
 
 ```
 # TYPE otel_scope_info info
@@ -204,10 +229,10 @@ attributes, and MUST NOT be added as metric attributes:
 | `url.scheme` | `http` or `https` |
 
 In addition to the attributes above, the
-[target_info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
-metric is used to supply additional resource attributes. If present,
-target_info MUST be dropped from the batch of metrics, and all labels from
-the target_info metric MUST be converted to resource attributes
+[target](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+ info metric is used to supply additional resource attributes. If present,
+the `target` info metric MUST be dropped from the batch of metrics, and all labels from
+the `target` info metric MUST be converted to resource attributes
 attached to all other metrics which are part of the scrape. By default, label
 keys and values MUST NOT be altered (such as replacing `_` with `.` characters
 in keys).
@@ -225,7 +250,7 @@ comments (but not metric points) SHOULD be dropped. If dropping a comment or
 metric points, the exporter SHOULD warn the user through error logging.
 
 The Name of an OTLP metric MUST be added as the
-[OpenMetrics MetricFamily Name](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily),
+[Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information),
 with unit and type suffixes added as described below. The metric name is
 required to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Invalid characters
 in the metric name MUST be replaced with the `_` character. Multiple
@@ -239,16 +264,16 @@ The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in P
 * Converting "foo/bar" to "foo_per_bar".
 
 The resulting unit SHOULD be added to the metric as
-[OpenMetrics UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
+[UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
 and as a suffix to the metric name unless the metric name already contains the
 unit, or the unit MUST be omitted. The unit suffix comes before any
 type-specific suffixes.
 
 The description of an OTLP metrics point MUST be added as
-[OpenMetrics HELP metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+[HELP metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
 
 The data point type of an OTLP metric MUST be added as
-[OpenMetrics TYPE metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily).
+[TYPE metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
 It also dictates type-specific conversion rules listed below.
 
 ### Instrumentation Scope
@@ -368,29 +393,29 @@ the lexicographical order of the original keys.
 ### Exemplars
 
 [Exemplars](../metrics/data-model.md#exemplars) on OpenTelemetry Histograms and Monotonic Sums SHOULD
-be converted to OpenMetrics exemplars. Exemplars on other OpenTelemetry data
-points MUST be dropped. For Prometheus push exporters, multiple exemplars are
+be converted to Prometheus exemplars. Exemplars on other OpenTelemetry data
+points MUST be dropped. For Prometheus Remote Write exporters, multiple exemplars are
 able to be added to each bucket, so all exemplars SHOULD be converted. For
 Prometheus pull endpoints, only a single exemplar is able to be added to each
 bucket, so the largest exemplar from each bucket MUST be used, if attaching
 exemplars. If no exemplars exist on a bucket, the highest exemplar from a lower
 bucket MUST be used, even though it is a duplicate of another bucket's exemplar.
-OpenMetrics Exemplars MUST use the `trace_id` and `span_id` keys for the trace
+Prometheus Exemplars MUST use the `trace_id` and `span_id` keys for the trace
 and span IDs, respectively. Timestamps MUST be added as timestamps on the
-OpenMetrics exemplar, and `filtered_attributes` MUST be added as labels on the
-OpenMetrics exemplar unless they would exceed the OpenMetrics
+Prometheus exemplar, and `filtered_attributes` MUST be added as labels on the
+Prometheus exemplar unless they would exceed the
 [limit on characters](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#exemplars).
 
 ### Resource Attributes
 
 In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to
-a single [`target_info` metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+a single [`target` info metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 if the resource is not [empty](../resource/sdk.md#the-empty-resource).
 The resource attributes MAY be copied to labels of exported metric families
-if required by the exporter configuration, or MUST be dropped. The target_info metric MUST be an info-typed
-metric whose labels MUST include the resource attributes, and MUST NOT include
-any other labels. There MUST be at most one target_info metric exposed on an SDK
-Prometheus endpoint.
+if required by the exporter configuration, or MUST be dropped. The `target`
+info metric MUST be an info-typed metric whose labels MUST include the resource
+attributes, and MUST NOT include any other labels. There MUST be at most one
+`target` info metric exposed on an SDK Prometheus endpoint.
 
 In the Collector's Prometheus pull and push (remote-write) exporters, it is
 possible for metrics from multiple targets to be sent together, so targets must
@@ -410,12 +435,12 @@ attributes MUST be combined as `<service.namespace>/<service.name>`, or
 `service.instance.id` attribute, if present, MUST be converted to the
 `instance` label; otherwise, `instance` should be added with an empty value.
 Other resource attributes SHOULD be converted to a
-[target_info](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
-metric, or MUST be dropped. The target_info metric is an info-typed metric
+[target](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+info metric, or MUST be dropped. The `target` metric is an info-typed metric
 whose labels MUST include the resource attributes, and MUST NOT include any
 other labels other than `job` and `instance`.  There MUST be at most one
-target_info metric exported for each unique combination of `job` and `instance`.
+`target` info metric exported for each unique combination of `job` and `instance`.
 
-If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named target_info with a constant value of 1 MUST be used instead.
+If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named `target_info` with a constant value of 1 MUST be used instead.
 
 To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](../common/README.md#attribute).
