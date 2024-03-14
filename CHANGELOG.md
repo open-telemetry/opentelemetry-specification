@@ -26,6 +26,9 @@ release.
 
 ### Compatibility
 
+- Prometheus compatibility: Clarify naming of the target info metric, and differences between various Prometheus formats.
+  ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
+
 ### SDK Configuration
 
 ### Common
