@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Links with invalid SpanContext are recorded by default.
+  ([#3928](https://github.com/open-telemetry/opentelemetry-specification/pull/3928))
+
 ### Metrics
 
 ### Logs
