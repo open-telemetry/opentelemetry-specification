@@ -84,10 +84,6 @@ Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
 
-A boolean parameter indicating whether `Links` with invalid `SpanContext`
-are recorded or not SHOULD be exposed as part of the configuration,
-with true as its default value.
-
 ### Shutdown
 
 This method provides a way for provider to do any cleanup required.
