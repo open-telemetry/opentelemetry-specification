@@ -11,9 +11,24 @@ release.
 
 ### Traces
 
+- Clarify STDOUT exporter format is unspecified.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
+- Recommend documentation of the STDOUT exporter format.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
+
 ### Metrics
 
+- Clarify STDOUT exporter format is unspecified.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
+- Recommend documentation of the STDOUT exporter format.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
+
 ### Logs
+
+- Clarify STDOUT exporter format is unspecified.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
+- Require documentation of the STDOUT exporter format.
+  ([#3935](https://github.com/open-telemetry/opentelemetry-specification/pull/3935))
 
 ### Events
 
