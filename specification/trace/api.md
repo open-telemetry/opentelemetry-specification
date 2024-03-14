@@ -4,7 +4,7 @@ linkTitle: API
 
 # Tracing API
 
-**Status**: [Stable, Feature-freeze](../document-status.md), except where otherwise specified
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -542,8 +542,6 @@ Note that [`RecordException`](#record-exception) is a specialized variant of
 `AddEvent` for recording exception events.
 
 #### Add Link
-
-**Status**: [Experimental](../document-status.md)
 
 A `Span` MUST have the ability to add `Link`s associated with it after its creation - see [Links](#link).
 `Link`s added after `Span` creation may not be considered by [Samplers](sdk.md#sampler).
