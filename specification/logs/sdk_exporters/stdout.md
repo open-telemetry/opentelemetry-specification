@@ -2,7 +2,7 @@
 linkTitle: Stdout
 --->
 
-# OpenTelemetry LogRecord Exporter - Standard output
+# Logs Exporter - Standard output
 
 **Status**: [Stable](../../document-status.md)
 
