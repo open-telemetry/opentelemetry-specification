@@ -28,7 +28,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Instrumented Library](#instrumented-library)
   * [Instrumentation Library](#instrumentation-library)
   * [Instrumentation Scope](#instrumentation-scope)
-  * [Tracer Name / Meter Name](#tracer-name--meter-name)
+  * [Tracer Name / Meter Name / Logger Name](#tracer-name--meter-name--logger-name)
   * [Execution Unit](#execution-unit)
 - [Logs](#logs)
   * [Log Record](#log-record)
@@ -169,7 +169,7 @@ fully qualified name of the emitting code (e.g. fully qualified library name or
 fully qualified class name).
 
 The instrumentation scope is used to obtain a
-[Tracer or Meter](#tracer-name--meter-name).
+[Tracer, Meter, or Logger](#tracer-name--meter-name--logger-name).
 
 The instrumentation scope may have zero or more additional attributes that provide
 additional information about the scope. For example for a scope that specifies an
@@ -177,11 +177,11 @@ instrumentation library an additional attribute may be recorded to denote the UR
 repository URL the library's source code is stored. Since the scope is a build-time
 concept the attributes of the scope cannot change at runtime.
 
-### Tracer Name / Meter Name
+### Tracer Name / Meter Name / Logger Name
 
 This refers to the `name` and (optional) `version` arguments specified when
 creating a new `Tracer` or `Meter` (see
-[Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider)).
+[Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider))/[Obtaining a Logger](logs/bridge-api.md#loggerprovider).
 The name/version pair identifies the
 [Instrumentation Scope](#instrumentation-scope), for example the
 [Instrumentation Library](#instrumentation-library) or another unit of
