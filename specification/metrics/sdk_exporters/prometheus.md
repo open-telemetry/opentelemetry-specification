@@ -26,13 +26,13 @@ Exporter MUST support version `0.0.4` of the
 [Text-based format](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#text-based-format).
 A Prometheus Exporter MAY support Exemplars and Exponential Histograms,
 which are [not currently supported by the Prometheus text format](../../compatibility/prometheus_and_openmetrics.md#differences-between-prometheus-formats),
-by supporting other Prococols, but is not required to implement them.
+by supporting other Protocols, but is not required to implement them.
 
 A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT use
 [Prometheus Remote Write format](https://github.com/prometheus/prometheus/blob/main/prompb/remote.proto)
 or [OpenMetrics protobuf format](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#protobuf-format).
 
-A Prometheus Expoerter for an OpenTelemetry metrics SDK MUST NOT add
+A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT add
 [explicit timestamps on Metric points](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metric).
 
 There MUST be at most one `target` info metric exposed by an SDK
