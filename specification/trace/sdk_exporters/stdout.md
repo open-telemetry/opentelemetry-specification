@@ -2,7 +2,7 @@
 linkTitle: Stdout
 --->
 
-# OpenTelemetry Span Exporter - Standard output
+# Span Exporter - Standard output
 
 **Status**: [Stable](../../document-status.md)
 

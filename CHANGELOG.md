@@ -15,6 +15,8 @@ release.
 
 ### Logs
 
+- Refine description of Instrumentation Scope.
+  ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
 - Clarify that `ReadableLogRecord` and `ReadWriteLogRecord` can be represented using a single type.
   ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
 
@@ -25,6 +27,9 @@ release.
 ### OpenTelemetry Protocol
 
 ### Compatibility
+
+- Prometheus compatibility: Clarify naming of the target info metric, and differences between various Prometheus formats.
+  ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
 
 ### SDK Configuration
 
