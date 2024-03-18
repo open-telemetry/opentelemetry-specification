@@ -325,6 +325,11 @@ configuration models, or overlay values from environment variables on top of a
 configuration model. Implementations MAY provide a mechanism to customize the
 configuration model parsed from `OTEL_CONFIG_FILE`.
 
+Users are encouraged to use the `sdk-config.yaml` (TODO: Add link when
+available) as a starting point for `OTEL_CONFIG_FILE`. This file represents a
+common SDK configuration scenario, and includes environment variable
+substitution references to environment variables which are otherwise ignored.
+
 ## Language Specific Environment Variables
 
 To ensure consistent naming across projects, this specification recommends that language specific environment variables are formed using the following convention:

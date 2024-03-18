@@ -31,9 +31,6 @@ release.
 
 ### SDK Configuration
 
-- Define `OTEL_CONFIG_FILE` environment variable.
-  ([#3805](https://github.com/open-telemetry/opentelemetry-specification/pull/3805))
-
 ### Common
 
 ### Supplementary Guidelines
