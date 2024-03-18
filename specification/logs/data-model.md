@@ -112,7 +112,9 @@ Value of type `any` can be one of the following:
 
 - An array (a list) of `any` values,
 
-- A `map<string, any>`.
+- A `map<string, any>`,
+
+- [since 1.31.0] An empty value (e.g. `null`).
 
 #### Type `map<string, any>`
 
@@ -428,17 +430,11 @@ This field is optional.
 
 ### Field: `InstrumentationScope`
 
-Type: (Name,Version) tuple of strings.
+Type: [Instrumentation Scope](../glossary.md#instrumentation-scope).
 
 Description: the [instrumentation scope](../glossary.md#instrumentation-scope).
 Multiple occurrences of events coming from the same scope can happen across time and
-they all have the same value of `InstrumentationScope`. For log sources which define
-a logger name (e.g. Java
-[Logger Name](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html#getLogger(java.lang.String)))
-the Logger Name SHOULD be recorded as the Instrumentation Scope name.
-
-Version is optional. Name SHOULD be specified if version is specified, otherwise Name
-is optional.
+they all have the same value of `InstrumentationScope`. This field is optional.
 
 ### Field: `Attributes`
 
