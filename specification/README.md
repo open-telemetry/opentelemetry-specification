@@ -5,8 +5,11 @@ cascade:
   body_class: otel-docs-spec
   github_repo: &repo https://github.com/open-telemetry/opentelemetry-specification
   github_subdir: specification
-  path_base_for_github_subdir: content/en/docs/specs/otel/
+  path_base_for_github_subdir: tmp/otel/specification
   github_project_repo: *repo
+path_base_for_github_subdir:
+  from: tmp/otel/specification/_index.md
+  to: README.md
 --->
 
 # OpenTelemetry Specification

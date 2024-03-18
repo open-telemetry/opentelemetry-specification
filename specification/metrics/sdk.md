@@ -50,15 +50,14 @@ linkTitle: SDK
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
-  * [Built-in ExemplarFilters](#built-in-exemplarfilters)
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceBased](#tracebased)
-    + [Configuration](#configuration-2)
   * [ExemplarReservoir](#exemplarreservoir)
   * [Exemplar defaults](#exemplar-defaults)
     + [SimpleFixedSizeExemplarReservoir](#simplefixedsizeexemplarreservoir)
     + [AlignedHistogramBucketExemplarReservoir](#alignedhistogrambucketexemplarreservoir)
+  * [Custom ExemplarReservoir](#custom-exemplarreservoir)
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [Collect](#collect)
@@ -344,7 +343,7 @@ The SDK MUST accept the following stream configuration parameters:
   user does not provide an `aggregation` value, the `MeterProvider` MUST apply
   a [default aggregation](#default-aggregation) configurable on the basis of
   instrument type according to the [MetricReader](#metricreader) instance.
-* **Status**: [Feature-freeze](../document-status.md) - `exemplar_reservoir`: A
+* **Status**: [Experimental, Feature-freeze](../document-status.md) - `exemplar_reservoir`: A
   functional type that generates an exemplar reservoir a `MeterProvider` will
   use when storing exemplars. This functional type needs to be a factory or
   callback similar to aggregation selection functionality which allows
@@ -380,11 +379,15 @@ made with an Instrument:
     according to the [MetricReader](#metricreader) instance's
     `aggregation` property.
 * If the `MeterProvider` has one or more `View`(s) registered:
-  * For each View, if the Instrument could match the instrument selection
-    criteria:
-    * Try to apply the View's stream configuration. If applying the View
-      results in [conflicting metric
-      identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
+  * If the Instrument could match the instrument selection criteria, for each
+    View:
+    * Try to apply the View's stream configuration independently of any other
+      Views registered for the same matching Instrument (i.e. Views are not
+      merged). This may result in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
+      even if stream configurations specify non-overlapping properties (e.g.
+      one View setting `aggregation` and another View setting `attribute_keys`,
+      both leaving the stream `name` as the default configured by the
+      Instrument). If applying the View results in conflicting metric identities
       the implementation SHOULD apply the View and emit a warning. If it is not
       possible to apply the View without producing semantic errors (e.g. the
       View sets an asynchronous instrument to use the [Explicit bucket
@@ -445,13 +448,24 @@ meter_provider
 ```
 
 ```python
-# Counter X will be exported as delta sum
-# Histogram Y and Gauge Z will be exported with 2 attributes (a and b)
+# Counter X will be exported as a delta sum and the default attributes
+# Counter X, Histogram Y, and Gauge Z will be exported with 2 attributes (a and b)
+# A warning will be emitted for conflicting metric identities on Counter X (as two Views matching that Instrument
+# are configured with the same default name X) and streams from both views will be exported
 meter_provider
     .add_view("X", aggregation=SumAggregation())
-    .add_view("*", attribute_keys=["a", "b"])
+    .add_view("*", attribute_keys=["a", "b"]) # wildcard view matches everything, including X
     .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()),
               temporality=lambda kind: Delta if kind in [Counter, AsyncCounter, Histogram] else Cumulative)
+```
+
+```python
+# Only Counter X will be exported, with the default configuration (match-all drop aggregation does not result in
+# conflicting metric identities)
+meter_provider
+    .add_view("X")
+    .add_view("*", aggregation=DropAggregation()) # a wildcard view to disable all instruments
+    .add_metric_reader(PeriodicExportingMetricReader(ConsoleExporter()))
 ```
 
 ### Aggregation
@@ -499,10 +513,6 @@ meterProviderBuilder
     )
   );
 ```
-
-TODO: after we release the initial Stable version of Metrics SDK specification,
-we will explore how to allow configuring custom
-[ExemplarReservoir](#exemplarreservoir)s with the [View](#view) API.
 
 The SDK MUST provide the following `Aggregation` to support the
 [Metric Points](./data-model.md#metric-points) in the
@@ -721,8 +731,11 @@ of metrics across successive collections.
 
 **Status**: [Experimental](../document-status.md)
 
-SDKs SHOULD support being configured with a cardinality limit. A cardinality
-limit is the hard limit on the number of metric streams that can be collected.
+SDKs SHOULD support being configured with a cardinality limit. The number of
+unique combinations of attributes is called cardinality. For a given metric, the
+cardinality limit is a hard limit on the number of [Metric
+Points](./data-model.md#metric-points) that can be collected during a collection
+cycle.
 
 #### Configuration
 
@@ -740,35 +753,36 @@ The cardinality limit for an aggregation is defined in one of three ways:
 #### Overflow attribute
 
 An overflow attribute set is defined, containing a single attribute
-`otel.metric.overflow` having (boolean) value `true`, which is used to
-report a synthetic aggregation of the metric events that could not be
-independently aggregated because of the limit.
+`otel.metric.overflow` having (boolean) value `true`, which is used to report a
+synthetic aggregation of the [Measurements](./api.md#measurement) that could not
+be independently aggregated because of the limit.
 
-The SDK MUST create an Aggregator with the overflow attribute set
-prior to reaching the cardinality limit and use it to aggregate events
-for which the correct Aggregator could not be created.  The maximum
-number of distinct, non-overflow attributes is one less than the
-limit, as a result.
+The SDK MUST create an Aggregator with the overflow attribute set prior to
+reaching the cardinality limit and use it to aggregate
+[Measurements](./api.md#measurement) for which the correct Aggregator could not
+be created.  The SDK MUST provide the guarantee that overflow would not happen
+if the maximum number of distinct, non-overflow attribute sets is less than or
+equal to the limit.
 
 #### Synchronous instrument cardinality limits
 
 Aggregators for synchronous instruments with cumulative temporality MUST
-continue to export all attribute sets that were observed prior to the
-beginning of overflow.  Metric events corresponding with attribute sets that
-were not observed prior to the overflow will be reflected in a single data
-point described by (only) the overflow attribute.
+continue to export all attribute sets that were observed prior to the beginning
+of overflow.  [Measurements](./api.md#measurement) corresponding with attribute
+sets that were not observed prior to the overflow will be reflected in a single
+data point described by (only) the overflow attribute.
 
 Aggregators of synchronous instruments with delta aggregation temporality MAY
 choose an arbitrary subset of attribute sets to output to maintain the stated
 cardinality limit.
 
 Regardless of aggregation temporality, the SDK MUST ensure that every
-metric event is reflected in exactly one Aggregator, which is either
-an Aggregator associated with the correct attribute set or an
+[Measurement](./api.md#measurement) is reflected in exactly one Aggregator,
+which is either an Aggregator associated with the correct attribute set or an
 aggregator associated with the overflow attribute set.
 
-Events MUST NOT be double-counted or dropped during an
-overflow.
+[Measurements](./api.md#measurement) MUST NOT be double-counted or dropped
+during an overflow.
 
 #### Asynchronous instrument cardinality limits
 
@@ -882,7 +896,7 @@ series and the topic requires further analysis.
 
 ## Exemplar
 
-**Status**: [Feature-freeze](../document-status.md)
+**Status**: [Experimental, Feature-freeze](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
@@ -937,31 +951,27 @@ A Metric SDK MUST allow exemplar sampling to leverage the configuration of
 metric aggregation. For example, Exemplar sampling of histograms should be able
 to leverage bucket boundaries.
 
-A Metric SDK SHOULD provide extensible hooks for Exemplar sampling, specifically:
+A Metric SDK SHOULD provide configuration for Exemplar sampling, specifically:
 
 - `ExemplarFilter`: filter which measurements can become exemplars.
 - `ExemplarReservoir`: storage and sampling of exemplars.
 
 ### ExemplarFilter
 
-The `ExemplarFilter` interface MUST provide a method to determine if a
-measurement should be sampled. Sampled here simply makes the measurement
-eligible for being included as an exemplar. `ExemplarReservoir` makes the final
-decision if a measurement becomes an exemplar.
+The `ExemplarFilter` configuration MUST allow users to select between one of the
+built-in ExemplarFilters. While `ExemplarFilter` determines which measurements
+are _eligible_ for becoming an `Exemplar`, the `ExemplarReservoir` makes the
+final decision if a measurement becomes an exemplar and is stored.
 
-This interface SHOULD have access to:
+The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
+an SDK. The default value SHOULD be `TraceBased`. The filter configuration
+SHOULD follow the [environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
 
-- The `value` of the measurement.
-- The complete set of `Attributes` of the measurement.
-- The [Context](../context/README.md) of the measurement, which covers the
-  [Baggage](../baggage/api.md) and the current active
-  [Span](../trace/api.md#span).
-- A `timestamp` that best represents when the measurement was taken.
+An OpenTelemetry SDK MUST support the following filters:
 
-### Built-in ExemplarFilters
-
-OpenTelemetry supports a number of built-in exemplar filters to choose from.
-The default is `TraceBased`.
+- [AlwaysOn](#alwayson)
+- [AlwaysOff](#alwaysoff)
+- [TraceBased](#tracebased)
 
 #### AlwaysOn
 
@@ -976,12 +986,6 @@ Using this ExemplarFilter is as good as disabling Exemplar feature.
 
 An ExemplarFilter which makes those measurements eligible for being an
 Exemplar, which are recorded in the context of a sampled parent span.
-
-#### Configuration
-
-The ExemplarFilter SHOULD be a configuration parameter of a `MeterProvider` for
-an SDK. The default value SHOULD be `TraceBased`. The filter configuration
-SHOULD follow the [environment variable specification](../configuration/sdk-environment-variables.md#exemplar).
 
 ### ExemplarReservoir
 
@@ -1033,7 +1037,7 @@ The `ExemplarReservoir` SHOULD avoid allocations when sampling exemplars.
 
 ### Exemplar defaults
 
-The SDK SHOULD include two types of built-in exemplar reservoirs:
+The SDK MUST include two types of built-in exemplar reservoirs:
 
 1. `SimpleFixedSizeExemplarReservoir`
 2. `AlignedHistogramBucketExemplarReservoir`
@@ -1096,6 +1100,20 @@ measurements using the equivalent of the following naive algorithm:
     end
     return boundaries.length
   ```
+
+This Exemplar reservoir MAY take a configuration parameter for the bucket
+boundaries used by the reservoir. The size of the reservoir is always the
+number of bucket boundaries plus one. This configuration parameter SHOULD have
+the same format as specifying bucket boundaries to
+[Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation).
+
+### Custom ExemplarReservoir
+
+The SDK MUST provide a mechanism for SDK users to provide their own
+ExemplarReservoir implementation. This extension MUST be configurable on
+a metric [View](#view), although individual reservoirs MUST still be
+instantiated per metric-timeseries (see
+[Exemplar Reservoir - Paragraph 2](#exemplarreservoir)).
 
 ## MetricReader
 
@@ -1367,12 +1385,12 @@ A Push Metric Exporter MUST support the following functions:
 
 ##### Export(batch)
 
-Exports a batch of [Metric points](./data-model.md#metric-points). Protocol
+Exports a batch of [Metric Points](./data-model.md#metric-points). Protocol
 exporters that will implement this function are typically expected to serialize
 and transmit the data to the destination.
 
 The SDK MUST provide a way for the exporter to get the [Meter](./api.md#meter)
-information (e.g. name, version, etc.) associated with each `Metric point`.
+information (e.g. name, version, etc.) associated with each `Metric Point`.
 
 `Export` will never be called concurrently for the same exporter instance.
 `Export` can be called again only after the current call returns.
@@ -1387,10 +1405,10 @@ are being sent to.
 
 **Parameters:**
 
-`batch` - a batch of `Metric point`s. The exact data type of the batch is
-language specific, typically it is some kind of list. The exact type of `Metric
-point` is language specific, and is typically optimized for high performance.
-Here are some examples:
+`batch` - a batch of [Metric Points](./data-model.md#metric-points). The exact
+data type of the batch is language specific, typically it is some kind of list.
+The exact type of `Metric Point` is language specific, and is typically
+optimized for high performance. Here are some examples:
 
 ```text
        +--------+ +--------+     +--------+
@@ -1406,7 +1424,7 @@ Batch: | Metric | | Metric | ... | Metric |
                                     +--> timestamps, attributes, value (or buckets), exemplars, ...
 ```
 
-Refer to the [Metric points](./data-model.md#metric-points) section from the
+Refer to the [Metric Points](./data-model.md#metric-points) section from the
 Metrics Data Model specification for more details.
 
 Note: it is highly recommended that implementors design the `Metric` data type
@@ -1546,12 +1564,12 @@ A `MetricProducer` MUST support the following functions:
 #### Produce batch
 
 `Produce` provides metrics from the MetricProducer to the caller. `Produce`
-MUST return a batch of [Metric points](./data-model.md#metric-points), filtered by the optional
+MUST return a batch of [Metric Points](./data-model.md#metric-points), filtered by the optional
 `metricFilter` parameter. Implementation SHOULD use the filter as early as
 possible to gain as much performance gain possible (memory allocation,
 internal metric fetching, etc).
 
-If the batch of [Metric points](./data-model.md#metric-points) includes
+If the batch of [Metric Points](./data-model.md#metric-points) includes
 resource information, `Produce` SHOULD require a resource as a parameter.
 `Produce` does not have any other required parameters, however, [OpenTelemetry
 SDK](../overview.md#sdk) authors MAY choose to add required or optional
@@ -1562,7 +1580,7 @@ failed or timed out. When the `Produce` operation fails, the `MetricProducer`
 MAY return successfully collected results and a failed reasons list to the
 caller.
 
-If a batch of [Metric points](./data-model.md#metric-points) can include
+If a batch of [Metric Points](./data-model.md#metric-points) can include
 [`InstrumentationScope`](../glossary.md#instrumentation-scope) information,
 `Produce` SHOULD include a single InstrumentationScope which identifies the
 `MetricProducer`.
@@ -1577,13 +1595,13 @@ If a batch of [Metric points](./data-model.md#metric-points) can include
 
 `MetricFilter` defines the interface which enables the [MetricReader](#metricreader)'s
 registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#metricproducer) to filter aggregated data points
-([Metric points](./data-model.md#metric-points)) inside its `Produce` operation.
+([Metric Points](./data-model.md#metric-points)) inside its `Produce` operation.
 The filtering is done at the [MetricProducer](#metricproducer) for performance reasons.
 
 The `MetricFilter` allows filtering an entire metric stream - dropping or allowing all its attribute sets -
 by its `TestMetric` operation, which accepts the metric stream information
 (scope, name, kind and unit)  and returns an enumeration: `Accept`, `Drop`
-or `Allow_Partial`. If the latter returned, the `TestAttributes` operation
+or `Accept_Partial`. If the latter returned, the `TestAttributes` operation
 is to be called per attribute set of that metric stream, returning an enumeration
 determining if the data point for that (metric stream, attributes) pair is to be
 allowed in the result of the [MetricProducer](#metricproducer) `Produce` operation.
@@ -1683,8 +1701,6 @@ specific guarantees and safeties.
 
 **MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` are safe to be
 called concurrently.
-
-**ExemplarFilter** - all methods are safe to be called concurrently.
 
 **ExemplarReservoir** - all methods are safe to be called concurrently.
 

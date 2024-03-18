@@ -183,6 +183,7 @@ Semantic Conventions defines the set of fields in the OTLP data model:
   - Attribute keys
     - provided to [get a tracer](trace/api.md#get-a-tracer)
     - provided to [get a meter](metrics/api.md#get-a-meter)
+  - Attribute values that are defined in a list of well-known values.
 - [Trace](trace/api.md)
   - The following data on [span](trace/api.md#span):
     - The span name
@@ -190,9 +191,13 @@ Semantic Conventions defines the set of fields in the OTLP data model:
     - The attribute keys provided to the span
       - Whether these attributes must be provided at span start time, due to
         sampling concerns.
+    - The attribute values provided to the span that are defined in a list of
+      well-known values.
   - The following data provided on [span events](trace/api.md#add-events)
     - The event name
     - The attribute keys provided for the event
+    - The attribute values provided for the event that are defined in a list of
+      well-known values.
 - [Metrics](metrics/api.md)
   - The following portions of a Metric
     (passed when constructing [an instrument](metrics/api.md#instrument)):
@@ -207,8 +212,12 @@ Semantic Conventions defines the set of fields in the OTLP data model:
       both synchronous and asynchronous instruments.
     - These exist on `NumberDataPoint`, `HistogramDataPoint`,
       `ExponentialHistogramDataPoint` and `SummaryDataPoint`.
+  - The attribute values on any `*DataPoint` that are defined in a list of
+    well-known values.
 - [Log Records](logs/data-model.md#log-and-event-record-definition)
   - The attribute keys provided on the LogRecord
+  - The attribute values provided on the LogRecord that are defined in a list
+    of well-known values.
   - For log records that are [Log Events](logs/event-api.md)
     - The following data provided to [emit event](logs/event-api.md#emit-event):
       - The event name (the value of the `event.name` attribute)
@@ -217,10 +226,9 @@ Things not listed in the above are not expected to remain stable via semantic
 convention and are allowed (or expected) to change. A few examples:
 
 - The values of attributes
-  - Specifically for `enums` the list of allowed values is expected to change
-    overtime.
-  - Even for `enums` that limit allowed values to semconv, some may need to
-    updated values in the future. Tooling should expect unknown values.
+  - An exception are existing values in lists of well-known values. However,
+    new values can be added to such lists. Consumers should expect unknown
+    values.
 - The links attached to a span
 - The recorded measurement type (float or integer) of a metric is not enforced and allowed to change.
 - The description of a metric instrument.

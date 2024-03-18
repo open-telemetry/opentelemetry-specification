@@ -68,7 +68,7 @@ The Metrics API consists of these main components:
 
 * [MeterProvider](#meterprovider) is the entry point of the API. It provides
   access to `Meters`.
-* [Meter](#meter) is the class responsible for creating `Instruments`.
+* [Meter](#meter) is responsible for creating `Instruments`.
 * [Instrument](#instrument) is responsible for reporting
   [Measurements](#measurement).
 
@@ -103,9 +103,6 @@ the metrics API:
 
 `Meter`s can be accessed with a `MeterProvider`.
 
-In implementations of the API, the `MeterProvider` is expected to be the
-stateful object that holds any configuration.
-
 Normally, the `MeterProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
 `MeterProvider`.
@@ -132,19 +129,19 @@ This API MUST accept the following parameters:
   within that library or application.
 * `version`: Specifies the version of the instrumentation scope if the scope
   has a version (e.g. a library version). Example value: `1.0.0`.
-  
+
   Users can provide a `version`, but it is up to their discretion. Therefore,
   this API needs to be structured to accept a `version`, but MUST NOT obligate
   a user to provide one.
 * [since 1.4.0] `schema_url`: Specifies the Schema URL that should be recorded
   in the emitted telemetry.
-  
+
   Users can provide a `schema_url`, but it is up to their discretion.
   Therefore, this API needs to be structured to accept a `schema_url`, but MUST
   NOT obligate a user to provide one.
 * [since 1.13.0] `attributes`: Specifies the instrumentation scope attributes
   to associate with emitted telemetry.
-  
+
   Users can provide attributes to associate with the instrumentation scope, but
   it is up to their discretion. Therefore, this API MUST be structured to
   accept a variable number of attributes, including none.
@@ -308,32 +305,32 @@ pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation).
 The API to construct synchronous instruments MUST accept the following parameters:
 
 * A `name` of the Instrument.
-  
+
   The `name` needs to be provided by a user. If possible, the API SHOULD be
   structured so a user is obligated to provide this parameter. If it is not
   possible to structurally enforce this obligation, the API MUST be documented
   in a way to communicate to users that this parameter is needed.
-  
+
   The API SHOULD be documented in a way to communicate to users that the `name`
   parameter needs to conform to the [instrument name
   syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`;
   that is left to implementations of the API.
 * A `unit` of measure.
-  
+
   Users can provide a `unit`, but it is up to their discretion. Therefore, this
   API needs to be structured to accept a `unit`, but MUST NOT obligate a user
   to provide one.
-  
+
   The `unit` parameter needs to support the [instrument unit
   rule](#instrument-unit). Meaning, the API MUST accept a case-sensitive string
   that supports ASCII character encoding and can hold at least 63 characters.
   The API SHOULD NOT validate the `unit`.
 * A `description` describing the Instrument in human-readable terms.
-  
+
   Users can provide a `description`, but it is up to their discretion.
   Therefore, this API needs to be structured to accept a `description`, but
   MUST NOT obligate a user to provide one.
-  
+
   The `description` needs to support the [instrument description
   rule](#instrument-description). Meaning, the API MUST accept a string that
   supports at least [BMP (Unicode Plane
@@ -361,32 +358,32 @@ order of callback execution is not specified.
 The API to construct asynchronous instruments MUST accept the following parameters:
 
 * A `name` of the Instrument.
-  
+
   The `name` needs to be provided by a user. If possible, the API SHOULD be
   structured so a user is obligated to provide this parameter. If it is not
   possible to structurally enforce this obligation, the API MUST be documented
   in a way to communicate to users that this parameter is needed.
-  
+
   The API SHOULD be documented in a way to communicate to users that the `name`
   parameter needs to conform to the [instrument name
   syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`,
   that is left to implementations of the API.
 * A `unit` of measure.
-  
+
   Users can provide a `unit`, but it is up to their discretion. Therefore, this
   API needs to be structured to accept a `unit`, but MUST NOT obligate a user
   to provide one.
-  
+
   The `unit` parameter needs to support the [instrument unit
   rule](#instrument-unit). Meaning, the API MUST accept a case-sensitive string
   that supports ASCII character encoding and can hold at least 63 characters.
   The API SHOULD NOT validate the `unit`.
 * A `description` describing the Instrument in human-readable terms.
-  
+
   Users can provide a `description`, but it is up to their discretion.
   Therefore, this API needs to be structured to accept a `description`, but
   MUST NOT obligate a user to provide one.
-  
+
   The `description` needs to support the [instrument description
   rule](#instrument-description). Meaning, the API MUST accept a string that
   supports at least [BMP (Unicode Plane
@@ -404,7 +401,7 @@ The API to construct asynchronous instruments MUST accept the following paramete
   The API SHOULD NOT validate `advisory` parameters.
 * `callback` functions that report [Measurements](#measurement) of the created
   instrument.
-  
+
   Users can provide `callback` functions, but it is up to their discretion.
   Therefore, this API MUST be structured to accept a variable number of
   `callback` functions, including none.
@@ -532,19 +529,19 @@ certain programming languages or systems, for example `null`, `undefined`).
 This API MUST accept the following parameter:
 
 * A numeric increment value.
-  
+
   The increment value needs to be provided by a user. If possible, this API
   SHOULD be structured so a user is obligated to provide this parameter. If it
   is not possible to structurally enforce this obligation, this API MUST be
   documented in a way to communicate to users that this parameter is needed.
-  
+
   The increment value is expected to be non-negative. This API SHOULD be
   documented in a way to communicate to users that this value is expected to be
   non-negative. This API SHOULD NOT validate this value, that is left to
   implementations of the API.
 * [Attributes](../common/README.md#attribute) to associate with the increment
   value.
-  
+
   Users can provide attributes to associate with the increment value, but it is
   up to their discretion. Therefore, this API MUST be structured to accept a
   variable number of attributes, including none.
@@ -579,7 +576,7 @@ counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_gree
 ### Asynchronous Counter
 
 Asynchronous Counter is an [asynchronous Instrument](#asynchronous-instrument-api)
-which reports [monotonically](https://wikipedia.org/wiki/Monotonic_function)
+which reports [monotonically](https://en.wikipedia.org/wiki/Monotonic_function)
 increasing value(s) when the instrument is being observed.
 
 Example uses for Asynchronous Counter:
@@ -599,9 +596,9 @@ language idiomatic name(s), for example `CreateUInt64ObservableCounter`,
 `CreateDoubleObservableCounter`, `CreateObservableCounter<UInt64>`,
 `CreateObservableCounter<double>`.
 
-It is highly recommended that implementations use the name `ObservableCounter`
-(or any language idiomatic variation, e.g. `observable_counter`) unless there is
-a strong reason not to do so. Please note that the name has nothing to do with
+It is highly recommended that the name `ObservableCounter` (or any language
+idiomatic variation, e.g. `observable_counter`) be used unless there is a
+strong reason not to do so. Please note that the name has nothing to do with
 [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
@@ -773,13 +770,13 @@ This API MUST accept the following parameter:
   structured so a user is obligated to provide this parameter. If it is not
   possible to structurally enforce this obligation, this API MUST be documented
   in a way to communicate to users that this parameter is needed.
-  
+
   The value is expected to be non-negative. This API SHOULD be documented in a
   way to communicate to users that this value is expected to be non-negative.
   This API SHOULD NOT validate this value, that is left to implementations of
   the API.
 * [Attributes](../common/README.md#attribute) to associate with the value.
-  
+
   Users can provide attributes to associate with the value, but it is up to
   their discretion. Therefore, this API MUST be structured to accept a variable
   number of attributes, including none.
@@ -922,9 +919,9 @@ idiomatic name(s), for example `CreateUInt64ObservableGauge`,
 `CreateDoubleObservableGauge`, `CreateObservableGauge<UInt64>`,
 `CreateObservableGauge<double>`.
 
-It is highly recommended that implementations use the name `ObservableGauge`
-(or any language idiomatic variation, e.g. `observable_gauge`) unless there is
-a strong reason not to do so. Please note that the name has nothing to do with
+It is highly recommended that the name `ObservableGauge` (or any language
+idiomatic variation, e.g. `observable_gauge`) be used unless there is a strong
+reason not to do so. Please note that the name has nothing to do with
 [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
@@ -1017,7 +1014,7 @@ class Device:
 supports increments and decrements.
 
 Note: if the value is
-[monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing, use
+[monotonically](https://en.wikipedia.org/wiki/Monotonic_function) increasing, use
 [Counter](#counter) instead.
 
 Example uses for `UpDownCounter`:
@@ -1113,7 +1110,7 @@ This API MUST accept the following parameter:
   possible to structurally enforce this obligation, this API MUST be documented
   in a way to communicate to users that this parameter is needed.
 * [Attributes](../common/README.md#attribute) to associate with the value.
-  
+
   Users can provide attributes to associate with the value, but it is up to
   their discretion. Therefore, this API MUST be structured to accept a variable
   number of attributes, including none.
@@ -1146,7 +1143,7 @@ processes and sum them up, so we get the total heap usage) when the instrument
 is being observed.
 
 Note: if the value is
-[monotonically](https://wikipedia.org/wiki/Monotonic_function) increasing, use
+[monotonically](https://en.wikipedia.org/wiki/Monotonic_function) increasing, use
 [Asynchronous Counter](#asynchronous-counter) instead; if the value is
 non-additive, use [Asynchronous Gauge](#asynchronous-gauge) instead.
 
@@ -1165,10 +1162,10 @@ decide the language idiomatic name(s), for example
 `CreateObservableUpDownCounter<UInt64>`,
 `CreateObservableUpDownCounter<double>`.
 
-It is highly recommended that implementations use the name
-`ObservableUpDownCounter` (or any language idiomatic variation, e.g.
-`observable_up_down_counter`) unless there is a strong reason not to do so. Please
-note that the name has nothing to do with [asynchronous
+It is highly recommended that the name `ObservableUpDownCounter` (or any
+language idiomatic variation, e.g. `observable_up_down_counter`) be used unless
+there is a strong reason not to do so. Please note that the name has nothing to
+do with [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
 

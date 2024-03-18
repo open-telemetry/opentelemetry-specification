@@ -1,5 +1,8 @@
 <!--- Hugo front matter used to generate the website version of this page:
 aliases: [/docs/reference/specification/context/context]
+path_base_for_github_subdir:
+  from: tmp/otel/specification/context/_index.md
+  to: context/README.md
 --->
 
 # Context

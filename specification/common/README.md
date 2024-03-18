@@ -1,5 +1,9 @@
 <!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Common concepts
 aliases: [/docs/reference/specification/common/common]
+path_base_for_github_subdir:
+  from: tmp/otel/specification/common/_index.md
+  to: common/README.md
 --->
 
 # Common specification concepts
@@ -12,6 +16,7 @@ aliases: [/docs/reference/specification/common/common]
 <!-- toc -->
 
 - [Attribute](#attribute)
+  * [Standard Attribute](#standard-attribute)
   * [Attribute Limits](#attribute-limits)
     + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
@@ -60,6 +65,36 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
+
+### Standard Attribute
+
+Attributes are used in various places throughout the OpenTelemetry data model.
+We designate the [previous attribute section](#attribute) as the standard
+attribute definition, in order to facilitate more intuitive and consistent API /
+SDK design.
+
+The standard attribute definition SHOULD be used to represent attributes in data
+modeling unless there is a strong justification to diverge. For example, the Log
+Data Model has an extended [attributes](../logs/data-model.md#field-attributes)
+definition allowing values of [type `Any`](../logs/data-model.md#type-any). This
+reflects that LogRecord attributes are expected to model data produced from
+external log APIs, which do not necessarily have the same value type
+restrictions as the standard attribute definition.
+
+Note: Extending the set of standard attribute value types is a breaking change.
+This was decided after extensive debate, with arguments as follows:
+
+* Limiting the types of attribute values to a set which has proved sufficient
+  during several years of OpenTelemetry's development is a useful guardrail for
+  design. In taking additional value types off the table, we narrow the solution
+  space and have more productive design conversations.
+* Upon proposing to extend support for complex value types, we received significant
+  pushback. Limiting attribute value types to primitives and arrays of primitives
+  simplifies data consumers' efforts to create search indexes and perform statistical
+  analysis.
+* To address concerns over restricting standard attributes to primitive types, it was
+  called out that complex types can be encoded as existing primitive types, such as
+  representing datetime as a string or 64 bit integer.
 
 ### Attribute Limits
 
@@ -120,8 +155,9 @@ at this time, as discussed in
 
 ## Attribute Collections
 
-[Resources](../resource/sdk.md), Metrics
-[data points](../metrics/data-model.md#metric-points),
+[Resources](../resource/sdk.md),
+[Instrumentation Scopes](../glossary.md#instrumentation-scope),
+[Metric points](../metrics/data-model.md#metric-points),
 [Spans](../trace/api.md#set-attributes), Span
 [Events](../trace/api.md#add-events), Span
 [Links](../trace/api.md#link) and

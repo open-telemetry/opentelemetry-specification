@@ -23,7 +23,7 @@ aliases: [/docs/reference/specification/metrics/datamodel]
     + [OpenTelemetry Protocol data model: Producer recommendations](#opentelemetry-protocol-data-model-producer-recommendations)
     + [OpenTelemetry Protocol data model: Consumer recommendations](#opentelemetry-protocol-data-model-consumer-recommendations)
     + [Point kinds](#point-kinds)
-- [Metric points](#metric-points)
+- [Metric Points](#metric-points)
   * [Sums](#sums)
   * [Gauge](#gauge)
   * [Histogram](#histogram)
@@ -381,9 +381,14 @@ designed for compatibility with existing metric formats.
 
 - [Summary](#summary-legacy)
 
-## Metric points
+## Metric Points
 
 **Status**: [Stable](../document-status.md)
+
+Metric points are the basic building blocks of metrics. Depending on the [point
+kind](#point-kinds), a metric point may have different fields. The following
+sections describe the fields for each point kind and how these points form
+metrics.
 
 ### Sums
 

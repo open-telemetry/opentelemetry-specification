@@ -1,3 +1,7 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Mapping to AnyValue
+--->
+
 # Mapping Arbitrary Data to OTLP AnyValue
 
 **Status**: [Experimental](../document-status.md)

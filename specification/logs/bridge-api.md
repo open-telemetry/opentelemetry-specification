@@ -30,10 +30,10 @@ library authors to build
 which use this API to bridge between existing logging libraries and the
 OpenTelemetry log data model.</b>
 
-The Logs Bridge API consist of these main classes:
+The Logs Bridge API consist of these main components:
 
 * [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
-* [Logger](#logger) is the class responsible for emitting logs as
+* [Logger](#logger) is responsible for emitting logs as
   [LogRecords](./data-model.md#log-and-event-record-definition).
 
 ```mermaid
@@ -45,9 +45,6 @@ graph TD
 ## LoggerProvider
 
 `Logger`s can be accessed with a `LoggerProvider`.
-
-In implementations of the API, the `LoggerProvider` is expected to be the stateful
-object that holds any configuration.
 
 Normally, the `LoggerProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
@@ -61,7 +58,8 @@ The `LoggerProvider` MUST provide the following functions:
 
 #### Get a Logger
 
-This API MUST accept the following parameters:
+This API MUST accept the following [instrumentation scope](data-model.md#field-instrumentationscope)
+parameters:
 
 * `name`: This name uniquely identifies the [instrumentation scope](../glossary.md#instrumentation-scope),
   such as the [instrumentation library](../glossary.md#instrumentation-library)
@@ -71,6 +69,9 @@ This API MUST accept the following parameters:
   [Instrumentation library](../glossary.md#instrumentation-library) may refer to
   the same library. In that scenario, the `name` denotes a module name or component
   name within that library or application.
+  For log sources which define a logger name (e.g. Java
+  [Logger Name](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html#getLogger(java.lang.String)))
+  the Logger Name should be recorded as the instrumentation scope name.
 
 * `version` (optional): Specifies the version of the instrumentation scope if
   the scope has a version (e.g. a library version). Example value: 1.0.0.

@@ -2,7 +2,7 @@
 linkTitle: Prometheus
 --->
 
-# OpenTelemetry Metrics Exporter - Prometheus
+# Metrics Exporter - Prometheus
 
 **Status**: [Experimental](../../document-status.md)
 

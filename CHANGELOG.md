@@ -15,8 +15,10 @@ release.
 
 ### Logs
 
-- Fix `Resource` field type in Logs Data Model.
-  ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
+- Refine description of Instrumentation Scope.
+  ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
+
+### Events
 
 ### Resource
 
@@ -24,16 +26,137 @@ release.
 
 ### Compatibility
 
+- Prometheus compatibility: Clarify naming of the target info metric, and differences between various Prometheus formats.
+  ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
+
 ### SDK Configuration
 
-- Add file configuration section to spec compliance matrix.
-  ([#3804](https://github.com/open-telemetry/opentelemetry-specification/pull/3804))
 - Define `OTEL_CONFIG_FILE` environment variable.
   ([#3805](https://github.com/open-telemetry/opentelemetry-specification/pull/3805))
 
 ### Common
 
 ### Supplementary Guidelines
+
+## v1.31.0 (2024-03-13)
+
+### Context
+
+- Specify allowed characters for Baggage keys and values.
+  ([#3801](https://github.com/open-telemetry/opentelemetry-specification/pull/3801))
+
+### Traces
+
+- Mark the AddLink() operation as stable.
+  ([#3887](https://github.com/open-telemetry/opentelemetry-specification/pull/3887))
+
+### Metrics
+
+- Formalize the interaction between cardinality limit and overflow attribute.
+  ([#3912](https://github.com/open-telemetry/opentelemetry-specification/pull/3912))
+
+### Logs
+
+- Fix: remove `name` from LogRecord example in the File Exporter example.
+  ([#3886](https://github.com/open-telemetry/opentelemetry-specification/pull/3886))
+- Remove implementation detail from Logs Bridge API.
+  ([#3884](https://github.com/open-telemetry/opentelemetry-specification/pull/3884))
+- Clarify that logs attributes are a superset of standard attributes.
+  ([#3852](https://github.com/open-telemetry/opentelemetry-specification/pull/3852))
+- Add support for empty values.
+  ([#3853](https://github.com/open-telemetry/opentelemetry-specification/pull/3853))
+- Mark standard output log record exporter as stable.
+  ([#3922](https://github.com/open-telemetry/opentelemetry-specification/pull/3922))
+
+### Events
+
+- Add Provider to the Event API.
+  ([#3878](https://github.com/open-telemetry/opentelemetry-specification/pull/3878))
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### Compatibility
+
+- No changes.
+
+### SDK Configuration
+
+- No changes.
+
+### Common
+
+- Prohibit attribute value from evolving to contain complex types.
+  ([#3858](https://github.com/open-telemetry/opentelemetry-specification/pull/3858))
+- Tighten stability requirements for well-known attribute values.
+  ([#3879](https://github.com/open-telemetry/opentelemetry-specification/pull/3879))
+
+### Supplementary Guidelines
+
+- No changes.
+
+## v1.30.0 (2024-02-15)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- Clarify metric view measurement processing.
+  ([#3842](https://github.com/open-telemetry/opentelemetry-specification/pull/3842))
+- Expose `ExemplarReservoir` as configuration parameter for views.
+  Remove `ExemplarFilter` as an interface, now it is only configuration
+  parameter.
+  ([#3820](https://github.com/open-telemetry/opentelemetry-specification/pull/3820))
+
+### Logs
+
+- Fix `Resource` field type in Logs Data Model.
+  ([#3826](https://github.com/open-telemetry/opentelemetry-specification/pull/3826))
+- Remove confusing description from `Body` field in Logs Data Model to make it clear the Bridge API must support a structured body.
+  ([#3827](https://github.com/open-telemetry/opentelemetry-specification/pull/3827))
+- Deconstruct number scalar type to double and signed integer.
+  ([#3854](https://github.com/open-telemetry/opentelemetry-specification/pull/3854))
+- Remove use of Object-Oriented term `class` in log signal.
+  ([#3882](https://github.com/open-telemetry/opentelemetry-specification/pull/3882))
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- Use `TracesData`, `MetricsData` and `LogsData` proto messages for file exporter.
+  ([#3809](https://github.com/open-telemetry/opentelemetry-specification/pull/3809))
+
+### Compatibility
+
+- No changes.
+
+### SDK Configuration
+
+- Add file configuration section to spec compliance matrix.
+  ([#3804](https://github.com/open-telemetry/opentelemetry-specification/pull/3804))
+- Define mechanism for SDK extension components.
+  ([#3802](https://github.com/open-telemetry/opentelemetry-specification/pull/3802))
+
+### Common
+
+- No changes.
+
+### Supplementary Guidelines
+
+- No changes.
 
 ## v1.29.0 (2024-01-10)
 
@@ -61,8 +184,6 @@ release.
 ### Resource
 
 ### OpenTelemetry Protocol
-
-- Use `TracesData`, `MetricsData` and `LogsData` proto messages for file exporter.
 
 ### Compatibility
 
