@@ -103,9 +103,6 @@ the metrics API:
 
 `Meter`s can be accessed with a `MeterProvider`.
 
-In implementations of the API, the `MeterProvider` is expected to be the
-stateful object that holds any configuration.
-
 Normally, the `MeterProvider` is expected to be accessed from a central place.
 Thus, the API SHOULD provide a way to set/register and access a global default
 `MeterProvider`.
@@ -599,9 +596,9 @@ language idiomatic name(s), for example `CreateUInt64ObservableCounter`,
 `CreateDoubleObservableCounter`, `CreateObservableCounter<UInt64>`,
 `CreateObservableCounter<double>`.
 
-It is highly recommended that implementations use the name `ObservableCounter`
-(or any language idiomatic variation, e.g. `observable_counter`) unless there is
-a strong reason not to do so. Please note that the name has nothing to do with
+It is highly recommended that the name `ObservableCounter` (or any language
+idiomatic variation, e.g. `observable_counter`) be used unless there is a
+strong reason not to do so. Please note that the name has nothing to do with
 [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
@@ -922,9 +919,9 @@ idiomatic name(s), for example `CreateUInt64ObservableGauge`,
 `CreateDoubleObservableGauge`, `CreateObservableGauge<UInt64>`,
 `CreateObservableGauge<double>`.
 
-It is highly recommended that implementations use the name `ObservableGauge`
-(or any language idiomatic variation, e.g. `observable_gauge`) unless there is
-a strong reason not to do so. Please note that the name has nothing to do with
+It is highly recommended that the name `ObservableGauge` (or any language
+idiomatic variation, e.g. `observable_gauge`) be used unless there is a strong
+reason not to do so. Please note that the name has nothing to do with
 [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
@@ -1165,10 +1162,10 @@ decide the language idiomatic name(s), for example
 `CreateObservableUpDownCounter<UInt64>`,
 `CreateObservableUpDownCounter<double>`.
 
-It is highly recommended that implementations use the name
-`ObservableUpDownCounter` (or any language idiomatic variation, e.g.
-`observable_up_down_counter`) unless there is a strong reason not to do so. Please
-note that the name has nothing to do with [asynchronous
+It is highly recommended that the name `ObservableUpDownCounter` (or any
+language idiomatic variation, e.g. `observable_up_down_counter`) be used unless
+there is a strong reason not to do so. Please note that the name has nothing to
+do with [asynchronous
 pattern](https://en.wikipedia.org/wiki/Asynchronous_method_invocation) and
 [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern).
 
