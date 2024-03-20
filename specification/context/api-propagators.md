@@ -369,9 +369,11 @@ following fields are propagated.
 - TraceFlags (8 bits)
 - TraceState (string)
 
-Propagators MUST NOT assume that bits 2-7 (6 most significant bits)
-will be zero, as they are reserved for future use and are expected to
-propagate with the context.
+There are two trace flag values defined in W3C Trace Context Level 2
+specification, `Sampled` (0x1) and `Random` (0x2).  Propagators MUST
+set bits 2-7 (6 most significant bits) to zero, as they are reserved
+for future use and the W3C specification requires participants to set
+them to zero.
 
 ### B3 Requirements
 
