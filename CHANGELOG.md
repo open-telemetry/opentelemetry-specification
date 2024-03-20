@@ -31,6 +31,8 @@ release.
 
 - Prometheus compatibility: Clarify naming of the target info metric, and differences between various Prometheus formats.
   ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
+- Prometheus compatibility: Clarify that the service triplet is required to be unique by semantic conventions.
+  ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
 
 ### SDK Configuration
 
