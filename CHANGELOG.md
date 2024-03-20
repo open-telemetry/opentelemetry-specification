@@ -14,8 +14,9 @@ release.
 ### Traces
 
 - Specify how span flags, trace context flags, and the tracestate
-  field are propagated and exported by trace
-  SDKs. ([#3924](https://github.com/open-telemetry/opentelemetry-specification/pull/3924))
+  field are propagated and exported by trace SDKs in the W3C Trace
+  Context Level 2
+  specification. ([#3924](https://github.com/open-telemetry/opentelemetry-specification/pull/3924))
 
 ### Metrics
 
