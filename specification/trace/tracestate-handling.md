@@ -6,8 +6,8 @@ linkTitle: TraceState
 
 **Status**: [Experimental](../document-status.md)
 
-In alignment to the [TraceContext](https://www.w3.org/TR/trace-context/) specification, this section uses the
-Augmented Backus-Naur Form (ABNF) notation of [RFC5234](https://www.w3.org/TR/trace-context/#bib-rfc5234),
+In alignment to the [TraceContext](https://www.w3.org/TR/trace-context-2/) specification, this section uses the
+Augmented Backus-Naur Form (ABNF) notation of [RFC5234](https://www.w3.org/TR/trace-context-2/#bib-rfc5234),
 including the DIGIT rule in that document.
 
 When setting [TraceState](api.md#tracestate) values that are part of the OTel ecosystem,
@@ -17,7 +17,7 @@ a semicolon separated list of key-value pairs such as:
 * `ot=p:8;r:62`
 * `ot=foo:bar;k1:13`
 
-The [TraceContext](https://www.w3.org/TR/trace-context/) specification defines support for multiple "tenants" each to use their own `tracestate` entry by prefixing `tenant@` to tenant-specific values in a mixed tracing environment. OpenTelemetry recognizes this syntax but does not specify an interpretation for multi-tenant `tracestate`.
+The [TraceContext](https://www.w3.org/TR/trace-context-2/) specification defines support for multiple "tenants" each to use their own `tracestate` entry by prefixing `tenant@` to tenant-specific values in a mixed tracing environment. OpenTelemetry recognizes this syntax but does not specify an interpretation for multi-tenant `tracestate`.
 The list can be formally defined as:
 
 ```
@@ -26,7 +26,7 @@ list-member = key ":" value
 ```
 
 The complete list length MUST NOT exceed 256 characters, as defined by the
-[TraceState value section](https://www.w3.org/TR/trace-context/#value),
+[TraceState value section](https://www.w3.org/TR/trace-context-2/#value),
 and the used keys MUST be unique.
 
 Instrumentation libraries and clients MUST NOT use this entry, and they MUST

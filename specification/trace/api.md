@@ -209,7 +209,7 @@ A `SpanContext` represents the portion of a `Span` which must be serialized and
 propagated along side of a distributed context. `SpanContext`s are immutable.
 
 The OpenTelemetry `SpanContext` representation conforms to the [W3C TraceContext
-specification](https://www.w3.org/TR/trace-context/). It contains two
+specification](https://www.w3.org/TR/trace-context-2/). It contains two
 identifiers - a `TraceId` and a `SpanId` - along with a set of common
 `TraceFlags` and system-specific `TraceState` values.
 
@@ -220,16 +220,16 @@ non-zero byte.
 byte.
 
 `TraceFlags` contain details about the trace. Unlike TraceState values,
-TraceFlags are present in all traces. The current version of the specification
-supports two flags:
+TraceFlags are present in all traces. The Level 2 version of the W3C Trace Context
+specification defines two flags:
 
-- [Sampled](https://www.w3.org/TR/trace-context/#sampled-flag)
+- [Sampled](https://www.w3.org/TR/trace-context-2/#sampled-flag)
 - [Random](https://www.w3.org/TR/trace-context-2/#random-trace-id-flag)
 
 `TraceState` carries vendor-specific trace identification data, represented as a list
 of key-value pairs. TraceState allows multiple tracing
 systems to participate in the same trace. It is fully described in the [W3C Trace Context
-specification](https://www.w3.org/TR/trace-context/#tracestate-header). For
+specification](https://www.w3.org/TR/trace-context-2/#tracestate-header). For
 specific OTel values in `TraceState`, see the [TraceState Handling](tracestate-handling.md)
 document.
 
@@ -267,7 +267,7 @@ When extracting a `SpanContext` through the [Propagators API](../context/api-pro
 ### TraceState
 
 `TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by an immutable list of string key/value pairs and
-formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
+formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context-2/#tracestate-header).
 Tracing API MUST provide at least the following operations on `TraceState`:
 
 * Get value for a given key
@@ -275,9 +275,9 @@ Tracing API MUST provide at least the following operations on `TraceState`:
 * Update an existing value for a given key
 * Delete a key/value pair
 
-These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
+These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context-2/#mutating-the-tracestate-field).
 All mutating operations MUST return a new `TraceState` with the modifications applied.
-`TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header-field-values).
+`TraceState` MUST at all times be valid according to rules specified in [W3C Trace Context specification](https://www.w3.org/TR/trace-context-2/#tracestate-header-field-values).
 Every mutating operations MUST validate input parameters.
 If invalid value is passed the operation MUST NOT return `TraceState` containing invalid data
 and MUST follow the [general error handling guidelines](../error-handling.md).

@@ -358,7 +358,7 @@ the Core OpenTelemetry repositories.
 ### W3C Trace Context Requirements
 
 A W3C Trace Context propagator is expected to implement the
-`traceparent` and `tracestate` contexts fields specified in [W3C Trace
+`traceparent` and `tracestate` context fields specified in [W3C Trace
 Context Level 2](https://www.w3.org/TR/trace-context-2/).
 
 When injecting and extracting trace context to or from a carrier, the
@@ -371,9 +371,9 @@ following fields are propagated.
 
 There are two trace flag values defined in W3C Trace Context Level 2
 specification, `Sampled` (0x1) and `Random` (0x2).  Propagators MUST
-set bits 2-7 (6 most significant bits) to zero, as they are reserved
-for future use and the W3C specification requires participants to set
-them to zero.
+set bits 2-7 of the Trace Flags (6 most significant bits) to zero, as
+they are reserved for future use and the W3C specification requires
+participants to set them to zero.
 
 ### B3 Requirements
 

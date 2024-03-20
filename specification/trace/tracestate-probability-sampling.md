@@ -435,7 +435,7 @@ tracestate: ot=r:3;p:2
 ```
 
 The `traceparent` contents in this example example are repeated from
-the [W3C specification](https://www.w3.org/TR/trace-context/#examples-of-http-traceparent-headers))
+the [W3C specification](https://www.w3.org/TR/trace-context-2/#examples-of-http-traceparent-headers))
 and have the following base64-encoded field values:
 
 ```
