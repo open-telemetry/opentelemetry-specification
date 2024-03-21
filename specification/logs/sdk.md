@@ -129,8 +129,7 @@ the responsibility of the `LoggerProvider` instead.
 
 ## Additional LogRecord interfaces
 
-In addition to the [definition for LogRecord](data-model.md#log-and-event-record-definition), the
-following `LogRecord`-like interfaces are defined in the SDK:
+In this document we refer to `ReadableLogRecord` and `ReadWriteLogRecord`, defined as follows.
 
 ### ReadableLogRecord
 
@@ -150,7 +149,8 @@ the [transformation to non-OTLP formats](../common/mapping-to-non-otlp.md#droppe
 specification.
 
 Note: Typically this will be implemented with a new interface or (immutable)
-value type.
+value type. The SDK may also use a single type to represent both `ReadableLogRecord`
+and `ReadWriteLogRecord`.
 
 ### ReadWriteLogRecord
 
