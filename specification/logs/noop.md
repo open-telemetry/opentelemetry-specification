@@ -28,8 +28,8 @@ so that no telemetry is produced and computation resources are minimized.
 
 All language implementations of OpenTelemetry MUST provide a No-Op.
 
-The [Logs Bridge API](./bridge-api.md) defines classes with various operations.
-All No-Op classes MUST NOT hold configuration or operational state. All No-op
+The [Logs Bridge API](./bridge-api.md) defines components with various operations.
+All No-Op components MUST NOT hold configuration or operational state. All No-op
 operations MUST accept all defined parameters, MUST NOT validate any arguments
 received, and MUST NOT return any non-empty error or log any message.
 
