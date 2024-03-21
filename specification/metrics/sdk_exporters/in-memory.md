@@ -2,7 +2,7 @@
 linkTitle: In-memory
 --->
 
-# OpenTelemetry Metrics Exporter - In-memory
+# Metrics Exporter - In-memory
 
 **Status**: [Stable](../../document-status.md)
 

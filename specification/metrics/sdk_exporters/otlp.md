@@ -2,7 +2,7 @@
 linkTitle: OTLP
 --->
 
-# OpenTelemetry Metrics Exporter - OTLP
+# Metrics Exporter - OTLP
 
 **Status**: [Stable](../../document-status.md)
 

@@ -22,10 +22,9 @@ weight: 1
   * [Links between spans](#links-between-spans)
 - [Metric Signal](#metric-signal)
   * [Recording raw measurements](#recording-raw-measurements)
-    + [Measure](#measure)
-    + [Measurement](#measurement)
-  * [Recording metrics with predefined aggregation](#recording-metrics-with-predefined-aggregation)
+    + [Instruments](#instruments)
   * [Metrics data model and SDK](#metrics-data-model-and-sdk)
+    + [Views](#views)
 - [Log Signal](#log-signal)
   * [Data model](#data-model)
 - [Baggage Signal](#baggage-signal)
@@ -218,65 +217,53 @@ scenarios.
 
 ## Metric Signal
 
-OpenTelemetry allows to record raw measurements or metrics with predefined
-aggregation and a [set of attributes](./common/README.md#attribute).
+OpenTelemetry allows recording raw measurements or metrics with predefined
+aggregations and a [set of attributes](common/README.md#attribute).
 
-Recording raw measurements using OpenTelemetry API allows to defer to end-user
-the decision on what aggregation algorithm should be applied for this metric as
-well as defining attributes (dimensions). It will be used in client libraries like
-gRPC to record raw measurements "server_latency" or "received_bytes". So end
-user will decide what type of aggregated values should be collected out of these
-raw measurements. It may be simple average or elaborate histogram calculation.
-
-Recording of metrics with the pre-defined aggregation using OpenTelemetry API is
-not less important. It allows to collect values like cpu and memory usage, or
-simple metrics like "queue length".
+Using the OpenTelemetry API to record raw measurements gives end-users the
+flexibility to choose the aggregation algorithm for a given metric. This functionality
+is particularly useful in client libraries such as gRPC, where it enables the
+recording of raw measurements like "server_latency" or "received_bytes." End-users
+then have the autonomy to decide on the aggregation method for these raw measurements,
+options for which range from straightforward averages to more complex histogram calculations.
 
 ### Recording raw measurements
 
-The main classes used to record raw measurements are `Measure` and
-`Measurement`. List of `Measurement`s alongside the additional context can be
-recorded using OpenTelemetry API. So user may define to aggregate those
-`Measurement`s and use the context passed alongside to define additional
-attributes of the resulting metric.
+The primary components involved in recording raw measurements using the OpenTelemetry
+API are `Measurement`, `Instrument` and `Meter`. A `Meter` is obtained from a
+`MeterProvider` and used to create an `Instrument`, which is then responsible for capturing
+[measurements](metrics/api.md#measurement).
 
-#### Measure
+```
++------------------+
+| MeterProvider    |                 +-----------------+             +--------------+
+|   Meter A        | Measurements... |                 | Metrics...  |              |
+|     Instrument X +-----------------> In-memory state +-------------> MetricReader |
+|     Instrument Y |                 |                 |             |              |
+|   Meter B        |                 +-----------------+             +--------------+
+|     Instrument Z |
+|     ...          |                 +-----------------+             +--------------+
+|     ...          | Measurements... |                 | Metrics...  |              |
+|     ...          +-----------------> In-memory state +-------------> MetricReader |
+|     ...          |                 |                 |             |              |
+|     ...          |                 +-----------------+             +--------------+
++------------------+
+```
 
-`Measure` describes the type of the individual values recorded by a library. It
-defines a contract between the library exposing the measurements and an
-application that will aggregate those individual measurements into a `Metric`.
-`Measure` is identified by name, description and a unit of values.
+#### Instruments
 
-#### Measurement
+[Instruments](metrics/api.md#instrument) are used to report `Measurement`s, and are identified
+by a name, kind, description and a unit of values.
 
-`Measurement` describes a single value to be collected for a `Measure`.
-`Measurement` is an empty interface in API surface. This interface is defined in
-SDK.
-
-### Recording metrics with predefined aggregation
-
-The base class for all types of pre-aggregated metrics is called `Metric`. It
-defines basic metric properties like a name and attributes. Classes inheriting from
-the `Metric` define their aggregation type as well as a structure of individual
-measurements or Points. API defines the following types of pre-aggregated
-metrics:
-
-- Counter metric to report instantaneous measurement. Counter values can go
-  up or stay the same, but can never go down. Counter values cannot be
-  negative. There are two types of counter metric values - `double` and `long`.
-- Gauge metric to report instantaneous measurement of a numeric value. Gauges can
-  go both up and down. The gauges values can be negative. There are two types of
-  gauge metric values - `double` and `long`.
-
-API allows to construct the `Metric` of a chosen type. SDK defines the way to
-query the current value of a `Metric` to be exported.
-
-Every type of a `Metric` has it's API to record values to be aggregated. API
-supports both - push and pull model of setting the `Metric` value.
+There are several types of metric instruments for specific use cases, such as counters for
+incrementing values, gauges for capturing current values, and histograms for capturing
+distributions of measurements. Instruments can be synchronous, meaning that they are invoked
+inline by application logic, or asynchronous where the user registers a callback
+function that is invoked on demand by the SDK.
 
 ### Metrics data model and SDK
 
-Metrics data model is [specified here](metrics/data-model.md) and is based on
+The Metrics data model is [specified here](metrics/data-model.md) and is based on
 [metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
 This data model defines three semantics: An Event model used by the API, an
 in-flight data model used by the SDK and OTLP, and a TimeSeries model which
@@ -284,7 +271,7 @@ denotes how exporters should interpret the in-flight model.
 
 Different exporters have different capabilities (e.g. which data types are
 supported) and different constraints (e.g. which characters are allowed in attribute
-keys). Metrics is intended to be a superset of what's possible, not a lowest
+keys). Metrics is intended to be a superset of what's possible, not the lowest
 common denominator that's supported everywhere. All exporters consume data from
 Metrics Data Model via a Metric Producer interface defined in OpenTelemetry SDK.
 
@@ -296,6 +283,13 @@ from the backend.
 
 See [Metrics Data Model Specification](metrics/data-model.md) for more
 information.
+
+#### Views
+
+[Views](metrics/sdk.md#view) are configurations that specify how the data from an `Instrument` should be processed,
+aggregated, and exported. They can be applied globally through the `MeterProvider` or more
+specifically at the `Meter` level. A `View` allows the customization of metric data beyond the default
+collection behavior, enabling specific aggregations, transformations, and filtering of metrics.
 
 ## Log Signal
 

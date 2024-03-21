@@ -2,7 +2,7 @@
 linkTitle: Stdout
 --->
 
-# OpenTelemetry Metrics Exporter - Standard output
+# Metrics Exporter - Standard output
 
 **Status**: [Stable](../../document-status.md)
 
