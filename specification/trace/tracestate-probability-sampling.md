@@ -222,7 +222,7 @@ incomplete if the span's parent span was not collected.
 Incomplete traces that result from sampling configuration (i.e., on
 purpose) are known as partial traces.  An important subset of the
 partial traces are those which are also complete subtraces.  A
-complete subtrace is defined at a span when every descendent span is
+complete subtrace is defined at a span when every descendant span is
 collected.
 
 Since the test for an incompleteness is one-way, it is important to
@@ -820,7 +820,7 @@ tracestate, we have the following cases:
 3. If `TraceIDRatioBased` changes the sampling decision from yes to
    no, the consumer will observe singleton trace with correct adjusted
    count. The consumer cannot determine that R has two unsampled
-   descendents.
+   descendants.
 
 As these cases demonstrate, users can expect incompleteness and
 unknown adjusted count when using `TraceIDRatioBased` samplers for
