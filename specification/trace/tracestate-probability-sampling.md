@@ -222,7 +222,7 @@ incomplete if the span's parent span was not collected.
 Incomplete traces that result from sampling configuration (i.e., on
 purpose) are known as partial traces.  An important subset of the
 partial traces are those which are also complete subtraces.  A
-complete subtrace is defined at span when every descendent span is
+complete subtrace is defined at a span when every descendent span is
 collected.
 
 Since the test for an incompleteness is one-way, it is important to
