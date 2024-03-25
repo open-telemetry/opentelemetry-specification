@@ -73,8 +73,8 @@ is stored on the created `Tracer`.
 
 **Status**: [Experimental](../document-status.md) - The `TracerProvider` MUST
 compute the relevant [TracerConfig](#tracerconfig) using the
-configured [TracerConfigurator](#tracerconfigurator), and adjust
-the `Tracer`'s behavior to conform to the `TracerConfig`.
+configured [TracerConfigurator](#tracerconfigurator), and create
+a `Tracer` whose behavior to conform to that `TracerConfig`.
 
 ### Configuration
 
@@ -159,7 +159,7 @@ make the flush timeout configurable.
 ## Tracer
 
 **Status**: [Experimental](../document-status.md) - `Tracer` MUST behave
-according to the [TracerConfig](#tracerconfig) computing
+according to the [TracerConfig](#tracerconfig) computed
 during [Tracer creation](#tracer-creation). If the `TracerProvider` supports
 updating the [TracerConfigurator](#tracerconfigurator), then upon update
 the `Tracer` MUST be updated to behave according to the new `TracerConfig`.

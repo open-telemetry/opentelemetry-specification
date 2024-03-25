@@ -73,8 +73,8 @@ message reporting that the specified value is invalid SHOULD be logged.
 
 **Status**: [Experimental](../document-status.md) - The `LoggerProvider` MUST
 compute the relevant [LoggerConfig](#loggerconfig) using the
-configured [LoggerConfigurator](#loggerconfigurator), and adjust
-the `Logger`'s behavior to conform to the `LoggerConfig`.
+configured [LoggerConfigurator](#loggerconfigurator), and create
+a `Logger` whose behavior to conform to that `LoggerConfig`.
 
 ### Configuration
 
@@ -164,7 +164,7 @@ registered [LogRecordProcessors](#logrecordprocessor).
 ## Logger
 
 **Status**: [Experimental](../document-status.md) - `Logger` MUST behave
-according to the [LoggerConfig](#loggerconfig) computing
+according to the [LoggerConfig](#loggerconfig) computed
 during [logger creation](#logger-creation). If the `LoggerProvider` supports
 updating the [LoggerConfigurator](#loggerconfigurator), then upon update
 the `Logger` MUST be updated to behave according to the new `LoggerConfig`.

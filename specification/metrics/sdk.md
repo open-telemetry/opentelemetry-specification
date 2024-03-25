@@ -132,8 +132,8 @@ that the emitted data format is capable of representing such association.
 
 **Status**: [Experimental](../document-status.md) - The `MeterProvider` MUST
 compute the relevant [MeterConfig](#meterconfig) using the
-configured [MeterConfigurator](#meterconfigurator), and adjust the `Meter`'s
-behavior to conform to the `MeterConfig`.
+configured [MeterConfigurator](#meterconfigurator), and create
+a `Meter` whose behavior to conform to that `MeterConfig`.
 
 ### Configuration
 
@@ -835,7 +835,7 @@ Distinct meters MUST be treated as separate namespaces for the purposes of detec
 [duplicate instrument registrations](#duplicate-instrument-registration).
 
 **Status**: [Experimental](../document-status.md) - `Meter` MUST behave
-according to the [MeterConfig](#meterconfig) computing
+according to the [MeterConfig](#meterconfig) computed
 during [Meter creation](#meter-creation). If the `MeterProvider` supports
 updating the [MeterConfigurator](#meterconfigurator), then upon update
 the `Meter` MUST be updated to behave according to the new `MeterConfig`.
