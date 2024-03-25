@@ -456,16 +456,6 @@ a superset of [standard Attribute](../common/README.md#attribute),
 to preserve the semantics of structured attributes emitted by the applications.
 This field is optional.
 
-### Field: `Flags`
-
-Type: `fixed32`
-
-Description: The 8 least significant bits are the trace flags as
-defined in W3C Trace Context Level 2 specification. 24 most significant bits are reserved
-and must be set to 0. Readers must not assume that 24 most significant bits
-will be zero and must correctly mask the bits when reading 8-bit trace flag (use
-flags & LOG_RECORD_FLAGS_TRACE_FLAGS_MASK or 0xFF). This field is optional.
-
 #### Errors and Exceptions
 
 Additional information about errors and/or exceptions that are associated with
