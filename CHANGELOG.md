@@ -35,6 +35,8 @@ release.
   ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
 - Prometheus compatibility: Clarify that the service triplet is required to be unique by semantic conventions.
   ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
+- Mark the "Trace Context in non-OTLP Log Formats" specification stable.
+  ([#3909](https://github.com/open-telemetry/opentelemetry-specification/pull/3909))
 
 ### SDK Configuration
 
