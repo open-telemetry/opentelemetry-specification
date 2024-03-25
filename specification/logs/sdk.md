@@ -159,15 +159,15 @@ ReadWriteLogRecord is a superset of [ReadableLogRecord](#readablelogrecord).
 A function receiving this as an argument MUST additionally be able to modify
 the following information added to the [LogRecord](data-model.md#log-and-event-record-definition):
 
-* `Timestamp`
-* `ObservedTimestamp`
-* `SeverityText`
-* `SeverityNumber`
-* `Body`
-* `Attributes` (addition, modification, removal)
-* `TraceId`
-* `SpanId`
-* `TraceFlags`
+* [`Timestamp`](./data-model.md#field-timestamp)
+* [`ObservedTimestamp`](./data-model.md#field-observedtimestamp)
+* [`SeverityText`](./data-model.md#field-severitytext)
+* [`SeverityNumber`](./data-model.md#field-severitynumber)
+* [`Body`](./data-model.md#field-body)
+* [`Attributes`](./data-model.md#field-attributes) (addition, modification, removal)
+* [`TraceId`](./data-model.md#field-traceid)
+* [`SpanId`](./data-model.md#field-spanid)
+* [`TraceFlags`](./data-model.md#field-traceflags)
 
 ## LogRecord Limits
 
