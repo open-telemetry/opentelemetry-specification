@@ -13,10 +13,15 @@ release.
 
 ### Metrics
 
+- Clarify that exemplar reservoir default may change in a minor version.
+  ([#3943](https://github.com/open-telemetry/opentelemetry-specification/pull/3943))
+
 ### Logs
 
 - Refine description of Instrumentation Scope.
   ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
+- Clarify that `ReadableLogRecord` and `ReadWriteLogRecord` can be represented using a single type.
+  ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
 - Fix what can be modified via `ReadWriteLogRecord`.
   ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
 
@@ -30,6 +35,8 @@ release.
 
 - Prometheus compatibility: Clarify naming of the target info metric, and differences between various Prometheus formats.
   ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
+- Prometheus compatibility: Clarify that the service triplet is required to be unique by semantic conventions.
+  ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
 
 ### SDK Configuration
 
