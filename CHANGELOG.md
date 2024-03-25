@@ -15,6 +15,7 @@ release.
 
 - Clarify that exemplar reservoir default may change in a minor version.
   ([#3943](https://github.com/open-telemetry/opentelemetry-specification/pull/3943))
+- Mark Exemplars as stabilized ([#3870](https://github.com/open-telemetry/opentelemetry-specification/pull/3870))
 
 ### Logs
 
