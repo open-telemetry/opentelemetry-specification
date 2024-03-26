@@ -12,7 +12,7 @@ release.
 ### Traces
 
 - Remove the Jaeger Exporter.
-  ([#3567](https://github.com/open-telemetry/opentelemetry-specification/pull/3567))
+  ([#3964](https://github.com/open-telemetry/opentelemetry-specification/pull/3964))
 
 ### Metrics
 
