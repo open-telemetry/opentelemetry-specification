@@ -173,27 +173,6 @@ Thus, the SDK specification defines sets of possible requirements for
   (for example, the `Span` could be one of the parameters passed to such a function,
   or a getter could be provided).
 
-### Span flags
-
-The OTLP representation for Span and Span Link include a 32-bit field
-declared as Span Flags.
-
-Bits 0-7 of the Span Flags field are reserved for the 8 bits of Trace
-Context flags, specified in [W3C Trace
-Context](https://www.w3.org/TR/trace-context-2/).  [See the list of
-recognized flags](./api.md#spancontext).
-
-Bits 8 and 9 are defined to report the Remote property associated with
-the SpanContext `IsRemote` property.  SDKs should report this
-information as follows:
-
-- IsRemote = `true`: Bits 8 and 9 are set in the flags (i.e., `0x300`).
-- IsRemote = `false`: Bit 8 is set in the flags (i.e., `0x100`).
-
-For example, if the Span's incoming context has flags 0x3 (indicating
-`Sampled` and `Random`) and the parent SpanContext `IsRemote` = `true`, 
-the resulting Span Flags will equal `0x303`.
-
 ## Sampling
 
 Sampling is a mechanism to control the noise and overhead introduced by
