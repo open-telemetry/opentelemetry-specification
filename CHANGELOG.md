@@ -24,6 +24,8 @@ release.
   ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
 - Clarify that `ReadableLogRecord` and `ReadWriteLogRecord` can be represented using a single type.
   ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
+- Fix what can be modified via `ReadWriteLogRecord`.
+  ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
 
 ### Events
 
