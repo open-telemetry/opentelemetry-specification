@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Links with invalid SpanContext are recorded.
+  ([#3928](https://github.com/open-telemetry/opentelemetry-specification/pull/3928))
+
 ### Metrics
 
 - Clarify that exemplar reservoir default may change in a minor version.
