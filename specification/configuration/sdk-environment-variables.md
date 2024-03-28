@@ -97,7 +97,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 Known values for `OTEL_PROPAGATORS` are:
 
-- `"tracecontext"`: [W3C Trace Context](https://www.w3.org/TR/trace-context/)
+- `"tracecontext"`: [W3C Trace Context](https://www.w3.org/TR/trace-context-2/)
 - `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
 - `"b3"`: [B3 Single](../context/api-propagators.md#configuration)
 - `"b3multi"`: [B3 Multi](../context/api-propagators.md#configuration)

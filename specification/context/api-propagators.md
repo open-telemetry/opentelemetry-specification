@@ -355,6 +355,26 @@ Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
 the Core OpenTelemetry repositories.
 
+### W3C Trace Context Requirements
+
+A W3C Trace Context propagator is expected to implement the
+`traceparent` and `tracestate` context fields specified in [W3C Trace
+Context Level 2](https://www.w3.org/TR/trace-context-2/).
+
+When injecting and extracting trace context to or from a carrier, the
+following fields are propagated.
+
+- TraceID (16 bytes)
+- SpanID (8 bytes)
+- TraceFlags (8 bits)
+- TraceState (string)
+
+There are two trace flag values defined in W3C Trace Context Level 2
+specification, `Sampled` (0x1) and `Random` (0x2).  Propagators MUST
+set bits 2-7 of the Trace Flags (6 most significant bits) to zero, as
+they are reserved for future use and the W3C specification requires
+participants to set them to zero.
+
 ### B3 Requirements
 
 B3 has both single and multi-header encodings. It also has semantics that do not

@@ -224,7 +224,7 @@ timestamp internally the following logic is recommended:
 Type: byte sequence.
 
 Description: Request trace id as defined in
-[W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-id). Can be set
+[W3C Trace Context](https://www.w3.org/TR/trace-context-2/#trace-id). Can be set
 for logs that are part of request processing and have an assigned trace id. This
 field is optional.
 
@@ -241,7 +241,7 @@ is optional.
 Type: byte.
 
 Description: Trace flag as defined in
-[W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-flags)
+[W3C Trace Context](https://www.w3.org/TR/trace-context-2/#trace-flags)
 specification. At the time of writing the specification defines one flag - the
 SAMPLED flag. This field is optional.
 

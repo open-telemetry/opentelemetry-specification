@@ -187,7 +187,7 @@ propagated from parent to child **Spans**.
 - **Tracestate** carries tracing-system specific context in a list of key value
   pairs. **Tracestate** allows different vendors propagate additional
   information and inter-operate with their legacy Id formats. For more details
-  see [this](https://www.w3.org/TR/trace-context/#tracestate-header).
+  see [this](https://www.w3.org/TR/trace-context-2/#tracestate-header).
 
 ### Links between spans
 

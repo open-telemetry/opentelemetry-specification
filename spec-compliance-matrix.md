@@ -37,7 +37,8 @@ formats is required. Implementing more than one format is optional.
 | [SpanContext](specification/trace/api.md#spancontext)                                            |          |     |      |     |        |      |        |     |      |     |      |       |
 | IsValid                                                                                          |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRemote                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| Conforms to the W3C TraceContext spec                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Conforms to the W3C Level 1 TraceContext spec                                                    |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
+| Conforms to the W3C Level 2 TraceContext spec                                                    |          |     |      |     |        |      |        |     |      |     |      |       |
 | [Span](specification/trace/api.md#span)                                                          | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create root span                                                                                 |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Create with default parent (active span)                                                         |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -86,6 +87,7 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     | +      | +    | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     | +      |      |        | +   |      |     |      |       |
+| Produce Span IsRemote and HasIsRemote Span and Link flags                                        |          |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 

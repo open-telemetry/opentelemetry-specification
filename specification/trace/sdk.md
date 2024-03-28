@@ -193,7 +193,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   receive them unless the `Sampled` flag was also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
   the `SpanContext` to child Spans. For more details see the [W3C Trace Context
-  specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
+  specification](https://www.w3.org/TR/trace-context-2/#sampled-flag). This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
   that do not.
@@ -294,6 +294,12 @@ be displayed on debug pages or in the logs. Example:
 `"TraceIdRatioBased{0.000100}"`.
 
 Description MUST NOT change over time and caller can cache the returned value.
+
+### Span TraceState
+
+The tracestate returned by the Sampler SHOULD be recorded
+in the span's readable span data object and set in the corresponding field
+when exported using OpenTelemetry's OTLP format.
 
 ### Built-in samplers
 
