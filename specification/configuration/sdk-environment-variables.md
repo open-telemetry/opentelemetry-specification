@@ -8,7 +8,39 @@ aliases:
 
 # OpenTelemetry Environment Variable Specification
 
-**Status**: [Mixed](../document-status.md)
+**Status**: [Stable](../document-status.md) except where otherwise specified
+
+<details>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
+
+- [Implementation guidelines](#implementation-guidelines)
+- [Parsing empty value](#parsing-empty-value)
+- [Special configuration types](#special-configuration-types)
+  * [Boolean value](#boolean-value)
+  * [Numeric value](#numeric-value)
+  * [Enum value](#enum-value)
+  * [Duration](#duration)
+- [General SDK Configuration](#general-sdk-configuration)
+- [Batch Span Processor](#batch-span-processor)
+- [Batch LogRecord Processor](#batch-logrecord-processor)
+- [Attribute Limits](#attribute-limits)
+- [Span Limits](#span-limits)
+- [LogRecord Limits](#logrecord-limits)
+- [OTLP Exporter](#otlp-exporter)
+- [Zipkin Exporter](#zipkin-exporter)
+- [Prometheus Exporter](#prometheus-exporter)
+- [Exporter Selection](#exporter-selection)
+- [Metrics SDK Configuration](#metrics-sdk-configuration)
+  * [Exemplar](#exemplar)
+  * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
+- [File Configuration](#file-configuration)
+- [Language Specific Environment Variables](#language-specific-environment-variables)
+
+<!-- tocstop -->
+
+</details>
 
 The goal of this specification is to unify the environment variable names between different OpenTelemetry implementations.
 
@@ -17,21 +49,15 @@ If they do, they SHOULD use the names listed in this document.
 
 ## Implementation guidelines
 
-**Status**: [Stable](../document-status.md)
-
 Environment variables MAY be handled (implemented) directly by a component, in the SDK, or in a separate component (e.g. environment-based autoconfiguration component).
 
 The environment-based configuration MUST have a direct code configuration equivalent.
 
 ## Parsing empty value
 
-**Status**: [Stable](../document-status.md)
-
 The SDK MUST interpret an empty value of an environment variable the same way as when the variable is unset.
 
 ## Special configuration types
-
-**Status**: [Stable](../document-status.md)
 
 ### Boolean value
 
@@ -47,9 +73,9 @@ Renaming or changing the default value MUST NOT happen without a major version u
 If an implementation chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
 
 > The following paragraph was added after stabilization and the requirements are
-thus qualified as "SHOULD" to allow implementations to avoid breaking changes.
-For new
-implementations, these should be treated as MUST requirements.
+> thus qualified as "SHOULD" to allow implementations to avoid breaking changes.
+> For new
+> implementations, these should be treated as MUST requirements.
 
 For variables accepting a numeric value, if the user provides a value the implementation cannot parse,
 or which is outside the valid range for the configuration item, the implementation SHOULD
@@ -82,8 +108,6 @@ gracefully ignore the setting and use the default value if it is defined.
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 ## General SDK Configuration
-
-**Status**: [Stable](../document-status.md)
 
 | Name                     | Description                                                                                                   | Default                                                                                                                                          | Notes                                                                                                                                                                                                                                                                                    |
 |--------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -129,8 +153,6 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch Span Processor
 
-**Status**: [Stable](../document-status.md)
-
 | Name                           | Description                                                      | Default  | Notes                                                 |
 | ------------------------------ | ---------------------------------------------------------------- | -------  | ----------------------------------------------------- |
 | OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000     |                                                       |
@@ -139,8 +161,6 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512      | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
 ## Batch LogRecord Processor
-
-**Status**: [Stable](../document-status.md)
 
 | Name                            | Description                                                      | Default  | Notes                                                  |
 | ------------------------------- | ---------------------------------------------------------------- | -------  | ------------------------------------------------------ |
@@ -163,8 +183,6 @@ See the SDK [Attribute Limits](../common/README.md#attribute-limits) section for
 
 ## Span Limits
 
-**Status**: [Stable](../document-status.md)
-
 See the SDK [Span Limits](../trace/sdk.md#span-limits) section for the definition of the limits.
 
 | Name                                   | Description                                    | Default | Notes |
@@ -178,8 +196,6 @@ See the SDK [Span Limits](../trace/sdk.md#span-limits) section for the definitio
 
 ## LogRecord Limits
 
-**Status**: [Stable](../document-status.md)
-
 See the SDK [LogRecord Limits](../logs/sdk.md#logrecord-limits) section for the definition of the limits.
 
 | Name                                        | Description                                | Default  | Notes |
@@ -192,8 +208,6 @@ See the SDK [LogRecord Limits](../logs/sdk.md#logrecord-limits) section for the 
 See [OpenTelemetry Protocol Exporter Configuration Options](../protocol/exporter.md).
 
 ## Zipkin Exporter
-
-**Status**: [Stable](../document-status.md)
 
 | Name                          | Description                                                                        | Default                              |
 | ----------------------------- | ---------------------------------------------------------------------------------- |------------------------------------- |
@@ -219,8 +233,6 @@ _is no specified default, or configuration via environment variables_.
 | OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
 
 ## Exporter Selection
-
-**Status**: [Stable](../document-status.md)
 
 We define environment variables for setting one or more exporters per signal.
 
@@ -260,8 +272,6 @@ NOT be supported by new implementations.
 
 ## Metrics SDK Configuration
 
-**Status**: [Mixed](../document-status.md)
-
 ### Exemplar
 
 **Status**: [Experimental](../document-status.md)
@@ -278,8 +288,6 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
 ### Periodic exporting MetricReader
 
-**Status**: [Stable](../document-status.md)
-
 Environment variables specific for the push metrics exporters (OTLP, stdout, in-memory)
 that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-metricreader).
 
@@ -287,6 +295,46 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 | ----------------------------- | ----------------------------------------------------------------------------- | ------- | ----- |
 | `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   |       |
 | `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   |       |
+
+## File Configuration
+
+**Status**: [Experimental](../document-status.md)
+
+Environment variables involved in [file configuration](file-configuration.md).
+
+| Name                          | Description                                                                                                                                                                   | Default | Notes     |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
+| OTEL_EXPERIMENTAL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | See below |
+
+If `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, the file at the specified path is used to
+call [Parse](file-configuration.md#parse). The
+resulting [configuration model](./file-configuration.md#configuration-model) is
+used to call [Create](file-configuration.md#create) to produce fully configured
+SDK components.
+
+When `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, all other environment variables
+besides those referenced in the configuration file
+for [environment variable substitution](file-configuration.md#environment-variable-substitution)
+MUST be ignored. Ignoring the environment variables is necessary because
+there is no intuitive way to merge the flat environment variable scheme with the
+structured file configuration scheme in all cases. Users that require merging
+multiple sources of configuration are encouraged to customize the configuration
+model returned by `Parse` before `Create` is called. For example, a user may
+call `Parse` on multiple files and define logic from merging the resulting
+configuration models, or overlay values from environment variables on top of a
+configuration model. Implementations MAY provide a mechanism to customize the
+configuration model parsed from `OTEL_EXPERIMENTAL_CONFIG_FILE`.
+
+Users are encouraged to use the `sdk-config.yaml` (TODO: Add link when
+available) as a starting point for `OTEL_EXPERIMENTAL_CONFIG_FILE`. This file
+represents a common SDK configuration scenario, and includes environment
+variable substitution references to environment variables which are otherwise
+ignored.
+
+TODO: deprecate env vars which are not
+compatible ([#3967](https://github.com/open-telemetry/opentelemetry-specification/issues/3967))
+TODO: provide solution for platforms to contribute to
+configure ([#3966](https://github.com/open-telemetry/opentelemetry-specification/issues/3966))
 
 ## Language Specific Environment Variables
 
