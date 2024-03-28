@@ -65,6 +65,11 @@ release.
 - Formalize the interaction between cardinality limit and overflow attribute.
   ([#3912](https://github.com/open-telemetry/opentelemetry-specification/pull/3912))
 
+- Mark the [Overflow
+  attribute](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.30.0/specification/metrics/sdk.md#overflow-attribute)
+  section under Cardinality limits as Stable.
+  ([#3905](https://github.com/open-telemetry/opentelemetry-specification/pull/3905))
+
 ### Logs
 
 - Fix: remove `name` from LogRecord example in the File Exporter example.
