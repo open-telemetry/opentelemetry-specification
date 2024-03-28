@@ -302,18 +302,18 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 
 Environment variables involved in [file configuration](file-configuration.md).
 
-| Name             | Description                                                                                                                                                                   | Default | Notes     |
-|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
-| OTEL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | See below |
+| Name                          | Description                                                                                                                                                                   | Default | Notes     |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
+| OTEL_EXPERIMENTAL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | See below |
 
-If `OTEL_CONFIG_FILE` is set, the file at the specified path is used to
+If `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, the file at the specified path is used to
 call [Parse](file-configuration.md#parse). The
 resulting [configuration model](./file-configuration.md#configuration-model) is
 used to call [Create](file-configuration.md#create) to produce fully configured
 SDK components.
 
-When `OTEL_CONFIG_FILE` is set, all other environment variables besides those
-referenced in the configuration file
+When `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, all other environment variables
+besides those referenced in the configuration file
 for [environment variable substitution](file-configuration.md#environment-variable-substitution)
 MUST be ignored. Ignoring the environment variables is necessary because
 there is no intuitive way to merge the flat environment variable scheme with the
@@ -323,12 +323,18 @@ model returned by `Parse` before `Create` is called. For example, a user may
 call `Parse` on multiple files and define logic from merging the resulting
 configuration models, or overlay values from environment variables on top of a
 configuration model. Implementations MAY provide a mechanism to customize the
-configuration model parsed from `OTEL_CONFIG_FILE`.
+configuration model parsed from `OTEL_EXPERIMENTAL_CONFIG_FILE`.
 
 Users are encouraged to use the `sdk-config.yaml` (TODO: Add link when
-available) as a starting point for `OTEL_CONFIG_FILE`. This file represents a
-common SDK configuration scenario, and includes environment variable
-substitution references to environment variables which are otherwise ignored.
+available) as a starting point for `OTEL_EXPERIMENTAL_CONFIG_FILE`. This file
+represents a common SDK configuration scenario, and includes environment
+variable substitution references to environment variables which are otherwise
+ignored.
+
+TODO: deprecate env vars which are not
+compatible ([#3967](https://github.com/open-telemetry/opentelemetry-specification/issues/3967))
+TODO: provide solution for platforms to contribute to
+configure ([#3966](https://github.com/open-telemetry/opentelemetry-specification/issues/3966))
 
 ## Language Specific Environment Variables
 
