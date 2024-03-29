@@ -44,6 +44,9 @@ release.
 
 ### SDK Configuration
 
+- Clarify environment variable substitution is not recursive
+  ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
+
 ### Common
 
 ### Supplementary Guidelines
