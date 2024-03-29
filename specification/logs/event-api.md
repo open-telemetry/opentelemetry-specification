@@ -49,19 +49,18 @@ instrumentation authors are encouraged to call this API directly. It is
 appropriate to use the Event API when these properties fit your requirements:
 
 * A consistent schema that can be identified by a name is necessary.
-* A semantic convention needs to be defined. We do not define semantic
-  conventions for logs.
 * Analysis by an Observability platform is the intended use case. For
   example: statistics, indexing, machine learning, session replay.
+* A semantic convention needs to be defined. We do not define semantic
+  conventions for LogRecords that are not Events.
 
 If any of these properties fit your requirements, we recommend using the Event API.
 Events are described in more detail in the[semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
-
 Please note that Events are sent directly to the OTel Log SDK, which currently lacks a
 number of advanced features present in popular log frameworks. For example: 
 pattern logging, file rotation, network appenders, etc. These features cannot be
-used with events at this time.
+used with Events at this time.
 
 ## EventLoggerProvider
 
