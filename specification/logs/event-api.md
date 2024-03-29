@@ -9,15 +9,16 @@
 
 <!-- toc -->
 
-- [Data model](#data-model)
-- [EventLoggerProvider](#eventloggerprovider)
-  * [EventLoggerProvider operations](#eventloggerprovider-operations)
-    + [Get an EventLogger](#get-an-eventlogger)
-- [EventLogger](#eventlogger)
-  * [EventLogger Operations](#eventlogger-operations)
-    + [Emit Event](#emit-event)
-- [Optional and required parameters](#optional-and-required-parameters)
-- [References](#references)
+- [Events API](#events-api)
+  - [Data model](#data-model)
+  - [EventLoggerProvider](#eventloggerprovider)
+    - [EventLoggerProvider operations](#eventloggerprovider-operations)
+      - [Get an EventLogger](#get-an-eventlogger)
+  - [EventLogger](#eventlogger)
+    - [EventLogger Operations](#eventlogger-operations)
+      - [Emit Event](#emit-event)
+  - [Optional and required parameters](#optional-and-required-parameters)
+  - [References](#references)
 
 <!-- tocstop -->
 
@@ -36,17 +37,31 @@ Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
 >operating system or other software runs.
 
 From OpenTelemetry's perspective LogRecords and Events are both represented
-using the same [data model](./data-model.md).
+using the same [data model](./data-model.md). An Event is a specialized type
+of LogRecord, not a seperate concept.
 
-However, OpenTelemetry does recognize a subtle semantic difference between
-LogRecords and Events: Events are LogRecords which have a `name` which uniquely
-defines a particular class or type of event. All events with the same `name`
-have `Body` that conform to the same schema, which assists in analysis in
-observability platforms. Events are described in more detail in
-the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+Events contain all of the features provided by LogRecords, plus one additional
+feature. All Events have a `name`.  Events with the same `name` MUST conform to
+the same schema for both their `Attributes` and their `Body`.
 
 Unlike the [Logs Bridge API](./bridge-api.md), application developers and
-instrumentation authors are encouraged to call this API directly.
+instrumentation authors are encouraged to call this API directly. It is 
+appropriate to use the Event API when these properties fit your requirements:
+
+* A consistent schema that can be identified by a name is necessary.
+* A semantic convention needs to be defined. We do not define semantic
+  conventions for logs.
+* Analysis by an Observability platform is the intended use case. For
+  example: statistics, indexing, machine learning, session replay.
+
+If any of these properties fit your requirements, we recommend using the Event API.
+Events are described in more detail in the[semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+
+
+Please note that Events are sent directly to the OTel Log SDK, which currently lacks a
+number of advanced features present in popular log frameworks. For example: 
+pattern logging, file rotation, network appenders, etc. These features cannot be
+used with events at this time.
 
 ## EventLoggerProvider
 
