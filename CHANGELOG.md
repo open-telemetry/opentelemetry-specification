@@ -24,6 +24,8 @@ release.
   ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
 - Clarify that `ReadableLogRecord` and `ReadWriteLogRecord` can be represented using a single type.
   ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
+- Fix what can be modified via `ReadWriteLogRecord`.
+  ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
 
 ### Events
 
@@ -41,6 +43,9 @@ release.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 
 ### SDK Configuration
+
+- Clarify environment variable substitution is not recursive
+  ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
 
 ### Common
 
