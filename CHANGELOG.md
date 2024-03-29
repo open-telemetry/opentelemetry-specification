@@ -15,6 +15,8 @@ release.
 
 - Clarify that exemplar reservoir default may change in a minor version.
   ([#3943](https://github.com/open-telemetry/opentelemetry-specification/pull/3943))
+- Add option to disable target info metric to Prometheus exporters.
+  ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 
 ### Logs
 
@@ -22,6 +24,8 @@ release.
   ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
 - Clarify that `ReadableLogRecord` and `ReadWriteLogRecord` can be represented using a single type.
   ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
+- Fix what can be modified via `ReadWriteLogRecord`.
+  ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
 
 ### Events
 
@@ -35,8 +39,13 @@ release.
   ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
 - Prometheus compatibility: Clarify that the service triplet is required to be unique by semantic conventions.
   ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
+- Update and reorganize the prometheus sdk exporter specification.
+  ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 
 ### SDK Configuration
+
+- Clarify environment variable substitution is not recursive
+  ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
 
 ### Common
 
