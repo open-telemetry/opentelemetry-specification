@@ -38,7 +38,7 @@ Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
 
 From OpenTelemetry's perspective LogRecords and Events are both represented
 using the same [data model](./data-model.md). An Event is a specialized type
-of LogRecord, not a seperate concept.
+of LogRecord, not a separate concept.
 
 Events contain all of the features provided by LogRecords, plus one additional
 feature. All Events have a `name`.  Events with the same `name` MUST conform to
