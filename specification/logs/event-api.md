@@ -45,7 +45,7 @@ feature. All Events have a `name`.  Events with the same `name` MUST conform to
 the same schema for both their `Attributes` and their `Body`.
 
 Unlike the [Logs Bridge API](./bridge-api.md), application developers and
-instrumentation authors are encouraged to call this API directly. It is 
+instrumentation authors are encouraged to call this API directly. It is
 appropriate to use the Event API when these properties fit your requirements:
 
 * A consistent schema that can be identified by a name is necessary.
@@ -58,7 +58,7 @@ If any of these properties fit your requirements, we recommend using the Event A
 Events are described in more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
 Please note that Events are sent directly to the OTel Log SDK, which currently lacks a
-number of advanced features present in popular log frameworks. For example: 
+number of advanced features present in popular log frameworks. For example:
 pattern logging, file rotation, network appenders, etc. These features cannot be
 used with Events at this time.
 
