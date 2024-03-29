@@ -55,7 +55,7 @@ appropriate to use the Event API when these properties fit your requirements:
   conventions for LogRecords that are not Events.
 
 If any of these properties fit your requirements, we recommend using the Event API.
-Events are described in more detail in the[semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+Events are described in more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
 Please note that Events are sent directly to the OTel Log SDK, which currently lacks a
 number of advanced features present in popular log frameworks. For example: 
