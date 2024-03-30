@@ -60,7 +60,9 @@ Events are described in more detail in the [semantic conventions](https://github
 Please note that Events are sent directly to the OTel Log SDK, which currently lacks a
 number of advanced features present in popular log frameworks. For example:
 pattern logging, file rotation, network appenders, etc. These features cannot be
-used with Events at this time.
+used with the Event API at this time. If a log framework is capable of creating
+logs which correctly map to the Event data model, that is also an acceptable
+way to create Events.
 
 ## EventLoggerProvider
 
