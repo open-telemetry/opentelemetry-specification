@@ -39,6 +39,8 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
   - An array of primitive type values. The array MUST be homogeneous,
     i.e., it MUST NOT contain values of different types.
 
+String values SHOULD be valid Unicode sequences (UTF-8).
+
 For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
 Attribute values expressing a numerical value of zero, an empty string, or an
