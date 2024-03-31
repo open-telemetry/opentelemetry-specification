@@ -106,11 +106,7 @@ AnyValue's
 [string_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L31)
 field.
 
-String values which are not valid Unicode sequences SHOULD be converted to
-AnyValue's
-[bytes_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L37)
-with the bytes representing the string in the original order and format of the
-source string.
+String values which are not valid Unicode sequences SHOULD be dropped.
 
 #### Byte Sequences
 
