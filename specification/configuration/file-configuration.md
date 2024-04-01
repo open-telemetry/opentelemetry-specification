@@ -85,8 +85,8 @@ Environment variable substitution MUST only apply to scalar values. Mapping keys
 are not candidates for substitution.
 
 The `DEFAULT_VALUE` is an optional fallback value which is substituted
-if `ENV_NAME` is null or undefined. `DEFAULT_VALUE` is consists of 0 or more non
-line break characters (i.e. any character except `\n`). If a referenced
+if `ENV_NAME` is null, empty, or undefined. `DEFAULT_VALUE` consists of 0 or
+more non line break characters (i.e. any character except `\n`). If a referenced
 environment variable is not defined and does not have a `DEFAULT_VALUE`, it MUST
 be replaced with an empty value.
 
