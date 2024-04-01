@@ -97,6 +97,9 @@ or floating point fields can be properly converted to expected types.
 It MUST NOT be possible to inject YAML structures by environment variables. For
 example, references to `INVALID_MAP_VALUE` environment variable below.
 
+It MUST NOT be possible to inject environment variable by environment variables.
+For example, references to `DO_NOT_REPLACE_ME` environment variable below.
+
 For example, consider the following environment variables,
 and [YAML](#yaml-file-format) configuration file:
 
@@ -105,7 +108,9 @@ export STRING_VALUE="value"
 export BOOl_VALUE="true"
 export INT_VALUE="1"
 export FLOAT_VALUE="1.1"
-export INVALID_MAP_VALUE"value\nkey:value" # An invalid attempt to inject a map key into the YAML
+export INVALID_MAP_VALUE="value\nkey:value"           # An invalid attempt to inject a map key into the YAML
+export DO_NOT_REPLACE_ME="Never use this value"       # An unused environment variable
+export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text, used verbatim, not replaced with "Never use this value"
 ```
 
 ```yaml
@@ -120,6 +125,7 @@ combo_string_key: foo ${STRING_VALUE} ${FLOAT_VALUE}  # Valid reference to STRIN
 string_key_with_default: ${UNDEFINED_KEY:-fallback}   # UNDEFINED_KEY is not defined but a default value is included
 undefined_key: ${UNDEFINED_KEY}                       # Invalid reference, UNDEFINED_KEY is not defined and is replaced with ""
 ${STRING_VALUE}: value                                # Invalid reference, substitution is not valid in mapping keys and reference is ignored
+recursive_key: ${REPLACE_ME}                          # Valid reference to REPLACE_ME
 ```
 
 Environment variable substitution results in the following YAML:
@@ -136,6 +142,7 @@ combo_string_key: foo value 1.1             # Interpreted as type string, tag UR
 string_key_with_default: fallback           # Interpreted as type string, tag URI tag:yaml.org,2002:str
 undefined_key:                              # Interpreted as type null, tag URI tag:yaml.org,2002:null
 ${STRING_VALUE}: value                      # Interpreted as type string, tag URI tag:yaml.org,2002:str
+recursive_key: ${DO_NOT_REPLACE_ME}         # Interpreted as type string, tag URI tag:yaml.org,2002:str
 ```
 
 ## SDK Configuration
