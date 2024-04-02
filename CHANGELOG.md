@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add synchronous gauge entry to sum monotonic table.
+  ([#3977](https://github.com/open-telemetry/opentelemetry-specification/pull/3977))
+
 ### Logs
 
 - Refine description of Instrumentation Scope.
