@@ -129,6 +129,7 @@ Environment variable substitution results in the following YAML:
 
 ```yaml
 string_key: value                           # Interpreted as type string, tag URI tag:yaml.org,2002:str
+env_string_key: value                       # Interpreted as type string, tag URI tag:yaml.org,2002:str
 other_string_key: "value"                   # Interpreted as type string, tag URI tag:yaml.org,2002:str
 another_string_key: "true"                  # Interpreted as type string, tag URI tag:yaml.org,2002:str
 yet_another_string_key: "value\nkey:value"  # Interpreted as type string, tag URI tag:yaml.org,2002:str
