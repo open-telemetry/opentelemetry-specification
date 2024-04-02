@@ -47,7 +47,7 @@ release.
 - Clarify environment variable substitution is not recursive
   ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
 - Allow `env:` prefix in environment variable substitution syntax.
-  ([#3914]())
+  ([#3974](https://github.com/open-telemetry/opentelemetry-specification/pull/3974))
 
 ### Common
 
