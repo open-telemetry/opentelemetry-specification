@@ -78,7 +78,7 @@ which match the following regular expression:
 The `ENV_NAME` MUST start with an alphabetic or `_` character, and is followed
 by 0 or more alphanumeric or `_` characters.
 
-For example, `${API_KEY}` and `${env:API_KEY}` are valid, while `${1API_KEY}` 
+For example, `${API_KEY}` and `${env:API_KEY}` are valid, while `${1API_KEY}`
 and `${API_$KEY}` are invalid.
 
 Environment variable substitution MUST only apply to scalar values. Mapping keys
