@@ -72,14 +72,14 @@ Configuration files support environment variables substitution for references
 which match the following regular expression:
 
 ```regexp
-\$\{(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)}
+\$\{(?:env:)?(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)}
 ```
 
 The `ENV_NAME` MUST start with an alphabetic or `_` character, and is followed
 by 0 or more alphanumeric or `_` characters.
 
-For example, `${API_KEY}` is valid, while `${1API_KEY}` and `${API_$KEY}` are
-invalid.
+For example, `${API_KEY}` and `${env:API_KEY}` are valid, while `${1API_KEY}` 
+and `${API_$KEY}` are invalid.
 
 Environment variable substitution MUST only apply to scalar values. Mapping keys
 are not candidates for substitution.
@@ -112,6 +112,7 @@ export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text
 
 ```yaml
 string_key: ${STRING_VALUE}                           # Valid reference to STRING_VALUE
+env_string_key: ${env:STRING_VALUE}                   # Valid reference to STRING_VALUE
 other_string_key: "${STRING_VALUE}"                   # Valid reference to STRING_VALUE inside double quotes
 another_string_key: "${BOOl_VALUE}"                   # Valid reference to BOOl_VALUE inside double quotes
 yet_another_string_key: ${INVALID_MAP_VALUE}          # Valid reference to INVALID_MAP_VALUE, but YAML structure from INVALID_MAP_VALUE MUST NOT be injected
