@@ -1112,6 +1112,11 @@ use `AlignedHistogramBucketExemplarReservoir`.
   twenty (e.g. `min(20, max_buckets)`).
 - All other aggregations will use `SimpleFixedSizeExemplarReservoir`.
 
+Exemplar default reservoirs MAY change in
+a [minor version bump](./../versioning-and-stability.md#minor-version-bump). No
+guarantees are made on the shape or statistical properties of returned
+exemplars.
+
 #### SimpleFixedSizeExemplarReservoir
 
 This reservoir MUST use an uniformly-weighted sampling algorithm based on the

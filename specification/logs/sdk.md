@@ -186,8 +186,7 @@ It consists of the following parameters:
 
 ## Additional LogRecord interfaces
 
-In addition to the [definition for LogRecord](data-model.md#log-and-event-record-definition), the
-following `LogRecord`-like interfaces are defined in the SDK:
+In this document we refer to `ReadableLogRecord` and `ReadWriteLogRecord`, defined as follows.
 
 ### ReadableLogRecord
 
@@ -207,15 +206,25 @@ the [transformation to non-OTLP formats](../common/mapping-to-non-otlp.md#droppe
 specification.
 
 Note: Typically this will be implemented with a new interface or (immutable)
-value type.
+value type. The SDK may also use a single type to represent both `ReadableLogRecord`
+and `ReadWriteLogRecord`.
 
 ### ReadWriteLogRecord
 
-A function receiving this as an argument MUST be able to write to the
-full [LogRecord](data-model.md#log-and-event-record-definition) and additionally MUST be able to retrieve all
-information
-that was added to the `LogRecord` (as with
-[ReadableLogRecord](#readablelogrecord)).
+ReadWriteLogRecord is a superset of [ReadableLogRecord](#readablelogrecord).
+
+A function receiving this as an argument MUST additionally be able to modify
+the following information added to the [LogRecord](data-model.md#log-and-event-record-definition):
+
+* [`Timestamp`](./data-model.md#field-timestamp)
+* [`ObservedTimestamp`](./data-model.md#field-observedtimestamp)
+* [`SeverityText`](./data-model.md#field-severitytext)
+* [`SeverityNumber`](./data-model.md#field-severitynumber)
+* [`Body`](./data-model.md#field-body)
+* [`Attributes`](./data-model.md#field-attributes) (addition, modification, removal)
+* [`TraceId`](./data-model.md#field-traceid)
+* [`SpanId`](./data-model.md#field-spanid)
+* [`TraceFlags`](./data-model.md#field-traceflags)
 
 ## LogRecord Limits
 
