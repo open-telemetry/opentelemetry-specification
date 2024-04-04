@@ -74,7 +74,7 @@ is stored on the created `Tracer`.
 **Status**: [Experimental](../document-status.md) - The `TracerProvider` MUST
 compute the relevant [TracerConfig](#tracerconfig) using the
 configured [TracerConfigurator](#tracerconfigurator), and create
-a `Tracer` whose behavior to conform to that `TracerConfig`.
+a `Tracer` whose behavior conforms to that `TracerConfig`.
 
 ### Configuration
 

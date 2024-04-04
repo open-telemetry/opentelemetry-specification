@@ -133,7 +133,7 @@ that the emitted data format is capable of representing such association.
 **Status**: [Experimental](../document-status.md) - The `MeterProvider` MUST
 compute the relevant [MeterConfig](#meterconfig) using the
 configured [MeterConfigurator](#meterconfigurator), and create
-a `Meter` whose behavior to conform to that `MeterConfig`.
+a `Meter` whose behavior conforms to that `MeterConfig`.
 
 ### Configuration
 

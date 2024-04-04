@@ -74,7 +74,7 @@ message reporting that the specified value is invalid SHOULD be logged.
 **Status**: [Experimental](../document-status.md) - The `LoggerProvider` MUST
 compute the relevant [LoggerConfig](#loggerconfig) using the
 configured [LoggerConfigurator](#loggerconfigurator), and create
-a `Logger` whose behavior to conform to that `LoggerConfig`.
+a `Logger` whose behavior conforms to that `LoggerConfig`.
 
 ### Configuration
 
