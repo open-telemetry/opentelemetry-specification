@@ -241,7 +241,7 @@ in keys).
 
 ### Metric Metadata
 
-Prometheus SDK exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
+Prometheus Pull exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
 comments for the same metric name to be returned in a single scrape of the
 Prometheus endpoint. Exporters MUST drop entire metrics to prevent conflicting
 TYPE comments, but SHOULD NOT drop metric points as a result of conflicting
@@ -408,16 +408,16 @@ Prometheus exemplar unless they would exceed the
 
 ### Resource Attributes
 
-In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to
-a single [`target` info metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+In Prometheus exporters, an OpenTelemetry Resource SHOULD be converted to
+a [`target` info metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 if the resource is not [empty](../resource/sdk.md#the-empty-resource).
-The resource attributes MAY be copied to labels of exported metric families
+The Resource attributes MAY be copied to labels of exported metric families
 if required by the exporter configuration, or MUST be dropped. The `target`
-info metric MUST be an info-typed metric whose labels MUST include the resource
-attributes, and MUST NOT include any other labels. There MUST be at most one
-`target` info metric exposed on an SDK Prometheus endpoint.
+info metric MUST be an info-typed
+metric whose labels MUST include the resource attributes, and MUST NOT include
+any other labels.
 
-In the Collector's Prometheus pull and push (remote-write) exporters, it is
+In the Collector's Prometheus exporters, it is
 possible for metrics from multiple targets to be sent together, so targets must
 be disambiguated from one another. However, the Prometheus exposition format
 and [remote-write](https://github.com/Prometheus/Prometheus/blob/main/prompb/remote.proto)
