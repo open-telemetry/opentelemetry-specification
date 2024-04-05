@@ -121,8 +121,8 @@ Value of type `any` can be one of the following:
 Value of type `map<string, any>` is a map of string keys to `any` values. The
 keys in the map are unique (duplicate keys are not allowed). The representation
 of the map is language-dependent. The SDKs MAY allow duplicated keys (represent
-the map as an array/list of key-values) as long as the OTLP exporters by default
-handle deduplication.
+the map as an array/list of key-values) as long as they provide means to have
+them deduplicated when log records are exported.
 
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
 allows to represent an equivalent of a JSON object).
