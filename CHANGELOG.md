@@ -26,6 +26,8 @@ release.
   ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
 - Fix what can be modified via `ReadWriteLogRecord`.
   ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
+- Allow SDKs to have duplicated keys in a map if they provide means to have them deduplicated when log records are exported.
+  ([#3938](https://github.com/open-telemetry/opentelemetry-specification/pull/3938))
 
 ### Events
 
