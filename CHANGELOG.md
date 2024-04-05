@@ -13,6 +13,34 @@ release.
 
 ### Metrics
 
+### Logs
+
+### Events
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.32.0 (2024-04-09)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
 - Clarify that exemplar reservoir default may change in a minor version.
   ([#3943](https://github.com/open-telemetry/opentelemetry-specification/pull/3943))
 - Add option to disable target info metric to Prometheus exporters.
@@ -29,9 +57,15 @@ release.
 
 ### Events
 
+- No changes.
+
 ### Resource
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### Compatibility
 
@@ -49,7 +83,11 @@ release.
 
 ### Common
 
+- No changes.
+
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.31.0 (2024-03-13)
 
