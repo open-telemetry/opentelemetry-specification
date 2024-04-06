@@ -17,6 +17,8 @@ release.
   ([#3943](https://github.com/open-telemetry/opentelemetry-specification/pull/3943))
 - Add option to disable target info metric to Prometheus exporters.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
+- Add synchronous gauge entry to sum monotonic table.
+  ([#3977](https://github.com/open-telemetry/opentelemetry-specification/pull/3977))
 
 ### Logs
 
