@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Remove the Jaeger Exporter.
+  ([#3964](https://github.com/open-telemetry/opentelemetry-specification/pull/3964))
+
 ### Metrics
 
 - Clarify that exemplar reservoir default may change in a minor version.
