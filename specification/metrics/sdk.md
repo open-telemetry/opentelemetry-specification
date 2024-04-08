@@ -599,13 +599,14 @@ The Sum Aggregation informs the SDK to collect data for the
 
 The monotonicity of the aggregation is determined by the instrument type:
 
-| Instrument Kind | `SumType` |
-| --- | --- |
-| [Counter](./api.md#counter) | Monotonic |
-| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic |
-| [Histogram](./api.md#histogram) | Monotonic |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
+| Instrument Kind                                                   | `SumType`     |
+|-------------------------------------------------------------------|---------------|
+| [Counter](./api.md#counter)                                       | Monotonic     |
+| [UpDownCounter](./api.md#updowncounter)                           | Non-Monotonic |
+| [Histogram](./api.md#histogram)                                   | Monotonic     |
+| [Gauge](./api.md#gauge)                                           | Non-Monotonic |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | Non-Monotonic |
+| [Asynchronous Counter](./api.md#asynchronous-counter)             | Monotonic     |
 | [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
 
 This Aggregation does not have any configuration parameters.
