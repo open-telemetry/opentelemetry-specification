@@ -97,6 +97,8 @@ if present, MUST be added as the description of the OTLP metric.
 if present, MUST be used to determine the OTLP data type, and dictates
 type-specific conversion rules listed below. Metric families without type
 metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
+The TYPE metadata MUST also be added to the OTLP [metric.metadata][metricMetadata]
+under the `prometheus.type` key (e.g. `prometheus.type="unknown"`).
 
 ### Counters
 
@@ -294,13 +296,20 @@ Prometheus exporters SHOULD provide a configuration option to disable the
 
 ### Gauges
 
-An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to a Prometheus Gauge.
+An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to
+a Prometheus Unknown-typed metric if the `prometheus.type` key of
+[metric.metadata][metricMetadata] is `unknown`. Otherwise, it MUST be converted
+to a Prometheus Gauge.
 
 ### Sums
 
 [OpenTelemetry Sums](../metrics/data-model.md#sums) follows this logic:
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
+- If the aggregation temporality is cumulative and the sum is non-monotonic and the `prometheus.type` key of
+[metric.metadata][metricMetadata] is `info`, it MUST be converted to an OpenMetrics Info metric.
+- If the aggregation temporality is cumulative and the sum is non-monotonic and the `prometheus.type` key of
+[metric.metadata][metricMetadata] is `stateset`, it MUST be converted to an OpenMetrics StateSet metric.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Counter. The following behaviors are expected:
   - The new data point type must be the same as the accumulated data point type.
@@ -445,3 +454,5 @@ other labels other than `job` and `instance`.  There MUST be at most one
 If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named `target_info` with a constant value of 1 MUST be used instead.
 
 To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](../common/README.md#attribute).
+
+[metricMetadata]: https://github.com/open-telemetry/opentelemetry-proto/blob/c451441d7b73f702d1647574c730daf7786f188c/opentelemetry/proto/metrics/v1/metrics.proto#L199
