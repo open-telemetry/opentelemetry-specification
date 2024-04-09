@@ -11,9 +11,6 @@ release.
 
 ### Traces
 
-- Remove the Jaeger Exporter.
-  ([#3964](https://github.com/open-telemetry/opentelemetry-specification/pull/3964))
-
 ### Metrics
 
 ### Logs
@@ -40,7 +37,8 @@ release.
 
 ### Traces
 
-- No changes.
+- Remove the Jaeger Exporter.
+  ([#3964](https://github.com/open-telemetry/opentelemetry-specification/pull/3964))
 
 ### Metrics
 
@@ -85,10 +83,14 @@ release.
 
 ### SDK Configuration
 
+- Define OTEL_EXPERIMENTAL_CONFIG_FILE to ignore other env vars, add env var substitution default syntax.
+  ([#3948](https://github.com/open-telemetry/opentelemetry-specification/pull/3948))
 - Clarify environment variable substitution is not recursive
   ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
 - Allow `env:` prefix in environment variable substitution syntax.
   ([#3974](https://github.com/open-telemetry/opentelemetry-specification/pull/3974))
+- Add simple scope configuration to Tracer, Meter, Logger (experimental).
+  ([#3877](https://github.com/open-telemetry/opentelemetry-specification/pull/3877))
 
 ### Common
 
