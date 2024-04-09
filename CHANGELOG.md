@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Remove the Jaeger Exporter.
+  ([#3964](https://github.com/open-telemetry/opentelemetry-specification/pull/3964))
+
 ### Metrics
 
 - Clarify that exemplar reservoir default may change in a minor version.
@@ -43,6 +46,8 @@ release.
   ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
 - Prometheus compatibility: Clarify that the service triplet is required to be unique by semantic conventions.
   ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
+- Prometheus: represent Prometheus Info, StateSet and Unknown-typed metrics in OTLP.
+  ([#3868](https://github.com/open-telemetry/opentelemetry-specification/pull/3868))
 - Update and reorganize the prometheus sdk exporter specification.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 
@@ -50,6 +55,8 @@ release.
 
 - Clarify environment variable substitution is not recursive
   ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
+- Allow `env:` prefix in environment variable substitution syntax.
+  ([#3974](https://github.com/open-telemetry/opentelemetry-specification/pull/3974))
 
 ### Common
 
