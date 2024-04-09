@@ -72,20 +72,23 @@ Configuration files support environment variables substitution for references
 which match the following regular expression:
 
 ```regexp
-\$\{(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)}
+\$\{(?:env:)?(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?}
 ```
 
 The `ENV_NAME` MUST start with an alphabetic or `_` character, and is followed
 by 0 or more alphanumeric or `_` characters.
 
-For example, `${API_KEY}` is valid, while `${1API_KEY}` and `${API_$KEY}` are
-invalid.
+For example, `${API_KEY}` and `${env:API_KEY}` are valid, while `${1API_KEY}`
+and `${API_$KEY}` are invalid.
 
 Environment variable substitution MUST only apply to scalar values. Mapping keys
 are not candidates for substitution.
 
-If a referenced environment variable is not defined, it MUST be replaced with an
-empty value.
+The `DEFAULT_VALUE` is an optional fallback value which is substituted
+if `ENV_NAME` is null, empty, or undefined. `DEFAULT_VALUE` consists of 0 or
+more non line break characters (i.e. any character except `\n`). If a referenced
+environment variable is not defined and does not have a `DEFAULT_VALUE`, it MUST
+be replaced with an empty value.
 
 Node types MUST be interpreted after environment variable substitution takes
 place. This ensures the environment string representation of boolean, integer,
@@ -112,6 +115,7 @@ export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text
 
 ```yaml
 string_key: ${STRING_VALUE}                           # Valid reference to STRING_VALUE
+env_string_key: ${env:STRING_VALUE}                   # Valid reference to STRING_VALUE
 other_string_key: "${STRING_VALUE}"                   # Valid reference to STRING_VALUE inside double quotes
 another_string_key: "${BOOl_VALUE}"                   # Valid reference to BOOl_VALUE inside double quotes
 yet_another_string_key: ${INVALID_MAP_VALUE}          # Valid reference to INVALID_MAP_VALUE, but YAML structure from INVALID_MAP_VALUE MUST NOT be injected
@@ -119,6 +123,7 @@ bool_key: ${BOOl_VALUE}                               # Valid reference to BOOl_
 int_key: ${INT_VALUE}                                 # Valid reference to INT_VALUE
 float_key: ${FLOAT_VALUE}                             # Valid reference to FLOAT_VALUE
 combo_string_key: foo ${STRING_VALUE} ${FLOAT_VALUE}  # Valid reference to STRING_VALUE and FLOAT_VALUE
+string_key_with_default: ${UNDEFINED_KEY:-fallback}   # UNDEFINED_KEY is not defined but a default value is included
 undefined_key: ${UNDEFINED_KEY}                       # Invalid reference, UNDEFINED_KEY is not defined and is replaced with ""
 ${STRING_VALUE}: value                                # Invalid reference, substitution is not valid in mapping keys and reference is ignored
 recursive_key: ${REPLACE_ME}                          # Valid reference to REPLACE_ME
@@ -128,6 +133,7 @@ Environment variable substitution results in the following YAML:
 
 ```yaml
 string_key: value                           # Interpreted as type string, tag URI tag:yaml.org,2002:str
+env_string_key: value                       # Interpreted as type string, tag URI tag:yaml.org,2002:str
 other_string_key: "value"                   # Interpreted as type string, tag URI tag:yaml.org,2002:str
 another_string_key: "true"                  # Interpreted as type string, tag URI tag:yaml.org,2002:str
 yet_another_string_key: "value\nkey:value"  # Interpreted as type string, tag URI tag:yaml.org,2002:str
@@ -135,6 +141,7 @@ bool_key: true                              # Interpreted as type bool, tag URI 
 int_key: 1                                  # Interpreted as type int, tag URI tag:yaml.org,2002:int
 float_key: 1.1                              # Interpreted as type float, tag URI tag:yaml.org,2002:float
 combo_string_key: foo value 1.1             # Interpreted as type string, tag URI tag:yaml.org,2002:str
+string_key_with_default: fallback           # Interpreted as type string, tag URI tag:yaml.org,2002:str
 undefined_key:                              # Interpreted as type null, tag URI tag:yaml.org,2002:null
 ${STRING_VALUE}: value                      # Interpreted as type string, tag URI tag:yaml.org,2002:str
 recursive_key: ${DO_NOT_REPLACE_ME}         # Interpreted as type string, tag URI tag:yaml.org,2002:str
