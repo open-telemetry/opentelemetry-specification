@@ -4,7 +4,7 @@ linkTitle: SDK
 
 # Tracing SDK
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -14,8 +14,11 @@ linkTitle: SDK
 - [Tracer Provider](#tracer-provider)
   * [Tracer Creation](#tracer-creation)
   * [Configuration](#configuration)
+    + [TracerConfigurator](#tracerconfigurator)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
+- [Tracer](#tracer)
+  * [TracerConfig](#tracerconfig)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
@@ -68,12 +71,18 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.
 
+**Status**: [Experimental](../document-status.md) - The `TracerProvider` MUST
+compute the relevant [TracerConfig](#tracerconfig) using the
+configured [TracerConfigurator](#tracerconfigurator), and create
+a `Tracer` whose behavior conforms to that `TracerConfig`.
+
 ### Configuration
 
-Configuration (i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators),
-[SpanLimits](#span-limits) and [`Sampler`](#sampling)) MUST be owned by the
-the `TracerProvider`. The configuration MAY be applied at the time of `TracerProvider`
-creation if appropriate.
+Configuration (
+i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators), [SpanLimits](#span-limits), [`Sampler`](#sampling),
+and (**experimental**) [TracerConfigurator](#tracerconfigurator)) MUST be
+owned by the `TracerProvider`. The configuration MAY be applied at the time
+of `TracerProvider` creation if appropriate.
 
 The TracerProvider MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `SpanProcessor`),
@@ -83,6 +92,37 @@ the updated configuration MUST also apply to all already returned `Tracers`
 Note: Implementation-wise, this could mean that `Tracer` instances have a
 reference to their `TracerProvider` and access configuration only via this
 reference.
+
+#### TracerConfigurator
+
+**Status**: [Experimental](../document-status.md)
+
+A `TracerConfigurator` is a function which computes
+the [TracerConfig](#tracerconfig) for a [Tracer](#tracer).
+
+The function MUST accept the following parameter:
+
+* `tracer_scope`:
+  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  the `Tracer`.
+
+The function MUST return the relevant `TracerConfig`, or some signal indicating
+that the [default TracerConfig](#tracerconfig) should be used. This signal MAY
+be nil, null, empty, or an instance of the default `TracerConfig` depending on
+what is idiomatic in the language.
+
+This function is called when a `Tracer` is first created, and for each
+outstanding `Tracer` when a `TracerProvider`'s `TracerConfigurator` is
+updated (if updating is supported). Therefore, it is important that it returns
+quickly.
+
+`TracerConfigurator` is modeled as a function to maximize flexibility.
+However, implementations MAY provide shorthand or helper functions to
+accommodate common use cases:
+
+* Select one or more Tracers by name, with exact match or pattern matching.
+* Disable one or more specific Tracers.
+* Disable all Tracers, and selectively enable one or more specific Tracers.
 
 ### Shutdown
 
@@ -115,6 +155,29 @@ via a callback or an event. OpenTelemetry client authors can decide if they want
 make the flush timeout configurable.
 
 `ForceFlush` MUST invoke `ForceFlush` on all registered `SpanProcessors`.
+
+## Tracer
+
+**Status**: [Experimental](../document-status.md) - `Tracer` MUST behave
+according to the [TracerConfig](#tracerconfig) computed
+during [Tracer creation](#tracer-creation). If the `TracerProvider` supports
+updating the [TracerConfigurator](#tracerconfigurator), then upon update
+the `Tracer` MUST be updated to behave according to the new `TracerConfig`.
+
+### TracerConfig
+
+**Status**: [Experimental](../document-status.md)
+
+A `TracerConfig` defines various configurable aspects of a `Tracer`'s behavior.
+It consists of the following parameters:
+
+* `disabled`: A boolean indication of whether the Tracer is enabled.
+
+  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  i.e. `Tracer`s are enabled by default).
+
+  If a `Tracer` is disabled, it MUST behave equivalently
+  to [No-op Tracer](./api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk).
 
 ## Additional Span Interfaces
 
