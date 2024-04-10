@@ -128,10 +128,10 @@ The representation of the map is language-dependent.
 
 The SDK MUST by default ensure that the exported maps contain only unique keys.
 
-The SDK MAY have an option to allow duplicated keys
+The SDK MAY have an option to allow exporting maps with duplicated keys
 (e.g. for better performance or for receivers that accept duplicated keys).
 If such option is provided, it MUST be documented that for many log record
-receivers, handling of duplicated keys is unpredictable.
+receivers, handling of maps with duplicated keys is unpredictable.
 
 ### Field Kinds
 
