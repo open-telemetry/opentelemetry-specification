@@ -77,7 +77,7 @@ The Data Model was designed to satisfy the following requirements:
   implementations that require the data to be stored or transmitted. We
   primarily care about 2 aspects of efficiency: CPU usage for
   serialization/deserialization and space requirements in serialized form. This
-  is an indirect requirement that is affected by the specific representation of
+  is an indirect requirement that is affected by the specifics representation of
   the Data Model rather than the Data Model itself, but is still useful to keep
   in mind.
 
@@ -119,13 +119,20 @@ Value of type `any` can be one of the following:
 #### Type `map<string, any>`
 
 Value of type `map<string, any>` is a map of string keys to `any` values. The
-keys in the map are unique (duplicate keys are not allowed). The representation
-of the map is language-dependent. The SDKs MAY allow duplicated keys (e.g. represent
-the map as an array/list of key-values) as long as they provide means to have
-them deduplicated when log records are exported.
+keys in the map are unique (duplicate keys are not allowed). 
 
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
 allows to represent an equivalent of a JSON object).
+
+The representation
+of the map is language-dependent.
+
+The SDK MUST by default ensure that the exported maps contain only unique keys.
+
+The SDK MAY have an option to allow duplicated keys
+(e.g. for better performance or for receivers that accept duplicated keys).
+If such option is provided, it MUST be documented that for many log record receivers,
+handling of duplicated keys is unpredictable.
 
 ### Field Kinds
 
