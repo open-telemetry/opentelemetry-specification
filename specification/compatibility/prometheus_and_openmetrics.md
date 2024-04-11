@@ -97,6 +97,8 @@ if present, MUST be added as the description of the OTLP metric.
 if present, MUST be used to determine the OTLP data type, and dictates
 type-specific conversion rules listed below. Metric families without type
 metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
+The TYPE metadata MUST also be added to the OTLP [metric.metadata][metricMetadata]
+under the `prometheus.type` key (e.g. `prometheus.type="unknown"`).
 
 ### Counters
 
@@ -241,7 +243,7 @@ in keys).
 
 ### Metric Metadata
 
-Prometheus SDK exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
+Prometheus Pull exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
 comments for the same metric name to be returned in a single scrape of the
 Prometheus endpoint. Exporters MUST drop entire metrics to prevent conflicting
 TYPE comments, but SHOULD NOT drop metric points as a result of conflicting
@@ -294,13 +296,20 @@ Prometheus exporters SHOULD provide a configuration option to disable the
 
 ### Gauges
 
-An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to a Prometheus Gauge.
+An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to
+a Prometheus Unknown-typed metric if the `prometheus.type` key of
+[metric.metadata][metricMetadata] is `unknown`. Otherwise, it MUST be converted
+to a Prometheus Gauge.
 
 ### Sums
 
 [OpenTelemetry Sums](../metrics/data-model.md#sums) follows this logic:
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
+- If the aggregation temporality is cumulative and the sum is non-monotonic and the `prometheus.type` key of
+[metric.metadata][metricMetadata] is `info`, it MUST be converted to an OpenMetrics Info metric.
+- If the aggregation temporality is cumulative and the sum is non-monotonic and the `prometheus.type` key of
+[metric.metadata][metricMetadata] is `stateset`, it MUST be converted to an OpenMetrics StateSet metric.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it MUST be converted to a Prometheus Gauge.
 - If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Counter. The following behaviors are expected:
   - The new data point type must be the same as the accumulated data point type.
@@ -408,16 +417,16 @@ Prometheus exemplar unless they would exceed the
 
 ### Resource Attributes
 
-In SDK Prometheus (pull) exporters, resource attributes SHOULD be converted to
-a single [`target` info metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
+In Prometheus exporters, an OpenTelemetry Resource SHOULD be converted to
+a [`target` info metric](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 if the resource is not [empty](../resource/sdk.md#the-empty-resource).
-The resource attributes MAY be copied to labels of exported metric families
+The Resource attributes MAY be copied to labels of exported metric families
 if required by the exporter configuration, or MUST be dropped. The `target`
-info metric MUST be an info-typed metric whose labels MUST include the resource
-attributes, and MUST NOT include any other labels. There MUST be at most one
-`target` info metric exposed on an SDK Prometheus endpoint.
+info metric MUST be an info-typed
+metric whose labels MUST include the resource attributes, and MUST NOT include
+any other labels.
 
-In the Collector's Prometheus pull and push (remote-write) exporters, it is
+In the Collector's Prometheus exporters, it is
 possible for metrics from multiple targets to be sent together, so targets must
 be disambiguated from one another. However, the Prometheus exposition format
 and [remote-write](https://github.com/Prometheus/Prometheus/blob/main/prompb/remote.proto)
@@ -445,3 +454,5 @@ other labels other than `job` and `instance`.  There MUST be at most one
 If info-typed metric families are not yet supported by the language Prometheus client library, a gauge-typed metric family named `target_info` with a constant value of 1 MUST be used instead.
 
 To convert OTLP resource attributes to Prometheus labels, string Attribute values are converted directly to labels, and non-string Attribute values MUST be converted to string attributes following the [attribute specification](../common/README.md#attribute).
+
+[metricMetadata]: https://github.com/open-telemetry/opentelemetry-proto/blob/c451441d7b73f702d1647574c730daf7786f188c/opentelemetry/proto/metrics/v1/metrics.proto#L199
