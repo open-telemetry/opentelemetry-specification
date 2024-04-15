@@ -186,7 +186,6 @@ Semantic Conventions defines the set of fields in the OTLP data model:
   - Attribute values that are defined in a list of well-known values.
 - [Trace](trace/api.md)
   - The following data on [span](trace/api.md#span):
-    - The span name
     - The span kind
     - The attribute keys provided to the span
       - Whether these attributes must be provided at span start time, due to
@@ -225,6 +224,7 @@ Semantic Conventions defines the set of fields in the OTLP data model:
 Things not listed in the above are not expected to remain stable via semantic
 convention and are allowed (or expected) to change. A few examples:
 
+- The span name
 - The values of attributes
   - An exception are existing values in lists of well-known values. However,
     new values can be added to such lists. Consumers should expect unknown
