@@ -67,7 +67,7 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation                                                           |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
-| Links can be recorded after span creation                                                        |          |     |      |     |        |      |        |     |      | +   |      |       |
+| Links can be recorded after span creation                                                        |          | +   |      |     |        |      |        |     |      | +   |      |       |
 | Links order is preserved                                                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Span events](specification/trace/api.md#add-events)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
 | AddEvent                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -106,7 +106,7 @@ formats is required. Implementing more than one format is optional.
 | When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.                                                                        |          | +  | +    | +   | +      |      | +      |     |  +   | +   | -    |       |
 | The fallback `Meter` `name` property keeps its original invalid value.                                                                                                 | X        | -  | -    | +   | +      |      | +      |     |  +   | -   | -    |       |
 | Associate `Meter` with `InstrumentationScope`.                                                                                                                         |          |    | +    | +   | +      |      | +      |     |  +   | +   |      |       |
-| The meter provides functions to create a new `Counter`.                                                                                                                |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
+| `Counter` instrument is supported.                                                                                                                                     |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The meter provides functions to create a new `AsynchronousCounter`.                                                                                                    |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The meter provides functions to create a new `Histogram`.                                                                                                              |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The meter provides functions to create a new `AsynchronousGauge`.                                                                                                      |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
@@ -124,13 +124,6 @@ formats is required. Implementing more than one format is optional.
 | Instrument descriptions conform to the specified syntax.                                                                                                               |          | -  | +    |     | -      |      | -      |     |      | -   | +    |       |
 | Instrument supports the advisory ExplicitBucketBoundaries parameter.                                                                                                   |          |    | +    |     |        |      | +      |     |      |     |      |       |
 | Instrument supports the advisory Attributes parameter.                                                                                                                 |          |    | +    |     |        |      | -      |     |      |     |      |       |
-| `create_counter` returns a `Counter`.                                                                                                                                  |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The API for `Counter` accepts the name, unit and description of the instrument.                                                                                        |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| `Counter` has an `add` method.                                                                                                                                         |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `add` method returns no (or dummy) value.                                                                                                                          | X        | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `add` method accepts optional attributes.                                                                                                                          |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `add` method accepts the increment amount.                                                                                                                         |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `add` method of `Counter` accepts only positive amounts.                                                                                                           |          | +  | +    | +   | +      |      |        |     |  +   | +   | -    |       |
 | `create_asynchronous_counter` creates an `AsynchronousCounter`.                                                                                                        |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The API for `AsynchronousCounter` accepts the name, unit and description of the instrument.                                                                            |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The API for `AsynchronousCounter` accepts a callback.                                                                                                                  |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
@@ -263,7 +256,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Global Propagator                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | TraceContext Propagator                                                          |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | B3 Propagator                                                                    |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
-| Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      |     | +    | +   | -    | +     |
+| Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | -    | +     |
 | OT Propagator                                                                    |          | +  | +    | +  | +      |      |        |     |      |     |      |       |
 | OpenCensus Binary Propagator                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  | +    |    |        | +    |        | +   |      |     |      |       |
@@ -276,37 +269,38 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 Note: Support for environment variables is optional.
 
-| Feature                                                  | Go  | Java | JS  | Python      | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-|----------------------------------------------------------|-----|------|-----|-------------|------|--------|-----|------|-----|------|-------|
-| OTEL_SDK_DISABLED                                        | -   | +    | -   | -           | -    | -      | +   | -    | -   | -    | -     |
-| OTEL_RESOURCE_ATTRIBUTES                                 | +   | +    | +   | +           | +    | +      | +   | +    | +   | +    | -     |
-| OTEL_SERVICE_NAME                                        | +   | +    | +   | +           | +    | +      | +   |      | +   | +    |       |
-| OTEL_LOG_LEVEL                                           | -   | -    | +   | [-][py1059] | +    | -      | +   |      | -   | -    | -     |
-| OTEL_PROPAGATORS                                         | -   | +    |     | +           | +    | +      | +   | -    | -   | -    | -     |
-| OTEL_BSP_*                                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    | -     |
-| OTEL_BLRP_*                                              |     | +    |     |             |      |        |     | +    |     | +    |       |
-| OTEL_EXPORTER_OTLP_*                                     | +   | +    |     | +           | +    | +      | +   | +    | +   | +    | -     |
-| OTEL_EXPORTER_ZIPKIN_*                                   | -   | +    |     | +           | +    | -      | +   | -    | -   | +    | -     |
-| OTEL_TRACES_EXPORTER                                     | -   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
-| OTEL_METRICS_EXPORTER                                    | -   | +    |     | +           | -    | -      | +   | -    | -   | -    | -     |
-| OTEL_LOGS_EXPORTER                                       | -   | +    |     | +           |      |        | +   |      |     | -    |       |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    |       |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +   | +    | +   | +           | +    | +      | +   |      |     | +    |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT                              | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT                               | +   | +    | +   | +           | +    | +      | +   | +    | -   | +    |       |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +   | -    |     | +           | +    | +      | +   |      |     | +    |       |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +   | -    |     | +           | +    | +      | +   |      |     | +    |       |
-| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT                     |     |      |     |             |      |        | +   |      |     |      |       |
-| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT              |     |      |     |             |      |        | +   |      |     |      |       |
-| OTEL_TRACES_SAMPLER                                      | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
-| OTEL_TRACES_SAMPLER_ARG                                  | +   | +    | +   | +           | +    | +      | +   | -    | -   | -    |       |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +   | +    | +   | +           | +    | -      | +   |      |     | +    |       |
-| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +   | +    | +   | +           | +    | -      | +   |      |     | +    |       |
-| OTEL_METRIC_EXPORT_INTERVAL                              | -   | +    |     |             |      |        | +   |      |     | +    |       |
-| OTEL_METRIC_EXPORT_TIMEOUT                               | -   | -    |     |             |      |        | +   |      |     | +    |       |
-| OTEL_METRICS_EXEMPLAR_FILTER                             | -   | +    |     |             |      |        | +   |      |     | -    |       |
-| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -   | +    | +   | +           |      |        | +   |      |     | +    |       |
-| OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |     | +    |     |             |      |        |     |      |     |      |       |
+| Feature                                                  | Go | Java | JS | Python      | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|----------------------------------------------------------|----|------|----|-------------|------|--------|-----|------|-----|------|-------|
+| OTEL_SDK_DISABLED                                        | -  | +    | -  | -           | -    | -      | +   | -    | -   | -    | -     |
+| OTEL_RESOURCE_ATTRIBUTES                                 | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | -     |
+| OTEL_SERVICE_NAME                                        | +  | +    | +  | +           | +    | +      | +   |      | +   | +    |       |
+| OTEL_LOG_LEVEL                                           | -  | -    | +  | [-][py1059] | +    | -      | +   |      | -   | -    | -     |
+| OTEL_PROPAGATORS                                         | -  | +    |    | +           | +    | +      | +   | -    | -   | -    | -     |
+| OTEL_BSP_*                                               | +  | +    | +  | +           | +    | +      | +   | +    | -   | +    | -     |
+| OTEL_BLRP_*                                              |    | +    |    |             |      |        |     | +    |     | +    |       |
+| OTEL_EXPORTER_OTLP_*                                     | +  | +    |    | +           | +    | +      | +   | +    | +   | +    | -     |
+| OTEL_EXPORTER_ZIPKIN_*                                   | -  | +    |    | +           | +    | -      | +   | -    | -   | +    | -     |
+| OTEL_TRACES_EXPORTER                                     | -  | +    | +  | +           | +    | +      | +   | -    | -   | -    |       |
+| OTEL_METRICS_EXPORTER                                    | -  | +    |    | +           | -    | -      | +   | -    | -   | -    | -     |
+| OTEL_LOGS_EXPORTER                                       | -  | +    |    | +           |      |        | +   |      |     | -    |       |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +  | +    | +  | +           | +    | +      | +   | +    | -   | +    |       |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +  | +    | +  | +           | +    | +      | +   |      |     | +    |       |
+| OTEL_SPAN_EVENT_COUNT_LIMIT                              | +  | +    | +  | +           | +    | +      | +   | +    | -   | +    |       |
+| OTEL_SPAN_LINK_COUNT_LIMIT                               | +  | +    | +  | +           | +    | +      | +   | +    | -   | +    |       |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +  | -    |    | +           | +    | +      | +   |      |     | +    |       |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +  | -    |    | +           | +    | +      | +   |      |     | +    |       |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT                     |    |      |    |             |      |        | +   |      |     |      |       |
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT              |    |      |    |             |      |        | +   |      |     |      |       |
+| OTEL_TRACES_SAMPLER                                      | +  | +    | +  | +           | +    | +      | +   | -    | -   | -    |       |
+| OTEL_TRACES_SAMPLER_ARG                                  | +  | +    | +  | +           | +    | +      | +   | -    | -   | -    |       |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +  | +    | +  | +           | +    | -      | +   |      |     | +    |       |
+| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +  | +    | +  | +           | +    | -      | +   |      |     | +    |       |
+| OTEL_METRIC_EXPORT_INTERVAL                              | -  | +    |    |             |      |        | +   |      |     | +    |       |
+| OTEL_METRIC_EXPORT_TIMEOUT                               | -  | -    |    |             |      |        | +   |      |     | +    |       |
+| OTEL_METRICS_EXEMPLAR_FILTER                             | -  | +    |    |             |      |        | +   |      |     | -    |       |
+| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | -  | +    | +  | +           |      |        | +   |      |     | +    |       |
+| OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |    | +    |    |             |      |        |     |      |     |      |       |
+| OTEL_EXPERIMENTAL_CONFIG_FILE                            |    |      |    |             |      |        |     |      |     |      |       |
 
 ## File Configuration
 

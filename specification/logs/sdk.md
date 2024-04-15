@@ -1,6 +1,6 @@
 # Logs SDK
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -11,9 +11,11 @@
   * [LoggerProvider Creation](#loggerprovider-creation)
   * [Logger Creation](#logger-creation)
   * [Configuration](#configuration)
+    + [LoggerConfigurator](#loggerconfigurator)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
+  * [LoggerConfig](#loggerconfig)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
   * [ReadWriteLogRecord](#readwritelogrecord)
@@ -69,11 +71,17 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
+**Status**: [Experimental](../document-status.md) - The `LoggerProvider` MUST
+compute the relevant [LoggerConfig](#loggerconfig) using the
+configured [LoggerConfigurator](#loggerconfigurator), and create
+a `Logger` whose behavior conforms to that `LoggerConfig`.
+
 ### Configuration
 
-Configuration (i.e. [LogRecordProcessors](#logrecordprocessor)) MUST be owned
-by the the `LoggerProvider`. The configuration MAY be applied at the time of
-`LoggerProvider` creation if appropriate.
+Configuration (
+i.e. [LogRecordProcessors](#logrecordprocessor) and (**experimental**) [LoggerConfigurator](#loggerconfigurator))
+MUST be owned by the `LoggerProvider`. The configuration MAY be applied at the
+time of `LoggerProvider` creation if appropriate.
 
 The `LoggerProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `LogRecordProcessor`), the updated
@@ -82,6 +90,37 @@ NOT matter whether a `Logger` was obtained from the `LoggerProvider` before or
 after the configuration change). Note: Implementation-wise, this could mean
 that `Logger` instances have a reference to their `LoggerProvider` and access
 configuration only via this reference.
+
+#### LoggerConfigurator
+
+**Status**: [Experimental](../document-status.md)
+
+A `LoggerConfigurator` is a function which computes
+the [LoggerConfig](#loggerconfig) for a [Logger](#logger).
+
+The function MUST accept the following parameter:
+
+* `logger_scope`:
+  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  the `Logger`.
+
+The function MUST return the relevant `LoggerConfig`, or some signal indicating
+that the [default LoggerConfig](#loggerconfig) should be used. This signal MAY
+be nil, null, empty, or an instance of the default `LoggerConfig` depending on
+what is idiomatic in the language.
+
+This function is called when a `Logger` is first created, and for each
+outstanding `Logger` when a `LoggerProvider`'s `LoggerConfigurator` is
+updated (if updating is supported). Therefore, it is important that it returns
+quickly.
+
+`LoggerConfigurator` is modeled as a function to maximize flexibility.
+However, implementations MAY provide shorthand or helper functions to
+accommodate common use cases:
+
+* Select one or more loggers by name, with exact match or pattern matching.
+* Disable one or more specific loggers.
+* Disable all loggers, and selectively enable one or more specific loggers.
 
 ### Shutdown
 
@@ -124,13 +163,30 @@ registered [LogRecordProcessors](#logrecordprocessor).
 
 ## Logger
 
-Note that `Logger`s should not be responsible for configuration. This should be
-the responsibility of the `LoggerProvider` instead.
+**Status**: [Experimental](../document-status.md) - `Logger` MUST behave
+according to the [LoggerConfig](#loggerconfig) computed
+during [logger creation](#logger-creation). If the `LoggerProvider` supports
+updating the [LoggerConfigurator](#loggerconfigurator), then upon update
+the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
+
+### LoggerConfig
+
+**Status**: [Experimental](../document-status.md)
+
+A `LoggerConfig` defines various configurable aspects of a `Logger`'s behavior.
+It consists of the following parameters:
+
+* `disabled`: A boolean indication of whether the logger is enabled.
+
+  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  i.e. `Logger`s are enabled by default).
+
+  If a `Logger` is disabled, it MUST behave equivalently
+  to [No-op Logger](./noop.md#logger).
 
 ## Additional LogRecord interfaces
 
-In addition to the [definition for LogRecord](data-model.md#log-and-event-record-definition), the
-following `LogRecord`-like interfaces are defined in the SDK:
+In this document we refer to `ReadableLogRecord` and `ReadWriteLogRecord`, defined as follows.
 
 ### ReadableLogRecord
 
@@ -150,15 +206,25 @@ the [transformation to non-OTLP formats](../common/mapping-to-non-otlp.md#droppe
 specification.
 
 Note: Typically this will be implemented with a new interface or (immutable)
-value type.
+value type. The SDK may also use a single type to represent both `ReadableLogRecord`
+and `ReadWriteLogRecord`.
 
 ### ReadWriteLogRecord
 
-A function receiving this as an argument MUST be able to write to the
-full [LogRecord](data-model.md#log-and-event-record-definition) and additionally MUST be able to retrieve all
-information
-that was added to the `LogRecord` (as with
-[ReadableLogRecord](#readablelogrecord)).
+ReadWriteLogRecord is a superset of [ReadableLogRecord](#readablelogrecord).
+
+A function receiving this as an argument MUST additionally be able to modify
+the following information added to the [LogRecord](data-model.md#log-and-event-record-definition):
+
+* [`Timestamp`](./data-model.md#field-timestamp)
+* [`ObservedTimestamp`](./data-model.md#field-observedtimestamp)
+* [`SeverityText`](./data-model.md#field-severitytext)
+* [`SeverityNumber`](./data-model.md#field-severitynumber)
+* [`Body`](./data-model.md#field-body)
+* [`Attributes`](./data-model.md#field-attributes) (addition, modification, removal)
+* [`TraceId`](./data-model.md#field-traceid)
+* [`SpanId`](./data-model.md#field-spanid)
+* [`TraceFlags`](./data-model.md#field-traceflags)
 
 ## LogRecord Limits
 

@@ -15,6 +15,7 @@ linkTitle: SDK
   * [MeterProvider Creation](#meterprovider-creation)
   * [Meter Creation](#meter-creation)
   * [Configuration](#configuration)
+    + [MeterConfigurator](#meterconfigurator)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
   * [View](#view)
@@ -41,6 +42,7 @@ linkTitle: SDK
     + [Synchronous instrument cardinality limits](#synchronous-instrument-cardinality-limits)
     + [Asynchronous instrument cardinality limits](#asynchronous-instrument-cardinality-limits)
 - [Meter](#meter)
+  * [MeterConfig](#meterconfig)
   * [Duplicate instrument registration](#duplicate-instrument-registration)
     + [Name conflict](#name-conflict)
   * [Instrument name](#instrument-name)
@@ -128,12 +130,18 @@ When a Schema URL is passed as an argument when creating a `Meter` the emitted
 telemetry for that `Meter` MUST be associated with the Schema URL, provided
 that the emitted data format is capable of representing such association.
 
+**Status**: [Experimental](../document-status.md) - The `MeterProvider` MUST
+compute the relevant [MeterConfig](#meterconfig) using the
+configured [MeterConfigurator](#meterconfigurator), and create
+a `Meter` whose behavior conforms to that `MeterConfig`.
+
 ### Configuration
 
-Configuration (i.e. [MetricExporters](#metricexporter),
-[MetricReaders](#metricreader) and [Views](#view)) MUST be owned by the
-`MeterProvider`. The configuration MAY be applied at the time of `MeterProvider`
-creation if appropriate.
+Configuration (
+i.e. [MetricExporters](#metricexporter), [MetricReaders](#metricreader), [Views](#view),
+and (**experimental**) [MeterConfigurator](#meterconfigurator)) MUST be
+owned by the `MeterProvider`. The configuration MAY be applied at the time
+of `MeterProvider` creation if appropriate.
 
 The `MeterProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `MetricReader`), the updated
@@ -142,6 +150,37 @@ matter whether a `Meter` was obtained from the `MeterProvider` before or after
 the configuration change). Note: Implementation-wise, this could mean that
 `Meter` instances have a reference to their `MeterProvider` and access
 configuration only via this reference.
+
+#### MeterConfigurator
+
+**Status**: [Experimental](../document-status.md)
+
+A `MeterConfigurator` is a function which computes
+the [MeterConfig](#meterconfig) for a [Meter](#meter).
+
+The function MUST accept the following parameter:
+
+* `meter_scope`:
+  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  the `Meter`.
+
+The function MUST return the relevant `MeterConfig`, or some signal indicating
+that the [default MeterConfig](#meterconfig) should be used. This signal MAY
+be nil, null, empty, or an instance of the default `MeterConfig` depending on
+what is idiomatic in the language.
+
+This function is called when a `Meter` is first created, and for each
+outstanding `Meter` when a `MeterProvider`'s `MeterConfigurator` is
+updated (if updating is supported). Therefore, it is important that it returns
+quickly.
+
+`MeterConfigurator` is modeled as a function to maximize flexibility.
+However, implementations MAY provide shorthand or helper functions to
+accommodate common use cases:
+
+* Select one or more Meters by name, with exact match or pattern matching.
+* Disable one or more specific Meters.
+* Disable all Meters, and selectively enable one or more specific Meters.
 
 ### Shutdown
 
@@ -560,13 +599,14 @@ The Sum Aggregation informs the SDK to collect data for the
 
 The monotonicity of the aggregation is determined by the instrument type:
 
-| Instrument Kind | `SumType` |
-| --- | --- |
-| [Counter](./api.md#counter) | Monotonic |
-| [UpDownCounter](./api.md#updowncounter) | Non-Monotonic |
-| [Histogram](./api.md#histogram) | Monotonic |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge) | Non-Monotonic |
-| [Asynchronous Counter](./api.md#asynchronous-counter) | Monotonic |
+| Instrument Kind                                                   | `SumType`     |
+|-------------------------------------------------------------------|---------------|
+| [Counter](./api.md#counter)                                       | Monotonic     |
+| [UpDownCounter](./api.md#updowncounter)                           | Non-Monotonic |
+| [Histogram](./api.md#histogram)                                   | Monotonic     |
+| [Gauge](./api.md#gauge)                                           | Non-Monotonic |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | Non-Monotonic |
+| [Asynchronous Counter](./api.md#asynchronous-counter)             | Monotonic     |
 | [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | Non-Monotonic |
 
 This Aggregation does not have any configuration parameters.
@@ -794,6 +834,27 @@ temporality.
 
 Distinct meters MUST be treated as separate namespaces for the purposes of detecting
 [duplicate instrument registrations](#duplicate-instrument-registration).
+
+**Status**: [Experimental](../document-status.md) - `Meter` MUST behave
+according to the [MeterConfig](#meterconfig) computed
+during [Meter creation](#meter-creation). If the `MeterProvider` supports
+updating the [MeterConfigurator](#meterconfigurator), then upon update
+the `Meter` MUST be updated to behave according to the new `MeterConfig`.
+
+### MeterConfig
+
+**Status**: [Experimental](../document-status.md)
+
+A `MeterConfig` defines various configurable aspects of a `Meter`'s behavior.
+It consists of the following parameters:
+
+* `disabled`: A boolean indication of whether the Meter is enabled.
+
+  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  i.e. `Meter`s are enabled by default).
+
+  If a `Meter` is disabled, it MUST behave equivalently
+  to [No-op Meter](./noop.md#meter).
 
 ### Duplicate instrument registration
 
@@ -1051,6 +1112,11 @@ use `AlignedHistogramBucketExemplarReservoir`.
   smaller of the maximum number of buckets configured on the aggregation or
   twenty (e.g. `min(20, max_buckets)`).
 - All other aggregations will use `SimpleFixedSizeExemplarReservoir`.
+
+Exemplar default reservoirs MAY change in
+a [minor version bump](./../versioning-and-stability.md#minor-version-bump). No
+guarantees are made on the shape or statistical properties of returned
+exemplars.
 
 #### SimpleFixedSizeExemplarReservoir
 

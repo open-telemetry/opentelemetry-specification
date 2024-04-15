@@ -155,8 +155,9 @@ at this time, as discussed in
 
 ## Attribute Collections
 
-[Resources](../resource/sdk.md), Metrics
-[data points](../metrics/data-model.md#metric-points),
+[Resources](../resource/sdk.md),
+[Instrumentation Scopes](../glossary.md#instrumentation-scope),
+[Metric points](../metrics/data-model.md#metric-points),
 [Spans](../trace/api.md#set-attributes), Span
 [Events](../trace/api.md#add-events), Span
 [Links](../trace/api.md#link) and

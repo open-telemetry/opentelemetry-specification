@@ -32,6 +32,77 @@ release.
 
 ### Supplementary Guidelines
 
+## v1.32.0 (2024-04-11)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Remove the Jaeger Exporter.
+  ([#3964](https://github.com/open-telemetry/opentelemetry-specification/pull/3964))
+
+### Metrics
+
+- Clarify that exemplar reservoir default may change in a minor version.
+  ([#3943](https://github.com/open-telemetry/opentelemetry-specification/pull/3943))
+- Add option to disable target info metric to Prometheus exporters.
+  ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
+- Add synchronous gauge entry to sum monotonic table.
+  ([#3977](https://github.com/open-telemetry/opentelemetry-specification/pull/3977))
+
+### Logs
+
+- Refine description of Instrumentation Scope.
+  ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
+- Clarify that `ReadableLogRecord` and `ReadWriteLogRecord` can be represented using a single type.
+  ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
+- Fix what can be modified via `ReadWriteLogRecord`.
+  ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
+
+### Events
+
+- No changes.
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### Compatibility
+
+- Prometheus compatibility: Clarify naming of the target info metric, and differences between various Prometheus formats.
+  ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
+- Prometheus compatibility: Clarify that the service triplet is required to be unique by semantic conventions.
+  ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
+- Prometheus: represent Prometheus Info, StateSet and Unknown-typed metrics in OTLP.
+  ([#3868](https://github.com/open-telemetry/opentelemetry-specification/pull/3868))
+- Update and reorganize the prometheus sdk exporter specification.
+  ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
+
+### SDK Configuration
+
+- Define OTEL_EXPERIMENTAL_CONFIG_FILE to ignore other env vars, add env var substitution default syntax.
+  ([#3948](https://github.com/open-telemetry/opentelemetry-specification/pull/3948))
+- Clarify environment variable substitution is not recursive
+  ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
+- Allow `env:` prefix in environment variable substitution syntax.
+  ([#3974](https://github.com/open-telemetry/opentelemetry-specification/pull/3974))
+- Add simple scope configuration to Tracer, Meter, Logger (experimental).
+  ([#3877](https://github.com/open-telemetry/opentelemetry-specification/pull/3877))
+
+### Common
+
+- No changes.
+
+### Supplementary Guidelines
+
+- No changes.
+
 ## v1.31.0 (2024-03-13)
 
 ### Context
