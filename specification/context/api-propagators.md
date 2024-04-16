@@ -370,7 +370,7 @@ following fields are propagated.
 - TraceState (string)
 
 There are two trace flag values defined in W3C Trace Context Level 2
-specification, `Sampled` (0x1) and `Random` (0x2).  Propagators MUST
+specification, `Sampled` (0x1) and `Random` (0x2).  Propagators need to
 set bits 2-7 of the Trace Flags (6 most significant bits) to zero, as
 they are reserved for future use and the W3C specification requires
 participants to set them to zero.
