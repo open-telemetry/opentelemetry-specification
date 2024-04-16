@@ -211,11 +211,11 @@ formats is required. Implementing more than one format is optional.
 
 ## Logs
 
+Features for the [Logging SDK](specification/logs/sdk.md).
 Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
 
 | Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
-| **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
 | LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      | +   |      |       |
 | LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
@@ -233,7 +233,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 ## Events
 
 Features for the [Events API](specification/logs/event-api.md) and the [Events SDK](specification/logs/event-sdk.md).
-Events are currently an experimental work in progress.
+Disclaimer: Events are currently an experimental work in progress. 
 
 | Feature                                                | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
