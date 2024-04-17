@@ -11,6 +11,35 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Events
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+- Clarify the schema for YAML configuration files
+  ([#3973](https://github.com/open-telemetry/opentelemetry-specification/pull/3973))
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.32.0 (2024-04-11)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Remove the Jaeger Exporter.
   ([#3964](https://github.com/open-telemetry/opentelemetry-specification/pull/3964))
 
@@ -22,6 +51,8 @@ release.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 - Add synchronous gauge entry to sum monotonic table.
   ([#3977](https://github.com/open-telemetry/opentelemetry-specification/pull/3977))
+- Change the exemplar behavior to be on by default.
+  ([#3994](https://github.com/open-telemetry/opentelemetry-specification/pull/3994))
 
 ### Logs
 
@@ -34,9 +65,15 @@ release.
 
 ### Events
 
+- No changes.
+
 ### Resource
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### Compatibility
 
@@ -51,16 +88,23 @@ release.
 
 ### SDK Configuration
 
+- Define OTEL_EXPERIMENTAL_CONFIG_FILE to ignore other env vars, add env var substitution default syntax.
+  ([#3948](https://github.com/open-telemetry/opentelemetry-specification/pull/3948))
 - Clarify environment variable substitution is not recursive
   ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
 - Allow `env:` prefix in environment variable substitution syntax.
   ([#3974](https://github.com/open-telemetry/opentelemetry-specification/pull/3974))
-- Clarify the schema for YAML configuration files
-  ([#3973](https://github.com/open-telemetry/opentelemetry-specification/pull/3973))
+- Add simple scope configuration to Tracer, Meter, Logger (experimental).
+  ([#3877](https://github.com/open-telemetry/opentelemetry-specification/pull/3877))
+
 
 ### Common
 
+- No changes.
+
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.31.0 (2024-03-13)
 
