@@ -97,7 +97,6 @@ release.
 - Add simple scope configuration to Tracer, Meter, Logger (experimental).
   ([#3877](https://github.com/open-telemetry/opentelemetry-specification/pull/3877))
 
-
 ### Common
 
 - No changes.
