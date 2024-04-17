@@ -805,8 +805,8 @@ The API MUST provide:
   arguments. This MAY be called `AddLink`. This API takes the `SpanContext` of
   the `Span` to link to and optional `Attributes`, either as individual
   parameters or as an immutable object encapsulating them, whichever is most
-  appropriate for the language. Implementations SHOULD record links with
-  [invalid](#isvalid) `SpanContext` as long as either the attribute set
+  appropriate for the language. Implementations SHOULD record links containing
+  `SpanContext` with empty `TraceId` or `SpanId` as long as either the attribute set
   or `TraceState` is non-empty.
 
 The Span interface MAY provide:
