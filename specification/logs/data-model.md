@@ -126,9 +126,9 @@ allows to represent an equivalent of a JSON object).
 
 The representation of the map is language-dependent.
 
-The SDK MUST by default ensure that the exported maps contain only unique keys.
+The implementation MUST by default ensure that the exported maps contain only unique keys.
 
-The SDK MAY have an option to allow exporting maps with duplicate keys
+The implementation MAY have an option to allow exporting maps with duplicate keys
 (e.g. for better performance).
 If such option is provided, it MUST be documented that for many receivers,
 handling of maps with duplicate keys is unpredictable and it is the users'
