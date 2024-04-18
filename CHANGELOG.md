@@ -25,6 +25,9 @@ release.
 
 ### SDK Configuration
 
+- Error out on invalid identifiers in environment variable substitution.
+  ([#4002](https://github.com/open-telemetry/opentelemetry-specification/pull/4002))
+
 ### Common
 
 ### Supplementary Guidelines
