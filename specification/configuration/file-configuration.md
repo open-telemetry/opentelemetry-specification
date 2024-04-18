@@ -90,6 +90,14 @@ more non line break characters (i.e. any character except `\n`). If a referenced
 environment variable is not defined and does not have a `DEFAULT_VALUE`, it MUST
 be replaced with an empty value.
 
+Configuration files MUST fail to parse if they contain a reference that does not
+match the references regular expression but does match the following PCRE2
+regular expression:
+
+```regexp
+\$\{(?<INVALID_IDENTIFIER>[^}]+)\}
+```
+
 Node types MUST be interpreted after environment variable substitution takes
 place. This ensures the environment string representation of boolean, integer,
 or floating point fields can be properly converted to expected types.
@@ -127,6 +135,7 @@ string_key_with_default: ${UNDEFINED_KEY:-fallback}   # UNDEFINED_KEY is not def
 undefined_key: ${UNDEFINED_KEY}                       # Invalid reference, UNDEFINED_KEY is not defined and is replaced with ""
 ${STRING_VALUE}: value                                # Invalid reference, substitution is not valid in mapping keys and reference is ignored
 recursive_key: ${REPLACE_ME}                          # Valid reference to REPLACE_ME
+# invalid_identifier_key: ${STRING_VALUE:?error}      # If uncommented, this is an invalid identifier, it would fail to parse
 ```
 
 Environment variable substitution results in the following YAML:
