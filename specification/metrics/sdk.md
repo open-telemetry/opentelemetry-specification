@@ -1005,7 +1005,7 @@ While the metric data point for the counter would carry the attributes `X` and
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements
 via the `ExemplarFilter` and `ExemplarReservoir` hooks.
 
-`Exemplar` sampling SHOULD be turned off by default. If `Exemplar` sampling is
+`Exemplar` sampling SHOULD be turned on by default. If `Exemplar` sampling is
 off, the SDK MUST NOT have overhead related to exemplar sampling.
 
 A Metric SDK MUST allow exemplar sampling to leverage the configuration of
