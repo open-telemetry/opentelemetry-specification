@@ -311,6 +311,10 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    `Span` is created without an SDK installed or as described in
    [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
 
+Note: Once the span creation behavior has shipped in a stable SDK release it
+MUST NOT be changed without clear indication of a breaking change being made
+(major version bump typically).
+
 ### Sampler
 
 `Sampler` interface allows users to create custom samplers which will return a
