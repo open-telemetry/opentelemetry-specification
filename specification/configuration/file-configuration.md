@@ -69,10 +69,10 @@ TODO: decide if JSON file format is required
 ### Environment variable substitution
 
 Configuration files support environment variables substitution for references
-which match the following regular expression:
+which match the following PCRE2 regular expression:
 
 ```regexp
-\$\{(?:env:)?(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?}
+\$\{(?:env:)?(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?\}
 ```
 
 The `ENV_NAME` MUST start with an alphabetic or `_` character, and is followed
