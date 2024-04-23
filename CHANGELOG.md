@@ -13,6 +13,13 @@ release.
 
 ### Metrics
 
+- Change the exemplar behavior to be on by default.
+  ([#3994](https://github.com/open-telemetry/opentelemetry-specification/pull/3994))
+- Add name suggestion for option to apply resource attributes as metric attributes in Prometheus exporter.
+  ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
+- Mark Exemplars as stable.
+  ([#3870](https://github.com/open-telemetry/opentelemetry-specification/pull/3870))
+
 ### Logs
 
 ### Events
@@ -51,8 +58,6 @@ release.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 - Add synchronous gauge entry to sum monotonic table.
   ([#3977](https://github.com/open-telemetry/opentelemetry-specification/pull/3977))
-- Change the exemplar behavior to be on by default.
-  ([#3994](https://github.com/open-telemetry/opentelemetry-specification/pull/3994))
 
 ### Logs
 
