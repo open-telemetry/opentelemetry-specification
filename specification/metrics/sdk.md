@@ -382,7 +382,7 @@ The SDK MUST accept the following stream configuration parameters:
   user does not provide an `aggregation` value, the `MeterProvider` MUST apply
   a [default aggregation](#default-aggregation) configurable on the basis of
   instrument type according to the [MetricReader](#metricreader) instance.
-* **Status**: [Experimental, Feature-freeze](../document-status.md) - `exemplar_reservoir`: A
+* `exemplar_reservoir`: A
   functional type that generates an exemplar reservoir a `MeterProvider` will
   use when storing exemplars. This functional type needs to be a factory or
   callback similar to aggregation selection functionality which allows
@@ -957,7 +957,7 @@ series and the topic requires further analysis.
 
 ## Exemplar
 
-**Status**: [Experimental, Feature-freeze](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
