@@ -1105,13 +1105,13 @@ The SDK MUST include two types of built-in exemplar reservoirs:
 
 By default:
 
-- Explicit bucket histogram aggregation with more than 1 bucket will
+- Explicit bucket histogram aggregation with more than 1 bucket MUST
 use `AlignedHistogramBucketExemplarReservoir`.
 - Base2 Exponential Histogram Aggregation SHOULD use a
   `SimpleFixedSizeExemplarReservoir` with a reservoir equal to the
   smaller of the maximum number of buckets configured on the aggregation or
   twenty (e.g. `min(20, max_buckets)`).
-- All other aggregations will use `SimpleFixedSizeExemplarReservoir`.
+- All other aggregations MUST use `SimpleFixedSizeExemplarReservoir`.
 
 Exemplar default reservoirs MAY change in
 a [minor version bump](./../versioning-and-stability.md#minor-version-bump). No
