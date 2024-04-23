@@ -32,6 +32,9 @@ release.
 
 ### SDK Configuration
 
+- Clarify syntax for environment variable substitution regular expression
+  ([#4001](https://github.com/open-telemetry/opentelemetry-specification/pull/4001))
+
 ### Common
 
 ### Supplementary Guidelines
