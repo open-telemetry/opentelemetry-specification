@@ -90,9 +90,10 @@ more non line break characters (i.e. any character except `\n`). If a referenced
 environment variable is not defined and does not have a `DEFAULT_VALUE`, it MUST
 be replaced with an empty value.
 
-Configuration files MUST fail to parse if they contain a reference that does not
-match the references regular expression but does match the following PCRE2
-regular expression:
+When parsing a configuration file that contains a reference not matching
+the references regular expression but does match the following PCRE2
+regular expression, the parser MUST return an empty result (no partial
+results are allowed) and an error describing the parse failure to the user.
 
 ```regexp
 \$\{(?<INVALID_IDENTIFIER>[^}]+)\}
