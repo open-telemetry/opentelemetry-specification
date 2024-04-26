@@ -235,17 +235,19 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 Features for the [Events API](specification/logs/event-api.md) and the [Events SDK](specification/logs/event-sdk.md).
 Disclaimer: Events are currently an experimental work in progress.
 
-| Feature                                                | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-|--------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
-| EventLoggerProvider.Get EventLogger                    |          |     | +    |     |        |      |        |     |      |     |      |       |
-| EventLoggerProvider.Get EventLogger accepts version    | +        |     | +    |     |        |      |        |     |      |     |      |       |
-| EventLoggerProvider.Get EventLogger accepts schema_url | +        |     | +    |     |        |      |        |     |      |     |      |       |
-| EventLoggerProvider.Get EventLogger accepts attributes | +        |     |      |     |        |      |        |     |      |     |      |       |
-| EventLogger accepts AnyValue payload                   | +        |     | +    |     |        |      |        |     |      |     |      |       |
-| EventLogger accepts severity                           | +        |     | +    |     |        |      |        |     |      |     |      |       |
-| EventLogger accepts timestamp                          | +        |     | +    |     |        |      |        |     |      |     |      |       |
-| EventLogger accepts attributes                         | +        |     | +    |     |        |      |        |     |      |     |      |       |
-| EventLogger accepts context                            | +        |     | +    |     |        |      |        |     |      |     |      |       |
+| Feature                                                                    | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|----------------------------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
+| [EventLoggerProvider](specification/logs/event-api.md#eventloggerprovider) |          |     |      |     |        |      |        |     |      |     |      |       |
+| Get EventLogger                                                            |          |     |      |     |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts version                                            | +        |     |      |     |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts schema_url                                         | +        |     |      |     |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts attributes                                         | +        |     |      |     |        |      |        |     |      |     |      |       |
+| [EventLogger](specification/logs/event-api.md#eventlogger)                 |          |     |      |     |        |      |        |     |      |     |      |       |
+| Accepts AnyValue payload                                                   | +        |     |      |     |        |      |        |     |      |     |      |       |
+| Accepts severity                                                           | +        |     |      |     |        |      |        |     |      |     |      |       |
+| Accepts timestamp                                                          | +        |     |      |     |        |      |        |     |      |     |      |       |
+| Accepts attributes                                                         | +        |     |      |     |        |      |        |     |      |     |      |       |
+| Accepts context                                                            | +        |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Resource
 
