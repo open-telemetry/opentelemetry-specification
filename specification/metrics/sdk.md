@@ -382,6 +382,13 @@ The SDK MUST accept the following stream configuration parameters:
   user does not provide an `aggregation` value, the `MeterProvider` MUST apply
   a [default aggregation](#default-aggregation) configurable on the basis of
   instrument type according to the [MetricReader](#metricreader) instance.
+* **Status**: [Experimental](../document-status.md) - `exemplar_filter`: The
+  `exemplar_filter` configuration allows users to select between one of the
+  built-in [ExemplarFilters](#exemplarfilter). The list of acceptable values for
+  `exemplar_filter` MUST match those available to be set on the `MeterProvider`
+  for the SDK. Users MUST NOT be required to specify `exemplar_filter` but if
+  specified it MUST override the `MeterProvider` value (if set) or the default
+  SDK behavior if not explicitly set for the `MeterProvider`.
 * `exemplar_reservoir`: A
   functional type that generates an exemplar reservoir a `MeterProvider` will
   use when storing exemplars. This functional type needs to be a factory or
