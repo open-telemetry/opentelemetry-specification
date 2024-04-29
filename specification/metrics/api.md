@@ -804,8 +804,6 @@ httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", schem
 
 ### Gauge
 
-**Status**: [Experimental](../document-status.md)
-
 `Gauge` is a [synchronous Instrument](#synchronous-instrument-api) which can be
 used to record non-additive value(s) (e.g. the background noise level - it makes
 no sense to record the background noise level value from multiple rooms and sum
