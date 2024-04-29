@@ -108,6 +108,10 @@ The `Logger` MUST provide functions to:
 
 - Emit a `LogRecord`
 
+The `Logger` SHOULD provide functions to:
+
+- Report if `Enabled` for a `LogRecord`
+
 #### Emit a LogRecord
 
 The effect of calling this API is to emit a `LogRecord` to the processing pipeline.
@@ -126,6 +130,30 @@ The API MUST accept the following parameters:
 - [Attributes](./data-model.md#field-attributes)
 
 All parameters are optional.
+
+#### Enabled
+
+To help users avoid performing computationally expensive operations when
+generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
+
+At a minimum, the API MUST accept the following parameters:
+
+- [Context](../context/README.md) (optional): This is the Context associated
+  with the `LogRecord`. The API MAY implicitly use the current Context as a
+  default behavior.
+- [Severity Number](./data-model.md#field-severitynumber)
+
+Users of a language implementation community can have specific needs when using
+this API. Therefore, additional parameters MAY be accepted.
+
+This API MUST return a language idiomatic boolean type.
+
+The returned value MUST be `true` when logging is enabled for the provided
+arguments. The returned value can be `true` or `false` when logging is disabled
+for the provided arguments. The ambiguity when disabled allows implementation
+that want to optimize memory or handle indeterminable states the flexibility
+they need. If an implementation does not need this flexibility, it SHOULD
+return `false` when logging is disabled for the provided arguments.
 
 ## Optional and required parameters
 
