@@ -15,6 +15,7 @@
 - [Logger](#logger)
   * [Logger operations](#logger-operations)
     + [Emit a LogRecord](#emit-a-logrecord)
+    + [Enabled](#enabled)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [Artifact Naming](#artifact-naming)
