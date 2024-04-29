@@ -397,7 +397,7 @@ try {
     OpenTelemetryConfiguration resolvedConfigurationModel = merge(localConfigurationModel, remoteConfigurationModel);
     
     // Create SDK components from resolved configuration model
-    openTelemetry = FileConfiguration.create(configurationModel);
+    openTelemetry = FileConfiguration.create(resolvedConfigurationModel);
 } catch (Throwable e) {
     log.error("Error initializing SDK from configuration file", e);    
 }
@@ -416,7 +416,7 @@ supports [OTEL_EXPERIMENTAL_CONFIG_FILE](./sdk-environment-variables.md#file-con
 then setting `OTEL_EXPERIMENTAL_CONFIG_FILE` provides a simple way to obtain an
 SDK initialized from the specified config file. The pattern for accessing the
 configured SDK components and installing into instrumentation will vary by
-language. For example, the usage in java might resemble:
+language. For example, the usage in Java might resemble:
 
 ```shell
 # Set the required env var to the location of the configuration file
