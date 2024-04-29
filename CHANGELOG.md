@@ -22,6 +22,9 @@ release.
 
 ### Logs
 
+- Allow implementations to export duplicate keys in a map as an opt-in option.
+  ([#3938](https://github.com/open-telemetry/opentelemetry-specification/pull/3938))
+
 ### Events
 
 ### Resource
