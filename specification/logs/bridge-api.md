@@ -1,6 +1,6 @@
 # Logs Bridge API
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -133,6 +133,8 @@ The API MUST accept the following parameters:
 All parameters are optional.
 
 #### Enabled
+
+**Status**: [Experimental](../document-status.md)
 
 To help users avoid performing computationally expensive operations when
 generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
