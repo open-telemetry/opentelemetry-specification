@@ -57,6 +57,7 @@ linkTitle: API
   * [Multiple-instrument callbacks](#multiple-instrument-callbacks)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
+- [References](#references)
 
 <!-- tocstop -->
 
