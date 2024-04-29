@@ -6,6 +6,7 @@ default: true
 
 ul-style: false
 line-length: false
+first-line-heading: false
 no-duplicate-header:
   siblings_only: true
 ol-prefix:
