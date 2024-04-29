@@ -158,6 +158,10 @@ that want to optimize memory or handle indeterminable states the flexibility
 they need. If an implementation does not need this flexibility, it SHOULD
 return `false` when logging is disabled for the provided arguments.
 
+The returned value is not always static, it can change over time. The API
+SHOULD be documented that users needs to call this API each time they generate
+a `LogRecord` to ensure they have the most up-to-date response.
+
 ## Optional and required parameters
 
 The operations defined include various parameters, some of which are marked
