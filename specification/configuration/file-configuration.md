@@ -23,6 +23,9 @@ linkTitle: File
     + [Parse](#parse)
     + [Create](#create)
     + [Register Component Provider](#register-component-provider)
+- [Examples](#examples)
+  * [Via File Configuration API](#via-file-configuration-api)
+  * [Via OTEL_EXPERIMENTAL_CONFIG_FILE](#via-otel_experimental_config_file)
 - [References](#references)
 
 <!-- tocstop -->
