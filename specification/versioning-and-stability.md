@@ -131,6 +131,12 @@ There are two categories of public features: **plugin interfaces** and **constru
 Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
 Examples of constructors include configuration objects, environment variables, and SDK builders.
 
+**plugin interfaces** may be extended with new functions without requiring a new major version.
+Languages which support adding methods to interfaces in a non-breaking manner (e.g. with default implementations) can directly extend the existing interfaces. 
+Languages which don't support this will have to introduce a new interface which adds the new method(s).
+This new interface needs to be accepted in addition to the old one in all places where the previous revision of that plugin interface was accepted.
+When the major version of the SDK is bumped, the interfaces SHOULD be consolidated back to a single interface.
+
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for SDK packages.
 
 #### Contrib Stability
