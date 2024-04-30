@@ -449,6 +449,7 @@ standard output.
 * [Logs Data Model](./data-model.md)
 * [Event API](./event-api.md)
 * [Trace Context in non-OTLP Log Formats](../compatibility/logging_trace_context.md)
+* [Span Events to Events mapping](./span-events-mapping.md)
 
 ## References
 
