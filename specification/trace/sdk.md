@@ -38,6 +38,7 @@ linkTitle: SDK
 - [Span processor](#span-processor)
   * [Interface definition](#interface-definition)
     + [OnStart](#onstart)
+    + [OnEnding](#onendingspan)
     + [OnEnd(Span)](#onendspan)
     + [Shutdown()](#shutdown)
     + [ForceFlush()](#forceflush)
@@ -579,6 +580,19 @@ exceptions.
   if that was explicitly requested).
 
 **Returns:** `Void`
+
+#### OnEnding
+
+`OnEnding` is called just before a span is ended. The span is still mutable, but the end timestamp is already set.
+This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
+therefore it should not block or throw an exception.
+
+**Parameters:**
+
+* `span` - a [read/write span object](#additional-span-interfaces) for the span which is about to be ended.
+
+**Returns:** `Void`
+
 
 #### OnEnd(Span)
 
