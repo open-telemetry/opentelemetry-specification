@@ -81,4 +81,4 @@ jobs:
       run: dotnet tool install -g docfx
 
     - name: run docfx
-      run: docfx build --dry-run
+      run: docfx build
