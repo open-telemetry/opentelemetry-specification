@@ -67,8 +67,6 @@ revision >= 1.2.
 
 YAML configuration files MUST use file extensions `.yaml` or `.yml`.
 
-TODO: decide if JSON file format is required
-
 ### Environment variable substitution
 
 Configuration files support environment variables substitution for references
