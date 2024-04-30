@@ -38,7 +38,7 @@ linkTitle: SDK
 - [Span processor](#span-processor)
   * [Interface definition](#interface-definition)
     + [OnStart](#onstart)
-    + [OnEnding](#onendingspan)
+    + [OnEnding](#onending)
     + [OnEnd(Span)](#onendspan)
     + [Shutdown()](#shutdown)
     + [ForceFlush()](#forceflush)
@@ -592,7 +592,6 @@ therefore it should not block or throw an exception.
 * `span` - a [read/write span object](#additional-span-interfaces) for the span which is about to be ended.
 
 **Returns:** `Void`
-
 
 #### OnEnd(Span)
 
