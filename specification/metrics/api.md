@@ -57,6 +57,7 @@ linkTitle: API
   * [Multiple-instrument callbacks](#multiple-instrument-callbacks)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -1327,3 +1328,19 @@ specific guarantees and safeties.
 
 **Instrument** - All methods of any Instrument are safe to be called
 concurrently.
+
+## References
+
+- [OTEP0003 Consolidate pre-aggregated and raw metrics APIs](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0003-measure-metric-type.md)
+- [OTEP0008 Metrics observer specification](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0008-metric-observer.md)
+- [OTEP0009 Metric Handle API specification](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0009-metric-handles.md)
+- [OTEP0010 Rename "Cumulative" to "Counter" in the metrics API](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0010-cumulative-to-counter.md)
+- [OTEP0049 Metric `LabelSet` specification](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0049-metric-label-set.md)
+- [OTEP0070 Rename metric instrument Handles to "Bound Instruments"](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0070-metric-bound-instrument.md)
+- [OTEP0072 Metric observer specification (refinement)](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0072-metric-observer.md)
+- [OTEP0080 Remove the Metric API Gauge instrument](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0080-remove-metric-gauge.md)
+- [OTEP0088 Metric Instruments](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0088-metric-instrument-optional-refinements.md)
+- [OTEP0090 Remove the LabelSet object from the metrics API](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0090-remove-labelset-from-metrics-api.md)
+- [OTEP0098 Explain the metric instruments](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0098-metric-instruments-explained.md)
+- [OTEP0108 Metric instrument naming guidelines](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0108-naming-guidelines.md)
+- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md)
