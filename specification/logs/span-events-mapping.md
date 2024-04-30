@@ -1,17 +1,6 @@
-# Span Event to Events Mapping
+# Span Event to Event Mapping
 
 **Status**: [Experimental](../document-status.md)
-
-<details>
-<summary>Table of Contents</summary>
-
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-
-<!-- toc -->
-
-<!-- tocstop -->
-
-</details>
 
 [Span Events](../trace/api.md#add-events) represent an event attached to a span and has a different structure than [Events](./event-api.md).
 
