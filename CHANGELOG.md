@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add `OnEnding` callback to SDK `SpanProcessor` interface
+  ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
+
 ### Metrics
 
 - Change the exemplar behavior to be on by default.
