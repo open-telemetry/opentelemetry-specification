@@ -17,6 +17,7 @@
   * [EventLogger Operations](#eventlogger-operations)
     + [Emit Event](#emit-event)
 - [Optional and required parameters](#optional-and-required-parameters)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -129,3 +130,7 @@ NOT obligate a user to provide it.
 
 For each required parameter, the API MUST be structured to obligate a user to
 provide it.
+
+## References
+
+- [OTEP0202 Introducing Events and Logs API](https://github.com/open-telemetry/oteps/blob/main/text/0202-events-and-logs-api.md)
