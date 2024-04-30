@@ -8,7 +8,7 @@ Applications or telemetry consumers MAY transform Span Events to Events inside t
 
 Event API properties:
 
-<!- TODO add link to semantic conventions once https://github.com/open-telemetry/semantic-conventions/pull/954 is merged -->
+<!-- TODO add link to semantic conventions once https://github.com/open-telemetry/semantic-conventions/pull/954 is merged -->
 
 - `Name` SHOULD match the Span Event name
 - `Timestamp` SHOULD match Span Event timestamp
