@@ -37,6 +37,8 @@ release.
 
 - Clarify syntax for environment variable substitution regular expression
   ([#4001](https://github.com/open-telemetry/opentelemetry-specification/pull/4001))
+- Error out on invalid identifiers in environment variable substitution.
+  ([#4002](https://github.com/open-telemetry/opentelemetry-specification/pull/4002))
 
 ### Common
 
