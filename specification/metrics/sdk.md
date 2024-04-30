@@ -1687,6 +1687,7 @@ operation.
 - `name`: the name of the metric stream
 - `kind`: the metric stream [kind](./data-model.md#point-kinds)
 - `unit`: the metric stream unit
+- `value`: the observed value of the metric
 
 Returns: `MetricFilterResult`
 
