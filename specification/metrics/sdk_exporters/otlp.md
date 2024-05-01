@@ -60,3 +60,7 @@ The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_DEFAULT
   Use [Explicit Bucket Histogram Aggregation](../sdk.md#explicit-bucket-histogram-aggregation).
 * `base2_exponential_bucket_histogram`:
   Use [Base2 Exponential Bucket Histogram Aggregation](../sdk.md#base2-exponential-bucket-histogram-aggregation).
+
+## References
+
+- [OTEP0131 OTLP Exporters Configurable Export Behavior](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0131-otlp-export-behavior.md)

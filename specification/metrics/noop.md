@@ -33,6 +33,7 @@ linkTitle: No-Op
   * [Asynchronous UpDownCounter Observations](#asynchronous-updowncounter-observations)
   * [Asynchronous Gauge](#asynchronous-gauge)
   * [Asynchronous Gauge Observations](#asynchronous-gauge-observations)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -263,3 +264,7 @@ concurrently.
 
 The No-Op Asynchronous Gauge MUST NOT validate or retain any state about
 observations made for the instrument.
+
+## References
+
+- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md)
