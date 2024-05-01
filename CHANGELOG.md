@@ -19,6 +19,8 @@ release.
   ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
 - Mark Exemplars as stable.
   ([#3870](https://github.com/open-telemetry/opentelemetry-specification/pull/3870))
+- Mark synchronous gauge as stable.
+  ([#4019](https://github.com/open-telemetry/opentelemetry-specification/pull/4019))
 
 ### Logs
 
