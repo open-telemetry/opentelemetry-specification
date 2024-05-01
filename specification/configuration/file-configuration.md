@@ -64,15 +64,13 @@ revision >= 1.2.
 
 YAML configuration files MUST use file extensions `.yaml` or `.yml`.
 
-TODO: decide if JSON file format is required
-
 ### Environment variable substitution
 
 Configuration files support environment variables substitution for references
-which match the following regular expression:
+which match the following PCRE2 regular expression:
 
 ```regexp
-\$\{(?:env:)?(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?}
+\$\{(?:env:)?(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?\}
 ```
 
 The `ENV_NAME` MUST start with an alphabetic or `_` character, and is followed
@@ -89,6 +87,15 @@ if `ENV_NAME` is null, empty, or undefined. `DEFAULT_VALUE` consists of 0 or
 more non line break characters (i.e. any character except `\n`). If a referenced
 environment variable is not defined and does not have a `DEFAULT_VALUE`, it MUST
 be replaced with an empty value.
+
+When parsing a configuration file that contains a reference not matching
+the references regular expression but does match the following PCRE2
+regular expression, the parser MUST return an empty result (no partial
+results are allowed) and an error describing the parse failure to the user.
+
+```regexp
+\$\{(?<INVALID_IDENTIFIER>[^}]+)\}
+```
 
 Node types MUST be interpreted after environment variable substitution takes
 place. This ensures the environment string representation of boolean, integer,
@@ -127,6 +134,7 @@ string_key_with_default: ${UNDEFINED_KEY:-fallback}   # UNDEFINED_KEY is not def
 undefined_key: ${UNDEFINED_KEY}                       # Invalid reference, UNDEFINED_KEY is not defined and is replaced with ""
 ${STRING_VALUE}: value                                # Invalid reference, substitution is not valid in mapping keys and reference is ignored
 recursive_key: ${REPLACE_ME}                          # Valid reference to REPLACE_ME
+# invalid_identifier_key: ${STRING_VALUE:?error}      # If uncommented, this is an invalid identifier, it would fail to parse
 ```
 
 Environment variable substitution results in the following YAML:
