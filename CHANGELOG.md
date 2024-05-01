@@ -41,6 +41,8 @@ release.
   ([#4001](https://github.com/open-telemetry/opentelemetry-specification/pull/4001))
 - Error out on invalid identifiers in environment variable substitution.
   ([#4002](https://github.com/open-telemetry/opentelemetry-specification/pull/4002))
+- Add end to end examples for file configuration
+  ([#4018](https://github.com/open-telemetry/opentelemetry-specification/pull/4018))
 
 ### Common
 
