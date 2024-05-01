@@ -84,6 +84,7 @@ linkTitle: SDK
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -1775,3 +1776,9 @@ and `Shutdown` are safe to be called concurrently.
 
 **MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
 concurrently.
+
+## References
+
+- [OTEP0113 Integrate Exemplars with Metrics](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0113-exemplars.md)
+- [OTEP0126 A Proposal For SDK Support for Configurable Batching and Aggregations (Basic Views)](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0126-Configurable-Metric-Aggregations.md)
+- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md)
