@@ -583,6 +583,8 @@ exceptions.
 
 #### OnEnding
 
+**Status**: [Experimental](../document-status.md)
+
 `OnEnding` is called just before a span is ended. The span is still mutable, but the end timestamp is already set.
 This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
 therefore it should not block or throw an exception.
