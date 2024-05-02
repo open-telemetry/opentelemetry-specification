@@ -28,6 +28,7 @@ path_base_for_github_subdir:
 - [OpenTelemetry Collector](#opentelemetry-collector)
 - [Auto-Instrumenting Existing Logging](#auto-instrumenting-existing-logging)
 - [Specifications](#specifications)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -448,3 +449,8 @@ standard output.
 * [Logs Data Model](./data-model.md)
 * [Event API](./event-api.md)
 * [Trace Context in non-OTLP Log Formats](../compatibility/logging_trace_context.md)
+
+## References
+
+- [OTEP0091 Logs: Vocabulary](https://github.com/open-telemetry/oteps/blob/main/text/logs/0091-logs-vocabulary.md)
+- [OTEP0092 OpenTelemetry Logs Vision](https://github.com/open-telemetry/oteps/blob/main/text/logs/0092-logs-vision.md)

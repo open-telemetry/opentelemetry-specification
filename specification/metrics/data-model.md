@@ -54,6 +54,7 @@ aliases: [/docs/reference/specification/metrics/datamodel]
   * [Sums: Delta-to-Cumulative](#sums-delta-to-cumulative)
     + [Sums: detecting alignment issues](#sums-detecting-alignment-issues)
     + [Sums: Missing Timestamps](#sums-missing-timestamps)
+- [References](#references)
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
@@ -1275,6 +1276,12 @@ every data point due to not being able to determine alignment or point overlap.
 For comparison, see the simple logic used in
 [statsd sums](https://github.com/statsd/statsd/blob/master/stats.js#L281)
 where all points are added, and lost points are ignored.
+
+## References
+
+- [OTEP0049 Metric `LabelSet` specification](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0049-metric-label-set.md)
+- [OTEP0113 Integrate Exemplars with Metrics](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0113-exemplars.md)
+- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md)
 
 ## Footnotes
 

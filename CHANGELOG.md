@@ -19,6 +19,8 @@ release.
   ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
 - Mark Exemplars as stable.
   ([#3870](https://github.com/open-telemetry/opentelemetry-specification/pull/3870))
+- Mark synchronous gauge as stable.
+  ([#4019](https://github.com/open-telemetry/opentelemetry-specification/pull/4019))
 
 ### Logs
 
@@ -37,6 +39,10 @@ release.
 
 - Clarify syntax for environment variable substitution regular expression
   ([#4001](https://github.com/open-telemetry/opentelemetry-specification/pull/4001))
+- Error out on invalid identifiers in environment variable substitution.
+  ([#4002](https://github.com/open-telemetry/opentelemetry-specification/pull/4002))
+- Add end to end examples for file configuration
+  ([#4018](https://github.com/open-telemetry/opentelemetry-specification/pull/4018))
 - Clarify the schema for YAML configuration files
   ([#3973](https://github.com/open-telemetry/opentelemetry-specification/pull/3973))
 
