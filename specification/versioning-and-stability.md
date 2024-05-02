@@ -12,8 +12,8 @@
   * [Experimental](#experimental)
   * [Stable](#stable)
     + [API Stability](#api-stability)
-      - [Extending Existing API Calls](#extending-existing-api-calls)
     + [SDK Stability](#sdk-stability)
+      - [Extending Existing API/SDK Calls and Interfaces](#extending-existing-apisdk-calls-and-interfaces)
     + [Contrib Stability](#contrib-stability)
     + [Semantic Conventions Stability](#semantic-conventions-stability)
     + [Telemetry Stability](#telemetry-stability)
@@ -104,13 +104,22 @@ All existing API calls MUST continue to compile and function against all future 
 
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for API packages.
 
-##### Extending Existing API Calls
+#### SDK Stability
 
-An existing API call MAY be extended without incrementing the major version
+Public portions of SDK packages MUST remain backwards compatible.
+There are two categories of public features: **plugin interfaces** and **constructors**.
+Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
+Examples of constructors include configuration objects, environment variables, and SDK builders.
+
+Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for SDK packages.
+
+##### Extending Existing API/SDK Calls and Interfaces
+
+An existing API/SDK call MAY be extended without incrementing the major version
 number if the particular language allows to do it in a backward-compatible
 manner.
 
-To add a new parameter to an existing API call depending on the language several
+To add a new parameter to an existing API/SDK call depending on the language several
 approaches are possible:
 
 - Add a new optional parameter to existing methods. This may not be the right
@@ -121,17 +130,15 @@ approaches are possible:
   include the new parameter. This is likely the preferred approach for languages
   where method overloads are possible.
 
-There may be other ways to extend existing APIs in non-breaking manner. Language
+Similarly, existing interfaces MAY be extended with new methods without incrementing the major version
+number if the particular language allows to do it in a backward-compatible
+manner (e.g. by providing default implementations). If this is not possible for a language,
+the language maintainers MAY still implement the addition using backwards-compatible workarounds without incrementing the major version.
+For example, a possible workaround might be to add a new interface instead of extending the existing one and accepting the
+new interface in addition to the old one in every place.
+
+There may be other ways to extend existing API/SDKs in non-breaking manner. Language
 maintainers SHOULD choose the idiomatic way for their language.
-
-#### SDK Stability
-
-Public portions of SDK packages MUST remain backwards compatible.
-There are two categories of public features: **plugin interfaces** and **constructors**.
-Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
-Examples of constructors include configuration objects, environment variables, and SDK builders.
-
-Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for SDK packages.
 
 #### Contrib Stability
 
