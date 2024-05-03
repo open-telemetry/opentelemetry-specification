@@ -138,7 +138,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
 
-`Shutdown` MUST be implemented at least by invoking `Shutdown` on all
+`Shutdown` MUST be implemented by invoking `Shutdown` on all
 registered [LogRecordProcessors](#logrecordprocessor).
 
 ### ForceFlush

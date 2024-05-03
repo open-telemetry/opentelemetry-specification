@@ -65,7 +65,7 @@ related to processing MUST be done by configuring the `LoggerProvider` directly.
 
 This method provides a way for provider to do any cleanup required.
 
-`Shutdown` MUST be implemented at least by invoking `Shutdown` on the delegate
+`Shutdown` MUST be implemented by invoking `Shutdown` on the delegate
 `LoggerProvider`, which in effect invokes `Shutdown` on all registered 
 registered [LogRecordProcessors](#logrecordprocessor).
 
