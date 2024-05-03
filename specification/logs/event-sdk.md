@@ -67,7 +67,7 @@ This method provides a way for provider to do any cleanup required.
 
 `Shutdown` MUST be implemented by invoking `Shutdown` on the delegate
 `LoggerProvider`, which in effect invokes `Shutdown` on all registered 
-registered [LogRecordProcessors](#logrecordprocessor).
+[LogRecordProcessors](#logrecordprocessor).
 
 ### ForceFlush
 
