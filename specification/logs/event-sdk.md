@@ -46,7 +46,7 @@ The SDK SHOULD allow the creation of multiple independent `EventLoggerProvider`s
 
 ### EventLogger Creation
 
-It SHOULD only be possible to create `EventLogger` instances through a `EventLoggerProvider`
+It SHOULD only be possible to create `EventLogger` instances through an `EventLoggerProvider`
 (see [Events API](event-api.md)).
 
 The `EventLoggerProvider` MUST implement the [Get an EventLogger API](event-api.md#get-an-eventlogger).
