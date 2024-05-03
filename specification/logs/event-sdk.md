@@ -42,7 +42,7 @@ All `LogRecord`s produced by any `EventLogger` from the `EventLoggerProvider` SH
 
 ### EventLoggerProvider Creation
 
-The SDK SHOULD allow the creation of multiple independent `EventLoggerProviders`s.
+The SDK SHOULD allow the creation of multiple independent `EventLoggerProvider`s.
 
 ### EventLogger Creation
 
