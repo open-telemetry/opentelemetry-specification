@@ -11,6 +11,11 @@
 
 - [Overview](#overview)
 - [EventLoggerProvider](#eventloggerprovider)
+  * [EventLoggerProvider Creation](#eventloggerprovider-creation)
+  * [EventLogger Creation](#eventlogger-creation)
+  * [Configuration](#configuration)
+  * [Shutdown](#shutdown)
+  * [ForceFlush](#forceflush)
 - [EventLogger](#eventlogger)
   * [Emit Event](#emit-event)
 
