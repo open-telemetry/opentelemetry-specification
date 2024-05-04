@@ -13,7 +13,6 @@
 - [EventLoggerProvider](#eventloggerprovider)
 - [EventLogger](#eventlogger)
   * [Emit Event](#emit-event)
-- [Additional Interfaces](#additional-interfaces)
 
 <!-- tocstop -->
 
@@ -66,13 +65,13 @@ related to processing MUST be done by configuring the `LoggerProvider` directly.
 This method provides a way for provider to do any cleanup required.
 
 `Shutdown` MUST be implemented by invoking `Shutdown` on the delegate
-`LoggerProvider`, which in effect invokes `Shutdown` on all registered 
-[LogRecordProcessors](#logrecordprocessor).
+`LoggerProvider`, which in effect invokes `Shutdown` on all registered
+[LogRecordProcessors](sdk.md#logrecordprocessor).
 
 ### ForceFlush
 
 This method provides a way for the provider to notify the delegate `LoggerProvider`
-to force all registered [LogRecordProcessors](#logrecordprocessor) to immediately export all
+to force all registered [LogRecordProcessors](sdk.md#logrecordprocessor) to immediately export all
 `LogRecords` that have not yet been exported.
 
 ## EventLogger
