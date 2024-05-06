@@ -13,7 +13,19 @@ release.
 
 ### Metrics
 
+- Change the exemplar behavior to be on by default.
+  ([#3994](https://github.com/open-telemetry/opentelemetry-specification/pull/3994))
+- Add name suggestion for option to apply resource attributes as metric attributes in Prometheus exporter.
+  ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
+- Mark Exemplars as stable.
+  ([#3870](https://github.com/open-telemetry/opentelemetry-specification/pull/3870))
+- Mark synchronous gauge as stable.
+  ([#4019](https://github.com/open-telemetry/opentelemetry-specification/pull/4019))
+
 ### Logs
+
+- Allow implementations to export duplicate keys in a map as an opt-in option.
+  ([#3938](https://github.com/open-telemetry/opentelemetry-specification/pull/3938))
 
 ### Events
 
@@ -24,6 +36,13 @@ release.
 ### Compatibility
 
 ### SDK Configuration
+
+- Clarify syntax for environment variable substitution regular expression
+  ([#4001](https://github.com/open-telemetry/opentelemetry-specification/pull/4001))
+- Error out on invalid identifiers in environment variable substitution.
+  ([#4002](https://github.com/open-telemetry/opentelemetry-specification/pull/4002))
+- Add end to end examples for file configuration
+  ([#4018](https://github.com/open-telemetry/opentelemetry-specification/pull/4018))
 
 ### Common
 
@@ -48,8 +67,6 @@ release.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 - Add synchronous gauge entry to sum monotonic table.
   ([#3977](https://github.com/open-telemetry/opentelemetry-specification/pull/3977))
-- Change the exemplar behavior to be on by default.
-  ([#3994](https://github.com/open-telemetry/opentelemetry-specification/pull/3994))
 
 ### Logs
 

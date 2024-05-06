@@ -84,6 +84,7 @@ linkTitle: SDK
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -382,7 +383,7 @@ The SDK MUST accept the following stream configuration parameters:
   user does not provide an `aggregation` value, the `MeterProvider` MUST apply
   a [default aggregation](#default-aggregation) configurable on the basis of
   instrument type according to the [MetricReader](#metricreader) instance.
-* **Status**: [Experimental, Feature-freeze](../document-status.md) - `exemplar_reservoir`: A
+* `exemplar_reservoir`: A
   functional type that generates an exemplar reservoir a `MeterProvider` will
   use when storing exemplars. This functional type needs to be a factory or
   callback similar to aggregation selection functionality which allows
@@ -957,7 +958,7 @@ series and the topic requires further analysis.
 
 ## Exemplar
 
-**Status**: [Experimental, Feature-freeze](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
@@ -1105,13 +1106,13 @@ The SDK MUST include two types of built-in exemplar reservoirs:
 
 By default:
 
-- Explicit bucket histogram aggregation with more than 1 bucket will
+- Explicit bucket histogram aggregation with more than 1 bucket SHOULD
 use `AlignedHistogramBucketExemplarReservoir`.
 - Base2 Exponential Histogram Aggregation SHOULD use a
   `SimpleFixedSizeExemplarReservoir` with a reservoir equal to the
   smaller of the maximum number of buckets configured on the aggregation or
   twenty (e.g. `min(20, max_buckets)`).
-- All other aggregations will use `SimpleFixedSizeExemplarReservoir`.
+- All other aggregations SHOULD use `SimpleFixedSizeExemplarReservoir`.
 
 Exemplar default reservoirs MAY change in
 a [minor version bump](./../versioning-and-stability.md#minor-version-bump). No
@@ -1775,3 +1776,9 @@ and `Shutdown` are safe to be called concurrently.
 
 **MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
 concurrently.
+
+## References
+
+- [OTEP0113 Integrate Exemplars with Metrics](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0113-exemplars.md)
+- [OTEP0126 A Proposal For SDK Support for Configurable Batching and Aggregations (Basic Views)](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0126-Configurable-Metric-Aggregations.md)
+- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md)
