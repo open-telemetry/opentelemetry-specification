@@ -115,7 +115,7 @@ and [YAML](#yaml-file-format) configuration file:
 
 ```shell
 export STRING_VALUE="value"
-export BOOl_VALUE="true"
+export BOOL_VALUE="true"
 export INT_VALUE="1"
 export FLOAT_VALUE="1.1"
 export INVALID_MAP_VALUE="value\nkey:value"           # An invalid attempt to inject a map key into the YAML
@@ -127,9 +127,9 @@ export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text
 string_key: ${STRING_VALUE}                           # Valid reference to STRING_VALUE
 env_string_key: ${env:STRING_VALUE}                   # Valid reference to STRING_VALUE
 other_string_key: "${STRING_VALUE}"                   # Valid reference to STRING_VALUE inside double quotes
-another_string_key: "${BOOl_VALUE}"                   # Valid reference to BOOl_VALUE inside double quotes
+another_string_key: "${BOOL_VALUE}"                   # Valid reference to BOOL_VALUE inside double quotes
 yet_another_string_key: ${INVALID_MAP_VALUE}          # Valid reference to INVALID_MAP_VALUE, but YAML structure from INVALID_MAP_VALUE MUST NOT be injected
-bool_key: ${BOOl_VALUE}                               # Valid reference to BOOl_VALUE
+bool_key: ${BOOL_VALUE}                               # Valid reference to BOOL_VALUE
 int_key: ${INT_VALUE}                                 # Valid reference to INT_VALUE
 float_key: ${FLOAT_VALUE}                             # Valid reference to FLOAT_VALUE
 combo_string_key: foo ${STRING_VALUE} ${FLOAT_VALUE}  # Valid reference to STRING_VALUE and FLOAT_VALUE
