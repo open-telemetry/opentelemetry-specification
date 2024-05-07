@@ -69,9 +69,10 @@ related to processing MUST be done by configuring the `LoggerProvider` directly.
 
 This method provides a way for provider to do any cleanup required.
 
-`Shutdown` MUST be implemented by invoking `Shutdown` on the delegate
-`LoggerProvider`, which in effect invokes `Shutdown` on all registered
-[LogRecordProcessors](sdk.md#logrecordprocessor).
+`Shutdown` MUST NOT invoke `Shutdown` on the delegate
+`LoggerProvider`, since the `LoggerProvider` could be used elsewhere. In order to
+perform cleanup of the delegate `LoggerProvider`, its `Shutdown` method should be
+called separately.
 
 ### ForceFlush
 
