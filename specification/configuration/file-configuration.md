@@ -65,6 +65,8 @@ Configuration files SHOULD use one the following serialization formats:
 [YAML](https://yaml.org/spec/1.2.2/) configuration files SHOULD follow YAML spec
 revision >= 1.2.
 
+YAML configuration files SHOULD be parsed using [v1.2 YAML core schema](https://yaml.org/spec/1.2.2/#103-core-schema).
+
 YAML configuration files MUST use file extensions `.yaml` or `.yml`.
 
 ### Environment variable substitution
