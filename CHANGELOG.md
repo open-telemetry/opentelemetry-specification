@@ -73,6 +73,8 @@ release.
   ([#4002](https://github.com/open-telemetry/opentelemetry-specification/pull/4002))
 - Add end to end examples for file configuration
   ([#4018](https://github.com/open-telemetry/opentelemetry-specification/pull/4018))
+- Clarify the schema for YAML configuration files
+  ([#3973](https://github.com/open-telemetry/opentelemetry-specification/pull/3973))
 
 ### Common
 
