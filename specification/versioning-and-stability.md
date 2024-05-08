@@ -126,7 +126,6 @@ maintainers SHOULD choose the idiomatic way for their language.
 
 #### SDK Stability
 
-Public portions of SDK packages MUST remain backwards compatible.
 There are two categories of public features: **plugin interfaces** and **constructors**.
 Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
 Examples of constructors include configuration objects, environment variables, and SDK builders.
@@ -143,8 +142,6 @@ and released in a timely fashion. (See limitations on instrumentation stability
 in [Telemetry Stability](telemetry-stability.md).) The goal is to ensure users can
 update to the latest version of OpenTelemetry, and not be held back by the
 plugins that they depend on.
-
-Public portions of contrib packages (constructors, configuration, interfaces) SHOULD remain backwards compatible.
 
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for contrib packages.
 
@@ -310,7 +307,7 @@ We invented a new tracing API, but continue to support the old one.
 
 ## Version numbers
 
-OpenTelemetry clients follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
+OpenTelemetry clients MUST follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
 
 OpenTelemetry clients have four components: API, SDK, Semantic Conventions, and Contrib.
 
