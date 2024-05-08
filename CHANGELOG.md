@@ -11,7 +11,6 @@ release.
 
 ### Traces
 
-=======
 - Links with invalid SpanContext are recorded.
   ([#3928](https://github.com/open-telemetry/opentelemetry-specification/pull/3928))
 - Add `OnEnding` callback to SDK `SpanProcessor` interface
