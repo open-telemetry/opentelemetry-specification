@@ -23,6 +23,9 @@ linkTitle: File
     + [Parse](#parse)
     + [Create](#create)
     + [Register Component Provider](#register-component-provider)
+- [Examples](#examples)
+  * [Via File Configuration API](#via-file-configuration-api)
+  * [Via OTEL_EXPERIMENTAL_CONFIG_FILE](#via-otel_experimental_config_file)
 - [References](#references)
 
 <!-- tocstop -->
@@ -62,17 +65,17 @@ Configuration files SHOULD use one the following serialization formats:
 [YAML](https://yaml.org/spec/1.2.2/) configuration files SHOULD follow YAML spec
 revision >= 1.2.
 
-YAML configuration files MUST use file extensions `.yaml` or `.yml`.
+YAML configuration files SHOULD be parsed using [v1.2 YAML core schema](https://yaml.org/spec/1.2.2/#103-core-schema).
 
-TODO: decide if JSON file format is required
+YAML configuration files MUST use file extensions `.yaml` or `.yml`.
 
 ### Environment variable substitution
 
 Configuration files support environment variables substitution for references
-which match the following regular expression:
+which match the following PCRE2 regular expression:
 
 ```regexp
-\$\{(?:env:)?(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?}
+\$\{(?:env:)?(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?\}
 ```
 
 The `ENV_NAME` MUST start with an alphabetic or `_` character, and is followed
@@ -90,6 +93,15 @@ more non line break characters (i.e. any character except `\n`). If a referenced
 environment variable is not defined and does not have a `DEFAULT_VALUE`, it MUST
 be replaced with an empty value.
 
+When parsing a configuration file that contains a reference not matching
+the references regular expression but does match the following PCRE2
+regular expression, the parser MUST return an empty result (no partial
+results are allowed) and an error describing the parse failure to the user.
+
+```regexp
+\$\{(?<INVALID_IDENTIFIER>[^}]+)\}
+```
+
 Node types MUST be interpreted after environment variable substitution takes
 place. This ensures the environment string representation of boolean, integer,
 or floating point fields can be properly converted to expected types.
@@ -105,7 +117,7 @@ and [YAML](#yaml-file-format) configuration file:
 
 ```shell
 export STRING_VALUE="value"
-export BOOl_VALUE="true"
+export BOOL_VALUE="true"
 export INT_VALUE="1"
 export FLOAT_VALUE="1.1"
 export HEX_VALUE="0xdeadbeef"                         # A valid integer value written in hexadecimal
@@ -118,10 +130,10 @@ export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text
 string_key: ${STRING_VALUE}                           # Valid reference to STRING_VALUE
 env_string_key: ${env:STRING_VALUE}                   # Valid reference to STRING_VALUE
 other_string_key: "${STRING_VALUE}"                   # Valid reference to STRING_VALUE inside double quotes
-another_string_key: "${BOOl_VALUE}"                   # Valid reference to BOOl_VALUE inside double quotes
+another_string_key: "${BOOL_VALUE}"                   # Valid reference to BOOL_VALUE inside double quotes
 string_key_with_quoted_hex_value: "${HEX_VALUE}"      # Valid reference to HEX_VALUE inside double quotes
 yet_another_string_key: ${INVALID_MAP_VALUE}          # Valid reference to INVALID_MAP_VALUE, but YAML structure from INVALID_MAP_VALUE MUST NOT be injected
-bool_key: ${BOOl_VALUE}                               # Valid reference to BOOl_VALUE
+bool_key: ${BOOL_VALUE}                               # Valid reference to BOOL_VALUE
 int_key: ${INT_VALUE}                                 # Valid reference to INT_VALUE
 int_key_with_unquoted_hex_value: ${HEX_VALUE}         # Valid reference to HEX_VALUE without quotes
 float_key: ${FLOAT_VALUE}                             # Valid reference to FLOAT_VALUE
@@ -130,6 +142,7 @@ string_key_with_default: ${UNDEFINED_KEY:-fallback}   # UNDEFINED_KEY is not def
 undefined_key: ${UNDEFINED_KEY}                       # Invalid reference, UNDEFINED_KEY is not defined and is replaced with ""
 ${STRING_VALUE}: value                                # Invalid reference, substitution is not valid in mapping keys and reference is ignored
 recursive_key: ${REPLACE_ME}                          # Valid reference to REPLACE_ME
+# invalid_identifier_key: ${STRING_VALUE:?error}      # If uncommented, this is an invalid identifier, it would fail to parse
 ```
 
 Environment variable substitution results in the following YAML:
@@ -354,6 +367,90 @@ register [component providers](#component-provider).
 
 The `type` and `name` comprise a unique key. Register MUST return an error if it
 is called multiple times with the same `type` and `name` combination.
+
+## Examples
+
+### Via File Configuration API
+
+The file configuration [Parse](#parse) and [Create](#create) operations along
+with the [Configuration Model](#configuration-model) can be combined in a
+variety of ways to achieve simple or complex configuration goals.
+
+For example, a simple case would consist of calling `Parse` with a configuration
+file, and passing the result to `Create` to obtain configured SDK components:
+
+```java
+OpenTelemetry openTelemetry = OpenTelemetry.noop();
+try {
+    // Parse configuration file to configuration model
+    OpenTelemetryConfiguration configurationModel = FileConfiguration.parse(new File("/app/sdk-config.yaml"));
+    // Create SDK components from configuration model
+    openTelemetry = FileConfiguration.create(configurationModel);
+} catch (Throwable e) {
+    log.error("Error initializing SDK from configuration file", e);    
+}
+
+// Access SDK components and install instrumentation
+TracerProvider tracerProvider = openTelemetry.getTracerProvider();
+MeterProvider meterProvider = openTelemetry.getMeterProvider();
+LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+ContextPropagators propagators = openTelemetry.getPropagators();
+```
+
+A more complex case might consist of parsing multiple configuration files from
+different sources, merging them using custom logic, and creating SDK components
+from the merged configuration model:
+
+```java
+OpenTelemetry openTelemetry = OpenTelemetry.noop();
+try {
+    // Parse local and remote configuration files to configuration models
+    OpenTelemetryConfiguration localConfigurationModel = FileConfiguration.parse(new File("/app/sdk-config.yaml"));
+    OpenTelemetryConfiguration remoteConfigurationModel = FileConfiguration.parse(getRemoteConfiguration("http://example-host/config/my-application"));
+    
+    // Merge the configuration models using custom logic
+    OpenTelemetryConfiguration resolvedConfigurationModel = merge(localConfigurationModel, remoteConfigurationModel);
+    
+    // Create SDK components from resolved configuration model
+    openTelemetry = FileConfiguration.create(resolvedConfigurationModel);
+} catch (Throwable e) {
+    log.error("Error initializing SDK from configuration file", e);    
+}
+
+// Access SDK components and install instrumentation
+TracerProvider tracerProvider = openTelemetry.getTracerProvider();
+MeterProvider meterProvider = openTelemetry.getMeterProvider();
+LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+ContextPropagators propagators = openTelemetry.getPropagators();
+```
+
+### Via OTEL_EXPERIMENTAL_CONFIG_FILE
+
+If an SDK
+supports [OTEL_EXPERIMENTAL_CONFIG_FILE](./sdk-environment-variables.md#file-configuration),
+then setting `OTEL_EXPERIMENTAL_CONFIG_FILE` provides a simple way to obtain an
+SDK initialized from the specified config file. The pattern for accessing the
+configured SDK components and installing into instrumentation will vary by
+language. For example, the usage in Java might resemble:
+
+```shell
+# Set the required env var to the location of the configuration file
+export OTEL_EXPERIMENTAL_CONFIG_FILE="/app/sdk-config.yaml"
+```
+
+```java
+// Initialize SDK using autoconfigure model, which recognizes that OTEL_EXPERIMENTAL_CONFIG_FILE is set and configures the SDK accordingly
+OpenTelemetry openTelemetry = AutoConfiguredOpenTelemetrySdk.initialize().getOpenTelemetrySdk();
+
+// Access SDK components and install instrumentation
+TracerProvider tracerProvider = openTelemetry.getTracerProvider();
+MeterProvider meterProvider = openTelemetry.getMeterProvider();
+LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+ContextPropagators propagators = openTelemetry.getPropagators();
+```
+
+If using auto-instrumentation, this initialization flow might occur
+automatically.
 
 ## References
 

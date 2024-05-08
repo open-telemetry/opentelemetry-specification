@@ -18,6 +18,7 @@
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [Artifact Naming](#artifact-naming)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -154,3 +155,7 @@ in the event OpenTelemetry were to add a user facing API, the Logs Bridge API wo
 be a natural starting point. Therefore, Log Bridge API artifact, package, and class
 names MUST NOT include the terms "bridge", "appender", or any other qualifier
 that would prevent evolution into a user facing API.
+
+## References
+
+- [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
