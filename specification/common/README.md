@@ -1,10 +1,11 @@
-<!--- Hugo front matter used to generate the website version of this page:
+---
+# Hugo front matter used to generate the website version of this page:
 linkTitle: Common concepts
 aliases: [/docs/reference/specification/common/common]
 path_base_for_github_subdir:
   from: tmp/otel/specification/common/_index.md
   to: common/README.md
---->
+---
 
 # Common specification concepts
 

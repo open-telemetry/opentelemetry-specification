@@ -1,8 +1,9 @@
-<!--- Hugo front matter used to generate the website version of this page:
+---
+# Hugo front matter used to generate the website version of this page:
 linkTitle: Requirements
 redirect: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/requirements.md 301!
 manualLinkTarget: _blank
---->
+---
 
 # OpenTelemetry Protocol Requirements
 

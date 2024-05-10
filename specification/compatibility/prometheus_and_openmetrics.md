@@ -1,9 +1,10 @@
-<!--- Hugo front matter used to generate the website version of this page:
+---
+# Hugo front matter used to generate the website version of this page:
 linkTitle: Prometheus and OpenMetrics
 aliases:
   - /docs/reference/specification/compatibility/openmetrics
   - /docs/specs/otel/compatibility/openmetrics
---->
+---
 
 # Prometheus and OpenMetrics Compatibility
 

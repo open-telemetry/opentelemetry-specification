@@ -1,6 +1,7 @@
-<!--- Hugo front matter used to generate the website version of this page:
+---
+# Hugo front matter used to generate the website version of this page:
 redirect: /docs/specs/semconv/general/attribute-naming/ 301!
---->
+---
 
 # Attribute Naming
 

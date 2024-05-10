@@ -1,6 +1,7 @@
-<!--- Hugo front matter used to generate the website version of this page:
+---
+# Hugo front matter used to generate the website version of this page:
 linkTitle: SDK
---->
+---
 
 # Metrics SDK
 
@@ -352,7 +353,7 @@ The SDK MUST accept the following stream configuration parameters:
   `name` value, name from the Instrument the View matches MUST be used by
   default.
 * `description`: The metric stream description that SHOULD be used.
-  
+
   Users can provide a `description`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
   accept a `description`, but MUST NOT obligate a user to provide one. If the

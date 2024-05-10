@@ -4,6 +4,8 @@
 # Default state for all rules
 default: true
 
+single-title:
+  front_matter_title: ""
 ul-style: false
 line-length: false
 no-duplicate-header:
