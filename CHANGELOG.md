@@ -13,10 +13,92 @@ release.
 
 ### Metrics
 
+### Logs
+
+### Events
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.33.0 (2024-05-09)
+
+### Context
+
+### Traces
+
+- Links with invalid SpanContext are recorded.
+  ([#3928](https://github.com/open-telemetry/opentelemetry-specification/pull/3928))
+
+### Metrics
+
+- Change the exemplar behavior to be on by default.
+  ([#3994](https://github.com/open-telemetry/opentelemetry-specification/pull/3994))
+- Use normative language for exemplar default aggregations.
+  ([#4009](https://github.com/open-telemetry/opentelemetry-specification/pull/4009))
+- Mark Exemplars as stable.
+  ([#3870](https://github.com/open-telemetry/opentelemetry-specification/pull/3870))
+- Mark synchronous gauge as stable.
+  ([#4019](https://github.com/open-telemetry/opentelemetry-specification/pull/4019))
+
+### Logs
+
+- Allow implementations to export duplicate keys in a map as an opt-in option.
+  ([#3987](https://github.com/open-telemetry/opentelemetry-specification/pull/3987))
+
+### Events
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+- Add name suggestion for option to apply resource attributes as metric attributes in Prometheus exporter.
+  ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
+
+### SDK Configuration
+
+- Clarify syntax for environment variable substitution regular expression
+  ([#4001](https://github.com/open-telemetry/opentelemetry-specification/pull/4001))
+- Error out on invalid identifiers in environment variable substitution.
+  ([#4002](https://github.com/open-telemetry/opentelemetry-specification/pull/4002))
+- Add end to end examples for file configuration
+  ([#4018](https://github.com/open-telemetry/opentelemetry-specification/pull/4018))
+- Clarify the schema for YAML configuration files
+  ([#3973](https://github.com/open-telemetry/opentelemetry-specification/pull/3973))
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.32.0 (2024-04-11)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Remove the Jaeger Exporter.
+  ([#3964](https://github.com/open-telemetry/opentelemetry-specification/pull/3964))
+
+### Metrics
+
 - Clarify that exemplar reservoir default may change in a minor version.
   ([#3943](https://github.com/open-telemetry/opentelemetry-specification/pull/3943))
 - Add option to disable target info metric to Prometheus exporters.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
+- Add synchronous gauge entry to sum monotonic table.
+  ([#3977](https://github.com/open-telemetry/opentelemetry-specification/pull/3977))
 
 ### Logs
 
@@ -29,9 +111,15 @@ release.
 
 ### Events
 
+- No changes.
+
 ### Resource
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### Compatibility
 
@@ -39,17 +127,29 @@ release.
   ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
 - Prometheus compatibility: Clarify that the service triplet is required to be unique by semantic conventions.
   ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
+- Prometheus: represent Prometheus Info, StateSet and Unknown-typed metrics in OTLP.
+  ([#3868](https://github.com/open-telemetry/opentelemetry-specification/pull/3868))
 - Update and reorganize the prometheus sdk exporter specification.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 
 ### SDK Configuration
 
+- Define OTEL_EXPERIMENTAL_CONFIG_FILE to ignore other env vars, add env var substitution default syntax.
+  ([#3948](https://github.com/open-telemetry/opentelemetry-specification/pull/3948))
 - Clarify environment variable substitution is not recursive
   ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
+- Allow `env:` prefix in environment variable substitution syntax.
+  ([#3974](https://github.com/open-telemetry/opentelemetry-specification/pull/3974))
+- Add simple scope configuration to Tracer, Meter, Logger (experimental).
+  ([#3877](https://github.com/open-telemetry/opentelemetry-specification/pull/3877))
 
 ### Common
 
+- No changes.
+
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.31.0 (2024-03-13)
 

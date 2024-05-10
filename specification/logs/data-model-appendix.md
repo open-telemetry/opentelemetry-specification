@@ -19,6 +19,7 @@ the respective exporter documentation if exact details are required.
   * [Google Cloud Logging](#google-cloud-logging)
   * [Elastic Common Schema](#elastic-common-schema)
 - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -815,3 +816,7 @@ for an exhaustive list.
 |Critical     |Critical   |      |Dpanic|                 |                                   |ERROR2        |
 |Alert        |           |      |Panic |                 |                                   |ERROR3        |
 |Emergency    |           |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL         |
+
+## References
+
+- [OTEP0097 Log Data Model, Appendix A. Example Mappings](https://github.com/open-telemetry/oteps/blob/main/text/logs/0097-log-data-model.md#appendix-a-example-mappings)
