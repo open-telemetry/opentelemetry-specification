@@ -65,6 +65,8 @@ Configuration files SHOULD use one the following serialization formats:
 [YAML](https://yaml.org/spec/1.2.2/) configuration files SHOULD follow YAML spec
 revision >= 1.2.
 
+YAML configuration files SHOULD be parsed using [v1.2 YAML core schema](https://yaml.org/spec/1.2.2/#103-core-schema).
+
 YAML configuration files MUST use file extensions `.yaml` or `.yml`.
 
 ### Environment variable substitution
@@ -118,6 +120,7 @@ export STRING_VALUE="value"
 export BOOL_VALUE="true"
 export INT_VALUE="1"
 export FLOAT_VALUE="1.1"
+export HEX_VALUE="0xdeadbeef"                         # A valid integer value written in hexadecimal
 export INVALID_MAP_VALUE="value\nkey:value"           # An invalid attempt to inject a map key into the YAML
 export DO_NOT_REPLACE_ME="Never use this value"       # An unused environment variable
 export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text, used verbatim, not replaced with "Never use this value"
@@ -128,9 +131,11 @@ string_key: ${STRING_VALUE}                           # Valid reference to STRIN
 env_string_key: ${env:STRING_VALUE}                   # Valid reference to STRING_VALUE
 other_string_key: "${STRING_VALUE}"                   # Valid reference to STRING_VALUE inside double quotes
 another_string_key: "${BOOL_VALUE}"                   # Valid reference to BOOL_VALUE inside double quotes
+string_key_with_quoted_hex_value: "${HEX_VALUE}"      # Valid reference to HEX_VALUE inside double quotes
 yet_another_string_key: ${INVALID_MAP_VALUE}          # Valid reference to INVALID_MAP_VALUE, but YAML structure from INVALID_MAP_VALUE MUST NOT be injected
 bool_key: ${BOOL_VALUE}                               # Valid reference to BOOL_VALUE
 int_key: ${INT_VALUE}                                 # Valid reference to INT_VALUE
+int_key_with_unquoted_hex_value: ${HEX_VALUE}         # Valid reference to HEX_VALUE without quotes
 float_key: ${FLOAT_VALUE}                             # Valid reference to FLOAT_VALUE
 combo_string_key: foo ${STRING_VALUE} ${FLOAT_VALUE}  # Valid reference to STRING_VALUE and FLOAT_VALUE
 string_key_with_default: ${UNDEFINED_KEY:-fallback}   # UNDEFINED_KEY is not defined but a default value is included
@@ -143,19 +148,21 @@ recursive_key: ${REPLACE_ME}                          # Valid reference to REPLA
 Environment variable substitution results in the following YAML:
 
 ```yaml
-string_key: value                           # Interpreted as type string, tag URI tag:yaml.org,2002:str
-env_string_key: value                       # Interpreted as type string, tag URI tag:yaml.org,2002:str
-other_string_key: "value"                   # Interpreted as type string, tag URI tag:yaml.org,2002:str
-another_string_key: "true"                  # Interpreted as type string, tag URI tag:yaml.org,2002:str
-yet_another_string_key: "value\nkey:value"  # Interpreted as type string, tag URI tag:yaml.org,2002:str
-bool_key: true                              # Interpreted as type bool, tag URI tag:yaml.org,2002:bool
-int_key: 1                                  # Interpreted as type int, tag URI tag:yaml.org,2002:int
-float_key: 1.1                              # Interpreted as type float, tag URI tag:yaml.org,2002:float
-combo_string_key: foo value 1.1             # Interpreted as type string, tag URI tag:yaml.org,2002:str
-string_key_with_default: fallback           # Interpreted as type string, tag URI tag:yaml.org,2002:str
-undefined_key:                              # Interpreted as type null, tag URI tag:yaml.org,2002:null
-${STRING_VALUE}: value                      # Interpreted as type string, tag URI tag:yaml.org,2002:str
-recursive_key: ${DO_NOT_REPLACE_ME}         # Interpreted as type string, tag URI tag:yaml.org,2002:str
+string_key: value                              # Interpreted as type string, tag URI tag:yaml.org,2002:str
+env_string_key: value                          # Interpreted as type string, tag URI tag:yaml.org,2002:str
+other_string_key: "value"                      # Interpreted as type string, tag URI tag:yaml.org,2002:str
+another_string_key: "true"                     # Interpreted as type string, tag URI tag:yaml.org,2002:str
+string_key_with_quoted_hex_value: "0xdeadbeef" # Interpreted as type string, tag URI tag:yaml.org,2002:str
+yet_another_string_key: "value\nkey:value"     # Interpreted as type string, tag URI tag:yaml.org,2002:str
+bool_key: true                                 # Interpreted as type bool, tag URI tag:yaml.org,2002:bool
+int_key: 1                                     # Interpreted as type int, tag URI tag:yaml.org,2002:int
+int_key_with_unquoted_hex_value: 3735928559    # Interpreted as type int, tag URI tag:yaml.org,2002:int
+float_key: 1.1                                 # Interpreted as type float, tag URI tag:yaml.org,2002:float
+combo_string_key: foo value 1.1                # Interpreted as type string, tag URI tag:yaml.org,2002:str
+string_key_with_default: fallback              # Interpreted as type string, tag URI tag:yaml.org,2002:str
+undefined_key:                                 # Interpreted as type null, tag URI tag:yaml.org,2002:null
+${STRING_VALUE}: value                         # Interpreted as type string, tag URI tag:yaml.org,2002:str
+recursive_key: ${DO_NOT_REPLACE_ME}            # Interpreted as type string, tag URI tag:yaml.org,2002:str
 ```
 
 ## SDK Configuration
