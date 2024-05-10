@@ -27,6 +27,9 @@ release.
 
 ### Common
 
+- Versioning and stability: Clarify backwards compatibility and SemVer.
+  ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
+
 ### Supplementary Guidelines
 
 ## v1.33.0 (2024-05-09)
@@ -77,9 +80,6 @@ release.
   ([#3973](https://github.com/open-telemetry/opentelemetry-specification/pull/3973))
 
 ### Common
-
-- Versioning and stability: Clarify backwards compatibility and SemVer.
-  ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
 
 ### Supplementary Guidelines
 
