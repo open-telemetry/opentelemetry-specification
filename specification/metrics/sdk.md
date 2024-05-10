@@ -1076,7 +1076,7 @@ MAY further sample beyond the `ExemplarFilter`.
 
 The "offer" method MAY accept a filtered subset of `Attributes` which diverge
 from the timeseries the reservoir is associated with. This MUST be clearly
-documented in the API interface and the reservoir MUST be given the `Attributes`
+documented in the API and the reservoir MUST be given the `Attributes`
 associated with its timeseries point either at construction so that additional
 sampling performed by the reservoir has access to all attributes from a
 measurement in the "offer" method. SDK authors are encouraged to benchmark
