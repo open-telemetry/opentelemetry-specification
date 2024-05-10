@@ -141,7 +141,7 @@ generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
 
 There are currently no required parameters for this API. Parameters can be
 added in the future, therefore, the API MUST be structured in a way for
-parameters to be added. 
+parameters to be added.
 
 This API MUST return a language idiomatic boolean type.
 
