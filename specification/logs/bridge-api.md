@@ -139,15 +139,9 @@ All parameters are optional.
 To help users avoid performing computationally expensive operations when
 generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
 
-At a minimum, the API MUST accept the following parameters:
-
-- [Context](../context/README.md) (optional): This is the Context associated
-  with the `LogRecord`. The API MAY implicitly use the current Context as a
-  default behavior.
-- [Severity Number](./data-model.md#field-severitynumber)
-
-Users of a language implementation community can have specific needs when using
-this API. Therefore, additional parameters MAY be accepted.
+There are currently no required parameters for this API. Parameters can be
+added in the future, therefore, the API MUST be structured in a way for
+parameters to be added. 
 
 This API MUST return a language idiomatic boolean type.
 
