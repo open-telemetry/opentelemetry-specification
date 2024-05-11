@@ -65,15 +65,6 @@ message reporting that the specified value is invalid SHOULD be logged.
 The `EventLoggerProvider` MUST accept an instance of `LoggerProvider`. Any configuration
 related to processing MUST be done by configuring the `LoggerProvider` directly.
 
-### Shutdown
-
-This method provides a way for provider to do any cleanup required.
-
-`Shutdown` MUST NOT invoke `Shutdown` on the delegate
-`LoggerProvider`, since the `LoggerProvider` could be used elsewhere. In order to
-perform cleanup of the delegate `LoggerProvider`, its `Shutdown` method should be
-called separately.
-
 ### ForceFlush
 
 This method provides a way for the provider to notify the delegate `LoggerProvider`
