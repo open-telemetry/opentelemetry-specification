@@ -73,6 +73,8 @@ to force all registered [LogRecordProcessors](sdk.md#logrecordprocessor) to imme
 
 ## EventLogger
 
+The `EventLogger` MUST be implemented as a proxy to an instance of [`Logger`](./sdk.md#logger).
+
 ### Emit Event
 
 Emit a `LogRecord` representing an `Event`.
