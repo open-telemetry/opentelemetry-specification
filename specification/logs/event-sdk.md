@@ -40,7 +40,7 @@ The SDK MUST use the [Logs SDK](./sdk.md) to generate, process and export `LogRe
 
 ## EventLoggerProvider
 
-The `EventLoggerProvider` MUST be implemented as a proxy to an instance of `LoggerProvider`.
+The `EventLoggerProvider` MUST be implemented as a proxy to an instance of [`LoggerProvider`](./sdk.md#loggerprovider).
 
 All `LogRecord`s produced by any `EventLogger` from the `EventLoggerProvider` SHOULD be associated with the `Resource` from the provided `LoggerProvider`.
 
