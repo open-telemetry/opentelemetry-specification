@@ -107,11 +107,11 @@ formats is required. Implementing more than one format is optional.
 | The fallback `Meter` `name` property keeps its original invalid value.                                                                                                 | X        | -  | -    | +   | +      |      | +      |     |  +   | -   | -    |       |
 | Associate `Meter` with `InstrumentationScope`.                                                                                                                         |          |    | +    | +   | +      |      | +      |     |  +   | +   |      |       |
 | `Counter` instrument is supported.                                                                                                                                     |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The meter provides functions to create a new `AsynchronousCounter`.                                                                                                    |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The meter provides functions to create a new `Histogram`.                                                                                                              |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The meter provides functions to create a new `AsynchronousGauge`.                                                                                                      |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The meter provides functions to create a new `UpDownCounter`.                                                                                                          |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The meter provides functions to create a new `AsynchronousUpDownCounter`.                                                                                              |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
+| `AsynchronousCounter` instrument is supported.                                                                                                                         |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
+| `Histogram` instrument is supported.                                                                                                                                   |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
+| `AsynchronousGauge` instrument is supported.                                                                                                                           |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
+| `UpDownCounter` instrument is supported.                                                                                                                               |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
+| `AsynchronousUpDownCounter` instrument is supported.                                                                                                                   |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | Instruments have `name`                                                                                                                                                |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | Instruments have kind.                                                                                                                                                 |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | Instruments have an optional unit of measure.                                                                                                                          |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
@@ -124,31 +124,6 @@ formats is required. Implementing more than one format is optional.
 | Instrument descriptions conform to the specified syntax.                                                                                                               |          | -  | +    |     | -      |      | -      |     |      | -   | +    |       |
 | Instrument supports the advisory ExplicitBucketBoundaries parameter.                                                                                                   |          |    | +    |     |        |      | +      |     |      |     |      |       |
 | Instrument supports the advisory Attributes parameter.                                                                                                                 |          |    | +    |     |        |      | -      |     |      |     |      |       |
-| `create_asynchronous_counter` creates an `AsynchronousCounter`.                                                                                                        |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The API for `AsynchronousCounter` accepts the name, unit and description of the instrument.                                                                            |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The API for `AsynchronousCounter` accepts a callback.                                                                                                                  |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| `create_up_down_counter` returns an `UpDownCounter`.                                                                                                                   |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The API for `UpDownCounter` accepts the name, unit and description of the instrument.                                                                                  |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| `UpDownCounter` has an `add` method.                                                                                                                                   |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `add` method returns no (or dummy) value.                                                                                                                          | X        | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `add` method accepts optional attributes.                                                                                                                          |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `add` method accepts the increment amount.                                                                                                                         |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| `create_asynchronous_up_down_counter` creates an `AsynchronousUpDownCounter`.                                                                                          |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The API for `AsynchronousUpDownCounter` accepts the name, unit and description of the instrument.                                                                      |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The API for `AsynchronousUpDownCounter` accepts a callback.                                                                                                            |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| `create_histogram` returns a `Histogram`.                                                                                                                              |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The API for `Histogram` accepts the name, unit and description of the instrument.                                                                                      |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| `Histogram` has a `record` method.                                                                                                                                     |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `record` method return no (or dummy) value.                                                                                                                        | X        | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `record` method accepts optional attributes.                                                                                                                       |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `record` method accepts a value.                                                                                                                                   |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `record` method of `Histogram` accepts only positive amounts.                                                                                                      |          | -  | +    | +   | +      |      | +      |     |  +   | +   | +    |       |
-| `create_asynchronous_gauge` creates an `Asynchronous Gauge`.                                                                                                           |          | +  | +    | +   | +      |      | +      | +   |  +  | +   | +    |       |
-| The API for `AsynchronousGauge` accepts the name, unit and description of the instrument.                                                                              |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The API for `AsynchronousGauge` accepts a callback.                                                                                                                    |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The callback function of an `Asynchronous` instrument does not block indefinitely.                                                                                     | X        | -  | -    | +   | -      |      | +      |     |     | +   | ?    |       |
-| The callback function reports `Measurement`s.                                                                                                                          |          | +  | +    | +   | +      |      | +      |     |  +   | +   | +    |       |
-| There is a way to pass state to the callback.                                                                                                                          | X        | +  | +    |     | +      |      | +      |     |      | +   | +    |       |
 | All methods of `MeterProvider` are safe to be called concurrently.                                                                                                     |          | +  | +    | +   | -      |      | +      |     |      | +   | +    |       |
 | All methods of `Meter` are safe to be called concurrently.                                                                                                             |          | +  | +    | +   | -      |      | +      |     |      | +   | +    |       |
 | All methods of any instrument are safe to be called concurrently.                                                                                                      |          | +  | +    | +   | -      |      | +      |     |      | +   | +    |       |
@@ -211,11 +186,11 @@ formats is required. Implementing more than one format is optional.
 
 ## Logs
 
+Features for the [Logging SDK](specification/logs/sdk.md).
 Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
 
 | Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
-| **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
 | LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      | +   |      |       |
 | LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
@@ -229,6 +204,26 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
 | Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
+
+## Events
+
+Features for the [Events API](specification/logs/event-api.md) and the [Events SDK](specification/logs/event-sdk.md).
+Disclaimer: Events are currently an experimental work in progress.
+
+| Feature                                                                    | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|----------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
+| [EventLoggerProvider](specification/logs/event-api.md#eventloggerprovider) |          |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger                                                            |          |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts version                                            | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts schema_url                                         | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts attributes                                         | +        |    |      |    |        |      |        |     |      |     |      |       |
+| [EventLogger](specification/logs/event-api.md#eventlogger)                 |          |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts name                                                    |          |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts AnyValue body                                           | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts severity                                                | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts timestamp                                               | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts attributes                                              | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts context                                                 | +        |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Resource
 
