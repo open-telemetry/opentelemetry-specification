@@ -186,11 +186,11 @@ formats is required. Implementing more than one format is optional.
 
 ## Logs
 
+Features for the [Logging SDK](specification/logs/sdk.md).
 Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
 
 | Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
-| **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
 | LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      | +   |      |       |
 | LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
@@ -204,6 +204,26 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
 | Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
+
+## Events
+
+Features for the [Events API](specification/logs/event-api.md) and the [Events SDK](specification/logs/event-sdk.md).
+Disclaimer: Events are currently an experimental work in progress.
+
+| Feature                                                                    | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|----------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
+| [EventLoggerProvider](specification/logs/event-api.md#eventloggerprovider) |          |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger                                                            |          |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts version                                            | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts schema_url                                         | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts attributes                                         | +        |    |      |    |        |      |        |     |      |     |      |       |
+| [EventLogger](specification/logs/event-api.md#eventlogger)                 |          |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts name                                                    |          |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts AnyValue body                                           | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts severity                                                | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts timestamp                                               | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts attributes                                              | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts context                                                 | +        |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Resource
 
