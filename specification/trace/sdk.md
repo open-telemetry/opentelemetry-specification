@@ -566,7 +566,7 @@ in the SDK:
 
 `OnStart` is called when a span is started. This method is called synchronously
 on the thread that started the span, therefore it should not block or throw
-exceptions. If multiple `SpanProcessors` are registered, their `OnStart` callbacks 
+exceptions. If multiple `SpanProcessors` are registered, their `OnStart` callbacks
 are invoked in the order they have been registered.
 
 **Parameters:**
@@ -589,7 +589,7 @@ are invoked in the order they have been registered.
 `OnEnding` is called just before a span is ended. The span is still mutable, but the end timestamp is already set.
 This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
 therefore it should not block or throw an exception.
-If multiple `SpanProcessors` are registered, their `OnEnding` callbacks 
+If multiple `SpanProcessors` are registered, their `OnEnding` callbacks
 are invoked in the order they have been registered.
 The SDK MUST guarantee that the span cannot be modified anymore by any other thread
 before invoking `OnEnding` of the first `SpanProcessor`. From that point on, modifications
