@@ -306,7 +306,7 @@ There are typically 2 ways to collect logs from these applications.
 The first approach, assuming the logs are written to files or to standard
 output, requires ability to read file logs, tail them, work correctly when log
 rotation is used, optionally also parse the logs to convert them into more
-structured formats. Parings requires support for different parser types, which
+structured formats. Parsing requires support for different parser types, which
 can also be configured to parse custom formats as well as ability to add custom
 parsers. Examples of common formats that parsers need to support are: CSV,
 Common Log Format, Labeled Tab-separated Values (LTSV), Key/Value Pair format,
