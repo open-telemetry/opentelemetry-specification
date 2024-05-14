@@ -276,7 +276,7 @@ boundaries to use if aggregating to
 Applies to all instrument types.
 
 `Attributes` (a list of [attribute keys](../common/README.md#attribute)) is
-the recommended set of attribute keys to be used for the resulting metrics.
+the set of allowed attribute keys that may be used on the resulting metrics.
 
 #### Synchronous and Asynchronous instruments
 
