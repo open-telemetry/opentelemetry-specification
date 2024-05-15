@@ -1,4 +1,4 @@
-# Events API Interface
+# Events API
 
 **Status**: [Experimental](../document-status.md)
 

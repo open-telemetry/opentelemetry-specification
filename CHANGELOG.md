@@ -11,24 +11,9 @@ release.
 
 ### Traces
 
-- Links with invalid SpanContext are recorded.
-  ([#3928](https://github.com/open-telemetry/opentelemetry-specification/pull/3928))
-
 ### Metrics
 
-- Change the exemplar behavior to be on by default.
-  ([#3994](https://github.com/open-telemetry/opentelemetry-specification/pull/3994))
-- Add name suggestion for option to apply resource attributes as metric attributes in Prometheus exporter.
-  ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
-- Mark Exemplars as stable.
-  ([#3870](https://github.com/open-telemetry/opentelemetry-specification/pull/3870))
-- Mark synchronous gauge as stable.
-  ([#4019](https://github.com/open-telemetry/opentelemetry-specification/pull/4019))
-
 ### Logs
-
-- Allow implementations to export duplicate keys in a map as an opt-in option.
-  ([#3938](https://github.com/open-telemetry/opentelemetry-specification/pull/3938))
 
 ### Events
 
@@ -37,6 +22,48 @@ release.
 ### OpenTelemetry Protocol
 
 ### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.33.0 (2024-05-09)
+
+### Context
+
+### Traces
+
+- Links with invalid SpanContext are recorded.
+  ([#3928](https://github.com/open-telemetry/opentelemetry-specification/pull/3928))
+
+### Metrics
+
+- Change the exemplar behavior to be on by default.
+  ([#3994](https://github.com/open-telemetry/opentelemetry-specification/pull/3994))
+- Use normative language for exemplar default aggregations.
+  ([#4009](https://github.com/open-telemetry/opentelemetry-specification/pull/4009))
+- Mark Exemplars as stable.
+  ([#3870](https://github.com/open-telemetry/opentelemetry-specification/pull/3870))
+- Mark synchronous gauge as stable.
+  ([#4019](https://github.com/open-telemetry/opentelemetry-specification/pull/4019))
+
+### Logs
+
+- Allow implementations to export duplicate keys in a map as an opt-in option.
+  ([#3987](https://github.com/open-telemetry/opentelemetry-specification/pull/3987))
+
+### Events
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+- Add name suggestion for option to apply resource attributes as metric attributes in Prometheus exporter.
+  ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
 
 ### SDK Configuration
 
@@ -2641,11 +2668,11 @@ Updates:
   Moved support for out-of-band telemetry from the API to the SDK.
 - [OTEP-0016](https://github.com/open-telemetry/oteps/blob/main/text/0016-named-tracers.md)
   Added named providers for Tracers and Meters.
-- Added design goals and requirements for a telemetry data exchange protocol.
+- Added design goals and requirements for a telemetry data exchange protocol.
 - Added a Span Processor interface for intercepting span start and end
   invocations.
 - Added a Span Exporter interface for processing batches of spans.
-- Replaced DistributedContext.GetIterator with GetEntries.
+- Replaced DistributedContext.GetIterator with GetEntries.
 - Added clarifications and adjustments to improve cross-language applicability.
 - Added a specification for SDK configuration.
 
