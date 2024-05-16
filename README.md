@@ -33,7 +33,7 @@ Technical committee holds regular meetings, notes are held
 
 ## Specification compliance matrix by language
 
-See, [Compliance of Implementations with
+See [Compliance of Implementations with
 Specification](./spec-compliance-matrix.md).
 
 ## Project Timeline
