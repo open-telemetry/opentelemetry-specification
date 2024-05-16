@@ -41,28 +41,35 @@ using the same [data model](./data-model.md). An Event is a specialized type
 of LogRecord, not a separate concept.
 
 Events contain all of the features provided by LogRecords, plus one additional
-feature. All Events have a `name`.  Events with the same `name` MUST conform to
-the same schema for both their `Attributes` and their `Body`.
+feature: every event is a semantic convention. All Events have a
+`name`, and all Events with the same `name` MUST conform to the same schema for
+both their `Attributes` and their `Body`. This additional 
 
-Unlike the [Logs Bridge API](./bridge-api.md), application developers and
-instrumentation authors are encouraged to call this API directly. It is
-appropriate to use the Event API when these properties fit your requirements:
+The Events API was designed to allow shared libraries to emit high quality
+logs without needing to depend on a third party logger. Unlike the [Logs Bridge API](./bridge-api.md), instrumentation authors and application developers and are encouraged
+to call this API directly. It is appropriate to use the Event API when these properties fit your requirements:
 
-* A consistent schema that can be identified by a name is necessary.
-* Analysis by an Observability platform is the intended use case. For
-  example: statistics, indexing, machine learning, session replay.
+* Logging from a shared library that must run in many applications.
 * A semantic convention needs to be defined. We do not define semantic
   conventions for LogRecords that are not Events.
+* Analysis by an observability platform is the intended use case. For
+  example: statistics, indexing, machine learning, session replay.
+* Normalizing logging and having a consistent schema across a large
+  application is helpful.
 
 If any of these properties fit your requirements, we recommend using the Event API.
 Events are described in more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
-Please note that Events are sent directly to the OTel Log SDK, which currently lacks a
-number of advanced features present in popular log frameworks. For example:
+Please note that Events are sent directly to the OTel Log SDK, which currently
+lacks a number of advanced features present in popular log frameworks. For example:
 pattern logging, file rotation, network appenders, etc. These features cannot be
-used with the Event API at this time. If a log framework is capable of creating
-logs which correctly map to the Event data model, that is also an acceptable
-way to create Events.
+used with the Event API at this time.
+
+If a third party logging framework is capable of creating logs which correctly map
+to the Event data model, loggin in this manner is also an acceptable way to create
+Events. For application developers that need additional logging features, we
+recommend using this approach. For shared libraries and instrumentation, we recommend
+using the Event API directly, to avoid taking a dependecy on a third party logger.
 
 ## EventLoggerProvider
 
