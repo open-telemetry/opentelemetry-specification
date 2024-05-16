@@ -113,7 +113,7 @@ Examples of constructors include configuration objects, environment variables, a
 
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for SDK packages.
 
-##### Extending Existing API/SDK Calls and Interfaces
+#### Extending API/SDK abstractions
 
 An existing API/SDK call MAY be extended without incrementing the major version
 number if the particular language allows to do it in a backward-compatible
