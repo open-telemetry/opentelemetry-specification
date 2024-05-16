@@ -13,7 +13,7 @@
   * [Stable](#stable)
     + [API Stability](#api-stability)
     + [SDK Stability](#sdk-stability)
-      - [Extending Existing API/SDK Calls and Interfaces](#extending-existing-apisdk-calls-and-interfaces)
+    + [Extending API/SDK abstractions](#extending-apisdk-abstractions)
     + [Contrib Stability](#contrib-stability)
     + [Semantic Conventions Stability](#semantic-conventions-stability)
     + [Telemetry Stability](#telemetry-stability)
