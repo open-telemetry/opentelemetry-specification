@@ -26,7 +26,8 @@
 
 The Event API consists of these main components:
 
-* [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It provides access to `EventLogger`s.
+* [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It
+  provides access to `EventLogger`s.
 * [EventLogger](#eventlogger) is the component responsible for emitting events.
 
 ## Data model
@@ -46,8 +47,10 @@ feature: every event is a semantic convention. All Events have a
 both their `Attributes` and their `Body`. This additional 
 
 The Events API was designed to allow shared libraries to emit high quality
-logs without needing to depend on a third party logger. Unlike the [Logs Bridge API](./bridge-api.md), instrumentation authors and application developers and are encouraged
-to call this API directly. It is appropriate to use the Event API when these properties fit your requirements:
+logs without needing to depend on a third party logger. Unlike the
+[Logs Bridge API](./bridge-api.md), instrumentation authors and application
+developers and are encouraged to call this API directly. It is appropriate to
+use the Event API when these properties fit your requirements:
 
 * Logging from a shared library that must run in many applications.
 * A semantic convention needs to be defined. We do not define semantic
@@ -65,11 +68,9 @@ lacks a number of advanced features present in popular log frameworks. For examp
 pattern logging, file rotation, network appenders, etc. These features cannot be
 used with the Event API at this time.
 
-If a third party logging framework is capable of creating logs which correctly map
-to the Event data model, logging in this manner is also an acceptable way to create
-Events. For application developers that need additional logging features, we
-recommend using this approach. For shared libraries and instrumentation, we recommend
-using the Event API directly, to avoid taking a dependecy on a third party logger.
+If a logging framework is capable of creating logs which correctly map
+to the Event data model, logging in this manner is also an acceptable way to
+create Events.
 
 ## EventLoggerProvider
 
