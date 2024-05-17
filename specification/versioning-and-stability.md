@@ -126,6 +126,7 @@ maintainers SHOULD choose the idiomatic way for their language.
 
 #### SDK Stability
 
+Public portions of SDK packages MUST remain backwards compatible.
 There are two categories of public features: **plugin interfaces** and **constructors**.
 Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
 Examples of constructors include configuration objects, environment variables, and SDK builders.
@@ -143,6 +144,7 @@ in [Telemetry Stability](telemetry-stability.md).) The goal is to ensure users c
 update to the latest version of OpenTelemetry, and not be held back by the
 plugins that they depend on.
 
+Public portions of contrib packages (constructors, configuration, interfaces) SHOULD remain backwards compatible.
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for contrib packages.
 
 **Exception:** Contrib packages MAY break stability when a required downstream dependency breaks stability.
