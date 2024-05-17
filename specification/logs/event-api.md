@@ -66,7 +66,7 @@ pattern logging, file rotation, network appenders, etc. These features cannot be
 used with the Event API at this time.
 
 If a third party logging framework is capable of creating logs which correctly map
-to the Event data model, loggin in this manner is also an acceptable way to create
+to the Event data model, logging in this manner is also an acceptable way to create
 Events. For application developers that need additional logging features, we
 recommend using this approach. For shared libraries and instrumentation, we recommend
 using the Event API directly, to avoid taking a dependecy on a third party logger.
