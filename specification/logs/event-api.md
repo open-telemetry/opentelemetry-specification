@@ -1,4 +1,4 @@
-# Events API Interface
+# Events API
 
 **Status**: [Experimental](../document-status.md)
 
@@ -41,7 +41,7 @@ using the same [data model](./data-model.md).
 However, OpenTelemetry does recognize a subtle semantic difference between
 LogRecords and Events: Events are LogRecords which have a `name` which uniquely
 defines a particular class or type of event. All events with the same `name`
-have `Payloads` that conform to the same schema, which assists in analysis in
+have `Body` that conform to the same schema, which assists in analysis in
 observability platforms. Events are described in more detail in
 the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
@@ -112,13 +112,13 @@ The effect of calling this API is to emit an `Event` to the processing pipeline.
 
 * The `Name` of the Event, as described
   in [event.name semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
-* The (`AnyValue`) (optional) `Payload` of the Event.
+* The (`AnyValue`) (optional) `Body` of the Event.
 * The `Timestamp` (optional) of the Event.
 * The [Context](../context/README.md) (optional) associated with the Event.
 * The `SeverityNumber` (optional) of the Event.
 * The `Attributes` (optional) of the Event. Event `Attributes` provide
   additional details about the Event which are not part of the
-  well-defined `Payload`.
+  well-defined event `Body`.
 
 ## Optional and required parameters
 

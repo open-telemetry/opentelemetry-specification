@@ -2671,11 +2671,11 @@ Updates:
   Moved support for out-of-band telemetry from the API to the SDK.
 - [OTEP-0016](https://github.com/open-telemetry/oteps/blob/main/text/0016-named-tracers.md)
   Added named providers for Tracers and Meters.
-- Added design goals and requirements for a telemetry data exchange protocol.
+- Added design goals and requirements for a telemetry data exchange protocol.
 - Added a Span Processor interface for intercepting span start and end
   invocations.
 - Added a Span Exporter interface for processing batches of spans.
-- Replaced DistributedContext.GetIterator with GetEntries.
+- Replaced DistributedContext.GetIterator with GetEntries.
 - Added clarifications and adjustments to improve cross-language applicability.
 - Added a specification for SDK configuration.
 
