@@ -9,16 +9,15 @@
 
 <!-- toc -->
 
-- [Events API](#events-api)
-  - [Data model](#data-model)
-  - [EventLoggerProvider](#eventloggerprovider)
-    - [EventLoggerProvider operations](#eventloggerprovider-operations)
-      - [Get an EventLogger](#get-an-eventlogger)
-  - [EventLogger](#eventlogger)
-    - [EventLogger Operations](#eventlogger-operations)
-      - [Emit Event](#emit-event)
-  - [Optional and required parameters](#optional-and-required-parameters)
-  - [References](#references)
+- [Data model](#data-model)
+- [EventLoggerProvider](#eventloggerprovider)
+  * [EventLoggerProvider operations](#eventloggerprovider-operations)
+    + [Get an EventLogger](#get-an-eventlogger)
+- [EventLogger](#eventlogger)
+  * [EventLogger Operations](#eventlogger-operations)
+    + [Emit Event](#emit-event)
+- [Optional and required parameters](#optional-and-required-parameters)
+- [References](#references)
 
 <!-- tocstop -->
 
