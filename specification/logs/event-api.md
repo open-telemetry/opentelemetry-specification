@@ -44,7 +44,7 @@ of LogRecord, not a separate concept.
 Events contain all of the features provided by LogRecords, plus one additional
 feature: every event is a semantic convention. All Events have a
 `name`, and all Events with the same `name` MUST conform to the same schema for
-both their `Attributes` and their `Body`. This additional 
+both their `Attributes` and their `Body`.
 
 The Events API was designed to allow shared libraries to emit high quality
 logs without needing to depend on a third party logger. Unlike the
