@@ -310,7 +310,7 @@ We invented a new tracing API, but continue to support the old one.
 
 ## Version numbers
 
-OpenTelemetry clients follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
+OpenTelemetry clients MUST follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
 
 OpenTelemetry clients have four components: API, SDK, Semantic Conventions, and Contrib.
 
