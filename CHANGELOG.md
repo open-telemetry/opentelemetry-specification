@@ -27,6 +27,9 @@ release.
 
 ### Common
 
+- OpenTelemetry clients MUST follow SemVer 2.0.0.
+  ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
+
 ### Supplementary Guidelines
 
 ## v1.33.0 (2024-05-09)
