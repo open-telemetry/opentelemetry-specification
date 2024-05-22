@@ -283,7 +283,7 @@ For stability of telemetry produced by instrumentation see the
 
 Signals MAY eventually be replaced. When this happens, they are marked as deprecated.
 
-Signals MUST only be marked as deprecated when the replacement becomes stable.
+Signals MUST NOT be marked as deprecated unless the replacement is stable.
 Deprecated code MUST abide by the same support guarantees as stable code.
 
 ### Removed
