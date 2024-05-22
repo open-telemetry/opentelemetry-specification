@@ -41,7 +41,7 @@ In this document, the terms "OpenTelemetry" and "language implementations" both 
 These terms do not refer to the specification or the Collector in this document.
 
 Each language implementation MUST take these versioning and stability requirements, and produce a language-specific document which details how these requirements will be met.
-This document MUST be placed in the root of each repo and named `VERSIONING`.
+This document MUST be placed in the root of each repo and named `VERSIONING` or `VERSIONING.md`.
 
 ## Design goals
 
