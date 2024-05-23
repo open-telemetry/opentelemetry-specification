@@ -11,9 +11,12 @@
 
 - [Overview](#overview)
 - [EventLoggerProvider](#eventloggerprovider)
+  * [EventLoggerProvider Creation](#eventloggerprovider-creation)
+  * [EventLogger Creation](#eventlogger-creation)
+  * [Configuration](#configuration)
+  * [ForceFlush](#forceflush)
 - [EventLogger](#eventlogger)
   * [Emit Event](#emit-event)
-- [Additional Interfaces](#additional-interfaces)
 
 <!-- tocstop -->
 
@@ -32,15 +35,44 @@ From OpenTelemetry's perspective LogRecords and Events are both represented
 using the same [data model](./event-api.md#data-model). Therefore, the default
 implementation of an Event SDK MUST generate events using the [Logs Data Model](./data-model.md).
 
-The SDK MAY be implemented on top of the [Logs Bridge API](./bridge-api.md).
+The SDK MUST use the [Logs SDK](./sdk.md) to generate, process and export `LogRecord`s.
 
 ## EventLoggerProvider
 
-TODO
+The `EventLoggerProvider` MUST be implemented as a proxy to an instance of [`LoggerProvider`](./sdk.md#loggerprovider).
+
+All `LogRecord`s produced by any `EventLogger` from the `EventLoggerProvider` SHOULD be associated with the `Resource` from the provided `LoggerProvider`.
+
+### EventLoggerProvider Creation
+
+The SDK SHOULD allow the creation of multiple independent `EventLoggerProvider`s.
+
+### EventLogger Creation
+
+It SHOULD only be possible to create `EventLogger` instances through an `EventLoggerProvider`
+(see [Events API](event-api.md)).
+
+The `EventLoggerProvider` MUST implement the [Get an EventLogger API](event-api.md#get-an-eventlogger).
+
+In the case where an invalid `name` (null or empty string) is specified, a
+working `EventLogger` MUST be returned as a fallback rather than returning null or
+throwing an exception. Its `name` SHOULD keep the original invalid value, and a
+message reporting that the specified value is invalid SHOULD be logged.
+
+### Configuration
+
+The `EventLoggerProvider` MUST accept an instance of `LoggerProvider`. Any configuration
+related to processing MUST be done by configuring the `LoggerProvider` directly.
+
+### ForceFlush
+
+This method provides a way for the provider to notify the delegate `LoggerProvider`
+to force all registered [LogRecordProcessors](sdk.md#logrecordprocessor) to immediately export all
+`LogRecords` that have not yet been exported.
 
 ## EventLogger
 
-TODO
+The `EventLogger` MUST be implemented as a proxy to an instance of [`Logger`](./sdk.md#logger).
 
 ### Emit Event
 
@@ -76,7 +108,3 @@ to [emit a logRecord](./bridge-api.md#emit-a-logrecord) as follows:
   the [Attributes](./data-model.md#field-attributes). The user
   provided `Attributes` MUST not take over the `event.name`
   attribute previously discussed.
-
-## Additional Interfaces
-
-TODO
