@@ -267,9 +267,9 @@ The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in P
 
 The resulting unit SHOULD be added to the metric as
 [UNIT metadata](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily)
-and as a suffix to the metric name unless the metric name already contains the
-unit, or the unit MUST be omitted. The unit suffix comes before any
-type-specific suffixes.
+and as a suffix to the metric name unless the metric name already ends with the
+unit (before type-specific suffixes), or the unit MUST be omitted. The unit
+suffix comes before any type-specific suffixes.
 
 The description of an OTLP metrics point MUST be added as
 [HELP metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
