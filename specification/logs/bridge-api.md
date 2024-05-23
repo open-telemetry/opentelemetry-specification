@@ -143,11 +143,9 @@ There are currently no required parameters for this API. Parameters can be
 added in the future, therefore, the API MUST be structured in a way for
 parameters to be added.
 
-This API MUST return a language idiomatic boolean type.
-
-Implementations of this API SHALL return `true` when logging is enabled or
-`false` when logging is disabled for the provided arguments. Implementations
-designed for performance that cache the logging state MAY return stale values.
+This API MUST return a language idiomatic boolean type. A returned value of
+`true` means logging is enabled for the provided arguments, and a returned
+value of `false` means the logging is disabled for the provided arguments.
 
 The returned value is not always static, it can change over time. The API
 SHOULD be documented that users needs to call this API each time they generate
