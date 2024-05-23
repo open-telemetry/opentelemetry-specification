@@ -591,7 +591,7 @@ This method MUST be called synchronously within the [`Span.End()` API](api.md#en
 therefore it should not block or throw an exception.
 If multiple `SpanProcessors` are registered, their `OnEnding` callbacks
 are invoked in the order they have been registered.
-The SDK MUST guarantee that the span cannot be modified anymore by any other thread
+The SDK MUST guarantee that the span can no longer be modified by any other thread
 before invoking `OnEnding` of the first `SpanProcessor`. From that point on, modifications
 are only allowed synchronously from within the invoked `OnEnding` callbacks.
 
