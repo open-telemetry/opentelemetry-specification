@@ -20,6 +20,9 @@ release.
 
 ### Events
 
+- Add specification for EventLogger and EventLoggerProvider
+  ([#4031](https://github.com/open-telemetry/opentelemetry-specification/pull/4031))
+
 ### Resource
 
 ### OpenTelemetry Protocol
