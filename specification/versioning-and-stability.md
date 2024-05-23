@@ -41,7 +41,7 @@ In this document, the terms "OpenTelemetry" and "language implementations" both 
 These terms do not refer to the specification or the Collector in this document.
 
 Each language implementation MUST take these versioning and stability requirements, and produce a language-specific document which details how these requirements will be met.
-This document SHALL be placed in the root of each repo and named `VERSIONING`.
+This document MUST be placed in the root of each repo and named `VERSIONING` or `VERSIONING.md`.
 
 ## Design goals
 
@@ -283,7 +283,7 @@ For stability of telemetry produced by instrumentation see the
 
 Signals MAY eventually be replaced. When this happens, they are marked as deprecated.
 
-Signals SHALL only be marked as deprecated when the replacement becomes stable.
+Signals MUST NOT be marked as deprecated unless the replacement is stable.
 Deprecated code MUST abide by the same support guarantees as stable code.
 
 ### Removed
