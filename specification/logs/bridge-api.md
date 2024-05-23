@@ -148,7 +148,7 @@ This API MUST return a language idiomatic boolean type. A returned value of
 value of `false` means the logging is disabled for the provided arguments.
 
 The returned value is not always static, it can change over time. The API
-SHOULD be documented that users needs to call this API each time they generate
+SHOULD be documented that Logs Bridge API developers needs to call this API each time they generate
 a `LogRecord` to ensure they have the most up-to-date response.
 
 ## Optional and required parameters
