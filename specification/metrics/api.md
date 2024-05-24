@@ -275,8 +275,11 @@ boundaries to use if aggregating to
 
 Applies to all instrument types.
 
-`Attributes` (a list of [attribute keys](../common/README.md#attribute)) is
-the set of allowed attribute keys that may be used on the resulting metrics.
+`Attributes` (a list of [attribute keys](../common/README.md#attribute)) is an
+allow-list of attribute keys for measurements captured in the [metric stream](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/data-model.md#events--data-stream--timeseries)
+that MAY be used. When used, the allow-list contains attribute keys that
+identify the attributes that MUST be kept, and all other attributes MUST be
+ignored.
 
 #### Synchronous and Asynchronous instruments
 
