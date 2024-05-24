@@ -586,14 +586,14 @@ are invoked in the order they have been registered.
 
 **Status**: [Experimental](../document-status.md)
 
-`OnEnding` is called just before a span is ended. The span is still mutable, but the end timestamp is already set.
+`OnEnding` is called during the span `End()` operation, after the end timestamp has been set. The Span object is still mutable (i.e., `SetAttribute`, `AddLink`, `AddEvent` can be called) while `OnEnding` is called.
 This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
 therefore it should not block or throw an exception.
 If multiple `SpanProcessors` are registered, their `OnEnding` callbacks
 are invoked in the order they have been registered.
 The SDK MUST guarantee that the span can no longer be modified by any other thread
 before invoking `OnEnding` of the first `SpanProcessor`. From that point on, modifications
-are only allowed synchronously from within the invoked `OnEnding` callbacks.
+are only allowed synchronously from within the invoked `OnEnding` callbacks.  All registered SpanProcessor `OnEnding` callbacks are executed before any SpanProcessor's `OnEnd` callback is invoked.
 
 **Parameters:**
 
