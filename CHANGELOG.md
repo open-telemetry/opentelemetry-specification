@@ -26,6 +26,9 @@ release.
 
 ### Compatibility
 
+- Prometheus: Clarify location of unit suffix within metric names.
+  ([#4057](https://github.com/open-telemetry/opentelemetry-specification/pull/4057))
+
 ### SDK Configuration
 
 ### Common
