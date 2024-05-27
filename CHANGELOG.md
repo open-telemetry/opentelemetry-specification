@@ -17,15 +17,24 @@ release.
 
 ### Events
 
+- Add specification for EventLogger and EventLoggerProvider
+  ([#4031](https://github.com/open-telemetry/opentelemetry-specification/pull/4031))
+
 ### Resource
 
 ### OpenTelemetry Protocol
 
 ### Compatibility
 
+- Prometheus: Clarify location of unit suffix within metric names.
+  ([#4057](https://github.com/open-telemetry/opentelemetry-specification/pull/4057))
+
 ### SDK Configuration
 
 ### Common
+
+- OpenTelemetry clients MUST follow SemVer 2.0.0.
+  ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
 
 ### Supplementary Guidelines
 
