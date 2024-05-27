@@ -4,7 +4,7 @@ linkTitle: TraceState
 
 # TraceState Handling
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 In alignment to the [TraceContext](https://www.w3.org/TR/trace-context/) specification, this section uses the
 Augmented Backus-Naur Form (ABNF) notation of [RFC5234](https://www.w3.org/TR/trace-context/#bib-rfc5234),

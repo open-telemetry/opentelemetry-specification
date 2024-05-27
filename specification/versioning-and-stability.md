@@ -9,7 +9,7 @@
 
 - [Design goals](#design-goals)
 - [Signal lifecycle](#signal-lifecycle)
-  * [Experimental](#experimental)
+  * [Development](#development)
   * [Stable](#stable)
     + [API Stability](#api-stability)
       - [Extending Existing API Calls](#extending-existing-api-calls)
@@ -61,36 +61,37 @@ A library that imports the OpenTelemetry API should never become incompatible wi
 Theoretically, APIs can be deprecated and eventually removed, but this is a process measured in years and we have no plans to do so.
 
 **Allow for multiple levels of package stability within the same release of an OpenTelemetry component.**
-Provide maintainers a clear process for developing new, experimental [signals](glossary.md#signals) alongside stable signals.
+Provide maintainers a clear process for developing new [signals](glossary.md#signals) in Development status alongside stable signals.
 Different packages within the same release may have different levels of stability.
-This means that an implementation wishing to release stable tracing today MUST ensure that experimental metrics are factored out in such a way that breaking changes to metrics API do not destabilize the trace API packages.
+This means that an implementation wishing to release stable tracing today MUST ensure that in-development metrics are factored out in such a way that breaking changes to metrics API do not destabilize the trace API packages.
 
 ## Signal lifecycle
 
-The development of each signal follows a lifecycle: experimental, stable, deprecated, removed.
+The development of each signal follows a lifecycle: development, stable, deprecated, removed.
 
 The infographic below shows an example of the lifecycle of an API component.
 
 ![API Lifecycle](../internal/img/api-lifecycle.png)
 
-### Experimental
+### Development
 
-Signals start as **experimental**, which covers alpha, beta, and release candidate versions of the signal.
-While signals are experimental, breaking changes and performance issues MAY occur.
+Signals start in **Development** status as defined by
+[OTEP 0232](https://github.com/open-telemetry/oteps/blob/main/text/0232-maturity-of-otel.md#explanation).
+While signals are in development, breaking changes and performance issues MAY occur.
 Components SHOULD NOT be expected to be feature-complete.
-In some cases, the experiment MAY be discarded and removed entirely.
-Long-term dependencies SHOULD NOT be taken against experimental signals.
+In some cases, the signal in Development MAY be discarded and removed entirely.
+Long-term dependencies SHOULD NOT be taken against signals in Development.
 
-OpenTelemetry clients MUST be designed in a manner that allows experimental signals to be created without breaking the stability guarantees of existing signals.
+OpenTelemetry clients MUST be designed in a manner that allows signals in Development to be created without breaking the stability guarantees of existing signals.
 
-OpenTelemetry clients MUST NOT be designed in a manner that breaks existing users when a signal transitions from experimental to stable. This would punish users of the release candidate, and hinder adoption.
+OpenTelemetry clients MUST NOT be designed in a manner that breaks existing users when a signal transitions from Development to Stable. This would punish users of the release candidate, and hinder adoption.
 
-Terms which denote stability, such as "experimental," MUST NOT be used as part of a directory or import name.
-Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or -experimental, to differentiate stable and experimental packages.
+Terms which denote stability, such as "development", MUST NOT be used as part of a directory or import name.
+Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or -development, to differentiate packages in different statuses.
 
 ### Stable
 
-Once an experimental signal has gone through rigorous beta testing, it MAY transition to **stable**.
+Once a signal in Development has gone through rigorous testing, it MAY transition to **Stable**.
 Long-term dependencies MAY now be taken against this signal.
 
 All signal components MAY become stable together, or MAY transition to stability component-by-component. The API MUST become stable before the other components.
@@ -332,8 +333,8 @@ For example, it is fine to have `opentelemetry-python-api` at v1.2.8 when `opent
 * Language implementations have version numbers which are independent of the specification they implement.
 For example, it is fine for v1.8.2 of `opentelemetry-python-api` to implement v1.1.1 of the specification.
 
-**Exception:** in some languages, package managers may react poorly to experimental packages having a version higher than 0.X.
-In these cases, experimental signals MAY version independently from stable signals, in order to retain a 0.X version number.
+**Exception:** in some languages, package managers may react poorly to unstable packages having a version higher than 0.X.
+In these cases, signals in Development MAY version independently from stable signals, in order to retain a 0.X version number.
 When a signal becomes stable, the version MUST be bumped to match the other stable signals in the release.
 
 ### Major version bump
@@ -347,9 +348,9 @@ Most changes to OpenTelemetry clients result in a minor version bump.
 
 * New backward-compatible functionality added to any component.
 * Breaking changes to internal SDK components.
-* Breaking changes to experimental signals.
-* New experimental signals are added.
-* Experimental signals become stable.
+* Breaking changes to in-development signals.
+* New signals in Development are added.
+* Signals in Development become stable.
 * Stable signals are deprecated.
 
 ### Patch version bump
