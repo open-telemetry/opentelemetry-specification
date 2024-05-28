@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Add the experimental `Enabled` API to the `Logger`.
+  ([#4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020))
+
 ### Events
 
 - Add specification for EventLogger and EventLoggerProvider
