@@ -15,6 +15,11 @@ release.
 
 ### Logs
 
+- SDK SHOULD allow independent log processing pipelines
+  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
+- SDK MAY offer a way to copy `ReadWriteLogRecord`
+  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
+
 ### Events
 
 - Add specification for EventLogger and EventLoggerProvider
