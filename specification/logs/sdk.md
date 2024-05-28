@@ -311,7 +311,7 @@ therefore it SHOULD NOT block or throw exceptions.
 **Parameters:**
 
 * `logRecord` - a [ReadWriteLogRecord](#readwritelogrecord) for the
-  emitted `LogRecord`. It is `logRecord` MAY be passed as a 
+  emitted `LogRecord`.
 * `context` - the resolved `Context` (the explicitly passed `Context` or the
   current `Context`)
 
