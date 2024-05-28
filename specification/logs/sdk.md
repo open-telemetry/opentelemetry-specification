@@ -274,7 +274,10 @@ The SDK MUST allow users to implement and configure custom processors and
 decorate built-in processors for advanced scenarios such as enriching with
 attributes.
 
-The SDK SHOULD allow users to set up independent log processing pipelines.
+The SDK SHOULD allow users to set up independent processing pipelines.
+For instance, the user should be able to make a log record modification in
+a processor that is not visible to and does not affect the behavior of other
+log record processors.
 
 The following diagram shows `LogRecordProcessor`'s relationship to other
 components in the SDK:
