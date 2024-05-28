@@ -274,6 +274,8 @@ The SDK MUST allow users to implement and configure custom processors and
 decorate built-in processors for advanced scenarios such as enriching with
 attributes.
 
+The SDK SHOULD allow users to set up independent log processing pipelines.
+
 The following diagram shows `LogRecordProcessor`'s relationship to other
 components in the SDK:
 
@@ -303,7 +305,7 @@ therefore it SHOULD NOT block or throw exceptions.
 **Parameters:**
 
 * `logRecord` - a [ReadWriteLogRecord](#readwritelogrecord) for the
-  emitted `LogRecord`.
+  emitted `LogRecord`. It is `logRecord` MAY be passed as a 
 * `context` - the resolved `Context` (the explicitly passed `Context` or the
   current `Context`)
 
@@ -312,6 +314,14 @@ therefore it SHOULD NOT block or throw exceptions.
 A `LogRecordProcessor` may freely modify `logRecord` for the duration of
 the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
 asynchronous processing) only reads are permitted.
+
+It is implementation specific whether `logRecord` modification are
+also applied to the subsequent registered processors.
+For instance, `logRecord` may be passed by value or by reference.
+If `logRecord` modifications are applied the to subsequent registered processors,
+then [ReadWriteLogRecord](#readwritelogrecord) SHOULD offer
+a way to make a copy so that the user can set up independent log processing
+pipelines.
 
 #### ShutDown
 
