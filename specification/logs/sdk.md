@@ -226,6 +226,9 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * [`SpanId`](./data-model.md#field-spanid)
 * [`TraceFlags`](./data-model.md#field-traceflags)
 
+ReadWriteLogRecord MAY offer a way to make a copy
+so that the user can set up independent log processing pipelines.
+
 ## LogRecord Limits
 
 `LogRecord` attributes MUST adhere to
@@ -321,10 +324,6 @@ asynchronous processing) only reads are permitted.
 It is implementation specific whether `logRecord` modification are
 also applied to the subsequent registered processors.
 For instance, `logRecord` may be passed by value or by reference.
-If `logRecord` modifications are applied the to subsequent registered processors,
-then [ReadWriteLogRecord](#readwritelogrecord) SHOULD offer
-a way to make a copy so that the user can set up independent log processing
-pipelines.
 
 #### ShutDown
 
