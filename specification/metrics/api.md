@@ -17,6 +17,7 @@ linkTitle: API
     + [Get a Meter](#get-a-meter)
 - [Meter](#meter)
   * [Meter operations](#meter-operations)
+    + [Enabled](#enabled)
 - [Instrument](#instrument)
   * [General characteristics](#general-characteristics)
     + [Instrument name syntax](#instrument-name-syntax)
