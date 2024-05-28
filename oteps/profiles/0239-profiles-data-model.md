@@ -1349,7 +1349,7 @@ sample:
     locations_length: 3
     value:
       - 100
-  - locations_start_index: 2
+  - locations_start_index: 3
     locations_length: 2
     value:
       - 200
@@ -1361,8 +1361,8 @@ location_indices:
   - 0 # foo
   - 1 # bar
   - 2 # baz
-  - 4 # abc
-  - 5 # def
+  - 3 # abc
+  - 4 # def
 location:
   - line:
       - function_index: 0 # foo
