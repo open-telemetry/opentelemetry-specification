@@ -178,6 +178,29 @@ The `Meter` MUST provide functions to create new [Instruments](#instrument):
 
 Also see the respective sections below for more information on instrument creation.
 
+The `Meter` SHOULD provide functions to:
+
+* [Report if `Meter` is `Enabled`](#enabled)
+
+#### Enabled
+
+**Status**: [Experimental](../document-status.md)
+
+To help users avoid performing computationally expensive operations when
+recording measurements, a `Meter` SHOULD provide this `Enabled` API.
+
+There are currently no required parameters for this API. Parameters can be
+added in the future, therefore, the API MUST be structured in a way for
+parameters to be added.
+
+This API MUST return a language idiomatic boolean type. A returned value of
+`true` means the `Meter` is enabled for the provided arguments, and a returned
+value of `false` means the `Meter` is disabled for the provided arguments.
+
+The returned value is not always static, it can change over time. The API
+SHOULD be documented that instrumentation authors needs to call this API each
+time they record a measurement to ensure they have the most up-to-date response.
+
 ## Instrument
 
 Instruments are used to report [Measurements](#measurement). Each Instrument

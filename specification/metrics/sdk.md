@@ -857,6 +857,14 @@ It consists of the following parameters:
   If a `Meter` is disabled, it MUST behave equivalently
   to [No-op Meter](./noop.md#meter).
 
+  The value of `disabled` MUST be used to resolve whether a `Meter`
+  is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
+  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
+  necessary for implementations to ensure that changes to `disabled` are
+  immediately visible to callers of `Enabled`. I.e. atomic, volatile,
+  synchronized, or equivalent memory semantics to avoid stale reads are
+  discouraged to prioritize performance over immediate consistency.
+
 ### Duplicate instrument registration
 
 A _duplicate instrument registration_ occurs when more than one Instrument of

@@ -107,11 +107,11 @@ The `Logger` is responsible for emitting `LogRecord`s.
 
 The `Logger` MUST provide functions to:
 
-- Emit a `LogRecord`
+- [Emit a `LogRecord`](#emit-a-logrecord)
 
 The `Logger` SHOULD provide functions to:
 
-- Report if `Enabled` for a `LogRecord`
+- [Report if `Logger` is `Enabled`](#enabled)
 
 #### Emit a LogRecord
 
@@ -144,12 +144,13 @@ added in the future, therefore, the API MUST be structured in a way for
 parameters to be added.
 
 This API MUST return a language idiomatic boolean type. A returned value of
-`true` means logging is enabled for the provided arguments, and a returned
-value of `false` means the logging is disabled for the provided arguments.
+`true` means the `Logger` is enabled for the provided arguments, and a returned
+value of `false` means the `Logger` is disabled for the provided arguments.
 
 The returned value is not always static, it can change over time. The API
-SHOULD be documented that Logs Bridge API developers needs to call this API each time they generate
-a `LogRecord` to ensure they have the most up-to-date response.
+SHOULD be documented that instrumentation authors needs to call this API each
+time they [Emit a LogRecord](#emit-a-logrecord) to ensure they have the most
+up-to-date response.
 
 ## Optional and required parameters
 
