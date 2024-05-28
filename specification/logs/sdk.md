@@ -226,7 +226,6 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * [`SpanId`](./data-model.md#field-spanid)
 * [`TraceFlags`](./data-model.md#field-traceflags)
 
-
 The SDK MAY offer a way to make a copy of `ReadWriteLogRecord`
 so that the user can set up independent log processing pipelines.
 
