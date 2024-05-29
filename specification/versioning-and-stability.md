@@ -108,7 +108,8 @@ Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.
 
 Public portions of SDK packages MUST remain backwards compatible.
 There are two categories of public features: **plugin interfaces** and **constructors**.
-Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
+A plugin interface is an extension point provided by the SDK which is intended to be implemented by end users in order to customize SDK behaviors.
+Examples of plugins interfaces include SpanProcessor, Exporter, and Sampler.
 Examples of constructors include configuration objects, environment variables, and SDK builders.
 
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for SDK packages.
