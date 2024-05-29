@@ -41,6 +41,9 @@ release.
 
 ### Supplementary Guidelines
 
+- Clarify that it is permissible to extend SDK interfaces without requiring a new major version
+  ([#4030](https://github.com/open-telemetry/opentelemetry-specification/pull/4030))
+
 ## v1.33.0 (2024-05-09)
 
 ### Context
@@ -91,9 +94,6 @@ release.
 ### Common
 
 ### Supplementary Guidelines
-
-- Clarify that it is permissible to extend SDK interfaces without requiring a new major version
-  ([#4030](https://github.com/open-telemetry/opentelemetry-specification/pull/4030))
 
 ## v1.32.0 (2024-04-11)
 
