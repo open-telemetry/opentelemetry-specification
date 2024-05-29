@@ -225,7 +225,7 @@ value of `false` means the `Tracer` is disabled for the provided arguments.
 
 The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
-time they [create q new `Span`](#span-creation) to ensure they have the most
+time they [create a new `Span`](#span-creation) to ensure they have the most
 up-to-date response.
 
 ## SpanContext
