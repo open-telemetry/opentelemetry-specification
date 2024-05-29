@@ -48,7 +48,7 @@ both their `Attributes` and their `Body`.
 The Events API was designed to allow shared libraries to emit high quality
 logs without needing to depend on a third party logger. Unlike the
 [Logs Bridge API](./bridge-api.md), instrumentation authors and application
-developers and are encouraged to call this API directly. It is appropriate to
+developers are encouraged to call this API directly. It is appropriate to
 use the Event API when these properties fit your requirements:
 
 * Logging from a shared library that must run in many applications.
