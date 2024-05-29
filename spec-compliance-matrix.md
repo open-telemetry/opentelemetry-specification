@@ -191,6 +191,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
 | LoggerProvider.ForceFlush                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
 | Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
+| Logger.Enabled                               | X        | +   |      |     |        |      |        |     | +    | +   |      |       |
 | SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | BatchLogRecordProcessor                      |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        | +   |      | +   |      |       |
