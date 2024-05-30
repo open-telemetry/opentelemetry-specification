@@ -9,15 +9,17 @@
 
 <!-- toc -->
 
-- [Data model](#data-model)
-- [EventLoggerProvider](#eventloggerprovider)
-  * [EventLoggerProvider operations](#eventloggerprovider-operations)
-    + [Get an EventLogger](#get-an-eventlogger)
-- [EventLogger](#eventlogger)
-  * [EventLogger Operations](#eventlogger-operations)
-    + [Emit Event](#emit-event)
-- [Optional and required parameters](#optional-and-required-parameters)
-- [References](#references)
+- [Events API](#events-api)
+  - [Event Data model](#event-data-model)
+  - [Event API usecases](#event-api-usecases)
+  - [EventLoggerProvider](#eventloggerprovider)
+    - [EventLoggerProvider operations](#eventloggerprovider-operations)
+      - [Get an EventLogger](#get-an-eventlogger)
+  - [EventLogger](#eventlogger)
+    - [EventLogger Operations](#eventlogger-operations)
+      - [Emit Event](#emit-event)
+  - [Optional and required parameters](#optional-and-required-parameters)
+  - [References](#references)
 
 <!-- tocstop -->
 
@@ -29,7 +31,7 @@ The Event API consists of these main components:
   provides access to `EventLogger`s.
 * [EventLogger](#eventlogger) is the component responsible for emitting events.
 
-## Data model
+## Event Data model
 
 Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
 
@@ -44,6 +46,8 @@ Events contain all of the features provided by LogRecords, plus one additional
 feature: every event is a semantic convention. All Events have a
 `name`, and all Events with the same `name` MUST conform to the same schema for
 both their `Attributes` and their `Body`.
+
+## Event API usecases
 
 The Events API was designed to allow shared libraries to emit high quality
 logs without needing to depend on a third party logger. Unlike the
