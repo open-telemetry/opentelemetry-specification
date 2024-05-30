@@ -42,10 +42,15 @@ From OpenTelemetry's perspective LogRecords and Events are both represented
 using the same [data model](./data-model.md). An Event is a specialized type
 of LogRecord, not a separate concept.
 
-Events contain all of the features provided by LogRecords, plus one additional
-feature: every event is a semantic convention. All Events have a
-`name`, and all Events with the same `name` MUST conform to the same schema for
-both their `Attributes` and their `Body`.
+Events are OpenTelemetry's standardized semantic formatting for LogRecords.
+Beyond the structure provided by the LogRecord data model, it is helpful for
+logs to have a common format within that structure. When OpenTelemetry
+instrumentation emits logs, those logs SHOULD be formatted as Events. All
+semantic conventions defined for logs MUST be formatted as Events.
+
+The Event format is as follows. All Events have a `name` attribute, and all
+Events with the same `name` MUST conform to the same schema for both their
+`Attributes` and their `Body`.
 
 ## Event API usecases
 
