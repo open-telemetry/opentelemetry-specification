@@ -321,10 +321,6 @@ A `LogRecordProcessor` may freely modify `logRecord` for the duration of
 the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
 asynchronous processing) only reads are permitted.
 
-It is implementation specific whether `logRecord` modification are
-also applied to the subsequent registered processors.
-For instance, `logRecord` may be passed by value or by reference.
-
 #### ShutDown
 
 Shuts down the processor. Called when the SDK is shut down. This is an
