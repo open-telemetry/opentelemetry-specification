@@ -9,16 +9,17 @@
 
 <!-- toc -->
 
-- [Event Data model](#event-data-model)
-- [Event API usecases](#event-api-usecases)
-- [EventLoggerProvider](#eventloggerprovider)
-  * [EventLoggerProvider operations](#eventloggerprovider-operations)
-    + [Get an EventLogger](#get-an-eventlogger)
-- [EventLogger](#eventlogger)
-  * [EventLogger Operations](#eventlogger-operations)
-    + [Emit Event](#emit-event)
-- [Optional and required parameters](#optional-and-required-parameters)
-- [References](#references)
+- [Events API](#events-api)
+  - [Event Data model](#event-data-model)
+  - [Event API use cases](#event-api-use-cases)
+  - [EventLoggerProvider](#eventloggerprovider)
+    - [EventLoggerProvider operations](#eventloggerprovider-operations)
+      - [Get an EventLogger](#get-an-eventlogger)
+  - [EventLogger](#eventlogger)
+    - [EventLogger Operations](#eventlogger-operations)
+      - [Emit Event](#emit-event)
+  - [Optional and required parameters](#optional-and-required-parameters)
+  - [References](#references)
 
 <!-- tocstop -->
 
@@ -51,7 +52,7 @@ The Event format is as follows. All Events have a `name` attribute, and all
 Events with the same `name` MUST conform to the same schema for both their
 `Attributes` and their `Body`.
 
-## Event API usecases
+## Event API use cases
 
 The Events API was designed to allow shared libraries to emit high quality
 logs without needing to depend on a third party logger. Unlike the
@@ -75,7 +76,7 @@ lacks a number of advanced features present in popular log frameworks. For examp
 pattern logging, file rotation, network appenders, etc. These features cannot be
 used with the Event API at this time.
 
-If a logging framework is capable of creating logs which correctly map
+If a logging library is capable of creating logs which correctly map
 to the Event data model, logging in this manner is also an acceptable way to
 create Events.
 
