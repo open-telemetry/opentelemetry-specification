@@ -71,10 +71,10 @@ use the Event API when these properties fit your requirements:
 If any of these properties fit your requirements, we recommend using the Event API.
 Events are described in more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
-Please note that Events are sent directly to the OTel Log SDK, which currently
-lacks a number of advanced features present in popular log frameworks. For example:
-pattern logging, file rotation, network appenders, etc. These features cannot be
-used with the Event API at this time.
+Please note that the OpenTelemetry Log SDK currently lacks a number of advanced
+features present in popular log frameworks. For example: pattern logging, file
+rotation, network appenders, etc. These features cannot be used with the
+OpenTelemetry Event SDK at this time.
 
 If a logging library is capable of creating logs which correctly map
 to the Event data model, logging in this manner is also an acceptable way to
