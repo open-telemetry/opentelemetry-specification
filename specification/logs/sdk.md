@@ -409,7 +409,7 @@ representations to the configured `LogRecordExporter`.
 This is a `LogRecordProcessor` composite ensuring the log record passed to
 `OnEmit` of the configured `processors` do not share mutable data.
 For example, the `OnEmit` implementation of the fan-out processor can make
-a deep copy of the log record before passing it to each warpped processor.
+a deep copy of the log record before passing it to each wrapped processor.
 
 **Configurable parameters:**
 
