@@ -277,11 +277,6 @@ The SDK MUST allow users to implement and configure custom processors and
 decorate built-in processors for advanced scenarios such as enriching with
 attributes.
 
-The SDK SHOULD allow users to set up independent processing pipelines.
-For instance, the user should be able to make a log record modification in
-a processor that is not visible to and does not affect the behavior of other
-log record processors.
-
 The following diagram shows `LogRecordProcessor`'s relationship to other
 components in the SDK:
 
@@ -372,7 +367,10 @@ make the flush timeout configurable.
 ### Built-in processors
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
-as described below. Other common processing scenarios SHOULD be first considered
+as described below.
+The standard OpenTelemetry SDK SHOULD implement a fan-out processor,
+as described below.
+Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
 
@@ -404,6 +402,17 @@ representations to the configured `LogRecordExporter`.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
+
+#### Fan-out processor
+
+This is a `LogRecordProcessor` composite ensuring the log record passed to
+`OnEmit` of the configured `processors` do not share mutable data.
+For example, the `OnEmit` implementation of the fan-out processor can make
+a deep copy of the log record before passing it to each warpped processor.
+
+**Configurable parameters:**
+
+* `processors` - independent log processors.
 
 ## LogRecordExporter
 
