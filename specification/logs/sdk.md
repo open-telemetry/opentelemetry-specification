@@ -28,7 +28,7 @@
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
-    + [Fan-out processor](#fan-out-processor)
+    + [Isolated processor](#isolated-processor)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
@@ -227,9 +227,6 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * [`SpanId`](./data-model.md#field-spanid)
 * [`TraceFlags`](./data-model.md#field-traceflags)
 
-The SDK MAY offer a way to make a clone of `ReadWriteLogRecord`
-so that the user can set up independent log processing pipelines.
-
 ## LogRecord Limits
 
 `LogRecord` attributes MUST adhere to
@@ -369,7 +366,7 @@ make the flush timeout configurable.
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below.
-The standard OpenTelemetry SDK SHOULD implement a fan-out processor,
+The standard OpenTelemetry SDK SHOULD implement an isolated processor,
 as described below.
 Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
@@ -404,16 +401,17 @@ representations to the configured `LogRecordExporter`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
 
-#### Fan-out processor
+#### Isolated processor
 
-This is a `LogRecordProcessor` composite ensuring the log record passed to
-`OnEmit` of the configured `processors` do not share mutable data.
-For example, the `OnEmit` implementation of the fan-out processor can make
-a deep copy of the log record before passing it to each wrapped processor.
+This is a `LogRecordProcessor` decorator ensuring the log record passed to
+`OnEmit` of the configured `processor` does not share mutable data with
+subsequent registered processors.
+For example, the `OnEmit` implementation of the isolated processor can make
+a deep copy of the log record before passing it to the wrapped processor.
 
 **Configurable parameters:**
 
-* `processors` - independent log processors.
+* `processor` - processor to be isolated.
 
 ## LogRecordExporter
 

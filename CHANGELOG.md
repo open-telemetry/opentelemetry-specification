@@ -17,9 +17,7 @@ release.
 
 - Add the experimental `Enabled` API to the `Logger`.
   ([#4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020))
-- SDK SHOULD provide a fan-out processor allowing independent log processing pipelines
-  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
-- SDK MAY offer a way to clone `ReadWriteLogRecord`
+- SDK SHOULD provide an isolated processor allowing independent log processing pipelines
   ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
 
 ### Events
