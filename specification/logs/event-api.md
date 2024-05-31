@@ -72,7 +72,7 @@ If any of these properties fit your requirements, we recommend using the Event A
 Events are described in more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
 
 Please note that the OpenTelemetry Log SDK currently lacks a number of advanced
-features present in popular log frameworks. For example: pattern logging, file
+features present in popular logging libraries. For example: pattern logging, file
 rotation, network appenders, etc. These features cannot be used with the
 OpenTelemetry Event SDK at this time.
 
