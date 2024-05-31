@@ -137,7 +137,7 @@ manner (e.g. by providing default implementations). Hereby, backwards-compatible
 the plugin interfaces MUST continue to be possible to use with newer versions of the SDK without making changes to the end user's code.
 If this backwards compatible addition of methods to interfaces is not possible for a language,
 the language maintainers MAY still implement the addition using backwards-compatible workarounds without incrementing the major version.
-For example, a possible workaround might be to add a new interface instead of extending the existing one and accepting the
+For example, a possible workaround might be to add a new interface instead of extending the existing one and accept the
 new interface in addition to the old one in every place.
 
 There may be other ways to extend existing API/SDKs in non-breaking manner. Language
