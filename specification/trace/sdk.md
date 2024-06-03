@@ -179,6 +179,14 @@ It consists of the following parameters:
   If a `Tracer` is disabled, it MUST behave equivalently
   to [No-op Tracer](./api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk).
 
+  The value of `disabled` MUST be used to resolve whether a `Tracer`
+  is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
+  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
+  necessary for implementations to ensure that changes to `disabled` are
+  immediately visible to callers of `Enabled`. I.e. atomic, volatile,
+  synchronized, or equivalent memory semantics to avoid stale reads are
+  discouraged to prioritize performance over immediate consistency.
+
 ## Additional Span Interfaces
 
 The [API-level definition for Span's interface](api.md#span-operations)
