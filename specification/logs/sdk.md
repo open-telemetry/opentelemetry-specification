@@ -403,11 +403,12 @@ representations to the configured `LogRecordExporter`.
 
 #### Isolated processor
 
-This is a `LogRecordProcessor` decorator ensuring the log record passed to
-`OnEmit` of the configured `processor` does not share mutable data with
-subsequent registered processors.
-For example, the `OnEmit` implementation of the isolated processor can make
-a deep copy of the log record before passing it to the wrapped processor.
+This is an implementation of `LogRecordProcessor` ensuring the log record
+passed to `OnEmit` of the configured `processor` does not share mutable data
+with subsequent registered processors.
+For example, the `OnEmit` implementation of the isolated processor can 
+be a decorator that makes a deep copy of the log record before passing it
+to the configured `processor`.
 
 **Configurable parameters:**
 
