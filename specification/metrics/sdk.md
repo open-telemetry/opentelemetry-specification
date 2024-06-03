@@ -49,6 +49,7 @@ linkTitle: SDK
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
   * [Instrument advisory parameters](#instrument-advisory-parameters)
+  * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -857,6 +858,10 @@ It consists of the following parameters:
   If a `Meter` is disabled, it MUST behave equivalently
   to [No-op Meter](./noop.md#meter).
 
+  The value of `disabled` MUST be used to resolve whether an instrument
+  is [Enabled](./api.md#enabled). See [Instrument Enabled](#instrument-enabled)
+  for details.
+
 ### Duplicate instrument registration
 
 A _duplicate instrument registration_ occurs when more than one Instrument of
@@ -946,6 +951,27 @@ If multiple [identical Instruments](api.md#instrument) are created with
 different advisory parameters, the Meter MUST return an instrument using the
 first-seen advisory parameters and log an appropriate error as described in
 [duplicate instrument registrations](#duplicate-instrument-registration).
+
+### Instrument enabled
+
+**Status**: [Experimental](../document-status.md)
+
+The instrument [Enabled](./api.md#enabled) operation MUST return `false` if any
+of the following conditions are true, and `true` otherwise:
+
+* The [MeterConfig](#meterconfig) of the `Meter` used to create the instrument
+  has parameter `disabled=true`.
+* All [resolved views](#measurement-processing) for the instrument are
+  configured with the [Drop Aggregation](#drop-aggregation).
+
+Note: If a user makes no configuration changes, `Enabled` returns `true` since by
+default `MeterConfig.disabled=false` and instruments use the default
+aggregation when no matching views match the instrument.
+
+It is not necessary for implementations to ensure that changes
+to `MeterConfig.disabled` are immediately visible to callers of `Enabled`. I.e.
+atomic, volatile, synchronized, or equivalent memory semantics to avoid stale
+reads are discouraged to prioritize performance over immediate consistency.
 
 ## Attribute limits
 
