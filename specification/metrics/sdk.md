@@ -965,7 +965,7 @@ of the following conditions are true, and `true` otherwise:
   configured with the [Drop Aggregation](#drop-aggregation).
 
 Note: If a user makes no configuration changes, `Enabled` returns `true` since by
-default, `MeterConfig.disabled=false` and instruments use the default
+default `MeterConfig.disabled=false` and instruments use the default
 aggregation when no matching views match the instrument.
 
 It is not necessary for implementations to ensure that changes
