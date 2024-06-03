@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Clarify the trace SDK should log discarded events and links.
+  ([#4064](https://github.com/open-telemetry/opentelemetry-specification/pull/4064))
+
 ### Metrics
 
 ### Logs
