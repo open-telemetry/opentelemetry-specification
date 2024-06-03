@@ -956,13 +956,17 @@ first-seen advisory parameters and log an appropriate error as described in
 
 **Status**: [Experimental](../document-status.md)
 
-The instrument [Enabled](./api.md#enabled) operation MUST return `true` if any
-of the following conditions are true, and `false` otherwise:
+The instrument [Enabled](./api.md#enabled) operation MUST return `false` if any
+of the following conditions are true, and `true` otherwise:
 
 * The [MeterConfig](#meterconfig) of the `Meter` used to create the instrument
   has parameter `disabled=true`.
 * All [resolved views](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
+
+Note: If a user makes no configuration changes, `Enabled` returns `true` since by
+default, `MeterConfig.disabled=false` and instruments use the default
+aggregation when no matching views match the instrument.
 
 It is not necessary for implementations to ensure that changes
 to `MeterConfig.disabled` are immediately visible to callers of `Enabled`. I.e.
