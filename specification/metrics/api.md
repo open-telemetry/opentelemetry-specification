@@ -28,6 +28,8 @@ linkTitle: API
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
       - [Synchronous Instrument API](#synchronous-instrument-api)
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
+  * [General operations](#general-operations)
+    + [Enabled](#enabled)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -472,6 +474,31 @@ callback. [OpenTelemetry API](../overview.md#api) authors MAY decide
 what is the idiomatic approach (e.g.  it could be an additional
 parameter to the callback function, or captured by the lambda closure,
 or something else).
+
+### General operations
+
+All instruments SHOULD provide functions to:
+
+* [Report if instrument is `Enabled`](#enabled)
+
+#### Enabled
+
+**Status**: [Experimental](../document-status.md)
+
+To help users avoid performing computationally expensive operations when
+recording measurements, instruments SHOULD provide this `Enabled` API.
+
+There are currently no required parameters for this API. Parameters can be
+added in the future, therefore, the API MUST be structured in a way for
+parameters to be added.
+
+This API MUST return a language idiomatic boolean type. A returned value of
+`true` means the instrument is enabled for the provided arguments, and a returned
+value of `false` means the instrument is disabled for the provided arguments.
+
+The returned value is not always static, it can change over time. The API
+SHOULD be documented that instrumentation authors needs to call this API each
+time they record a measurement to ensure they have the most up-to-date response.
 
 ### Counter
 

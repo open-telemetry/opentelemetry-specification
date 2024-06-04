@@ -185,6 +185,14 @@ It consists of the following parameters:
   If a `Logger` is disabled, it MUST behave equivalently
   to [No-op Logger](./noop.md#logger).
 
+  The value of `disabled` MUST be used to resolve whether a `Logger`
+  is [Enabled](./bridge-api.md#enabled). If `disabled` is `true`, `Enabled`
+  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
+  necessary for implementations to ensure that changes to `disabled` are
+  immediately visible to callers of `Enabled`. I.e. atomic, volatile,
+  synchronized, or equivalent memory semantics to avoid stale reads are
+  discouraged to prioritize performance over immediate consistency.
+
 ## Additional LogRecord interfaces
 
 In this document we refer to `ReadableLogRecord` and `ReadWriteLogRecord`, defined as follows.
