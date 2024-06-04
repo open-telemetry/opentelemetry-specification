@@ -1087,7 +1087,7 @@ of cardinality outside of the process.
 
 ## Resets and Gaps
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 When the `StartTimeUnixNano` field is present, it allows the consumer
 to observe when there are gaps and overlapping writers in a stream.
@@ -1161,7 +1161,7 @@ of reaggregation for cumulative series.
 
 ## Overlap
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 Overlap occurs when more than one metric data point is defined for a
 metric stream within a time window.  Overlap is usually caused through
@@ -1200,7 +1200,7 @@ gaps to zero width in these cases, without any overlap.
 
 ## Stream Manipulations
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 Pending introduction.
 
