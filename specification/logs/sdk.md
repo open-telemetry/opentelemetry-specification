@@ -374,8 +374,12 @@ make the flush timeout configurable.
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below.
+
+
+**Status**: [Experimental](../document-status.md) -
 The standard OpenTelemetry SDK SHOULD implement an isolated processor,
 as described below.
+
 Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
@@ -410,6 +414,8 @@ representations to the configured `LogRecordExporter`.
   smaller or equal to `maxQueueSize`. The default value is `512`.
 
 #### Isolated processor
+
+**Status**: [Experimental](../document-status.md) 
 
 This is an implementation of `LogRecordProcessor` ensuring the log record
 passed to `OnEmit` of the configured `processor` does not share mutable data
