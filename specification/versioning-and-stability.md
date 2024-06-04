@@ -89,6 +89,9 @@ OpenTelemetry clients MUST NOT be designed in a manner that breaks existing user
 Terms which denote stability, such as "development", MUST NOT be used as part of a directory or import name.
 Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or -development, to differentiate packages in different statuses.
 
+Note that "Development" status was previously called "Experimental" in this repository.
+Any uses of "Experimental" should be treated same as "Development".
+
 ### Stable
 
 Once a signal in Development has gone through rigorous testing, it MAY transition to **Stable**.
