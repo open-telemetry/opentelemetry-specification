@@ -21,7 +21,7 @@ release.
 - Add the experimental `Enabled` API to the `Logger`.
   ([#4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020))
 - Log record mutations do not have to be visible in next registered processors. Allow chaining processors and having the log record modifications local.
-  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+  ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
 
 ### Events
 
