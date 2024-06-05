@@ -20,7 +20,7 @@ release.
 
 - Add the experimental `Enabled` API to the `Logger`.
   ([#4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020))
-- Add experimental isolating log record processor.
+- Add the in-developement isolating log record processor.
   ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
 
 ### Events
