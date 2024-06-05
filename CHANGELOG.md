@@ -13,7 +13,7 @@ release.
 
 - Clarify the trace SDK should log discarded events and links.
   ([#4064](https://github.com/open-telemetry/opentelemetry-specification/pull/4064))
-- Add `OnEnding` callback to SDK `SpanProcessor` interface
+- Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
   ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
 
 ### Metrics

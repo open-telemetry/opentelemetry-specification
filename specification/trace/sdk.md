@@ -592,7 +592,7 @@ are invoked in the order they have been registered.
 
 #### OnEnding
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 `OnEnding` is called during the span `End()` operation, after the end timestamp has been set. The Span object is still mutable (i.e., `SetAttribute`, `AddLink`, `AddEvent` can be called) while `OnEnding` is called.
 This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
