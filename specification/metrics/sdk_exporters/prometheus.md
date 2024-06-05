@@ -4,7 +4,7 @@ linkTitle: Prometheus
 
 # Metrics Exporter - Prometheus
 
-**Status**: [Experimental](../../document-status.md)
+**Status**: [Development](../../document-status.md)
 
 A Prometheus Exporter MUST be a [Pull Metric Exporter](../sdk.md#pull-metric-exporter)
 which responds to HTTP requests with Prometheus metrics in the appropriate format.
