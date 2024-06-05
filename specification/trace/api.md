@@ -21,6 +21,7 @@ linkTitle: API
 - [Context Interaction](#context-interaction)
 - [Tracer](#tracer)
   * [Tracer operations](#tracer-operations)
+    + [Enabled](#enabled)
 - [SpanContext](#spancontext)
   * [Retrieving the TraceId and SpanId](#retrieving-the-traceid-and-spanid)
   * [IsValid](#isvalid)
@@ -202,6 +203,30 @@ This should be the responsibility of the `TracerProvider` instead.
 The `Tracer` MUST provide functions to:
 
 - [Create a new `Span`](#span-creation) (see the section on `Span`)
+
+The `Tracer` SHOULD provide functions to:
+
+- [Report if `Tracer` is `Enabled`](#enabled)
+
+#### Enabled
+
+**Status**: [Experimental](../document-status.md)
+
+To help users avoid performing computationally expensive operations when
+creating `Span`s, a `Tracer` SHOULD provide this `Enabled` API.
+
+There are currently no required parameters for this API. Parameters can be
+added in the future, therefore, the API MUST be structured in a way for
+parameters to be added.
+
+This API MUST return a language idiomatic boolean type. A returned value of
+`true` means the `Tracer` is enabled for the provided arguments, and a returned
+value of `false` means the `Tracer` is disabled for the provided arguments.
+
+The returned value is not always static, it can change over time. The API
+SHOULD be documented that instrumentation authors needs to call this API each
+time they [create a new `Span`](#span-creation) to ensure they have the most
+up-to-date response.
 
 ## SpanContext
 

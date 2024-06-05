@@ -1,6 +1,6 @@
 # Trace Context in non-OTLP Log Formats
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>

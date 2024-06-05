@@ -574,7 +574,7 @@ startSpan(name: string, options: SpanOptions = {}): Span {
 Using both the OpenTracing Shim and the OpenTelemetry API in the same codebase
 may result in traces using the incorrect parent `Span`, given the different
 implicit/explicit propagation expectations. For this case, the Shim MAY offer
-**experimental** integration with the OpenTelemetry implicit in-process
+**in-Development** integration with the OpenTelemetry implicit in-process
 propagation via an **explicit** setting, warning the user incorrect parent
 values may be consumed:
 
