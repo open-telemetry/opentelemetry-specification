@@ -72,7 +72,7 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-**Status**: [Experimental](../document-status.md) - The `LoggerProvider` MUST
+**Status**: [Development](../document-status.md) - The `LoggerProvider` MUST
 compute the relevant [LoggerConfig](#loggerconfig) using the
 configured [LoggerConfigurator](#loggerconfigurator), and create
 a `Logger` whose behavior conforms to that `LoggerConfig`.
@@ -80,7 +80,7 @@ a `Logger` whose behavior conforms to that `LoggerConfig`.
 ### Configuration
 
 Configuration (
-i.e. [LogRecordProcessors](#logrecordprocessor) and (**experimental**) [LoggerConfigurator](#loggerconfigurator))
+i.e. [LogRecordProcessors](#logrecordprocessor) and (**Development**) [LoggerConfigurator](#loggerconfigurator))
 MUST be owned by the `LoggerProvider`. The configuration MAY be applied at the
 time of `LoggerProvider` creation if appropriate.
 
@@ -94,7 +94,7 @@ configuration only via this reference.
 
 #### LoggerConfigurator
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 A `LoggerConfigurator` is a function which computes
 the [LoggerConfig](#loggerconfig) for a [Logger](#logger).
@@ -164,7 +164,7 @@ registered [LogRecordProcessors](#logrecordprocessor).
 
 ## Logger
 
-**Status**: [Experimental](../document-status.md) - `Logger` MUST behave
+**Status**: [Development](../document-status.md) - `Logger` MUST behave
 according to the [LoggerConfig](#loggerconfig) computed
 during [logger creation](#logger-creation). If the `LoggerProvider` supports
 updating the [LoggerConfigurator](#loggerconfigurator), then upon update
@@ -172,7 +172,7 @@ the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
 
 ### LoggerConfig
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 A `LoggerConfig` defines various configurable aspects of a `Logger`'s behavior.
 It consists of the following parameters:
