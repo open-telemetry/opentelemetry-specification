@@ -1,6 +1,6 @@
 # Logs SDK
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -11,9 +11,11 @@
   * [LoggerProvider Creation](#loggerprovider-creation)
   * [Logger Creation](#logger-creation)
   * [Configuration](#configuration)
+    + [LoggerConfigurator](#loggerconfigurator)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
+  * [LoggerConfig](#loggerconfig)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
   * [ReadWriteLogRecord](#readwritelogrecord)
@@ -69,11 +71,17 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
+**Status**: [Development](../document-status.md) - The `LoggerProvider` MUST
+compute the relevant [LoggerConfig](#loggerconfig) using the
+configured [LoggerConfigurator](#loggerconfigurator), and create
+a `Logger` whose behavior conforms to that `LoggerConfig`.
+
 ### Configuration
 
-Configuration (i.e. [LogRecordProcessors](#logrecordprocessor)) MUST be owned
-by the the `LoggerProvider`. The configuration MAY be applied at the time of
-`LoggerProvider` creation if appropriate.
+Configuration (
+i.e. [LogRecordProcessors](#logrecordprocessor) and (**Development**) [LoggerConfigurator](#loggerconfigurator))
+MUST be owned by the `LoggerProvider`. The configuration MAY be applied at the
+time of `LoggerProvider` creation if appropriate.
 
 The `LoggerProvider` MAY provide methods to update the configuration. If
 configuration is updated (e.g., adding a `LogRecordProcessor`), the updated
@@ -82,6 +90,37 @@ NOT matter whether a `Logger` was obtained from the `LoggerProvider` before or
 after the configuration change). Note: Implementation-wise, this could mean
 that `Logger` instances have a reference to their `LoggerProvider` and access
 configuration only via this reference.
+
+#### LoggerConfigurator
+
+**Status**: [Development](../document-status.md)
+
+A `LoggerConfigurator` is a function which computes
+the [LoggerConfig](#loggerconfig) for a [Logger](#logger).
+
+The function MUST accept the following parameter:
+
+* `logger_scope`:
+  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  the `Logger`.
+
+The function MUST return the relevant `LoggerConfig`, or some signal indicating
+that the [default LoggerConfig](#loggerconfig) should be used. This signal MAY
+be nil, null, empty, or an instance of the default `LoggerConfig` depending on
+what is idiomatic in the language.
+
+This function is called when a `Logger` is first created, and for each
+outstanding `Logger` when a `LoggerProvider`'s `LoggerConfigurator` is
+updated (if updating is supported). Therefore, it is important that it returns
+quickly.
+
+`LoggerConfigurator` is modeled as a function to maximize flexibility.
+However, implementations MAY provide shorthand or helper functions to
+accommodate common use cases:
+
+* Select one or more loggers by name, with exact match or pattern matching.
+* Disable one or more specific loggers.
+* Disable all loggers, and selectively enable one or more specific loggers.
 
 ### Shutdown
 
@@ -99,7 +138,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
 
-`Shutdown` MUST be implemented at least by invoking `Shutdown` on all
+`Shutdown` MUST be implemented by invoking `Shutdown` on all
 registered [LogRecordProcessors](#logrecordprocessor).
 
 ### ForceFlush
@@ -124,8 +163,34 @@ registered [LogRecordProcessors](#logrecordprocessor).
 
 ## Logger
 
-Note that `Logger`s should not be responsible for configuration. This should be
-the responsibility of the `LoggerProvider` instead.
+**Status**: [Development](../document-status.md) - `Logger` MUST behave
+according to the [LoggerConfig](#loggerconfig) computed
+during [logger creation](#logger-creation). If the `LoggerProvider` supports
+updating the [LoggerConfigurator](#loggerconfigurator), then upon update
+the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
+
+### LoggerConfig
+
+**Status**: [Development](../document-status.md)
+
+A `LoggerConfig` defines various configurable aspects of a `Logger`'s behavior.
+It consists of the following parameters:
+
+* `disabled`: A boolean indication of whether the logger is enabled.
+
+  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  i.e. `Logger`s are enabled by default).
+
+  If a `Logger` is disabled, it MUST behave equivalently
+  to [No-op Logger](./noop.md#logger).
+
+  The value of `disabled` MUST be used to resolve whether a `Logger`
+  is [Enabled](./bridge-api.md#enabled). If `disabled` is `true`, `Enabled`
+  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
+  necessary for implementations to ensure that changes to `disabled` are
+  immediately visible to callers of `Enabled`. I.e. atomic, volatile,
+  synchronized, or equivalent memory semantics to avoid stale reads are
+  discouraged to prioritize performance over immediate consistency.
 
 ## Additional LogRecord interfaces
 
@@ -154,11 +219,20 @@ and `ReadWriteLogRecord`.
 
 ### ReadWriteLogRecord
 
-A function receiving this as an argument MUST be able to write to the
-full [LogRecord](data-model.md#log-and-event-record-definition) and additionally MUST be able to retrieve all
-information
-that was added to the `LogRecord` (as with
-[ReadableLogRecord](#readablelogrecord)).
+ReadWriteLogRecord is a superset of [ReadableLogRecord](#readablelogrecord).
+
+A function receiving this as an argument MUST additionally be able to modify
+the following information added to the [LogRecord](data-model.md#log-and-event-record-definition):
+
+* [`Timestamp`](./data-model.md#field-timestamp)
+* [`ObservedTimestamp`](./data-model.md#field-observedtimestamp)
+* [`SeverityText`](./data-model.md#field-severitytext)
+* [`SeverityNumber`](./data-model.md#field-severitynumber)
+* [`Body`](./data-model.md#field-body)
+* [`Attributes`](./data-model.md#field-attributes) (addition, modification, removal)
+* [`TraceId`](./data-model.md#field-traceid)
+* [`SpanId`](./data-model.md#field-spanid)
+* [`TraceFlags`](./data-model.md#field-traceflags)
 
 ## LogRecord Limits
 
@@ -422,3 +496,5 @@ return a Failure result.
 `Shutdown` SHOULD NOT block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
+
+- [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)

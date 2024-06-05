@@ -4,7 +4,7 @@ linkTitle: File Exporter
 
 # OpenTelemetry Protocol File Exporter
 
-**Status**: [Experimental](../../specification/document-status.md)
+**Status**: [Development](../../specification/document-status.md)
 
 This document provides a placeholder for specifying an OTLP exporter capable of
 exporting to either a file or stdout.

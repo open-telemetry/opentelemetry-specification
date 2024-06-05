@@ -20,8 +20,8 @@ Note: when a format has a direct semantic equivalent for a particular field or
 concept then the recommendation in this document MUST be ignored.
 
 See also additional specific transformation rules for
-[Jaeger](../trace/sdk_exporters/jaeger.md) and [Zipkin](../trace/sdk_exporters/zipkin.md).
-The specific rules for Jaeger and Zipkin take precedence over the generic rules defined
+[Prometheus](../compatibility/prometheus_and_openmetrics.md) and [Zipkin](../trace/sdk_exporters/zipkin.md).
+The specific rules for Prometheus and Zipkin take precedence over the generic rules defined
 in this document.
 
 ## Mappings

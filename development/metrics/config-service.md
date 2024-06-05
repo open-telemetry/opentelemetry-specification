@@ -122,7 +122,7 @@ metrics on a push-based model.
 
 ## Implementation Details
 
-Because this specification is experimental, and may imply substantial changes to
+Because this specification is in Development, and may imply substantial changes to
 the existing system, we provide additional details on the example prototype
 implementations available on the
 [contrib collector](https://github.com/vmingchen/opentelemetry-collector-contrib) and

@@ -11,17 +11,65 @@ release.
 
 ### Traces
 
-### Metrics
+- Clarify the trace SDK should log discarded events and links.
+  ([#4064](https://github.com/open-telemetry/opentelemetry-specification/pull/4064))
 
-- Clarify that exemplar reservoir default may change in a minor version.
-  ([#3943](https://github.com/open-telemetry/opentelemetry-specification/pull/3943))
+### Metrics
 
 ### Logs
 
-- Refine description of Instrumentation Scope.
-  ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
-- Clarify that `ReadableLogRecord` and `ReadWriteLogRecord` can be represented using a single type.
-  ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
+- Add the experimental `Enabled` API to the `Logger`.
+  ([#4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020))
+
+### Events
+
+- Add specification for EventLogger and EventLoggerProvider
+  ([#4031](https://github.com/open-telemetry/opentelemetry-specification/pull/4031))
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+- Prometheus: Clarify location of unit suffix within metric names.
+  ([#4057](https://github.com/open-telemetry/opentelemetry-specification/pull/4057))
+- Mark the "Trace Context in non-OTLP Log Formats" specification stable.
+  ([#3909](https://github.com/open-telemetry/opentelemetry-specification/pull/3909))
+
+### SDK Configuration
+
+### Common
+
+- OpenTelemetry clients MUST follow SemVer 2.0.0.
+  ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
+
+### Supplementary Guidelines
+
+## v1.33.0 (2024-05-09)
+
+### Context
+
+### Traces
+
+- Links with invalid SpanContext are recorded.
+  ([#3928](https://github.com/open-telemetry/opentelemetry-specification/pull/3928))
+
+### Metrics
+
+- Change the exemplar behavior to be on by default.
+  ([#3994](https://github.com/open-telemetry/opentelemetry-specification/pull/3994))
+- Use normative language for exemplar default aggregations.
+  ([#4009](https://github.com/open-telemetry/opentelemetry-specification/pull/4009))
+- Mark Exemplars as stable.
+  ([#3870](https://github.com/open-telemetry/opentelemetry-specification/pull/3870))
+- Mark synchronous gauge as stable.
+  ([#4019](https://github.com/open-telemetry/opentelemetry-specification/pull/4019))
+
+### Logs
+
+- Allow implementations to export duplicate keys in a map as an opt-in option.
+  ([#3987](https://github.com/open-telemetry/opentelemetry-specification/pull/3987))
 
 ### Events
 
@@ -31,18 +79,94 @@ release.
 
 ### Compatibility
 
-- Prometheus compatibility: Clarify naming of the target info metric, and differences between various Prometheus formats.
-  ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
-- Prometheus compatibility: Clarify that the service triplet is required to be unique by semantic conventions.
-  ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
-- Mark the "Trace Context in non-OTLP Log Formats" specification stable.
-  ([#3909](https://github.com/open-telemetry/opentelemetry-specification/pull/3909))
+- Add name suggestion for option to apply resource attributes as metric attributes in Prometheus exporter.
+  ([#3837](https://github.com/open-telemetry/opentelemetry-specification/pull/3837))
 
 ### SDK Configuration
+
+- Clarify syntax for environment variable substitution regular expression
+  ([#4001](https://github.com/open-telemetry/opentelemetry-specification/pull/4001))
+- Error out on invalid identifiers in environment variable substitution.
+  ([#4002](https://github.com/open-telemetry/opentelemetry-specification/pull/4002))
+- Add end to end examples for file configuration
+  ([#4018](https://github.com/open-telemetry/opentelemetry-specification/pull/4018))
+- Clarify the schema for YAML configuration files
+  ([#3973](https://github.com/open-telemetry/opentelemetry-specification/pull/3973))
 
 ### Common
 
 ### Supplementary Guidelines
+
+## v1.32.0 (2024-04-11)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Remove the Jaeger Exporter.
+  ([#3964](https://github.com/open-telemetry/opentelemetry-specification/pull/3964))
+
+### Metrics
+
+- Clarify that exemplar reservoir default may change in a minor version.
+  ([#3943](https://github.com/open-telemetry/opentelemetry-specification/pull/3943))
+- Add option to disable target info metric to Prometheus exporters.
+  ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
+- Add synchronous gauge entry to sum monotonic table.
+  ([#3977](https://github.com/open-telemetry/opentelemetry-specification/pull/3977))
+
+### Logs
+
+- Refine description of Instrumentation Scope.
+  ([#3855](https://github.com/open-telemetry/opentelemetry-specification/pull/3855))
+- Clarify that `ReadableLogRecord` and `ReadWriteLogRecord` can be represented using a single type.
+  ([#3898](https://github.com/open-telemetry/opentelemetry-specification/pull/3898))
+- Fix what can be modified via `ReadWriteLogRecord`.
+  ([#3907](https://github.com/open-telemetry/opentelemetry-specification/pull/3907))
+
+### Events
+
+- No changes.
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### Compatibility
+
+- Prometheus compatibility: Clarify naming of the target info metric, and differences between various Prometheus formats.
+  ([#3871](https://github.com/open-telemetry/opentelemetry-specification/pull/3871))
+- Prometheus compatibility: Clarify that the service triplet is required to be unique by semantic conventions.
+  ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
+- Prometheus: represent Prometheus Info, StateSet and Unknown-typed metrics in OTLP.
+  ([#3868](https://github.com/open-telemetry/opentelemetry-specification/pull/3868))
+- Update and reorganize the prometheus sdk exporter specification.
+  ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
+
+### SDK Configuration
+
+- Define OTEL_EXPERIMENTAL_CONFIG_FILE to ignore other env vars, add env var substitution default syntax.
+  ([#3948](https://github.com/open-telemetry/opentelemetry-specification/pull/3948))
+- Clarify environment variable substitution is not recursive
+  ([#3913](https://github.com/open-telemetry/opentelemetry-specification/pull/3913))
+- Allow `env:` prefix in environment variable substitution syntax.
+  ([#3974](https://github.com/open-telemetry/opentelemetry-specification/pull/3974))
+- Add simple scope configuration to Tracer, Meter, Logger (experimental).
+  ([#3877](https://github.com/open-telemetry/opentelemetry-specification/pull/3877))
+
+### Common
+
+- No changes.
+
+### Supplementary Guidelines
+
+- No changes.
 
 ## v1.31.0 (2024-03-13)
 
@@ -2561,11 +2685,11 @@ Updates:
   Moved support for out-of-band telemetry from the API to the SDK.
 - [OTEP-0016](https://github.com/open-telemetry/oteps/blob/main/text/0016-named-tracers.md)
   Added named providers for Tracers and Meters.
-- Added design goals and requirements for a telemetry data exchange protocol.
+- Added design goals and requirements for a telemetry data exchange protocol.
 - Added a Span Processor interface for intercepting span start and end
   invocations.
 - Added a Span Exporter interface for processing batches of spans.
-- Replaced DistributedContext.GetIterator with GetEntries.
+- Replaced DistributedContext.GetIterator with GetEntries.
 - Added clarifications and adjustments to improve cross-language applicability.
 - Added a specification for SDK configuration.
 

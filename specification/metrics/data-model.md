@@ -54,6 +54,7 @@ aliases: [/docs/reference/specification/metrics/datamodel]
   * [Sums: Delta-to-Cumulative](#sums-delta-to-cumulative)
     + [Sums: detecting alignment issues](#sums-detecting-alignment-issues)
     + [Sums: Missing Timestamps](#sums-missing-timestamps)
+- [References](#references)
 - [Footnotes](#footnotes)
 
 <!-- tocstop -->
@@ -1086,7 +1087,7 @@ of cardinality outside of the process.
 
 ## Resets and Gaps
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 When the `StartTimeUnixNano` field is present, it allows the consumer
 to observe when there are gaps and overlapping writers in a stream.
@@ -1160,7 +1161,7 @@ of reaggregation for cumulative series.
 
 ## Overlap
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 Overlap occurs when more than one metric data point is defined for a
 metric stream within a time window.  Overlap is usually caused through
@@ -1199,7 +1200,7 @@ gaps to zero width in these cases, without any overlap.
 
 ## Stream Manipulations
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 Pending introduction.
 
@@ -1275,6 +1276,12 @@ every data point due to not being able to determine alignment or point overlap.
 For comparison, see the simple logic used in
 [statsd sums](https://github.com/statsd/statsd/blob/master/stats.js#L281)
 where all points are added, and lost points are ignored.
+
+## References
+
+- [OTEP0049 Metric `LabelSet` specification](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0049-metric-label-set.md)
+- [OTEP0113 Integrate Exemplars with Metrics](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0113-exemplars.md)
+- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md)
 
 ## Footnotes
 

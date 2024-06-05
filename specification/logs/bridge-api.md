@@ -1,6 +1,6 @@
 # Logs Bridge API
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -15,9 +15,11 @@
 - [Logger](#logger)
   * [Logger operations](#logger-operations)
     + [Emit a LogRecord](#emit-a-logrecord)
+    + [Enabled](#enabled)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [Artifact Naming](#artifact-naming)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -105,7 +107,11 @@ The `Logger` is responsible for emitting `LogRecord`s.
 
 The `Logger` MUST provide functions to:
 
-- Emit a `LogRecord`
+- [Emit a `LogRecord`](#emit-a-logrecord)
+
+The `Logger` SHOULD provide functions to:
+
+- [Report if `Logger` is `Enabled`](#enabled)
 
 #### Emit a LogRecord
 
@@ -125,6 +131,26 @@ The API MUST accept the following parameters:
 - [Attributes](./data-model.md#field-attributes)
 
 All parameters are optional.
+
+#### Enabled
+
+**Status**: [Experimental](../document-status.md)
+
+To help users avoid performing computationally expensive operations when
+generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
+
+There are currently no required parameters for this API. Parameters can be
+added in the future, therefore, the API MUST be structured in a way for
+parameters to be added.
+
+This API MUST return a language idiomatic boolean type. A returned value of
+`true` means the `Logger` is enabled for the provided arguments, and a returned
+value of `false` means the `Logger` is disabled for the provided arguments.
+
+The returned value is not always static, it can change over time. The API
+SHOULD be documented that instrumentation authors needs to call this API each
+time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
+up-to-date response.
 
 ## Optional and required parameters
 
@@ -154,3 +180,7 @@ in the event OpenTelemetry were to add a user facing API, the Logs Bridge API wo
 be a natural starting point. Therefore, Log Bridge API artifact, package, and class
 names MUST NOT include the terms "bridge", "appender", or any other qualifier
 that would prevent evolution into a user facing API.
+
+## References
+
+- [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)

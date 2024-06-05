@@ -28,6 +28,7 @@ path_base_for_github_subdir:
 - [OpenTelemetry Collector](#opentelemetry-collector)
 - [Auto-Instrumenting Existing Logging](#auto-instrumenting-existing-logging)
 - [Specifications](#specifications)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -305,7 +306,7 @@ There are typically 2 ways to collect logs from these applications.
 The first approach, assuming the logs are written to files or to standard
 output, requires ability to read file logs, tail them, work correctly when log
 rotation is used, optionally also parse the logs to convert them into more
-structured formats. Parings requires support for different parser types, which
+structured formats. Parsing requires support for different parser types, which
 can also be configured to parse custom formats as well as ability to add custom
 parsers. Examples of common formats that parsers need to support are: CSV,
 Common Log Format, Labeled Tab-separated Values (LTSV), Key/Value Pair format,
@@ -448,3 +449,8 @@ standard output.
 * [Logs Data Model](./data-model.md)
 * [Event API](./event-api.md)
 * [Trace Context in non-OTLP Log Formats](../compatibility/logging_trace_context.md)
+
+## References
+
+- [OTEP0091 Logs: Vocabulary](https://github.com/open-telemetry/oteps/blob/main/text/logs/0091-logs-vocabulary.md)
+- [OTEP0092 OpenTelemetry Logs Vision](https://github.com/open-telemetry/oteps/blob/main/text/logs/0092-logs-vision.md)

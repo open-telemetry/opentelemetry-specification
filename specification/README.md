@@ -50,7 +50,7 @@ path_base_for_github_subdir:
 
 ## Notation Conventions and Compliance
 
-The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in the
 [specification][] are to be interpreted as described in [BCP
 14](https://tools.ietf.org/html/bcp14)
@@ -59,19 +59,17 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 appear in all capitals, as shown here.
 
 An implementation of the [specification][] is not compliant if it fails to
-satisfy one or more of the "MUST", "MUST NOT", "REQUIRED", "SHALL", or "SHALL
-NOT" requirements defined in the [specification][]. Conversely, an
+satisfy one or more of the "MUST", "MUST NOT", "REQUIRED",
+requirements defined in the [specification][]. Conversely, an
 implementation of the [specification][] is compliant if it satisfies all the
-"MUST", "MUST NOT", "REQUIRED", "SHALL", and "SHALL NOT" requirements defined in
-the [specification][].
+"MUST", "MUST NOT", "REQUIRED", requirements defined in the [specification][].
 
 ## Project Naming
 
 - The official project name is "OpenTelemetry" (with no space between "Open" and
   "Telemetry").
-- The official acronym used by the OpenTelemetry project is "OTel". Refrain from
-  using "OT" in order to avoid confusion with the now deprecated "OpenTracing"
-  project.
+- The official acronym used by the OpenTelemetry project is "OTel". "OT" MAY be
+  used only as a part of a longer acronym, such as OTCA (OpenTelemetry Certified Associate).
 - The official names for sub-projects, like language specific implementations,
   follow the pattern of "OpenTelemetry {the name of the programming language,
   runtime or component}", for example, "OpenTelemetry Python", "OpenTelemetry
