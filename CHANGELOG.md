@@ -11,11 +11,39 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Events
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.34.0 (2024-06-10)
+
+### Context
+
+- No changes.
+
+### Traces
+
 - Clarify the trace SDK should log discarded events and links.
   ([#4064](https://github.com/open-telemetry/opentelemetry-specification/pull/4064))
 
 ### Metrics
 
+- No changes.
+-
 ### Logs
 
 - Add the in-Development `Enabled` API to the `Logger`.
@@ -23,12 +51,20 @@ release.
 
 ### Events
 
-- Add specification for EventLogger and EventLoggerProvider
+- Rename event payload to body.
+  ([#4035](https://github.com/open-telemetry/opentelemetry-specification/pull/4035))
+- Add specification for EventLogger and EventLoggerProvider.
   ([#4031](https://github.com/open-telemetry/opentelemetry-specification/pull/4031))
+- Describe the use cases for events in greater detail.
+  ([#3969](https://github.com/open-telemetry/opentelemetry-specification/pull/3969))
 
 ### Resource
 
+- No changes.
+
 ### OpenTelemetry Protocol
+
+- No changes.
 
 ### Compatibility
 
@@ -37,12 +73,18 @@ release.
 
 ### SDK Configuration
 
+- No changes.
+
 ### Common
 
 - OpenTelemetry clients MUST follow SemVer 2.0.0.
   ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
+- Rename "Experimental" to "Development" according to OTEP 0232.
+  ([#4061](https://github.com/open-telemetry/opentelemetry-specification/pull/4061))
 
 ### Supplementary Guidelines
+
+- No changes.
 
 ## v1.33.0 (2024-05-09)
 
