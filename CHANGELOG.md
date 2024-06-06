@@ -13,17 +13,17 @@ release.
 
 - Clarify the trace SDK should log discarded events and links.
   ([#4064](https://github.com/open-telemetry/opentelemetry-specification/pull/4064))
-- Add new experimental `Enabled` API to the `Tracer`.
+- Add new in-development `Enabled` API to the `Tracer`.
   ([#4063](https://github.com/open-telemetry/opentelemetry-specification/pull/4063))
 
 ### Metrics
 
-- Add new experimental `Enabled` API to meter instruments.
+- Add new in-development `Enabled` API to meter instruments.
   ([#4063](https://github.com/open-telemetry/opentelemetry-specification/pull/4063))
 
 ### Logs
 
-- Add the experimental `Enabled` API to the `Logger`.
+- Add the in-development `Enabled` API to the `Logger`.
   ([#4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020))
 
 ### Events
