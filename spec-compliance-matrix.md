@@ -191,6 +191,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
 | LoggerProvider.ForceFlush                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
 | Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
+| Logger.Enabled                               | X        | +   |      |     |        |      |        |     | +    | +   |      |       |
 | SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | BatchLogRecordProcessor                      |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        | +   |      | +   |      |       |
@@ -203,7 +204,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 ## Events
 
 Features for the [Events API](specification/logs/event-api.md) and the [Events SDK](specification/logs/event-sdk.md).
-Disclaimer: Events are currently an experimental work in progress.
+Disclaimer: Events are currently in Development status - work in progress.
 
 | Feature                                                                    | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|

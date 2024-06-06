@@ -49,6 +49,7 @@ linkTitle: SDK
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
   * [Instrument advisory parameters](#instrument-advisory-parameters)
+  * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -131,7 +132,7 @@ When a Schema URL is passed as an argument when creating a `Meter` the emitted
 telemetry for that `Meter` MUST be associated with the Schema URL, provided
 that the emitted data format is capable of representing such association.
 
-**Status**: [Experimental](../document-status.md) - The `MeterProvider` MUST
+**Status**: [Development](../document-status.md) - The `MeterProvider` MUST
 compute the relevant [MeterConfig](#meterconfig) using the
 configured [MeterConfigurator](#meterconfigurator), and create
 a `Meter` whose behavior conforms to that `MeterConfig`.
@@ -140,7 +141,7 @@ a `Meter` whose behavior conforms to that `MeterConfig`.
 
 Configuration (
 i.e. [MetricExporters](#metricexporter), [MetricReaders](#metricreader), [Views](#view),
-and (**experimental**) [MeterConfigurator](#meterconfigurator)) MUST be
+and (**Development**) [MeterConfigurator](#meterconfigurator)) MUST be
 owned by the `MeterProvider`. The configuration MAY be applied at the time
 of `MeterProvider` creation if appropriate.
 
@@ -154,7 +155,7 @@ configuration only via this reference.
 
 #### MeterConfigurator
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 A `MeterConfigurator` is a function which computes
 the [MeterConfig](#meterconfig) for a [Meter](#meter).
@@ -395,7 +396,7 @@ The SDK MUST accept the following stream configuration parameters:
   If the user does not provide an `exemplar_reservoir` value, the
   `MeterProvider` MUST apply a [default exemplar
   reservoir](#exemplar-defaults).
-* **Status**: [Experimental](../document-status.md) -
+* **Status**: [Development](../document-status.md) -
   `aggregation_cardinality_limit`: A positive integer value defining the
   maximum number of data points allowed to be emitted in a collection cycle by
   a single instrument. See [cardinality limits](#cardinality-limits), below.
@@ -770,7 +771,7 @@ of metrics across successive collections.
 
 ### Cardinality limits
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 SDKs SHOULD support being configured with a cardinality limit. The number of
 unique combinations of attributes is called cardinality. For a given metric, the
@@ -836,7 +837,7 @@ temporality.
 Distinct meters MUST be treated as separate namespaces for the purposes of detecting
 [duplicate instrument registrations](#duplicate-instrument-registration).
 
-**Status**: [Experimental](../document-status.md) - `Meter` MUST behave
+**Status**: [Development](../document-status.md) - `Meter` MUST behave
 according to the [MeterConfig](#meterconfig) computed
 during [Meter creation](#meter-creation). If the `MeterProvider` supports
 updating the [MeterConfigurator](#meterconfigurator), then upon update
@@ -844,7 +845,7 @@ the `Meter` MUST be updated to behave according to the new `MeterConfig`.
 
 ### MeterConfig
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 A `MeterConfig` defines various configurable aspects of a `Meter`'s behavior.
 It consists of the following parameters:
@@ -856,6 +857,10 @@ It consists of the following parameters:
 
   If a `Meter` is disabled, it MUST behave equivalently
   to [No-op Meter](./noop.md#meter).
+
+  The value of `disabled` MUST be used to resolve whether an instrument
+  is [Enabled](./api.md#enabled). See [Instrument Enabled](#instrument-enabled)
+  for details.
 
 ### Duplicate instrument registration
 
@@ -936,7 +941,7 @@ Meter MUST treat it the same as an empty description string.
 
 ### Instrument advisory parameters
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 When a Meter creates an instrument, it SHOULD validate the instrument advisory
 parameters. If an advisory parameter is not valid, the Meter SHOULD emit an error
@@ -946,6 +951,27 @@ If multiple [identical Instruments](api.md#instrument) are created with
 different advisory parameters, the Meter MUST return an instrument using the
 first-seen advisory parameters and log an appropriate error as described in
 [duplicate instrument registrations](#duplicate-instrument-registration).
+
+### Instrument enabled
+
+**Status**: [Development](../document-status.md)
+
+The instrument [Enabled](./api.md#enabled) operation MUST return `false` if any
+of the following conditions are true, and `true` otherwise:
+
+* The [MeterConfig](#meterconfig) of the `Meter` used to create the instrument
+  has parameter `disabled=true`.
+* All [resolved views](#measurement-processing) for the instrument are
+  configured with the [Drop Aggregation](#drop-aggregation).
+
+Note: If a user makes no configuration changes, `Enabled` returns `true` since by
+default `MeterConfig.disabled=false` and instruments use the default
+aggregation when no matching views match the instrument.
+
+It is not necessary for implementations to ensure that changes
+to `MeterConfig.disabled` are immediately visible to callers of `Enabled`. I.e.
+atomic, volatile, synchronized, or equivalent memory semantics to avoid stale
+reads are discouraged to prioritize performance over immediate consistency.
 
 ## Attribute limits
 
@@ -1201,11 +1227,11 @@ SHOULD provide at least the following:
 * The `exporter` to use, which is a `MetricExporter` instance.
 * The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
-* **Status**: [Experimental](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
-* **Status**: [Experimental](../document-status.md) - The [MetricFilter](#metricfilter) to apply to metrics and attributes during `MetricReader#Collect`.
+* **Status**: [Development](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+* **Status**: [Development](../document-status.md) - The [MetricFilter](#metricfilter) to apply to metrics and attributes during `MetricReader#Collect`.
 * Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
 
-**Status**: [Experimental](../document-status.md) - A `MetricReader` SHOULD provide the [MetricFilter](#metricfilter) to the SDK or registered [MetricProducer](#metricproducer)(s)
+**Status**: [Development](../document-status.md) - A `MetricReader` SHOULD provide the [MetricFilter](#metricfilter) to the SDK or registered [MetricProducer](#metricproducer)(s)
 when calling the `Produce` operation.
 
 The [MetricReader.Collect](#collect) method allows general-purpose
@@ -1654,11 +1680,11 @@ If a batch of [Metric Points](./data-model.md#metric-points) can include
 
 **Parameters:**
 
-**Status**: [Experimental](../document-status.md) `metricFilter`: An optional [MetricFilter](#metricfilter).
+**Status**: [Development](../document-status.md) `metricFilter`: An optional [MetricFilter](#metricfilter).
 
 ## MetricFilter
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 `MetricFilter` defines the interface which enables the [MetricReader](#metricreader)'s
 registered [MetricProducers](#metricproducer) or the SDK's [MetricProducer](#metricproducer) to filter aggregated data points
