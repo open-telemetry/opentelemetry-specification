@@ -190,7 +190,7 @@ will have the following parameters:
   one of the other kinds, whether it is synchronous or asynchronous
 * An optional `unit` of measure
 * An optional `description`
-* Optional `advisory` parameters (**experimental**)
+* Optional `advisory` parameters (**development**)
 
 Instruments are associated with the Meter during creation. Instruments
 are identified by the `name`, `kind`, `unit`, and `description`.
@@ -274,7 +274,7 @@ boundaries to use if aggregating to
 
 ##### Instrument advisory parameter: `Attributes`
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 Applies to all instrument types.
 
@@ -483,7 +483,7 @@ All instruments SHOULD provide functions to:
 
 #### Enabled
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 To help users avoid performing computationally expensive operations when
 recording measurements, instruments SHOULD provide this `Enabled` API.

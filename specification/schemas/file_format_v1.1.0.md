@@ -4,7 +4,7 @@ linkTitle: 1.1.0
 
 # Schema File Format 1.1.0
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 A Schema File is a YAML file that describes the schema of a particular version.
 It defines the transformations that can be used to convert the telemetry data

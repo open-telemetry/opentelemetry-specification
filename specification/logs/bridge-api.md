@@ -134,7 +134,7 @@ All parameters are optional.
 
 #### Enabled
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 To help users avoid performing computationally expensive operations when
 generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
