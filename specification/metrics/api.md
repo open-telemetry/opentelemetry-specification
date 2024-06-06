@@ -483,7 +483,7 @@ All instruments SHOULD provide functions to:
 
 #### Enabled
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 To help users avoid performing computationally expensive operations when
 recording measurements, instruments SHOULD provide this `Enabled` API.

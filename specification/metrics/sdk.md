@@ -954,7 +954,7 @@ first-seen advisory parameters and log an appropriate error as described in
 
 ### Instrument enabled
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 The instrument [Enabled](./api.md#enabled) operation MUST return `false` if any
 of the following conditions are true, and `true` otherwise:
