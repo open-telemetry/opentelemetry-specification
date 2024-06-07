@@ -13,14 +13,19 @@ release.
 
 - Clarify the trace SDK should log discarded events and links.
   ([#4064](https://github.com/open-telemetry/opentelemetry-specification/pull/4064))
+- Add new in-development `Enabled` API to the `Tracer`.
+  ([#4063](https://github.com/open-telemetry/opentelemetry-specification/pull/4063))
 - Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
   ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
 
 ### Metrics
 
+- Add new in-development `Enabled` API to meter instruments.
+  ([#4063](https://github.com/open-telemetry/opentelemetry-specification/pull/4063))
+
 ### Logs
 
-- Add the experimental `Enabled` API to the `Logger`.
+- Add the in-development `Enabled` API to the `Logger`.
   ([#4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020))
 
 ### Events
@@ -45,6 +50,9 @@ release.
   ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
 
 ### Supplementary Guidelines
+
+- Clarify that it is permissible to extend SDK interfaces without requiring a major version bump
+  ([#4030](https://github.com/open-telemetry/opentelemetry-specification/pull/4030))
 
 ## v1.33.0 (2024-05-09)
 
