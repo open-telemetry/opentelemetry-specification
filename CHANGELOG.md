@@ -13,12 +13,17 @@ release.
 
 - Clarify the trace SDK should log discarded events and links.
   ([#4064](https://github.com/open-telemetry/opentelemetry-specification/pull/4064))
+- Add new in-development `Enabled` API to the `Tracer`.
+  ([#4063](https://github.com/open-telemetry/opentelemetry-specification/pull/4063))
 
 ### Metrics
 
+- Add new in-development `Enabled` API to meter instruments.
+  ([#4063](https://github.com/open-telemetry/opentelemetry-specification/pull/4063))
+
 ### Logs
 
-- Add the experimental `Enabled` API to the `Logger`.
+- Add the in-development `Enabled` API to the `Logger`.
   ([#4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020))
 - Log record mutations do not have to be visible in next registered processors. Allow chaining processors and having the log record modifications local.
   ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
@@ -45,6 +50,9 @@ release.
   ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
 
 ### Supplementary Guidelines
+
+- Clarify that it is permissible to extend SDK interfaces without requiring a major version bump
+  ([#4030](https://github.com/open-telemetry/opentelemetry-specification/pull/4030))
 
 ## v1.33.0 (2024-05-09)
 
