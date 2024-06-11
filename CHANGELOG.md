@@ -83,7 +83,8 @@ release.
 - OpenTelemetry clients MUST follow SemVer 2.0.0.
   ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
 - Rename "Experimental" to "Development" according to OTEP 0232.
-  ([#4061](https://github.com/open-telemetry/opentelemetry-specification/pull/4061))
+  ([#4061](https://github.com/open-telemetry/opentelemetry-specification/pull/4061)),
+  ([#4069](https://github.com/open-telemetry/opentelemetry-specification/pull/4069))
 
 ### Supplementary Guidelines
 
