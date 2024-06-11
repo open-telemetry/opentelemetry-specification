@@ -29,7 +29,7 @@ release.
 
 ### Supplementary Guidelines
 
-## v1.34.0 (2024-06-10)
+## v1.34.0 (2024-06-11)
 
 ### Context
 
