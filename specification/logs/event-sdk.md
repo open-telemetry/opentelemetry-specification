@@ -32,7 +32,7 @@ All implementations of the OpenTelemetry API MUST provide an SDK.
 ## Overview
 
 From OpenTelemetry's perspective LogRecords and Events are both represented
-using the same [data model](./event-api.md#data-model). Therefore, the default
+using the same [data model](./event-api.md#event-data-model). Therefore, the default
 implementation of an Event SDK MUST generate events using the [Logs Data Model](./data-model.md).
 
 The SDK MUST use the [Logs SDK](./sdk.md) to generate, process and export `LogRecord`s.

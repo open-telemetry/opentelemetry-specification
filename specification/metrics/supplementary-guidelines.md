@@ -404,10 +404,10 @@ beginning of the process**.
 
 Imagine if we have a long running service and we collect metrics with 7
 attributes and each attribute can have 30 different values. We might eventually
-end up having to remember the complete set of all `21,870,000,000` permutations!
+end up having to remember the complete set of all `21,870,000,000` combinations!
 This **cardinality explosion** is a well-known challenge in the metrics space.
 
-Making it even worse, if we export the permutations even if there are no recent
+Making it even worse, if we export the combinations even if there are no recent
 updates, the export batch could become huge and will be very costly. For
 example, do we really need/want to export the same thing for (T<sub>0</sub>,
 T<sub>2</sub>] in the above case?
@@ -553,7 +553,7 @@ If we export the metrics using **Delta Temporality**:
   * attributes: {pid = `1003`}, delta: `3`
 
 You can see that we are performing Cumulative->Delta conversion, and it requires
-us to remember the last value of **every single permutation we've encountered so
+us to remember the last value of **every single combination we've encountered so
 far**, because if we don't, we won't be able to calculate the delta value using
 `current value - last value`. And as you can tell, this is super expensive.
 
@@ -671,6 +671,6 @@ data loss.
 **Provide configurations to the application owner.** The answer to _"what is an
 efficient memory usage"_ is ultimately depending on the goal of the application
 owner. For example, the application owners might want to spend more memory in
-order to keep more permutations of metrics attributes, or they might want to use
+order to keep more combinations of metrics attributes, or they might want to use
 memory aggressively for certain attributes that are important, and keep a
 conservative limit for attributes that are less important.
