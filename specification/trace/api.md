@@ -210,7 +210,7 @@ The `Tracer` SHOULD provide functions to:
 
 #### Enabled
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 To help users avoid performing computationally expensive operations when
 creating `Span`s, a `Tracer` SHOULD provide this `Enabled` API.
@@ -283,7 +283,7 @@ non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 An API called `IsRemote`, that returns a boolean value, which is `true` if the SpanContext was
 propagated from a remote parent, MUST be provided.
-When extracting a `SpanContext` through the [Propagators API](../context/api-propagators.md#propagators-api),
+When extracting a `SpanContext` through the [Propagators API](../context/api-propagators.md),
 `IsRemote` MUST return true, whereas for the SpanContext of any child spans it MUST return false.
 
 ### TraceState
