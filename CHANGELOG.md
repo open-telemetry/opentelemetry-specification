@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
+  ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
+
 ### Metrics
 
 ### Logs
@@ -41,8 +44,6 @@ release.
   ([#4064](https://github.com/open-telemetry/opentelemetry-specification/pull/4064))
 - Add new in-development `Enabled` API to the `Tracer`.
   ([#4063](https://github.com/open-telemetry/opentelemetry-specification/pull/4063))
-- Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
-  ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
 
 ### Metrics
 
