@@ -570,6 +570,12 @@ in the SDK:
 
 ### Interface definition
 
+The `SpanProcessor` interface MUST declare the following methods:
+ * [OnStart](#onstart)
+ * [OnEnd](#onendspan)
+
+The `SpanProcessor` interface SHOULD declare the [OnEnding](#onending) method.
+
 #### OnStart
 
 `OnStart` is called when a span is started. This method is called synchronously
