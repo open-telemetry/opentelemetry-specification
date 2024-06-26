@@ -571,8 +571,9 @@ in the SDK:
 ### Interface definition
 
 The `SpanProcessor` interface MUST declare the following methods:
- * [OnStart](#onstart)
- * [OnEnd](#onendspan)
+
+* [OnStart](#onstart)
+* [OnEnd](#onendspan)
 
 The `SpanProcessor` interface SHOULD declare the [OnEnding](#onending) method.
 
