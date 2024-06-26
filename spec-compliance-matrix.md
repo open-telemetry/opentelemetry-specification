@@ -210,16 +210,16 @@ Disclaimer: Events are currently in Development status - work in progress.
 |----------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
 | [EventLoggerProvider](specification/logs/event-api.md#eventloggerprovider) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Get EventLogger                                                            |          |    |      |    |        |      |        |     |      |     |      |       |
-| Get EventLogger accepts version                                            | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Get EventLogger accepts schema_url                                         | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Get EventLogger accepts attributes                                         | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts version                                            | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts schema_url                                         | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts attributes                                         | X        |    |      |    |        |      |        |     |      |     |      |       |
 | [EventLogger](specification/logs/event-api.md#eventlogger)                 | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Emit event accepts name                                                    |          |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts AnyValue body                                           | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts severity                                                | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts timestamp                                               | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts attributes                                              | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts context                                                 | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts AnyValue body                                           | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts severity                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts timestamp                                               | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts attributes                                              | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts context                                                 | X        |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Resource
 
