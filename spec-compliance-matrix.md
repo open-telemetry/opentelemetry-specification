@@ -16,7 +16,7 @@ formats is required. Implementing more than one format is optional.
 
 | Feature                                                                                          | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
-| [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           |          |     |      |     |        |      |        |     |      |     |      |       |
+| [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create TracerProvider                                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer with schema_url                                                                     |          | +   | +    |     | +      |      |        | +   |      | +   |      |       |
@@ -25,7 +25,7 @@ formats is required. Implementing more than one format is optional.
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | ForceFlush (SDK only required)                                                                   |          | +   | +    | -   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Trace / Context interaction](specification/trace/api.md#context-interaction)                    | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
@@ -34,7 +34,7 @@ formats is required. Implementing more than one format is optional.
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Mark Span active                                                                                 |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [SpanContext](specification/trace/api.md#spancontext)                                            |          |     |      |     |        |      |        |     |      |     |      |       |
+| [SpanContext](specification/trace/api.md#spancontext)                                            | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | IsValid                                                                                          |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRemote                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Conforms to the W3C TraceContext spec                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -69,11 +69,11 @@ formats is required. Implementing more than one format is optional.
 | Links can be recorded on span creation                                                           |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | Links can be recorded after span creation                                                        |          | +   |      |     |        |      |        |     |      | +   |      |       |
 | Links order is preserved                                                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
-| [Span events](specification/trace/api.md#add-events)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Span events](specification/trace/api.md#add-events)                                             | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | AddEvent                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Add order preserved                                                                              |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Span exceptions](specification/trace/api.md#record-exception)                                   |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Span exceptions](specification/trace/api.md#record-exception)                                   | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | RecordException                                                                                  |          | -   | +    | +   | +      | +    | +      | +   | +    | -   | +    | -     |
 | RecordException with extra parameters                                                            |          | -   | +    | +   | +      | +    | +      | +   | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
@@ -208,18 +208,18 @@ Disclaimer: Events are currently in Development status - work in progress.
 
 | Feature                                                                    | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| [EventLoggerProvider](specification/logs/event-api.md#eventloggerprovider) |          |    |      |    |        |      |        |     |      |     |      |       |
+| [EventLoggerProvider](specification/logs/event-api.md#eventloggerprovider) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Get EventLogger                                                            |          |    |      |    |        |      |        |     |      |     |      |       |
-| Get EventLogger accepts version                                            | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Get EventLogger accepts schema_url                                         | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Get EventLogger accepts attributes                                         | +        |    |      |    |        |      |        |     |      |     |      |       |
-| [EventLogger](specification/logs/event-api.md#eventlogger)                 |          |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts version                                            | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts schema_url                                         | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts attributes                                         | X        |    |      |    |        |      |        |     |      |     |      |       |
+| [EventLogger](specification/logs/event-api.md#eventlogger)                 | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Emit event accepts name                                                    |          |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts AnyValue body                                           | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts severity                                                | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts timestamp                                               | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts attributes                                              | +        |    |      |    |        |      |        |     |      |     |      |       |
-| Emit event accepts context                                                 | +        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts AnyValue body                                           | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts severity                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts timestamp                                               | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts attributes                                              | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts context                                                 | X        |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Resource
 
@@ -322,7 +322,7 @@ for details.
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | +    |    | [-][py1779] | +    | +      | +   | -    |     | +    |       |
 | Standard output (logging)                                                      |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | +    | +  | +           | +    | +      | +   | -    | +   | +    | +     |
-| **[OTLP](specification/protocol/otlp.md)**                                     |          |    |      |    |             |      |        |     |      |     |      |       |
+| **[OTLP](specification/protocol/otlp.md)**                                     | Optional | Go | Java | JS | Python      | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | OTLP/gRPC Exporter                                                             | *        | +  | +    | +  | +           |      | +      | +   | +    | +   | +    | +     |
 | OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | -    | +  | [-][py1003] |      | -      | +   |      | +   | -    | -     |
