@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Add the in-development isolating log record processor.
+  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
+
 ### Events
 
 ### Resource
