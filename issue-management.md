@@ -11,11 +11,7 @@
 - Reviewer:
   - Person whose Approval is needed to merge the PR.
 - Sponsor:
-  - This person, typically a technical committee member or someone the TC has assigned, is responsible for the completion of the issue.
-    This may require finding collaborators or reviewers to work on the issue.
-    They may also act as collaborator or reviewer, but are not required to do so.
-    They are also responsible to make sure the issue is kept up to date and closed when the issue is completed.
-    The sponsor is identified as the assignee of the issue.
+  - The [specification sponsors](./community-membership.md#specification-sponsor), identified as the assignee of the issue, is responsible for the completion of the issue.
 - Triager:
   - This person is responsible for applying appropriate labels as outlined below,
     following up on issues to ensure they are complete,
@@ -31,12 +27,10 @@ deciding, accepted, and rejected. Within each category, there are several labels
 which provide more context. Following are the definitions of each triage label and when they are applied.
 
 ### `triage:deciding:*`
+These labels are applied to issues when it is unclear yet if they are something the project will take on.
 
-These labels are applied to issues when it is unclear if they are something the project will take on.
-This may be because they provide insufficient info to properly describe the problem or if the problem described is potentially out of scope.
-
-* `triage:deciding:community-feedback` - This issue is open to community discussion. If the community can provide sufficient reasoning, it may be accepted by the project.
-* `triage:deciding:insufficient-info` - This issue does not provide enough information for the project to accept it. It is left open to provide the author with time to add more details.
+* `triage:deciding:needs-community-feedback` - This issue is open to community discussion. If the community can provide sufficient reasoning, it may be accepted by the project.
+* `triage:deciding:needs-info` - This issue does not provide enough information for the project to accept it. It is left open to provide the author with time to add more details.
 * `triage:deciding:tc-inbox` - This issue needs attention from the TC in order to move forward. It may need TC input for triage, or to unblock a discussion that is deadlocked.
 
 ### `triage:accepted:*`
@@ -45,8 +39,8 @@ These labels are applied to issues that describe a problem that is in scope and 
 Just because an issue is accepted does not mean that a solution suggested by the issue will be the solution applied.
 
 * `triage:accepted:ready` - This issue is ready to be implemented. It is either small enough in scope or uncontroversial enough to be implemented without a TC sponsor.
-* `triage:accepted:ready-with-sponsor` - This issue is ready to be implemented and has a TC sponsor assigned.
-* `triage:accepted:needs-sponsor` - This issue is ready to be implemented, but does not yet have a TC sponsor. A pull request without a TC sponsor may not be reviewed in a timely manner.
+* `triage:accepted:ready-with-sponsor` - This issue is ready to be implemented and has a specification sponsor assigned.
+* `triage:accepted:needs-sponsor` - This issue is ready to be implemented, but does not yet have a specification sponsor. A pull request without a specification sponsor may not be reviewed in a timely manner.
 
 ### `triage:rejected:*`
 
