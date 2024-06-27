@@ -749,21 +749,21 @@ This functionality MUST be fully implemented in the API, and SHOULD NOT be overr
 
 ## SpanKind
 
-`SpanKind` describes the relationship between the Spans that are correlated via
+`SpanKind` describes the relationship between Spans that are correlated via
 parent/child relationships or span links.  `SpanKind` describes two independent
 properties that benefit tracing systems during analysis.
 
 The first property described by `SpanKind` reflects whether, from the point of
 view of the library that is being instrumented, a Span sends a message or
-request (`CLIENT` and `PRODUCER` spans), or whether a Span receives or handles
-a message or request (`SERVER` and `CONSUMER` spans).  Spans with a remote
+request (CLIENT and PRODUCER spans), or whether a Span receives or handles
+a message or request (SERVER and CONSUMER spans).  Spans with a remote
 parent or remote incoming link are interesting because they are sources of
 external load.  Spans with a remote child remote ougoing links are interesting
 because they reflect a non-local system dependency.
 
 The second property described by `SpanKind` reflects whether a Span represents
-synchronous communication (`CLIENT and `SERVER` spans) or asynchronous
-communication (`PRODUCER` and `CONSUMER` spans).  When communication is
+synchronous communication (CLIENT and SERVER spans) or asynchronous
+communication (PRODUCER and CONSUMER spans).  When communication is
 synchronous, the initiating span is expected to wait for it to complete under
 ordinary circumstances.  It can be useful for tracing systems to know this
 property, since synchronous Spans may contribute to the overall trace latency.
