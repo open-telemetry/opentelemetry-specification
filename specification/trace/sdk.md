@@ -574,8 +574,12 @@ The `SpanProcessor` interface MUST declare the following methods:
 
 * [OnStart](#onstart)
 * [OnEnd](#onendspan)
+* [Shutdown](#shutdown-1)
+* [ForceFlush](#forceflush-1)
 
-The `SpanProcessor` interface SHOULD declare the [OnEnding](#onending) method.
+The `SpanProcessor` interface SHOULD declare the following methods:
+
+* [OnEnding](#onending) method.
 
 #### OnStart
 
