@@ -28,6 +28,7 @@
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
+    + [Isolating processor](#isolating-processor)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
@@ -372,7 +373,13 @@ make the flush timeout configurable.
 ### Built-in processors
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
-as described below. Other common processing scenarios SHOULD be first considered
+as described below.
+
+**Status**: [Development](../document-status.md) -
+The standard OpenTelemetry SDK SHOULD implement an isolating processor,
+as described below.
+
+Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
 
@@ -404,6 +411,21 @@ representations to the configured `LogRecordExporter`.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
+
+#### Isolating processor
+
+**Status**: [Development](../document-status.md)
+
+This is an implementation of `LogRecordProcessor` ensuring the log record
+passed to `OnEmit` of the configured `processor` does not share mutable data
+with subsequent registered processors.
+For example, the `OnEmit` implementation of the isolating processor can be
+a decorator that makes a deep copy of the log record before passing it to
+the configured `processor`.
+
+**Configurable parameters:**
+
+* `processor` - processor to be isolated.
 
 ## LogRecordExporter
 
