@@ -15,6 +15,8 @@ release.
 
 ### Logs
 
+- Add the in-development isolating log record processor.
+  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
 - Log record mutations do not have to be visible in next registered processors. Allow chaining processors and having the log record modifications local.
   ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
 
