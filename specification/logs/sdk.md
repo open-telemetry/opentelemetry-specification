@@ -324,9 +324,9 @@ in next registered processors.
 
 If the `logRecord` is shared[^shared], then a `LogRecordProcessor` may freely
 modify `logRecord` only for the duration of the `OnEmit` call.
-The modifications applied on shared data are visible in next
+The modifications applied on shared data are visible in the next
 registered processors.
-If `logRecord` is needed after `OnEmit` returns (i.e. for asynchronous
+If the `logRecord` is needed after `OnEmit` returns (i.e. for asynchronous
 processing) only reads are permitted.
 
 [^shared]: A shared `logRecord` means that consecutive processors receive
