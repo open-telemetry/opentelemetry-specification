@@ -18,7 +18,7 @@ release.
 - Add the in-development isolating log record processor.
   ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
 - `ReadWriteLogRecord` MAY provide a method to make a clone.
-  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+  ([#4090](https://github.com/open-telemetry/opentelemetry-specification/pull/4090))
 
 ### Events
 
