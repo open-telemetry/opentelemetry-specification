@@ -11,7 +11,7 @@
 - Reviewer:
   - Person whose Approval is needed to merge the PR.
 - Sponsor:
-  - The [specification sponsors](./community-membership.md#specification-sponsor), identified as the assignee of the issue, is responsible for the completion of the issue.
+  - The [specification sponsors](https://github.com/open-telemetry/community/blob/main/community-membership.md#specification-sponsor), identified as the assignee of the issue, is responsible for the completion of the issue.
 - Triager:
   - This person is responsible for applying appropriate labels as outlined below,
     following up on issues to ensure they are complete,
@@ -27,6 +27,7 @@ deciding, accepted, and rejected. Within each category, there are several labels
 which provide more context. Following are the definitions of each triage label and when they are applied.
 
 ### `triage:deciding:*`
+
 These labels are applied to issues when it is unclear yet if they are something the project will take on.
 
 * `triage:deciding:needs-community-feedback` - This issue is open to community discussion. If the community can provide sufficient reasoning, it may be accepted by the project.
