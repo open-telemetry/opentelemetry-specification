@@ -235,7 +235,7 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * [`SpanId`](./data-model.md#field-spanid)
 * [`TraceFlags`](./data-model.md#field-traceflags)
 
-`ReadWriteLogRecord` MAY provide a method to make a clone.
+The SDK MAY provide an operation that makes a clone of a `ReadWriteLogRecord`.
 
 ## LogRecord Limits
 
