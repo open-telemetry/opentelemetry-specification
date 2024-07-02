@@ -57,3 +57,12 @@ metric, or scope labels. The option MAY be named `without_scope_info`, and MUST 
 
 A Prometheus Exporter MAY support a configuration option to produce metrics without a [target info](../../compatibility/prometheus_and_openmetrics.md#resource-attributes-1)
 metric. The option MAY be named `without_target_info`, and MUST be `false` by default.
+
+A Prometheus Exporter MAY support a configuration option to set the default
+histogram aggregation. The option MAY be named `default_histogram_aggregation`,
+and MUST support the following values:
+
+* `explicit_bucket_histogram`: Use [Explicit Bucket Histogram Aggregation](../sdk.md#explicit-bucket-histogram-aggregation).
+* `base2_exponential_bucket_histogram`: Use [Base2 Exponential Bucket Histogram Aggregation](../sdk.md#base2-exponential-bucket-histogram-aggregation).
+
+By default, `default_histogram_aggregation` MUST be `explicit_bucket_histogram`.
