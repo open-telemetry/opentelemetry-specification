@@ -26,6 +26,9 @@ release.
 
 ### Compatibility
 
+- Mark the "Trace Context in non-OTLP Log Formats" specification stable.
+  ([#3909](https://github.com/open-telemetry/opentelemetry-specification/pull/3909))
+
 ### SDK Configuration
 
 ### Common
