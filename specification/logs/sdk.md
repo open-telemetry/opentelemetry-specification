@@ -318,9 +318,29 @@ therefore it SHOULD NOT block or throw exceptions.
 
 **Returns:** `Void`
 
-A `LogRecordProcessor` may freely modify `logRecord` for the duration of
-the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
-asynchronous processing) only reads are permitted.
+It is implementation specific whether and how the `logRecord` passed by the SDK
+is shared between the processors. Log record mutations do not have to be visible
+in next registered processors.
+
+If the `logRecord` is shared[^shared], then a `LogRecordProcessor` may freely
+modify `logRecord` only for the duration of the `OnEmit` call.
+The modifications applied on shared data are visible in the next
+registered processors.
+If the `logRecord` is needed after `OnEmit` returns (i.e. for asynchronous
+processing) only reads are permitted.
+
+[^shared]: A shared `logRecord` means that consecutive processors receive
+the same instance of the log record (i.e. shared by a pointer).
+
+If the `logRecord` is not shared[^not-shared], then modifications applied
+on the `logRecord` are local.
+If the modification is needed in another processor,
+then the processor making the modification needs to call the other processor's
+`OnEmit` and pass the locally modified `logRecord`.
+
+[^not-shared]: A not shared `logRecord` means that consecutive processors
+receive a copy of the log record (i.e. shallow copies in Go, which are
+stack allocated).
 
 #### ShutDown
 
