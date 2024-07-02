@@ -1,6 +1,7 @@
-<!--- Hugo front matter used to generate the website version of this page:
+---
+# Hugo front matter used to generate the website version of this page:
 linkTitle: File
---->
+---
 
 # File Configuration
 
@@ -387,7 +388,7 @@ try {
     // Create SDK components from configuration model
     openTelemetry = FileConfiguration.create(configurationModel);
 } catch (Throwable e) {
-    log.error("Error initializing SDK from configuration file", e);    
+    log.error("Error initializing SDK from configuration file", e);
 }
 
 // Access SDK components and install instrumentation
@@ -407,14 +408,14 @@ try {
     // Parse local and remote configuration files to configuration models
     OpenTelemetryConfiguration localConfigurationModel = FileConfiguration.parse(new File("/app/sdk-config.yaml"));
     OpenTelemetryConfiguration remoteConfigurationModel = FileConfiguration.parse(getRemoteConfiguration("http://example-host/config/my-application"));
-    
+
     // Merge the configuration models using custom logic
     OpenTelemetryConfiguration resolvedConfigurationModel = merge(localConfigurationModel, remoteConfigurationModel);
-    
+
     // Create SDK components from resolved configuration model
     openTelemetry = FileConfiguration.create(resolvedConfigurationModel);
 } catch (Throwable e) {
-    log.error("Error initializing SDK from configuration file", e);    
+    log.error("Error initializing SDK from configuration file", e);
 }
 
 // Access SDK components and install instrumentation
