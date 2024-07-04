@@ -72,7 +72,7 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.
 
-**Status**: [Experimental](../document-status.md) - The `TracerProvider` MUST
+**Status**: [Development](../document-status.md) - The `TracerProvider` MUST
 compute the relevant [TracerConfig](#tracerconfig) using the
 configured [TracerConfigurator](#tracerconfigurator), and create
 a `Tracer` whose behavior conforms to that `TracerConfig`.
@@ -81,7 +81,7 @@ a `Tracer` whose behavior conforms to that `TracerConfig`.
 
 Configuration (
 i.e., [SpanProcessors](#span-processor), [IdGenerator](#id-generators), [SpanLimits](#span-limits), [`Sampler`](#sampling),
-and (**experimental**) [TracerConfigurator](#tracerconfigurator)) MUST be
+and (**Development**) [TracerConfigurator](#tracerconfigurator)) MUST be
 owned by the `TracerProvider`. The configuration MAY be applied at the time
 of `TracerProvider` creation if appropriate.
 
@@ -96,7 +96,7 @@ reference.
 
 #### TracerConfigurator
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 A `TracerConfigurator` is a function which computes
 the [TracerConfig](#tracerconfig) for a [Tracer](#tracer).
@@ -159,7 +159,7 @@ make the flush timeout configurable.
 
 ## Tracer
 
-**Status**: [Experimental](../document-status.md) - `Tracer` MUST behave
+**Status**: [Development](../document-status.md) - `Tracer` MUST behave
 according to the [TracerConfig](#tracerconfig) computed
 during [Tracer creation](#tracer-creation). If the `TracerProvider` supports
 updating the [TracerConfigurator](#tracerconfigurator), then upon update
@@ -167,7 +167,7 @@ the `Tracer` MUST be updated to behave according to the new `TracerConfig`.
 
 ### TracerConfig
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 A `TracerConfig` defines various configurable aspects of a `Tracer`'s behavior.
 It consists of the following parameters:
@@ -179,6 +179,14 @@ It consists of the following parameters:
 
   If a `Tracer` is disabled, it MUST behave equivalently
   to [No-op Tracer](./api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk).
+
+  The value of `disabled` MUST be used to resolve whether a `Tracer`
+  is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
+  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
+  necessary for implementations to ensure that changes to `disabled` are
+  immediately visible to callers of `Enabled`. I.e. atomic, volatile,
+  synchronized, or equivalent memory semantics to avoid stale reads are
+  discouraged to prioritize performance over immediate consistency.
 
 ## Additional Span Interfaces
 
@@ -496,7 +504,7 @@ public final class SpanLimits {
 * `AttributePerLinkCountLimit` (Default=128) - Maximum allowed attribute per span link count;
 
 There SHOULD be a message printed in the SDK's log to indicate to the user
-that an attribute was discarded due to such a limit.
+that an attribute, event, or link was discarded due to such a limit.
 To prevent excessive logging, the message MUST be printed at most once per
 span (i.e., not per discarded attribute, event, or link).
 

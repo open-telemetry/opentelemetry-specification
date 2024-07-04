@@ -5,7 +5,7 @@ linkTitle: File
 
 # File Configuration
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 <!-- toc -->
 

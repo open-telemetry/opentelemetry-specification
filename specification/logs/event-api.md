@@ -1,6 +1,6 @@
 # Events API
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -9,7 +9,8 @@
 
 <!-- toc -->
 
-- [Data model](#data-model)
+- [Event Data model](#event-data-model)
+- [Event API use cases](#event-api-use-cases)
 - [EventLoggerProvider](#eventloggerprovider)
   * [EventLoggerProvider operations](#eventloggerprovider-operations)
     + [Get an EventLogger](#get-an-eventlogger)
@@ -25,10 +26,11 @@
 
 The Event API consists of these main components:
 
-* [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It provides access to `EventLogger`s.
+* [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It
+  provides access to `EventLogger`s.
 * [EventLogger](#eventlogger) is the component responsible for emitting events.
 
-## Data model
+## Event Data model
 
 Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
 
@@ -36,17 +38,46 @@ Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
 >operating system or other software runs.
 
 From OpenTelemetry's perspective LogRecords and Events are both represented
-using the same [data model](./data-model.md).
+using the same [data model](./data-model.md). An Event is a specialized type
+of LogRecord, not a separate concept.
 
-However, OpenTelemetry does recognize a subtle semantic difference between
-LogRecords and Events: Events are LogRecords which have a `name` which uniquely
-defines a particular class or type of event. All events with the same `name`
-have `Payloads` that conform to the same schema, which assists in analysis in
-observability platforms. Events are described in more detail in
-the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+Events are OpenTelemetry's standardized semantic formatting for LogRecords.
+Beyond the structure provided by the LogRecord data model, it is helpful for
+logs to have a common format within that structure. When OpenTelemetry
+instrumentation emits logs, those logs SHOULD be formatted as Events. All
+semantic conventions defined for logs MUST be formatted as Events.
 
-Unlike the [Logs Bridge API](./bridge-api.md), application developers and
-instrumentation authors are encouraged to call this API directly.
+The Event format is as follows. All Events have a `name` attribute, and all
+Events with the same `name` MUST conform to the same schema for both their
+`Attributes` and their `Body`.
+
+## Event API use cases
+
+The Events API was designed to allow shared libraries to emit high quality
+logs without needing to depend on a third party logger. Unlike the
+[Logs Bridge API](./bridge-api.md), instrumentation authors and application
+developers are encouraged to call this API directly. It is appropriate to
+use the Event API when these properties fit your requirements:
+
+* Logging from a shared library that must run in many applications.
+* A semantic convention needs to be defined. We do not define semantic
+  conventions for LogRecords that are not Events.
+* Analysis by an observability platform is the intended use case. For
+  example: statistics, indexing, machine learning, session replay.
+* Normalizing logging and having a consistent schema across a large
+  application is helpful.
+
+If any of these properties fit your requirements, we recommend using the Event API.
+Events are described in more detail in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+
+Please note that the OpenTelemetry Log SDK currently lacks a number of advanced
+features present in popular logging libraries. For example: pattern logging, file
+rotation, network appenders, etc. These features cannot be used with the
+OpenTelemetry Event SDK at this time.
+
+If a logging library is capable of creating logs which correctly map
+to the Event data model, logging in this manner is also an acceptable way to
+create Events.
 
 ## EventLoggerProvider
 
@@ -112,13 +143,13 @@ The effect of calling this API is to emit an `Event` to the processing pipeline.
 
 * The `Name` of the Event, as described
   in [event.name semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
-* The (`AnyValue`) (optional) `Payload` of the Event.
+* The (`AnyValue`) (optional) `Body` of the Event.
 * The `Timestamp` (optional) of the Event.
 * The [Context](../context/README.md) (optional) associated with the Event.
 * The `SeverityNumber` (optional) of the Event.
 * The `Attributes` (optional) of the Event. Event `Attributes` provide
   additional details about the Event which are not part of the
-  well-defined `Payload`.
+  well-defined event `Body`.
 
 ## Optional and required parameters
 

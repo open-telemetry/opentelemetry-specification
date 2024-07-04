@@ -51,7 +51,7 @@ path_base_for_github_subdir:
 
 ## Notation Conventions and Compliance
 
-The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in the
 [specification][] are to be interpreted as described in [BCP
 14](https://tools.ietf.org/html/bcp14)
@@ -60,11 +60,10 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 appear in all capitals, as shown here.
 
 An implementation of the [specification][] is not compliant if it fails to
-satisfy one or more of the "MUST", "MUST NOT", "REQUIRED", "SHALL", or "SHALL
-NOT" requirements defined in the [specification][]. Conversely, an
+satisfy one or more of the "MUST", "MUST NOT", "REQUIRED",
+requirements defined in the [specification][]. Conversely, an
 implementation of the [specification][] is compliant if it satisfies all the
-"MUST", "MUST NOT", "REQUIRED", "SHALL", and "SHALL NOT" requirements defined in
-the [specification][].
+"MUST", "MUST NOT", "REQUIRED", requirements defined in the [specification][].
 
 ## Project Naming
 

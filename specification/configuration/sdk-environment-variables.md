@@ -226,7 +226,7 @@ _is no specified default, or configuration via environment variables_.
 
 ## Prometheus Exporter
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 | Name                          | Description                     | Default                      |
 | ----------------------------- | --------------------------------| ---------------------------- |
@@ -275,7 +275,7 @@ NOT be supported by new implementations.
 
 ### Exemplar
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
@@ -299,7 +299,7 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 
 ## File Configuration
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 Environment variables involved in [file configuration](file-configuration.md).
 

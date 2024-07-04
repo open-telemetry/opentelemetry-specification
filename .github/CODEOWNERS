@@ -16,15 +16,15 @@
 *   @open-telemetry/technical-committee @open-telemetry/specs-approvers
 
 # Trace owners (global + trace)
-experimental/trace/     @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
+development/trace/     @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
 specification/trace/    @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
 
 # Metrics owners (global + metrics)
-experimental/metrics/   @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-metrics-approvers
+development/metrics/   @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-metrics-approvers
 specification/metrics/  @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-metrics-approvers
 
 # Logs owners (global + logs)
-experimental/logs/      @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-logs-approvers
+development/logs/      @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-logs-approvers
 specification/logs/     @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-logs-approvers
 
 # Semantic Conventions owners (global)

@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Add the in-development isolating log record processor.
+  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
+
 ### Events
 
 ### Resource
@@ -28,6 +31,68 @@ release.
 ### Common
 
 ### Supplementary Guidelines
+
+## v1.34.0 (2024-06-11)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- Clarify the trace SDK should log discarded events and links.
+  ([#4064](https://github.com/open-telemetry/opentelemetry-specification/pull/4064))
+- Add new in-development `Enabled` API to the `Tracer`.
+  ([#4063](https://github.com/open-telemetry/opentelemetry-specification/pull/4063))
+
+### Metrics
+
+- Add new in-development `Enabled` API to meter instruments.
+  ([#4063](https://github.com/open-telemetry/opentelemetry-specification/pull/4063))
+
+### Logs
+
+- Add the in-development `Enabled` API to the `Logger`.
+  ([#4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020))
+
+### Events
+
+- Rename event payload to body.
+  ([#4035](https://github.com/open-telemetry/opentelemetry-specification/pull/4035))
+- Add specification for EventLogger and EventLoggerProvider.
+  ([#4031](https://github.com/open-telemetry/opentelemetry-specification/pull/4031))
+- Describe the use cases for events in greater detail.
+  ([#3969](https://github.com/open-telemetry/opentelemetry-specification/pull/3969))
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### Compatibility
+
+- Prometheus: Clarify location of unit suffix within metric names.
+  ([#4057](https://github.com/open-telemetry/opentelemetry-specification/pull/4057))
+
+### SDK Configuration
+
+- No changes.
+
+### Common
+
+- OpenTelemetry clients MUST follow SemVer 2.0.0.
+  ([#4039](https://github.com/open-telemetry/opentelemetry-specification/pull/4039))
+- Rename "Experimental" to "Development" according to OTEP 0232.
+  ([#4061](https://github.com/open-telemetry/opentelemetry-specification/pull/4061)),
+  ([#4069](https://github.com/open-telemetry/opentelemetry-specification/pull/4069))
+
+### Supplementary Guidelines
+
+- Clarify that it is permissible to extend SDK interfaces without requiring a major version bump
+  ([#4030](https://github.com/open-telemetry/opentelemetry-specification/pull/4030))
 
 ## v1.33.0 (2024-05-09)
 
@@ -2668,11 +2733,11 @@ Updates:
   Moved support for out-of-band telemetry from the API to the SDK.
 - [OTEP-0016](https://github.com/open-telemetry/oteps/blob/main/text/0016-named-tracers.md)
   Added named providers for Tracers and Meters.
-- Added design goals and requirements for a telemetry data exchange protocol.
+- Added design goals and requirements for a telemetry data exchange protocol.
 - Added a Span Processor interface for intercepting span start and end
   invocations.
 - Added a Span Exporter interface for processing batches of spans.
-- Replaced DistributedContext.GetIterator with GetEntries.
+- Replaced DistributedContext.GetIterator with GetEntries.
 - Added clarifications and adjustments to improve cross-language applicability.
 - Added a specification for SDK configuration.
 

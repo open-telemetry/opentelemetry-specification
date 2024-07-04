@@ -5,7 +5,7 @@ linkTitle: Mapping to AnyValue
 
 # Mapping Arbitrary Data to OTLP AnyValue
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>

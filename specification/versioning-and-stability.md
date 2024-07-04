@@ -9,11 +9,11 @@
 
 - [Design goals](#design-goals)
 - [Signal lifecycle](#signal-lifecycle)
-  * [Experimental](#experimental)
+  * [Development](#development)
   * [Stable](#stable)
     + [API Stability](#api-stability)
-      - [Extending Existing API Calls](#extending-existing-api-calls)
     + [SDK Stability](#sdk-stability)
+    + [Extending API/SDK abstractions](#extending-apisdk-abstractions)
     + [Contrib Stability](#contrib-stability)
     + [Semantic Conventions Stability](#semantic-conventions-stability)
     + [Telemetry Stability](#telemetry-stability)
@@ -41,7 +41,7 @@ In this document, the terms "OpenTelemetry" and "language implementations" both 
 These terms do not refer to the specification or the Collector in this document.
 
 Each language implementation MUST take these versioning and stability requirements, and produce a language-specific document which details how these requirements will be met.
-This document SHALL be placed in the root of each repo and named `VERSIONING`.
+This document MUST be placed in the root of each repo and named `VERSIONING` or `VERSIONING.md`.
 
 ## Design goals
 
@@ -61,36 +61,40 @@ A library that imports the OpenTelemetry API should never become incompatible wi
 Theoretically, APIs can be deprecated and eventually removed, but this is a process measured in years and we have no plans to do so.
 
 **Allow for multiple levels of package stability within the same release of an OpenTelemetry component.**
-Provide maintainers a clear process for developing new, experimental [signals](glossary.md#signals) alongside stable signals.
+Provide maintainers a clear process for developing new [signals](glossary.md#signals) in Development status alongside stable signals.
 Different packages within the same release may have different levels of stability.
-This means that an implementation wishing to release stable tracing today MUST ensure that experimental metrics are factored out in such a way that breaking changes to metrics API do not destabilize the trace API packages.
+This means that an implementation wishing to release stable tracing today MUST ensure that in-development metrics are factored out in such a way that breaking changes to metrics API do not destabilize the trace API packages.
 
 ## Signal lifecycle
 
-The development of each signal follows a lifecycle: experimental, stable, deprecated, removed.
+The development of each signal follows a lifecycle: development, stable, deprecated, removed.
 
 The infographic below shows an example of the lifecycle of an API component.
 
 ![API Lifecycle](../internal/img/api-lifecycle.png)
 
-### Experimental
+### Development
 
-Signals start as **experimental**, which covers alpha, beta, and release candidate versions of the signal.
-While signals are experimental, breaking changes and performance issues MAY occur.
+Signals start in **Development** status as defined by
+[OTEP 0232](https://github.com/open-telemetry/oteps/blob/main/text/0232-maturity-of-otel.md#explanation).
+While signals are in development, breaking changes and performance issues MAY occur.
 Components SHOULD NOT be expected to be feature-complete.
-In some cases, the experiment MAY be discarded and removed entirely.
-Long-term dependencies SHOULD NOT be taken against experimental signals.
+In some cases, the signal in Development MAY be discarded and removed entirely.
+Long-term dependencies SHOULD NOT be taken against signals in Development.
 
-OpenTelemetry clients MUST be designed in a manner that allows experimental signals to be created without breaking the stability guarantees of existing signals.
+OpenTelemetry clients MUST be designed in a manner that allows signals in Development to be created without breaking the stability guarantees of existing signals.
 
-OpenTelemetry clients MUST NOT be designed in a manner that breaks existing users when a signal transitions from experimental to stable. This would punish users of the release candidate, and hinder adoption.
+OpenTelemetry clients MUST NOT be designed in a manner that breaks existing users when a signal transitions from Development to Stable. This would punish users of the release candidate, and hinder adoption.
 
-Terms which denote stability, such as "experimental," MUST NOT be used as part of a directory or import name.
-Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or -experimental, to differentiate stable and experimental packages.
+Terms which denote stability, such as "development", MUST NOT be used as part of a directory or import name.
+Package **version numbers** MAY include a suffix, such as -alpha, -beta, -rc, or -development, to differentiate packages in different statuses.
+
+Note that "Development" status was previously called "Experimental" in this repository.
+Any uses of "Experimental" should be treated same as "Development".
 
 ### Stable
 
-Once an experimental signal has gone through rigorous beta testing, it MAY transition to **stable**.
+Once a signal in Development has gone through rigorous testing, it MAY transition to **Stable**.
 Long-term dependencies MAY now be taken against this signal.
 
 All signal components MAY become stable together, or MAY transition to stability component-by-component. The API MUST become stable before the other components.
@@ -104,13 +108,23 @@ All existing API calls MUST continue to compile and function against all future 
 
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for API packages.
 
-##### Extending Existing API Calls
+#### SDK Stability
 
-An existing API call MAY be extended without incrementing the major version
+Public portions of SDK packages MUST remain backwards compatible.
+There are two categories of public features: **plugin interfaces** and **constructors**.
+A plugin interface is an extension point provided by the SDK which is intended to be implemented by end users in order to customize SDK behaviors.
+Examples of plugins interfaces include SpanProcessor, Exporter, and Sampler.
+Examples of constructors include configuration objects, environment variables, and SDK builders.
+
+Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for SDK packages.
+
+#### Extending API/SDK abstractions
+
+An existing API/SDK call MAY be extended without incrementing the major version
 number if the particular language allows to do it in a backward-compatible
 manner.
 
-To add a new parameter to an existing API call depending on the language several
+To add a new parameter to an existing API/SDK call depending on the language several
 approaches are possible:
 
 - Add a new optional parameter to existing methods. This may not be the right
@@ -121,17 +135,19 @@ approaches are possible:
   include the new parameter. This is likely the preferred approach for languages
   where method overloads are possible.
 
-There may be other ways to extend existing APIs in non-breaking manner. Language
+Similarly, existing SDK plugin interfaces MAY be extended with new methods without incrementing the major version
+number if the particular language allows to do it in a backward-compatible
+manner (e.g. by providing default implementations). Hereby, backwards-compatible means that end user's code that implements
+the plugin interfaces MUST continue to be possible to use with newer versions of the SDK without making changes to the end user's code.
+For languages that commonly share code via binary artifacts, e.g. Java, backwards-compatible means that end user's code that implements plugin interfaces MUST continue to be possible to use with newer minor or patch versions without recompiling the end user's code.
+
+If this backwards compatible addition of methods to interfaces is not possible for a language,
+the language maintainers MAY still implement the addition using backwards-compatible workarounds without incrementing the major version.
+For example, a possible workaround might be to add a new interface instead of extending the existing one and accept the
+new interface in addition to the old one in every place.
+
+There may be other ways to extend existing API/SDKs in non-breaking manner. Language
 maintainers SHOULD choose the idiomatic way for their language.
-
-#### SDK Stability
-
-Public portions of SDK packages MUST remain backwards compatible.
-There are two categories of public features: **plugin interfaces** and **constructors**.
-Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces.
-Examples of constructors include configuration objects, environment variables, and SDK builders.
-
-Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for SDK packages.
 
 #### Contrib Stability
 
@@ -283,7 +299,7 @@ For stability of telemetry produced by instrumentation see the
 
 Signals MAY eventually be replaced. When this happens, they are marked as deprecated.
 
-Signals SHALL only be marked as deprecated when the replacement becomes stable.
+Signals MUST NOT be marked as deprecated unless the replacement is stable.
 Deprecated code MUST abide by the same support guarantees as stable code.
 
 ### Removed
@@ -310,7 +326,7 @@ We invented a new tracing API, but continue to support the old one.
 
 ## Version numbers
 
-OpenTelemetry clients follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
+OpenTelemetry clients MUST follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), with the following clarifications.
 
 OpenTelemetry clients have four components: API, SDK, Semantic Conventions, and Contrib.
 
@@ -332,8 +348,8 @@ For example, it is fine to have `opentelemetry-python-api` at v1.2.8 when `opent
 * Language implementations have version numbers which are independent of the specification they implement.
 For example, it is fine for v1.8.2 of `opentelemetry-python-api` to implement v1.1.1 of the specification.
 
-**Exception:** in some languages, package managers may react poorly to experimental packages having a version higher than 0.X.
-In these cases, experimental signals MAY version independently from stable signals, in order to retain a 0.X version number.
+**Exception:** in some languages, package managers may react poorly to unstable packages having a version higher than 0.X.
+In these cases, signals in Development MAY version independently from stable signals, in order to retain a 0.X version number.
 When a signal becomes stable, the version MUST be bumped to match the other stable signals in the release.
 
 ### Major version bump
@@ -347,9 +363,9 @@ Most changes to OpenTelemetry clients result in a minor version bump.
 
 * New backward-compatible functionality added to any component.
 * Breaking changes to internal SDK components.
-* Breaking changes to experimental signals.
-* New experimental signals are added.
-* Experimental signals become stable.
+* Breaking changes to in-development signals.
+* New signals in Development are added.
+* Signals in Development become stable.
 * Stable signals are deprecated.
 
 ### Patch version bump

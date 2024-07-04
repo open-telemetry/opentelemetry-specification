@@ -28,6 +28,7 @@
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
+    + [Isolating processor](#isolating-processor)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
@@ -71,7 +72,7 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-**Status**: [Experimental](../document-status.md) - The `LoggerProvider` MUST
+**Status**: [Development](../document-status.md) - The `LoggerProvider` MUST
 compute the relevant [LoggerConfig](#loggerconfig) using the
 configured [LoggerConfigurator](#loggerconfigurator), and create
 a `Logger` whose behavior conforms to that `LoggerConfig`.
@@ -79,7 +80,7 @@ a `Logger` whose behavior conforms to that `LoggerConfig`.
 ### Configuration
 
 Configuration (
-i.e. [LogRecordProcessors](#logrecordprocessor) and (**experimental**) [LoggerConfigurator](#loggerconfigurator))
+i.e. [LogRecordProcessors](#logrecordprocessor) and (**Development**) [LoggerConfigurator](#loggerconfigurator))
 MUST be owned by the `LoggerProvider`. The configuration MAY be applied at the
 time of `LoggerProvider` creation if appropriate.
 
@@ -93,7 +94,7 @@ configuration only via this reference.
 
 #### LoggerConfigurator
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 A `LoggerConfigurator` is a function which computes
 the [LoggerConfig](#loggerconfig) for a [Logger](#logger).
@@ -138,7 +139,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the shutdown timeout configurable.
 
-`Shutdown` MUST be implemented at least by invoking `Shutdown` on all
+`Shutdown` MUST be implemented by invoking `Shutdown` on all
 registered [LogRecordProcessors](#logrecordprocessor).
 
 ### ForceFlush
@@ -163,7 +164,7 @@ registered [LogRecordProcessors](#logrecordprocessor).
 
 ## Logger
 
-**Status**: [Experimental](../document-status.md) - `Logger` MUST behave
+**Status**: [Development](../document-status.md) - `Logger` MUST behave
 according to the [LoggerConfig](#loggerconfig) computed
 during [logger creation](#logger-creation). If the `LoggerProvider` supports
 updating the [LoggerConfigurator](#loggerconfigurator), then upon update
@@ -171,7 +172,7 @@ the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
 
 ### LoggerConfig
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Development](../document-status.md)
 
 A `LoggerConfig` defines various configurable aspects of a `Logger`'s behavior.
 It consists of the following parameters:
@@ -183,6 +184,14 @@ It consists of the following parameters:
 
   If a `Logger` is disabled, it MUST behave equivalently
   to [No-op Logger](./noop.md#logger).
+
+  The value of `disabled` MUST be used to resolve whether a `Logger`
+  is [Enabled](./bridge-api.md#enabled). If `disabled` is `true`, `Enabled`
+  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
+  necessary for implementations to ensure that changes to `disabled` are
+  immediately visible to callers of `Enabled`. I.e. atomic, volatile,
+  synchronized, or equivalent memory semantics to avoid stale reads are
+  discouraged to prioritize performance over immediate consistency.
 
 ## Additional LogRecord interfaces
 
@@ -364,7 +373,13 @@ make the flush timeout configurable.
 ### Built-in processors
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
-as described below. Other common processing scenarios SHOULD be first considered
+as described below.
+
+**Status**: [Development](../document-status.md) -
+The standard OpenTelemetry SDK SHOULD implement an isolating processor,
+as described below.
+
+Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
 
@@ -396,6 +411,21 @@ representations to the configured `LogRecordExporter`.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
+
+#### Isolating processor
+
+**Status**: [Development](../document-status.md)
+
+This is an implementation of `LogRecordProcessor` ensuring the log record
+passed to `OnEmit` of the configured `processor` does not share mutable data
+with subsequent registered processors.
+For example, the `OnEmit` implementation of the isolating processor can be
+a decorator that makes a deep copy of the log record before passing it to
+the configured `processor`.
+
+**Configurable parameters:**
+
+* `processor` - processor to be isolated.
 
 ## LogRecordExporter
 

@@ -16,7 +16,7 @@ formats is required. Implementing more than one format is optional.
 
 | Feature                                                                                          | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |--------------------------------------------------------------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
-| [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           |          |     |      |     |        |      |        |     |      |     |      |       |
+| [TracerProvider](specification/trace/api.md#tracerprovider-operations)                           | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create TracerProvider                                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer                                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Get a Tracer with schema_url                                                                     |          | +   | +    |     | +      |      |        | +   |      | +   |      |       |
@@ -25,7 +25,7 @@ formats is required. Implementing more than one format is optional.
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Shutdown (SDK only required)                                                                     |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | ForceFlush (SDK only required)                                                                   |          | +   | +    | -   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Trace / Context interaction](specification/trace/api.md#context-interaction)                    |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Trace / Context interaction](specification/trace/api.md#context-interaction)                    | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Set active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Tracer](specification/trace/api.md#tracer-operations)                                           | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
@@ -34,7 +34,7 @@ formats is required. Implementing more than one format is optional.
 | Get active Span                                                                                  |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Mark Span active                                                                                 |          | N/A | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [SpanContext](specification/trace/api.md#spancontext)                                            |          |     |      |     |        |      |        |     |      |     |      |       |
+| [SpanContext](specification/trace/api.md#spancontext)                                            | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | IsValid                                                                                          |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | IsRemote                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Conforms to the W3C TraceContext spec                                                            |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -67,13 +67,13 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation                                                           |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
-| Links can be recorded after span creation                                                        |          | +   |      |     |        |      |        |     |      | +   |      |       |
+| Links can be recorded after span creation                                                        |          | +   |      |     | +      |      |        |     |      | +   |      |       |
 | Links order is preserved                                                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
-| [Span events](specification/trace/api.md#add-events)                                             |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Span events](specification/trace/api.md#add-events)                                             | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | AddEvent                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Add order preserved                                                                              |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | Safe for concurrent calls                                                                        |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
-| [Span exceptions](specification/trace/api.md#record-exception)                                   |          |     |      |     |        |      |        |     |      |     |      |       |
+| [Span exceptions](specification/trace/api.md#record-exception)                                   | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | RecordException                                                                                  |          | -   | +    | +   | +      | +    | +      | +   | +    | -   | +    | -     |
 | RecordException with extra parameters                                                            |          | -   | +    | +   | +      | +    | +      | +   | +    | -   | +    | -     |
 | [Sampling](specification/trace/sdk.md#sampling)                                                  | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
@@ -110,6 +110,7 @@ formats is required. Implementing more than one format is optional.
 | `AsynchronousCounter` instrument is supported.                                                                                                                         |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | `Histogram` instrument is supported.                                                                                                                                   |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | `AsynchronousGauge` instrument is supported.                                                                                                                           |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
+| `Gauge` instrument is supported.                                                                                                                                       |          | -  | -    | -   | -      |      | -      | -   |  +   | -   | -    |       |
 | `UpDownCounter` instrument is supported.                                                                                                                               |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | `AsynchronousUpDownCounter` instrument is supported.                                                                                                                   |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | Instruments have `name`                                                                                                                                                |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
@@ -138,23 +139,17 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria is as specified.                                                                                                              |          |    | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The `View` instrument selection criteria supports wildcards.                                                                                                           | X        |    | +    | +   | +      |      | -      |     |  +   | +   | +    |       |
 | The `View` instrument selection criteria supports the match-all wildcard.                                                                                              |          |    | +    | +   | +      |      | +      |     |  +   | +   | +    |       |
-| The `View` instrument selection criteria supports a unit.                                                                                                              |          | +  |      |     | +      |      | +      |     |  +   |     |      |       |
 | The name of the `View` can be specified.                                                                                                                               |          |    | +    | +   | +      |      | +      | +   |      | +   | +    |       |
-| The `View` allows configuring the name description, attributes keys and aggregation of the resulting metric stream.                                                    |          |    | +    | +   | +      |      | +      | +   |  +   | +   | -    |       |
+| The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.                                                   |          |    | +    | +   | +      |      | +      | +   |  +   | +   | -    |       |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream.                                                                                       | X        |    | -    |     | -      |      | -      |     |      |     | -    |       |
 | The SDK allows more than one `View` to be specified per instrument.                                                                                                    | X        |    | +    | +   | +      |      | +      |     |  +   | +   | +    |       |
 | The `Drop` aggregation is available.                                                                                                                                   |          | +  | +    | +   | +      |      | +      |     |  +   | +   | +    |       |
-| The `Drop` aggregation drops all measurements and does not produce a metric stream.                                                                                    |          | +  | +    | +   | +      |      | +      |     |  +   | -   | +    |       |
 | The `Default` aggregation is available.                                                                                                                                |          | +  | +    | +   | +      |      | +      |     |  +   | +   | +    |       |
 | The `Default` aggregation uses the specified aggregation by instrument.                                                                                                |          | +  | +    | +   | +      |      | +      |     |  +   | +   | +    |       |
 | The `Sum` aggregation is available.                                                                                                                                    |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `Sum` aggregation performs as specified.                                                                                                                           |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The `LastValue` aggregation is available.                                                                                                                              |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `LastValue` aggregation performs as specified.                                                                                                                     |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The `ExplicitBucketHistogram` aggregation is available.                                                                                                                |          | -  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| The `ExplicitBucketHistogram` aggregation performs as specified.                                                                                                       |          | -  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The `ExponentialBucketHistogram` aggregation is available.                                                                                                             |          |    |      |     |        |      |        |     |      |     | +    |       |
-| The `ExponentialBucketHistogram` aggregation performs as specified.                                                                                                    |          |    |      |     |        |      |        |     |      |     | +    |       |
 | The metrics Reader implementation supports registering metric Exporters                                                                                                |          |    | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.                                                        |          |    | +    |     | +      |      | +      |     |      | -   | -    |       |
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.                                                        |          |    | +    | +   | +      |      | +      |     |  +   | +   |      |       |
@@ -186,16 +181,17 @@ formats is required. Implementing more than one format is optional.
 
 ## Logs
 
+Features for the [Logging SDK](specification/logs/sdk.md).
 Disclaimer: this list of features is still a work in progress, please refer to the specification if in any doubt.
 
 | Feature                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
-| **[Logging SDK](specification/logs/sdk.md)** | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | LoggerProvider.Get Logger                    |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
 | LoggerProvider.Get Logger accepts attributes |          |     |      |     |        |      |        | +   |      | +   |      |       |
 | LoggerProvider.Shutdown                      |          |     | +    |     |        |      |        | +   |      |     | -    |       |
 | LoggerProvider.ForceFlush                    |          |     | +    |     |        |      |        | +   |      |     | -    |       |
 | Logger.Emit(LogRecord)                       |          |     | +    |     |        |      |        | +   |      | +   | -    |       |
+| Logger.Enabled                               | X        | +   |      |     |        |      |        |     | +    | +   |      |       |
 | SimpleLogRecordProcessor                     |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | BatchLogRecordProcessor                      |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | Can plug custom LogRecordProcessor           |          |     | +    |     |        |      |        | +   |      | +   |      |       |
@@ -204,6 +200,26 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
 | Can plug custom LogRecordExporter            |          |     | +    |     |        |      |        | +   |      | +   |      |       |
 | Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
+
+## Events
+
+Features for the [Events API](specification/logs/event-api.md) and the [Events SDK](specification/logs/event-sdk.md).
+Disclaimer: Events are currently in Development status - work in progress.
+
+| Feature                                                                    | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|----------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
+| [EventLoggerProvider](specification/logs/event-api.md#eventloggerprovider) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| Get EventLogger                                                            |          |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts version                                            | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts schema_url                                         | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts attributes                                         | X        |    |      |    |        |      |        |     |      |     |      |       |
+| [EventLogger](specification/logs/event-api.md#eventlogger)                 | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| Emit event accepts name                                                    |          |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts AnyValue body                                           | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts severity                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts timestamp                                               | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts attributes                                              | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts context                                                 | X        |    |      |    |        |      |        |     |      |     |      |       |
 
 ## Resource
 
@@ -306,7 +322,7 @@ for details.
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |          |    | +    |    | [-][py1779] | +    | +      | +   | -    |     | +    |       |
 | Standard output (logging)                                                      |          | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | +     |
 | In-memory (mock exporter)                                                      |          | +  | +    | +  | +           | +    | +      | +   | -    | +   | +    | +     |
-| **[OTLP](specification/protocol/otlp.md)**                                     |          |    |      |    |             |      |        |     |      |     |      |       |
+| **[OTLP](specification/protocol/otlp.md)**                                     | Optional | Go | Java | JS | Python      | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | OTLP/gRPC Exporter                                                             | *        | +  | +    | +  | +           |      | +      | +   | +    | +   | +    | +     |
 | OTLP/HTTP binary Protobuf Exporter                                             | *        | +  | +    | +  | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTLP/HTTP JSON Protobuf Exporter                                               |          | +  | -    | +  | [-][py1003] |      | -      | +   |      | +   | -    | -     |
