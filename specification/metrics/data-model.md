@@ -1002,18 +1002,20 @@ the gauge interval for the same source.
 
 **Status**: [Experimental](../document-status.md)
 
-Certain flags can be applied to denote special data points. A flag can either
-be true or false. Currently the following flag is supported.
+Certain flags can be applied to denote special data points. A flag  is a
+boolean property which can either be set to `true` or `false`. Currently the
+following flag is supported.
 
 ### No recorded value
 
 If this flag is set on a data point, then this data point reflects explicitly
 missing data in a series. It serves as an indicator that a previously present
 timeseries was removed and that this timeseries should not be returned in
-queries after they were marked stale. It is an equivalent of the [Prometheus staleness marker](https://prometheus.io/docs/prometheus/2.52/querying/basics/#staleness).
+queries after such an indicator was received. It is an equivalent of the
+[Prometheus staleness marker](https://prometheus.io/docs/prometheus/2.52/querying/basics/#staleness).
 
 If this flag is set, all other data point properties except attributes, time
-stamps, or time windows should be ignored.
+stamps, or time windows, should be ignored.
 
 This flags defaults to `false`.
 
