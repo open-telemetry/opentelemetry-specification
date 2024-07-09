@@ -412,6 +412,7 @@ in OTLP consist of the following:
     - Times are specified in Value is UNIX Epoch time in nanoseconds since
       `00:00:00 UTC on 1 January 1970`
   - (optional) a set of examplars (see [Exemplars](#exemplars)).
+  - (optional) Data point flags (see [Data point flags](#data-point-flags)).
 
 The aggregation temporality is used to understand the context in which the sum
 was calculated. When the aggregation temporality is "delta", we expect to have
@@ -447,6 +448,7 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
     first possible moment a measurement could be recorded.  This is commonly
     set to the timestamp when a metric collection system started.
   - (optional) a set of examplars (see [Exemplars](#exemplars)).
+  - (optional) Data point flags (see [Data point flags](#data-point-flags)).
 
 In OTLP, a point within a Gauge stream represents the last-sampled event for a
 given time window.
@@ -493,6 +495,7 @@ Histograms consist of the following:
       bucket.
     - A count of the number of observations that fell within this bucket.
   - (optional) a set of examplars (see [Exemplars](#exemplars)).
+  - (optional) Data point flags (see [Data point flags](#data-point-flags)).
 
 Like Sums, Histograms also define an aggregation temporality.  The picture above
 denotes Delta temporality where accumulated event counts are reset to zero after reporting
@@ -994,6 +997,25 @@ sum.
 
 For Gauges, when an exemplar exists, its value was seen at some point within
 the gauge interval for the same source.
+
+## Data point flags
+
+**Status**: [Experimental](../document-status.md)
+
+Certain flags can be applied to denote special data points. A flag can either
+be true or false. Currently the following flag is supported.
+
+### No recorded value
+
+If this flag is set on a data point, then this data point reflects explicitly
+missing data in a series. It serves as an indicator that a previously present
+timeseries was removed and that this timeseries should not be returned in
+queries after they were marked stale. It is an equivalent of the [Prometheus staleness marker](https://prometheus.io/docs/prometheus/2.52/querying/basics/#staleness).
+
+If this flag is set, all other data point properties except attributes, time
+stamps, or time windows should be ignored.
+
+This flags defaults to `false`.
 
 ## Single-Writer
 
