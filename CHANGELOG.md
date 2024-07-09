@@ -15,9 +15,6 @@ release.
 
 ### Logs
 
-- Add the in-development isolating log record processor.
-  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
-
 ### Events
 
 ### Resource
@@ -31,6 +28,53 @@ release.
 ### Common
 
 ### Supplementary Guidelines
+
+## v1.35.0 (2024-07-10)
+
+### Context
+
+- No changes.
+
+### Traces
+
+- No changes.
+
+### Metrics
+
+- No changes.
+
+### Logs
+
+- Add the in-development isolating log record processor.
+  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
+
+### Events
+
+- No changes.
+
+### Resource
+
+- No changes.
+
+### OpenTelemetry Protocol
+
+- No changes.
+
+### Compatibility
+
+- No changes.
+
+### SDK Configuration
+
+- No changes.
+
+### Common
+
+- No changes.
+
+### Supplementary Guidelines
+
+- No changes.
 
 ## v1.34.0 (2024-06-11)
 
