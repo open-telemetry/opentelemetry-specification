@@ -12,7 +12,7 @@ release.
 ### Traces
 
 - Remove restriction that sampler description is immutable.
-  ([4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
+  ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
 
 ### Metrics
 
