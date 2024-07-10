@@ -41,6 +41,8 @@ aliases: [/docs/reference/specification/metrics/datamodel]
     + [ExponentialHistogram: Bucket inclusivity](#exponentialhistogram-bucket-inclusivity)
   * [Summary (Legacy)](#summary-legacy)
 - [Exemplars](#exemplars)
+- [Data point flags](#data-point-flags)
+  * [No recorded value](#no-recorded-value)
 - [Single-Writer](#single-writer)
 - [Temporality](#temporality)
 - [Resets and Gaps](#resets-and-gaps)
