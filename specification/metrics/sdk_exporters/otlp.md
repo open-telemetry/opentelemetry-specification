@@ -12,8 +12,15 @@ OTLP Metrics Exporter is a [Push Metric
 Exporter](../sdk.md#push-metric-exporter) which sends metrics via the
 [OpenTelemetry Protocol](../../protocol/README.md).
 
-OTLP Metrics Exporter MUST support both Cumulative and Delta
-[Aggregation Temporality](../data-model.md#temporality).
+OTLP Metrics Exporter MUST provide configuration to set
+the [MetricReader](../sdk.md#metricreader) output `temporality` as a function of
+instrument kind. This option MAY be named `temporality`, and MUST set
+temporality to Cumulative for all instrument kinds by default.
+
+OTLP Metrics Exporter MUST provide configuration to set
+the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
+of instrument kind. This option MAY be named `default_aggregation`, and MUST use
+the [default aggregation](../sdk.md#default-aggregation) by default.
 
 The exporter MUST provide configuration according to the [OpenTelemetry Protocol
 Exporter](../../protocol/exporter.md) specification.
@@ -33,12 +40,12 @@ then by default:
 * The exporter MUST configure the default aggregation on the basis of instrument kind using
   the `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION` variable as described below if it is implemented.
 
-## Additional Configuration
+## Additional Environment Variable Configuration
 
-| Name                                                       | Description                                                         | Default                     |
-|------------------------------------------------------------|---------------------------------------------------------------------|-----------------------------|
-| `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE`        | The aggregation temporality to use on the basis of instrument kind. | `cumulative`                |
-| `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION` | The default aggregation to use for histogram instruments.           | `explicit_bucket_histogram` |
+| Name                                                       | Description                                                                                            | Default                     |
+|------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|-----------------------------|
+| `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE`        | Configure the exporter's aggregation `temporality` option (see above) on the basis of instrument kind. | `cumulative`                |
+| `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION` | Configure the exporter's `default_aggregation` option (see above) for Histogram instrument kind.   | `explicit_bucket_histogram` |
 
 The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` are:
 
