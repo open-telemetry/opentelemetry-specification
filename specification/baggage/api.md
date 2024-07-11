@@ -35,7 +35,7 @@ with _exactly one value_. This is more restrictive than the [W3C Baggage
 Specification, § 3.2.1.1](https://www.w3.org/TR/baggage/#baggage-string)
 which allows duplicate entries for a given name.
 
-Baggage **names** are any valid UTF-8 strings. Language API SHOULD NOT
+Baggage **names** are any valid UTF-8 strings and cannot be empty. Language API SHOULD NOT
 restrict which strings are used as baggage **names**. However, the
 specific `Propagator`s that are used to transmit baggage entries across
 component boundaries may impose their own restrictions on baggage names.
