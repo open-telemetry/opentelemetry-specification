@@ -318,29 +318,24 @@ therefore it SHOULD NOT block or throw exceptions.
 
 **Returns:** `Void`
 
-It is implementation specific whether and how the `logRecord` passed by the SDK
-is shared between the processors. Log record mutations do not have to be visible
-in next registered processors.
-
-If the `logRecord` is shared[^shared], then a `LogRecordProcessor` may freely
-modify `logRecord` only for the duration of the `OnEmit` call.
-The modifications applied on shared data are visible in the next
-registered processors.
+It is RECOMMENDED that a `logRecord` is shared between processors.
+This means that each processor receives the same instance of the `logRecord`
+(i.e. shared by a pointer).
+The applied modifications are visible in the next registered processors.
+In such case, a `LogRecordProcessor` may freely modify `logRecord` only for the
+duration of the `OnEmit` call.
 If the `logRecord` is needed after `OnEmit` returns (i.e. for asynchronous
-processing) only reads are permitted.
+processing) only reads should be used as modifications can lead to race
+conditions.
 
-[^shared]: A shared `logRecord` means that consecutive processors receive
-the same instance of the log record (i.e. shared by a pointer).
-
-If the `logRecord` is not shared[^not-shared], then modifications applied
-on the `logRecord` are local.
-If the modification is needed in another processor,
+In exceptional cases, the SDK may not share the `logRecord` between processors.
+For example, for better performance, the Go SDK passes shallow copies of the
+`logRecord` to the processors, and these copies are stack allocated.
+If it were passed by pointer, the Go compiler would allocate them on
+the heap and increase the GC pressure.
+If a modification is needed in another processor,
 then the processor making the modification needs to call the other processor's
 `OnEmit` and pass the locally modified `logRecord`.
-
-[^not-shared]: A not shared `logRecord` means that consecutive processors
-receive a copy of the log record (i.e. shallow copies in Go, which are
-stack allocated).
 
 #### ShutDown
 
