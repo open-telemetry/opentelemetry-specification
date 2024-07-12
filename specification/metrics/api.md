@@ -1291,6 +1291,7 @@ for the interaction between the API and SDK.
 
 * A value
 * [`Attributes`](../common/README.md#attribute)
+* [since 1.35.0] [Data point flags](./data-model.md#data-point-flags)
 
 ### Multiple-instrument callbacks
 
