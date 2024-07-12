@@ -15,7 +15,7 @@ release.
 
 ### Logs
 
-- Log record mutations do not have to be visible in next registered processors. Allow chaining processors and having the log record modifications local.
+- In exceptional cases, log record mutations do not have to be visible in next registered processors.
   ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
 
 ### Events
