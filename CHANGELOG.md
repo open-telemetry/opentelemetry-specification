@@ -23,9 +23,6 @@ release.
 
 ### Compatibility
 
-- Define casing for hex-encoded IDs and mark the "Trace Context in non-OTLP Log Formats" specification stable.
-  ([#3909](https://github.com/open-telemetry/opentelemetry-specification/pull/3909))
-
 ### SDK Configuration
 
 ### Common
@@ -38,6 +35,11 @@ release.
 
 - Add the in-development isolating log record processor.
   ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
+
+### Compatibility
+
+- Define casing for hex-encoded IDs and mark the "Trace Context in non-OTLP Log Formats" specification stable.
+  ([#3909](https://github.com/open-telemetry/opentelemetry-specification/pull/3909))
 
 ## v1.34.0 (2024-06-11)
 
