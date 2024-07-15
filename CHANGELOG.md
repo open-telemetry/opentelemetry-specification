@@ -11,9 +11,18 @@ release.
 
 ### Traces
 
+- Define how `TracerProvider` handles identical `Tracer` creation calls.
+  ([#4146](https://github.com/open-telemetry/opentelemetry-specification/pull/4146))
+
 ### Metrics
 
+- Define how `MeterProvider` handles identical `Meter` creation calls.
+  ([#4146](https://github.com/open-telemetry/opentelemetry-specification/pull/4146))
+
 ### Logs
+
+- Define how `LoggerProvider` handles identical `Logger` creation calls.
+  ([#4146](https://github.com/open-telemetry/opentelemetry-specification/pull/4146))
 
 ### Events
 
