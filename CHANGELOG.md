@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Clarify prometheus exporter should have `host` and `port` configuration options.
+  ([#4147](https://github.com/open-telemetry/opentelemetry-specification/pull/4147))
+
 ### Logs
 
 ### Events
