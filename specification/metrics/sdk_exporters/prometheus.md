@@ -44,14 +44,6 @@ instrument kind to be `cumulative` for all instrument kinds.
 
 ## Configuration
 
-A Prometheus Exporter MUST support a configuration option to set the host
-metrics are served on. The option MAY be named `host`, and MUST be `localhost`
-by default.
-
-A Prometheus Exporter MUST support a configuration option to set the port
-metrics are served on. The option MAY be named `port`, and MUST be `9464` by
-default.
-
 A Prometheus Exporter SHOULD support a configuration option to set
 the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
 of instrument kind. This option MAY be named `default_aggregation`, and MUST use
