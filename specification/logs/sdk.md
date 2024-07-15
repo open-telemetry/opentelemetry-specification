@@ -68,8 +68,8 @@ an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Logger`.
 
 The method MUST return the same instance when the caller requests *identical*
-`Logger`s. In such scenario, the `Logger` MUST have the non-identifying fields'
-values (e.g. isntrumentation scope attributes) assigned during the first
+`Logger`s. In such scenario, the returned `Logger` MUST have the non-identifying
+fields' values (e.g. isntrumentation scope attributes) assigned during the first
 *identical* `Logger` creation call.
 
 In the case where an invalid `name` (null or empty string) is specified, a

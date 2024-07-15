@@ -124,8 +124,8 @@ an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
 
 The method MUST return the same instance when the caller requests *identical*
-`Meter`s. In such scenario, the `Meter` MUST have the non-identifying fields'
-values (e.g. isntrumentation scope attributes) assigned during the first
+`Meter`s. In such scenario, the returned `Meter` MUST have the non-identifying
+fields' values (e.g. isntrumentation scope attributes) assigned during the first
 *identical* `Meter` creation call.
 
 In the case where an invalid `name` (null or empty string) is specified, a
