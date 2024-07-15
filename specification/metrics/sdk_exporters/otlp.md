@@ -12,15 +12,15 @@ OTLP Metrics Exporter is a [Push Metric
 Exporter](../sdk.md#push-metric-exporter) which sends metrics via the
 [OpenTelemetry Protocol](../../protocol/README.md).
 
-OTLP Metrics Exporter MUST provide configuration to set
+OTLP Metrics Exporter MUST provide configuration to influence
 the [MetricReader](../sdk.md#metricreader) output `temporality` as a function of
 instrument kind. This option MAY be named `temporality`, and MUST set
-temporality to Cumulative for all instrument kinds by default.
+temporality preference to Cumulative for all instrument kinds by default.
 
-OTLP Metrics Exporter MUST provide configuration to set
+OTLP Metrics Exporter MUST provide configuration to influence
 the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
-of instrument kind. This option MAY be named `default_aggregation`, and MUST use
-the [default aggregation](../sdk.md#default-aggregation) by default.
+of instrument kind. This option MAY be named `default_aggregation`, and MUST set
+the [default aggregation](../sdk.md#default-aggregation) for all instrument kinds by default.
 
 The exporter MUST provide configuration according to the [OpenTelemetry Protocol
 Exporter](../../protocol/exporter.md) specification.
