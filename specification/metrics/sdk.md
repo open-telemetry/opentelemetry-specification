@@ -123,10 +123,10 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
 
-The method MUST return the same instance when the caller requests *identical*
+The method MUST return the same instance when the caller requests _identical_
 `Meter`s. In such scenario, the returned `Meter` MUST have the non-identifying
-fields' values (e.g. isntrumentation scope attributes) assigned during the first
-*identical* `Meter` creation call.
+fields' values (e.g. instrumentation scope attributes) assigned during the first
+_identical_ `Meter` creation call.
 
 In the case where an invalid `name` (null or empty string) is specified, a
 working Meter MUST be returned as a fallback rather than returning null or
