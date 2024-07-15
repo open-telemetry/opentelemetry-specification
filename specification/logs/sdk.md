@@ -77,8 +77,6 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-In case where the 
-
 **Status**: [Development](../document-status.md) - The `LoggerProvider` MUST
 compute the relevant [LoggerConfig](#loggerconfig) using the
 configured [LoggerConfigurator](#loggerconfigurator), and create
