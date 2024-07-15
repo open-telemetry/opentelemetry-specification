@@ -13,6 +13,12 @@ release.
 
 ### Metrics
 
+- Clarify metric reader / metric exporter relationship for temporality
+  preference and default aggregation. Explicitly define configuration options
+  for temporality preference and default aggregation of built-in exporters, and
+  make default values explicit.
+  ([#4142](https://github.com/open-telemetry/opentelemetry-specification/pull/4142))
+
 ### Logs
 
 - Add the in-development isolating log record processor.
