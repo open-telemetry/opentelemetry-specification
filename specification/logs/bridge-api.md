@@ -95,9 +95,10 @@ The term *identical* applied to `Logger`s describes instances where all
 identifying fields are equal. The term *distinct* applied to `Logger`s describes
 instances where at least one identifying field has a different value.
 
-The effect of associating a Schema URL with a `Logger` MUST be that the telemetry
-emitted using the `Logger` will be associated with the Schema URL, provided that
-the emitted data format is capable of representing such association.
+The effect of associating a Schema URL and instrumentation scope attributes with
+a `Logger` MUST be that the telemetry emitted using the `Logger` will be
+associated with the Schema URL and instrumentation scope attributes, provided
+that the emitted data format is capable of representing such association.
 
 ## Logger
 
