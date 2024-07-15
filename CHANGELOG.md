@@ -12,16 +12,19 @@ release.
 ### Traces
 
 - Define how `TracerProvider` handles identical `Tracer` creation calls.
+  Require that the telemetry emitted using the `Tracer` will be associated with the passed instrumentation scope attributes, provided that the emitted data format is capable of representing such association.
   ([#4146](https://github.com/open-telemetry/opentelemetry-specification/pull/4146))
 
 ### Metrics
 
 - Define how `MeterProvider` handles identical `Meter` creation calls.
+  Require that the telemetry emitted using the `Meter` will be associated with the passed instrumentation scope attributes, provided that the emitted data format is capable of representing such association.
   ([#4146](https://github.com/open-telemetry/opentelemetry-specification/pull/4146))
 
 ### Logs
 
 - Define how `LoggerProvider` handles identical `Logger` creation calls.
+  Require that the telemetry emitted using the `Logger` will be associated with the passed instrumentation scope attributes, provided that the emitted data format is capable of representing such association.
   ([#4146](https://github.com/open-telemetry/opentelemetry-specification/pull/4146))
 
 ### Events
