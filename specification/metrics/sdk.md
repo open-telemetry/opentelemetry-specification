@@ -123,13 +123,19 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Meter`.
 
+The method MUST return the same instance when the caller requests *identical*
+`Meter`s. In such scenario, the `Meter` MUST have the non-identifying fields'
+values (e.g. isntrumentation scope attributes) assigned during the first
+*identical* `Meter` creation call.
+
 In the case where an invalid `name` (null or empty string) is specified, a
 working Meter MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-When a Schema URL is passed as an argument when creating a `Meter` the emitted
-telemetry for that `Meter` MUST be associated with the Schema URL, provided
+When a Schema URL and instrumentation scope attributes are passed as an argument
+when creating a `Meter` the emitted telemetry for that `Meter` MUST be
+associated with the Schema URL and instrumentation scope attributes, provided
 that the emitted data format is capable of representing such association.
 
 **Status**: [Development](../document-status.md) - The `MeterProvider` MUST

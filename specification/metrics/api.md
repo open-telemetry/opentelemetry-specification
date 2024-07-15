@@ -159,11 +159,6 @@ The term *identical* applied to Meters describes instances where all identifying
 fields are equal. The term *distinct* applied to Meters describes instances where
 at least one identifying field has a different value.
 
-The effect of associating a Schema URL and instrumentation scope attributes with
-a `Meter` MUST be that the telemetry emitted using the `Meter` will be
-associated with the Schema URL and instrumentation scope attributes, provided
-that the emitted data format is capable of representing such association.
-
 ## Meter
 
 The meter is responsible for creating [Instruments](#instrument).

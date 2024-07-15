@@ -71,6 +71,11 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.
 
+The method MUST return the same instance when the caller requests *identical*
+`Tracer`s. In such scenario, the `Tracer` MUST have the non-identifying fields'
+values (e.g. isntrumentation scope attributes) assigned during the first
+*identical* `Tracer` creation call.
+
 **Status**: [Development](../document-status.md) - The `TracerProvider` MUST
 compute the relevant [TracerConfig](#tracerconfig) using the
 configured [TracerConfigurator](#tracerconfigurator), and create
