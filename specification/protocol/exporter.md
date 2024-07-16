@@ -169,7 +169,12 @@ The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXP
 
 ## Retry
 
-Transient errors MUST be handled with a retry strategy. This retry strategy MUST implement an exponential back-off with jitter to avoid overwhelming the destination until the network is restored or the destination has recovered.
+Transient errors MUST be handled with a retry strategy. This retry strategy MUST
+implement an exponential back-off with jitter to avoid overwhelming the
+destination until the network is restored or the destination has recovered.
+
+SDKs SHOULD provide a configuration option to disable the retry strategy. This
+option MAY be named `disabled`, AND MUST be `false` by default.
 
 ### Transient errors
 
