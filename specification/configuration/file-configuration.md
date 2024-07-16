@@ -278,12 +278,14 @@ with OpAmp
 
 #### Parse
 
-Parse and validate a [configuration file](#configuration-file).
+Parse and validate one or more [configuration file](#configuration-file)s.
 
 **Parameters:**
 
-* `file`: The [configuration file](#configuration-file) to parse. This MAY be a
+* `file`: The [configuration file](#configuration-file)(s) to parse. This MAY be a
   file path, or language specific file data structure, or a stream of a file's content.
+  If multiple configuration files are provided, implementations SHOULD merge them into
+  one YAML document prior to parsing and validation.
 * `file_format`: The file format of the `file` (e.g. [yaml](#yaml-file-format)).
   Implementations MAY accept a `file_format` parameter, or infer it from
   the `file` extension, or include file format specific overloads of `parse`,
@@ -429,13 +431,13 @@ ContextPropagators propagators = openTelemetry.getPropagators();
 If an SDK
 supports [OTEL_EXPERIMENTAL_CONFIG_FILE](./sdk-environment-variables.md#file-configuration),
 then setting `OTEL_EXPERIMENTAL_CONFIG_FILE` provides a simple way to obtain an
-SDK initialized from the specified config file. The pattern for accessing the
+SDK initialized from the specified config file(s). The pattern for accessing the
 configured SDK components and installing into instrumentation will vary by
 language. For example, the usage in Java might resemble:
 
 ```shell
-# Set the required env var to the location of the configuration file
-export OTEL_EXPERIMENTAL_CONFIG_FILE="/app/sdk-config.yaml"
+# Set the required env var to the location of the configuration files
+export OTEL_EXPERIMENTAL_CONFIG_FILE="/app/sdk-config.yaml,/app/sdk-config.extra.yaml"
 ```
 
 ```java
