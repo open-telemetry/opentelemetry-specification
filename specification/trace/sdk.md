@@ -79,7 +79,6 @@ the same identifying parameters. The SDK can handle such cases in its preferred
 way. However, it MUST be documented that the behavior may change in future 
 releases, as this is currently an unsupported usage of the API.
 
-
 **Status**: [Development](../document-status.md) - The `TracerProvider` MUST
 compute the relevant [TracerConfig](#tracerconfig) using the
 configured [TracerConfigurator](#tracerconfigurator), and create
