@@ -244,7 +244,7 @@ Thus, the SDK specification defines sets of possible requirements for
   both the full span API as defined in the
   [API-level definition for span's interface](api.md#span-operations) and
   additionally must be able to retrieve all information that was added to the span
-  (as with *readable span*).
+  (as with _readable span_).
 
   It MUST be possible for functions being called with this
   to somehow obtain the same `Span` instance and type
