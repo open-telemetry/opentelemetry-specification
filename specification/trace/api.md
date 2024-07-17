@@ -161,10 +161,10 @@ the tracer could, for example, do a look-up with its identity in a map
 in the `TracerProvider`, or the `TracerProvider` could maintain a registry of
 all returned `Tracer`s and actively update their configuration if it changes.
 
-The effect of associating a Schema URL and instrumentation scope attributes with
-a `Tracer` MUST be that the telemetry emitted using the `Tracer` will be
-associated with the Schema URL and instrumentation scope attributes, provided
-that the emitted data format is capable of representing such association.
+The effect of associating a Schema URL with a `Tracer` MUST be that the
+telemetry emitted using the `Tracer` will be associated with the Schema URL,
+provided that the emitted data format is capable of representing such
+association.
 
 ## Context Interaction
 

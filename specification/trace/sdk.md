@@ -71,10 +71,14 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.
 
-The method MUST return the same instance when the caller requests _identical_
-`Tracer`s. In such scenario, the returned `Tracer` MUST have the non-identifying
-fields' values (e.g. instrumentation scope attributes) assigned during the first
-_identical_ `Tracer` creation call.
+The first _identical_ `Tracer` MUST be associated with all
+(both identifying and non-identifying) passed parameters.
+Currently, it is a user error to create `Tracer`s with different 
+non-identifying parameter values (e.g. instrumentation scope attributes) but 
+the same identifying parameters. The SDK can handle such cases in its preferred 
+way. However, it MUST be documented that the behavior may change in future 
+releases, as this is currently an unsupported usage of the API.
+
 
 **Status**: [Development](../document-status.md) - The `TracerProvider` MUST
 compute the relevant [TracerConfig](#tracerconfig) using the
@@ -241,7 +245,7 @@ Thus, the SDK specification defines sets of possible requirements for
   both the full span API as defined in the
   [API-level definition for span's interface](api.md#span-operations) and
   additionally must be able to retrieve all information that was added to the span
-  (as with _readable span_).
+  (as with *readable span*).
 
   It MUST be possible for functions being called with this
   to somehow obtain the same `Span` instance and type
