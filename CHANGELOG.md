@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+  - Add `RulesBased` sampler. [#4152](https://github.com/open-telemetry/opentelemetry-specification/pull/4152)
+
 ### Metrics
 
 ### Logs
