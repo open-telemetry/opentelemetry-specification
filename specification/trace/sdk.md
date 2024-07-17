@@ -32,6 +32,7 @@ linkTitle: SDK
     + [TraceIdRatioBased](#traceidratiobased)
       - [Requirements for `TraceIdRatioBased` sampler algorithm](#requirements-for-traceidratiobased-sampler-algorithm)
     + [ParentBased](#parentbased)
+    + [RuleBased](#rulebased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
 - [Span Limits](#span-limits)
 - [Id Generators](#id-generators)
