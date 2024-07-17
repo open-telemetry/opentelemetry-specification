@@ -447,6 +447,64 @@ Optional parameters:
 |present|false|true|`localParentSampled()`|
 |present|false|false|`localParentNotSampled()`|
 
+#### RuleBased
+
+A `RuleBased` sampler tests a span against a list of rules, and delegates the
+sampling decision to another sampler when a rule matches. If no rules match, a
+fallback sampler is used to make the sampling decision.
+
+The obvious use-case for a `RuleBased` sampler is to avoid tracing frequent and
+uninteresting transactions such as health checks.
+
+* A `RuleBased` sampler MUST be configured with a set of rules and a fallback
+  `Sampler` to use if the `Span` does not match any of the configured rules. The
+  rules MUST be processed in the order they were provided.
+* A `Rule` requires a list of tests, and a delegate `Sampler` to be invoked if
+  all of the tests match the `Span` being sampled. If multiple tests are
+  configured, then the rule MUST pass if *all* tests pass.
+* If no rules match, the sampling decision MUST be made by the configured
+  fallback sampler.
+* A test can be based on the parameters available to [`ShouldSample`](#shouldsample):
+  * `parent`
+    * `sampled` - boolean representing whether the parent is sampled
+    * `remote` - boolean representing whether the parent is remote
+  * `span_name`
+    * `pattern` - regular expression to match on
+  * `span_kind`
+    * `kind` - one of [SpanKind](./api.md#spankind), for example `SERVER`
+  * `attributes`
+    * `key` and `pattern` - attribute key and regular expression pattern to match on
+  * `link`
+    * `sampled` - boolean representing whether a link is sampled
+    * `remote` - boolean representing whether a link is remote
+* Description MUST start with `RuleBased`, and MAY contain further details of the
+configuration, such as `RuleBasedSampler{rules=[RuleSet{rules=[Attribute{key=http.request.url,pattern=^/health$}],delegate=always_off}],fallback=parent_based_always_on}`
+
+An example YAML-based configuration for a `RuleBased` sampler with multiple rules:
+
+```yaml
+sampler:
+  rule_based:
+    rule_sets:
+      - rules:
+          - span_kind: { kind: SERVER }
+          - attribute: { key: url.path, pattern: "^/health$" }
+        delegate:
+          always_off: {}
+      - rules:
+          - link: { sampled: true }
+        delegate:
+          always_on: {}
+    fallback:
+      parent_based_always_on: {}
+```
+
+The above sampler will:
+
+* Use an `AlwaysOff` sampler for any `SERVER` span with a url path matching the regular expression `^/health$`
+* Use an `AlwaysOn` sampler for any span with a link that is sampled
+* Use a `ParentBased,AlwaysOn` sampler for all other spans
+
 #### JaegerRemoteSampler
 
 [Jaeger remote sampler][jaeger-remote-sampling] allows remotely controlling the sampling configuration for the SDKs. The sampling configuration is periodically loaded from the backend (see [Remote Sampling API][jaeger-remote-sampling-api]), where it can be managed by operators via configuration files or even automatically calculated (see [Adaptive Sampling][jaeger-adaptive-sampling]). The sampling configuration retrieved by the remote sampler can instruct it to  use either a single sampling method for the whole service (e.g., `TraceIdRatioBased`), or different methods for different endpoints (span names), for example, sample `/product` endpoint at 10%, `/admin` endpoint at 100%, and never sample `/metrics` endpoint.
