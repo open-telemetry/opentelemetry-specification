@@ -130,10 +130,10 @@ message reporting that the specified value is invalid SHOULD be logged.
 
 The first _identical_ `Meter` MUST be associated with all
 (both identifying and non-identifying) passed parameters.
-Currently, it is a user error to create `Meter`s with different 
-non-identifying parameter values (e.g. instrumentation scope attributes) but 
-the same identifying parameters. The SDK can handle such cases in its preferred 
-way. However, it MUST be documented that the behavior may change in future 
+Currently, it is a user error to create `Meter`s with different
+non-identifying parameter values (e.g. instrumentation scope attributes) but
+the same identifying parameters. The SDK can handle such cases in its preferred
+way. However, it MUST be documented that the behavior may change in future
 releases, as this is currently an unsupported usage of the API.
 
 When a Schema URL is passed as an argument when creating a `Meter` the emitted
