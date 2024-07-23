@@ -72,7 +72,7 @@ an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.
 
 For each unique set of identifying parameters, the non-identifying
-parameters MUST be associated with the `Tracer` at least once. 
+parameters MUST be associated with the `Tracer` at least once.
 Currently, it is a user error to create `Tracer`s with different
 non-identifying parameter values (e.g. instrumentation scope attributes) but
 the same identifying parameters. The SDK can handle such cases in its preferred
