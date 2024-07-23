@@ -41,11 +41,11 @@ Prometheus exporter.
 ## Configuration
 
 A Prometheus Exporter SHOULD support a configuration option to set the host
-metrics are served on. The option MAY be named `host`, and MUST be `localhost`
+that metrics are served on. The option MAY be named `host`, and MUST be `localhost`
 by default.
 
 A Prometheus Exporter SHOULD support a configuration option to set the port
-metrics are served on. The option MAY be named `port`, and MUST be `9464` by
+that metrics are served on. The option MAY be named `port`, and MUST be `9464` by
 default.
 
 A Prometheus Exporter MAY offer configuration to add resource attributes as metric attributes.
