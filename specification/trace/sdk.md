@@ -364,7 +364,9 @@ Returns the sampler name or short description with the configuration. This may
 be displayed on debug pages or in the logs. Example:
 `"TraceIdRatioBased{0.000100}"`.
 
-Description MUST NOT change over time and caller can cache the returned value.
+Description MAY change over time, for example, if the sampler supports dynamic
+configuration or otherwise adjusts its parameters.
+Callers SHOULD NOT cache the returned value.
 
 ### Built-in samplers
 

@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Remove restriction that sampler description is immutable.
+  ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
+
 ### Metrics
 
 - Clarify prometheus exporter should have `host` and `port` configuration options.
