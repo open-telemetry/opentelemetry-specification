@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Remove restriction that sampler description is immutable.
+  ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
 - Define how `TracerProvider` handles identical `Tracer` creation calls.
   ([#4146](https://github.com/open-telemetry/opentelemetry-specification/pull/4146))
 
