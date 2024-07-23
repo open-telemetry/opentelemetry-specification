@@ -287,8 +287,7 @@ information.
 #### Views
 
 [Views](metrics/sdk.md#view) are configurations that specify how the data from an `Instrument` should be processed,
-aggregated, and exported. They can be applied globally through the `MeterProvider` or more
-specifically at the `Meter` level. A `View` allows the customization of metric data beyond the default
+aggregated, and exported. They can be configured through the `MeterProvider`. A `View` allows the customization of metric data beyond the default
 collection behavior, enabling specific aggregations, transformations, and filtering of metrics.
 
 ## Log Signal

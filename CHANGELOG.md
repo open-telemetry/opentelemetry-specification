@@ -11,8 +11,13 @@ release.
 
 ### Traces
 
+- Remove restriction that sampler description is immutable.
+  ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
+
 ### Metrics
 
+- Clarify prometheus exporter should have `host` and `port` configuration options.
+  ([#4147](https://github.com/open-telemetry/opentelemetry-specification/pull/4147))
 - Clarify metric reader / metric exporter relationship for temporality
   preference and default aggregation. Explicitly define configuration options
   for temporality preference and default aggregation of built-in exporters, and
