@@ -41,8 +41,8 @@ Declarative configuration consists of the following main components:
   specify an intended configuration of OpenTelemetry SDK components and
   instrumentation. The data model includes a file-based representation.
 * [Instrumentation configuration API](./api.md) allows
-  instrumentation libraries to read relevant configuration options during
-  initialization.
+  instrumentation libraries to consume configuration by reading relevant
+  configuration options during initialization.
 * [Configuration SDK](./sdk.md) defines SDK capabilities around file
   configuration, including an In-Memory configuration model, support for
   referencing custom extension plugin interfaces in configuration files, and

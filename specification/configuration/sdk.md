@@ -11,12 +11,12 @@
     + [ComponentProvider](#componentprovider)
       - [ComponentsProvider operations](#componentsprovider-operations)
         * [Create Plugin](#create-plugin)
-  * [File config operations](#file-config-operations)
+  * [Config operations](#config-operations)
     + [Parse](#parse)
     + [Create](#create)
     + [Register ComponentProvider](#register-componentprovider)
   * [Examples](#examples)
-    + [Via File Configuration API](#via-file-configuration-api)
+    + [Via configuration API](#via-configuration-api)
     + [Via OTEL_EXPERIMENTAL_CONFIG_FILE](#via-otel_experimental_config_file)
   * [References](#references)
 
@@ -35,20 +35,20 @@ components:
 * [In-Memory configuration model](#in-memory-configuration-model) is an
   in-memory representation of the [configuration model](./data-model.md).
 * [ConfigProvider](#configprovider) defines the SDK implementation
-  of `ConfigProvider`.
+  of the [ConfigProvider API](./api.md#configprovider).
 * [SDK extension components](#sdk-extension-components) defines how users and
   libraries extend file configuration with custom SDK extension plugin
   interfaces (exporters, processors, etc).
-* [File config operations](#file-config-operations) defines user APIs to parse
+* [Config operations](#config-operations) defines user APIs to parse
   configuration files and produce SDK components from their contents.
 
 ### In-Memory configuration model
 
 SDKs SHOULD provide an in-memory representation of
-the [Configuration data model](./data-model.md).
+the [configuration model](./data-model.md).
 Whereas [`ConfigProperties`](./api.md#configproperties) is a schemaless
-representation of any mapping node from a configuration file, the in-memory
-configuration model SHOULD reflect the schema of the configuration model.
+representation of any mapping node, the in-memory configuration model SHOULD
+reflect the schema of the configuration model.
 
 SDKs are encouraged to provide this in-memory representation in a manner that is
 idiomatic for their language. If an SDK needs to expose a class or interface,
@@ -59,7 +59,7 @@ the name `Configuration` is RECOMMENDED.
 The SDK implementation of [`ConfigProvider`](./api.md#configprovider) MUST be
 created using a [`ConfigProperties`](./api.md#configproperties) representing
 the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
-mapping node from a configuration file.
+mapping node of the [configuration model](./data-model.md).
 
 ### SDK extension components
 
@@ -117,8 +117,8 @@ registered automatically using
 the [service provider interface (SPI)](https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html)
 mechanism.
 
-See [create](#create), which details `ComponentProvider` usage in file
-configuration interpretation.
+See [create](#create), which details `ComponentProvider` usage in
+configuration model interpretation.
 
 ##### ComponentsProvider operations
 
@@ -150,7 +150,7 @@ and attempts to extract data according to its configuration schema. If this
 fails (e.g. a required property is not present, a type is mismatches, etc.),
 Create Plugin SHOULD return an error.
 
-### File config operations
+### Config operations
 
 SDK implementations of configuration MUST provide the following operations.
 
@@ -184,7 +184,7 @@ Parse MUST interpret null as equivalent to unset.
 When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to
 the SDK, Parse MUST resolve corresponding configuration to a
-generic `properties` representation as described
+generic [ConfigProperties](./api.md#configproperties) representation as described
 in [Create Plugin](#create-plugin).
 
 Parse SHOULD return an error if:
@@ -256,9 +256,9 @@ is called multiple times with the same `type` and `name` combination.
 
 ### Examples
 
-#### Via File Configuration API
+#### Via configuration API
 
-The file configuration [Parse](#parse) and [Create](#create) operations along
+The configuration [Parse](#parse) and [Create](#create) operations along
 with the [Configuration Model](./data-model.md) can be combined in a
 variety of ways to achieve simple or complex configuration goals.
 
@@ -269,9 +269,9 @@ file, and passing the result to `Create` to obtain configured SDK components:
 OpenTelemetry openTelemetry = OpenTelemetry.noop();
 try {
     // Parse configuration file to configuration model
-    OpenTelemetryConfiguration configurationModel = FileConfiguration.parse(new File("/app/sdk-config.yaml"));
+    OpenTelemetryConfiguration configurationModel = parse(new File("/app/sdk-config.yaml"));
     // Create SDK components from configuration model
-    openTelemetry = FileConfiguration.create(configurationModel);
+    openTelemetry = create(configurationModel);
 } catch (Throwable e) {
     log.error("Error initializing SDK from configuration file", e);    
 }
@@ -292,14 +292,14 @@ from the merged configuration model:
 OpenTelemetry openTelemetry = OpenTelemetry.noop();
 try {
     // Parse local and remote configuration files to configuration models
-    OpenTelemetryConfiguration localConfigurationModel = FileConfiguration.parse(new File("/app/sdk-config.yaml"));
-    OpenTelemetryConfiguration remoteConfigurationModel = FileConfiguration.parse(getRemoteConfiguration("http://example-host/config/my-application"));
+    OpenTelemetryConfiguration localConfigurationModel = parse(new File("/app/sdk-config.yaml"));
+    OpenTelemetryConfiguration remoteConfigurationModel = parse(getRemoteConfiguration("http://example-host/config/my-application"));
     
     // Merge the configuration models using custom logic
     OpenTelemetryConfiguration resolvedConfigurationModel = merge(localConfigurationModel, remoteConfigurationModel);
     
     // Create SDK components from resolved configuration model
-    openTelemetry = FileConfiguration.create(resolvedConfigurationModel);
+    openTelemetry = create(resolvedConfigurationModel);
 } catch (Throwable e) {
     log.error("Error initializing SDK from configuration file", e);    
 }
