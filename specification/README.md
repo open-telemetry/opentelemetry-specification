@@ -28,7 +28,7 @@ path_base_for_github_subdir:
   - [Baggage](baggage/api.md)
   - [Tracing](trace/api.md)
   - [Metrics](metrics/api.md)
-  - Logs
+  - [Logs](logs/README.md)
     - [Bridge API](logs/bridge-api.md)
     - [Event API](logs/event-api.md)
 - SDK Specification

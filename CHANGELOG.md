@@ -11,12 +11,15 @@ release.
 
 ### Traces
 
+- Remove restriction that sampler description is immutable.
+  ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
+
 ### Metrics
 
-### Logs
+- Clarify prometheus exporter should have `host` and `port` configuration options.
+  ([#4147](https://github.com/open-telemetry/opentelemetry-specification/pull/4147))
 
-- Add the in-development isolating log record processor.
-  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
+### Logs
 
 ### Events
 
@@ -31,6 +34,18 @@ release.
 ### Common
 
 ### Supplementary Guidelines
+
+## v1.35.0 (2024-07-12)
+
+### Logs
+
+- Add the in-development isolating log record processor.
+  ([#4062](https://github.com/open-telemetry/opentelemetry-specification/pull/4062))
+
+### Compatibility
+
+- Define casing for hex-encoded IDs and mark the "Trace Context in non-OTLP Log Formats" specification stable.
+  ([#3909](https://github.com/open-telemetry/opentelemetry-specification/pull/3909))
 
 ## v1.34.0 (2024-06-11)
 
