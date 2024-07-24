@@ -18,6 +18,8 @@ release.
 
 ### Metrics
 
+- Clarify prometheus exporter should have `host` and `port` configuration options.
+  ([#4147](https://github.com/open-telemetry/opentelemetry-specification/pull/4147))
 - Define how `MeterProvider` handles identical `Meter` creation calls.
   ([#4146](https://github.com/open-telemetry/opentelemetry-specification/pull/4146))
 
