@@ -121,7 +121,6 @@ The term *identical* applied to `EventLogger`s describes instances where all
 fields are equal. The term *distinct* applied to `EventLogger`s describes
 instances where at least one field has a different value.
 
-
 ## EventLogger
 
 The `EventLogger` is the entrypoint of the Event API, and is responsible for
