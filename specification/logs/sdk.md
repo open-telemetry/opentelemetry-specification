@@ -236,6 +236,10 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * [`TraceFlags`](./data-model.md#field-traceflags)
 
 The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
+The operation can be used to implement the [isolating processor](#isolating-processor)
+or by asynchronous processors (e.g. [Batching processor](#batching-processor))
+to avoid race conditions on the log record that is not required to be
+concurrent safe.
 
 ## LogRecord Limits
 
