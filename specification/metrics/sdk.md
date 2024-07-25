@@ -119,7 +119,7 @@ It SHOULD only be possible to create `Meter` instances through a `MeterProvider`
 
 The `MeterProvider` MUST implement the [Get a Meter API](api.md#get-a-meter).
 
-The implementation MUST honor all passed parameters so that that the telemetry
+The implementation MUST honor all passed parameters so that the telemetry
 emitted using the `Meter` will contain the data passed via the parameters,
 provided that the emitted data format is capable of representing such data.
 

@@ -138,9 +138,9 @@ This API MUST accept the following parameters:
 - [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
   to associate with emitted telemetry.
 
-The term *identical* applied to Tracers describes instances where all fields are
-equal. The term *distinct* applied to Tracers describes instances where at least
-one field has a different value.
+The term *identical* applied to Tracers describes instances where all parameters
+are equal. The term *distinct* applied to Tracers describes instances where at
+least one parameter has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
 with the same identity to pick up configuration changes. This can be

@@ -63,7 +63,7 @@ It SHOULD only be possible to create `Logger` instances through a `LoggerProvide
 
 The `LoggerProvider` MUST implement the [Get a Logger API](bridge-api.md#get-a-logger).
 
-The implementation MUST honor all passed parameters so that that the telemetry
+The implementation MUST honor all passed parameters so that the telemetry
 emitted using the `Logger` will contain the data passed via the parameters,
 provided that the emitted data format is capable of representing such data.
 

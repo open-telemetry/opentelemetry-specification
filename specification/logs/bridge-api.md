@@ -85,9 +85,9 @@ parameters:
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
 
-The term *identical* applied to `Logger`s describes instances where all fields
-are equal. The term *distinct* applied to `Logger`s describes instances where at
-least one field has a different value.
+The term *identical* applied to `Logger`s describes instances where all
+parameters are equal. The term *distinct* applied to `Logger`s describes
+instances where at least one parameter has a different value.
 
 ## Logger
 

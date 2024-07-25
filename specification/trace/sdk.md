@@ -67,7 +67,7 @@ It SHOULD only be possible to create `Tracer` instances through a `TracerProvide
 
 The `TracerProvider` MUST implement the [Get a Tracer API](api.md#get-a-tracer).
 
-The implementation MUST honor all passed parameters so that that the telemetry
+The implementation MUST honor all passed parameters so that the telemetry
 emitted using the `Tracer` will contain the data passed via the parameters,
 provided that the emitted data format is capable of representing such data.
 
