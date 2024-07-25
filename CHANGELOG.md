@@ -13,6 +13,8 @@ release.
 
 - Remove restriction that sampler description is immutable.
   ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
+- Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
+  ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
 
 ### Metrics
 
