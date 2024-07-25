@@ -26,6 +26,10 @@ release.
 
 ### Logs
 
+- Add the in-development Simple Concurrent log record processor.
+  ([#4163](https://github.com/open-telemetry/opentelemetry-specification/pull/4163))
+- Clarify that `Export` should not called by built-in processors concurrently.
+
 ### Events
 
 ### Resource
