@@ -29,6 +29,7 @@
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
     + [Isolating processor](#isolating-processor)
+    + [Simple Concurrent processor](#simple-concurrent-processor)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
