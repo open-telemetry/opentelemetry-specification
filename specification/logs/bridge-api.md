@@ -63,7 +63,7 @@ The `LoggerProvider` MUST provide the following functions:
 This API MUST accept the following [instrumentation scope](data-model.md#field-instrumentationscope)
 parameters:
 
-* `name`: This name uniquely identifies the [instrumentation scope](../glossary.md#instrumentation-scope),
+* `name`: Specifies the name of the [instrumentation scope](../glossary.md#instrumentation-scope),
   such as the [instrumentation library](../glossary.md#instrumentation-library)
   (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
   If an application or library has built-in OpenTelemetry instrumentation, both
@@ -85,19 +85,9 @@ parameters:
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
 
-`Logger`s are identified by `name`, `version`, and `schema_url` fields.  When more
-than one `Logger` of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different `Logger`
-instances are returned. It is a user error to create Loggers with different
-`attributes` but the same identity.
-
-The term *identical* applied to `Logger`s describes instances where all
-identifying fields are equal. The term *distinct* applied to `Logger`s describes
-instances where at least one identifying field has a different value.
-
-The effect of associating a Schema URL with a `Logger` MUST be that the telemetry
-emitted using the `Logger` will be associated with the Schema URL, provided that
-the emitted data format is capable of representing such association.
+The term *identical* applied to `Logger`s describes instances where all fields
+are equal. The term *distinct* applied to `Logger`s describes instances where at
+least one field has a different value.
 
 ## Logger
 

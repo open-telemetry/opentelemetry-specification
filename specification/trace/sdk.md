@@ -67,6 +67,10 @@ It SHOULD only be possible to create `Tracer` instances through a `TracerProvide
 
 The `TracerProvider` MUST implement the [Get a Tracer API](api.md#get-a-tracer).
 
+The implementation MUST honor all passed parameters so that that the telemetry
+emitted using the `Tracer` will contain the data passed via the parameters,
+provided that the emitted data format is capable of representing such data.
+
 The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
 is stored on the created `Tracer`.

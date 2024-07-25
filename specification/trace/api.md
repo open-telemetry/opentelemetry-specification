@@ -138,15 +138,9 @@ This API MUST accept the following parameters:
 - [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
   to associate with emitted telemetry.
 
-Tracers are identified by `name`, `version`, and `schema_url` fields.  When more
-than one `Tracer` of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different `Tracer`
-instances are returned. It is a user error to create Tracers with different
-attributes but the same identity.
-
-The term *identical* applied to Tracers describes instances where all
-identifying fields are equal. The term *distinct* applied to Tracers describes
-instances where at least one identifying field has a different value.
+The term *identical* applied to Tracers describes instances where all fields are
+equal. The term *distinct* applied to Tracers describes instances where at least
+one field has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
 with the same identity to pick up configuration changes. This can be
@@ -160,11 +154,6 @@ configuration must be stored per-tracer (such as disabling a certain tracer),
 the tracer could, for example, do a look-up with its identity in a map
 in the `TracerProvider`, or the `TracerProvider` could maintain a registry of
 all returned `Tracer`s and actively update their configuration if it changes.
-
-The effect of associating a Schema URL with a `Tracer` MUST be that the
-telemetry emitted using the `Tracer` will be associated with the Schema URL,
-provided that the emitted data format is capable of representing such
-association.
 
 ## Context Interaction
 
