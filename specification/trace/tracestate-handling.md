@@ -6,6 +6,21 @@ linkTitle: TraceState
 
 **Status**: [Development](../document-status.md)
 
+<details>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
+
+- [Key](#key)
+- [Value](#value)
+- [Setting values](#setting-values)
+- [Pre-defined OpenTelemetry sub-keys](#pre-defined-opentelemetry-sub-keys)
+  * [Sampling threshold value `th`](#sampling-threshold-value-th)
+
+<!-- tocstop -->
+
+</details>
+
 In alignment to the [TraceContext](https://www.w3.org/TR/trace-context/) specification, this section uses the
 Augmented Backus-Naur Form (ABNF) notation of [RFC5234](https://www.w3.org/TR/trace-context/#bib-rfc5234),
 including the DIGIT rule in that document.
@@ -82,4 +97,53 @@ if ok {
 } else {
   // traceState was not updated.
 }
+```
+
+## Pre-defined OpenTelemetry sub-keys
+
+The following values have been defined by OpenTelemetry.
+
+### Sampling threshold value `th`
+
+The OpenTelemetry TraceState `th` sub-key defines a sampling
+threshold, which conveys effective sampling probability.  Valid values
+of the `th` sub-fields include between 1 and 14 hexadecimal digits.
+
+```
+hexdigit = DIGIT ; A-F ; a-f
+```
+
+To decode the threshold from the OpenTelemetry TraceState `th` value,
+first extend the value with trailing zeros to make 14 digits.  Then,
+parse the 14-digit value as a 56-bit unsigned number, yielding a
+rejection threshold.
+
+OpenTelemetry defines consistent sampling in terms of a 56-bit trace
+randomness value compared with the 56-bit rejection threshold.  When
+the randomness value is less than the rejection threshold, the trace
+is not sampled.
+
+The threshold value `0` indicates that no traces are being rejected,
+corresponding with 100% sampling.  For example, the following
+TraceState value identifies a trace with 100% sampling:
+
+```
+tracestate: ot=th:0
+```
+
+In sampling, the term _adjusted count_ refers to the effective number
+of items represented by a sampled item of telemetry.  To calculate
+sampling probability from the rejection threshold, define a constant
+`MaxAdjustedCount` equal to 2^56, the number of distinct 56-bit
+values.  The sampling probability is defined:
+
+```
+Probability = (MaxAdjustedCount - Threshold) / MaxAdjustedCount
+```
+
+The adjusted count of a span is the inverse of its sampling
+probability, which is derived from the rejection threshold:
+
+```
+AdjustedCount = MaxAdjustedCount / (MaxAdjustedCount - Threshold)
 ```

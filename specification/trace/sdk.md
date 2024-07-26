@@ -30,7 +30,9 @@ linkTitle: SDK
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceIdRatioBased](#traceidratiobased)
-      - [Requirements for `TraceIdRatioBased` sampler algorithm](#requirements-for-traceidratiobased-sampler-algorithm)
+      - [`TraceIdRatioBased` sampler configuration](#traceidratiobased-sampler-configuration)
+      - [`TraceIdRatioBased` sampler algorithm](#traceidratiobased-sampler-algorithm)
+      - [`TraceIdRatioBased` sampler description](#traceidratiobased-sampler-description)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
 - [Span Limits](#span-limits)
@@ -378,6 +380,7 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 * Returns `RECORD_AND_SAMPLE` always.
 * Description MUST be `AlwaysOnSampler`.
+* OpenTelemetry TraceState SHOULD include `th:0`.
 
 #### AlwaysOff
 
@@ -386,40 +389,41 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### TraceIdRatioBased
 
-* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
-parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
-the `ParentBased` sampler specified below.
-* Description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
-  with `RATIO` replaced with the Sampler instance's trace sampling ratio
-  represented as a decimal number. The precision of the number SHOULD follow
-  implementation language standards and SHOULD be high enough to identify when
-  Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
-  had a sampling ratio of 1 to every 10,000 spans it COULD return
-  `"TraceIdRatioBased{0.000100}"` as its description.
+The `TraceIdRatioBased` sampler implements simple, ratio-based probability sampling using randomness features specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
+OpenTelemetry follows W3C Trace Context Level 2, which specifies 56 bits of randomness, in making use of 56 bits of information for probabilistic sampling decisions.
+[OpenTelemetry defines consistent probability sampling using 56 bits of randomness][CONSISTENTSAMPLING].
 
-TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
-of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
+The `TraceIdRatioBased` sampler MUST ignore the parent `SampledFlag`.
+For respecting the parent `SampledFlag`, see the `ParentBased` sampler specified below.
 
-##### Requirements for `TraceIdRatioBased` sampler algorithm
+[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
 
-* The sampling algorithm MUST be deterministic. A trace identified by a given
-  `TraceId` is sampled or not independent of language, time, etc. To achieve this,
-  implementations MUST use a deterministic hash of the `TraceId` when computing
-  the sampling decision. By ensuring this, running the sampler on any child `Span`
-  will produce the same decision.
-* A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
-  traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
-  sample. This is important when a backend system may want to run with a higher
-  sampling rate than the frontend system, this way all frontend traces will
-  still be sampled and extra traces will be sampled on the backend only.
-* **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
-  there will probably be changes to it in any language SDK once it is, which
-  would break code that relies on the algorithm results.
-  Only the configuration and creation APIs can be considered stable.
-  It is recommended to use this sampler algorithm only for root spans
-  (in combination with [`ParentBased`](#parentbased)) because different language
-  SDKs or even different versions of the same language SDKs may produce inconsistent
-  results for the same input.
+##### `TraceIdRatioBased` sampler configuration
+
+The `TraceIdRatioBased` sampler is typically configured using a 32-bit or 64-bit floating point number to express the sampling ratio.
+The minimum valid sampling ratio is `2**-56`, and the maximum valid sampling ratio is 1.0.
+From an input sampling ratio, a rejection threshold value is calculated; see [consistent-probability sampler requirements][CONSISTENTSAMPLING] for details on converting sampling ratios into thresholds with variable precision.
+
+[CONSISTENTSAMPLING]: ./tracestate-probability-sampling.md
+
+##### `TraceIdRatioBased` sampler algorithm
+
+A Trace configured with sampling threshold `T`, a 56-bit unsigned number corresponding with the sampling ratio, has `ShouldSample()` called for a trace having randomness value `R`, a 56-bit unsigned random number.
+
+* If randomness value (R) is less than rejection threshold (T), meaning when (R < T), return `RECORD_AND_SAMPLE`, otherwise, return `DROP`.
+* When (R < T), the OpenTelemetry TraceState SHOULD be modified to include the key-value `th:T` for rejection threshold value (T), as specified for the [OpenTelemetry TraceState `th` sub-key][TRACESTATEHANDLING].
+
+[TRACESTATEHANDLING]: ./tracestate-handling.md#sampling-threshold-value-th
+
+##### `TraceIdRatioBased` sampler description
+
+The `TraceIdRatioBased` GetDescription MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
+with `RATIO` replaced with the Sampler instance's trace sampling ratio
+represented as a decimal number. The precision of the number SHOULD follow
+implementation language standards and SHOULD be high enough to identify when
+Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
+had a sampling ratio of 1 to every 10,000 spans it could return
+`"TraceIdRatioBased{0.000100}"` as its description.
 
 #### ParentBased
 
