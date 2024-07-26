@@ -476,9 +476,8 @@ specific way for signaling completion of an asynchronous task. This means that
 while an instance of an exporter that does not support concurrent calls will
 never have `Export` called concurrently, it does not mean that the task of
 exporting cannot be done concurrently. How this is done is outside the scope of
-this specification. How this is done is outside the scope of this specification.
-Each implementation MUST document the concurrency characteristics the SDK
-requires of the exporter.
+this specification. Each implementation MUST document the concurrency
+characteristics the SDK requires of the exporter.
 
 `Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
