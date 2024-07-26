@@ -704,7 +704,7 @@ spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
 
 The processor SHOULD export a batch when any of the following happens AND the
-previous export operation has finished (for additional concurrency details see
+previous export call has returned (for additional concurrency details see
 the [Export() specification](#exportbatch)):
 
 - `scheduledDelayMillis` after the processor is constructed OR the first span
