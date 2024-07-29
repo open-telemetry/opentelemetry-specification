@@ -31,6 +31,7 @@
   * [Get Global Propagator](#get-global-propagator)
   * [Set Global Propagator](#set-global-propagator)
 - [Propagators Distribution](#propagators-distribution)
+  * [W3C Trace Context Requirements](#w3c-trace-context-requirements)
   * [B3 Requirements](#b3-requirements)
     + [B3 Extract](#b3-extract)
     + [B3 Inject](#b3-inject)
@@ -354,6 +355,17 @@ as OpenTelemetry extension packages:
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
 the Core OpenTelemetry repositories.
+
+### W3C Trace Context Requirements
+
+A W3C Trace Context propagator is expected to implement the `traceparent` and `tracestate` contexts fields specified in [W3C Trace Context Level 2](https://www.w3.org/TR/trace-context-2/).
+
+When injecting and extracting trace context to or from a carrier, the following fields from the `SpanContext` are propagated.
+
+- TraceID (16 bytes)
+- SpanID (8 bytes)
+- TraceFlags (8 bits)
+- TraceState (string)
 
 ### B3 Requirements
 

@@ -87,6 +87,8 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     | +      | +    | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     | +      |      |        | +   |      |     |      |       |
+| TraceID generator implements W3C Trace Context Level 2 randomness                                |          |     |      |     |        |      |        |     |      |     |      |       |
+| OpenTelemetry explicit randomness supported                                                      | X        |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 

@@ -83,3 +83,25 @@ if ok {
   // traceState was not updated.
 }
 ```
+
+## Pre-defined OpenTelemetry sub-keys
+
+The following values have been defined by OpenTelemetry.
+
+### Explicit randomness value `rv`
+
+The OpenTelemetry TraceState `rv` sub-key defines an alternative source of randomness to the use of TraceID randomness when used by samplers decisions.  Values of `rv` MUST be exactly 14 hexadecimal digits:
+
+```
+hexdigit    = DIGIT ; A-F ; a-f
+```
+
+The explicit randomness value is meant to be used instead of extracting randomness from TraceIDs, therefore it contains the same number of bits as a W3C Trace Context Level 2 recommends for TraceIDs.
+
+Explicit randomness values are meant to propagate through [span contexts](../context/README.md) unmodified.  Explicit randomness values SHOULD NOT be erased from the OpenTelemetry TraceState or modified once associated with a new TraceID, so that sampling decisions made using the explicit randomness value are consistent across signals.
+
+For example, here is a W3C TraceState values including an OpenTelemetry explicit randomness value:
+
+```
+tracestate: ot=rv:6e6d1a75832a2f
+```
