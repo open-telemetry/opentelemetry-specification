@@ -7,8 +7,8 @@ path_base_for_github_subdir:
 # Overview
 
 OpenTelemetry SDK components are highly configurable. This specification
-outlines the mechanisms by which the SDK can be configured. It does not attempt
-to specify the details of what can be configured.
+outlines the mechanisms by which OpenTelemetry components can be configured. It
+does not attempt to specify the details of what can be configured.
 
 ## Configuration Interfaces
 
@@ -26,6 +26,9 @@ see [declarative configuration](#declarative-configuration)).
 
 ### Environment variables
 
+Environment variable configuration defines a set of language agnostic
+environment variables for common configuration goals.
+
 See [OpenTelemetry Environment Variable Specification](./sdk-environment-variables.md).
 
 ### Declarative configuration
@@ -34,6 +37,9 @@ Declarative configuration provides a mechanism for configuring OpenTelemetry
 which is more expressive and full-featured than
 the [environment variable](#environment-variables) based scheme, and language
 agnostic in a way not possible with [programmatic configuration](#programmatic).
+Notably, declarative configuration defines tooling allowing users to load
+OpenTelemetry components according to a file-based representation of a
+standardized configuration data model.
 
 Declarative configuration consists of the following main components:
 

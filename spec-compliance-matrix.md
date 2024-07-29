@@ -297,6 +297,7 @@ Note: Support for environment variables is optional.
 
 See [declarative configuration](./specification/configuration/README.md#declarative-configuration)
 for details.
+Disclaimer: Declarative configuration is currently in Development status - work in progress.
 
 | Feature                                                                                                                 | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |-------------------------------------------------------------------------------------------------------------------------|----|------|----|--------|------|--------|-----|------|-----|------|-------|

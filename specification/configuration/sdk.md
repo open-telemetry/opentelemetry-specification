@@ -29,7 +29,7 @@ the [declarative configuration interface](./README.md#declarative-configuration)
 
 The SDK is an implementation
 of [Instrumenation Config API](./api.md) and other
-user facing file configuration capabilities. It consists of the following main
+user facing declarative configuration capabilities. It consists of the following main
 components:
 
 * [In-Memory configuration model](#in-memory-configuration-model) is an
@@ -143,7 +143,7 @@ The plugin interface MAY have properties which are optional or required, and
 have specific requirements around type or format. The set of properties a
 `ComponentProvider` accepts, along with their requirement level and expected
 type, comprise a configuration schema. A `ComponentProvider` SHOULD document its
-configuration schema.
+configuration schema and include examples.
 
 When Create Plugin is invoked, the `ComponentProvider` interprets `properties`
 and attempts to extract data according to its configuration schema. If this
@@ -195,19 +195,19 @@ Parse SHOULD return an error if:
 
 #### Create
 
-Interpret [configuration model](#in-memory-configuration-model) and return SDK components.
+Interpret configuration model and return SDK components.
 
 **Parameters:**
 
-* `configuration` - The configuration model.
+* `configuration` - An [in-memory configuration model](#in-memory-configuration-model).
 
 **Returns:** Top level SDK components:
 
-* `TracerProvider`
-* `MeterProvider`
-* `LoggerProvider`
-* `Propagators`
-* `ConfigProvider`
+* [TracerProvider](../trace/sdk.md#tracer-provider)
+* [MeterProvider](../metrics/sdk.md#meterprovider)
+* [LoggerProvider](../logs/sdk.md#loggerprovider)
+* [Propagators](../context/api-propagators.md#composite-propagator)
+* [ConfigProvider](#configprovider)
 
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
@@ -314,12 +314,14 @@ ConfigProvider configProvider = openTelemetry.getConfigProvider();
 
 #### Via OTEL_EXPERIMENTAL_CONFIG_FILE
 
-If an SDK
-supports [OTEL_EXPERIMENTAL_CONFIG_FILE](./sdk-environment-variables.md#declarative-configuration),
-then setting `OTEL_EXPERIMENTAL_CONFIG_FILE` provides a simple way to obtain an
-SDK initialized from the specified config file. The pattern for accessing the
-configured SDK components and installing into instrumentation will vary by
-language. For example, the usage in Java might resemble:
+Setting
+the [OTEL_EXPERIMENTAL_CONFIG_FILE](./sdk-environment-variables.md#declarative-configuration)
+environment variable (for languages that support it) provides users a convenient
+way to initialize OpenTelemetry components without needing to learn
+language-specific configuration details or use a large number of environment
+variables. The pattern for accessing the configured components and installing
+into instrumentation will vary by language. For example, the usage in Java might
+resemble:
 
 ```shell
 # Set the required env var to the location of the configuration file

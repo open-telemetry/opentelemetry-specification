@@ -18,8 +18,11 @@ The instrumentation configuration API is part of
 the [declarative configuration interface](./README.md#declarative-configuration).
 
 The API allows [instrumentation libraries](../glossary.md#instrumentation-library)
-to consume configuration by reading relevant configuration options during
-initialization. It consists of the following main components:
+to consume configuration by reading relevant configuration during
+initialization. For example, an instrumentation library for an HTTP client can
+read the set of HTTP request and response headers to capture.
+
+It consists of the following main components:
 
 * [ConfigProvider](#configprovider) is the entry point of the API.
 * [ConfigProperties](#configproperties) is a programmatic representation of a
@@ -33,8 +36,8 @@ instrumentation.
 Instrumentation libraries access `ConfigProvider` during
 initialization. `ConfigProvider` may be passed as an argument to the
 instrumentation library, or the instrumentation library may access it from a
-central place. Thus, the API SHOULD provide a way to set/register and access a
-global default `ConfigProvider`.
+central place. Thus, the API SHOULD provide a way to access a global
+default `ConfigProvider`, and set/register it.
 
 #### ConfigProvider operations
 

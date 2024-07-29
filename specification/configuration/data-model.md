@@ -24,7 +24,7 @@ The data model is defined
 in [opentelemetry-configuration](https://github.com/open-telemetry/opentelemetry-configuration)
 using [JSON Schema](https://json-schema.org/).
 
-The data model itself is an abstraction with multiple representations:
+The data model itself is an abstraction with multiple built-in representations:
 
 * [File-based configuration model](#file-based-configuration-model)
 * [SDK in-memory configuration model](./sdk.md#in-memory-configuration-model)
