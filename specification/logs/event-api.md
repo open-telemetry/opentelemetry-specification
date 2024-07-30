@@ -163,6 +163,14 @@ NOT obligate a user to provide it.
 For each required parameter, the API MUST be structured to obligate a user to
 provide it.
 
+## Supplementary Guildelines
+
+### Migrating from Span Events to the Events API
+
+Instrumentation migrating from Span Events to the Events API must set the event context parameter from a current or explicit
+SpanContext. Otherwise, data exported will be inconsistent with Span Events having traceID and spanID correlation while Events
+do not.
+
 ## References
 
 - [OTEP0202 Introducing Events and Logs API](https://github.com/open-telemetry/oteps/blob/main/text/0202-events-and-logs-api.md)
