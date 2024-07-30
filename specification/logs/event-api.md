@@ -18,6 +18,8 @@
   * [EventLogger Operations](#eventlogger-operations)
     + [Emit Event](#emit-event)
 - [Optional and required parameters](#optional-and-required-parameters)
+- [Supplementary Guildelines](#supplementary-guildelines)
+  * [Migrating from Span Events to the Events API](#migrating-from-span-events-to-the-events-api)
 - [References](#references)
 
 <!-- tocstop -->
