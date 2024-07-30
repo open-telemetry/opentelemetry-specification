@@ -715,8 +715,6 @@ the [Export() specification](#exportbatch)):
 - The queue contains `maxExportBatchSize` or more spans.
 - `ForceFlush` is called.
 
-If any of the above events occurs before `Export()` returns, the span processor
-should wait until `Export()` returns before exporting the next batch.
 If the queue is empty when an export is triggered, the processor MAY export
 an empty batch OR skip the export and consider it to be completed immediately.
 
