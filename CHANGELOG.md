@@ -13,6 +13,8 @@ release.
 
 - Remove restriction that sampler description is immutable.
   ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
+- Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
+  ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
 
 ### Metrics
 
@@ -25,6 +27,9 @@ release.
   ([#4142](https://github.com/open-telemetry/opentelemetry-specification/pull/4142))
 
 ### Logs
+
+- The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
+  ([#4090](https://github.com/open-telemetry/opentelemetry-specification/pull/4090))
 
 ### Events
 

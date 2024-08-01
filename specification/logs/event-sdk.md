@@ -87,7 +87,7 @@ to [emit a logRecord](./bridge-api.md#emit-a-logrecord) as follows:
   the `event.name` [Attribute](./data-model.md#field-attributes). If
   the `Attributes` provided by the user contain an `event.name` attribute the
   value provided in the `Name` takes precedence.
-* If provided by the user, the `Payload` MUST be used to set
+* If provided by the user, the `Body` MUST be used to set
   the [Body](./data-model.md#field-body). If not provided, `Body` MUST not be
   set.
 * If provided by the user, the `Timestamp` MUST be used to set
