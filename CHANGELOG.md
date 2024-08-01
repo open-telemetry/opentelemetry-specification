@@ -15,7 +15,7 @@ release.
 
 ### Logs
 
-- In exceptional cases, log record mutations do not have to be visible in next registered processors.
+- Clarify that the `LogRecord` passed by the SDK to the `LogRecordProcessor` is shared with other registered `LogRecordProcessors`.
   ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
 
 ### Events
