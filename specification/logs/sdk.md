@@ -462,7 +462,9 @@ Exports a batch of [ReadableLogRecords](#readablelogrecord). Protocol exporters
 that will implement this function are typically expected to serialize and
 transmit the data to the destination.
 
-`Export` should not be called concurrently for the same exporter instance.
+`Export` should not be called concurrently with other `Export` calls for the
+same exporter instance.
+
 Depending on the implementation the result of the export may be returned to the
 Processor not in the return value of the call to `Export` but in a language
 specific way for signaling completion of an asynchronous task. This means that
