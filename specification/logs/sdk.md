@@ -318,24 +318,14 @@ therefore it SHOULD NOT block or throw exceptions.
 
 **Returns:** `Void`
 
-It is RECOMMENDED that a `logRecord` is shared between processors.
+The passed `logRecord` MUST be shared between registered [`LogRecordProcessors`](#logrecordprocessor).
 This means that each processor receives the same instance of the `logRecord`
 (i.e. shared by a pointer).
 The applied modifications are visible in the next registered processors.
-In such case, a `LogRecordProcessor` may freely modify `logRecord` only for the
-duration of the `OnEmit` call.
-If the `logRecord` is needed after `OnEmit` returns (i.e. for asynchronous
-processing) only reads should be used as modifications can lead to race
-conditions.
 
-In exceptional cases, the SDK may not share the `logRecord` between processors.
-For example, for better performance, the Go SDK passes shallow copies of the
-`logRecord` to the processors, and these copies are stack allocated.
-If it were passed by pointer, the Go compiler would allocate them on
-the heap and increase the GC pressure.
-If a modification is needed in another processor,
-then the processor making the modification needs to call the other processor's
-`OnEmit` and pass the locally modified `logRecord`.
+A `LogRecordProcessor` may freely modify `logRecord` for the duration of
+the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
+asynchronous processing) only reads are permitted.
 
 #### ShutDown
 
