@@ -324,10 +324,8 @@ therefore it SHOULD NOT block or throw exceptions.
 
 **Returns:** `Void`
 
-The passed `logRecord` MUST be shared between registered [`LogRecordProcessors`](#logrecordprocessor).
-This means that each processor receives the same instance of the `logRecord`
-(i.e. shared by a pointer).
-The applied modifications are visible in the next registered processors.
+For a `LogRecordProcessor` registered directly on SDK `LoggerProvider`,
+the `logRecord` mutations MUST be visible in next registered processors.
 
 A `LogRecordProcessor` may freely modify `logRecord` for the duration of
 the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
