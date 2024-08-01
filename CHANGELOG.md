@@ -30,6 +30,8 @@ release.
 
 - The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
   ([#4090](https://github.com/open-telemetry/opentelemetry-specification/pull/4090))
+- Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
+  ([#4173](https://github.com/open-telemetry/opentelemetry-specification/pull/4173))
 
 ### Events
 
