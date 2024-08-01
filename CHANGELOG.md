@@ -30,7 +30,7 @@ release.
 
 - The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
   ([#4090](https://github.com/open-telemetry/opentelemetry-specification/pull/4090))
-- Clarify that the `LogRecord` passed by the SDK to the `LogRecordProcessor` is shared with other registered `LogRecordProcessors`.
+- Clarify that log record mutations are visible in next registered processors.
   ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
 
 ### Events
