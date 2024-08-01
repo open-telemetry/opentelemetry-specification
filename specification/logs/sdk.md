@@ -235,6 +235,12 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * [`SpanId`](./data-model.md#field-spanid)
 * [`TraceFlags`](./data-model.md#field-traceflags)
 
+The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
+The operation can be used to implement the [isolating processor](#isolating-processor)
+or by asynchronous processors (e.g. [Batching processor](#batching-processor))
+to avoid race conditions on the log record that is not required to be
+concurrent safe.
+
 ## LogRecord Limits
 
 `LogRecord` attributes MUST adhere to
@@ -390,6 +396,12 @@ passes the export-friendly `ReadableLogRecord` representation to the
 configured [LogRecordExporter](#logrecordexporter), as soon as they are
 finished.
 
+The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
+to make sure that they are not executed in parallel.
+
+The exporter methods of the exporter MUST NOT be called concurrently for the
+same exporter instance.
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the `LogRecord`s are pushed.
@@ -399,6 +411,9 @@ finished.
 This is an implementation of the `LogRecordProcessor` which create batches
 of `LogRecord`s and passes the export-friendly `ReadableLogRecord`
 representations to the configured `LogRecordExporter`.
+
+The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
+to make sure that they are not executed in parallel.
 
 **Configurable parameters:**
 
@@ -437,6 +452,16 @@ The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
+Each implementation MUST document the concurrency characteristics the SDK requires of the exporter.
+
+Depending on the implementation the result of the export may be returned to the
+Processor not in the return value of the call to `Export` but in a language
+specific way for signaling completion of an asynchronous task. This means that
+while an instance of an exporter will never have it `Export` called concurrently
+it does not mean that the task of exporting can not be done concurrently. How
+this is done is outside the scope of this specification. Each implementation
+MUST document the concurrency characteristics the SDK requires of the exporter.
+
 ### LogRecordExporter operations
 
 A `LogRecordExporter` MUST support the following functions:
@@ -447,14 +472,12 @@ Exports a batch of [ReadableLogRecords](#readablelogrecord). Protocol exporters
 that will implement this function are typically expected to serialize and
 transmit the data to the destination.
 
-`Export` will never be called concurrently for the same exporter instance.
 Depending on the implementation the result of the export may be returned to the
 Processor not in the return value of the call to `Export` but in a language
 specific way for signaling completion of an asynchronous task. This means that
 while an instance of an exporter will never have it `Export` called concurrently
 it does not mean that the task of exporting can not be done concurrently. How
-this is done is outside the scope of this specification. Each implementation
-MUST document the concurrency characteristics the SDK requires of the exporter.
+this is done is outside the scope of this specification.
 
 `Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
