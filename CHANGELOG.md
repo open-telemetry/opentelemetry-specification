@@ -11,6 +11,30 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Events
+
+### Baggage
+
+### Resource
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.36.0 (2024-08-06)
+
+### Traces
+
 - Remove restriction that sampler description is immutable.
   ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
 - Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
@@ -31,19 +55,15 @@ release.
 - The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
   ([#4090](https://github.com/open-telemetry/opentelemetry-specification/pull/4090))
 
-### Events
+### Baggage
 
-### Resource
-
-### OpenTelemetry Protocol
-
-### Compatibility
-
-### SDK Configuration
+- Clarify no empty string allowed in baggage names.
+  ([#4144](https://github.com/open-telemetry/opentelemetry-specification/pull/4144))
 
 ### Common
 
-### Supplementary Guidelines
+- Require separation of API and SDK artifacts.
+  ([#4125](https://github.com/open-telemetry/opentelemetry-specification/pull/4125))
 
 ## v1.35.0 (2024-07-12)
 
