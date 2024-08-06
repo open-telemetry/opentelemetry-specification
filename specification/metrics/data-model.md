@@ -1012,12 +1012,12 @@ following flag is supported.
 
 If this flag is set on a data point, then this data point reflects explicitly
 missing data in a series. It serves as an indicator that a previously present
-timeseries was removed and that this timeseries should not be returned in
+timeseries was removed and that this timeseries SHOULD NOT be returned in
 queries after such an indicator was received. It is an equivalent of the
 [Prometheus staleness marker](https://prometheus.io/docs/prometheus/2.52/querying/basics/#staleness).
 
 If this flag is set, all other data point properties except attributes, time
-stamps, or time windows, should be ignored.
+stamps, or time windows, SHOULD be ignored.
 
 This flags defaults to `false`.
 
