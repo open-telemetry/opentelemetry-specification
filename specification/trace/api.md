@@ -749,55 +749,47 @@ This functionality MUST be fully implemented in the API, and SHOULD NOT be overr
 
 ## SpanKind
 
-`SpanKind` describes the relationship between the Span, its parents,
-and its children in a Trace.  `SpanKind` describes two independent
+`SpanKind` clarifies the relationship between Spans that are correlated via
+parent/child relationships or span links. `SpanKind` describes two independent
 properties that benefit tracing systems during analysis.
 
-The first property described by `SpanKind` reflects whether the Span
-is a "logical" remote child or parent. By "logical", we mean that
-the span is logically a remote child or parent, from the point of view
-of the library that is being instrumented. Spans with a remote parent are
-interesting because they are sources of external load.  Spans with a
-remote child are interesting because they reflect a non-local system
-dependency.
+The first property described by `SpanKind` reflects whether span describes an
+outgoing request to a remote service (CLIENT and PRODUCER spans) or whether
+it handles request from an external service (SERVER and CONSUMER spans).
 
-The second property described by `SpanKind` reflects whether a child
-Span represents a synchronous call.  When a child span is synchronous,
-the parent is expected to wait for it to complete under ordinary
-circumstances.  It can be useful for tracing systems to know this
-property, since synchronous Spans may contribute to the overall trace
-latency. Asynchronous scenarios can be remote or local.
+The second property described by `SpanKind` reflects whether a Span represents a
+synchronous call. Spans that describe synchronous operations (SERVER and CLIENT),
+under ordinary circumstances, end after all its children complete. It can be
+useful for tracing systems to know this property, since synchronous Spans may
+contribute to the overall trace latency. Asynchronous scenarios can be remote or local.
 
 In order for `SpanKind` to be meaningful, callers SHOULD arrange that
 a single Span does not serve more than one purpose.  For example, a
-server-side span SHOULD NOT be used directly as the parent of another
-remote span.  As a simple guideline, instrumentation should create a
-new Span prior to extracting and serializing the SpanContext for a
-remote call.
+server-side span SHOULD NOT be used to describe outgoing remote procedure call.
+As a simple guideline, instrumentation should create a
+new Span prior to injecting the SpanContext for a remote outgoing call.
 
-Note: there are complex scenarios where a CLIENT span may have a child
-that is also logically a CLIENT span, or a PRODUCER span might have a local child
-that is a CLIENT span, depending on how the various libraries that are providing
-the functionality are built and instrumented. These scenarios, when they occur,
-should be detailed in the semantic conventions appropriate to the relevant
-libraries.
+Note: A CLIENT span may have a child that is also a CLIENT span,
+or a PRODUCER span might have a local child that is a CLIENT span,
+depending on how the various libraries that are providing the functionality
+are built and instrumented. These scenarios, when they occur, should be
+detailed in the semantic conventions appropriate to the relevant libraries.
 
 These are the possible SpanKinds:
 
 * `SERVER` Indicates that the span covers server-side handling of a
-  synchronous RPC or other remote request.  This span is often the child
-  of a remote `CLIENT` span that was expected to wait for a response.
-* `CLIENT` Indicates that the span describes a request to
-  some remote service.  This span is usually the parent of a remote `SERVER`
-  span and does not end until the response is received.
-* `PRODUCER` Indicates that the span describes the initiators of an
-  asynchronous request.  This parent span will often end before
-  the corresponding child `CONSUMER` span, possibly even before the
-  child span starts. In messaging scenarios with batching, tracing
-  individual messages requires a new `PRODUCER` span per message to
-  be created.
-* `CONSUMER` Indicates that the span describes a child of an
-  asynchronous `PRODUCER` request.
+  synchronous RPC or other remote request.
+* `CLIENT` Indicates that the span describes a synchronous request to
+  a remote service.
+  When the context of a `CLIENT` span is propagated, `CLIENT`  span usually
+  becomes a parent of a remote `SERVER` span and ends after `SERVER` span
+  completes.
+* `PRODUCER` span describes the initiation of an asynchronous request. This initiating
+  span will often end before the correlated `CONSUMER` span, possibly even before the
+  `CONSUMER` span starts. In messaging scenarios with batching, tracing
+  individual messages requires a new `PRODUCER` span per message to be created.
+* `CONSUMER` Indicates that the span describes the receiving or handling on an
+  asynchronous request.
 * `INTERNAL` Default value. Indicates that the span represents an
   internal operation within an application, as opposed to an
   operations with remote parents or children.
@@ -805,12 +797,12 @@ These are the possible SpanKinds:
 To summarize the interpretation of these kinds:
 
 | `SpanKind` | Synchronous | Asynchronous | Remote Incoming | Remote Outgoing |
-|---|---|---|---|---|
-| `CLIENT` | yes | | | yes |
-| `SERVER` | yes | | yes | |
-| `PRODUCER` | | yes | | maybe |
-| `CONSUMER` | | yes | maybe | |
-| `INTERNAL` | | | | |
+|------------|-------------|--------------|-----------------|-----------------|
+| `CLIENT`   |     yes     |              |                 |       yes       |
+| `SERVER`   |     yes     |              |       yes       |                 |
+| `PRODUCER` |             |     yes      |                 |       maybe     |
+| `CONSUMER` |             |     yes      |      maybe      |                 |
+| `INTERNAL` |             |              |                 |                 |
 
 ## Link
 
