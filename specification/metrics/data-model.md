@@ -1002,7 +1002,7 @@ the gauge interval for the same source.
 
 ## Data point flags
 
-**Status**: [Experimental](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Certain flags can be applied to denote special data points. A flag is a
 boolean property which can either be set to `true` or `false`. Currently the
