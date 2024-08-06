@@ -38,7 +38,24 @@ A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT add
 There MUST be at most one `target` info metric exposed by an SDK
 Prometheus exporter.
 
+A Prometheus Exporter MUST set
+the [MetricReader](../sdk.md#metricreader) `temporality` as a function of
+instrument kind to be `cumulative` for all instrument kinds.
+
 ## Configuration
+
+A Prometheus Exporter SHOULD support a configuration option to set the host
+that metrics are served on. The option MAY be named `host`, and MUST be `localhost`
+by default.
+
+A Prometheus Exporter SHOULD support a configuration option to set the port
+that metrics are served on. The option MAY be named `port`, and MUST be `9464` by
+default.
+
+A Prometheus Exporter SHOULD support a configuration option to set
+the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
+of instrument kind. This option MAY be named `default_aggregation`, and MUST use
+the [default aggregation](../sdk.md#default-aggregation) by default.
 
 A Prometheus Exporter MAY offer configuration to add resource attributes as metric attributes.
 By default, it MUST NOT add any resource attributes as metric attributes.

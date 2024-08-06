@@ -38,6 +38,7 @@ linkTitle: SDK
 - [Span processor](#span-processor)
   * [Interface definition](#interface-definition)
     + [OnStart](#onstart)
+    + [OnEnding](#onending)
     + [OnEnd(Span)](#onendspan)
     + [Shutdown()](#shutdown)
     + [ForceFlush()](#forceflush)
@@ -364,7 +365,9 @@ Returns the sampler name or short description with the configuration. This may
 be displayed on debug pages or in the logs. Example:
 `"TraceIdRatioBased{0.000100}"`.
 
-Description MUST NOT change over time and caller can cache the returned value.
+Description MAY change over time, for example, if the sampler supports dynamic
+configuration or otherwise adjusts its parameters.
+Callers SHOULD NOT cache the returned value.
 
 ### Built-in samplers
 
@@ -569,11 +572,23 @@ in the SDK:
 
 ### Interface definition
 
+The `SpanProcessor` interface MUST declare the following methods:
+
+* [OnStart](#onstart)
+* [OnEnd](#onendspan)
+* [Shutdown](#shutdown-1)
+* [ForceFlush](#forceflush-1)
+
+The `SpanProcessor` interface SHOULD declare the following methods:
+
+* [OnEnding](#onending) method.
+
 #### OnStart
 
 `OnStart` is called when a span is started. This method is called synchronously
 on the thread that started the span, therefore it should not block or throw
-exceptions.
+exceptions. If multiple `SpanProcessors` are registered, their `OnStart` callbacks
+are invoked in the order they have been registered.
 
 **Parameters:**
 
@@ -585,6 +600,25 @@ exceptions.
 * `parentContext` - the parent `Context` of the span that the SDK determined
   (the explicitly passed `Context`, the current `Context` or an empty `Context`
   if that was explicitly requested).
+
+**Returns:** `Void`
+
+#### OnEnding
+
+**Status**: [Development](../document-status.md)
+
+`OnEnding` is called during the span `End()` operation, after the end timestamp has been set. The Span object is still mutable (i.e., `SetAttribute`, `AddLink`, `AddEvent` can be called) while `OnEnding` is called.
+This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
+therefore it should not block or throw an exception.
+If multiple `SpanProcessors` are registered, their `OnEnding` callbacks
+are invoked in the order they have been registered.
+The SDK MUST guarantee that the span can no longer be modified by any other thread
+before invoking `OnEnding` of the first `SpanProcessor`. From that point on, modifications
+are only allowed synchronously from within the invoked `OnEnding` callbacks.  All registered SpanProcessor `OnEnding` callbacks are executed before any SpanProcessor's `OnEnd` callback is invoked.
+
+**Parameters:**
+
+* `span` - a [read/write span object](#additional-span-interfaces) for the span which is about to be ended.
 
 **Returns:** `Void`
 

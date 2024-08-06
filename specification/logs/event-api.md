@@ -47,9 +47,10 @@ logs to have a common format within that structure. When OpenTelemetry
 instrumentation emits logs, those logs SHOULD be formatted as Events. All
 semantic conventions defined for logs MUST be formatted as Events.
 
-The Event format is as follows. All Events have a `name` attribute, and all
-Events with the same `name` MUST conform to the same schema for both their
-`Attributes` and their `Body`.
+The Event format is as follows. All Events have a
+[`event.name` attribute](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md),
+and all Events with the same `event.name` MUST conform to the same schema for
+both their `Attributes` and their `Body`.
 
 ## Event API use cases
 
