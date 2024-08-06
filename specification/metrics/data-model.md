@@ -1019,7 +1019,7 @@ queries after such an indicator was received. It is an equivalent of the
 If this flag is set, all other data point properties except attributes, time
 stamps, or time windows, SHOULD be ignored.
 
-This flags defaults to `false`.
+This flag defaults to `false`.
 
 ## Single-Writer
 
