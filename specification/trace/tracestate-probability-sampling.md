@@ -22,6 +22,7 @@ linkTitle: Probability Sampling
 - [Sampler behavior for initializing and updating T and R values](#sampler-behavior-for-initializing-and-updating-t-and-r-values)
   * [Head samplers](#head-samplers)
   * [Downstream samplers](#downstream-samplers)
+  * [Migration to consistent probability samplers](#migration-to-consistent-probability-samplers)
 - [Algorithms](#algorithms)
   * [Converting floating-point probability to threshold value](#converting-floating-point-probability-to-threshold-value)
   * [Converting integer threshold to a `th`-value](#converting-integer-threshold-to-a-th-value)
@@ -132,6 +133,16 @@ A downstream sampler, in contrast, may output a given ended Span with a *modifie
 
 - If the chosen sampling probability is 1, the sampler MUST NOT modify any existing `th`, nor set any `th`.
 - Otherwise, the chosen sampling probability is in `(0, 1)`. In this case the sampler MUST output the span with a `th` equal to `max(input th, chosen th)`. In other words, `th` MUST NOT be decreased (as it is not possible to retroactively adjust an earlier stage's sampling probability), and it MUST be increased if a lower sampling probability was used. This case represents the common case where a downstream sampler is reducing span throughput in the system.
+
+### Migration to consistent probability samplers
+
+The OpenTelemetry specification for TraceIdRatioBased samplers was not completed until after the SDK specification was declared stable, and the exact behavior of that sampler was left unspecified.  The `th` and `rv` sub-keys defined in the OpenTelemetry TraceState now address this behavior specifically.
+
+As the OpenTelemetry TraceIdRatioBased sampler changes definition, users must consider how to avoid incomplete traces due to inconsistent sampling during the transition between old and new logic.
+
+The original TraceIdRatioBased sampler specification gave a workaround for the underspecified behavior, that it was safe to use for root spans: "It is recommended to use this sampler algorithm only for root spans (in combination with [`ParentBased`](./sdk.md#parentbased)) because different language SDKs or even different versions of the same language SDKs may produce inconsistent results for the same input."
+
+To avoid inconsistency during this transition, users SHOULD follow this guidance until all TraceIdRatioBased samplers used in a system have been upgraded to the modern `TraceIdRatioBased` specification based on W3C Trace Context Level 2 randomness.  After all `TraceIdRatioBased` samplers have been upgraded, it is safe to use `TraceIdRatioBased` sampler without also using the `ParentBased` sampler.
 
 ## Algorithms
 
