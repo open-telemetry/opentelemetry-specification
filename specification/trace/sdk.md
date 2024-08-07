@@ -505,19 +505,19 @@ which ensures that samplers always have sufficient randomness when using W3C Tra
 
 #### TraceID randomness
 
-The SDK SHOULD implement the TraceID randomness requirements of the [W3C Trace Context Level 2][W3CCONTEXTTRACEID] Candidate Recommendation when generating TraceID values for root span contexts.
+For root span contexts, the SDK SHOULD implement the TraceID randomness requirements of the [W3C Trace Context Level 2][W3CCONTEXTTRACEID] Candidate Recommendation when generating TraceID values.
 
 #### Random trace flag
 
-The SDK SHOULD set the `Random` flag in the trace flags of the root span context when it generates TraceIDs that meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID].
+For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags when it generates TraceIDs that meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID].
 
 #### Explicit trace randomness
 
-The SDK MAY support an optional explicit trace randomness feature.  When this option is configured and the trace SDK creates a root span context, the SDK inserts explicit randomness into the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
+The SDK MAY support an optional explicit trace randomness feature.  For root span contexts, when this option is configured, the SDK inserts explicit randomness into the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
 
 #### Presumption of TraceID randomness
 
-OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
+For non-root span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
 
 #### User-defined explicit trace randomness
 
