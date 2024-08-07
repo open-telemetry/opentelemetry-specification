@@ -71,7 +71,7 @@ mapping node it represents, including:
 * mappings, which SHOULD be represented as `ConfigProperties`
 * sequences of scalars
 * sequences of mappings, which SHOULD be represented as `ConfigProperties`
-* the set of properties
+* the set of property keys present
 
 `ConfigProperties` SHOULD provide access to properties in a type safe manner,
 based on what is idiomatic in the language.
