@@ -517,11 +517,11 @@ The SDK MAY support an optional explicit trace randomness feature.  For root spa
 
 #### Presumption of TraceID randomness
 
-For non-root span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
+For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
 
 #### User-defined explicit trace randomness
 
-Trace SDKs SHOULD permit users to setup explicit randomness by entering it into the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE] of the context before creating a root span.  This lets users have consistent sampling across traces.
+Trace SDKs MAY permit users to setup explicit randomness by entering it into the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE] of the context before creating a root span.  This lets users have consistent sampling across traces.
 
 #### IdGenerator randomness
 
