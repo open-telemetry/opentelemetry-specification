@@ -102,7 +102,7 @@ The explicit randomness value is meant to be used instead of extracting randomne
 Explicit randomness values are meant to propagate through [span contexts](../context/README.md) unmodified.
 Explicit randomness values SHOULD NOT be erased from the OpenTelemetry TraceState or modified once associated with a new TraceID, so that sampling decisions made using the explicit randomness value are consistent across signals.
 
-For example, here is a W3C TraceState values including an OpenTelemetry explicit randomness value:
+For example, here is a W3C TraceState value including an OpenTelemetry explicit randomness value:
 
 ```
 tracestate: ot=rv:6e6d1a75832a2f

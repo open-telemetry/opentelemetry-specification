@@ -358,7 +358,7 @@ the Core OpenTelemetry repositories.
 
 ### W3C Trace Context Requirements
 
-A W3C Trace Context propagator is expected to implement the `traceparent` and `tracestate` contexts fields specified in [W3C Trace Context Level 2](https://www.w3.org/TR/trace-context-2/).
+A W3C Trace Context propagator MUST parse and set the `traceparent` and `tracestate` HTTP headers as specified in [W3C Trace Context Level 2](https://www.w3.org/TR/trace-context-2/).
 
 When injecting and extracting trace context to or from a carrier, the following fields from the `SpanContext` are propagated.
 
