@@ -247,7 +247,7 @@ The implementation MAY accept a comma-separated list to enable setting multiple 
 Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
-- `"otlp-stdout"`: [OTLP Stdout](../trace/sdk_exporters/otlp-stdout.md)
+- `"otlp-stdout"`: [OTLP Stdout](../common/otlp-stdout.md)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"console"`: [Standard Output](../trace/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../trace/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
@@ -257,6 +257,7 @@ NOT be supported by new implementations.
 Known values for `OTEL_METRICS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
+- `"otlp-stdout"`: [OTLP Stdout](../common/otlp-stdout.md)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 - `"console"`: [Standard Output](../metrics/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../metrics/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
@@ -266,6 +267,7 @@ NOT be supported by new implementations.
 Known values for `OTEL_LOGS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
+- `"otlp-stdout"`: [OTLP Stdout](../common/otlp-stdout.md)
 - `"console"`: [Standard Output](../logs/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../logs/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
 NOT be supported by new implementations.
