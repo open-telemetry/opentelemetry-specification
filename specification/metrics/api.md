@@ -120,7 +120,7 @@ The `MeterProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-* `name`: This name uniquely identifies the [instrumentation
+* `name`: Specifies the name of the [instrumentation
   scope](../glossary.md#instrumentation-scope), such as the
   [instrumentation library](../glossary.md#instrumentation-library) (e.g.
   `io.opentelemetry.contrib.mongodb`), package,
@@ -149,15 +149,9 @@ This API MUST accept the following parameters:
   it is up to their discretion. Therefore, this API MUST be structured to
   accept a variable number of attributes, including none.
 
-Meters are identified by `name`, `version`, and `schema_url` fields.  When more
-than one `Meter` of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different `Meter`
-instances are returned. It is a user error to create Meters with different
-attributes but the same identity.
-
-The term *identical* applied to Meters describes instances where all identifying
-fields are equal. The term *distinct* applied to Meters describes instances where
-at least one identifying field has a different value.
+The term *identical* applied to Meters describes instances where all parameters
+are equal. The term *distinct* applied to Meters describes instances where at
+least one parameter has a different value.
 
 ## Meter
 

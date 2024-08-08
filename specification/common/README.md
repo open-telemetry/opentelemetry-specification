@@ -59,6 +59,8 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
+Attributes are equal when their keys and values are equal.
+
 See [Attribute Naming](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-naming.md) for naming guidelines.
 
 See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-requirement-level.md) for requirement levels guidelines.
@@ -185,3 +187,7 @@ Some other implementations may use a streaming approach where every
 that individual attribute value being exported using a streaming wire protocol.
 In such cases the enforcement of uniqueness will likely be the responsibility of
 the recipient of this data.
+
+Collection of attributes are equal when they contain the same attributes,
+irrespective of the order in which those elements appear
+(unordered collection equality).
