@@ -147,6 +147,8 @@ release.
   ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
 - Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
   ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
+- Add in-development `OTLP Stdout` traces exporter.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Metrics
 
@@ -157,11 +159,15 @@ release.
   ([#4142](https://github.com/open-telemetry/opentelemetry-specification/pull/4142))
 - Add data point flags to the metric data model.
   ([#4135](https://github.com/open-telemetry/opentelemetry-specification/pull/4135))
+- Add in-development `OTLP Stdout` metrics exporter.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Logs
 
 - The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
   ([#4090](https://github.com/open-telemetry/opentelemetry-specification/pull/4090))
+- Add in-development `OTLP Stdout` log record exporter.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Baggage
 
