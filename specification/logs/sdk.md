@@ -29,6 +29,7 @@
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
     + [Isolating processor](#isolating-processor)
+    + [Simple Concurrent processor](#simple-concurrent-processor)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
@@ -392,9 +393,10 @@ in [OpenTelemetry Collector](../overview.md#collector).
 #### Simple processor
 
 This is an implementation of `LogRecordProcessor` which passes finished logs and
-passes the export-friendly `ReadableLogRecord` representation to the
-configured [LogRecordExporter](#logrecordexporter), as soon as they are
-finished.
+passes the export-friendly `ReadableLogRecord` representation to the configured
+[LogRecordExporter](#logrecordexporter), as soon as they are finished. The
+exporter methods of the exporter MUST NOT be called concurrently for the same
+exporter instance.
 
 **Configurable parameters:**
 
@@ -433,6 +435,21 @@ the configured `processor`.
 
 * `processor` - processor to be isolated.
 
+#### Simple Concurrent processor
+
+**Status**: [Development](../document-status.md)
+
+This is an implementation of `LogRecordProcessor` which passes finished logs and
+passes the export-friendly `ReadableLogRecord` representation to the configured
+[LogRecordExporter](#logrecordexporter), as soon as they are finished. Unlike
+[Simple processor](#simple-processor), this can invoke exporter methods
+concurrently, and hence MUST be documented clearly to be used only with
+concurrent safe exporters.
+
+**Configurable parameters:**
+
+* `exporter` - the concurrent safe exporter where the `LogRecord`s are pushed.
+
 ## LogRecordExporter
 
 `LogRecordExporter` defines the interface that protocol-specific exporters must
@@ -453,14 +470,18 @@ Exports a batch of [ReadableLogRecords](#readablelogrecord). Protocol exporters
 that will implement this function are typically expected to serialize and
 transmit the data to the destination.
 
-`Export` will never be called concurrently for the same exporter instance.
-Depending on the implementation the result of the export may be returned to the
+`Export` MAY be called concurrently for the same exporter instance if paired
+with [Simple Concurrent Processor](#simple-concurrent-processor). Each exporter
+implementation MUST document whether it is concurrent safe, and hence can be
+paired with the [Simple Concurrent Processor](#simple-concurrent-processor).
+
+Depending on the implementation, the result of the export may be returned to the
 Processor not in the return value of the call to `Export` but in a language
 specific way for signaling completion of an asynchronous task. This means that
-while an instance of an exporter will never have it `Export` called concurrently
-it does not mean that the task of exporting can not be done concurrently. How
-this is done is outside the scope of this specification. Each implementation
-MUST document the concurrency characteristics the SDK requires of the exporter.
+while an instance of an exporter that does not support concurrent calls will
+never have `Export` called concurrently, it does not mean that the task of
+exporting cannot be done concurrently. How this is done is outside the scope of
+this specification.
 
 `Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
