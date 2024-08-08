@@ -247,6 +247,7 @@ The implementation MAY accept a comma-separated list to enable setting multiple 
 Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
+- `"otlp-stdout"`: [OTLP Stdout](../trace/sdk_exporters/otlp-stdout.md)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"console"`: [Standard Output](../trace/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../trace/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
