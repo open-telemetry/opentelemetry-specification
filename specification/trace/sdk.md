@@ -703,9 +703,9 @@ This is an implementation of the `SpanProcessor` which create batches of finishe
 spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
 
-The processor SHOULD export a batch when any of the following happens AND
-`SpanProcessor#Export()` has not yet returned (for additional concurrency
-details see the [Export() specification](#exportbatch)):
+The processor SHOULD export a batch when any of the following happens AND the
+previous export call has returned (for additional concurrency details see
+the [Export() specification](#exportbatch)):
 
 - `scheduledDelayMillis` after the processor is constructed OR the first span
   is received by the span processor.
@@ -715,8 +715,6 @@ details see the [Export() specification](#exportbatch)):
 - The queue contains `maxExportBatchSize` or more spans.
 - `ForceFlush` is called.
 
-If any of the above events occurs before `Export()` returns, the span processor
-should wait until `Export()` returns before exporting the next batch.
 If the queue is empty when an export is triggered, the processor MAY export
 an empty batch OR skip the export and consider it to be completed immediately.
 
