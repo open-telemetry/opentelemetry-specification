@@ -1,4 +1,5 @@
-<!--- Hugo front matter used to generate the website version of this page:
+---
+# Hugo front matter used to generate the website version of this page:
 linkTitle: OTel spec
 no_list: true
 cascade:
@@ -10,7 +11,7 @@ cascade:
 path_base_for_github_subdir:
   from: tmp/otel/specification/_index.md
   to: README.md
---->
+---
 
 # OpenTelemetry Specification
 

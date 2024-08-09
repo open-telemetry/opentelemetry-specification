@@ -1,9 +1,10 @@
-<!--- Hugo front matter used to generate the website version of this page:
+---
+# Hugo front matter used to generate the website version of this page:
 linkTitle: Metrics
 path_base_for_github_subdir:
   from: tmp/otel/specification/metrics/_index.md
   to: metrics/README.md
---->
+---
 
 # OpenTelemetry Metrics
 

@@ -1,10 +1,11 @@
-<!--- Hugo front matter used to generate the website version of this page:
+---
+# Hugo front matter used to generate the website version of this page:
 linkTitle: Schemas
 aliases: [/docs/reference/specification/schemas/overview]
 path_base_for_github_subdir:
   from: tmp/otel/specification/schemas/_index.md
   to: schemas/README.md
---->
+---
 
 # Telemetry Schemas
 
