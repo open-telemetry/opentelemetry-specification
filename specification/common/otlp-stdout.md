@@ -7,9 +7,10 @@ linkTitle: OTLP Stdout
 **Status**: [Development](../document-status.md)
 
 "OTLP Standard output" Exporter is an OTLP exporter which outputs to
-stdout/console in OTLP JSON format.
+stdout/console in OTLP JSON format, as defined in the
+[file exporter](../protocol/file-exporter.md).
 
-The exporter SHOULD provide the same configuration options as the OTLP
+The exporter MUST provide the same configuration options as the OTLP
 Exporter, except for the all the network related options.
 
 If a language provides a mechanism to automatically configure a
@@ -19,5 +20,8 @@ variable](../configuration/sdk-environment-variables.md#exporter-selection)), by
 default the standard output exporter SHOULD be paired with a batching
 processor.
 
-When using programmatically, the exporter SHOULD provide a way to configure the
-output stream, defaulting to `stdout`.
+## Programmatic configuration
+
+| Requirement | Name                       | Description                                                                                            | Default |
+|-------------|----------------------------|--------------------------------------------------------------------------------------------------------|---------|
+| MUST        | output stream (or similar) | Configure output stream. This SHOULD include the possibility to configure the output stream to a file. | stdout  |
