@@ -37,6 +37,9 @@ Trivial changes, such as clarifications, wording changes, spelling/grammar
 corrections, etc. can be made directly via pull requests and do not require an associated
 issue.
 
+Supplementary guidance around a specification should be placed in a [directory alongside
+the signal.](https://github.com/open-telemetry/opentelemetry-specification/issues/3587)
+
 ## Writing specs
 
 Specification is written in markdown format. Please make sure files are rendered
