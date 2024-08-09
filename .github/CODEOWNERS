@@ -13,22 +13,4 @@
 #
 
 # Global owners, will be the owners for everything in the repo. Membership is tracked via https://github.com/open-telemetry/community/blob/main/community-members.md 
-*   @open-telemetry/technical-committee @open-telemetry/specs-approvers
-
-# Trace owners (global + trace)
-development/trace/     @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
-specification/trace/    @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-trace-approvers
-
-# Metrics owners (global + metrics)
-development/metrics/   @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-metrics-approvers
-specification/metrics/  @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-metrics-approvers
-
-# Logs owners (global + logs)
-development/logs/      @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-logs-approvers
-specification/logs/     @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-logs-approvers
-
-# Semantic Conventions owners (global)
-specification/semantic-conventions.md @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-semconv-approvers
-specification/telemetry-stability.md @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-semconv-approvers
-# Note: Common is about naming conventions, relevant to semconv
-specification/common/ @open-telemetry/technical-committee @open-telemetry/specs-approvers @open-telemetry/specs-semconv-approvers
+*   @open-telemetry/technical-committee @open-telemetry/spec-sponsors
