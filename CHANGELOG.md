@@ -31,7 +31,7 @@ release.
 
 ### Supplementary Guidelines
 
-## v1.36.0 (2024-08-06)
+## v1.36.0 (2024-08-12)
 
 ### Traces
 
