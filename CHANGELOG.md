@@ -42,13 +42,13 @@ release.
 
 ### Metrics
 
-- Clarify prometheus exporter should have `host` and `port` configuration options.
-  ([#4147](https://github.com/open-telemetry/opentelemetry-specification/pull/4147))
 - Clarify metric reader / metric exporter relationship for temporality
   preference and default aggregation. Explicitly define configuration options
   for temporality preference and default aggregation of built-in exporters, and
   make default values explicit.
   ([#4142](https://github.com/open-telemetry/opentelemetry-specification/pull/4142))
+- Add data point flags to the metric data model.
+  ([#4135](https://github.com/open-telemetry/opentelemetry-specification/pull/4135))
 
 ### Logs
 
@@ -59,6 +59,11 @@ release.
 
 - Clarify no empty string allowed in baggage names.
   ([#4144](https://github.com/open-telemetry/opentelemetry-specification/pull/4144))
+
+### Compatibility
+
+- Clarify prometheus exporter should have `host` and `port` configuration options.
+  ([#4147](https://github.com/open-telemetry/opentelemetry-specification/pull/4147))
 
 ### Common
 
