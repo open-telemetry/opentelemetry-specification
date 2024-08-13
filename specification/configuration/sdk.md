@@ -240,7 +240,11 @@ TODO: define behavior if some portion of configuration model is not supported
 #### Register ComponentProvider
 
 The SDK MUST provide a mechanism to
-register [`ComponentProvider`](#componentprovider).
+register [`ComponentProvider`](#componentprovider). The mechanism MAY be
+language-specific and automatic. For example, a java implementation might use
+the [service provider interface](https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html)
+mechanism to register implementations of a particular interface
+as `ComponentProvider`s.
 
 **Parameters:**
 
