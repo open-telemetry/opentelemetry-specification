@@ -1221,12 +1221,12 @@ determines the following capabilities:
 * Handling the [ForceFlush](#forceflush) and [Shutdown](#shutdown) signals from
   the SDK.
 
-To construct a `MetricReader` when setting up an SDK, the caller
-SHOULD provide at least the following:
+To construct a `MetricReader` when setting up an SDK, at least the following
+SHOULD be provided:
 
 * The `exporter` to use, which is a `MetricExporter` instance.
-* The default output `aggregation` (optional), a function of instrument kind.  If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
-* The default output `temporality` (optional), a function of instrument kind.  If not configured, the Cumulative temporality SHOULD be used.
+* The default output `aggregation` (optional), a function of instrument kind. This function SHOULD be obtained from the `exporter`. If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
+* The output `temporality` (optional), a function of instrument kind. This function SHOULD be obtained from the `exporter`. If not configured, the Cumulative temporality SHOULD be used.
 * **Status**: [Development](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 * **Status**: [Development](../document-status.md) - The [MetricFilter](#metricfilter) to apply to metrics and attributes during `MetricReader#Collect`.
 * Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
