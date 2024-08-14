@@ -29,6 +29,9 @@ release.
 
 ### Common
 
+- Add natively instrumented to glossary.
+  ([#4186](https://github.com/open-telemetry/opentelemetry-specification/pull/4186))
+
 ### Supplementary Guidelines
 
 ## v1.36.0 (2024-08-12)
