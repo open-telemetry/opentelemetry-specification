@@ -106,10 +106,10 @@ The following values have been defined by OpenTelemetry.
 ### Sampling threshold value `th`
 
 The OpenTelemetry TraceState `th` sub-key defines a sampling threshold, which conveys effective sampling probability.
-Valid values of the `th` sub-fields include between 1 and 14 hexadecimal digits.
+Valid values of the `th` sub-fields include between 1 and 14 lowercase hexadecimal digits.
 
 ```
-hexdigit = DIGIT ; A-F ; a-f
+hexdigit = DIGIT ; a-f
 ```
 
 To decode the threshold from the OpenTelemetry TraceState `th` value, first extend the value with trailing zeros to make 14 digits.
