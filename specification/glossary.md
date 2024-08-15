@@ -119,7 +119,7 @@ Denotes a library or application that has built-in instrumentation by using the 
 *Instrumented Library* and *Instrumentation Library* are the same library.
 
 If a separate *instrumentation library* or a plugin is required to instrument a library or application,
-that *instrumented library* or application MUST not be called *natively instrumented*, even if the
+that *instrumented library* or application must not be called *natively instrumented*, even if the
 *instrumentation library* or plugin is provided by the same authors or is a plugin that fits into
 the ecosystem of the given software.
 
