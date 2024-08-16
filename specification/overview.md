@@ -393,7 +393,7 @@ name itself. Examples include:
 
 Instrumentations libraries not authored by OpenTelemetry should avoid potential naming collisions with
 OpenTelemetry-authored instrumentations. For example, they may prefix instrumentation package name with
-corresponding project name:
+their company or project name:
 
 * {company}-opentelemetry-instrumentation-{component} (Python)
 * @{company}/opentelemetry-instrumentation-{component} (Javascript)
