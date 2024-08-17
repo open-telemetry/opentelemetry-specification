@@ -294,10 +294,11 @@ Note: Support for environment variables is optional.
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |    | +    |    |             |      |        |     |      |     |      |       |
 | OTEL_EXPERIMENTAL_CONFIG_FILE                            |    |      |    |             |      |        |     |      |     |      |       |
 
-## File Configuration
+## Declarative configuration
 
-See [File Configuration](./specification/configuration/file-configuration.md)
+See [declarative configuration](./specification/configuration/README.md#declarative-configuration)
 for details.
+Disclaimer: Declarative configuration is currently in Development status - work in progress.
 
 | Feature                                                                                                                 | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |-------------------------------------------------------------------------------------------------------------------------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
