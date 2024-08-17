@@ -11,29 +11,16 @@ release.
 
 ### Traces
 
-- Remove restriction that sampler description is immutable.
-  ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
-- Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
-  ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
-
 ### Metrics
-
-- Clarify prometheus exporter should have `host` and `port` configuration options.
-  ([#4147](https://github.com/open-telemetry/opentelemetry-specification/pull/4147))
-- Clarify metric reader / metric exporter relationship for temporality
-  preference and default aggregation. Explicitly define configuration options
-  for temporality preference and default aggregation of built-in exporters, and
-  make default values explicit.
-  ([#4142](https://github.com/open-telemetry/opentelemetry-specification/pull/4142))
 
 ### Logs
 
-- The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
-  ([#4090](https://github.com/open-telemetry/opentelemetry-specification/pull/4090))
 - Clarify that log record mutations are visible in next registered processors.
   ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
 
 ### Events
+
+### Baggage
 
 ### Resource
 
@@ -46,6 +33,45 @@ release.
 ### Common
 
 ### Supplementary Guidelines
+
+## v1.36.0 (2024-08-12)
+
+### Traces
+
+- Remove restriction that sampler description is immutable.
+  ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
+- Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
+  ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
+
+### Metrics
+
+- Clarify metric reader / metric exporter relationship for temporality
+  preference and default aggregation. Explicitly define configuration options
+  for temporality preference and default aggregation of built-in exporters, and
+  make default values explicit.
+  ([#4142](https://github.com/open-telemetry/opentelemetry-specification/pull/4142))
+- Add data point flags to the metric data model.
+  ([#4135](https://github.com/open-telemetry/opentelemetry-specification/pull/4135))
+
+### Logs
+
+- The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
+  ([#4090](https://github.com/open-telemetry/opentelemetry-specification/pull/4090))
+
+### Baggage
+
+- Clarify no empty string allowed in baggage names.
+  ([#4144](https://github.com/open-telemetry/opentelemetry-specification/pull/4144))
+
+### Compatibility
+
+- Clarify prometheus exporter should have `host` and `port` configuration options.
+  ([#4147](https://github.com/open-telemetry/opentelemetry-specification/pull/4147))
+
+### Common
+
+- Require separation of API and SDK artifacts.
+  ([#4125](https://github.com/open-telemetry/opentelemetry-specification/pull/4125))
 
 ## v1.35.0 (2024-07-12)
 
