@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Clarify `SpanKind` description, extend it to cover links, add examples of
+  nested client spans.
+  ([#4178](https://github.com/open-telemetry/opentelemetry-specification/pull/4178))
+
 ### Metrics
 
 ### Logs
