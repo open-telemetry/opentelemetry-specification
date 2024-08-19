@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Minor clarification on BatchExportingProcessor behavior.
+  ([#4164](https://github.com/open-telemetry/opentelemetry-specification/pull/4164))
+
 ### Metrics
 
 ### Logs
