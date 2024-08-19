@@ -17,7 +17,7 @@ release.
 ### Metrics
 
 - Add support for filtering attribute keys for streams via an exclude list.
-  ([]())
+  ([#4188](https://github.com/open-telemetry/opentelemetry-specification/pull/4188))
 
 ### Logs
 
