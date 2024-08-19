@@ -16,6 +16,9 @@ release.
 
 ### Metrics
 
+- Add support for filtering attribute keys for streams via an exclude list.
+  ([]())
+
 ### Logs
 
 ### Events

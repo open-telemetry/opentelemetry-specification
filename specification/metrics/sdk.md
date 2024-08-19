@@ -364,6 +364,10 @@ The SDK MUST accept the following stream configuration parameters:
   keys that identify the attributes that MUST be kept, and all other attributes
   MUST be ignored.
 
+  Additionally, implementations SHOULD support configuring an exclude-list of
+  attribute keys. The exclude-list contains attribute keys that identify the
+  attributes that MUST be excluded, all other attributes MUST be kept.
+
   Implementations MAY accept additional attribute filtering functionality for
   this parameter.
 
