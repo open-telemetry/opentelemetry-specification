@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Minor clarification on BatchExportingProcessor behavior.
+  ([#4164](https://github.com/open-telemetry/opentelemetry-specification/pull/4164))
 - Clarify `SpanKind` description, extend it to cover links, add examples of
   nested client spans.
   ([#4178](https://github.com/open-telemetry/opentelemetry-specification/pull/4178))
