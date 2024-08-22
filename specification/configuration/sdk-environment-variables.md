@@ -247,7 +247,6 @@ The implementation MAY accept a comma-separated list to enable setting multiple 
 Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
-- `"otlp-stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"console"`: [Standard Output](../trace/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../trace/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
@@ -257,7 +256,6 @@ NOT be supported by new implementations.
 Known values for `OTEL_METRICS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
-- `"otlp-stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
 - `"console"`: [Standard Output](../metrics/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../metrics/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
@@ -267,11 +265,28 @@ NOT be supported by new implementations.
 Known values for `OTEL_LOGS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
-- `"otlp-stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
 - `"console"`: [Standard Output](../logs/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../logs/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
 NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for logs.
+
+### Experimental Exporter Selection
+
+**Status**: [Development](../document-status.md)
+
+In addition to the above, the following environment variables are added for experimental exporter selection:
+
+Additional known values for `OTEL_TRACES_EXPORTER` are:
+
+- `"otlp-stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
+
+Additional known values for `OTEL_METRICS_EXPORTER` are:
+
+- `"otlp-stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
+
+Additional known values for `OTEL_LOGS_EXPORTER` are:
+
+- `"otlp-stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
 
 ## Metrics SDK Configuration
 
