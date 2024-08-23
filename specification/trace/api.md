@@ -753,8 +753,8 @@ This functionality MUST be fully implemented in the API, and SHOULD NOT be overr
 parent/child relationships or span links. `SpanKind` describes two independent
 properties that benefit tracing systems during analysis:
 
-1. Whether span represents an outgoing call a remote service (`CLIENT` and
-   `PRODUCER` spans) or a processing of request initiated externally (`SERVER`
+1. Whether span represents an outgoing call to a remote service (`CLIENT` and
+   `PRODUCER` spans) or a processing of an incoming request initiated externally (`SERVER`
    and `CONSUMER` spans).
 2. Whether a Span represents a synchronous call. Spans that describe synchronous
    operations (`SERVER` and `CLIENT`) end after all its children complete under
@@ -785,13 +785,13 @@ appropriate to the relevant technologies.
 These are the possible `SpanKind`s:
 
 * `SERVER` Indicates that the span covers server-side handling of a
-  synchronous RPC or other remote request.
+  remote request.
 * `CLIENT` Indicates that the span describes a synchronous request to
   a remote service.
   When the context of a `CLIENT` span is propagated, `CLIENT` span usually
   becomes a parent of a remote `SERVER` span and ends after the `SERVER` span
   completes.
-* `PRODUCER` span describes the initiation of an asynchronous request. This
+* `PRODUCER` span describes the initiation of a one-way request. This
   initiating span will often end before the correlated `CONSUMER` span,
   possibly even before the `CONSUMER` span starts. In messaging scenarios with
   batching, tracing individual messages requires a new `PRODUCER` span per
