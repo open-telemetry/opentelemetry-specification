@@ -770,14 +770,14 @@ Note: A `CLIENT` span may have a child that is also a `CLIENT` span, or a
 depending on how the various components that are providing the functionality
 are built and instrumented.
 
-For instance, a database client instrumentations create `CLIENT` span that
-describes database calls. If the database client communicate to the server over
-HTTP, the HTTP instrumentation (when enabled) creates nested `CLIENT` spans to
-track individual HTTP calls performed in the scope of logical database `CLIENT`
-operation.
+[Semantic conventions](../../specification/overview.md#semantic-conventions) for
+specific technologies should document kind for each span they define.
 
-Such scenarios, when they occur, should be detailed in the semantic conventions
-appropriate to the relevant technologies.
+For instance, [Database Client Semantic Conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/database-spans.md)
+recommend using `CLIENT` span kind to describes database calls.
+If the database client communicate to the server over HTTP, the HTTP
+instrumentation (when enabled) creates nested `CLIENT` spans to track individual
+HTTP calls performed in the scope of logical database `CLIENT` operation.
 
 These are the possible `SpanKind`s:
 
