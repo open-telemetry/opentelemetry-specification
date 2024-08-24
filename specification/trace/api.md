@@ -758,10 +758,6 @@ properties that benefit tracing systems during analysis:
    and `CONSUMER` spans).
 2. Whether a Span represents a request/response operation (`CLIENT` and `SERVER`
    spans) or a deferred execution (`PRODUCER` and `CONSUMER` spans).
-   Spans that describe request/response operations typically end after all their
-   child spans have completed.
-   It can be beneficial for tracing systems to be aware of this property to make
-   assumptions about overall trace latency.
 
 In order for `SpanKind` to be meaningful, callers SHOULD arrange that
 a single Span does not serve more than one purpose.  For example, a
