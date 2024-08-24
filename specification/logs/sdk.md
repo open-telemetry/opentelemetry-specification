@@ -397,7 +397,7 @@ configured [LogRecordExporter](#logrecordexporter), as soon as they are
 finished.
 
 The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
-to make sure that they are not executed in parallel.
+to make sure that they are not invoked in parallel.
 
 **Configurable parameters:**
 
@@ -410,7 +410,7 @@ of `LogRecord`s and passes the export-friendly `ReadableLogRecord`
 representations to the configured `LogRecordExporter`.
 
 The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
-to make sure that they are not executed in parallel.
+to make sure that they are not invoked in parallel.
 
 **Configurable parameters:**
 
