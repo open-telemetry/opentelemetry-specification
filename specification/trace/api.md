@@ -784,7 +784,7 @@ These are the possible `SpanKind`s:
 * `SERVER` indicates that the span covers server-side handling of a remote
   request while the client awaits a response.
 * `CLIENT` indicates that the span describes a request to a remote service where
-  the client await a response.
+  the client awaits a response.
   When the context of a `CLIENT` span is propagated, `CLIENT` span usually
   becomes a parent of a remote `SERVER` span.
 * `PRODUCER` indicates that the span describes the initiation or scheduling
