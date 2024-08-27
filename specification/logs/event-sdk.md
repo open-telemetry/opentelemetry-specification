@@ -226,7 +226,8 @@ Built-in processors are responsible for passing `LogRecord`s to various
 logging pipelines.
 
 `EventProcessors` can be registered directly on SDK `EventLoggerProvider` and
-they are invoked in the same order as they were registered.
+they are invoked in the same order as they were registered. If a processor 
+returns STOP, then no further processors with be called for that `LogRecord`.
 
 The SDK MUST allow users to implement and configure custom processors and
 decorate built-in processors for advanced scenarios such as enriching with
@@ -265,7 +266,14 @@ therefore it SHOULD NOT block or throw exceptions.
 * `context` - the resolved `Context` (the explicitly passed `Context` or the
   current `Context`)
 
-**Returns:** `Void`
+**Returns:** 
+
+* `next` - an Enum with two values, STOP and CONTINUE.
+
+The return value of the EventProcessor controls whether any further EventProcessors
+in the pipeline will be called. EventProcessors designed for filtering MUST use
+this return value to halt the processing of that event.
+
 
 An `EventProcessor` may freely modify `logRecord` for the duration of
 the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
