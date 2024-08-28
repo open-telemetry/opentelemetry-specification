@@ -384,9 +384,17 @@ an [Instrumentation Library](glossary.md#instrumentation-library).
 An instrumentation library should be named to follow any naming conventions of
 the instrumented library (e.g. 'middleware' for a web framework).
 
-If there is no established name, the recommendation is to prefix packages
-with "opentelemetry-instrumentation", followed by the instrumented library
-name itself. Examples include:
+For instrumentation hosted in OpenTelemetry repositories, the recommendation is
+to prefix packages with "opentelemetry-instrumentation", followed by the
+instrumented library name itself. Examples include:
 
 * opentelemetry-instrumentation-flask (Python)
 * @opentelemetry/instrumentation-grpc (Javascript)
+
+Instrumentations libraries not hosted by OpenTelemetry should avoid
+potential naming collisions with OpenTelemetry-hosted packages.
+For example, they may prefix instrumentation package name with their company or
+project name:
+
+* {company}-opentelemetry-instrumentation-{component} (Python)
+* @{company}/opentelemetry-instrumentation-{component} (Javascript)
