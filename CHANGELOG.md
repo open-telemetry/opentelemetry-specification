@@ -15,6 +15,8 @@ release.
   ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
 - Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
   ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
+- Minor clarification on BatchExportingProcessor behavior.
+  ([#4164](https://github.com/open-telemetry/opentelemetry-specification/pull/4164))
 - Define randomness value requirements for W3C Trace Context Level 2.
   ([#4162](https://github.com/open-telemetry/opentelemetry-specification/pull/4162))
 
@@ -35,6 +37,9 @@ release.
 ### SDK Configuration
 
 ### Common
+
+- Update instrumentation library guidance to avoid naming collisions between external and OTel instrumentations.
+  ([#4187](https://github.com/open-telemetry/opentelemetry-specification/pull/4187))
 
 ### Supplementary Guidelines
 

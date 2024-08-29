@@ -36,7 +36,7 @@ path_base_for_github_subdir:
   - [Metrics](metrics/sdk.md)
   - [Logs](logs/sdk.md)
   - [Resource](resource/sdk.md)
-  - [Configuration](configuration/sdk-configuration.md)
+  - [Configuration](configuration/README.md)
 - Data Specification
   - [Semantic Conventions](overview.md#semantic-conventions)
   - [Protocol](protocol/README.md)
