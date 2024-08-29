@@ -116,9 +116,9 @@ To decode the threshold from the OpenTelemetry TraceState `th` value, first exte
 Then, parse the 14-digit value as a 56-bit unsigned number, yielding a rejection threshold.
 
 OpenTelemetry defines consistent sampling in terms of a 56-bit trace randomness value compared with the 56-bit rejection threshold.
-When the randomness value is less than the rejection threshold, the trace is not sampled.
+When the randomness value is less than the rejection threshold, the span is not sampled.
 
-The threshold value `0` indicates that no traces are being rejected, corresponding with 100% sampling.  
+The threshold value `0` indicates that no spans are being rejected, corresponding with 100% sampling.  
 For example, the following TraceState value identifies a trace with 100% sampling:
 
 ```
