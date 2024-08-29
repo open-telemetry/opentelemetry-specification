@@ -35,7 +35,7 @@ aliases:
 - [Metrics SDK Configuration](#metrics-sdk-configuration)
   * [Exemplar](#exemplar)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
-- [File Configuration](#file-configuration)
+- [Declarative configuration](#declarative-configuration)
 - [Language Specific Environment Variables](#language-specific-environment-variables)
 
 <!-- tocstop -->
@@ -296,25 +296,25 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 | `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   |       |
 | `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   |       |
 
-## File Configuration
+## Declarative configuration
 
 **Status**: [Development](../document-status.md)
 
-Environment variables involved in [file configuration](file-configuration.md).
+Environment variables involved in [declarative configuration](./README.md#declarative-configuration).
 
 | Name                          | Description                                                                                                                                                                   | Default | Notes     |
 |-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
 | OTEL_EXPERIMENTAL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | See below |
 
 If `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, the file at the specified path is used to
-call [Parse](file-configuration.md#parse). The
-resulting [configuration model](./file-configuration.md#configuration-model) is
-used to call [Create](file-configuration.md#create) to produce fully configured
+call [Parse](./sdk.md#parse). The
+resulting [configuration model](./sdk.md#in-memory-configuration-model) is
+used to call [Create](./sdk.md#create) to produce fully configured
 SDK components.
 
 When `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, all other environment variables
 besides those referenced in the configuration file
-for [environment variable substitution](file-configuration.md#environment-variable-substitution)
+for [environment variable substitution](./data-model.md#environment-variable-substitution)
 MUST be ignored. Ignoring the environment variables is necessary because
 there is no intuitive way to merge the flat environment variable scheme with the
 structured file configuration scheme in all cases. Users that require merging

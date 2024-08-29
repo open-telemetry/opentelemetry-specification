@@ -874,9 +874,9 @@ The reverse mapping function for positive scales is:
 
 ```golang
 // LowerBoundary computes the bucket boundary for positive scales.
-func LowerBoundary(index int) float64 {
+func LowerBoundary(index, scale int) float64 {
     inverseFactor := math.Ldexp(math.Ln2, -scale)
-    return math.Exp(index * inverseFactor), nil
+    return math.Exp(index * inverseFactor)
 }
 ```
 
@@ -890,11 +890,11 @@ reference implementation, for example, the above formula computes
 to subtract `1<<scale` from the index and multiply the result by `2`.
 
 ```golang
-func LowerBoundary(index int) float64 {
+func LowerBoundary(index, scale int) float64 {
     // Use this form in case the equation above computes +Inf
     // as the lower boundary of a valid bucket.
     inverseFactor := math.Ldexp(math.Ln2, -scale)
-    return 2.0 * math.Exp((index - (1 << scale)) * inverseFactor), nil
+    return 2.0 * math.Exp((index - (1 << scale)) * inverseFactor)
 }
 ```
 
