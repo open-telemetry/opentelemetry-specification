@@ -410,8 +410,8 @@ From an input sampling ratio, a rejection threshold value is calculated; see [co
 
 A Trace configured with sampling threshold `T`, a 56-bit unsigned number corresponding with the sampling ratio, has `ShouldSample()` called for a trace having randomness value `R`, a 56-bit unsigned random number.
 
-* If randomness value (R) is less than rejection threshold (T), meaning when (R < T), return `RECORD_AND_SAMPLE`, otherwise, return `DROP`.
-* When (R < T), the OpenTelemetry TraceState SHOULD be modified to include the key-value `th:T` for rejection threshold value (T), as specified for the [OpenTelemetry TraceState `th` sub-key][TRACESTATEHANDLING].
+* If randomness value (R) is greater or equal to the rejection threshold (T), meaning when (R >= T), return `RECORD_AND_SAMPLE`, otherwise, return `DROP`.
+* When (R >= T), the OpenTelemetry TraceState SHOULD be modified to include the key-value `th:T` for rejection threshold value (T), as specified for the [OpenTelemetry TraceState `th` sub-key][TRACESTATEHANDLING].
 
 [TRACESTATEHANDLING]: ./tracestate-handling.md#sampling-threshold-value-th
 
