@@ -35,6 +35,9 @@ release.
 
 ### Common
 
+- Update instrumentation library guidance to avoid naming collisions between external and OTel instrumentations.
+  ([#4187](https://github.com/open-telemetry/opentelemetry-specification/pull/4187))
+
 ### Supplementary Guidelines
 
 ## v1.36.0 (2024-08-12)
