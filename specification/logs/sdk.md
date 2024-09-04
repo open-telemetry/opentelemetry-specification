@@ -324,6 +324,9 @@ therefore it SHOULD NOT block or throw exceptions.
 
 **Returns:** `Void`
 
+For a `LogRecordProcessor` registered directly on SDK `LoggerProvider`,
+the `logRecord` mutations MUST be visible in next registered processors.
+
 A `LogRecordProcessor` may freely modify `logRecord` for the duration of
 the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
 asynchronous processing) only reads are permitted.
