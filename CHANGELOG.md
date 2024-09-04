@@ -21,6 +21,9 @@ release.
 
 ### Logs
 
+- Clarify that log record mutations are visible in next registered processors.
+  ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
+
 ### Events
 
 ### Baggage
