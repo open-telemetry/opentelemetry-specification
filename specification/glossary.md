@@ -115,8 +115,8 @@ Synonym: *Auto-instrumentation*.
 
 ### Natively instrumented
 
-Denotes a library or application that has built-in instrumentation by using the OpenTelemetry API directly, thus
-*Instrumented Library* and *Instrumentation Library* are the same library.
+Denotes a library or application that uses the OpenTelemetry API directly to provide built-in instrumentation, thus
+*instrumented library* and *instrumentation library* are the same library.
 
 If a separate *instrumentation library* or a plugin is required to instrument a library or application,
 that *instrumented library* or application must not be called *natively instrumented*, even if the
