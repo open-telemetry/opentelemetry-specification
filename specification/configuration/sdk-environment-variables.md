@@ -278,15 +278,15 @@ In addition to the above, the following environment variables are added for expe
 
 Additional known values for `OTEL_TRACES_EXPORTER` are:
 
-- `"otlp-stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
+- `"otlp/stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
 
 Additional known values for `OTEL_METRICS_EXPORTER` are:
 
-- `"otlp-stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
+- `"otlp/stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
 
 Additional known values for `OTEL_LOGS_EXPORTER` are:
 
-- `"otlp-stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
+- `"otlp/stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
 
 ## Metrics SDK Configuration
 
