@@ -42,6 +42,8 @@ release.
 
 - Update instrumentation library guidance to avoid naming collisions between external and OTel instrumentations.
   ([#4187](https://github.com/open-telemetry/opentelemetry-specification/pull/4187))
+- Add natively instrumented to glossary.
+  ([#4186](https://github.com/open-telemetry/opentelemetry-specification/pull/4186))
 
 ### Supplementary Guidelines
 
