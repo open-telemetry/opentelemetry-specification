@@ -23,6 +23,8 @@ release.
 
 - Clarify that log record mutations are visible in next registered processors.
   ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
+- Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
+  ([#4173](https://github.com/open-telemetry/opentelemetry-specification/pull/4173))
 
 ### Events
 
@@ -40,6 +42,8 @@ release.
 
 - Update instrumentation library guidance to avoid naming collisions between external and OTel instrumentations.
   ([#4187](https://github.com/open-telemetry/opentelemetry-specification/pull/4187))
+- Add natively instrumented to glossary.
+  ([#4186](https://github.com/open-telemetry/opentelemetry-specification/pull/4186))
 
 ### Supplementary Guidelines
 
