@@ -32,6 +32,7 @@ aliases:
 - [Zipkin Exporter](#zipkin-exporter)
 - [Prometheus Exporter](#prometheus-exporter)
 - [Exporter Selection](#exporter-selection)
+  * [In-development Exporter Selection](#in-development-exporter-selection)
 - [Metrics SDK Configuration](#metrics-sdk-configuration)
   * [Exemplar](#exemplar)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
