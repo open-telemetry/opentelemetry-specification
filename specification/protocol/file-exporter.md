@@ -99,7 +99,7 @@ If a language provides a mechanism to automatically configure a
 Span or Traces processor to pair with the associated
 exporter (e.g., using the [`OTEL_TRACES_EXPORTER` environment
 variable](../configuration/sdk-environment-variables.md#exporter-selection)), by
-default the standard output exporter SHOULD be paired with a batching
+default the OpenTelemetry Protocol File Exporter SHOULD be paired with a batching
 processor.
 
 #### Programmatic configuration
