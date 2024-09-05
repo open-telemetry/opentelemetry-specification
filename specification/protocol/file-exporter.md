@@ -96,7 +96,7 @@ The metric exporter MUST support the environment variables defined in the
 specification.
 
 If a language provides a mechanism to automatically configure a
-Span or Traces processor to pair with the associated
+span or logs processor to pair with the associated
 exporter (e.g., using the [`OTEL_TRACES_EXPORTER` environment
 variable](../configuration/sdk-environment-variables.md#exporter-selection)), by
 default the OpenTelemetry Protocol File Exporter SHOULD be paired with a batching
