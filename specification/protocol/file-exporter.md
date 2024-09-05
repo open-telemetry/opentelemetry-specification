@@ -12,7 +12,7 @@ exporting to either a file or stdout.
 Currently, it only describes the serialization of OpenTelemetry data to the OTLP JSON format.
 
 ## Table of Contents
-        
+
 - [Exporter configuration](#exporter-configuration)
   - [Programmatic configuration](#programmatic-configuration)
 - [JSON File serialization](#json-file-serialization)
@@ -21,7 +21,6 @@ Currently, it only describes the serialization of OpenTelemetry data to the OTLP
     - [Streaming appending](#streaming-appending)
   - [Telemetry data requirements](#telemetry-data-requirements)
   - [Examples](#examples)
-
 
 ## Exporter configuration
 
