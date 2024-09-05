@@ -270,23 +270,23 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for logs.
 
-### Experimental Exporter Selection
+### In-development Exporter Selection
 
 **Status**: [Development](../document-status.md)
 
-In addition to the above, the following environment variables are added for experimental exporter selection:
+In addition to the above, the following environment variables are added for in-development exporter selection:
 
 Additional known values for `OTEL_TRACES_EXPORTER` are:
 
-- `"otlp/stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
+- `"otlp/stdout"`: [OTLP File](../protocol/file-exporter.md) writing to standard output
 
 Additional known values for `OTEL_METRICS_EXPORTER` are:
 
-- `"otlp/stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
+- `"otlp/stdout"`: [OTLP File](../protocol/file-exporter.md) writing to standard output
 
 Additional known values for `OTEL_LOGS_EXPORTER` are:
 
-- `"otlp/stdout"`: [OTLP Stdout](../protocol/file-exporter.md#stdout-exporter)
+- `"otlp/stdout"`: [OTLP File](../protocol/file-exporter.md) writing to standard output
 
 ## Metrics SDK Configuration
 
