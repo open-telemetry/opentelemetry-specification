@@ -24,6 +24,26 @@ Currently, it only describes the serialization of OpenTelemetry data to the OTLP
       - [Configuration](#configuration)
       - [Programmatic configuration](#programmatic-configuration)
 
+
+## Exporter configuration
+
+The metric exporter MUST support the environment variables defined in the
+[OTLP Exporter](../metrics/sdk_exporters/otlp.md#additional-environment-variable-configuration)
+specification.
+
+If a language provides a mechanism to automatically configure a
+span or logs processor to pair with the associated
+exporter (e.g., using the [`OTEL_TRACES_EXPORTER` environment
+variable](../configuration/sdk-environment-variables.md#exporter-selection)), by
+default the OpenTelemetry Protocol File Exporter SHOULD be paired with a batching
+processor.
+
+### Programmatic configuration
+
+| Requirement | Name                       | Description                                                                                            | Default |
+|-------------|----------------------------|--------------------------------------------------------------------------------------------------------|---------|
+| MUST        | output stream (or similar) | Configure output stream. This SHOULD include the possibility to configure the output stream to a file. | stdout  |
+
 ## JSON File serialization
 
 This document describes the serialization of OpenTelemetry data as JSON objects that can be stored in files.
@@ -84,22 +104,3 @@ This is an example showing logs:
 {"resourceLogs":[{"resource":{"attributes":[{"key":"resource-attr","value":{"stringValue":"resource-attr-val-1"}}]},"scopeLogs":[{"scope":{},"logRecords":[{"timeUnixNano":"1581452773000005443","severityNumber":9,"severityText":"Info","body":{"stringValue":"This is a log message"},"attributes":[{"key":"app","value":{"stringValue":"server"}},{"key":"instance_num","value":{"intValue":"1"}}],"droppedAttributesCount":1,"traceId":"08040201000000000000000000000000","spanId":"0102040800000000"},{"timeUnixNano":"1581452773000000789","severityNumber":9,"severityText":"Info","body":{"stringValue":"something happened"},"attributes":[{"key":"customer","value":{"stringValue":"acme"}},{"key":"env","value":{"stringValue":"dev"}}],"droppedAttributesCount":1,"traceId":"","spanId":""}]}]}]}
 {"resourceLogs":[{"resource":{"attributes":[{"key":"resource-attr","value":{"stringValue":"resource-attr-val-1"}}]},"scopeLogs":[{"scope":{},"logRecords":[{"timeUnixNano":"1581452773000009875","severityNumber":9,"severityText":"Info","body":{"stringValue":"This is a log message"},"attributes":[{"key":"app","value":{"stringValue":"server"}},{"key":"instance_num","value":{"intValue":"1"}}],"droppedAttributesCount":1,"traceId":"08040201000000000000000000000000","spanId":"0102040800000000"},{"timeUnixNano":"1581452773000000789","severityNumber":9,"severityText":"Info","body":{"stringValue":"something happened"},"attributes":[{"key":"customer","value":{"stringValue":"acme"}},{"key":"env","value":{"stringValue":"dev"}}],"droppedAttributesCount":1,"traceId":"","spanId":""}]}]}]}
 ```
-
-## Exporter configuration
-
-The metric exporter MUST support the environment variables defined in the
-[OTLP Exporter](../metrics/sdk_exporters/otlp.md#additional-environment-variable-configuration)
-specification.
-
-If a language provides a mechanism to automatically configure a
-span or logs processor to pair with the associated
-exporter (e.g., using the [`OTEL_TRACES_EXPORTER` environment
-variable](../configuration/sdk-environment-variables.md#exporter-selection)), by
-default the OpenTelemetry Protocol File Exporter SHOULD be paired with a batching
-processor.
-
-#### Programmatic configuration
-
-| Requirement | Name                       | Description                                                                                            | Default |
-|-------------|----------------------------|--------------------------------------------------------------------------------------------------------|---------|
-| MUST        | output stream (or similar) | Configure output stream. This SHOULD include the possibility to configure the output stream to a file. | stdout  |
