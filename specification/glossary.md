@@ -21,7 +21,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [In-band and Out-of-band Data](#in-band-and-out-of-band-data)
   * [Manual Instrumentation](#manual-instrumentation)
   * [Automatic Instrumentation](#automatic-instrumentation)
-  * [Natively instrumented](#natively-instrumented)
+  * [Natively Instrumented](#natively-instrumented)
   * [Telemetry SDK](#telemetry-sdk)
   * [Constructors](#constructors)
   * [SDK Plugins](#sdk-plugins)
@@ -113,7 +113,7 @@ monkey patching, or running eBPF programs.
 
 Synonym: *Auto-instrumentation*.
 
-### Natively instrumented
+### Natively Instrumented
 
 Denotes a library or application that uses the OpenTelemetry API directly to provide built-in instrumentation, thus
 *instrumented library* and *instrumentation library* are the same library.
