@@ -364,10 +364,6 @@ The SDK MUST accept the following stream configuration parameters:
   keys that identify the attributes that MUST be kept, and all other attributes
   MUST be ignored.
 
-  Additionally, implementations SHOULD support configuring an exclude-list of
-  attribute keys. The exclude-list contains attribute keys that identify the
-  attributes that MUST be excluded, all other attributes MUST be kept.
-
   Implementations MAY accept additional attribute filtering functionality for
   this parameter.
 
@@ -378,6 +374,12 @@ The SDK MUST accept the following stream configuration parameters:
   the [`Attributes`](./api.md#instrument-advisory-parameters) advisory
   parameter configured on the instrument instead. If the `Attributes`
   advisory parameter is absent, all attributes MUST be kept.
+
+  Additionally, implementations SHOULD support configuring an exclude-list of
+  attribute keys. The exclude-list contains attribute keys that identify the
+  attributes that MUST be excluded, all other attributes MUST be kept. If an
+  attribute key is both included and excluded, implementations MAY cause the
+  application to fail on initialization.
 
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
