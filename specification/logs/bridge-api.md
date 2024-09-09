@@ -122,9 +122,8 @@ The API MUST accept the following parameters:
 - [Timestamp](./data-model.md#field-timestamp)
 - [Observed Timestamp](./data-model.md#field-observedtimestamp). If unspecified the
   implementation SHOULD set it equal to the current time.
-- The [Context](../context/README.md) associated with the `LogRecord`. The API
-  MAY implicitly use the current Context as a default
-  behavior.
+- The [Context](../context/README.md) associated with the `LogRecord`.
+  When implicit Context is supported, the current Context SHOULD be used by default.
 - [Severity Number](./data-model.md#field-severitynumber)
 - [Severity Text](./data-model.md#field-severitytext)
 - [Body](./data-model.md#field-body)
@@ -141,8 +140,8 @@ generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
 
 The API SHOULD accept the following parameters:
 
-- The [Context](../context/README.md) associated with the `LogRecord`. The API
-  MAY implicitly use the current Context as a default behavior.
+- The [Context](../context/README.md) to be associated with the `LogRecord`.
+  When implicit Context is supported, the current Context SHOULD be used by default.
 - [Severity Number](./data-model.md#field-severitynumber)
 
 All parameters MUST be optional.
