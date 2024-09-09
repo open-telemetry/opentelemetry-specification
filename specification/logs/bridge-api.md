@@ -119,17 +119,17 @@ The effect of calling this API is to emit a `LogRecord` to the processing pipeli
 
 The API MUST accept the following parameters:
 
-- [Timestamp](./data-model.md#field-timestamp)
-- [Observed Timestamp](./data-model.md#field-observedtimestamp). If unspecified the
+- [Timestamp](./data-model.md#field-timestamp) (optional)
+- [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified the
   implementation SHOULD set it equal to the current time.
 - The [Context](../context/README.md) associated with the `LogRecord`.
-  When implicit Context is supported, the current Context SHOULD be used by default.
-- [Severity Number](./data-model.md#field-severitynumber)
-- [Severity Text](./data-model.md#field-severitytext)
-- [Body](./data-model.md#field-body)
-- [Attributes](./data-model.md#field-attributes)
-
-All parameters are optional.
+  When implicit Context is supported, then this parameter SHOULD be optional and
+  if unspecified then MUST use current Context.
+  When only explicit Context is supported, this parameter SHOULD be required.
+- [Severity Number](./data-model.md#field-severitynumber) (optional)
+- [Severity Text](./data-model.md#field-severitytext) (optional)
+- [Body](./data-model.md#field-body) (optional)
+- [Attributes](./data-model.md#field-attributes) (optional)
 
 #### Enabled
 
@@ -141,10 +141,10 @@ generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
 The API SHOULD accept the following parameters:
 
 - The [Context](../context/README.md) to be associated with the `LogRecord`.
-  When implicit Context is supported, the current Context SHOULD be used by default.
-- [Severity Number](./data-model.md#field-severitynumber)
-
-All parameters MUST be optional.
+  When implicit Context is supported, then this parameter SHOULD be optional and
+  if unspecified then MUST use current Context.
+  When only explicit Context is supported, this parameter SHOULD be required.
+- [Severity Number](./data-model.md#field-severitynumber) (optional)
 
 Parameters can be added in the future, therefore,
 the API MUST be structured in a way for parameters to be added.
