@@ -146,8 +146,8 @@ The API SHOULD accept the following parameters:
   When only explicit Context is supported, this parameter SHOULD be required.
 - [Severity Number](./data-model.md#field-severitynumber) (optional)
 
-Parameters can be added in the future, therefore,
-the API MUST be structured in a way for parameters to be added.
+Optional parameters can be added in the future, therefore,
+the API MUST be structured in a way for optional parameters to be added.
 
 It SHOULD be possible to distinguish between an unset parameter value from
 a parameter value set explicitly to a valid default value of given type
