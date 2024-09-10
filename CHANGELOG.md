@@ -16,6 +16,8 @@ release.
 - Clarify `SpanKind` description, extend it to cover links, add examples of
   nested client spans.
   ([#4178](https://github.com/open-telemetry/opentelemetry-specification/pull/4178))
+- Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
+  ([#4205](https://github.com/open-telemetry/opentelemetry-specification/pull/4205))
 
 ### Metrics
 
