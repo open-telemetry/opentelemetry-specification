@@ -1375,6 +1375,9 @@ Configurable parameters:
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
 
+The processor MUST synchronize calls to `MetricExporter`'s `Export`
+to make sure that they are not invoked concurrently.
+
 One possible implementation of periodic exporting MetricReader is to inherit
 from `MetricReader` and start a background task which calls the inherited
 `Collect()` method at the requested `exportIntervalMillis`. The reader's
@@ -1485,8 +1488,8 @@ and transmit the data to the destination.
 The SDK MUST provide a way for the exporter to get the [Meter](./api.md#meter)
 information (e.g. name, version, etc.) associated with each `Metric Point`.
 
-`Export` will never be called concurrently for the same exporter instance.
-`Export` can be called again only after the current call returns.
+`Export` should never be called concurrently with other `Export` calls for the
+same exporter instance.
 
 `Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (Failure).
