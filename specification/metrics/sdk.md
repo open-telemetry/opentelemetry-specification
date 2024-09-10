@@ -1375,7 +1375,7 @@ Configurable parameters:
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
 
-The processor MUST synchronize calls to `MetricExporter`'s `Export`
+The reader MUST synchronize calls to `MetricExporter`'s `Export`
 to make sure that they are not invoked concurrently.
 
 One possible implementation of periodic exporting MetricReader is to inherit
