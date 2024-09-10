@@ -7,6 +7,7 @@ This document defines the required attributes of [`Mapping`](https://github.com/
 <!-- toc -->
 
 - [Attributes](#attributes)
+  * [Algorithm for `process.executable.build_id.profiling`](#algorithm-for-processexecutablebuild_idprofiling)
 
 <!-- tocstop -->
 
