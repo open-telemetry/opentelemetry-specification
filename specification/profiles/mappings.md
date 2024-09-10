@@ -2,7 +2,7 @@
 
 **Status**: [Development](../document-status.md), except where otherwise specified
 
-This document defines the required attributes of [`Mapping`](https://github.com/open-telemetry/oteps/blob/main/text/profiles/0239-profiles-data-model.md#message-mapping)s.
+This document defines the required attributes of [`Mapping`](https://github.com/open-telemetry/oteps/blob/main/text/profiles/0239-profiles-data-model.md#message-mapping) messages.
 
 <!-- toc -->
 
@@ -20,13 +20,13 @@ attributes:
 - `process.executable.build_id.go`
 - `process.executable.build_id.profiling`
 
-If possible all the above listed attributes SHOULD be present in a `Mapping`.
+If possible all the above listed attributes SHOULD be present in a `Mapping`. To promote interoperability, it is RECOMMENDED for `process.executable.build_id.profiling` to be present in every `Mapping`.
 
 ### Algorithm for `process.executable.build_id.profiling`
 
 In some environments GNU and/or Go build_id values are stripped or not usable - for example Alpine
-Linux which is often used as a base for Docker environments. In such cases, profiling generates
-build ids using a specified algorithm. The algorithm hashes the first and last page of a file
-together with its length:
+Linux which is often used as a base for Docker environments. For that reason and to promote interoperability, a deterministic build_id generation algorithm that hashes the first and last page of a file together with its length is defined as:
 
-SHA256(first4k, last4k, fileLen)
+TRUNC(SHA256(first4k, last4k, fileLen))
+
+where `TRUNC` returns the first 16bytes of the input, `fileLen` is the 8byte big-endian serialization of the file length and `first4k`, `last4k` are the first and last 4096 bytes of the file (may overlap).
