@@ -143,7 +143,7 @@ The API SHOULD accept the following parameters:
 - The [Context](../context/README.md) to be associated with the `LogRecord`.
   When implicit Context is supported, then this parameter SHOULD be optional and
   if unspecified then MUST use current Context.
-  When only explicit Context is supported, this parameter SHOULD be required.
+  When only explicit Context is supported, accepting this parameter is REQUIRED.
 - [Severity Number](./data-model.md#field-severitynumber) (optional)
 
 Additional optional parameters can be added in the future, therefore,
