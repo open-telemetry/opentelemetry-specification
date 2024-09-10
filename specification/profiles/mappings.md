@@ -29,4 +29,4 @@ Linux which is often used as a base for Docker environments. For that reason and
 
 TRUNC(SHA256(first4k, last4k, fileLen))
 
-where `TRUNC` returns the first 16bytes of the input, `fileLen` is the 8byte big-endian serialization of the file length and `first4k`, `last4k` are the first and last 4096 bytes of the file (may overlap).
+where `TRUNC` returns the first 16bytes of the resulting digest, input to `SHA256` is passed left to right, `first4k`, `last4k` are the first and last 4096 bytes of the file (may overlap) and `fileLen` is the 8byte big-endian serialization of the file length.
