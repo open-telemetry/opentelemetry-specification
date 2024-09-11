@@ -1,0 +1,28 @@
+name: "Mark issues for followup"
+on:
+  schedule:
+    - cron: "12 4 * * *" # arbitrary time not to DDOS GitHub
+  workflow_dispatch:
+
+jobs:
+  followup:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./.github/scripts/triage-helper
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pipenv wheel
+      - name: Install dependencies
+        run: |
+          pipenv install --deploy --dev
+      - name: Run script
+        run: |
+          pipenv run python app.py --dry-run open-telemetry/opentelemetry-specification
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
