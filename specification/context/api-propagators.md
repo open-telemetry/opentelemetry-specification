@@ -358,14 +358,14 @@ the Core OpenTelemetry repositories.
 
 ### W3C Trace Context Requirements
 
-A W3C Trace Context propagator MUST parse and set the `traceparent` and `tracestate` HTTP headers as specified in [W3C Trace Context Level 2](https://www.w3.org/TR/trace-context-2/).
+A W3C Trace Context propagator MUST parse and validate the `traceparent` and `tracestate` HTTP headers as specified in [W3C Trace Context Level 2](https://www.w3.org/TR/trace-context-2/).  A W3C Trace Context propagator MUST propagate a valid `traceparent` value using the same header.  A W3C Trace Context propagator MUST propagate a valid `tracestate` unless the value is empty, in which case the `tracestate` header may be omitted.
 
 When injecting and extracting trace context to or from a carrier, the following fields from the `SpanContext` are propagated.
 
 - TraceID (16 bytes)
 - SpanID (8 bytes)
 - TraceFlags (8 bits)
-- TraceState (string)
+- TraceState (string, unless empty)
 
 ### B3 Requirements
 
