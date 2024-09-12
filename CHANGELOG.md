@@ -20,6 +20,7 @@ release.
 ### Metrics
 
 - Clarify that `Enabled` only applies to synchronous instruments.
+  ([#4211](https://github.com/open-telemetry/opentelemetry-specification/pull/4211))
 
 ### Logs
 
