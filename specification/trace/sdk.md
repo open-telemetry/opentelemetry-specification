@@ -584,16 +584,19 @@ an interface like the java example below (name of the interface MAY be
 [SpanContext](./api.md#retrieving-the-traceid-and-spanid)), which provides
 extension points for two methods, one to generate a `SpanId` and one for `TraceId`.
 
-Custom implementations of the `IdGenerator` SHOULD support setting the
-W3C Trace Context `random` flag when generated TraceID values meet the
-[W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID].
-
 ```java
 public interface IdGenerator {
   byte[] generateSpanIdBytes();
   byte[] generateTraceIdBytes();
 }
 ```
+
+Custom implementations of the `IdGenerator` SHOULD support setting the
+W3C Trace Context `random` flag when all generated TraceID values meet
+the [W3C Trace Context Level 2 randomness
+requirements][W3CCONTEXTTRACEID].  This is presumed to be a static
+property of the `IdGenerator` implementation which can be inferred
+using language features, for example by extending a marker interface.
 
 Additional `IdGenerator` implementing vendor-specific protocols such as AWS
 X-Ray trace id generator MUST NOT be maintained or distributed as part of the
