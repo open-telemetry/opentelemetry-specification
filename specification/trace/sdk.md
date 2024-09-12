@@ -488,7 +488,7 @@ The [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation include
 This flag indicates that [the least-significant ("rightmost") 7 bytes or 56 bits of the TraceID are random][W3CCONTEXTTRACEID].
 
 Note the Random flag does not propagate through [Trace Context Level 1][W3CCONTEXTLEVEL1] implementations, which do not recognize the flag.
-Therefore, this flag is considered meaningful only when it is set on a root span context.
+When this flag is 1, it is considered meaningful.  When this flag is 0, it may be due to a non-random TraceID or because a Trace Context Level 1 propagator was used.
 To enable sampling in this and other situations where TraceIDs lack sufficient randomness,
 OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encoded in the [W3C TraceState field][W3CCONTEXTTRACESTATE].
 
@@ -583,6 +583,10 @@ an interface like the java example below (name of the interface MAY be
 `IdGenerator`, name of the methods MUST be consistent with
 [SpanContext](./api.md#retrieving-the-traceid-and-spanid)), which provides
 extension points for two methods, one to generate a `SpanId` and one for `TraceId`.
+
+Custom implementations of the `IdGenerator` SHOULD support setting the
+W3C Trace Context `random` flag when generated TraceID values meet the
+[W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID].
 
 ```java
 public interface IdGenerator {
