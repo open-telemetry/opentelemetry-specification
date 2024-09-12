@@ -87,7 +87,7 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     | +      | +    | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     | +      |      |        | +   |      |     |      |       |
-| TraceIdRatioBased implements OpenTelemetry tracestate `th` field                                 |          |     |      |     |        |      |        |     |      |     |      |       |
+| TraceIdRatioBased and AlwaysOn samplers implements OpenTelemetry tracestate `th` field           |          |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
