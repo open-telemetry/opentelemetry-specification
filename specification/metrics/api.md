@@ -486,7 +486,8 @@ All instruments SHOULD provide functions to:
 **Status**: [Development](../document-status.md)
 
 To help users avoid performing computationally expensive operations when
-recording measurements, instruments SHOULD provide this `Enabled` API.
+recording measurements, [synchronous Instrument](#synchronous-instrument-api)
+SHOULD provide this `Enabled` API.
 
 There are currently no required parameters for this API. Parameters can be
 added in the future, therefore, the API MUST be structured in a way for

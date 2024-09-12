@@ -19,6 +19,8 @@ release.
 
 ### Metrics
 
+- Clarify that `Enabled` only applies to synchronous instruments.
+
 ### Logs
 
 - Clarify that log record mutations are visible in next registered processors.
