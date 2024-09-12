@@ -17,12 +17,20 @@ release.
   ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
 - Minor clarification on BatchExportingProcessor behavior.
   ([#4164](https://github.com/open-telemetry/opentelemetry-specification/pull/4164))
+- Clarify `SpanKind` description, extend it to cover links, add examples of
+  nested client spans.
+  ([#4178](https://github.com/open-telemetry/opentelemetry-specification/pull/4178))
 - Define randomness value requirements for W3C Trace Context Level 2.
   ([#4162](https://github.com/open-telemetry/opentelemetry-specification/pull/4162))
 
 ### Metrics
 
 ### Logs
+
+- Clarify that log record mutations are visible in next registered processors.
+  ([#4067](https://github.com/open-telemetry/opentelemetry-specification/pull/4067))
+- Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
+  ([#4173](https://github.com/open-telemetry/opentelemetry-specification/pull/4173))
 
 ### Events
 
@@ -40,6 +48,8 @@ release.
 
 - Update instrumentation library guidance to avoid naming collisions between external and OTel instrumentations.
   ([#4187](https://github.com/open-telemetry/opentelemetry-specification/pull/4187))
+- Add natively instrumented to glossary.
+  ([#4186](https://github.com/open-telemetry/opentelemetry-specification/pull/4186))
 
 ### Supplementary Guidelines
 

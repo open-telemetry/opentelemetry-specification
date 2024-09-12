@@ -274,8 +274,6 @@ NOT be supported by new implementations.
 
 ### Exemplar
 
-**Status**: [Development](../document-status.md)
-
 | Name            | Description | Default | Notes |
 |-----------------|---------|-------------|---------|
 | `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"trace_based"` | |

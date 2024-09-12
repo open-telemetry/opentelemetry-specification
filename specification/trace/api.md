@@ -750,68 +750,65 @@ This functionality MUST be fully implemented in the API, and SHOULD NOT be overr
 
 ## SpanKind
 
-`SpanKind` describes the relationship between the Span, its parents,
-and its children in a Trace.  `SpanKind` describes two independent
-properties that benefit tracing systems during analysis.
+`SpanKind` clarifies the relationship between Spans that are correlated via
+parent/child relationships or span links. `SpanKind` describes two independent
+properties that benefit tracing systems during analysis:
 
-The first property described by `SpanKind` reflects whether the Span
-is a "logical" remote child or parent. By "logical", we mean that
-the span is logically a remote child or parent, from the point of view
-of the library that is being instrumented. Spans with a remote parent are
-interesting because they are sources of external load.  Spans with a
-remote child are interesting because they reflect a non-local system
-dependency.
-
-The second property described by `SpanKind` reflects whether a child
-Span represents a synchronous call.  When a child span is synchronous,
-the parent is expected to wait for it to complete under ordinary
-circumstances.  It can be useful for tracing systems to know this
-property, since synchronous Spans may contribute to the overall trace
-latency. Asynchronous scenarios can be remote or local.
+1. Whether span represents an outgoing call to a remote service (`CLIENT` and
+   `PRODUCER` spans) or a processing of an incoming request initiated externally (`SERVER`
+   and `CONSUMER` spans).
+2. Whether a Span represents a request/response operation (`CLIENT` and `SERVER`
+   spans) or a deferred execution (`PRODUCER` and `CONSUMER` spans).
 
 In order for `SpanKind` to be meaningful, callers SHOULD arrange that
 a single Span does not serve more than one purpose.  For example, a
-server-side span SHOULD NOT be used directly as the parent of another
-remote span.  As a simple guideline, instrumentation should create a
-new Span prior to extracting and serializing the SpanContext for a
-remote call.
+server-side span SHOULD NOT be used to describe outgoing remote procedure call.
+As a simple guideline, instrumentation should create a
+new Span prior to injecting the `SpanContext` for a remote outgoing call.
 
-Note: there are complex scenarios where a CLIENT span may have a child
-that is also logically a CLIENT span, or a PRODUCER span might have a local child
-that is a CLIENT span, depending on how the various libraries that are providing
-the functionality are built and instrumented. These scenarios, when they occur,
-should be detailed in the semantic conventions appropriate to the relevant
-libraries.
+Note: A `CLIENT` span may have a child that is also a `CLIENT` span, or a
+`PRODUCER` span might have a local child that is a `CLIENT` span,
+depending on how the various components that are providing the functionality
+are built and instrumented.
 
-These are the possible SpanKinds:
+[Semantic conventions](../../specification/overview.md#semantic-conventions) for
+specific technologies should document kind for each span they define.
 
-* `SERVER` Indicates that the span covers server-side handling of a
-  synchronous RPC or other remote request.  This span is often the child
-  of a remote `CLIENT` span that was expected to wait for a response.
-* `CLIENT` Indicates that the span describes a request to
-  some remote service.  This span is usually the parent of a remote `SERVER`
-  span and does not end until the response is received.
-* `PRODUCER` Indicates that the span describes the initiators of an
-  asynchronous request.  This parent span will often end before
-  the corresponding child `CONSUMER` span, possibly even before the
-  child span starts. In messaging scenarios with batching, tracing
-  individual messages requires a new `PRODUCER` span per message to
-  be created.
-* `CONSUMER` Indicates that the span describes a child of an
-  asynchronous `PRODUCER` request.
+For instance, [Database Client Semantic Conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/database-spans.md)
+recommend using `CLIENT` span kind to describes database calls.
+If the database client communicate to the server over HTTP, the HTTP
+instrumentation (when enabled) creates nested `CLIENT` spans to track individual
+HTTP calls performed in the scope of logical database `CLIENT` operation.
+
+These are the possible `SpanKind`s:
+
+* `SERVER` indicates that the span covers server-side handling of a remote
+  request while the client awaits a response.
+* `CLIENT` indicates that the span describes a request to a remote service where
+  the client awaits a response.
+  When the context of a `CLIENT` span is propagated, `CLIENT` span usually
+  becomes a parent of a remote `SERVER` span.
+* `PRODUCER` indicates that the span describes the initiation or scheduling
+  of a local or remote operation. This initiating span often ends before the
+  correlated `CONSUMER` span, possibly even before the `CONSUMER` span starts.
+
+  In messaging scenarios with batching, tracing individual messages requires
+  a new `PRODUCER` span per message to be created.
+* `CONSUMER` indicates that the span represents the processing of an operation
+  initiated by a producer, where the producer does not wait for the outcome.
 * `INTERNAL` Default value. Indicates that the span represents an
   internal operation within an application, as opposed to an
   operations with remote parents or children.
 
 To summarize the interpretation of these kinds:
 
-| `SpanKind` | Synchronous | Asynchronous | Remote Incoming | Remote Outgoing |
-|---|---|---|---|---|
-| `CLIENT` | yes | | | yes |
-| `SERVER` | yes | | yes | |
-| `PRODUCER` | | yes | | maybe |
-| `CONSUMER` | | yes | maybe | |
-| `INTERNAL` | | | | |
+| `SpanKind` | Call direction | Communication style |
+|------------|----------------|---------------------|
+| `CLIENT`   |   outgoing     |   request/response  |
+| `SERVER`   |   incoming     |   request/response  |
+| `PRODUCER` |   outgoing     |  deferred execution |
+| `CONSUMER` |   incoming     |  deferred execution |
+| `INTERNAL` |                |                     |
 
 ## Link
 
