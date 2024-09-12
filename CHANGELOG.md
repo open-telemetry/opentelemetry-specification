@@ -11,10 +11,6 @@ release.
 
 ### Traces
 
-- Remove restriction that sampler description is immutable.
-  ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
-- Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
-  ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
 - Minor clarification on BatchExportingProcessor behavior.
   ([#4164](https://github.com/open-telemetry/opentelemetry-specification/pull/4164))
 - Clarify `SpanKind` description, extend it to cover links, add examples of
