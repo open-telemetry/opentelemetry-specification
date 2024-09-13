@@ -19,6 +19,9 @@ release.
 
 ### Metrics
 
+- Clarify that `Export` MUST NOT be called by periodic exporting MetricReader concurrently.
+  ([#4206](https://github.com/open-telemetry/opentelemetry-specification/pull/4206))
+
 ### Logs
 
 - Clarify that log record mutations are visible in next registered processors.
