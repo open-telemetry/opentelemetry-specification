@@ -27,6 +27,10 @@ If possible all the above listed attributes SHOULD be present in a `Mapping`. To
 In some environments GNU and/or Go build_id values are stripped or not usable - for example Alpine
 Linux which is often used as a base for Docker environments. For that reason and to promote interoperability, a deterministic build_id generation algorithm that hashes the first and last page of a file together with its length is defined as:
 
-TRUNC(SHA256(first4k, last4k, fileLen))
+```
+Input   ← Concat(File[:4096], File[-4096:], BigEndianUInt64(Len(File)))
+Digest  ← SHA256(Input)
+BuildID ← Digest[:16]
+```
 
-where `TRUNC` returns the first 16bytes of the resulting digest, input to `SHA256` is passed left to right, `first4k`, `last4k` are the first and last 4096 bytes of the file (may overlap) and `fileLen` is the 8byte big-endian serialization of the file length.
+where `Input` is the concatenation of the first and last 4096 bytes of the file (may overlap, not padded) and the 8 byte big-endian serialization of the file length. The resulting `BuildID` is the truncation of the hash digest to 16 bytes (128 bits), in hex string form.
