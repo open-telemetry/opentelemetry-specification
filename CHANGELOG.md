@@ -13,9 +13,6 @@ release.
 
 ### Metrics
 
-- Clarify that `Export` MUST NOT be called by periodic exporting MetricReader concurrently.
-  ([#4206](https://github.com/open-telemetry/opentelemetry-specification/pull/4206))
-
 ### Logs
 
 ### Events
@@ -34,7 +31,7 @@ release.
 
 ### Supplementary Guidelines
 
-## v1.37.0 (2024-09-10)
+## v1.37.0 (2024-09-13)
 
 ### Traces
 
@@ -43,6 +40,11 @@ release.
 - Clarify `SpanKind` description, extend it to cover links, add examples of
   nested client spans.
   ([#4178](https://github.com/open-telemetry/opentelemetry-specification/pull/4178))
+
+### Metrics
+
+- Clarify that `Export` MUST NOT be called by periodic exporting MetricReader concurrently.
+  ([#4206](https://github.com/open-telemetry/opentelemetry-specification/pull/4206))
 
 ### Logs
 
@@ -55,6 +57,8 @@ release.
 
 - Define instrumentation configuration API.
   ([#4128](https://github.com/open-telemetry/opentelemetry-specification/pull/4128))
+- Mark exemplar filter env variable config as stable.
+  ([#4191](https://github.com/open-telemetry/opentelemetry-specification/pull/4191))
 
 ### Common
 
