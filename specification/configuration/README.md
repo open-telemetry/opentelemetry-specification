@@ -4,7 +4,7 @@ path_base_for_github_subdir:
   to: configuration/README.md
 --->
 
-# Overview
+# Configuration
 
 OpenTelemetry SDK components are highly configurable. This specification
 outlines the mechanisms by which OpenTelemetry components can be configured. It
