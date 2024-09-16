@@ -11,9 +11,18 @@ release.
 
 ### Traces
 
+- Make all fields as identifying for Tracer.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+
 ### Metrics
 
+- Make all fields as identifying for Meter.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+
 ### Logs
+
+- Make all fields as identifying for Logger.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Events
 
@@ -28,6 +37,9 @@ release.
 ### SDK Configuration
 
 ### Common
+
+- Define attributes equality.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Supplementary Guidelines
 
