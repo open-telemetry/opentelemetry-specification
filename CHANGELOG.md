@@ -38,7 +38,7 @@ release.
 
 ### Common
 
-- Define attributes equality.
+- Define equality for attributes and collection of attributes.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Supplementary Guidelines
