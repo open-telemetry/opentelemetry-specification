@@ -11,17 +11,17 @@ release.
 
 ### Traces
 
-- Make all fields as identifying for Tracer.
+- Make all fields as identifying for Tracer. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Metrics
 
-- Make all fields as identifying for Meter.
+- Make all fields as identifying for Meter. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Logs
 
-- Make all fields as identifying for Logger.
+- Make all fields as identifying for Logger. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Events
