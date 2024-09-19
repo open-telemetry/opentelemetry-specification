@@ -16,6 +16,10 @@ release.
 
 ### Metrics
 
+- Add support for filtering attribute keys for streams via an exclude list.
+  ([#4188](https://github.com/open-telemetry/opentelemetry-specification/pull/4188))
+- Clarify that `Enabled` only applies to synchronous instruments.
+  ([#4211](https://github.com/open-telemetry/opentelemetry-specification/pull/4211))
 - Make all fields as identifying for Meter. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
