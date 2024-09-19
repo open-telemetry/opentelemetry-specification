@@ -1,89 +1,61 @@
-# Issue Management for OpenTelemetry
-
-It's an important community goal for OpenTelemetry that our members find the backlogs
-to be responsive, and easy to take part in. Shared practices will simplify collaboration
-and engagement as well as help standardize on automation and overall project management.
-
-SIGs are encouraged to experiment with labels and backlog management procedures,
-including project board. This document only covers the bare bones of issue management
-which should work the same across all SIGs, to help maintain a responsive backlog and
-allow us to track work across all projects in a similar manner.
+# Issue Management
 
 ## Roles
 
-- OP:
-  - Original Poster. This is the person who has opened or posted the issue.
-- Maintainer (aka Triager, or anyone performing that role):
-  - Person who is triaging the issue by determining its workability. This person is
-    responsible for getting the tickets to one of two stages - 1) `help-wanted`
-    2) `will-not-fix`. They are responsible for triaging by working with the OP to get
-    additional information as needed and analyzing the issue and adding relevant
-    details/information/guidance that would be helpful to the resolution of the issue.
+- Author:
+  - This is the person who has opened or posted the issue.
 - Collaborator:
   - Person(s) that are actually doing the work related to the ticket. Once work is done,
     they work with the Reviewer to get feedback implemented and complete the work. They
     are responsible for making sure issue status labels are up to date.
 - Reviewer:
   - Person whose Approval is needed to merge the PR.
+- Sponsor:
+  - The [specification sponsors](https://github.com/open-telemetry/community/blob/main/community-membership.md#specification-sponsor), identified as the assignee of the issue, is responsible for the completion of the issue.
+- Triager:
+  - This person is responsible for applying appropriate labels as outlined below,
+    following up on issues to ensure they are complete,
+    and closing issues that are too vague or out of scope.
+    They should work closely with the author to analyze the issue and add relevant
+    details/information/guidance that would be helpful to the resolution of the issue.
 
-## Opening an Issue
+## Issue Triage
 
-- An issue is filed by OP.
-- A Maintainer responds and asks clarifying questions within 1-2 business days.
-- The Maintainer processes the issue and labels it as:
-  - `bug`
-  - `enhancement`
-  - `needs-discussion`
-  - `documentation` or
-  - `will-not-fix` (thereby closing the issue with explicit reasons)
-- The Maintainer can also label the issue as
-  - `URGENT` (for critical issues)
-  - `help-wanted` for issues which require work and have no one assigned
-- Once a Collaborator is assigned, please remove `help-wanted` and add `wip` to
-  the issue.
+Issue triagers are responsible for applying the labels defined below which indicate
+what stage of the process an issue is in. There are 3 main categories of triage labels:
+deciding, accepted, and rejected. Within each category, there are several labels
+which provide more context. Following are the definitions of each triage label and when they are applied.
 
-## Closing an Issue
+### `triage:deciding:*`
 
-- Review criteria:
-  - For interface and design changes: 2 approvals - which must be from reviewers
-    who work at different companies than the Collaborator.
-  - For smaller or internal changes: 1 approval from a different company.
-- For `URGENT` issues:
-  - Collaborator: please provide an initial assessment of the issues to OP ASAP or
-    within 1 business day, whichever is earlier.
-  - Reviewer: please review and provide feedback ASAP or within 1 business day,
-    whichever is earlier.
-  - Collaborator: please provide an update and/or response to each review comment ASAP
-    or within 1 business day, whichever is sooner. Merge should happen as soon as
-    review criteria are met.
-- For non-`URGENT` issues
-  - Collaborator: please provide an initial response or assessment of the issue to
-    OP within 3 business days.
-  - Reviewer: please review and provide feedback within 3 business days.
-  - Collaborator: please provide an update and/or response to each review comment
-    within 3 business days. Once all review comments are resolved, please allow
-    1-2 business days for others to raise additional comments/questions, unless
-    the changes are fixing typos, bugs, documentation, test enhancements, or
-    implementing already discussed design.
+These labels are applied to issues when it is unclear yet if they are something the project will take on.
 
-When closing an issue that we `will-not-fix` or we believe need no further
-action, please provide the rationale for closing, and indicate that OP can
-re-open for discussion if there are additional info, justification and
-questions.
+* `triage:deciding:needs-community-feedback` - This issue is open to community discussion. If the community can provide sufficient reasoning, it may be accepted by the project.
+* `triage:deciding:needs-info` - This issue does not provide enough information for the project to accept it. It is left open to provide the author with time to add more details.
+* `triage:deciding:tc-inbox` - This issue needs attention from the TC in order to move forward. It may need TC input for triage, or to unblock a discussion that is deadlocked.
 
-## When Issues Get Stuck
+### `triage:accepted:*`
 
-Some issues are not directly related to a particular code change. If an
-issue is worth considering in the issue backlog, but not scoped clearly
-enough for work to begin, then please label it `needs-discussion`.
+These labels are applied to issues that describe a problem that is in scope and that we would like to tackle.
+Just because an issue is accepted does not mean that a solution suggested by the issue will be the solution applied.
 
-- When possible, move the discussion forward by using tests and code examples.
-- If discussion happens elsewhere, record relevant meeting notes into the
-  issue.
-- When an agreement is made, clearly summarize the decision, and list any
-  resulting action items which need to be addressed.
+* `triage:accepted:ready` - This issue is ready to be implemented. It is either small enough in scope or uncontroversial enough to be implemented without a TC sponsor.
+* `triage:accepted:ready-with-sponsor` - This issue is ready to be implemented and has a specification sponsor assigned.
+* `triage:accepted:needs-sponsor` - This issue is ready to be implemented, but does not yet have a specification sponsor. A pull request without a specification sponsor may not be reviewed in a timely manner.
 
-If an issue is stuck because someone is not responding, please add the `stale`
-label. It is possible to automate this. E.g. <https://github.com/apps/stale>
-The minimum time elapsed before the `stale` label is applied is proposed to be
-one week.
+### `triage:rejected:*`
+
+Rejected issues are issues that describe a problem that cannot or will not be solved by the project in the proposed form.
+
+* `triage:rejected:declined`
+* `triage:rejected:duplicate`
+* `triage:rejected:insufficient-info`
+* `triage:rejected:out-of-scope`
+* `triage:rejected:scope-too-large`
+
+## SIG Specific Issues
+
+Many SIGs track work in the specification repo that is outside of the triage process listed above.
+These issues, which may be created by a SIG or just assigned to them, should be added to the SIG's project board and given the label `sig-issue`.
+If an issue is labeled as a `sig-issue`, it is the responsibility of the SIG to prioritize
+the issue appropriately, and ensure it is completed or closed as won't fix.
