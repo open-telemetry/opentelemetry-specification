@@ -483,7 +483,7 @@ All instruments SHOULD provide functions to:
 
 #### Enabled
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 To help users avoid performing computationally expensive operations when
 recording measurements, [synchronous Instruments](#synchronous-instrument-api)
