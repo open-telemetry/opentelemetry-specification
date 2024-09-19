@@ -1,7 +1,7 @@
 name: "Mark issues for followup"
 on:
   schedule:
-    - cron: "12 4 * * *"  # arbitrary time not to DDOS GitHub
+    - cron: "12 4 * * *"
   workflow_dispatch:
 
 jobs:
@@ -23,6 +23,6 @@ jobs:
           pipenv install --deploy --dev
       - name: Run script
         run: |
-          pipenv run python app.py --dry-run open-telemetry/opentelemetry-specification
+          pipenv run python app.py open-telemetry/opentelemetry-specification
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
