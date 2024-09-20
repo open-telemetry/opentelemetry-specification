@@ -155,6 +155,14 @@ SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
 
+Note: Adding a new paramter is a breaking change.
+This was decided with arguments as follows:
+
+* Allowing expandable set of parameters would decrase the ergonmics in some
+  languages.
+* This operation is optimized for performance, so minimal set of parameters
+  is also desired.
+
 ## Optional and required parameters
 
 The operations defined include various parameters, some of which are marked
