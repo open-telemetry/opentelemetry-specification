@@ -155,7 +155,7 @@ SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
 
-Note: Adding a new parameter is a breaking change.
+Note: Adding a parameter is a breaking change.
 This was decided with arguments as follows:
 
 * Allowing expandable set of parameters would decrase the ergonmics in some
