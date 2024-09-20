@@ -53,7 +53,7 @@ linkTitle: API
 
 </details>
 
-The Tracing API consist of these main components:
+The Tracing API consists of these main components:
 
 - [`TracerProvider`](#tracerprovider) is the entry point of the API.
   It provides access to `Tracer`s.
@@ -99,7 +99,7 @@ Notwithstanding any global `TracerProvider`, some applications may want to or
 have to use multiple `TracerProvider` instances,
 e.g. to have different configuration (like `SpanProcessor`s) for each
 (and consequently for the `Tracer`s obtained from them),
-or because its easier with dependency injection frameworks.
+or because it's easier with dependency injection frameworks.
 Thus, implementations of `TracerProvider` SHOULD allow creating an arbitrary
 number of `TracerProvider` instances.
 
@@ -742,7 +742,7 @@ This functionality MUST be fully implemented in the API, and SHOULD NOT be overr
 parent/child relationships or span links. `SpanKind` describes two independent
 properties that benefit tracing systems during analysis:
 
-1. Whether span represents an outgoing call to a remote service (`CLIENT` and
+1. Whether a span represents an outgoing call to a remote service (`CLIENT` and
    `PRODUCER` spans) or a processing of an incoming request initiated externally (`SERVER`
    and `CONSUMER` spans).
 2. Whether a Span represents a request/response operation (`CLIENT` and `SERVER`
@@ -764,7 +764,7 @@ specific technologies should document kind for each span they define.
 
 For instance, [Database Client Semantic Conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/database-spans.md)
 recommend using `CLIENT` span kind to describes database calls.
-If the database client communicate to the server over HTTP, the HTTP
+If the database client communicates to the server over HTTP, the HTTP
 instrumentation (when enabled) creates nested `CLIENT` spans to track individual
 HTTP calls performed in the scope of logical database `CLIENT` operation.
 

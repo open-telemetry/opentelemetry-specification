@@ -25,6 +25,8 @@ release.
 
 ### Logs
 
+- Define `Enabled` parameters for `Logger`.
+  ([#4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203))
 - Make all fields as identifying for Logger. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
