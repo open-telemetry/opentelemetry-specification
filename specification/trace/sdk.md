@@ -178,7 +178,7 @@ It consists of the following parameters:
   i.e. `Tracer`s are enabled by default).
 
   If a `Tracer` is disabled, it MUST behave equivalently
-  to [No-op Tracer](./api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk).
+  to a [No-op Tracer](./api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk).
 
   The value of `disabled` MUST be used to resolve whether a `Tracer`
   is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
@@ -211,7 +211,7 @@ Thus, the SDK specification defines sets of possible requirements for
   [deprecated since 1.10.0] having the same name and version values as the
   `InstrumentationScope`.
 
-  A function receiving this as argument MUST must be able to reliably determine
+  A function receiving this as argument MUST be able to reliably determine
   whether the Span has ended
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
@@ -253,11 +253,11 @@ the backend.
 
 Sampling may be implemented on different stages of a trace collection. The
 earliest sampling could happen before the trace is actually created, and the
-latest sampling could happen on the Collector which is out of process.
+latest sampling could happen on the Collector, which is out of process.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
-* `IsRecording` field of a `Span`. If `false` the current `Span` discards all
+* `IsRecording` field of a `Span`. If `false`, the current `Span` discards all
   tracing data (attributes, events, status, etc.). Users can use this property
   to determine if collecting expensive trace data can be avoided. [Span
   Processor](#span-processor) MUST receive only those spans which have this

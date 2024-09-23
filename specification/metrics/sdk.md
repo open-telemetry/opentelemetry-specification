@@ -375,6 +375,13 @@ The SDK MUST accept the following stream configuration parameters:
   parameter configured on the instrument instead. If the `Attributes`
   advisory parameter is absent, all attributes MUST be kept.
 
+  Additionally, implementations SHOULD support configuring an exclude-list of
+  attribute keys. The exclude-list contains attribute keys that identify the
+  attributes that MUST be excluded, all other attributes MUST be kept. If an
+  attribute key is both included and excluded, the SDK MAY fail fast in
+  accordance with initialization [error handling
+  principles](../error-handling.md#basic-error-handling-principles).
+
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
 
@@ -1375,6 +1382,9 @@ Configurable parameters:
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
 
+The reader MUST synchronize calls to `MetricExporter`'s `Export`
+to make sure that they are not invoked concurrently.
+
 One possible implementation of periodic exporting MetricReader is to inherit
 from `MetricReader` and start a background task which calls the inherited
 `Collect()` method at the requested `exportIntervalMillis`. The reader's
@@ -1485,8 +1495,8 @@ and transmit the data to the destination.
 The SDK MUST provide a way for the exporter to get the [Meter](./api.md#meter)
 information (e.g. name, version, etc.) associated with each `Metric Point`.
 
-`Export` will never be called concurrently for the same exporter instance.
-`Export` can be called again only after the current call returns.
+`Export` should never be called concurrently with other `Export` calls for the
+same exporter instance.
 
 `Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (Failure).
