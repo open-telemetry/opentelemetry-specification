@@ -403,8 +403,7 @@ The SDK MUST accept the following stream configuration parameters:
   If the user does not provide an `exemplar_reservoir` value, the
   `MeterProvider` MUST apply a [default exemplar
   reservoir](#exemplar-defaults).
-* **Status**: [Development](../document-status.md) -
-  `aggregation_cardinality_limit`: A positive integer value defining the
+* `aggregation_cardinality_limit`: A positive integer value defining the
   maximum number of data points allowed to be emitted in a collection cycle by
   a single instrument. See [cardinality limits](#cardinality-limits), below.
 
@@ -778,7 +777,7 @@ of metrics across successive collections.
 
 ### Cardinality limits
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 SDKs SHOULD support being configured with a cardinality limit. The number of
 unique combinations of attributes is called cardinality. For a given metric, the

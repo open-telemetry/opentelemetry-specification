@@ -17,6 +17,8 @@ release.
   ([#4188](https://github.com/open-telemetry/opentelemetry-specification/pull/4188))
 - Clarify that `Enabled` only applies to synchronous instruments.
   ([#4211](https://github.com/open-telemetry/opentelemetry-specification/pull/4211))
+- Mark cardinality limits as stable.
+  ([#TBD](https://github.com/open-telemetry/opentelemetry-specification/pull/TBD))
 
 ### Logs
 
