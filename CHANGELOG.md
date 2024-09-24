@@ -11,12 +11,17 @@ release.
 
 ### Traces
 
+- Make all fields as identifying for Tracer. Previously attributes were omitted from being identifying.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+
 ### Metrics
 
 - Add support for filtering attribute keys for streams via an exclude list.
   ([#4188](https://github.com/open-telemetry/opentelemetry-specification/pull/4188))
 - Clarify that `Enabled` only applies to synchronous instruments.
   ([#4211](https://github.com/open-telemetry/opentelemetry-specification/pull/4211))
+- Make all fields as identifying for Meter. Previously attributes were omitted from being identifying.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 - Mark cardinality limits as stable.
   ([#TBD](https://github.com/open-telemetry/opentelemetry-specification/pull/TBD))
 
@@ -24,6 +29,8 @@ release.
 
 - Define `Enabled` parameters for `Logger`.
   ([#4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203))
+- Make all fields as identifying for Logger. Previously attributes were omitted from being identifying.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Events
 
@@ -38,6 +45,9 @@ release.
 ### SDK Configuration
 
 ### Common
+
+- Define equality for attributes and collection of attributes.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Supplementary Guidelines
 

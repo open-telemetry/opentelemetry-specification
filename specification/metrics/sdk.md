@@ -128,10 +128,6 @@ working Meter MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-When a Schema URL is passed as an argument when creating a `Meter` the emitted
-telemetry for that `Meter` MUST be associated with the Schema URL, provided
-that the emitted data format is capable of representing such association.
-
 **Status**: [Development](../document-status.md) - The `MeterProvider` MUST
 compute the relevant [MeterConfig](#meterconfig) using the
 configured [MeterConfigurator](#meterconfigurator), and create
