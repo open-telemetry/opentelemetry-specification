@@ -23,7 +23,7 @@ release.
 - Make all fields as identifying for Meter. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 - Mark cardinality limits as stable.
-  ([#TBD](https://github.com/open-telemetry/opentelemetry-specification/pull/TBD))
+  ([#4222](https://github.com/open-telemetry/opentelemetry-specification/pull/4222))
 
 ### Logs
 
