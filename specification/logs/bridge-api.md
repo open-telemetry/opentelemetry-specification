@@ -119,18 +119,17 @@ The effect of calling this API is to emit a `LogRecord` to the processing pipeli
 
 The API MUST accept the following parameters:
 
-- [Timestamp](./data-model.md#field-timestamp)
-- [Observed Timestamp](./data-model.md#field-observedtimestamp). If unspecified the
+- [Timestamp](./data-model.md#field-timestamp) (optional)
+- [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified the
   implementation SHOULD set it equal to the current time.
-- The [Context](../context/README.md) associated with the `LogRecord`. The API
-  MAY implicitly use the current Context as a default
-  behavior.
-- [Severity Number](./data-model.md#field-severitynumber)
-- [Severity Text](./data-model.md#field-severitytext)
-- [Body](./data-model.md#field-body)
-- [Attributes](./data-model.md#field-attributes)
-
-All parameters are optional.
+- The [Context](../context/README.md) associated with the `LogRecord`.
+  When implicit Context is supported, then this parameter SHOULD be optional and
+  if unspecified then MUST use current Context.
+  When only explicit Context is supported, this parameter SHOULD be required.
+- [Severity Number](./data-model.md#field-severitynumber) (optional)
+- [Severity Text](./data-model.md#field-severitytext) (optional)
+- [Body](./data-model.md#field-body) (optional)
+- [Attributes](./data-model.md#field-attributes) (optional)
 
 #### Enabled
 
@@ -139,9 +138,22 @@ All parameters are optional.
 To help users avoid performing computationally expensive operations when
 generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
 
-There are currently no required parameters for this API. Parameters can be
-added in the future, therefore, the API MUST be structured in a way for
-parameters to be added.
+The API SHOULD accept the following parameters:
+
+- The [Context](../context/README.md) to be associated with the `LogRecord`.
+  When implicit Context is supported, then this parameter SHOULD be optional and
+  if unspecified then MUST use current Context.
+  When only explicit Context is supported, accepting this parameter is REQUIRED.
+- [Severity Number](./data-model.md#field-severitynumber) (optional)
+
+Additional optional parameters can be added in the future, therefore,
+the API MUST be structured in a way for these parameters to be added.
+
+It SHOULD be possible to distinguish between an unspecified parameter value from
+a parameter value set explicitly to a valid default value of given type
+(e.g. distinguish unspecified attributes for empty attributes). The exception
+from this rule is when the default value of given type is not seen as a valid
+value like 0 for [Severity Number](./data-model.md#field-severitynumber).
 
 This API MUST return a language idiomatic boolean type. A returned value of
 `true` means the `Logger` is enabled for the provided arguments, and a returned
