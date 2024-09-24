@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Make all fields as identifying for Tracer. Previously attributes were omitted from being identifying.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 - Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
   ([#4205](https://github.com/open-telemetry/opentelemetry-specification/pull/4205))
 
@@ -20,11 +22,15 @@ release.
   ([#4188](https://github.com/open-telemetry/opentelemetry-specification/pull/4188))
 - Clarify that `Enabled` only applies to synchronous instruments.
   ([#4211](https://github.com/open-telemetry/opentelemetry-specification/pull/4211))
+- Make all fields as identifying for Meter. Previously attributes were omitted from being identifying.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Logs
 
 - Define `Enabled` parameters for `Logger`.
   ([#4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203))
+- Make all fields as identifying for Logger. Previously attributes were omitted from being identifying.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Events
 
@@ -39,6 +45,9 @@ release.
 ### SDK Configuration
 
 ### Common
+
+- Define equality for attributes and collection of attributes.
+  ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
 ### Supplementary Guidelines
 
