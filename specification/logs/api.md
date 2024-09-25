@@ -19,7 +19,6 @@
     + [Enabled](#enabled)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
-- [Artifact Naming](#artifact-naming)
 - [References](#references)
 
 <!-- tocstop -->
@@ -43,7 +42,7 @@ OpenTelemetry log data model.
 It is provided for application developers to emit structured log recors
 (e.g. custom events).
 
-Languges MAY provide a seperate Logs Bridge API if they need different
+Languges MAY provide a separate Logs Bridge API if they need different
 ergonimics for consumers that are building log appenders/bridges.
 
 The Logs API consist of these main components:
