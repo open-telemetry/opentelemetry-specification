@@ -118,23 +118,31 @@ Then, parse the 14-digit value as a 56-bit unsigned number, yielding a rejection
 OpenTelemetry defines consistent sampling in terms of a 56-bit trace randomness value compared with the 56-bit rejection threshold.
 When the randomness value is less than the rejection threshold, the span is not sampled.
 
-The threshold value `0` indicates that no spans are being rejected, corresponding with 100% sampling.  
+The threshold value `0` indicates that no spans are being rejected, corresponding with 100% sampling.
 For example, the following TraceState value identifies a trace with 100% sampling:
 
 ```
 tracestate: ot=th:0
 ```
 
-In sampling, the term _adjusted count_ refers to the effective number of items represented by a sampled item of telemetry.  
-To calculate sampling probability from the rejection threshold, define a constant `MaxAdjustedCount` equal to 2^56, the number of distinct 56-bit values.  
+In sampling, the term _adjusted count_ refers to the effective number of items represented by a sampled item of telemetry.
+To calculate sampling probability from the rejection threshold, define a constant `MaxAdjustedCount` equal to 2^56, the number of distinct 56-bit values.
 The sampling probability is defined:
 
 ```
 Probability = (MaxAdjustedCount - Threshold) / MaxAdjustedCount
 ```
 
-The adjusted count of a span is the inverse of its sampling probability, which is derived from the rejection threshold:
+Threshold can be calculated from Probability:
+
+```
+Threshold = MaxAdjustedCount * (1 - Probability)
+```
+
+The adjusted count of a span is the inverse of its sampling probability and can be derived from the threshold as follows.
 
 ```
 AdjustedCount = MaxAdjustedCount / (MaxAdjustedCount - Threshold)
 ```
+
+As an example, 25% probability sampling corresponds with adjusted count 4 and threshold `c`.

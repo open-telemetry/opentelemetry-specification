@@ -42,7 +42,7 @@ There are two key aspects for sampling of tracing data. The first is that sampli
 
 For each of the above aspects, if we don't make **consistent** sampling decisions, we will end up with traces that are unusable and do not contain a coherent set of spans, because of the independent sampling decisions. Instead, we want sampling decisions to be made in a **consistent** manner so that we can effectively reason about a trace.
 
-This specification describes a mechanism to achieve such consistent sampling decisions using a mechanism called **Consistent Probability Sampling**. To achieve this, it uses two key building blocks. The first is a common source of randomness (R) that is available to all participants. This can be either a custom value (called `rv`) or taken from the trailing 7 bytes of the TraceID. The second is a concept of a rejection threshold (T). This is derived directly from a participant's sampling rate. This proposal describes how these two values should be propagated and how participants should use them to make sampling decisions.
+This specification describes a mechanism to achieve such consistent sampling decisions using a mechanism called **Consistent Probability Sampling**. To achieve this, it uses two key building blocks. The first is a common source of randomness (R) that is available to all participants, which includes a set of tracers and collectors. This can be either a custom value (called `rv`) or taken from the trailing 7 bytes of the TraceID. The second is a concept of a rejection threshold (T). This is derived directly from a participant's sampling rate. This proposal describes how these two values should be propagated and how participants should use them to make sampling decisions.
 
 For more details about this specification, see [OTEP 235](https://github.com/open-telemetry/oteps/blob/main/text/trace/0235-sampling-threshold-in-trace-state.md).
 
@@ -52,7 +52,7 @@ For more details about this specification, see [OTEP 235](https://github.com/ope
 
 Sampling probability is the likelihood that a span will be *kept*. Each participant can choose a different sampling probability for each span. For example, if the sampling probability is 0.25, around 25% of the spans will be kept.
 
-Sampling probability is valid in the range 2^-56 through 1.  Note that the zero value is not defined and that "never" sampling is not a form of probability sampling.
+Sampling probability is valid in the range 2^-56 through 1.  The value 56 appearing in this expression corresponds with 7 bytes of randomness (i.e., 56 bits) which are specified for W3C Trace Context Level 2 TraceIDs.  Note that the zero value is not defined and that "never" sampling is not a form of probability sampling.
 
 ### Consistent Sampling Decision
 
@@ -154,7 +154,7 @@ The following examples are in Golang and Python3. They are intended as examples 
 
 Threshold values are encoded with trailing zeros removed, which allows for variable precision.  This can be accompolished by rounding, and there are several practical way to do this with built-in string formatting libraries.
 
-With up to 56 bits of precision available, implementations that use built-in floating point number support will be limited by the precision of the underlying number support.  If the language supports IEEE 754-2008-standard hexadecimal floating point, for example in Golang,
+With up to 56 bits of precision available, implementations that use built-in floating point number support will be limited by the precision of the underlying number support.  One way to encode thresholds uses the IEEE 754-2008-standard hexadecimal floating point representation as a simple solution.  For example, in Golang,
 
 ```go
 // ProbabilityToThresholdWithPrecision assumes the probability value is in the range
