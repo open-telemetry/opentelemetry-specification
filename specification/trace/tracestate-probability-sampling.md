@@ -72,7 +72,7 @@ For example, if the sampling probability is 100% (keep all spans), the rejection
 
 Similarly, if the sampling probability is 1% (drop 99% of spans), the rejection threshold with 5 digits of precision would be (1-0.01) * 2^56 = 4458562600304640 = 0xfd70a00000000.
 
-We refer to this rejection threshold conceptually as `T`. We represent it using the key `th`. This must be propagated in both the `tracestate` header and in the TraceState attribute of each span.
+We refer to this rejection threshold conceptually as `T`. We represent it using the key `th`. This must be propagated in both the `tracestate` header and in the TraceState attribute of each span. In the example above, the `th` key has `fd70a00000000` as the value.
 
 See [tracestate handling](./tracestate-handling.md#sampling-threshold-value-th) for details about encoding threshold values.
 
@@ -125,7 +125,7 @@ For the output TraceState,
 - The `th` key MUST be defined with a value corresponding to the sampling probability the sampler used.
 - The `rv` value, if present on the input TraceState, MUST be defined and equal to the incoming span context's `rv` value, including the root context.
 
-Trace SDKs are responsible for for synthesizing `rv` values in the OpenTelemetry TraceState root span contexts.
+Trace SDKs are responsible for synthesizing `rv` values in the OpenTelemetry TraceState root span contexts.
 
 ### Downstream samplers
 
@@ -152,7 +152,7 @@ The following examples are in Golang and Python3. They are intended as examples 
 
 ### Converting floating-point probability to threshold value
 
-Threshold values are encoded with trailing zeros removed, which allows for variable precision.  This can be accompolished by rounding, and there are several practical way to do this with built-in string formatting libraries.
+Threshold values are encoded with trailing zeros removed, which allows for variable precision. This can be accomplished by rounding, and there are several practical ways to do this with built-in string formatting libraries.
 
 With up to 56 bits of precision available, implementations that use built-in floating point number support will be limited by the precision of the underlying number support.  One way to encode thresholds uses the IEEE 754-2008-standard hexadecimal floating point representation as a simple solution.  For example, in Golang,
 
