@@ -15,6 +15,8 @@ release.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 - Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
   ([#4205](https://github.com/open-telemetry/opentelemetry-specification/pull/4205))
+- Add in-development support for `otlp/stdout` exporter via `OTEL_TRACES_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Metrics
 
@@ -26,6 +28,8 @@ release.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 - Clarify that applying cardinality limits should be done after attribute filtering.
   ([#4228](https://github.com/open-telemetry/opentelemetry-specification/pull/4228))
+- Add in-development support for `otlp/stdout` exporter via `OTEL_METRICS_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Logs
 
@@ -33,6 +37,8 @@ release.
   ([#4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203))
 - Make all fields as identifying for Logger. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+- Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
+ ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Events
 
@@ -97,8 +103,6 @@ release.
   ([#4137](https://github.com/open-telemetry/opentelemetry-specification/pull/4137))
 - Add in-development `OnEnding` callback to SDK `SpanProcessor` interface.
   ([#4024](https://github.com/open-telemetry/opentelemetry-specification/pull/4024))
-- Add in-development support for `otlp/stdout` exporter via `OTEL_TRACES_EXPORTER`.
-  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Metrics
 
@@ -109,15 +113,11 @@ release.
   ([#4142](https://github.com/open-telemetry/opentelemetry-specification/pull/4142))
 - Add data point flags to the metric data model.
   ([#4135](https://github.com/open-telemetry/opentelemetry-specification/pull/4135))
-- Add in-development support for `otlp/stdout` exporter via `OTEL_METRICS_EXPORTER`.
-  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Logs
 
 - The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
   ([#4090](https://github.com/open-telemetry/opentelemetry-specification/pull/4090))
-- Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
-  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Baggage
 
