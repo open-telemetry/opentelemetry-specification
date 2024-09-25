@@ -807,7 +807,9 @@ reaching the cardinality limit and use it to aggregate
 [Measurements](./api.md#measurement) for which the correct Aggregator could not
 be created.  The SDK MUST provide the guarantee that overflow would not happen
 if the maximum number of distinct, non-overflow attribute sets is less than or
-equal to the limit.
+equal to the limit. Cardinality limit enforcement SHOULD occur after attribute
+filtering, if any. This ensures users can filter undesired attributes using
+[views](#view) and prevent reaching the cardinality limit.
 
 #### Synchronous instrument cardinality limits
 
