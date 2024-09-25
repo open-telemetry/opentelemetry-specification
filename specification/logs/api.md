@@ -39,11 +39,11 @@ It is provided for logging library authors to build
 which use this API to bridge between existing logging libraries and the
 OpenTelemetry log data model.
 
-It is provided for application developers to emit structured log recors
+It is provided for application developers to emit structured log records
 (e.g. custom events).
 
 Languges MAY provide a separate Logs Bridge API if they need different
-ergonimics for consumers that are building log appenders/bridges.
+ergonomics for consumers that are building log appenders/bridges.
 
 The Logs API consist of these main components:
 
