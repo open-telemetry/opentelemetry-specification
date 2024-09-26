@@ -89,9 +89,14 @@ def needs_followup(issue, verbose=False):
     if last_meaningful_activity == deciding_label_added:
         return False
     if last_meaningful_activity > deciding_label_added:
+        if followup_label_removed:
+            # Only return True if there has been meaningful activity since the followup label was removed
+            return last_meaningful_activity > followup_label_removed
         return True
-    if followup_label_removed and followup_label_removed < two_weeks_ago and last_meaningful_activity > followup_label_removed:
-        return True
+    if followup_label_removed and followup_label_removed > two_weeks_ago:
+        # If the followup label was removed more than two weeks ago and there's been no activity since,
+        # we don't need to add it back
+        return False
 
     return False
 
