@@ -27,7 +27,7 @@
 
 ## Overview
 
-This document defines a log *backend* API.
+This document defines a log API.
 
 The API serves following use cases.
 
@@ -42,10 +42,10 @@ OpenTelemetry log data model.
 It is provided for application developers to emit structured log records
 (e.g. custom events).
 
-Languges MAY provide a separate Logs Bridge API if they need different
+Languages MAY provide a separate Logs Bridge API if they need different
 ergonomics for consumers that are building log appenders/bridges.
 
-The Logs API consist of these main components:
+The Logs API consists of these main components:
 
 * [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
 * [Logger](#logger) is responsible for emitting logs as
