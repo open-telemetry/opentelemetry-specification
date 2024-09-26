@@ -243,6 +243,10 @@ A PR is considered to be **ready to merge** when:
   people reasonable time to review.
 * Trivial changes (typos, cosmetic changes, CI improvements, etc.) don't have to
   wait for two days.
+* The [spec
+  maintainers](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto)
+  might make situational judgement and put additional requirements (e.g. need
+  more approvals, wait for the next release train, etc.).
 
 Any [spec
 maintainer](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto) can
