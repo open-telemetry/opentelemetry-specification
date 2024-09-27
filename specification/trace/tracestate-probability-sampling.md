@@ -72,7 +72,7 @@ For example, if the sampling probability is 100% (keep all spans), the rejection
 
 Similarly, if the sampling probability is 1% (drop 99% of spans), the rejection threshold with 5 digits of precision would be (1-0.01) * 2^56 = 4458562600304640 = 0xfd70a00000000.
 
-We refer to this rejection threshold conceptually as `T`. We represent it using the key `th`. This must be propagated in both the `tracestate` header and in the TraceState attribute of each span. In the example above, the `th` key has `fd70a00000000` as the value.
+We refer to this rejection threshold conceptually as `T`. We represent it using the OpenTelemetry TraceState key `th`, where the value is propagated and also stored with each span. In the example above, the `th` key has `fd70a00000000` as the value.
 
 See [tracestate handling](./tracestate-handling.md#sampling-threshold-value-th) for details about encoding threshold values.
 
@@ -113,19 +113,10 @@ This section defines the behavior for these two categories of samplers.
 
 A head sampler is responsible for computing the `rv` and `th` values in a new span's initial [`TraceState`](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.29.0/specification/trace/api.md#tracestate). The main inputs to that computation include the parent span's trace state (if a parent span exists), the new span's trace ID, and possibly the trace flags (to know if the trace ID has been generated in a random manner).
 
-First, a consistent probability `Sampler` may choose its own sampling rate. The higher the chosen sampling rate, the lower the rejection threshold (T). It MAY select any value of T. If a valid `SpanContext` is provided in the call to `ShouldSample` (indicating that the span being created will be a child span), there are two possibilities:
+When a span is sampled by in accordance with this specification, the output TraceState SHOULD be set to convey probability sampling:
 
-- **The child span chooses a T greater than the parent span's T**: The parent span may be *kept* but it is possible that its child, the current span, may be dropped because of the lower sampling rate. At the same time, in the case where the decision for the child span is to *keep* it, the decision for the parent span would have also been to *keep* (due to our consistent sampling approach) since the parent's sampling rate is greater than the child's sampling rate.
-- **The child span chooses a T less than or equal to the parent span's T**:  The parent span might have been *dropped* but it is possible that its child, the current span, may be *kept* because of the higher sampling rate. At the same time, in case where the parent span is *kept*, the child span would be *kept* as well (due to our consistent sampling approach) since the child's sampling rate is greater than the parent's sampling rate.
-
-Note that while both the above cases can result in incomplete traces, they still meet the consistent sampling goals.
-
-For the output TraceState,
-
-- The `th` key MUST be defined with a value corresponding to the sampling probability the sampler used.
-- The `rv` value, if present on the input TraceState, MUST be defined and equal to the incoming span context's `rv` value, including the root context.
-
-Trace SDKs are responsible for synthesizing `rv` values in the OpenTelemetry TraceState root span contexts.
+- The `th` key MUST be defined with a threshold value corresponding to the sampling probability the sampler used.
+- If trace randomness was derived from a TraceState `rv` value, the same `rv` value MUST be defined and equal to the incoming Context's `rv` value.
 
 ### Downstream samplers
 
@@ -181,7 +172,7 @@ func ProbabilityToThresholdWithPrecision(probability float64, precision int) str
 }
 ```
 
-To translate directly from floating point probability into a 56-bit unsigned integer representation using `math.Round()` and shift operations, see the [OpenTelemetry Collector-Contrib `pkg/sampling` package][PKGSAMPLING] package demonstrates this form of directly calculating integer thresholds from probabilities.
+To translate directly from floating point probability into a 56-bit unsigned integer representation using `math.Round()` and shift operations, see the [OpenTelemetry Collector-Contrib `pkg/sampling` package][PKGSAMPLING] package.  This package demonstrates how to directly calculate integer thresholds from probabilities.
 
 [PKGSAMPLING]: https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/pkg/sampling/README.md
 
@@ -209,9 +200,12 @@ OpenTelemetry SDKs are recommended to use 4 digits of precision by default. The 
 To convert a 56-bit integer threshold value to the t-value representation, emit it as a hexadecimal value (without a leading '0x'), optionally with trailing zeros omitted:
 
 ```py
-h = hex(tvalue).rstrip('0')
-# remove leading 0x
-tv = 'tv='+h[2:]
+if tvalue == 0: 
+  add_otel_trace_state('tv:0')
+else:
+  h = hex(tvalue).rstrip('0')
+  # remove leading 0x
+  add_otel_trace_state('tv:'+h[2:])
 ```
 
 ### Testing randomness vs threshold

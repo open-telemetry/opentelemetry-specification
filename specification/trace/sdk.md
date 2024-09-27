@@ -401,7 +401,7 @@ For respecting the parent `SampledFlag`, see the `ParentBased` sampler specified
 ##### `TraceIdRatioBased` sampler configuration
 
 The `TraceIdRatioBased` sampler is typically configured using a 32-bit or 64-bit floating point number to express the sampling ratio.
-The minimum valid sampling ratio is `2**-56`, and the maximum valid sampling ratio is 1.0.
+The minimum valid sampling ratio is `2^-56`, and the maximum valid sampling ratio is 1.0.
 From an input sampling ratio, a rejection threshold value is calculated; see [consistent-probability sampler requirements][CONSISTENTSAMPLING] for details on converting sampling ratios into thresholds with variable precision.
 
 [CONSISTENTSAMPLING]: ./tracestate-probability-sampling.md

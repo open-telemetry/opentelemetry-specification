@@ -125,7 +125,6 @@ For example, the following TraceState value identifies a trace with 100% samplin
 tracestate: ot=th:0
 ```
 
-In sampling, the term _adjusted count_ refers to the effective number of items represented by a sampled item of telemetry.
 To calculate sampling probability from the rejection threshold, define a constant `MaxAdjustedCount` equal to 2^56, the number of distinct 56-bit values.
 The sampling probability is defined:
 
@@ -139,6 +138,7 @@ Threshold can be calculated from Probability:
 Threshold = MaxAdjustedCount * (1 - Probability)
 ```
 
+In sampling, the term _adjusted count_ refers to the effective number of items represented by a sampled item of telemetry.
 The adjusted count of a span is the inverse of its sampling probability and can be derived from the threshold as follows.
 
 ```
