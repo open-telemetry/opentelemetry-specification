@@ -779,7 +779,9 @@ SDKs SHOULD support being configured with a cardinality limit. The number of
 unique combinations of attributes is called cardinality. For a given metric, the
 cardinality limit is a hard limit on the number of [Metric
 Points](./data-model.md#metric-points) that can be collected during a collection
-cycle.
+cycle. Cardinality limit enforcement SHOULD occur _after_ attribute filtering,
+if any. This ensures users can filter undesired attributes using [views](#view)
+and prevent reaching the cardinality limit.
 
 #### Configuration
 
