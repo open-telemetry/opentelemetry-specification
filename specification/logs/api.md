@@ -40,7 +40,7 @@ which use this API to bridge between existing logging libraries and the
 OpenTelemetry log data model.
 
 It is provided for application developers to emit structured log records
-(e.g. custom events).
+(including OpenTelemetry Events).
 
 Languages MAY provide a separate Logs Bridge API if they need different
 ergonomics for consumers that are building log appenders/bridges.
