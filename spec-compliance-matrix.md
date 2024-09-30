@@ -203,6 +203,26 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Can plug custom LogRecordExporter            |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 
+## Events
+
+Features for the [Events API](specification/logs/event-api.md) and the [Events SDK](specification/logs/event-sdk.md).
+Disclaimer: Events are currently in Development status - work in progress.
+
+| Feature                                                                    | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|----------------------------------------------------------------------------|----------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
+| [EventLoggerProvider](specification/logs/event-api.md#eventloggerprovider) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| Get EventLogger                                                            |          |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts version                                            | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts schema_url                                         | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Get EventLogger accepts attributes                                         | X        |    |      |    |        |      |        |     |      |     |      |       |
+| [EventLogger](specification/logs/event-api.md#eventlogger)                 | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+| Emit event accepts name                                                    |          |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts AnyValue body                                           | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts severity                                                | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts timestamp                                               | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts attributes                                              | X        |    |      |    |        |      |        |     |      |     |      |       |
+| Emit event accepts context                                                 | X        |    |      |    |        |      |        |     |      |     |      |       |
+
 ## Resource
 
 | Feature                                                                                                                                     | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
