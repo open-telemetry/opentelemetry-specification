@@ -3,7 +3,7 @@
 **Status**: [Stable](../document-status.md), except where otherwise specified
 
 **Note: the Logs API was previously called the Logs Bridge API, but has since been renamed
-to reflect that it is now a user-facing API.**
+to reflect that it is now also a user-facing API.**
 
 <details>
 <summary>Table of Contents</summary>
