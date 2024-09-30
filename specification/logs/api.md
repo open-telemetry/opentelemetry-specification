@@ -38,7 +38,7 @@ It is provided for logging library authors to build
 which use this API to bridge between existing logging libraries and the
 OpenTelemetry log data model. See also: [Logs Bridge API](#logs-bridge-api)
 
-It is provided for (instrumentation) libraries to emit
+It is provided for OpenTelemetry (instrumentation) libraries to emit
 [OpenTelemetry Events](data-model.md#events).
 
 It is provided for application developers to emit structured log records
