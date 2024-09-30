@@ -19,6 +19,8 @@
     + [Enabled](#enabled)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
+- [Convenience](#convenience)
+- [Logs Bridge API](#logs-bridge-api)
 - [References](#references)
 
 <!-- tocstop -->
@@ -31,19 +33,16 @@ This document defines a log API.
 
 The API serves following use cases.
 
-It is provided for instrumentation libraries to emit events (log records following
-OpenTelemetry Semantic Conventions).
-
 It is provided for logging library authors to build
 [log appenders/bridges](./supplementary-guidelines.md#how-to-create-a-log4j-log-appender),
 which use this API to bridge between existing logging libraries and the
-OpenTelemetry log data model.
+OpenTelemetry log data model. See also: [Logs Bridge API](#logs-bridge-api)
+
+It is provided for (instrumentation) libraries to emit
+[OpenTelemetry Events](data-model.md#events).
 
 It is provided for application developers to emit structured log records
 (including OpenTelemetry Events).
-
-Languages MAY provide a separate Logs Bridge API if they need different
-ergonomics for consumers that are building log appenders/bridges.
 
 The Logs API consists of these main components:
 
@@ -186,6 +185,17 @@ specific guarantees and safeties.
 **LoggerProvider** - all methods are safe to be called concurrently.
 
 **Logger** - all methods are safe to be called concurrently.
+
+## Convenience
+
+Languages MAY provide additional ergonomics and convinence APIs. For instance,
+a language may provide an `Emit an Event` method that requires passing
+an event name parameter.
+
+## Logs Bridge API
+
+Languages MAY provide a separate Logs Bridge API if they need different
+ergonomics for consumers that are building log appenders/bridges.
 
 ## References
 

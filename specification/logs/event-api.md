@@ -9,7 +9,6 @@
 
 <!-- toc -->
 
-- [Event Data model](#event-data-model)
 - [Event API use cases](#event-api-use-cases)
 - [EventLoggerProvider](#eventloggerprovider)
   * [EventLoggerProvider operations](#eventloggerprovider-operations)
@@ -30,35 +29,13 @@ The Event API consists of these main components:
   provides access to `EventLogger`s.
 * [EventLogger](#eventlogger) is the component responsible for emitting events.
 
-## Event Data model
-
-Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
-
->In computing, a log file is a file that records either events that occur in an
->operating system or other software runs.
-
-From OpenTelemetry's perspective LogRecords and Events are both represented
-using the same [data model](./data-model.md). An Event is a specialized type
-of LogRecord, not a separate concept.
-
-Events are OpenTelemetry's standardized semantic formatting for LogRecords.
-Beyond the structure provided by the LogRecord data model, it is helpful for
-logs to have a common format within that structure. When OpenTelemetry
-instrumentation emits logs, those logs SHOULD be formatted as Events. All
-semantic conventions defined for logs MUST be formatted as Events.
-
-The Event format is as follows. All Events have a
-[`event.name` attribute](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md),
-and all Events with the same `event.name` MUST conform to the same schema for
-both their `Attributes` and their `Body`.
-
 ## Event API use cases
 
-The Events API was designed to allow shared libraries to emit high quality
-logs without needing to depend on a third party logger. Unlike the
-[Logs Bridge API](./bridge-api.md), instrumentation authors and application
-developers are encouraged to call this API directly. It is appropriate to
-use the Event API when these properties fit your requirements:
+The Events API was designed to allow shared libraries to emit
+[events](data-model.md#events) without needing to depend on a third party logger.
+Instrumentation authors and application developers are encouraged can call this
+API directly. It is appropriate to use the Event API when these properties fit
+your requirements:
 
 * Logging from a shared library that must run in many applications.
 * A semantic convention needs to be defined. We do not define semantic
@@ -79,6 +56,8 @@ OpenTelemetry Event SDK at this time.
 If a logging library is capable of creating logs which correctly map
 to the Event data model, logging in this manner is also an acceptable way to
 create Events.
+
+Emitting events via [Logs API](api.md) is also acceptable.
 
 ## EventLoggerProvider
 
