@@ -128,10 +128,6 @@ working Meter MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-When a Schema URL is passed as an argument when creating a `Meter` the emitted
-telemetry for that `Meter` MUST be associated with the Schema URL, provided
-that the emitted data format is capable of representing such association.
-
 **Status**: [Development](../document-status.md) - The `MeterProvider` MUST
 compute the relevant [MeterConfig](#meterconfig) using the
 configured [MeterConfigurator](#meterconfigurator), and create
@@ -784,7 +780,9 @@ SDKs SHOULD support being configured with a cardinality limit. The number of
 unique combinations of attributes is called cardinality. For a given metric, the
 cardinality limit is a hard limit on the number of [Metric
 Points](./data-model.md#metric-points) that can be collected during a collection
-cycle.
+cycle. Cardinality limit enforcement SHOULD occur _after_ attribute filtering,
+if any. This ensures users can filter undesired attributes using [views](#view)
+and prevent reaching the cardinality limit.
 
 #### Configuration
 

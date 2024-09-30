@@ -63,7 +63,7 @@ The `LoggerProvider` MUST provide the following functions:
 This API MUST accept the following [instrumentation scope](data-model.md#field-instrumentationscope)
 parameters:
 
-* `name`: This name uniquely identifies the [instrumentation scope](../glossary.md#instrumentation-scope),
+* `name`: Specifies the name of the [instrumentation scope](../glossary.md#instrumentation-scope),
   such as the [instrumentation library](../glossary.md#instrumentation-library)
   (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
   If an application or library has built-in OpenTelemetry instrumentation, both
@@ -85,19 +85,9 @@ parameters:
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
 
-`Logger`s are identified by `name`, `version`, and `schema_url` fields.  When more
-than one `Logger` of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different `Logger`
-instances are returned. It is a user error to create Loggers with different
-`attributes` but the same identity.
-
 The term *identical* applied to `Logger`s describes instances where all
-identifying fields are equal. The term *distinct* applied to `Logger`s describes
-instances where at least one identifying field has a different value.
-
-The effect of associating a Schema URL with a `Logger` MUST be that the telemetry
-emitted using the `Logger` will be associated with the Schema URL, provided that
-the emitted data format is capable of representing such association.
+parameters are equal. The term *distinct* applied to `Logger`s describes
+instances where at least one parameter has a different value.
 
 ## Logger
 
@@ -119,18 +109,17 @@ The effect of calling this API is to emit a `LogRecord` to the processing pipeli
 
 The API MUST accept the following parameters:
 
-- [Timestamp](./data-model.md#field-timestamp)
-- [Observed Timestamp](./data-model.md#field-observedtimestamp). If unspecified the
+- [Timestamp](./data-model.md#field-timestamp) (optional)
+- [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified the
   implementation SHOULD set it equal to the current time.
-- The [Context](../context/README.md) associated with the `LogRecord`. The API
-  MAY implicitly use the current Context as a default
-  behavior.
-- [Severity Number](./data-model.md#field-severitynumber)
-- [Severity Text](./data-model.md#field-severitytext)
-- [Body](./data-model.md#field-body)
-- [Attributes](./data-model.md#field-attributes)
-
-All parameters are optional.
+- The [Context](../context/README.md) associated with the `LogRecord`.
+  When implicit Context is supported, then this parameter SHOULD be optional and
+  if unspecified then MUST use current Context.
+  When only explicit Context is supported, this parameter SHOULD be required.
+- [Severity Number](./data-model.md#field-severitynumber) (optional)
+- [Severity Text](./data-model.md#field-severitytext) (optional)
+- [Body](./data-model.md#field-body) (optional)
+- [Attributes](./data-model.md#field-attributes) (optional)
 
 #### Enabled
 
@@ -139,9 +128,22 @@ All parameters are optional.
 To help users avoid performing computationally expensive operations when
 generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
 
-There are currently no required parameters for this API. Parameters can be
-added in the future, therefore, the API MUST be structured in a way for
-parameters to be added.
+The API SHOULD accept the following parameters:
+
+- The [Context](../context/README.md) to be associated with the `LogRecord`.
+  When implicit Context is supported, then this parameter SHOULD be optional and
+  if unspecified then MUST use current Context.
+  When only explicit Context is supported, accepting this parameter is REQUIRED.
+- [Severity Number](./data-model.md#field-severitynumber) (optional)
+
+Additional optional parameters can be added in the future, therefore,
+the API MUST be structured in a way for these parameters to be added.
+
+It SHOULD be possible to distinguish between an unspecified parameter value from
+a parameter value set explicitly to a valid default value of given type
+(e.g. distinguish unspecified attributes for empty attributes). The exception
+from this rule is when the default value of given type is not seen as a valid
+value like 0 for [Severity Number](./data-model.md#field-severitynumber).
 
 This API MUST return a language idiomatic boolean type. A returned value of
 `true` means the `Logger` is enabled for the provided arguments, and a returned
