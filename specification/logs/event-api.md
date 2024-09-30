@@ -33,7 +33,7 @@ The Event API consists of these main components:
 
 The Events API was designed to allow shared libraries to emit
 [events](data-model.md#events) without needing to depend on a third party logger.
-Instrumentation authors and application developers are encouraged can call this
+Instrumentation authors and application developers are encouraged to call this
 API directly. It is appropriate to use the Event API when these properties fit
 your requirements:
 
