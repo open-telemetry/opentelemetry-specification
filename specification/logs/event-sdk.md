@@ -81,7 +81,7 @@ Emit a `LogRecord` representing an `Event`.
 **Implementation Requirements:**
 
 The implementation MUST use the parameters
-to [emit a logRecord](./bridge-api.md#emit-a-logrecord) as follows:
+to [emit a logRecord](./api.md#emit-a-logrecord) as follows:
 
 * The `Name` MUST be used to set
   the `event.name` [Attribute](./data-model.md#field-attributes). If
