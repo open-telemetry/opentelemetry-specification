@@ -283,7 +283,7 @@ try {
 // Access SDK components and install instrumentation
 TracerProvider tracerProvider = openTelemetry.getTracerProvider();
 MeterProvider meterProvider = openTelemetry.getMeterProvider();
-LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+LoggerProvider loggerProvider = openTelemetry.getLoggerProvider();
 ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```
@@ -311,7 +311,7 @@ try {
 // Access SDK components and install instrumentation
 TracerProvider tracerProvider = openTelemetry.getTracerProvider();
 MeterProvider meterProvider = openTelemetry.getMeterProvider();
-LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+LoggerProvider loggerProvider = openTelemetry.getLoggerProvider();
 ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```
@@ -339,7 +339,7 @@ OpenTelemetry openTelemetry = AutoConfiguredOpenTelemetrySdk.initialize().getOpe
 // Access SDK components and install instrumentation
 TracerProvider tracerProvider = openTelemetry.getTracerProvider();
 MeterProvider meterProvider = openTelemetry.getMeterProvider();
-LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+LoggerProvider loggerProvider = openTelemetry.getLoggerProvider();
 ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```

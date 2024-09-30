@@ -1,6 +1,9 @@
-# Logs Bridge API
+# Logs API
 
 **Status**: [Stable](../document-status.md), except where otherwise specified
+
+**Note: the Logs API was previously called the Logs Bridge API, but has since been renamed
+to reflect that it is now a user-facing API.**
 
 <details>
 <summary>Table of Contents</summary>
@@ -25,14 +28,7 @@
 
 </details>
 
-<b>Note: this document defines a log *backend* API. The API is not intended
-to be called by application developers directly. It is provided for logging
-library authors to build
-[log appenders](./supplementary-guidelines.md#how-to-create-a-log4j-log-appender),
-which use this API to bridge between existing logging libraries and the
-OpenTelemetry log data model.</b>
-
-The Logs Bridge API consist of these main components:
+The Logs API consist of these main components:
 
 * [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
 * [Logger](#logger) is responsible for emitting logs as
@@ -167,21 +163,12 @@ provide it.
 
 ## Concurrency requirements
 
-For languages which support concurrent execution the Logs Bridge APIs provide
+For languages which support concurrent execution the Logs APIs provide
 specific guarantees and safeties.
 
 **LoggerProvider** - all methods are safe to be called concurrently.
 
 **Logger** - all methods are safe to be called concurrently.
-
-## Artifact Naming
-
-The Logs Bridge API is not intended to be called by application developers
-directly, and SHOULD include documentation that discourages direct use. However,
-in the event OpenTelemetry were to add a user facing API, the Logs Bridge API would
-be a natural starting point. Therefore, Log Bridge API artifact, package, and class
-names MUST NOT include the terms "bridge", "appender", or any other qualifier
-that would prevent evolution into a user facing API.
 
 ## References
 

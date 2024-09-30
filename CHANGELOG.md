@@ -33,6 +33,8 @@ release.
   ([#4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203))
 - Make all fields as identifying for Logger. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+- Rename Logs Bridge API to Logs API and do not discourage from direct usage.
+  ([#4235](https://github.com/open-telemetry/opentelemetry-specification/pull/4235))
 
 ### Events
 
