@@ -33,6 +33,7 @@
   * [Field: `InstrumentationScope`](#field-instrumentationscope)
   * [Field: `Attributes`](#field-attributes)
     + [Errors and Exceptions](#errors-and-exceptions)
+  * [Events](#events)
 - [Example Log Records](#example-log-records)
 - [Example Mappings](#example-mappings)
 - [References](#references)
@@ -465,6 +466,28 @@ a log record MAY be included in the structured data in the `Attributes` section
 of the record.
 If included, they MUST follow the OpenTelemetry
 [semantic conventions for exception-related attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
+
+### Events
+
+Wikipedia’s [definition of log file](https://en.wikipedia.org/wiki/Log_file):
+
+>In computing, a log file is a file that records either events that occur in an
+>operating system or other software runs.
+
+From OpenTelemetry's perspective LogRecords and Events are both represented
+using the same [data model](./data-model.md). An Event is a specialized type
+of LogRecord, not a separate concept.
+
+Events are OpenTelemetry's standardized semantic formatting for LogRecords.
+Beyond the structure provided by the LogRecord data model, it is helpful for
+logs to have a common format within that structure. When OpenTelemetry
+instrumentation emits logs, those logs SHOULD be formatted as Events. All
+semantic conventions defined for logs MUST be formatted as Events.
+
+The Event format is as follows. All Events have a
+[`event.name` attribute](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md),
+and all Events with the same `event.name` MUST conform to the same schema for
+both their `Attributes` and their `Body`.
 
 ## Example Log Records
 

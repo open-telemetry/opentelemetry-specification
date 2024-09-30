@@ -1,7 +1,7 @@
 # Supplementary Guidelines
 
 Note: this document is NOT a spec, it is provided to support the Logs
-[API](./bridge-api.md) and [SDK](./sdk.md) specifications, it does NOT add any
+[API](./api.md) and [SDK](./sdk.md) specifications, it does NOT add any
 extra requirements to the existing specifications.
 
 <details>
@@ -34,8 +34,8 @@ and is [one of the supported](README.md#direct-to-collector) log collection
 approaches.
 
 The log appender implementation will typically acquire a
-[Logger](./bridge-api.md#logger), then
-call [Emit LogRecord](./bridge-api.md#emit-a-logrecord) for `LogRecord`s
+[Logger](./api.md#logger), then
+call [Emit LogRecord](./api.md#emit-a-logrecord) for `LogRecord`s
 received from the application.
 
 [Implicit Context Injection](#implicit-context-injection)
@@ -62,7 +62,7 @@ popular logging library.
 If the logging library has a concept that is similar to OpenTelemetry's
 definition of the [Instrumentation Scope's](../glossary.md#instrumentation-scope)
 name, then the appender's implementation should use that value as the
-name parameter when [obtaining the Logger](./bridge-api.md#get-a-logger).
+name parameter when [obtaining the Logger](./api.md#get-a-logger).
 
 This is for example applicable to:
 
@@ -72,7 +72,7 @@ This is for example applicable to:
 Appenders should avoid setting any attributes of the Instrumentation Scope.
 Doing so may result in different appenders setting different attributes on the
 same Instrumentation Scope, obtained with the same identity of the
-[Logger](./bridge-api.md#get-a-logger), which, according to the specification,
+[Logger](./api.md#get-a-logger), which, according to the specification,
 is an error.
 
 ### Context
@@ -81,13 +81,13 @@ is an error.
 
 When Context is implicitly available (e.g. in Java) the Appender can rely on
 automatic context propagation by NOT explicitly setting `Context` when
-calling [emit a LogRecord](./bridge-api.md#emit-a-logrecord).
+calling [emit a LogRecord](./api.md#emit-a-logrecord).
 
 Some log libraries have mechanisms specifically tailored for injecting
 contextual information into logs, such as MDC in Log4j. When available, it may
 be preferable to use these mechanisms to set the Context. A log appender can
 then fetch the Context and explicitly set it when
-calling [emit a LogRecord](./bridge-api.md#emit-a-logrecord). This allows the correct Context
+calling [emit a LogRecord](./api.md#emit-a-logrecord). This allows the correct Context
 to be included even when log records are emitted asynchronously, which can
 otherwise lead the Context to be incorrect.
 
@@ -100,7 +100,7 @@ In order for `TraceContext` to be recorded in `LogRecord`s in languages where
 the Context must be provided explicitly (e.g. Go), the end user must capture the
 Context and explicitly pass it to the logging subsystem. The log appender must
 take this Context and explicitly set it when
-calling [emit a LogRecord](./bridge-api.md#emit-a-logrecord).
+calling [emit a LogRecord](./api.md#emit-a-logrecord).
 
 Support for OpenTelemetry for logging libraries in these languages typically can
 be implemented in the form of logger wrappers that can capture the context once,
