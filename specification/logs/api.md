@@ -21,7 +21,6 @@ to reflect that it is now a user-facing API.**
     + [Enabled](#enabled)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
-- [Artifact Naming](#artifact-naming)
 - [References](#references)
 
 <!-- tocstop -->
