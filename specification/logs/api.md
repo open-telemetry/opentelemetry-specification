@@ -189,8 +189,8 @@ specific guarantees and safeties.
 ## Convenience
 
 Languages MAY provide additional ergonomics and convinence APIs. For instance,
-a language may provide an `Emit an Event` method that requires passing
-an event name parameter.
+a language may provide an `Info` method for `Logger` which emits a log record
+with `SeverityNumber` equal to `9`.
 
 ## Logs Bridge API
 
