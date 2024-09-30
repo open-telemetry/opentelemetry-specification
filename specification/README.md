@@ -29,10 +29,12 @@ path_base_for_github_subdir:
   - [Tracing](trace/api.md)
   - [Metrics](metrics/api.md)
   - [Logs](logs/api.md)
+    - [Events](logs/event-api.md)
 - SDK Specification
   - [Tracing](trace/sdk.md)
   - [Metrics](metrics/sdk.md)
   - [Logs](logs/sdk.md)
+    - [Events](logs/event-sdk.md)
   - [Resource](resource/sdk.md)
   - [Configuration](configuration/README.md)
 - Data Specification
