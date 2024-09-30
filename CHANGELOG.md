@@ -13,6 +13,8 @@ release.
 
 - Make all fields as identifying for Tracer. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+- Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
+  ([#4205](https://github.com/open-telemetry/opentelemetry-specification/pull/4205))
 
 ### Metrics
 
