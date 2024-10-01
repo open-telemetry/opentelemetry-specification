@@ -153,7 +153,6 @@ up-to-date response.
 This set of API functions will provide the capabalities needed to emit a
 `LogRecord` as is currently provided by
 
-* [Logs Bridge API](./bridge-api.md)
 * [Events API](./event-api.md)
 
 ## Optional and required parameters
