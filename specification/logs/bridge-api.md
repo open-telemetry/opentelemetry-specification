@@ -150,7 +150,7 @@ up-to-date response.
 
 **Status**: [Development](../document-status.md)
 
-This set of API functions will provide the capabalities needed to emit a
+This set of API functions will provide the capabilities needed to emit a
 `LogRecord` as is currently provided by [Events API](./event-api.md).
 
 ## Optional and required parameters
