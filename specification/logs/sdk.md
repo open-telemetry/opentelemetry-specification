@@ -7,6 +7,7 @@
 
 <!-- toc -->
 
+- [Public API/SDK Development](#public-apisdk-development)
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider Creation](#loggerprovider-creation)
   * [Logger Creation](#logger-creation)
@@ -45,6 +46,14 @@ OpenTelemetry API to actually produce telemetry. The OpenTelemetry Logging SDK
 API that provides users with this functionally.
 
 All language implementations of OpenTelemetry MUST provide an SDK.
+
+## Public API/SDK Development
+
+Note!: We are currently in the process of defining a new [user-facing Logs API](./public-api.md).
+
+The intent is that this new API/SDK will incorporate the current functionality of this existing API/SDK and once it is defined and implemented, this SDK usage will be migrated, deprecated, renamed and eventually removed.
+
+No further work is scheduled for the current Logging SDK definition at this time.
 
 ## LoggerProvider
 

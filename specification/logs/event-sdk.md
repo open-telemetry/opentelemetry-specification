@@ -9,6 +9,7 @@
 
 <!-- toc -->
 
+- [Public API/SDK Development](#public-apisdk-development)
 - [Overview](#overview)
 - [EventLoggerProvider](#eventloggerprovider)
   * [EventLoggerProvider Creation](#eventloggerprovider-creation)
@@ -28,6 +29,14 @@ OpenTelemetry API to actually produce telemetry. The OpenTelemetry SDK
 API that provides users with this functionally.
 
 All implementations of the OpenTelemetry API MUST provide an SDK.
+
+## Public API/SDK Development
+
+Note!: We are currently in the process of defining a new [user-facing Logs API](./public-api.md).
+
+The intent is that this new API will incorporate the current functionality of this existing API and once it is defined and implemented, the Event API usage will be migrated, deprecated, renamed and eventually removed.
+
+No further work is scheduled for the current Event SDK at this time.
 
 ## Overview
 

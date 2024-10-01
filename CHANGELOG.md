@@ -34,6 +34,9 @@ release.
   ([#4221](https://github.com/open-telemetry/opentelemetry-specification/pull/4221))
 - Make all fields as identifying for Logger. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+- Introduce initial placeholder for the new user-facing Logs API, adding references
+  to existing API's informing of the coming changes while the definition is defined.
+  ([#4236](https://github.com/open-telemetry/opentelemetry-specification/pull/4236))
 
 ### Events
 

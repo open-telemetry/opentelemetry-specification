@@ -9,6 +9,7 @@
 
 <!-- toc -->
 
+- [Public API Development](#public-api-development)
 - [Event Data model](#event-data-model)
 - [Event API use cases](#event-api-use-cases)
 - [EventLoggerProvider](#eventloggerprovider)
@@ -29,6 +30,14 @@ The Event API consists of these main components:
 * [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It
   provides access to `EventLogger`s.
 * [EventLogger](#eventlogger) is the component responsible for emitting events.
+
+## Public API Development
+
+Note!: We are currently in the process of defining a new [user-facing Logs API](./public-api.md).
+
+The intent is that this new API will incorporate the current functionality of this existing API and once it is defined and implemented, the Event API usage will be migrated, deprecated, renamed and eventually removed.
+
+No further work is scheduled for the current Event API definition at this time.
 
 ## Event Data model
 

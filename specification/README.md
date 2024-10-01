@@ -29,6 +29,7 @@ path_base_for_github_subdir:
   - [Tracing](trace/api.md)
   - [Metrics](metrics/api.md)
   - [Logs](logs/README.md)
+    - [Public API](logs/public-api.md)
     - [Bridge API](logs/bridge-api.md)
     - [Event API](logs/event-api.md)
 - SDK Specification
