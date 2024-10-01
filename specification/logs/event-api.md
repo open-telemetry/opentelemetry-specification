@@ -37,7 +37,7 @@ Note!: We are currently in the process of defining a new [Instrumentation API](.
 
 The intent is that this Instrumentation API will incorporate the current functionality of this existing API and once it is defined and implemented, the Events API usage will be migrated, deprecated, renamed and eventually removed.
 
-No further work is scheduled for the current Event API definition at this time.
+No further work is scheduled for the current Events API definition at this time.
 
 ## Event Data model
 
