@@ -35,7 +35,7 @@ The Event API consists of these main components:
 
 Note!: We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#instrumentation-api).
 
-The intent is that this Instrumentation API will incorporate the current functionality of this existing API and once it is defined and implemented, the Events API usage will be migrated, deprecated, renamed and eventually removed.
+The intent is that this Logs Instrumentation API will incorporate the current functionality of this existing Events API and once it is defined and implemented, the Events API usage will be migrated, deprecated, renamed and eventually removed.
 
 No further work is scheduled for the current Events API definition at this time.
 
