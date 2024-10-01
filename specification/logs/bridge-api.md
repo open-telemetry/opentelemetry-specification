@@ -9,6 +9,7 @@
 
 <!-- toc -->
 
+- [Public API Development](#public-api-development)
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider operations](#loggerprovider-operations)
     + [Get a Logger](#get-a-logger)
@@ -43,6 +44,14 @@ graph TD
     A[LoggerProvider] -->|Get| B(Logger)
     B -->|Emit| C(LogRecord)
 ```
+
+## Public API Development
+
+We are currently in the process of defining a new [user-facing Logs API](./public-api.md). Unlike this Logs Bridge API, the new API is intended to be called by both application developers and logging library authors to build log appenders, which use this API to bridge between existing logging libraries and the OpenTelemetry log data model.
+
+The intent is that this new API will incorporate the current functionality of this existing API and once it is defined and implemented, the Logs Bridge API usage will be migrated, deprecated, renamed and eventually removed.
+
+No further work is scheduled for the current Log Bridge API at this time.
 
 ## LoggerProvider
 
