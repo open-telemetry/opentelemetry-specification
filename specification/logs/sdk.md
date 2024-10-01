@@ -7,7 +7,6 @@
 
 <!-- toc -->
 
-- [Public API/SDK Development](#public-apisdk-development)
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider Creation](#loggerprovider-creation)
   * [Logger Creation](#logger-creation)
@@ -35,6 +34,7 @@
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
+- [Instrumentation API](#instrumentation-api)
 
 <!-- tocstop -->
 
@@ -46,14 +46,6 @@ OpenTelemetry API to actually produce telemetry. The OpenTelemetry Logging SDK
 API that provides users with this functionally.
 
 All language implementations of OpenTelemetry MUST provide an SDK.
-
-## Public API/SDK Development
-
-Note!: We are currently in the process of defining a new [user-facing Logs API](./public-api.md).
-
-The intent is that this new API/SDK will incorporate the current functionality of this existing API/SDK and once it is defined and implemented, this SDK usage will be migrated, deprecated, renamed and eventually removed.
-
-No further work is scheduled for the current Logging SDK definition at this time.
 
 ## LoggerProvider
 
@@ -546,5 +538,9 @@ return a Failure result.
 `Shutdown` SHOULD NOT block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
+
+## Instrumentation API
+
+Note!: We are currently in the process of defining a new [Instrumentation API](./bridge-api.md#instrumentation-api).
 
 - [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)

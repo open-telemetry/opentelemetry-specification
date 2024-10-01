@@ -9,7 +9,7 @@
 
 <!-- toc -->
 
-- [Public API/SDK Development](#public-apisdk-development)
+- [Instrumentation API Development](#instrumentation-api-development)
 - [Overview](#overview)
 - [EventLoggerProvider](#eventloggerprovider)
   * [EventLoggerProvider Creation](#eventloggerprovider-creation)
@@ -30,9 +30,9 @@ API that provides users with this functionally.
 
 All implementations of the OpenTelemetry API MUST provide an SDK.
 
-## Public API/SDK Development
+## Instrumentation API Development
 
-Note!: We are currently in the process of defining a new [user-facing Logs API](./public-api.md).
+Note!: We are currently in the process of defining a new [Instrumentation API](./bridge-api.md#instrumentation-api).
 
 The intent is that this new API will incorporate the current functionality of this existing API and once it is defined and implemented, the Event API usage will be migrated, deprecated, renamed and eventually removed.
 
