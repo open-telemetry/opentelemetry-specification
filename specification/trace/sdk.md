@@ -308,10 +308,9 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
 1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
    (note: this must be done before calling `ShouldSample`, because it expects
    a valid trace ID as input).
-2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method
-   (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
-   use the sampling decision of the parent,
-   translating a set SampledFlag to RECORD and an unset one to DROP).
+2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
+   The [built-in `ParentBasedSampler`](#parentbased) can be used to
+   take the sampling decision of the parent context using the `Sampled` flag.
 3. Generate a new span ID for the `Span`, independently of the sampling decision.
    This is done so other components (such as logs or exception handling) can rely on
    a unique span ID, even if the `Span` is a non-recording instance.
@@ -326,7 +325,7 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
 
 #### Span flags
 
-The OTLP representation for Span and Span Link include a 32-bit field declared as Span Flags.
+The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
 
 Bits 0-7 of the Span Flags field are reserved for the 8 bits of Trace Context flags,
 specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
