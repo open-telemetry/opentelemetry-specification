@@ -120,7 +120,7 @@ The `MeterProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-* `name`: This name uniquely identifies the [instrumentation
+* `name`: Specifies the name of the [instrumentation
   scope](../glossary.md#instrumentation-scope), such as the
   [instrumentation library](../glossary.md#instrumentation-library) (e.g.
   `io.opentelemetry.contrib.mongodb`), package,
@@ -149,15 +149,9 @@ This API MUST accept the following parameters:
   it is up to their discretion. Therefore, this API MUST be structured to
   accept a variable number of attributes, including none.
 
-Meters are identified by `name`, `version`, and `schema_url` fields.  When more
-than one `Meter` of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different `Meter`
-instances are returned. It is a user error to create Meters with different
-attributes but the same identity.
-
-The term *identical* applied to Meters describes instances where all identifying
-fields are equal. The term *distinct* applied to Meters describes instances where
-at least one identifying field has a different value.
+The term *identical* applied to Meters describes instances where all parameters
+are equal. The term *distinct* applied to Meters describes instances where at
+least one parameter has a different value.
 
 ## Meter
 
@@ -185,12 +179,12 @@ Also see the respective sections below for more information on instrument creati
 Instruments are used to report [Measurements](#measurement). Each Instrument
 will have the following parameters:
 
-* The `name` of the Instrument
+* The [`name`](#instrument-name-syntax) of the Instrument
 * The `kind` of the Instrument - whether it is a [Counter](#counter) or
   one of the other kinds, whether it is synchronous or asynchronous
-* An optional `unit` of measure
-* An optional `description`
-* Optional `advisory` parameters (**development**)
+* An optional [`unit`](#instrument-unit) of measure
+* An optional [`description`](#instrument-description)
+* Optional [`advisory`](#instrument-advisory-parameters) parameters (**mixed**)
 
 Instruments are associated with the Meter during creation. Instruments
 are identified by the `name`, `kind`, `unit`, and `description`.
@@ -317,8 +311,8 @@ The API to construct synchronous instruments MUST accept the following parameter
 
   The API SHOULD be documented in a way to communicate to users that the `name`
   parameter needs to conform to the [instrument name
-  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`;
-  that is left to implementations of the API.
+  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`; that
+  is left to implementations of the API, like the [SDK](sdk.md#instrument-name).
 * A `unit` of measure.
 
   Users can provide a `unit`, but it is up to their discretion. Therefore, this
@@ -486,7 +480,8 @@ All instruments SHOULD provide functions to:
 **Status**: [Development](../document-status.md)
 
 To help users avoid performing computationally expensive operations when
-recording measurements, instruments SHOULD provide this `Enabled` API.
+recording measurements, [synchronous Instruments](#synchronous-instrument-api)
+SHOULD provide this `Enabled` API.
 
 There are currently no required parameters for this API. Parameters can be
 added in the future, therefore, the API MUST be structured in a way for
