@@ -13,6 +13,8 @@ release.
 
 - Make all fields as identifying for Tracer. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+- Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
+  ([#4205](https://github.com/open-telemetry/opentelemetry-specification/pull/4205))
 
 ### Metrics
 
@@ -22,6 +24,8 @@ release.
   ([#4211](https://github.com/open-telemetry/opentelemetry-specification/pull/4211))
 - Make all fields as identifying for Meter. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+- Clarify that applying cardinality limits should be done after attribute filtering.
+  ([#4228](https://github.com/open-telemetry/opentelemetry-specification/pull/4228))
 - Mark the `Enabled` method as stable.
   ([#4219](https://github.com/open-telemetry/opentelemetry-specification/pull/4219))
 
@@ -29,6 +33,7 @@ release.
 
 - Define `Enabled` parameters for `Logger`.
   ([#4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203))
+  ([#4221](https://github.com/open-telemetry/opentelemetry-specification/pull/4221))
 - Make all fields as identifying for Logger. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 
