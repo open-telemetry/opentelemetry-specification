@@ -512,7 +512,7 @@ For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags 
 
 #### Explicit trace randomness
 
-The SDK MAY support an optional explicit trace randomness feature.  For root span contexts, when this option is configured, the SDK inserts explicit randomness into the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
+The SDK MAY support an optional explicit trace randomness feature.  For root span contexts, when this option is configured, the SDK inserts explicit randomness into the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].  Explicit trace randomness can be the result of a custom IdGenerator that does not meet the TraceID randomness requirement, or through user-defined explicit trace randomness.
 
 #### Presumption of TraceID randomness
 
@@ -521,6 +521,8 @@ For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet 
 #### User-defined explicit trace randomness
 
 Trace SDKs MAY permit users to setup explicit randomness by entering it into the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE] of the context before creating a root span.  This lets users have consistent sampling across traces.
+
+SDK support means permitting the user to set the `TraceState` of a root span, in particular so that the OpenTelemetry TraceState `rv` sub-key passes through to the root span Sampler.
 
 #### IdGenerator randomness
 
