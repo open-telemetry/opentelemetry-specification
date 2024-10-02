@@ -15,6 +15,8 @@ release.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 - Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
   ([#4205](https://github.com/open-telemetry/opentelemetry-specification/pull/4205))
+- Add in-development support for `otlp/stdout` exporter via `OTEL_TRACES_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Metrics
 
@@ -26,6 +28,8 @@ release.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 - Clarify that applying cardinality limits should be done after attribute filtering.
   ([#4228](https://github.com/open-telemetry/opentelemetry-specification/pull/4228))
+- Add in-development support for `otlp/stdout` exporter via `OTEL_METRICS_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Logs
 
@@ -34,6 +38,8 @@ release.
   ([#4221](https://github.com/open-telemetry/opentelemetry-specification/pull/4221))
 - Make all fields as identifying for Logger. Previously attributes were omitted from being identifying.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+- Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
+ ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Events
 

@@ -13,12 +13,33 @@ Currently, it only describes the serialization of OpenTelemetry data to the OTLP
 
 ## Table of Contents
 
+- [Exporter configuration](#exporter-configuration)
+  - [Programmatic configuration](#programmatic-configuration)
 - [JSON File serialization](#json-file-serialization)
   - [File storage requirements](#file-storage-requirements)
     - [JSON lines file](#json-lines-file)
     - [Streaming appending](#streaming-appending)
   - [Telemetry data requirements](#telemetry-data-requirements)
   - [Examples](#examples)
+
+## Exporter configuration
+
+The metric exporter MUST support the environment variables defined in the
+[OTLP Exporter](../metrics/sdk_exporters/otlp.md#additional-environment-variable-configuration)
+specification.
+
+If a language provides a mechanism to automatically configure a
+span or logs processor to pair with the associated
+exporter (e.g., using the [`OTEL_TRACES_EXPORTER` environment
+variable](../configuration/sdk-environment-variables.md#exporter-selection)), by
+default the OpenTelemetry Protocol File Exporter SHOULD be paired with a batching
+processor.
+
+### Programmatic configuration
+
+| Requirement | Name                       | Description                                                                                            | Default |
+|-------------|----------------------------|--------------------------------------------------------------------------------------------------------|---------|
+| MUST        | output stream (or similar) | Configure output stream. This SHOULD include the possibility to configure the output stream to a file. | stdout  |
 
 ## JSON File serialization
 
