@@ -179,12 +179,12 @@ Also see the respective sections below for more information on instrument creati
 Instruments are used to report [Measurements](#measurement). Each Instrument
 will have the following parameters:
 
-* The `name` of the Instrument
+* The [`name`](#instrument-name-syntax) of the Instrument
 * The `kind` of the Instrument - whether it is a [Counter](#counter) or
   one of the other kinds, whether it is synchronous or asynchronous
-* An optional `unit` of measure
-* An optional `description`
-* Optional `advisory` parameters (**development**)
+* An optional [`unit`](#instrument-unit) of measure
+* An optional [`description`](#instrument-description)
+* Optional [`advisory`](#instrument-advisory-parameters) parameters (**mixed**)
 
 Instruments are associated with the Meter during creation. Instruments
 are identified by the `name`, `kind`, `unit`, and `description`.
@@ -311,8 +311,8 @@ The API to construct synchronous instruments MUST accept the following parameter
 
   The API SHOULD be documented in a way to communicate to users that the `name`
   parameter needs to conform to the [instrument name
-  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`;
-  that is left to implementations of the API.
+  syntax](#instrument-name-syntax). The API SHOULD NOT validate the `name`; that
+  is left to implementations of the API, like the [SDK](sdk.md#instrument-name).
 * A `unit` of measure.
 
   Users can provide a `unit`, but it is up to their discretion. Therefore, this
