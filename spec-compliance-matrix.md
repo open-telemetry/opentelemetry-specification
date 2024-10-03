@@ -88,7 +88,7 @@ formats is required. Implementing more than one format is optional.
 | [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     | +      | +    | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     | +      |      |        | +   |      |     |      |       |
 | TraceID generator implements W3C Trace Context Level 2 randomness                                | X        |     |      |     |        |      |        |     |      |     |      |       |
-| OpenTelemetry explicit randomness supported                                                      | X        |     |      |     |        |      |        |     |      |     |      |       |
+| OpenTelemetry explicit randomness inserted for non-random IdGenerators                           | X        |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
