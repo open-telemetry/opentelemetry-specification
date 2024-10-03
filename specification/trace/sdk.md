@@ -624,7 +624,7 @@ are only allowed synchronously from within the invoked `OnEnding` callbacks.  Al
 
 #### OnEnd(Span)
 
-`OnEnd` is called after a span is ended (i.e., the end timestamp is already set).
+`OnEnd` is called after a span is ended. The end timestamp MUST have been set.
 This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
 therefore it should not block or throw an exception.
 
