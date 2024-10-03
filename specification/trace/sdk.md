@@ -607,7 +607,9 @@ are invoked in the order they have been registered.
 
 **Status**: [Development](../document-status.md)
 
-`OnEnding` is called during the span `End()` operation. The end timestamp MUST have been set.
+`OnEnding` is called during the span `End()` operation.
+The end timestamp MUST have been computed (the method duration is not included
+in the span duration).
 The Span object MUST still be mutable (i.e., `SetAttribute`, `AddLink`, `AddEvent` can be called) while `OnEnding` is called.
 This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
 therefore it should not block or throw an exception.
