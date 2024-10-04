@@ -70,7 +70,7 @@ Rejection_Threshold = (1 - Sampling_Probability) * 2^56.
 
 For example, if the sampling probability is 100% (keep all spans), the rejection threshold is 0.
 
-Similarly, if the sampling probability is 1% (drop 99% of spans), the rejection threshold with 5 digits of precision would be (1-0.01) * 2^56 = 4458562600304640 = 0xfd70a00000000.
+Similarly, if the sampling probability is 1% (drop 99% of spans), the rejection threshold with 5 digits of precision would be (1-0.01) * 2^56 ≈ 71337018784743424 = 0xfd70a400000000.
 
 We refer to this rejection threshold conceptually as `T`. We represent it using the OpenTelemetry TraceState key `th`, where the value is propagated and also stored with each span. In the example above, the `th` key has `fd70a00000000` as the value.
 
