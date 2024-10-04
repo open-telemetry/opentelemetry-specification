@@ -374,7 +374,17 @@ Callers SHOULD NOT cache the returned value.
 ### Built-in samplers
 
 OpenTelemetry supports a number of built-in samplers to choose from.
-The default sampler is `ParentBased(root=AlwaysOn)`.
+
+The default sampler is `ParentBased(root=AlwaysOn)`, which configures
+a policy depending on whether the new span is a root or a child:
+
+* For root spans, always sample a new context.
+* For child spans, take the decision of the parent context.
+
+By using the ParentBased sampler by default, users can change sampling
+across their system by reconfiguring only root span Samplers.  To
+configure probability-based trace sampling across a system, users may
+configure `ParentBased(root=TraceIdRatioBased{probability})`.
 
 #### AlwaysOn
 
