@@ -39,7 +39,6 @@ linkTitle: SDK
     + [Random trace flag](#random-trace-flag)
     + [Explicit trace randomness](#explicit-trace-randomness)
     + [Presumption of TraceID randomness](#presumption-of-traceid-randomness)
-    + [User-defined explicit trace randomness](#user-defined-explicit-trace-randomness)
     + [IdGenerator randomness](#idgenerator-randomness)
 - [Span Limits](#span-limits)
 - [Id Generators](#id-generators)
