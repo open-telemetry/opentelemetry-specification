@@ -26,6 +26,8 @@ release.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 - Clarify that applying cardinality limits should be done after attribute filtering.
   ([#4228](https://github.com/open-telemetry/opentelemetry-specification/pull/4228))
+- Mark cardinality limits as stable.
+  ([#4222](https://github.com/open-telemetry/opentelemetry-specification/pull/4222))
 - Mark the `Enabled` method as stable.
   ([#4219](https://github.com/open-telemetry/opentelemetry-specification/pull/4219))
 
