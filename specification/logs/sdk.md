@@ -34,7 +34,7 @@
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
-- [Instrumentation API](#instrumentation-api)
+- [Logs Instrumentation API](#logs-instrumentation-api)
 
 <!-- tocstop -->
 
@@ -539,9 +539,9 @@ return a Failure result.
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
 
-## Instrumentation API
+## Logs Instrumentation API
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#instrumentation-api).
+> We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#logs-instrumentation-api).
 
 - [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
