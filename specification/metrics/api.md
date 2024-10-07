@@ -483,9 +483,7 @@ To help users avoid performing computationally expensive operations when
 recording measurements, [synchronous Instruments](#synchronous-instrument-api)
 SHOULD provide this `Enabled` API.
 
-There are currently no required parameters for this API. Parameters can be
-added in the future, therefore, the API MUST be structured in a way for
-parameters to be added.
+There are currently no required parameters for this API.
 
 This API MUST return a language idiomatic boolean type. A returned value of
 `true` means the instrument is enabled for the provided arguments, and a returned
