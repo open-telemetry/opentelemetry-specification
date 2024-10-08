@@ -56,7 +56,6 @@ release.
 - Update Instrumentation Scope glossary entry with correct identifying fields
   ([#4244](https://github.com/open-telemetry/opentelemetry-specification/pull/4244))
 
-
 ### Supplementary Guidelines
 
 ## v1.37.0 (2024-09-13)
