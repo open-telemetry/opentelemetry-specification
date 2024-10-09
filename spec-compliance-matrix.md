@@ -190,8 +190,8 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 |----------------------------------------------|----------|-----|------|-----|--------|------|--------|-----|------|-----|------|-------|
 | LoggerProvider.Get Logger                    |          |     | +    |     | +      |      |        | +   |      | +   | -    |       |
 | LoggerProvider.Get Logger accepts attributes |          |     |      |     | +      |      |        | +   |      | +   |      |       |
-| LoggerProvider.Shutdown                      |          |     | +    |     | +      |      |        | +   |      |     | -    |       |
-| LoggerProvider.ForceFlush                    |          |     | +    |     | +      |      |        | +   |      |     | -    |       |
+| LoggerProvider.Shutdown                      |          |     | +    |     | +      |      |        | +   |      | +   | -    |       |
+| LoggerProvider.ForceFlush                    |          |     | +    |     | +      |      |        | +   |      | +   | -    |       |
 | Logger.Emit(LogRecord)                       |          |     | +    |     | +      |      |        | +   |      | +   | -    |       |
 | Logger.Enabled                               | X        | +   |      |     |        |      |        |     | +    | +   |      |       |
 | SimpleLogRecordProcessor                     |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
@@ -199,7 +199,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Can plug custom LogRecordProcessor           |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
-| OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      |     | -    |       |
+| OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      | +   | -    |       |
 | Can plug custom LogRecordExporter            |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | Trace Context Injection                      |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 
@@ -252,7 +252,7 @@ Disclaimer: Events are currently in Development status - work in progress.
 | Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | -    | +     |
 | OT Propagator                                                                    |          | +  | +    | +  | +      |      |        |     |      |     |      |       |
 | OpenCensus Binary Propagator                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  | +    |    | +      | +    |        | +   |      |     |      |       |
+| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  | +    |    | +      | +    |        | +   |      | +   |      |       |
 | Fields                                                                           |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      | +   | N/A  | +   | +    | +     |
 | Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      | +   | N/A  | +   | +    | +     |
@@ -270,30 +270,30 @@ Note: Support for environment variables is optional.
 | OTEL_LOG_LEVEL                                           | -  | -    | +  | [-][py1059] | +    | -      | +   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -  | +    |    | +           | +    | +      | +   | -    | -   | -    | -     |
 | OTEL_BSP_*                                               | +  | +    | +  | +           | +    | +      | +   | +    | -   | +    | -     |
-| OTEL_BLRP_*                                              |    | +    |    |             |      |        |     | +    |     | +    |       |
+| OTEL_BLRP_*                                              |    | +    |    |             |      |        |     | +    | -   | +    |       |
 | OTEL_EXPORTER_OTLP_*                                     | +  | +    |    | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_EXPORTER_ZIPKIN_*                                   | -  | +    |    | +           | +    | -      | +   | -    | -   | +    | -     |
 | OTEL_TRACES_EXPORTER                                     | -  | +    | +  | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_METRICS_EXPORTER                                    | -  | +    |    | +           | -    | -      | +   | -    | -   | -    | -     |
-| OTEL_LOGS_EXPORTER                                       | -  | +    |    | +           |      |        | +   |      |     | -    |       |
+| OTEL_LOGS_EXPORTER                                       | -  | +    |    | +           |      |        | +   |      | -   | -    |       |
 | OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT                          | +  | +    | +  | +           | +    | +      | +   | +    | -   | +    |       |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +  | +    | +  | +           | +    | +      | +   |      |     | +    |       |
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT                   | +  | +    | +  | +           | +    | +      | +   |      | -   | +    |       |
 | OTEL_SPAN_EVENT_COUNT_LIMIT                              | +  | +    | +  | +           | +    | +      | +   | +    | -   | +    |       |
 | OTEL_SPAN_LINK_COUNT_LIMIT                               | +  | +    | +  | +           | +    | +      | +   | +    | -   | +    |       |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +  | -    |    | +           | +    | +      | +   |      |     | +    |       |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +  | -    |    | +           | +    | +      | +   |      |     | +    |       |
-| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT                     |    |      |    |             |      |        | +   |      |     |      |       |
-| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT              |    |      |    |             |      |        | +   |      |     |      |       |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT                         | +  | -    |    | +           | +    | +      | +   |      | -   | +    |       |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT                          | +  | -    |    | +           | +    | +      | +   |      | -   | +    |       |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT                     |    |      |    |             |      |        | +   |      | -   |      |       |
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT              |    |      |    |             |      |        | +   |      | -   |      |       |
 | OTEL_TRACES_SAMPLER                                      | +  | +    | +  | +           | +    | +      | +   | -    | -   | -    |       |
 | OTEL_TRACES_SAMPLER_ARG                                  | +  | +    | +  | +           | +    | +      | +   | -    | -   | -    |       |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +  | +    | +  | +           | +    | -      | +   |      |     | +    |       |
-| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +  | +    | +  | +           | +    | -      | +   |      |     | +    |       |
-| OTEL_METRIC_EXPORT_INTERVAL                              | -  | +    |    | +           |      |        | +   |      |     | +    |       |
-| OTEL_METRIC_EXPORT_TIMEOUT                               | -  | -    |    | +           |      |        | +   |      |     | +    |       |
-| OTEL_METRICS_EXEMPLAR_FILTER                             | -  | +    |    |             |      |        | +   |      |     | +    |       |
-| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | +  | +    | +  | +           |      |        | +   |      |     | +    |       |
-| OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |    | +    |    | +           |      |        |     |      |     |      |       |
-| OTEL_EXPERIMENTAL_CONFIG_FILE                            |    |      |    |             |      |        |     |      |     |      |       |
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT                        | +  | +    | +  | +           | +    | -      | +   |      | -   | +    |       |
+| OTEL_ATTRIBUTE_COUNT_LIMIT                               | +  | +    | +  | +           | +    | -      | +   |      | -   | +    |       |
+| OTEL_METRIC_EXPORT_INTERVAL                              | -  | +    |    | +           |      |        | +   |      | -   | +    |       |
+| OTEL_METRIC_EXPORT_TIMEOUT                               | -  | -    |    | +           |      |        | +   |      | -   | +    |       |
+| OTEL_METRICS_EXEMPLAR_FILTER                             | -  | +    |    |             |      |        | +   |      | -   | +    |       |
+| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | +  | +    | +  | +           |      |        | +   |      | -   | +    |       |
+| OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |    | +    |    | +           |      |        |     |      | -   |      |       |
+| OTEL_EXPERIMENTAL_CONFIG_FILE                            |    |      |    |             |      |        |     |      | -   |      |       |
 
 ## Declarative configuration
 
