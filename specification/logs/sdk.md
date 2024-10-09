@@ -15,6 +15,8 @@
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
+  * [Logs Instrumentation API](#logs-instrumentation-api)
+    + [Emit Event](#emit-event)
   * [LoggerConfig](#loggerconfig)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
@@ -34,7 +36,6 @@
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
-- [Logs Instrumentation API](#logs-instrumentation-api)
 
 <!-- tocstop -->
 
@@ -170,6 +171,49 @@ according to the [LoggerConfig](#loggerconfig) computed
 during [logger creation](#logger-creation). If the `LoggerProvider` supports
 updating the [LoggerConfigurator](#loggerconfigurator), then upon update
 the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
+
+### Logs Instrumentation API
+
+**Status**: [Development](../document-status.md)
+
+> [!NOTE]
+> We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#logs-instrumentation-api).
+
+#### Emit Event
+
+Emit a `LogRecord` representing an OpenTelemetry `Event` that conforms to the
+definition of [Semantic Conventions for Events](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+
+**Implementation Requirements:**
+
+The implementation MUST use the parameters
+to [emit a logRecord](./bridge-api.md#emit-a-logrecord) as follows:
+
+* The `Name` MUST be used to set
+  the `event.name` [Attribute](./data-model.md#field-attributes). If
+  the `Attributes` provided by the user contain an `event.name` attribute the
+  value provided in the `Name` takes precedence.
+* If provided by the user, the `Body` MUST be used to set
+  the [Body](./data-model.md#field-body). If not provided, `Body` MUST not be
+  set.
+* If provided by the user, the `Attributes` MUST be used to set
+  the [Attributes](./data-model.md#field-attributes). The user
+  provided `Attributes` MUST not take over the `event.name`
+  attribute previously discussed.
+* If provided by the user, the `Timestamp` MUST be used to set
+  the [Timestamp](./data-model.md#field-timestamp). If not provided, `Timestamp`
+  MUST be set to the current time when [emit](#emit-event) was called.
+* The [Observed Timestamp](./data-model.md#field-observedtimestamp) MUST not be
+  set. (NOTE: [emit a logRecord](./bridge-api.md#emit-a-logrecord) will
+  set `ObservedTimestamp` to the current time when unset.)
+* If provided by the user, the `Context` MUST be used to set
+  the [Context](./bridge-api.md#emit-a-logrecord). If not provided, `Context`
+  MUST be set to the current Context.
+* If provided by the user, the `SeverityNumber` MUST be used to set
+  the [Severity Number](./data-model.md#field-severitynumber) when emitting the
+  logRecord. If not provided, `SeverityNumber` MUST be set
+  to `SEVERITY_NUMBER_INFO=9`.
+* The [Severity Text](./data-model.md#field-severitytext) MUST not be set.
 
 ### LoggerConfig
 
@@ -538,10 +582,5 @@ return a Failure result.
 `Shutdown` SHOULD NOT block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
-
-## Logs Instrumentation API
-
-> [!NOTE]
-> We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#logs-instrumentation-api).
 
 - [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)

@@ -16,7 +16,8 @@
   * [Logger operations](#logger-operations)
     + [Emit a LogRecord](#emit-a-logrecord)
     + [Enabled](#enabled)
-- [Logs Instrumentation API](#logs-instrumentation-api)
+  * [Logs Instrumentation API](#logs-instrumentation-api)
+    + [Emit Event](#emit-event)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [Artifact Naming](#artifact-naming)
@@ -146,12 +147,34 @@ SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
 
-## Logs Instrumentation API
+### Logs Instrumentation API
 
 **Status**: [Development](../document-status.md)
 
 This set of API functions will provide the capabilities needed to emit a
 `LogRecord` as is currently provided by [Events API](./event-api.md).
+
+#### Emit Event
+
+**Status**: [Development](../document-status.md)
+
+An Event is a specialized type of `LogRecord` that conforms to the
+[Semantic Conventions for Events](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
+and all semantic conventions defined for logs. The effect of calling this API is
+to emit a resulting OpenTelemetry `Event` to the processing pipeline as a well
+formed `LogRecord`.
+
+**Parameters:**
+
+* The `Name` of the Event, as described
+  in [event.name semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/event.md).
+* The (`AnyValue`) (optional) `Body` of the Event.
+* The `Attributes` (optional) of the Event. Event `Attributes` provide
+  additional details about the Event which are not part of the
+  well-defined event `Body`.
+* The `Timestamp` (optional) of the Event.
+* The [Context](../context/README.md) (optional) associated with the Event.
+* The `SeverityNumber` (optional) of the Event.
 
 ## Optional and required parameters
 

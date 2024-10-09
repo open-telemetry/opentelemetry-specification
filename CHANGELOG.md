@@ -39,6 +39,8 @@ release.
 - Introduce initial placeholder for the new user-facing Logs API, adding references
   to existing API's informing of the coming changes while the definition is defined.
   ([#4236](https://github.com/open-telemetry/opentelemetry-specification/pull/4236))
+- Merge in the API and SDK definitions of the emitEvent from the Event API/SDK
+  ([#4252](https://github.com/open-telemetry/opentelemetry-specification/pull/4252))
 
 ### Events
 
