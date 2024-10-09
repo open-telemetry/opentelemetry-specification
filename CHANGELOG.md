@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Merge in the API and SDK definitions of the emitEvent from the Event API/SDK
+  ([#4252](https://github.com/open-telemetry/opentelemetry-specification/pull/4252))
+
 ### Events
 
 ### Baggage
