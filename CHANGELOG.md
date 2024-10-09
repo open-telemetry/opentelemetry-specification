@@ -56,6 +56,8 @@ release.
 
 - Define equality for attributes and collection of attributes.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+- Update Instrumentation Scope glossary entry with correct identifying fields
+  ([#4244](https://github.com/open-telemetry/opentelemetry-specification/pull/4244))
 
 ### Supplementary Guidelines
 
