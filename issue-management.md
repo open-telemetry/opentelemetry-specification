@@ -71,7 +71,7 @@ to their issue, if the following conditions are met:
 * they summarize in the issue description what is blocking this issue and/or what change is required to move that issue forward.
 * they tag all maintainers of the implementation repo in the issue description (@open-telemetry/<sig>-maintainers). No action from the other maintainers is expected, except they disagree with
   the request of this issue being tagged as `maintainer-blocked` or `maintainer-request`
-* they will share the issue with all other SIGs either via the Maintainers Call or via a message to [#otel-maintainers](https://cloud-native.slack.com/archives/C01NJ7V1KRC) on CNCF slack. This way maintainers of other implementation SIGs can comment if they have the same request.
+* they will share the issue with all other SIGs either via the [Maintainer Meeting](https://github.com/open-telemetry/community?tab=readme-ov-file#cross-cutting-sigs) or via a message to [#otel-maintainers](https://cloud-native.slack.com/archives/C01NJ7V1KRC) on CNCF slack. This way maintainers of other implementation SIGs can comment if they have the same request.
 
 A triager will add the requested label to the issue if those conditions are met. The difference between the 2 labels is as follows:
 
