@@ -16,6 +16,7 @@
   * [Logger operations](#logger-operations)
     + [Emit a LogRecord](#emit-a-logrecord)
     + [Enabled](#enabled)
+- [Logs Instrumentation API](#logs-instrumentation-api)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [Artifact Naming](#artifact-naming)
@@ -136,15 +137,6 @@ The API SHOULD accept the following parameters:
   When only explicit Context is supported, accepting this parameter is REQUIRED.
 - [Severity Number](./data-model.md#field-severitynumber) (optional)
 
-Additional optional parameters can be added in the future, therefore,
-the API MUST be structured in a way for these parameters to be added.
-
-It SHOULD be possible to distinguish between an unspecified parameter value from
-a parameter value set explicitly to a valid default value of given type
-(e.g. distinguish unspecified attributes for empty attributes). The exception
-from this rule is when the default value of given type is not seen as a valid
-value like 0 for [Severity Number](./data-model.md#field-severitynumber).
-
 This API MUST return a language idiomatic boolean type. A returned value of
 `true` means the `Logger` is enabled for the provided arguments, and a returned
 value of `false` means the `Logger` is disabled for the provided arguments.
@@ -153,6 +145,13 @@ The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
+
+## Logs Instrumentation API
+
+**Status**: [Development](../document-status.md)
+
+This set of API functions will provide the capabilities needed to emit a
+`LogRecord` as is currently provided by [Events API](./event-api.md).
 
 ## Optional and required parameters
 
