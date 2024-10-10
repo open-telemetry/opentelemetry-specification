@@ -9,6 +9,7 @@
 
 <!-- toc -->
 
+- [Logs Instrumentation API Development](#logs-instrumentation-api-development)
 - [Event Data model](#event-data-model)
 - [Event API use cases](#event-api-use-cases)
 - [EventLoggerProvider](#eventloggerprovider)
@@ -29,6 +30,15 @@ The Event API consists of these main components:
 * [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It
   provides access to `EventLogger`s.
 * [EventLogger](#eventlogger) is the component responsible for emitting events.
+
+## Logs Instrumentation API Development
+
+> [!NOTE]
+> We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#logs-instrumentation-api).
+
+The intent is that this Logs Instrumentation API will incorporate the current functionality of this existing Events API and once it is defined and implemented, the Events API usage will be migrated, deprecated, renamed and eventually removed.
+
+No further work is scheduled for the current Events API definition at this time.
 
 ## Event Data model
 
@@ -98,7 +108,7 @@ The `EventLoggerProvider` MUST provide the following functions:
 
 This API MUST accept the following parameters:
 
-* `name`: This name uniquely identifies the [instrumentation scope](../glossary.md#instrumentation-scope),
+* `name`: Specifies the name of the [instrumentation scope](../glossary.md#instrumentation-scope),
   such as the [instrumentation library](../glossary.md#instrumentation-library)
   (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
   If an application or library has built-in OpenTelemetry instrumentation, both
@@ -117,15 +127,9 @@ This API MUST accept the following parameters:
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
 
-`EventLogger`s are identified by `name`, `version`, and `schema_url` fields.  When more
-than one `EventLogger` of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different `EventLogger`
-instances are returned. It is a user error to create `EventLogger`s with different
-`attributes` but the same identity.
-
-The effect of associating a Schema URL with a `EventLogger` MUST be that the telemetry
-emitted using the `EventLogger` will be associated with the Schema URL, provided that
-the emitted data format is capable of representing such association.
+The term *identical* applied to `EventLogger`s describes instances where all
+parameters are equal. The term *distinct* applied to `EventLogger`s describes
+instances where at least one parameter has a different value.
 
 ## EventLogger
 

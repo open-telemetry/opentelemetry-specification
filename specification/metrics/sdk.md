@@ -128,10 +128,6 @@ working Meter MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-When a Schema URL is passed as an argument when creating a `Meter` the emitted
-telemetry for that `Meter` MUST be associated with the Schema URL, provided
-that the emitted data format is capable of representing such association.
-
 **Status**: [Development](../document-status.md) - The `MeterProvider` MUST
 compute the relevant [MeterConfig](#meterconfig) using the
 configured [MeterConfigurator](#meterconfigurator), and create
@@ -375,6 +371,13 @@ The SDK MUST accept the following stream configuration parameters:
   parameter configured on the instrument instead. If the `Attributes`
   advisory parameter is absent, all attributes MUST be kept.
 
+  Additionally, implementations SHOULD support configuring an exclude-list of
+  attribute keys. The exclude-list contains attribute keys that identify the
+  attributes that MUST be excluded, all other attributes MUST be kept. If an
+  attribute key is both included and excluded, the SDK MAY fail fast in
+  accordance with initialization [error handling
+  principles](../error-handling.md#basic-error-handling-principles).
+
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
 
@@ -396,8 +399,7 @@ The SDK MUST accept the following stream configuration parameters:
   If the user does not provide an `exemplar_reservoir` value, the
   `MeterProvider` MUST apply a [default exemplar
   reservoir](#exemplar-defaults).
-* **Status**: [Development](../document-status.md) -
-  `aggregation_cardinality_limit`: A positive integer value defining the
+* `aggregation_cardinality_limit`: A positive integer value defining the
   maximum number of data points allowed to be emitted in a collection cycle by
   a single instrument. See [cardinality limits](#cardinality-limits), below.
 
@@ -771,13 +773,15 @@ of metrics across successive collections.
 
 ### Cardinality limits
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 SDKs SHOULD support being configured with a cardinality limit. The number of
 unique combinations of attributes is called cardinality. For a given metric, the
 cardinality limit is a hard limit on the number of [Metric
 Points](./data-model.md#metric-points) that can be collected during a collection
-cycle.
+cycle. Cardinality limit enforcement SHOULD occur _after_ attribute filtering,
+if any. This ensures users can filter undesired attributes using [views](#view)
+and prevent reaching the cardinality limit.
 
 #### Configuration
 
@@ -1227,7 +1231,7 @@ SHOULD be provided:
 * The `exporter` to use, which is a `MetricExporter` instance.
 * The default output `aggregation` (optional), a function of instrument kind. This function SHOULD be obtained from the `exporter`. If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The output `temporality` (optional), a function of instrument kind. This function SHOULD be obtained from the `exporter`. If not configured, the Cumulative temporality SHOULD be used.
-* **Status**: [Development](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+* The default aggregation [cardinality limit](#cardinality-limits) (optional) to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 * **Status**: [Development](../document-status.md) - The [MetricFilter](#metricfilter) to apply to metrics and attributes during `MetricReader#Collect`.
 * Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
 
@@ -1375,6 +1379,9 @@ Configurable parameters:
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
 
+The reader MUST synchronize calls to `MetricExporter`'s `Export`
+to make sure that they are not invoked concurrently.
+
 One possible implementation of periodic exporting MetricReader is to inherit
 from `MetricReader` and start a background task which calls the inherited
 `Collect()` method at the requested `exportIntervalMillis`. The reader's
@@ -1485,8 +1492,8 @@ and transmit the data to the destination.
 The SDK MUST provide a way for the exporter to get the [Meter](./api.md#meter)
 information (e.g. name, version, etc.) associated with each `Metric Point`.
 
-`Export` will never be called concurrently for the same exporter instance.
-`Export` can be called again only after the current call returns.
+`Export` should never be called concurrently with other `Export` calls for the
+same exporter instance.
 
 `Export` MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (Failure).

@@ -53,7 +53,7 @@ linkTitle: API
 
 </details>
 
-The Tracing API consist of these main components:
+The Tracing API consists of these main components:
 
 - [`TracerProvider`](#tracerprovider) is the entry point of the API.
   It provides access to `Tracer`s.
@@ -99,7 +99,7 @@ Notwithstanding any global `TracerProvider`, some applications may want to or
 have to use multiple `TracerProvider` instances,
 e.g. to have different configuration (like `SpanProcessor`s) for each
 (and consequently for the `Tracer`s obtained from them),
-or because its easier with dependency injection frameworks.
+or because it's easier with dependency injection frameworks.
 Thus, implementations of `TracerProvider` SHOULD allow creating an arbitrary
 number of `TracerProvider` instances.
 
@@ -138,15 +138,9 @@ This API MUST accept the following parameters:
 - [since 1.13.0] `attributes` (optional): Specifies the instrumentation scope attributes
   to associate with emitted telemetry.
 
-Tracers are identified by `name`, `version`, and `schema_url` fields.  When more
-than one `Tracer` of the same `name`, `version`, and `schema_url` is created, it
-is unspecified whether or under which conditions the same or different `Tracer`
-instances are returned. It is a user error to create Tracers with different
-attributes but the same identity.
-
-The term *identical* applied to Tracers describes instances where all
-identifying fields are equal. The term *distinct* applied to Tracers describes
-instances where at least one identifying field has a different value.
+The term *identical* applied to Tracers describes instances where all parameters
+are equal. The term *distinct* applied to Tracers describes instances where at
+least one parameter has a different value.
 
 Implementations MUST NOT require users to repeatedly obtain a `Tracer` again
 with the same identity to pick up configuration changes. This can be
@@ -160,11 +154,6 @@ configuration must be stored per-tracer (such as disabling a certain tracer),
 the tracer could, for example, do a look-up with its identity in a map
 in the `TracerProvider`, or the `TracerProvider` could maintain a registry of
 all returned `Tracer`s and actively update their configuration if it changes.
-
-The effect of associating a Schema URL with a `Tracer` MUST be that the
-telemetry emitted using the `Tracer` will be associated with the Schema URL,
-provided that the emitted data format is capable of representing such
-association.
 
 ## Context Interaction
 
@@ -753,7 +742,7 @@ This functionality MUST be fully implemented in the API, and SHOULD NOT be overr
 parent/child relationships or span links. `SpanKind` describes two independent
 properties that benefit tracing systems during analysis:
 
-1. Whether span represents an outgoing call to a remote service (`CLIENT` and
+1. Whether a span represents an outgoing call to a remote service (`CLIENT` and
    `PRODUCER` spans) or a processing of an incoming request initiated externally (`SERVER`
    and `CONSUMER` spans).
 2. Whether a Span represents a request/response operation (`CLIENT` and `SERVER`
@@ -775,7 +764,7 @@ specific technologies should document kind for each span they define.
 
 For instance, [Database Client Semantic Conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/database-spans.md)
 recommend using `CLIENT` span kind to describes database calls.
-If the database client communicate to the server over HTTP, the HTTP
+If the database client communicates to the server over HTTP, the HTTP
 instrumentation (when enabled) creates nested `CLIENT` spans to track individual
 HTTP calls performed in the scope of logical database `CLIENT` operation.
 

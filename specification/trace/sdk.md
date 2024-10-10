@@ -180,7 +180,7 @@ It consists of the following parameters:
   i.e. `Tracer`s are enabled by default).
 
   If a `Tracer` is disabled, it MUST behave equivalently
-  to [No-op Tracer](./api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk).
+  to a [No-op Tracer](./api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk).
 
   The value of `disabled` MUST be used to resolve whether a `Tracer`
   is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
@@ -213,7 +213,7 @@ Thus, the SDK specification defines sets of possible requirements for
   [deprecated since 1.10.0] having the same name and version values as the
   `InstrumentationScope`.
 
-  A function receiving this as argument MUST must be able to reliably determine
+  A function receiving this as argument MUST be able to reliably determine
   whether the Span has ended
   (some languages might implement this by having an end timestamp of `null`,
   others might have an explicit `hasEnded` boolean).
@@ -255,11 +255,11 @@ the backend.
 
 Sampling may be implemented on different stages of a trace collection. The
 earliest sampling could happen before the trace is actually created, and the
-latest sampling could happen on the Collector which is out of process.
+latest sampling could happen on the Collector, which is out of process.
 
 The OpenTelemetry API has two properties responsible for the data collection:
 
-* `IsRecording` field of a `Span`. If `false` the current `Span` discards all
+* `IsRecording` field of a `Span`. If `false`, the current `Span` discards all
   tracing data (attributes, events, status, etc.). Users can use this property
   to determine if collecting expensive trace data can be avoided. [Span
   Processor](#span-processor) MUST receive only those spans which have this
@@ -628,7 +628,10 @@ are invoked in the order they have been registered.
 
 **Status**: [Development](../document-status.md)
 
-`OnEnding` is called during the span `End()` operation, after the end timestamp has been set. The Span object is still mutable (i.e., `SetAttribute`, `AddLink`, `AddEvent` can be called) while `OnEnding` is called.
+`OnEnding` is called during the span `End()` operation.
+The end timestamp MUST have been computed (the `OnEnding` method duration is not included
+in the span duration).
+The Span object MUST still be mutable (i.e., `SetAttribute`, `AddLink`, `AddEvent` can be called) while `OnEnding` is called.
 This method MUST be called synchronously within the [`Span.End()` API](api.md#end),
 therefore it should not block or throw an exception.
 If multiple `SpanProcessors` are registered, their `OnEnding` callbacks
@@ -714,6 +717,9 @@ This is an implementation of `SpanProcessor` which passes finished spans
 and passes the export-friendly span data representation to the configured
 `SpanExporter`, as soon as they are finished.
 
+The processor MUST synchronize calls to `Span Exporter`'s `Export`
+to make sure that they are not invoked concurrently.
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.
@@ -724,9 +730,11 @@ This is an implementation of the `SpanProcessor` which create batches of finishe
 spans and passes the export-friendly span data representations to the
 configured `SpanExporter`.
 
+The processor MUST synchronize calls to `Span Exporter`'s `Export`
+to make sure that they are not invoked concurrently.
+
 The processor SHOULD export a batch when any of the following happens AND the
-previous export call has returned (for additional concurrency details see
-the [Export() specification](#exportbatch)):
+previous export call has returned:
 
 - `scheduledDelayMillis` after the processor is constructed OR the first span
   is received by the span processor.
@@ -763,6 +771,9 @@ The goal of the interface is to minimize burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
+Each implementation MUST document the concurrency characteristics the SDK
+requires of the exporter.
+
 ### Interface Definition
 
 The exporter MUST support three functions: **Export**, **Shutdown**, and **ForceFlush**.
@@ -776,15 +787,15 @@ Protocol exporters that will implement this
 function are typically expected to serialize and transmit the data to the
 destination.
 
-Export() will never be called concurrently for the same exporter instance.
+Export() should not be be called concurrently with other `Export` calls for the
+same exporter instance.
+
 Depending on the implementation the result of the export may be returned to the
 Processor not in the return value of the call to Export() but in a language
 specific way for signaling completion of an asynchronous task. This means that
-while an instance of an exporter will never have its Export() called
+while an instance of an exporter should never have its Export() called
 concurrently it does not mean that the task of exporting can not be done
-concurrently. How this is done is outside the scope of this specification. Each
-implementation MUST document the concurrency characteristics the SDK requires of
-the exporter.
+concurrently. How this is done is outside the scope of this specification.
 
 Export() MUST NOT block indefinitely, there MUST be a reasonable upper limit
 after which the call must time out with an error result (`Failure`).
