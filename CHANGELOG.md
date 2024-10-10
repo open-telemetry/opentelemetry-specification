@@ -31,7 +31,7 @@ release.
 
 ### Supplementary Guidelines
 
-## v1.38.0 (2024-10-09)
+## v1.38.0 (2024-10-10)
 
 ### Traces
 
@@ -60,11 +60,16 @@ release.
 - Define `Enabled` parameters for `Logger`.
   ([#4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203))
   ([#4221](https://github.com/open-telemetry/opentelemetry-specification/pull/4221))
+- Introduce initial placeholder for the new user-facing Logs API, adding references
+  to existing API's informing of the coming changes while the definition is defined.
+  ([#4236](https://github.com/open-telemetry/opentelemetry-specification/pull/4236))
 
 ### Common
 
 - Define equality for attributes and collection of attributes.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
+- Update Instrumentation Scope glossary entry with correct identifying fields
+  ([#4244](https://github.com/open-telemetry/opentelemetry-specification/pull/4244))
 
 ## v1.37.0 (2024-09-13)
 
