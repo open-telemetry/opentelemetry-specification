@@ -1,6 +1,6 @@
 # Mappings
 
-**Status**: [Development](../document-status.md), except where otherwise specified
+**Status**: [Development](../document-status.md)
 
 This document defines the required attributes of [`Mapping`](https://github.com/open-telemetry/oteps/blob/main/text/profiles/0239-profiles-data-model.md#message-mapping) messages.
 
