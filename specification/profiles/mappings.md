@@ -7,7 +7,7 @@ This document defines the required attributes of [`Mapping`](https://github.com/
 <!-- toc -->
 
 - [Attributes](#attributes)
-  * [Algorithm for `process.executable.build_id.profiling`](#algorithm-for-processexecutablebuild_idprofiling)
+  * [Algorithm for `process.executable.build_id.htlhash`](#algorithm-for-processexecutablebuild_idhtlhash)
 
 <!-- tocstop -->
 
@@ -18,11 +18,11 @@ A message representing a `Mapping` MUST have at least one of the following
 
 - `process.executable.build_id.gnu`
 - `process.executable.build_id.go`
-- `process.executable.build_id.profiling`
+- `process.executable.build_id.htlhash`
 
 If possible all the above listed attributes SHOULD be present in a `Mapping`. To promote interoperability, it is RECOMMENDED for `process.executable.build_id.profiling` to be present in every `Mapping`.
 
-### Algorithm for `process.executable.build_id.profiling`
+### Algorithm for `process.executable.build_id.htlhash`
 
 In some environments GNU and/or Go build_id values are stripped or not usable - for example Alpine
 Linux which is often used as a base for Docker environments. For that reason and to promote interoperability, a deterministic build_id generation algorithm that hashes the first and last page of a file together with its length is defined as:
