@@ -20,7 +20,7 @@ A message representing a `Mapping` MUST have at least one of the following
 - `process.executable.build_id.go`
 - `process.executable.build_id.htlhash`
 
-If possible all the above listed attributes SHOULD be present in a `Mapping`. To promote interoperability, it is RECOMMENDED for `process.executable.build_id.htlhash` to be present in every `Mapping`. For the use and purpose of `process.executable.build_id.go` see https://github.com/golang/go/issues/68652#issuecomment-2274452424.
+If possible all the above listed attributes SHOULD be present in a `Mapping`. To promote interoperability, it is RECOMMENDED for `process.executable.build_id.htlhash` to be present in every `Mapping`. For the use and purpose of `process.executable.build_id.go` see [golang/go#68652](https://github.com/golang/go/issues/68652#issuecomment-2274452424).
 
 ### Algorithm for `process.executable.build_id.htlhash`
 
