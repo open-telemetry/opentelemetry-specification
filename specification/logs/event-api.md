@@ -9,6 +9,7 @@
 
 <!-- toc -->
 
+- [Logs Instrumentation API Development](#logs-instrumentation-api-development)
 - [Event Data model](#event-data-model)
 - [Event API use cases](#event-api-use-cases)
 - [EventLoggerProvider](#eventloggerprovider)
@@ -29,6 +30,15 @@ The Event API consists of these main components:
 * [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It
   provides access to `EventLogger`s.
 * [EventLogger](#eventlogger) is the component responsible for emitting events.
+
+## Logs Instrumentation API Development
+
+> [!NOTE]
+> We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#logs-instrumentation-api).
+
+The intent is that this Logs Instrumentation API will incorporate the current functionality of this existing Events API and once it is defined and implemented, the Events API usage will be migrated, deprecated, renamed and eventually removed.
+
+No further work is scheduled for the current Events API definition at this time.
 
 ## Event Data model
 

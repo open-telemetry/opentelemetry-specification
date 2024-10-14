@@ -399,8 +399,7 @@ The SDK MUST accept the following stream configuration parameters:
   If the user does not provide an `exemplar_reservoir` value, the
   `MeterProvider` MUST apply a [default exemplar
   reservoir](#exemplar-defaults).
-* **Status**: [Development](../document-status.md) -
-  `aggregation_cardinality_limit`: A positive integer value defining the
+* `aggregation_cardinality_limit`: A positive integer value defining the
   maximum number of data points allowed to be emitted in a collection cycle by
   a single instrument. See [cardinality limits](#cardinality-limits), below.
 
@@ -774,13 +773,15 @@ of metrics across successive collections.
 
 ### Cardinality limits
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 SDKs SHOULD support being configured with a cardinality limit. The number of
 unique combinations of attributes is called cardinality. For a given metric, the
 cardinality limit is a hard limit on the number of [Metric
 Points](./data-model.md#metric-points) that can be collected during a collection
-cycle.
+cycle. Cardinality limit enforcement SHOULD occur _after_ attribute filtering,
+if any. This ensures users can filter undesired attributes using [views](#view)
+and prevent reaching the cardinality limit.
 
 #### Configuration
 
@@ -1230,7 +1231,7 @@ SHOULD be provided:
 * The `exporter` to use, which is a `MetricExporter` instance.
 * The default output `aggregation` (optional), a function of instrument kind. This function SHOULD be obtained from the `exporter`. If not configured, the [default aggregation](#default-aggregation) SHOULD be used.
 * The output `temporality` (optional), a function of instrument kind. This function SHOULD be obtained from the `exporter`. If not configured, the Cumulative temporality SHOULD be used.
-* **Status**: [Development](../document-status.md) - The default aggregation cardinality limit to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
+* The default aggregation [cardinality limit](#cardinality-limits) (optional) to use, a function of instrument kind.  If not configured, a default value of 2000 SHOULD be used.
 * **Status**: [Development](../document-status.md) - The [MetricFilter](#metricfilter) to apply to metrics and attributes during `MetricReader#Collect`.
 * Zero of more [MetricProducer](#metricproducer)s (optional) to collect metrics from in addition to metrics from the SDK.
 

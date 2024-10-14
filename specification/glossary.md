@@ -172,15 +172,19 @@ reasonable instrumentation scope. The most common approach is to use the
 scopes are also common, e.g. a module, a package, or a class can be chosen as
 the instrumentation scope.
 
-If the unit of code has a version then the instrumentation scope is defined by
-the (name,version) pair otherwise the version is omitted and only the name is
-used. The name or (name,version) pair uniquely identify the logical unit of the
-code that emits the telemetry. A typical approach to ensure uniqueness is to use
-fully qualified name of the emitting code (e.g. fully qualified library name or
-fully qualified class name).
+The instrumentation scope is defined by the
+(name,version,schema_url,attributes) tuple where version, schema_url, and
+attributes are optional. This tuple uniquely identifies the logical unit of the
+code that emits the telemetry. A typical approach to ensure uniqueness is to
+use the fully qualified name of the emitting code (e.g. fully qualified library
+name or fully qualified class name).
 
 The instrumentation scope is used to obtain a
 [Tracer, Meter, or Logger](#tracer-name--meter-name--logger-name).
+
+The instrumentation scope's optional Schema URL identifies the [Telemetry
+Schema](schemas/README.md) that the instrumentation's emitted
+telemetry conforms to.
 
 The instrumentation scope may have zero or more additional attributes that provide
 additional information about the scope. For example for a scope that specifies an
