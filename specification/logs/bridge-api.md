@@ -18,7 +18,6 @@
       - [Emit a LogRecord](#emit-a-logrecord)
       - [Enabled](#enabled)
   - [Logs API](#logs-api)
-      - [Emit Event](#emit-event)
   - [Optional and required parameters](#optional-and-required-parameters)
   - [Concurrency requirements](#concurrency-requirements)
   - [Artifact Naming](#artifact-naming)
@@ -151,11 +150,6 @@ up-to-date response.
 ## Logs API
 
 **Status**: [Development](../document-status.md)
-
-This set of API functions will provide the capabilities needed to emit a
-`LogRecord` as is currently provided by [Events API](./event-api.md).
-
-#### Emit Event
 
 Events are OpenTelemetry's standardized semantic formatting for LogRecords.
 Beyond the structure provided by the LogRecord data model, it is helpful for
