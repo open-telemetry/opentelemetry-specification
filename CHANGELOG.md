@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Simplify the name "Logs Instrumentation API" to just "Logs API".
+  ([#4258](https://github.com/open-telemetry/opentelemetry-specification/pull/4258))
+
 ### Events
 
 ### Baggage

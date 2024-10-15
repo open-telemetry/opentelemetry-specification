@@ -16,7 +16,7 @@
   * [Logger operations](#logger-operations)
     + [Emit a LogRecord](#emit-a-logrecord)
     + [Enabled](#enabled)
-- [Logs Instrumentation API](#logs-instrumentation-api)
+- [Logs API](#logs-api)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [Artifact Naming](#artifact-naming)
@@ -146,7 +146,7 @@ SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
 
-## Logs Instrumentation API
+## Logs API
 
 **Status**: [Development](../document-status.md)
 
