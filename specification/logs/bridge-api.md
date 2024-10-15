@@ -9,18 +9,20 @@
 
 <!-- toc -->
 
-- [LoggerProvider](#loggerprovider)
-  * [LoggerProvider operations](#loggerprovider-operations)
-    + [Get a Logger](#get-a-logger)
-- [Logger](#logger)
-  * [Logger operations](#logger-operations)
-    + [Emit a LogRecord](#emit-a-logrecord)
-    + [Enabled](#enabled)
-- [Logs API](#logs-api)
-- [Optional and required parameters](#optional-and-required-parameters)
-- [Concurrency requirements](#concurrency-requirements)
-- [Artifact Naming](#artifact-naming)
-- [References](#references)
+- [Logs Bridge API](#logs-bridge-api)
+  - [LoggerProvider](#loggerprovider)
+    - [LoggerProvider operations](#loggerprovider-operations)
+      - [Get a Logger](#get-a-logger)
+  - [Logger](#logger)
+    - [Logger operations](#logger-operations)
+      - [Emit a LogRecord](#emit-a-logrecord)
+      - [Enabled](#enabled)
+  - [Logs API](#logs-api)
+      - [Emit Event](#emit-event)
+  - [Optional and required parameters](#optional-and-required-parameters)
+  - [Concurrency requirements](#concurrency-requirements)
+  - [Artifact Naming](#artifact-naming)
+  - [References](#references)
 
 <!-- tocstop -->
 
@@ -152,6 +154,26 @@ up-to-date response.
 
 This set of API functions will provide the capabilities needed to emit a
 `LogRecord` as is currently provided by [Events API](./event-api.md).
+
+#### Emit Event
+
+Events are OpenTelemetry's standardized semantic formatting for LogRecords.
+Beyond the structure provided by the LogRecord data model, it is helpful for
+logs to have a common format within that structure. When OpenTelemetry
+native instrumentation emit logs, those logs SHOULD be formatted as Events.
+All semantic conventions defined for logs MUST be formatted as Events.
+
+**Parameters:**
+
+* The `Name` of the Event, as described
+  in [event.name semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+* The (`AnyValue`) (optional) `Body` of the Event.
+* The `Timestamp` (optional) of the Event.
+* The [Context](../context/README.md) (optional) associated with the Event.
+* The `SeverityNumber` (optional) of the Event.
+* The `Attributes` (optional) of the Event. Event `Attributes` provide
+  additional details about the Event which are not part of the
+  well-defined event `Body`.
 
 ## Optional and required parameters
 
