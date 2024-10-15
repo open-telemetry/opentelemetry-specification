@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add `Context` parameter to `Enabled` for synchronous instruments.
+  ([#4262](https://github.com/open-telemetry/opentelemetry-specification/pull/4262))
+
 ### Logs
 
 ### Events
