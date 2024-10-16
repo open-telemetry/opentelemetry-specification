@@ -9,16 +9,15 @@
 
 <!-- toc -->
 
-- [Events SDK](#events-sdk)
-  - [Logs Instrumentation API Development](#logs-instrumentation-api-development)
-  - [Overview](#overview)
-  - [EventLoggerProvider](#eventloggerprovider)
-    - [EventLoggerProvider Creation](#eventloggerprovider-creation)
-    - [EventLogger Creation](#eventlogger-creation)
-    - [Configuration](#configuration)
-    - [ForceFlush](#forceflush)
-  - [EventLogger](#eventlogger)
-    - [Emit Event](#emit-event)
+- [Logs Instrumentation API Development](#logs-instrumentation-api-development)
+- [Overview](#overview)
+- [EventLoggerProvider](#eventloggerprovider)
+  * [EventLoggerProvider Creation](#eventloggerprovider-creation)
+  * [EventLogger Creation](#eventlogger-creation)
+  * [Configuration](#configuration)
+  * [ForceFlush](#forceflush)
+- [EventLogger](#eventlogger)
+  * [Emit Event](#emit-event)
 
 <!-- tocstop -->
 

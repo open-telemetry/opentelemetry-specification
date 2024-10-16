@@ -182,6 +182,7 @@ The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
+
 ## Optional and required parameters
 
 The operations defined include various parameters, some of which are marked
