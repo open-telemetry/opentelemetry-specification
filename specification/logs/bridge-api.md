@@ -9,18 +9,21 @@
 
 <!-- toc -->
 
-- [LoggerProvider](#loggerprovider)
-  * [LoggerProvider operations](#loggerprovider-operations)
-    + [Get a Logger](#get-a-logger)
-- [Logger](#logger)
-  * [Logger operations](#logger-operations)
-    + [Emit a LogRecord](#emit-a-logrecord)
-    + [Enabled](#enabled)
-- [Logs Instrumentation API](#logs-instrumentation-api)
-- [Optional and required parameters](#optional-and-required-parameters)
-- [Concurrency requirements](#concurrency-requirements)
-- [Artifact Naming](#artifact-naming)
-- [References](#references)
+- [Logs Bridge API](#logs-bridge-api)
+  - [LoggerProvider](#loggerprovider)
+    - [LoggerProvider operations](#loggerprovider-operations)
+      - [Get a Logger](#get-a-logger)
+  - [Logger](#logger)
+    - [Log Bridge operations](#log-bridge-operations)
+      - [Emit a LogRecord](#emit-a-logrecord)
+    - [Log Instrumentation operations](#log-instrumentation-operations)
+      - [Emit an Event](#emit-an-event)
+    - [Helper operations](#helper-operations)
+      - [Enabled](#enabled)
+  - [Optional and required parameters](#optional-and-required-parameters)
+  - [Concurrency requirements](#concurrency-requirements)
+  - [Artifact Naming](#artifact-naming)
+  - [References](#references)
 
 <!-- tocstop -->
 
@@ -92,17 +95,26 @@ instances where at least one parameter has a different value.
 
 ## Logger
 
-The `Logger` is responsible for emitting `LogRecord`s.
+The `Logger` is responsible for emitting `LogRecord`s. There are two types of
+logging operations:
 
-### Logger operations
+* **Log Bridge** operations to be used when receiving data from other logging
+  libraries.
+* **Log Instrumentation** operations to be used when writing instrumentation
+  for OpenTelemetry.
+* **helper** operations to assist with using the logger.
 
-The `Logger` MUST provide functions to:
+The Logger contains methods for both types of operations. The `Logger` MUST
+provide functions to:
 
 - [Emit a `LogRecord`](#emit-a-logrecord)
+- [Emit an `Event`](#emit-an-event)
 
 The `Logger` SHOULD provide functions to:
 
 - [Report if `Logger` is `Enabled`](#enabled)
+
+### Log Bridge operations
 
 #### Emit a LogRecord
 
@@ -121,6 +133,36 @@ The API MUST accept the following parameters:
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
+
+### Log Instrumentation operations
+
+#### Emit an Event
+
+**Status**: [Development](../document-status.md)
+
+Events are OpenTelemetry's standardized semantic formatting for LogRecords.
+Beyond the structure provided by the LogRecord data model, it is helpful for
+logs to have a common format within that structure. When OpenTelemetry
+instrumentation emits logs, those logs SHOULD be formatted as Events.
+All semantic conventions defined for logs MUST be formatted as Events.
+
+**Parameters:**
+
+* The [`Name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
+  of the Event.
+* [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
+  the implementation SHOULD set it equal to the current time.
+* The [Context](../context/README.md) associated with the `Event`. When implicit
+  Context is supported, then this parameter SHOULD be optional and if unspecified
+  then MUST use current Context. When only explicit Context is supported, this parameter
+  SHOULD be required.
+* [Severity Number](./data-model.md#field-severitynumber) (optional)
+* [Severity Text](./data-model.md#field-severitytext) (optional)
+* [Body](./data-model.md#field-body) (optional)
+* [Attributes](./data-model.md#field-attributes) (optional) Event `Attributes` conform
+  to the [standard definition](../common/README.md#standard-attribute) of an attribute.
+
+### Helper operations
 
 #### Enabled
 
@@ -145,13 +187,6 @@ The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
-
-## Logs Instrumentation API
-
-**Status**: [Development](../document-status.md)
-
-This set of API functions will provide the capabilities needed to emit a
-`LogRecord` as is currently provided by [Events API](./event-api.md).
 
 ## Optional and required parameters
 

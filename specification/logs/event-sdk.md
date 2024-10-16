@@ -33,7 +33,7 @@ All implementations of the OpenTelemetry API MUST provide an SDK.
 ## Logs Instrumentation API Development
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#logs-instrumentation-api).
+> We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#log-instrumentation-operations).
 
 The intent is that Logs SDK will incorporate the current functionality of this existing Events SDK and once it is defined and implemented, the Events SDK usage will be migrated, deprecated, renamed and eventually removed.
 
