@@ -408,8 +408,8 @@ For respecting the parent `SampledFlag`, see the `ParentBased` sampler specified
 
 Note that the "ratio-based" part of this Sampler's name implies that
 it makes a probability decision directly from the TraceID, even though
-it was not not originally specified in an exact way.  In the present
-specification,the Sampler decision is more nuanced: only a portion of
+it was not originally specified in an exact way.  In the present
+specification, the Sampler decision is more nuanced: only a portion of
 the identifier is used, after checking whether the OpenTelemetry
 TraceState field contains an explicit trace randomness value.
 
