@@ -149,15 +149,19 @@ All semantic conventions defined for logs MUST be formatted as Events.
 
 **Parameters:**
 
-* The `Name` of the Event, as described
-  in [event.name semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
-* The (`AnyValue`) (optional) `Body` of the Event.
-* The `Timestamp` (optional) of the Event.
-* The [Context](../context/README.md) (optional) associated with the Event.
-* The `SeverityNumber` (optional) of the Event.
-* The `Attributes` (optional) of the Event. Event `Attributes` provide
-  additional details about the Event which are not part of the
-  well-defined event `Body`.
+* The [`Name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
+  of the Event.
+* [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
+  the implementation SHOULD set it equal to the current time.
+* The [Context](../context/README.md) associated with the `Event`. When implicit
+  Context is supported, then this parameter SHOULD be optional and if unspecified
+  then MUST use current Context. When only explicit Context is supported, this parameter
+  SHOULD be required.
+* [Severity Number](./data-model.md#field-severitynumber) (optional)
+* [Severity Text](./data-model.md#field-severitytext) (optional)
+* [Body](./data-model.md#field-body) (optional)
+* [Attributes](./data-model.md#field-attributes) (optional) Event `Attributes` conform
+  to the [standard definition](../common/README.md#standard-attribute) of an attribute.
 
 ### Helper operations
 
