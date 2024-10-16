@@ -154,7 +154,7 @@ up-to-date response.
 Events are OpenTelemetry's standardized semantic formatting for LogRecords.
 Beyond the structure provided by the LogRecord data model, it is helpful for
 logs to have a common format within that structure. When OpenTelemetry
-native instrumentation emit logs, those logs SHOULD be formatted as Events.
+instrumentation emits logs, those logs SHOULD be formatted as Events.
 All semantic conventions defined for logs MUST be formatted as Events.
 
 **Parameters:**
