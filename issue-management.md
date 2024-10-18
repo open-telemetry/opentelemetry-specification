@@ -70,7 +70,7 @@ to an issue, if the following conditions are met:
 * the issue description or a comment by the maintainer points to at least one issue in an implementation repo, of which they are a maintainer.
 * the maintainer summarizes in the issue description or in a comment to an existing issue, what is blocking them and/or what is required from their point of view to make progress.
 * the maintainer tags all other maintainers of the implementation repo in the issue description or their comment (@open-telemetry/<sig>-maintainers). No action from the other maintainers is expected, except they disagree with
-  the request of this issue being tagged as `maintainer-request`
+  the request of this issue being tagged as `maintainer-request`.
 * they will share the issue with all other SIGs either via the [Maintainer Meeting](https://github.com/open-telemetry/community?tab=readme-ov-file#cross-cutting-sigs) or via a message to [#otel-maintainers](https://cloud-native.slack.com/archives/C01NJ7V1KRC) on [CNCF slack](https://slack.cncf.io). This way maintainers of other implementation SIGs can comment if they have the same request.
 
 A triager will add the `maintainer-request` label to the issue if those conditions are met.
