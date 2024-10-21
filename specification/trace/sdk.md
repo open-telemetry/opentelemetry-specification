@@ -513,9 +513,29 @@ For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags 
 
 #### Explicit trace randomness
 
-For root span contexts, when the SDK generates a TraceID that does not meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID], and when the initial `TraceState` does not already define the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE], the SDK SHOULD insert an explicit trace randomness value into the OpenTelemetry TraceState value containing 56 random bits.
+Explicit trace randomness is a mechanism that enables API users and
+SDK authors to control trace randomness.  The following recommendation
+applies to Trace SDKs that have disregarded the recommendation on
+TraceID randomness, above.  It has two parts.
 
-For example, here's a W3C Trace Context with non-random identifiers and an explicit randomness value:
+##### Do not overwrite explicit trace randomness
+
+API users control the initial TraceState of a root span, so they can
+provide explicit trace randomness for a trace by defining the [`rv`
+sub-key of the OpenTelemetry TraceState][OTELRVALUE].  SDKs MUST NOT
+overwrite explicit trace randomness in an OpenTelemetry TraceState 
+value.
+
+##### Set explicit trace randomness for non-random TraceIDs
+
+For root span contexts, when the SDK generates a TraceID that does not 
+meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID],
+and when the the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE] is 
+not already set, the SDK SHOULD insert an explicit trace randomness value 
+into the OpenTelemetry TraceState value containing 56 random bits.
+
+For example, here's a W3C Trace Context with non-random identifiers and an
+explicit randomness value:
 
 ```
 traceparent: 00-ffffffffffffffffffffffffffffffff-ffffffffffffffff-00
