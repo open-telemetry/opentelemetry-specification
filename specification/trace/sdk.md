@@ -38,10 +38,13 @@ linkTitle: SDK
     + [TraceID randomness](#traceid-randomness)
     + [Random trace flag](#random-trace-flag)
     + [Explicit trace randomness](#explicit-trace-randomness)
+      - [Do not overwrite explicit trace randomness](#do-not-overwrite-explicit-trace-randomness)
+      - [Set explicit trace randomness for non-random TraceIDs](#set-explicit-trace-randomness-for-non-random-traceids)
     + [Presumption of TraceID randomness](#presumption-of-traceid-randomness)
     + [IdGenerator randomness](#idgenerator-randomness)
 - [Span Limits](#span-limits)
 - [Id Generators](#id-generators)
+  * [IdGenerator randomness](#idgenerator-randomness-1)
 - [Span processor](#span-processor)
   * [Interface definition](#interface-definition)
     + [OnStart](#onstart)
@@ -523,15 +526,15 @@ TraceID randomness, above.  It has two parts.
 API users control the initial TraceState of a root span, so they can
 provide explicit trace randomness for a trace by defining the [`rv`
 sub-key of the OpenTelemetry TraceState][OTELRVALUE].  SDKs MUST NOT
-overwrite explicit trace randomness in an OpenTelemetry TraceState 
+overwrite explicit trace randomness in an OpenTelemetry TraceState
 value.
 
 ##### Set explicit trace randomness for non-random TraceIDs
 
-For root span contexts, when the SDK generates a TraceID that does not 
+For root span contexts, when the SDK generates a TraceID that does not
 meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID],
-and when the the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE] is 
-not already set, the SDK SHOULD insert an explicit trace randomness value 
+and when the the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE] is
+not already set, the SDK SHOULD insert an explicit trace randomness value
 into the OpenTelemetry TraceState value containing 56 random bits.
 
 For example, here's a W3C Trace Context with non-random identifiers and an
