@@ -60,7 +60,7 @@ A consistent sampling decision means that a positive sampling decision made for 
 
 ### Rejection Threshold (T)
 
-This is a 56-bit value directly derived from the sampling probability. One way to think about this is that this is the number of spans that would be *dropped* out of 2^56 considered spans. This is an alternative to the `p` value in the previous specification. The `p` value is limited to powers of two, while this supports a large range of values.
+This is a 56-bit value directly derived from the sampling probability. One way to think about this is that this is the number of spans that would be *dropped* out of 2^56 considered spans. [This is an alternative to the `p` value in the previous specification. The `p` value is limited to powers of two, while this supports a large range of values.](./tracestate-probability-sampling-experimental.md)
 
 You can derive the rejection threshold from the sampling probability as follows:
 
@@ -72,7 +72,7 @@ For example, if the sampling probability is 100% (keep all spans), the rejection
 
 Similarly, if the sampling probability is 1% (drop 99% of spans), the rejection threshold with 5 digits of precision would be (1-0.01) * 2^56 ≈ 71337018784743424 = 0xfd70a400000000.
 
-We refer to this rejection threshold conceptually as `T`. We represent it using the OpenTelemetry TraceState key `th`, where the value is propagated and also stored with each span. In the example above, the `th` key has `fd70a00000000` as the value.
+We refer to this rejection threshold conceptually as `T`. We represent it using the OpenTelemetry TraceState key `th`, where the value is propagated and also stored with each span. In the example above, the `th` key has `fd70a4` as the value, because trailing zeros are removed.
 
 See [tracestate handling](./tracestate-handling.md#sampling-threshold-value-th) for details about encoding threshold values.
 
@@ -82,8 +82,10 @@ A common random value (that is known or propagated to all participants) is the m
 
 This proposal supports two sources of randomness:
 
-- **A custom source of randomness**: This proposal allows for a *random* (or pseudo-random) 56-bit value. We refer to this as `rv`. This can be generated and propagated through the `tracestate` header and the tracestate attribute in each span.
-- **Using TraceID as a source of randomness**: This proposal introduces using the last 56 bits of the `traceid` as the source of randomness. This can be done if the root participant knows that the `traceid` has been generated in a random or pseudo-random manner.
+- **An explicit source of randomness**: OpenTelemetry supports a *random* (or pseudo-random) 56-bit value known as explicit trace randomness. This can be propagated through the OpenTelemetry TraceState `rv` sub-key and is stored in the Span's TraceState field.
+- **Using TraceID as a source of randomness**: OpenTelemetry supports using the [least-significant 56 bits of the TraceID as the source of randomness, as specified in W3C Trace Context Level 2][W3CCONTEXTTRACEID]. This can be done if the root Span's Trace SDK knows that the TraceID has been generated in a random or pseudo-random manner.
+
+[W3CCONTEXTTRACEID]: https://www.w3.org/TR/trace-context-2/#randomness-of-trace-id
 
 See [tracestate handling](./tracestate-handling.md#sampling-randomness-value-rv) for details about encoding randomness values.
 
@@ -96,7 +98,7 @@ Given the above building blocks, let's look at how a participant can make consis
 
 If `R` >= `T`, *keep* the span, else *drop* the span.
 
-`T` represents the maximum threshold that was applied in all previous consistent sampling stages. If the current sampling stage applies a greater threshold value than any stage before, it MUST update (increase) the threshold correspondingly.
+`T` represents the maximum threshold that was applied in all previous consistent sampling stages. If the current sampling stage applies a greater threshold value than any stage before, it MUST update (increase) the threshold correspondingly by re-encoding the OpenTelemetry TraceState value.
 
 ## Explanation
 
@@ -104,25 +106,27 @@ If `R` >= `T`, *keep* the span, else *drop* the span.
 
 There are two categories of samplers:
 
-- **Head samplers:** Implementations of [`Sampler`](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.29.0/specification/trace/sdk.md#sampler), called by a `Tracer` during span creation.
+- **Head samplers:** Implementations of [`Sampler`](./sdk.md#sampler), called by a `Tracer` during span creation for both root and child spans.
 - **Downstream samplers:** Any component that, given an ended Span, decides whether to *drop* it or *keep* it (by forwarding it to the next component in the pipeline). This category is also known as "collection path samplers" or "sampling processors". Note that *Tail samplers* are a special class of downstream samplers that buffer spans of a trace and make a sampling decision for the trace as a whole using data from any span in the buffered trace.
 
 This section defines the behavior for these two categories of samplers.
 
 ### Head samplers
 
-A head sampler is responsible for computing the `rv` and `th` values in a new span's initial [`TraceState`](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.29.0/specification/trace/api.md#tracestate). The main inputs to that computation include the parent span's trace state (if a parent span exists), the new span's trace ID, and possibly the trace flags (to know if the trace ID has been generated in a random manner).
+See [SDK requirements for trace randomness](./sdk.md#sampling-requirements), which covers potentially inserting explicit trace randomness using the OpenTelemetry TraceState `rv` sub-key.
+
+A head Sampler is responsible for computing the `th` value in a new span's [OpenTelemetry TraceState](./tracestate-handling.md#tracestate-handling). The main inputs to that computation include the parent context's TraceState and the TraceID.
 
 When a span is sampled by in accordance with this specification, the output TraceState SHOULD be set to convey probability sampling:
 
 - The `th` key MUST be defined with a threshold value corresponding to the sampling probability the sampler used.
-- If trace randomness was derived from a TraceState `rv` value, the same `rv` value MUST be defined and equal to the incoming Context's `rv` value.
+- If trace randomness was derived from a OpenTelemetry TraceState `rv` sub-key value, the same `rv` value MUST be defined and equal to the incoming OpenTelemetry TraceState `rv` sub-key value.
 
 ### Downstream samplers
 
 A downstream sampler, in contrast, may output a given ended Span with a *modified* trace state, complying with following rules:
 
-- If the chosen sampling probability is 1, the sampler MUST NOT modify any existing `th`, nor set any `th`.
+- If the chosen sampling probability is 1, the sampler MUST NOT modify an existing `th` sub-key value, nor set a `th` sub-key value.
 - Otherwise, the chosen sampling probability is in `(0, 1)`. In this case the sampler MUST output the span with a `th` equal to `max(input th, chosen th)`. In other words, `th` MUST NOT be decreased (as it is not possible to retroactively adjust an earlier stage's sampling probability), and it MUST be increased if a lower sampling probability was used. This case represents the common case where a downstream sampler is reducing span throughput in the system.
 
 ### Migration to consistent probability samplers
