@@ -9,7 +9,7 @@
 
 <!-- toc -->
 
-- [Logs Instrumentation API Development](#logs-instrumentation-api-development)
+- [Logs API Development](#logs-api-development)
 - [Overview](#overview)
 - [EventLoggerProvider](#eventloggerprovider)
   * [EventLoggerProvider Creation](#eventloggerprovider-creation)
@@ -30,10 +30,10 @@ API that provides users with this functionally.
 
 All implementations of the OpenTelemetry API MUST provide an SDK.
 
-## Logs Instrumentation API Development
+## Logs API Development
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs Instrumentation API](./bridge-api.md#logs-instrumentation-api).
+> We are currently in the process of defining a new [Logs API](./bridge-api.md#logs-api).
 
 The intent is that Logs SDK will incorporate the current functionality of this existing Events SDK and once it is defined and implemented, the Events SDK usage will be migrated, deprecated, renamed and eventually removed.
 
