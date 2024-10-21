@@ -482,6 +482,8 @@ The following configuration properties should be available when creating the sam
 
 ### Sampling Requirements
 
+**Status**: [Development](../document-status.md)
+
 The [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation includes [a Random trace flag][W3CCONTEXTRANDOMFLAG] for indicating that the TraceID contains 56 random bits, specified for statistical purposes.
 This flag indicates that [the least-significant ("rightmost") 7 bytes or 56 bits of the TraceID are random][W3CCONTEXTTRACEID].
 
@@ -592,16 +594,21 @@ public interface IdGenerator {
 }
 ```
 
-Custom implementations of the `IdGenerator` SHOULD support setting the
-W3C Trace Context `random` flag when all generated TraceID values meet
-the [W3C Trace Context Level 2 randomness
-requirements][W3CCONTEXTTRACEID].  This is presumed to be a static
-property of the `IdGenerator` implementation which can be inferred
-using language features, for example by extending a marker interface.
-
 Additional `IdGenerator` implementing vendor-specific protocols such as AWS
 X-Ray trace id generator MUST NOT be maintained or distributed as part of the
 Core OpenTelemetry repositories.
+
+### IdGenerator randomness
+
+**Status**: [Development](../document-status.md)
+
+Custom implementations of the `IdGenerator` SHOULD identify themselves
+appropriately when all generated TraceID values meet the [W3C Trace
+Context Level 2 randomness requirements][W3CCONTEXTTRACEID], so that
+the Trace `random` flag will be set in the associated Trace contexts.
+This is presumed to be a static property of the `IdGenerator`
+implementation which can be inferred using language features, for
+example by extending a marker interface.
 
 ## Span processor
 
