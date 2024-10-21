@@ -137,7 +137,15 @@ As the OpenTelemetry TraceIdRatioBased sampler changes definition, users must co
 
 The original TraceIdRatioBased sampler specification gave a workaround for the underspecified behavior, that it was safe to use for root spans: "It is recommended to use this sampler algorithm only for root spans (in combination with [`ParentBased`](./sdk.md#parentbased)) because different language SDKs or even different versions of the same language SDKs may produce inconsistent results for the same input."
 
-To avoid inconsistency during this transition, users SHOULD follow this guidance until all TraceIdRatioBased samplers used in a system have been upgraded to the modern `TraceIdRatioBased` specification based on W3C Trace Context Level 2 randomness.  After all `TraceIdRatioBased` samplers have been upgraded, it is safe to use `TraceIdRatioBased` sampler without also using the `ParentBased` sampler.
+To avoid inconsistency during this transition, users SHOULD follow
+this guidance until all Trace SDKs in a system have been upgraded to
+modern Trace randomness requirements based on W3C Trace Context
+Level 2.
+Users can verify that all Trace SDKs have been upgraded when all Spans
+in their system have the Trace random flag set (in Span flags).
+To assist with this migration, the TraceIdRatioBased Sampler issues a
+warning statement the first time it presumes TraceID randomness for a
+Context where the Trace random flag is not set.
 
 ## Algorithms
 
