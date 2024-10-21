@@ -326,7 +326,7 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
 
 The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
 
-Bits 0-7 of the Span Flags field are reserved for the 8 bits of Trace Context flags,
+Bits 0-7 (8 least significant bits) of the Span Flags field are reserved for the 8 bits of Trace Context flags,
 specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
 [See the list of recognized flags](./api.md#spancontext).
 
@@ -511,7 +511,7 @@ For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags 
 
 #### Explicit trace randomness
 
-For root span contexts, the when the SDK generates a TraceID that does not meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID], and when the initial `TraceState` does not already define the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE], the SDK SHOULD insert an explicit trace randomness value into the OpenTelemetry TraceState value containing 56 random bits.
+For root span contexts, when the SDK generates a TraceID that does not meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID], and when the initial `TraceState` does not already define the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE], the SDK SHOULD insert an explicit trace randomness value into the OpenTelemetry TraceState value containing 56 random bits.
 
 For example, here's a W3C Trace Context with non-random identifiers and an explicit randomness value:
 
