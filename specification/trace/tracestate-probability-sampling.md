@@ -167,10 +167,9 @@ func ProbabilityToThresholdWithPrecision(probability float64, precision int) str
         // Special case
         return "0"
     }
-    // Raise precision by the number of leading 0s or Fs
+    // Raise precision by the number of leading 'f' digits.
     _, expF := math.Frexp(probability)
-    _, expR := math.Frexp(1 - probability)
-    precision = min(14, max(precision+expF/-4, precision+expR/-4))
+    precision = min(14, precision+expF/-4)
 
     // Change the probability to rejection probability, with range [0, 1),
     // translate rejection probability by +1, into range [1, 2).
@@ -183,6 +182,13 @@ func ProbabilityToThresholdWithPrecision(probability float64, precision int) str
     return strings.TrimRight(digits, "0")
 }
 ```
+
+Note the use of `math.Frexp(probability)` used to adjust precision
+using the base-2 exponent of the probability argument.  This makes the
+configured precision apply to the significant digits of the threshold
+for probabilities near zero.  Note that there is not a symmetrical
+adjustment made for values near unit probability, as we do not believe
+there is a practical use for sampling very precisely near 100%.
 
 To translate directly from floating point probability into a 56-bit unsigned integer representation using `math.Round()` and shift operations, see the [OpenTelemetry Collector-Contrib `pkg/sampling` package][PKGSAMPLING] package.  This package demonstrates how to directly calculate integer thresholds from probabilities.
 
