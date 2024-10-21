@@ -33,6 +33,7 @@ linkTitle: SDK
       - [`TraceIdRatioBased` sampler configuration](#traceidratiobased-sampler-configuration)
       - [`TraceIdRatioBased` sampler algorithm](#traceidratiobased-sampler-algorithm)
       - [`TraceIdRatioBased` sampler description](#traceidratiobased-sampler-description)
+      - [`TraceIdRatioBased` sampler compatibility warning](#traceidratiobased-sampler-compatibility-warning)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
 - [Span Limits](#span-limits)
@@ -398,6 +399,8 @@ configure `ParentBased(root=TraceIdRatioBased{probability})`.
 * Description MUST be `AlwaysOffSampler`.
 
 #### TraceIdRatioBased
+
+**Status**: [Development](../document-status.md)
 
 The `TraceIdRatioBased` sampler implements simple, ratio-based probability sampling using randomness features specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
 OpenTelemetry follows W3C Trace Context Level 2, which specifies 56 bits of randomness, in making use of 56 bits of information for probabilistic sampling decisions.
