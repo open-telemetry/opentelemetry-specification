@@ -1,4 +1,4 @@
-# Logs Bridge API
+# Logs API
 
 **Status**: [Stable](../document-status.md), except where otherwise specified
 
@@ -9,7 +9,7 @@
 
 <!-- toc -->
 
-- [Logs Bridge API](#logs-bridge-api)
+- [Logs API](#logs-api)
   - [LoggerProvider](#loggerprovider)
     - [LoggerProvider operations](#loggerprovider-operations)
       - [Get a Logger](#get-a-logger)
@@ -20,7 +20,7 @@
       - [Emit an Event](#emit-an-event)
     - [Helper operations](#helper-operations)
       - [Enabled](#enabled)
-  - [Logs API](#logs-api)
+  - [Logs API](#logs-api-1)
   - [Optional and required parameters](#optional-and-required-parameters)
   - [Concurrency requirements](#concurrency-requirements)
   - [Artifact Naming](#artifact-naming)
@@ -37,7 +37,7 @@ library authors to build
 which use this API to bridge between existing logging libraries and the
 OpenTelemetry log data model.</b>
 
-The Logs Bridge API consist of these main components:
+The Logs API consist of these main components:
 
 * [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
 * [Logger](#logger) is responsible for emitting logs as
@@ -227,7 +227,7 @@ provide it.
 
 ## Concurrency requirements
 
-For languages which support concurrent execution the Logs Bridge APIs provide
+For languages which support concurrent execution the Logs APIs provide
 specific guarantees and safeties.
 
 **LoggerProvider** - all methods are safe to be called concurrently.
@@ -236,10 +236,10 @@ specific guarantees and safeties.
 
 ## Artifact Naming
 
-The Logs Bridge API is not intended to be called by application developers
+The Logs API is not intended to be called by application developers
 directly, and SHOULD include documentation that discourages direct use. However,
-in the event OpenTelemetry were to add a user facing API, the Logs Bridge API would
-be a natural starting point. Therefore, Log Bridge API artifact, package, and class
+in the event OpenTelemetry were to add a user facing API, the Logs API would
+be a natural starting point. Therefore, Log API artifact, package, and class
 names MUST NOT include the terms "bridge", "appender", or any other qualifier
 that would prevent evolution into a user facing API.
 
