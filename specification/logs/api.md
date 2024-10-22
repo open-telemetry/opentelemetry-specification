@@ -9,22 +9,21 @@
 
 <!-- toc -->
 
+- [LoggerProvider](#loggerprovider)
+  * [LoggerProvider operations](#loggerprovider-operations)
+    + [Get a Logger](#get-a-logger)
+- [Logger](#logger)
+  * [Log Bridge operations](#log-bridge-operations)
+    + [Emit a LogRecord](#emit-a-logrecord)
+  * [Log Instrumentation operations](#log-instrumentation-operations)
+    + [Emit an Event](#emit-an-event)
+  * [Helper operations](#helper-operations)
+    + [Enabled](#enabled)
 - [Logs API](#logs-api)
-  - [LoggerProvider](#loggerprovider)
-    - [LoggerProvider operations](#loggerprovider-operations)
-      - [Get a Logger](#get-a-logger)
-  - [Logger](#logger)
-    - [Log Bridge operations](#log-bridge-operations)
-      - [Emit a LogRecord](#emit-a-logrecord)
-    - [Log Instrumentation operations](#log-instrumentation-operations)
-      - [Emit an Event](#emit-an-event)
-    - [Helper operations](#helper-operations)
-      - [Enabled](#enabled)
-  - [Logs API](#logs-api-1)
-  - [Optional and required parameters](#optional-and-required-parameters)
-  - [Concurrency requirements](#concurrency-requirements)
-  - [Artifact Naming](#artifact-naming)
-  - [References](#references)
+- [Optional and required parameters](#optional-and-required-parameters)
+- [Concurrency requirements](#concurrency-requirements)
+- [Artifact Naming](#artifact-naming)
+- [References](#references)
 
 <!-- tocstop -->
 
