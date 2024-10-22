@@ -96,22 +96,25 @@ instances where at least one parameter has a different value.
 
 ## Logger
 
-The `Logger` is responsible for emitting `LogRecord`s. There are two types of
+The `Logger` is responsible for emitting `LogRecord`s. There are three types of
 logging operations:
 
 * **Log Bridge** operations to be used when receiving data from other logging
   libraries.
 * **Log Instrumentation** operations to be used when writing instrumentation
   for OpenTelemetry.
-* **helper** operations to assist with using the logger.
+* **Helper** operations to assist with using the logger.
 
-The Logger contains methods for both types of operations. The `Logger` MUST
-provide functions to:
+The Logger contains methods for all types of operations. The `Logger` MUST
+provide a function to:
 
 - [Emit a `LogRecord`](#emit-a-logrecord)
+
+The `Logger` is RECOMMENDED to provide a function to:
+
 - [Emit an `Event`](#emit-an-event)
 
-The `Logger` SHOULD provide functions to:
+The `Logger` SHOULD provide a function to:
 
 - [Report if `Logger` is `Enabled`](#enabled)
 
