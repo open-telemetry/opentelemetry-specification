@@ -9,15 +9,16 @@
 
 <!-- toc -->
 
-- [Logs API Development](#logs-api-development)
-- [Overview](#overview)
-- [EventLoggerProvider](#eventloggerprovider)
-  * [EventLoggerProvider Creation](#eventloggerprovider-creation)
-  * [EventLogger Creation](#eventlogger-creation)
-  * [Configuration](#configuration)
-  * [ForceFlush](#forceflush)
-- [EventLogger](#eventlogger)
-  * [Emit Event](#emit-event)
+- [Events SDK](#events-sdk)
+  - [Logs API Development](#logs-api-development)
+  - [Overview](#overview)
+  - [EventLoggerProvider](#eventloggerprovider)
+    - [EventLoggerProvider Creation](#eventloggerprovider-creation)
+    - [EventLogger Creation](#eventlogger-creation)
+    - [Configuration](#configuration)
+    - [ForceFlush](#forceflush)
+  - [EventLogger](#eventlogger)
+    - [Emit Event](#emit-event)
 
 <!-- tocstop -->
 
@@ -33,7 +34,7 @@ All implementations of the OpenTelemetry API MUST provide an SDK.
 ## Logs API Development
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs API](./bridge-api.md#logs-api).
+> We are currently in the process of defining a new [Logs API](./api.md#logs-api).
 
 The intent is that Logs SDK will incorporate the current functionality of this existing Events SDK and once it is defined and implemented, the Events SDK usage will be migrated, deprecated, renamed and eventually removed.
 
