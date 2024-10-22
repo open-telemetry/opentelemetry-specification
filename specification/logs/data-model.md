@@ -7,35 +7,37 @@
 
 <!-- toc -->
 
-- [Design Notes](#design-notes)
-  * [Requirements](#requirements)
-  * [Definitions Used in this Document](#definitions-used-in-this-document)
-    + [Type `any`](#type-any)
-    + [Type `map`](#type-mapstring-any)
-  * [Field Kinds](#field-kinds)
-- [Log and Event Record Definition](#log-and-event-record-definition)
-  * [Field: `Timestamp`](#field-timestamp)
-  * [Field: `ObservedTimestamp`](#field-observedtimestamp)
-  * [Trace Context Fields](#trace-context-fields)
-    + [Field: `TraceId`](#field-traceid)
-    + [Field: `SpanId`](#field-spanid)
-    + [Field: `TraceFlags`](#field-traceflags)
-  * [Severity Fields](#severity-fields)
-    + [Field: `SeverityText`](#field-severitytext)
-    + [Field: `SeverityNumber`](#field-severitynumber)
-    + [Mapping of `SeverityNumber`](#mapping-of-severitynumber)
-    + [Reverse Mapping](#reverse-mapping)
-    + [Error Semantics](#error-semantics)
-    + [Displaying Severity](#displaying-severity)
-    + [Comparing Severity](#comparing-severity)
-  * [Field: `Body`](#field-body)
-  * [Field: `Resource`](#field-resource)
-  * [Field: `InstrumentationScope`](#field-instrumentationscope)
-  * [Field: `Attributes`](#field-attributes)
-    + [Errors and Exceptions](#errors-and-exceptions)
-- [Example Log Records](#example-log-records)
-- [Example Mappings](#example-mappings)
-- [References](#references)
+- [Logs Data Model](#logs-data-model)
+  - [Design Notes](#design-notes)
+    - [Requirements](#requirements)
+    - [Events](#events)
+    - [Definitions Used in this Document](#definitions-used-in-this-document)
+      - [Type `any`](#type-any)
+      - [Type `map<string, any>`](#type-mapstring-any)
+    - [Field Kinds](#field-kinds)
+  - [Log and Event Record Definition](#log-and-event-record-definition)
+    - [Field: `Timestamp`](#field-timestamp)
+    - [Field: `ObservedTimestamp`](#field-observedtimestamp)
+    - [Trace Context Fields](#trace-context-fields)
+      - [Field: `TraceId`](#field-traceid)
+      - [Field: `SpanId`](#field-spanid)
+      - [Field: `TraceFlags`](#field-traceflags)
+    - [Severity Fields](#severity-fields)
+      - [Field: `SeverityText`](#field-severitytext)
+      - [Field: `SeverityNumber`](#field-severitynumber)
+      - [Mapping of `SeverityNumber`](#mapping-of-severitynumber)
+      - [Reverse Mapping](#reverse-mapping)
+      - [Error Semantics](#error-semantics)
+      - [Displaying Severity](#displaying-severity)
+      - [Comparing Severity](#comparing-severity)
+    - [Field: `Body`](#field-body)
+    - [Field: `Resource`](#field-resource)
+    - [Field: `InstrumentationScope`](#field-instrumentationscope)
+    - [Field: `Attributes`](#field-attributes)
+      - [Errors and Exceptions](#errors-and-exceptions)
+  - [Example Log Records](#example-log-records)
+  - [Example Mappings](#example-mappings)
+  - [References](#references)
 
 <!-- tocstop -->
 
@@ -96,6 +98,21 @@ The Data Model aims to successfully represent 3 sorts of logs and events:
   some control over how the logs and events are generated and what information
   we include in the logs. We can likely modify the source code of the
   application if needed.
+
+### Events
+
+**Status**: [Development](../document-status.md)
+
+Events are OpenTelemetry's standardized format for LogRecords. All semantic
+conventions defined for logs MUST be formatted as Events.
+
+Events are intended to be used by OpenTelemetry instrumentation. It is not a
+requirement that all LogRecords be formatted as Events.
+
+The Event format is as follows. Events are defined by an
+[`event.name` attribute](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+All Events with the same `event.name` MUST conform to the same schema for
+both their `Attributes` and their `Body`.
 
 ### Definitions Used in this Document
 

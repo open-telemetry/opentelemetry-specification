@@ -9,21 +9,21 @@
 
 <!-- toc -->
 
-- [LoggerProvider](#loggerprovider)
-  * [LoggerProvider operations](#loggerprovider-operations)
-    + [Get a Logger](#get-a-logger)
-- [Logger](#logger)
-  * [Log Bridge operations](#log-bridge-operations)
-    + [Emit a LogRecord](#emit-a-logrecord)
-  * [Log Instrumentation operations](#log-instrumentation-operations)
-    + [Emit an Event](#emit-an-event)
-  * [Helper operations](#helper-operations)
-    + [Enabled](#enabled)
 - [Logs API](#logs-api)
-- [Optional and required parameters](#optional-and-required-parameters)
-- [Concurrency requirements](#concurrency-requirements)
-- [Artifact Naming](#artifact-naming)
-- [References](#references)
+  - [LoggerProvider](#loggerprovider)
+    - [LoggerProvider operations](#loggerprovider-operations)
+      - [Get a Logger](#get-a-logger)
+  - [Logger](#logger)
+    - [Log Bridge operations](#log-bridge-operations)
+      - [Emit a LogRecord](#emit-a-logrecord)
+      - [Enabled](#enabled)
+    - [Log Instrumentation operations](#log-instrumentation-operations)
+      - [Emit an Event](#emit-an-event)
+  - [Logs API](#logs-api-1)
+  - [Optional and required parameters](#optional-and-required-parameters)
+  - [Concurrency requirements](#concurrency-requirements)
+  - [Artifact Naming](#artifact-naming)
+  - [References](#references)
 
 <!-- tocstop -->
 
@@ -109,12 +109,9 @@ provide a function to:
 
 - [Emit a `LogRecord`](#emit-a-logrecord)
 
-The `Logger` is RECOMMENDED to provide a function to:
+The `Logger` SHOULD provide functions to:
 
 - [Emit an `Event`](#emit-an-event)
-
-The `Logger` SHOULD provide a function to:
-
 - [Report if `Logger` is `Enabled`](#enabled)
 
 ### Log Bridge operations
@@ -136,36 +133,6 @@ The API MUST accept the following parameters:
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
-
-### Log Instrumentation operations
-
-#### Emit an Event
-
-**Status**: [Development](../document-status.md)
-
-Events are OpenTelemetry's standardized semantic formatting for LogRecords.
-Beyond the structure provided by the LogRecord data model, it is helpful for
-logs to have a common format within that structure. When OpenTelemetry
-instrumentation emits logs, those logs SHOULD be formatted as Events.
-All semantic conventions defined for logs MUST be formatted as Events.
-
-**Parameters:**
-
-* The [`Name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
-  of the Event.
-* [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
-  the implementation SHOULD set it equal to the current time.
-* The [Context](../context/README.md) associated with the `Event`. When implicit
-  Context is supported, then this parameter SHOULD be optional and if unspecified
-  then MUST use current Context. When only explicit Context is supported, this parameter
-  SHOULD be required.
-* [Severity Number](./data-model.md#field-severitynumber) (optional)
-* [Severity Text](./data-model.md#field-severitytext) (optional)
-* [Body](./data-model.md#field-body) (optional)
-* [Attributes](./data-model.md#field-attributes) (optional) Event `Attributes` conform
-  to the [standard definition](../common/README.md#standard-attribute) of an attribute.
-
-### Helper operations
 
 #### Enabled
 
@@ -190,6 +157,31 @@ The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
+
+### Log Instrumentation operations
+
+#### Emit an Event
+
+**Status**: [Development](../document-status.md)
+
+The effect of calling this API is to emit a `LogRecord` to the processing pipeline
+formatted as an [event](./data-model.md#events).
+
+**Parameters:**
+
+* The [`Name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
+  of the Event.
+* [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
+  the implementation SHOULD set it equal to the current time.
+* The [Context](../context/README.md) associated with the `Event`. When implicit
+  Context is supported, then this parameter SHOULD be optional and if unspecified
+  then MUST use current Context. When only explicit Context is supported, this parameter
+  SHOULD be required.
+* [Severity Number](./data-model.md#field-severitynumber) (optional)
+* [Severity Text](./data-model.md#field-severitytext) (optional)
+* [Body](./data-model.md#field-body) (optional)
+* [Attributes](./data-model.md#field-attributes) (optional) Event `Attributes` conform
+  to the [standard definition](../common/README.md#standard-attribute) of an attribute.
 
 ## Logs API
 
