@@ -9,17 +9,18 @@
 
 <!-- toc -->
 
-- [Logs API Development](#logs-api-development)
-- [Event Data model](#event-data-model)
-- [Event API use cases](#event-api-use-cases)
-- [EventLoggerProvider](#eventloggerprovider)
-  * [EventLoggerProvider operations](#eventloggerprovider-operations)
-    + [Get an EventLogger](#get-an-eventlogger)
-- [EventLogger](#eventlogger)
-  * [EventLogger Operations](#eventlogger-operations)
-    + [Emit Event](#emit-event)
-- [Optional and required parameters](#optional-and-required-parameters)
-- [References](#references)
+- [Events API](#events-api)
+  - [Logs API Development](#logs-api-development)
+  - [Event Data model](#event-data-model)
+  - [Event API use cases](#event-api-use-cases)
+  - [EventLoggerProvider](#eventloggerprovider)
+    - [EventLoggerProvider operations](#eventloggerprovider-operations)
+      - [Get an EventLogger](#get-an-eventlogger)
+  - [EventLogger](#eventlogger)
+    - [EventLogger Operations](#eventlogger-operations)
+      - [Emit Event](#emit-event)
+  - [Optional and required parameters](#optional-and-required-parameters)
+  - [References](#references)
 
 <!-- tocstop -->
 
@@ -34,7 +35,7 @@ The Event API consists of these main components:
 ## Logs API Development
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs API](./bridge-api.md#logs-api).
+> We are currently in the process of defining a new [Logs API](./api.md#logs-api).
 
 The intent is that this Logs API will incorporate the current functionality of this existing Events API and once it is defined and implemented, the Events API usage will be migrated, deprecated, renamed and eventually removed.
 
