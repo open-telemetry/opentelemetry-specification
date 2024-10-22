@@ -7,34 +7,35 @@
 
 <!-- toc -->
 
-- [LoggerProvider](#loggerprovider)
-  * [LoggerProvider Creation](#loggerprovider-creation)
-  * [Logger Creation](#logger-creation)
-  * [Configuration](#configuration)
-    + [LoggerConfigurator](#loggerconfigurator)
-  * [Shutdown](#shutdown)
-  * [ForceFlush](#forceflush)
-- [Logger](#logger)
-  * [LoggerConfig](#loggerconfig)
-- [Additional LogRecord interfaces](#additional-logrecord-interfaces)
-  * [ReadableLogRecord](#readablelogrecord)
-  * [ReadWriteLogRecord](#readwritelogrecord)
-- [LogRecord Limits](#logrecord-limits)
-- [LogRecordProcessor](#logrecordprocessor)
-  * [LogRecordProcessor operations](#logrecordprocessor-operations)
-    + [OnEmit](#onemit)
-    + [ShutDown](#shutdown)
-    + [ForceFlush](#forceflush-1)
-  * [Built-in processors](#built-in-processors)
-    + [Simple processor](#simple-processor)
-    + [Batching processor](#batching-processor)
-    + [Isolating processor](#isolating-processor)
-- [LogRecordExporter](#logrecordexporter)
-  * [LogRecordExporter operations](#logrecordexporter-operations)
-    + [Export](#export)
-    + [ForceFlush](#forceflush-2)
-    + [Shutdown](#shutdown-1)
-- [Logs API](#logs-api)
+- [Logs SDK](#logs-sdk)
+  - [LoggerProvider](#loggerprovider)
+    - [LoggerProvider Creation](#loggerprovider-creation)
+    - [Logger Creation](#logger-creation)
+    - [Configuration](#configuration)
+      - [LoggerConfigurator](#loggerconfigurator)
+    - [Shutdown](#shutdown)
+    - [ForceFlush](#forceflush)
+  - [Logger](#logger)
+    - [LoggerConfig](#loggerconfig)
+  - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
+    - [ReadableLogRecord](#readablelogrecord)
+    - [ReadWriteLogRecord](#readwritelogrecord)
+  - [LogRecord Limits](#logrecord-limits)
+  - [LogRecordProcessor](#logrecordprocessor)
+    - [LogRecordProcessor operations](#logrecordprocessor-operations)
+      - [OnEmit](#onemit)
+      - [ShutDown](#shutdown-1)
+      - [ForceFlush](#forceflush-1)
+    - [Built-in processors](#built-in-processors)
+      - [Simple processor](#simple-processor)
+      - [Batching processor](#batching-processor)
+      - [Isolating processor](#isolating-processor)
+  - [LogRecordExporter](#logrecordexporter)
+    - [LogRecordExporter operations](#logrecordexporter-operations)
+      - [Export](#export)
+      - [ForceFlush](#forceflush-2)
+      - [Shutdown](#shutdown-2)
+  - [Logs API](#logs-api)
 
 <!-- tocstop -->
 
@@ -542,6 +543,6 @@ authors MAY decide if they want to make the shutdown timeout configurable.
 ## Logs API
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs API](./bridge-api.md#logs-api).
+> We are currently in the process of defining a new [Logs API](./api.md#logs-api).
 
 - [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
