@@ -9,21 +9,19 @@
 
 <!-- toc -->
 
-- [Logs API](#logs-api)
-  - [LoggerProvider](#loggerprovider)
-    - [LoggerProvider operations](#loggerprovider-operations)
-      - [Get a Logger](#get-a-logger)
-  - [Logger](#logger)
-    - [Log Bridge operations](#log-bridge-operations)
-      - [Emit a LogRecord](#emit-a-logrecord)
-      - [Enabled](#enabled)
-    - [Log Instrumentation operations](#log-instrumentation-operations)
-      - [Emit an Event](#emit-an-event)
-  - [Logs API](#logs-api-1)
-  - [Optional and required parameters](#optional-and-required-parameters)
-  - [Concurrency requirements](#concurrency-requirements)
-  - [Artifact Naming](#artifact-naming)
-  - [References](#references)
+- [LoggerProvider](#loggerprovider)
+  * [LoggerProvider operations](#loggerprovider-operations)
+    + [Get a Logger](#get-a-logger)
+- [Logger](#logger)
+  * [Log Bridge operations](#log-bridge-operations)
+    + [Emit a LogRecord](#emit-a-logrecord)
+    + [Enabled](#enabled)
+  * [Log Instrumentation operations](#log-instrumentation-operations)
+    + [Emit an Event](#emit-an-event)
+- [Optional and required parameters](#optional-and-required-parameters)
+- [Concurrency requirements](#concurrency-requirements)
+- [Artifact Naming](#artifact-naming)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -182,28 +180,6 @@ formatted as an [event](./data-model.md#events).
 * [Body](./data-model.md#field-body) (optional)
 * [Attributes](./data-model.md#field-attributes) (optional) Event `Attributes` conform
   to the [standard definition](../common/README.md#standard-attribute) of an attribute.
-
-## Logs API
-
-**Status**: [Development](../document-status.md)
-
-Events are OpenTelemetry's standardized semantic formatting for LogRecords.
-Beyond the structure provided by the LogRecord data model, it is helpful for
-logs to have a common format within that structure. When OpenTelemetry
-instrumentation emits logs, those logs SHOULD be formatted as Events.
-All semantic conventions defined for logs MUST be formatted as Events.
-
-**Parameters:**
-
-* The `Name` of the Event, as described
-  in [event.name semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
-* The (`AnyValue`) (optional) `Body` of the Event.
-* The `Timestamp` (optional) of the Event.
-* The [Context](../context/README.md) (optional) associated with the Event.
-* The `SeverityNumber` (optional) of the Event.
-* The `Attributes` (optional) of the Event. Event `Attributes` provide
-  additional details about the Event which are not part of the
-  well-defined event `Body`.
 
 ## Optional and required parameters
 
