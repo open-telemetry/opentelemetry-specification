@@ -169,6 +169,7 @@ formatted as an [event](./data-model.md#events).
 
 * The [`Name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
   of the Event.
+* [Timestamp](./data-model.md#field-timestamp) (optional)
 * [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
   the implementation SHOULD set it equal to the current time.
 * The [Context](../context/README.md) associated with the `Event`. When implicit
