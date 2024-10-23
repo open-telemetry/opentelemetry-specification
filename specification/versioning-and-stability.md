@@ -152,7 +152,8 @@ Stable APIs. Language implementations SHOULD have a mechanism to do so, such tha
 
 - Adding a new method in Development maturity level is possible and is not a breaking
   change for users that do not use the new method. It is acceptable that to use the
-  new method the user must opt-in explicitly, provided that such opt-in operation is easy.
+  new method the user must opt-in explicitly, provided that such opt-in operation is 
+  easy and documented.
 - Newly added methods are clearly marked and documented as in Development.
 - Removing (or deprecating) a method that was in Development maturity level but did
   not graduate to Stable level is not a breaking change for users that never used the
