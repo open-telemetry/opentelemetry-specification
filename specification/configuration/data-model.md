@@ -86,7 +86,7 @@ results are allowed) and an error describing the parse failure to the user.
 
 Node types MUST be interpreted after environment variable substitution takes
 place. This ensures the environment string representation of boolean, integer,
-or floating point fields can be properly converted to expected types.
+or floating point properties can be properly converted to expected types.
 
 It MUST NOT be possible to inject YAML structures by environment variables. For
 example, see references to `INVALID_MAP_VALUE` environment variable below.

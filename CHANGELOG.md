@@ -35,6 +35,9 @@ release.
 
 ### SDK Configuration
 
+- Clarify declarative configuration parse requirements for null vs empty.
+  ([#4269](https://github.com/open-telemetry/opentelemetry-specification/pull/4269))
+
 ### Common
 
 ### Supplementary Guidelines
