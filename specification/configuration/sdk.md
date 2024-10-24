@@ -228,15 +228,15 @@ Interpret configuration model and return SDK components.
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
 
-If a field has a default value defined (i.e. is _not_ required) and is present
-but null or unset, Create MUST ensure the SDK component is configured with the
-default value. If a field is required and is present but null or unset, Create
-SHOULD return an error. For example, if configuring
+If a property has a default value defined (i.e. is _not_ required) and is
+present but null or unset, Create MUST ensure the SDK component is configured
+with the default value. If a property is required and is present but null or
+unset, Create SHOULD return an error. For example, if configuring
 the [span batching processor](../trace/sdk.md#batching-processor) and
-the `scheduleDelayMillis` field is present but null or unset, the component is
-configured with the default value of `5000`. However, if the `exporter` field is
-present but null or unset, Create fails fast since there is no default value
-for `exporter`.
+the `scheduleDelayMillis` property is present but null or unset, the component
+is configured with the default value of `5000`. However, if the `exporter`
+property is present but null or unset, Create fails fast since there is no
+default value for `exporter`.
 
 When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to
