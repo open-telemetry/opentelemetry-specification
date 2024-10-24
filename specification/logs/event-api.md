@@ -34,7 +34,7 @@ The Event API consists of these main components:
 ## Logs API Development
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs API](./bridge-api.md#logs-api).
+> We are currently in the process of defining a new [Logs API](./api.md#logs-api).
 
 The intent is that this Logs API will incorporate the current functionality of this existing Events API and once it is defined and implemented, the Events API usage will be migrated, deprecated, renamed and eventually removed.
 
@@ -66,7 +66,7 @@ both their `Attributes` and their `Body`.
 
 The Events API was designed to allow shared libraries to emit high quality
 logs without needing to depend on a third party logger. Unlike the
-[Logs Bridge API](./bridge-api.md), instrumentation authors and application
+[Logs API](./api.md), instrumentation authors and application
 developers are encouraged to call this API directly. It is appropriate to
 use the Event API when these properties fit your requirements:
 

@@ -33,7 +33,7 @@ All implementations of the OpenTelemetry API MUST provide an SDK.
 ## Logs API Development
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs API](./bridge-api.md#logs-api).
+> We are currently in the process of defining a new [Logs API](./api.md#logs-api).
 
 The intent is that Logs SDK will incorporate the current functionality of this existing Events SDK and once it is defined and implemented, the Events SDK usage will be migrated, deprecated, renamed and eventually removed.
 
@@ -91,7 +91,7 @@ Emit a `LogRecord` representing an `Event`.
 **Implementation Requirements:**
 
 The implementation MUST use the parameters
-to [emit a logRecord](./bridge-api.md#emit-a-logrecord) as follows:
+to [emit a logRecord](./api.md#emit-a-logrecord) as follows:
 
 * The `Name` MUST be used to set
   the `event.name` [Attribute](./data-model.md#field-attributes). If
@@ -104,10 +104,10 @@ to [emit a logRecord](./bridge-api.md#emit-a-logrecord) as follows:
   the [Timestamp](./data-model.md#field-timestamp). If not provided, `Timestamp`
   MUST be set to the current time when [emit](#emit-event) was called.
 * The [Observed Timestamp](./data-model.md#field-observedtimestamp) MUST not be
-  set. (NOTE: [emit a logRecord](./bridge-api.md#emit-a-logrecord) will
+  set. (NOTE: [emit a logRecord](./api.md#emit-a-logrecord) will
   set `ObservedTimestamp` to the current time when unset.)
 * If provided by the user, the `Context` MUST be used to set
-  the [Context](./bridge-api.md#emit-a-logrecord). If not provided, `Context`
+  the [Context](./api.md#emit-a-logrecord). If not provided, `Context`
   MUST be set to the current Context.
 * If provided by the user, the `SeverityNumber` MUST be used to set
   the [Severity Number](./data-model.md#field-severitynumber) when emitting the

@@ -196,7 +196,7 @@ concept the attributes of the scope cannot change at runtime.
 
 This refers to the `name` and (optional) `version` arguments specified when
 creating a new `Tracer` or `Meter` (see
-[Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider))/[Obtaining a Logger](logs/bridge-api.md#loggerprovider).
+[Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider))/[Obtaining a Logger](logs/api.md#loggerprovider).
 The name/version pair identifies the
 [Instrumentation Scope](#instrumentation-scope), for example the
 [Instrumentation Library](#instrumentation-library) or another unit of
@@ -254,7 +254,7 @@ recommended to call it out specifically.
 ### Log Appender / Bridge
 
 A log appender or bridge is a component which bridges logs from an existing log
-API into OpenTelemetry using the [Log Bridge API](./logs/bridge-api.md). The
+API into OpenTelemetry using the [Log API](./logs/api.md). The
 terms "log bridge" and "log appender" are used interchangeably, reflecting that
 these components bridge data into OpenTelemetry, but are often called appenders
 in the logging domain.
