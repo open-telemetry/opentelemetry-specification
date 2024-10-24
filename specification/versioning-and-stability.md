@@ -151,9 +151,10 @@ Additionally, a Stable signal's API/SDK may be extended by adding new calls to e
 Stable APIs. Language implementations SHOULD have a mechanism to do so, such that:
 
 - Adding a new method in Development maturity level is possible and is not a breaking
-  change for users that do not use the new method. It is acceptable that to use the
-  new method the user must opt-in explicitly, provided that such opt-in operation is 
-  easy and documented.
+  change for users that do not use the new method.
+- New in Development methods SHOULD require opt-in, so that the user is made aware of
+  the risk associated with using the development API. It should be documented that
+  the newly added methods are in Development and are subject to breaking changes.
 - Newly added methods are clearly marked and documented as in Development.
 - Removing (or deprecating) a method that was in Development maturity level but did
   not graduate to Stable level is not a breaking change for users that never used the
