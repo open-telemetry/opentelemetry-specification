@@ -155,7 +155,6 @@ Stable APIs. Language implementations SHOULD have a mechanism to do so, such tha
 - New in Development methods SHOULD require opt-in, so that the user is made aware of
   the risk associated with using the development API. It should be documented that
   the newly added methods are in Development and are subject to breaking changes.
-- Newly added methods are clearly marked and documented as in Development.
 - Removing (or deprecating) a method that was in Development maturity level but did
   not graduate to Stable level is not a breaking change for users that never used the
   method.
