@@ -180,7 +180,9 @@ Parse and validate a [configuration file](./data-model.md#file-based-configurati
 Parse MUST perform [environment variable substitution](./data-model.md#environment-variable-substitution).
 
 Parse MUST differentiate between properties that are unset and present but null.
-For example, consider the following snippet:
+For example, consider the following snippet,
+noting `.meter_provider.views[0].stream.drop` is set to null rather than an
+empty object:
 
 ```yaml
 meter_provider:
