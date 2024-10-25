@@ -37,9 +37,11 @@ Smaller changes can follow a shorter process:
   a [chicken or the egg problem](https://en.wikipedia.org/wiki/Chicken_or_the_egg)
   in that proposals require prototyping but language implementations require
   features to be in the specification. For this reason, when adding new features
-  with Development maturity level, a prototype is defined as an unmerged PR to a
-  language implementation which has the support of the implementation's
-  maintainers.
+  with Development maturity level, a prototype is defined as a working
+  demonstration of the feature in a language implementation which has the
+  support of that language's maintainers. For example, this may be an unmerged
+  PR with an indication of maintainers' intent to merge in the event the
+  corresponding specification PR is merged.
 
 Trivial changes, such as clarifications, wording changes, spelling/grammar
 corrections, etc. can be made directly via pull requests and do not require an associated
