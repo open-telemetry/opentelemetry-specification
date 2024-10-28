@@ -24,6 +24,11 @@ release.
 
 ### Resource
 
+### Profiles
+
+- Define required attributes for Mappings.
+  ([#4197](https://github.com/open-telemetry/opentelemetry-specification/pull/4197))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
