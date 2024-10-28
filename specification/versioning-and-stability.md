@@ -147,7 +147,7 @@ workarounds without incrementing the major version.
 For example, a possible workaround might be to add a new interface instead of extending the existing one and accept the
 new interface in addition to the old one in every place.
 
-Additionally, a Stable signal's API/SDK may be extended by adding new methods to existing
+Additionally, a Stable signal's API/SDK MAY be extended by adding new methods to existing
 Stable APIs. Language implementations SHOULD have a mechanism to do so, such that:
 
 - Adding a new method in Development maturity level is possible and is not a breaking
