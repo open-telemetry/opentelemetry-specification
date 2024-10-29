@@ -112,6 +112,9 @@ The `Logger` SHOULD provide functions to:
 
 ### Log Bridge operations
 
+Log Bridge operations are not intended to be used for writing instrumentation,
+and SHOULD include documentation that discourages this use.
+
 #### Emit a LogRecord
 
 The effect of calling this API is to emit a `LogRecord` to the processing pipeline.
