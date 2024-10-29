@@ -42,6 +42,7 @@ path_base_for_github_subdir:
   - [Protocol](protocol/README.md)
     - [Metrics](metrics/data-model.md)
     - [Logs](logs/data-model.md)
+    - [Profiles](profiles/mappings.md)
   - Compatibility
     - [OpenCensus](compatibility/opencensus.md)
     - [OpenTracing](compatibility/opentracing.md)
