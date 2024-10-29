@@ -33,6 +33,9 @@ release.
 
 ### Compatibility
 
+- Add requirement to allow extending Stable APIs
+  ([#4270](https://github.com/open-telemetry/opentelemetry-specification/pull/4270))
+
 ### SDK Configuration
 
 - Clarify declarative configuration parse requirements for null vs empty.
