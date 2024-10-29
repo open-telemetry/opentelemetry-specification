@@ -66,7 +66,9 @@ release.
 - Introduce initial placeholder for the new user-facing Logs API, adding references
   to existing API's informing of the coming changes while the definition is defined.
   ([#4236](https://github.com/open-telemetry/opentelemetry-specification/pull/4236))
-- Moved the EventProvider and EventLogger into to the LogProvider and Logger.([#4259](https://github.com/open-telemetry/opentelemetry-specification/pull/4259))
+- Renamed Log Bridge API to Logs API. Defined the existing Logger methods to be 
+  Log Bridge Operations. Added EmitEvent to the Logger as an Instrumentation Operation.
+  ([#4259](https://github.com/open-telemetry/opentelemetry-specification/pull/4259))
 
 ### Common
 
