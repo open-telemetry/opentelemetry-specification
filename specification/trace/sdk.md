@@ -391,7 +391,8 @@ configure `ParentBased(root=TraceIdRatioBased{probability})`.
 
 * Returns `RECORD_AND_SAMPLE` always.
 * Description MUST be `AlwaysOnSampler`.
-* OpenTelemetry TraceState SHOULD include `th:0`.
+* If the incoming TraceState has a valid OpenTelemetry TraceState `th` sub-key, the the returned TraceState is unmodified.
+* If the there is no incoming TraceState or the OpenTelemetry TraceState `th` sub-key is not set, the returned TraceState SHOULD include `th:0`.
 
 #### AlwaysOff
 
