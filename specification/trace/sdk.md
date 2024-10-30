@@ -525,17 +525,21 @@ TraceID randomness, above.  It has two parts.
 
 API users control the initial TraceState of a root span, so they can
 provide explicit trace randomness for a trace by defining the [`rv`
-sub-key of the OpenTelemetry TraceState][OTELRVALUE].  SDKs MUST NOT
-overwrite explicit trace randomness in an OpenTelemetry TraceState
+sub-key of the OpenTelemetry TraceState][OTELRVALUE].  SDKs and Samplers
+MUST NOT overwrite explicit trace randomness in an OpenTelemetry TraceState
 value.
 
-##### Set explicit trace randomness for non-random TraceIDs
+##### Root samplers set explicit trace randomness for non-random TraceIDs
 
-For root span contexts, when the SDK generates a TraceID that does not
-meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID],
-and when the the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE] is
-not already set, the SDK SHOULD insert an explicit trace randomness value
-into the OpenTelemetry TraceState value containing 56 random bits.
+When the SDK has generated a TraceID that does not meet the [W3C Trace
+Context Level 2 randomness requirements][W3CCONTEXTTRACEID], indicated
+by an unset trace random flag, and when the the [`rv` sub-key of the
+OpenTelemetry TraceState][OTELRVALUE] is not already set, the Root
+sampler has the opportunity to insert explicit trace randomness.
+
+Root Samplers MAY insert an explicit trace randomness value into the
+OpenTelemetry TraceState value in cases where an explicit trace
+randomness value is not already set.
 
 For example, here's a W3C Trace Context with non-random identifiers and an
 explicit randomness value:
@@ -551,7 +555,7 @@ For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet 
 
 #### IdGenerator randomness
 
-If the SDK uses an `IdGenerator` extension point, the SDK SHOULD allow the extension to determine whether the Random flag is set when new IDs are generated.  When an `IdGenerator` instance does not meet the randomness requirements, the SDK SHOULD insert explicit randomness instead, otherwise samplers will incorrectly presume TraceID randomness.
+If the SDK uses an `IdGenerator` extension point, the SDK SHOULD allow the extension to determine whether the Random flag is set when new IDs are generated.
 
 ## Span Limits
 
