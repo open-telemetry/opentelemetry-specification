@@ -3,9 +3,9 @@
 With the stable release of the tracing specification, the OpenTelemetry
 community is willing to spend more energy on metrics API/SDK. The goal is to get
 the metrics API/SDK specification to
-[`Experimental`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/versioning-and-stability.md#experimental)
+[`Experimental`](../../specification/versioning-and-stability.md#experimental)
 state by end of 5/2021, and make it
-[`Stable`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/versioning-and-stability.md#stable)
+[`Stable`](../../specification/versioning-and-stability.md#stable)
 before end of 2021:
 
 * By end of 5/31/2021, we should have a good confidence that we can recommend
@@ -15,12 +15,12 @@ before end of 2021:
   We might introduce additional features but there should be a high bar.
 
 * By end of 9/30/2021, we should mark the metrics API/SDK specification as
-  [`Feature-freeze`](https://github.com/open-telemetry/opentelemetry-specification/blob/1afab39e5658f807315abf2f3256809293bfd421/specification/document-status.md#feature-freeze),
+  [`Feature-freeze`](../../specification/document-status.md#feature-freeze),
   and focus on bug fixing or editorial changes.
 
 * By end of 11/30/2021, we want to have a stable release of metrics API/SDK
   specification, with multiple language SIGs providing RC (release candidate) or
-  [stable](https://github.com/open-telemetry/opentelemetry-specification/blob/9047c91412d3d4b7f28b0f7346d8c5034b509849/specification/versioning-and-stability.md#stable)
+  [stable](../../specification/versioning-and-stability.md#stable)
   clients.
 
 In this document, we will focus on two scenarios that we use for prototyping
@@ -171,7 +171,7 @@ Both libraries will provide out-of-box metrics, the metrics have two categories:
 #### Server Climate Control Library
 
 Note: the **Host Name** should leverage [`OpenTelemetry
-Resource`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/resource/sdk.md),
+Resource`](../../specification/resource/sdk.md),
 so it should be covered by the metrics SDK rather than API, and strictly
 speaking it is not considered as a "dimension" from the SDK perspective.
 
@@ -208,7 +208,7 @@ can accept negative recordings and that they can be aggregated appropriately.
 **Received HTTP requests:**
 
 Note: the **Client Type** is passed in via the [`OpenTelemetry
-Baggage`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/baggage/api.md),
+Baggage`](../../specification/baggage/api.md),
 strictly speaking it is not part of the metrics API, but it is considered as a
 "dimension" from the metrics SDK perspective.
 

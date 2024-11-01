@@ -31,7 +31,7 @@ Without further ado, here are a set of requirements for “official” OpenTelem
 * Explicit, whitebox OpenTelemetry instrumentation must interoperate with the “automatic” / zero-source-code-modification / blackbox instrumentation.
   * If the blackbox instrumentation starts a Span, whitebox instrumentation must be able to discover it as the active Span (and vice versa)
   * Relatedly, there also must be a way to discover and avoid potential conflicts/overlap/redundancy between explicit whitebox instrumentation and blackbox instrumentation of the same libraries/packages
-    * That is, if a developer has already added the “official” OpenTelemetry plugin for, say, gRPC, then when the blackbox instrumentation effort adds gRPC support, it should *not* “double-instrument” it and create a mess of extra spans/etc
+    * That is, if a developer has already added the “official” OpenTelemetry plugin for, say, gRPC, then when the blackbox instrumentation effort adds gRPC support, it should _not_ “double-instrument” it and create a mess of extra spans/etc
 * From the standpoint of the actual telemetry being gathered, the same standards and expectations (about tagging, metadata, and so on) apply to "whitebox" instrumentation and automatic instrumentation
 * The code in the OpenTelemetry package must not take a hard dependency on any particular vendor/vendors (that sort of functionality should work via a plugin or registry mechanism)
   * Further, the code in the OpenTelemetry package must be isolated to avoid possible conflicts with the host application (e.g., shading in Java, etc)

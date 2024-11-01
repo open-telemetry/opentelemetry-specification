@@ -47,7 +47,6 @@ Introduces Data Model for Profiles signal to OpenTelemetry.
     * ["large" Profile](#large-profile)
     * [Conclusions](#conclusions)
   * [Semantic Conventions](#semantic-conventions)
-    * [Attributes](#attributes)
     * [Profile Types](#profile-types)
     * [Profile Units](#profile-units)
   * [Decision Log](#decision-log)

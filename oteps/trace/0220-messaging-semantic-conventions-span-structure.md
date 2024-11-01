@@ -6,8 +6,8 @@ for messaging scenarios, and at defining how those spans relate to each other.
 This OTEP is based on [OTEP 0173](0173-messaging-semantic-conventions.md),
 which defines basic terms and describes messaging scenarios that should be
 supported by messaging semantic conventions. It also relies on context
-propagation requirements put forth in the existing [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/specification/trace/semantic_conventions/messaging.md#context-propagation)
-and detailed in [OTEP 0205](0205-messaging-semantic-conventions-context-propagation).
+propagation requirements put forth in the existing [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/messaging/messaging-spans.md#context-propagation)
+and detailed in [OTEP 0205](0205-messaging-semantic-conventions-context-propagation.md).
 
 * [Terminology](#terminology)
 * [Motivation](#motivation)
@@ -25,7 +25,7 @@ and detailed in [OTEP 0205](0205-messaging-semantic-conventions-context-propagat
 
 ## Terminology
 
-For terms used in this document, refer to [OTEP 173](#0173-messaging-semantic-conventions.md#terminology).
+For terms used in this document, refer to [OTEP 173](0173-messaging-semantic-conventions.md#terminology).
 
 ## Motivation
 
@@ -140,7 +140,7 @@ There are four different scenarios for injecting a creation context into a messa
 
 ### Consumer
 
-Existing semantic conventions [prescribe the use of "Process" spans](https://github.com/open-telemetry/semantic-conventions/blob/main/specification/trace/semantic_conventions/messaging.md#operation-names)
+Existing semantic conventions [prescribe the use of "Process" spans](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/messaging/messaging-spans.md#span-name)
 for correlating producer with consumer traces.  However, for many use cases, it
 is not possible to rely on the presence of "Process" spans: there are cases
 where a dedicated processing operation cannot be identified, or where
@@ -254,7 +254,7 @@ For further details about each of those operations refer to the [section about t
 
 ### Span kind
 
-[Span kinds](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#spankind)
+[Span kinds](../../specification/trace/api.md#spankind)
 SHOULD be set according to the following table, based on the operation a span describes.
 
 | Operation name | Span kind|
@@ -265,7 +265,7 @@ SHOULD be set according to the following table, based on the operation a span de
 | `deliver`      | `CONSUMER` |
 | `settle`       | (see below) |
 
-The kind of `settle` spans should be set according to the [generic specification about span kinds](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#spankind),
+The kind of `settle` spans should be set according to the [generic specification about span kinds](../../specification/trace/api.md#spankind),
 e. g. it should be set to `CLIENT` if the `settle` spans models a synchronous call
 to the intermediary.
 
@@ -415,7 +415,7 @@ build on the foundation that this OTEP lays.
 
 ## Prior art
 
-The existing semantic conventions for messaging contain a [list of examples](https://github.com/open-telemetry/semantic-conventions/blob/main/specification/trace/semantic_conventions/messaging.md#examples),
+The existing semantic conventions for messaging contain a [list of examples](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/messaging/messaging-spans.md#examples),
 each specifying the spans with their attributes and relationships that should
 be created for a given messaging scenario.
 

@@ -119,7 +119,7 @@ Create a `Configurer` from a [configuration model](#configuration-model).
 
 #### Get TracerProvider, MeterProvider, LoggerProvider
 
-Interpret the [configuration model](#configuration-model) and return SDK TracerProvider, MeterProvider, LoggerProvider which strictly reflect the configuration object's details and ignores the [opentelemetry environment variable configuration scheme](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/sdk-environment-variables.md).
+Interpret the [configuration model](#configuration-model) and return SDK TracerProvider, MeterProvider, LoggerProvider which strictly reflect the configuration object's details and ignores the [opentelemetry environment variable configuration scheme](../specification/configuration/sdk-environment-variables.md).
 
 ### Configuration model
 
@@ -315,7 +315,7 @@ How should the SDK be configured when both no-code configuration (either environ
 
 Included in this OTEP is an example configuration file format.
 This included format was settled on so the configuration file schemas being proposed here could all be evaluated as viable options.
-It acted as proof-of-concept that _a_ configuration file format existed that could describe needed OTel configuration and be described by a schema.
+It acted as proof-of-concept that *a* configuration file format existed that could describe needed OTel configuration and be described by a schema.
 However, the configuration file format presented here is not meant as the final, nor optimal, design for use by OpenTelemetry.
 
 What that final design will be is left to discussion when this OTEP is implemented in the OpenTelemetry specification.

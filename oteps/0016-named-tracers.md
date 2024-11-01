@@ -35,9 +35,9 @@ Based on the name and version, a Provider could provide a no-op Tracer or Meter 
 
 ## Explanation
 
-From a user perspective, working with *Named Tracers / Meters* and `TracerProvider` / `MeterProvider` is conceptually similar to how e.g. the [Java logging API](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html#getLogger(java.lang.String)) and logging frameworks like [log4j](https://www.slf4j.org/apidocs/org/slf4j/LoggerFactory.html) work. In analogy to requesting Logger objects through LoggerFactories, an instrumentation library would create specific Tracer / Meter objects through a TracerProvider / MeterProvider.
+From a user perspective, working with _Named Tracers / Meters_ and `TracerProvider` / `MeterProvider` is conceptually similar to how e.g. the [Java logging API](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html#getLogger(java.lang.String)) and logging frameworks like [log4j](https://www.slf4j.org/apidocs/org/slf4j/LoggerFactory.html) work. In analogy to requesting Logger objects through LoggerFactories, an instrumentation library would create specific Tracer / Meter objects through a TracerProvider / MeterProvider.
 
-New Tracers or Meters can be created by providing the name and version of an instrumentation library. The version (following the convention proposed in <https://github.com/open-telemetry/oteps/pull/38>) is basically optional but *should* be supplied since only this information enables following scenarios:
+New Tracers or Meters can be created by providing the name and version of an instrumentation library. The version (following the convention proposed in <https://github.com/open-telemetry/oteps/pull/38>) is basically optional but _should_ be supplied since only this information enables following scenarios:
 
 * Only a specific range of versions of a given instrumentation library need to be suppressed, while other versions are allowed (e.g. due to a bug in those specific versions).
 * Go modules allow multiple versions of the same middleware in a single build so those need to be determined at runtime.
@@ -50,7 +50,7 @@ Meter meter = OpenTelemetry.getMeterProvider().getMeter("io.opentelemetry.contri
 
 These factories (`TracerProvider` and `MeterProvider`) replace the global `Tracer` / `Meter` singleton objects as ubiquitous points to request Tracer and Meter instances.
 
- The *name* used to create a Tracer or Meter must identify the *instrumentation* libraries (also referred to as *integrations*) and not the library being instrumented. These instrumentation libraries could be libraries developed in an OpenTelemetry repository, a 3rd party implementation, or even auto-injected code (see [Open Telemetry Without Manual Instrumentation OTEP](https://github.com/open-telemetry/oteps/blob/master/text/0001-telemetry-without-manual-instrumentation.md)). See also the examples for identifiers at the end.
+ The _name_ used to create a Tracer or Meter must identify the _instrumentation_ libraries (also referred to as _integrations_) and not the library being instrumented. These instrumentation libraries could be libraries developed in an OpenTelemetry repository, a 3rd party implementation, or even auto-injected code (see [Open Telemetry Without Manual Instrumentation OTEP](https://github.com/open-telemetry/oteps/blob/master/text/0001-telemetry-without-manual-instrumentation.md)). See also the examples for identifiers at the end.
 If a library (or application) has instrumentation built-in, it is both the instrumenting and instrumented library and should pass its own name here. In all other cases (and to distinguish them from that case), the distinction between instrumenting and instrumented library is very important. For example, if an HTTP library `com.example.http` is instrumented by either `io.opentelemetry.contrib.examplehttp`, then it is important that the Tracer is not named `com.example.http`, but `io.opentelemetry.contrib.examplehttp` after the actual instrumentation library.
 
 If no name (null or empty string) is specified, following the suggestions in ["error handling proposal"](https://github.com/open-telemetry/opentelemetry-specification/pull/153), a "smart default" will be applied and a default Tracer / Meter implementation is returned.
@@ -76,7 +76,7 @@ Examples (based on existing contribution libraries from OpenTracing and OpenCens
 
 ## Internal details
 
-By providing a `TracerProvider` / `MeterProvider` and *Named Tracers / Meters*, a vendor or OpenTelemetry implementation gains more flexibility in providing Tracers and Meters and which attributes they set in the resulting Spans and Metrics that are produced.
+By providing a `TracerProvider` / `MeterProvider` and _Named Tracers / Meters_, a vendor or OpenTelemetry implementation gains more flexibility in providing Tracers and Meters and which attributes they set in the resulting Spans and Metrics that are produced.
 
 On an SDK level, the SpanData class and its Metrics counterpart are extended with a `getLibraryResource` function that returns the resource associated with the Tracer / Meter that created it.
 
@@ -117,7 +117,7 @@ Span span = traceComponent.spanBuilder("someMethod").startSpan();
 
 Overall, this would not change a lot compared to the `TracerProvider` since the levels of indirection until producing an actual span are the same.
 
-Instead of setting the `component` property based on the given Tracer names, those names could also be used as *prefixes* for produced span names (e.g. `<TracerName-SpanName>`). However, with regard to data quality and semantic conventions, a dedicated `component` set on spans is probably preferred.
+Instead of setting the `component` property based on the given Tracer names, those names could also be used as _prefixes_ for produced span names (e.g. `<TracerName-SpanName>`). However, with regard to data quality and semantic conventions, a dedicated `component` set on spans is probably preferred.
 
 Instead of using plain strings as an argument for creating new Tracers, a `Resource` identifying an instrumentation library could be used. Such resources must have a _version_ and a _name_ label (there could be semantic convention definitions for those labels). This implementation alternative mainly depends on the availability of the `Resource` data type on an API level (see <https://github.com/open-telemetry/opentelemetry-specification/pull/254>).
 

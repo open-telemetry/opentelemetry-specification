@@ -12,13 +12,13 @@ parent sampling probability associated with a context in order to
 build span-to-metrics pipelines when the built-in `ParentBased`
 Sampler is used.  Further motivation for supporting span-to-metrics
 pipelines is presented in [OTEP
-170](https://github.com/open-telemetry/oteps/blob/main/text/trace/0170-sampling-probability.md).
+170](0170-sampling-probability.md).
 
 A consistent trace sampling decision is one that can be carried out at
 any node in a trace, which supports collecting partial traces.
 OpenTelemetry specifies a built-in `TraceIDRatioBased` Sampler that
 aims to accomplish this goal but was left incomplete (see a
-[TODO](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#traceidratiobased)
+[TODO](../../specification/trace/sdk.md#traceidratiobased)
 in the v1.0 Trace specification).
 
 We propose a Sampler option to propagate the necessary information
@@ -44,7 +44,7 @@ Ertl](https://arxiv.org/pdf/2107.07703.pdf).
 ### Adjusted count
 
 The concept of adjusted count is introduced in [OTEP
-170](./0170-sampling_probability.md).  Briefly, adjusted count is defined
+170](./0170-sampling-probability.md).  Briefly, adjusted count is defined
 in terms of the sampling probability, where:
 
 | Sampling probability | Adjusted count                     | Notes                                                                                                      |
@@ -89,7 +89,7 @@ probabilities is the negative base-2 logarithm of the probability:
 | 63      | 0                |
 
 [As specified in OTEP 170 for the Trace data
-model](https://github.com/open-telemetry/oteps/blob/main/text/trace/0170-sampling-probability.md),
+model](0170-sampling-probability.md),
 parent sampling probability can be stored in exported Span data to
 enable span-to-metrics pipelines to be built.  Because `tracestate` is
 already encoded in the OpenTelemetry Span, this proposal is requires

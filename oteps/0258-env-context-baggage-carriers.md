@@ -41,7 +41,7 @@ Adding arbitrary [Text Map propagation][tmp] through environment variable carrie
 the OpenTelemetry Specification will enable distributed tracing within the
 above listed systems.
 
-There has already been a significant amount of [Prior Art](#prior-art) built
+There has already been a significant amount of [Prior Art](#prior-art-and-alternatives) built
 within the industry and **within OpenTelemetry** to accomplish the immediate needs,
 however, OpenTelemetry at this time does not define the specification for this
 form of propagation.
@@ -270,7 +270,7 @@ mentioned in [opentelemetry-specification #740](https://github.com/open-telemetr
 
 * [Jenkins OpenTelemetry Plugin](https://github.com/jenkinsci/opentelemetry-plugin)
 * [otel-cli generic wrapper](https://github.com/equinix-labs/otel-cli)
-* [Maven OpenTelemetry Extension](https://github.com/cyrille-leclerc/opentelemetry-maven-extension)
+* [Maven OpenTelemetry Extension](https://github.com/open-telemetry/opentelemetry-java-contrib/tree/main/maven-extension)
 * [Ansible OpenTelemetry Plugin](https://github.com/ansible-collections/community.general/pull/3091)
 * [go-test-trace](https://github.com/rakyll/go-test-trace/commit/22493612be320e0a01c174efe9b2252924f6dda9)
 * [Concourse CI](https://github.com/concourse/docs/pull/462)

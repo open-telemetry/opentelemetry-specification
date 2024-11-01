@@ -27,7 +27,7 @@ This would *initially* have the following structure:
   - `trace/` - Contents of `{specification}/trace/semantic_conventions`
   - `metrics/` - Contents of `{specification}/metrics/semantic_conventions`
   - `logs/`- Contents of `{specification}/logs/semantic_conventions`
-  - `schemas/` - A new location for [Telemetry Schemas](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/schemas/README.md)
+  - `schemas/` - A new location for [Telemetry Schemas](https://github.com/open-telemetry/semantic-conventions/tree/main/schemas)
     to live. This directory will be hosted at
     `https://opentelemetry.io/schemas/`
 
@@ -48,7 +48,7 @@ There will also be the following exceptions in the specification:
     specification. Specifically `service.name`.
 - The specification may elevate some semantic conventions as necessary for
   compatibility requirements, e.g. `service.instance.id` and
-  [Prometheus Compatibility](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/compatibility/prometheus_and_openmetrics.md).
+  [Prometheus Compatibility](../specification/compatibility/prometheus_and_openmetrics.md).
 
 These exceptions exist because:
 
@@ -115,13 +115,13 @@ Initially this repository would have the following ownership:
   - [Sean Marcinak](https://github.com/MovieStoreGuy), Atlassian
   - [Ted Young](https://github.com/tedsuo), Lightstep
 - Approvers (HTTP Only)
-  - [Trask Stalnaker](github.com/trask)
+  - [Trask Stalnaker](https://github.com/trask)
 - Approvers (SchemaUrl Files)
-  - [Tigran Najaryan](github.com/tigrannajaryan)
+  - [Tigran Najaryan](https://github.com/tigrannajaryan)
 - Maintainers
-  - [Josh Suereth](github.com/jsuereth)
-  - [Armin Ruech](github.com/arminru)
-  - [Reiley Yang](github.com/reyang)
+  - [Josh Suereth](https://github.com/jsuereth)
+  - [Armin Ruech](https://github.com/arminru)
+  - [Reiley Yang](https://github.com/reyang)
 
 That is, Maintenance would initially continue to fall on (a subset of) the
 Technical Committee. Approvers would start with existing semconv approvers in

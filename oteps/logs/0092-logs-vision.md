@@ -44,7 +44,7 @@ We will produce mapping recommendations for commonly used log formats.
 ## Log Protocol
 
 Armed with the Log Data model we will aim to design a high performance protocol
-for logs, which will pursue the same [design goals](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/protocol/design-goals.md)
+for logs, which will pursue the same [design goals](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/design-goals.md)
 as we had for the traces and metrics protocol.
 
 Most notably the protocol will aim to be highly reliable, have low resource
@@ -111,7 +111,7 @@ system logs, infrastructure logs, third-party and first-party application logs.
 
 ### Standalone and Embedded Logs
 
-OpenTelemetry will support both logs embedded inside [Spans](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#span)
+OpenTelemetry will support both logs embedded inside [Spans](../../specification/trace/api.md#span)
 and standalone logs recorded elsewhere. The support of embedded logs is
 important for OpenTelemetry's primary use cases, where errors and exceptions
 need to be embedded in Spans. The support of standalone logs is important for

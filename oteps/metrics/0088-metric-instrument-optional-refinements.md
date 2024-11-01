@@ -54,8 +54,8 @@ refinements) use callbacks to capture measurements.
 
 All measurement APIs produce metric events consisting of [timestamp,
 instrument descriptor, label set, and numerical
-value](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md#metric-event-format).  Synchronous instrument
-events additionally have [Context](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/context/context.md), describing
+value](../../specification/metrics/api.md#metric-event-format).  Synchronous instrument
+events additionally have [Context](../../specification/context/README.md), describing
 properties of the associated trace and distributed correlation values.
 
 ### Terminology: Kinds of Aggregation
@@ -108,7 +108,7 @@ without referring to the collection interval and without ambiguity.
 
 Measure instruments do not define a Last Value relationship.  One
 reason is that [synchronous events can happen
-simultaneously](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/metrics/api.md#time).
+simultaneously](../../specification/metrics/api.md#time).
 
 For Measure instruments, it is possible to compute an aggregation that
 computes the last-captured value in a collection interval, but it is
