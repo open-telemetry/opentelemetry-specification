@@ -20,7 +20,7 @@ Here are a few situations that require recording of Events, there will be more. 
   - Standalone events that occur when there is no span in progress, such as errors, user interaction events and web vitals.
 - Recording kubernetes events
 - Collector Entity events [link](https://docs.google.com/document/d/1Tg18sIck3Nakxtd3TFFcIjrmRO_0GLMdHXylVqBQmJA/edit)
-- Few other event systems described in [example mappings](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#appendix-a-example-mappings) in the data model.
+- Few other event systems described in [example mappings](../specification/logs/data-model.md#appendix-a-example-mappings) in the data model.
 
 ### Can the current Log API interfaces be used for events?
 
@@ -46,7 +46,7 @@ All Events will have a name and a domain. The name is MANDATORY. The domain will
 
 ### Events and Logs API
 
-We also propose having an API interface for creating Events and Logs. Currently, there is only an SDK called [LogEmitterProvider](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/logging-library-sdk.md#logemitterprovider) for creating `LogRecord`s.
+We also propose having an API interface for creating Events and Logs. Currently, there is only an SDK called [LoggerProvider](../specification/logs/sdk.md#loggerprovider) for creating `LogRecord`s.
 
 However, there is a question of whether OTel should have an API for logs. A part of the OTel community thinks that we should not have a full-fledged logging API unless there is a language that doesn't already have a plethora of logging libraries and APIs to choose from where it might make sense to define one. Further, we will not be able to have the [rich set of configuration options](https://logging.apache.org/log4j/2.x/manual/configuration.html) that some popular logging frameworks provide so the logging API in OTel will only become yet another API. However, it was noted that the Log Appender API is very similar to the API for Events and so instead of having API for Events and API for Log Appenders separately it was agreed to have one API for Events and Logs, and that the API for Logs is targeted only to Log Appenders. This will also keep it consistent with Traces and Metrics in having one API for each signal.
 

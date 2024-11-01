@@ -54,7 +54,7 @@ A span can be considered an entry-point span if it has no parent (`parent_span_i
 The first part would be to update the trace protobuf, adding a `boolean parent_span_is_remote` field to the
 [`Span` message](https://github.com/open-telemetry/opentelemetry-proto/blob/b43e9b18b76abf3ee040164b55b9c355217151f3/opentelemetry/proto/trace/v1/trace.proto#L84).
 
-[`SpanContext.IsRemote`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#isremote) identifies whether span context has been propagated from a remote parent.
+[`SpanContext.IsRemote`](../specification/trace/api.md#isremote) identifies whether span context has been propagated from a remote parent.
 The OTLP exporter in each SDK would need to be updated to record this in the new `parent_span_is_remote` field.
 
 For backwards compatibility with older OTLP versions, the protobuf field should be `nullable` (`true`, `false`, or unspecified)

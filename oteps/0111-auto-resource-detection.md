@@ -157,7 +157,7 @@ specification](https://github.com/census-instrumentation/opencensus-specs/blob/m
   resource detection code is currently in the JS resource package, so this would
   need to be separated.
 - Environment variable resource detection in Java SDK
-  [here](https://github.com/open-telemetry/opentelemetry-java/blob/master/sdk/src/main/java/io/opentelemetry/sdk/resources/EnvVarResource.java):
+  [here](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/src/main/java/io/opentelemetry/sdk/autoconfigure/ResourceConfiguration.java):
   This implementation does not currently include a detector interface, but is
   used by default for tracer and meter providers
 

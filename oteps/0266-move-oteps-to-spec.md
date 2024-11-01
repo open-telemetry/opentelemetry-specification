@@ -1,6 +1,6 @@
 # Move OTEPS to the Specification repository
 
-Let's move OTEP documentation and PRs back into the github.com/open-telemetry/opentelemetry-specification repository.
+Let's move OTEP documentation and PRs back into the [Specification](https://github.com/open-telemetry/opentelemetry-specification) repository.
 
 ## Motivation
 
@@ -25,7 +25,7 @@ As OpenTelemetry is stabilizing, the need for OTEPs to live outside the specific
   - New contributors to OpenTelemetry often can't find recorded decision that exist in OTEPs.
   - Getting reviews from folks used to checking the Specification repository, but not the less-frequently-worked-on OTEP repository.
 
-To solve these, let's move OTEPs into a directory within the [specification repository](github.com/open-telemetry/opentelemetry-specification).
+To solve these, let's move OTEPs into a directory within the [specification repository](https://github.com/open-telemetry/opentelemetry-specification).
 We would also update all tooling and expected reviews to match existing standards for OTEPs.  Given the maintainers of OTEPs are the same as
 maintainers of the specification, this should not change the bar for acceptance.
 

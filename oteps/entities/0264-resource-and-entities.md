@@ -53,7 +53,7 @@ It is an expansion on the [previous entity proposal](0256-entities-data-model.md
   * [SDK and Collector - Entity coordination across versions](#sdk-and-collector---entity-coordination-across-versions)
 - [Collection of Resource detectors and attributes used](#collection-of-resource-detectors-and-attributes-used)
   * [Implications](#implications)
-  * [What could this mean for chosing entities that belong on resource?](#what-could-this-mean-for-chosing-entities-that-belong-on-resource)
+  * [What could this mean for choosing entities that belong on resource?](#what-could-this-mean-for-choosing-entities-that-belong-on-resource)
 
 <!-- tocstop -->
 
@@ -92,7 +92,7 @@ The SDK Resource Provider is responsible for running all configured Resource and
   - Entity merging will occur first resulting in an "Entity Merged" Resource (See [algorithm here](#entity-merging-and-resource)).
   - Resource detectors otherwise follow existing merge semantics.
     - The Specification merge rules will be updated to account for violations prevalent in ALL implementation of resource detection.
-    - Specifically: This means the [rules around merging Resource across schema-url will be dropped](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/resource/sdk.md#merge).  Instead only conflicting attributes will be dropped.
+    - Specifically: This means the [rules around merging Resource across schema-url will be dropped](../../specification/resource/sdk.md#merge).  Instead only conflicting attributes will be dropped.
     - SchemaURL on Resource will be deprecated with entity-specific schema-url replacing it. SDKs will only fill out SchemaURL on Resource when SchemaURL matches across all entities discovered. Additionally, only existing stable resource attributes can be used in Resource SchemaURL in stable OpenTelemetry components (Specifially `service.*` and `sdk.*` are the only stabilized resource convnetions). Given prevalent concerns of implementations around Resource merge specification, we suspect impact of this deprecation to be minimal, and existing usage was within the "experimental" phase of semantic conventions.
   - An OOTB ["Env Variable Entity Detector"](#environment-variable-detector) will be specified and provided vs. requiring SDK wide ENV variables for resource detection.
 - *Additionally, Resource Provider would be responsible for understanding Entity lifecycle events, for Entities whose lifetimes do not match or exceed the SDK's own lifetime (e.g. browser session).*
@@ -317,7 +317,7 @@ This proposal motivates a Resource Provider in the SDK whose job could include m
 
 ### How to deal with Prometheus Compatibility for non-SDK telemetry?
 
-Today, [Prometheus compatibility](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/compatibility/prometheus_and_openmetrics.md) relies on two key attributes in Resource: `service.name` and `service.instance.id`. These are not guaranteed to exist outside of OpenTelemetry SDK generation. While this question is not fully answered, we believe outlining identity in all resources within OpenTelemetry allows us to define a solution in the future while preserving compatibility with what works today.
+Today, [Prometheus compatibility](../../specification/compatibility/prometheus_and_openmetrics.md) relies on two key attributes in Resource: `service.name` and `service.instance.id`. These are not guaranteed to exist outside of OpenTelemetry SDK generation. While this question is not fully answered, we believe outlining identity in all resources within OpenTelemetry allows us to define a solution in the future while preserving compatibility with what works today.
 
 Here's a list of requirements for the solution:
 
