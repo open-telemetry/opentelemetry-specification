@@ -45,7 +45,7 @@ OTLP is a general-purpose telemetry data delivery protocol designed in the scope
 
 OTLP defines the encoding of telemetry data and the protocol used to exchange data between the client and the server.
 
-This specification defines how OTLP is implemented over [gRPC](https://grpc.io/) and specifies corresponding [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/overview) schema. Future extensions to OTLP may define implementations over other transports. For details of gRPC service definition see section [gRPC Transport](#grpc-transport).
+This specification defines how OTLP is implemented over [gRPC](https://grpc.io/) and specifies corresponding [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/overview) schema. Future extensions to OTLP may define implementations over other transports. For details of gRPC service definition see section [gRPC Transport](#grpc-service-definition).
 
 OTLP is a request/response style protocols: the clients send requests, the server replies with corresponding responses. This document defines one requests and response type: `Export`.
 

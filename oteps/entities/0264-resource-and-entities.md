@@ -53,7 +53,7 @@ It is an expansion on the [previous entity proposal](0256-entities-data-model.md
   * [SDK and Collector - Entity coordination across versions](#sdk-and-collector---entity-coordination-across-versions)
 - [Collection of Resource detectors and attributes used](#collection-of-resource-detectors-and-attributes-used)
   * [Implications](#implications)
-  * [What could this mean for chosing entities that belong on resource?](#what-could-this-mean-for-chosing-entities-that-belong-on-resource)
+  * [What could this mean for choosing entities that belong on resource?](#what-could-this-mean-for-choosing-entities-that-belong-on-resource)
 
 <!-- tocstop -->
 
