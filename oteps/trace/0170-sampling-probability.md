@@ -55,7 +55,7 @@ Sampling builds on results from probability theory.  Estimates drawn
 from probability samples are *random variables* that are expected to
 equal their true value.  When all outcomes are equally likely, meaning
 all the potential combinations of items used to compute a sample of
-the sampling logic are equally likely, we say the sample is _unbiased_.
+the sampling logic are equally likely, we say the sample is *unbiased*.
 
 Unbiased samples can be used for after-the-fact analysis.  We can
 answer questions such as "what fraction of events had property X?"
@@ -128,7 +128,7 @@ with non-integer counts, which forces the use of integer adjusted
 counts here (i.e., 1-in-N sampling rates where N is an integer).
 
 Logically speaking, this processor will observe the span's duration
-_adjusted count_ number of times for every sample span it receives.
+*adjusted count* number of times for every sample span it receives.
 This example, therefore, uses a hypothetical `RecordMany()` method to
 capture multiple observations of a Histogram measurement at once:
 
@@ -169,8 +169,8 @@ data items is produced containing one or more associated numbers.
 Using the OpenTelemetry Metrics data model terminology, we have two
 scenarios in which sampling is common.
 
-1. _Counter events:_ Each event represents a count, signifying the change in a sum.
-2. _Histogram events:_ Each event represents an individual variable, signifying membership in a distribution.
+1. *Counter events:* Each event represents a count, signifying the change in a sum.
+2. *Histogram events:* Each event represents an individual variable, signifying membership in a distribution.
 
 A Tracing Span event qualifies as both of these cases simultaneously.
 One span can be interpreted as at least one Counter event (e.g., one
@@ -190,8 +190,8 @@ individual events at an API boundary are sampled for collection.  Once
 the process of sampling individual API-level events is understood, we
 will learn to apply these techniques for sampling aggregated data.
 
-In sampling, the term _sampling design_ refers to how sampling
-probability is decided and the term _sample frame_ refers to how
+In sampling, the term *sampling design* refers to how sampling
+probability is decided and the term *sample frame* refers to how
 events are organized into discrete populations.  The design of a
 sampling strategy dictates how the population is framed.
 
@@ -201,7 +201,7 @@ hour.  A different sample framing could collect one sample across all
 span names every 10 minutes.
 
 After executing a sampling design over a frame, each item selected in
-the sample will have known _inclusion probability_, that determines
+the sample will have known *inclusion probability*, that determines
 how likely the item was to being selected.  Implicitly, all the items
 that were not selected for the sample have zero inclusion probability.
 
@@ -222,7 +222,7 @@ telemetry data to be agnostic to the sampling design used.
 We are interested in the common case in telemetry collection, where
 sampling is performed while processing a stream of events and each
 event is considered just once.  Sampling designs of this form are
-referred to as _sampling without replacement_.  Unless stated
+referred to as *sampling without replacement*.  Unless stated
 otherwise, "sampling" in telemetry collection always refers to
 sampling without replacement.
 
@@ -243,10 +243,10 @@ total equals the expected value of the true population total.
 #### Adjusted sample count
 
 Following the model above, every event defines the notion of an
-_adjusted count_.
+*adjusted count*.
 
-- _Adjusted count_ is zero if the event was not selected for the sample
-- _Adjusted count_ is the reciprocal of its inclusion probability, otherwise.
+- *Adjusted count* is zero if the event was not selected for the sample
+- *Adjusted count* is the reciprocal of its inclusion probability, otherwise.
 
 The adjusted count of an event represents the expected contribution to
 the estimated population total of a sample frame represented by the
@@ -258,16 +258,16 @@ inclusion count for N each, approximately speaking.
 
 This intuition is backed up with statistics.  This equation is known
 as the Horvitz-Thompson estimator of the population total, a
-general-purpose statistical "estimator" that applies to all _without
-replacement_ sampling designs.
+general-purpose statistical "estimator" that applies to all *without
+replacement* sampling designs.
 
 Assuming sample data is correctly computed, the consumer of sample
 data can treat every sample event as though an identical copy of
-itself has occurred _adjusted count_ times.  Every sample event is
+itself has occurred *adjusted count* times.  Every sample event is
 representative for adjusted count many copies of itself.
 
 There is one essential requirement for this to work.  The selection
-procedure must be _statistically unbiased_, a term meaning that the
+procedure must be *statistically unbiased*, a term meaning that the
 process is required to give equal consideration to all possible
 outcomes.
 
@@ -365,7 +365,7 @@ Traces are said to be complete when the all spans that were part of
 the trace are collected.  When sampling is applied to reduce Tracer
 overhead, there is generally an expectation that complete traces will
 still be produced.  Sampling techniques that lower Tracer overhead and
-produce complete traces are known as _Head trace sampling_ techniques.
+produce complete traces are known as *Head trace sampling* techniques.
 
 The decision to produce and collect a sample trace has to be made when
 the root span starts, to avoid incomplete traces.  Then, assuming
@@ -379,7 +379,7 @@ each of its children based on the following logic:
 
 - The root span is considered representative of `adjusted_count` many
   identical root spans, because it was selected using unbiased sampling
-- Context propagation conveys _causation_, the fact the one span produces
+- Context propagation conveys *causation*, the fact the one span produces
   another
 - A root span causes each of the child spans in its trace to be produced
 - A sampled root span represents `adjusted_count` many traces, representing
@@ -424,7 +424,7 @@ information about the parent sampling probability through the
 context.  Using the parent sampling probability, instead of the
 root, allows individual spans in a trace to control the sampling
 probability of their descendents in a sub-trace that use `ParentBased`
-sampler.  Such techniques are referred to as _parent sampling_
+sampler.  Such techniques are referred to as *parent sampling*
 techniques.
 
 Parent sampling probability may be thought of as the probability

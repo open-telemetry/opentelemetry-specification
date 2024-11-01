@@ -723,8 +723,8 @@ contained Metric messages.
 The schema_url field in the InstrumentationLibraryLogs message applies to the
 contained LogRecord messages.
 
-If schema_url field is non-empty both in Resource* message and in the contained
-InstrumentationLibrary* message then the value in InstrumentationLibrary*
+If schema_url field is non-empty both in Resource message and in the contained
+InstrumentationLibrary message then the value in InstrumentationLibrary
 message takes the precedence.
 
 ## API and SDK Changes

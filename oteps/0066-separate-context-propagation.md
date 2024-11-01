@@ -1,24 +1,24 @@
 # Context Propagation: A Layered Approach
 
-* [Motivation](#Motivation)
-* [OpenTelemetry layered architecture](#OpenTelemetry-layered-architecture)
-  * [Cross-Cutting Concerns](#Cross-Cutting-Concerns)
-    * [Observability API](#Observability-API)
-    * [Correlations API](#Correlations-API)
-  * [Context Propagation](#Context-Propagation)
-    * [Context API](#Context-API)
-    * [Propagation API](#Propagation-API)
-* [Prototypes](#Prototypes)
-* [Examples](#Examples)
-  * [Global initialization](#Global-initialization)
-  * [Extracting and injecting from HTTP headers](#Extracting-and-injecting-from-HTTP-headers)
-  * [Simplify the API with automated context propagation](#Simplify-the-API-with-automated-context-propagation)
-  * [Implementing a propagator](#Implementing-a-propagator)
-  * [Implementing a concern](#Implementing-a-concern)
-  * [The scope of current context](#The-scope-of-current-context)
-  * [Referencing multiple contexts](#Referencing-multiple-contexts)
-  * [Falling back to explicit contexts](#Falling-back-to-explicit-contexts)
-* [Internal details](#Internal-details)
+* [Motivation](#motivation)
+* [OpenTelemetry layered architecture](#opentelemetry-layered-architecture)
+  * [Cross-Cutting Concerns](#cross-cutting-concerns)
+    * [Observability API](#observability-api)
+    * [Correlations API](#correlations-api)
+  * [Context Propagation](#context-propagation)
+    * [Context API](#context-api)
+    * [Propagation API](#propagation-api)
+* [Prototypes](#prototypes)
+* [Examples](#examples)
+  * [Global initialization](#global-initialization)
+  * [Extracting and injecting from HTTP headers](#extracting-and-injecting-from-http-headers)
+  * [Simplify the API with automated context propagation](#simplify-the-api-with-automated-context-propagation)
+  * [Implementing a propagator](#implementing-a-propagator)
+  * [Implementing a concern](#implementing-a-concern)
+  * [The scope of current context](#the-scope-of-current-context)
+  * [Referencing multiple contexts](#referencing-multiple-contexts)
+  * [Falling back to explicit contexts](#falling-back-to-explicit-contexts)
+* [Internal details](#internal-details)
 * [FAQ](#faq)
 
 ![drawing](img/0066_context_propagation_overview.png)
@@ -109,7 +109,7 @@ causal relationship between these events. For example, determining that a
 particular browser version is associated with a failure in an image processing
 service.
 
-The Correlations API is based on the [W3C Correlation-Context specification](https://w3c.github.io/correlation-context/),
+The Correlations API is based on the [W3C Baggage specification](https://www.w3.org/TR/baggage/),
 and implements the protocol as it is defined in that working group. There are
 few details provided here as it is outside the scope of this OTEP to finalize
 this API.
@@ -581,7 +581,7 @@ Their properties and requirements are integrated into the OpenTelemetry APIs.
 and `tracestate` headers defined in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/).
 
 **Correlation Context -** The OpenTelemetry Correlations API is modeled on the
-`Correlation-Context` headers defined in the [W3C Correlation Context specification](https://w3c.github.io/correlation-context/).
+`Baggage` headers defined in the [W3C Baggage specification](https://www.w3.org/TR/baggage/).
 
 ### Context management and in-process propagation
 
@@ -626,7 +626,7 @@ Prior art:
 
 ## Risks
 
-The Correlations API is related to the [W3C Correlation-Context](https://w3c.github.io/correlation-context/)
+The Correlations API is related to the [W3C Baggage](https://www.w3.org/TR/baggage/)
 specification. Work on this specification has begun, but is not complete. While
 unlikely, it is possible that this W3C specification could diverge from the
 design or guarantees needed by the Correlations API.
