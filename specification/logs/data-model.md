@@ -9,6 +9,7 @@
 
 - [Design Notes](#design-notes)
   * [Requirements](#requirements)
+  * [Events](#events)
   * [Definitions Used in this Document](#definitions-used-in-this-document)
     + [Type `any`](#type-any)
     + [Type `map`](#type-mapstring-any)
@@ -96,6 +97,16 @@ The Data Model aims to successfully represent 3 sorts of logs and events:
   some control over how the logs and events are generated and what information
   we include in the logs. We can likely modify the source code of the
   application if needed.
+
+### Events
+
+**Status**: [Development](../document-status.md)
+
+Events are OpenTelemetry's standardized format for LogRecords. All semantic
+conventions defined for logs SHOULD be formatted as Events. Requirements and details for the Event format can be found in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+
+Events are intended to be used by OpenTelemetry instrumentation. It is not a
+requirement that all LogRecords are formatted as Events.
 
 ### Definitions Used in this Document
 

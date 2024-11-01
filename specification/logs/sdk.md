@@ -60,9 +60,9 @@ The SDK SHOULD allow the creation of multiple independent `LoggerProviders`s.
 ### Logger Creation
 
 It SHOULD only be possible to create `Logger` instances through a `LoggerProvider`
-(see [Bridge API](bridge-api.md)).
+(see [API](api.md)).
 
-The `LoggerProvider` MUST implement the [Get a Logger API](bridge-api.md#get-a-logger).
+The `LoggerProvider` MUST implement the [Get a Logger API](api.md#get-a-logger).
 
 The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
@@ -187,7 +187,7 @@ It consists of the following parameters:
   to [No-op Logger](./noop.md#logger).
 
   The value of `disabled` MUST be used to resolve whether a `Logger`
-  is [Enabled](./bridge-api.md#enabled). If `disabled` is `true`, `Enabled`
+  is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`. I.e. atomic, volatile,
@@ -208,7 +208,7 @@ associated with the `LogRecord`.
 
 The [trace context fields](./data-model.md#trace-context-fields) MUST be populated from
 the resolved `Context` (either the explicitly passed `Context` or the
-current `Context`) when [emitted](./bridge-api.md#emit-a-logrecord).
+current `Context`) when [emitted](./api.md#emit-a-logrecord).
 
 Counts for attributes due to collection limits MUST be available for exporters
 to report as described in
@@ -312,7 +312,7 @@ components in the SDK:
 
 #### OnEmit
 
-`OnEmit` is called when a `LogRecord` is [emitted](bridge-api.md#emit-a-logrecord). This
+`OnEmit` is called when a `LogRecord` is [emitted](api.md#emit-a-logrecord). This
 method is called synchronously on the thread that emitted the `LogRecord`,
 therefore it SHOULD NOT block or throw exceptions.
 
@@ -542,6 +542,6 @@ authors MAY decide if they want to make the shutdown timeout configurable.
 ## Logs API
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs API](./bridge-api.md#logs-api).
+> We are currently in the process of defining a new [Logs API](./api.md#logs-api).
 
 - [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
