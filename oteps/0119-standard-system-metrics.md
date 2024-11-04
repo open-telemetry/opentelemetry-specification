@@ -28,7 +28,7 @@ There are already a few implementations of system and/or runtime metric collecti
   * This package does not export metrics with labels, instead exporting individual metrics.
   * [Overview of collected metrics](https://docs.google.com/spreadsheets/d/1r50cC9ass0A8SZIg2ZpLdvZf6HmQJsUSXFOu-rl4yaY/edit#gid=0).
 - **Python**
-  * Python [has instrumentation](https://github.com/open-telemetry/opentelemetry-python/tree/master/ext/opentelemetry-ext-system-metrics) to collect some system and runtime metrics.
+  * Python [has instrumentation](https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation/opentelemetry-instrumentation-system-metrics) to collect some system and runtime metrics.
   * Collects system CPU, memory, and network metrics.
   * Collects runtime CPU, memory, and GC metrics.
   * Makes use of labels, similar to the Collector.

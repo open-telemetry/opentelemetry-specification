@@ -27,7 +27,7 @@ OpenTelemetry SHOULD provide a way to bypass the OpenTelemetry Logs API entirely
 directly via existing language-specific logging libraries, if that library has the capability to do so.
 
 OpenTelemetry will recommend that
-[instrumentation libraries](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/glossary.md#instrumentation-library)
+[instrumentation libraries](../specification/glossary.md#instrumentation-library)
 use the OpenTelemetry Logs API to emit OpenTelemetry Events rather than using other logging libraries to emit OpenTelemetry Events. This recommendation aims to provide users with a simple and consistent
 onboarding experience that avoids mixing approaches.
 
@@ -74,6 +74,6 @@ The state of this OTEP represents the option that we think will be the least con
 * How do OpenTelemetry Events relate to raw metric events?
   (e.g. [opentelemetry-specification/617](https://github.com/open-telemetry/opentelemetry-specification/issues/617)).
 * How do OpenTelemetry Events relate to raw span events?
-  (e.g. a [streaming SDK](https://github.com/search?q=repo%3Aopen-telemetry%2Fopentelemetry-specification+%22streaming+sdk%22&type=issues)).
+  (e.g. a streaming SDK).
 * Should event name be captured as an attribute or as a top-level field?
 * How will Event / Span Event interoperability work in the presence of sampling (e.g. since Span Events are sampled along with Spans)?

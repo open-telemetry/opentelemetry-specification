@@ -1,9 +1,9 @@
 # Scenarios and Open Questions for Tracing semantic conventions for HTTP
 
 This document aims to capture scenarios/open questions and a road map, both of
-which will serve as a basis for [stabilizing](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/versioning-and-stability.md#stable)
-the [existing semantic conventions for HTTP](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/http.md),
-which are currently in an [experimental](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/versioning-and-stability.md#experimental)
+which will serve as a basis for [stabilizing](../../specification/versioning-and-stability.md#stable)
+the [existing semantic conventions for HTTP](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/http),
+which are currently in an [experimental](../../specification/versioning-and-stability.md#experimental)
 state. The goal is to declare HTTP semantic conventions stable before the
 end of Q1 2022.
 
@@ -16,7 +16,7 @@ and guidelines for instrumenting HTTP communication.
 
 Bringing the existing experimental semantic conventions for HTTP to a
 stable state is a crucial step for users and instrumentation authors, as it
-allows them to rely on [stability guarantees](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/versioning-and-stability.md#not-defined-semantic-conventions-stability),
+allows them to rely on [stability guarantees](../../specification/versioning-and-stability.md#not-defined-semantic-conventions-stability),
 and thus to ship and use stable instrumentation.
 
 > NOTE. This OTEP captures a scope for changes should be done to existing
@@ -26,7 +26,7 @@ experimental semantic conventions for HTTP, but does not propose solutions.
 
 1. This OTEP, consisting of scenarios/open questions and a proposed roadmap, is
    approved and merged.
-2. [Stability guarantees](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/versioning-and-stability.md#not-defined-semantic-conventions-stability)
+2. [Stability guarantees](../../specification/versioning-and-stability.md#not-defined-semantic-conventions-stability)
    for semantic conventions are approved and merged. This is not strictly related
    to semantic conventions for HTTP but is a prerequisite for stabilizing any
    semantic conventions.
@@ -34,9 +34,9 @@ experimental semantic conventions for HTTP, but does not propose solutions.
    document are approved and merged.
 4. Proposed specification changes are verified by prototypes for the scenarios
    and examples below.
-5. The [specification for HTTP semantic conventions for tracing](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/http.md)
+5. The [specification for HTTP semantic conventions for tracing](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/http)
    are updated according to this OTEP and are declared
-   [stable](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/versioning-and-stability.md#stable).
+   [stable](../../specification/versioning-and-stability.md#stable).
 
 The steps in the roadmap don't necessarily need to happen in the given order,
 some steps can be worked on in parallel.
@@ -60,8 +60,8 @@ for `SpanKind.CLIENT`.
 >
 > * `http.url`
 > * `http.scheme`, `http.host`, `http.target`
-> * `http.scheme`, [`net.peer.name`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
-> * `http.scheme`, [`net.peer.ip`](span-general.md), [`net.peer.port`](span-general.md), `http.target`
+> * `http.scheme`, `net.peer.name`, `net.peer.port`, `http.target`
+> * `http.scheme`, `net.peer.ip`, `net.peer.port`, `http.target`
 
 As a result, users that write queries against raw data or Zipkin/Jaeger don't
 have consistent story across instrumentations and languages. e.g. they'd need to

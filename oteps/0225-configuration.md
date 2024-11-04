@@ -119,7 +119,7 @@ Create a `Configurer` from a [configuration model](#configuration-model).
 
 #### Get TracerProvider, MeterProvider, LoggerProvider
 
-Interpret the [configuration model](#configuration-model) and return SDK TracerProvider, MeterProvider, LoggerProvider which strictly reflect the configuration object's details and ignores the [opentelemetry environment variable configuration scheme](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/sdk-environment-variables.md).
+Interpret the [configuration model](#configuration-model) and return SDK TracerProvider, MeterProvider, LoggerProvider which strictly reflect the configuration object's details and ignores the [opentelemetry environment variable configuration scheme](../specification/configuration/sdk-environment-variables.md).
 
 ### Configuration model
 

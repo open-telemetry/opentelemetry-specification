@@ -868,8 +868,6 @@ K. Thompson](https://www.wiley.com/en-us/Sampling%2C+3rd+Edition-p-9780470402313
 
 [A Generalization of Sampling Without Replacement From a Finite Universe](https://www.jstor.org/stable/2280784), JSTOR (1952)
 
-[Performance Is A Shape. Cost Is A Number: Sampling](https://docs.lightstep.com/otel/performance-is-a-shape-cost-is-a-number-sampling), 2020 blog post, Joshua MacDonald
-
 [Priority sampling for estimation of arbitrary subset sums](https://dl.acm.org/doi/abs/10.1145/1314690.1314696)
 
 [Stream sampling for variance-optimal estimation of subset sums](https://arxiv.org/abs/0803.0473).

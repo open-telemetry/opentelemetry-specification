@@ -44,7 +44,7 @@ In addition to the use case of structured logs, the maturity of ECS for SIEM (Se
 
 Another significant use case is providing first-class support for Kubernetes application logs, system logs, and application introspection events. We would also like to see support for structured events (e.g. [k8seventsreceiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/k8seventsreceiver)) and using 'content-type' to identify event types.
 
-We'd like to see different categories of structured logs being well-supported in the [OTel Log Data Model](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md), presumably through [semantic conventions for log attributes](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#field-attributes). For example, NGINX access logs and Apache access logs should be processed the same way as structured logs. This would help in trace and metric correlation with such log data as well as it would help grow the ecosystem of curated UIs provided by observability backends and monitoring dashboards (e.g. one single HTTP access log dashboard benefiting Apache httpd, Nginx, and HAProxy).
+We'd like to see different categories of structured logs being well-supported in the [OTel Log Data Model](../specification/logs/data-model.md), presumably through [semantic conventions for log attributes](../specification/logs/data-model.md#field-attributes). For example, NGINX access logs and Apache access logs should be processed the same way as structured logs. This would help in trace and metric correlation with such log data as well as it would help grow the ecosystem of curated UIs provided by observability backends and monitoring dashboards (e.g. one single HTTP access log dashboard benefiting Apache httpd, Nginx, and HAProxy).
 
 ## Customer Motivation
 
@@ -147,7 +147,7 @@ Example of a Nginx Access Log entry structured with ECS
 
 ## Principles
 
-| Description | [OTel Logs and Event Record](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#log-and-event-record-definition) | [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/ecs-reference.html) |
+| Description | [OTel Logs and Event Record](../specification/logs/data-model.md#log-and-event-record-definition) | [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/ecs-reference.html) |
 |-------------|-------------|--------|
 | Metadata shared by all the Log Messages / Spans / Metrics of an application instance | Resource Attributes | ECS fields |
 | Metadata specific to each Log Message / Span / Metric data point | Attributes | ECS Fields |
@@ -158,7 +158,7 @@ Example of a Nginx Access Log entry structured with ECS
 
 ## Data Types
 
-| Category | <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a> (all or a subset of <a href="https://developers.google.com/protocol-buffers/docs/proto3">GRPC data types</a>) | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/mapping-types.html">ECS Data Types</a> |
+| Category | <a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a> (all or a subset of <a href="https://developers.google.com/protocol-buffers/docs/proto3">GRPC data types</a>) | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/mapping-types.html">ECS Data Types</a> |
 |---|---|---|
 | Text | string | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/text.html#text-field-type">text</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/text.html#match-only-text-field-type">match_only_text</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/keyword.html#keyword-field-type">keyword</a> <a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/keyword.html#constant-keyword-field-type">constant_keyword</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/keyword.html#wildcard-field-type">wildcard</a> |
 | Dates | uint64 nanoseconds since Unix epoch | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/date.html">date</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/date_nanos.html">date_nanos</a> |
@@ -177,7 +177,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
 
 <table>
   <tr>
-   <td><strong><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a></strong>
+   <td><strong><a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a></strong>
    </td>
    <td><strong><a href="https://www.elastic.co/guide/en/ecs/current/ecs-reference.html">Elastic Common Schema (ECS)</a></strong>
    </td>
@@ -185,7 +185,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#log-and-event-record-definition">Timestamp</a> (uint64 nanoseconds since Unix epoch)
+   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">Timestamp</a> (uint64 nanoseconds since Unix epoch)
    </td>
    <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-base.html#field-timestamp">@timestamp</a> (date)
    </td>
@@ -193,7 +193,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#log-and-event-record-definition">TraceId</a> (byte sequence), <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#log-and-event-record-definition">SpanId</a> (byte sequence)
+   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">TraceId</a> (byte sequence), <a href="../specification/logs/data-model.md#log-and-event-record-definition">SpanId</a> (byte sequence)
    </td>
    <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-tracing.html#field-trace-id">trace.id</a> (keyword), <a href="https://www.elastic.co/guide/en/ecs/current/ecs-tracing.html#field-trace-id">span.id</a> (keyword)
    </td>
@@ -209,7 +209,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#log-and-event-record-definition">SeverityText</a> (string)
+   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">SeverityText</a> (string)
    </td>
    <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-log.html#field-log-syslog-severity-name">log.syslog.severity.name</a> (keyword), <a href="https://www.elastic.co/guide/en/ecs/current/ecs-log.html#field-log-level">log.level</a> (keyword)
    </td>
@@ -217,7 +217,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#log-and-event-record-definition">SeverityNumber</a> (number)
+   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">SeverityNumber</a> (number)
    </td>
    <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-log.html#field-log-syslog-severity-code">log.syslog.severity.code</a>
    </td>
@@ -225,7 +225,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#log-and-event-record-definition">Body</a> (any)
+   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">Body</a> (any)
    </td>
    <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-base.html#field-message">message</a> (match_only_text)
    </td>
@@ -235,9 +235,9 @@ As the markdown code of the tables is hard to read and maintain with very long l
   <tr>
    <td>process.cpu.load (not specified but collected by OTel Collector)
 <br/>
-<a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/semantic_conventions/process-metrics.md">process.cpu.time</a> (async counter)
+<a href="https://github.com/open-telemetry/semantic-conventions/blob/main/docs/system/process-metrics.md">process.cpu.time</a> (async counter)
 <br/>
-<a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/semantic_conventions/system-metrics.md">system.cpu.utilization</a>
+<a href="https://github.com/open-telemetry/semantic-conventions/blob/main/docs/system/system-metrics.md">system.cpu.utilization</a>
    </td>
    <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-host.html#field-host-cpu-usage">host.cpu.usage</a> (scaled_float) with a slightly different measurement than what OTel metrics measure
    </td>
@@ -290,5 +290,5 @@ Some areas that need to be addressed in the long run as ECS is integrated into O
 ensuring the OTel specification incorporates the changes to accommodate ECS, and a process for handling breaking changes if any (the proposal
 [Define semantic conventions and instrumentation stability #2180](https://github.com/open-telemetry/opentelemetry-specification/pull/2180)
 should tackle this point). Also, migration of existing naming (e.g. Prometheus exporter) to standardized convention (see
-[Semantic Conventions for System Metrics](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/semantic_conventions/system-metrics.md) ,
-[Semantic Conventions for OS Process Metrics](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/semantic_conventions/process-metrics.md)).
+[Semantic Conventions for System Metrics](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/system/system-metrics.md) ,
+[Semantic Conventions for OS Process Metrics](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/system/process-metrics.md)).

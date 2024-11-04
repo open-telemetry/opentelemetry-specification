@@ -20,7 +20,7 @@ supported by messaging semantic conventions.
 
 ## Terminology
 
-For terms used in this document, refer to [OTEP 173](#0173-messaging-semantic-conventions.md#terminology).
+For terms used in this document, refer to [OTEP 173](0173-messaging-semantic-conventions.md#terminology).
 
 ## Motivation
 

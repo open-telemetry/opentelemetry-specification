@@ -7,7 +7,7 @@ In this context, consistency means that a positive sampling decision made for a 
 
 ## Explanation
 
-The existing, experimental [specification for probability sampling using TraceState](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/tracestate-probability-sampling.md) is limited to powers-of-two probabilities, and is designed to work without making assumptions about TraceID randomness.
+The existing, experimental [specification for probability sampling using TraceState](../../specification/trace/tracestate-probability-sampling.md) is limited to powers-of-two probabilities, and is designed to work without making assumptions about TraceID randomness.
 This system can only achieve non-power-of-two sampling using interpolation between powers of two, which is unnecessarily restrictive.
 In existing sampling systems, sampling probabilities like 1%, 10%, and 75% are common, and it should be possible to express these without interpolation.
 There is also a need for consistent sampling in the collection path (outside of the head-sampling paths) and using inherent randomness in the traceID is a less-expensive solution than referencing a custom `r-value` from the tracestate in every span.
@@ -84,14 +84,14 @@ Sampling Decisions MUST be propagated by setting the value of the `th` key in th
 
 There are two categories of sampler:
 
-- **Head samplers:** Implementations of [`Sampler`](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.29.0/specification/trace/sdk.md#sampler), called by a `Tracer` during span creation.
+- **Head samplers:** Implementations of [`Sampler`](../../specification/trace/sdk.md#sampler), called by a `Tracer` during span creation.
 - **Downstream samplers:** Any component that, given an ended Span, decides whether to drop or forward ("sample") it on to the next component in the system. Also known as "collection-path samplers" or "sampling processors". _Tail samplers_ are a special class of downstream samplers that buffer the spans in a trace and select a sampling probability for the trace as a whole using data from any span in the buffered trace.
 
 This section defines behavior for each kind of sampler.
 
 ### Head samplers
 
-A head sampler is responsible for computing the `rv` and `th` values in a new span's initial [`TraceState`](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.29.0/specification/trace/api.md#tracestate). Notable inputs to that computation include the parent span's trace state (if a parent span exists) and the new span's trace ID.
+A head sampler is responsible for computing the `rv` and `th` values in a new span's initial [`TraceState`](../../specification/trace/api.md#tracestate). Notable inputs to that computation include the parent span's trace state (if a parent span exists) and the new span's trace ID.
 
 First, a consistent `Sampler` decides which sampling probability to use. The sampler MAY select any value of T. If a valid `SpanContext` is provided in the call to `ShouldSample` (indicating that the span being created will be a child span),
 

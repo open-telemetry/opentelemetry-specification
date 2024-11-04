@@ -9,7 +9,7 @@ avoid the chaos experienced by the builders of the Tower of Babel.
 
 ## Proposal
 
-OpenTelemetry specification already contains a [vocabulary](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/overview.md)
+OpenTelemetry specification already contains a [vocabulary](../../specification/overview.md)
 for Traces, Metrics and other relevant concepts.
 
 This proposal is to add the following concepts to the vocabulary.
@@ -31,8 +31,8 @@ additional qualifiers should be used (e.g. `Log Record`).
 
 ### Embedded Log
 
-`Log Records` embedded inside a [Span](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#span)
-object, in the [Events](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#add-events) list.
+`Log Records` embedded inside a [Span](../../specification/trace/api.md#span)
+object, in the [Events](../../specification/trace/api.md#add-events) list.
 
 ### Standalone Log
 

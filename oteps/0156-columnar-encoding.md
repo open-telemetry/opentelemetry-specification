@@ -624,7 +624,7 @@ Specifically:
 
 When Arrow is enabled, the OTelArrow receiver listens for both the standard unary gRPC service OTLP and OTel Arrow stream
 services.  Each stream uses an instance of the OTel-Arrow-Adapter's
-[Consumer](https://pkg.go.dev/github.com/f5/otel-arrow-adapter@v0.0.0-20230112224802-dafb6df21c97/pkg/otel/arrow_record#Consumer). Sets
+[Consumer](https://pkg.go.dev/github.com/f5/otel-arrow-adapter/pkg/otel/arrow_record#Consumer). Sets
 `client.Metadata` in the Context.
 
 #### OTelArrow/gRPC Exporter
@@ -637,7 +637,7 @@ restarting, while honoring the caller's context deadline, to avoid delays introd
 through the `exporterhelper` mechanism.
 
 Each stream uses an instance of the OTel-Arrow-Adapter's
-[Producer](https://pkg.go.dev/github.com/f5/otel-arrow-adapter@v0.0.0-20230112224802-dafb6df21c97/pkg/otel/arrow_record#Producer).
+[Producer](https://pkg.go.dev/github.com/f5/otel-arrow-adapter/pkg/otel/arrow_record#Producer).
 
 When a stream fails specifically because the server does not recognize the Arrow service, it will not restart.  When all
 streams have failed in this manner, the connection downgrades by closing a channel, at which point the exporter behaves

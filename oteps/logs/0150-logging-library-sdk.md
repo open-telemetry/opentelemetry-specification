@@ -24,11 +24,11 @@ guidelines on how to create the prototypes.
 The specification defines how the OpenTelemetry Logging Library SDK exposes its
 functionality to authors of extensions to language-specific 3rd party logging
 libraries and to end users that want to produce logs in the
-[OpenTelemetry manner](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/overview.md).
+[OpenTelemetry manner](../../specification/logs/README.md).
 
 The specification defines SDK elements that to some extent mirror the
 OpenTelemetry
-[Trace SDK](https://github.com/open-telemetry/opentelemetry-specification/tree/main/specification/trace).
+[Trace SDK](../../specification/trace).
 This ensures uniformity and consistency of the OpenTelemetry specification and
 of the implementations across traces and logs. For additional clarity the
 definitions in this document refer to the Trace analogs where appropriate.
@@ -90,7 +90,7 @@ Methods:
 ### LogRecord
 
 See LogRecord
-[data model](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md)
+[data model](../../specification/logs/data-model.md)
 for the list of fields.
 
 Open Question: should LoggerName field be added to the data model to allow
@@ -133,7 +133,7 @@ Methods:
 An Appender implementation can be used to allow emitting log records via
 OpenTelemetry Logging Library exporters. This approach is typically used for
 applications which are fine with changing the log transport and is
-[one of the supported](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/overview.md#direct-to-collector)
+[one of the supported](../../specification/logs/README.md#direct-to-collector)
 log collection approaches.
 
 The Appender implementation will typically acquire a LogEmitter from the global
@@ -142,7 +142,7 @@ received from the application.
 
 For languages with implicit Context, the Appender may call Context API to get
 the currently
-[active Span](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#context-interaction)
+[active Span](../../specification/trace/api.md#context-interaction)
 and populate TraceId, SpanId, TraceFlags fields of the LogRecord before emitting
 it. The log library may also have an alternate way to inject the context into
 log records (e.g. MDC in Log4j).

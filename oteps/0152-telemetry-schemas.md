@@ -25,14 +25,14 @@
   * [Schema File Format Number](#schema-file-format-number)
 * [OTLP Changes](#otlp-changes)
 * [API and SDK Changes](#api-and-sdk-changes)
-* [OpenTelemetry Schema 1.0.0](#opentelemetry-schema-100)
+* [OpenTelemetry Schema](#opentelemetry-schema)
 * [Performance Impact](#performance-impact)
 * [Open Questions](#open-questions)
 * [Future Possibilities](#future-possibilities)
   * [Parent Schema](#parent-schema)
-  * [Collector Processor](#collector-processor)
   * [Current State in Schema](#current-state-in-schema)
   * [Other Transformation Types](#other-transformation-types)
+  * [Version Convertability](#version-convertability)
 * [Alternates Considered](#alternates-considered)
   * [Name Aliases](#name-aliases)
   * [Schema Negotiation](#schema-negotiation)
@@ -815,9 +815,6 @@ versions:
 Since 1.2.0 is the first published version of OpenTelemetry schema there are no
 "changes" section and we omitted all previous versions from the file since there
 is nothing to record for earlier versions.
-
-This file SHOULD be available for retrieval at
-[https://opentelemetry.io/schemas/1.2.0](https://opentelemetry.io/schemas/1.2.0)
 
 All OpenTelemetry instrumentation solutions will follow this schema.
 
