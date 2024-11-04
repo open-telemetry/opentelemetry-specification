@@ -43,6 +43,10 @@ Just because an issue is accepted does not mean that a solution suggested by the
 * `triage:accepted:ready-with-sponsor` - This issue is ready to be implemented and has a specification sponsor assigned.
 * `triage:accepted:needs-sponsor` - This issue is ready to be implemented, but does not yet have a specification sponsor. A pull request without a specification sponsor may not be reviewed in a timely manner.
 
+### `triage:followup`
+
+This label is applied to issues that are waiting on some action to be taken before they can be further considered. For example, they may be blocked on another issue, waiting on prototypes or otherwise waiting on some action to be taken.
+
 ### `triage:rejected:*`
 
 Rejected issues are issues that describe a problem that cannot or will not be solved by the project in the proposed form.
