@@ -105,5 +105,6 @@ OpenTelemetry has a large scope and many components. Solving a complex problem
 with simple design and solution leads to a much lower maintenance burden and
 easier evolution in the future.
 
-This principle pairs into the overall values of "Loosely-Coupled", "Easy" and
-"Resilience".
+Additionally, a Specification is read and interpreted by many individuals.
+Complex language, nuanced wording and unclear descriptions lead to confusion and
+often times poor user experience as sections are not interpreted as desired.
