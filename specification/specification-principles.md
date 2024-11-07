@@ -50,7 +50,7 @@ be implementable across the entire OpenTelemetry ecosystem.
 This means proposals should think "end to end" not "add this one little thing".
 
 Additionally, projects and proposals should provide prototypes or implementations
-prior to solidification within the Specification. 
+prior to solidification within the Specification.
 
 We have a few simple rules of thumb regarding prototypes:
 
@@ -103,7 +103,7 @@ with in OpenTelemetry.  This has three sub-principles:
 Simple is better than complicated. Abstractions should pay for themselves.
 OpenTelemetry has a large scope and many components. Solving a complex problem
 with simple design and solution leads to a much lower maintenance burden and
-easier evolution in the future. 
+easier evolution in the future.
 
 This principle pairs into the overall values of "Loosely-Coupled", "Easy" and
 "Resilience".
