@@ -45,7 +45,9 @@ Just because an issue is accepted does not mean that a solution suggested by the
 
 ### `triage:followup`
 
-This label is applied to issues that are waiting on some action to be taken before they can be further considered. For example, they may be blocked on another issue, waiting on prototypes or otherwise waiting on some action to be taken.
+This label is managed [by an automated workflow](https://github.com/open-telemetry/opentelemetry-specification/blob/main/.github/scripts/triage-helper/app.py).
+It is applied to issues that have a `triage:deciding:*` label and have not had meaningful updates in two weeks.
+It should not be added manually.
 
 ### `triage:rejected:*`
 
