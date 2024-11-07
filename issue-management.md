@@ -45,9 +45,11 @@ Just because an issue is accepted does not mean that a solution suggested by the
 
 ### `triage:followup`
 
-This label is managed [by an automated workflow](https://github.com/open-telemetry/opentelemetry-specification/blob/main/.github/scripts/triage-helper/app.py).
-It is applied to issues that have a `triage:deciding:*` label and have not had meaningful updates in two weeks.
-It should not be added manually.
+This label is managed [by an automated workflow](https://github.com/open-telemetry/opentelemetry-specification/blob/main/.github/scripts/triage-helper/app.py) and should not be added manually. The label is added to issues that meet both of these criteria:
+* The issue has a `triage:deciding:*` label and does not already have the `triage:followup` label
+* There has been at least one comment or reference since the most recent triage, where a triage is one of these
+  * `triage:deciding:*` label was added
+  * `triage:followup` label was removed
 
 ### `triage:rejected:*`
 
