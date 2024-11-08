@@ -49,7 +49,7 @@ be implementable across the entire OpenTelemetry ecosystem.
 
 This means proposals should think "end to end" not "add this one little thing".
 
-Additionally, projects and proposals should provide prototypes or implementations
+Projects and proposals should provide prototypes or implementations
 prior to solidification within the Specification.
 
 We have a few simple rules of thumb regarding prototypes:
