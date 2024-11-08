@@ -70,7 +70,7 @@ The specification needs to be implementable across a wide range of languages,
 frameworks, ecosystems and communities. The specification should allow 
 OpenTelemetry components to provide idiomatic experiences to their users.
 
-THe Specification should focus on *what* not *how*. When describing how, use
+The specification should focus on *what* not *how*. When describing how, use
 non-normative language or supplementary guidelines, like this document.
 
 ### Be Stable
