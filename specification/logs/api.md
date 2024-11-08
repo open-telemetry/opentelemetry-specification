@@ -1,3 +1,8 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: API
+aliases: [bridge-api]
+--->
+
 # Logs API
 
 **Status**: [Stable](../document-status.md), except where otherwise specified

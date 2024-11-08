@@ -542,6 +542,6 @@ authors MAY decide if they want to make the shutdown timeout configurable.
 ## Logs API
 
 > [!NOTE]
-> We are currently in the process of defining a new [Logs API](./api.md#logs-api).
+> We are currently in the process of defining a new [Logs API](./api.md).
 
 - [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
