@@ -66,9 +66,9 @@ We have a few simple rules of thumb regarding prototypes:
 
 ### Be General
 
-The specification needs to be implemented across a wide range of languages,
-frameworks, ecosystems and communities. OpenTelemetry components should be
-allowed to provide idiomatic experiences to their users.
+The specification needs to be implementable across a wide range of languages,
+frameworks, ecosystems and communities. The specification should allow 
+OpenTelemetry components to provide idiomatic experiences to their users.
 
 THe Specification should focus on *what* not *how*. When describing how, use
 non-normative language or supplementary guidelines, like this document.
