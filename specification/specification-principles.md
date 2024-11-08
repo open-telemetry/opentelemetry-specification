@@ -22,7 +22,7 @@ Additionally, it lays out the following core Engineering Values:
   - See [Specification Performance Principles](performance.md) for more details.
 
 In addition to these core values, there are a set of things we've learned about
-Specification work and drives how we write our Specification.
+Specification work and drive how we write our Specification.
 
 ## Specification Principles
 
