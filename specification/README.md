@@ -18,7 +18,7 @@ path_base_for_github_subdir:
 
 - [Overview](overview.md)
 - [Glossary](glossary.md)
-- Principles and Guideliens
+- Principles and Guidelines
   - [Core Principles](specification-principles.md)
   - [Versioning and stability for OpenTelemetry clients](versioning-and-stability.md)
   - [Library Guidelines](library-guidelines.md)
