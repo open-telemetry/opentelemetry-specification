@@ -5,7 +5,7 @@ the OpenTelemetry specification to adapt to new use cases and fix issues.
 
 ## OpenTelemetry Mission and Values
 
-It should be taken in context of the [overal values of OpenTelemetry](https://opentelemetry.io/community/mission/), which lays out the following core values:
+It should be taken in context of the [overall values of OpenTelemetry](https://opentelemetry.io/community/mission/), which lays out the following core values:
 
 - [Telemetry should be easy](https://opentelemetry.io/community/mission/#telemetry-should-be-easy)
 - [Telemetry should be universal](https://opentelemetry.io/community/mission/#telemetry-should-be-universal)
