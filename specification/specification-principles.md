@@ -36,7 +36,7 @@ Here are the key principles of the OpenTelemetry Specification:
 
 Note that at times some of these principles are at odds with each other. For
 example, keeping things stable may put constraints on possible simplicity. These
-principles are a rubric to guide design, and form a specturm through which we
+principles are a rubric to guide design, and form a spectrum through which we
 evaluate additions or changes to the Specification.
 
 Let's look at each in more detail.
@@ -67,7 +67,7 @@ We have a few simple rules of thumb regarding prototypes:
 ### Be General
 
 The specification needs to be implementable across a wide range of languages,
-frameworks, ecosystems and communities. The specification should allow 
+frameworks, ecosystems and communities. The specification should allow
 OpenTelemetry components to provide idiomatic experiences to their users.
 
 The specification should focus on *what* not *how*. When describing how, use
