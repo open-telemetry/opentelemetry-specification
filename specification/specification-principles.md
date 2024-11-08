@@ -54,7 +54,7 @@ prior to solidification within the Specification.
 
 We have a few simple rules of thumb regarding prototypes:
 
-- API / SDK Changes should be prototyped in three languages.  The goal is
+- API/SDK changes should be prototyped in three languages.  The goal is
   coverage of possible API designs, not any specific language:
   - One language should cover typed Object-Oriented ecosystems (Java, C#, etc.)
   - One language should cover dynamically typed ecosystems (Python, Javascript)
