@@ -102,18 +102,6 @@ release.
 - Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
-### Events
-
-### Baggage
-
-### Resource
-
-### OpenTelemetry Protocol
-
-### Compatibility
-
-### SDK Configuration
-
 ### Common
 
 - Define equality for attributes and collection of attributes.
