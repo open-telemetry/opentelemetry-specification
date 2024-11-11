@@ -13,6 +13,7 @@ Currently, it only describes the serialization of OpenTelemetry data to the OTLP
 
 ## Table of Contents
 
+- [Use Cases](#use-cases)
 - [Exporter configuration](#exporter-configuration)
   - [Programmatic configuration](#programmatic-configuration)
 - [JSON File serialization](#json-file-serialization)
@@ -21,6 +22,17 @@ Currently, it only describes the serialization of OpenTelemetry data to the OTLP
     - [Streaming appending](#streaming-appending)
   - [Telemetry data requirements](#telemetry-data-requirements)
   - [Examples](#examples)
+
+## Use Cases
+
+Why do we need a file exporter - why not just use the OTLP exporter?
+
+- *Faas*: In a FaaS environment, the OTLP exporter may not be able to send data to a collector.
+- *Consistent log scraping from pods*: In a Kubernetes environment, logs are often scraped from the stdout pod file. 
+  This exporter can be used to write logs to stdout - which makes it easier to integrate with existing log scraping tools.
+  Existing solutions add metadata, such as the trace ID, to the log line, 
+  which needs manual configuration and is error-prone.
+- *Reliability*: Writing to a file is more reliable than sending data over the network. 
 
 ## Exporter configuration
 
