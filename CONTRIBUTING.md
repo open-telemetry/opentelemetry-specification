@@ -70,8 +70,8 @@ imperatives:
 It is important to build a specification that is clear and useful, not
 one that is needlessly restrictive and complex.
 
-Please see [Specification Principles](specification-principles.md) for more
-information.
+Please see [Specification Principles](specification/specification-principles.md)
+for more information.
 
 ### Consistency Checks
 
