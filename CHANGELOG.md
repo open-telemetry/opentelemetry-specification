@@ -11,9 +11,18 @@ release.
 
 ### Traces
 
+- Add in-development support for `otlp/stdout` exporter via `OTEL_TRACES_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+
 ### Metrics
 
+- Add in-development support for `otlp/stdout` exporter via `OTEL_METRICS_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+
 ### Logs
+
+- Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
+ ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Events
 
@@ -71,8 +80,6 @@ release.
   ([#4161](https://github.com/open-telemetry/opentelemetry-specification/pull/4161))
 - Clarify that `Export` MUST NOT be called by simple and batching processors concurrently.
   ([#4205](https://github.com/open-telemetry/opentelemetry-specification/pull/4205))
-- Add in-development support for `otlp/stdout` exporter via `OTEL_TRACES_EXPORTER`.
-  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Metrics
 
@@ -86,8 +93,6 @@ release.
   ([#4228](https://github.com/open-telemetry/opentelemetry-specification/pull/4228))
 - Mark cardinality limits as stable.
   ([#4222](https://github.com/open-telemetry/opentelemetry-specification/pull/4222))
-- Add in-development support for `otlp/stdout` exporter via `OTEL_METRICS_EXPORTER`.
-  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Logs
 
@@ -99,8 +104,6 @@ release.
 - Introduce initial placeholder for the new user-facing Logs API, adding references
   to existing API's informing of the coming changes while the definition is defined.
   ([#4236](https://github.com/open-telemetry/opentelemetry-specification/pull/4236))
-- Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
- ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Common
 
