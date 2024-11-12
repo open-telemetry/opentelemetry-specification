@@ -58,7 +58,7 @@ We have a few simple rules of thumb regarding prototypes:
   coverage of possible API designs, not any specific language:
   - One language should cover typed Object-Oriented ecosystems (Java, .NET, etc.)
   - One language should cover dynamically typed ecosystems (Python, JavaScript)
-  - One language should cover structural ecosystems (e.g. Go, Rust)
+  - One language should cover structural ecosystems (Go, Rust)
 - Protocol changes should be prototyped both on the client and the server.
 - Prototypes can be unmerged Pull Requests, existing projects, etc. but must
   demonstrate the feature with confidence that the Specification of it will
