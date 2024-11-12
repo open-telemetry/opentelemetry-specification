@@ -32,7 +32,7 @@ Why do we need a file exporter - why not just use the OTLP exporter?
   This exporter can be used to write logs to stdout - which makes it easier to integrate with existing log scraping tools.
   Existing solutions add metadata, such as the trace ID, to the log line,
   which needs manual configuration and is error-prone.
-- *Reliability*: Writing to a file is more reliable than sending data over the network.
+- *Reliability*: Some prefer writing logs to a file rather than sending data over the network for reliability reasons.
 
 ## Exporter configuration
 
