@@ -53,11 +53,12 @@ For example, an OTEP proposing configurable sampling *and* various samplers shou
 
 - First, [fork](https://help.github.com/en/articles/fork-a-repo) this repo.
 - Copy [`0000-template.md`](./0000-template.md) to `0000-my-OTEP.md`, where `my-OTEP` is a title relevant to your proposal, and `0000` is the OTEP ID.
+  Leave the number as is for now. Once a Pull Request is made, update this ID to match the PR ID.
 - Fill in the template. Put care into the details: It is important to present convincing motivation, demonstrate an understanding of the design's impact, and honestly assess the drawbacks and potential alternatives.
 
 ### Submitting the OTEP
 
-- An OTEP is `proposed` by posting it as a PR.
+- An OTEP is `proposed` by posting it as a PR. Once the PR is created, update the OTEP file name to use the PR ID as the OTEP ID.
 - An OTEP is `approved` when four reviewers github-approve the PR. The OTEP is then merged.
 - If an OTEP is `rejected` or `withdrawn`, the PR is closed. Note that these OTEPs submissions are still recorded, as GitHub retains both the discussion and the proposal, even if the branch is later deleted.
 - If an OTEP discussion becomes long, and the OTEP then goes through a major revision, the next version of the OTEP can be posted as a new PR, which references the old PR. The old PR is then closed. This makes OTEP review easier to follow and participate in.
