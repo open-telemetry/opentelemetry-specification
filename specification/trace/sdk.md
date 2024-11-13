@@ -311,8 +311,6 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    (note: this must be done before calling `ShouldSample`, because it expects
    a valid trace ID as input).
 2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
-   The [built-in `ParentBasedSampler`](#parentbased) can be used to
-   take the sampling decision of the parent context using the `Sampled` flag.
 3. Generate a new span ID for the `Span`, independently of the sampling decision.
    This is done so other components (such as logs or exception handling) can rely on
    a unique span ID, even if the `Span` is a non-recording instance.
