@@ -113,7 +113,7 @@ hexdigit = DIGIT ; a-f
 ```
 
 To decode the threshold from the OpenTelemetry TraceState `th` value, first extend the value with trailing zeros to make 14 digits.
-Then, parse the 14-digit value as a 56-bit unsigned number, yielding a rejection threshold.
+Then, parse the 14-digit value as a 56-bit unsigned hexadecimal number, yielding a rejection threshold.
 
 OpenTelemetry defines consistent sampling in terms of a 56-bit trace randomness value compared with the 56-bit rejection threshold.
 When the randomness value is less than the rejection threshold, the span is not sampled.

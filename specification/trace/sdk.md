@@ -375,23 +375,12 @@ Callers SHOULD NOT cache the returned value.
 ### Built-in samplers
 
 OpenTelemetry supports a number of built-in samplers to choose from.
-
-The default sampler is `ParentBased(root=AlwaysOn)`, which configures
-a policy depending on whether the new span is a root or a child:
-
-* For root spans, always sample a new context.
-* For child spans, take the decision of the parent context.
-
-By using the ParentBased sampler by default, users can change sampling
-across their system by reconfiguring only root span Samplers.  To
-configure probability-based trace sampling across a system, users may
-configure `ParentBased(root=TraceIdRatioBased{probability})`.
+The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### AlwaysOn
 
 * Returns `RECORD_AND_SAMPLE` always.
 * Description MUST be `AlwaysOnSampler`.
-* OpenTelemetry TraceState SHOULD include `th:0`.
 
 #### AlwaysOff
 
@@ -403,8 +392,8 @@ configure `ParentBased(root=TraceIdRatioBased{probability})`.
 **Status**: [Development](../document-status.md)
 
 The `TraceIdRatioBased` sampler implements simple, ratio-based probability sampling using randomness features specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
-OpenTelemetry follows W3C Trace Context Level 2, which specifies 56 bits of randomness, in making use of 56 bits of information for probabilistic sampling decisions.
-[OpenTelemetry defines consistent probability sampling using 56 bits of randomness][CONSISTENTSAMPLING].
+OpenTelemetry follows W3C Trace Context Level 2, which specifies 56 bits of randomness,
+[specifying how to make consistent probability sampling decisions using 56 bits of randomness][CONSISTENTSAMPLING].
 
 The `TraceIdRatioBased` sampler MUST ignore the parent `SampledFlag`.
 For respecting the parent `SampledFlag`, see the `ParentBased` sampler specified below.
