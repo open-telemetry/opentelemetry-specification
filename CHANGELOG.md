@@ -18,9 +18,6 @@ release.
 
 ### Logs
 
-- Simplify the name "Logs Instrumentation API" to just "Logs API".
-  ([#4258](https://github.com/open-telemetry/opentelemetry-specification/pull/4258))
-
 ### Events
 
 ### Baggage
@@ -29,14 +26,34 @@ release.
 
 ### Profiles
 
-- Define required attributes for Mappings.
-  ([#4197](https://github.com/open-telemetry/opentelemetry-specification/pull/4197))
-
 ### OpenTelemetry Protocol
 
 ### Compatibility
 
-- Add requirement to allow extending Stable APIs
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.39.0 (2024-11-06)
+
+### Logs
+
+- Simplify the name "Logs Instrumentation API" to just "Logs API".
+  ([#4258](https://github.com/open-telemetry/opentelemetry-specification/pull/4258))
+- Rename Log Bridge API to Logs API. Define the existing Logger methods to be
+  Log Bridge Operations. Add EmitEvent to the Logger as an Instrumentation Operation.
+  ([#4259](https://github.com/open-telemetry/opentelemetry-specification/pull/4259))
+
+### Profiles
+
+- Define required attributes for Mappings.
+  ([#4197](https://github.com/open-telemetry/opentelemetry-specification/pull/4197))
+
+### Compatibility
+
+- Add requirement to allow extending Stable APIs.
   ([#4270](https://github.com/open-telemetry/opentelemetry-specification/pull/4270))
 
 ### SDK Configuration
@@ -46,7 +63,8 @@ release.
 
 ### Common
 
-### Supplementary Guidelines
+- Define prototype for proposed features in development.
+  ([#4273](https://github.com/open-telemetry/opentelemetry-specification/pull/4273))
 
 ## v1.38.0 (2024-10-10)
 

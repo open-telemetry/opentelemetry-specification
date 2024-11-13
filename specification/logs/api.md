@@ -1,4 +1,9 @@
-# Logs Bridge API
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: API
+aliases: [bridge-api]
+--->
+
+# Logs API
 
 **Status**: [Stable](../document-status.md), except where otherwise specified
 
@@ -13,13 +18,13 @@
   * [LoggerProvider operations](#loggerprovider-operations)
     + [Get a Logger](#get-a-logger)
 - [Logger](#logger)
-  * [Logger operations](#logger-operations)
+  * [Log Bridge operations](#log-bridge-operations)
     + [Emit a LogRecord](#emit-a-logrecord)
     + [Enabled](#enabled)
-- [Logs API](#logs-api)
+  * [Log Instrumentation operations](#log-instrumentation-operations)
+    + [Emit an Event](#emit-an-event)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
-- [Artifact Naming](#artifact-naming)
 - [References](#references)
 
 <!-- tocstop -->
@@ -33,7 +38,7 @@ library authors to build
 which use this API to bridge between existing logging libraries and the
 OpenTelemetry log data model.</b>
 
-The Logs Bridge API consist of these main components:
+The Logs API consist of these main components:
 
 * [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
 * [Logger](#logger) is responsible for emitting logs as
@@ -92,17 +97,28 @@ instances where at least one parameter has a different value.
 
 ## Logger
 
-The `Logger` is responsible for emitting `LogRecord`s.
+The `Logger` is responsible for emitting `LogRecord`s. There are two types of
+logging operations:
 
-### Logger operations
+* **Log Bridge** operations to be used when receiving data from other logging
+  libraries.
+* **Log Instrumentation** operations to be used when writing instrumentation
+  for OpenTelemetry.
 
-The `Logger` MUST provide functions to:
+The Logger contains methods for both types of operations. The `Logger` MUST
+provide a function to:
 
 - [Emit a `LogRecord`](#emit-a-logrecord)
 
 The `Logger` SHOULD provide functions to:
 
+- [Emit an `Event`](#emit-an-event)
 - [Report if `Logger` is `Enabled`](#enabled)
+
+### Log Bridge operations
+
+Log Bridge operations are not intended to be used for writing instrumentation,
+and SHOULD include documentation that discourages this use.
 
 #### Emit a LogRecord
 
@@ -146,12 +162,31 @@ SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
 
-## Logs API
+### Log Instrumentation operations
+
+#### Emit an Event
 
 **Status**: [Development](../document-status.md)
 
-This set of API functions will provide the capabilities needed to emit a
-`LogRecord` as is currently provided by [Events API](./event-api.md).
+The effect of calling this API is to emit a `LogRecord` to the processing pipeline
+formatted as an [event](./data-model.md#events).
+
+**Parameters:**
+
+* The [`Name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
+  of the Event.
+* [Timestamp](./data-model.md#field-timestamp) (optional)
+* [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
+  the implementation SHOULD set it equal to the current time.
+* The [Context](../context/README.md) associated with the `Event`. When implicit
+  Context is supported, then this parameter SHOULD be optional and if unspecified
+  then MUST use current Context. When only explicit Context is supported, this parameter
+  SHOULD be required.
+* [Severity Number](./data-model.md#field-severitynumber) (optional)
+* [Severity Text](./data-model.md#field-severitytext) (optional)
+* [Body](./data-model.md#field-body) (optional)
+* [Attributes](./data-model.md#field-attributes) (optional) Event `Attributes` conform
+  to the [standard definition](../common/README.md#standard-attribute) of an attribute.
 
 ## Optional and required parameters
 
@@ -166,21 +201,12 @@ provide it.
 
 ## Concurrency requirements
 
-For languages which support concurrent execution the Logs Bridge APIs provide
+For languages which support concurrent execution the Logs APIs provide
 specific guarantees and safeties.
 
 **LoggerProvider** - all methods are safe to be called concurrently.
 
 **Logger** - all methods are safe to be called concurrently.
-
-## Artifact Naming
-
-The Logs Bridge API is not intended to be called by application developers
-directly, and SHOULD include documentation that discourages direct use. However,
-in the event OpenTelemetry were to add a user facing API, the Logs Bridge API would
-be a natural starting point. Therefore, Log Bridge API artifact, package, and class
-names MUST NOT include the terms "bridge", "appender", or any other qualifier
-that would prevent evolution into a user facing API.
 
 ## References
 

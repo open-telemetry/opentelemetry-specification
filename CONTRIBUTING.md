@@ -32,6 +32,16 @@ Smaller changes can follow a shorter process:
   of the change, prototyping in multiple programming languages might be required
   by the [specification
   approvers](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto).
+  When proposing new features, we
+  encounter
+  a [chicken or the egg problem](https://en.wikipedia.org/wiki/Chicken_or_the_egg)
+  in that proposals require prototyping but language implementations require
+  features to be in the specification. For this reason, when adding new features
+  with Development maturity level, a prototype is defined as a working
+  demonstration of the feature in a language implementation which has the
+  support of that language's maintainers. For example, this may be an unmerged
+  PR with an indication of maintainers' intent to merge in the event the
+  corresponding specification PR is merged.
 
 Trivial changes, such as clarifications, wording changes, spelling/grammar
 corrections, etc. can be made directly via pull requests and do not require an associated
