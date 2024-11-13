@@ -43,6 +43,15 @@ Just because an issue is accepted does not mean that a solution suggested by the
 * `triage:accepted:ready-with-sponsor` - This issue is ready to be implemented and has a specification sponsor assigned.
 * `triage:accepted:needs-sponsor` - This issue is ready to be implemented, but does not yet have a specification sponsor. A pull request without a specification sponsor may not be reviewed in a timely manner.
 
+### `triage:followup`
+
+This label is managed [by an automated workflow](https://github.com/open-telemetry/opentelemetry-specification/blob/main/.github/scripts/triage-helper/app.py) and should not be added manually. The label is added to issues that meet both of these criteria:
+
+* The issue has a `triage:deciding:*` label and does not already have the `triage:followup` label
+* There has been at least one comment or reference since the most recent triage, where a triage is one of these
+  * `triage:deciding:*` label was added
+  * `triage:followup` label was removed
+
 ### `triage:rejected:*`
 
 Rejected issues are issues that describe a problem that cannot or will not be solved by the project in the proposed form.
