@@ -94,7 +94,7 @@ ecosystem.
 Don't make users learn new concepts and behaviors for each feature they interact
 with in OpenTelemetry.  This has three sub-principles:
 
-- Favor fewer broadly applicable features over many narrowly defined ones.
+- Favor simple, broadly applicable features.
 - Prefer similar concepts and behaviors between signals.
 - Reuse naming conventions between signals, components, where possible.
 
