@@ -353,12 +353,12 @@ It produces an output called `SamplingResult` which contains:
   * `RECORD_AND_SAMPLE` - `IsRecording` will be `true` and the `Sampled` flag MUST be set.
 * A set of span Attributes that will also be added to the `Span`. The returned
 object must be immutable (multiple calls may return different immutable objects).
+
 * A `Tracestate` that will be associated with the `Span` through the new
   `SpanContext`.
   If the sampler returns an empty `Tracestate` here, the `Tracestate` will be cleared,
   so samplers SHOULD normally return the passed-in `Tracestate` if they do not intend
   to change it.
-
 #### GetDescription
 
 Returns the sampler name or short description with the configuration. This may
@@ -369,20 +369,67 @@ Description MAY change over time, for example, if the sampler supports dynamic
 configuration or otherwise adjusts its parameters.
 Callers SHOULD NOT cache the returned value.
 
+#### Optional: Optimizing consistent sampling decisions
+
+Consistent sampling adds overhead to a Trace SDK because of the degree
+of overhead added when modifying `TraceState` to incorporate sampling
+thresholds.  When a consistent sampling decision must be derived from
+multiple Samplers, the resulting overhead is extreme.
+
+SDKs are permitted to optimize the Sampler interface using an
+alternate design pattern.  In this pattern, the sampler's
+`ShouldSample` receives sampling threshold and randomness values
+explicitly, so they can be computed once, and returns a modified
+result `CompositeSamplingResult` which contains the sampler's designed,
+consistent threshold:
+
+* A sampling `Decision`. One of the following enum values:
+  * `RECORD_ONLY` - indicates to record the span, independent of the threshold
+  * `SAMPLE_THRESHOLD(threshold)` - indicates the desired sampling probability
+     (note that the `DROP` behavior is equivalent to `SAMPLE_THRESHOLD(2^56)`, 
+	 which rejects all randomness values).
+* A `func(Tracestate) TraceState` that will be called to return a TraceState associated with the `Span` when it is sampled.
+* A `func() Attributes` that will be called to return a new span attributes for the `Span` when it is sampled.
+
+This pattern enables composite samplers that make a decision based on
+multiple Samplers without the overhead of calculating multiple
+TraceState values.
+
 ### Built-in samplers
 
 OpenTelemetry supports a number of built-in samplers to choose from.
-The default sampler is `ParentBased(root=AlwaysOn)`.
+This specification has been extended with a mechanism for making
+consistent sampling decisions across participants.
+
+Some of the built-in Samplers continue to support the alternative,
+described as a "parent-based" approach as opposed to a "consistent"
+one.  The `ParentBased` and `AlwaysOn` samplers are included to
+continue supporting parent-based sampling decisions.  However, use of
+parent-based sampling as opposed to consistent sampling compromises
+the potential for a Span-to-Metrics pipeline to derived adjusted
+counts from Span data.
+
+The default sampler is `Consistent(root=TraceIdRatio(1))`, which
+achieves consistent always-on sampling.
 
 #### AlwaysOn
 
 * Returns `RECORD_AND_SAMPLE` always.
 * Description MUST be `AlwaysOnSampler`.
 
+`AlwaysOn` is not designated as a consistent sampler, therefore SHOULD
+NOT be used as a delegate of the `Consistent` sampler.  When a
+consistent delegate sampler is preferred, use `TraceIdRatio(1)` for
+equivalent behavior.
+
 #### AlwaysOff
 
 * Returns `DROP` always.
 * Description MUST be `AlwaysOffSampler`.
+
+`AlwaysOff` is designated as a consistent sampler and may be used as a
+delegate of the `Consistent` sampler.  This is true in a technical
+sense, because `AlwaysOff` never makes a positive sampling decision.
 
 #### TraceIdRatioBased
 
@@ -421,15 +468,48 @@ of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specif
   SDKs or even different versions of the same language SDKs may produce inconsistent
   results for the same input.
 
+#### Consistent
+
+This is a consistent composite sampler. `Consistent` distinguishes root spans from child spans, using `SpanContext.IsRemote()` as a condition for child sampling decisions.  This sampler avoids using the trace `sampled` flag as a condition because of the potential for bias. Unlike `ParentBased`, this sampler has three cases:
+  * No parent (root span)
+  * Remote parent (`SpanContext.IsRemote() == true`)
+  * Local parent (`SpanContext.IsRemote() == false`)
+  
+All of the samplers configured with `Consistent` SHOULD make
+consistent sampling decisions.  The built-in consistent samplers are
+`TraceIdRatioBased` and `AlwaysOff`.
+
+The `Consistent` sampler is a delegating case of [consistent head
+sampler](./tracestate-probability-sampling.md#head-sampler).  See the
+[supplemental guidelines for composite samplers](TODO) for an explanation.
+
+Required parameters:
+
+* `root(Sampler)` - Sampler called for spans with no parent (root spans)
+
+Optional parameters:
+
+* `remoteParent(Sampler)` (default: TraceIdRatio(1))
+* `localParent(Sampler)` (default: TraceIdRatio(1))
+
+|Parent| parent.isRemote() | Invoke sampler|
+|--|--|--|--|
+|absent| n/a | `root()`|
+|present|true|`remoteParent()`|
+|present|false|`localParent()`|
+
 #### ParentBased
 
-* This is a sampler decorator. `ParentBased` helps distinguish between the
-following cases:
+This is a composite sampler. `ParentBased` uses the trace `sampled` flag and the value of `SpanContext.IsRemote()`, distinguishing five cases:
   * No parent (root span).
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` set
-  * Remote parent (`SpanContext.IsRemote() == true`) with `SampledFlag` not set
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` set
-  * Local parent (`SpanContext.IsRemote() == false`) with `SampledFlag` not set
+  * Remote parent (`SpanContext.IsRemote() == true`) with `sampled` flag set
+  * Remote parent (`SpanContext.IsRemote() == true`) with `sampled` flag not set
+  * Local parent (`SpanContext.IsRemote() == false`) with `sampled` flag set
+  * Local parent (`SpanContext.IsRemote() == false`) with `sampled` flag not set
+
+Note that this sampler can create errors in Span-to-Metrics pipelines
+such as bias, under-, and over-counting.  The `Consistent` Sampler is
+recommended as a replacement.
 
 Required parameters:
 
