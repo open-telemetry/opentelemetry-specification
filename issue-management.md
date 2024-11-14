@@ -30,7 +30,7 @@ which provide more context. Following are the definitions of each triage label a
 
 These labels are applied to issues when it is unclear yet if they are something the project will take on.
 
-* `triage:deciding:needs-community-feedback` - This issue is open to community discussion. If the community can provide sufficient reasoning, it may be accepted by the project.
+* `triage:deciding:community-feedback` - This issue is open to community discussion. If the community can provide sufficient reasoning, it may be accepted by the project.
 * `triage:deciding:needs-info` - This issue does not provide enough information for the project to accept it. It is left open to provide the author with time to add more details.
 * `triage:deciding:tc-inbox` - This issue needs attention from the TC in order to move forward. It may need TC input for triage, or to unblock a discussion that is deadlocked.
 
@@ -42,6 +42,15 @@ Just because an issue is accepted does not mean that a solution suggested by the
 * `triage:accepted:ready` - This issue is ready to be implemented. It is either small enough in scope or uncontroversial enough to be implemented without a TC sponsor.
 * `triage:accepted:ready-with-sponsor` - This issue is ready to be implemented and has a specification sponsor assigned.
 * `triage:accepted:needs-sponsor` - This issue is ready to be implemented, but does not yet have a specification sponsor. A pull request without a specification sponsor may not be reviewed in a timely manner.
+
+### `triage:followup`
+
+This label is managed [by an automated workflow](https://github.com/open-telemetry/opentelemetry-specification/blob/main/.github/scripts/triage-helper/app.py) and should not be added manually. The label is added to issues that meet both of these criteria:
+
+* The issue has a `triage:deciding:*` label and does not already have the `triage:followup` label
+* There has been at least one comment or reference since the most recent triage, where a triage is one of these
+  * `triage:deciding:*` label was added
+  * `triage:followup` label was removed
 
 ### `triage:rejected:*`
 

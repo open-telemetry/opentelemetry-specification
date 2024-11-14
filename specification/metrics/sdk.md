@@ -1025,7 +1025,7 @@ api.context.with(api.trace.setSpan(api.context.active(), span), () => {
 Then an exemplar output in OTLP would consist of:
 
 - The `value` of 1.
-- The `time` when the `add` method was called
+- The `time` when the `add` method was called.
 - The `Attributes` of `{"Z": "z-value"}`, as these are not preserved in the
   resulting metric point.
 - The trace/span id for the `makeRequest` span.
@@ -1072,7 +1072,7 @@ An ExemplarFilter which makes all measurements eligible for being an Exemplar.
 #### AlwaysOff
 
 An ExemplarFilter which makes no measurements eligible for being an Exemplar.
-Using this ExemplarFilter is as good as disabling Exemplar feature.
+Using this ExemplarFilter is as good as disabling the Exemplar feature.
 
 #### TraceBased
 
@@ -1151,7 +1151,7 @@ exemplars.
 
 #### SimpleFixedSizeExemplarReservoir
 
-This reservoir MUST use an uniformly-weighted sampling algorithm based on the
+This reservoir MUST use a uniformly-weighted sampling algorithm based on the
 number of samples the reservoir has seen so far to determine if the offered
 measurements should be sampled. For example, the [simple reservoir sampling
 algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
@@ -1173,7 +1173,7 @@ count is reset every time the reservoir is collected.
 
 This Exemplar reservoir MAY take a configuration parameter for the size of the
 reservoir. If no size configuration is provided, the default size MAY be
-the number of possible concurrent threads (e.g. numer of CPUs) to help reduce
+the number of possible concurrent threads (e.g., number of CPUs) to help reduce
 contention. Otherwise, a default size of `1` SHOULD be used.
 
 #### AlignedHistogramBucketExemplarReservoir

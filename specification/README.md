@@ -29,7 +29,7 @@ path_base_for_github_subdir:
   - [Tracing](trace/api.md)
   - [Metrics](metrics/api.md)
   - [Logs](logs/README.md)
-    - [Bridge API](logs/bridge-api.md)
+    - [API](logs/api.md)
     - [Event API](logs/event-api.md)
 - SDK Specification
   - [Tracing](trace/sdk.md)
@@ -42,6 +42,7 @@ path_base_for_github_subdir:
   - [Protocol](protocol/README.md)
     - [Metrics](metrics/data-model.md)
     - [Logs](logs/data-model.md)
+    - [Profiles](profiles/mappings.md)
   - Compatibility
     - [OpenCensus](compatibility/opencensus.md)
     - [OpenTracing](compatibility/opentracing.md)

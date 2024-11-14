@@ -179,7 +179,24 @@ Parse and validate a [configuration file](./data-model.md#file-based-configurati
 
 Parse MUST perform [environment variable substitution](./data-model.md#environment-variable-substitution).
 
-Parse MUST interpret null as equivalent to unset.
+Parse MUST differentiate between properties that are missing and properties that
+are present but null. For example, consider the following snippet,
+noting `.meter_provider.views[0].stream.drop` is present but null:
+
+```yaml
+meter_provider:
+  views:
+    - selector:
+        name: some.metric.name
+      stream:
+        aggregation:
+          drop:
+```
+
+As a result, the view stream should be configured with the `drop` aggregation.
+Note that some aggregations have additional arguments, but `drop` does not. The
+user MUST not be required to specify an empty object (i.e. `drop: {}`) in these
+cases.
 
 When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to
@@ -212,14 +229,15 @@ Interpret configuration model and return SDK components.
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
 
-If a field is null or unset and a default value is defined, Create MUST ensure
-the SDK component is configured with the default value. If a field is null or
-unset and no default value is defined, Create SHOULD return an error. For
-example, if configuring
+If a property has a default value defined (i.e. is _not_ required) and is
+missing or present but null, Create MUST ensure the SDK component is configured
+with the default value. If a property is required and is missing or present but
+null, Create SHOULD return an error. For example, if configuring
 the [span batching processor](../trace/sdk.md#batching-processor) and
-the `scheduleDelayMillis` field is null or unset, the component is configured
-with the default value of `5000`. However, if the `exporter` field is null or
-unset, Create fails fast since there is no default value for `exporter`.
+the `scheduleDelayMillis` property is missing or present but null, the component
+is configured with the default value of `5000`. However, if the `exporter`
+property is missing or present but null, Create fails fast since there is no
+default value for `exporter`.
 
 When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to

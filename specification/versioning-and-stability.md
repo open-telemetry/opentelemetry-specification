@@ -142,10 +142,23 @@ the plugin interfaces MUST continue to be possible to use with newer versions of
 For languages that commonly share code via binary artifacts, e.g. Java, backwards-compatible means that end user's code that implements plugin interfaces MUST continue to be possible to use with newer minor or patch versions without recompiling the end user's code.
 
 If this backwards compatible addition of methods to interfaces is not possible for a language,
-the language maintainers MAY still implement the addition using backwards-compatible workarounds without incrementing the major version.
+the language maintainers SHOULD still implement the addition using backwards-compatible
+workarounds without incrementing the major version.
 For example, a possible workaround might be to add a new interface instead of extending the existing one and accept the
 new interface in addition to the old one in every place.
 
+Additionally, a Stable signal's API/SDK MAY be extended by adding new methods to existing
+Stable APIs. Language implementations SHOULD have a mechanism to do so, such that:
+
+- Adding a new method in Development maturity level is possible and is not a breaking
+  change for users that do not use the new method.
+- New in Development methods SHOULD require opt-in, so that the user is made aware of
+  the risk associated with using the development API. It should be documented that
+  the newly added methods are in Development and are subject to breaking changes.
+- Removing (or deprecating) a method that was in Development maturity level but did
+  not graduate to Stable level is not a breaking change for users that never used the
+  method.
+  
 There may be other ways to extend existing API/SDKs in non-breaking manner. Language
 maintainers SHOULD choose the idiomatic way for their language.
 
