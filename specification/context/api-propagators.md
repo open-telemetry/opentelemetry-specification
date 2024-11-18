@@ -234,10 +234,11 @@ The Get function is responsible for handling case sensitivity. If the getter is 
 
 **Status**: [Development](../document-status.md)
 
-The GetAll function MUST NOT require explicit implementation to satisfy the base `Getter` type.
-Language implementations have the flexibility to incorporate this optional
-functionality in various ways, such as by providing a default GetAll method, or
-by creating a new type that extends the base `Getter` type.
+For many language implementations, the GetAll function will be added after the stable release of Getter.
+For these languages, requiring implementations of Getter to include GetAll constitutes a breaking change
+since instrumentation which previously functioned would fail. Language implementations should be cognizant
+of this, and add GetAll in a way that retains backwards compatibility. For example, by providing a default
+GetAll implementation based on Get, or by creating an extended Getter type.
 
 If explicitly implemented, the GetAll function MUST return all values of the given propagation key.
 It SHOULD return them in the same order as they appear in the carrier.
