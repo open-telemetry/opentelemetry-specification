@@ -22,6 +22,7 @@
     + [Getter argument](#getter-argument)
       - [Keys](#keys)
       - [Get](#get)
+      - [GetAll](#getall)
 - [Injectors and Extractors as Separate Interfaces](#injectors-and-extractors-as-separate-interfaces)
 - [Composite Propagator](#composite-propagator)
   * [Create a Composite Propagator](#create-a-composite-propagator)
