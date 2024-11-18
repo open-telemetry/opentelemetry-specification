@@ -9,7 +9,7 @@ release.
 
 ### Context
 
-- Propagation - Extract handles multiple values on carrier using same key.
+- Propagation - Adds optional GetAll method to Getter, allowing for the retrieval of multiple keys for the same value.
   [#4295](https://github.com/open-telemetry/opentelemetry-specification/pull/4295)
 
 ### Traces
