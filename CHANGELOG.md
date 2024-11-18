@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Propagation - Extract handles multiple values on carrier using same key. 
+  [#4295](https://github.com/open-telemetry/opentelemetry-specification/pull/4295)
+
 ### Traces
 
 ### Metrics
