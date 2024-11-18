@@ -196,11 +196,11 @@ Returns a new `Context` derived from the `Context` passed as argument.
 
 #### Getter argument
 
-Getter is an argument in `Extract` that get value from given field
+Getter is an argument in `Extract` that gets value(s) from given field.
 
 `Getter` allows a `TextMapPropagator` to read propagated fields from a carrier.
 
-One of the ways to implement it is `Getter` class with `Get` and `Keys` methods
+One of the ways to implement it is `Getter` class with methods `Get`, `Keys`, and `GetAll`
 as described below. Languages may decide on alternative implementations and
 expose corresponding methods as delegates or other ways.
 
@@ -228,6 +228,24 @@ Required arguments:
 - the key of the field.
 
 The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive.
+
+##### GetAll
+
+The GetAll function MUST NOT require explicit implementation to satisfy the base `Getter` type.
+Language implementations have the flexibility to incorporate this optional
+functionality in various ways, such as by providing a default GetAll method, or
+by creating a new type that extends the base `Getter` type.
+
+If explicitly implemented, the GetAll function MUST return all values of the given propagation key.
+It SHOULD return them in the same order as they appear in the carrier.
+If the key doesn't exist, it SHOULD return an empty collection.
+
+Required arguments:
+
+- the carrier of propagation fields, such as an HTTP request.
+- the key of the field.
+
+The GetAll function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive.
 
 ## Injectors and Extractors as Separate Interfaces
 
