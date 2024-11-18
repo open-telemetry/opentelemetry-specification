@@ -1,6 +1,6 @@
 # Propagators API
 
-**Status**: [Stable, Feature-Freeze](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified.
 
 <details>
 <summary>Table of Contents</summary>
