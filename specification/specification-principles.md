@@ -83,7 +83,8 @@ That's how important stability is.
 
 To achieve OpenTelemetry's mission of "Telemetry should be built-in", we need to
 create a set of components that are safe for users to depend on. Instability
-breaks trust, and hurts the mission of being a built-in solution.
+breaks trust, and hurts the mission of being a solution which application
+and library authors are glad to integrate with their software out of the box.
 
 When things do change, the specification (and implementation) should do the
 heavy lifting to ensure seamless, smooth experience for the OpenTelemetry
