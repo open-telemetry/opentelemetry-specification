@@ -31,7 +31,13 @@ release.
 
 ### Common
 
+- Lay out core principles for Specification changes.
+  ([#4286](https://github.com/open-telemetry/opentelemetry-specification/pull/4286))
+
 ### Supplementary Guidelines
+
+- Add core principles for evaluating specification changes.
+  ([#4286](https://github.com/open-telemetry/opentelemetry-specification/pull/4286))
 
 ## v1.39.0 (2024-11-06)
 
