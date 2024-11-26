@@ -240,7 +240,7 @@ since instrumentation which previously functioned would fail. Language implement
 of this, and add GetAll in a way that retains backwards compatibility. For example, by providing a default
 GetAll implementation based on Get, or by creating an extended Getter type.
 
-If explicitly implemented, the GetAll function MUST return all values of the given propagation key.
+If explicitly implemented, the `GetAll` function MUST return all values of the given propagation key.
 It SHOULD return them in the same order as they appear in the carrier.
 If the key doesn't exist, it SHOULD return an empty collection.
 
