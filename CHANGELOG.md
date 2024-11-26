@@ -9,7 +9,7 @@ release.
 
 ### Context
 
-- Propagation - Adds optional GetAll method to Getter, allowing for the retrieval of multiple keys for the same value.
+- Adds optional `GetAll` method to `Getter` in Propagation API, allowing for the retrieval of multiple values for the same key.
   [#4295](https://github.com/open-telemetry/opentelemetry-specification/pull/4295)
 
 ### Traces
