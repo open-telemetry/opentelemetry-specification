@@ -237,7 +237,7 @@ The Get function is responsible for handling case sensitivity. If the getter is 
 For many language implementations, the `GetAll` function will be added after the stable release of `Getter`.
 For these languages, requiring implementations of `Getter` to include `GetAll` constitutes a breaking change
 since instrumentation which previously functioned would fail. Language implementations should be cognizant
-of this, and add GetAll in a way that retains backwards compatibility. For example, by providing a default
+of this, and add `GetAll` in a way that retains backwards compatibility. For example, by providing a default
 `GetAll` implementation based on Get, or by creating an extended `Getter` type.
 
 If explicitly implemented, the `GetAll` function MUST return all values of the given propagation key.
