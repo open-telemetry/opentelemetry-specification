@@ -11,7 +11,7 @@ OpenTelemetry Collector Distros while also ensuring that components produced by
 the OpenTelemetry Collector SIG is able to work with any vendor who claims
 support for an OpenTelemetry Collector.
 
-- An OpenTelemetry Collector _MUST_ accept as OpenTelemetry Collector Configuration
+- An OpenTelemetry Collector _MUST_ accept an OpenTelemetry Collector Configuration
   file.
 - An OpenTelemetry Collector _MUST_ be able to be compiled with any and all
   additional Collector components that the user wishes to include.
