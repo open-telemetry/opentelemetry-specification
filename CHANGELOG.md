@@ -14,9 +14,18 @@ release.
 
 ### Traces
 
+- Add in-development support for `otlp/stdout` exporter via `OTEL_TRACES_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+
 ### Metrics
 
+- Add in-development support for `otlp/stdout` exporter via `OTEL_METRICS_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+
 ### Logs
+
+- Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
+ ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 
 ### Events
 
@@ -34,7 +43,13 @@ release.
 
 ### Common
 
+- Lay out core principles for Specification changes.
+  ([#4286](https://github.com/open-telemetry/opentelemetry-specification/pull/4286))
+
 ### Supplementary Guidelines
+
+- Add core principles for evaluating specification changes.
+  ([#4286](https://github.com/open-telemetry/opentelemetry-specification/pull/4286))
 
 ## v1.39.0 (2024-11-06)
 
