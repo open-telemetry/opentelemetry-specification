@@ -11,8 +11,20 @@ OpenTelemetry Collector Distros while also ensuring that components produced by
 the OpenTelemetry Collector SIG is able to work with any vendor who claims
 support for an OpenTelemetry Collector.
 
-- An OpenTelemetry Collector _MUST_ accept a OpenTelemetry Collector Config file.
+- An OpenTelemetry Collector _MUST_ accept a OpenTelemetry Collector Configuration
+  file.
 - An OpenTelemetry Collector _MUST_ be able to be compiled with any and all
-  additional Collector plugins that the user wishes to include.
-- A compiled instance of an OpenTelemetry Collector – with a specific set of
-  plugins and features – is referred to as an OpenTelemetry Collector Distro.
+  additional Collector components that the user wishes to include.
+
+## OpenTelemetry Collector Configuration file
+
+## OpenTelemetry Collector components
+
+For a library to be considered an OpenTelemetry Collector component, it _MUST_
+implement the [Component interface](https://github.com/open-telemetry/opentelemetry-collector/blob/main/component/component.go) defined in the [opentelemetry-collector repository](https://github.com/open-telemetry/opentelemetry-collector).
+repository.
+
+## OpenTelemetry Collector Distribution
+
+An OpenTelemetry Collector Distribution (Distro) is a compiled instance
+of an OpenTelemetry Collector with a specific set of components and features.
