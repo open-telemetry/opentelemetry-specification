@@ -11,7 +11,7 @@ OpenTelemetry Collector Distros while also ensuring that components produced by
 the OpenTelemetry Collector SIG is able to work with any vendor who claims
 support for an OpenTelemetry Collector.
 
-- An OpenTelemetry Collector _MUST_ accept a OpenTelemetry Collector Configuration
+- An OpenTelemetry Collector _MUST_ accept as OpenTelemetry Collector Configuration
   file.
 - An OpenTelemetry Collector _MUST_ be able to be compiled with any and all
   additional Collector components that the user wishes to include.
@@ -21,7 +21,8 @@ support for an OpenTelemetry Collector.
 ## OpenTelemetry Collector components
 
 For a library to be considered an OpenTelemetry Collector component, it _MUST_
-implement the [Component interface](https://github.com/open-telemetry/opentelemetry-collector/blob/main/component/component.go) defined in the [opentelemetry-collector repository](https://github.com/open-telemetry/opentelemetry-collector).
+implement the [Component interface](https://github.com/open-telemetry/opentelemetry-collector/blob/main/component/component.go)
+defined in the [opentelemetry-collector repository](https://github.com/open-telemetry/opentelemetry-collector).
 repository.
 
 ## OpenTelemetry Collector Distribution
