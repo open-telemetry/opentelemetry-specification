@@ -1,6 +1,6 @@
 # Propagators API
 
-**Status**: [Stable, Feature-Freeze](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified.
 
 <details>
 <summary>Table of Contents</summary>
@@ -22,6 +22,7 @@
     + [Getter argument](#getter-argument)
       - [Keys](#keys)
       - [Get](#get)
+      - [GetAll](#getall)
 - [Injectors and Extractors as Separate Interfaces](#injectors-and-extractors-as-separate-interfaces)
 - [Composite Propagator](#composite-propagator)
   * [Create a Composite Propagator](#create-a-composite-propagator)
@@ -196,11 +197,11 @@ Returns a new `Context` derived from the `Context` passed as argument.
 
 #### Getter argument
 
-Getter is an argument in `Extract` that get value from given field
+Getter is an argument in `Extract` that gets value(s) from given field.
 
 `Getter` allows a `TextMapPropagator` to read propagated fields from a carrier.
 
-One of the ways to implement it is `Getter` class with `Get` and `Keys` methods
+One of the ways to implement it is `Getter` class with methods `Get`, `Keys`, and `GetAll`
 as described below. Languages may decide on alternative implementations and
 expose corresponding methods as delegates or other ways.
 
@@ -227,7 +228,28 @@ Required arguments:
 - the carrier of propagation fields, such as an HTTP request.
 - the key of the field.
 
-The Get function is responsible for handling case sensitivity. If the getter is intended to work with a HTTP request object, the getter MUST be case insensitive.
+The Get function is responsible for handling case sensitivity. If the getter is intended to work with an HTTP request object, the getter MUST be case insensitive.
+
+##### GetAll
+
+**Status**: [Development](../document-status.md)
+
+For many language implementations, the `GetAll` function will be added after the stable release of `Getter`.
+For these languages, requiring implementations of `Getter` to include `GetAll` constitutes a breaking change
+since instrumentation which previously functioned would fail. Language implementations should be cognizant
+of this, and add `GetAll` in a way that retains backwards compatibility. For example, by providing a default
+`GetAll` implementation based on Get, or by creating an extended `Getter` type.
+
+If explicitly implemented, the `GetAll` function MUST return all values of the given propagation key.
+It SHOULD return them in the same order as they appear in the carrier.
+If the key doesn't exist, it SHOULD return an empty collection.
+
+Required arguments:
+
+- the carrier of propagation fields, such as an HTTP request.
+- the key of the field.
+
+The `GetAll` function is responsible for handling case sensitivity. If the getter is intended to work with an HTTP request object, the getter MUST be case insensitive.
 
 ## Injectors and Extractors as Separate Interfaces
 
