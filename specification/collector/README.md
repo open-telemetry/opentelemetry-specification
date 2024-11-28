@@ -8,7 +8,7 @@ path_base_for_github_subdir:
 
 The goal of this document is for users to be able to easily switch between
 OpenTelemetry Collector Distros while also ensuring that components produced by
-the OpenTelemetry Collector SIG is able to work with any vendor who claims
+the OpenTelemetry Collector SIG are able to work with any vendor who claims
 support for an OpenTelemetry Collector.
 
 - An OpenTelemetry Collector _MUST_ accept an [OpenTelemetry Collector configuration
