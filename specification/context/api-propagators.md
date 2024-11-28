@@ -338,7 +338,7 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 * [W3C Baggage](https://www.w3.org/TR/baggage). MAY alternatively
   be distributed as part of the OpenTelemetry API.
 * [B3](https://github.com/openzipkin/b3-propagation).
-* [Jaeger](https://www.jaegertracing.io/docs/latest/client-libraries/#propagation-format).
+* [Jaeger](https://www.jaegertracing.io/docs/1.63/client-libraries/#propagation-format).
 
 This is a list of additional propagators that MAY be maintained and distributed
 as OpenTelemetry extension packages:

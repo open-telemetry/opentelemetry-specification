@@ -126,7 +126,7 @@ Known values for `OTEL_PROPAGATORS` are:
 - `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
 - `"b3"`: [B3 Single](../context/api-propagators.md#configuration)
 - `"b3multi"`: [B3 Multi](../context/api-propagators.md#configuration)
-- `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.21/client-libraries/#propagation-format)
+- `"jaeger"`: [Jaeger](https://www.jaegertracing.io/docs/1.63/client-libraries/#propagation-format)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
 - `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
 - `"none"`: No automatically configured propagator.
