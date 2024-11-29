@@ -4,6 +4,10 @@
 
 OpenTelemetry uses an "OTEP" (similar to a RFC) process for proposing changes to the OpenTelemetry Specification.
 
+> [!NOTE]
+> OTEPs are documents of intent. They become requirements only after their contents have been
+> [integrated](#integrating-the-otep-into-the-spec) into the actual [Specification](../specification).
+
 ### Table of Contents
 
 - [OpenTelemetry Enhancement Proposal (OTEP)](#opentelemetry-enhancement-proposal-otep)

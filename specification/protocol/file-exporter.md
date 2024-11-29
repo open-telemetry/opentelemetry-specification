@@ -13,12 +13,45 @@ Currently, it only describes the serialization of OpenTelemetry data to the OTLP
 
 ## Table of Contents
 
+- [Use Cases](#use-cases)
+- [Exporter configuration](#exporter-configuration)
+  - [Programmatic configuration](#programmatic-configuration)
 - [JSON File serialization](#json-file-serialization)
   - [File storage requirements](#file-storage-requirements)
     - [JSON lines file](#json-lines-file)
     - [Streaming appending](#streaming-appending)
   - [Telemetry data requirements](#telemetry-data-requirements)
   - [Examples](#examples)
+
+## Use Cases
+
+Why do we need a file exporter - why not just use the OTLP exporter?
+
+- *Faas*: In a FaaS environment, the OTLP exporter may not be able to send data to a collector.
+- *Consistent log scraping from pods*: In a Kubernetes environment, logs are often scraped from the stdout pod file.
+  This exporter can be used to write logs to stdout - which makes it easier to integrate with existing log scraping tools.
+  Existing solutions add metadata, such as the trace ID, to the log line,
+  which needs manual configuration and is error-prone.
+- *Reliability*: Some prefer writing logs to a file rather than sending data over the network for reliability reasons.
+
+## Exporter configuration
+
+The metric exporter MUST support the environment variables defined in the
+[OTLP Exporter](../metrics/sdk_exporters/otlp.md#additional-environment-variable-configuration)
+specification.
+
+If a language provides a mechanism to automatically configure a
+span or logs processor to pair with the associated
+exporter (e.g., using the [`OTEL_TRACES_EXPORTER` environment
+variable](../configuration/sdk-environment-variables.md#exporter-selection)), by
+default the OpenTelemetry Protocol File Exporter SHOULD be paired with a batching
+processor.
+
+### Programmatic configuration
+
+| Requirement | Name                       | Description                                                                                            | Default |
+|-------------|----------------------------|--------------------------------------------------------------------------------------------------------|---------|
+| MUST        | output stream (or similar) | Configure output stream. This SHOULD include the possibility to configure the output stream to a file. | stdout  |
 
 ## JSON File serialization
 

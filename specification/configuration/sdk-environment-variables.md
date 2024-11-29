@@ -32,6 +32,7 @@ aliases:
 - [Zipkin Exporter](#zipkin-exporter)
 - [Prometheus Exporter](#prometheus-exporter)
 - [Exporter Selection](#exporter-selection)
+  * [In-development Exporter Selection](#in-development-exporter-selection)
 - [Metrics SDK Configuration](#metrics-sdk-configuration)
   * [Exemplar](#exemplar)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
@@ -269,6 +270,24 @@ Known values for `OTEL_LOGS_EXPORTER` are:
 - `"logging"`: [Standard Output](../logs/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
 NOT be supported by new implementations.
 - `"none"`: No automatically configured exporter for logs.
+
+### In-development Exporter Selection
+
+**Status**: [Development](../document-status.md)
+
+In addition to the above, the following environment variables are added for in-development exporter selection:
+
+Additional known values for `OTEL_TRACES_EXPORTER` are:
+
+- `"otlp/stdout"`: [OTLP File](../protocol/file-exporter.md) writing to standard output
+
+Additional known values for `OTEL_METRICS_EXPORTER` are:
+
+- `"otlp/stdout"`: [OTLP File](../protocol/file-exporter.md) writing to standard output
+
+Additional known values for `OTEL_LOGS_EXPORTER` are:
+
+- `"otlp/stdout"`: [OTLP File](../protocol/file-exporter.md) writing to standard output
 
 ## Metrics SDK Configuration
 

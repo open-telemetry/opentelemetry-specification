@@ -18,10 +18,13 @@ path_base_for_github_subdir:
 
 - [Overview](overview.md)
 - [Glossary](glossary.md)
-- [Versioning and stability for OpenTelemetry clients](versioning-and-stability.md)
-- [Library Guidelines](library-guidelines.md)
-  - [Package/Library Layout](library-layout.md)
-  - [General error handling guidelines](error-handling.md)
+- Principles and Guidelines
+  - [Core Principles](specification-principles.md)
+  - [Versioning and stability for OpenTelemetry clients](versioning-and-stability.md)
+  - [Library Guidelines](library-guidelines.md)
+    - [Package/Library Layout](library-layout.md)
+    - [General error handling guidelines](error-handling.md)
+  - [Performance](performance.md)
 - API Specification
   - [Context](context/README.md)
     - [Propagators](context/api-propagators.md)
