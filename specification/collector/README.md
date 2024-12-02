@@ -22,7 +22,7 @@ support for an OpenTelemetry Collector.
 ## OpenTelemetry Collector components
 
 For a library to be considered an OpenTelemetry Collector component, it _MUST_
-implement the [Component interface](https://github.com/open-telemetry/opentelemetry-collector/blob/main/component/component.go)
+implement the [Component interface](https://pkg.go.dev/go.opentelemetry.io/collector/component#Component)
 defined in the [opentelemetry-collector repository](https://github.com/open-telemetry/opentelemetry-collector).
 repository.
 
