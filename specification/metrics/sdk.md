@@ -51,6 +51,11 @@ linkTitle: SDK
   * [Instrument advisory parameters](#instrument-advisory-parameters)
   * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
+- [MeasurementProcessor](#measurementprocessor)
+  * [MeasurementProcessor operations](#measurementprocessor-operations)
+    + [OnMeasure](#onmeasure)
+    + [Shutdown](#shutdown-1)
+    + [ForceFlush](#forceflush-1)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
     + [AlwaysOn](#alwayson)
@@ -64,9 +69,9 @@ linkTitle: SDK
 - [MetricReader](#metricreader)
   * [MetricReader operations](#metricreader-operations)
     + [Collect](#collect)
-    + [Shutdown](#shutdown-1)
+    + [Shutdown](#shutdown-2)
   * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
-    + [ForceFlush](#forceflush-1)
+    + [ForceFlush](#forceflush-2)
 - [MetricExporter](#metricexporter)
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
@@ -985,6 +990,75 @@ Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/README.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
+
+## MeasurementProcessor
+
+`MeasurementProcessor` is an interface which allows hooks when a `Measurement` is recorded by an `Instrument`.
+
+`MeasurementProcessors` can be registered directly on SDK `MeterProvider` and they are invoked in the same order as they were registered.
+
+SDK MUST allow users to implement and configure custom processors.
+
+The following diagram shows `MeasurementProcessor`'s relationship to other components in the SDK:
+
+```plaintext
++------------------+
+| MeterProvider    |                 +----------------------+            +-----------------+
+|   Meter A        | Measurements... |                      | Metrics... |                 |
+|     Instrument X |-----------------> MeasurementProcessor +------------> In-memory state |
+|     Instrument Y +                 |                      |            |                 |
+|   Meter B        |                 +----------------------+            +-----------------+
+|     Instrument Z |
+|     ...          |                 +----------------------+            +-----------------+
+|     ...          | Measurements... |                      | Metrics... |                 |
+|     ...          |-----------------> MeasurementProcessor +------------> In-memory state |
+|     ...          |                 |                      |            |                 |
+|     ...          |                 +----------------------+            +-----------------+
++------------------+
+```
+
+### MeasurementProcessor operations
+
+#### OnMeasure
+
+`OnMeasure` is called when a `Measurement` is recorded. This method is called synchronously on the thread that emitted the `Measurement`, therefore it SHOULD NOT block or throw exceptions.
+
+**Parameters:**
+
+* `measurement` - a [Measurement](./api.md#measurement) that was recorded
+* `context` - the resolved `Context` (the explicitly passed `Context` or the current `Contex`)
+
+**Returns:** Void
+
+For a `MeasurementProcessor` registered directly on SDK `MeterProvider`, the `measurement` mutations MUST be visible in next registered processors.
+
+A `MeasuremenetProcessor` may freely modify `measurement` for the duration of the `OnMeasure` call.
+
+#### Shutdown
+
+Shuts down the processor. Called when the SDK is shut down. This is an opportunity for the processor to do any cleanup required.
+
+`Shutdown` SHOULD be called only once for each`MeasurementProcessor` instance. After the call to `Shutdow`, subsequent calls to `OnMeasure` are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
+
+`Shutdown` SHOULD provide a way to let the caller know whether it succeeded, failed or timed out.
+
+`Shutdown` MUST include the effects of `ForceFlush`.
+
+`Shutdown` SHOULD complete or abort within some timeout. `Shutdown` can be implemented as a blocking API or an asynchronous API which notifies the caller via a callback or an event. OpenTelemetry SDK authors can decide if they want to make the shutdown timeout configurable.
+
+#### ForceFlush
+
+This is a hint to ensure that any tasks associated with `Measurements` for which the `MeasurementProcessor` had already received events prior to the call to `ForceFlush` SHOULD be completed as soon as possible, preferably before returning from this method.
+
+<!--  TODO: Should we mingle with the Exporter concept here? For metrics, the only thing we care is that Measuremenets can be processed before aggregation happens   -->
+
+In particular, if any `MeasurementProcessor` has any associated exporter, it SHOULD try to call the exporter's `Export` with all `Measurements` for which this was not already done and then invoke `ForceFlush` on it. If a timeout is specified (see below), the `MeasurementProcessor` MUST prioritize honoring the timeout over finishing all calls. It MAY skip or abort some or all `Export` or `ForceFlush` calls it has made to achieve this goal.
+
+`ForceFlush` SHOULD provide a way to let the caller know whether it succeeded, failed or timed out.
+
+`ForceFlush` SHOULD only be called in cases where it is absolutely necessary, such as when using some FaaS providers that may suspend the process after an invocation, but before the `MeasurementProcessor` exports the emitted `Measuremenets`.
+
+`ForceFlush` SHOULD complete or abort within some timeout. `ForceFlush` can be implemented as a blocking API or an asynchronous API which notifies the caller via a callback or an event. OpenTelemetry SDK authors can decide if they want to make the flush timeout configurable.
 
 ## Exemplar
 
