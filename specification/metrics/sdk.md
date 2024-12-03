@@ -993,6 +993,8 @@ series and the topic requires further analysis.
 
 ## MeasurementProcessor
 
+**Status**: [Development](../document-status.md)
+
 `MeasurementProcessor` is an interface which allows hooks when a `Measurement` is recorded by an `Instrument`.
 
 `MeasurementProcessors` can be registered directly on SDK `MeterProvider` and they are invoked in the same order as they were registered.
