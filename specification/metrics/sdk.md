@@ -1050,7 +1050,7 @@ Shuts down the processor. Called when the SDK is shut down. This is an opportuni
 
 This is a hint to ensure that any tasks associated with `Measurements` for which the `MeasurementProcessor` had already received events prior to the call to `ForceFlush` SHOULD be completed as soon as possible, preferably before returning from this method.
 
-<!--  TODO: Should we mingle with the Exporter concept here? For metrics, the only thing we care is that Measuremenets can be processed before aggregation happens   -->
+<!--  TODO: Should we mingle with the Exporter concept here? For metrics, the only thing we care is that Measuremenets are processed before aggregation happens   -->
 
 In particular, if any `MeasurementProcessor` has any associated exporter, it SHOULD try to call the exporter's `Export` with all `Measurements` for which this was not already done and then invoke `ForceFlush` on it. If a timeout is specified (see below), the `MeasurementProcessor` MUST prioritize honoring the timeout over finishing all calls. It MAY skip or abort some or all `Export` or `ForceFlush` calls it has made to achieve this goal.
 
