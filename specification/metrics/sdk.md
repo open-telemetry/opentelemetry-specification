@@ -1040,7 +1040,7 @@ A `MeasuremenetProcessor` may freely modify `measurement` for the duration of th
 
 Shuts down the processor. Called when the SDK is shut down. This is an opportunity for the processor to do any cleanup required.
 
-`Shutdown` SHOULD be called only once for each`MeasurementProcessor` instance. After the call to `Shutdow`, subsequent calls to `OnMeasure` are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
+`Shutdown` SHOULD be called only once for each `MeasurementProcessor` instance. After the call to `Shutdown`, subsequent calls to `OnMeasure` are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded, failed or timed out.
 
