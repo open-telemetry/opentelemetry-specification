@@ -1028,7 +1028,7 @@ The following diagram shows `MeasurementProcessor`'s relationship to other compo
 **Parameters:**
 
 * `measurement` - a [Measurement](./api.md#measurement) that was recorded
-* `context` - the resolved `Context` (the explicitly passed `Context` or the current `Contex`)
+* `context` - the resolved `Context` (the explicitly passed `Context` or the current `Context`)
 
 **Returns:** Void
 
