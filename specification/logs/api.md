@@ -138,6 +138,12 @@ The API MUST accept the following parameters:
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
 
+##### Event Name
+
+**Status**: [Development](../document-status.md)
+
+[Event Name](./data-model.md#event-name) is an optional parameter to [`Emit a LogRecord`](#emit-a-logrecord).
+
 #### Enabled
 
 **Status**: [Development](../document-status.md)
