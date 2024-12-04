@@ -29,6 +29,9 @@ release.
 
 ### Events
 
+- Change `event.name` attribute into top-level event name field.
+  ([#4320](https://github.com/open-telemetry/opentelemetry-specification/pull/4320))
+
 ### Baggage
 
 ### Resource
