@@ -19,7 +19,7 @@
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
   * [ReadWriteLogRecord](#readwritelogrecord)
-    * [Event Name](#event-name)
+    + [Event Name](#event-name)
 - [LogRecord Limits](#logrecord-limits)
 - [LogRecordProcessor](#logrecordprocessor)
   * [LogRecordProcessor operations](#logrecordprocessor-operations)
