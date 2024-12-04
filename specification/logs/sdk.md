@@ -242,6 +242,13 @@ or by asynchronous processors (e.g. [Batching processor](#batching-processor))
 to avoid race conditions on the log record that is not required to be
 concurrent safe.
 
+#### Event Name
+
+**Status**: [Development](../document-status.md)
+
+A function receiving [ReadWriteLogRecord](#readwritelogrecord) as an argument
+MUST additionally be able to modify the [`EventName`](./data-model.md#event-name).
+
 ## LogRecord Limits
 
 `LogRecord` attributes MUST adhere to
