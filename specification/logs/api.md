@@ -20,6 +20,7 @@ aliases: [bridge-api]
 - [Logger](#logger)
   * [Log Bridge operations](#log-bridge-operations)
     + [Emit a LogRecord](#emit-a-logrecord)
+      + [Event Name](#event-name)
     + [Enabled](#enabled)
   * [Log Instrumentation operations](#log-instrumentation-operations)
     + [Emit an Event](#emit-an-event)
