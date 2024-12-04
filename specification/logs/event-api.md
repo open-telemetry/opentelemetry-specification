@@ -1,6 +1,7 @@
 # Events API
 
-**Status**: [Development](../document-status.md)
+**Status**: [Deprecated](../document-status.md) (was never stabilized),
+see [Emit Event](./api.md#emit-an-event) in the Logs API for replacement.
 
 <details>
 <summary>Table of Contents</summary>
@@ -9,7 +10,6 @@
 
 <!-- toc -->
 
-- [Logs API Development](#logs-api-development)
 - [Event Data model](#event-data-model)
 - [Event API use cases](#event-api-use-cases)
 - [EventLoggerProvider](#eventloggerprovider)
@@ -30,15 +30,6 @@ The Event API consists of these main components:
 * [EventLoggerProvider](#eventloggerprovider) is the entry point of the API. It
   provides access to `EventLogger`s.
 * [EventLogger](#eventlogger) is the component responsible for emitting events.
-
-## Logs API Development
-
-> [!NOTE]
-> We are currently in the process of defining a new [Logs API](./api.md).
-
-The intent is that this Logs API will incorporate the current functionality of this existing Events API and once it is defined and implemented, the Events API usage will be migrated, deprecated, renamed and eventually removed.
-
-No further work is scheduled for the current Events API definition at this time.
 
 ## Event Data model
 
