@@ -214,7 +214,6 @@ The `ConsistentAlwaysOn` sampler MUST provide a `SamplingIntent` with
 - `GetAttributes` returning an empty set,
 - `UpdateTraceState` returning its argument, without any modifications.
 
-
 #### Constructing `SamplingResult`
 
 The process of constructing the final `SamplingResult` in response to a call to `ShouldSample` on the root sampler of the composite samplers tree consists of the following steps.
@@ -237,6 +236,41 @@ This composite sampler re-uses the concept of Predicates from Approach One.
 - list of pairs (`Predicate`, `ComposableSampler`)
 
 For calculating the `SamplingIntent`, if the `Span` kind matches the specified kind, the sampler goes through the list in the provided order and calls `SpanMatches` on `Predicate`s passing the same arguments as received. If a call returns `true`, the result is as returned by `GetSamplingIntent` called on the corresponding `ComposableSampler`. If the `SpanKind` does not match, or none of the calls to `SpanMatches` yield `true`, the result is obtained by calling `GetSamplingIntent` on `ConsistentAlwaysOffSampler`.
+
+### ConsistentParentBased
+
+The functionality of `ConsistentParentBased` sampler corresponds to the standard `ParentBased` sampler.
+It takes one ComposableSampler delegate as the argument.
+The delegate is used to make sampling decisions for ROOT spans.
+
+The behavior of `ConsistentParentBased` caters to the case where a non-probabilistic sampler was used to sample the parent span.
+
+Upon invocation of its `GetSamplingIntent` function, the sampler checks if there's a valid parent span context. If there isn't, the sampler MUST return the result of calling `GetSamplingIntent` on the delegate.
+
+Otherwise, the sampler attempts to extract the threshold value from the parent trace state.
+The sampler MUST return a `SamplingIntent` as follows.
+
+If the parent trace state has a valid threshold T:
+
+- The resulting THRESHOLD value is T.
+- The `IsAdjustedCountReliable` returns `true`.
+
+If the parent trace state has no valid threshold, the sampler examines the `sampled` flag from the traceparent.
+
+If the flag is set:
+
+- The resulting THRESHOLD value is `00000000000000` (or equivalent).
+- The `IsAdjustedCountReliable` returns `false`.
+
+If the flag is not set:
+
+- The resulting THRESHOLD value is `null` (or equivalent).
+- The `IsAdjustedCountReliable` returns `false`.
+
+In all cases with valid parent context:
+
+- The `GetAttributes` function returns empty set.
+- The `UpdateTraceState` function returns its argument, without any modifications.
 
 ### ConsistentAnyOf
 
