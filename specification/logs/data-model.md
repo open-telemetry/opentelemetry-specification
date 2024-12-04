@@ -15,6 +15,7 @@
     + [Type `map`](#type-mapstring-any)
   * [Field Kinds](#field-kinds)
 - [Log and Event Record Definition](#log-and-event-record-definition)
+  * [Field: `EventName`](#field-eventname)
   * [Field: `Timestamp`](#field-timestamp)
   * [Field: `ObservedTimestamp`](#field-observedtimestamp)
   * [Trace Context Fields](#trace-context-fields)
@@ -197,6 +198,7 @@ Here is the list of fields in a log record:
 
 Field Name     |Description
 ---------------|--------------------------------------------
+EventName      |Name that identifies the class / type of event.
 Timestamp      |Time when the event occurred.
 ObservedTimestamp|Time when the event was observed.
 TraceId        |Request trace id.
@@ -210,6 +212,13 @@ InstrumentationScope|Describes the scope that emitted the log.
 Attributes     |Additional information about the event.
 
 Below is the detailed description of each field.
+
+### Field: `EventName`
+
+Type: string.
+
+Description: Name that identifies the class / type of event.
+This name SHOULD uniquely identify the event structure (both attributes and body).
 
 ### Field: `Timestamp`
 

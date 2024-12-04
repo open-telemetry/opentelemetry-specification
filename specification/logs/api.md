@@ -173,8 +173,7 @@ formatted as an [event](./data-model.md#events).
 
 **Parameters:**
 
-* The [`Name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
-  of the Event.
+* [Event Name](./data-model.md#event-name) (required)
 * [Timestamp](./data-model.md#field-timestamp) (optional)
 * [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
   the implementation SHOULD set it equal to the current time.
