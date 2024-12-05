@@ -13,8 +13,8 @@ support for an OpenTelemetry Collector.
 
 - An OpenTelemetry Collector _MUST_ accept an [OpenTelemetry Collector configuration
   file](#opentelemetry-collector-configuration-file).
-- An OpenTelemetry Collector _MUST_ be able to include any and all
-  additional [Collector components](#opentelemetry-collector-components) that
+- An OpenTelemetry Collector _MUST_ be able to include additional compatible
+  [Collector components](#opentelemetry-collector-components) that
   the user wishes to include.
 
 ## OpenTelemetry Collector configuration file
