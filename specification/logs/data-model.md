@@ -1,6 +1,6 @@
 # Logs Data Model
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -15,7 +15,6 @@
     + [Type `map`](#type-mapstring-any)
   * [Field Kinds](#field-kinds)
 - [Log and Event Record Definition](#log-and-event-record-definition)
-  * [Field: `EventName`](#field-eventname)
   * [Field: `Timestamp`](#field-timestamp)
   * [Field: `ObservedTimestamp`](#field-observedtimestamp)
   * [Trace Context Fields](#trace-context-fields)
@@ -35,6 +34,7 @@
   * [Field: `InstrumentationScope`](#field-instrumentationscope)
   * [Field: `Attributes`](#field-attributes)
     + [Errors and Exceptions](#errors-and-exceptions)
+  * [Field: `EventName`](#field-eventname)
 - [Example Log Records](#example-log-records)
 - [Example Mappings](#example-mappings)
 - [References](#references)
@@ -198,7 +198,6 @@ Here is the list of fields in a log record:
 
 Field Name     |Description
 ---------------|--------------------------------------------
-EventName      |Name that identifies the class / type of event.
 Timestamp      |Time when the event occurred.
 ObservedTimestamp|Time when the event was observed.
 TraceId        |Request trace id.
@@ -210,15 +209,9 @@ Body           |The body of the log record.
 Resource       |Describes the source of the log.
 InstrumentationScope|Describes the scope that emitted the log.
 Attributes     |Additional information about the event.
+**Status**: [Development](../document-status.md) - EventName | Name that identifies the class / type of event.
 
 Below is the detailed description of each field.
-
-### Field: `EventName`
-
-Type: string.
-
-Description: Name that identifies the class / type of event.
-This name SHOULD uniquely identify the event structure (both attributes and body).
 
 ### Field: `Timestamp`
 
@@ -485,6 +478,15 @@ a log record MAY be included in the structured data in the `Attributes` section
 of the record.
 If included, they MUST follow the OpenTelemetry
 [semantic conventions for exception-related attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
+
+### Field: `EventName`
+
+**Status**: [Development](../document-status.md)
+
+Type: string.
+
+Description: Name that identifies the class / type of event.
+This name SHOULD uniquely identify the event structure (both attributes and body).
 
 ## Example Log Records
 

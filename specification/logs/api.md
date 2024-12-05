@@ -20,7 +20,6 @@ aliases: [bridge-api]
 - [Logger](#logger)
   * [Log Bridge operations](#log-bridge-operations)
     + [Emit a LogRecord](#emit-a-logrecord)
-      - [Event Name](#event-name)
     + [Enabled](#enabled)
   * [Log Instrumentation operations](#log-instrumentation-operations)
     + [Emit an Event](#emit-an-event)
@@ -138,12 +137,7 @@ The API MUST accept the following parameters:
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
-
-##### Event Name
-
-**Status**: [Development](../document-status.md)
-
-[Event Name](./data-model.md#event-name) is an optional parameter to [`Emit a LogRecord`](#emit-a-logrecord).
+- **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#event-name) (optional)
 
 #### Enabled
 

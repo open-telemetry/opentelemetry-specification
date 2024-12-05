@@ -19,7 +19,6 @@
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
   * [ReadWriteLogRecord](#readwritelogrecord)
-    + [Event Name](#event-name)
 - [LogRecord Limits](#logrecord-limits)
 - [LogRecordProcessor](#logrecordprocessor)
   * [LogRecordProcessor operations](#logrecordprocessor-operations)
@@ -236,19 +235,13 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * [`TraceId`](./data-model.md#field-traceid)
 * [`SpanId`](./data-model.md#field-spanid)
 * [`TraceFlags`](./data-model.md#field-traceflags)
+* **Status**: [Development](../document-status.md) - [`EventName`](./data-model.md#event-name)
 
 The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
 The operation can be used to implement the [isolating processor](#isolating-processor)
 or by asynchronous processors (e.g. [Batching processor](#batching-processor))
 to avoid race conditions on the log record that is not required to be
 concurrent safe.
-
-#### Event Name
-
-**Status**: [Development](../document-status.md)
-
-A function receiving [ReadWriteLogRecord](#readwritelogrecord) as an argument
-MUST additionally be able to modify the [`EventName`](./data-model.md#event-name).
 
 ## LogRecord Limits
 
