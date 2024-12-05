@@ -485,8 +485,9 @@ If included, they MUST follow the OpenTelemetry
 
 Type: string.
 
-Description: Name that identifies the class / type of event.
+Description: Name that identifies the class / type of the [Event](#events).
 This name SHOULD uniquely identify the event structure (both attributes and body).
+A log record with a non-empty event name is an [Event](#events).
 
 ## Example Log Records
 
