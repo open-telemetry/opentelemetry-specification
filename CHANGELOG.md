@@ -26,9 +26,6 @@ release.
 
 - Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
-
-### Events
-
 - Change `event.name` attribute into top-level event name field.
   ([#4320](https://github.com/open-telemetry/opentelemetry-specification/pull/4320))
 
