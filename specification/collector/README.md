@@ -19,6 +19,18 @@ support for an OpenTelemetry Collector.
 
 ## OpenTelemetry Collector configuration file
 
+An OpenTelemetry Collector configuration file is defined as YAML and _MUST_ support
+the following [minimum structure](https://pkg.go.dev/go.opentelemetry.io/collector/otelcol#Config):
+
+```yaml
+receivers:
+processors:
+exporters:
+connectors:
+extensions:
+service:
+```
+
 ## OpenTelemetry Collector components
 
 For a library to be considered an OpenTelemetry Collector component, it _MUST_
