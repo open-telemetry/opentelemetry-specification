@@ -16,20 +16,29 @@ release.
 
 - Add in-development support for `otlp/stdout` exporter via `OTEL_TRACES_EXPORTER`.
   ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+- Remove the recommendation to not synchronize access to `TracerConfig.disabled`.
+  ([#4310](https://github.com/open-telemetry/opentelemetry-specification/pull/4310))
 
 ### Metrics
 
 - Add in-development support for `otlp/stdout` exporter via `OTEL_METRICS_EXPORTER`.
   ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+- Remove the recommendation to not synchronize access to `MeterConfig.disabled`.
+  ([#4310](https://github.com/open-telemetry/opentelemetry-specification/pull/4310))
 
 ### Logs
 
 - Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+- Remove the recommendation to not synchronize access to `LoggerConfig.disabled`.
+  ([#4310](https://github.com/open-telemetry/opentelemetry-specification/pull/4310))
 - Remove the in-development isolating log record processor.
   ([#4301](https://github.com/open-telemetry/opentelemetry-specification/pull/4301))
 
 ### Events
+
+- Deprecate Events API and SDK in favor of having Events support in the Logs API and SDK.
+  ([#4319](https://github.com/open-telemetry/opentelemetry-specification/pull/4319))
 
 ### Baggage
 
