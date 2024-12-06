@@ -247,7 +247,7 @@ Semantic Conventions defines the set of fields in the OTLP data model:
   - The attribute keys provided on the LogRecord
   - The attribute values provided on the LogRecord that are defined in a list
     of well-known values.
-  - The event name (the value of the `event.name` attribute)
+  - The event name
 
 Things not listed in the above are not expected to remain stable via semantic
 convention and are allowed (or expected) to change. A few examples:

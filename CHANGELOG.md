@@ -34,6 +34,8 @@ release.
   ([#4310](https://github.com/open-telemetry/opentelemetry-specification/pull/4310))
 - Remove the in-development isolating log record processor.
   ([#4301](https://github.com/open-telemetry/opentelemetry-specification/pull/4301))
+- Change `event.name` attribute into top-level event name field.
+  ([#4320](https://github.com/open-telemetry/opentelemetry-specification/pull/4320))
 
 ### Events
 
