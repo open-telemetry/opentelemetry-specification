@@ -1,0 +1,272 @@
+# Resource Provider
+
+Define a mechanism for updating the resources associated with an application.
+
+## Motivation
+
+Resources were originally defined as immutable. For the common cases related to
+server-side application development, because the lifespan for most resources associated
+with server-side applications either match or outlive the lifespan of the application.
+
+However, it turns out that not all swans are white, and some resources utilized
+by applications change while the application is still running. This is especially
+true in client-side applications running in the browser and on mobile devices.
+
+Examples of resources whose availability may change include networking (wifi, cellular, none),
+application state (foreground, background, sleeping), and session management (sessions
+starting and ending without the application being shut down or the browser being
+refreshed).
+
+Tracking these resource changes are critical. Without them, it would be impossible
+to segment the telemetry correctly. The lifespan of a session is a far more important
+segmentation than the lifespan of an application instance, as the application lifespan
+is often somewhat arbitrary. The performance of an application when it is foregrounded
+cannot be understood when the foregrounded telemetry is mixed with backgrounded
+telemetry. Failure modes may exist when network availability drops due to a switch
+in networking – how an application performs when it has access to wifi vs when it
+does not is a critical distinction.
+
+## Explanation
+
+Resources are managed via a ResourceProvider. Setting an attribute on a ResourceProvider
+will cause that attribute value to be included in any future requests for the resource
+object managed by the provider. Programs such as the SDK can listen for resource
+changes and respond accordingly.
+
+## Internal details
+
+### ResourceListener
+
+A ResourceListener is a function that takes a resource reference as a parameter.
+Resource listeners SHOULD NOT be required to be thread safe.
+
+### ResourceProvider
+
+#### NewResourceProvider([resource]) ResourceProvider
+
+NewResourceProvider instantiates an implementation of the ResourceProvider interface.
+
+The ResourceProvider interface has the following methods.
+
+#### MergeResource(resource)
+
+MergeResource creates a new resource, representing the union of the resource parameter
+and the resource contained within the Provider. The ResourceProvider is updated
+to hold a reference to the merged resource, and all OnChange listeners are called
+with this new resource.
+
+#### GetResource() Resource
+
+GetResource returns a reference to the current resource held by the ResourceProvider.
+
+#### OnChange(resourceListener)
+
+Registers a ResourceListener to be called when MergeResource updates the resource.
+
+#### Implementation Notes
+
+For multithreaded systems, a lock SHOULD be used to queue all calls to MergeResource.
+
+The resource reference held by the ResourceProvider SHOULD be updated atomically,
+so that calls to GetResource do not require a lock.
+
+Calls to listeners SHOULD be serialized, to avoid thread safety issues and ensure that
+callbacks are processed in the right order.
+
+### SDK Changes
+
+NewTraceProvider, NewMetricsProvider, and NewLoggerProvider now take a ResourceProvider
+as a parameter. How SDKs handle resource changes is listed under [open questions](#open-questions).
+
+## Trade-offs and mitigations
+
+This change should be fully backwards compatible, with one potential exception:
+fingerprinting. It is possible that an analysis tool which accepts OTLP may identify
+individual services by creating an identifier by hashing all of the resource attributes.
+
+In practice, the only implementation we have discovered that does this is the OpenTelemetry
+Go SDK. But the Go SDK is not a backend; all analysis tools have a specific concept
+of identity that is fulfilled by a specific subject of resource attributes.
+
+Since we control the Go SDK, we can develop a path forward specific to that particular
+library. That path should be identified before this OTEP is accepted.
+
+Beyond fingerprinting, there are no destabilizing changes because the resources
+that we have already declared "immutable" match the lifespan of the application
+and have no reason to be updated. Developers are not going to start messing with
+the service.id arbitrarily just because they can, and resource detectors solve the
+problem of accidentally starting the application while async resources are still
+being fetched.
+
+## Prior art and alternatives
+
+An alternative to updating resources would be to create span, metrics, and log
+processors which attach these resource attributes to every instance of every
+span and log.
+
+There are two problems to this approach. One is that the duplication of attributes
+is very inefficient. This is a problem on clients, which have limited network
+bandwidth and processing power. This problem is compounded by a lack of support
+for gzip and other compression algorithms on the browser.
+
+Second, and perhaps more important, is that this approach does not match our data
+model. These application states are global; they are not specific to any particular
+transaction or event. Span attributes should record information specific to that
+particular operation, log record attributes should record information specific to
+that particular event. The correct place in our data model model for attributes
+that identify the application, describe the environment the application is running
+in, and describe the resources available to that application should be modelled
+as resource attributes.
+
+## Open questions
+
+The primary open question – which must be resolved before this OTEP is accepted –
+is how to handle spans that bridge a change in resources.
+
+For example, a long running background operation may span more than one session.
+Networking may change from wifi to a cellular connection at any time, a user might
+log in at any time, the application might be backgrounded at any time.
+
+Simply put, how should the SDK handle spans that have already started when a resource
+changes? What about the logs that are associated with that span? EntityState can be
+used to record the exact moment when these values change. But resources need to act
+as search indexes and metric dimensions. For those situations, we only get to pick
+one value.
+
+The simplest implementation is for the BatchProcessor to listen for resource changes,
+and to flush the current batch whenever a change occurs. The old batch gets the old
+resource, the new batch gets the new resource. This would be easy to implement,
+but is it actually what we want? Either as part of this OTEP or as a quick follow
+up, we need to define the expected behavior for the BatchProcessor when it is listening
+for resource changes.
+
+## FAQ
+
+### Is there some distinction between "identifying resources" and "updatable resources"?
+
+Surprising as it may be, there is no direct correlation between an attribute being
+"identifying" and that attribute matching the lifespan of an application.
+
+Some resources are used to identify a service instance – `service.name`, `service.instance.id`, etc.
+These resources naturally match the lifespan of the service instance. An "immutability requirement"
+is not necessary in this case because there is no reason to ever update these values.
+
+Other resources are used to identify other critical lifespans, and these values
+do change. For example, the user's identity may change as the user logs in and out
+of the application. And multiple sessions may start and end over the lifespan of
+an application.
+
+Therefore there is no need to conflate "identifying" with "immutable." Telemetry
+simply models reality. If we change a resource attribute that is not supposed to
+change, that is an implementation error. If we don't change a resource attribute
+when the application state changes, that is also an implementation error. With the
+correct tools these errors are unlikely, as it is very obvious when these individual
+attributes should and shouldn't change.
+
+### Why were resources immutable in the first place?
+
+Use of the term "immutable" points at the real reason this requirement was initially
+added to the specification.When an application initially boots up, gathering some resources
+require async operations that may take time to acquire. The start of the application
+must be delayed until all of these resources are resolved, otherwise the initial
+batches of telemetry would be poorly indexed. This initial telemetry is critical
+and too valuable to lose due to a late loading of certain resources.
+
+A convenient cudgel with which to beat developers into doing the right thing is
+to make the resource object "immutable" by not providing an update function. This
+makes it impossible to late load resources and helps to avoid this mistake when
+installing OpenTelemetry in an application.
+
+However, OpenTelemetry has since developed a resource detector pattern that gives
+developers the tools they need to cleanly resolve all initial resources before
+application start. This is a sufficient solution for the bootstrapping problem;
+at this point in OpenTelemetry's development adding an update function to resources
+would not cause issues in this regard.
+
+## Example Usage
+
+Pseudocode example of a ResourceProvider in use. The resource provider is loaded with all available permanent resources, then passed to a TraceProvider. The ResourceProvider is also passed to a session manager, which updates an ephemeral resource in the background.
+
+```
+var resources = {“service.name” = “example-service”};
+
+// Example of a deny list validator.
+var validator = NewDenyListValidator(PERMANENT_RESOURCE_KEYS);
+
+// The ResourceProvider is initialized with
+// a dictionary of resources and a validator.
+var resourceProvider = NewResourceProvider(resources, validator);
+
+// The resourceProvider can be passed to resource detectors 
+// to populate async resources.
+DetectResources(resourceProvider);
+
+// The TraceProvider now takes a ResourceProvider.
+// The TraceProvider calls Freeze on the ResourceProvider.
+// After this point, it is no longer possible to update or add
+// additional permanent resources.
+var traceProvider = NewTraceProvider(resourceProvider);
+
+// Whenever the SessionManager starts a new session
+// it updates the ResourceProvider with a new session id.
+sessionManager.OnChange(
+  func(sessionID){
+    resourceProvider.SetAttribute(“session.id”, sessionID);
+  }
+);
+
+```
+
+## Example Implementation
+
+Pseudocode examples for a possible Validator and ResourceProvider implementation. Attention is placed on making the ResourceProvider thread safe, without introducing any locking or synchronization overhead to `GetResource`, which is the only ResourceProvider method on the hot path for OpenTelemetry instrumentation.
+
+```
+// Example of a thread-safe ResourceProvider
+class ResourceProvider{
+  
+  *Resource resource
+  Lock lock
+  listeners [func(resource){}] // a list of callback functions
+  
+  GetResource(){
+    return this.resource;
+  }
+  
+  OnChange(listener) {
+    this.lock.Acquire();
+
+    listeners.append(listener)
+
+    this.lock.Release();
+  }
+
+  // MergeResource essentially has the same implementation as SetAttribute.
+  MergeResource(resource){
+    this.lock.Acquire();
+
+    var mergedResource = this.resource.Merge(resource)
+
+    // safely change the resource reference without blocking
+    AtomicSwap(this.resource, mergedResource)
+
+    // calling listeners inside of the lock ensures that the listeners do not fire
+    // out of order or get called simultaneously by multiple threads, but would
+    // also allow a poorly implemented listener to block the ResourceProvider.
+    for (listener in listeners) {
+        listener(mergedResource)
+    }
+
+    this.lock.Release();
+
+  }
+
+  FreezePermanent(){
+    this.lock.Acquire();
+
+    this.isFrozen = true;
+
+    this.lock.Release();  
+  }
+}
+```
