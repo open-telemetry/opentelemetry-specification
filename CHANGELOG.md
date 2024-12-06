@@ -35,6 +35,9 @@ release.
 
 ### Events
 
+- Deprecate Events API and SDK in favor of having Events support in the Logs API and SDK.
+  ([#4319](https://github.com/open-telemetry/opentelemetry-specification/pull/4319))
+
 ### Baggage
 
 ### Resource
