@@ -28,7 +28,6 @@
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
-    + [Isolating processor](#isolating-processor)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
@@ -190,9 +189,7 @@ It consists of the following parameters:
   is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
   necessary for implementations to ensure that changes to `disabled` are
-  immediately visible to callers of `Enabled`. I.e. atomic, volatile,
-  synchronized, or equivalent memory semantics to avoid stale reads are
-  discouraged to prioritize performance over immediate consistency.
+  immediately visible to callers of `Enabled`.
 
 ## Additional LogRecord interfaces
 
@@ -238,8 +235,7 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * **Status**: [Development](../document-status.md) - [`EventName`](./data-model.md#event-name)
 
 The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
-The operation can be used to implement the [isolating processor](#isolating-processor)
-or by asynchronous processors (e.g. [Batching processor](#batching-processor))
+The operation can be used by asynchronous processors (e.g. [Batching processor](#batching-processor))
 to avoid race conditions on the log record that is not required to be
 concurrent safe.
 
@@ -386,10 +382,6 @@ make the flush timeout configurable.
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below.
 
-**Status**: [Development](../document-status.md) -
-The standard OpenTelemetry SDK SHOULD implement an isolating processor,
-as described below.
-
 Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
@@ -428,21 +420,6 @@ to make sure that they are not invoked concurrently.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
-
-#### Isolating processor
-
-**Status**: [Development](../document-status.md)
-
-This is an implementation of `LogRecordProcessor` ensuring the log record
-passed to `OnEmit` of the configured `processor` does not share mutable data
-with subsequent registered processors.
-For example, the `OnEmit` implementation of the isolating processor can be
-a decorator that makes a deep copy of the log record before passing it to
-the configured `processor`.
-
-**Configurable parameters:**
-
-* `processor` - processor to be isolated.
 
 ## LogRecordExporter
 

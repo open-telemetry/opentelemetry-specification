@@ -1,6 +1,7 @@
 # Events SDK
 
-**Status**: [Development](../document-status.md)
+**Status**: [Deprecated](../document-status.md) (was never stabilized),
+see the [Logs SDK](./sdk.md) and [Emit Event](./api.md#emit-an-event) in the Logs API for replacement.
 
 <details>
 <summary>Table of Contents</summary>
