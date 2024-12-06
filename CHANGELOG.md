@@ -32,8 +32,13 @@ release.
  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 - Remove the recommendation to not synchronize access to `LoggerConfig.disabled`.
   ([#4310](https://github.com/open-telemetry/opentelemetry-specification/pull/4310))
+- Remove the in-development isolating log record processor.
+  ([#4301](https://github.com/open-telemetry/opentelemetry-specification/pull/4301))
 
 ### Events
+
+- Deprecate Events API and SDK in favor of having Events support in the Logs API and SDK.
+  ([#4319](https://github.com/open-telemetry/opentelemetry-specification/pull/4319))
 
 ### Baggage
 
