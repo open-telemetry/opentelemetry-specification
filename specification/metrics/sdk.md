@@ -976,9 +976,7 @@ default `MeterConfig.disabled=false` and instruments use the default
 aggregation when no matching views match the instrument.
 
 It is not necessary for implementations to ensure that changes
-to `MeterConfig.disabled` are immediately visible to callers of `Enabled`. I.e.
-atomic, volatile, synchronized, or equivalent memory semantics to avoid stale
-reads are discouraged to prioritize performance over immediate consistency.
+to `MeterConfig.disabled` are immediately visible to callers of `Enabled`.
 
 ## Attribute limits
 
