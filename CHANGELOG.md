@@ -9,6 +9,34 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Events
+
+### Baggage
+
+### Resource
+
+### Profiles
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+## v1.40.0 (2024-12-09)
+
+### Context
+
 - Adds optional `GetAll` method to `Getter` in Propagation API, allowing for the retrieval of multiple values for the same key.
   [#4295](https://github.com/open-telemetry/opentelemetry-specification/pull/4295)
 
@@ -32,20 +60,6 @@ release.
  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
 - Remove the recommendation to not synchronize access to `LoggerConfig.disabled`.
   ([#4310](https://github.com/open-telemetry/opentelemetry-specification/pull/4310))
-
-### Events
-
-### Baggage
-
-### Resource
-
-### Profiles
-
-### OpenTelemetry Protocol
-
-### Compatibility
-
-### SDK Configuration
 
 ### Common
 
