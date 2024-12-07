@@ -51,6 +51,9 @@ linkTitle: SDK
   * [Instrument advisory parameters](#instrument-advisory-parameters)
   * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
+- [MeasurementProcessor](#measurementprocessor)
+  * [MeasurementProcessor operations](#measurementprocessor-operations)
+    + [OnMeasure](#onmeasure)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
     + [AlwaysOn](#alwayson)
@@ -983,6 +986,51 @@ Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/README.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
+
+## MeasurementProcessor
+
+**Status**: [Development](../document-status.md)
+
+`MeasurementProcessor` is an interface which allows hooks when a `Measurement` is recorded by an `Instrument`.
+
+`MeasurementProcessors` can be registered directly on SDK `MeterProvider` and they are invoked in the same order as they were registered.
+
+SDK MUST allow users to implement and configure custom processors.
+
+The following diagram shows `MeasurementProcessor`'s relationship to other components in the SDK:
+
+```plaintext
++------------------+
+| MeterProvider    |                 +----------------------+                 +-----------------+
+|   Meter A        | Measurements... |                      | Measurements... |                 |
+|     Instrument X |-----------------> MeasurementProcessor +-----------------> In-memory state |
+|     Instrument Y +                 |                      |                 |                 |
+|   Meter B        |                 +----------------------+                 +-----------------+
+|     Instrument Z |
+|     ...          |                 +----------------------+                 +-----------------+
+|     ...          | Measurements... |                      | Measurements... |                 |
+|     ...          |-----------------> MeasurementProcessor +-----------------> In-memory state |
+|     ...          |                 |                      |                 |                 |
+|     ...          |                 +----------------------+                 +-----------------+
++------------------+
+```
+
+### MeasurementProcessor operations
+
+#### OnMeasure
+
+`OnMeasure` is called when a `Measurement` is recorded. This method is called synchronously on the thread that emitted the `Measurement`, therefore it SHOULD NOT block or throw exceptions.
+
+**Parameters:**
+
+* `measurement` - a [Measurement](./api.md#measurement) that was recorded
+* `context` - the resolved `Context` (the explicitly passed `Context` or the current `Context`)
+
+**Returns:** Void
+
+For a `MeasurementProcessor` registered directly on SDK `MeterProvider`, the `measurement` mutations MUST be visible in next registered processors.
+
+A `MeasuremenetProcessor` may freely modify `measurement` for the duration of the `OnMeasure` call.
 
 ## Exemplar
 
