@@ -63,6 +63,8 @@ release.
 
 ### Common
 
+- The [open-telemetry/oteps](https://github.com/open-telemetry/oteps) repository was merged into the specification repository.
+ ([#4288](https://github.com/open-telemetry/opentelemetry-specification/pull/4288))
 - Lay out core principles for Specification changes.
   ([#4286](https://github.com/open-telemetry/opentelemetry-specification/pull/4286))
 
