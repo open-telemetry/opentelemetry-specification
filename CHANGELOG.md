@@ -33,6 +33,8 @@ release.
 
 ### Supplementary Guidelines
 
+### OTEPS
+
 ## v1.40.0 (2024-12-09)
 
 ### Context
