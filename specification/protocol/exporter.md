@@ -55,7 +55,7 @@ Each configuration option MUST be overridable by a signal specific option.
   - Default: No value [3]
   - Env vars: `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` `OTEL_EXPORTER_OTLP_LOGS_COMPRESSION`
 
-- **Timeout**: Maximum time the OTLP exporter will wait for each batch export.
+- **Timeout**: Maximum time the OTLP exporter will wait for each batch export. Valid values are positive.
   - Default: 10s
   - Env vars: `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT`
 
