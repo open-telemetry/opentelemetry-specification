@@ -108,6 +108,13 @@ gracefully ignore the setting and use the default value if it is defined.
 
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
+### Timeout values
+
+For variables that represent a timeout (e.g. exporter timeout), implementations
+SHOULD validate that values are positive unless they have good reasons not to (
+e.g. backwards compatibility with semantics where a negative or zero value means
+indefinite).
+
 ## General SDK Configuration
 
 | Name                     | Description                                                                                                   | Default                                                                                                                                          | Notes                                                                                                                                                                                                                                                                                    |
@@ -148,27 +155,27 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 - For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25". Default is 1.0 if unset.
 - For `jaeger_remote` and `parentbased_jaeger_remote`: The value is a comma separated list:
   - `endpoint`: the endpoint in form of `scheme://host:port` of gRPC server that serves the sampling strategy for the service ([sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/sampling.proto)).
-  - `pollingIntervalMs`:  in milliseconds indicating how often the sampler will poll the backend for updates to sampling strategy.
+  - `pollingIntervalMs`:  in milliseconds indicating how often the sampler will poll the backend for updates to sampling strategy. Valid values are positive.
   - `initialSamplingRate`:  in the [0..1] range, which is used as the sampling probability when the backend cannot be reached to retrieve a sampling strategy. This value stops having an effect once a sampling strategy is retrieved successfully, as the remote strategy will be used until a new update is retrieved.
   - Example: `endpoint=http://localhost:14250,pollingIntervalMs=5000,initialSamplingRate=0.25`
 
 ## Batch Span Processor
 
-| Name                           | Description                                                      | Default  | Notes                                                 |
-| ------------------------------ | ---------------------------------------------------------------- | -------  | ----------------------------------------------------- |
-| OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000     |                                                       |
-| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000    |                                                       |
-| OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048     |                                                       |
-| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512      | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
+| Name                           | Description                                                      | Default | Notes                                                                             |
+|--------------------------------|------------------------------------------------------------------|---------|-----------------------------------------------------------------------------------|
+| OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000    | Valid values are non-negative.                                                    |
+| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | Valid values are positive.                                                        |
+| OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | Valid values are positive.                                                        |
+| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE. Valid values are positive. |
 
 ## Batch LogRecord Processor
 
-| Name                            | Description                                                      | Default  | Notes                                                  |
-| ------------------------------- | ---------------------------------------------------------------- | -------  | ------------------------------------------------------ |
-| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 1000     |                                                        |
-| OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000    |                                                        |
-| OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048     |                                                        |
-| OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512      | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE |
+| Name                            | Description                                                      | Default | Notes                                                                              |
+|---------------------------------|------------------------------------------------------------------|---------|------------------------------------------------------------------------------------|
+| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 1000    | Valid values are non-negative.                                                     |
+| OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | Valid values are positive.                                                         |
+| OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | Valid values are positive.                                                         |
+| OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE. Valid values are positive. |
 
 ## Attribute Limits
 
@@ -177,32 +184,32 @@ which that SDK implements truncation mechanism.
 
 See the SDK [Attribute Limits](../common/README.md#attribute-limits) section for the definition of the limits.
 
-| Name                              | Description                          | Default | Notes |
-| --------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | no limit|       |
-| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute count      | 128     |       |
+| Name                              | Description                          | Default  | Notes                          |
+|-----------------------------------|--------------------------------------|----------|--------------------------------|
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | no limit | Valid values are non-negative. |
+| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute count      | 128      | Valid values are non-negative. |
 
 ## Span Limits
 
 See the SDK [Span Limits](../trace/sdk.md#span-limits) section for the definition of the limits.
 
-| Name                                   | Description                                    | Default | Notes |
-| -------------------------------------- | ---------------------------------------------- | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | no limit |       |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     |       |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     |       |
+| Name                                   | Description                                    | Default  | Notes                          |
+|----------------------------------------|------------------------------------------------|----------|--------------------------------|
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | no limit | Valid values are non-negative. |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128      | Valid values are non-negative. |
+| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128      | Valid values are non-negative. |
+| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128      | Valid values are non-negative. |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128      | Valid values are non-negative. |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128      | Valid values are non-negative. |
 
 ## LogRecord Limits
 
 See the SDK [LogRecord Limits](../logs/sdk.md#logrecord-limits) section for the definition of the limits.
 
-| Name                                        | Description                                | Default  | Notes |
-| ------------------------------------------- | -------------------------------------------| -------- | ----- |
-| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size       | no limit |       |
-| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed log record attribute count | 128      |       |
+| Name                                        | Description                                | Default  | Notes                          |
+|---------------------------------------------|--------------------------------------------|----------|--------------------------------|
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size       | no limit | Valid values are non-negative. |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed log record attribute count | 128      | Valid values are non-negative. |
 
 ## OTLP Exporter
 
@@ -210,10 +217,10 @@ See [OpenTelemetry Protocol Exporter Configuration Options](../protocol/exporter
 
 ## Zipkin Exporter
 
-| Name                          | Description                                                                        | Default                              |
-| ----------------------------- | ---------------------------------------------------------------------------------- |------------------------------------- |
-| OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces                                                         | `http://localhost:9411/api/v2/spans` |
-| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time (in milliseconds) the Zipkin exporter will wait for each batch export | 10000                                |
+| Name                          | Description                                                                        | Default                              | Notes |
+| ----------------------------- | ---------------------------------------------------------------------------------- |------------------------------------- |-------|
+| OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces                                                         | `http://localhost:9411/api/v2/spans` |       |
+| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time (in milliseconds) the Zipkin exporter will wait for each batch export | 10000                                | Valid values are positive.      |
 
 Additionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:
@@ -308,10 +315,10 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 Environment variables specific for the push metrics exporters (OTLP, stdout, in-memory)
 that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-metricreader).
 
-| Name                          | Description                                                                   | Default | Notes |
-| ----------------------------- | ----------------------------------------------------------------------------- | ------- | ----- |
-| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   |       |
-| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   |       |
+| Name                          | Description                                                                   | Default | Notes                      |
+|-------------------------------|-------------------------------------------------------------------------------|---------|----------------------------|
+| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   | Valid values are positive. |
+| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   | Valid values are positive. |
 
 ## Declarative configuration
 
