@@ -8,7 +8,7 @@ The consumers of OpenTelemetry clients want to:
 2. Avoid performing computationally expensive operations and exporting when emitting a log or event record is unencessary.
 3. Control a minmium a log serverity level on the SDK level.
 4. Filter out log and event records when they are not inside a recording span.
-5. Have fine-grained control of logging pipelines without using an OpenTelemetry Collector (e.g. mobile devices, serverless, IoT).
+5. Have fine-grained filtering control for logging pipelines without using an OpenTelemetry Collector (e.g. mobile devices, serverless, IoT).
 6. Efficiently support high-performance logging destionation like user_events and ETW.
 7. Add sampling for logging.
 
