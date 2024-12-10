@@ -22,6 +22,7 @@ aliases:
   * [Numeric value](#numeric-value)
   * [Enum value](#enum-value)
   * [Duration](#duration)
+  * [Timeout values](#timeout-values)
 - [General SDK Configuration](#general-sdk-configuration)
 - [Batch Span Processor](#batch-span-processor)
 - [Batch LogRecord Processor](#batch-logrecord-processor)
