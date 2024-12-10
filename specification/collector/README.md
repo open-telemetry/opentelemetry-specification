@@ -40,4 +40,6 @@ defined by the OpenTelemetry Collector SIG.
 ## OpenTelemetry Collector Distribution
 
 An OpenTelemetry Collector Distribution (Distro) is a compiled instance
-of an OpenTelemetry Collector with a specific set of components and features.
+of an OpenTelemetry Collector with a specific set of components and features. A
+Distribution _SHOULD_ provide users with tools and/or documentation for adding
+their own components to the Distribution.
