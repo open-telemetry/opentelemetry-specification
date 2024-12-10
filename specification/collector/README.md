@@ -37,6 +37,13 @@ For a library to be considered an OpenTelemetry Collector component, it _MUST_
 implement a [Component interface](https://pkg.go.dev/go.opentelemetry.io/collector/component#Component)
 defined by the OpenTelemetry Collector SIG.
 
+### Compatibility requirements
+
+A component is defined as compatible with an OpenTelemetry Collector when its dependencies are
+source- and version-compatible with the Component interfaces of that Collector.
+
+For example, a Collector derived from version tag v0.100.0 of the [OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector) _MUST_ support all components that 
+are version-compatible with the Golang Component API defined in the `github.com/open-telemetry/opentelemetry-collector/component` module found in that repository for that version tag.
 ## OpenTelemetry Collector Distribution
 
 An OpenTelemetry Collector Distribution (Distro) is a compiled instance
