@@ -36,6 +36,8 @@ release.
   ([#4301](https://github.com/open-telemetry/opentelemetry-specification/pull/4301))
 - Change `event.name` attribute into top-level event name field.
   ([#4320](https://github.com/open-telemetry/opentelemetry-specification/pull/4320))
+- Support complex attributes in the Event API
+  ([#4334](https://github.com/open-telemetry/opentelemetry-specification/pull/4334))
 
 ### Events
 
