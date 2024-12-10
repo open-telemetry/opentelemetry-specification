@@ -4,7 +4,7 @@
 
 The consumers of OpenTelemetry clients want to:
 
-1. Correctly and efficiently bridge features like `Logger.LogLevelEnabled` in log adapter implementations.
+1. Correctly and efficiently bridge features like `LogLevelEnabled` in log bridge/appender implementations.
 2. Avoid performing computationally expensive operations when emitting a log or event record is unencessary.
 3. Control a minmium a log serverity level on the SDK level.
 4. Filter out log and event records when they are not inside a recording span.
