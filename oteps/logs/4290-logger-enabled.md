@@ -2,13 +2,22 @@
 
 ## Motivation
 
-Why should we make this change? What new value would it bring? What use cases does it enable?
+The consumers of OpenTelemetry clients want to:
+
+1. Correctly and efficiently bridge features like `Logger.LogLevelEnabled` in log adapter implementations.
+2. Avoid performing computationally expensive operations when emitting a log or event record is unencessary.
+3. Control a minmium a log serverity level on the SDK level.
+4. Filter out log and event records when they are not inside a recording span.
+5. Have fine-grained control of logging pipelines without using an OpenTelemetry Collector (e.g. mobile devices, serverless, IoT).
+6. Efficiently support high-performance logging destionation like user_events and ETW.
 
 ## Explanation
 
-Explain the proposed change as though it was already implemented and you were explaining it to a user. Depending on which layer the proposal addresses, the "user" may vary, or there may even be multiple.
+For (1) (2), the user can use the Logs API `Logger.Enabled` function, which tells the user wheteher a `Logger` for given arguments is going to emit a log record.
 
-We encourage you to use examples, diagrams, or whatever else makes the most sense!
+For (3) (4), the user can declarativly configure the Logs SDK using `LoggerConfigurator` to set the `disabled`, `minimum_severity_level`, `disabled_not_recorded_spans` of a `LoggerConfig`.
+
+For (5) (6), the user can hook to `Logger.Enabled` Logs API calls by adding a `LogRecordProcessor` implementing `OnEnabled`.
 
 ## Internal details
 
