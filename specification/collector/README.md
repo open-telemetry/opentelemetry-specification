@@ -44,6 +44,7 @@ source- and version-compatible with the Component interfaces of that Collector.
 
 For example, a Collector derived from version tag v0.100.0 of the [OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector) _MUST_ support all components that 
 are version-compatible with the Golang Component API defined in the `github.com/open-telemetry/opentelemetry-collector/component` module found in that repository for that version tag.
+
 ## OpenTelemetry Collector Distribution
 
 An OpenTelemetry Collector Distribution (Distro) is a compiled instance
