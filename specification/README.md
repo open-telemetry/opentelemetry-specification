@@ -33,7 +33,6 @@ path_base_for_github_subdir:
   - [Metrics](metrics/api.md)
   - [Logs](logs/README.md)
     - [API](logs/api.md)
-    - [Event API](logs/event-api.md)
 - SDK Specification
   - [Tracing](trace/sdk.md)
   - [Metrics](metrics/sdk.md)
