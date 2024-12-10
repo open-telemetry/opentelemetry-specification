@@ -37,6 +37,11 @@ For a library to be considered an OpenTelemetry Collector component, it _MUST_
 implement a [Component interface](https://pkg.go.dev/go.opentelemetry.io/collector/component#Component)
 defined by the OpenTelemetry Collector SIG.
 
+Components require a unique identfier as a `type` string to be included in an OpenTelemetry
+Collector. It is possible that multiple components use the same identifier, in which
+case the two components cannot be used simultaneously in a single OpenTelemetry Collector. In
+order to resolve this, the clashing components must use a different identifier.
+
 ### Compatibility requirements
 
 A component is defined as compatible with an OpenTelemetry Collector when its dependencies are
