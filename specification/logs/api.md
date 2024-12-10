@@ -185,8 +185,7 @@ formatted as an [event](./data-model.md#events).
 * [Severity Number](./data-model.md#field-severitynumber) (optional)
 * [Severity Text](./data-model.md#field-severitytext) (optional)
 * [Body](./data-model.md#field-body) (optional)
-* [Attributes](./data-model.md#field-attributes) (optional) Event `Attributes` conform
-  to the [standard definition](../common/README.md#standard-attribute) of an attribute.
+* [Attributes](./data-model.md#field-attributes) (optional)
 
 ## Optional and required parameters
 
