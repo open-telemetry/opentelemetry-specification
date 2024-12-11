@@ -54,7 +54,7 @@ are version-compatible with the Golang Component API defined in the `github.com/
 
 An OpenTelemetry Collector Distribution (Distro) is a compiled instance
 of an OpenTelemetry Collector with a specific set of components and features. A
-Distribution _SHOULD_ provide users with tools and/or documentation for adding
-their own components to the Distribution. Note that the resulting
+Distribution author _SHOULD_ provide users with tools and/or documentation for adding
+their own components to the Distribution's components. Note that the resulting
 binary from updating a Distribution to include new components
 is a different Distribution.
