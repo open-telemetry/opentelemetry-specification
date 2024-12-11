@@ -26,7 +26,7 @@ For (1) (2), the user can use the Logs API `Logger.Enabled` function, which tell
 
 For (3) (4), the user can declaratively configure the Logs SDK using `LoggerConfigurator` to set the `disabled`, `minimum_severity_level`, `disabled_on_sampled_out_spans` of a `LoggerConfig`.
 
-For (5) (6) (7), the user can hook to `Logger.Enabled` Logs API calls by adding to the Logs SDK a `LogRecordProcessor` implementing `OnEnabled`.
+For (5) (6), the user can hook to `Logger.Enabled` Logs API calls by adding to the Logs SDK a `LogRecordProcessor` implementing `OnEnabled`.
 
 ## Internal details
 
