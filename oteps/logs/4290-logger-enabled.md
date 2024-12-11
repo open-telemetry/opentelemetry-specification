@@ -4,12 +4,12 @@
 
 The consumers of OpenTelemetry clients want to:
 
-1. Correctly and efficiently bridge features like `LogLevelEnabled` in log bridge/appender implementations.
+1. **Correctly** and **efficiently** bridge features like `LogLevelEnabled` in log bridge/appender implementations.
 2. Avoid allocating memory to store a log record, avoid performing computationally expensive operations and avoid exporting when emitting a log or event record is unnecessary.
-3. Control a minimum a log serverity level on the SDK level.
+3. Configure a minimum a log serverity level on the SDK level.
 4. Filter out log and event records when they are not inside a recording span.
-5. Have fine-grained filtering control for logging pipelines without using an OpenTelemetry Collector (e.g. mobile devices, serverless, IoT).
-6. Efficiently support high-performance logging destination like Linux user_events and ETW (Event Tracing for Windows).
+5. Have **fine-grained** filtering control for logging pipelines without using an OpenTelemetry Collector (e.g. mobile devices, serverless, IoT).
+6. **Efficiently** support high-performance logging destination like Linux user_events and ETW (Event Tracing for Windows).
 7. Add sampling for logging.
 
 ## Explanation
