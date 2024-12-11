@@ -12,10 +12,9 @@ The consumers of OpenTelemetry clients want to:
 1. **Correctly** and **efficiently** bridge features like `LogLevelEnabled` in log bridge/appender implementations.
 2. Avoid allocating memory to store a log record, avoid performing computationally expensive operations and avoid exporting when emitting a log or event record is unnecessary.
 3. Configure a minimum a log severity level on the SDK level.
-4. Filter out log and event records when they are not inside a recording span.
+4. Filter out log and event records when they are inside a span that has been sampled out (span is valid and has sampled flag of `false`).
 5. Have **fine-grained** filtering control for logging pipelines without using an OpenTelemetry Collector (e.g. mobile devices, serverless, IoT).
 6. **Efficiently** support high-performance logging destination like [Linux user_events](https://docs.kernel.org/trace/user_events.html) and [ETW (Event Tracing for Windows)](https://learn.microsoft.com/windows/win32/etw/about-event-tracing).
-7. Add sampling for logging.
 
 Without a `Logger.Enabled` check in the OpenTelemetry Logs API
 and corresponding implementations in the SDK,
@@ -25,7 +24,7 @@ achieving this goal is not feasible.
 
 For (1) (2), the user can use the Logs API `Logger.Enabled` function, which tells the user whether a `Logger` for given arguments is going to emit a log record.
 
-For (3) (4), the user can declarativly configure the Logs SDK using `LoggerConfigurator` to set the `disabled`, `minimum_severity_level`, `disabled_not_recorded_spans` of a `LoggerConfig`.
+For (3) (4), the user can declaratively configure the Logs SDK using `LoggerConfigurator` to set the `disabled`, `minimum_severity_level`, `disabled_on_sampled_out_spans` of a `LoggerConfig`.
 
 For (5) (6) (7), the user can hook to `Logger.Enabled` Logs API calls by adding to the Logs SDK a `LogRecordProcessor` implementing `OnEnabled`.
 
