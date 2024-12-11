@@ -2,6 +2,10 @@
 
 ## Motivation
 
+In applications requiring extremely high performance,
+minimizing the cost of logging when it is not exported is often more critical
+than optimizing the cost of logging when the log record is of interest.
+
 The consumers of OpenTelemetry clients want to:
 
 1. **Correctly** and **efficiently** bridge features like `LogLevelEnabled` in log bridge/appender implementations.
@@ -11,6 +15,10 @@ The consumers of OpenTelemetry clients want to:
 5. Have **fine-grained** filtering control for logging pipelines without using an OpenTelemetry Collector (e.g. mobile devices, serverless, IoT).
 6. **Efficiently** support high-performance logging destination like Linux user_events and ETW (Event Tracing for Windows).
 7. Add sampling for logging.
+
+Without a `Logger.Enabled` check in the OpenTelemetry Logs API
+and corresponding implementations in the SDK,
+achieving this goal is not feasible.
 
 ## Explanation
 
