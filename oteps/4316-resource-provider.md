@@ -103,13 +103,14 @@ or deleted.
 
 #### Implementation Notes
 
-For multithreaded systems, a lock SHOULD be used to queue all calls to MergeResource.
+For multithreaded systems, a lock SHOULD be used to queue all calls to `UpdateEntity`
+and `DeleteEntity`. This is to help avoid inconsistent reads and writes.
 
 The resource reference held by the ResourceProvider SHOULD be updated atomically,
-so that calls to GetResource do not require a lock.
+so that calls to `GetResource` do not require a lock.
 
-Calls to listeners SHOULD be serialized, to avoid thread safety issues and ensure that
-callbacks are processed in the right order.
+Calls to EntityListeners SHOULD be serialized, to avoid thread safety issues and
+ensure that callbacks are processed in the right order.
 
 ### SDK Changes
 
