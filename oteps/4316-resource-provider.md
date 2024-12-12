@@ -185,7 +185,10 @@ would not cause issues in this regard.
 
 ## Example Usage
 
-Pseudocode example of a ResourceProvider in use. The resource provider is loaded with all available permanent resources, then passed to a TraceProvider. The ResourceProvider is also passed to a session manager, which updates an ephemeral resource in the background.
+Pseudocode example of a ResourceProvider in use. The resource provider is loaded
+with all available permanent resources, then passed to a TraceProvider. The
+ResourceProvider is also passed to a session manager, which updates an ephemeral
+resource in the background.
 
 ```
 var resources = {“service.name” = “example-service”};
@@ -219,7 +222,10 @@ sessionManager.OnChange(
 
 ## Example Implementation
 
-Pseudocode examples for a possible Validator and ResourceProvider implementation. Attention is placed on making the ResourceProvider thread safe, without introducing any locking or synchronization overhead to `GetResource`, which is the only ResourceProvider method on the hot path for OpenTelemetry instrumentation.
+Pseudocode examples for a possible Validator and ResourceProvider implementation.
+Attention is placed on making the ResourceProvider thread safe, without introducing
+any locking or synchronization overhead to `GetResource`, which is the only
+ResourceProvider method on the hot path for OpenTelemetry instrumentation.
 
 ```
 // Example of a thread-safe ResourceProvider
