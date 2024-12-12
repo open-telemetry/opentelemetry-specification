@@ -35,33 +35,71 @@ changes and respond accordingly.
 
 ## Internal details
 
-### ResourceListener
+### EntityListener
 
-A ResourceListener is a function that takes a resource reference as a parameter.
-Resource listeners SHOULD NOT be required to be thread safe.
+An EntityListener MUST provide the following operations
+
+- On EntityState
+- On EntityDelete
+
+#### On EntityState
+
+`On EntityState` MUST accept the following parameters:
+
+* `EntityState`: represents the entity that has changed.
+* `Resource`: represents the entire set of resources after the entity changes
+  have been applied.
+
+#### On EntityDelete
+
+`On EntityDelete` MUST accept the following parameters:
+
+* `EntityDelete`: represents the entity that has been deleted.
+* `Resource`: represents the entire set of resources after the entity
+  has been deleted.
 
 ### ResourceProvider
 
-#### NewResourceProvider([resource]) ResourceProvider
+#### ResourceProvider creation
 
-NewResourceProvider instantiates an implementation of the ResourceProvider interface.
+Creation of a ResourceProvider MUST accept the following parameters:
 
-The ResourceProvider interface has the following methods.
+* `Entities`: a list of entities.
 
-#### MergeResource(resource)
+Internally, the entities MUST be merged in the order provided to create the initial
+resource.
 
-MergeResource creates a new resource, representing the union of the resource parameter
-and the resource contained within the Provider. The ResourceProvider is updated
-to hold a reference to the merged resource, and all OnChange listeners are called
-with this new resource.
+#### Update Entity
 
-#### GetResource() Resource
+`Update Entity` replaces the resource attributes associated with an entity.
 
-GetResource returns a reference to the current resource held by the ResourceProvider.
+Update Entity MUST accept the following parameters:
 
-#### OnChange(resourceListener)
+* `ID`: the ID of the Entity being updated.
+* `attributes`: the new set of attributes associated with the entity.
 
-Registers a ResourceListener to be called when MergeResource updates the resource.
+Internally, `Update Entity` MUST trigger the `On EntityState` operation for all
+registered `EntityListeners`.
+
+#### Delete Entity
+
+`Delete Entity` replaces the resource attributes associated with an entity.
+
+Update Entity MUST accept the following parameters:
+
+* `ID`: the ID of the Entity being updated.
+
+Internally, `Update Entity` MUST trigger the `On EntityState` operation for all
+registered `EntityListeners`.
+
+#### Get Resource
+
+`Get Resource` MUST return a reference to the current resource held by the ResourceProvider.
+
+#### On Change
+
+`On Change` registers an `EntityListener` to be called every time an entity is updated
+or deleted.
 
 #### Implementation Notes
 
