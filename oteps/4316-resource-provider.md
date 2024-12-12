@@ -71,6 +71,22 @@ An EntityListener MUST provide the following operations:
 
 ### ResourceProvider
 
+A `ResourceProvider` MUST provide the following operations:
+
+* `Update Entity`
+* `Delete Entity`
+* `Get Resource`
+* `On Change`
+
+For multithreaded systems, a lock SHOULD be used to queue all calls to `UpdateEntity`
+and `DeleteEntity`. This is to help avoid inconsistent reads and writes.
+
+The resource reference held by the ResourceProvider SHOULD be updated atomically,
+so that calls to `GetResource` do not require a lock.
+
+Calls to EntityListeners SHOULD be serialized, to avoid thread safety issues and
+ensure that callbacks are processed in the right order.
+
 #### ResourceProvider creation
 
 Creation of a ResourceProvider MUST accept the following parameters:
@@ -111,17 +127,6 @@ registered `EntityListeners`.
 
 `On Change` registers an `EntityListener` to be called every time an entity is updated
 or deleted.
-
-#### Implementation Notes
-
-For multithreaded systems, a lock SHOULD be used to queue all calls to `UpdateEntity`
-and `DeleteEntity`. This is to help avoid inconsistent reads and writes.
-
-The resource reference held by the ResourceProvider SHOULD be updated atomically,
-so that calls to `GetResource` do not require a lock.
-
-Calls to EntityListeners SHOULD be serialized, to avoid thread safety issues and
-ensure that callbacks are processed in the right order.
 
 ### SDK Changes
 
@@ -216,7 +221,7 @@ attributes should and shouldn't change.
 ### Why were resources immutable in the first place?
 
 Use of the term "immutable" points at the real reason this requirement was initially
-added to the specification.When an application initially boots up, gathering some resources
+added to the specification. When an application initially boots up, gathering some resources
 require async operations that may take time to acquire. The start of the application
 must be delayed until all of these resources are resolved, otherwise the initial
 batches of telemetry would be poorly indexed. This initial telemetry is critical
