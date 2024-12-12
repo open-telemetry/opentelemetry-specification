@@ -28,19 +28,30 @@ does not is a critical distinction.
 
 ## Explanation
 
-Resources are managed via a ResourceProvider. Setting an attribute on a ResourceProvider
-will cause that attribute value to be included in any future requests for the resource
-object managed by the provider. Programs such as the SDK can listen for resource
-changes and respond accordingly.
+Changes to resources and entities are managed via a ResourceProvider. When the resources
+represented by an entity change, the telemetry system records these changes by updating
+the entity managed by the ResourceProvider. These changes are then propagated to the
+rest of the telemetry system via EntityListeners that have been registered with the
+ResourceProvider.
+
+The loose coupling provided by a ResourceProvider allows each subsystem to focus
+on their various responsibilities without having to be directly aware of each other.
+For a highly extensible cross-cutting concern such as OpenTelemetry, this loose
+coupling is a valuable feature.
 
 ## Internal details
 
+Like the other Providers used in OpenTelemetry, the ResourceProvider MUST allow
+for alternative implementations. This means that the ResourceProvider API and
+the ResourceProvider implementation we provide MUST be loosely coupled, following
+the same API/SDK pattern used everywhere in OpenTelemetry.
+
 ### EntityListener
 
-An EntityListener MUST provide the following operations
+An EntityListener MUST provide the following operations:
 
-- On EntityState
-- On EntityDelete
+- `On EntityState`
+- `On EntityDelete`
 
 #### On EntityState
 
