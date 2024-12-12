@@ -277,52 +277,101 @@ Attention is placed on making the ResourceProvider thread safe, without introduc
 any locking or synchronization overhead to `GetResource`, which is the only
 ResourceProvider method on the hot path for OpenTelemetry instrumentation.
 
-```
+```php
 // Example of a thread-safe ResourceProvider
 class ResourceProvider{
   
   *Resource resource
   Lock lock
-  listeners [func(resource){}] // a list of callback functions
+  Map[string:Entity] entities // a map of Entities using that uses entity IDs as keys
+  Array[EntityListener] listeners
   
-  GetResource(){
+  GetResource() Resource {
     return this.resource;
   }
   
-  OnChange(listener) {
+  OnChange(EntityListener listener) {
     this.lock.Acquire();
 
-    listeners.append(listener)
+    listeners.Append(listener);
 
     this.lock.Release();
   }
 
-  // MergeResource essentially has the same implementation as SetAttribute.
-  MergeResource(resource){
+  UpdateEntity(string ID, Map[Attribute] attributes){
     this.lock.Acquire();
 
-    var mergedResource = this.resource.Merge(resource)
+    // Acquire the correct entity based on ID
+    var entity = this.entities[ID]
+    
+    // If there is no entity, log the error and return. This follows the pattern
+    // of not returning errors in the OpenTelemetry API.
+    if(!entity) {
+      LogError(EntityNotFound);
+      this.lock.Release();
+      return;
+    }
+    
+    // Update the attributes on the entity.
+    entity.attributes.Merge(attributes);
+    
+    // Update the attributes on the resource.
+    var mergedResource = this.resource.Merge(attributes);
 
     // safely change the resource reference without blocking
-    AtomicSwap(this.resource, mergedResource)
+    AtomicSwap(this.resource, mergedResource);
 
     // calling listeners inside of the lock ensures that the listeners do not fire
     // out of order or get called simultaneously by multiple threads, but would
     // also allow a poorly implemented listener to block the ResourceProvider.
-    for (listener in listeners) {
-        listener(mergedResource)
+    for (listener in this.listeners) {
+        // create an EntityState event from the entity
+        var entityState = entity.EntityState();
+        listener.OnEntityState(entityState, mergedResource);
     }
 
     this.lock.Release();
-
   }
 
-  FreezePermanent(){
+  DeleteEntity(string ID, Map[Attribute] attributes){
     this.lock.Acquire();
 
-    this.isFrozen = true;
+    // Acquire the correct entity based on ID
+    var entity = this.entities[ID]
+    
+    // If there is no entity, log the error and return. This follows the pattern
+    // of not returning errors in the OpenTelemetry API.
+    if (!entity) {
+      LogError(EntityNotFound);
+      this.lock.Release();
+      return;
+    }
 
-    this.lock.Release();  
+    // remove the entity from the map
+    this.entities.Delete(ID);
+
+    // Get the attributes to delete from the resource
+    var keys = new Array();
+    for (entity.attributes as name:value) {
+      keys.Push(name)
+    }
+    
+    // Delete the attributes
+    var mergedResource = this.resource.Delete(keys);
+
+    // safely change the resource reference without blocking
+    AtomicSwap(this.resource, mergedResource);
+
+    // calling listeners inside of the lock ensures that the listeners do not fire
+    // out of order or get called simultaneously by multiple threads, but would
+    // also allow a poorly implemented listener to block the ResourceProvider.
+    for (listener in this.listeners) {
+        // create an EntityDelete event from the entity
+        var entityDelete = entity.EntityDelete();
+        listener.OnEntityDelete(entityDelete, mergedResource);
+    }
+
+    this.lock.Release();
   }
 }
 ```
