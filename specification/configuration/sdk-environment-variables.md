@@ -136,7 +136,7 @@ String values are sub-classified into:
 
 * [Enum](#enum).
 
-Normally, string values includes notes describing how they are interpreted by
+Normally, string values include notes describing how they are interpreted by
 implementations.
 
 #### Enum
