@@ -6,15 +6,18 @@ This OTEP provides guidance on how to record exceptions using OpenTelemetry logs
 
 Today OTel supports recording exceptions using span events available through Trace API. Outside of OTel world, exceptions are usually recorded by user apps and libraries using logging libraries and may be recorded as OTel logs via logging bridge.
 
-Log-based exception events have the following advantages over span events:
+Exceptions recorded on logs have the following advantages over span events:
 - they can be recorded for operations that don't have any tracing instrumentation
 - they can be sampled along with or separately from spans
 - they can have different severity levels to reflect how critical the exception is
 - they are already reported natively by many frameworks and libraries
 
-Exception events are essential for troubleshooting. Regardless of how they are recorded, they could be noisy:
-- distributed applications experience transient errors at the rate proportional to their scale and exceptions in logs could be misleading - individual occurrence of transient errors are not necessarily indicative of a problem.
-- exception events can be huge due to stack traces. They can frequently reach several KBs resulting in high costs associated with ingesting and storing exception events. It's also common to log exceptions multiple times while they bubble up leading to duplication and aggravating the verbosity problem.
+Recording exception on logs is essential for troubleshooting. But regardless of how they are recorded, they could be noisy:
+- distributed applications experience transient errors at the rate proportional to their scale and exceptions in logs could be misleading -
+  individual occurrence of transient errors are not necessarily indicative of a problem.
+- exception stack traces can be huge. Corresponding attribute value can frequently reach several KBs resulting in high costs
+  associated with ingesting and storing such logs. It's also common to log exceptions multiple times while they bubble up
+  leading to duplication and aggravating the verbosity problem.
 
 In this OTEP, we'll provide guidance around recording exceptions that minimizes duplication, allows to reduce noise with configuration and
 allows to capture exceptions in absence of a recorded span.
@@ -29,7 +32,7 @@ This guidance applies to general-purpose instrumentations including native ones.
    This rule ensures that exception logs can be recorded independently from traces and covers cases when no span exists,
    or when the corresponding span is not recorded.
 
-2. Exception should be logged with appropriate severity depending on the available context.
+2. An exception should be logged with appropriate severity depending on the available context.
 
    - Exceptions that don't indicate any issue should be recorded with severity not higher than `Info`.
    - Transient errors (even if it's the last try) should be recorded with severity not higher than `Warning`.
@@ -169,29 +172,50 @@ TODO
 1. Breaking change for any component following existing [exception guidance](https://github.com/open-telemetry/opentelemetry-specification/blob/a265ae0628177be25dc477ea8fe200f1c825b871/specification/trace/exceptions.md) which recommends recording exceptions as span events in every instrumentation that detects them.
 
    **Mitigation:**
-   - OpenTelemetry API and/or SDK in the future may provide opt-in span events -> log events conversion, but that's not enough - instrumentations will have to change their behavior to report exception events with appropriate severity (or stop reporting exceptions).
+   - OpenTelemetry API and/or SDK in the future may provide opt-in span events -> log-based events conversion,
+     but that's not enough - instrumentations will have to change their behavior to report exception logs
+     with appropriate severity (or stop reporting them).
    - TODO: document opt-in mechanism similar to `OTEL_SEMCONV_STABILITY_OPT_IN`
 
-2. Recording exceptions as log-based events would result in UX degradation for users leveraging trace-only backends such as Jaeger.
+1. Recording exceptions as log-based events would result in UX degradation for users
+   leveraging trace-only backends such as Jaeger.
 
    **Mitigation:**
-   - OpenTelemetry API and/or SDK may provide span events -> log events conversion. See also [Event vision OTEP](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0265-event-vision.md#relationship-to-span-events).
+   - OpenTelemetry API and/or SDK may provide span events -> log events conversion.
+     See also [Event vision OTEP](./0265-event-vision.md#relationship-to-span-events).
 
 ## Prior art and alternatives
 
 Alternatives:
 
-1. Record exceptions only when exception is handled (or remains unhandled). This relies on the user applications to log them correctly and consistently, it also makes it impossible to add context available deep in the stack where exception happened.
-2. Record exception events whenever exception is detected (even if exception is handled or rethrown), use additional attributes and/or severity so that it can be filtered out by the processing pipeline. This OTEP does not prevent evolution in this direction.
-3. (Variation of 2) Exception stack traces are the most problematic in terms of volume. We can record exception type and message whenever caller feels like recording exception information and only record stacktrace when the exception is thrown. This OTEP does not prevent evolution in this direction.
-4. OTel may deduplicate exception events and mark exception instances as logged (augment exception instance or keep a small cache of recently logged exceptions). This can potentially mitigate the problem for existing application when it logs exceptions extensively. We should still provide guidance for the greenfield applications and libraries to optimize logging.
+1. Record exceptions only when exception is handled (or remains unhandled). This relies
+   on the user applications to log them correctly and consistently, it also makes
+   it impossible to add context available deep in the stack where exception happened.
+2. Record exception events whenever exception is detected (even if exception is handled or rethrown),
+   use additional attributes and/or severity so that it can be filtered out by the processing pipeline.
+   This OTEP does not prevent evolution in this direction.
+3. (Variation of 2) Exception stack traces are the most problematic in terms of volume.
+   We can record exception type and message whenever caller feels like recording exception information
+   and only record stacktrace when the exception is thrown.
+   This OTEP does not prevent evolution in this direction.
+4. OTel may deduplicate exception events by marking exception instances as logged
+   (augment exception instance or keep a small cache of recently logged exceptions).
+   This can potentially mitigate the problem for existing application when it logs exceptions extensively.
+   We should still provide optimal guidance for the greenfield applications and libraries.
 
 ## Open questions
 
-1. This OTEP assumes that client libraries (in general) are already instrumented with logs natively. It's valid for some environments (e.g. .NET, Java, or Python)
-   which have standard (or widely used) structured logging libraries. In languages and ecosystem without common logging libraries, we cannot rely on exceptions
-   to be logged where they are thrown.
-   As a result instrumentation libraries may need to log exceptions every time they see them, resulting in possible duplication.
+1. This OTEP assumes that the majority of client libraries are already instrumented
+   with logs natively. It should be the case for some environments (e.g. .NET, Java,
+   Python, Golang, or Rust) which have standard or widely used structured logging
+   libraries. In languages and ecosystem without common logging libraries,
+   we cannot rely on exceptions to be logged where they are thrown.
+
+   As a result instrumentation libraries may need to log exceptions every time
+   they see them, resulting in possible duplication.
+
+   Are we aware of environments where we don't have widely available logging libs
+   making this OTEP less relevant for them?
 
 ## Future possibilities
 
