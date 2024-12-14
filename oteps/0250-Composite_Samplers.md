@@ -214,7 +214,6 @@ The `ConsistentAlwaysOn` sampler MUST provide a `SamplingIntent` with
 - `GetAttributes` returning an empty set,
 - `UpdateTraceState` returning its argument, without any modifications.
 
-
 #### Constructing `SamplingResult`
 
 The process of constructing the final `SamplingResult` in response to a call to `ShouldSample` on the root sampler of the composite samplers tree consists of the following steps.
