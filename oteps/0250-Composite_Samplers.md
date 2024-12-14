@@ -194,8 +194,26 @@ The arguments are the same as for [`ShouldSample`](https://github.com/open-telem
 The return value is a structure (`SamplingIntent`) with the following elements:
 
 - The THRESHOLD value represented as a 14-character hexadecimal string, with value of `null` representing non-probabilistic `DROP` decision (implementations MAY use different representation, if it appears more performant or convenient),
+- A function (`IsAdjustedCountReliable`) that provides a `boolean` value indicating that the adjusted count (calculated as reciprocal of the sampling probability) can be faithfully used to estimate span metrics,
 - A function (`GetAttributes`) that provides a set of `Attributes` to be added to the `Span` in case of positive final sampling decision,
 - A function (`UpdateTraceState`) that given an input `Tracestate` and sampling Decision provides a `Tracestate` to be associated with the `Span`. The samplers SHOULD NOT add or modify the `th` value for the `ot` key within these functions.
+
+#### Requirements for the basic samplers
+
+The `ConsistentAlwaysOff` sampler MUST provide a `SamplingIntent` with
+
+- The THRESHOLD value of `null` (or equivalent),
+- `IsAdjustedCountReliable` returning `false`,
+- `GetAttributes` returning an empty set,
+- `UpdateTraceState` returning its argument, without any modifications.
+
+The `ConsistentAlwaysOn` sampler MUST provide a `SamplingIntent` with
+
+- The THRESHOLD value of `00000000000000` (or equivalent),
+- `IsAdjustedCountReliable` returning `true`,
+- `GetAttributes` returning an empty set,
+- `UpdateTraceState` returning its argument, without any modifications.
+
 
 #### Constructing `SamplingResult`
 
@@ -203,9 +221,11 @@ The process of constructing the final `SamplingResult` in response to a call to 
 
 - The sampler gets its own `SamplingIntent`, it is a recursive process as described below (unless the sampler is a leaf),
 - The sampler compares the received THRESHOLD value with the trace Randomness value to arrive at the final sampling `Decision`,
-- In case of a positive sampling decision the sampler calls the received `GetAttributes` function to determine the set of `Attributes` to be added to the `Span`, in most cases it will be a recursive step,
 - The sampler calls the received `UpdateTraceState` function passing the parent `Tracestate` and the final sampling `Decision` to get the new `Tracestate` to be associated with the `Span` - again, in most cases this is a recursive step,
-- The sampler modifies (or removes) the `th` value for the `ot` key in the `Tracestate` according to the final sampling `Decision` and the THRESHOLD used in the second step above.
+- In case of positive sampling decision:
+  - the sampler calls the received `GetAttributes` function to determine the set of `Attributes` to be added to the `Span`, in most cases it will be a recursive step,
+  - the sampler calls the received `IsAdjustedCountReliable` function, and in case of `true` it modifies the `th` value for the `ot` key in the `Tracestate` according to the received THRESHOLD; if the returned value is `false`, it removes the `th` value for the `ot` key from the `Tracestate`,
+- In case of negative sampling decision, it removes the `th` value for the `ot` key from the `Tracestate`.
 
 ### ConsistentRuleBased
 
@@ -226,7 +246,8 @@ Upon invocation of its `GetSamplingIntent` function, it MUST go through the whol
 
 `ConsistentAnyOf` sampler MUST return a `SamplingIntent` which is constructed as follows:
 
-- If any of the delegates returned a non-`null` threshold value, the resulting threshold is the lexicographical minimum value from the set of those non-`null` values, otherwise `null`.
+- If any of the delegates returned a non-`null` threshold value, the resulting threshold is the lexicographical minimum value T from the set of those non-`null` values, otherwise `null`.
+- The `IsAdjustedCountReliable` returns `true`, if any of the delegates returning the threshold value equal to T returns `true` upon calling its `IsAdjustedCountReliable` function, otherwise it returns `false`.
 - The `GetAttributes` function calculates the union of `Attribute` sets as returned by the calls to `GetAttributes` function for each delegate, in the declared order.
 - The `UpdateTraceState` function makes a chain of calls to the `UpdateTraceState` functions as returned by the delegates, passing the received `Tracestate` as argument to subsequent calls and returning the last value received.
 
@@ -246,8 +267,9 @@ Upon invocation of its `GetSamplingIntent` function, the composite sampler MUST 
 
 The returned `SamplingIntent` is constructed as follows.
 
-- If using the obtained threshold value as the final threshold would entail sampling more spans than the declared target rate, the sampler SHOULD increase the threshold to a value that would meet the target rate. Several algorithms can be used for threshold adjustment, no particular behavior is prescribed by the specification though.
-- The `GetAttributes` function returns the union of the set of `Attributes` returned by calling the delegate's `GetAttributes` and own `Attributes`.
+- If using the obtained threshold value as the final threshold would entail sampling more spans than the declared target rate, the sampler SHOULD set the threshold to a value that would meet the target rate. Several algorithms can be used for threshold adjustment, no particular behavior is prescribed by the specification though.
+- The `IsAdjustedCountReliable` returns the result of calling this function on the `SamplingIntent` provided by the delegate.
+- The `GetAttributes` function returns the result of calling this function on the `SamplingIntent` provided by the delegate.
 - The `UpdateTraceState` function returns the `Tracestate` as returned by calling `UpdateTraceState` from the delegate's `SamplingIntent`.
 
 TO DO: consider introducing a `ConsistentConjuntion` sampler (similar to `Conjunction` from Approach One) that would generalize the relationship between the delegate and the principal sampler, and remove the explicit delegate from `ConsistentRateLimiting`.
