@@ -168,6 +168,16 @@ to add a distinct `LogRecordFilterer` abstraction.
 However, this approach is less suited for use case (5)
 and offers limited flexibility for use case (6).
 
+### Add LogRecordExporter.Enabled
+
+There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/pull/4290#discussion_r1878379347)
+to additionally extend `LogRecordExporter` with `Enabled` operation.
+However, this extension seems unnecessary.
+The `LogRecordExporter` abstraction is primarily designed
+for batching exporters, whereas the (5) use cases is focused
+on synchronous exporters, which can be implemented as a `LogRecordProcessor`.
+Skipping this additional level of abstraction would also reduce overhead.
+
 ## Open questions
 
 ### Need of LoggerConfig.disabled_on_sampled_out_spans
