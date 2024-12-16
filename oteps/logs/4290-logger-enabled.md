@@ -37,9 +37,16 @@ For (1) (2), the user can use the Logs API `Logger.Enabled` function,
 which tells the user whether a `Logger` for given arguments
 is going to emit a log record.
 
-For (3) (4), the user can declaratively configure the Logs SDK
-using `LoggerConfigurator` to set the `disabled`, `minimum_severity_level`,
-and maybe even `disabled_on_sampled_out_spans` of a `LoggerConfig`.
+For (3), the user can declaratively configure the Logs SDK
+using `LoggerConfigurator` to set the `minimum_severity_level`
+of a `LoggerConfig`.
+
+For (4), the user can use the Tracing API to check whether
+there is a sampled span in the current context before creating
+and emitting log record.
+However, the user can may also want to declaratively configure the Logs SDK
+using `LoggerConfigurator` to set the `disabled_on_sampled_out_spans`
+of a `LoggerConfig`.
 
 For (5) (6), the user can hook to `Logger.Enabled` Logs API calls
 by adding to the Logs SDK a `LogRecordProcessor` implementing `Enabled`.
