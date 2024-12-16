@@ -118,7 +118,7 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 For some langagues extending the `LogRecordProcessor` may be seen as breaking.
 For these languages implementing `LogRecordProcessor.Enabled` must be optional.
 The SDK `LogRecordProcessor` must return `true` if `Enabled` is not implemented.
-This is the approach currently taken by OpenTelemetry Go.
+This approach is currently taken by OpenTelemetry Go.
 
 ## Prior art
 
@@ -142,36 +142,40 @@ This is the approach currently taken by OpenTelemetry Go.
 Regarding the (5) use case,
 OpenTelemetry Rust provides
 [OpenTelemetry Log Exporter for Linux user_events](https://github.com/open-telemetry/opentelemetry-rust-contrib/blob/1cb39edbb6467375f71f5dab25ccbc49ac9bf1d5/opentelemetry-user-events-logs/src/logs/exporter.rs)
-which enables emitting logs efficiently to user_events.
+enabling efficient log emission to user_events.
 
 Regarding the (6) use case,
 OpenTelemetry Go Contrib provides
 [`minsev` processor](https://pkg.go.dev/go.opentelemetry.io/contrib/processors/minsev)
-which enables to have different severity levels
-for different log record destinations.
+allowing distinict minimum severity levels
+for different log destinations.
 
 ## Alternatives
 
-There was a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2501688210)
-to make the `LoggerConfig` to support dynamic evaluation
-instead of supporting only static configuration.
-However, it seems that the purpose of the `LoggerConfig` is static configuration.
-Moreover, both (5) and (6) use cases are coupled to log record processing,
-therefore it seems more straighforward to extend `LogRecordProcessor`.
+### Dynamic Evaluation in LoggerConfig
 
-There was a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2354859647)
-to add a separate `LogRecordFilterer` abstraction.
-However, it does not looks well-suited for (5) use case
-and also would not give a lot flexibility for (6) use case.
+There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2501688210)
+suggested dynamic evaluation in `LoggerConfig` instead of static configuration
+to make the `LoggerConfig` to support dynamic evaluation.
+However, since the purpose of `LoggerConfig` is static configuration,
+and use cases (5) and (6) are tied to log record processing,
+extending `LogRecordProcessor` is more straightforward.
+
+### Separate LogRecordFilterer Abstraction
+
+There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2354859647)
+to add a distinct `LogRecordFilterer` abstraction.
+However, this approach is less suited for use case (5)
+and offers limited flexibility for use case (6).
 
 ## Open questions
 
-At this point of time, it is not yet known if `LoggerConfig`
-needs a new `disabled_on_sampled_out_spans` field.
-It is difficult to know whether it is not only the API caller
-who should know whether the log record should not be emitted
-when the span is not sampled. For instrumentation libraries
-it may make more sense to control it on the API level, e.g.:
+### Need of LoggerConfig.disabled_on_sampled_out_spans
+
+Should LoggerConfig include a `disabled_on_sampled_out_spans` field?
+It is uncertain if API callers alone should decide
+whether to emit log records for spans that are not sampled.
+For instrumentation libraries, API-level control might be more appropriate, e.g.:
 
 <!-- markdownlint-disable no-hard-tabs -->
 ```go
@@ -183,6 +187,10 @@ if trace.SpanContextFromContext(ctx).IsSampled() && logger.Enabled(ctx, params) 
 
 ## Future possibilities
 
-The `Enabled` API may in future also accept
-an optional `Event Name` parameter
-given it will be relevant for processing event records.
+The `Enabled` API could be extended in the future
+to include additional parameters, such as `Event Name`,
+for processing event records.
+This would offer a simpler design to use the `LogRecordProcessor`
+for both log records and event records.
+Reference: [Add EventName parameter to Logger.Enabled #4220](https://github.com/open-telemetry/opentelemetry-specification/issues/4220).
+
