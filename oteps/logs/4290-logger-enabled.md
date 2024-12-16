@@ -85,7 +85,11 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 		return false
 	}
 	if params.Severity > config.MinSeverityLevel {
-		// The severity is less severe than the minimum level.
+		// The severity is less severe than the logger minimum level.
+		return false
+	}
+	if config.DisabledNotSampledSpans && !trace.SpanContextFromContext(ctx).IsSampled() {
+		// The logger is disabled on sampled out spans.
 		return false
 	}
 
