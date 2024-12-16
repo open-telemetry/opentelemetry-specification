@@ -158,7 +158,7 @@ and also would not give a lot flexibility for (6) use case.
 
 ## Open questions
 
-At this point of time, it is not yet known if `Logger.Config`
+At this point of time, it is not yet known if `LoggerConfig`
 needs a new `disabled_on_sampled_out_spans` field.
 It is difficult to know whether it is not only the API caller
 who should know whether the log record should not be emitted
