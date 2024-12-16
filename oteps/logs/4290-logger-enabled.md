@@ -54,6 +54,7 @@ by adding to the Logs SDK a `LogRecordProcessor` implementing `Enabled`.
 ## Internal details
 
 Regarding (1) (2), the Logs API specification has already introduced `Logger.Enabled`:
+
 - [Add Enabled method to Logger #4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020)
 - [Define Enabled parameters for Logger #4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203)
 
@@ -84,6 +85,7 @@ as it means that there no processor does is going to process
 the log record.
 Pseudo-code:
 
+<!-- markdownlint-disable no-hard-tabs -->
 ```go
 func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 	config := l.config()
@@ -111,6 +113,7 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 	return false
 }
 ```
+<!-- markdownlint-enable no-hard-tabs -->
 
 ## Trade-offs and mitigations
 
@@ -172,11 +175,13 @@ who should know whether the log record should not be emitted
 when the span is not sampled. For instrumentation libraries
 it may make more sense to control it on the API level, e.g.:
 
+<!-- markdownlint-disable no-hard-tabs -->
 ```go
 if trace.SpanContextFromContext(ctx).IsSampled() && logger.Enabled(ctx, params) {
 	logger.Emit(ctx, createLogRecord(payload))
 }
 ```
+<!-- markdownlint-enable no-hard-tabs -->
 
 ## Future possibilities
 
