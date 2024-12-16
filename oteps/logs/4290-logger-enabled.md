@@ -13,8 +13,8 @@ The consumers of OpenTelemetry clients want to:
 2. Avoid allocating memory to store a log record, avoid performing computationally expensive operations and avoid exporting when emitting a log or event record is unnecessary.
 3. Configure a minimum a log severity level on the SDK level.
 4. Filter out log and event records when they are inside a span that has been sampled out (span is valid and has sampled flag of `false`).
-5. Have **fine-grained** filtering control for logging pipelines without using an OpenTelemetry Collector (e.g. mobile devices, serverless, IoT).
-6. **Efficiently** support high-performance logging destination like [Linux user_events](https://docs.kernel.org/trace/user_events.html) and [ETW (Event Tracing for Windows)](https://learn.microsoft.com/windows/win32/etw/about-event-tracing).
+5. **Efficiently** support high-performance logging destination like [Linux user_events](https://docs.kernel.org/trace/user_events.html) and [ETW (Event Tracing for Windows)](https://learn.microsoft.com/windows/win32/etw/about-event-tracing).
+6. Allow **fine-grained** filtering control for logging pipelines without using an OpenTelemetry Collector (e.g. mobile devices, serverless, IoT).
 
 Without a `Logger.Enabled` check in the OpenTelemetry Logs API
 and corresponding implementations in the SDK,
