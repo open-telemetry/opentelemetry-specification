@@ -26,116 +26,147 @@ This guidance applies to general-purpose instrumentations including native ones.
 
 ## Guidance
 
+This guidance boils down to the following:
+
+- we should record full exception details including stack traces only for unhandled exceptions (by default).
+- we should log error details and context when the error happens. These records don't need need to include exception stack traces unless this exception is unhandled.
+- we should avoid logging the same error as it propagates up through the stack.
+- we should log errors with appropriate severity ranging from `Trace` to `Fatal`.
+
+> [!NOTE]
+>
+> Based on this guidance non-native instrumentations should record exceptions in top-level instrumentations only (#2 above)
+
+### Details
+
 1. Exceptions should be recorded as [logs](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md)
    or [log-based events](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
 
-   This rule ensures that exception logs can be recorded independently from traces and covers cases when no span exists,
-   or when the corresponding span is not recorded.
-
-2. An exception should be logged with appropriate severity depending on the available context.
-
-   - Exceptions that don't indicate any issue should be recorded with severity not higher than `Info`.
-   - Transient errors (even if it's the last try) should be recorded with severity not higher than `Warning`.
-
-   This rule enables typical logging mechanisms to control logs volume.
-
-3. An exception log should be recorded when the exception instance is created and thrown for the first time.
-   This includes new exception instances that wrap other exception(s).
-
-   This rule ensures that an exception log is recorded at least once for each exception thrown.
-
-4. An exception log should not be recorded when an exception is handled or rethrown as is, except the following cases:
-   - exceptions handled in global exception handlers (see #5 below)
-   - exceptions from code that doesn't record exception logs in a way that is compatible with OTel.
-
-   This rule ensures that an exception log is recorded at most once for each *handled* exception.
-
-5. Instrumentations for incoming requests, message processing, background job execution, or others that wrap user code and usually create local root spans, should record logs
+2. Instrumentations for incoming requests, message processing, background job execution, or others that wrap user code and usually create local root spans, should record logs
    for unhandled exceptions with `Error` severity and [`exception.escaped`](https://github.com/open-telemetry/semantic-conventions/blob/v1.29.0/docs/attributes-registry/exception.md) flag set to `true`.
 
+    <!-- TODO: do we need an `exception.unhandled` attribute instead of `exception.escaped`? -->
    Some runtimes and frameworks provide global exception handler that can be used to record exception logs. Priority should be given to the instrumentation point where the operation context is available.
 
-    <!-- TODO: do we need an `exception.unhandled` attribute instead of `exception.escaped`? -->
+3. It's recommended to record exception stack traces only for unhandled exceptions in cases outlined in #2 above.
 
-   This allows to record unhandled exception with proper severity and distinguish them from handled ones.
+4. Native instrumentations should record log describing an error and the context it happened in
+   when this error is detected. Corresponding log record should not contain exception stack
+   traces (if an exception was thrown/caught) unless such exceptions usually remain unhandled.
 
-6. When recording exception on logs, user applications and instrumentations are encouraged to put additional attributes
+5. An error should be logged with appropriate severity depending on the available context.
+
+   - Error that don't indicate any issue should be recorded with severity not higher than `Info`.
+   - Transient errors (even if it's the last try) should be recorded with severity not higher than `Warning`.
+   - Unhandled exceptions that don't result in application shutdown should be recorded with severity `Error`
+   - Errors that result in application shutdown should be recorded with severity `Fatal`
+
+6. Instrumentations should not log errors or exceptions that are handled or
+   are propagated as is, except ones handled in global exception handlers (see #2 below)
+
+   If a new exception is created based on the original one or a new details about the error become available,
+   instrumentation may record another error (without stack trace)
+
+7. When recording exception on logs, user applications and instrumentations are encouraged to put additional attributes
    to describe the context that the exception was thrown in.
    They are also encouraged to define their own error events and enrich them with `exception.*` attributes.
 
+## API changes
+
+It should not be an instrumentation library concern to decide whether exception stack trace should be recorded or not.
+Library may write logs providing exception instance through a log bridge and not be aware of this guidance.
+
+It also maybe desirable by some vendors/apps to record all the exception details.
+
+OTel Logs API should provide additional methods that enrich log record with exception details such as
+`addException(exception)` (`addUnhandledException`, etc), similar to [RecordException](../specification/trace/api.md?plain=1#L682)
+method on span.
+
+OTel SDK should implement such methods and set exception attributes based on configuration
+and in the optimal way. This would also provide a more scalable way to evolve this guidance
+and extend configuration options if necessary.
+
 ### Examples
 
-#### Catching exception from client library call
-
-If underlying client library is already recording exceptions using OTel-compatible logger facade, the caller should not record exception event.
+#### Catching exception from client library in a user application
 
 ```java
 StorageClient client = createClient(endpoint, credential);
 ...
 try {
-    // let's assume that the underlying client library is already
-    // recording exceptions using OTel-compatible logger facade.
     BinaryData content = client.download(contentId);
 
     return response(content, HttpStatus.OK);
 } catch (ContentNotFoundException ex) {
     // we don't record exception here, but may record a log record without exception info
     logger.logRecordBuilder()
-        // let's assume it's expected that some content can disappear
-        .severityNumber(Severity.INFO)
-        .addAttribute(AttributeKey.stringKey("error.type"), ex.getClass().getCanonicalName())
         .addAttribute(AttributeKey.stringKey("com.example.content.id"), contentId)
+        .severityNumber(Severity.INFO)
+        // let's assume it's expected that some content can disappear
+        .addAttribute(AttributeKey.stringKey("exception.type"), ex.getClass().getCanonicalName())
+        .addAttribute(AttributeKey.stringKey("exception.message"), ex.getMessage())
+         // ideally we should provide the following method for convenience, optimization,
+         // and to support different behavior behind config options
+         //.addException(ex)
         .emit();
 
     return response(HttpStatus.NOT_FOUND);
 } catch (NotAuthorizedException ex) {
     // let's assume it's really unexpected - service lost access to the underlying storage
+    // since we're returning error response without an exception, we
     logger.logRecordBuilder()
         .severityNumber(Severity.ERROR)
-        .addAttribute(AttributeKey.stringKey("error.type"), ex.getClass().getCanonicalName())
         .addAttribute(AttributeKey.stringKey("com.example.content.id"), contentId)
+         // ideally we should provide the following method for convenience, optimization,
+         // and to support different behavior behind config options
+         //.addException(ex)
+        .addAttribute(AttributeKey.stringKey("exception.type"), ex.getClass().getCanonicalName())
+        .addAttribute(AttributeKey.stringKey("exception.message"), ex.getMessage())
         .emit();
 
     return response(HttpStatus.INTERNAL_SERVER_ERROR);
 }
 ```
 
-#### Recording exceptions inside the library (native instrumentation)
+#### Recording error inside the library (native instrumentation)
 
 It's a common practice to record exceptions using logging libraries. Client libraries that are natively instrumented with OpenTelemetry should
 leverage OTel Events/Logs API for their exception logging purposes.
 
 ```java
-public class MyClient {
+public class StorageClient {
 
     private final Logger logger;
     ...
     public BinaryData getContent(String contentId) {
+         HttpResponse response = client.get(contentId);
+         if (response.statusCode() == 200) {
+             return readContent(response);
+         }
 
-        // let's assume as have logging interceptor in our
-        // http client pipeline and exception are logged there
-        // or HTTP client already records exceptions using logger
-        // supported by OTel
-        HttpResponse response = client.get(contentId);
-        if (response.statusCode == 200) {
-            return readContent(response);
+         logger.logRecordBuilder()
+            // we may set different levels depending on the status code, but in general
+            // we expect caller to handle the error, so this is at most warning
+            .setSeverity(Severity.WARN)
+            .addAttribute(AttributeKey.stringKey("com.example.content.id"), contentId)
+            .addAttribute(AttributeKey.stringKey("http.response.status_code"), response.statusCode())
+            // ideally we should provide the following method for convenience, optimization,
+            // and to support different behavior behind config options
+            //.addException(ex)
+            .addAttribute(AttributeKey.stringKey("exception.type"), ex.getClass().getCanonicalName())
+            .addAttribute(AttributeKey.stringKey("exception.message"), ex.getMessage())
+            .emit();
+
+        if (response.statusCode() == 404) {
+            throw new ContentNotFoundException(readErrorInfo(response));
         }
 
-        MyClientException ex = new MyClientException(response.statusCode(), readErrorInfo(response));
-
-        logger.logRecordBuilder()
-            .setSeverity(Severity.INFO)
-            .addAttribute(AttributeKey.stringKey("com.example.content.id"), contentId)
-            .addAttribute(AttributeKey.stringKey("exception.type"), ex.getClass().getCanonicalName())
-            .addAttribute(AttributeKey.stringKey("exception.name"), ex.getMessage())
-            .addAttribute(AttributeKey.stringKey("exception.stacktrace"), getStackTrace(ex))
-            .emit();
+        ...
     }
 }
 ```
 
-Some libraries or runtimes don't record exception logs or record them in ways that are not compatible with OpenTelemetry. In this case, it's recommended to
-record exception event when the exception is rethrown.
+Network level errors are part of normal life, we should consider using low severity for them
 
 ```java
 public class Connection {
@@ -146,15 +177,12 @@ public class Connection {
         try {
             return socketChannel.write(content);
         } catch (Throwable ex) {
-            // we're re-throwing the exception here, but still recording it on logs
-            // since the underlying platform code may or may not record exception logs depending on JRE,
-            // configuration, and other implementation details
             logger.logRecordBuilder()
+              // we'll retry it, so it's Info or lower
               .setSeverity(Severity.INFO)
               .addAttribute("connection.id", this.getId())
               .addAttribute(AttributeKey.stringKey("exception.type"), ex.getClass().getCanonicalName())
-              .addAttribute(AttributeKey.stringKey("exception.name"), ex.getMessage())
-              .addAttribute(AttributeKey.stringKey("exception.stacktrace"), getStackTrace(ex))
+              .addAttribute(AttributeKey.stringKey("exception.message"), ex.getMessage())
               .emit();
 
             throw ex;
@@ -163,7 +191,7 @@ public class Connection {
 }
 ```
 
-#### HTTP server instrumentation
+#### HTTP server instrumentation/global exception handler
 
 TODO
 
@@ -188,41 +216,27 @@ TODO
 
 Alternatives:
 
-1. Record exceptions only when exception is handled (or remains unhandled). This relies
-   on the user applications to log them correctly and consistently, it also makes
-   it impossible to add context available deep in the stack where exception happened.
-2. Record exception events whenever exception is detected (even if exception is handled or rethrown),
-   use additional attributes and/or severity so that it can be filtered out by the processing pipeline.
-   This OTEP does not prevent evolution in this direction.
-3. (Variation of 2) Exception stack traces are the most problematic in terms of volume.
-   We can record exception type and message whenever caller feels like recording exception information
-   and only record stacktrace when the exception is thrown.
-   This OTEP does not prevent evolution in this direction.
-4. OTel may deduplicate exception events by marking exception instances as logged
+1. Deduplicate exception info on logs. We can mark exception instances as logged
    (augment exception instance or keep a small cache of recently logged exceptions).
    This can potentially mitigate the problem for existing application when it logs exceptions extensively.
    We should still provide optimal guidance for the greenfield applications and libraries.
 
+2. Log full exception info only when exception is thrown for the first time
+   (including new exceptions wrapping original ones). This results in at-most-once
+   logging, but even this is known to be problematic since absolute majority of exceptions
+   are handled.
+   It also relies on the assumption that most libraries will follow this guidance.
+
 ## Open questions
 
-1. This OTEP assumes that the majority of client libraries are already instrumented
-   with logs natively. It should be the case for some environments (e.g. .NET, Java,
-   Python, Golang, or Rust) which have standard or widely used structured logging
-   libraries. In languages and ecosystem without common logging libraries,
-   we cannot rely on exceptions to be logged where they are thrown.
-
-   As a result instrumentation libraries may need to log exceptions every time
-   they see them, resulting in possible duplication.
-
-   Are we aware of environments where we don't have widely available logging libs
-   making this OTEP less relevant for them?
+TBD
 
 ## Future possibilities
 
 1. OpenTelemetry should provide configuration options and APIs allowing (but not limited) to:
 
-   - Record unhandled exceptions only
-   - Record exceptions based on the log severity
+   - Record unhandled exceptions only (the default documented in this guidance)
+   - Record exception info based on the log severity
    - Record exception logs, but omit the stack trace based on (at least) the log level.
      See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that records stack trace conditionally.
    - Record all available exceptions with all the details
@@ -230,9 +244,5 @@ Alternatives:
    It should be possible to optimize instrumentation and avoid collecting exception information
    (such as stack trace) when the corresponding exception log is not going to be recorded.
 
-2. OpenTelemetry API should be extended to provide convenience methods to
-   - record log-based event from exception instance
-   - attach exception information to any event or log
-
-3. Exception stacktraces can be recorded in structured form instead of their
+2. Exception stack traces can be recorded in structured form instead of their
    string representation. It may be easier to process and consume them in this form.
