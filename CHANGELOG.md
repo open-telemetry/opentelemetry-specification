@@ -38,6 +38,9 @@ release.
 
 ### OTEPs
 
+- Create `Logger.Enabled` OTEP.
+  ([#4290](https://github.com/open-telemetry/opentelemetry-specification/pull/4290))
+
 ## v1.40.0 (2024-12-12)
 
 ### Context
