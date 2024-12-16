@@ -101,8 +101,6 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 }
 ```
 
-_TBD_
-
 ## Trade-offs and mitigations
 
 For some langagues extending the `LogRecordProcessor` may be seen as breaking.
