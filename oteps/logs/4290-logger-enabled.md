@@ -112,11 +112,47 @@ This is the approach currently taken by OpenTelemetry Go.
 
 ## Prior art
 
-_What are some prior and/or alternative approaches?_
+`Logger.Enabled` is already defined by:
+
+- [OpenTelemetry C++](https://github.com/open-telemetry/opentelemetry-cpp/blob/main/api/include/opentelemetry/logs/logger.h)
+- [OpenTelemetry Go](https://github.com/open-telemetry/opentelemetry-go/blob/main/log/logger.go)
+- [OpenTelemetry PHP](https://github.com/open-telemetry/opentelemetry-php/blob/main/src/API/Logs/LoggerInterface.php)
+- [OpenTelemetry Rust](https://github.com/open-telemetry/opentelemetry-rust/blob/main/opentelemetry/src/logs/logger.rs)
+
+`LoggerConfig` (with only `disabled`) is already defined by:
+
+- [OpenTelemetry Java](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk/logs/src/main/java/io/opentelemetry/sdk/logs/internal/LoggerConfig.java)
+- [OpenTelemetry PHP](https://github.com/open-telemetry/opentelemetry-php/blob/main/src/SDK/Logs/LoggerConfig.php)
+
+`LogRecordProcessor.Enabled` is already defined by:
+
+- [OpenTelemetry Go](https://github.com/open-telemetry/opentelemetry-go/tree/main/sdk/log/internal/x)
+- [OpenTelemetry Rust](https://github.com/open-telemetry/opentelemetry-rust/blob/main/opentelemetry-sdk/src/logs/log_processor.rs)
+
+Regarding the (5) use case,
+OpenTelemetry Rust provides
+[OpenTelemetry Log Exporter for Linux user_events](https://github.com/open-telemetry/opentelemetry-rust-contrib/blob/1cb39edbb6467375f71f5dab25ccbc49ac9bf1d5/opentelemetry-user-events-logs/src/logs/exporter.rs)
+which enables emitting logs efficiently to user_events.
+
+Regarding the (6) use case,
+OpenTelemetry Go Contrib provides
+[`minsev` processor](https://pkg.go.dev/go.opentelemetry.io/contrib/processors/minsev)
+which enables to have different severity levels
+for different log record destinations.
 
 ## Alternatives
 
-_What are some ideas that you have rejected?_
+There was a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2501688210)
+to make the `LoggerConfig` to support also dynamic evaluation
+instead of supporting only declarative configuration.
+However, it seems that the purpose of the `LoggerConfig` is static configuration.
+Moreover, both (5) and (6) use cases are coupled to log record processing,
+therefore it seems more straighforward to extend `LogRecordProcessor`.
+
+There was a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2354859647)
+to add a seperate `LogRecordFilterer` abstraction.
+However, it does not looks well-suited for (5) use case
+and also would not give a lot flexibility for (6) use case.
 
 ## Open questions
 
