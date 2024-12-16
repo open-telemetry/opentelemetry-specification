@@ -75,14 +75,12 @@ use cases where filtering is dynamic and coupled to processing,
 such as (5) and (6).
 
 Both `LoggerConfig` and registered `LogRecordProcessors` take part
-in the evalaution of the `Logger.Enabled`.
-First the `LoggerConfig` is evaluated. If it is going to return
-`true`, as it mean that Logger is enabled,
-and `LogRecordProcessors` are going to be evaluated.
-In such case `false` is returned only if all registered
-`LogRecordProcessors'` `Enabled` calls returned `false`,
-as it means that there no processor does is going to process
-the log record.
+in the evalaution of the `Logger.Enabled` operation.
+If it returns `true`, meaning the logger is enabled,
+then the `LogRecordProcessors` are evaluated.
+In such cases, `false` is returned only if all registered
+`LogRecordProcessors` return `false` in their `Enabled` calls,
+as this means no processor will process the log record.
 Pseudo-code:
 
 <!-- markdownlint-disable no-hard-tabs -->
