@@ -159,7 +159,7 @@ Moreover, both (5) and (6) use cases are coupled to log record processing,
 therefore it seems more straighforward to extend `LogRecordProcessor`.
 
 There was a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2354859647)
-to add a seperate `LogRecordFilterer` abstraction.
+to add a separate `LogRecordFilterer` abstraction.
 However, it does not looks well-suited for (5) use case
 and also would not give a lot flexibility for (6) use case.
 
