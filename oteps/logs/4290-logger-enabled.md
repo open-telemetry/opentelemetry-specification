@@ -143,8 +143,8 @@ for different log record destinations.
 ## Alternatives
 
 There was a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2501688210)
-to make the `LoggerConfig` to support also dynamic evaluation
-instead of supporting only declarative configuration.
+to make the `LoggerConfig` to support dynamic evaluation
+instead of supporting only static configuration.
 However, it seems that the purpose of the `LoggerConfig` is static configuration.
 Moreover, both (5) and (6) use cases are coupled to log record processing,
 therefore it seems more straighforward to extend `LogRecordProcessor`.
