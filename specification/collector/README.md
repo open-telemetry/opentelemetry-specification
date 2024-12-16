@@ -29,6 +29,8 @@ exporters:
 connectors:
 extensions:
 service:
+  telemetry:
+  pipelines:
 ```
 
 ## OpenTelemetry Collector components
