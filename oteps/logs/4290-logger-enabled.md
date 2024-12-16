@@ -192,5 +192,7 @@ to include additional parameters, such as `Event Name`,
 for processing event records.
 This would offer a simpler design to use the `LogRecordProcessor`
 for both log records and event records.
-Reference: [Add EventName parameter to Logger.Enabled #4220](https://github.com/open-telemetry/opentelemetry-specification/issues/4220).
+References:
 
+- [Add EventName parameter to Logger.Enabled #4220](https://github.com/open-telemetry/opentelemetry-specification/issues/4220).
+- OpenTelemetry Go: [[Prototype] log: Events support with minimal non-breaking changes #6018](https://github.com/open-telemetry/opentelemetry-go/pull/6018)
