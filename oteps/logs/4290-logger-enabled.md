@@ -29,6 +29,8 @@ Without a `Logger.Enabled` check in the OpenTelemetry Logs API
 and corresponding implementations in the SDK,
 achieving this goal is not feasible.
 
+Address [Specify how Logs SDK implements Enabled #4207](https://github.com/open-telemetry/opentelemetry-specification/issues/4207).
+
 ## Explanation
 
 For (1) (2), the user can use the Logs API `Logger.Enabled` function,
@@ -55,7 +57,14 @@ and to extend the `LogRecordProcessor` with an `Enabled` operation.
 The addition of `LoggerConfig.minimum_severity_level` is supposed
 to serve the (3) use case in an easy to setup and efficient way.
 
-_(4) (5) (6) TO BE DESCRIBED_
+The addition of `LoggerConfig.disabled_on_sampled_out_spans` can serve the (4)
+use case in a declarative way configured on the SDK level
+if the user would want to only capture the log records that are
+within sampled spans.
+
+The addition of `LogRecordProcessor.Enabled` is necessary for
+use cases where the filtering is dynamic and coupled
+to the processing such as (5) and (6).
 
 Both `LoggerConfig` and registered `LogRecordProcessors` take part
 in the evalaution of the `Logger.Enabled`.
@@ -101,18 +110,19 @@ For these languages implementing `LogRecordProcessor.Enabled` must be optional.
 The SDK `LogRecordProcessor` must return `true` if `Enabled` is not implemented.
 This is the approach currently taken by OpenTelemetry Go.
 
-## Prior art and alternatives
+## Prior art
 
-_What are some prior and/or alternative approaches? What are some ideas that you have rejected?_
+_What are some prior and/or alternative approaches?_
 
+## Alternatives
 
-- [Specify how Logs SDK implements Enabled #4207](https://github.com/open-telemetry/opentelemetry-specification/issues/4207)
+_What are some ideas that you have rejected?_
 
 ## Open questions
 
 At this point of time, it is not yet known if `Logger.Config`
 needs a new `disabled_on_sampled_out_spans` field.
-It is difficult to know whether it is the SDK or the API caller
+It is difficult to know whether it is not only the API caller
 who should know whether the log record should not be emitted
 when the span is not sampled. For instrumentation libraries
 it may make more sense to control it on the API level, e.g.:
