@@ -190,8 +190,8 @@ if trace.SpanContextFromContext(ctx).IsSampled() && logger.Enabled(ctx, params) 
 The `Enabled` API could be extended in the future
 to include additional parameters, such as `Event Name`,
 for processing event records.
-This would offer a simpler design to use the `LogRecordProcessor`
-for both log records and event records.
+This would fit well a simple design where `LogRecordProcessor`
+is used for both log records and event records.
 References:
 
 - [Add EventName parameter to Logger.Enabled #4220](https://github.com/open-telemetry/opentelemetry-specification/issues/4220).
