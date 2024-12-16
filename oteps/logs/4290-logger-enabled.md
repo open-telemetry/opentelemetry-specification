@@ -23,7 +23,7 @@ The consumers of OpenTelemetry clients want to:
    and [ETW (Event Tracing for Windows)](https://learn.microsoft.com/windows/win32/etw/about-event-tracing).
 6. Allow **fine-grained** filtering control for logging pipelines
    when using an OpenTelemetry Collector is not feasible
-   e.g. for mobile devices, serverless, IoT.
+   e.g., for mobile devices, serverless, or IoT.
 
 Without a `Logger.Enabled` check in the OpenTelemetry Logs API
 and corresponding implementations in the SDK,
@@ -43,7 +43,7 @@ of a `LoggerConfig`.
 
 For (4), the user can use the Tracing API to check whether
 there is a sampled span in the current context before creating
-and emitting log record.
+and emitting a log record.
 However, the user can may also want to declaratively configure the Logs SDK
 using `LoggerConfigurator` to set the `disabled_on_sampled_out_spans`
 of a `LoggerConfig`.
@@ -63,7 +63,7 @@ with `minimum_severity_level` and optionally `disabled_on_sampled_out_spans`
 and to extend the `LogRecordProcessor` with an `Enabled` operation.
 
 The addition of `LoggerConfig.minimum_severity_level` is supposed
-to serve the (3) use case in an easy to setup and efficient way.
+to serve the (3) use case in an easy-to-setup and efficient way.
 
 The addition of `LoggerConfig.disabled_on_sampled_out_spans` can serve the (4)
 use case in a declarative way configured on the SDK level
@@ -71,8 +71,8 @@ if the user would want to only capture the log records that are
 within sampled spans.
 
 The addition of `LogRecordProcessor.Enabled` is necessary for
-use cases where the filtering is dynamic and coupled
-to the processing such as (5) and (6).
+use cases where filtering is dynamic and coupled to processing,
+such as (5) and (6).
 
 Both `LoggerConfig` and registered `LogRecordProcessors` take part
 in the evalaution of the `Logger.Enabled`.
