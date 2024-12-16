@@ -44,11 +44,53 @@ by adding to the Logs SDK a `LogRecordProcessor` implementing `Enabled`.
 
 ## Internal details
 
-The proposal is to both extend the SDK's `LoggerConfig` with `minimum_severity_level`
-and optionally something like `disabled_on_sampled_out_spans`
-and to extend the `LogRecordProcessor` with an `Enabled` operation
-that would both take part into the evalaution of the `Logger.Enabled`
-Logs API call.
+Regarding (1) (2), the Logs API specification has already introduced `Logger.Enabled`:
+- [Add Enabled method to Logger #4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020)
+- [Define Enabled parameters for Logger #4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203)
+
+The main purpose of this OTEP is to extend the SDK's `LoggerConfig`
+with `minimum_severity_level` and optionally `disabled_on_sampled_out_spans`
+and to extend the `LogRecordProcessor` with an `Enabled` operation.
+
+The addition of `LoggerConfig.minimum_severity_level` is supposed
+to serve the (3) use case in an easy to setup and efficient way.
+
+_(4) (5) (6) TO BE DESCRIBED_
+
+Both `LoggerConfig` and registered `LogRecordProcessors` take part
+in the evalaution of the `Logger.Enabled`.
+First the `LoggerConfig` is evaluated. If it is going to return
+`true`, as it mean that Logger is enabled,
+and `LogRecordProcessors` are going to be evaluated.
+In such case `false` is returned only if all registered
+`LogRecordProcessors'` `Enabled` calls returned `false`,
+as it means that there no processor does is going to process
+the log record.
+Pseudo-code:
+
+```go
+func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
+   config := l.config()
+	if config.Disabled {
+      // The logger is disabled.
+      return false
+	}
+	if params.Severity > config.MinSeverityLevel {
+      // The severity is less severe than the minimum level.
+      return false
+	}
+
+	processors := l.provider.processors()
+	for _, p := range processors {
+		if p.Enabled(ctx, param) {
+			// At least one processor will process the record.
+			return true
+		}
+	}
+	// No processor will process the record.
+	return false
+}
+```
 
 _TBD_
 
@@ -60,10 +102,15 @@ _What are some (known!) drawbacks? What are some ways that they might be mitigat
 
 _What are some prior and/or alternative approaches? What are some ideas that you have rejected?_
 
-- [Add Enabled method to Logger #4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020)
-- [Define Enabled parameters for Logger #4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203)
+
 - [Specify how Logs SDK implements Enabled #4207](https://github.com/open-telemetry/opentelemetry-specification/issues/4207)
 
 ## Open questions
 
 _What are some questions that you know aren't resolved yet by the OTEP? These may be questions that could be answered through further discussion, implementation experiments, or anything else that the future may bring._
+
+## Future possibilities
+
+The `Enabled` API may in future also accept
+an optional `Event Name` parameter
+given it will be relevant for processing event records.
