@@ -70,14 +70,14 @@ Pseudo-code:
 
 ```go
 func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
-   config := l.config()
+	config := l.config()
 	if config.Disabled {
-      // The logger is disabled.
-      return false
+		// The logger is disabled.
+		return false
 	}
 	if params.Severity > config.MinSeverityLevel {
-      // The severity is less severe than the minimum level.
-      return false
+		// The severity is less severe than the minimum level.
+		return false
 	}
 
 	processors := l.provider.processors()
