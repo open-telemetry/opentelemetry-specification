@@ -96,7 +96,10 @@ _TBD_
 
 ## Trade-offs and mitigations
 
-_What are some (known!) drawbacks? What are some ways that they might be mitigated?_
+For some langagues extending the `LogRecordProcessor` may be seen as breaking.
+For these languages implementing `LogRecordProcessor.Enabled` must be optional.
+The SDK `LogRecordProcessor` must return `true` if `Enabled` is not implemented.
+This is the approach currently taken by OpenTelemetry Go.
 
 ## Prior art and alternatives
 
