@@ -24,7 +24,7 @@ achieving this goal is not feasible.
 
 For (1) (2), the user can use the Logs API `Logger.Enabled` function, which tells the user whether a `Logger` for given arguments is going to emit a log record.
 
-For (3) (4), the user can declaratively configure the Logs SDK using `LoggerConfigurator` to set the `disabled`, `minimum_severity_level`, `disabled_on_sampled_out_spans` of a `LoggerConfig`.
+For (3) (4), the user can declaratively configure the Logs SDK using `LoggerConfigurator` to set the `disabled`, `minimum_severity_level`, and maybe even `disabled_on_sampled_out_spans` of a `LoggerConfig`.
 
 For (5) (6), the user can hook to `Logger.Enabled` Logs API calls by adding to the Logs SDK a `LogRecordProcessor` implementing `OnEnabled`.
 
@@ -40,18 +40,16 @@ While you do not need to prescribe a particular implementation - indeed, OTEPs s
 
 ## Trade-offs and mitigations
 
-What are some (known!) drawbacks? What are some ways that they might be mitigated?
-
-Note that mitigations do not need to be complete *solutions*, and that they do not need to be accomplished directly through your proposal. A suggested mitigation may even warrant its own OTEP!
+_What are some (known!) drawbacks? What are some ways that they might be mitigated?_
 
 ## Prior art and alternatives
 
-What are some prior and/or alternative approaches? For instance, is there a corresponding feature in OpenTracing or OpenCensus? What are some ideas that you have rejected?
+_What are some prior and/or alternative approaches? What are some ideas that you have rejected?_
 
 ## Open questions
 
-What are some questions that you know aren't resolved yet by the OTEP? These may be questions that could be answered through further discussion, implementation experiments, or anything else that the future may bring.
+_What are some questions that you know aren't resolved yet by the OTEP? These may be questions that could be answered through further discussion, implementation experiments, or anything else that the future may bring._
 
 ## Future possibilities
 
-What are some future changes that this proposal would enable?
+_What are some future changes that this proposal would enable?_
