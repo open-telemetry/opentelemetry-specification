@@ -31,21 +31,26 @@ achieving this goal is not feasible.
 
 ## Explanation
 
-For (1) (2), the user can use the Logs API `Logger.Enabled` function, which tells the user whether a `Logger` for given arguments is going to emit a log record.
+For (1) (2), the user can use the Logs API `Logger.Enabled` function,
+which tells the user whether a `Logger` for given arguments
+is going to emit a log record.
 
-For (3) (4), the user can declaratively configure the Logs SDK using `LoggerConfigurator` to set the `disabled`, `minimum_severity_level`, and maybe even `disabled_on_sampled_out_spans` of a `LoggerConfig`.
+For (3) (4), the user can declaratively configure the Logs SDK
+using `LoggerConfigurator` to set the `disabled`, `minimum_severity_level`,
+and maybe even `disabled_on_sampled_out_spans` of a `LoggerConfig`.
 
-For (5) (6), the user can hook to `Logger.Enabled` Logs API calls by adding to the Logs SDK a `LogRecordProcessor` implementing `OnEnabled`.
+For (5) (6), the user can hook to `Logger.Enabled` Logs API calls
+by adding to the Logs SDK a `LogRecordProcessor` implementing `Enabled`.
 
 ## Internal details
 
-From a technical perspective, how do you propose accomplishing the proposal? In particular, please explain:
+The proposal is to both extend the SDK's `LoggerConfig` with `minimum_severity_level`
+and optionally something like `disabled_on_sampled_out_spans`
+and to extend the `LogRecordProcessor` with an `Enabled` operation
+that would both take part into the evalaution of the `Logger.Enabled`
+Logs API call.
 
-* How the change would impact and interact with existing functionality
-* Likely error modes (and how to handle them)
-* Corner cases (and how to handle them)
-
-While you do not need to prescribe a particular implementation - indeed, OTEPs should be about **behaviour**, not implementation! - it may be useful to provide at least one suggestion as to how the proposal *could* be implemented. This helps reassure reviewers that implementation is at least possible, and often helps them inspire them to think more deeply about trade-offs, alternatives, etc.
+_TBD_
 
 ## Trade-offs and mitigations
 
@@ -55,10 +60,10 @@ _What are some (known!) drawbacks? What are some ways that they might be mitigat
 
 _What are some prior and/or alternative approaches? What are some ideas that you have rejected?_
 
+- [Add Enabled method to Logger #4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020)
+- [Define Enabled parameters for Logger #4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203)
+- [Specify how Logs SDK implements Enabled #4207](https://github.com/open-telemetry/opentelemetry-specification/issues/4207)
+
 ## Open questions
 
 _What are some questions that you know aren't resolved yet by the OTEP? These may be questions that could be answered through further discussion, implementation experiments, or anything else that the future may bring._
-
-## Future possibilities
-
-_What are some future changes that this proposal would enable?_
