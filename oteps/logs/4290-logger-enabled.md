@@ -107,7 +107,18 @@ _What are some prior and/or alternative approaches? What are some ideas that you
 
 ## Open questions
 
-_What are some questions that you know aren't resolved yet by the OTEP? These may be questions that could be answered through further discussion, implementation experiments, or anything else that the future may bring._
+At this point of time, it is not yet known if `Logger.Config`
+needs a new `disabled_on_sampled_out_spans` field.
+It is difficult to know whether it is the SDK or the API caller
+who should know whether the log record should not be emitted
+when the span is not sampled. For instrumentation libraries
+it may make more sense to control it on the API level, e.g.:
+
+```go
+if trace.SpanContextFromContext(ctx).IsSampled() && logger.Enabled(ctx, params) {
+	logger.Emit(ctx, createLogRecord(payload))
+}
+```
 
 ## Future possibilities
 
