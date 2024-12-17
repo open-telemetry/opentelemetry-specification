@@ -45,7 +45,7 @@ For (4), the user can use the Tracing API to check whether
 there is a sampled span in the current context before creating
 and emitting a log record.
 However, the user can may also want to declaratively configure the Logs SDK
-using `LoggerConfigurator` to set the `disabled_on_sampled_out_spans`
+using `LoggerConfigurator` to set the `trace_based`
 of a `LoggerConfig`.
 
 For (5) (6), the user can hook to `Logger.Enabled` Logs API calls
@@ -59,13 +59,13 @@ Regarding (1) (2), the Logs API specification has already introduced `Logger.Ena
 - [Define Enabled parameters for Logger #4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203)
 
 The main purpose of this OTEP is to extend the SDK's `LoggerConfig`
-with `minimum_severity_level` and optionally `disabled_on_sampled_out_spans`
+with `minimum_severity_level` and optionally `trace_based`
 and to extend the `LogRecordProcessor` with an `Enabled` operation.
 
 The addition of `LoggerConfig.minimum_severity_level` is supposed
 to serve the (3) use case in an easy-to-setup and efficient way.
 
-The addition of `LoggerConfig.disabled_on_sampled_out_spans` can serve the (4)
+The addition of `LoggerConfig.trace_based` can serve the (4)
 use case in a declarative way configured on the SDK level
 if the user would want to only capture the log records that are
 within sampled spans.
@@ -95,7 +95,7 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 		// The severity is less severe than the logger minimum level.
 		return false
 	}
-	if config.DisabledNotSampledSpans && !trace.SpanContextFromContext(ctx).IsSampled() {
+	if config.TraceBased && !trace.SpanContextFromContext(ctx).IsSampled() {
 		// The logger is disabled on sampled out spans.
 		return false
 	}
@@ -170,9 +170,9 @@ and offers limited flexibility for use case (6).
 
 ## Open questions
 
-### Need of LoggerConfig.disabled_on_sampled_out_spans
+### Need of LoggerConfig.trace_based
 
-Should LoggerConfig include a `disabled_on_sampled_out_spans` field?
+Should LoggerConfig include a `trace_based` field?
 It is uncertain if API callers alone should decide
 whether to emit log records for spans that are not sampled.
 For instrumentation libraries, API-level control might be more appropriate, e.g.:
