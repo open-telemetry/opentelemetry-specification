@@ -30,10 +30,10 @@ by supporting other Protocols, but is not required to implement them.
 
 A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT use
 [Prometheus Remote Write format](https://github.com/prometheus/prometheus/blob/main/prompb/remote.proto)
-or [OpenMetrics protobuf format](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#protobuf-format).
+or [OpenMetrics protobuf format](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#protobuf-format).
 
 A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT add
-[explicit timestamps on Metric points](https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metric).
+[explicit timestamps on Metric points](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metric).
 
 There MUST be at most one `target` info metric exposed by an SDK
 Prometheus exporter.
