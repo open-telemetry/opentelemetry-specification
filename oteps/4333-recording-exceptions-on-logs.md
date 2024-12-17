@@ -22,15 +22,17 @@ Recording exception on logs is essential for troubleshooting. But regardless of 
 In this OTEP, we'll provide guidance around recording exceptions that minimizes duplication, allows to reduce noise with configuration and
 allows to capture exceptions in absence of a recorded span.
 
-This guidance applies to general-purpose instrumentations including native ones. Application developers should consider following it as a starting point, but they are expected to adjust it to their needs.
+This guidance applies to general-purpose instrumentations including native ones. Application developers should consider following it as a
+starting point, but they are encouraged to adjust it to their needs.
 
 ## Guidance
 
 This guidance boils down to the following:
 
 - we should record full exception details including stack traces only for unhandled exceptions (by default).
-- we should log error details and context when the error happens. These records don't need need to include exception stack traces unless this exception is unhandled.
-- we should avoid logging the same error as it propagates up through the stack.
+- we should log error details and context when the error happens. These records should not include
+  exception stack traces unless this exception is unhandled.
+- we should avoid logging the same error multiple times as it propagates up through the stack.
 - we should log errors with appropriate severity ranging from `Trace` to `Fatal`.
 
 > [!NOTE]
