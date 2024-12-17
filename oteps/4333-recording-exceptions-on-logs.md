@@ -35,7 +35,12 @@ This guidance boils down to the following:
 
 > [!NOTE]
 >
-> Based on this guidance non-native instrumentations should record exceptions in top-level instrumentations only (#2 above)
+> Based on this guidance non-native instrumentations should record exceptions in top-level instrumentations only (#2 in [Details](#details))
+
+> [!Important]
+>
+> OTel should provide APIs like `setException` when creating log record that will record only necessary information depending
+> on the configuration and log severity. See [API changes](#api-changes) for the details.
 
 ### Details
 
@@ -79,7 +84,7 @@ Library may write logs providing exception instance through a log bridge and not
 It also maybe desirable by some vendors/apps to record all the exception details.
 
 OTel Logs API should provide additional methods that enrich log record with exception details such as
-`addException(exception)` (`addUnhandledException`, etc), similar to [RecordException](../specification/trace/api.md?plain=1#L682)
+`setException(exception)` (`setUnhandledException`, etc), similar to [RecordException](../specification/trace/api.md?plain=1#L682)
 method on span.
 
 OTel SDK should implement such methods and set exception attributes based on configuration
