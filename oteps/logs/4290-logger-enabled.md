@@ -159,7 +159,7 @@ for different log destinations.
 
 ## Alternatives
 
-Below are some alternatives that would be further explored 
+Below are some alternatives that would be further explored
 during the Development phase.
 
 ### Dynamic Evaluation in LoggerConfig
@@ -216,7 +216,7 @@ can always be added in future.
 
 ### Extending LoggerConfig
 
-In future, more fields can be added to `LoggerConfig` 
+In future, more fields can be added to `LoggerConfig`
 in order to conveniently address the most popular use cases.
 
 ### Extending Logger.Enabled
