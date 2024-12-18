@@ -1,0 +1,13 @@
+include-fragments = true
+
+accept = ["200..=299", "403"]
+
+exclude  = [
+    # excluding links to pull requests and issues is done for performance
+    "^https://github.com/open-telemetry/opentelemetry-specification/(issue|pull)/\\d+$",
+    # TODO (trask) look into this
+    "^https://docs.google.com/document/d/1d0afxe3J6bQT-I6UbRXeIYNcTIyBQv4axfjKF4yvAPA/edit"
+]
+
+# better to be safe and avoid failures
+max-retries = 6

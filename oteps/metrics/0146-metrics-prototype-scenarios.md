@@ -3,7 +3,7 @@
 With the stable release of the tracing specification, the OpenTelemetry
 community is willing to spend more energy on metrics API/SDK. The goal is to get
 the metrics API/SDK specification to
-[`Experimental`](../../specification/versioning-and-stability.md#experimental)
+[`Experimental`](../../specification/versioning-and-stability.md#development)
 state by end of 5/2021, and make it
 [`Stable`](../../specification/versioning-and-stability.md#stable)
 before end of 2021:
