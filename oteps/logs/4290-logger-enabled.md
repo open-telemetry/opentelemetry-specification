@@ -214,6 +214,13 @@ can always be added in future.
 
 ## Future possibilities
 
+### Extending LoggerConfig
+
+In future, more fields can be added to `LoggerConfig` 
+in order to conveniently address the most popular use cases.
+
+### Extending Logger.Enabled
+
 The `Enabled` API could be extended in the future
 to include additional parameters, such as `Event Name`,
 for processing event records.
