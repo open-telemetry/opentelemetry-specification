@@ -29,6 +29,12 @@ Without a `Logger.Enabled` check in the OpenTelemetry Logs API
 and corresponding implementations in the SDK,
 achieving this goal is not feasible.
 
+OpenTelemetry Logs SDK users require:
+
+- A declarative configuration to conveniently address
+  the most popular use cases.
+- A dynamic hook for advanced customization and flexibility.
+
 Address [Specify how Logs SDK implements Enabled #4207](https://github.com/open-telemetry/opentelemetry-specification/issues/4207).
 
 ## Explanation
@@ -49,7 +55,8 @@ using `LoggerConfigurator` to set the `trace_based`
 of a `LoggerConfig`.
 
 For (5) (6), the user can hook to `Logger.Enabled` Logs API calls
-by adding to the Logs SDK a `LogRecordProcessor` implementing `Enabled`.
+by adding to the Logs SDK a `LogRecordProcessor` implementing `Enabled`
+(or other hook such as `LogRecordFilterer`).
 
 ## Internal details
 
@@ -152,11 +159,15 @@ for different log destinations.
 
 ## Alternatives
 
+Below are some alternatives that would be further explored 
+during the Development phase.
+
 ### Dynamic Evaluation in LoggerConfig
 
 There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2501688210)
 suggested dynamic evaluation in `LoggerConfig` instead of static configuration
 to make the `LoggerConfig` to support dynamic evaluation.
+
 However, since the purpose of `LoggerConfig` is static configuration,
 and use cases (5) and (6) are tied to log record processing,
 extending `LogRecordProcessor` is more straightforward.
@@ -165,8 +176,12 @@ extending `LogRecordProcessor` is more straightforward.
 
 There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2354859647)
 to add a distinct `LogRecordFilterer` abstraction.
+
 However, this approach is less suited for use case (5)
 and offers limited flexibility for use case (6).
+The initial feedback after [an experiment](https://github.com/open-telemetry/opentelemetry-go/pull/5825)
+with `LogRecordFilterer` was that it makes composing
+processing pipelines harder and more bug-prone.
 
 ## Open questions
 
