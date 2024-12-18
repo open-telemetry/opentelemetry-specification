@@ -307,12 +307,13 @@ class ResourceProvider{
     // safely change the resource reference without blocking
     AtomicSwap(this.resource, mergedResource);
 
+    // create an EntityState event from the entity
+    var entityState = entity.EntityState();
+
     // calling listeners inside of the lock ensures that the listeners do not fire
     // out of order or get called simultaneously by multiple threads, but would
     // also allow a poorly implemented listener to block the ResourceProvider.
     for (listener in this.listeners) {
-        // create an EntityState event from the entity
-        var entityState = entity.EntityState();
         listener.OnEntityState(entityState, mergedResource);
     }
 
@@ -342,12 +343,13 @@ class ResourceProvider{
     // safely change the resource reference without blocking
     AtomicSwap(this.resource, mergedResource);
 
+    // create an EntityState event from the entity
+    var entityState = entity.EntityState();
+
     // calling listeners inside of the lock ensures that the listeners do not fire
     // out of order or get called simultaneously by multiple threads, but would
     // also allow a poorly implemented listener to block the ResourceProvider.
     for (listener in this.listeners) {
-        // create an EntityState event from the entity
-        var entityState = entity.EntityState();
         listener.OnEntityState(entityState, mergedResource);
     }
 
@@ -377,12 +379,13 @@ class ResourceProvider{
     // safely change the resource reference without blocking
     AtomicSwap(this.resource, mergedResource);
 
+    // create an EntityDelete event from the entity
+    var entityDelete = entity.EntityDelete();
+
     // calling listeners inside of the lock ensures that the listeners do not fire
     // out of order or get called simultaneously by multiple threads, but would
     // also allow a poorly implemented listener to block the ResourceProvider.
     for (listener in this.listeners) {
-        // create an EntityDelete event from the entity
-        var entityDelete = entity.EntityDelete();
         listener.OnEntityDelete(entityDelete, mergedResource);
     }
 
