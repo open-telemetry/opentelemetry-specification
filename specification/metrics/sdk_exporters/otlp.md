@@ -42,10 +42,10 @@ then by default:
 
 ## Additional Environment Variable Configuration
 
-| Name                                                       | Description                                                                                            | Default                     |
-|------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|-----------------------------|
-| `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE`        | Configure the exporter's aggregation `temporality` option (see above) on the basis of instrument kind. | `cumulative`                |
-| `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION` | Configure the exporter's `default_aggregation` option (see above) for Histogram instrument kind.   | `explicit_bucket_histogram` |
+| Name                                                       | Description                                                                                            | Default                     | Type     |
+|------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|-----------------------------|----------|
+| `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE`        | Configure the exporter's aggregation `temporality` option (see above) on the basis of instrument kind. | `cumulative`                | [Enum][] |
+| `OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION` | Configure the exporter's `default_aggregation` option (see above) for Histogram instrument kind.       | `explicit_bucket_histogram` | [Enum][] |
 
 The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` are:
 
@@ -71,3 +71,5 @@ The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_DEFAULT
 ## References
 
 - [OTEP0131 OTLP Exporters Configurable Export Behavior](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0131-otlp-export-behavior.md)
+
+[Enum]: ../../configuration/sdk-environment-variables.md#enum
