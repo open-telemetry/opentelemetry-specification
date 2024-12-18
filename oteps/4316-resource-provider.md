@@ -262,40 +262,7 @@ would not cause issues in this regard.
 
 ## Example Usage
 
-Pseudocode example of a ResourceProvider in use. The resource provider is loaded
-with all available permanent resources, then passed to a TraceProvider. The
-ResourceProvider is also passed to a session manager, which updates an ephemeral
-resource in the background.
-
-```
-var resources = {“service.name” = “example-service”};
-
-// Example of a deny list validator.
-var validator = NewDenyListValidator(PERMANENT_RESOURCE_KEYS);
-
-// The ResourceProvider is initialized with
-// a dictionary of resources and a validator.
-var resourceProvider = NewResourceProvider(resources, validator);
-
-// The resourceProvider can be passed to resource detectors 
-// to populate async resources.
-DetectResources(resourceProvider);
-
-// The TraceProvider now takes a ResourceProvider.
-// The TraceProvider calls Freeze on the ResourceProvider.
-// After this point, it is no longer possible to update or add
-// additional permanent resources.
-var traceProvider = NewTraceProvider(resourceProvider);
-
-// Whenever the SessionManager starts a new session
-// it updates the ResourceProvider with a new session id.
-sessionManager.OnChange(
-  func(sessionID){
-    resourceProvider.SetAttribute(“session.id”, sessionID);
-  }
-);
-
-```
+DRAFT
 
 ## Example Implementation
 
