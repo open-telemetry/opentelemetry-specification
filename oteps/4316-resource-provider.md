@@ -171,9 +171,9 @@ library. That path should be identified before this OTEP is accepted.
 Beyond fingerprinting, there are no destabilizing changes because the resources
 that we have already declared "immutable" match the lifespan of the application
 and have no reason to be updated. Developers are not going to start messing with
-the service.id arbitrarily just because they can, and resource detectors solve the
-problem of accidentally starting the application while async resources are still
-being fetched.
+the `service.instance.id` resource arbitrarily just because they can, and resource
+detectors solve the problem of accidentally starting the application while async
+resources are still being fetched.
 
 ## Prior art and alternatives
 
