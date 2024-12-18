@@ -6,6 +6,8 @@ path_base_for_github_subdir:
 
 # OpenTelemetry Collector
 
+**Status**: [Development](../document-status.md)
+
 The goal of this document is for users to be able to easily switch between
 OpenTelemetry Collector Distros while also ensuring that components produced by
 the OpenTelemetry Collector SIG are able to work with any vendor who claims
