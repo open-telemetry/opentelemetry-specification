@@ -31,6 +31,7 @@ aliases:
 - [OTLP Exporter](#otlp-exporter)
 - [Zipkin Exporter](#zipkin-exporter)
 - [Prometheus Exporter](#prometheus-exporter)
+- [Instana Exporter](#instana-exporter)
 - [Exporter Selection](#exporter-selection)
   * [In-development Exporter Selection](#in-development-exporter-selection)
 - [Metrics SDK Configuration](#metrics-sdk-configuration)
@@ -232,6 +233,13 @@ _is no specified default, or configuration via environment variables_.
 | ----------------------------- | --------------------------------| ---------------------------- |
 | OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | "localhost"             |
 | OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
+
+## Instana Exporter
+
+| Name                           | Description                                                                   | Default           |
+| ------------------------------ | ----------------------------------------------------------------------------- | ----------------- |
+| OTEL_EXPORTER_INSTANA_ENDPOINT | Endpoint of Instana agent                                                     | `127.0.0.1:42699` |
+| OTEL_EXPORTER_INSTANA_TIMEOUT  | Maximum time (in milliseconds) the Instana exporter will wait for each export | 10000             |
 
 ## Exporter Selection
 
