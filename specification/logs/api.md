@@ -137,6 +137,7 @@ The API MUST accept the following parameters:
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
+- **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
 
 #### Enabled
 
@@ -173,8 +174,7 @@ formatted as an [event](./data-model.md#events).
 
 **Parameters:**
 
-* The [`Name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
-  of the Event.
+* [Event Name](./data-model.md#field-eventname) (required)
 * [Timestamp](./data-model.md#field-timestamp) (optional)
 * [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
   the implementation SHOULD set it equal to the current time.
