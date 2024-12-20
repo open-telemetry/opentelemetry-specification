@@ -267,10 +267,12 @@ If the flag is not set:
 - The resulting THRESHOLD value is `null` (or equivalent).
 - The `IsAdjustedCountReliable` returns `false`.
 
-In all cases with valid parent context:
+By default, in all cases with valid parent context:
 
 - The `GetAttributes` function returns empty set.
 - The `UpdateTraceState` function returns its argument, without any modifications.
+
+However, `ConsistentParentBased` implementations SHOULD allow users to customize added Attributes as well as modify the trace state depending on whether the parent Span is local or remote.
 
 ### ConsistentAnyOf
 
