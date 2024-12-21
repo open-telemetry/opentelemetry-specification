@@ -52,9 +52,9 @@ have three calling patterns (_Bound_, _Unbound_, and _Batch_) to
 capture measurements.  Asynchronous instruments (Observer and its
 refinements) use callbacks to capture measurements.
 
-All measurement APIs produce metric events consisting of [timestamp,
+All measurement APIs produce metric events consisting of timestamp,
 instrument descriptor, label set, and numerical
-value](../../specification/metrics/api.md#metric-event-format).  Synchronous instrument
+value.  Synchronous instrument
 events additionally have [Context](../../specification/context/README.md), describing
 properties of the associated trace and distributed correlation values.
 
@@ -107,8 +107,8 @@ without referring to the collection interval and without ambiguity.
 ### Last-value and Measure instruments
 
 Measure instruments do not define a Last Value relationship.  One
-reason is that [synchronous events can happen
-simultaneously](../../specification/metrics/api.md#time).
+reason is that synchronous events can happen
+simultaneously.
 
 For Measure instruments, it is possible to compute an aggregation that
 computes the last-captured value in a collection interval, but it is
