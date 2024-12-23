@@ -17,11 +17,13 @@ aliases:
 
 - [Implementation guidelines](#implementation-guidelines)
 - [Parsing empty value](#parsing-empty-value)
-- [Special configuration types](#special-configuration-types)
-  * [Boolean value](#boolean-value)
-  * [Numeric value](#numeric-value)
-  * [Enum value](#enum-value)
-  * [Duration](#duration)
+- [Configuration types](#configuration-types)
+  * [Boolean](#boolean)
+  * [Numeric](#numeric)
+    + [Integer](#integer)
+    + [Duration](#duration)
+  * [String](#string)
+    + [Enum](#enum)
 - [General SDK Configuration](#general-sdk-configuration)
 - [Batch Span Processor](#batch-span-processor)
 - [Batch LogRecord Processor](#batch-logrecord-processor)
@@ -58,67 +60,99 @@ The environment-based configuration MUST have a direct code configuration equiva
 
 The SDK MUST interpret an empty value of an environment variable the same way as when the variable is unset.
 
-## Special configuration types
+## Configuration types
 
-### Boolean value
+### Boolean
 
-Any value that represents a Boolean MUST be set to true only by the case-insensitive string `"true"`, meaning `"True"` or `"TRUE"` are also accepted, as true.
-An implementation MUST NOT extend this definition and define additional values that are interpreted as true.
-Any value not explicitly defined here as a true value, including unset and empty values, MUST be interpreted as false.
-If any value other than a true value, case-insensitive string `"false"`, empty, or unset is used, a warning SHOULD be logged to inform users about the fallback to false being applied.
-All Boolean environment variables SHOULD be named and defined such that false is the expected safe default behavior.
-Renaming or changing the default value MUST NOT happen without a major version upgrade.
+Any value that represents a Boolean MUST be set to true only by the
+case-insensitive string `"true"`, meaning `"True"` or `"TRUE"` are also
+accepted, as true. An implementation MUST NOT extend this definition and define
+additional values that are interpreted as true. Any value not explicitly defined
+here as a true value, including unset and empty values, MUST be interpreted as
+false. If any value other than a true value, case-insensitive string `"false"`,
+empty, or unset is used, a warning SHOULD be logged to inform users about the
+fallback to false being applied. All Boolean environment variables SHOULD be
+named and defined such that false is the expected safe default behavior.
+Renaming or changing the default value MUST NOT happen without a major version
+upgrade.
 
-### Numeric value
+### Numeric
 
-If an implementation chooses to support an integer-valued environment variable, it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive). Individual SDKs MAY choose to support a larger range of values.
+Variables accepting numeric values are sub-classified into:
+
+* [Integer](#integer)
+* [Duration](#duration)
+
+The following guidance applies to all numeric types.
 
 > The following paragraph was added after stabilization and the requirements are
 > thus qualified as "SHOULD" to allow implementations to avoid breaking changes.
 > For new
 > implementations, these should be treated as MUST requirements.
 
-For variables accepting a numeric value, if the user provides a value the implementation cannot parse,
-or which is outside the valid range for the configuration item, the implementation SHOULD
-generate a warning and gracefully ignore the setting, i.e., treat them as not set.
-In particular, implementations
+For variables accepting a numeric value, if the user provides a value the
+implementation cannot parse, or which is outside the valid range for the
+configuration item, the implementation SHOULD generate a warning and gracefully
+ignore the setting, i.e., treat them as not set. In particular, implementations
 SHOULD NOT assign a custom interpretation e.g. to negative values if a negative
-value does not naturally apply to a configuration and does not have an explicitly specified meaning, but treat it like any other
-invalid value.
+value does not naturally apply to a configuration and does not have an
+explicitly specified meaning, but treat it like any other invalid value.
 
 For example, a value specifying a buffer size must naturally be non-negative.
-Treating a negative value as "buffer everything" would be an example of such a discouraged custom interpretation.
-Instead the default buffer size should be used.
+Treating a negative value as "buffer everything" would be an example of such a
+discouraged custom interpretation. Instead the default buffer size should be
+used.
 
-Note that this could make a difference even if the custom interpretation is identical with the default value,
-because it might reset a value set from other configuration sources with the default.
+Note that this could make a difference even if the custom interpretation is
+identical with the default value, because it might reset a value set from other
+configuration sources with the default.
 
-### Enum value
+#### Integer
 
-For variables which accept a known value out of a set, i.e., an enum value, implementations MAY support additional values not listed here.
-For variables accepting an enum value, if the user provides a value the implementation does not recognize, the implementation MUST generate a warning and gracefully ignore the setting.
+If an implementation chooses to support an integer-valued environment variable,
+it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive).
+Individual SDKs MAY choose to support a larger range of values.
 
-If a null object (empty, no-op) value is acceptable, then the enum value representing it MUST be `"none"`.
+#### Duration
 
-### Duration
-
-Any value that represents a duration, for example a timeout, MUST be an integer representing a number of
-milliseconds. The value is non-negative - if a negative value is provided, the implementation MUST generate a warning,
-gracefully ignore the setting and use the default value if it is defined.
+Any value that represents a duration, for example a timeout, MUST be an integer
+representing a number of milliseconds. The value is non-negative - if a negative
+value is provided, the implementation MUST generate a warning, gracefully ignore
+the setting and use the default value if it is defined.
 
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
+### String
+
+String values are sub-classified into:
+
+* [Enum](#enum).
+
+Normally, string values include notes describing how they are interpreted by
+implementations.
+
+#### Enum
+
+For variables which accept a known value out of a set, i.e., an enum value,
+implementations MAY support additional values not listed here. For variables
+accepting an enum value, if the user provides a value the implementation does
+not recognize, the implementation MUST generate a warning and gracefully ignore
+the setting.
+
+If a null object (empty, no-op) value is acceptable, then the enum value
+representing it MUST be `"none"`.
+
 ## General SDK Configuration
 
-| Name                     | Description                                                                                                   | Default                                                                                                                                          | Notes                                                                                                                                                                                                                                                                                    |
-|--------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| OTEL_SDK_DISABLED        | Disable the SDK for all signals                                                                               | false                                                                                                                                            | Boolean value. If "true", a no-op SDK implementation will be used for all telemetry signals. Any other value or absence of the variable will have no effect and the SDK will remain enabled. This setting has no effect on propagators configured through the OTEL_PROPAGATORS variable. |
-| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes                                                             | See [Resource semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for details. | See [Resource SDK](../resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details.                                                                                                                                                                     |
-| OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#service) resource attribute |                                                                                                                                                  | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence.                                                                                                                                                                             |
-| OTEL_LOG_LEVEL           | Log level used by the [SDK internal logger](../error-handling.md#self-diagnostics)                                                                              | "info"                                                                                                                                           |                                                                                                                                                                                                                                                                                          |
-| OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list                                                              | "tracecontext,baggage"                                                                                                                           | Values MUST be deduplicated in order to register a `Propagator` only once.                                                                                                                                                                                                               |
-| OTEL_TRACES_SAMPLER      | Sampler to be used for traces                                                                                 | "parentbased_always_on"                                                                                                                          | See [Sampling](../trace/sdk.md#sampling)                                                                                                                                                                                                                                                 |
-| OTEL_TRACES_SAMPLER_ARG  | String value to be used as the sampler argument                                                               |                                                                                                                                                  | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the implementation MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set.            |
+| Name                     | Description                                                                                                                                                 | Default                                                                                                                                                                                            | Type         | Notes                                                                                                                                                                                                                                                                                    |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| OTEL_SDK_DISABLED        | Disable the SDK for all signals                                                                                                                             | false                                                                                                                                                                                              | [Boolean][]  | If "true", a no-op SDK implementation will be used for all telemetry signals. Any other value or absence of the variable will have no effect and the SDK will remain enabled. This setting has no effect on propagators configured through the OTEL_PROPAGATORS variable.                |
+| OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes                                                                                                           | See [Resource semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for details. | [String][]   | See [Resource SDK](../resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details.                                                                                                                                                                     |
+| OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#service) resource attribute |                                                                                                                                                                                                    | [String][]   | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence.                                                                                                                                                                             |
+| OTEL_LOG_LEVEL           | Log level used by the [SDK internal logger](../error-handling.md#self-diagnostics)                                                                          | "info"                                                                                                                                                                                             | [Enum][]     |                                                                                                                                                                                                                                                                                          |
+| OTEL_PROPAGATORS         | Propagators to be used as a comma-separated list                                                                                                            | "tracecontext,baggage"                                                                                                                                                                             | [Enum][]     | Values MUST be deduplicated in order to register a `Propagator` only once.                                                                                                                                                                                                               |
+| OTEL_TRACES_SAMPLER      | Sampler to be used for traces                                                                                                                               | "parentbased_always_on"                                                                                                                                                                            | [Enum][]     | See [Sampling](../trace/sdk.md#sampling)                                                                                                                                                                                                                                                 |
+| OTEL_TRACES_SAMPLER_ARG  | Value to be used as the sampler argument                                                                                                                    |                                                                                                                                                                                                    | See footnote | The specified value will only be used if OTEL_TRACES_SAMPLER is set. Each Sampler type defines its own expected input, if any. Invalid or unrecognized input MUST be logged and MUST be otherwise ignored, i.e. the implementation MUST behave as if OTEL_TRACES_SAMPLER_ARG is not set. |
 
 Known values for `OTEL_PROPAGATORS` are:
 
@@ -154,21 +188,21 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch Span Processor
 
-| Name                           | Description                                                      | Default  | Notes                                                 |
-| ------------------------------ | ---------------------------------------------------------------- | -------  | ----------------------------------------------------- |
-| OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000     |                                                       |
-| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000    |                                                       |
-| OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048     |                                                       |
-| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512      | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
+| Name                           | Description                                                      | Default | Type         | Notes                                                 |
+|--------------------------------|------------------------------------------------------------------|---------|--------------|-------------------------------------------------------|
+| OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000    | [Duration][] |                                                       |
+| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | [Duration][] |                                                       |
+| OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | [Integer][]  |                                                       |
+| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
 
 ## Batch LogRecord Processor
 
-| Name                            | Description                                                      | Default  | Notes                                                  |
-| ------------------------------- | ---------------------------------------------------------------- | -------  | ------------------------------------------------------ |
-| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 1000     |                                                        |
-| OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000    |                                                        |
-| OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048     |                                                        |
-| OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512      | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE |
+| Name                            | Description                                                      | Default | Type         | Notes                                                  |
+|---------------------------------|------------------------------------------------------------------|---------|--------------|--------------------------------------------------------|
+| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 1000    | [Duration][] |                                                        |
+| OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | [Duration][] |                                                        |
+| OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | [Integer][]  |                                                        |
+| OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE |
 
 ## Attribute Limits
 
@@ -177,32 +211,32 @@ which that SDK implements truncation mechanism.
 
 See the SDK [Attribute Limits](../common/README.md#attribute-limits) section for the definition of the limits.
 
-| Name                              | Description                          | Default | Notes |
-| --------------------------------- | ------------------------------------ | ------- | ----- |
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | no limit|       |
-| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute count      | 128     |       |
+| Name                              | Description                          | Default  | Type        |
+|-----------------------------------|--------------------------------------|----------|-------------|
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | no limit | [Integer][] |
+| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute count      | 128      | [Integer][] |
 
 ## Span Limits
 
 See the SDK [Span Limits](../trace/sdk.md#span-limits) section for the definition of the limits.
 
-| Name                                   | Description                                    | Default | Notes |
-| -------------------------------------- | ---------------------------------------------- | ------- | ----- |
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | no limit |       |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128     |       |
-| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128     |       |
-| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128     |       |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128     |       |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128     |       |
+| Name                                   | Description                                    | Default  | Type        |
+|----------------------------------------|------------------------------------------------|----------|-------------|
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | no limit | [Integer][] |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128      | [Integer][] |
+| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128      | [Integer][] |
+| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128      | [Integer][] |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128      | [Integer][] |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128      | [Integer][] |
 
 ## LogRecord Limits
 
 See the SDK [LogRecord Limits](../logs/sdk.md#logrecord-limits) section for the definition of the limits.
 
-| Name                                        | Description                                | Default  | Notes |
-| ------------------------------------------- | -------------------------------------------| -------- | ----- |
-| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size       | no limit |       |
-| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed log record attribute count | 128      |       |
+| Name                                        | Description                                | Default  | Type        |
+|---------------------------------------------|--------------------------------------------|----------|-------------|
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size       | no limit | [Integer][] |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed log record attribute count | 128      | [Integer][] |
 
 ## OTLP Exporter
 
@@ -210,10 +244,10 @@ See [OpenTelemetry Protocol Exporter Configuration Options](../protocol/exporter
 
 ## Zipkin Exporter
 
-| Name                          | Description                                                                        | Default                              |
-| ----------------------------- | ---------------------------------------------------------------------------------- |------------------------------------- |
-| OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces                                                         | `http://localhost:9411/api/v2/spans` |
-| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time (in milliseconds) the Zipkin exporter will wait for each batch export | 10000                                |
+| Name                          | Description                                                                        | Default                              | Type        |
+|-------------------------------|------------------------------------------------------------------------------------|--------------------------------------|-------------|
+| OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces                                                         | `http://localhost:9411/api/v2/spans` | [String][]  |
+| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time (in milliseconds) the Zipkin exporter will wait for each batch export | 10000                                | [Integer][] |
 
 Additionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:
@@ -228,20 +262,20 @@ _is no specified default, or configuration via environment variables_.
 
 **Status**: [Development](../document-status.md)
 
-| Name                          | Description                     | Default                      |
-| ----------------------------- | --------------------------------| ---------------------------- |
-| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | "localhost"             |
-| OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464                    |
+| Name                          | Description                          | Default     | Type        |
+|-------------------------------|--------------------------------------|-------------|-------------|
+| OTEL_EXPORTER_PROMETHEUS_HOST | Host used by the Prometheus exporter | "localhost" | [String][]  |
+| OTEL_EXPORTER_PROMETHEUS_PORT | Port used by the Prometheus exporter | 9464        | [Integer][] |
 
 ## Exporter Selection
 
 We define environment variables for setting one or more exporters per signal.
 
-| Name          | Description                                                                  | Default |
-| ------------- | ---------------------------------------------------------------------------- | ------- |
-| OTEL_TRACES_EXPORTER | Trace exporter to be used | "otlp"  |
-| OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  |
-| OTEL_LOGS_EXPORTER | Logs exporter to be used | "otlp"  |
+| Name                  | Description                 | Default | Type     |
+|-----------------------|-----------------------------|---------|----------|
+| OTEL_TRACES_EXPORTER  | Trace exporter to be used   | "otlp"  | [Enum][] |
+| OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  | [Enum][] |
+| OTEL_LOGS_EXPORTER    | Logs exporter to be used    | "otlp"  | [Enum][] |
 
 The implementation MAY accept a comma-separated list to enable setting multiple exporters.
 
@@ -293,9 +327,9 @@ Additional known values for `OTEL_LOGS_EXPORTER` are:
 
 ### Exemplar
 
-| Name            | Description | Default | Notes |
-|-----------------|---------|-------------|---------|
-| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"trace_based"` | |
+| Name                           | Description                                         | Default         | Type     | Notes |
+|--------------------------------|-----------------------------------------------------|-----------------|----------|-------|
+| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"trace_based"` | [Enum][] |       |
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
@@ -308,10 +342,10 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 Environment variables specific for the push metrics exporters (OTLP, stdout, in-memory)
 that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-metricreader).
 
-| Name                          | Description                                                                   | Default | Notes |
-| ----------------------------- | ----------------------------------------------------------------------------- | ------- | ----- |
-| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   |       |
-| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   |       |
+| Name                          | Description                                                                   | Default | Type         | Notes |
+|-------------------------------|-------------------------------------------------------------------------------|---------|--------------|-------|
+| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   | [Duration][] |       |
+| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   | [Duration][] |       |
 
 ## Declarative configuration
 
@@ -319,9 +353,9 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 
 Environment variables involved in [declarative configuration](./README.md#declarative-configuration).
 
-| Name                          | Description                                                                                                                                                                   | Default | Notes     |
-|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
-| OTEL_EXPERIMENTAL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | See below |
+| Name                          | Description                                                                                                                                                                   | Default | Type       | Notes     |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|------------|-----------|
+| OTEL_EXPERIMENTAL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | [String][] | See below |
 
 If `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, the file at the specified path is used to
 call [Parse](./sdk.md#parse). The
@@ -360,3 +394,10 @@ To ensure consistent naming across projects, this specification recommends that 
 ```
 OTEL_{LANGUAGE}_{FEATURE}
 ```
+
+[Boolean]: #boolean
+[Float]: #float
+[Integer]: #integer
+[Duration]: #duration
+[String]: #string
+[Enum]: #enum
