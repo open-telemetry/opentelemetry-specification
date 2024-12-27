@@ -89,11 +89,11 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
    - Unhandled exceptions that don't result in application shutdown should be recorded with severity `Error`
    - Errors that result in application shutdown should be recorded with severity `Fatal`.
 
-1. When recording exception on logs, user applications and instrumentations are encouraged to put additional attributes
+6. When recording exception on logs, user applications and instrumentations are encouraged to put additional attributes
    to describe the context that the exception was thrown in.
    They are also encouraged to define their own error events and enrich them with exception details.
 
-2. OTel SDK should record stack traces on exceptions with severity `Error` or higher and should allow users to
+7. OTel SDK should record stack traces on exceptions with severity `Error` or higher and should allow users to
    change the threshold.
 
    See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that
@@ -109,7 +109,7 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
 It should not be an instrumentation library concern to decide whether exception stack trace should be recorded or not.
 Library may write logs providing exception instance through a log bridge and not be aware of this guidance.
 
-It also maybe desirable by some vendors/apps to record all the exception details.
+It also maybe desirable by some vendors/apps to record all exception details at all levels.
 
 OTel Logs API should provide methods that enrich log record with exception details such as
 `setException(exception)` similar to [RecordException](../specification/trace/api.md?plain=1#L682)
@@ -242,8 +242,8 @@ MessageContext context = retrieveNext();
 try {
   processMessage.accept(context)
 } catch (Throwable t) {
-  // This native instrumentation may use OTel log API or another logging library such as SLF4J.
-  // Here we use Error severity since it remained unhandled by the application code
+  // This native instrumentation may use OTel log API or another logging library such as slf4j.
+  // Here we use Error severity since this exception was not handled by the application code.
   logger.atError()
     .addKeyValuePair("messaging.message.id", context.getMessageId())
     ...
@@ -268,7 +268,7 @@ final class InstrumentedRecordInterceptor<K, V> implements RecordInterceptor<K, 
 
   @Override
   public void failure(ConsumerRecord<K, V> record, Exception exception, Consumer<K, V> consumer) {
-    // we should capture the error in the scope of the processing span (or pass its context explicitly).
+    // we should capture this error in the scope of the processing span (or pass its context explicitly).
     logger.logRecordBuilder()
       .setSeverity(Severity.ERROR)
       .addAttribute("messaging.message.id", record.getId())
@@ -314,7 +314,8 @@ Alternatives:
 
 ## Open questions
 
-TBD
+- Do we need to have log-related limits similar to [span event limits](/specification/trace/sdk.md#span-limits)
+  on the SDK level?
 
 ## Future possibilities
 
