@@ -47,9 +47,8 @@ release.
 
 ### OTEPs
 
-- [OTEP-4333](https://github.com/open-telemetry/oteps/blob/main/text/4333-component.md)
+- [OTEP-4333](https://github.com/open-telemetry/opentelemetry-specification/pull/4333)
   Recording exceptions on logs.
-
 
 ## v1.40.0 (2024-12-12)
 
