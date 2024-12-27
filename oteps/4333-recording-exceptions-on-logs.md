@@ -68,8 +68,7 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
 
     > [!NOTE]
     >
-    > Top-level instrumentations is the only place non-native instrumentations should
-    > record exceptions.
+    > Only top-level instrumentations (native and non-native) should record exceptions at `Error` (or higher) severity.
 
    Some runtimes provide global exception handler that can be used to log exceptions.
    Priority should be given to the instrumentation point where the operation context is available.
@@ -88,13 +87,13 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
    - Error that don't indicate any issue should be recorded with severity not higher than `Info`.
    - Transient errors (even if it's the last try) should be recorded with severity not higher than `Warning`.
    - Unhandled exceptions that don't result in application shutdown should be recorded with severity `Error`
-   - Errors that result in application shutdown should be recorded with severity `Fatal`
+   - Errors that result in application shutdown should be recorded with severity `Fatal`.
 
-6. When recording exception on logs, user applications and instrumentations are encouraged to put additional attributes
+1. When recording exception on logs, user applications and instrumentations are encouraged to put additional attributes
    to describe the context that the exception was thrown in.
    They are also encouraged to define their own error events and enrich them with exception details.
 
-7. OTel SDK should record stack traces on exceptions with severity `Error` or higher and should allow users to
+2. OTel SDK should record stack traces on exceptions with severity `Error` or higher and should allow users to
    change the threshold.
 
    See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that
