@@ -7,12 +7,14 @@ This OTEP provides guidance on how to record exceptions using OpenTelemetry logs
 Today OTel supports recording exceptions using span events available through Trace API. Outside of OTel world, exceptions are usually recorded by user apps and libraries using logging libraries and may be recorded as OTel logs via logging bridge.
 
 Exceptions recorded on logs have the following advantages over span events:
+
 - they can be recorded for operations that don't have any tracing instrumentation
 - they can be sampled along with or separately from spans
 - they can have different severity levels to reflect how critical the exception is
 - they are already reported natively by many frameworks and libraries
 
-Recording exceptions is essential for troubleshooting. Regardless of how exceptions are recorded, they could be noisy:
+Recording exceptions is essential for troubleshooting, but regardless of how exceptions are recorded, they could be noisy:
+
 - distributed applications experience transient errors at the rate proportional to their scale and exceptions in logs could be misleading -
   individual occurrence of transient errors are not necessarily indicative of a problem.
 - exception stack traces can be huge. Corresponding attribute value can frequently reach several KBs resulting in high costs
@@ -69,7 +71,6 @@ this OTEP proposes to record exception stack traces on log with `Error` or highe
 
    See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that
    records stack trace conditionally.
-
 
 > [!NOTE]
 >
@@ -179,7 +180,8 @@ public class Connection {
             return socketChannel.write(content);
         } catch (SocketException ex) {
             logger.logRecordBuilder()
-              // we retry it, so it's Info or lower
+              // we'll retry it, so it's info or lower.
+              // we'll write a warn for overall operation if retries are exhausted.
               .setSeverity(Severity.INFO)
               .addAttribute("connection.id", this.getId())
               .addException(ex)
@@ -193,7 +195,7 @@ public class Connection {
 
 #### Messaging processor instrumentation
 
-In this example, application code provides and callback to the messaging processor to
+In this example, application code provides the callback to the messaging processor to
 execute for each message.
 
 ```java
@@ -208,19 +210,21 @@ processorClient.start();
 ```
 
 The `MessagingProcessorClient` implementation should catch exceptions thrown by the  `processMessage` callback and log them similarly to
+this example:
 
 ```java
 MessageContext context = retrieveNext();
 try {
   processMessage.accept(context)
 } catch (Throwable t) {
-  // this native instrumentation may use OTel log API or another logging library
-  // such as SLF4J
+  // This native instrumentation may use OTel log API or another logging library such as SLF4J.
+  // Here we use Error severity since it remained unhandled by the application code
   logger.atError()
     .addKeyValuePair("messaging.message.id", context.getMessageId())
     ...
     .setException(t)
-    .log()
+    .log();
+  // error handling logic ...
 }
 ```
 
