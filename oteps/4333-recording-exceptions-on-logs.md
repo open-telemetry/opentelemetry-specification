@@ -1,5 +1,24 @@
 # Recording exceptions and errors on logs
 
+<!-- toc -->
+
+- [Motivation](#motivation)
+- [Guidance](#guidance)
+  * [Details](#details)
+- [API changes](#api-changes)
+- [Examples](#examples)
+  * [Logging exception from client library in a user application](#logging-exception-from-client-library-in-a-user-application)
+  * [Logging error inside the library (native instrumentation)](#logging-error-inside-the-library-native-instrumentation)
+  * [Logging errors in messaging processor](#logging-errors-in-messaging-processor)
+    + [Native instrumentation](#native-instrumentation)
+    + [Instrumentation library](#instrumentation-library)
+- [Trade-offs and mitigations](#trade-offs-and-mitigations)
+- [Prior art and alternatives](#prior-art-and-alternatives)
+- [Open questions](#open-questions)
+- [Future possibilities](#future-possibilities)
+
+<!-- tocstop -->
+
 This OTEP provides guidance on how to record exceptions using OpenTelemetry logs focusing on minimizing duplication and providing context to reduce the noise.
 
 ## Motivation
@@ -32,12 +51,12 @@ starting point, but they are encouraged to adjust it to their needs.
 This guidance boils down to the following:
 
 Instrumentations should record exception information (along with other context) on the log record and
-use appropriate severity - only unhandled exceptions should be recorded as `Error` or higher. They
+use appropriate severity - only unhandled exceptions should be recorded as `Error` or higher. Instrumentations
 should strive to report each exception once.
 
-Instrumentation should provide the whole exception instance to the OTel (instead of individual attributes)
-and the OTel SDK should, based on user configuration, decide which information to record. As a default,
-this OTEP proposes to record exception stack traces on log with `Error` or higher severity.
+Instrumentations should provide the whole exception instance to the OTel (instead of individual attributes)
+and the OTel SDK should, based on configuration, decide which information to record. As a default,
+this OTEP proposes to record exception stack traces on logs with `Error` or higher severity.
 
 ### Details
 
@@ -47,7 +66,16 @@ this OTEP proposes to record exception stack traces on log with `Error` or highe
 2. Instrumentations for incoming requests, message processing, background job execution, or others that wrap user code and usually create local root spans, should record logs
    for unhandled exceptions with `Error` severity.
 
-   Some runtimes and frameworks provide global exception handler that can be used to record exception logs. Priority should be given to the instrumentation point where the operation context is available.
+    > [!NOTE]
+    >
+    > Top-level instrumentations is the only place non-native instrumentations should
+    > record exceptions.
+
+   Some runtimes provide global exception handler that can be used to log exceptions.
+   Priority should be given to the instrumentation point where the operation context is available.
+   Language SIGs are encouraged to give runtime-specific guidance. For example, here's
+   [.NET guidance](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/reporting-exceptions#unhandled-exception)
+   for recording exceptions on traces.
 
 3. Native instrumentations should record log describing an error and the context it happened in
    when this error is detected (or where the most context is available).
@@ -72,16 +100,12 @@ this OTEP proposes to record exception stack traces on log with `Error` or highe
    See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that
    records stack trace conditionally.
 
-> [!NOTE]
->
-> Based on this guidance non-native instrumentations should record exceptions in top-level instrumentations only (#2 in [Details](#details))
+## API changes
 
-> [!Important]
+> [!IMPORTANT]
 >
 > OTel should provide API like `setException` when creating log record that will record only necessary information depending
-> on the configuration and log severity. See [API changes](#api-changes) for the details.
-
-## API changes
+> on the configuration and log severity.
 
 It should not be an instrumentation library concern to decide whether exception stack trace should be recorded or not.
 Library may write logs providing exception instance through a log bridge and not be aware of this guidance.
@@ -96,9 +120,9 @@ OTel SDK should implement such methods and set exception attributes based on con
 and in the optimal way. This would also provide a more scalable way to evolve this guidance
 and extend configuration options if necessary.
 
-### Examples
+## Examples
 
-#### Catching exception from client library in a user application
+### Logging exception from client library in a user application
 
 ```java
 StorageClient client = createClient(endpoint, credential);
@@ -133,7 +157,7 @@ try {
 }
 ```
 
-#### Recording error inside the library (native instrumentation)
+### Logging error inside the library (native instrumentation)
 
 It's a common practice to record exceptions using logging libraries. Client libraries that are natively instrumented with OpenTelemetry should
 leverage OTel Events/Logs API for their exception logging purposes.
@@ -171,7 +195,7 @@ public class StorageClient {
 Network level errors are part of normal life, we should consider using low severity for them
 
 ```java
-public class Connection {
+public class NetworkClient {
 
     private final Logger logger;
     ...
@@ -193,7 +217,9 @@ public class Connection {
 }
 ```
 
-#### Messaging processor instrumentation
+### Logging errors in messaging processor
+
+#### Native instrumentation
 
 In this example, application code provides the callback to the messaging processor to
 execute for each message.
@@ -227,6 +253,35 @@ try {
   // error handling logic ...
 }
 ```
+
+If native instrumentation supports tracing, it should capture the error in the scope of the processing
+span.
+
+#### Instrumentation library
+
+In this example we leverage Spring Kafka `RecordInterceptor` extensibility point that allows to
+listen to exceptions that remained unhandled.
+
+```java
+import org.springframework.kafka.listener.RecordInterceptor;
+final class InstrumentedRecordInterceptor<K, V> implements RecordInterceptor<K, V> {
+  ...
+
+  @Override
+  public void failure(ConsumerRecord<K, V> record, Exception exception, Consumer<K, V> consumer) {
+    // we should capture the error in the scope of the processing span (or pass its context explicitly).
+    logger.logRecordBuilder()
+      .setSeverity(Severity.ERROR)
+      .addAttribute("messaging.message.id", record.getId())
+      ...
+      .addException(ex)
+      .emit();
+    // ..
+  }
+}
+```
+
+See [corresponding Java (tracing) instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/spring/spring-kafka-2.7/library/src/main/java/io/opentelemetry/instrumentation/spring/kafka/v2_7/InstrumentedRecordInterceptor.java) for the details.
 
 ## Trade-offs and mitigations
 
