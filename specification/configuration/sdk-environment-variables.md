@@ -130,9 +130,9 @@ Timeout is a sub-classification of [duration](#duration): All timeouts are also
 durations, but not all durations are timeouts.
 
 For variables that represent a timeout (e.g. exporter timeout), implementations
-SHOULD validate that values are positive unless they have good reasons not to (
-e.g. backwards compatibility with semantics where a negative or zero value means
-indefinite).
+SHOULD interpret a value of zero as indefinite. In practice, implementations MAY
+treat indefinite as "a very long time" and substitute a very large duration (
+e.g. the maximum milliseconds representable by a 32-bit integer).
 
 ### String
 
