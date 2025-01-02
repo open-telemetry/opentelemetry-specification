@@ -61,7 +61,7 @@ both containing an array of strings to represent a mapping
 
 Attributes are equal when their keys and values are equal.
 
-See [Attribute Naming](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-naming.md) for naming guidelines.
+See [Attribute Naming](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/naming.md#attributes) for naming guidelines.
 
 See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-requirement-level.md) for requirement levels guidelines.
 

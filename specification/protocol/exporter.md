@@ -26,43 +26,53 @@ Each configuration option MUST be overridable by a signal specific option.
   When using `OTEL_EXPORTER_OTLP_ENDPOINT`, exporters MUST construct per-signal URLs as [described below](#endpoint-urls-for-otlphttp). The per-signal endpoint configuration options take precedence and can be used to override this behavior (the URL is used as-is for them, without any modifications). See the [OTLP Specification][otlphttp-req] for more details.
   - Default:  `http://localhost:4318` [1]
   - Env vars: `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`
+  - Type: [String][]
 
 - **Endpoint (OTLP/gRPC)**: Target to which the exporter is going to send spans, metrics, or logs. The option SHOULD accept any form allowed by the underlying gRPC client implementation. Additionally, the option MUST accept a URL with a scheme of either `http` or `https`. A scheme of `https` indicates a secure connection and takes precedence over the `insecure` configuration setting. A scheme of `http` indicates an insecure connection and takes precedence over the `insecure` configuration setting. If the gRPC client implementation does not support an endpoint with a scheme of `http` or `https` then the endpoint SHOULD be transformed to the most sensible format for that implementation.
   - Default: `http://localhost:4317` [1]
   - Env vars: `OTEL_EXPORTER_OTLP_ENDPOINT` `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`
+  - Type: [String][]
 
 - **Insecure**: Whether to enable client transport security for the exporter's gRPC connection. This option only applies to OTLP/gRPC when an endpoint is provided without the `http` or `https` scheme - OTLP/HTTP always uses the scheme provided for the `endpoint`. Implementations MAY choose to not implement the `insecure` option if it is not required or supported by the underlying gRPC client implementation.
   - Default: `false`
   - Env vars: `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_TRACES_INSECURE` `OTEL_EXPORTER_OTLP_METRICS_INSECURE` `OTEL_EXPORTER_OTLP_LOGS_INSECURE` [2]
+  - Type: [Boolean[]
 
 - **Certificate File**: The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection.
   - Default: n/a
   - Env vars: `OTEL_EXPORTER_OTLP_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE` `OTEL_EXPORTER_OTLP_LOGS_CERTIFICATE`
+  - Type: [String][]
 
 - **Client key file**: Clients private key to use in mTLS communication in PEM format.
   - Default: n/a
   - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_KEY` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_KEY` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_KEY` `OTEL_EXPORTER_OTLP_LOGS_CLIENT_KEY`
+  - Type: [String][]
 
 - **Client certificate file**: Client certificate/chain trust for clients private key to use in mTLS communication in PEM format.
   - Default: n/a
   - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_LOGS_CLIENT_CERTIFICATE`
+  - Type: [String][]
 
 - **Headers**: Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.
   - Default: n/a
   - Env vars: `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` `OTEL_EXPORTER_OTLP_LOGS_HEADERS`
+  - Type: [String][]
 
 - **Compression**: Compression key for supported compression types. Supported compression: `gzip`.
   - Default: No value [3]
   - Env vars: `OTEL_EXPORTER_OTLP_COMPRESSION` `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION` `OTEL_EXPORTER_OTLP_METRICS_COMPRESSION` `OTEL_EXPORTER_OTLP_LOGS_COMPRESSION`
+  - Type: [Enum][]
 
 - **Timeout**: Maximum time the OTLP exporter will wait for each batch export.
   - Default: 10s
   - Env vars: `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT`
+  - Type: [Duration][]
 
 - **Protocol**: The transport protocol. Options MUST be one of: `grpc`, `http/protobuf`, `http/json`.
   See [Specify Protocol](./exporter.md#specify-protocol) for more details.
   - Default: `http/protobuf`
   - Env vars: `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` `OTEL_EXPORTER_OTLP_LOGS_PROTOCOL`
+  - Type: [Enum][]
 
 **[1]**: SDKs SHOULD default endpoint variables to use `http` scheme unless they have good reasons to choose
 `https` scheme for the default (e.g., for backward compatibility reasons in a stable SDK release).
@@ -197,6 +207,11 @@ OTel-OTLP-Exporter-Python/1.2.3
 ```
 
 The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
+
+[Boolean]: ../configuration/sdk-environment-variables.md#boolean
+[Duration]: ../configuration/sdk-environment-variables.md#duration
+[String]: ../configuration/sdk-environment-variables.md#string
+[Enum]: ../configuration/sdk-environment-variables.md#enum
 
 [resource-semconv]: https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#telemetry-sdk
 [otlphttp-req]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-request
