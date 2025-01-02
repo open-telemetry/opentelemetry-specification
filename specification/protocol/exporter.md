@@ -209,7 +209,6 @@ OTel-OTLP-Exporter-Python/1.2.3
 The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
 
 [Boolean]: ../configuration/sdk-environment-variables.md#boolean
-[Duration]: ../configuration/sdk-environment-variables.md#duration
 [Timeout]: ../configuration/sdk-environment-variables.md#timeout
 [String]: ../configuration/sdk-environment-variables.md#string
 [Enum]: ../configuration/sdk-environment-variables.md#enum
