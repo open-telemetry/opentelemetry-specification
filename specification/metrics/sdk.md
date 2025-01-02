@@ -54,6 +54,8 @@ linkTitle: SDK
 - [MeasurementProcessor](#measurementprocessor)
   * [MeasurementProcessor operations](#measurementprocessor-operations)
     + [OnMeasure](#onmeasure)
+  * [Built-in processors](#built-in-processors)
+    + [SimpleProcessor](#simpleprocessor)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
     + [AlwaysOn](#alwayson)
@@ -993,6 +995,8 @@ series and the topic requires further analysis.
 
 `MeasurementProcessor` is an interface which allows hooks when a `Measurement` is recorded by an `Instrument`.
 
+Built-in measurement processors are responsible for [Measurement Processing](#measurement-processing).
+
 `MeasurementProcessors` can be registered directly on SDK `MeterProvider` and they are invoked in the same order as they were registered.
 
 SDK MUST allow users to implement and configure custom processors.
@@ -1031,6 +1035,16 @@ The following diagram shows `MeasurementProcessor`'s relationship to other compo
 For a `MeasurementProcessor` registered directly on SDK `MeterProvider`, the `measurement` mutations MUST be visible in next registered processors.
 
 A `MeasuremenetProcessor` may freely modify `measurement` for the duration of the `OnMeasure` call.
+
+A `MeasurementProcessor` MUST invoke `OnMeasure` on the next registered processor.
+
+### Built-in processors
+
+The standard OpenTelemetry SDK MUST implement simple processor as described below.
+
+#### SimpleProcessor
+
+This is an implementation of `MeasurementProcessor` which calculates an in-memory state from incoming `Measurements`.
 
 ## Exemplar
 
