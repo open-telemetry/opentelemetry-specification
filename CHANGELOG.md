@@ -29,6 +29,10 @@ release.
 
 ### SDK Configuration
 
+- Clarify that implementations should interpret timeout environment variable
+  values of zero as indefinite.
+  ([#4331](https://github.com/open-telemetry/opentelemetry-specification/pull/4331))
+
 ### Common
 
 ### Supplementary Guidelines
