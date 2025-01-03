@@ -54,8 +54,8 @@ Instrumentations should record exception information (along with other context) 
 use appropriate severity - only unhandled exceptions should be recorded as `Error` or higher. Instrumentations
 should strive to report each exception once.
 
-Instrumentations should provide the whole exception instance to the OTel (instead of individual attributes)
-and the OTel SDK should, based on configuration, decide which information to record. As a default,
+Instrumentations should provide the whole exception instance to the OTel SDK (instead of individual attributes)
+and the SDK should, based on configuration, decide which information to record. As a default,
 this OTEP proposes to record exception stack traces on logs with `Error` or higher severity.
 
 ### Details
@@ -72,7 +72,7 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
 
    Some runtimes provide global exception handler that can be used to log exceptions.
    Priority should be given to the instrumentation point where the operation context is available.
-   Language SIGs are encouraged to give runtime-specific guidance. For example, here's
+   Language SIGs are encouraged to give runtime-specific guidance. For example, here is the
    [.NET guidance](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/reporting-exceptions#unhandled-exception)
    for recording exceptions on traces.
 
@@ -84,7 +84,7 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
 
 5. An error should be logged with appropriate severity depending on the available context.
 
-   - Error that don't indicate any issue should be recorded with severity not higher than `Info`.
+   - Errors that don't indicate any issue should be recorded with severity not higher than `Info`.
    - Transient errors (even if it's the last try) should be recorded with severity not higher than `Warning`.
    - Unhandled exceptions that don't result in application shutdown should be recorded with severity `Error`
    - Errors that result in application shutdown should be recorded with severity `Fatal`.
@@ -156,7 +156,7 @@ try {
 }
 ```
 
-### Logging error inside the library (native instrumentation)
+### Logging error inside the instrumented Library (native instrumentation)
 
 It's a common practice to record exceptions using logging libraries. Client libraries that are natively instrumented with OpenTelemetry should
 leverage OTel Events/Logs API for their exception logging purposes.
