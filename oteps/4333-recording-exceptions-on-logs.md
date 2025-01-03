@@ -52,11 +52,6 @@ This guidance boils down to the following:
 
 Instrumentations should record exception information (along with other context) on the log record and
 use appropriate severity - only unhandled exceptions should be recorded as `Error` or higher.
-
-> [!NOTE]
->
-> As a result of applying this guidance, only top-level instrumentations (native and non-native) should record exceptions at `Error` (or higher) severity.
-
 Instrumentations should strive to report each exception once.
 
 Instrumentations should provide the whole exception instance to the OTel SDK (instead of individual attributes)
