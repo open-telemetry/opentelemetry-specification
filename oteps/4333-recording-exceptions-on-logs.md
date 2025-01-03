@@ -8,9 +8,9 @@
 - [API changes](#api-changes)
 - [Examples](#examples)
   * [Logging exception from client library in a user application](#logging-exception-from-client-library-in-a-user-application)
-  * [Logging error inside the library (native instrumentation)](#logging-error-inside-the-library-native-instrumentation)
+  * [Logging error inside the natively instrumented Library](#logging-error-inside-the-natively-instrumented-library)
   * [Logging errors in messaging processor](#logging-errors-in-messaging-processor)
-    + [Native instrumentation](#native-instrumentation)
+    + [Natively instrumented library](#natively-instrumented-library)
     + [Instrumentation library](#instrumentation-library)
 - [Trade-offs and mitigations](#trade-offs-and-mitigations)
 - [Prior art and alternatives](#prior-art-and-alternatives)
@@ -51,8 +51,13 @@ starting point, but they are encouraged to adjust it to their needs.
 This guidance boils down to the following:
 
 Instrumentations should record exception information (along with other context) on the log record and
-use appropriate severity - only unhandled exceptions should be recorded as `Error` or higher. Instrumentations
-should strive to report each exception once.
+use appropriate severity - only unhandled exceptions should be recorded as `Error` or higher.
+
+> [!NOTE]
+>
+> As a result of applying this guidance, only top-level instrumentations (native and non-native) should record exceptions at `Error` (or higher) severity.
+
+Instrumentations should strive to report each exception once.
 
 Instrumentations should provide the whole exception instance to the OTel SDK (instead of individual attributes)
 and the SDK should, based on configuration, decide which information to record. As a default,
@@ -66,17 +71,13 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
 2. Instrumentations for incoming requests, message processing, background job execution, or others that wrap user code and usually create local root spans, should record logs
    for unhandled exceptions with `Error` severity.
 
-    > [!NOTE]
-    >
-    > Only top-level instrumentations (native and non-native) should record exceptions at `Error` (or higher) severity.
-
    Some runtimes provide global exception handler that can be used to log exceptions.
    Priority should be given to the instrumentation point where the operation context is available.
    Language SIGs are encouraged to give runtime-specific guidance. For example, here is the
-   [.NET guidance](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/reporting-exceptions#unhandled-exception)
+   [.NET guidance](https://github.com/open-telemetry/opentelemetry-dotnet/blob/610045298873397e55e0df6cd777d4901ace1f63/docs/trace/reporting-exceptions/README.md#unhandled-exception)
    for recording exceptions on traces.
 
-3. Native instrumentations should record log describing an error and the context it happened in
+3. Natively instrumented libraries should record log describing an error and the context it happened in
    when this error is detected (or where the most context is available).
 
 4. It's not recommended to record the same error as it propagates through the stack trace or
@@ -156,7 +157,7 @@ try {
 }
 ```
 
-### Logging error inside the instrumented Library (native instrumentation)
+### Logging error inside the natively instrumented Library
 
 It's a common practice to record exceptions using logging libraries. Client libraries that are natively instrumented with OpenTelemetry should
 leverage OTel Events/Logs API for their exception logging purposes.
@@ -218,7 +219,7 @@ public class NetworkClient {
 
 ### Logging errors in messaging processor
 
-#### Native instrumentation
+#### Natively instrumented library
 
 In this example, application code provides the callback to the messaging processor to
 execute for each message.
@@ -242,7 +243,7 @@ MessageContext context = retrieveNext();
 try {
   processMessage.accept(context)
 } catch (Throwable t) {
-  // This native instrumentation may use OTel log API or another logging library such as slf4j.
+  // This natively instrumented library may use OTel log API or another logging library such as slf4j.
   // Here we use Error severity since this exception was not handled by the application code.
   logger.atError()
     .addKeyValuePair("messaging.message.id", context.getMessageId())
@@ -253,7 +254,7 @@ try {
 }
 ```
 
-If native instrumentation supports tracing, it should capture the error in the scope of the processing
+If this instrumentation supports tracing, it should capture the error in the scope of the processing
 span.
 
 #### Instrumentation library
