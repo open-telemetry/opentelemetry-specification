@@ -20,7 +20,7 @@ Here are a few situations that require recording of Events, there will be more. 
   - Standalone events that occur when there is no span in progress, such as errors, user interaction events and web vitals.
 - Recording kubernetes events
 - Collector Entity events [link](https://docs.google.com/document/d/1Tg18sIck3Nakxtd3TFFcIjrmRO_0GLMdHXylVqBQmJA/edit)
-- Few other event systems described in [example mappings](../specification/logs/data-model.md#appendix-a-example-mappings) in the data model.
+- Few other event systems described in [example mappings](../specification/logs/data-model-appendix.md#appendix-a-example-mappings) in the data model.
 
 ### Can the current Log API interfaces be used for events?
 
