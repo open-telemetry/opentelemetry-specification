@@ -55,7 +55,7 @@ linkTitle: SDK
   * [MeasurementProcessor operations](#measurementprocessor-operations)
     + [OnMeasure](#onmeasure)
   * [Built-in processors](#built-in-processors)
-    + [SimpleProcessor](#simpleprocessor)
+    + [DefaultProcessor](#defaultprocessor)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
     + [AlwaysOn](#alwayson)
@@ -1040,9 +1040,9 @@ A `MeasurementProcessor` SHOULD invoke `OnMeasure` on the next registered proces
 
 ### Built-in processors
 
-The standard OpenTelemetry SDK MUST implement simple processor as described below.
+The standard OpenTelemetry SDK MUST implement default processor as described below.
 
-#### SimpleProcessor
+#### DefaultProcessor
 
 This is an implementation of `MeasurementProcessor` which calculates an in-memory state from incoming `Measurements`.
 
