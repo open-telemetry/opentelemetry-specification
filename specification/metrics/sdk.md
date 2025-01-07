@@ -1034,9 +1034,9 @@ The following diagram shows `MeasurementProcessor`'s relationship to other compo
 
 For a `MeasurementProcessor` registered directly on SDK `MeterProvider`, the `measurement` mutations MUST be visible in next registered processors.
 
-A `MeasuremenetProcessor` may freely modify `measurement` for the duration of the `OnMeasure` call.
+A `MeasuremenetProcessor` MAY freely modify `measurement` for the duration of the `OnMeasure` call.
 
-A `MeasurementProcessor` MUST invoke `OnMeasure` on the next registered processor.
+A `MeasurementProcessor` SHOULD invoke `OnMeasure` on the next registered processor. A `MeasurementProcessor` MAY decide to drop the `Measurement` by not invoking the next processor.
 
 ### Built-in processors
 
