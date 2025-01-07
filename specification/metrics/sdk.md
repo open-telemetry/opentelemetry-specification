@@ -56,6 +56,7 @@ linkTitle: SDK
     + [OnMeasure](#onmeasure)
   * [Built-in processors](#built-in-processors)
     + [DefaultProcessor](#defaultprocessor)
+    + [NoopProcessor](#noopprocessor)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
     + [AlwaysOn](#alwayson)
@@ -999,6 +1000,8 @@ Built-in measurement processors are responsible for [Measurement Processing](#me
 
 `MeasurementProcessors` can be registered directly on SDK `MeterProvider` and they are invoked in the same order as they were registered.
 
+Each processor registered on the `MeterProvider` is part of a pipeline. The SDK MUST inject the `OnMeasure` function from the next processor in the chain into the current processor. It is RECOMMENDED that the SDK adds a `NoopProcessor` at the end of a pipeline.
+
 SDK MUST allow users to implement and configure custom processors.
 
 The following diagram shows `MeasurementProcessor`'s relationship to other components in the SDK:
@@ -1027,8 +1030,9 @@ The following diagram shows `MeasurementProcessor`'s relationship to other compo
 
 **Parameters:**
 
-* `measurement` - a [Measurement](./api.md#measurement) that was recorded
 * `context` - the resolved `Context` (the explicitly passed `Context` or the current `Context`)
+* `measurement` - a [Measurement](./api.md#measurement) that was recorded
+* `next` - the `OnMeasure` function from the next processor in the chain
 
 **Returns:** Void
 
@@ -1045,6 +1049,10 @@ The standard OpenTelemetry SDK MUST implement default processor as described bel
 #### DefaultProcessor
 
 This is an implementation of `MeasurementProcessor` which calculates an in-memory state from incoming `Measurements`.
+
+#### NoopProcessor
+
+This is an implementation of `MeasurementProcessor` which does nothing. It can be used to entirely disable processing of `Measurements` or to safely terminate a chain of processors.
 
 ## Exemplar
 
