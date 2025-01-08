@@ -29,7 +29,8 @@ release.
 
 ### SDK Configuration
 
-- Add exception for environment variable naming guidance to avoid double negation ([#4351](https://github.com/open-telemetry/opentelemetry-specification/pull/4351)).
+- Add exception for environment variable naming guidance to avoid double negation.
+  ([#4351](https://github.com/open-telemetry/opentelemetry-specification/pull/4351))
 
 ### Common
 
