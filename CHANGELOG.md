@@ -15,6 +15,11 @@ release.
 
 ### Logs
 
+- Remove `Logger`'s Log Instrumentation operations.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+- Make all `Logger` operations user-facing.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+
 ### Events
 
 ### Baggage
