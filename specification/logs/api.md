@@ -137,7 +137,7 @@ The API MUST accept the following parameters:
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
-- **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#event-name) (optional)
+- **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
 
 #### Enabled
 
@@ -174,7 +174,7 @@ formatted as an [event](./data-model.md#events).
 
 **Parameters:**
 
-* [Event Name](./data-model.md#event-name) (required)
+* [Event Name](./data-model.md#field-eventname) (required)
 * [Timestamp](./data-model.md#field-timestamp) (optional)
 * [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
   the implementation SHOULD set it equal to the current time.

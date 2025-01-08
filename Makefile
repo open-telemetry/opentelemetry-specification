@@ -27,11 +27,13 @@ misspell-correction:	$(MISSPELL)
 
 .PHONY: markdown-link-check
 markdown-link-check:
-	@if ! npm ls markdown-link-check; then npm install; fi
-	@for f in $(ALL_DOCS); do \
-		npx --no -- markdown-link-check --quiet --config .markdown_link_check_config.json $$f \
-			|| exit 1; \
-	done
+	docker run --rm \
+		--mount 'type=bind,source=$(PWD),target=/home/repo' \
+		lycheeverse/lychee \
+		--config home/repo/.lychee.toml \
+		--root-dir /home/repo \
+		-v \
+		home/repo
 
 # This target runs markdown-toc on all files that contain
 # a comment <!-- tocstop -->.

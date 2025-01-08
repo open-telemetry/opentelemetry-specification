@@ -9,6 +9,39 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Events
+
+- Support complex attributes in the Event API
+  ([#4334](https://github.com/open-telemetry/opentelemetry-specification/pull/4334))
+
+### Baggage
+
+### Resource
+
+### Profiles
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.40.0 (2024-12-12)
+
+### Context
+
 - Adds optional `GetAll` method to `Getter` in Propagation API, allowing for the retrieval of multiple values for the same key.
   [#4295](https://github.com/open-telemetry/opentelemetry-specification/pull/4295)
 
@@ -36,25 +69,13 @@ release.
   ([#4301](https://github.com/open-telemetry/opentelemetry-specification/pull/4301))
 - Change `event.name` attribute into top-level event name field.
   ([#4320](https://github.com/open-telemetry/opentelemetry-specification/pull/4320))
-- Support complex attributes in the Event API
-  ([#4334](https://github.com/open-telemetry/opentelemetry-specification/pull/4334))
 
 ### Events
 
 - Deprecate Events API and SDK in favor of having Events support in the Logs API and SDK.
   ([#4319](https://github.com/open-telemetry/opentelemetry-specification/pull/4319))
-
-### Baggage
-
-### Resource
-
-### Profiles
-
-### OpenTelemetry Protocol
-
-### Compatibility
-
-### SDK Configuration
+- Change `event.name` attribute into top-level event name field.
+  ([#4320](https://github.com/open-telemetry/opentelemetry-specification/pull/4320))
 
 ### Common
 
@@ -65,6 +86,12 @@ release.
 
 - Add core principles for evaluating specification changes.
   ([#4286](https://github.com/open-telemetry/opentelemetry-specification/pull/4286))
+
+## OTEPs
+
+- The [open-telemetry/oteps](https://github.com/open-telemetry/oteps) repository was
+  merged into the specification repository.
+ ([#4288](https://github.com/open-telemetry/opentelemetry-specification/pull/4288))
 
 ## v1.39.0 (2024-11-06)
 
