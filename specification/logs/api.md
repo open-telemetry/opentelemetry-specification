@@ -94,7 +94,7 @@ instances where at least one parameter has a different value.
 
 ## Logger
 
-The `Logger` is responsible for emitting `LogRecord`s. 
+The `Logger` is responsible for emitting `LogRecord`s.
 
 The `Logger` MUST provide a function to:
 
