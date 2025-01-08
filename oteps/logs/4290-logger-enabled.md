@@ -176,12 +176,23 @@ extending `LogRecordProcessor` is more straightforward.
 
 There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2354859647)
 to add a distinct `LogRecordFilterer` abstraction.
+Here is [a dicsussion](https://github.com/open-telemetry/opentelemetry-specification/pull/4290#discussion_r1887795096).
 
 However, this approach is less suited for use case (5)
 and offers limited flexibility for use case (6).
 The initial feedback after [an experiment](https://github.com/open-telemetry/opentelemetry-go/pull/5825)
-with `LogRecordFilterer` was that it makes composing
+with `LogRecordFilterer` was that it can make composing
 processing pipelines harder and more bug-prone.
+
+Adding `Enabled` to `LogRecordProcessor` should be:
+
+- Simpler. There is no need for separate code for
+  global filterers and processor filterers.
+- More composable. Filtering could be applied at any place,
+  even after some pre-processing.
+- More cohesive: Filtering can be coupled to processing,
+  e.g. making a rate limiting processor should be more
+  straighforward.
 
 ## Open questions
 
