@@ -72,10 +72,10 @@ here as a true value, including unset and empty values, MUST be interpreted as
 false. If any value other than a true value, case-insensitive string `"false"`,
 empty, or unset is used, a warning SHOULD be logged to inform users about the
 fallback to false being applied. All Boolean environment variables SHOULD be
-named and defined such that false is the expected safe default behavior, unless 
+named and defined such that false is the expected safe default behavior, unless
 the name and false value would produce a double-negation (e.g. 'disabled'). In
 the latter case Boolean environment variables MAY be named and defined such that
-true is the safe default behavior. Renaming or changing the default value MUST 
+true is the safe default behavior. Renaming or changing the default value MUST
 NOT happen without a major version upgrade.
 
 ### Numeric
