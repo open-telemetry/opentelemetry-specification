@@ -237,13 +237,14 @@ There is a [proposal](https://github.com/open-telemetry/opentelemetry-specificat
 suggested dynamic evaluation in `LoggerConfig` instead of static configuration
 to make the `LoggerConfig` to support dynamic evaluation.
 
-However, since the purpose of `LoggerConfig` is static configuration,
-and use cases (5) and (6) are tied to log record processing,
-extending `LogRecordProcessor` seem more appropriate.
-
 Additionally, nothing prevents adding some other way of configuring Loggers similar to
 [Metrics View](../../specification/metrics/sdk.md#view).
 This was proposed [here](https://github.com/open-telemetry/opentelemetry-specification/pull/4290#discussion_r1908897211).
+
+It is worth mentioning that the purpose of `LoggerConfig` is `Logger` configuration.
+It won't solve use cases (5) and (6) that are tied to log processing pipelines.
+This mechanism could not be used to setup different filters for each registered
+processor.
 
 ### Extending Logger.Enabled
 
