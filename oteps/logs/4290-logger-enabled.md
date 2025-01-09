@@ -35,7 +35,12 @@ OpenTelemetry Logs SDK users require:
   the most popular use cases.
 - A dynamic hook for advanced customization and flexibility.
 
-Address [Specify how Logs SDK implements Enabled #4207](https://github.com/open-telemetry/opentelemetry-specification/issues/4207).
+The main purpose of this OTEP is to have foundations for:
+
+- extending the SDK's `LoggerConfig` with `minimum_severity_level` field,
+- extending the `LogRecordProcessor` with an `Enabled` operation,
+
+and address [Specify how Logs SDK implements Enabled #4207](https://github.com/open-telemetry/opentelemetry-specification/issues/4207).
 
 ## Explanation
 
@@ -45,18 +50,16 @@ is going to emit a log record.
 
 For (3), the user can declaratively configure the Logs SDK
 using `LoggerConfigurator` to set the `minimum_severity_level`
-of a `LoggerConfig`.
+of a `LoggerConfig` for given `Logger`.
 
 For (4), the user can use the Tracing API to check whether
 there is a sampled span in the current context before creating
 and emitting a log record.
-However, the user can may also want to declaratively configure the Logs SDK
-using `LoggerConfigurator` to set the `trace_based`
-of a `LoggerConfig`.
 
 For (5) (6), the user can hook to `Logger.Enabled` Logs API calls
 by adding to the Logs SDK a `LogRecordProcessor` implementing `Enabled`
-(or other hook such as `LogRecordFilterer`).
+(or alternatively other hook such as `LogRecordFilterer`;
+see [here](#separate-logrecordfilterer-abstraction)).
 
 ## Internal details
 
@@ -65,17 +68,22 @@ Regarding (1) (2), the Logs API specification has already introduced `Logger.Ena
 - [Add Enabled method to Logger #4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020)
 - [Define Enabled parameters for Logger #4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203)
 
-The main purpose of this OTEP is to extend the SDK's `LoggerConfig`
-with `minimum_severity_level` and optionally `trace_based`
-and to extend the `LogRecordProcessor` with an `Enabled` operation.
-
 The addition of `LoggerConfig.minimum_severity_level` is supposed
 to serve the (3) use case in an easy-to-setup and efficient way.
 
-The addition of `LoggerConfig.trace_based` can serve the (4)
-use case in a declarative way configured on the SDK level
-if the user would want to only capture the log records that are
-within sampled spans.
+Regarding (4) the API callers can decide whether to emit log records
+for spans that are not sampled. Example in Go:
+
+<!-- markdownlint-disable no-hard-tabs -->
+```go
+if trace.SpanContextFromContext(ctx).IsSampled() && logger.Enabled(ctx, params) {
+	logger.Emit(ctx, createLogRecord(payload))
+}
+```
+<!-- markdownlint-enable no-hard-tabs -->
+
+For instrumentation libraries, the API-level control might be more appropriate,
+than configuring such behavior on the SDK level.
 
 The addition of `LogRecordProcessor.Enabled` is necessary for
 use cases where filtering is dynamic and coupled to processing,
@@ -100,10 +108,6 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 	}
 	if params.Severity > config.MinSeverityLevel {
 		// The severity is less severe than the logger minimum level.
-		return false
-	}
-	if config.TraceBased && !trace.SpanContextFromContext(ctx).IsSampled() {
-		// The logger is disabled on sampled out spans.
 		return false
 	}
 
@@ -170,7 +174,7 @@ to make the `LoggerConfig` to support dynamic evaluation.
 
 However, since the purpose of `LoggerConfig` is static configuration,
 and use cases (5) and (6) are tied to log record processing,
-extending `LogRecordProcessor` is more straightforward.
+extending `LogRecordProcessor` seem more appropriate.
 
 ### Separate LogRecordFilterer Abstraction
 
@@ -196,21 +200,6 @@ Adding `Enabled` to `LogRecordProcessor` should be:
 
 ## Open questions
 
-### Need of LoggerConfig.trace_based
-
-Should LoggerConfig include a `trace_based` field?
-It is uncertain if API callers alone should decide
-whether to emit log records for spans that are not sampled.
-For instrumentation libraries, API-level control might be more appropriate, e.g.:
-
-<!-- markdownlint-disable no-hard-tabs -->
-```go
-if trace.SpanContextFromContext(ctx).IsSampled() && logger.Enabled(ctx, params) {
-	logger.Emit(ctx, createLogRecord(payload))
-}
-```
-<!-- markdownlint-enable no-hard-tabs -->
-
 ### Need of LogRecordExporter.Enabled
 
 There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/pull/4290#discussion_r1878379347)
@@ -229,6 +218,13 @@ can always be added in future.
 
 In future, more fields can be added to `LoggerConfig`
 in order to conveniently address the most popular use cases.
+
+One example could be the addition of `LoggerConfig.trace_based`.
+This configuration can be used only capture the log records that are
+within sampled spans. It could serve the (4) use case in a declarative way
+configured on the SDK level. This configuration was discussed
+e.g. [here](https://github.com/open-telemetry/opentelemetry-specification/pull/4290#discussion_r1898672657)
+and is beyond the scope of this OTEP.
 
 ### Extending Logger.Enabled
 
