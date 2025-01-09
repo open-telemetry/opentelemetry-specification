@@ -181,16 +181,6 @@ for different log destinations.
 Below are some alternatives that would be further explored
 during the Development phase.
 
-### Dynamic Evaluation in LoggerConfig
-
-There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2501688210)
-suggested dynamic evaluation in `LoggerConfig` instead of static configuration
-to make the `LoggerConfig` to support dynamic evaluation.
-
-However, since the purpose of `LoggerConfig` is static configuration,
-and use cases (5) and (6) are tied to log record processing,
-extending `LogRecordProcessor` seem more appropriate.
-
 ### Separate LogRecordFilterer Abstraction
 
 There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2354859647)
@@ -240,6 +230,20 @@ within sampled spans. It could serve the (4) use case in a declarative way
 configured on the SDK level. This configuration was discussed
 e.g. [here](https://github.com/open-telemetry/opentelemetry-specification/pull/4290#discussion_r1898672657)
 and is beyond the scope of this OTEP.
+
+### Dynamic Evaluation in LoggerConfig
+
+There is a [proposal](https://github.com/open-telemetry/opentelemetry-specification/issues/4207#issuecomment-2501688210)
+suggested dynamic evaluation in `LoggerConfig` instead of static configuration
+to make the `LoggerConfig` to support dynamic evaluation.
+
+However, since the purpose of `LoggerConfig` is static configuration,
+and use cases (5) and (6) are tied to log record processing,
+extending `LogRecordProcessor` seem more appropriate.
+
+Additionally, nothing prevents adding some other way of configuring Loggers similar to
+[Metrics View](../../specification/metrics/sdk.md#view).
+This was proposed [here](https://github.com/open-telemetry/opentelemetry-specification/pull/4290#discussion_r1908897211).
 
 ### Extending Logger.Enabled
 
