@@ -124,6 +124,21 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 ```
 <!-- markdownlint-enable no-hard-tabs -->
 
+There is nothing preventing having both `LoggerConfig.minimum_severity_level`
+and something like a `MinimumSeverityLevelProcessor`.
+
+`LoggerConfig.minimum_severity_level` is a configuration for concrete loggers.
+For instance, it would be a easy to use feature when one would like to change
+the minimum severity level for all loggers with names matching
+`MyCompany.NoisyModule.*` wildcard pattern.
+With `LoggerConfigurator` the user is not able to change/apply a processor.
+
+`MinimumSeverityLevelProcessor` is for configuring log processing pipelines.
+It is the only choice when one would like to set the minimum severity level
+for a certain exporting pipeline.
+For example, one batching processor would be exporting logs only above info level
+via OTLP and a second simple processor would be exporting all logs to stdout.
+
 ## Trade-offs and mitigations
 
 For some langagues extending the `LogRecordProcessor` may be seen as breaking.
