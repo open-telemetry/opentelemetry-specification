@@ -1,6 +1,8 @@
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Logs
 aliases: [/docs/reference/specification/logs/overview]
+aliases: [/docs/reference/specification/logs/event-api]
+aliases: [/docs/reference/specification/logs/event-sdk]
 path_base_for_github_subdir:
   from: tmp/otel/specification/logs/_index.md
   to: logs/README.md
