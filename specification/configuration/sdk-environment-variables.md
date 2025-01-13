@@ -22,7 +22,7 @@ aliases:
   * [Numeric](#numeric)
     + [Integer](#integer)
     + [Duration](#duration)
-      - [Timeout](#timeout)
+    + [Timeout](#timeout)
   * [String](#string)
     + [Enum](#enum)
 - [General SDK Configuration](#general-sdk-configuration)
@@ -83,7 +83,7 @@ Variables accepting numeric values are sub-classified into:
 
 * [Integer](#integer)
 * [Duration](#duration)
-  * [Timeout](#duration)
+* [Timeout](#timeout)
 
 The following guidance applies to all numeric types.
 
@@ -124,15 +124,23 @@ the default value if it is defined.
 
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
-##### Timeout
+#### Timeout
 
-Timeout is a sub-classification of [duration](#duration): All timeouts are also
-durations, but not all durations are timeouts.
+Timeout values are similar to [duration](#duration) values, but are treated a
+separate type because of differences in how they interpret timeout zero values (
+see below).
 
-For variables that represent a timeout (e.g. exporter timeout), implementations
-SHOULD interpret a value of zero as indefinite. In practice, implementations MAY
-treat indefinite as "a very long time" and substitute a very large duration (
-e.g. the maximum milliseconds representable by a 32-bit integer).
+Any value that represents a timeout MUST be an integer representing a number of
+milliseconds. The value is non-negative - if a negative value is provided, the
+implementation MUST generate a warning, gracefully ignore the setting and use
+the default value if it is defined.
+
+For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
+
+Implementations SHOULD interpret timeout zero values (i.e. `0` indicating 0
+milliseconds) as indefinite. In practice, implementations MAY treat indefinite
+as "a very long time" and substitute a very large duration (e.g. the maximum
+milliseconds representable by a 32-bit integer).
 
 ### String
 
