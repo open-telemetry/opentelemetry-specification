@@ -126,7 +126,7 @@ For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 #### Timeout
 
-Timeout values are similar to [duration](#duration) values, but are treated a
+Timeout values are similar to [duration](#duration) values, but are treated as a
 separate type because of differences in how they interpret timeout zero values (
 see below).
 
