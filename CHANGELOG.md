@@ -17,9 +17,6 @@ release.
 
 ### Events
 
-- Remove the deprecated Events API and SDK in favor of having Events support in the Logs API and SDK.
-  ([#4353](https://github.com/open-telemetry/opentelemetry-specification/pull/4353))
-
 ### Baggage
 
 ### Resource
@@ -37,6 +34,13 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.41.0 (2025-01-14)
+
+### Events
+
+- Remove the deprecated Events API and SDK in favor of having Events support in the Logs API and SDK.
+  ([#4353](https://github.com/open-telemetry/opentelemetry-specification/pull/4353))
 
 ## v1.40.0 (2024-12-12)
 
