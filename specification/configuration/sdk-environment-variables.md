@@ -112,7 +112,7 @@ configuration sources with the default.
 #### Integer
 
 If an implementation chooses to support an integer-valued environment variable,
-it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive).
+it SHOULD support non-negative values between 0 and 2³¹ − 1 (inclusive).
 Individual SDKs MAY choose to support a larger range of values.
 
 #### Duration
@@ -138,9 +138,9 @@ the default value if it is defined.
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
 
 Implementations SHOULD interpret timeout zero values (i.e. `0` indicating 0
-milliseconds) as indefinite. In practice, implementations MAY treat indefinite
-as "a very long time" and substitute a very large duration (e.g. the maximum
-milliseconds representable by a 32-bit integer).
+milliseconds) as no limit (i.e. infinite). In practice, implementations MAY
+treat no limit as "a very long time" and substitute a very large duration (
+e.g. the maximum milliseconds representable by a 32-bit integer).
 
 ### String
 
