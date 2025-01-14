@@ -72,7 +72,7 @@ linkTitle: SDK
     + [Interface Definition](#interface-definition)
       - [Export(batch)](#exportbatch)
       - [ForceFlush()](#forceflush)
-      - [Shutdown()](#shutdown)
+      - [Shutdown()](#shutdown-2)
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
   * [Interface Definition](#interface-definition-1)
