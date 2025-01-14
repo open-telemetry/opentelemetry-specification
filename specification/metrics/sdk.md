@@ -71,7 +71,7 @@ linkTitle: SDK
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
       - [Export(batch)](#exportbatch)
-      - [ForceFlush()](#forceflush)
+      - [ForceFlush](#forceflush-2)
       - [Shutdown](#shutdown-2)
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
@@ -1545,7 +1545,7 @@ Returns: `ExportResult`
 Note: this result may be returned via an async mechanism or a callback, if that
 is idiomatic for the language implementation.
 
-##### ForceFlush()
+##### ForceFlush
 
 This is a hint to ensure that the export of any `Metrics` the exporter has
 received prior to the call to `ForceFlush` SHOULD be completed as soon as
