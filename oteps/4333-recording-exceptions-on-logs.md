@@ -40,8 +40,8 @@ Recording exceptions is essential for troubleshooting, but regardless of how exc
   associated with ingesting and storing them. It's also common to log exceptions multiple times while they bubble up
   leading to duplication and aggravating the verbosity problem.
 
-In this OTEP, we'll provide guidance around recording exceptions that minimizes duplication, allows to reduce noise with configuration and
-allows to capture exceptions in absence of a recorded span.
+In this OTEP, we'll provide guidance around recording exceptions that minimizes duplication, allows reducing noise with configuration, and
+allows capturing exceptions in the absence of a recorded span.
 
 This guidance applies to general-purpose instrumentations including native ones. Application developers should consider following it as a
 starting point, but they are encouraged to adjust it to their needs.
@@ -50,17 +50,17 @@ starting point, but they are encouraged to adjust it to their needs.
 
 This guidance boils down to the following:
 
-Instrumentations should record exception information (along with other context) on the log record and
+Instrumentations should record exception information (along with other context) as a log record and
 use appropriate severity - only unhandled exceptions should be recorded as `Error` or higher.
 Instrumentations should strive to report each exception once.
 
 Instrumentations should provide the whole exception instance to the OTel SDK (instead of individual attributes)
-and the SDK should, based on configuration, decide which information to record. As a default,
-this OTEP proposes to record exception stack traces on logs with `Error` or higher severity.
+and the SDK should, based on configuration, decide which information to record. The default SDK
+behavior should be to record exception stack traces when logging exceptions at `Error` or higher severity.
 
 ### Details
 
-1. Exceptions should be recorded on [logs](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md)
+1. Exceptions should be recorded as [logs](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md)
    or [log-based events](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
 
 2. Instrumentations for incoming requests, message processing, background job execution, or others that wrap user code and usually create local root spans, should record logs
@@ -72,11 +72,11 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
    [.NET guidance](https://github.com/open-telemetry/opentelemetry-dotnet/blob/610045298873397e55e0df6cd777d4901ace1f63/docs/trace/reporting-exceptions/README.md#unhandled-exception)
    for recording exceptions on traces.
 
-3. Natively instrumented libraries should record log describing an error and the context it happened in
-   when this error is detected (or where the most context is available).
+3. Natively instrumented libraries should record a log describing an exception and the context it happened in
+   as soon as the exception is detected (or where the most context is available).
 
-4. It's not recommended to record the same error as it propagates through the stack trace or
-   attach the same instance of exception to multiple log records.
+4. It's not recommended to record the same exception as it propagates through the stack frames, or
+   to attach the same instance of an exception to multiple log records.
 
 5. An error should be logged with appropriate severity depending on the available context.
 
@@ -85,7 +85,7 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
    - Unhandled exceptions that don't result in application shutdown should be recorded with severity `Error`
    - Errors that result in application shutdown should be recorded with severity `Fatal`.
 
-6. When recording exception on logs, user applications and instrumentations are encouraged to put additional attributes
+6. When recording exception on logs, user applications and instrumentations are encouraged to add additional attributes
    to describe the context that the exception was thrown in.
    They are also encouraged to define their own error events and enrich them with exception details.
 
@@ -103,9 +103,9 @@ this OTEP proposes to record exception stack traces on logs with `Error` or high
 > on the configuration and log severity.
 
 It should not be an instrumentation library concern to decide whether exception stack trace should be recorded or not.
-Library may write logs providing exception instance through a log bridge and not be aware of this guidance.
+An instrumentation library may write logs providing an exception instance through a log bridge and not be aware of this guidance.
 
-It also maybe desirable by some vendors/apps to record all exception details at all levels.
+It also may be desirable by some vendors/apps to record all exception details at all levels.
 
 OTel Logs API should provide methods that enrich log record with exception details such as
 `setException(exception)` similar to [RecordException](../specification/trace/api.md?plain=1#L682)
