@@ -72,7 +72,7 @@ linkTitle: SDK
     + [Interface Definition](#interface-definition)
       - [Export(batch)](#exportbatch)
       - [ForceFlush()](#forceflush)
-      - [Shutdown()](#shutdown-2)
+      - [Shutdown](#shutdown-2)
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
   * [Interface Definition](#interface-definition-1)
@@ -1563,7 +1563,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
 
-##### Shutdown()
+##### Shutdown
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.
