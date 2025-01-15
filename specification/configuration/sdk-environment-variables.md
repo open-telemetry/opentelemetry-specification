@@ -131,16 +131,11 @@ separate type because of differences in how they interpret timeout zero values (
 see below).
 
 Any value that represents a timeout MUST be an integer representing a number of
-milliseconds. The value is non-negative - if a negative value is provided, the
+milliseconds. The value is positive - if a zero or negative value is provided, the
 implementation MUST generate a warning, gracefully ignore the setting and use
 the default value if it is defined.
 
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
-
-Implementations SHOULD interpret timeout zero values (i.e. `0` indicating 0
-milliseconds) as no limit (i.e. infinite). In practice, implementations MAY
-treat no limit as "a very long time" and substitute a very large duration (
-e.g. the maximum milliseconds representable by a 32-bit integer).
 
 ### String
 
