@@ -37,8 +37,11 @@ OpenTelemetry Logs SDK users require:
 
 The main purpose of this OTEP is to have foundations for:
 
-- extending the SDK's `LoggerConfig` with `minimum_severity_level` field,
-- extending the `LogRecordProcessor` with an `Enabled` operation,
+- [#4364](https://github.com/open-telemetry/opentelemetry-specification/issues/4364):
+  extending the SDK's `LoggerConfig` with `min_severity` field,
+  
+- [#4363](https://github.com/open-telemetry/opentelemetry-specification/issues/4363):
+  extending the SDK's `LogRecordProcessor` with an `Enabled` operation,
 
 and address [Specify how Logs SDK implements Enabled #4207](https://github.com/open-telemetry/opentelemetry-specification/issues/4207).
 
@@ -49,7 +52,7 @@ which tells the user whether a `Logger` for given arguments
 is going to emit a log record.
 
 For (3), the user can declaratively configure the Logs SDK
-using `LoggerConfigurator` to set the `minimum_severity_level`
+using `LoggerConfigurator` to set the `min_severity`
 of a `LoggerConfig` for given `Logger`.
 
 For (4), the user can use the Tracing API to check whether
@@ -68,7 +71,7 @@ Regarding (1) (2), the Logs API specification has already introduced `Logger.Ena
 - [Add Enabled method to Logger #4020](https://github.com/open-telemetry/opentelemetry-specification/pull/4020)
 - [Define Enabled parameters for Logger #4203](https://github.com/open-telemetry/opentelemetry-specification/pull/4203)
 
-The addition of `LoggerConfig.minimum_severity_level` is supposed
+The addition of `LoggerConfig.min_severity` is supposed
 to serve the (3) use case in an easy-to-setup and efficient way.
 
 Regarding (4) the application developers can decide whether to emit log records
@@ -108,7 +111,7 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 		// The logger is disabled.
 		return false
 	}
-	if params.Severity > config.MinSeverityLevel {
+	if params.Severity > config.MinSeverity {
 		// The severity is less severe than the logger minimum level.
 		return false
 	}
@@ -126,10 +129,10 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 ```
 <!-- markdownlint-enable no-hard-tabs -->
 
-There is nothing preventing having both `LoggerConfig.minimum_severity_level`
+There is nothing preventing having both `LoggerConfig.min_severity`
 and something like a `MinimumSeverityLevelProcessor`.
 
-`LoggerConfig.minimum_severity_level` is a configuration for concrete loggers.
+`LoggerConfig.min_severity` is a configuration for concrete loggers.
 For instance, it would be a easy to use feature when one would like to change
 the minimum severity level for all loggers with names matching
 `MyCompany.NoisyModule.*` wildcard pattern.
