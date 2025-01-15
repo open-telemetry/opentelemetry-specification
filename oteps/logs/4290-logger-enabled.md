@@ -82,8 +82,10 @@ if trace.SpanContextFromContext(ctx).IsSampled() && logger.Enabled(ctx, params) 
 ```
 <!-- markdownlint-enable no-hard-tabs -->
 
-For instrumentation libraries, the API-level control might be more appropriate,
-than configuring such behavior on the SDK level.
+The instrumentation libraries can have a configuration defining
+if they emit log records that are not inside sampled spans.
+The alternative can be [extending LoggerConfig](#extending-loggerconfig)
+so that the instrumentation library code could be simplified.
 
 The addition of `LogRecordProcessor.Enabled` is necessary for
 use cases where filtering is dynamic and coupled to processing,
