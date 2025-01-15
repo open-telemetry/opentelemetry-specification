@@ -15,6 +15,11 @@ release.
 
 ### Logs
 
+- Remove `Logger`'s Log Instrumentation operations.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+- Make all `Logger` operations user-facing.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+
 ### Events
 
 - Remove the deprecated Events API and SDK in favor of having Events support in the Logs API and SDK.
@@ -31,6 +36,10 @@ release.
 ### Compatibility
 
 ### SDK Configuration
+
+- Clarify that implementations should interpret timeout environment variable
+  values of zero as no limit (infinity).
+  ([#4331](https://github.com/open-telemetry/opentelemetry-specification/pull/4331))
 
 ### Common
 
