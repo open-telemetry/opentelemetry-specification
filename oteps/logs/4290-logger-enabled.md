@@ -15,7 +15,7 @@ The consumers of OpenTelemetry clients want to:
    avoid performing computationally expensive operations,
    and avoid exporting
    when emitting a log or event record is unnecessary.
-3. Configure a minimum a log severity level on the SDK level.
+3. Configure a minimum log severity level on the SDK level.
 4. Filter out log and event records when they are inside a span
    that has been sampled out (span is valid and has sampled flag of `false`).
 5. **Efficiently** support high-performance logging destination
@@ -71,7 +71,7 @@ Regarding (1) (2), the Logs API specification has already introduced `Logger.Ena
 The addition of `LoggerConfig.minimum_severity_level` is supposed
 to serve the (3) use case in an easy-to-setup and efficient way.
 
-Regarding (4) the API callers can decide whether to emit log records
+Regarding (4) the application developers can decide whether to emit log records
 for spans that are not sampled. Example in Go:
 
 <!-- markdownlint-disable no-hard-tabs -->
@@ -91,7 +91,7 @@ such as (5) and (6).
 
 Both `LoggerConfig` and registered `LogRecordProcessors` take part
 in the evalaution of the `Logger.Enabled` operation.
-If it returns `true`, meaning the logger is enabled,
+If `LoggerConfig.disabled` is `false`, meaning the logger is enabled,
 then the `LogRecordProcessors` are evaluated.
 In such cases, `false` is returned only if all registered
 `LogRecordProcessors` return `false` in their `Enabled` calls,
