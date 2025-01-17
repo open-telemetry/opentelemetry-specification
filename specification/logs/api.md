@@ -120,8 +120,13 @@ The API MUST accept the following parameters:
 - [Severity Number](./data-model.md#field-severitynumber) (optional)
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
-- [Attributes](./data-model.md#field-attributes) (optional)
+- [Attributes](./data-model.md#field-attributes) (optional) [1]
 - **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
+
+[1]: The API SHOULD provide ergonomics so that the caller can reuse
+[Standard Attributes](../common/README.md#standard-attribute)
+that are used when emitting telemetry for other signals.
+This can be converting functions, method overloads, etc.
 
 ### Enabled
 
