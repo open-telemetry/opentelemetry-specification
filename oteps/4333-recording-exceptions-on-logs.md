@@ -7,8 +7,8 @@
   * [Details](#details)
 - [API changes](#api-changes)
 - [Examples](#examples)
-  * [Logging exception from client library in a user application](#logging-exception-from-client-library-in-a-user-application)
-  * [Logging error inside the natively instrumented Library](#logging-error-inside-the-natively-instrumented-library)
+  * [Logging errors from client library in a user application](#logging-errors-from-client-library-in-a-user-application)
+  * [Logging errors inside the natively instrumented Library](#logging-errors-inside-the-natively-instrumented-library)
   * [Logging errors in messaging processor](#logging-errors-in-messaging-processor)
     + [Natively instrumented library](#natively-instrumented-library)
     + [Instrumentation library](#instrumentation-library)
@@ -19,54 +19,76 @@
 
 <!-- tocstop -->
 
-This OTEP provides guidance on how to record exceptions using OpenTelemetry logs focusing on minimizing duplication and providing context to reduce the noise.
+This OTEP provides guidance on how to record errors using OpenTelemetry Logs
+focusing on minimizing duplication and providing context to reduce the noise.
+
+In the long term, errors recorded on logs **will replace span events**
+(according to [Event vision OTEP](./0265-event-vision.md)).
+
+> [!NOTE]
+> Throughout the OTEP *exception* and *error* are used in the following way:
+> - *Error* refers to a general concept describing any non-success condition,
+>   which may manifest as an exception, non-successful status code, or an invalid
+>   response.
+> - *Exception* specifically refers to runtime exceptions and their associated stack traces.
 
 ## Motivation
 
-Today OTel supports recording exceptions using span events available through Trace API. Outside of OTel world, exceptions are usually recorded by user apps and libraries using logging libraries and may be recorded as OTel logs via logging bridge.
+Today OTel supports recording *exceptions* using span events available through Trace API. Outside of OTel world,
+*errors* are usually recorded by user apps and libraries using logging libraries
+and may be recorded as OTel logs via logging bridge.
 
-Exceptions recorded on logs have the following advantages over span events:
+Errors recorded on logs have the following advantages over span events:
 
 - they can be recorded for operations that don't have any tracing instrumentation
 - they can be sampled along with or separately from spans
-- they can have different severity levels to reflect how critical the exception is
+- they can have different severity levels to reflect how critical the error is
 - they are already reported natively by many frameworks and libraries
 
-Recording exceptions is essential for troubleshooting, but regardless of how exceptions are recorded, they could be noisy:
+Recording errors is essential for troubleshooting, but regardless of how they are recorded, they could be noisy:
 
-- distributed applications experience transient errors at the rate proportional to their scale and exceptions in logs could be misleading -
-  individual occurrence of transient errors are not necessarily indicative of a problem.
+- distributed applications experience transient errors at the rate proportional to their scale and
+  errors in logs could be misleading - individual occurrence of transient errors
+  are not necessarily indicative of a problem.
 - exception stack traces can be huge. Corresponding attribute value can frequently reach several KBs resulting in high costs
-  associated with ingesting and storing them. It's also common to log exceptions multiple times while they bubble up
-  leading to duplication and aggravating the verbosity problem.
+  associated with ingesting and storing them. It's also common to log errors multiple times
+  as they bubble up leading to duplication and aggravating the verbosity problem.
+- severity depends on the context and, in general case, is not known when error
+  occurs. Errors are frequently handled (suppressed, retried, ignored) by the caller.
 
-In this OTEP, we'll provide guidance around recording exceptions that minimizes duplication, allows reducing noise with configuration, and
-allows capturing exceptions in the absence of a recorded span.
+In this OTEP, we'll provide guidance around recording errors that minimizes duplication,
+allows reducing noise with configuration, and allows capturing errors in the
+absence of a recorded span.
 
-This guidance applies to general-purpose instrumentations including native ones. Application developers should consider following it as a
-starting point, but they are encouraged to adjust it to their needs.
+This guidance applies to general-purpose instrumentations including natively
+instrumented libraries.
+
+Application developers should consider following it as a starting point, but
+they are encouraged to adjust it to their needs.
 
 ## Guidance
 
 This guidance boils down to the following:
 
-Instrumentations SHOULD record exception information (along with other context) as a log record with appropriate severity.
-Only unhandled exceptions SHOULD be recorded as `Error` or higher. Instrumentations SHOULD do the best effort to report
-each exception once.
+Instrumentations SHOULD record error information along with relevant context as
+a log record with appropriate severity.
 
-Instrumentations SHOULD provide the whole exception instance to the OTel SDK so it can
-record it fully or partially based on provided configuration. The default SDK behavior SHOULD
+Instrumentations SHOULD set severity to `Error` or higher only when log describes a
+problem affecting application functionality, availability, performance, security or
+another aspect important for this type of applications.
+
+When instrumentation records exception, it SHOULD provide
+the whole exception instance to the OTel SDK so the SDK can record it fully or
+partially based on provided configuration. The default SDK behavior SHOULD
 be to record exception stack traces when logging exceptions at `Error` or higher severity.
-
-In the long term, exceptions recorded on logs will replace span events (according to [Event vision OTEP](./0265-event-vision.md)).
 
 ### Details
 
-1. Exceptions SHOULD be recorded as [logs](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md)
-   or [log-based events](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md)
+1. Errors SHOULD be recorded on [logs](https://github.com/open-telemetry/semantic-conventions/blob/v1.29.0/docs/exceptions/exceptions-logs.md)
+   or as [log-based events](https://github.com/open-telemetry/semantic-conventions/blob/v1.29.0/docs/general/events.md)
 
-2. Instrumentations for incoming requests, message processing, background job execution, or others that wrap user code and usually
-   create local root spans, SHOULD record logs for unhandled exceptions with `Error` severity.
+2. Instrumentations for incoming requests, message processing, background job execution, or others that wrap application code and usually
+   create local root spans, SHOULD record logs for unhandled errors with `Error` severity.
 
    Some runtimes provide global exception handler that can be used to log exceptions.
    Priority should be given to the instrumentation point where the operation context is available.
@@ -74,29 +96,31 @@ In the long term, exceptions recorded on logs will replace span events (accordin
    [.NET guidance](https://github.com/open-telemetry/opentelemetry-dotnet/blob/610045298873397e55e0df6cd777d4901ace1f63/docs/trace/reporting-exceptions/README.md#unhandled-exception)
    for recording exceptions on traces.
 
-3. Natively instrumented libraries SHOULD record a log describing an exception and the context it happened in
-   as soon as the exception is detected (or where the most context is available).
+3. Natively instrumented libraries SHOULD record a log describing an error and the context it happened in
+   as soon as the error is detected (or where the most context is available).
 
-4. It's NOT RECOMMENDED to record the same exception as it propagates through the stack frames, or
+4. It's NOT RECOMMENDED to record the same error as it propagates through the call stack, or
    to attach the same instance of an exception to multiple log records.
 
-5. An exception (or error) SHOULD be logged with appropriate severity depending on the available context.
+5. An error SHOULD be logged with appropriate severity depending on the available context.
 
-   - Exceptions or errors that don't indicate actual issues SHOULD be recorded with
+   - Errors that don't indicate actual issues SHOULD be recorded with
      severity not higher than `Info`.
 
-     Such exceptions can be used to control application logic and have a minor impact, if any,
-     on application functionality, availability, or performance.
+     Such errors can be used to control application logic and have a minor impact, if any,
+     on application functionality, availability, or performance (beyond performance hit introduced
+     if exception is used to control application logic).
 
      Examples:
 
-      - exception is thrown when checking optional dependency or resource existence.
-      - exception thrown when client disconnects before reading full response from the server
+      - error is returned when checking optional dependency or resource existence.
+      - exception is thrown on the server when client disconnects before reading
+        full response from the server
 
-   - Exceptions or errors that are expected to be retried or handled by the caller or another
-     layer of the component SHOULD be recorded with severity not higher than `Warning`.
+   - Errors that are expected to be retried or handled by the caller or another
+     layer of the component SHOULD be recorded with severity not higher than `Warn`.
 
-     Such exceptions represent transient failures that are common and expected in
+     Such errors represent transient failures that are common and expected in
      distributed applications. They typically increase the latency of individual
      operations and have a minor impact on overall application availability.
 
@@ -108,40 +132,40 @@ In the long term, exceptions recorded on logs will replace span events (accordin
       - remote dependency returned 503 "Service Unavailable" response for 5 times in a row,
         retry attempts are exhausted and the corresponding operation has failed.
 
-   - Unhandled (by the user code) exceptions that don't result in application shutdown SHOULD
-     be recorded with severity `Error`
+   - Unhandled (by the application code) errors that don't result in application
+     shutdown SHOULD be recorded with severity `Error`
 
-     These exceptions are not expected and may indicate a bug in the application logic
+     These errors are not expected and may indicate a bug in the application logic
      that this application instance was not able to recover from or a gap in the error
      handling logic.
 
      Examples:
 
       - Background job terminates with an exception
-      - HTTP framework error handler catches exception thrown by the user code.
+      - HTTP framework error handler catches exception thrown by the application code.
 
         Note: some frameworks use exceptions as a communication mechanism when request fails. For example,
         Spring users can throw [ResponseStatusException](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/server/ResponseStatusException.html)
         exception to return unsuccessful status code. Such exceptions represent errors already handled by the application code.
-        Application code, in this case, is expected to logs error at appropriate severity and
-        general-purpose instrumentation SHOULD NOT record such exceptions.
+        Application code, in this case, is expected to log this at appropriate severity.
+        General-purpose instrumentation MAY record such errors, but at severity not higher than `Warn`.
 
-   - Exceptions or errors that result in application shutdown SHOULD be recorded with severity `Fatal`.
+   - Errors that result in application shutdown SHOULD be recorded with severity `Fatal`.
 
       - The application detects an invalid configuration at startup and shuts down.
       - The application encounters a (presumably) terminal error, such as an out-of-memory condition.
 
-1. When recording exception on logs, user applications and instrumentations are encouraged to add additional attributes
+6. When recording exceptions on logs, applications and instrumentations are encouraged to add additional attributes
    to describe the context that the exception was thrown in.
    They are also encouraged to define their own error events and enrich them with exception details.
 
-2. OTel SDK SHOULD record stack traces on exceptions with severity `Error` or higher and SHOULD allow users to
+7. OTel SDK SHOULD record stack traces on exceptions with severity `Error` or higher and SHOULD allow users to
    change the threshold.
 
    See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that
    records stack trace conditionally.
 
-3. Instrumentation libraries that record exceptions using span events SHOULD gracefully migrate
+8. Instrumentation libraries that record exceptions using span events SHOULD gracefully migrate
    to log-based exceptions offering it as an opt-in feature first and then switching to log-based exceptions
    in the next major version update.
 
@@ -163,15 +187,15 @@ OTel Logs API SHOULD provide methods that enrich log record with exception detai
 OTel SDK, based on the log severity and configuration, SHOULD record exception details fully or partially.
 
 The signature of the method is to be determined by each language
-and can be overloaded as appropriate including ability to collect and customize stack trace
+and can be overloaded as appropriate including ability to customize stack trace
 collection.
 
-It MUST be possible to efficiently set exception information on a log record without
-using the `setException` method.
+It MUST be possible to efficiently set exception information on a log record based on configuration
+and without using the `setException` method.
 
 ## Examples
 
-### Logging exception from client library in a user application
+### Logging errors from client library in a user application
 
 ```java
 StorageClient client = createClient(endpoint, credential);
@@ -206,9 +230,9 @@ try {
 }
 ```
 
-### Logging error inside the natively instrumented Library
+### Logging errors inside the natively instrumented Library
 
-It's a common practice to record exceptions using logging libraries. Client libraries that are natively instrumented with OpenTelemetry should
+It's a common practice to record errors using logging libraries. Client libraries that are natively instrumented with OpenTelemetry should
 leverage OTel Events/Logs API for their exception logging purposes.
 
 ```java
@@ -223,13 +247,13 @@ public class StorageClient {
          }
 
          logger.logRecordBuilder()
-            // In general we don't know if it's certainly an error - we expect caller
-            // to handle the exception and decide. So this is warning (at most).
-            // If it remains unhandled, it'd be logged by the global handler.
+            // In general we don't know if it's an error - we expect caller
+            // to handle it and decide. So this is warning (at most).
+            // If exception thrown below remains unhandled, it'd be logged by the global handler.
             .setSeverity(Severity.WARN)
             .addAttribute(AttributeKey.stringKey("com.example.content.id"), contentId)
             .addAttribute(AttributeKey.stringKey("http.response.status_code"), response.statusCode())
-            .addException(ex)
+            .setBody("Unexpected HTTP response")
             .emit();
 
         if (response.statusCode() == 404) {
@@ -258,6 +282,7 @@ public class NetworkClient {
               .setSeverity(Severity.INFO)
               .addAttribute("connection.id", this.getId())
               .addException(ex)
+              .setBody("Failed to send content")
               .emit();
 
             throw ex;
@@ -284,7 +309,7 @@ MessagingProcessorClient processorClient = new MessagingClientBuilder()
 processorClient.start();
 ```
 
-The `MessagingProcessorClient` implementation should catch exceptions thrown by the  `processMessage` callback and log them similarly to
+The `MessagingProcessorClient` implementation should catch exceptions thrown by the `processMessage` callback and log them similarly to
 this example:
 
 ```java
@@ -298,7 +323,7 @@ try {
     .addKeyValuePair("messaging.message.id", context.getMessageId())
     ...
     .setException(t)
-    .log();
+    .log("Message processing failed");
   // error handling logic ...
 }
 ```
@@ -324,6 +349,7 @@ final class InstrumentedRecordInterceptor<K, V> implements RecordInterceptor<K, 
       .addAttribute("messaging.message.id", record.getId())
       ...
       .addException(ex)
+      .setBody("Consumer error")
       .emit();
     // ..
   }
@@ -334,12 +360,13 @@ See [corresponding Java (tracing) instrumentation](https://github.com/open-telem
 
 ## Trade-offs and mitigations
 
-1. Breaking change for any component following existing [exception guidance](/specification/trace/exceptions.md) which recommends recording exceptions as span events in every instrumentation that detects them.
+1. Switching from recording exceptions as span events to log records is a breaking change
+   for any component following existing [exception guidance](/specification/trace/exceptions.md).
 
    **Mitigation:**
    - OpenTelemetry API and/or SDK in the future may provide opt-in span events -> log-based events conversion,
-     but that's not enough - instrumentations will have to change their behavior to report exception logs
-     with appropriate severity (or stop reporting them).
+     but that's not enough - instrumentations will have to change their behavior to report errors
+     as logs with appropriate severity.
    - We should provide opt-in mechanism for existing instrumentations to switch to logs.
 
 2. Recording exceptions as log-based events would result in UX degradation for users
@@ -355,12 +382,8 @@ Alternatives:
 
 1. Deduplicate exception info by marking exception instances as logged.
    This can potentially mitigate the problem for existing application when it logs exceptions extensively.
-   We should still provide optimal guidance for the greenfield applications and libraries.
-
-2. Log full exception info only when exception is thrown for the first time.
-   This results in at-most-once logging, but even this is known to be problematic since absolute
-   majority of exceptions are handled.
-   It also relies on the assumption that most libraries will follow this guidance.
+   We should still provide optimal guidance for the greenfield applications and libraries,
+   covering wider problem of recording errors.
 
 ## Open questions
 
