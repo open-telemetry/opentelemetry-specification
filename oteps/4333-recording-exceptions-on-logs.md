@@ -26,7 +26,8 @@ In the long term, errors recorded on logs **will replace span events**
 (according to [Event vision OTEP](./0265-event-vision.md)).
 
 > [!NOTE]
-> Throughout the OTEP *exception* and *error* are used in the following way:
+> Throughout this OTEP, the terms exception and error are defined as follows:
+>
 > - *Error* refers to a general concept describing any non-success condition,
 >   which may manifest as an exception, non-successful status code, or an invalid
 >   response.
@@ -182,7 +183,7 @@ be to record exception stack traces when logging exceptions at `Error` or higher
 > It also may be desirable by some vendors/apps to record all exception details at all levels.
 
 OTel Logs API SHOULD provide methods that enrich log record with exception details such as
-`setException(exception)` and similar to [RecordException](../specification/trace/api.md#L682) method on span.
+`setException(exception)` and similar to [RecordException](../specification/trace/api.md#record-exception) method on span.
 
 OTel SDK, based on the log severity and configuration, SHOULD record exception details fully or partially.
 
