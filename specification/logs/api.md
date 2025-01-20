@@ -123,7 +123,7 @@ The API MUST accept the following parameters:
 - [Attributes](./data-model.md#field-attributes) (optional) [1]
 - **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
 
-[1]: The API SHOULD provide ergonomics so that the caller can reuse
+[1]: **Status**: [Development](../document-status.md) - The API SHOULD provide ergonomics so that the caller can reuse
 [Standard Attributes](../common/README.md#standard-attribute)
 that are used when emitting telemetry for other signals.
 This can be converting functions, method overloads, etc.
