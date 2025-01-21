@@ -41,7 +41,7 @@ The main purpose of this OTEP is to have foundations for:
   extending the SDK's `LoggerConfig` with `min_severity` field,
   
 - [#4363](https://github.com/open-telemetry/opentelemetry-specification/issues/4363):
-  extending the SDK's `LogRecordProcessor` with an `Enabled` operation,
+  extending the SDK's `LogRecordProcessor` with an opt-in `Enabled` operation,
 
 and address [Specify how Logs SDK implements Enabled #4207](https://github.com/open-telemetry/opentelemetry-specification/issues/4207).
 
@@ -111,18 +111,30 @@ func (l *logger) Enabled(ctx context.Context, param EnabledParameters) bool {
 		return false
 	}
 
-	processors := l.provider.processors()
-	for _, p := range processors {
-		if p.Enabled(ctx, param) {
-			// At least one processor will process the record.
+	fltrs := l.provider.filterProcessors()
+	// If there are more Processors than FilterProcessors we cannot be sure
+	// that all Processors will drop the record. Therefore, return true.
+	//
+	// If all Processors are FilterProcessors, check if any is enabled.
+	return len(l.provider.processors) > len(fltrs) || anyEnabled(ctx, param, fltrs)
+}
+
+func anyEnabled(ctx context.Context, param EnabledParameters, fltrs []FilterProcessor) bool {
+	for _, f := range fltrs {
+		if f.Enabled(ctx, param) {
+			// At least one Processor will process the Record.
 			return true
 		}
 	}
-	// No processor will process the record.
+	// No Processor will process the record
 	return false
 }
 ```
 <!-- markdownlint-enable no-hard-tabs -->
+
+The implementation of `LogRecordProcessor.Enabled` is optional
+so that we can optimize (and not loop though processors)
+when the processor does not implement it.
 
 There is nothing preventing having both `LoggerConfig.min_severity`
 and something like a `MinimumSeverityLevelProcessor`.
