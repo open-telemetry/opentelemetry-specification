@@ -125,7 +125,8 @@ The API MUST accept the following parameters:
 
 [1]: **Status**: [Development](../document-status.md) - The API SHOULD provide ergonomics so that the caller can reuse
 [Standard Attributes](../common/README.md#standard-attribute)
-that are used when emitting telemetry for other signals.
+along with log attributes of [type `map<string, any>`](/specification/logs/data-model.md#type-mapstring-any).
+This allows the reuse of attributes when emitting telemetry for other signals.
 This can be converting functions, method overloads, etc.
 
 ### Enabled
