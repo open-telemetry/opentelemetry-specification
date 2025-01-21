@@ -5,6 +5,9 @@ accept = ["200..=299", "403"]
 exclude = [
     # excluding links to pull requests and issues is done for performance
     "^https://github.com/open-telemetry/opentelemetry-specification/(issue|pull)/\\d+$",
+    # TODO (trask) remove this exclusion after next semconv release
+    #  see https://github.com/open-telemetry/opentelemetry-specification/pull/4376
+    "^https://opentelemetry.io/docs/specs/semconv/general/naming/$",
     # TODO (trask) look into this
     "^https://docs.google.com/document/d/1d0afxe3J6bQT-I6UbRXeIYNcTIyBQv4axfjKF4yvAPA/edit"
 ]
