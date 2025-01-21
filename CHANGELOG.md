@@ -19,7 +19,7 @@ release.
   ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
 - Make all `Logger` operations user-facing.
   ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
-- Logs API should have ergonimics for reusing standard attributes.
+- Logs API should have ergonomics for reusing standard attributes.
   ([#4373](https://github.com/open-telemetry/opentelemetry-specification/pull/4373))
 
 ### Events
