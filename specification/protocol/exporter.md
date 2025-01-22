@@ -36,7 +36,7 @@ Each configuration option MUST be overridable by a signal specific option.
 - **Insecure**: Whether to enable client transport security for the exporter's gRPC connection. This option only applies to OTLP/gRPC when an endpoint is provided without the `http` or `https` scheme - OTLP/HTTP always uses the scheme provided for the `endpoint`. Implementations MAY choose to not implement the `insecure` option if it is not required or supported by the underlying gRPC client implementation.
   - Default: `false`
   - Env vars: `OTEL_EXPORTER_OTLP_INSECURE` `OTEL_EXPORTER_OTLP_TRACES_INSECURE` `OTEL_EXPORTER_OTLP_METRICS_INSECURE` `OTEL_EXPORTER_OTLP_LOGS_INSECURE` [2]
-  - Type: [Boolean[]
+  - Type: [Boolean][]
 
 - **Certificate File**: The trusted certificate to use when verifying a server's TLS credentials. Should only be used for a secure connection.
   - Default: n/a
@@ -66,7 +66,7 @@ Each configuration option MUST be overridable by a signal specific option.
 - **Timeout**: Maximum time the OTLP exporter will wait for each batch export.
   - Default: 10s
   - Env vars: `OTEL_EXPORTER_OTLP_TIMEOUT` `OTEL_EXPORTER_OTLP_TRACES_TIMEOUT` `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` `OTEL_EXPORTER_OTLP_LOGS_TIMEOUT`
-  - Type: [Duration][]
+  - Type: [Timeout][]
 
 - **Protocol**: The transport protocol. Options MUST be one of: `grpc`, `http/protobuf`, `http/json`.
   See [Specify Protocol](./exporter.md#specify-protocol) for more details.
@@ -209,7 +209,7 @@ OTel-OTLP-Exporter-Python/1.2.3
 The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
 
 [Boolean]: ../configuration/sdk-environment-variables.md#boolean
-[Duration]: ../configuration/sdk-environment-variables.md#duration
+[Timeout]: ../configuration/sdk-environment-variables.md#timeout
 [String]: ../configuration/sdk-environment-variables.md#string
 [Enum]: ../configuration/sdk-environment-variables.md#enum
 

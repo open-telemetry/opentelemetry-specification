@@ -77,8 +77,8 @@ linkTitle: SDK
   * [Push Metric Exporter](#push-metric-exporter)
     + [Interface Definition](#interface-definition)
       - [Export(batch)](#exportbatch)
-      - [ForceFlush()](#forceflush)
-      - [Shutdown()](#shutdown)
+      - [ForceFlush](#forceflush-2)
+      - [Shutdown](#shutdown-2)
   * [Pull Metric Exporter](#pull-metric-exporter)
 - [MetricProducer](#metricproducer)
   * [Interface Definition](#interface-definition-1)
@@ -1615,7 +1615,7 @@ Returns: `ExportResult`
 Note: this result may be returned via an async mechanism or a callback, if that
 is idiomatic for the language implementation.
 
-##### ForceFlush()
+##### ForceFlush
 
 This is a hint to ensure that the export of any `Metrics` the exporter has
 received prior to the call to `ForceFlush` SHOULD be completed as soon as
@@ -1633,7 +1633,7 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. [OpenTelemetry SDK](../overview.md#sdk) authors MAY
 decide if they want to make the flush timeout configurable.
 
-##### Shutdown()
+##### Shutdown
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
 for exporter to do any cleanup required.

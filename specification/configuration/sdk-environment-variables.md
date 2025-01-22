@@ -22,6 +22,7 @@ aliases:
   * [Numeric](#numeric)
     + [Integer](#integer)
     + [Duration](#duration)
+    + [Timeout](#timeout)
   * [String](#string)
     + [Enum](#enum)
 - [General SDK Configuration](#general-sdk-configuration)
@@ -82,6 +83,7 @@ Variables accepting numeric values are sub-classified into:
 
 * [Integer](#integer)
 * [Duration](#duration)
+* [Timeout](#timeout)
 
 The following guidance applies to all numeric types.
 
@@ -110,17 +112,35 @@ configuration sources with the default.
 #### Integer
 
 If an implementation chooses to support an integer-valued environment variable,
-it SHOULD support nonnegative values between 0 and 2³¹ − 1 (inclusive).
+it SHOULD support non-negative values between 0 and 2³¹ − 1 (inclusive).
 Individual SDKs MAY choose to support a larger range of values.
 
 #### Duration
 
-Any value that represents a duration, for example a timeout, MUST be an integer
-representing a number of milliseconds. The value is non-negative - if a negative
-value is provided, the implementation MUST generate a warning, gracefully ignore
-the setting and use the default value if it is defined.
+Any value that represents a duration MUST be an integer representing a number of
+milliseconds. The value is non-negative - if a negative value is provided, the
+implementation MUST generate a warning, gracefully ignore the setting and use
+the default value if it is defined.
 
 For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
+
+#### Timeout
+
+Timeout values are similar to [duration](#duration) values, but are treated as a
+separate type because of differences in how they interpret timeout zero values (
+see below).
+
+Any value that represents a timeout MUST be an integer representing a number of
+milliseconds. The value is non-negative - if a negative value is provided, the
+implementation MUST generate a warning, gracefully ignore the setting and use
+the default value if it is defined.
+
+For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
+
+Implementations SHOULD interpret timeout zero values (i.e. `0` indicating 0
+milliseconds) as no limit (i.e. infinite). In practice, implementations MAY
+treat no limit as "a very long time" and substitute a very large duration (
+e.g. the maximum milliseconds representable by a 32-bit integer).
 
 ### String
 
@@ -188,21 +208,21 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch Span Processor
 
-| Name                           | Description                                                      | Default | Type         | Notes                                                 |
-|--------------------------------|------------------------------------------------------------------|---------|--------------|-------------------------------------------------------|
-| OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000    | [Duration][] |                                                       |
-| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | [Duration][] |                                                       |
-| OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | [Integer][]  |                                                       |
-| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE |
+| Name                           | Description                                                      | Default | Type         | Notes                                                                             |
+|--------------------------------|------------------------------------------------------------------|---------|--------------|-----------------------------------------------------------------------------------|
+| OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000    | [Duration][] |                                                                                   |
+| OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | [Timeout][]  |                                                                                   |
+| OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | [Integer][]  | Valid values are positive.                                                        |
+| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE. Valid values are positive. |
 
 ## Batch LogRecord Processor
 
-| Name                            | Description                                                      | Default | Type         | Notes                                                  |
-|---------------------------------|------------------------------------------------------------------|---------|--------------|--------------------------------------------------------|
-| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 1000    | [Duration][] |                                                        |
-| OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | [Duration][] |                                                        |
-| OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | [Integer][]  |                                                        |
-| OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE |
+| Name                            | Description                                                      | Default | Type         | Notes                                                                              |
+|---------------------------------|------------------------------------------------------------------|---------|--------------|------------------------------------------------------------------------------------|
+| OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 1000    | [Duration][] |                                                                                    |
+| OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | [Timeout][]  |                                                                                    |
+| OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | [Integer][]  | Valid values are positive.                                                         |
+| OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE. Valid values are positive. |
 
 ## Attribute Limits
 
@@ -211,32 +231,32 @@ which that SDK implements truncation mechanism.
 
 See the SDK [Attribute Limits](../common/README.md#attribute-limits) section for the definition of the limits.
 
-| Name                              | Description                          | Default  | Type        |
-|-----------------------------------|--------------------------------------|----------|-------------|
-| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | no limit | [Integer][] |
-| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute count      | 128      | [Integer][] |
+| Name                              | Description                          | Default  | Type        | Notes                          |
+|-----------------------------------|--------------------------------------|----------|-------------|--------------------------------|
+| OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size | no limit | [Integer][] | Valid values are non-negative. |
+| OTEL_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute count      | 128      | [Integer][] | Valid values are non-negative. |
 
 ## Span Limits
 
 See the SDK [Span Limits](../trace/sdk.md#span-limits) section for the definition of the limits.
 
-| Name                                   | Description                                    | Default  | Type        |
-|----------------------------------------|------------------------------------------------|----------|-------------|
-| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | no limit | [Integer][] |
-| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128      | [Integer][] |
-| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128      | [Integer][] |
-| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128      | [Integer][] |
-| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128      | [Integer][] |
-| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128      | [Integer][] |
+| Name                                   | Description                                    | Default  | Type        | Notes                          |
+|----------------------------------------|------------------------------------------------|----------|-------------|--------------------------------|
+| OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size           | no limit | [Integer][] | Valid values are non-negative. |
+| OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed span attribute count           | 128      | [Integer][] | Valid values are non-negative. |
+| OTEL_SPAN_EVENT_COUNT_LIMIT            | Maximum allowed span event count               | 128      | [Integer][] | Valid values are non-negative. |
+| OTEL_SPAN_LINK_COUNT_LIMIT             | Maximum allowed span link count                | 128      | [Integer][] | Valid values are non-negative. |
+| OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT       | Maximum allowed attribute per span event count | 128      | [Integer][] | Valid values are non-negative. |
+| OTEL_LINK_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed attribute per span link count  | 128      | [Integer][] | Valid values are non-negative. |
 
 ## LogRecord Limits
 
 See the SDK [LogRecord Limits](../logs/sdk.md#logrecord-limits) section for the definition of the limits.
 
-| Name                                        | Description                                | Default  | Type        |
-|---------------------------------------------|--------------------------------------------|----------|-------------|
-| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size       | no limit | [Integer][] |
-| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed log record attribute count | 128      | [Integer][] |
+| Name                                        | Description                                | Default  | Type        | Notes                          |
+|---------------------------------------------|--------------------------------------------|----------|-------------|--------------------------------|
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | Maximum allowed attribute value size       | no limit | [Integer][] | Valid values are non-negative. |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT        | Maximum allowed log record attribute count | 128      | [Integer][] | Valid values are non-negative. |
 
 ## OTLP Exporter
 
@@ -247,7 +267,7 @@ See [OpenTelemetry Protocol Exporter Configuration Options](../protocol/exporter
 | Name                          | Description                                                                        | Default                              | Type        |
 |-------------------------------|------------------------------------------------------------------------------------|--------------------------------------|-------------|
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces                                                         | `http://localhost:9411/api/v2/spans` | [String][]  |
-| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time (in milliseconds) the Zipkin exporter will wait for each batch export | 10000                                | [Integer][] |
+| OTEL_EXPORTER_ZIPKIN_TIMEOUT  | Maximum time (in milliseconds) the Zipkin exporter will wait for each batch export | 10000                                | [Timeout][] |
 
 Additionally, the following environment variables are reserved for future
 usage in Zipkin Exporter configuration:
@@ -327,9 +347,9 @@ Additional known values for `OTEL_LOGS_EXPORTER` are:
 
 ### Exemplar
 
-| Name                           | Description                                         | Default         | Type     | Notes |
-|--------------------------------|-----------------------------------------------------|-----------------|----------|-------|
-| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"trace_based"` | [Enum][] |       |
+| Name                           | Description                                         | Default         | Type     |
+|--------------------------------|-----------------------------------------------------|-----------------|----------|
+| `OTEL_METRICS_EXEMPLAR_FILTER` | Filter for which measurements can become Exemplars. | `"trace_based"` | [Enum][] |
 
 Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 
@@ -342,10 +362,10 @@ Known values for `OTEL_METRICS_EXEMPLAR_FILTER` are:
 Environment variables specific for the push metrics exporters (OTLP, stdout, in-memory)
 that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-metricreader).
 
-| Name                          | Description                                                                   | Default | Type         | Notes |
-|-------------------------------|-------------------------------------------------------------------------------|---------|--------------|-------|
-| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   | [Duration][] |       |
-| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   | [Duration][] |       |
+| Name                          | Description                                                                   | Default | Type         |
+|-------------------------------|-------------------------------------------------------------------------------|---------|--------------|
+| `OTEL_METRIC_EXPORT_INTERVAL` | The time interval (in milliseconds) between the start of two export attempts. | 60000   | [Duration][] |
+| `OTEL_METRIC_EXPORT_TIMEOUT`  | Maximum allowed time (in milliseconds) to export data.                        | 30000   | [Timeout][]  |
 
 ## Declarative configuration
 
@@ -399,5 +419,6 @@ OTEL_{LANGUAGE}_{FEATURE}
 [Float]: #float
 [Integer]: #integer
 [Duration]: #duration
+[Timeout]: #timeout
 [String]: #string
 [Enum]: #enum
