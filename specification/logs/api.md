@@ -124,7 +124,7 @@ The API MUST accept the following parameters:
 - **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
 
 [1]: **Status**: [Development](../document-status.md) -
-The API SHOULD provide ergonomics so that the caller can use
+The API SHOULD provide functionality so that the caller can use
 [Standard Attributes](../common/README.md#standard-attribute)
 along with [Log Attributes](./data-model.md#field-attributes)
 of [type `map<string, any>`](./data-model.md#type-mapstring-any).
