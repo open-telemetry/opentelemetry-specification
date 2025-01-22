@@ -197,7 +197,8 @@ It consists of the following parameters:
 
 `Enabled` MUST return `false` when:
 
-- `Logger` is disabled (`LoggerConfig.disabled` is `true`).
+- There is none registered [`LogRecordProcessor`](#logrecordprocessor),
+- `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
 
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional experimental features.
