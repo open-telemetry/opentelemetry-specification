@@ -201,7 +201,7 @@ It consists of the following parameters:
 - `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
 
 Otherwise, it SHOULD return `true`.
-It MAY return `false` to support additional optimizations and experimental features.
+It MAY return `false` to support additional optimizations and features.
 
 ## Additional LogRecord interfaces
 
