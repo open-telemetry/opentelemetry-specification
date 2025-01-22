@@ -59,4 +59,4 @@ for [emitting LogRecords](./api.md#emit-a-logrecord).
 
 ### Enabled
 
-Always returns `false`.
+MUST always returns `false`.
