@@ -126,8 +126,10 @@ The API MUST accept the following parameters:
 [1]: **Status**: [Development](../document-status.md) -
 The API SHOULD provide ergonomics so that the caller can use
 [Standard Attributes](../common/README.md#standard-attribute)
-along with log attributes of [type `map<string, any>`](./data-model.md#type-mapstring-any).
-This allows the reuse of attributes across signals.
+along with [Log Attributes](./data-model.md#field-attributes)
+of [type `map<string, any>`](./data-model.md#type-mapstring-any).
+This allows the reuse of [Standard Attributes](../common/README.md#standard-attribute)
+across signals.
 This can be converting functions, method overloads, etc.
 
 ### Enabled
