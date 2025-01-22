@@ -15,6 +15,7 @@ linkTitle: No-Op
   * [Logger Creation](#logger-creation)
 - [Logger](#logger)
   * [Emit LogRecord](#emit-logrecord)
+  * [Enabled](#enabled)
 
 <!-- tocstop -->
 
@@ -55,3 +56,7 @@ return the same `Logger` instances to all creation requests.
 
 The No-Op `Logger` MUST allow
 for [emitting LogRecords](./api.md#emit-a-logrecord).
+
+### Enabled
+
+Always returns `false`.
