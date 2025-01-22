@@ -196,11 +196,11 @@ It consists of the following parameters:
 
 **Status**: [Development](../document-status.md)
 
-`Enabled` returns `false` when:
+`Enabled` MUST return `false` when:
 
 - `Logger` is disabled (`LoggerConfig.disabled` is `true`).
 
-Otherwise, it returns `true`.
+Otherwise, it MUST return `true`.
 
 ## Additional LogRecord interfaces
 
