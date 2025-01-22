@@ -197,12 +197,11 @@ It consists of the following parameters:
 
 `Enabled` MUST return `false` when:
 
-- it is called after [`LoggerProvider.Shutdown`](#shutdown),
 - there is none registered [`LogRecordProcessor`](#logrecordprocessor),
 - `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
 
 Otherwise, it SHOULD return `true`.
-It MAY return `false` to support additional experimental features.
+It MAY return `false` to support additional optimizations and experimental features.
 
 ## Additional LogRecord interfaces
 
