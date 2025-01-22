@@ -199,7 +199,7 @@ It consists of the following parameters:
 
 - `Logger` is disabled (`LoggerConfig.disabled` is `true`).
 
-Otherwise, it SHOULD [1] return `true`.
+Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional experimental features.
 
 ## Additional LogRecord interfaces
