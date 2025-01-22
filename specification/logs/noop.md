@@ -59,4 +59,6 @@ for [emitting LogRecords](./api.md#emit-a-logrecord).
 
 ### Enabled
 
+**Status**: [Development](../document-status.md)
+
 MUST always returns `false`.
