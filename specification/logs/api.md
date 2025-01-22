@@ -28,12 +28,13 @@ aliases: [bridge-api]
 
 </details>
 
-<b>Note: this document defines a log *backend* API. The API is not intended
-to be called by application developers directly. It is provided for logging
-library authors to build
+The Logs API is provided for logging library authors to build
 [log appenders](./supplementary-guidelines.md#how-to-create-a-log4j-log-appender),
 which use this API to bridge between existing logging libraries and the
-OpenTelemetry log data model.</b>
+OpenTelemetry log data model.
+
+The Logs API can also be directly called by instrumentation libraries
+as well as instrumented libraries or applications.
 
 The Logs API consist of these main components:
 
