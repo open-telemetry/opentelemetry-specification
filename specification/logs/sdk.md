@@ -200,9 +200,10 @@ It consists of the following parameters:
 
 - `Logger` is disabled (`LoggerConfig.disabled` is `true`).
 
-Otherwise, it SHOULD return `true`.
-_It is not a MUST, to allow the SDKs to have additional experimental features
-which causes `Enabled` to return `false`._
+Otherwise, it SHOULD [1] return `true`.
+
+[1]: It is not "MUST", to allow the SDKs to have additional experimental features
+which causes `Enabled` to return `false`.
 
 ## Additional LogRecord interfaces
 
