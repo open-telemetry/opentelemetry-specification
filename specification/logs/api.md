@@ -121,10 +121,11 @@ The API MUST accept the following parameters:
 - [Severity Number](./data-model.md#field-severitynumber) (optional)
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
-- [Attributes](./data-model.md#field-attributes) (optional) [1]
+- [Attributes](./data-model.md#field-attributes) (optional)
 - **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
 
-[1]: **Status**: [Development](../document-status.md) -
+**Status**: [Development](../document-status.md)
+
 The API SHOULD provide functionality so that the caller can use
 [Standard Attributes](../common/README.md#standard-attribute)
 along with [Log Attributes](./data-model.md#field-attributes)
