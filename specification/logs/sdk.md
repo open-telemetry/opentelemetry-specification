@@ -34,7 +34,6 @@
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
-- [Logs API](#logs-api)
 
 <!-- tocstop -->
 
@@ -528,10 +527,5 @@ return a Failure result.
 `Shutdown` SHOULD NOT block indefinitely (e.g. if it attempts to flush the data
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
-
-## Logs API
-
-> [!NOTE]
-> We are currently in the process of defining a new [Logs API](./api.md).
 
 - [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
