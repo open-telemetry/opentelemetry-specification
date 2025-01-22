@@ -15,7 +15,7 @@ release.
 
 ### Logs
 
-- Logs API should have ergonomics for reusing standard attributes.
+- Logs API should have ergonomics for reusing Standard Attributes.
   ([#4373](https://github.com/open-telemetry/opentelemetry-specification/pull/4373))
 
 ### Baggage
