@@ -2,8 +2,8 @@
 linkTitle: Logs
 aliases:
   - /docs/reference/specification/logs/overview
-  - event-api
-  - event-sdk
+  - ./event-api
+  - ./event-sdk
 path_base_for_github_subdir:
   from: tmp/otel/specification/logs/_index.md
   to: logs/README.md
