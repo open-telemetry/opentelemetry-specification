@@ -33,6 +33,7 @@ The Logs API is provided for logging library authors to build
 which use this API to bridge between existing logging libraries and the
 OpenTelemetry log data model.
 
+**Status**: [Development](../document-status.md) - 
 The Logs API can also be directly called by instrumentation libraries
 as well as instrumented libraries or applications.
 
