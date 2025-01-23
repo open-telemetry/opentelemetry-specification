@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Define how SDK implements `Logger.Enabled`.
+  ([#4381](https://github.com/open-telemetry/opentelemetry-specification/pull/4381))
+
 ### Baggage
 
 ### Resource
