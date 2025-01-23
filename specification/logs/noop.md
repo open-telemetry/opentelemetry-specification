@@ -61,4 +61,4 @@ for [emitting LogRecords](./api.md#emit-a-logrecord).
 
 **Status**: [Development](../document-status.md)
 
-MUST always returns `false`.
+MUST always return `false`.
