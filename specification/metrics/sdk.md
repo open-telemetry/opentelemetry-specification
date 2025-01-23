@@ -1031,7 +1031,7 @@ The following diagram shows `MeasurementProcessor`'s relationship to other compo
 
 * `context` - the resolved `Context` (the explicitly passed `Context` or the current `Context`)
 * `measurement` - a [Measurement](./api.md#measurement) that was recorded
-* `next` - a callback to invoke `OnMeasure` on the next processor in the chain. It MUST be callable without a reference to the next processor.
+* `next` - this allows the MeasurementProcessor to pass the measurements to the next MeasurementProcessor in the chain. It can be a reference to the next MeasurementProcessor, a bound callback to invoke `OnMeasure` on the next processor in the chain without an explicit reference to the next processor, or something else. [OpenTelemetry SDK](../overview.md#sdk) authors MAY decide the language idiomatic approach.
 
 **Returns:** Void
 
