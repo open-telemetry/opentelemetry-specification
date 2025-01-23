@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Add `MeasurementProcessor` to the Metrics SDK specification [#4318](https://github.com/open-telemetry/opentelemetry-specification/pull/4318)
+
 ### Logs
 
 ### Baggage
