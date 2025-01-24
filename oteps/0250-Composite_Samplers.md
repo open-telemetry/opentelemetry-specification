@@ -68,8 +68,8 @@ The return value is a structure (`SamplingIntent`) with the following elements:
 
 - The THRESHOLD value represented as a 14-character hexadecimal string, with value of `null` representing non-probabilistic `DROP` decision (implementations MAY use different representation, if it appears more performant or convenient),
 - A function (`IsAdjustedCountReliable`) that provides a `boolean` value indicating that the adjusted count (calculated as reciprocal of the sampling probability) can be faithfully used to estimate span metrics,
-- A function (`GetAttributes`) that provides a set of `Attributes` to be added to the `Span` in case of positive final sampling decision,
-- A function (`UpdateTraceState`) that given an input `Tracestate` and sampling Decision provides a `Tracestate` to be associated with the `Span`. The samplers SHOULD NOT add or modify the `th` value for the `ot` key within these functions.
+- A function (`GetAttributes`) that provides a set of `Attributes` to be added to the `Span` in case of a positive final sampling decision,
+- A function (`UpdateTraceState`) that, given an input `Tracestate` and sampling Decision, provides a `Tracestate` to be associated with the `Span`. The samplers SHOULD NOT add or modify the `th` value for the `ot` key within these functions. The root node of the tree of composite samplers is solely responsible for setting or clearing this value (see Constructing `SamplingResult` below).
 
 #### Requirements for the basic samplers
 
@@ -110,6 +110,7 @@ Categorization of Spans is aided by `Predicates`.
 The Predicates represent logical expressions which can access `Span` `Attributes` (or anything else available when the sampling decision is to be made), and perform tests on the accessible values.
 For example, one can test if the target URL for a SERVER span matches a given pattern.
 `Predicate` interface allows users to create custom categories based on information that is available at the time of making the sampling decision.
+To preserve integrity of consistent probability sampling, the Predicates MUST NOT depend on the parent `sampled` flag nor the lowest 56-bit of the `TraceId` (which can be representing the _randomness_ value).
 
 ##### SpanMatches
 
