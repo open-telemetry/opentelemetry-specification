@@ -16,6 +16,7 @@
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
   * [LoggerConfig](#loggerconfig)
+  * [Enabled](#enabled)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
   * [ReadWriteLogRecord](#readwritelogrecord)
@@ -189,6 +190,18 @@ It consists of the following parameters:
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
+
+### Enabled
+
+**Status**: [Development](../document-status.md)
+
+`Enabled` MUST return `false` when:
+
+- there are no registered [`LogRecordProcessors`](#logrecordprocessor),
+- `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
+
+Otherwise, it SHOULD return `true`.
+It MAY return `false` to support additional optimizations and features.
 
 ## Additional LogRecord interfaces
 
