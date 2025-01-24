@@ -40,6 +40,9 @@ release.
 - Clarify that implementations should interpret timeout environment variable
   values of zero as no limit (infinity).
   ([#4331](https://github.com/open-telemetry/opentelemetry-specification/pull/4331))
+- Define syntax for escaping declarative configuration environment variable
+  references.
+  ([#4375](https://github.com/open-telemetry/opentelemetry-specification/pull/4375))
 
 ### Common
 
