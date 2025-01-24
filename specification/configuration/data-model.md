@@ -90,13 +90,13 @@ where `FOO=a, BAR=b, BAZ=c` would resemble:
 
 * Identify escape sequence `$$` at index 0. Perform substitution
   against `input.substring(0, 0)=""` => `""` and append to output. Append `$`
-  to output. Current output: `$`.
+  to output. Current output: `"$"`.
 * Identify escape sequence `$$` at index 15. Perform substitution
   against `input.substring(0+2, 15)="{FOO} ${BAR} "` => `"{FOO} b "` and append
-  to output. Append `$` to output. Current output: `${FOO} b $`.
+  to output. Append `$` to output. Current output: `"${FOO} b $"`.
 * Reach end of input without escape sequence. Perform substitution
   against `input.substring(15+2, input.length)="{BAZ}"` => `"{BAZ}"` and append
-  to output. Return output: `${FOO} b ${BAZ}`.
+  to output. Return output: `"${FOO} b ${BAZ}"`.
 
 When parsing a configuration file that contains a reference not matching
 the references regular expression but does match the following PCRE2
