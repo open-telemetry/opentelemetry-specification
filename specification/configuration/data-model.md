@@ -131,7 +131,7 @@ export DO_NOT_REPLACE_ME="Never use this value"       # An unused environment va
 export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text, used verbatim, not replaced with "Never use this value"
 ```
 
-| YAML - original                           | YAML - post substitution    | Resolved Tag URI          | Notes                                                                                                                                     |
+| YAML - input                              | YAML - post substitution    | Resolved Tag URI          | Notes                                                                                                                                     |
 |-------------------------------------------|-----------------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
 | `key: ${STRING_VALUE}`                    | `key: value`                | `tag:yaml.org,2002:str`   | YAML parser resolves to string                                                                                                            |
 | `key: ${BOOL_VALUE}`                      | `key: true`                 | `tag:yaml.org,2002:bool`  | YAML parser resolves to true                                                                                                              |
