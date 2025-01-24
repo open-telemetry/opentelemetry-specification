@@ -15,15 +15,8 @@ release.
 
 ### Logs
 
-- Remove `Logger`'s Log Instrumentation operations.
-  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
-- Make all `Logger` operations user-facing.
-  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
-
-### Events
-
-- Remove the deprecated Events API and SDK in favor of having Events support in the Logs API and SDK.
-  ([#4353](https://github.com/open-telemetry/opentelemetry-specification/pull/4353))
+- Define how SDK implements `Logger.Enabled`.
+  ([#4381](https://github.com/open-telemetry/opentelemetry-specification/pull/4381))
 
 ### Baggage
 
@@ -37,9 +30,6 @@ release.
 
 ### SDK Configuration
 
-- Clarify that implementations should interpret timeout environment variable
-  values of zero as no limit (infinity).
-  ([#4331](https://github.com/open-telemetry/opentelemetry-specification/pull/4331))
 - Define syntax for escaping declarative configuration environment variable
   references.
   ([#4375](https://github.com/open-telemetry/opentelemetry-specification/pull/4375))
@@ -49,6 +39,23 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.41.0 (2025-01-21)
+
+### Logs
+
+- Remove the deprecated Events API and SDK in favor of having Events support in the Logs API and SDK.
+  ([#4353](https://github.com/open-telemetry/opentelemetry-specification/pull/4353))
+- Remove `Logger`'s Log Instrumentation operations.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+- Make all `Logger` operations user-facing.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+
+### SDK Configuration
+
+- Clarify that implementations should interpret timeout environment variable
+  values of zero as no limit (infinity).
+  ([#4331](https://github.com/open-telemetry/opentelemetry-specification/pull/4331))
 
 ## v1.40.0 (2024-12-12)
 
