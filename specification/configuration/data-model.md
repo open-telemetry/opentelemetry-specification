@@ -77,7 +77,7 @@ be replaced with an empty value.
 
 The `$` character is an escape sequence, such that `$$` in the input is
 translated to a single `$` in the output. The resolved `$` from an escape
-sequence MUST not be considered when matching input against the environment
+sequence MUST NOT be considered when matching input against the environment
 variable substitution regular expression. For example, `$${API_KEY}` resolves
 to `${API_KEY}`, and the value of the `API_KEY` environment variable is NOT
 substituted. See table below for more examples. In practice, this implies that
