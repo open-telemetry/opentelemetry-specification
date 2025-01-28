@@ -49,6 +49,8 @@ linkTitle: SDK
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
   * [Instrument advisory parameters](#instrument-advisory-parameters)
+    + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
+    + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
   * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
