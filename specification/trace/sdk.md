@@ -733,10 +733,9 @@ an empty batch OR skip the export and consider it to be completed immediately.
   consecutive exports. The default value is `5000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
-* `maxExportBatchSize` - the maximum batch size of every export. It must be
-  smaller or equal to `maxQueueSize`. If the queue reaches `maxExportBatchSize`
-  a batch will be exported even if `scheduledDelayMillis` milliseconds have not
-  elapsed. The default value is `512`.
+* `maxExportBatchSize` - the maximum batch size of every export. If the queue
+  reaches `maxExportBatchSize` a batch will be exported even if `scheduledDelayMillis`
+  milliseconds have not elapsed. The default value is `512`.
 
 ## Span Exporter
 
