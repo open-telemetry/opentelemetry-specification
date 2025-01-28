@@ -430,8 +430,8 @@ to make sure that they are not invoked concurrently.
   consecutive exports. The default value is `1000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is `30000`.
-* `maxExportBatchSize` - the maximum batch size of every export. It must be
-  smaller or equal to `maxQueueSize`. The default value is `512`.
+* `maxExportBatchSize` - the maximum batch size of every export. The default
+  value is `512`.
 
 ## LogRecordExporter
 
