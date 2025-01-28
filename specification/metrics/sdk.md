@@ -418,9 +418,10 @@ made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
 * If the `MeterProvider` has no `View` registered, take the Instrument
-    and apply the default Aggregation on the basis of instrument kind
-    according to the [MetricReader](#metricreader) instance's
-    `aggregation` property.
+    and apply the default Aggregation on the basis of instrument kind according
+    to the [MetricReader](#metricreader) instance's `aggregation` property.
+    [Instrument advisory parameters](#instrument-advisory-parameters), if any,
+    MUST be honored.
 * If the `MeterProvider` has one or more `View`(s) registered:
   * If the Instrument could match the instrument selection criteria, for each
     View:
@@ -436,7 +437,9 @@ made with an Instrument:
       View sets an asynchronous instrument to use the [Explicit bucket
       histogram aggregation](#explicit-bucket-histogram-aggregation)) the
       implementation SHOULD emit a warning and proceed as if the View did not
-      exist.
+      exist. If any configuration is provided via View and [Instrument advisory
+      parameters](#instrument-advisory-parameters), then the View configuration
+      MUST take precedence.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
@@ -945,7 +948,7 @@ Meter MUST treat it the same as an empty description string.
 
 ### Instrument advisory parameters
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 When a Meter creates an instrument, it SHOULD validate the instrument advisory
 parameters. If an advisory parameter is not valid, the Meter SHOULD emit an error
@@ -955,6 +958,39 @@ If multiple [identical Instruments](api.md#instrument) are created with
 different advisory parameters, the Meter MUST return an instrument using the
 first-seen advisory parameters and log an appropriate error as described in
 [duplicate instrument registrations](#duplicate-instrument-registration).
+
+If a [View](#view) is configured with the same settings as advisory parameters,
+the View MUST take precedence over the advisory parameters.
+
+#### Instrument advisory parameter: `ExplicitBucketBoundaries`
+
+**Status**: [Stable](../document-status.md)
+
+This parameter is applicable when the [Explicit Bucket
+Histogram](#explicit-bucket-histogram-aggregation) aggregation is utilized.
+
+`ExplicitBucketBoundaries` (`double[]`) specifies the recommended set of bucket
+boundaries to use during the [Explicit Bucket
+Histogram](#explicit-bucket-histogram-aggregation) aggregation. If the user has
+configured a View with specific bucket boundaries, those boundaries should take
+precedence. In the absence of such a configuration, the advisory parameter
+should be used. If neither is provided, the default bucket boundaries must be
+applied.
+
+#### Instrument advisory parameter: `Attributes`
+
+**Status**: [Development](../document-status.md)
+
+This parameter is applicable to all aggregations.
+
+`Attributes` (a list of [attribute keys](../common/README.md#attribute))
+specifies the recommended set of attribute keys for measurements aggregated to
+produce a metric stream.
+
+If the user has provided attribute keys via a View, those keys should take
+precedence. If no View is configured, the advisory parameter configured on the
+instrument should be used. If the `Attributes` advisory parameter is also
+absent, all attributes must be retained.
 
 ### Instrument enabled
 
