@@ -950,7 +950,7 @@ Meter MUST treat it the same as an empty description string.
 
 ### Instrument advisory parameters
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 When a Meter creates an instrument, it SHOULD validate the instrument advisory
 parameters. If an advisory parameter is not valid, the Meter SHOULD emit an error
