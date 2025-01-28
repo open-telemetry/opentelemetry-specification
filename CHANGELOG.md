@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
+  on how to record errors across signals.
+  ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
+
 ### Metrics
 
 ### Logs
