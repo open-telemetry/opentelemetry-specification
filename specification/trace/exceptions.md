@@ -17,7 +17,7 @@ An exception SHOULD be recorded as an `Event` on the span during which it occurr
 The name of the event MUST be `"exception"`.
 
 <!-- TODO: update to semconv tag once merged and released  -->
-**Status**: [Development](../document-status.md) - Refer to the [Recording Errors](https://github.com/open-telemetry/semantic-conventions/blob/c77c7d7866c943b357d1d26ffa2fa89b092f2b9f/docs/general/recording-errors.md) document for the details on how to report errors across signals.
+**Status**: [Development](../document-status.md) - Refer to the [Recording Errors](https://github.com/open-telemetry/semantic-conventions/blob/v1.30.0/docs/general/recording-errors.md) document for the details on how to report errors across signals.
 
 A typical template for an auto-instrumentation implementing this semantic convention
 using an [API-provided `recordException` method](api.md#record-exception)
