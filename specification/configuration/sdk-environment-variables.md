@@ -213,7 +213,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 | OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000    | [Duration][] |                                                                                   |
 | OTEL_BSP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | [Timeout][]  |                                                                                   |
 | OTEL_BSP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | [Integer][]  | Valid values are positive.                                                        |
-| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE. Valid values are positive. |
+| OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Valid values are positive.                                                        |
 
 ## Batch LogRecord Processor
 
@@ -222,7 +222,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 | OTEL_BLRP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 1000    | [Duration][] |                                                                                    |
 | OTEL_BLRP_EXPORT_TIMEOUT        | Maximum allowed time (in milliseconds) to export data            | 30000   | [Timeout][]  |                                                                                    |
 | OTEL_BLRP_MAX_QUEUE_SIZE        | Maximum queue size                                               | 2048    | [Integer][]  | Valid values are positive.                                                         |
-| OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BLRP_MAX_QUEUE_SIZE. Valid values are positive. |
+| OTEL_BLRP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Valid values are positive.                                                         |
 
 ## Attribute Limits
 
