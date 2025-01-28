@@ -16,8 +16,7 @@ This document defines how to record exceptions and their attributes.
 An exception SHOULD be recorded as an `Event` on the span during which it occurred.
 The name of the event MUST be `"exception"`.
 
-<!-- TODO: update to semconv tag once merged and released  -->
-**Status**: [Development](../document-status.md) - Refer to the [Recording Errors](https://github.com/open-telemetry/semantic-conventions/blob/v1.30.0/docs/general/recording-errors.md) document for the details on how to report errors across signals.
+**Status**: [Development](../document-status.md) - Refer to the [Recording Errors](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/recording-errors.md) document for the details on how to report errors across signals.
 
 A typical template for an auto-instrumentation implementing this semantic convention
 using an [API-provided `recordException` method](api.md#record-exception)
@@ -45,7 +44,6 @@ event name `exception`.
 Additionally, the following attributes SHOULD be
 filled out:
 
-- [Deprecated](../document-status.md) `exception.escaped`
 - `exception.message`
 - `exception.stacktrace`
 - `exception.type`
