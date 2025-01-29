@@ -1,30 +1,3 @@
-**Table of content:**
-- [Composite Samplers Proposal](#composite-samplers-proposal)
-  - [Motivation](#motivation)
-  - [The Goal](#the-goal)
-    - [Example](#example)
-  - [Proposed Samplers](#proposed-samplers)
-    - [New API](#new-api)
-      - [GetSamplingIntent](#getsamplingintent)
-      - [Required Arguments for GetSamplingIntent](#required-arguments-for-getsamplingintent)
-      - [Return Value](#return-value)
-      - [Requirements for the basic samplers](#requirements-for-the-basic-samplers)
-      - [Constructing SamplingResult](#constructing-samplingresult)
-    - [ConsistentRuleBased](#consistentrulebased)
-      - [Predicate](#predicate)
-        - [SpanMatches](#spanmatches)
-        - [Required Arguments for Predicates](#required-arguments-for-predicates)
-      - [Required Arguments for ConsistentRuleBased](#required-arguments-for-consistentrulebased)
-    - [ConsistentParentBased](#consistentparentbased)
-    - [ConsistentAnyOf](#consistentanyof)
-    - [ConsistentRateLimiting](#consistentratelimiting)
-      - [Required Arguments for ConsistentRateLimiting](#required-arguments-for-consistentratelimiting)
-  - [Summary](#summary)
-    - [Example - sampling configuration](#example---sampling-configuration)
-    - [Limitations](#limitations)
-    - [Prototyping](#prototyping)
-  - [Prior Art](#prior-art)
-
 # Composite Samplers Proposal
 
 This proposal addresses head-based sampling as described by the [Open Telemetry SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#sampling).
@@ -34,6 +7,32 @@ The composite samplers invoke the delegate samplers, but eventually make the fin
 
 The new samplers proposed here have been designed to work with Consistent Probability Samplers. For detailed description of this concept see [probability sampling (OTEP 235)](https://github.com/open-telemetry/oteps/blob/main/text/trace/0235-sampling-threshold-in-trace-state.md).
 Also see Draft PR 3910 [Probability Samplers based on W3C Trace Context Level 2](https://github.com/open-telemetry/opentelemetry-specification/pull/3910).
+
+**Table of content:**
+- [Motivation](#motivation)
+- [The Goal](#the-goal)
+  - [Example](#example)
+- [Proposed Samplers](#proposed-samplers)
+  - [New API](#new-api)
+    - [GetSamplingIntent](#getsamplingintent)
+    - [Required Arguments for GetSamplingIntent](#required-arguments-for-getsamplingintent)
+    - [Return Value](#return-value)
+    - [Requirements for the basic samplers](#requirements-for-the-basic-samplers)
+    - [Constructing SamplingResult](#constructing-samplingresult)
+  - [ConsistentRuleBased](#consistentrulebased)
+    - [Predicate](#predicate)
+      - [SpanMatches](#spanmatches)
+      - [Required Arguments for Predicates](#required-arguments-for-predicates)
+    - [Required Arguments for ConsistentRuleBased](#required-arguments-for-consistentrulebased)
+  - [ConsistentParentBased](#consistentparentbased)
+  - [ConsistentAnyOf](#consistentanyof)
+  - [ConsistentRateLimiting](#consistentratelimiting)
+    - [Required Arguments for ConsistentRateLimiting](#required-arguments-for-consistentratelimiting)
+- [Summary](#summary)
+  - [Example - sampling configuration](#example---sampling-configuration)
+  - [Limitations](#limitations)
+  - [Prototyping](#prototyping)
+- [Prior Art](#prior-art)
 
 ## Motivation
 
