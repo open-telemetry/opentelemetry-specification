@@ -17,6 +17,11 @@ release.
 
 ### Logs
 
+- Define how SDK implements `Logger.Enabled`.
+  ([#4381](https://github.com/open-telemetry/opentelemetry-specification/pull/4381))
+- Logs API should have functionality for reusing Standard Attributes.
+  ([#4373](https://github.com/open-telemetry/opentelemetry-specification/pull/4373))
+
 ### Baggage
 
 ### Resource
