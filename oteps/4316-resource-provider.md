@@ -197,6 +197,8 @@ as resource attributes.
 
 ## Open questions
 
+### How should spans be batched when they bridge a resource change?
+
 The primary open question – which must be resolved before this OTEP is accepted –
 is how to handle spans that bridge a change in resources.
 
@@ -216,6 +218,12 @@ resource, the new batch gets the new resource. This would be easy to implement,
 but is it actually what we want? Either as part of this OTEP or as a quick follow
 up, we need to define the expected behavior for the BatchProcessor when it is listening
 for resource changes.
+
+### What if a resource thrashes?
+
+Because entity changes can now update resources, and those updates may trigger batch and flushing operations within the SDK, it is possible for rapid changes to resources to create a cascade of SDK operations that may lead to performance issues.
+
+Investigating the practical implications of this problem has not led to any examples of resources that can be expected to exhibit this behavior. For the time being, backoff or other thrash mitigation strategies are left out of this proposal. If a specific resource does end up requiring some form of throttling, the resource detector that updates that particular resource should manage this issue. If a common strategy for throttling emerges, it can be added to the ResourceProvider at a later date.
 
 ## FAQ
 
