@@ -1,3 +1,30 @@
+**Table of content:**
+- [Composite Samplers Proposal](#composite-samplers-proposal)
+  - [Motivation](#motivation)
+  - [The Goal](#the-goal)
+    - [Example](#example)
+  - [Proposed Samplers](#proposed-samplers)
+    - [New API](#new-api)
+      - [GetSamplingIntent](#getsamplingintent)
+      - [Required Arguments for GetSamplingIntent](#required-arguments-for-getsamplingintent)
+      - [Return Value](#return-value)
+      - [Requirements for the basic samplers](#requirements-for-the-basic-samplers)
+      - [Constructing SamplingResult](#constructing-samplingresult)
+    - [ConsistentRuleBased](#consistentrulebased)
+      - [Predicate](#predicate)
+        - [SpanMatches](#spanmatches)
+        - [Required Arguments for Predicates](#required-arguments-for-predicates)
+      - [Required Arguments for ConsistentRuleBased](#required-arguments-for-consistentrulebased)
+    - [ConsistentParentBased](#consistentparentbased)
+    - [ConsistentAnyOf](#consistentanyof)
+    - [ConsistentRateLimiting](#consistentratelimiting)
+      - [Required Arguments for ConsistentRateLimiting](#required-arguments-for-consistentratelimiting)
+  - [Summary](#summary)
+    - [Example - sampling configuration](#example---sampling-configuration)
+    - [Limitations](#limitations)
+    - [Prototyping](#prototyping)
+  - [Prior Art](#prior-art)
+
 # Composite Samplers Proposal
 
 This proposal addresses head-based sampling as described by the [Open Telemetry SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#sampling).
@@ -25,7 +52,7 @@ The goal of this proposal is to help creating advanced sampling configurations u
 
 ### Example
 
-Head-based sampling requirements.
+Head-based sampling requirements:
 
 - for root spans:
   - drop all `/healthcheck` requests
@@ -131,7 +158,9 @@ The arguments represent the values that are made available for `ShouldSample`.
 - `SpanKind`
 - list of pairs (`Predicate`, `Composable`)
 
-For calculating the `SamplingIntent`, if the `Span` kind matches the specified kind, the sampler goes through the list in the provided order and calls `SpanMatches` on `Predicate`s passing the same arguments as received. If a call returns `true`, the result is as returned by `GetSamplingIntent` called on the corresponding `Composable`. If the `SpanKind` does not match, or none of the calls to `SpanMatches` yield `true`, the result is obtained by calling `GetSamplingIntent` on `ConsistentAlwaysOffSampler`.
+For calculating the `SamplingIntent`, if the `Span` kind matches the specified kind, the sampler goes through the list in the provided order and calls `SpanMatches` on `Predicate`s passing the same arguments as received.
+If a call returns `true`, the result is as returned by `GetSamplingIntent` called on the corresponding `Composable` - no other `Predicate`s are evaluated.
+If the `SpanKind` does not match, or none of the calls to `SpanMatches` yield `true`, the result is obtained by calling `GetSamplingIntent` on `ConsistentAlwaysOffSampler`.
 
 ### ConsistentParentBased
 
@@ -208,7 +237,7 @@ The returned `SamplingIntent` is constructed as follows.
 
 ### Example - sampling configuration
 
-Going back to our example of sampling requirements, we can now configure the head sampler to support this particular case, using an informal notation of samplers and their arguments.
+Going back to our [example](#example) of sampling requirements, we can now configure the head sampler to support this particular case, using an informal notation of samplers and their arguments.
 First, let's express the requirements for the ROOT spans as follows.
 
 ```
