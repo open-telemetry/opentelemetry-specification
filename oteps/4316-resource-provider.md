@@ -1,6 +1,6 @@
-# Resource Provider
+# Entity Provider
 
-Define a mechanism for updating the resources associated with an application.
+Define a mechanism for updating the entities and resources associated with an application.
 
 ## Motivation
 
@@ -28,22 +28,22 @@ does not is a critical distinction.
 
 ## Explanation
 
-Changes to resources and entities are managed via a ResourceProvider. When the resources
+Changes to resources and entities are managed via a EntityProvider. When the resources
 represented by an entity change, the telemetry system records these changes by updating
-the entity managed by the ResourceProvider. These changes are then propagated to the
+the entity managed by the EntityProvider. These changes are then propagated to the
 rest of the telemetry system via EntityListeners that have been registered with the
-ResourceProvider.
+EntityProvider.
 
-The loose coupling provided by a ResourceProvider allows each subsystem to focus
+The loose coupling provided by a EntityProvider allows each subsystem to focus
 on their various responsibilities without having to be directly aware of each other.
 For a highly extensible cross-cutting concern such as OpenTelemetry, this loose
 coupling is a valuable feature.
 
 ## Internal details
 
-Like the other Providers used in OpenTelemetry, the ResourceProvider MUST allow
-for alternative implementations. This means that the ResourceProvider API and
-the ResourceProvider implementation we provide MUST be loosely coupled, following
+Like the other Providers used in OpenTelemetry, the EntityProvider MUST allow
+for alternative implementations. This means that the EntityProvider API and
+the EntityProvider implementation we provide MUST be loosely coupled, following
 the same API/SDK pattern used everywhere in OpenTelemetry.
 
 ### EntityListener
@@ -69,9 +69,9 @@ An EntityListener MUST provide the following operations:
 * `Resource`: represents the entire set of resources after the entity
   has been deleted.
 
-### ResourceProvider
+### EntityProvider
 
-A `ResourceProvider` MUST provide the following operations:
+A `EntityProvider` MUST provide the following operations:
 
 * `Update Entity`
 * `Delete Entity`
@@ -81,15 +81,15 @@ A `ResourceProvider` MUST provide the following operations:
 For multithreaded systems, a lock SHOULD be used to queue all calls to `UpdateEntity`
 and `DeleteEntity`. This is to help avoid inconsistent reads and writes.
 
-The resource reference held by the ResourceProvider SHOULD be updated atomically,
+The resource reference held by the EntityProvider SHOULD be updated atomically,
 so that calls to `GetResource` do not require a lock.
 
 Calls to EntityListeners SHOULD be serialized, to avoid thread safety issues and
 ensure that callbacks are processed in the right order.
 
-#### ResourceProvider creation
+#### EntityProvider creation
 
-Creation of a ResourceProvider MUST accept the following parameters:
+Creation of a EntityProvider MUST accept the following parameters:
 
 * `Entities`: a list of entities.
 
@@ -143,7 +143,7 @@ registered `EntityListeners`.
 
 #### Get Resource
 
-`Get Resource` MUST return a reference to the current resource held by the ResourceProvider.
+`Get Resource` MUST return a reference to the current resource held by the EntityProvider.
 
 #### On Change
 
@@ -152,7 +152,7 @@ or deleted.
 
 ### SDK Changes
 
-NewTraceProvider, NewMetricsProvider, and NewLoggerProvider now take a ResourceProvider
+NewTraceProvider, NewMetricsProvider, and NewLoggerProvider now take a EntityProvider
 as a parameter. How SDKs handle resource changes is listed under [open questions](#open-questions).
 
 ## Trade-offs and mitigations
@@ -223,7 +223,7 @@ for resource changes.
 
 Because entity changes can now update resources, and those updates may trigger batch and flushing operations within the SDK, it is possible for rapid changes to resources to create a cascade of SDK operations that may lead to performance issues.
 
-Investigating the practical implications of this problem has not led to any examples of resources that can be expected to exhibit this behavior. For the time being, backoff or other thrash mitigation strategies are left out of this proposal. If a specific resource does end up requiring some form of throttling, the resource detector that updates that particular resource should manage this issue. If a common strategy for throttling emerges, it can be added to the ResourceProvider at a later date.
+Investigating the practical implications of this problem has not led to any examples of resources that can be expected to exhibit this behavior. For the time being, backoff or other thrash mitigation strategies are left out of this proposal. If a specific resource does end up requiring some form of throttling, the resource detector that updates that particular resource should manage this issue. If a common strategy for throttling emerges, it can be added to the EntityProvider at a later date.
 
 ## FAQ
 
@@ -274,14 +274,14 @@ DRAFT
 
 ## Example Implementation
 
-Pseudocode examples for a possible Validator and ResourceProvider implementation.
-Attention is placed on making the ResourceProvider thread safe, without introducing
+Pseudocode examples for a possible Validator and EntityProvider implementation.
+Attention is placed on making the EntityProvider thread safe, without introducing
 any locking or synchronization overhead to `GetResource`, which is the only
-ResourceProvider method on the hot path for OpenTelemetry instrumentation.
+EntityProvider method on the hot path for OpenTelemetry instrumentation.
 
 ```php
-// Example of a thread-safe ResourceProvider
-class ResourceProvider{
+// Example of a thread-safe EntityProvider
+class EntityProvider{
   
   *Resource resource
   Lock lock
@@ -320,7 +320,7 @@ class ResourceProvider{
 
     // calling listeners inside of the lock ensures that the listeners do not fire
     // out of order or get called simultaneously by multiple threads, but would
-    // also allow a poorly implemented listener to block the ResourceProvider.
+    // also allow a poorly implemented listener to block the EntityProvider.
     for (listener in this.listeners) {
         listener.OnEntityState(entityState, mergedResource);
     }
@@ -356,7 +356,7 @@ class ResourceProvider{
 
     // calling listeners inside of the lock ensures that the listeners do not fire
     // out of order or get called simultaneously by multiple threads, but would
-    // also allow a poorly implemented listener to block the ResourceProvider.
+    // also allow a poorly implemented listener to block the EntityProvider.
     for (listener in this.listeners) {
         listener.OnEntityState(entityState, mergedResource);
     }
@@ -392,7 +392,7 @@ class ResourceProvider{
 
     // calling listeners inside of the lock ensures that the listeners do not fire
     // out of order or get called simultaneously by multiple threads, but would
-    // also allow a poorly implemented listener to block the ResourceProvider.
+    // also allow a poorly implemented listener to block the EntityProvider.
     for (listener in this.listeners) {
         listener.OnEntityDelete(entityDelete, mergedResource);
     }
