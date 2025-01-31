@@ -13,7 +13,10 @@ This document defines how to record exceptions and their attributes.
 
 ## Recording an Exception
 
-An exception SHOULD be recorded as an `Event` on the span during which it occurred.
+An exception SHOULD be recorded as an `Event` on the span during which it occurred
+if and only if it remains unhandled when the span ends and causes the span status
+to be set to ERROR.
+
 The name of the event MUST be `"exception"`.
 
 **Status**: [Development](../document-status.md) - Refer to the [Recording Errors](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/recording-errors.md) document for the details on how to report errors across signals.
