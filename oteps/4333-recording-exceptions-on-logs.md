@@ -153,6 +153,8 @@ be to record exception stack traces when logging exceptions at `Error` or higher
 
    - Errors that result in application shutdown SHOULD be recorded with severity `Fatal`.
 
+     Examples:
+
       - The application detects an invalid configuration at startup and shuts down.
       - The application encounters a (presumably) terminal error, such as an out-of-memory condition.
 
