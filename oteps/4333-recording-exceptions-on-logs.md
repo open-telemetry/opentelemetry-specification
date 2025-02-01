@@ -35,11 +35,11 @@ In the long term, errors recorded on logs **will replace span events**
 
 ## Motivation
 
-Today OTel supports recording *exceptions* using span events available through Trace API. Outside of OTel world,
-*errors* are usually recorded by user apps and libraries using logging libraries
-and may be recorded as OTel logs via logging bridge.
+Today OTel supports recording *exceptions* using span events available through the Trace API. Outside the OTel world,
+*errors* are usually recorded by user apps and libraries by using logging libraries,
+and may be recorded as OTel logs via a logging bridge.
 
-Errors recorded on logs have the following advantages over span events:
+Using logs to record errors has the following advantages over using span events:
 
 - they can be recorded for operations that don't have any tracing instrumentation
 - they can be sampled along with or separately from spans
@@ -49,13 +49,13 @@ Errors recorded on logs have the following advantages over span events:
 Recording errors is essential for troubleshooting, but regardless of how they are recorded, they could be noisy:
 
 - distributed applications experience transient errors at the rate proportional to their scale and
-  errors in logs could be misleading - individual occurrence of transient errors
+  errors in logs could be misleading - individual occurrences of transient errors
   are not necessarily indicative of a problem.
-- exception stack traces can be huge. Corresponding attribute value can frequently reach several KBs resulting in high costs
+- exception stack traces can be huge. The corresponding attribute value can frequently reach several KBs resulting in high costs
   associated with ingesting and storing them. It's also common to log errors multiple times
   as they bubble up leading to duplication and aggravating the verbosity problem.
-- severity depends on the context and, in general case, is not known when error
-  occurs. Errors are frequently handled (suppressed, retried, ignored) by the caller.
+- severity depends on the context and, in the general case, is not known at the time the error
+  occurs since errors are frequently handled (suppressed, retried, ignored) by the caller.
 
 In this OTEP, we'll provide guidance around recording errors that minimizes duplication,
 allows reducing noise with configuration, and allows capturing errors in the
@@ -74,24 +74,24 @@ This guidance boils down to the following:
 Instrumentations SHOULD record error information along with relevant context as
 a log record with appropriate severity.
 
-Instrumentations SHOULD set severity to `Error` or higher only when log describes a
+Instrumentations SHOULD set severity to `Error` or higher only when the log describes a
 problem affecting application functionality, availability, performance, security or
-another aspect important for this type of applications.
+another aspect that is important for the given type of application.
 
-When instrumentation records exception, it SHOULD provide
+When instrumentation records an exception, it SHOULD provide
 the whole exception instance to the OTel SDK so the SDK can record it fully or
 partially based on provided configuration. The default SDK behavior SHOULD
 be to record exception stack traces when logging exceptions at `Error` or higher severity.
 
 ### Details
 
-1. Errors SHOULD be recorded on [logs](https://github.com/open-telemetry/semantic-conventions/blob/v1.29.0/docs/exceptions/exceptions-logs.md)
+1. Errors SHOULD be recorded as [logs](https://github.com/open-telemetry/semantic-conventions/blob/v1.29.0/docs/exceptions/exceptions-logs.md)
    or as [log-based events](https://github.com/open-telemetry/semantic-conventions/blob/v1.29.0/docs/general/events.md)
 
 2. Instrumentations for incoming requests, message processing, background job execution, or others that wrap application code and usually
    create local root spans, SHOULD record logs for unhandled errors with `Error` severity.
 
-   Some runtimes provide global exception handler that can be used to log exceptions.
+   Some runtimes provide a global exception handler that can be used to log exceptions.
    Priority should be given to the instrumentation point where the operation context is available.
    Language SIGs are encouraged to give runtime-specific guidance. For example, here is the
    [.NET guidance](https://github.com/open-telemetry/opentelemetry-dotnet/blob/610045298873397e55e0df6cd777d4901ace1f63/docs/trace/reporting-exceptions/README.md#unhandled-exception)
@@ -114,8 +114,8 @@ be to record exception stack traces when logging exceptions at `Error` or higher
 
      Examples:
 
-      - error is returned when checking optional dependency or resource existence.
-      - exception is thrown on the server when client disconnects before reading
+      - an error is returned when checking optional dependency or resource existence.
+      - an exception is thrown on the server when client disconnects before reading
         full response from the server
 
    - Errors that are expected to be retried or handled by the caller or another
@@ -127,27 +127,27 @@ be to record exception stack traces when logging exceptions at `Error` or higher
 
      Examples:
 
-      - attempt to connect to the required remote dependency times out
-      - remote dependency returns 401 "Unauthorized" response code
-      - writing data to a file results in IO exception
-      - remote dependency returned 503 "Service Unavailable" response for 5 times in a row,
+      - an attempt to connect to the required remote dependency times out
+      - a remote dependency returns 401 "Unauthorized" response code
+      - writing data to a file results in an IO exception
+      - a remote dependency returned 503 "Service Unavailable" response for 5 times in a row,
         retry attempts are exhausted and the corresponding operation has failed.
 
    - Unhandled (by the application code) errors that don't result in application
      shutdown SHOULD be recorded with severity `Error`
 
      These errors are not expected and may indicate a bug in the application logic
-     that this application instance was not able to recover from or a gap in the error
+     that this application instance was not able to recover from, or a gap in the error
      handling logic.
 
      Examples:
 
-      - Background job terminates with an exception
-      - HTTP framework error handler catches exception thrown by the application code.
+      - A background job terminates with an exception
+      - An HTTP framework error handler catches an exception thrown by the application code.
 
-        Note: some frameworks use exceptions as a communication mechanism when request fails. For example,
-        Spring users can throw [ResponseStatusException](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/server/ResponseStatusException.html)
-        exception to return unsuccessful status code. Such exceptions represent errors already handled by the application code.
+        Note: some frameworks use exceptions as a communication mechanism when a request fails. For example,
+        Spring users can throw a [ResponseStatusException](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/server/ResponseStatusException.html)
+        exception to return an unsuccessful status code. Such exceptions represent errors already handled by the application code.
         Application code, in this case, is expected to log this at appropriate severity.
         General-purpose instrumentation MAY record such errors, but at severity not higher than `Warn`.
 
@@ -160,7 +160,7 @@ be to record exception stack traces when logging exceptions at `Error` or higher
    to describe the context that the exception was thrown in.
    They are also encouraged to define their own error events and enrich them with exception details.
 
-7. OTel SDK SHOULD record stack traces on exceptions with severity `Error` or higher and SHOULD allow users to
+7. The OTel SDK SHOULD record stack traces on exceptions with severity `Error` or higher and SHOULD allow users to
    change the threshold.
 
    See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that
