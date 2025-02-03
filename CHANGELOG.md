@@ -35,6 +35,8 @@ release.
 - Define syntax for escaping declarative configuration environment variable
   references.
   ([#4375](https://github.com/open-telemetry/opentelemetry-specification/pull/4375))
+- Resolve various declarative config TODOs.
+  ([#4394](https://github.com/open-telemetry/opentelemetry-specification/pull/4394))
 
 ### Common
 
