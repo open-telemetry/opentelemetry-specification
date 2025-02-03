@@ -18,7 +18,10 @@ release.
 
 ### Logs
 
-### Events
+- Define how SDK implements `Logger.Enabled`.
+  ([#4381](https://github.com/open-telemetry/opentelemetry-specification/pull/4381))
+- Logs API should have functionality for reusing Standard Attributes.
+  ([#4373](https://github.com/open-telemetry/opentelemetry-specification/pull/4373))
 
 ### Baggage
 
@@ -32,9 +35,85 @@ release.
 
 ### SDK Configuration
 
+- Define syntax for escaping declarative configuration environment variable
+  references.
+  ([#4375](https://github.com/open-telemetry/opentelemetry-specification/pull/4375))
+
 ### Common
 
 ### Supplementary Guidelines
+
+### OTEPs
+
+## v1.41.0 (2025-01-21)
+
+### Logs
+
+- Remove the deprecated Events API and SDK in favor of having Events support in the Logs API and SDK.
+  ([#4353](https://github.com/open-telemetry/opentelemetry-specification/pull/4353))
+- Remove `Logger`'s Log Instrumentation operations.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+- Make all `Logger` operations user-facing.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+
+### SDK Configuration
+
+- Clarify that implementations should interpret timeout environment variable
+  values of zero as no limit (infinity).
+  ([#4331](https://github.com/open-telemetry/opentelemetry-specification/pull/4331))
+
+## v1.40.0 (2024-12-12)
+
+### Context
+
+- Adds optional `GetAll` method to `Getter` in Propagation API, allowing for the retrieval of multiple values for the same key.
+  [#4295](https://github.com/open-telemetry/opentelemetry-specification/pull/4295)
+
+### Traces
+
+- Add in-development support for `otlp/stdout` exporter via `OTEL_TRACES_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+- Remove the recommendation to not synchronize access to `TracerConfig.disabled`.
+  ([#4310](https://github.com/open-telemetry/opentelemetry-specification/pull/4310))
+
+### Metrics
+
+- Add in-development support for `otlp/stdout` exporter via `OTEL_METRICS_EXPORTER`.
+  ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+- Remove the recommendation to not synchronize access to `MeterConfig.disabled`.
+  ([#4310](https://github.com/open-telemetry/opentelemetry-specification/pull/4310))
+
+### Logs
+
+- Add in-development support for `otlp/stdout` exporter via `OTEL_LOGS_EXPORTER`.
+ ([#4183](https://github.com/open-telemetry/opentelemetry-specification/pull/4183))
+- Remove the recommendation to not synchronize access to `LoggerConfig.disabled`.
+  ([#4310](https://github.com/open-telemetry/opentelemetry-specification/pull/4310))
+- Remove the in-development isolating log record processor.
+  ([#4301](https://github.com/open-telemetry/opentelemetry-specification/pull/4301))
+
+### Events
+
+- Deprecate Events API and SDK in favor of having Events support in the Logs API and SDK.
+  ([#4319](https://github.com/open-telemetry/opentelemetry-specification/pull/4319))
+- Change `event.name` attribute into top-level event name field.
+  ([#4320](https://github.com/open-telemetry/opentelemetry-specification/pull/4320))
+
+### Common
+
+- Lay out core principles for Specification changes.
+  ([#4286](https://github.com/open-telemetry/opentelemetry-specification/pull/4286))
+
+### Supplementary Guidelines
+
+- Add core principles for evaluating specification changes.
+  ([#4286](https://github.com/open-telemetry/opentelemetry-specification/pull/4286))
+
+## OTEPs
+
+- The [open-telemetry/oteps](https://github.com/open-telemetry/oteps) repository was
+  merged into the specification repository.
+ ([#4288](https://github.com/open-telemetry/opentelemetry-specification/pull/4288))
 
 ## v1.39.0 (2024-11-06)
 
