@@ -90,7 +90,7 @@ The following values have been defined by OpenTelemetry.
 
 ### Explicit randomness value `rv`
 
-The OpenTelemetry TraceState `rv` sub-key defines an alternative source of randomness to the use of TraceID randomness when used by samplers decisions.
+The OpenTelemetry TraceState `rv` sub-key defines an alternative source of randomness to the use of TraceID randomness in sampling decisions, the _explicit randomness value_.
 Values of `rv` MUST be exactly 14 lower-case hexadecimal digits:
 
 ```
@@ -98,6 +98,8 @@ hexdigit = DIGIT ; a-f
 ```
 
 The explicit randomness value is meant to be used instead of extracting randomness from TraceIDs, therefore it contains the same number of bits as W3C Trace Context Level 2 recommends for TraceIDs.
+
+Lowercase hexadecimal digits are specified to enable direct lexicographical  comparison between a sampling thresohld and either the TraceID (as it appears in the `traceparent` header) or the explicit randomness value (as it appears in the `tracestate` header).
 
 Explicit randomness values are meant to propagate through [span contexts](../context/README.md) unmodified.
 Explicit randomness values SHOULD NOT be erased from the OpenTelemetry TraceState or modified once associated with a new TraceID, so that sampling decisions made using the explicit randomness value are consistent across signals.
