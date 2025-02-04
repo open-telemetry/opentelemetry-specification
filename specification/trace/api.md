@@ -759,7 +759,7 @@ Note: A `CLIENT` span may have a child that is also a `CLIENT` span, or a
 depending on how the various components that are providing the functionality
 are built and instrumented.
 
-[Semantic conventions](../../specification/overview.md#semantic-conventions) for
+[Semantic conventions](../overview.md#semantic-conventions) for
 specific technologies should document kind for each span they define.
 
 For instance, [Database Client Semantic Conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/database-spans.md)

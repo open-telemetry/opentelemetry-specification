@@ -235,7 +235,8 @@ defined by semver 2.0 specification. See how ordering is used in the
 [Order of Transformations](file_format_v1.1.0.md#order-of-transformations). Other than the ordering
 rules the schema version numbers do not carry any other semantic meaning.
 
-OpenTelemetry schema version numbers match OpenTelemetry specification version
+OpenTelemetry schema version numbers match OpenTelemetry
+[Semantic Conventions](/specification/semantic-conventions.md) version
 numbers, see more details [here](#opentelemetry-schema).
 
 ## OTLP Support
@@ -271,8 +272,8 @@ is associated with a Schema URL.
 OpenTelemetry publishes it own schema at
 [opentelemetry.io/](https://opentelemetry.io/)schemas/<_version_>.
 The version number of the schema
-is the same as the specification version number which publishes the schema.
-Every time a new specification version is released a corresponding new schema
-MUST be released simultaneously. If the specification release did not introduce
+is the same as the semantic-conventions version number which publishes the schema.
+Every time a new semantic-conventions version is released a corresponding new schema
+MUST be released simultaneously. If the semantic-conventions release did not introduce
 any change the "changes" section of the corresponding version in the schema file
 will be empty.
