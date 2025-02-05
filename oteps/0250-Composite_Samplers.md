@@ -67,7 +67,8 @@ Whenever such union is constructed, in case of conflicting attribute keys, the a
 
 ## Proposed Samplers
 
-A principle of operation for all new samplers is that `ShouldSample` is invoked only once, on the root of the tree formed by composite samplers. All the logic provided by the composition of samplers is handled by calculating the threshold values, delegating the calculation downstream as necessary.
+A principle of operation for all new samplers is that `ShouldSample` is invoked only once, on the root of the tree formed by composite samplers.
+All the logic provided by the composition of samplers is handled by calculating the threshold values through `GetSamplingIntent`, delegating the calculation downstream as necessary.
 
 ### New API
 
