@@ -51,10 +51,10 @@ This document covers OpenTelemetry compatibility with various Prometheus-related
 
 Formats used for Scraping metrics (pull):
 
-* [Prometheus text exposition format](https://github.com/Prometheus/docs/blob/777846211d502a287ab2b304cb515dc779de3474/content/docs/instrumenting/exposition_formats.md#exposition-formats)
+* [Prometheus text exposition format](https://github.com/Prometheus/docs/blob/777846211d502a287ab2b304cb515dc779de3474/content/docs/instrumenting/exposition_formats.md)
 * [Prometheus protobuf format](https://github.com/prometheus/client_model/blob/01ca24cafc7877ed5ce091083068cde086b7c3dc/io/prometheus/client/metrics.proto)
-* [OpenMetrics text format](https://github.com/OpenObservability/OpenMetrics/blob/1386544931307dff279688f332890c31b6c5de36/specification/OpenMetrics.md#text-format)
-* (Not yet supported by Prometheus) [OpenMetrics protobuf format](https://github.com/OpenObservability/OpenMetrics/blob/1386544931307dff279688f332890c31b6c5de36/specification/OpenMetrics.md#protobuf-format)
+* [OpenMetrics text format](https://github.com/prometheus/OpenMetrics/blob/1386544931307dff279688f332890c31b6c5de36/specification/OpenMetrics.md#text-format)
+* (Not yet supported by Prometheus) [OpenMetrics protobuf format](https://github.com/prometheus/OpenMetrics/blob/1386544931307dff279688f332890c31b6c5de36/specification/OpenMetrics.md#protobuf-format)
 
 Formats used for Pushing metrics:
 
