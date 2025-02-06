@@ -138,7 +138,7 @@ or higher severity.
       - a remote dependency returns a 401 "Unauthorized" response code.
       - writing data to a file results in an IO exception.
       - a remote dependency returns a 503 "Service Unavailable" response for 5 times in a row,
-        retry attempts are exhausted, and the corresponding operation has fails.
+        retry attempts are exhausted, and the corresponding operation fails.
 
    - Unhandled (by the application code) errors that don't result in application
      shutdown SHOULD be recorded with severity `Error`
