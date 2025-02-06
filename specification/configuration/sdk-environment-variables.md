@@ -396,16 +396,17 @@ configuration models, or overlay values from environment variables on top of a
 configuration model. Implementations MAY provide a mechanism to customize the
 configuration model parsed from `OTEL_EXPERIMENTAL_CONFIG_FILE`.
 
-Users are encouraged to use the `sdk-config.yaml` (TODO: Add link when
-available) as a starting point for `OTEL_EXPERIMENTAL_CONFIG_FILE`. This file
-represents a common SDK configuration scenario, and includes environment
-variable substitution references to environment variables which are otherwise
-ignored.
+Users are encouraged to
+use [`sdk-migration-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-migration-config.yaml)
+as a starting point for `OTEL_EXPERIMENTAL_CONFIG_FILE`. This file represents a
+common SDK configuration scenario, and includes environment variable
+substitution references to environment variables which are otherwise ignored.
+Alternatively, [`sdk-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-config.yaml)
+offers a common SDK configuration starting point without environment variable
+substitution references.
 
 TODO: deprecate env vars which are not
 compatible ([#3967](https://github.com/open-telemetry/opentelemetry-specification/issues/3967))
-TODO: provide solution for platforms to contribute to
-configure ([#3966](https://github.com/open-telemetry/opentelemetry-specification/issues/3966))
 
 ## Language Specific Environment Variables
 
