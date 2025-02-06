@@ -31,7 +31,7 @@ The data model itself is an abstraction with multiple built-in representations:
 
 ### Stability definition
 
-TODO: define stability guarantees and backwards compatibility
+See `opentelemetry-configuration` [stability definition](https://github.com/open-telemetry/opentelemetry-configuration?tab=readme-ov-file#stability-definition).
 
 ### File-based configuration model
 
