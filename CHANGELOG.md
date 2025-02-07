@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
+  on how to record errors across signals.
+  ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
+
 ### Metrics
 
 - Add `MeasurementProcessor` to the Metrics SDK specification [#4318](https://github.com/open-telemetry/opentelemetry-specification/pull/4318)
@@ -33,6 +37,12 @@ release.
 ### Compatibility
 
 ### SDK Configuration
+
+- Define syntax for escaping declarative configuration environment variable
+  references.
+  ([#4375](https://github.com/open-telemetry/opentelemetry-specification/pull/4375))
+- Resolve various declarative config TODOs.
+  ([#4394](https://github.com/open-telemetry/opentelemetry-specification/pull/4394))
 
 ### Common
 
