@@ -214,7 +214,7 @@ OTel SHOULD provide configuration option allowing to specify severity threshold
 at which exception stack traces are to be collected.
 
 It SHOULD be possible to distinguish between the absence of configuration and an
-explicit configuration for the default value to support [backward-compatibility in logging bridges](#migrating-logging-bridges).
+explicit configuration for the default value to support [backward-compatibility in log bridges](#migrating-log-bridges).
 
 The exact configuration option name and semantics will be defined at the OTEP implementation stage.
 For the scope of this document, let's use 'exception stack traces collection severity threshold'.
@@ -244,13 +244,17 @@ This is a simplified version of [stability opt-in migration](https://github.com/
 
 Today log bridges translate exception instances into attributes on OTel log records.
 
-Log bridges that capture stack traces regardless of log record severity SHOULD preserve
-their current behavior when the user has not provided explicit [exception stack traces
-collection severity threshold](#configuration).
+Log bridges that capture stack traces regardless of log record severity,
+in their current major version, SHOULD preserve their current behavior when the
+user has not provided explicit [exception stack traces collection severity threshold](#configuration).
 
 If user has provided explicit exception stack traces collection severity threshold,
 log bridge SHOULD record stack traces accordingly and MAY use `setException` convenience
 method described in [API changes](#api-changes) section.
+
+In the next major version, log bridge SHOULD start using `setException` method or
+follow defaults documented for OTel SDK when explicitly recording `exception.*`
+attributes.
 
 ## Examples
 
