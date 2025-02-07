@@ -390,8 +390,8 @@ try {
 }
 ```
 
-If this instrumentation supports tracing, it should capture the error within the
-processing span or explicitly provide trace context when emitting a log record to preserve correlation.
+If this instrumentation captures message processing as a span, it should pass that span's context
+(either implicitly or explicitly) when emitting the log record to preserve correlation.
 
 #### Instrumentation library
 
