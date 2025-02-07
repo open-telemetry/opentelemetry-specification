@@ -115,13 +115,13 @@ or higher severity.
    - Errors that don't indicate actual issues SHOULD be recorded with
      severity not higher than `Info`.
 
-     Such errors can be used to control application logic and have a minor impact, if any,
+     Such errors have a minor impact, if any,
      on application functionality, availability, or performance (beyond the performance hit introduced
      if an exception is used to control application logic).
 
      Examples:
 
-      - an error is returned when checking the existence of an optional dependency or resource.
+      - an error is returned when checking the existence of an optional service or resource.
       - an exception is thrown on the server when the client disconnects before reading
         the full response from the server.
 
@@ -134,10 +134,10 @@ or higher severity.
 
      Examples:
 
-      - an attempt to connect to a required remote dependency times out.
-      - a remote dependency returns a 401 "Unauthorized" response code.
+      - an attempt to connect to a remote service times out.
+      - a remote service returns a 401 "Unauthorized" response code.
       - writing data to a file results in an IO exception.
-      - a remote dependency returns a 503 "Service Unavailable" response for 5 times in a row,
+      - a remote service returns a 503 "Service Unavailable" response for 5 times in a row,
         retry attempts are exhausted, and the corresponding operation fails.
 
    - Unhandled (by the application code) errors that don't result in application
