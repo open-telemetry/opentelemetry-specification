@@ -196,10 +196,10 @@ The OTel Logs API SHOULD provide methods that enrich log records with exception 
 `setException(exception)` and similar to the [RecordException](../specification/trace/api.md#record-exception) method on span.
 
 The OTel SDK, based on the log severity and configuration, SHOULD record exception details fully,
-partially or not at all.
+partially, or not at all.
 
 The signature of the method is to be determined by each language
-and can be overloaded as appropriate, including the ability to customize stack trace
+and can be overloaded as appropriate, for example to provide custom stack traces
 collection when the language does not provide a built-in mechanism for it.
 
 It MUST be possible to efficiently set `exception.*` attributes on a log record
