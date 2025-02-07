@@ -221,19 +221,24 @@ For the scope of this document, let's use 'exception stack traces collection sev
 ### Migrating from span events
 
 > [!NOTE]
-> New instrumentations or existing ones that do not record exceptions on span events SHOULD
-> NOT start recording exceptions on span events.
+>
+> The migration begins once the specification for recording exceptions on logs is stabilized,
+> and once there is stable support for it in the relevant SDK.
+>
+> When this happens, new instrumentations (or existing ones that do not record exceptions on
+> span events) SHOULD NOT start recording exceptions on span events.
+>
+> Users will still be able to opt-in to sending their events to span events using
+> [log -> span events conversion](https://github.com/open-telemetry/opentelemetry-specification/issues/4393)
+> at any stage of the migration process.
 
-We will define a configuration option to let users choose if they want instrumentations to record exceptions
-on span events or logs.
+We will define a configuration option to let users choose if they want **existing** instrumentations that already emit
+span events to record exceptions on span events or logs.
 
-Existing instrumentations SHOULD default to recording exceptions on span events in their current major version
+Such instrumentations SHOULD default to recording exceptions on span events in their current major version
 and record them on logs only when the user opts-in.
 
-In the next major version, this instrumentation SHOULD stop recording exceptions on span events.
-
-Users who still want to receive exceptions as span events MAY achieve it with [logs -> span events
-conversion](https://github.com/open-telemetry/opentelemetry-specification/issues/4393).
+In the next major version, such instrumentations SHOULD stop recording exceptions on span events.
 
 This is a simplified version of [stability opt-in migration](https://github.com/open-telemetry/semantic-conventions/blob/727700406f9e6cc3f4e4680a81c4c28f2eb71569/docs/http/README.md?plain=1#L13-L37) used in semantic conventions.
 
