@@ -178,10 +178,6 @@ or higher severity.
    See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that
    records stack traces conditionally.
 
-8. Instrumentation libraries that record exceptions using span events SHOULD gracefully migrate
-   to log-based exceptions, offering it as an opt-in feature first and then switching to log-based exceptions
-   in its next major version update.
-
 ## Spec changes
 
 > [!NOTE]
@@ -210,7 +206,7 @@ based on configuration and without using the `setException` method.
 
 ### Configuration
 
-OTel SHOULD provide configuration option allowing to specify severity threshold
+OTel SHOULD provide a configuration option allowing to specify the severity threshold
 at which exception stack traces are to be collected.
 
 It SHOULD be possible to distinguish between the absence of configuration and an
@@ -230,7 +226,7 @@ For the scope of this document, let's use 'exception stack traces collection sev
 We will define a configuration option to let users choose if they want instrumentations to record exceptions
 on span events or logs.
 
-Specific instrumentation SHOULD default to recording exceptions on span events in its current major version
+Existing instrumentations SHOULD default to recording exceptions on span events in their current major version
 and record them on logs only when the user opts-in.
 
 In the next major version, this instrumentation SHOULD stop recording exceptions on span events.
@@ -246,13 +242,13 @@ Today log bridges translate exception instances into attributes on OTel log reco
 
 Log bridges that capture stack traces regardless of log record severity,
 in their current major version, SHOULD preserve their current behavior when the
-user has not provided explicit [exception stack traces collection severity threshold](#configuration).
+user has not provided an explicit [exception stack traces collection severity threshold](#configuration).
 
-If user has provided explicit exception stack traces collection severity threshold,
-log bridge SHOULD record stack traces accordingly and MAY use `setException` convenience
-method described in [API changes](#api-changes) section.
+If the user has provided an explicit exception stack traces collection severity threshold,
+log bridges SHOULD record stack traces accordingly and MAY use `setException` convenience
+method described in the [API changes](#api-changes) section.
 
-In the next major version, log bridge SHOULD start using `setException` method or
+In their next major version, log bridges SHOULD start using `setException` method or
 follow defaults documented for OTel SDK when explicitly recording `exception.*`
 attributes.
 
@@ -339,8 +335,7 @@ public class NetworkClient {
             return socketChannel.write(content);
         } catch (SocketException ex) {
             logger.logRecordBuilder()
-              // we'll retry it, so it's info or lower.
-              // we'll write a warn for the overall operation if retries are exhausted.
+              // We'll write a warn for the overall operation if retries are exhausted.
               .setSeverity(Severity.INFO)
               .addAttribute("connection.id", this.getId())
               .addException(ex)
@@ -410,7 +405,7 @@ final class InstrumentedRecordInterceptor<K, V> implements RecordInterceptor<K, 
       .setSeverity(Severity.ERROR)
       .addAttribute("messaging.message.id", record.getId())
       ...
-      .addException(ex)
+      .addException(exception)
       .setBody("Consumer error")
       .emit();
     // ..
