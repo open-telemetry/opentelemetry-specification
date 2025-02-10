@@ -135,7 +135,7 @@ Let's look at some simple examples written in Go.
 <!-- markdownlint-disable no-hard-tabs -->
 
 Filtering can be achieved by [decorating](https://refactoring.guru/design-patterns/decorator)
-a processor.
+a processor. For example, here's how filtering based on Severity can be achieved.
 
 ```go
 // SeverityProcessor decorates a processor to filter out log records
