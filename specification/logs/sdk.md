@@ -319,7 +319,7 @@ components in the SDK:
 
 Please see [Supplementary Guidelines](./supplementary-guidelines.md#complex-log-processing)
 for more information on how to setup complex log record processing
-(filtering, fan-out, routing, retracting).
+(filtering, fan-out, routing).
 
 ### LogRecordProcessor operations
 
