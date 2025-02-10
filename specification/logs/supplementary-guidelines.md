@@ -122,8 +122,8 @@ of how it can be done for zap logging library for Go.
 
 As rule of thumb, users of [Logs SDK](sdk.md) are advised to have a simple
 processing pipeline that simply exports the log records to the Collector
-in order to use its processing capabilities. Doing so decouples the application
-code from the telemetry processing.
+and use its processing capabilities if necessary. Doing so decouples the
+application code from the telemetry processing.
 
 However, in some cases (like mobile devices, IoT, serverless, performance or cost
 tuning, legacy systems) using a Collector is not feasible. In these cases, users are able to use
