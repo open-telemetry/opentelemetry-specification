@@ -17,6 +17,7 @@ extra requirements to the existing specifications.
   * [Context](#context)
     + [Implicit Context Injection](#implicit-context-injection)
     + [Explicit Context Injection](#explicit-context-injection)
+  * [Complex Processing](#complex-processing)
 
 <!-- tocstop -->
 
@@ -116,5 +117,9 @@ the current active span.
 See
 [an example](https://docs.google.com/document/d/15vR7D1x2tKd7u3zaTF0yH1WaHkUr2T4hhr7OyiZgmBg/edit#heading=h.4xuru5ljcups)
 of how it can be done for zap logging library for Go.
+
+### Complex Processing
+
+TODO
 
 - [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
