@@ -7,7 +7,7 @@
 **Abstract**: This OTEP describes a new protocol, the OTelArrow protocol, which is based on a **generic columnar representation
 for metrics, logs and traces**.  This protocol significantly improves efficiency in scenarios involving the transmission
 of large batches of metrics, logs, traces. Moreover, it provides a better representation for [multivariate time-series](#multivariate-time-series).
-The OTelArrow protocol also supports a fallback mechanism to the [OpenTelemetry protocol (OTEP 0035)](../../oteps/0035-opentelemetry-protocol.md)
+The OTelArrow protocol also supports a fallback mechanism to the [OpenTelemetry protocol (OTEP 0035)](0035-opentelemetry-protocol.md)
 in instances when one of the endpoints does not support the OTelArrow protocol.
 
 **Reference implementation**: The [OTel Arrow Adapter](https://github.com/f5/otel-arrow-adapter) Go library specifies
@@ -70,7 +70,7 @@ other in memory. The main benefits of a columnar approach are:
 
 ![row vs column-oriented](img/0156_OTEL%20-%20Row%20vs%20Column.png)
 
-This OTEP proposes to improve the [OpenTelemetry protocol (OTEP 0035)](../../oteps/0035-opentelemetry-protocol.md)
+This OTEP proposes to improve the [OpenTelemetry protocol (OTEP 0035)](0035-opentelemetry-protocol.md)
 with a **generic columnar representation for metrics, logs and traces based on Apache Arrow**. Compared to the existing
 OpenTelemetry protocol this compatible extension has the following improvements:
 
@@ -85,7 +85,7 @@ OpenTelemetry protocol this compatible extension has the following improvements:
   efficiency, and data minimization require additional data processing capabilities such as data projection,
   aggregation, and filtering.
 
-These improvements not only address the aforementioned needs but also answer the [open questions](../../oteps/0035-opentelemetry-protocol.md#open-questions)
+These improvements not only address the aforementioned needs but also answer the [open questions](0035-opentelemetry-protocol.md#open-questions)
 cited in OTEP 035 (i.e. cpu usage, memory pressure, compression optimization).
 
 **It is important to understand that this proposal is complementary to the existing protocol. The row-oriented version
@@ -749,7 +749,7 @@ the client select between OTLP or OTel Arrow protocol depending on the nature of
 ## Future Versions and Interoperability
 
 As far as protocol evolution and interoperability mechanisms are concerned, this extension follows the
-[recommendations](../../oteps/0035-opentelemetry-protocol.md#future-versions-and-interoperability)
+[recommendations](0035-opentelemetry-protocol.md#future-versions-and-interoperability)
 outlined in the OTLP spec.
 
 ## Prior Art and Alternatives
