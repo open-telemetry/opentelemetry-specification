@@ -125,8 +125,8 @@ processing pipeline that simply exports the log records to the Collector
 in order to use its processing capabilities. Doing so decouples the application
 code from the telemetry processing.
 
-However, in some cases (like mobile devices, IoT, serverless, legacy systems)
-using a Collector is not feasible. In these cases, users are able to use
+However, in some cases (like mobile devices, IoT, serverless, performance or cost
+tuning, legacy systems) using a Collector is not feasible. In these cases, users are able to use
 different [structural design patterns](https://refactoring.guru/design-patterns/structural-patterns)
 to achieve complex log processing pipelines.
 
