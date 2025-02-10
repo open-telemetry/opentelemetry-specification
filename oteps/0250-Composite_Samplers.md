@@ -261,7 +261,7 @@ The special case of calling service `/foo` can now be supported by:
 ```
 S3 = ConsistentAnyOf(S2, ConsistentRuleBased(CLIENT, {
            (http.url == /foo) => ConsistentAlwaysOn
-     })
+     }))
 ```
 
 Finally, the last step is to put a limit on the stream of exported spans:
