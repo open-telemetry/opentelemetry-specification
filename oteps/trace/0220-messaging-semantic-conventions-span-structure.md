@@ -61,7 +61,7 @@ scenarios and different messaging systems.
 
 ## Stages of producing and consuming messages
 
-As previously described in [OTEP 173](https://github.com/open-telemetry/oteps/blob/main/text/trace/0173-messaging-semantic-conventions.md#scenarios.),
+As previously described in [OTEP 173](../../oteps/trace/0173-messaging-semantic-conventions.md#scenarios.),
 producing and consuming a message involves five stages:
 
 ```mermaid

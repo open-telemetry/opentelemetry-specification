@@ -7,7 +7,7 @@
 Discoverability, Interoperability, Type-Safe Client SDKs, Client SDKs Generation,
 CI/CD Integration, Data Governance, Data Privacy.
 
-**Related OTEPs**: [OTEP0152](https://github.com/open-telemetry/oteps/blob/main/text/0152-telemetry-schemas.md), [OTEP0202](https://github.com/open-telemetry/oteps/blob/main/text/0202-events-and-logs-api.md).
+**Related OTEPs**: [OTEP0152](../../oteps/0152-telemetry-schemas.md), [OTEP0202](../../oteps/0202-events-and-logs-api.md).
 
 ----
 _Unlike the traditional data ecosystem (OLTP and OLAP), the world of telemetry
@@ -193,7 +193,7 @@ Telemetry Schemas would replace/augment existing SchemaURL.
 ![Use cases](./img/0243-otel-weaver-use-cases.svg)
 
 Note: The relationship between Telemetry Schema v1.1
-([OTEP 0152](https://github.com/open-telemetry/oteps/blob/main/text/0152-telemetry-schemas.md))
+([OTEP 0152](../../oteps/0152-telemetry-schemas.md))
 and the Component and Resolved Telemetry Schema concepts is still being
 discussed. This will be clarified in future OTEPs (refer to the last section).
 

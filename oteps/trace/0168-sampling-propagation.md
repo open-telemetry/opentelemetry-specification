@@ -441,11 +441,11 @@ data to avoid the computational cost of hashing TraceIDs.
 
 Restricting parent sampling probabilities to powers of two does not limit tail
 Samplers from using arbitrary probabilities.  The companion [OTEP
-170](https://github.com/open-telemetry/oteps/blob/main/text/trace/0170-sampling-probability.md) has discussed
+170](../../oteps/trace/0170-sampling-probability.md) has discussed
 the use of a `sampler.adjusted_count` attribute that would not be
 limited to power-of-two values.  Discussion about how to represent the
 effective adjusted count for tail-sampled Spans belongs in [OTEP
-170](https://github.com/open-telemetry/oteps/blob/main/text/trace/0170-sampling-probability.md), not this OTEP.
+170](../../oteps/trace/0170-sampling-probability.md), not this OTEP.
 
 Restricting parent sampling probabilities to powers of two does not limit
 Samplers from using arbitrary effective probabilities over a period of
@@ -465,7 +465,7 @@ propagate the `p` value when the context is not sampled, since
 `ParentBased` samplers will not change the decision.  Although one
 use-case was docmented in Google's early Dapper system (known as
 "inflationary sampling", see
-[OTEP 170](https://github.com/open-telemetry/oteps/blob/main/text/trace/0170-sampling-probability.md#dappers-inflationary-sampler)), the same effect can
+[OTEP 170](../../oteps/trace/0170-sampling-probability.md#dappers-inflationary-sampler)), the same effect can
 be achieved using a consistent sampling decision in this framework.
 
 ### Default behavior

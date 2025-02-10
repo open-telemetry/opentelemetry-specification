@@ -214,7 +214,7 @@ The DataModel would ensure that attributes in Resource are produced from both th
 
 ### ResourceEntityRef
 
-The entityref data model, would have the following changes from the original [entity OTEP](https://github.com/open-telemetry/oteps/blob/main/text/entities/0256-entities-data-model.md) to denote references within Resource:
+The entityref data model, would have the following changes from the original [entity OTEP](../../oteps/entities/0256-entities-data-model.md) to denote references within Resource:
 
 | Field | Type | Description | Changes |
 | ----- | ---- | ----------- | ------- |

@@ -76,7 +76,7 @@ The infographic below shows an example of the lifecycle of an API component.
 ### Development
 
 Signals start in **Development** status as defined by
-[OTEP 0232](https://github.com/open-telemetry/oteps/blob/main/text/0232-maturity-of-otel.md#explanation).
+[OTEP 0232](../../oteps/0232-maturity-of-otel.md#explanation).
 While signals are in development, breaking changes and performance issues MAY occur.
 Components SHOULD NOT be expected to be feature-complete.
 In some cases, the signal in Development MAY be discarded and removed entirely.

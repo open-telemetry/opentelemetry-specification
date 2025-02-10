@@ -17,7 +17,7 @@ The support guarantees and allowed changes are governed by the lifecycle of the 
 |Deprecated          |Changes are no longer allowed, except for editorial changes.|
 
 The specification follows
-[OTEP 0232](https://github.com/open-telemetry/oteps/blob/main/text/0232-maturity-of-otel.md#explanation)
+[OTEP 0232](../../oteps/0232-maturity-of-otel.md#explanation)
 maturity level definitions.
 
 ## Feature freeze
