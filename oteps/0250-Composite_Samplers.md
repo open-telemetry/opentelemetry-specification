@@ -270,6 +270,26 @@ Finally, the last step is to put a limit on the stream of exported spans:
 S4 = ConsistentRateLimiting(S3, 1000)
 ```
 
+This is the complete example:
+
+```
+S4 = 
+ConsistentRateLimiting(
+    ConsistentAnyOf(
+        ConsistentParentBased(
+            ConsistentRuleBased(ROOT, {
+                (http.target == /healthcheck) => ConsistentAlwaysOff,
+                (http.target == /checkout) => ConsistentAlwaysOn,
+                true => ConsistentFixedThreshold(0.25),
+            })
+        ),
+        ConsistentRuleBased(CLIENT, {
+            (http.url == /foo) = > ConsistentAlwaysOn,
+        }),
+    ),
+    1000,
+)
+```
 ### Limitations
 
 Developers of `Composable` samplers should consider that the sampling Decision they declare as their intent might be different from the final sampling Decision.
