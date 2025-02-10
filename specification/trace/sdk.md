@@ -39,7 +39,7 @@ linkTitle: SDK
     + [Random trace flag](#random-trace-flag)
     + [Explicit trace randomness](#explicit-trace-randomness)
       - [Do not overwrite explicit trace randomness](#do-not-overwrite-explicit-trace-randomness)
-      - [Set explicit trace randomness for non-random TraceIDs](#set-explicit-trace-randomness-for-non-random-traceids)
+      - [Root samplers set explicit trace randomness for non-random TraceIDs](#root-samplers-set-explicit-trace-randomness-for-non-random-traceids)
     + [Presumption of TraceID randomness](#presumption-of-traceid-randomness)
     + [IdGenerator randomness](#idgenerator-randomness)
 - [Span Limits](#span-limits)
