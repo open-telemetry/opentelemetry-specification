@@ -181,8 +181,8 @@ func (p *FanoutProcessor) OnEmit(ctx context.Context, record *sdklog.Record) err
 // Implementation of ForceFlush and Shutdown is left for the reader.
 ```
 
-Other capabilities, such as routing, attributes can be implemented using
-different combinations of wrapping and composing of processors.
+Other capabilities, such as routing, can be implemented using different
+combinations of wrapping and composing of processors.
 
 ```go
 
