@@ -120,6 +120,86 @@ of how it can be done for zap logging library for Go.
 
 ### Complex Processing
 
-TODO
+As rule of thumb, users of [Logs SDK](sdk.md) are advised to have a simple
+processing pipeline that simply exports the log records to the Collector
+in order to use its processing capabilities. Doing so decouples the application
+code from the telemetry processing.
+
+However, in some cases (like mobile devices, IoT, serverless, legacy systems)
+using a Collector is not feasible. In these cases, users are able to use
+different [structural design patterns](https://refactoring.guru/design-patterns/structural-patterns)
+to achieve complex log processing pipelines.
+
+Let's look at some simple examples written in Go.
+
+Filtering can be achieved by [decorating](https://refactoring.guru/design-patterns/decorator)
+a processor.
+
+```go
+// SeverityProcessor decorates a processor to filter out log records
+// that severity is below given threshold.
+type SeverityProcessor struct {
+	sdklog.Processor
+	Min log.Severity
+}
+
+// OnEmit passes ctx and record to the sdklog.Processor that p wraps if the
+// severity of record is greater than or equal to p.Min. Otherwise, record is
+// dropped.
+func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
+	if record.Severity() < p.Min {
+		return nil
+	}
+	return p.Processor.OnEmit(ctx, record)
+}
+```
+
+Supporting multiple processing pipelines can be achieved by
+[composing](https://refactoring.guru/design-patterns/composite) processors.
+
+```go
+// FanoutProcessor composes multiple processors so that they are isolated.
+// Each processor operates on a deep copy of the record.
+type FanoutProcessor struct {
+	Processors []sdklog.Processor
+}
+
+// OnEmit passes ctx and a clone of record to the each wrapped sdklog.Processor.
+func (p *FanoutProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
+	var rErr error
+	for _, proc := range p.Processors {
+		r := record.Clone()
+		if err := proc.OnEmit(ctx, &r); err != nil {
+			rErr = errors.Join(rErr, err)
+		}
+	}
+	return rErr
+}
+
+// Implementation of ForceFlush and Shutdown is left for the reader.
+```
+
+Other capabilities, such as routing, attributes can be implemented using
+different combinations of wrapping and composing of processors.
+
+```go
+
+// LogEventRouteProcessor splits the log record processing from event record processing.
+type LogEventRouteProcessor struct {
+	LogProcessor sdklog.Processor
+	EventProcessor sdklog.Processor
+}
+
+// OnEmit calls EventProcessor if record has non-empty event name.
+// Otherwise, it calls LogProcessor.
+func (p *LogEventRouteProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
+	if record.EventName() != "" {
+		return p.EventProcessor.OnEmit(ctx, record)
+	}
+	return p.LogProcessor.OnEmit(ctx, record)
+}
+
+// Implementation of ForceFlush and Shutdown is left for the reader.
+```
 
 - [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
