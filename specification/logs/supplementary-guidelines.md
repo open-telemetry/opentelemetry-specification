@@ -132,6 +132,8 @@ to achieve complex log processing pipelines.
 
 Let's look at some simple examples written in Go.
 
+<!-- markdownlint-disable no-hard-tabs -->
+
 Filtering can be achieved by [decorating](https://refactoring.guru/design-patterns/decorator)
 a processor.
 
@@ -201,5 +203,7 @@ func (p *LogEventRouteProcessor) OnEmit(ctx context.Context, record *sdklog.Reco
 
 // Implementation of ForceFlush and Shutdown is left for the reader.
 ```
+
+<!-- markdownlint-enable no-hard-tabs -->
 
 - [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)
