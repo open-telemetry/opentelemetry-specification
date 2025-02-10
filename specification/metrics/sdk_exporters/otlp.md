@@ -70,6 +70,6 @@ The recognized (case-insensitive) values for `OTEL_EXPORTER_OTLP_METRICS_DEFAULT
 
 ## References
 
-- [OTEP0131 OTLP Exporters Configurable Export Behavior](../../oteps/metrics/0131-otlp-export-behavior.md)
+- [OTEP0131 OTLP Exporters Configurable Export Behavior](../../../oteps/metrics/0131-otlp-export-behavior.md)
 
 [Enum]: ../../configuration/sdk-environment-variables.md#enum
