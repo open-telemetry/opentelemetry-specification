@@ -130,9 +130,9 @@ There are many ways and places of implementing log processing like:
 Each of the approaches has different benefits and drawbacks.
 
 Here are some examples on how to build custom log processing using the
-[Logs SDK](sdk.md). These examples are written in Go and are shown for
-illustration. Consult the language specific documentation to see if this
-feasible to be implemented in a different language.
+[Logs SDK](sdk.md). These examples use the [Go Logs SDK](https://pkg.go.dev/go.opentelemetry.io/otel/sdk/log)
+and are shown for illustration. Consult the language specific documentation
+to see if this feasible to be implemented in a different language.
 
 <!-- markdownlint-disable no-hard-tabs -->
 
@@ -157,6 +157,12 @@ func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) e
 	return p.Processor.OnEmit(ctx, record)
 }
 ```
+
+> [!NOTE]
+> As noted before, the examples are shown for illustration.
+> Go developers can use take advantage of the
+> [`go.opentelemetry.io/contrib/processors/minsev`](https://pkg.go.dev/go.opentelemetry.io/contrib/processors/minsev)
+> module.
 
 Supporting multiple processing pipelines can be achieved by
 [composing](https://refactoring.guru/design-patterns/composite) processors.
