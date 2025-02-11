@@ -120,17 +120,19 @@ of how it can be done for zap logging library for Go.
 
 ### Complex Processing
 
-As rule of thumb, users of [Logs SDK](sdk.md) are advised to have a simple
-processing pipeline that simply exports the log records to the Collector
-and use its processing capabilities if necessary. Doing so decouples the
-application code from the telemetry processing.
+There are many ways and places of implementing log processing like:
 
-However, in some cases (like mobile devices, IoT, serverless, performance or cost
-tuning, legacy systems) using a Collector is not feasible. In these cases, users are able to use
-different [structural design patterns](https://refactoring.guru/design-patterns/structural-patterns)
-to achieve complex log processing pipelines.
+1. The OpenTelemetry Collector.
+2. The [OpenTelemetry Logs SDK](sdk.md).
+3. A bridged logging library.
+4. A backend.
 
-Let's look at some simple examples written in Go.
+Each of the approaches has different benefits and drawbacks.
+
+Here are some examples on how to build custom log processing using the
+[Logs SDK](sdk.md). These examples are written in Go and are shown for
+illustration. Consult the language specific documentation to see if this
+feasible to be implemented in a different language.
 
 <!-- markdownlint-disable no-hard-tabs -->
 
@@ -158,6 +160,9 @@ func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) e
 
 Supporting multiple processing pipelines can be achieved by
 [composing](https://refactoring.guru/design-patterns/composite) processors.
+Below is an example of a fan-out processor. It makes sure that each processor
+operates on an copy of log record so that the mutations in one processor
+are not affecting other processors.
 
 ```go
 // FanoutProcessor composes multiple processors so that they are isolated.
@@ -182,7 +187,9 @@ func (p *FanoutProcessor) OnEmit(ctx context.Context, record *sdklog.Record) err
 ```
 
 Other capabilities, such as routing, can be implemented using different
-combinations of wrapping and composing of processors.
+combinations of wrapping and composing of processors. Here's an example
+of a processor which splits the processing of event records from (non-event)
+log records.
 
 ```go
 
