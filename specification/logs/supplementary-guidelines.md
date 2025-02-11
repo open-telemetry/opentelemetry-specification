@@ -208,9 +208,8 @@ func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) e
 
 Supporting multiple processing pipelines can be achieved by
 [composing](https://refactoring.guru/design-patterns/composite) processors.
-Below is an example of a fan-out processor. It makes sure that each processor
-operates on an copy of log record so that the mutations in one processor
-are not affecting other processors.
+Below is an example of an isolated processor. It makes sure that the passed
+processors operate on a copy of a log record.
 
 ```go
 package demo
@@ -222,17 +221,16 @@ import (
 	sdklog "go.opentelemetry.io/otel/sdk/log"
 )
 
-// FanoutProcessor composes multiple processors so that they are isolated.
-// Each processor operates on a deep copy of the record.
-type FanoutProcessor struct {
+// IsolatedProcessor composes multiple processors so that they are isolated.
+type IsolatedProcessor struct {
 	Processors []sdklog.Processor
 }
 
 // OnEmit passes ctx and a clone of record to the each wrapped sdklog.Processor.
-func (p *FanoutProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
+func (p *IsolatedProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
 	var rErr error
+	r := record.Clone()
 	for _, proc := range p.Processors {
-		r := record.Clone()
 		if err := proc.OnEmit(ctx, &r); err != nil {
 			rErr = errors.Join(rErr, err)
 		}
@@ -273,6 +271,62 @@ func (p *LogEventRouteProcessor) OnEmit(ctx context.Context, record *sdklog.Reco
 }
 
 // Implementation of ForceFlush and Shutdown is left for the reader.
+```
+
+Below is an example of log processing setup which uses all of the processors
+described above.
+
+```go
+package play // import "go.opentelemetry.io/otel/sdk/play"
+
+import (
+	"context"
+
+	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp"
+	"go.opentelemetry.io/otel/exporters/stdout/stdoutlog"
+	"go.opentelemetry.io/otel/log"
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+)
+
+// NewLoggerProvider creates a new logger provider.
+// Event records with severity not lower than Info are exported via OTLP.
+// Event records have the token attributes redacted.
+// Non-event log records with severity not lower than Debug are synchronously emitted to stdout.
+func NewLoggerProvider() (*sdklog.LoggerProvider, error) {
+	// Events processing setup.
+	otlpExp, err := otlploghttp.New(context.Background()
+	if err != nil {
+		return nil, err
+	}
+	evtProc := &SeverityProcessor{
+		Processor: &IsolatedProcessor{
+			Processors: []sdklog.Processor{
+				&RedactTokensProcessor{},
+				sdklog.NewBatchProcessor(otlpExp),
+			},
+		},
+		Min: log.SeverityInfo,
+	}
+
+	// Logs processing setup.
+	stdoutExp, err := stdoutlog.New()
+	if err != nil {
+		return nil, err
+	}
+	logProc := &SeverityProcessor{
+		Processor: sdklog.NewSimpleProcessor(stdoutExp),
+		Min:       log.SeverityDebug,
+	}
+
+	// Create logs provider with log/event routing.
+	provider := sdklog.NewLoggerProvider(
+		sdklog.WithProcessor(&LogEventRouteProcessor{
+			LogProcessor:   logProc,
+			EventProcessor: evtProc,
+		}),
+	)
+	return provider, nil
+}
 ```
 
 <!-- markdownlint-enable no-hard-tabs -->
