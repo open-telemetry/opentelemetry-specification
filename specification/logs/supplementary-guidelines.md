@@ -207,8 +207,6 @@ func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) e
 	}
 	return p.Processor.OnEmit(ctx, record)
 }
-
-// Implementation of ForceFlush and Shutdown is left for the reader.
 ```
 
 > [!NOTE]
