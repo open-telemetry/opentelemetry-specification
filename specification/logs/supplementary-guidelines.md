@@ -137,8 +137,8 @@ to see if this feasible to be implemented in a different language.
 <!-- markdownlint-disable no-hard-tabs -->
 
 Log record altering can be simply done by mutating the log record passed to the 
-processor. Here is an example of processor that tries to redact tokens from log
-record attributes:
+processor. Here is an example of a processor that tries to redact tokens from
+log record attributes:
 
 ```go
 package demo
