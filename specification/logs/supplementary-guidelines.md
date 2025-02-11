@@ -202,7 +202,7 @@ type SeverityProcessor struct {
 // if the record's severity is greater than or equal to p.Min.
 // Otherwise, the record is dropped (the wrapped processor is not invoked).
 func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
-	if record.Severity() < p.Min {
+	if record.Severity() != log.SeverityUndefined && record.Severity() < p.Min {
 		return nil
 	}
 	return p.Processor.OnEmit(ctx, record)
