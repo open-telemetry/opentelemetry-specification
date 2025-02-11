@@ -181,7 +181,7 @@ formats is required. Implementing more than one format is optional.
 | The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers                                                  |          |    |      |     |        |      | -      |     |      |     |      |       |
 | The metric SDK's metric Producer implementations uses the metric Filter                                                                                                |          |    |      |     |        |      | -      |     |      |     |      |       |
 | Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits)                                                                           |          |    |      |   +  |   -    |     |        |     |  -   |  +  |   +   |       |
-| Metric SDK supports configuring cardinality limit at MeterReader level                                                                                                 |          |    |      |  +  |    -    |     |        |     |  -   |  -  |   -   |       |
+| Metric SDK supports configuring cardinality limit at MeterReader level                                                                                                 |          |    |      |  +   |    -    |     |        |     |  -   |  -  |   -   |       |
 | Metric SDK supports configuring cardinality limit per metric (using Views)                                                                                             |          |    |      |  +   |   -    |      |        |     |  -   |  -  |   +   |       |
 
 ## Logs
