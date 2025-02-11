@@ -167,6 +167,7 @@ func (p *RedactTokensProcessor) OnEmit(ctx context.Context, record *sdklog.Recor
 	return nil
 }
 
+// Implementation of ForceFlush and Shutdown is left for the reader.
 ```
 
 Filtering can be achieved by [decorating](https://refactoring.guru/design-patterns/decorator)
@@ -198,6 +199,8 @@ func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) e
 	}
 	return p.Processor.OnEmit(ctx, record)
 }
+
+// Implementation of ForceFlush and Shutdown is left for the reader.
 ```
 
 > [!NOTE]
