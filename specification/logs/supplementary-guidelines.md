@@ -18,6 +18,11 @@ extra requirements to the existing specifications.
     + [Implicit Context Injection](#implicit-context-injection)
     + [Explicit Context Injection](#explicit-context-injection)
   * [Complex Processing](#complex-processing)
+    + [Log Record Alteration](#log-record-alteration)
+    + [Filtering](#filtering)
+    + [Multiple Pipelines](#multiple-pipelines)
+    + [Routing](#routing)
+    + [Setup](#setup)
 
 <!-- tocstop -->
 
@@ -282,7 +287,7 @@ func (p *LogEventRouteProcessor) OnEmit(ctx context.Context, record *sdklog.Reco
 // Implementation of ForceFlush and Shutdown is left for the reader.
 ```
 
-#### Processing Setup
+#### Setup
 
 The following example sets up log processing using all of the processors
 described above.
