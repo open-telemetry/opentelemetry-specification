@@ -140,6 +140,15 @@ Filtering can be achieved by [decorating](https://refactoring.guru/design-patter
 a processor. For example, here's how filtering based on Severity can be achieved.
 
 ```go
+package demo
+
+import (
+	"context"
+
+	"go.opentelemetry.io/otel/log"
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+)
+
 // SeverityProcessor decorates a processor to filter out log records
 // that severity is below given threshold.
 type SeverityProcessor struct {
@@ -171,6 +180,15 @@ operates on an copy of log record so that the mutations in one processor
 are not affecting other processors.
 
 ```go
+package demo
+
+import (
+	"context"
+	"errors"
+
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+)
+
 // FanoutProcessor composes multiple processors so that they are isolated.
 // Each processor operates on a deep copy of the record.
 type FanoutProcessor struct {
@@ -198,6 +216,13 @@ of a processor which splits the processing of event records from (non-event)
 log records.
 
 ```go
+package demo
+
+import (
+	"context"
+
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+)
 
 // LogEventRouteProcessor splits the log record processing from event record processing.
 type LogEventRouteProcessor struct {
