@@ -136,6 +136,39 @@ to see if this feasible to be implemented in a different language.
 
 <!-- markdownlint-disable no-hard-tabs -->
 
+Log record altering can be simply done by mutating the log record passed to the 
+processor. Here is an example of processor that tries to redact tokens from log
+record attributes:
+
+```go
+package demo
+
+import (
+	"context"
+	"strings"
+
+	"go.opentelemetry.io/otel/log"
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+)
+
+// RedactTokensProcessor redacts values
+// from attributes containing "token" in the key.
+type RedactTokensProcessor struct{}
+
+// OnEmit redacts values from attributes containing "token" in the key
+// by replacing them with a REDACTED value.
+func (p *RedactTokensProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
+	record.WalkAttributes(func(kv log.KeyValue) bool {
+		if strings.Contains(strings.ToLower(kv.Key), "token") {
+			record.AddAttributes(log.String(kv.Key, "REDACTED"))
+		}
+		return true
+	})
+	return nil
+}
+
+```
+
 Filtering can be achieved by [decorating](https://refactoring.guru/design-patterns/decorator)
 a processor. For example, here's how filtering based on Severity can be achieved.
 
