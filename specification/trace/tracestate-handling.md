@@ -109,3 +109,5 @@ For example, here is a W3C TraceState value including an OpenTelemetry explicit 
 ```
 tracestate: ot=rv:6e6d1a75832a2f
 ```
+
+This corresponds with the explicit randomness value, an unsigned integer value, of 0x6e6d1a75832a2f. This randomness value is meant to be used instead of the least-significant 56 bits of the TraceID. In this example, the 56-bit fraction (i.e., 0x6e6d1a75832a2f / 0x100000000000000) implies making a consistent positive sampling decision at probabilities ranging from 41.1% through 100% (i.e., rejection thresohld values 0x6e6d1a75832a2f through 0), the same as for a hexadecimal TraceID ending in 6e6d1a75832a2f without explicit randomness value.
