@@ -415,7 +415,7 @@ From an input sampling ratio, a rejection threshold value is calculated; see [co
 
 ##### `TraceIdRatioBased` sampler algorithm
 
-Given a Sampler configured with a sampling threshold `T` and Context with randomness value `R` (typically, the 7 rightmost bytes of the trace ID), when `ShouldSample()` is called, it uses the expression `R >= T` to decide whether to return `RECORD_AND_SAMPLE` or `DROP`. 
+Given a Sampler configured with a sampling threshold `T` and Context with randomness value `R` (typically, the 7 rightmost bytes of the trace ID), when `ShouldSample()` is called, it uses the expression `R >= T` to decide whether to return `RECORD_AND_SAMPLE` or `DROP`.
 
 * If randomness value (R) is greater or equal to the rejection threshold (T), meaning when (R >= T), return `RECORD_AND_SAMPLE`, otherwise, return `DROP`.
 * When (R >= T), the OpenTelemetry TraceState SHOULD be modified to include the key-value `th:T` for rejection threshold value (T), as specified for the [OpenTelemetry TraceState `th` sub-key][TRACESTATEHANDLING].
@@ -456,7 +456,7 @@ compatibility warning.  As an example of this compatibility warning:
 
 ```
 WARNING: The TraceIdRatioBased sampler is presuming TraceIDs are random
-and expects the Trace random flag to be set in confirmation.  Please 
+and expects the Trace random flag to be set in confirmation.  Please
 upgrade your caller(s) to use W3C Trace Context Level 2.
 ```
 

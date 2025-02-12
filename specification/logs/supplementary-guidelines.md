@@ -114,7 +114,7 @@ any case the wrappers are expected to make use of the Trace Context API to get
 the current active span.
 
 See
-[an example](https://docs.google.com/document/d/15vR7D1x2tKd7u3zaTF0yH1WaHkUr2T4hhr7OyiZgmBg/edit#heading=h.4xuru5ljcups)
+[an example](https://github.com/open-telemetry/opentelemetry-go-contrib/blob/aeb198d6de25588afef49545cfa06533d0e67f1d/bridges/otelzap/core.go#L194-L244)
 of how it can be done for zap logging library for Go.
 
-- [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
+- [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)

@@ -218,7 +218,7 @@ OpenTelemetry SDKs are recommended to use 4 digits of precision by default. The 
 To convert a 56-bit integer threshold value to the t-value representation, emit it as a hexadecimal value (without a leading '0x'), optionally with trailing zeros omitted:
 
 ```py
-if tvalue == 0: 
+if tvalue == 0:
   add_otel_trace_state('tv:0')
 else:
   h = hex(tvalue).rstrip('0')
