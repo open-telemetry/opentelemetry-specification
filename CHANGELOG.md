@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
+  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
+  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
 - Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
   on how to record errors across signals.
   ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
