@@ -17,7 +17,7 @@ extra requirements to the existing specifications.
   * [Context](#context)
     + [Implicit Context Injection](#implicit-context-injection)
     + [Explicit Context Injection](#explicit-context-injection)
-  * [Complex Processing](#complex-processing)
+  * [Advanced Processing](#advanced-processing)
     + [Log Record Alteration](#log-record-alteration)
     + [Filtering](#filtering)
     + [Multiple Pipelines](#multiple-pipelines)
@@ -123,16 +123,18 @@ See
 [an example](https://github.com/open-telemetry/opentelemetry-go-contrib/blob/aeb198d6de25588afef49545cfa06533d0e67f1d/bridges/otelzap/core.go#L194-L244)
 of how it can be done for zap logging library for Go.
 
-### Complex Processing
+### Advanced Processing
 
 There are many ways and places of implementing log processing, including:
 
 1. The OpenTelemetry Collector
 2. The [OpenTelemetry Logs SDK](sdk.md)
 3. A bridged logging library
-4. A backend
+4. A backend observability system
 
 Each approach has different benefits and drawbacks.
+This section focuses on how the OpenTelemetry Logs SDK can be used
+to perform advanced compound processing using multiple processors.
 
 Below are examples of how to build custom log processing using the
 [Logs SDK](sdk.md). These examples use the [Go Logs SDK](https://pkg.go.dev/go.opentelemetry.io/otel/sdk/log)
@@ -173,8 +175,6 @@ func (p *RedactTokensProcessor) OnEmit(ctx context.Context, record *sdklog.Recor
 	})
 	return nil
 }
-
-// Implementation of ForceFlush and Shutdown is left for the reader.
 ```
 
 #### Filtering
@@ -248,8 +248,6 @@ func (p *IsolatedProcessor) OnEmit(ctx context.Context, record *sdklog.Record) e
 	}
 	return rErr
 }
-
-// Implementation of ForceFlush and Shutdown is left for the reader.
 ```
 
 #### Routing
@@ -281,8 +279,6 @@ func (p *LogEventRouteProcessor) OnEmit(ctx context.Context, record *sdklog.Reco
 	}
 	return p.LogProcessor.OnEmit(ctx, record)
 }
-
-// Implementation of ForceFlush and Shutdown is left for the reader.
 ```
 
 #### Setup
@@ -291,7 +287,7 @@ The following example sets up log processing using all of the processors
 described above.
 
 ```go
-package play // import "go.opentelemetry.io/otel/sdk/play"
+package play
 
 import (
 	"context"

@@ -48,7 +48,7 @@ release.
 
 ### Supplementary Guidelines
 
-- Add Complex Processing to Logs Supplementary Guidelines.
+- Add Advanced Processing to Logs Supplementary Guidelines.
   ([#4407](https://github.com/open-telemetry/opentelemetry-specification/pull/4407))
 
 ### OTEPs
