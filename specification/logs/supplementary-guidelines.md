@@ -150,8 +150,6 @@ Below is an example of a processor that redacts tokens from log record
 attributes.
 
 ```go
-package demo
-
 import (
 	"context"
 	"strings"
@@ -183,8 +181,6 @@ Filtering can be achieved by [decorating](https://refactoring.guru/design-patter
 a processor. For example, here's how filtering based on Severity can be achieved.
 
 ```go
-package demo
-
 import (
 	"context"
 
@@ -223,22 +219,20 @@ The example below demonstrates an isolated processor that ensures each processor
 operates on a copy of the log record:
 
 ```go
-package demo
-
 import (
 	"context"
 	"errors"
 
-	sdklog "go.opentelemetry.io/otel/sdk/log"
+	"go.opentelemetry.io/otel/sdk/log"
 )
 
 // IsolatedProcessor composes multiple processors so that they are isolated.
 type IsolatedProcessor struct {
-	Processors []sdklog.Processor
+	Processors []log.Processor
 }
 
 // OnEmit passes ctx and a clone of record to the each wrapped sdklog.Processor.
-func (p *IsolatedProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
+func (p *IsolatedProcessor) OnEmit(ctx context.Context, record *log.Record) error {
 	var rErr error
 	r := record.Clone()
 	for _, proc := range p.Processors {
@@ -257,23 +251,21 @@ processors in different ways. The following example demonstrates a processor
 that routes event records separately from log records:
 
 ```go
-package demo
-
 import (
 	"context"
 
-	sdklog "go.opentelemetry.io/otel/sdk/log"
+	"go.opentelemetry.io/otel/sdk/log"
 )
 
 // LogEventRouteProcessor routes log records and event records separately.
 type LogEventRouteProcessor struct {
-	LogProcessor sdklog.Processor
-	EventProcessor sdklog.Processor
+	LogProcessor log.Processor
+	EventProcessor log.Processor
 }
 
 // OnEmit calls EventProcessor if the record has a non-empty event name.
 // Otherwise, it calls LogProcessor.
-func (p *LogEventRouteProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
+func (p *LogEventRouteProcessor) OnEmit(ctx context.Context, record *log.Record) error {
 	if record.EventName() != "" {
 		return p.EventProcessor.OnEmit(ctx, record)
 	}
@@ -287,8 +279,6 @@ The following example sets up log processing using all of the processors
 described above.
 
 ```go
-package play
-
 import (
 	"context"
 
