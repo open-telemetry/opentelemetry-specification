@@ -1003,6 +1003,8 @@ Each processor registered on the `MeterProvider` is part of a pipeline.
 
 SDK MUST allow users to implement and configure custom processors.
 
+SDK MUST ensure that the pipeline concludes with the built-in [DefaultProcessor](#defaultprocessor).
+
 The following diagram shows `MeasurementProcessor`'s relationship to other components in the SDK:
 
 ```plaintext
