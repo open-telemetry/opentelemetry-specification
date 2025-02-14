@@ -20,7 +20,7 @@ extra requirements to the existing specifications.
   * [Advanced Processing](#advanced-processing)
     + [Log Record Alteration](#log-record-alteration)
     + [Filtering](#filtering)
-    + [Multiple Pipelines](#multiple-pipelines)
+    + [Isolating](#isolating)
     + [Routing](#routing)
     + [Setup](#setup)
 
@@ -211,9 +211,9 @@ func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) e
 > [`go.opentelemetry.io/contrib/processors/minsev`](https://pkg.go.dev/go.opentelemetry.io/contrib/processors/minsev)
 > module.
 
-#### Multiple Pipelines
+#### Isolating
 
-Multiple processing pipelines can be supported by
+Isolating a processing pipeline can be supported by
 [composing](https://refactoring.guru/design-patterns/composite) processors.
 The example below demonstrates an isolated processor that ensures each processor
 operates on a copy of the log record:
@@ -246,9 +246,9 @@ func (p *IsolatedProcessor) OnEmit(ctx context.Context, record *log.Record) erro
 
 #### Routing
 
-Additional capabilities, such as routing, can be implemented by combining
-processors in different ways. The following example demonstrates a processor
-that routes event records separately from log records:
+Additional capabilities, such as routing or fan-out, can be implemented by
+combining processors in different ways. The following example demonstrates
+a processor that routes event records separately from log records:
 
 ```go
 import (
