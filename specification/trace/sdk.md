@@ -23,6 +23,7 @@ linkTitle: SDK
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
   * [SDK Span creation](#sdk-span-creation)
+    + [Span flags](#span-flags)
   * [Sampler](#sampler)
     + [ShouldSample](#shouldsample)
     + [GetDescription](#getdescription)
@@ -33,8 +34,17 @@ linkTitle: SDK
       - [Requirements for `TraceIdRatioBased` sampler algorithm](#requirements-for-traceidratiobased-sampler-algorithm)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
+  * [Sampling Requirements](#sampling-requirements)
+    + [TraceID randomness](#traceid-randomness)
+    + [Random trace flag](#random-trace-flag)
+    + [Explicit trace randomness](#explicit-trace-randomness)
+      - [Do not overwrite explicit trace randomness](#do-not-overwrite-explicit-trace-randomness)
+      - [Root samplers set explicit trace randomness for non-random TraceIDs](#root-samplers-set-explicit-trace-randomness-for-non-random-traceids)
+    + [Presumption of TraceID randomness](#presumption-of-traceid-randomness)
+    + [IdGenerator randomness](#idgenerator-randomness)
 - [Span Limits](#span-limits)
 - [Id Generators](#id-generators)
+  * [IdGenerator randomness](#idgenerator-randomness-1)
 - [Span processor](#span-processor)
   * [Interface definition](#interface-definition)
     + [OnStart](#onstart)
@@ -263,7 +273,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   receive them unless the `Sampled` flag was also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
   the `SpanContext` to child Spans. For more details see the [W3C Trace Context
-  specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
+  specification][W3CCONTEXTSAMPLEDFLAG]. This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
   that do not.
@@ -298,10 +308,7 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
 1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
    (note: this must be done before calling `ShouldSample`, because it expects
    a valid trace ID as input).
-2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method
-   (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
-   use the sampling decision of the parent,
-   translating a set SampledFlag to RECORD and an unset one to DROP).
+2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
 3. Generate a new span ID for the `Span`, independently of the sampling decision.
    This is done so other components (such as logs or exception handling) can rely on
    a unique span ID, even if the `Span` is a non-recording instance.
@@ -313,6 +320,14 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    A non-recording span MAY be implemented using the same mechanism as when a
    `Span` is created without an SDK installed or as described in
    [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
+
+#### Span flags
+
+The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
+
+Bits 0-7 (8 least significant bits) of the Span Flags field are reserved for the 8 bits of Trace Context flags,
+specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
+[See the list of recognized flags](./api.md#spancontext).
 
 ### Sampler
 
@@ -464,6 +479,80 @@ The following configuration properties should be available when creating the sam
 [jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/apis/#remote-sampling-configuration-stable
 [jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#adaptive-sampling
 
+### Sampling Requirements
+
+**Status**: [Development](../document-status.md)
+
+The [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation includes [a Random trace flag][W3CCONTEXTRANDOMFLAG] for indicating that the TraceID contains 56 random bits, specified for statistical purposes.
+This flag indicates that [the least-significant ("rightmost") 7 bytes or 56 bits of the TraceID are random][W3CCONTEXTTRACEID].
+
+Note the Random flag does not propagate through [Trace Context Level 1][W3CCONTEXTLEVEL1] implementations, which do not recognize the flag.
+When this flag is 1, it is considered meaningful.  When this flag is 0, it may be due to a non-random TraceID or because a Trace Context Level 1 propagator was used.
+To enable sampling in this and other situations where TraceIDs lack sufficient randomness,
+OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encoded in the [W3C TraceState field][W3CCONTEXTTRACESTATE].
+
+This specification recommends the use of either TraceID randomness or explicit trace randomness,
+which ensures that samplers always have sufficient randomness when using W3C Trace Context propagation.
+
+[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
+[W3CCONTEXTLEVEL1]: https://www.w3.org/TR/trace-context
+[W3CCONTEXTTRACEID]: https://www.w3.org/TR/trace-context-2/#randomness-of-trace-id
+[W3CCONTEXTTRACESTATE]: https://www.w3.org/TR/trace-context-2/#tracestate-header
+[W3CCONTEXTSAMPLEDFLAG]: https://www.w3.org/TR/trace-context-2/#sampled-flag
+[W3CCONTEXTRANDOMFLAG]: https://www.w3.org/TR/trace-context-2/#random-trace-id-flag
+[OTELRVALUE]: ./tracestate-handling.md#explicit-randomness-value-rv
+
+#### TraceID randomness
+
+For root span contexts, the SDK SHOULD implement the TraceID randomness requirements of the [W3C Trace Context Level 2][W3CCONTEXTTRACEID] Candidate Recommendation when generating TraceID values.
+
+#### Random trace flag
+
+For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags when it generates TraceIDs that meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID].
+
+#### Explicit trace randomness
+
+Explicit trace randomness is a mechanism that enables API users and
+SDK authors to control trace randomness.  The following recommendation
+applies to Trace SDKs that have disregarded the recommendation on
+TraceID randomness, above.  It has two parts.
+
+##### Do not overwrite explicit trace randomness
+
+API users control the initial TraceState of a root span, so they can
+provide explicit trace randomness for a trace by defining the [`rv`
+sub-key of the OpenTelemetry TraceState][OTELRVALUE].  SDKs and Samplers
+MUST NOT overwrite explicit trace randomness in an OpenTelemetry TraceState
+value.
+
+##### Root samplers set explicit trace randomness for non-random TraceIDs
+
+When the SDK has generated a TraceID that does not meet the [W3C Trace
+Context Level 2 randomness requirements][W3CCONTEXTTRACEID], indicated
+by an unset trace random flag, and when the the [`rv` sub-key of the
+OpenTelemetry TraceState][OTELRVALUE] is not already set, the Root
+sampler has the opportunity to insert explicit trace randomness.
+
+Root Samplers MAY insert an explicit trace randomness value into the
+OpenTelemetry TraceState value in cases where an explicit trace
+randomness value is not already set.
+
+For example, here's a W3C Trace Context with non-random identifiers and an
+explicit randomness value:
+
+```
+traceparent: 00-ffffffffffffffffffffffffffffffff-ffffffffffffffff-00
+tracestate: ot=rv:7479cfb506891d
+```
+
+#### Presumption of TraceID randomness
+
+For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
+
+#### IdGenerator randomness
+
+If the SDK uses an `IdGenerator` extension point, the SDK SHOULD allow the extension to determine whether the Random flag is set when new IDs are generated.
+
 ## Span Limits
 
 Span attributes MUST adhere to the [common rules of attribute limits](../common/README.md#attribute-limits).
@@ -531,6 +620,18 @@ public interface IdGenerator {
 Additional `IdGenerator` implementing vendor-specific protocols such as AWS
 X-Ray trace id generator MUST NOT be maintained or distributed as part of the
 Core OpenTelemetry repositories.
+
+### IdGenerator randomness
+
+**Status**: [Development](../document-status.md)
+
+Custom implementations of the `IdGenerator` SHOULD identify themselves
+appropriately when all generated TraceID values meet the [W3C Trace
+Context Level 2 randomness requirements][W3CCONTEXTTRACEID], so that
+the Trace `random` flag will be set in the associated Trace contexts.
+This is presumed to be a static property of the `IdGenerator`
+implementation which can be inferred using language features, for
+example by extending a marker interface.
 
 ## Span processor
 
