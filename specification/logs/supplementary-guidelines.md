@@ -18,7 +18,7 @@ extra requirements to the existing specifications.
     + [Implicit Context Injection](#implicit-context-injection)
     + [Explicit Context Injection](#explicit-context-injection)
   * [Advanced Processing](#advanced-processing)
-    + [Alteration](#altering)
+    + [Altering](#altering)
     + [Filtering](#filtering)
     + [Isolating](#isolating)
     + [Routing](#routing)
