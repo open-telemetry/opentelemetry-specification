@@ -300,6 +300,8 @@ func NewLoggerProvider() (*sdklog.LoggerProvider, error) {
 		return nil, err
 	}
 	evtProc := &SeverityProcessor{
+		// This processing is isolated so that there is no chance
+		// that log records send to stdout have their token attributes redacted.
 		Processor: &IsolatedProcessor{
 			Processors: []sdklog.Processor{
 				&RedactTokensProcessor{},
