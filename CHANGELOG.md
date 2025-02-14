@@ -33,13 +33,15 @@ release.
 
 ### OTEPs
 
-## v1.42.0 (2025-02-11)
+## v1.42.0 (2025-02-14)
 
 ### Traces
 
 - Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
   on how to record errors across signals.
   ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
+- Define randomness value requirements for W3C Trace Context Level 2.
+  ([#4162](https://github.com/open-telemetry/opentelemetry-specification/pull/4162))
 
 ### Logs
 
