@@ -18,7 +18,7 @@ extra requirements to the existing specifications.
     + [Implicit Context Injection](#implicit-context-injection)
     + [Explicit Context Injection](#explicit-context-injection)
   * [Advanced Processing](#advanced-processing)
-    + [Log Record Alteration](#log-record-alteration)
+    + [Alteration](#altering)
     + [Filtering](#filtering)
     + [Isolating](#isolating)
     + [Routing](#routing)
@@ -143,7 +143,7 @@ to determine feasibility in other languages.
 
 <!-- markdownlint-disable no-hard-tabs -->
 
-#### Log Record Alteration
+#### Altering
 
 Log records can be modified by mutating the log record passed to the processor.
 Below is an example of a processor that redacts tokens from log record
