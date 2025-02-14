@@ -87,6 +87,7 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     | +      | +    | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     | +      |      |        | +   |      |     |      |       |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)                            | X        |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 

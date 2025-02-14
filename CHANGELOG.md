@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Define randomness value requirements for W3C Trace Context Level 2.
+  ([#4162](https://github.com/open-telemetry/opentelemetry-specification/pull/4162))
 - Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
   on how to record errors across signals.
   ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
