@@ -208,7 +208,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch Span Processor
 
-Refer to the Trace SDK [Batching processor specification](../trace/sdk/#batching-processor) for more information on these configuration parameters.
+Refer to the Trace SDK [Batching processor specification](../trace/sdk.md/#batching-processor) for more information on these configuration parameters.
 
 | Name                           | Description                                                      | Default | Type         | Notes                                                                             |
 |--------------------------------|------------------------------------------------------------------|---------|--------------|-----------------------------------------------------------------------------------|
@@ -219,7 +219,7 @@ Refer to the Trace SDK [Batching processor specification](../trace/sdk/#batching
 
 ## Batch LogRecord Processor
 
-Refer to the Logs SDK [Batching processor specification](../logs/sdk/#batching-processor) for more information on these configuration parameters.
+Refer to the Logs SDK [Batching processor specification](../logs/sdk.md/#batching-processor) for more information on these configuration parameters.
 
 | Name                            | Description                                                      | Default | Type         | Notes                                                                              |
 |---------------------------------|------------------------------------------------------------------|---------|--------------|------------------------------------------------------------------------------------|
