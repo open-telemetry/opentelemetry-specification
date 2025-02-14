@@ -421,6 +421,20 @@ representations to the configured `LogRecordExporter`.
 The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
 to make sure that they are not invoked concurrently.
 
+The processor SHOULD export a batch when any of the following happens AND the
+previous export call has returned:
+
+- `scheduledDelayMillis` after the processor is constructed OR the first `LogRecord`
+  is received by the log record processor.
+- `scheduledDelayMillis` after the previous export timer ends, OR the previous
+  export completes, OR the first `LogRecord` is added to the queue after the previous
+  export timer ends or previous batch completes.
+- The queue contains `maxExportBatchSize` or more `LogRecord`s.
+- `ForceFlush` is called.
+
+If the queue is empty when an export is triggered, the processor MAY export
+an empty batch OR skip the export and consider it to be completed immediately.
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the `LogRecord`s are pushed.
