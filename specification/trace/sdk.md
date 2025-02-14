@@ -720,6 +720,7 @@ previous export call has returned:
   export timer ends or previous batch completes.
 - The queue contains `maxExportBatchSize` or more spans.
 - `ForceFlush` is called.
+- `Shutdown` is called.
 
 If the queue is empty when an export is triggered, the processor MAY export
 an empty batch OR skip the export and consider it to be completed immediately.
