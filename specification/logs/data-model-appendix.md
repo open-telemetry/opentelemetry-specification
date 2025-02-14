@@ -819,4 +819,4 @@ for an exhaustive list.
 
 ## References
 
-- [OTEP0097 Log Data Model, Appendix A. Example Mappings](https://github.com/open-telemetry/oteps/blob/main/text/logs/0097-log-data-model.md#appendix-a-example-mappings)
+- [OTEP0097 Log Data Model, Appendix A. Example Mappings](../../oteps/logs/0097-log-data-model.md#appendix-a-example-mappings)

@@ -79,7 +79,7 @@ We recognize the following needs:
   interpret the telemetry data that uses different telemetry schemas.
 
 Telemetry Schemas that were proposed and accepted in
-[OTEP0152](https://github.com/open-telemetry/oteps/blob/main/text/0152-telemetry-schemas.md)
+[OTEP0152](../../oteps/0152-telemetry-schemas.md)
 address these needs.
 
 ## How Schemas Work

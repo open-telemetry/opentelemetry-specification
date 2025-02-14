@@ -453,5 +453,5 @@ standard output.
 
 ## References
 
-- [OTEP0091 Logs: Vocabulary](https://github.com/open-telemetry/oteps/blob/main/text/logs/0091-logs-vocabulary.md)
-- [OTEP0092 OpenTelemetry Logs Vision](https://github.com/open-telemetry/oteps/blob/main/text/logs/0092-logs-vision.md)
+- [OTEP0091 Logs: Vocabulary](../../oteps/logs/0091-logs-vocabulary.md)
+- [OTEP0092 OpenTelemetry Logs Vision](../../oteps/logs/0092-logs-vision.md)
