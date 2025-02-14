@@ -254,8 +254,8 @@ If the user has provided an explicit exception stack traces collection severity 
 log bridges SHOULD record stack traces accordingly and MAY use `setException` convenience
 method described in the [API changes](#api-changes) section.
 
-In their next major version, log bridges SHOULD start using `setException` method or
-follow defaults documented for OTel SDK when explicitly recording `exception.*`
+In their next major version, log bridges SHOULD start using the `setException` method or
+follow the defaults documented for OTel SDK when explicitly recording `exception.*`
 attributes.
 
 ## Examples
