@@ -16,8 +16,13 @@ release.
 - Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
   on how to record errors across signals.
   ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Metrics
+
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Logs
 
@@ -25,6 +30,8 @@ release.
   ([#4381](https://github.com/open-telemetry/opentelemetry-specification/pull/4381))
 - Logs API should have functionality for reusing Standard Attributes.
   ([#4373](https://github.com/open-telemetry/opentelemetry-specification/pull/4373))
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Baggage
 

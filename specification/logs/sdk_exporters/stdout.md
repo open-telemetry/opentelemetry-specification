@@ -9,17 +9,17 @@ linkTitle: Stdout
 "Standard output" LogRecord Exporter is a [LogRecord
 Exporter](../sdk.md#logrecordexporter) which outputs the logs to stdout/console.
 
-The exporter’s output format is unspecified and may vary between
-implementations. Documentation SHOULD caution users about this. The following
-wording is recommended:
+The exporter's output format is unspecified and can vary between
+implementations. Documentation SHOULD warn users about this. The following
+wording is recommended (modify as needed):
 
-“This exporter is intended for debugging and learning purposes. It is not
-recommended for production use. The output format is not standardized and may
-change at any time.”
-
-"If a standardized format for exporting logs to stdout is desired, consider using
-the [File Exporter](../../protocol/file-exporter.md). However, please note that
-the File Exporter is experimental and may not be available in all languages."
+> This exporter is intended for debugging and learning purposes. It is not
+> recommended for production use. The output format is not standardized and can
+> change at any time.
+>
+> If a standardized format for exporting logs to stdout is desired, consider
+> using the [File Exporter](../../protocol/file-exporter.md), if available.
+> However, please note that the File Exporter specification is experimental.
 
 [OpenTelemetry SDK](../../overview.md#sdk) authors MAY choose the best idiomatic
 name for their language. For example, ConsoleExporter, StdoutExporter,
