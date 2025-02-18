@@ -11,9 +11,6 @@ release.
 
 ### Traces
 
-- Clarify STDOUT exporter format is unspecified.
-   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
-
 ### Metrics
 
 - Clarify STDOUT exporter format is unspecified.
