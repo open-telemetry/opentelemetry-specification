@@ -59,7 +59,7 @@ Head-based sampling requirements:
   - capture 25% of all other requests
 - for non-root spans
   - follow the parent sampling decision
-  - however, capture all calls to service `/foo` (even if the trace will be incomplete)
+- however, capture all calls to service `/foo` (even if the trace will be incomplete)
 - in any case, do not exceed 1000 spans/minute
 
 __Note__: several proposed samplers call for calculating _unions_ of Attribute sets.
