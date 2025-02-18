@@ -50,6 +50,9 @@ release.
 
 ### OTEPs
 
+- [OTEP-4333](https://github.com/open-telemetry/opentelemetry-specification/pull/4333)
+  Recording exceptions and errors on logs.
+
 ## v1.41.0 (2025-01-21)
 
 ### Logs
