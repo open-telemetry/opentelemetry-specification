@@ -961,38 +961,37 @@ different advisory parameters, the Meter MUST return an instrument using the
 first-seen advisory parameters and log an appropriate error as described in
 [duplicate instrument registrations](#duplicate-instrument-registration).
 
-If a [View](#view) is configured with the same settings as advisory parameters,
-the View MUST take precedence over the advisory parameters.
+If both a [View](#view) and advisory parameters specify the same aspect of the
+[Stream configuration](#stream-configuration), the settings defined by the View
+MUST take precedence over the advisory parameters.
 
 #### Instrument advisory parameter: `ExplicitBucketBoundaries`
 
 **Status**: [Stable](../document-status.md)
 
-This parameter is applicable when the [Explicit Bucket
-Histogram](#explicit-bucket-histogram-aggregation) aggregation is utilized.
+This advisory parameter applies when the [Explicit Bucket
+Histogram](#explicit-bucket-histogram-aggregation) aggregation is used.
 
 `ExplicitBucketBoundaries` (`double[]`) specifies the recommended set of bucket
-boundaries to use during the [Explicit Bucket
+boundaries for the [Explicit Bucket
 Histogram](#explicit-bucket-histogram-aggregation) aggregation. If the user has
-configured a View with specific bucket boundaries, those boundaries should take
-precedence. In the absence of such a configuration, the advisory parameter
-should be used. If neither is provided, the default bucket boundaries must be
-applied.
+configured custom bucket boundaries via View(s), those boundaries take
+precedence. If no View is configured, the advisory parameter should be used. If
+neither is provided, the default bucket boundaries must be applied.
 
 #### Instrument advisory parameter: `Attributes`
 
 **Status**: [Development](../document-status.md)
 
-This parameter is applicable to all aggregations.
+This advisory parameter applies to all aggregations.
 
 `Attributes` (a list of [attribute keys](../common/README.md#attribute))
 specifies the recommended set of attribute keys for measurements aggregated to
 produce a metric stream.
 
-If the user has provided attribute keys via a View, those keys should take
-precedence. If no View is configured, the advisory parameter configured on the
-instrument should be used. If the `Attributes` advisory parameter is also
-absent, all attributes must be retained.
+If the user has provided attribute keys via View(s), those keys take precedence.
+If no View is configured, the advisory parameter should be used. If neither is
+provided, all attributes must be retained.
 
 ### Instrument enabled
 
