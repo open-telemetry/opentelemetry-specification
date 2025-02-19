@@ -19,7 +19,8 @@ wording is recommended (modify as needed):
 >
 > If a standardized format for exporting logs to stdout is desired, consider
 > using the [File Exporter](../../protocol/file-exporter.md), if available.
-> However, please note that the File Exporter specification is experimental.
+> However, please review the status of the File Exporter and verify if it is
+> stable and production-ready.
 
 [OpenTelemetry SDK](../../overview.md#sdk) authors MAY choose the best idiomatic
 name for their language. For example, ConsoleExporter, StdoutExporter,
