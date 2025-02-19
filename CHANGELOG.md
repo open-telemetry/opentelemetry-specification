@@ -13,13 +13,7 @@ release.
 
 ### Metrics
 
-- Clarify STDOUT exporter format is unspecified.
-   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
-
 ### Logs
-
-- Clarify STDOUT exporter format is unspecified.
-   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Baggage
 
