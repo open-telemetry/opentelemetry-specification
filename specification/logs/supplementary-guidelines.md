@@ -17,6 +17,12 @@ extra requirements to the existing specifications.
   * [Context](#context)
     + [Implicit Context Injection](#implicit-context-injection)
     + [Explicit Context Injection](#explicit-context-injection)
+  * [Advanced Processing](#advanced-processing)
+    + [Altering](#altering)
+    + [Filtering](#filtering)
+    + [Isolating](#isolating)
+    + [Routing](#routing)
+    + [Setup](#setup)
 
 <!-- tocstop -->
 
@@ -116,5 +122,216 @@ the current active span.
 See
 [an example](https://github.com/open-telemetry/opentelemetry-go-contrib/blob/aeb198d6de25588afef49545cfa06533d0e67f1d/bridges/otelzap/core.go#L194-L244)
 of how it can be done for zap logging library for Go.
+
+### Advanced Processing
+
+There are many ways and places of implementing log processing, including:
+
+1. The OpenTelemetry Collector
+2. The [OpenTelemetry Logs SDK](sdk.md)
+3. A bridged logging library
+4. A backend observability system
+
+Each approach has different benefits and drawbacks.
+This section focuses on how the OpenTelemetry Logs SDK can be used
+to perform advanced compound processing using multiple processors.
+
+Below are examples of how to build custom log processing using the
+[Logs SDK](sdk.md). These examples use the [Go Logs SDK](https://pkg.go.dev/go.opentelemetry.io/otel/sdk/log)
+for illustration purposes. Consult the language-specific documentation
+to determine feasibility in other languages.
+
+<!-- markdownlint-disable no-hard-tabs -->
+
+#### Altering
+
+Log records can be modified by mutating the log record passed to the processor.
+Below is an example of a processor that redacts tokens from log record
+attributes.
+
+```go
+import (
+	"context"
+	"strings"
+
+	"go.opentelemetry.io/otel/log"
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+)
+
+// RedactTokensProcessor redacts values from attributes
+// that contain "token" in the key.
+type RedactTokensProcessor struct{}
+
+// OnEmit redacts values from attributes containing "token" in the key
+// by replacing them with "REDACTED".
+func (p *RedactTokensProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
+	record.WalkAttributes(func(kv log.KeyValue) bool {
+		if strings.Contains(strings.ToLower(kv.Key), "token") {
+			record.AddAttributes(log.String(kv.Key, "REDACTED"))
+		}
+		return true
+	})
+	return nil
+}
+```
+
+#### Filtering
+
+Filtering can be achieved by [decorating](https://refactoring.guru/design-patterns/decorator)
+a processor. For example, here's how filtering based on Severity can be achieved.
+
+```go
+import (
+	"context"
+
+	"go.opentelemetry.io/otel/log"
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+)
+
+// SeverityProcessor filters out log records with severity below the given threshold.
+type SeverityProcessor struct {
+	sdklog.Processor
+	Min log.Severity
+}
+
+// OnEmit passes ctx and record to the wrapped sdklog.Processor
+// if the record's severity is greater than or equal to p.Min.
+// Otherwise, the record is dropped (the wrapped processor is not invoked).
+func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
+	if record.Severity() != log.SeverityUndefined && record.Severity() < p.Min {
+		return nil
+	}
+	return p.Processor.OnEmit(ctx, record)
+}
+```
+
+> [!NOTE]
+> As mentioned earlier, these examples are for illustration purposes.
+> Go developers can take advantage of the
+> [`go.opentelemetry.io/contrib/processors/minsev`](https://pkg.go.dev/go.opentelemetry.io/contrib/processors/minsev)
+> module.
+
+#### Isolating
+
+Isolating a processing pipeline can be supported by
+[composing](https://refactoring.guru/design-patterns/composite) processors.
+The example below demonstrates an isolated processor that ensures each processor
+operates on a copy of the log record:
+
+```go
+import (
+	"context"
+	"errors"
+
+	"go.opentelemetry.io/otel/sdk/log"
+)
+
+// IsolatedProcessor composes multiple processors so that they are isolated.
+type IsolatedProcessor struct {
+	Processors []log.Processor
+}
+
+// OnEmit passes ctx and a clone of record to the each wrapped sdklog.Processor.
+func (p *IsolatedProcessor) OnEmit(ctx context.Context, record *log.Record) error {
+	var rErr error
+	r := record.Clone()
+	for _, proc := range p.Processors {
+		if err := proc.OnEmit(ctx, &r); err != nil {
+			rErr = errors.Join(rErr, err)
+		}
+	}
+	return rErr
+}
+```
+
+#### Routing
+
+Additional capabilities, such as routing or fan-out, can be implemented by
+combining processors in different ways. The following example demonstrates
+a processor that routes event records separately from log records:
+
+```go
+import (
+	"context"
+
+	"go.opentelemetry.io/otel/sdk/log"
+)
+
+// LogEventRouteProcessor routes log records and event records separately.
+type LogEventRouteProcessor struct {
+	LogProcessor log.Processor
+	EventProcessor log.Processor
+}
+
+// OnEmit calls EventProcessor if the record has a non-empty event name.
+// Otherwise, it calls LogProcessor.
+func (p *LogEventRouteProcessor) OnEmit(ctx context.Context, record *log.Record) error {
+	if record.EventName() != "" {
+		return p.EventProcessor.OnEmit(ctx, record)
+	}
+	return p.LogProcessor.OnEmit(ctx, record)
+}
+```
+
+#### Setup
+
+The following example sets up log processing using all of the processors
+described above.
+
+```go
+import (
+	"context"
+
+	"go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp"
+	"go.opentelemetry.io/otel/exporters/stdout/stdoutlog"
+	"go.opentelemetry.io/otel/log"
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+)
+
+
+// NewLoggerProvider creates a new logger provider.
+// - Event records with severity not lower than Info are exported via OTLP.
+// - Event records have token attributes redacted.
+// - Non-event log records with severity not lower than Debug are synchronously emitted to stdout.
+func NewLoggerProvider() (*sdklog.LoggerProvider, error) {
+	// Events processing setup.
+	otlpExp, err := otlploghttp.New(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	evtProc := &SeverityProcessor{
+		// This processing is isolated so that there is no chance
+		// that log records send to stdout have their token attributes redacted.
+		Processor: &IsolatedProcessor{
+			Processors: []sdklog.Processor{
+				&RedactTokensProcessor{},
+				sdklog.NewBatchProcessor(otlpExp),
+			},
+		},
+		Min: log.SeverityInfo,
+	}
+
+	// Logs processing setup.
+	stdoutExp, err := stdoutlog.New()
+	if err != nil {
+		return nil, err
+	}
+	logProc := &SeverityProcessor{
+		Processor: sdklog.NewSimpleProcessor(stdoutExp),
+		Min:       log.SeverityDebug,
+	}
+
+	// Create logs provider with log/event routing.
+	provider := sdklog.NewLoggerProvider(
+		sdklog.WithProcessor(&LogEventRouteProcessor{
+			LogProcessor:   logProc,
+			EventProcessor: evtProc,
+		}),
+	)
+	return provider, nil
+}
+```
+
+<!-- markdownlint-enable no-hard-tabs -->
 
 - [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)
