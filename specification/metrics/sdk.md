@@ -51,6 +51,11 @@ linkTitle: SDK
   * [Instrument advisory parameters](#instrument-advisory-parameters)
   * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
+- [MeasurementProcessor](#measurementprocessor)
+  * [MeasurementProcessor operations](#measurementprocessor-operations)
+    + [OnMeasure](#onmeasure)
+  * [Built-in processors](#built-in-processors)
+    + [DefaultProcessor](#defaultprocessor)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
     + [AlwaysOn](#alwayson)
@@ -983,6 +988,68 @@ Attributes which belong to Metrics are exempt from the
 [common rules of attribute limits](../common/README.md#attribute-limits) at this
 time. Attribute truncation or deletion could affect identity of metric time
 series and the topic requires further analysis.
+
+## MeasurementProcessor
+
+**Status**: [Development](../document-status.md)
+
+`MeasurementProcessor` is an interface which allows hooks when a `Measurement` is recorded by an `Instrument`.
+
+Built-in measurement processors are responsible for [Measurement Processing](#measurement-processing).
+
+`MeasurementProcessors` can be registered directly on SDK `MeterProvider` and they are invoked in the same order as they were registered.
+
+Each processor registered on the `MeterProvider` is part of a pipeline.
+
+SDK MUST allow users to implement and configure custom processors.
+
+SDK MUST ensure that the pipeline concludes with the built-in [DefaultProcessor](#defaultprocessor).
+
+The following diagram shows `MeasurementProcessor`'s relationship to other components in the SDK:
+
+```plaintext
++------------------+
+| MeterProvider    |                 +----------------------+                 +-----------------+
+|   Meter A        | Measurements... |                      | Measurements... |                 |
+|     Instrument X |-----------------> MeasurementProcessor +-----------------> In-memory state |
+|     Instrument Y +                 |                      |                 |                 |
+|   Meter B        |                 +----------------------+                 +-----------------+
+|     Instrument Z |
+|     ...          |                 +----------------------+                 +-----------------+
+|     ...          | Measurements... |                      | Measurements... |                 |
+|     ...          |-----------------> MeasurementProcessor +-----------------> In-memory state |
+|     ...          |                 |                      |                 |                 |
+|     ...          |                 +----------------------+                 +-----------------+
++------------------+
+```
+
+### MeasurementProcessor operations
+
+#### OnMeasure
+
+`OnMeasure` is called when a `Measurement` is recorded. This method is called synchronously on the thread that emitted the `Measurement`, therefore it SHOULD NOT block or throw exceptions.
+
+**Parameters:**
+
+* `context` - the resolved `Context` (the explicitly passed `Context` or the current `Context`)
+* `measurement` - a [Measurement](./api.md#measurement) that was recorded
+* `next` - this allows the `MeasurementProcessor` to pass the measurements to the next `MeasurementProcessor` in the chain. It can be a reference to the next `MeasurementProcessor`, a bound callback to invoke `OnMeasure` on the next processor in the chain without an explicit reference to the next processor, or something else. [OpenTelemetry SDK](../overview.md#sdk) authors MAY decide the language idiomatic approach.
+
+**Returns:** Void
+
+For a `MeasurementProcessor` registered directly on SDK `MeterProvider`, the `measurement` mutations MUST be visible in next registered processors.
+
+A `MeasurementProcessor` MAY freely modify `measurement` for the duration of the `OnMeasure` call.
+
+A `MeasurementProcessor` SHOULD invoke `next`. A `MeasurementProcessor` MAY decide to drop the `Measurement` by not invoking the next processor.
+
+### Built-in processors
+
+The standard OpenTelemetry SDK MUST implement default processor as described below.
+
+#### DefaultProcessor
+
+This is an implementation of `MeasurementProcessor` which calculates an in-memory state from incoming `Measurements`.
 
 ## Exemplar
 
