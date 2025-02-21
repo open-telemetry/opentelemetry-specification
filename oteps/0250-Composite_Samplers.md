@@ -9,6 +9,7 @@ The new samplers proposed here have been designed to work with Consistent Probab
 Also see Draft PR 3910 [Probability Samplers based on W3C Trace Context Level 2](https://github.com/open-telemetry/opentelemetry-specification/pull/3910).
 
 **Table of content:**
+
 - [Motivation](#motivation)
 - [The Goal](#the-goal)
   - [Example](#example)
@@ -62,7 +63,7 @@ Head-based sampling requirements:
 - however, capture all calls to service `/foo` (even if the trace will be incomplete)
 - in any case, do not exceed 1000 spans/minute
 
-__Note__: several proposed samplers call for calculating _unions_ of Attribute sets.
+*Note*: several proposed samplers call for calculating _unions_ of Attribute sets.
 Whenever such union is constructed, in case of conflicting attribute keys, the attribute definition from the last set that uses that key takes effect. Similarly, whenever modifications of `Tracestate` are performed in sequence, in case of conflicting keys, the last modification erases the previous values.
 
 ## Proposed Samplers
@@ -201,7 +202,7 @@ However, `ConsistentParentBased` implementations SHOULD allow users to customize
 
 ### ConsistentAnyOf
 
-`ConsistentAnyOf` is a composite sampler which takes a non-empty list of `Composable` samplers (delegates) as the argument. The intention is to make a positive sampling decision if __any of__ the delegates would make a positive decision.
+`ConsistentAnyOf` is a composite sampler which takes a non-empty list of `Composable` samplers (delegates) as the argument. The intention is to make a positive sampling decision if *any of* the delegates would make a positive decision.
 
 Upon invocation of its `GetSamplingIntent` function, it MUST go through the whole list and invoke `GetSamplingIntent` function on each delegate sampler, passing the same arguments as received.
 
@@ -290,6 +291,7 @@ ConsistentRateLimiting(
     1000,
 )
 ```
+
 ### Limitations
 
 Developers of `Composable` samplers should consider that the sampling Decision they declare as their intent might be different from the final sampling Decision.
