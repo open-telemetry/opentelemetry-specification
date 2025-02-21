@@ -16,6 +16,7 @@
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
   * [LoggerConfig](#loggerconfig)
+  * [Enabled](#enabled)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
   * [ReadWriteLogRecord](#readwritelogrecord)
@@ -33,7 +34,6 @@
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
-- [Logs API](#logs-api)
 
 <!-- tocstop -->
 
@@ -190,6 +190,18 @@ It consists of the following parameters:
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
+
+### Enabled
+
+**Status**: [Development](../document-status.md)
+
+`Enabled` MUST return `false` when:
+
+- there are no registered [`LogRecordProcessors`](#logrecordprocessor),
+- `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
+
+Otherwise, it SHOULD return `true`.
+It MAY return `false` to support additional optimizations and features.
 
 ## Additional LogRecord interfaces
 
@@ -517,9 +529,4 @@ return a Failure result.
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
 
-## Logs API
-
-> [!NOTE]
-> We are currently in the process of defining a new [Logs API](./api.md).
-
-- [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
+- [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)

@@ -18,11 +18,8 @@ aliases: [bridge-api]
   * [LoggerProvider operations](#loggerprovider-operations)
     + [Get a Logger](#get-a-logger)
 - [Logger](#logger)
-  * [Log Bridge operations](#log-bridge-operations)
-    + [Emit a LogRecord](#emit-a-logrecord)
-    + [Enabled](#enabled)
-  * [Log Instrumentation operations](#log-instrumentation-operations)
-    + [Emit an Event](#emit-an-event)
+  * [Emit a LogRecord](#emit-a-logrecord)
+  * [Enabled](#enabled)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
 - [References](#references)
@@ -31,12 +28,13 @@ aliases: [bridge-api]
 
 </details>
 
-<b>Note: this document defines a log *backend* API. The API is not intended
-to be called by application developers directly. It is provided for logging
-library authors to build
+The Logs API is provided for logging library authors to build
 [log appenders](./supplementary-guidelines.md#how-to-create-a-log4j-log-appender),
 which use this API to bridge between existing logging libraries and the
-OpenTelemetry log data model.</b>
+OpenTelemetry log data model.
+
+The Logs API can also be directly called by instrumentation libraries
+as well as instrumented libraries or applications.
 
 The Logs API consist of these main components:
 
@@ -97,30 +95,17 @@ instances where at least one parameter has a different value.
 
 ## Logger
 
-The `Logger` is responsible for emitting `LogRecord`s. There are two types of
-logging operations:
+The `Logger` is responsible for emitting `LogRecord`s.
 
-* **Log Bridge** operations to be used when receiving data from other logging
-  libraries.
-* **Log Instrumentation** operations to be used when writing instrumentation
-  for OpenTelemetry.
-
-The Logger contains methods for both types of operations. The `Logger` MUST
-provide a function to:
+The `Logger` MUST provide a function to:
 
 - [Emit a `LogRecord`](#emit-a-logrecord)
 
 The `Logger` SHOULD provide functions to:
 
-- [Emit an `Event`](#emit-an-event)
 - [Report if `Logger` is `Enabled`](#enabled)
 
-### Log Bridge operations
-
-Log Bridge operations are not intended to be used for writing instrumentation,
-and SHOULD include documentation that discourages this use.
-
-#### Emit a LogRecord
+### Emit a LogRecord
 
 The effect of calling this API is to emit a `LogRecord` to the processing pipeline.
 
@@ -139,7 +124,15 @@ The API MUST accept the following parameters:
 - [Attributes](./data-model.md#field-attributes) (optional)
 - **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
 
-#### Enabled
+**Status**: [Development](../document-status.md)
+
+The API SHOULD provide functionality for users to convert
+[Standard Attributes](../common/README.md#standard-attribute)
+so they can be used, or directly accept them, in the log signal.
+This allows the reuse of [Standard Attributes](../common/README.md#standard-attribute)
+across signals.
+
+### Enabled
 
 **Status**: [Development](../document-status.md)
 
@@ -163,31 +156,6 @@ SHOULD be documented that instrumentation authors needs to call this API each
 time they [emit a LogRecord](#emit-a-logrecord) to ensure they have the most
 up-to-date response.
 
-### Log Instrumentation operations
-
-#### Emit an Event
-
-**Status**: [Development](../document-status.md)
-
-The effect of calling this API is to emit a `LogRecord` to the processing pipeline
-formatted as an [event](./data-model.md#events).
-
-**Parameters:**
-
-* [Event Name](./data-model.md#field-eventname) (required)
-* [Timestamp](./data-model.md#field-timestamp) (optional)
-* [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified
-  the implementation SHOULD set it equal to the current time.
-* The [Context](../context/README.md) associated with the `Event`. When implicit
-  Context is supported, then this parameter SHOULD be optional and if unspecified
-  then MUST use current Context. When only explicit Context is supported, this parameter
-  SHOULD be required.
-* [Severity Number](./data-model.md#field-severitynumber) (optional)
-* [Severity Text](./data-model.md#field-severitytext) (optional)
-* [Body](./data-model.md#field-body) (optional)
-* [Attributes](./data-model.md#field-attributes) (optional) Event `Attributes` conform
-  to the [standard definition](../common/README.md#standard-attribute) of an attribute.
-
 ## Optional and required parameters
 
 The operations defined include various parameters, some of which are marked
@@ -210,4 +178,4 @@ specific guarantees and safeties.
 
 ## References
 
-- [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
+- [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)

@@ -233,16 +233,17 @@ non-zero byte.
 `SpanId` A valid span identifier is an 8-byte array with at least one non-zero
 byte.
 
-`TraceFlags` contain details about the trace. Unlike TraceState values,
-TraceFlags are present in all traces. The current version of the specification
-only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
+`TraceFlags` contain details about the trace.
+Unlike TraceState values, TraceFlags are present in all traces.
+The current version of the specification supports two flags:
 
-`TraceState` carries vendor-specific trace identification data, represented as a list
-of key-value pairs. TraceState allows multiple tracing
-systems to participate in the same trace. It is fully described in the [W3C Trace Context
-specification](https://www.w3.org/TR/trace-context/#tracestate-header). For
-specific OTel values in `TraceState`, see the [TraceState Handling](tracestate-handling.md)
-document.
+- [Sampled](https://www.w3.org/TR/trace-context-2/#sampled-flag)
+- [Random](https://www.w3.org/TR/trace-context-2/#random-trace-id-flag)
+
+`TraceState` carries tracing-system-specific trace identification data, represented as a list of key-value pairs.
+TraceState allows multiple tracing systems to participate in the same trace.
+It is fully described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context-2/#tracestate-header).
+For specific OpenTelemetry values in `TraceState`, see the [TraceState Handling](tracestate-handling.md) document.
 
 `IsRemote`, a boolean indicating whether the SpanContext was received from somewhere
 else or locally generated, see [IsRemote](#isremote).
@@ -759,7 +760,7 @@ Note: A `CLIENT` span may have a child that is also a `CLIENT` span, or a
 depending on how the various components that are providing the functionality
 are built and instrumented.
 
-[Semantic conventions](../../specification/overview.md#semantic-conventions) for
+[Semantic conventions](../overview.md#semantic-conventions) for
 specific technologies should document kind for each span they define.
 
 For instance, [Database Client Semantic Conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/database-spans.md)

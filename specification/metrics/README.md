@@ -107,4 +107,4 @@ SDK](../overview.md#sdk) concept for more information.
 ## References
 
 * Scenarios for Metrics API/SDK Prototyping ([OTEP
-  146](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md))
+  146](../../oteps/metrics/0146-metrics-prototype-scenarios.md))

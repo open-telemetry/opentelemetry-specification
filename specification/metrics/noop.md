@@ -267,4 +267,4 @@ observations made for the instrument.
 
 ## References
 
-- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md)
+- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](../../oteps/metrics/0146-metrics-prototype-scenarios.md)

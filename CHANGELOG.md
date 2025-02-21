@@ -11,11 +11,18 @@ release.
 
 ### Traces
 
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+
 ### Metrics
+
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Logs
 
-### Events
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Baggage
 
@@ -34,6 +41,48 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.42.0 (2025-02-18)
+
+### Traces
+
+- Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
+  on how to record errors across signals.
+  ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
+- Define randomness value requirements for W3C Trace Context Level 2.
+  ([#4162](https://github.com/open-telemetry/opentelemetry-specification/pull/4162))
+
+### Logs
+
+- Define how SDK implements `Logger.Enabled`.
+  ([#4381](https://github.com/open-telemetry/opentelemetry-specification/pull/4381))
+- Logs API should have functionality for reusing Standard Attributes.
+  ([#4373](https://github.com/open-telemetry/opentelemetry-specification/pull/4373))
+
+### SDK Configuration
+
+- Define syntax for escaping declarative configuration environment variable
+  references.
+  ([#4375](https://github.com/open-telemetry/opentelemetry-specification/pull/4375))
+- Resolve various declarative config TODOs.
+  ([#4394](https://github.com/open-telemetry/opentelemetry-specification/pull/4394))
+
+## v1.41.0 (2025-01-21)
+
+### Logs
+
+- Remove the deprecated Events API and SDK in favor of having Events support in the Logs API and SDK.
+  ([#4353](https://github.com/open-telemetry/opentelemetry-specification/pull/4353))
+- Remove `Logger`'s Log Instrumentation operations.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+- Make all `Logger` operations user-facing.
+  ([#4352](https://github.com/open-telemetry/opentelemetry-specification/pull/4352))
+
+### SDK Configuration
+
+- Clarify that implementations should interpret timeout environment variable
+  values of zero as no limit (infinity).
+  ([#4331](https://github.com/open-telemetry/opentelemetry-specification/pull/4331))
 
 ## v1.40.0 (2024-12-12)
 
@@ -2868,19 +2917,19 @@ Updates:
 
 ## v0.4.0 (2020-05-12)
 
-- [OTEP-83](https://github.com/open-telemetry/oteps/blob/main/text/0083-component.md)
+- [OTEP-83](oteps/0083-component.md)
   Introduce the notion of InstrumentationLibrary.
-- [OTEP-88](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0088-metric-instrument-optional-refinements.md)
+- [OTEP-88](oteps/metrics/0088-metric-instrument-optional-refinements.md)
   Metrics API instrument foundation.
-- [OTEP-91](https://github.com/open-telemetry/oteps/blob/main/text/logs/0091-logs-vocabulary.md)
+- [OTEP-91](oteps/logs/0091-logs-vocabulary.md)
   Logs vocabulary.
-- [OTEP-92](https://github.com/open-telemetry/oteps/blob/main/text/logs/0092-logs-vision.md)
+- [OTEP-92](oteps/logs/0092-logs-vision.md)
   Logs Vision.
-- [OTEP-90](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0090-remove-labelset-from-metrics-api.md)
+- [OTEP-90](oteps/metrics/0090-remove-labelset-from-metrics-api.md)
   Remove LabelSet from the metrics API.
-- [OTEP-98](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0098-metric-instruments-explained.md)
+- [OTEP-98](oteps/metrics/0098-metric-instruments-explained.md)
   Explain the metric instruments.
-- [OTEP-99](https://github.com/open-telemetry/oteps/blob/main/text/0099-otlp-http.md)
+- [OTEP-99](oteps/0099-otlp-http.md)
   OTLP/HTTP: HTTP Transport Extension for OTLP.
 - Define handling of null and empty attribute values.
 - Rename Setter.put to Setter.set
@@ -2900,15 +2949,15 @@ Updates:
 
 ## v0.3.0 (2020-02-21)
 
-- [OTEP-0059](https://github.com/open-telemetry/oteps/blob/main/text/trace/0059-otlp-trace-data-format.md)
+- [OTEP-0059](oteps/trace/0059-otlp-trace-data-format.md)
   Add OTLP Trace Data Format specification.
-- [OTEP-0066](https://github.com/open-telemetry/oteps/blob/main/text/0066-separate-context-propagation.md)
+- [OTEP-0066](oteps/0066-separate-context-propagation.md)
   Separate Layer for Context Propagation.
-- [OTEP-0070](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0070-metric-bound-instrument.md)
+- [OTEP-0070](oteps/metrics/0070-metric-bound-instrument.md)
   Rename metric instrument "Handles" to "Bound Instruments".
-- [OTEP-0072](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0072-metric-observer.md)
+- [OTEP-0072](oteps/metrics/0072-metric-observer.md)
   Metric Observer instrument specification (refinement).
-- [OTEP-0080](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0080-remove-metric-gauge.md)
+- [OTEP-0080](oteps/metrics/0080-remove-metric-gauge.md)
   Remove the Metric Gauge instrument, recommend use of other instruments.
 - Update 0003-measure-metric-type to match current Specification.
 - Update 0009-metric-handles to match current Specification.
@@ -2928,23 +2977,23 @@ Updates:
 
 ## v0.2.0 (2019-10-22)
 
-- [OTEP-0001](https://github.com/open-telemetry/oteps/blob/main/text/0001-telemetry-without-manual-instrumentation.md)
+- [OTEP-0001](oteps/0001-telemetry-without-manual-instrumentation.md)
   Added Auto-Instrumentation.
-- [OTEP-0002](https://github.com/open-telemetry/oteps/blob/main/text/trace/0002-remove-spandata.md):
+- [OTEP-0002](oteps/trace/0002-remove-spandata.md):
   Removed SpanData interface in favor of Span Start and End options.
-- [OTEP-0003](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0003-measure-metric-type.md)
+- [OTEP-0003](oteps/metrics/0003-measure-metric-type.md)
   Consolidatesd pre-aggregated and raw metrics APIs.
-- [OTEP-0008](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0008-metric-observer.md)
+- [OTEP-0008](oteps/metrics/0008-metric-observer.md)
   Added Metrics Observers API.
-- [OTEP-0009](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0009-metric-handles.md)
+- [OTEP-0009](oteps/metrics/0009-metric-handles.md)
   Added Metrics Handle API.
-- [OTEP-0010](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0010-cumulative-to-counter.md)
+- [OTEP-0010](oteps/metrics/0010-cumulative-to-counter.md)
   Rename "Cumulative" to "Counter" in the Metrics API.
-- [OTEP-006](https://github.com/open-telemetry/oteps/blob/main/text/trace/0006-sampling.md)
+- [OTEP-006](oteps/trace/0006-sampling.md)
   Moved sampling from the API tp the SDK.
-- [OTEP-0007](https://github.com/open-telemetry/oteps/blob/main/text/0007-no-out-of-band-reporting.md)
+- [OTEP-0007](oteps/0007-no-out-of-band-reporting.md)
   Moved support for out-of-band telemetry from the API to the SDK.
-- [OTEP-0016](https://github.com/open-telemetry/oteps/blob/main/text/0016-named-tracers.md)
+- [OTEP-0016](oteps/0016-named-tracers.md)
   Added named providers for Tracers and Meters.
 - Added design goals and requirements for a telemetry data exchange protocol.
 - Added a Span Processor interface for intercepting span start and end

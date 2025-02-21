@@ -1,6 +1,9 @@
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Logs
-aliases: [/docs/reference/specification/logs/overview]
+aliases:
+  - /docs/reference/specification/logs/overview
+  - ./event-api
+  - ./event-sdk
 path_base_for_github_subdir:
   from: tmp/otel/specification/logs/_index.md
   to: logs/README.md
@@ -450,5 +453,5 @@ standard output.
 
 ## References
 
-- [OTEP0091 Logs: Vocabulary](https://github.com/open-telemetry/oteps/blob/main/text/logs/0091-logs-vocabulary.md)
-- [OTEP0092 OpenTelemetry Logs Vision](https://github.com/open-telemetry/oteps/blob/main/text/logs/0092-logs-vision.md)
+- [OTEP0091 Logs: Vocabulary](../../oteps/logs/0091-logs-vocabulary.md)
+- [OTEP0092 OpenTelemetry Logs Vision](../../oteps/logs/0092-logs-vision.md)
