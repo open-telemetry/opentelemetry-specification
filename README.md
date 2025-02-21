@@ -1,7 +1,7 @@
 # OpenTelemetry Specification
 
-[![Checks](https://github.com/open-telemetry/opentelemetry-specification/workflows/Checks/badge.svg?branch=main)](https://github.com/open-telemetry/opentelemetry-specification/actions?query=workflow%3A%22Checks%22+branch%3Amain)
-![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/open-telemetry/specification.svg)
+[![Slack](https://img.shields.io/badge/slack-@cncf/otel--specification-brightgreen.svg?logo=slack)](https://cloud-native.slack.com/archives/C01N7PP1THC)
+[![Release](https://img.shields.io/github/v/release/open-telemetry/opentelemetry-specification)](https://github.com/open-telemetry/opentelemetry-specification/releases/)
 
 ![OpenTelemetry Logo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)
 
