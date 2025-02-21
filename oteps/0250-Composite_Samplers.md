@@ -63,7 +63,7 @@ Head-based sampling requirements:
 - however, capture all calls to service `/foo` (even if the trace will be incomplete)
 - in any case, do not exceed 1000 spans/minute
 
-*Note*: several proposed samplers call for calculating _unions_ of Attribute sets.
+_Note_: several proposed samplers call for calculating _unions_ of Attribute sets.
 Whenever such union is constructed, in case of conflicting attribute keys, the attribute definition from the last set that uses that key takes effect. Similarly, whenever modifications of `Tracestate` are performed in sequence, in case of conflicting keys, the last modification erases the previous values.
 
 ## Proposed Samplers
@@ -202,7 +202,7 @@ However, `ConsistentParentBased` implementations SHOULD allow users to customize
 
 ### ConsistentAnyOf
 
-`ConsistentAnyOf` is a composite sampler which takes a non-empty list of `Composable` samplers (delegates) as the argument. The intention is to make a positive sampling decision if *any of* the delegates would make a positive decision.
+`ConsistentAnyOf` is a composite sampler which takes a non-empty list of `Composable` samplers (delegates) as the argument. The intention is to make a positive sampling decision if _any of_ the delegates would make a positive decision.
 
 Upon invocation of its `GetSamplingIntent` function, it MUST go through the whole list and invoke `GetSamplingIntent` function on each delegate sampler, passing the same arguments as received.
 
