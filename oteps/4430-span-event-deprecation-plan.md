@@ -40,13 +40,14 @@ The [Span AddEvent](../specification/trace/api.md#add-events) API
 SHOULD be marked as
 [deprecated](../specification/versioning-and-stability.md#deprecated),
 recommending that people use the OpenTelemetry Log (Event) API instead.
+The default behavior of this method MUST NOT change.
 
 The [Span AddEvent](../specification/trace/api.md#add-events) API
-MAY be [removed](../specification/versioning-and-stability.md#removed)
+MAY only be [removed](../specification/versioning-and-stability.md#removed)
 if the API (ever) bumps the major version
-AND if the [opt-in mechanism to emit (log-based) events
+and the [opt-in mechanism to emit (log-based) events
 as span events](#emitting-log-based-events-as-span-events)
-does not rely on it.
+does not rely on its presence.
 
 ### Instrumentation
 
