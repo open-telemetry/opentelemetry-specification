@@ -317,6 +317,10 @@ components in the SDK:
   +-----+------------------------+
 ```
 
+Please see [Supplementary Guidelines](./supplementary-guidelines.md#advanced-processing)
+for more information on how to setup advanced log record processing like filtering or
+fanning out.
+
 ### LogRecordProcessor operations
 
 #### OnEmit
