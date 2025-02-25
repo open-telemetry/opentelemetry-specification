@@ -11,21 +11,16 @@ release.
 
 ### Traces
 
-- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
-  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
-  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
 - Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
   on how to record errors across signals.
   ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
+- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
+  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
+  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
 
 ### Metrics
 
 ### Logs
-
-- Define how SDK implements `Logger.Enabled`.
-  ([#4381](https://github.com/open-telemetry/opentelemetry-specification/pull/4381))
-- Logs API should have functionality for reusing Standard Attributes.
-  ([#4373](https://github.com/open-telemetry/opentelemetry-specification/pull/4373))
 
 ### Baggage
 
@@ -39,17 +34,36 @@ release.
 
 ### SDK Configuration
 
-- Define syntax for escaping declarative configuration environment variable
-  references.
-  ([#4375](https://github.com/open-telemetry/opentelemetry-specification/pull/4375))
-- Resolve various declarative config TODOs.
-  ([#4394](https://github.com/open-telemetry/opentelemetry-specification/pull/4394))
-
 ### Common
 
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.42.0 (2025-02-18)
+
+### Traces
+
+- Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
+  on how to record errors across signals.
+  ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
+- Define randomness value requirements for W3C Trace Context Level 2.
+  ([#4162](https://github.com/open-telemetry/opentelemetry-specification/pull/4162))
+
+### Logs
+
+- Define how SDK implements `Logger.Enabled`.
+  ([#4381](https://github.com/open-telemetry/opentelemetry-specification/pull/4381))
+- Logs API should have functionality for reusing Standard Attributes.
+  ([#4373](https://github.com/open-telemetry/opentelemetry-specification/pull/4373))
+
+### SDK Configuration
+
+- Define syntax for escaping declarative configuration environment variable
+  references.
+  ([#4375](https://github.com/open-telemetry/opentelemetry-specification/pull/4375))
+- Resolve various declarative config TODOs.
+  ([#4394](https://github.com/open-telemetry/opentelemetry-specification/pull/4394))
 
 ## v1.41.0 (2025-01-21)
 
