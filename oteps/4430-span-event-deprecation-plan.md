@@ -32,7 +32,7 @@ The prerequisites for the deprecation plan are:
 Span events SHOULD be marked as deprecated in the proto definitions,
 recommending that people use (log-based) events instead. Per
 [OpenTelemetry proto stability rules](https://github.com/open-telemetry/opentelemetry-proto/blob/main/README.md#stability-definition)
-span events MUST never be removed from the proto.
+span events MUST NOT be removed from the proto.
 
 ### Span event API
 
