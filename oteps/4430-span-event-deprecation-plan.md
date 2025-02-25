@@ -71,8 +71,18 @@ the above guidance or not.
 There are some backends that only support tracing and have no plans
 to ingest log-based events.
 
-To support this use case, there MUST be a simple opt-in mechanism that allows
-users to configure the Log SDK to attach events to the current span as span events
-(and to drop events when there is no current span).
+To support this use case, there SHOULD be an opt-in mechanism that allows
+users to emit log-based events as span events.
 
 This opt-in mechanism SHOULD NOT be removed, even in a major version bump.
+
+This mechanism SHOULD be implemented as follows:
+
+- A log processor that converts events to span events and attaches them
+  to the current span, whose behavior and configuration are defined
+  in the OpenTelemetry Specification.
+- A standard way to add this log processor via declarative configuration
+  (assuming its package has been installed).
+
+Additionally, this log processor SHOULD be included in the standard
+OpenTelemetry zero-code distribution (if one exists for the language).
