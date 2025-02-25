@@ -52,7 +52,7 @@ does not rely on its presence.
 The [Span RecordException](../specification/trace/api.md#record-exception) API
 SHOULD be marked as
 [deprecated](../specification/versioning-and-stability.md#deprecated),
-recommending that people use the OpenTelemetry Log API instead.
+recommending that people use the OpenTelemetry Logs API instead.
 The default behavior of this method MUST NOT change.
 
 The [Span RecordException](../specification/trace/api.md#record-exception) API
