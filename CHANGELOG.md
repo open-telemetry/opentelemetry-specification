@@ -11,16 +11,24 @@ release.
 
 ### Traces
 
-- Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
-  on how to record errors across signals.
-  ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
 - Define sampling threshold field in OpenTelemetry TraceState; define the behavior
   of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
   ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
+- Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
+  on how to record errors across signals.
+  ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
+- Clarify STDOUT exporter format is unspecified.
+  ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Metrics
 
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+
 ### Logs
+
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Baggage
 
@@ -37,6 +45,9 @@ release.
 ### Common
 
 ### Supplementary Guidelines
+
+- Add Advanced Processing to Logs Supplementary Guidelines.
+  ([#4407](https://github.com/open-telemetry/opentelemetry-specification/pull/4407))
 
 ### OTEPs
 
