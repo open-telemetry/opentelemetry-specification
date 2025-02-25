@@ -87,7 +87,7 @@ This proposal supports two sources of randomness:
 
 [W3CCONTEXTTRACEID]: https://www.w3.org/TR/trace-context-2/#randomness-of-trace-id
 
-See [tracestate handling](./tracestate-handling.md#sampling-randomness-value-rv) for details about encoding randomness values.
+See [tracestate handling](./tracestate-handling.md#explicit-randomness-value-rv) for details about encoding randomness values.
 
 ### Consistent Sampling Decision Approach
 
