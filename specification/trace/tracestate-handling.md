@@ -16,6 +16,7 @@ linkTitle: TraceState
 - [Setting values](#setting-values)
 - [Pre-defined OpenTelemetry sub-keys](#pre-defined-opentelemetry-sub-keys)
   * [Sampling threshold value `th`](#sampling-threshold-value-th)
+  * [Explicit randomness value `rv`](#explicit-randomness-value-rv)
 
 <!-- tocstop -->
 
@@ -151,7 +152,7 @@ For example, here is a W3C TraceState value including an OpenTelemetry sampling 
 tracestate: ot=th:c
 ```
 
-This corresponds with 25% sampling probability, as follows: 
+This corresponds with 25% sampling probability, as follows:
 
 - The hexadecimal value `c` is extended to `c0000000000000` for 56 bits
 - The rejection threshold is `0xc0000000000000 / 0x100000000000000` which is 75%
@@ -175,6 +176,5 @@ For example, here is a W3C TraceState value including an OpenTelemetry explicit 
 tracestate: ot=rv:6e6d1a75832a2f
 ```
 
-This corresponds with the explicit randomness value, an unsigned integer value, of 0x6e6d1a75832a2f. This randomness value is meant to be used instead of the least-significant 56 bits of the TraceID. 
+This corresponds with the explicit randomness value, an unsigned integer value, of 0x6e6d1a75832a2f. This randomness value is meant to be used instead of the least-significant 56 bits of the TraceID.
 In this example, the 56-bit fraction (i.e., 0x6e6d1a75832a2f / 0x100000000000000 = 43.1%) supports making a consistent positive sampling decision at probabilities ranging from 56.9% through 100% (i.e., rejection thresohld values 0x6e6d1a75832a2f through 0), the same as for a hexadecimal TraceID ending in 6e6d1a75832a2f without explicit randomness value.
-
