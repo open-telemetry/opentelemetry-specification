@@ -49,6 +49,27 @@ and the [opt-in mechanism to emit (log-based) events
 as span events](#emitting-log-based-events-as-span-events)
 does not rely on its presence.
 
+The [Span RecordException](../specification/trace/api.md#record-exception) API
+SHOULD be marked as
+[deprecated](../specification/versioning-and-stability.md#deprecated),
+recommending that people use the OpenTelemetry Log API instead.
+The default behavior of this method MUST NOT change.
+
+The [Span RecordException](../specification/trace/api.md#record-exception) API
+MAY only be [removed](../specification/versioning-and-stability.md#removed)
+if the API (ever) bumps the major version
+and the [opt-in mechanism to emit (log-based) events
+as span events](#emitting-log-based-events-as-span-events)
+does not rely on its presence.
+
+### Tracing SDK
+
+The tracing SDK SHOULD provide an opt-in mechanism that allows
+users to emit span events as (log-based) events.
+
+This would be a short-term solution until existing instrumentations are
+updated to emit (log-based) events.
+
 ### Instrumentation
 
 For [stable](../specification/versioning-and-stability.md#stable)
@@ -56,7 +77,6 @@ instrumentations that are emitting span events:
 
 - In the instrumentation's current major version
   - It SHOULD continue to emit span events.
-  - It SHOULD allow users to opt-in to emitting (log-based) events.
 - In the instrumentation's next major version
   - It SHOULD stop emitting span events and only emit log-based events.
     Users will be able to continue receiving span events by using the
@@ -64,7 +84,7 @@ instrumentations that are emitting span events:
     as span events](#emitting-log-based-events-as-span-events).
 
 Non-stable instrumentations SHOULD use their best judgement on whether to follow
-the above guidance or not.
+the above guidance.
 
 ## Emitting (log-based) events as span events
 
