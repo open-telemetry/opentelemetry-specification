@@ -466,8 +466,8 @@ to be supported by every Trace SDK that has handled the context.
 
 When a TraceIdRatioBased Sampler makes a decision for a non-root Span
 using TraceID randomness, but the Trace random flag was not set, the
-SDK SHOULD issue a one-time warning statement in its log with a
-compatibility warning.  As an example of this compatibility warning:
+SDK SHOULD issue a warning statement in its log with a compatibility
+warning.  As an example of this compatibility warning:
 
 ```
 WARNING: The TraceIdRatioBased sampler is presuming TraceIDs are random
