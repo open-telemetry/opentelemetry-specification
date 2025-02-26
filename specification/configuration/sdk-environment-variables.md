@@ -208,6 +208,8 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 ## Batch Span Processor
 
+Refer to the Trace SDK [Batching processor specification](../trace/sdk.md/#batching-processor) for more information on these configuration parameters.
+
 | Name                           | Description                                                      | Default | Type         | Notes                                                                             |
 |--------------------------------|------------------------------------------------------------------|---------|--------------|-----------------------------------------------------------------------------------|
 | OTEL_BSP_SCHEDULE_DELAY        | Delay interval (in milliseconds) between two consecutive exports | 5000    | [Duration][] |                                                                                   |
@@ -216,6 +218,8 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 | OTEL_BSP_MAX_EXPORT_BATCH_SIZE | Maximum batch size                                               | 512     | [Integer][]  | Must be less than or equal to OTEL_BSP_MAX_QUEUE_SIZE. Valid values are positive. |
 
 ## Batch LogRecord Processor
+
+Refer to the Logs SDK [Batching processor specification](../logs/sdk.md/#batching-processor) for more information on these configuration parameters.
 
 | Name                            | Description                                                      | Default | Type         | Notes                                                                              |
 |---------------------------------|------------------------------------------------------------------|---------|--------------|------------------------------------------------------------------------------------|
