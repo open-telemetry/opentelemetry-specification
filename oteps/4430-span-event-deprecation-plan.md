@@ -98,7 +98,7 @@ This opt-in mechanism SHOULD NOT be removed, even in a major version bump.
 
 This mechanism SHOULD be implemented as follows:
 
-- A log processor that converts events to span events and attaches them
+- A log processor that converts event records to span events and attaches them
   to the current span, whose behavior and configuration are defined
   in the OpenTelemetry Specification.
 - A standard way to add this log processor via declarative configuration
