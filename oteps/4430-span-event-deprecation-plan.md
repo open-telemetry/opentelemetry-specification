@@ -105,6 +105,12 @@ This mechanism SHOULD be implemented as follows (see
 Additionally, this log processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
 
+## Communication plan
+
+Publish a blog post if/when this OTEP is accepted, giving readers a way to
+provide feedback (e.g. pointing to a specification issue where we are
+gathering feedback).
+
 ## Future possibilities
 
 - A collector-based processor that converts event records to span events
