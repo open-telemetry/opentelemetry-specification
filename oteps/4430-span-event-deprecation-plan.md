@@ -120,8 +120,7 @@ This mechanism SHOULD be implemented as follows:
   (assuming its package has been installed).
 
 Additionally, this span processor SHOULD be included in the standard
-OpenTelemetry zero-code distribution (if one exists for the language)
-for at least 1 year.
+OpenTelemetry zero-code distribution (if one exists for the language).
 
 ### Emitting (log-based) events as span events via the SDK
 
@@ -135,8 +134,7 @@ This mechanism SHOULD be implemented as follows (see
   (assuming its package has been installed).
 
 Additionally, this log processor SHOULD be included in the standard
-OpenTelemetry zero-code distribution (if one exists for the language)
-for at least 1 year.
+OpenTelemetry zero-code distribution (if one exists for the language).
 
 ### Emitting span-terminating exceptions as span events via the Collector
 
@@ -146,7 +144,7 @@ This mechanism SHOULD be implemented as follows:
   recorded as span attributes into span events.
 
 Additionally, this log processor SHOULD be included in the standard
-OpenTelemetry Collector Contrib distribution for at least 1 year.
+OpenTelemetry Collector Contrib distribution.
 
 ## Communication plan
 
