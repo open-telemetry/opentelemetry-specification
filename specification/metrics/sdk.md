@@ -972,12 +972,11 @@ MUST take precedence over the advisory parameters.
 This advisory parameter applies when the [Explicit Bucket
 Histogram](#explicit-bucket-histogram-aggregation) aggregation is used.
 
-`ExplicitBucketBoundaries` (`double[]`) specifies the recommended set of bucket
-boundaries for the [Explicit Bucket
-Histogram](#explicit-bucket-histogram-aggregation) aggregation. If the user has
-configured custom bucket boundaries via View(s), those boundaries take
-precedence. If no View is configured, the advisory parameter should be used. If
-neither is provided, the default bucket boundaries must be applied.
+If a matching View specifies Explicit Bucket Histogram aggregation with custom
+bucket boundaries, those boundaries take precedence. If no View matches, or if a
+matching View selects the default aggregation, the ExplicitBucketBoundaries
+advisory parameter must be used. If neither is provided, the default bucket
+boundaries apply.
 
 #### Instrument advisory parameter: `Attributes`
 
@@ -990,8 +989,9 @@ specifies the recommended set of attribute keys for measurements aggregated to
 produce a metric stream.
 
 If the user has provided attribute keys via View(s), those keys take precedence.
-If no View is configured, the advisory parameter should be used. If neither is
-provided, all attributes must be retained.
+If no View is configured, or if a matching view does not specify attribute keys,
+the advisory parameter should be used. If neither is provided, all attributes
+must be retained.
 
 ### Instrument enabled
 
