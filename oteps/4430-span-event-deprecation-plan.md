@@ -96,9 +96,9 @@ This opt-in mechanism SHOULD NOT be removed, even in a major version bump.
 This mechanism SHOULD be implemented as follows (see
 [prototype](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/80adbe1cf8de647afa32c68f921aef2bbd4dfd71/processors/README.md#event-to-spanevent-bridge)):
 
-- A log processor that converts event records to span events and attaches them
-  to the current span, whose behavior and configuration are defined
-  in the OpenTelemetry Specification.
+- An SDK-based log processor that converts event records to span events
+  and attaches them to the current span, whose behavior and configuration
+  are defined in the OpenTelemetry Specification.
 - A standard way to add this log processor via declarative configuration
   (assuming its package has been installed).
 
@@ -107,7 +107,8 @@ OpenTelemetry zero-code distribution (if one exists for the language).
 
 ## Future possibilities
 
-- The tracing SDK could provide an opt-in mechanism that allows users to
-  emit span events as (log-based) events. This would only be a short-term
-  solution until existing instrumentations are updated to emit (log-based) events.
-
+- A collector-based processor that converts event records to span events
+  and attaches them to the relevant span.
+- An opt-in mechanism in the tracing SDK that allows users to emit span events
+  as (log-based) events. This would only be a short-term solution until
+  existing instrumentations are updated to emit (log-based) events.
