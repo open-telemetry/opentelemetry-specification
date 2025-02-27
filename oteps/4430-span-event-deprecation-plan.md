@@ -23,7 +23,8 @@ to reduce confusion and hopefully alleviate these worries.
 
 The prerequisites for the deprecation plan are:
 
-- The event specification has been stabilized.
+- The event specification has been stabilized
+  ([#4362](https://github.com/open-telemetry/opentelemetry-specification/issues/4362)).
 - There is [stable](../specification/versioning-and-stability.md#stable)
   support for (log-based) events in the relevant SDK.
 - The [opt-in mechanism to emit (log-based) events
