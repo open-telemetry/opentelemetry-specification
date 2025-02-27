@@ -26,7 +26,7 @@ recording them using the Logs API:
 
 ## Prerequisites
 
-The prerequisites for deprecating span events are:
+The prerequisites for deprecating span events in the specification:
 
 - The (log-based) event specification has been stabilized
   ([#4362](https://github.com/open-telemetry/opentelemetry-specification/issues/4362)).
@@ -35,47 +35,60 @@ The prerequisites for deprecating span events are:
 - The [backcompat story](#backcompat-story) exists (and is stable)
   in the relevant SDK.
 
-## Deprecation plan by component
+## The plan
 
-### Proto
+### Proto and specification
 
-Span events SHOULD be marked as deprecated in the proto definitions,
-recommending that people use (log-based) events instead. Per
-[OpenTelemetry proto stability rules](https://github.com/open-telemetry/opentelemetry-proto/blob/main/README.md#stability-definition)
-span events MUST NOT be removed from the proto.
+1. Introduce and stabilize Span SetException in the specification.
 
-### Span event APIs
+   This will allow recording span-terminating exceptions directly as span
+   attributes, instead of recording them as span events.
+    
+   Stabilization will go through the normal process, requiring prototypes
+   in at least three languages.
 
-#### RecordException
+2. Stabilize (log-based) events in the proto and specification.
 
-[Span RecordException](../specification/trace/api.md#record-exception)
-SHOULD be marked as
-[deprecated](../specification/versioning-and-stability.md#deprecated),
-recommending instead that span-terminating exceptions are recorded directly
-as span attributes via a new Span function "SetException", and recommending
-that other exceptions are recorded using the OpenTelemetry Logs API.
+   This will allow recording events using the Logs API, instead of recording
+   them as span events.
 
-RecordException's existing behavior MUST NOT change.
+   This can be done in parallel with 1.
 
-And it MUST NOT be
-[removed](../specification/versioning-and-stability.md#removed)
-unless the API (ever) bumps the major version.
+3. Deprecate
+   [Span RecordException](../specification/trace/api.md#record-exception),
+   recommending instead that span-terminating exceptions are recorded directly
+   as span attributes via a new Span function "SetException", and recommending
+   that other exceptions are recorded using the Logs API.
 
-#### AddEvent
+4. Deprecate [Span AddEvent](../specification/trace/api.md#add-events),
+   recommending instead that events are recorded using the Logs (Events) API.
 
-[Span AddEvent](../specification/trace/api.md#add-events)
-SHOULD be marked as
-[deprecated](../specification/versioning-and-stability.md#deprecated),
-recommending instead that events are recorded using the OpenTelemetry
-Logs (Events) API.
+   This can be done in parallel with 3.
 
-AddEvent's existing behavior MUST NOT change.
+5. Deprecate span events in the proto, recommending the replacements mentioned
+   in 3 and 4 above.
 
-And it MUST NOT be
-[removed](../specification/versioning-and-stability.md#removed)
-unless the API (ever) bumps the major version.
+### Per SDK
 
-### Instrumentation
+1. Implement and stabilize Span SetException and (log-based) events.
+
+2. Implement the two SDK-based backcompat stories below:
+
+   - [Emitting span-terminating exceptions as span events](#emitting-span-terminating-exceptions-as-span-events-via-the-sdk)
+   - [Emitting (log-based) events as span events](#emitting-log-based-events-as-span-events-via-the-sdk)
+
+3. Deprecate
+   [Span RecordException](../specification/trace/api.md#record-exception),
+   recommending instead that span-terminating exceptions are recorded directly
+   as span attributes via a new Span function "SetException", and recommending
+   that other exceptions are recorded using the Logs API.
+
+4. Deprecate [Span AddEvent](../specification/trace/api.md#add-events),
+   recommending instead that events are recorded using the Logs (Events) API.
+
+   This can be done in parallel with 3.
+
+### Per Instrumentation
 
 For [stable](../specification/versioning-and-stability.md#stable)
 instrumentations that are emitting span events:
