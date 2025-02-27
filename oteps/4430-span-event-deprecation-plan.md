@@ -2,6 +2,11 @@
 
 ## Motivation
 
+Span events and log-based events both capture point-in-time telemetry.
+However, span events are limited because they need tracing instrumentation
+and can only be reported when a recording span ends.
+While both serve similar purposes, log-based events support a wider range of use cases.
+
 As stated in [OTEP 265: Event Vision](0265-event-vision.md),
 the long-term plan is to deprecate span events in favor of
 (log-based) events.
