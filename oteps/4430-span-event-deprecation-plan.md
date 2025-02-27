@@ -118,3 +118,5 @@ gathering feedback).
 - An opt-in mechanism in the tracing SDK that allows users to emit span events
   as (log-based) events. This would only be a short-term solution until
   existing instrumentations are updated to emit (log-based) events.
+- A processor (potentially both SDK- and Collector-based) for users to
+  attach all log records as span events (not only event records).
