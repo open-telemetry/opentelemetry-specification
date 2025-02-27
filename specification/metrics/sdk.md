@@ -49,6 +49,8 @@ linkTitle: SDK
   * [Instrument unit](#instrument-unit)
   * [Instrument description](#instrument-description)
   * [Instrument advisory parameters](#instrument-advisory-parameters)
+    + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
+    + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
   * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
@@ -418,9 +420,10 @@ made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
 * If the `MeterProvider` has no `View` registered, take the Instrument
-    and apply the default Aggregation on the basis of instrument kind
-    according to the [MetricReader](#metricreader) instance's
-    `aggregation` property.
+    and apply the default Aggregation on the basis of instrument kind according
+    to the [MetricReader](#metricreader) instance's `aggregation` property.
+    [Instrument advisory parameters](#instrument-advisory-parameters), if any,
+    MUST be honored.
 * If the `MeterProvider` has one or more `View`(s) registered:
   * If the Instrument could match the instrument selection criteria, for each
     View:
@@ -436,7 +439,9 @@ made with an Instrument:
       View sets an asynchronous instrument to use the [Explicit bucket
       histogram aggregation](#explicit-bucket-histogram-aggregation)) the
       implementation SHOULD emit a warning and proceed as if the View did not
-      exist.
+      exist. If any configuration is provided via View and [Instrument advisory
+      parameters](#instrument-advisory-parameters), then the View configuration
+      MUST take precedence.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
@@ -945,7 +950,7 @@ Meter MUST treat it the same as an empty description string.
 
 ### Instrument advisory parameters
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 When a Meter creates an instrument, it SHOULD validate the instrument advisory
 parameters. If an advisory parameter is not valid, the Meter SHOULD emit an error
@@ -955,6 +960,38 @@ If multiple [identical Instruments](api.md#instrument) are created with
 different advisory parameters, the Meter MUST return an instrument using the
 first-seen advisory parameters and log an appropriate error as described in
 [duplicate instrument registrations](#duplicate-instrument-registration).
+
+If both a [View](#view) and advisory parameters specify the same aspect of the
+[Stream configuration](#stream-configuration), the settings defined by the View
+MUST take precedence over the advisory parameters.
+
+#### Instrument advisory parameter: `ExplicitBucketBoundaries`
+
+**Status**: [Stable](../document-status.md)
+
+This advisory parameter applies when the [Explicit Bucket
+Histogram](#explicit-bucket-histogram-aggregation) aggregation is used.
+
+If a matching View specifies Explicit Bucket Histogram aggregation with custom
+bucket boundaries, those boundaries take precedence. If no View matches, or if a
+matching View selects the default aggregation, the ExplicitBucketBoundaries
+advisory parameter must be used. If neither is provided, the default bucket
+boundaries apply.
+
+#### Instrument advisory parameter: `Attributes`
+
+**Status**: [Development](../document-status.md)
+
+This advisory parameter applies to all aggregations.
+
+`Attributes` (a list of [attribute keys](../common/README.md#attribute))
+specifies the recommended set of attribute keys for measurements aggregated to
+produce a metric stream.
+
+If the user has provided attribute keys via View(s), those keys take precedence.
+If no View is configured, or if a matching view does not specify attribute keys,
+the advisory parameter should be used. If neither is provided, all attributes
+must be retained.
 
 ### Instrument enabled
 
