@@ -43,7 +43,7 @@ The prerequisites for deprecating span events in the specification:
 
    This will allow recording span-terminating exceptions directly as span
    attributes, instead of recording them as span events.
-    
+
    Stabilization will go through the normal process, requiring prototypes
    in at least three languages.
 
