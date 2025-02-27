@@ -67,14 +67,6 @@ and the [opt-in mechanism to emit (log-based) events
 as span events](#emitting-log-based-events-as-span-events)
 does not rely on its presence.
 
-### Tracing SDK
-
-The tracing SDK SHOULD provide an opt-in mechanism that allows
-users to emit span events as (log-based) events.
-
-This would be a short-term solution until existing instrumentations are
-updated to emit (log-based) events.
-
 ### Instrumentation
 
 For [stable](../specification/versioning-and-stability.md#stable)
@@ -112,3 +104,10 @@ This mechanism SHOULD be implemented as follows (see
 
 Additionally, this log processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
+
+## Future possibilities
+
+- The tracing SDK could provide an opt-in mechanism that allows users to
+  emit span events as (log-based) events. This would only be a short-term
+  solution until existing instrumentations are updated to emit (log-based) events.
+
