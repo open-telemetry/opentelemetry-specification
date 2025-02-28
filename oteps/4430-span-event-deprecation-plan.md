@@ -11,7 +11,8 @@ and can only be reported when a recording span ends.
 While both serve similar purposes, log-based events support a wider range of
 use cases.
 
-As we look at the current usage of span events though, by far the most common
+As we look at the current usage of span events across OpenTelemetry
+repositories though, by far the most common
 use is for recording span-terminating exceptions, and it will be much less
 disruptive to record these span-terminating exceptions directly as span
 attributes (since there is only ever at most one of these) compared to
