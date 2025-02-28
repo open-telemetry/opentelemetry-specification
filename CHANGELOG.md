@@ -11,11 +11,20 @@ release.
 
 ### Traces
 
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+
 ### Metrics
 
-- Add `MeasurementProcessor` to the Metrics SDK specification [#4318](https://github.com/open-telemetry/opentelemetry-specification/pull/4318)
+- Add `MeasurementProcessor` to the Metrics SDK specification
+   ([#4318](https://github.com/open-telemetry/opentelemetry-specification/pull/4318))
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Logs
+
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Baggage
 
@@ -32,6 +41,9 @@ release.
 ### Common
 
 ### Supplementary Guidelines
+
+- Add Advanced Processing to Logs Supplementary Guidelines.
+  ([#4407](https://github.com/open-telemetry/opentelemetry-specification/pull/4407))
 
 ### OTEPs
 
