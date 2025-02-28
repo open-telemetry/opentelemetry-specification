@@ -115,11 +115,13 @@ the above guidance.
 This mechanism SHOULD be implemented as follows:
 
 - An SDK-based span processor that converts span-terminating exceptions
-  recorded as span attributes into span events.
+  recorded as span attributes into span events
+  (with the option to either drop or retain the span-terminating exception
+  span attributes).
 - A standard way to add this span processor via declarative configuration
   (assuming its package has been installed).
 
-Additionally, this span processor SHOULD be included in the standard
+This span processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
 
 ### Emitting (log-based) events as span events via the SDK
@@ -133,7 +135,10 @@ This mechanism SHOULD be implemented as follows (see
 - A standard way to add this log processor via declarative configuration
   (assuming its package has been installed).
 
-Additionally, this log processor SHOULD be included in the standard
+Users can choose to register a log exporter depending on if they also want
+to export event records as logs or not.
+
+This log processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
 
 ### Emitting span-terminating exceptions as span events via the Collector
@@ -143,7 +148,7 @@ This mechanism SHOULD be implemented as follows:
 - A Collector-based span processor that converts span-terminating exceptions
   recorded as span attributes into span events.
 
-Additionally, this log processor SHOULD be included in the standard
+This log processor SHOULD be included in the standard
 OpenTelemetry Collector Contrib distribution.
 
 ## Communication plan
@@ -152,10 +157,12 @@ Publish a blog post if/when this OTEP is accepted, giving readers a way to
 provide feedback (e.g. pointing to a specification issue where we are
 gathering feedback).
 
-## Future possibilities
+## Nice to haves
 
-- An SDK-based log processor that converts all log records (not only event
-  records) to span events and attaches them to the current span.
-- An opt-in mechanism in the tracing SDK that allows users to emit span events
-  as (log-based) events. This would only be a short-term solution until
-  existing instrumentations are updated to emit (log-based) events.
+- Make [emitting span-terminating exceptions as span events via the
+  Collector](#emitting-span-terminating-exceptions-as-span-events-via-the-collector)
+  a prerequisite for stabilizing Span SetException in any SDK.
+- Forward compatibility story: A collector-based span processor that infers
+  if a span event represents a span-terminating exception, and adds it
+  directly as span attributes
+  (with the option to either drop or retain the span event).
