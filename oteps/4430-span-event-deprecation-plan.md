@@ -156,7 +156,8 @@ OpenTelemetry Collector Contrib distribution.
 
 Publish a blog post if/when this OTEP is accepted, giving readers a way to
 provide feedback (e.g. pointing to a specification issue where we are
-gathering feedback).
+gathering feedback). The blog post should include the rationale for the
+decision to deprecate span events.
 
 ## Nice to haves
 
