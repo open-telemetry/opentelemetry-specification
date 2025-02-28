@@ -50,6 +50,8 @@ Unfortunately, some of the valuable ideas flowing at the sampling SIG meetings n
 
 The goal of this proposal is to help creating advanced sampling configurations using pre-defined building blocks. Let's consider the following example of sampling requirements. It is believed that many users will have requirements following a similar pattern. Most notable elements here are trace classification based on target URL, some spans requiring special handling, and putting a sanity cap on the total volume of exported spans.
 
+Since this is a new part of the sampler specification, it is expected to be an optional component for OpenTelemetry SDKs. However, if an SDK _opts-in_, it SHOULD implement all samplers described herein.
+
 ### Example
 
 Head-based sampling requirements:
@@ -78,7 +80,7 @@ All the samplers described below are _Composable_ samplers.
 
 #### GetSamplingIntent
 
-This is a routine/function/method for all `Composable` samplers. Its purpose is to query the sampler about the activities it would perform had it been asked to make a sampling decision for a given span, however, without constructing the actual sampling Decision.
+This is an operation for all `Composable` samplers. Its purpose is to query the sampler about the activities it would perform had it been asked to make a sampling decision for a given span, however, without constructing the actual sampling Decision.
 
 #### Required Arguments for GetSamplingIntent
 
@@ -115,6 +117,13 @@ The `ConsistentAlwaysOn` sampler MUST provide a `SamplingIntent` with
 - `GetAttributes` returning an empty set,
 - `UpdateTraceState` returning its argument, without any modifications.
 
+The `ConsistentFixedThreshold` sampler, which is essentially `TraceIdRatioBased` sampler but implementing the `Composable` interface, MUST provide a `SamplingIntent` with
+
+- The THRESHOLD value representing the threshold calculated according to the proposed [sampler requirements following OTEP 235](https://github.com/open-telemetry/opentelemetry-specification/pull/4166),
+- `IsAdjustedCountReliable` returning `true`,
+- `GetAttributes` returning an empty set,
+- `UpdateTraceState` returning its argument, without any modifications.
+
 #### Constructing `SamplingResult`
 
 The process of constructing the final `SamplingResult` in response to a call to `ShouldSample` on the root sampler of the composite samplers tree consists of the following steps.
@@ -142,7 +151,7 @@ To preserve integrity of consistent probability sampling, the Predicates MUST NO
 
 ##### SpanMatches
 
-This is a routine/function/method for `Predicate`, which returns `true` if a given `Span` matches, i.e. belongs to the category described by the Predicate.
+This is an operation for `Predicate`, which returns `true` if a given `Span` matches, i.e. belongs to the category described by the Predicate.
 
 ##### Required Arguments for Predicates
 
@@ -156,10 +165,10 @@ The arguments represent the values that are made available for `ShouldSample`.
 
 #### Required Arguments for ConsistentRuleBased
 
-- `SpanKind`
+- optional `SpanKind`,
 - list of pairs (`Predicate`, `Composable`)
 
-For calculating the `SamplingIntent`, if the `Span` kind matches the specified kind, the sampler goes through the list in the provided order and calls `SpanMatches` on `Predicate`s passing the same arguments as received.
+For calculating the `SamplingIntent`, if the `Span` kind matches the specified kind, or the specified kind is not given, the sampler goes through the list in the provided order and calls `SpanMatches` on `Predicate`s passing the same arguments as received.
 If a call returns `true`, the result is as returned by `GetSamplingIntent` called on the corresponding `Composable` - no other `Predicate`s are evaluated.
 If the `SpanKind` does not match, or none of the calls to `SpanMatches` yield `true`, the result is obtained by calling `GetSamplingIntent` on `ConsistentAlwaysOffSampler`.
 
@@ -171,7 +180,7 @@ The delegate is used to make sampling decisions for ROOT spans.
 
 The behavior of `ConsistentParentBased` caters to the case where a non-probabilistic sampler was used to sample the parent span.
 
-Upon invocation of its `GetSamplingIntent` function, the sampler checks if there's a valid parent span context. If there isn't, the sampler MUST return the result of calling `GetSamplingIntent` on the delegate.
+Upon invocation of its `GetSamplingIntent` operation the sampler checks if there's a valid parent span context. If there isn't, the sampler MUST return the result of calling `GetSamplingIntent` on the delegate.
 
 Otherwise, the sampler attempts to extract the threshold value from the parent trace state.
 The sampler MUST return a `SamplingIntent` as follows.
@@ -204,7 +213,7 @@ However, `ConsistentParentBased` implementations SHOULD allow users to customize
 
 `ConsistentAnyOf` is a composite sampler which takes a non-empty list of `Composable` samplers (delegates) as the argument. The intention is to make a positive sampling decision if _any of_ the delegates would make a positive decision.
 
-Upon invocation of its `GetSamplingIntent` function, it MUST go through the whole list and invoke `GetSamplingIntent` function on each delegate sampler, passing the same arguments as received.
+Upon invocation of its `GetSamplingIntent` operation, it MUST go through the whole list and invoke `GetSamplingIntent` operation on each delegate sampler, passing the same arguments as received.
 
 `ConsistentAnyOf` sampler MUST return a `SamplingIntent` which is constructed as follows:
 
@@ -225,7 +234,7 @@ Each delegate sampler MUST be given a chance to participate in calculating the `
 - maximum sampling (throughput) target rate
 
 The sampler SHOULD measure and keep the average rate of incoming spans, and therefore also of the desired ratio between the incoming span rate to the target span rate.
-Upon invocation of its `GetSamplingIntent` function, the composite sampler MUST get the `SamplingIntent` from the delegate sampler, passing the same arguments as received.
+Upon invocation of its `GetSamplingIntent` operation, the composite sampler MUST get the `SamplingIntent` from the delegate sampler, passing the same arguments as received.
 
 The returned `SamplingIntent` is constructed as follows.
 
