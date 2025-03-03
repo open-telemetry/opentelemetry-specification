@@ -144,13 +144,14 @@ Given the above state of the logging space we took the following approach:
   translate them to OpenTelemetry log data model.
 
 - OpenTelemetry defines a Logs API
-  for [emitting LogRecords](./api.md#emit-a-logrecord). Application developers are
-  NOT encouraged to call this API directly. It is provided for library authors
-  to build [log appender](../glossary.md#log-appender--bridge), which use
-  the API to bridge between existing logging libraries and the OpenTelemetry log
-  data model. Existing logging libraries generally provide a much richer set of
-  features than what is defined in OpenTelemetry. It is NOT a goal of
-  OpenTelemetry to ship a feature-rich logging library.
+  for [emitting LogRecords](./api.md#emit-a-logrecord). It is provided for
+  library authors to build [log appender](../glossary.md#log-appender--bridge),
+  which use the API to bridge between existing logging libraries and the
+  OpenTelemetry log data model. Existing logging libraries generally provide
+  a much richer set of features than what is defined in OpenTelemetry.
+  It is NOT a goal of OpenTelemetry to ship a feature-rich logging library.
+  Yet, the Logs API can also be used directly if one prefers to couple the code
+  to it instead of using a bridged logging library.
 
 - OpenTelemetry defines an [SDK](./sdk.md) implementation of the [API](./api.md),
   which enables configuration of [processing](./sdk.md#logrecordprocessor)
