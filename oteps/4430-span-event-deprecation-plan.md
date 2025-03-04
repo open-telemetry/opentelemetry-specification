@@ -5,13 +5,15 @@
 [OTEP 265: Event Vision](0265-event-vision.md) states that we intend to
 deprecate span events in favor of (log-based) events.
 
-Span events and log-based events both capture point-in-time telemetry.
-However, span events are limited because they need tracing instrumentation
-and can only be reported when a recording span ends.
-While both serve similar purposes, log-based events support a wider range of
-use cases.
+After further discussions, we are only planning to deprecate the Span Event
+API, while retaining the ability to emit Span Events via the Events API.
 
-As we look at the current usage of span events across OpenTelemetry
+This achieves the primary goal, which is to provide a single consistent
+guidance to instrumentation authors to use event API, while still enabling
+use cases that rely on Span Events being emitted in the same proto
+envelope as their containing Span.
+
+Further, as we look at the current usage of span events across OpenTelemetry
 repositories though, by far the most common
 use is for recording span-terminating exceptions, and it will be much less
 disruptive to record these span-terminating exceptions directly as span
@@ -38,7 +40,11 @@ The prerequisites for deprecating span events in the specification:
 
 ## The plan
 
-### Proto and specification
+### Proto
+
+The span event proto will not be deprecated.
+
+### Specification
 
 1. Introduce and stabilize Span SetException in the specification.
 
@@ -65,9 +71,6 @@ The prerequisites for deprecating span events in the specification:
    recommending instead that events are recorded using the Logs (Events) API.
 
    This can be done in parallel with 3.
-
-5. Deprecate span events in the proto, recommending the replacements mentioned
-   in 3 and 4 above.
 
 ### Per SDK
 
