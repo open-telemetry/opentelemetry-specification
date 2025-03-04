@@ -263,7 +263,7 @@ func (p *IsolatedProcessor) Enabled(ctx context.Context, param sdklog.EnabledPar
 		fp, ok := proc.(sdklog.FilterProcessor)
 		if !ok {
 			// Processor not implementing Enabled.
-			// We asume it will be processed.
+			// We assume it will be processed.
 			return true
 		}
 		fltrProcessors[i] = fp
