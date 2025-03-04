@@ -61,13 +61,14 @@ The span event proto will not be deprecated.
 
    This can be done in parallel with 1.
 
-3. Deprecate
-   [Span RecordException](../specification/trace/api.md#record-exception),
+3. Mark [Span RecordException](../specification/trace/api.md#record-exception)
+   as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
    as span attributes via a new Span function "SetException", and recommending
    that other exceptions are recorded using the Logs API.
 
-4. Deprecate [Span AddEvent](../specification/trace/api.md#add-events),
+4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
+   as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that events are recorded using the Logs (Events) API.
 
    This can be done in parallel with 3.
@@ -81,13 +82,15 @@ The span event proto will not be deprecated.
    - [Emitting span-terminating exceptions as span events](#emitting-span-terminating-exceptions-as-span-events-via-the-sdk)
    - [Emitting (log-based) events as span events](#emitting-log-based-events-as-span-events-via-the-sdk)
 
-3. Deprecate
-   [Span RecordException](../specification/trace/api.md#record-exception),
+3. Mark
+   [Span RecordException](../specification/trace/api.md#record-exception)
+   as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
    as span attributes via a new Span function "SetException", and recommending
    that other exceptions are recorded using the Logs API.
 
-4. Deprecate [Span AddEvent](../specification/trace/api.md#add-events),
+4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
+   as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that events are recorded using the Logs (Events) API.
 
    This can be done in parallel with 3.
