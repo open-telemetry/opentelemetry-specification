@@ -350,6 +350,8 @@ asynchronous processing) only reads are permitted.
 
 #### Enabled
 
+**Status**: [Development](../document-status.md)
+
 `Enabled` is an opt-in operation that a `LogRecordProcessor` may implement
 in order to support filtering via [`Logger.Enabled`](api.md#enabled).
 
