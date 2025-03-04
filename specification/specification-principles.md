@@ -15,10 +15,10 @@ It should be taken in context of the [overall values of OpenTelemetry](https://o
 
 Additionally, it lays out the following core Engineering Values:
 
-- [Compatibility](https://opentelemetry.io/community/mission/#we-value-_compatibility_)
-- [Stability](https://opentelemetry.io/community/mission/#we-value-_stability_)
-- [Resilience](https://opentelemetry.io/community/mission/#we-value-_resilience_)
-- [Performance](https://opentelemetry.io/community/mission/#we-value-_performance_)
+- [Compatibility](https://opentelemetry.io/community/mission/#we-value-compatibility)
+- [Stability](https://opentelemetry.io/community/mission/#we-value-stability)
+- [Resilience](https://opentelemetry.io/community/mission/#we-value-resilience)
+- [Performance](https://opentelemetry.io/community/mission/#we-value-performance)
   - See [Specification Performance Principles](performance.md) for more details.
 
 In addition to these core values, there are a set of things we've learned about
@@ -78,7 +78,7 @@ non-normative language or supplementary guidelines, like this document.
 Don't. Break. Users.
 
 Yes, this is a repeat of the overall OpenTelemetry mission of
-[Stability](https://opentelemetry.io/community/mission/#we-value-_stability_).
+[Stability](https://opentelemetry.io/community/mission/#we-value-stability).
 That's how important stability is.
 
 To achieve OpenTelemetry's mission of "Telemetry should be built-in", we need to
