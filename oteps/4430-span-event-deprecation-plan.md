@@ -9,8 +9,8 @@ After further discussions, we are only planning to deprecate the Span Event
 API, while retaining the ability to emit Span Events via the Events API.
 
 This achieves the primary goal, which is to provide a single consistent
-guidance to instrumentation authors to use event API, while still enabling
-use cases that rely on Span Events being emitted in the same proto
+guidance to instrumentation authors to use the Event API, while still
+enabling use cases that rely on Span Events being emitted in the same proto
 envelope as their containing Span.
 
 Further, as we look at the current usage of span events across OpenTelemetry
