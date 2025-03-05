@@ -159,8 +159,8 @@ This mechanism SHOULD be implemented as follows (see
 - A standard way to add this log processor via declarative configuration
   (assuming its package has been installed).
 
-Users can choose to register a log exporter depending on if they also want
-to export Event records as logs or not.
+Users can add a batch log record processor and log exporter depending on
+if they also want to export Event records as logs or not.
 
 This log processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
