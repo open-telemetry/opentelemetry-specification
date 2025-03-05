@@ -177,6 +177,9 @@ decision to deprecate the Span Event API.
 - Make [sending span-terminating exceptions as Span Events via the
   Collector](#via-the-collector)
   a prerequisite for stabilizing Span SetException in SDKs.
+- Support
+  [Sending (log-based) Events as Span Events](#sending-span-terminating-exceptions-as-span-events)
+  via the Collector.
 - Forward compatibility story: A collector-based span processor that infers
   if a Span Event represents a span-terminating exception, and adds it
   directly as span attributes
