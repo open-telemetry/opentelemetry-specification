@@ -27,22 +27,7 @@ recording them using the Logs API:
 - Some backends only support tracing and have no current plans to ingest
   log-based events directly.
 
-## Prerequisites
-
-The prerequisites for deprecating span events in the specification:
-
-- The (log-based) event specification has been stabilized
-  ([#4362](https://github.com/open-telemetry/opentelemetry-specification/issues/4362)).
-- There is [stable](../specification/versioning-and-stability.md#stable)
-  support for (log-based) events in the relevant SDK.
-- The [backcompat story](#backcompat-story) exists (and is stable)
-  in the relevant SDK.
-
 ## The plan
-
-### Proto
-
-The span event proto will not be deprecated.
 
 ### Specification
 
@@ -79,8 +64,8 @@ The span event proto will not be deprecated.
 
 2. Implement the two SDK-based backcompat stories below:
 
-   - [Emitting span-terminating exceptions as span events](#emitting-span-terminating-exceptions-as-span-events-via-the-sdk)
-   - [Emitting (log-based) events as span events](#emitting-log-based-events-as-span-events-via-the-sdk)
+   - [Emitting (log-based) events as span events](#emitting-log-based-events-as-span-events)
+   - [Backcompat story for span-terminating exceptions](#backcompat-story-for-span-terminating-exceptions)
 
 3. Mark
    [Span RecordException](../specification/trace/api.md#record-exception)
@@ -109,29 +94,16 @@ instrumentations that are emitting span events:
   - It SHOULD stop emitting span events
     (instead calling Span "SetException" for span-terminating exceptions
     and calling the Logs API for all other use cases).
-  - Users will be able to retain the old behavior by opting in to the
-    [backcompat story](#backcompat-story).
+  - Users will be able to retain the old behavior by opting in to
+    - [Emitting (log-based) events as span events](#emitting-log-based-events-as-span-events), and
+    - [Backcompat story for span-terminating exceptions](#backcompat-story-for-span-terminating-exceptions)
 
 Non-stable instrumentations SHOULD use their best judgement on whether to follow
 the above guidance.
 
-## Backcompat story
+## Emitting (log-based) events as span events
 
-### Emitting span-terminating exceptions as span events via the SDK
-
-This mechanism SHOULD be implemented as follows:
-
-- An SDK-based span processor that converts span-terminating exceptions
-  recorded as span attributes into span events
-  (with the option to either drop or retain the span-terminating exception
-  span attributes).
-- A standard way to add this span processor via declarative configuration
-  (assuming its package has been installed).
-
-This span processor SHOULD be included in the standard
-OpenTelemetry zero-code distribution (if one exists for the language).
-
-### Emitting (log-based) events as span events via the SDK
+### Via the SDK
 
 This mechanism SHOULD be implemented as follows (see
 [prototype](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/80adbe1cf8de647afa32c68f921aef2bbd4dfd71/processors/README.md#event-to-spanevent-bridge)):
@@ -148,7 +120,7 @@ to export event records as logs or not.
 This log processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
 
-### Emitting span-terminating exceptions as span events via the Collector
+### Via the Collector
 
 This mechanism SHOULD be implemented as follows:
 
@@ -157,6 +129,20 @@ This mechanism SHOULD be implemented as follows:
 
 This log processor SHOULD be included in the standard
 OpenTelemetry Collector Contrib distribution.
+
+## Backcompat story for span-terminating exceptions
+
+This mechanism SHOULD be implemented as follows:
+
+- An SDK-based span processor that converts span-terminating exceptions
+  recorded as span attributes into span events
+  (with the option to either drop or retain the span-terminating exception
+  span attributes).
+- A standard way to add this span processor via declarative configuration
+  (assuming its package has been installed).
+
+This span processor SHOULD be included in the standard
+OpenTelemetry zero-code distribution (if one exists for the language).
 
 ## Communication plan
 
