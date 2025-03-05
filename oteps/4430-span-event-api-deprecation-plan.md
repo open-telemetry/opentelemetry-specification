@@ -9,10 +9,10 @@ After further discussions, we are only planning to deprecate the Span Event
 API, while retaining the ability to emit Span Events via the (log-based)
 Event API.
 
-This achieves the primary goal, which is to provide a single consistent
-guidance to instrumentation authors to use the Event API, while still
-enabling use cases that rely on Span Events being emitted in the same proto
-envelope as their containing span.
+This achieves the primary goal of deprecation, which is to provide a single
+consistent guidance to instrumentation authors to use the Event API,
+while still enabling use cases that rely on Span Events being emitted in the
+same proto envelope as their containing span.
 
 ## Span-terminating exceptions
 
