@@ -64,7 +64,7 @@ recording them using the Logs API:
 
 2. Implement the two SDK-based backcompat stories below:
 
-   - [Emitting (log-based) events as span events](#emitting-log-based-events-as-span-events)
+   - [Emitting (log-based) events as span events via the SDK](#emitting-log-based-events-as-span-events-via-the-sdk)
    - [Backcompat story for span-terminating exceptions](#via-the-sdk)
 
 3. Mark
@@ -95,13 +95,13 @@ instrumentations that are emitting span events:
     (instead calling Span "SetException" for span-terminating exceptions
     and calling the Logs API for all other use cases).
   - Users will be able to retain the old behavior by opting in to
-    - [Emitting (log-based) events as span events](#emitting-log-based-events-as-span-events), and
+    - [Emitting (log-based) events as span events via the SDK](#emitting-log-based-events-as-span-events-via-the-sdk), and
     - [Backcompat story for span-terminating exceptions](#backcompat-story-for-span-terminating-exceptions)
 
 Non-stable instrumentations SHOULD use their best judgement on whether to follow
 the above guidance.
 
-## Emitting (log-based) events as span events
+## Emitting (log-based) events as span events via the SDK
 
 This mechanism SHOULD be implemented as follows (see
 [prototype](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/80adbe1cf8de647afa32c68f921aef2bbd4dfd71/processors/README.md#event-to-spanevent-bridge)):
