@@ -65,7 +65,7 @@ recording them using the Logs API:
 2. Implement the two SDK-based backcompat stories below:
 
    - [Emitting (log-based) events as span events](#emitting-log-based-events-as-span-events)
-   - [Backcompat story for span-terminating exceptions](#backcompat-story-for-span-terminating-exceptions)
+   - [Backcompat story for span-terminating exceptions](#via-the-sdk)
 
 3. Mark
    [Span RecordException](../specification/trace/api.md#record-exception)
@@ -103,8 +103,6 @@ the above guidance.
 
 ## Emitting (log-based) events as span events
 
-### Via the SDK
-
 This mechanism SHOULD be implemented as follows (see
 [prototype](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/80adbe1cf8de647afa32c68f921aef2bbd4dfd71/processors/README.md#event-to-spanevent-bridge)):
 
@@ -120,17 +118,9 @@ to export event records as logs or not.
 This log processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
 
-### Via the Collector
-
-This mechanism SHOULD be implemented as follows:
-
-- A Collector-based span processor that converts span-terminating exceptions
-  recorded as span attributes into span events.
-
-This log processor SHOULD be included in the standard
-OpenTelemetry Collector Contrib distribution.
-
 ## Backcompat story for span-terminating exceptions
+
+### Via the SDK
 
 This mechanism SHOULD be implemented as follows:
 
@@ -144,6 +134,16 @@ This mechanism SHOULD be implemented as follows:
 This span processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
 
+### Via the Collector
+
+This mechanism SHOULD be implemented as follows:
+
+- A Collector-based span processor that converts span-terminating exceptions
+  recorded as span attributes into span events.
+
+This log processor SHOULD be included in the standard
+OpenTelemetry Collector Contrib distribution.
+
 ## Communication plan
 
 Publish a blog post if/when this OTEP is accepted, giving readers a way to
@@ -154,7 +154,7 @@ decision to deprecate span events.
 ## Nice to haves
 
 - Make [emitting span-terminating exceptions as span events via the
-  Collector](#emitting-span-terminating-exceptions-as-span-events-via-the-collector)
+  Collector](#via-the-collector)
   a prerequisite for stabilizing Span SetException in any SDK.
 - Forward compatibility story: A collector-based span processor that infers
   if a span event represents a span-terminating exception, and adds it
