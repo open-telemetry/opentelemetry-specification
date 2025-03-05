@@ -68,7 +68,7 @@ Stabilize (log-based) Events.
 
    This can be done in parallel with 3.
 
-### Per SDK
+### Per API and SDK
 
 1. Implement and stabilize the Span SetException API and the (log-based)
    Event API.
