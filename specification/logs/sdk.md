@@ -357,7 +357,6 @@ in order to support filtering via [`Logger.Enabled`](api.md#enabled).
 
 **Parameters:**
 
-* [Resource](./data-model.md#field-resource) associated with the `LoggerProvider`
 * [Instrumentation Scope](./data-model.md#field-instrumentationscope) associated
   with the `Logger`
 * [Context](../context/README.md) explicitly passed by the caller or the current
