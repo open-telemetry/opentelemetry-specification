@@ -106,8 +106,8 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
     instead calling the new Span SetException API for span-terminating exceptions
     and calling the (log-based) Event API for all other use cases.
   - Users will be able to retain the prior telemetry output by opting in to
-    - [Sending span-terminating exceptions as Span Events](#sending-span-terminating-exceptions-as-span-events)
-    - [Sending (log-based) Events as Span Events via the SDK](#sending-log-based-events-as-span-events-via-the-sdk), and
+    - [Sending span-terminating exceptions as Span Events](#sending-span-terminating-exceptions-as-span-events), and
+    - [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events)
 
 Non-stable instrumentations SHOULD use their best judgement on whether to follow
 the above guidance.
@@ -142,7 +142,7 @@ This mechanism SHOULD be implemented as follows:
 This log processor SHOULD be included in the standard
 OpenTelemetry Collector Contrib distribution.
 
-## Sending (log-based) Events as Span Events via the SDK
+## Sending (log-based) Events as Span Events
 
 There MUST be a way to send (log-based) Events as Span Events
 for use cases that rely on Span Events being emitted in the
