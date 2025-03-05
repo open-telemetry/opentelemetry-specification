@@ -1,4 +1,4 @@
-# Span event deprecation plan
+# Span Event API deprecation plan
 
 ## Motivation
 
