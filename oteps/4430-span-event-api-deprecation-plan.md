@@ -58,7 +58,7 @@ Stabilize (log-based) Events.
 3. Mark [Span RecordException](../specification/trace/api.md#record-exception)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
-   as span attributes via the new Span SetException API, and recommending
+   as span attributes via the new Span SetException API, and
    that other exceptions are recorded using the (log-based) Event API.
 
 4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
@@ -82,7 +82,7 @@ Stabilize (log-based) Events.
    [Span RecordException](../specification/trace/api.md#record-exception)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
-   as span attributes via the new Span SetException API, and recommending
+   as span attributes via the new Span SetException API, and
    that other exceptions are recorded using the (log-based) Event API.
 
 4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
