@@ -76,7 +76,7 @@ Stabilize (log-based) Events.
 2. Implement the two SDK-based backcompat stories below:
 
    - [Sending span-terminating exceptions as Span Events](#via-the-sdk)
-   - [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events)
+   - [Sending (log-based) Events as Span Events](#via-the-sdk-1)
 
 3. Mark
    [Span RecordException](../specification/trace/api.md#record-exception)
@@ -144,6 +144,8 @@ OpenTelemetry Collector Contrib distribution.
 
 ## Sending (log-based) Events as Span Events
 
+### Via the SDK
+
 There MUST be a way to send (log-based) Events as Span Events
 for use cases that rely on Span Events being emitted in the
 same proto envelope as their containing span, and for users
@@ -165,6 +167,19 @@ if they also want to export Event records as logs or not.
 This log processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
 
+### Via the Collector
+
+Note: this is a nice to have only and not required for any other part
+of the Span Event API deprecation plan.
+
+This mechanism MAY be implemented as follows:
+
+- A Collector-based processor that buffers spans and moves (log-based)
+  Events to the appropriate span.
+
+This log processor MAY be included in the standard
+OpenTelemetry Collector Contrib distribution.
+
 ## Communication plan
 
 Publish a blog post if/when this OTEP is accepted, giving readers a way to
@@ -172,14 +187,11 @@ provide feedback (e.g. pointing to a specification issue where we are
 gathering feedback). The blog post should include the rationale for the
 decision to deprecate the Span Event API.
 
-## Nice to haves
+## Additional nice to haves
 
 - Make [sending span-terminating exceptions as Span Events via the
   Collector](#via-the-collector)
   a prerequisite for stabilizing Span SetException in SDKs.
-- Support
-  [Sending (log-based) Events as Span Events](#sending-span-terminating-exceptions-as-span-events)
-  via the Collector.
 - Forward compatibility story: A collector-based span processor that infers
   if a Span Event represents a span-terminating exception, and adds it
   directly as span attributes
