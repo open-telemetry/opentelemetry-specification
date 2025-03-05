@@ -75,7 +75,7 @@ Stabilize (log-based) Events.
 
 2. Implement the two SDK-based backcompat stories below:
 
-   - [Emitting (log-based) Events as Span Events via the SDK](#emitting-log-based-events-as-span-events-via-the-sdk)
+   - [Sending (log-based) Events as Span Events via the SDK](#sending-log-based-events-as-span-events-via-the-sdk)
    - [Backcompat story for span-terminating exceptions](#via-the-sdk)
 
 3. Mark
@@ -106,13 +106,13 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
     instead calling the new Span SetException API for span-terminating exceptions
     and calling the (log-based) Event API for all other use cases.
   - Users will be able to retain the prior telemetry output by opting in to
-    - [Emitting (log-based) Events as Span Events via the SDK](#emitting-log-based-events-as-span-events-via-the-sdk), and
+    - [Sending (log-based) Events as Span Events via the SDK](#sending-log-based-events-as-span-events-via-the-sdk), and
     - [Backcompat story for span-terminating exceptions](#backcompat-story-for-span-terminating-exceptions)
 
 Non-stable instrumentations SHOULD use their best judgement on whether to follow
 the above guidance.
 
-## Emitting (log-based) Events as Span Events via the SDK
+## Sending (log-based) Events as Span Events via the SDK
 
 This mechanism SHOULD be implemented as follows (see
 [prototype](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/80adbe1cf8de647afa32c68f921aef2bbd4dfd71/processors/README.md#event-to-spanevent-bridge)):
@@ -164,9 +164,9 @@ decision to deprecate Span Events.
 
 ## Nice to haves
 
-- Make [emitting span-terminating exceptions as Span Events via the
+- Make [backcompat story for span-terminating exceptions via the
   Collector](#via-the-collector)
-  a prerequisite for stabilizing Span SetException in any SDK.
+  a prerequisite for stabilizing Span SetException in SDKs.
 - Forward compatibility story: A collector-based span processor that infers
   if a Span Event represents a span-terminating exception, and adds it
   directly as span attributes
