@@ -170,7 +170,7 @@ OpenTelemetry zero-code distribution (if one exists for the language).
 Publish a blog post if/when this OTEP is accepted, giving readers a way to
 provide feedback (e.g. pointing to a specification issue where we are
 gathering feedback). The blog post should include the rationale for the
-decision to deprecate Span Events.
+decision to deprecate the Span Event API.
 
 ## Nice to haves
 
