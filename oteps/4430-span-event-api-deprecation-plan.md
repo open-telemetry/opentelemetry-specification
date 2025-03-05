@@ -11,7 +11,7 @@ Event API.
 
 This achieves the primary goal of deprecation, which is to provide a single
 consistent guidance to instrumentation authors to use the Event API,
-while still enabling use cases that rely on Span Events being emitted in the
+while still supporting use cases that rely on Span Events being emitted in the
 same proto envelope as their containing span.
 
 ## Span-terminating exceptions
@@ -34,9 +34,13 @@ of recording them via the (log-based) Event API, for the following reasons:
 
 ## The plan
 
-### Specification
+### In the proto
 
-1. Introduce and stabilize Span SetException in the specification.
+Stabilize (log-based) Events.
+
+### In the Specification
+
+1. Introduce and stabilize the Span SetException API.
 
    This will allow recording span-terminating exceptions directly as span
    attributes, instead of recording them as Span Events.
@@ -44,7 +48,7 @@ of recording them via the (log-based) Event API, for the following reasons:
    Stabilization will go through the normal process, requiring prototypes
    in at least three languages.
 
-2. Stabilize (log-based) Events in the proto and specification.
+2. Stabilize the (log-based) Event API.
 
    This will allow recording events using the (log-based) Event API,
    instead of recording them using the Span Event API.
@@ -54,7 +58,7 @@ of recording them via the (log-based) Event API, for the following reasons:
 3. Mark [Span RecordException](../specification/trace/api.md#record-exception)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
-   as span attributes via a new Span function "SetException", and recommending
+   as span attributes via the new Span SetException API, and recommending
    that other exceptions are recorded using the (log-based) Event API.
 
 4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
@@ -66,7 +70,8 @@ of recording them via the (log-based) Event API, for the following reasons:
 
 ### Per SDK
 
-1. Implement and stabilize Span SetException and the (log-based) Event API.
+1. Implement and stabilize the Span SetException API and the (log-based)
+   Event API.
 
 2. Implement the two SDK-based backcompat stories below:
 
@@ -77,7 +82,7 @@ of recording them via the (log-based) Event API, for the following reasons:
    [Span RecordException](../specification/trace/api.md#record-exception)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
-   as span attributes via a new Span function "SetException", and recommending
+   as span attributes via the new Span SetException API, and recommending
    that other exceptions are recorded using the (log-based) Event API.
 
 4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
@@ -98,16 +103,16 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
   - It SHOULD continue to use these
 - In the instrumentation's next major version
   - It SHOULD stop using these,
-    instead calling Span "SetException" for span-terminating exceptions
-    and calling the Logs API for all other use cases.
-  - Users will be able to retain the old behavior by opting in to
-    - [Emitting (log-based) events as Span Events via the SDK](#emitting-log-based-events-as-span-events-via-the-sdk), and
+    instead calling the new Span SetException API for span-terminating exceptions
+    and calling the (log-based) Event API for all other use cases.
+  - Users will be able to retain the prior telemetry output by opting in to
+    - [Emitting (log-based) Events as Span Events via the SDK](#emitting-log-based-events-as-span-events-via-the-sdk), and
     - [Backcompat story for span-terminating exceptions](#backcompat-story-for-span-terminating-exceptions)
 
 Non-stable instrumentations SHOULD use their best judgement on whether to follow
 the above guidance.
 
-## Emitting (log-based) events as Span Events via the SDK
+## Emitting (log-based) Events as Span Events via the SDK
 
 This mechanism SHOULD be implemented as follows (see
 [prototype](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/80adbe1cf8de647afa32c68f921aef2bbd4dfd71/processors/README.md#event-to-spanevent-bridge)):
