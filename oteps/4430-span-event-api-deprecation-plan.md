@@ -58,7 +58,7 @@ Stabilize (log-based) Events.
 3. Mark [Span RecordException](../specification/trace/api.md#record-exception)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
-   as span attributes via the new Span SetException API, and
+   as span attributes via the new Span SetException API and
    that other exceptions are recorded using the (log-based) Event API.
 
 4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
@@ -75,14 +75,14 @@ Stabilize (log-based) Events.
 
 2. Implement the two SDK-based backcompat stories below:
 
-   - [Sending (log-based) Events as Span Events via the SDK](#sending-log-based-events-as-span-events-via-the-sdk)
-   - [Backcompat story for span-terminating exceptions](#via-the-sdk)
+   - [Sending span-terminating exceptions as Span Events](#via-the-sdk)
+   - [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events-via-the-sdk)
 
 3. Mark
    [Span RecordException](../specification/trace/api.md#record-exception)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
-   as span attributes via the new Span SetException API, and
+   as span attributes via the new Span SetException API and
    that other exceptions are recorded using the (log-based) Event API.
 
 4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
@@ -106,30 +106,17 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
     instead calling the new Span SetException API for span-terminating exceptions
     and calling the (log-based) Event API for all other use cases.
   - Users will be able to retain the prior telemetry output by opting in to
+    - [Sending span-terminating exceptions as Span Events](#sending-span-terminating-exceptions-as-span-events)
     - [Sending (log-based) Events as Span Events via the SDK](#sending-log-based-events-as-span-events-via-the-sdk), and
-    - [Backcompat story for span-terminating exceptions](#backcompat-story-for-span-terminating-exceptions)
 
 Non-stable instrumentations SHOULD use their best judgement on whether to follow
 the above guidance.
 
-## Sending (log-based) Events as Span Events via the SDK
+## Sending span-terminating exceptions as Span Events
 
-This mechanism SHOULD be implemented as follows (see
-[prototype](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/80adbe1cf8de647afa32c68f921aef2bbd4dfd71/processors/README.md#event-to-spanevent-bridge)):
-
-- An SDK-based log processor that converts Event records to Span Events
-  and attaches them to the current span, whose behavior and configuration
-  are defined in the OpenTelemetry Specification.
-- A standard way to add this log processor via declarative configuration
-  (assuming its package has been installed).
-
-Users can choose to register a log exporter depending on if they also want
-to export Event records as logs or not.
-
-This log processor SHOULD be included in the standard
-OpenTelemetry zero-code distribution (if one exists for the language).
-
-## Backcompat story for span-terminating exceptions
+There MUST be a way to send span-terminating exceptions as Span Events
+for users who need to preserve the prior behavior when updating to
+new instrumentation.
 
 ### Via the SDK
 
@@ -155,6 +142,29 @@ This mechanism SHOULD be implemented as follows:
 This log processor SHOULD be included in the standard
 OpenTelemetry Collector Contrib distribution.
 
+## Sending (log-based) Events as Span Events via the SDK
+
+There MUST be a way to send (log-based) Events as Span Events
+for use cases that rely on Span Events being emitted in the
+same proto envelope as their containing span, and for users
+who need to preserve the prior behavior when updating to
+new instrumentation.
+
+This mechanism SHOULD be implemented as follows (see
+[prototype](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/80adbe1cf8de647afa32c68f921aef2bbd4dfd71/processors/README.md#event-to-spanevent-bridge)):
+
+- An SDK-based log processor that converts Event records to Span Events
+  and attaches them to the current span, whose behavior and configuration
+  are defined in the OpenTelemetry Specification.
+- A standard way to add this log processor via declarative configuration
+  (assuming its package has been installed).
+
+Users can choose to register a log exporter depending on if they also want
+to export Event records as logs or not.
+
+This log processor SHOULD be included in the standard
+OpenTelemetry zero-code distribution (if one exists for the language).
+
 ## Communication plan
 
 Publish a blog post if/when this OTEP is accepted, giving readers a way to
@@ -164,7 +174,7 @@ decision to deprecate Span Events.
 
 ## Nice to haves
 
-- Make [backcompat story for span-terminating exceptions via the
+- Make [sending span-terminating exceptions as Span Events via the
   Collector](#via-the-collector)
   a prerequisite for stabilizing Span SetException in SDKs.
 - Forward compatibility story: A collector-based span processor that infers
