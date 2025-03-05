@@ -13,19 +13,22 @@ guidance to instrumentation authors to use the Event API, while still
 enabling use cases that rely on Span Events being emitted in the same proto
 envelope as their containing Span.
 
-Further, as we look at the current usage of span events across OpenTelemetry
-repositories though, by far the most common
-use is for recording span-terminating exceptions, and it will be much less
-disruptive to record these span-terminating exceptions directly as span
-attributes (since there is only ever at most one of these) compared to
-recording them using the Logs API:
+## Span-terminating exceptions
 
+As we look at the current usage of span events across OpenTelemetry
+repositories, by far the most common use is for recording span-terminating
+exceptions.
+
+This OTEP proposes to record span-terminating exceptions directly as span
+attributes (since there is only ever at most one of them on a span) instead
+of recording them via the (log-based) event API, for the following reasons:
+
+- Span-terminating exceptions are recorded by tracing instrumentation and
+  so there is a natural interest to view them as tracing data.
 - It is _much_ simpler to build a backcompat collector processor that moves
   span-terminating exceptions from span attributes to a span event,
   compared to buffering spans and moving these span-terminating exceptions
   over to the appropriate span.
-- Some backends only support tracing and have no current plans to ingest
-  log-based events directly.
 
 ## The plan
 
