@@ -2,7 +2,6 @@
 
 **Status**: [Development](../document-status.md)
 
-
 <details>
 <summary>Table of Contents</summary>
 
@@ -111,7 +110,7 @@ Here are examples of entities, the typical identifying attributes they
 have and some examples of non-identifying attributes that may be
 associated with the entity.
 
-*Note: These examples MAY diverge from semantic conventions.*
+_Note: These examples MAY diverge from semantic conventions._
 
 <table>
    <tr>
