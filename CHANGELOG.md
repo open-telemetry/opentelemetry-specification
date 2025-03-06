@@ -28,6 +28,9 @@ release.
 
 ### Resource
 
+- Add Datamodel for Entities
+   ([#4442](https://github.com/open-telemetry/opentelemetry-specification/pull/4442))
+
 ### Profiles
 
 ### OpenTelemetry Protocol
