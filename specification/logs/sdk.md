@@ -357,10 +357,10 @@ in order to support filtering via [`Logger.Enabled`](api.md#enabled).
 
 **Parameters:**
 
-* [Instrumentation Scope](./data-model.md#field-instrumentationscope) associated
-  with the `Logger`
 * [Context](../context/README.md) explicitly passed by the caller or the current
   Context
+* [Instrumentation Scope](./data-model.md#field-instrumentationscope) associated
+  with the `Logger`
 * [Severity Number](./data-model.md#field-severitynumber) passed by the caller
 
 **Returns:** `Boolean`
