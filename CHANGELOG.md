@@ -23,6 +23,8 @@ release.
 
 - Clarify STDOUT exporter format is unspecified.
    ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+- Clarify that it is allowed to directly use Logs API.
+   ([#4438](https://github.com/open-telemetry/opentelemetry-specification/pull/4438))
 
 ### Baggage
 
