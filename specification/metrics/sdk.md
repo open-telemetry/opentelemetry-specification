@@ -970,11 +970,14 @@ MUST take precedence over the advisory parameters.
 This advisory parameter applies when the [Explicit Bucket
 Histogram](#explicit-bucket-histogram-aggregation) aggregation is used.
 
-If a matching View specifies Explicit Bucket Histogram aggregation with custom
-bucket boundaries, those boundaries take precedence. If no View matches, or if a
-matching View selects the default aggregation, the ExplicitBucketBoundaries
-advisory parameter MUST be used. If neither is provided, the default bucket
-boundaries apply.
+If a matching View specifies Explicit Bucket Histogram aggregation (with or
+without bucket boundaries), then the `ExplicitBucketBoundaries` advisory
+parameter is ignored.
+
+If no View matches, or if a matching View selects the [default
+aggregation](#default-aggregation), the ExplicitBucketBoundaries advisory
+parameter MUST be used. If neither is provided, the default bucket boundaries
+apply.
 
 #### Instrument advisory parameter: `Attributes`
 
