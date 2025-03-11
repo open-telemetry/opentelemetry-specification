@@ -46,8 +46,6 @@ important to understand the goals of OpenTelemetry’s metrics effort:
 
 * **Working with existing metrics instrumentation protocols and standards**.
   Here is the minimum set of goals:
-  * Providing a data model that can support both cumulative and delta
-    [aggregation temporality](./data-model.md#temporality).
   * Providing full support for [Prometheus](https://prometheus.io/) - users
     should be able to use OpenTelemetry clients and
     [Collector](../overview.md#collector) to collect and export metrics, with
