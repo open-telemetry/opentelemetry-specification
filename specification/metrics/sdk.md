@@ -962,12 +962,10 @@ first-seen advisory parameters and log an appropriate error as described in
 [duplicate instrument registrations](#duplicate-instrument-registration).
 
 If both a [View](#view) and advisory parameters specify the same aspect of the
-[Stream configuration](#stream-configuration), the settings defined by the View
+[Stream configuration](#stream-configuration), the setting defined by the View
 MUST take precedence over the advisory parameters.
 
 #### Instrument advisory parameter: `ExplicitBucketBoundaries`
-
-**Status**: [Stable](../document-status.md)
 
 This advisory parameter applies when the [Explicit Bucket
 Histogram](#explicit-bucket-histogram-aggregation) aggregation is used.
@@ -975,7 +973,7 @@ Histogram](#explicit-bucket-histogram-aggregation) aggregation is used.
 If a matching View specifies Explicit Bucket Histogram aggregation with custom
 bucket boundaries, those boundaries take precedence. If no View matches, or if a
 matching View selects the default aggregation, the ExplicitBucketBoundaries
-advisory parameter must be used. If neither is provided, the default bucket
+advisory parameter MUST be used. If neither is provided, the default bucket
 boundaries apply.
 
 #### Instrument advisory parameter: `Attributes`
