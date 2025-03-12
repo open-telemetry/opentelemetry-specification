@@ -439,9 +439,9 @@ made with an Instrument:
       View sets an asynchronous instrument to use the [Explicit bucket
       histogram aggregation](#explicit-bucket-histogram-aggregation)) the
       implementation SHOULD emit a warning and proceed as if the View did not
-      exist. If any configuration is provided via View and [Instrument advisory
-      parameters](#instrument-advisory-parameters), then the View configuration
-      MUST take precedence.
+      If both a View and [Instrument advisory parameters](#instrument-advisory-parameters)
+      specify the same aspect of the [Stream configuration](#stream-configuration),
+      the setting defined by the View MUST take precedence over the advisory parameters.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
