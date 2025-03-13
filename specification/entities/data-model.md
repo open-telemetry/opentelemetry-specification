@@ -27,7 +27,7 @@ telemetry is also related with a process in which the service runs, so we say th
 the `service` entity is related to the `process` entity. The process normally also runs
 on a host, so we say that the `process` entity is related to the `host` entity.
 
-> Note: How entities are associated will be refined in future specification work.
+> Note: Entity relationship modelling will be refined in future specification work.
 
 The data model below defines a logical model for an entity (irrespective of the physical
 format and encoding of how entity data is recorded).
