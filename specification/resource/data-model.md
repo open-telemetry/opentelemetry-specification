@@ -17,7 +17,7 @@
 
 A Resource is an immutable representation of the entity producing telemetry as Attributes. For example, a process producing telemetry that is running in a container on Kubernetes has a Pod name, it is in a namespace and possibly is part of a Deployment which also has a name. All three of these attributes can be included in the Resource. Note that there are certain "standard attributes" that have prescribed meanings.
 
-A resource is composed of [`Entity`](../entities/README.md) and raw attributes.
+A resource is composed of 0 or more [`Entities`](../entities/README.md) and 0 or more attributes not associated with any entity.
 
 Resource provides two important aspects for observability:
 
@@ -36,7 +36,7 @@ raw attributes are different, then you can assume the resource is different.
 
 ### Navigation
 
-Implicit in the design of Resource and attributes is ensuring users are able to navigate their infrastructure, tools, Uis, etc. to find the *same* entity that telemetry is reporting against.  For example, in the definition above, we see a few components listed for one entity:
+Implicit in the design of Resource and attributes is ensuring users are able to navigate their infrastructure, tools, UIs, etc. to find the *same* entity that telemetry is reporting against.  For example, in the definition above, we see a few components listed for one entity:
 
 - A process
 - A container
