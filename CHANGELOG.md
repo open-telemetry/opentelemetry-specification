@@ -18,6 +18,8 @@ release.
 
 - Clarify STDOUT exporter format is unspecified.
    ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+- Clarify the metrics design goal, scope out StatsD client support.
+   ([#4445](https://github.com/open-telemetry/opentelemetry-specification/pull/4445))
 
 ### Logs
 

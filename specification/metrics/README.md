@@ -44,13 +44,15 @@ important to understand the goals of OpenTelemetry’s metrics effort:
   converging OpenCensus and OpenTracing. We will focus on providing the
   semantics and capability, instead of doing a 1-1 mapping of the APIs.
 
-* **Working with existing metrics instrumentation protocols and standards**. The
-  minimum goal is to provide full support for
-  [Prometheus](https://prometheus.io/) and
-  [StatsD](https://github.com/statsd/statsd) - users should be able to use
-  OpenTelemetry clients and [Collector](../overview.md#collector) to collect and
-  export metrics, with the ability to achieve the same functionality as their
-  native clients.
+* **Working with existing metrics instrumentation protocols and standards**.
+  Here is the minimum set of goals:
+  * Providing full support for [Prometheus](https://prometheus.io/) - users
+    should be able to use OpenTelemetry clients and
+    [Collector](../overview.md#collector) to collect and export metrics, with
+    the ability to achieve the same functionality as the native Prometheus
+    clients.
+  * Providing the ability to collect [StatsD](https://github.com/statsd/statsd)
+    metrics using the [OpenTelemetry Collector](../overview.md#collector).
 
 ### Concepts
 
