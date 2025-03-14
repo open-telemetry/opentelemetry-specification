@@ -33,7 +33,7 @@ release.
 
 ### OTEPs
 
-## v1.43.0 (2025-03-13)
+## v1.43.0 (2025-03-14)
 
 ### Traces
 
@@ -56,6 +56,11 @@ release.
 
 - Add Advanced Processing to Logs Supplementary Guidelines.
   ([#4407](https://github.com/open-telemetry/opentelemetry-specification/pull/4407))
+
+### OTEPs
+
+- Composite Head Samplers.
+  ([#4321](https://github.com/open-telemetry/opentelemetry-specification/pull/4321))
 
 ## v1.42.0 (2025-02-18)
 
