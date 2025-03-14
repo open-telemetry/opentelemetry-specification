@@ -47,6 +47,9 @@ release.
 
 ### OTEPs
 
+- Composite Head Samplers.
+  ([#4321](https://github.com/open-telemetry/opentelemetry-specification/pull/4321))
+
 ## v1.42.0 (2025-02-18)
 
 ### Traces
