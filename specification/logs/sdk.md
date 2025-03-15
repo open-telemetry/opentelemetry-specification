@@ -24,6 +24,7 @@
 - [LogRecordProcessor](#logrecordprocessor)
   * [LogRecordProcessor operations](#logrecordprocessor-operations)
     + [OnEmit](#onemit)
+    + [Enabled](#enabled-1)
     + [ShutDown](#shutdown)
     + [ForceFlush](#forceflush-1)
   * [Built-in processors](#built-in-processors)
@@ -198,7 +199,9 @@ It consists of the following parameters:
 `Enabled` MUST return `false` when:
 
 - there are no registered [`LogRecordProcessors`](#logrecordprocessor),
-- `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
+- `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`),
+- all registered `LogRecordProcessors` implement [`Enabled`](#enabled-1),
+  and a call to `Enabled` on each of them returns `false`.
 
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
@@ -344,6 +347,38 @@ the `logRecord` mutations MUST be visible in next registered processors.
 A `LogRecordProcessor` may freely modify `logRecord` for the duration of
 the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
 asynchronous processing) only reads are permitted.
+
+#### Enabled
+
+**Status**: [Development](../document-status.md)
+
+`Enabled` is an operation that a `LogRecordProcessor` MAY implement
+in order to support filtering via [`Logger.Enabled`](api.md#enabled).
+
+**Parameters:**
+
+* [Context](../context/README.md) explicitly passed by the caller or the current
+  Context
+* [Instrumentation Scope](./data-model.md#field-instrumentationscope) associated
+  with the `Logger`
+* [Severity Number](./data-model.md#field-severitynumber) passed by the caller
+
+**Returns:** `Boolean`
+
+Any modifications to parameters inside `Enabled` MUST NOT be propagated to the
+caller. Parameters are immutable or passed by value.
+
+An implementation should default to returning `true` for an indeterminate
+state, but may return `false` if valid reasons in particular circumstances
+exist (e.g. performance).
+
+`LogRecordProcessor` implementations that choose to support this operation are
+expected to re-evaluate the [ReadWriteLogRecord](#readwritelogrecord) passed to
+[`OnEmit`](#onemit). It is not expected that the caller to `OnEmit` will use the
+functionality from this operation prior to calling `OnEmit`.
+
+This operation is usually called synchronously, therefore it should not block
+or throw exceptions.
 
 #### ShutDown
 

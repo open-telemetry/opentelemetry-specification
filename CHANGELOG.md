@@ -25,6 +25,8 @@ release.
    ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 - Clarify that it is allowed to directly use Logs API.
    ([#4438](https://github.com/open-telemetry/opentelemetry-specification/pull/4438))
+- Add `Enabled` opt-in operation to the `LogRecordProcessor`.
+  ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
 
 ### Baggage
 
