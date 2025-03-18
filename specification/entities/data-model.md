@@ -15,9 +15,9 @@
 </details>
 
 Entity represents an object of interest associated with produced telemetry:
-traces, metrics or logs.
+traces, metrics, profiles, or logs.
 
-For example, telemetry produced using OpenTelemetry SDK is normally associated with
+For example, telemetry produced using an OpenTelemetry SDK is normally associated with
 a `service` entity. Similarly, OpenTelemetry defines system metrics for a `host`. The `host` is the
 entity we want to associate metrics with in this case.
 

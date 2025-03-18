@@ -7,7 +7,7 @@ path_base_for_github_subdir:
 # Entities
 
  <details>
- <sumamry>Table of Contents</summary>
+ <summary>Table of Contents</summary>
 
 <!-- toc -->
 
@@ -20,7 +20,7 @@ path_base_for_github_subdir:
 
 ## Overview
 
-Entity represents an object of interest associated with produced telemetry: traces, metrics, logs, etc.
+Entity represents an object of interest associated with produced telemetry: traces, metrics, logs, profiles etc.
 
 ## Specifications
 

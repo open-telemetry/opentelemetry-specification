@@ -44,9 +44,9 @@ Implicit in the design of Resource and attributes is ensuring users are able to 
 - A namespace
 - A deployment
 
-By including identifying attributes of each of these, we can help users navigate through their `kubectl` or kubernetes UIs to find the specific process generating telemetry.   This is as important as being able to uniquely identify one process from another.
+By including identifying attributes of each of these, we can help users navigate through their `kubectl` or Kubernetes UIs to find the specific process generating telemetry.   This is as important as being able to uniquely identify one process from another.
 
-> Aside: Observability signals SHOULD be actionable.  Knowing a process is struggling is not as useful as > being able to scale up a deployment to take load off the struggling process.
+> Aside: Observability signals SHOULD be actionable.  Knowing a process is struggling is not as useful as being able to scale up a deployment to take load off the struggling process.
 
 If the only thing important to Resource was identity, we could simply use UUIDs.
 
