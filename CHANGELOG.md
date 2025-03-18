@@ -33,7 +33,7 @@ release.
 
 ### OTEPs
 
-## v1.43.0 (2025-03-17)
+## v1.43.0 (2025-03-18)
 
 ### Traces
 
@@ -42,6 +42,8 @@ release.
 
 ### Metrics
 
+- Clarify the metrics design goal, scope out StatsD client support.
+   ([#4445](https://github.com/open-telemetry/opentelemetry-specification/pull/4445))
 - Clarify STDOUT exporter format is unspecified.
    ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
