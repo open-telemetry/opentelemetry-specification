@@ -15,7 +15,7 @@
 
 </details>
 
-A Resource is an immutable representation of the entity producing telemetry as Attributes. For example, a process producing telemetry that is running in a container on Kubernetes has a Pod name, it is in a namespace and possibly is part of a Deployment which also has a name. All three of these attributes can be included in the Resource. Note that there are certain "standard attributes" that have prescribed meanings.
+A Resource is an immutable representation of the entity producing telemetry as Attributes. For example, You could have a process producing telemetry that is running in a container on Kubernetes, which is associated to a Pod running on a Node that is a VM but also is in a namespace and possibly is part of a Deployment. Resource could have attributes to denote information about the Container, the Pod, the Node, the VM or the Deployment. All of these help identify what produced the telemetry. Note that there are certain "standard attributes" that have prescribed meanings.
 
 A resource is composed of 0 or more [`Entities`](../entities/README.md) and 0 or more attributes not associated with any entity.
 
