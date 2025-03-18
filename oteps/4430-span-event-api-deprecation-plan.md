@@ -104,7 +104,7 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
 - In the instrumentation's next major version
   - It SHOULD stop using these,
     instead calling the new Span SetException API for span-terminating exceptions
-    and calling the (log-based) Event API for all other use cases.
+    , recording additional details about spans (that don't need timestamp) as spans attributes, and calling the (log-based) Event API for all other use cases.
   - Users will be able to retain the prior telemetry output by opting in to
     - [Sending span-terminating exceptions as Span Events](#sending-span-terminating-exceptions-as-span-events), and
     - [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events)
