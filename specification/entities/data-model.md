@@ -103,9 +103,9 @@ unnecessary and violates the Minimally Sufficient Id rule.
 
 ## Repeatable Id
 
-The identifying attributes for entity SHOULD be values that can be repeatably obtained by observers of that entity. For example, a `process` entity SHOULD have the same id (and be recongized as the same process), regardless of whether the id was generated from the process itself, via SDK, by an OpenTelemetry Collector running on the same host, or by some other system describing the process.
+The identifying attributes for entity SHOULD be values that can be repeatably obtained by observers of that entity. For example, a `process` entity SHOULD have the same id (and be recognized as the same process), regardless of whether the id was generated from the process itself, via SDK, by an OpenTelemetry Collector running on the same host, or by some other system describing the process.
 
-> Aside: There are many ways to accomplish repeatable identifying attributes across multiple observers. While many succesful systems rely on pushing down identity from a central registry or knowledge store, OpenTelemetry must support all possible scenarios.
+> Aside: There are many ways to accomplish repeatable identifying attributes across multiple observers. While many successful systems rely on pushing down identity from a central registry or knowledge store, OpenTelemetry must support all possible scenarios.
 
 ## Examples of Entities
 
