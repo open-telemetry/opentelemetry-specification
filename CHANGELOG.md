@@ -11,22 +11,9 @@ release.
 
 ### Traces
 
-- Clarify STDOUT exporter format is unspecified.
-   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
-
 ### Metrics
 
-- Clarify STDOUT exporter format is unspecified.
-   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
-- Clarify the metrics design goal, scope out StatsD client support.
-   ([#4445](https://github.com/open-telemetry/opentelemetry-specification/pull/4445))
-
 ### Logs
-
-- Clarify STDOUT exporter format is unspecified.
-   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
-- Clarify that it is allowed to directly use Logs API.
-   ([#4438](https://github.com/open-telemetry/opentelemetry-specification/pull/4438))
 
 ### Baggage
 
@@ -41,6 +28,31 @@ release.
 ### SDK Configuration
 
 ### Common
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.43.0 (2025-03-18)
+
+### Traces
+
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+
+### Metrics
+
+- Clarify the metrics design goal, scope out StatsD client support.
+   ([#4445](https://github.com/open-telemetry/opentelemetry-specification/pull/4445))
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+
+### Logs
+
+- Clarify that it is allowed to directly use Logs API.
+   ([#4438](https://github.com/open-telemetry/opentelemetry-specification/pull/4438))
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Supplementary Guidelines
 
