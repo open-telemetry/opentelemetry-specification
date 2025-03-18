@@ -365,20 +365,28 @@ in order to support filtering via [`Logger.Enabled`](api.md#enabled).
 
 **Returns:** `Boolean`
 
+An implementation should return `false` if a `LogRecord` (if ever created)
+is supposed to be filtered out for the given parameters.
+It should default to returning `true` for any indeterminate state, for example,
+when awaiting configuration.
+
 Any modifications to parameters inside `Enabled` MUST NOT be propagated to the
 caller. Parameters are immutable or passed by value.
 
-An implementation should default to returning `true` for an indeterminate
-state, but may return `false` if valid reasons in particular circumstances
-exist (e.g. performance).
-
-`LogRecordProcessor` implementations that choose to support this operation are
-expected to re-evaluate the [ReadWriteLogRecord](#readwritelogrecord) passed to
-[`OnEmit`](#onemit). It is not expected that the caller to `OnEmit` will use the
-functionality from this operation prior to calling `OnEmit`.
-
 This operation is usually called synchronously, therefore it should not block
 or throw exceptions.
+
+`LogRecordProcessor` implementations responsible for filtering and supporting
+the `Enable` operation should ensure that [`OnEmit`](#onemit) handles filtering
+independently. API users cannot be expected to call [`Enabled`](api.md#enabled)
+before invoking [`Emit a LogRecord`](api.md#emit-a-logrecord).
+Moreover, the filtering logic in `OnEmit` and `Enabled` may differ.
+
+`LogRecordProcessor` implementations that wrap other `LogRecordProcessor`
+(which may perform filtering) can implement `Enabled` and delegate to
+the wrapped processor’s `Enabled`, if available. However, the `OnEmit`
+implementation of such processors should never call the wrapped processor’s
+`Enabled`, as `OnEmit` is responsible for handling filtering independently.
 
 #### ShutDown
 
