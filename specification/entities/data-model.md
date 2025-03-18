@@ -23,7 +23,7 @@ entity we want to associate metrics with in this case.
 
 Entities may be also associated with produced telemetry indirectly.
 For example a service that produces
-telemetry is also related with a process in which the service runs, so we say that
+telemetry is also related to a process in which the service runs, so we say that
 the `service` entity is related to the `process` entity. The process normally also runs
 on a host, so we say that the `process` entity is related to the `host` entity.
 
