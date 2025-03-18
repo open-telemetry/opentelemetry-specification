@@ -8,6 +8,7 @@
 <!-- toc -->
 
 - [Minimally Sufficient Id](#minimally-sufficient-id)
+- [Repeatable Id](#repeatable-id)
 - [Examples of Entities](#examples-of-entities)
 
 <!-- tocstop -->
