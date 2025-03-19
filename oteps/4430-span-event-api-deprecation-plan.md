@@ -26,6 +26,15 @@ Stabilize (log-based) Events.
    This will allow recording exceptions and events using the Logs API,
    instead of recording them using the Span Event API.
 
+   Note: emitting exceptions via the Logs API is
+   [already stable]https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md#semantic-conventions-for-exceptions-in-logs),
+   but there are a couple of open questions that need to be addressed:
+
+   - Do we want to specify some kind of convenience function on Logs
+     similar to RecordException?
+   - Do we want to recommend that log-based exceptions do anything
+     specific with the event name field?
+
 2. Mark [Span RecordException](../specification/trace/api.md#record-exception)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that exceptions are recorded using the Logs API.
