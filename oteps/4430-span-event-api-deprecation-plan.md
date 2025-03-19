@@ -6,13 +6,12 @@
 deprecate Span Events in favor of (log-based) Events.
 
 After further discussions, we are only planning to deprecate the Span Event
-API, while retaining the ability to emit Span Events via the (log-based)
-Event API.
+API, while retaining the ability to emit Span Events via the Logs API.
 
 This achieves the primary goal of deprecation, which is to provide a single
-consistent guidance to instrumentation authors to use the Event API,
-while still supporting use cases that rely on Span Events being emitted in the
-same proto envelope as their containing span.
+consistent guidance to instrumentation authors to use the Logs API when
+emitting events, while still supporting use cases that rely on Span Events
+being emitted in the same proto envelope as their containing span.
 
 ## Span-terminating exceptions
 
@@ -22,7 +21,7 @@ exceptions.
 
 This OTEP proposes to record span-terminating exceptions directly as span
 attributes (since there is only ever at most one of them on a span) instead
-of recording them via the (log-based) Event API, for the following reasons:
+of recording them via the Logs API, for the following reasons:
 
 - Span-terminating exceptions are (by their nature) recorded via tracing
   instrumentation and so there is a natural interest to keep them tightly
@@ -48,9 +47,9 @@ Stabilize (log-based) Events.
    Stabilization will go through the normal process, requiring prototypes
    in at least three languages.
 
-2. Stabilize the (log-based) Event API.
+2. Stabilize emitting Events via the Logs API.
 
-   This will allow recording events using the (log-based) Event API,
+   This will allow recording events using the Logs API,
    instead of recording them using the Span Event API.
 
    This can be done in parallel with 1.
@@ -59,19 +58,18 @@ Stabilize (log-based) Events.
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
    as span attributes via the new Span SetException API and
-   that other exceptions are recorded using the (log-based) Event API.
+   that other exceptions are recorded using the Logs API.
 
 4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
-   recommending instead that events are recorded using the (log-based) Event
-   API.
+   recommending instead that events are recorded using the Logs API.
 
    This can be done in parallel with 3.
 
 ### Per API and SDK
 
-1. Implement and stabilize the Span SetException API and the (log-based)
-   Event API.
+1. Implement and stabilize the Span SetException API and emitting Events
+   via the Logs API.
 
 2. Implement the two SDK-based backcompat stories below:
 
@@ -83,7 +81,7 @@ Stabilize (log-based) Events.
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that span-terminating exceptions are recorded directly
    as span attributes via the new Span SetException API and
-   that other exceptions are recorded using the (log-based) Event API.
+   that other exceptions are recorded using the Logs API.
 
 4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
@@ -104,7 +102,7 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
 - In the instrumentation's next major version
   - It SHOULD stop using these,
     instead calling the new Span SetException API for span-terminating exceptions,
-    recording additional details about spans (that don't need timestamp) as spans attributes, and calling the (log-based) Event API for all other use cases.
+    recording additional details about spans (that don't need timestamp) as spans attributes, and calling the Logs API for all other use cases.
   - Users will be able to retain the prior telemetry output by opting in to
     - [Sending span-terminating exceptions as Span Events](#sending-span-terminating-exceptions-as-span-events), and
     - [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events)
