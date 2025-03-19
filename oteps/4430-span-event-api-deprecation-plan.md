@@ -26,8 +26,6 @@ Stabilize (log-based) Events.
    This will allow recording exceptions and events using the Logs API,
    instead of recording them using the Span Event API.
 
-   This can be done in parallel with 1.
-
 2. Mark [Span RecordException](../specification/trace/api.md#record-exception)
    as [Deprecated](../specification/document-status.md#lifecycle-status),
    recommending instead that exceptions are recorded using the Logs API.
