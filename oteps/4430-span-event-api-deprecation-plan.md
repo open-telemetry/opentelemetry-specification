@@ -44,7 +44,7 @@ Stabilize (log-based) Events.
 
 2. Implement the SDK-based backcompat story:
 
-   - [Sending (log-based) Events as Span Events](#via-the-sdk-1)
+   - [Sending (log-based) Events as Span Events](#via-the-sdk)
 
 3. Mark
    [Span RecordException](../specification/trace/api.md#record-exception)
