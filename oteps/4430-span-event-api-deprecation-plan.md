@@ -75,11 +75,16 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
   - It SHOULD continue to use these
 - In the instrumentation's next major version
   - It SHOULD stop using these,
-    instead recording additional details about spans (that don't need a timestamp)
-    as spans attributes,
-    and recording exceptions and events using the Logs API.
+    instead recording exceptions and events using the Logs API.
   - Users will be able to retain the prior telemetry output by opting in to
-    - [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events)
+      - [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events)
+  - In case the instrumentation was using span events previously to record
+    additional details about a span (i.e. details that don't need a timestamp),
+    it SHOULD instead record these details as attributes on the span. See
+    [semantic-conventions#2010](https://github.com/open-telemetry/semantic-conventions/issues/2010)
+    and
+    [opentelemetry-specification#4446](https://github.com/open-telemetry/opentelemetry-specification/issues/4446)
+    for more details about this case.
 
 Non-stable instrumentations SHOULD use their best judgement on whether to follow
 the above guidance.
