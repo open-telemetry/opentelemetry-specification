@@ -27,7 +27,7 @@ Stabilize (log-based) Events.
    instead of recording them using the Span Event API.
 
    Note: emitting exceptions via the Logs API is
-   [already stable]https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md#semantic-conventions-for-exceptions-in-logs),
+   [already stable](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md#semantic-conventions-for-exceptions-in-logs),
    but there are a couple of open questions that need to be addressed:
 
    - Do we want to specify some kind of convenience function on Logs
@@ -77,7 +77,7 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
   - It SHOULD stop using these,
     instead recording exceptions and events using the Logs API.
   - Users will be able to retain the prior telemetry output by opting in to
-      - [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events)
+    [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events)
   - In case the instrumentation was using span events previously to record
     additional details about a span (i.e. details that don't need a timestamp),
     it SHOULD instead record these details as attributes on the span. See
