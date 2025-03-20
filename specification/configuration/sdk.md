@@ -9,6 +9,7 @@
   * [ConfigProvider](#configprovider)
   * [SDK extension components](#sdk-extension-components)
     + [ComponentProvider](#componentprovider)
+      - [Supported SDK extension plugins](#supported-sdk-extension-plugins)
       - [ComponentsProvider operations](#componentsprovider-operations)
         * [Create Plugin](#create-plugin)
   * [Config operations](#config-operations)
