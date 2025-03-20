@@ -120,6 +120,31 @@ mechanism.
 See [create](#create), which details `ComponentProvider` usage in
 configuration model interpretation.
 
+##### Supported SDK extension plugins
+
+The [configuration data model](./data-model.md) SHOULD support configuration of
+all SDK extension plugin interfaces. SDKs SHOULD
+support [registration](#register-componentprovider) of custom implementations of
+SDK extension plugin interfaces via the `ComponentProvider mechanism.
+
+The following table lists the current status of all SDK extension plugin
+interfaces in the configuration data model:
+
+| SDK extension plugin interface                                                              | Status                                                                                         |
+|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | + (in progress [#188](https://github.com/open-telemetry/opentelemetry-configuration/pull/188)) |
+| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | +                                                                                              |
+| [span exporter](../trace/sdk.md#span-exporter)                                              | +                                                                                              |
+| [span processor](../trace/sdk.md#span-processor)                                            | +                                                                                              |
+| [sampler](../trace/sdk.md#sampler)                                                          | +                                                                                              |
+| [id generator](../trace/sdk.md#id-generators)                                               | - [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)               |
+| [pull metric reader](../metrics/sdk.md#metricreader)                                        | +                                                                                              |
+| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | +                                                                                              |
+| [metric producer](../metrics/sdk.md#metricproducer)                                         | +                                                                                              |
+| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | - [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)             |
+| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | +                                                                                              |
+| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | +                                                                                              |
+
 ##### ComponentsProvider operations
 
 The `ComponentsProvider` MUST provide the following functions:
