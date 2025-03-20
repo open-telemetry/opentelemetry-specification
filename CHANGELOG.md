@@ -27,6 +27,9 @@ release.
 
 ### SDK Configuration
 
+- Convert declarative config env var substitution syntax to ABNF.
+  ([#4448](https://github.com/open-telemetry/opentelemetry-specification/pull/4448))
+
 ### Common
 
 ### Supplementary Guidelines
