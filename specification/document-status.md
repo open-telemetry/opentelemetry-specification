@@ -9,12 +9,13 @@ documents. The following table describes what the statuses mean.
 
 The support guarantees and allowed changes are governed by the lifecycle of the document.Lifecycle stages are defined in the [Versioning and Stability](versioning-and-stability.md) document.
 
-|Status              |Explanation|
-|--------------------|-----------|
-|No explicit "Status"|Equivalent to Development.|
-|Development        |Breaking changes are allowed.|
-|Stable              |Breaking changes are no longer allowed. See [stability guarantees](versioning-and-stability.md#stable) for details.|
-|Deprecated          |Changes are no longer allowed, except for editorial changes.|
+| Status               | Explanation                                                                                                         |
+|----------------------|---------------------------------------------------------------------------------------------------------------------|
+| No explicit "Status" | Equivalent to Development.                                                                                          |
+| Development          | Breaking changes are allowed.                                                                                       |
+| Release Candidate    | Breaking changes are only allowed under special circumstances.                                                      |
+| Stable               | Breaking changes are no longer allowed. See [stability guarantees](versioning-and-stability.md#stable) for details. |
+| Deprecated           | Changes are no longer allowed, except for editorial changes.                                                        |
 
 The specification follows
 [OTEP 0232](../oteps/0232-maturity-of-otel.md#explanation)
