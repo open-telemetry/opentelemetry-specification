@@ -27,6 +27,9 @@ release.
 
 ### SDK Configuration
 
+- List declarative config supported SDK extension plugin interfaces.
+  ([#4452](https://github.com/open-telemetry/opentelemetry-specification/pull/4452))
+
 ### Common
 
 ### Supplementary Guidelines
