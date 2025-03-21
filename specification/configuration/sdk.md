@@ -126,7 +126,7 @@ configuration model interpretation.
 The [configuration data model](./data-model.md) SHOULD support configuration of
 all SDK extension plugin interfaces. SDKs SHOULD
 support [registration](#register-componentprovider) of custom implementations of
-SDK extension plugin interfaces via the `ComponentProvider mechanism.
+SDK extension plugin interfaces via the `ComponentProvider` mechanism.
 
 The following table lists the current status of all SDK extension plugin
 interfaces in the configuration data model:
