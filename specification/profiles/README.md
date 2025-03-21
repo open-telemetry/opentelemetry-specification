@@ -5,3 +5,6 @@ path_base_for_github_subdir:
 --->
 
 # Profiles
+
+The Profiles signal MUST NOT use the Resource["code.*"] attributes as they
+are covered by the Profiles signal itself.
