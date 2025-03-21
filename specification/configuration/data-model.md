@@ -87,7 +87,7 @@ DIGIT = %x30-39 ; 0-9
 reference:
 
 * Must start with `${`
-* Must follow with any number of printicple characters and whitespace except `}`
+* Must follow with any number of printable characters and whitespace except `}`
 * Must follow with `}`
 
 For convenience, `SUBSTITUTION-REF` and `INVALID-SUBSTITUTION-REF` are expressed
