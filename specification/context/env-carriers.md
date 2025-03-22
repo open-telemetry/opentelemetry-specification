@@ -8,28 +8,17 @@
 <!-- toc -->
 
 - [Overview](#overview)
-- [Environment Variable Propagator](#environment-variable-propagator)
-  * [Standard Environment Variable Names](#standard-environment-variable-names)
-  * [Environment Variable Format Restrictions](#environment-variable-format-restrictions)
-    + [Key Format Restrictions](#key-format-restrictions)
-    + [Value Format Restrictions](#value-format-restrictions)
+- [Propagator Mechanisms](#propagator-mechanisms)
+  * [Environment Variable Names](#environment-variable-names)
+  * [Format Restrictions](#format-restrictions)
+    + [Name Restrictions](#name-restrictions)
+    + [Value Restrictions](#value-restrictions)
     + [Size Limitations](#size-limitations)
-  * [Implementation Details](#implementation-details)
-    + [EnvVarTextMapPropagator](#envvartextmappropagator)
-    + [EnvVarGetter](#envvargetter)
-      - [Get](#get)
-      - [Keys](#keys)
-      - [GetAll](#getall)
-    + [EnvVarSetter](#envvarsetter)
-      - [Set](#set)
   * [Operational Guidance](#operational-guidance)
     + [Environment Variable Immutability](#environment-variable-immutability)
     + [Process Spawning](#process-spawning)
-    + [Security Considerations](#security-considerations)
-- [Cross-Platform Considerations](#cross-platform-considerations)
-  * [Case Sensitivity](#case-sensitivity)
-  * [UNIX-Specific Considerations](#unix-specific-considerations)
-  * [Windows-Specific Considerations](#windows-specific-considerations)
+    + [Security](#security)
+    * [Case Sensitivity](#case-sensitivity)
 
 <!-- tocstop -->
 
@@ -40,8 +29,9 @@
 Environment variables provide a mechanism to propagate context and baggage
 information across process boundaries when network protocols are not
 applicable. This specification extends the [API Propagators](../context/api-propagators.md)
-to define how the [TextMapPropagator](../context/api-propagators.md#textmap-propagator)
-can be used with environment variables.
+to define how the
+[TextMapPropagator](../context/api-propagators.md#textmap-propagator) can be
+used with environment variables.
 
 Common systems where context propagation via environment variables is useful
 include:
@@ -54,10 +44,10 @@ include:
 
 Propagating context via environment variables involves reading and writing to
 environment variables. A `TextMapPropagator` SHOULD be used alongside its
-normal `Get`, `Set`, and `Inject` functionality as described in the [API
+normal `Get`, `Set`, `Extract`, and `Inject` functionality as described in the [API
 Propagators](../context/api-propagators.md) specification.
 
-### Standard Environment Variable Names
+### Environment Variable Names
 
 It is RECOMMENDED to use the [W3C Trace
 Context](https://www.w3.org/TR/trace-context/) and [W3C
@@ -77,9 +67,9 @@ be used:
 Implementations MAY support additional propagation formats and SHOULD provide
 configuration options to override the default environment variable.
 
-### Environment Variable Format Restrictions
+### Format Restrictions
 
-#### Key Format Restrictions
+#### Name Restrictions
 
 Environment variable names used for context propagation:
 
@@ -90,7 +80,7 @@ Environment variable names used for context propagation:
 - SHOULD follow naming conventions that align with the propagation format
   specification they're implementing (e.g., `TRACEPARENT` for W3C trace context)
 
-#### Value Format Restrictions
+#### Value Restrictions
 
 Environment variable values used for context propagation:
 
@@ -112,118 +102,48 @@ limitations:
 Implementations SHOULD handle truncation gracefully when size limits are
 exceeded.
 
-### Implementation Details
-
-#### EnvVarTextMapPropagator
-
-The `EnvPropagator` implements the `TextMapPropagator` interface to enable
-context propagation through environment variables. It uses specialized `EnvGetter` and
-`EnvSetter` implementations that work with environment variables.
-
-#### EnvGetter
-
-The `EnvGetter` implements the TextMapPropagator's Getter interface for
-environment variables.
-
-##### Get
-
-The `Get` function MUST return the value of the specified environment variable
-or return null if the variable doesn't exist.
-
-Required arguments:
-- The carrier of propagation fields (typically the environment variable store)
-- The key of the field
-
-The `Get` function MUST handle case-sensitivity appropriately across platforms.
-On Windows, where environment variables are case-insensitive, the getter SHOULD
-perform case-insensitive lookups.
-
-##### Keys
-
-The `Keys` function MUST return the list of all environment variable names in
-the carrier.
-
-Required arguments:
-- The carrier of the propagation fields (typically the environment variable
-  store)
-
-##### GetAll
-
-The `GetAll` function MUST return all values of the given propagation key, if
-supported. It SHOULD return them in the same order as they appear in the
-carrier. If the key doesn't exist, it SHOULD return an empty collection.
-
-Required arguments:
-- The carrier of propagation fields (typically the environment variable store)
-- The key of the field
-
-#### EnvSetter
-
-The `EnvSetter` implements the TextMapPropagator's Setter interface for environment variables.
-
-##### Set
-
-The `Set` function MUST set or replace an environment variable with the given value.
-
-Required arguments:
-- The carrier of propagation fields (typically the environment variable store)
-- The key of the field
-- The value to set
-
-The `Set` function SHOULD convert environment variable names to uppercase for consistency across platforms.
-
 ### Operational Guidance
 
 #### Environment Variable Immutability
 
-Once set for a process, environment variables SHOULD be treated as immutable within that process:
+Once set for a process, environment variables SHOULD be treated as immutable
+within that process:
 
-- Environment variables SHOULD only be modified before spawning child processes
-- Applications SHOULD NOT modify context-related environment variables during execution, as this can lead to inconsistent trace contexts
-- If modification is required, applications SHOULD create a new environment variables dictionary with the updated values for the child process
+- Environment variables SHOULD only be modified before the creation of one or
+  more child processes occur.
+- Applications SHOULD NOT modify context-related environment variables during
+  execution within the environment in which they were created, as this can lead
+  to inconsistent trace contexts.
+- If modification is required, applications SHOULD create a new environment
+  variables dictionary with the updated values for the child process.
 
 #### Process Spawning
 
 When spawning child processes:
 
-- Parent processes SHOULD inject context into environment variables before spawning child processes
-- Child processes SHOULD extract context from environment variables at startup
-- When spawning multiple child processes with different contexts, each child SHOULD receive its own copy of the environment variables with appropriate context information
+- Parent processes SHOULD inject context into environment variables before
+  spawning child processes.
+- Child processes SHOULD extract context from environment variables at startup.
+- When spawning multiple child processes with different contexts or baggage,
+  each child SHOULD receive its own copy of the environment variables with
+  appropriate information.
 
-#### Security Considerations
+#### Security
 
-Environment variables are generally accessible to all code running within a process:
+Environment variables are generally accessible to all code running within a
+process and with the correct permissions, can be accessed from other processes.
 
-- Implementations SHOULD NOT store sensitive information in context propagation via environment variables
-- Applications running in multi-tenant environments SHOULD be aware that environment variables may be visible to other processes or users with appropriate permissions
-- When using environment variables for context propagation, consider the security implications of propagating trace context across trust boundaries
+- Implementations SHOULD NOT store sensitive information in environment
+  variables.
+- Applications running in multi-tenant environments SHOULD be aware that
+  environment variables may be visible to other processes or users with
+  appropriate permissions.
 
-## Cross-Platform Considerations
+#### Case Sensitivity
 
-### Case Sensitivity
+Environment variable names are case-sensitive on UNIX and case-insensitive on
+Windows.
 
-- Environment variable names are case-sensitive on UNIX but case-insensitive on Windows
 - For maximum compatibility, implementations SHOULD:
-  - Use uppercase names consistently (`TRACEPARENT` not `TraceParent`)
-  - Handle case-insensitivity correctly when reading environment variables on Windows
-  - Always use the canonical case when setting environment variables
-
-### UNIX-Specific Considerations
-
-- UNIX systems generally use uppercase for environment variables by convention
-- Environment variables in UNIX are typically inherited by child processes unless explicitly cleared
-- The maximum size of environment variables varies by system and should be considered when implementing
-
-### Windows-Specific Considerations
-
-- Windows environment variables are case-insensitive but case-preserving
-- Windows has a larger maximum environment variable size limit (32,767 characters)
-- Some Windows APIs may have different behavior regarding environment variable inheritance in child processes
-
-<!-- TODO --> 
-## Implementation Guidelines
-
-- SDKs SHOULD automatically detect and extract context from environment variables when initializing
-- When spawning child processes, SDKs SHOULD automatically inject current context into the child's environment
-- Implementations MUST provide mechanisms to disable automatic propagation when needed
-- The presence of these variables SHOULD NOT override explicitly configured context
+  - Use uppercase names consistently (`TRACEPARENT` not `TraceParent`).
+  - Use the canonical case when setting environment variables.
