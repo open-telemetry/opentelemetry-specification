@@ -18,7 +18,7 @@
     + [Environment Variable Immutability](#environment-variable-immutability)
     + [Process Spawning](#process-spawning)
     + [Security](#security)
-    * [Case Sensitivity](#case-sensitivity)
+    + [Case Sensitivity](#case-sensitivity)
 
 <!-- tocstop -->
 
