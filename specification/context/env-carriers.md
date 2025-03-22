@@ -37,31 +37,36 @@
 
 ## Overview
 
-In systems where processes communicate without using network protocols, context
-propagation can be achieved using environment variables as carriers. This
-specification extends the [API Propagators](../context/api-propagators.md) to
-define how the
-[TextMapPropagator](../context/api-propagators.md#textmap-propagator) can be
-used with environment variables.
+Environment variables provide a mechanism to propagate context and baggage
+information across process boundaries when network protocols are not
+applicable. This specification extends the [API Propagators](../context/api-propagators.md)
+to define how the [TextMapPropagator](../context/api-propagators.md#textmap-propagator)
+can be used with environment variables.
 
-Common scenarios where this is useful include:
+Common systems where context propagation via environment variables is useful
+include:
 
-- ETL pipelines
 - Batch processing systems
 - CI/CD environments
 - Command-line tools
 
-## Environment Variable Propagator
+## Propagator Mechanisms
+
+Propagating context via environment variables involves reading and writing to
+environment variables. A `TextMapPropagator` SHOULD be used alongside its
+normal `Get`, `Set`, and `Inject` functionality as described in the [API
+Propagators](../context/api-propagators.md) specification.
 
 ### Standard Environment Variable Names
 
-The OpenTelemetry supported specifications for context propagation SHOULD be
-mapped to environment variables. It is RECOMMENDED to use the [W3C Trace Context](https://www.w3.org/TR/trace-context/)
-and [W3C Baggage](https://www.w3.org/TR/baggage/) specifications mapped to
-environment variables names.
+It is RECOMMENDED to use the [W3C Trace
+Context](https://www.w3.org/TR/trace-context/) and [W3C
+Baggage](https://www.w3.org/TR/baggage/) specifications mapped to environment
+variables names for consistent context propagation.
 
 When using the W3C Trace Context and Baggage propagators with environment
-variables, the following standard environment variable names MUST be used:
+variables, the following translated standard environment variable names SHOULD
+be used:
 
 | Context Information | Environment Variable | W3C Header Equivalent |
 |---------------------|----------------------|------------------------|
@@ -70,8 +75,7 @@ variables, the following standard environment variable names MUST be used:
 | Baggage             | `BAGGAGE`            | `baggage`              |
 
 Implementations MAY support additional propagation formats and SHOULD provide
-configuration options to override the default environment variable names to
-support legacy systems.
+configuration options to override the default environment variable.
 
 ### Environment Variable Format Restrictions
 
@@ -215,3 +219,11 @@ Environment variables are generally accessible to all code running within a proc
 - Windows environment variables are case-insensitive but case-preserving
 - Windows has a larger maximum environment variable size limit (32,767 characters)
 - Some Windows APIs may have different behavior regarding environment variable inheritance in child processes
+
+<!-- TODO --> 
+## Implementation Guidelines
+
+- SDKs SHOULD automatically detect and extract context from environment variables when initializing
+- When spawning child processes, SDKs SHOULD automatically inject current context into the child's environment
+- Implementations MUST provide mechanisms to disable automatic propagation when needed
+- The presence of these variables SHOULD NOT override explicitly configured context
