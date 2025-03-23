@@ -52,7 +52,7 @@ Propagators](../context/api-propagators.md) specification.
 It is RECOMMENDED to use the [W3C Trace
 Context](https://www.w3.org/TR/trace-context/) and [W3C
 Baggage](https://www.w3.org/TR/baggage/) specifications mapped to environment
-variables names for consistent context propagation.
+variable names for consistent context propagation.
 
 When using the W3C Trace Context and Baggage propagators with environment
 variables, the following translated standard environment variable names SHOULD
