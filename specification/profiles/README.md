@@ -6,5 +6,11 @@ path_base_for_github_subdir:
 
 # Profiles
 
-The Profiles signal MUST NOT use the Resource["code.*"] attributes as they
-are covered by the Profiles signal itself.
+## Attribute handling exception
+
+The resource attribute within the `code.*` namespace MUST NOT be utilized within the scope of the
+OTel profiles signal. This constraint is imposed to prevent redundancy and maintain data integrity.
+The OTel profiles signal is specifically designed to efficiently encode stacktraces and symbolization
+information, rendering the inclusion of resource attributes within the `code.*` namespace unnecessary
+and potentially duplicative. Consequently, this attribute is explicitly excluded from use within the
+context of OTel profiles.
