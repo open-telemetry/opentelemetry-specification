@@ -109,11 +109,10 @@ exceeded.
 Once set for a process, environment variables SHOULD be treated as immutable
 within that process:
 
-- Environment variables SHOULD only be modified before the creation of one or
-  more child processes occur.
-- Applications SHOULD NOT modify context-related environment variables during
-  execution within the environment in which they were created, as this can lead
-  to inconsistent trace contexts.
+- Applications SHOULD read context-related environment variables during
+  initialization.
+- Applications SHOULD NOT modify environment variables on initialization of
+  environment in which the parent process exists.
 - If modification is required, applications SHOULD create a new environment
   variables dictionary with the updated values for the child process.
 
