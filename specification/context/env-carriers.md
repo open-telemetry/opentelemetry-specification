@@ -59,10 +59,10 @@ variables, the following translated standard environment variable names SHOULD
 be used:
 
 | Context Information | Environment Variable | W3C Header Equivalent |
-|---------------------|----------------------|------------------------|
-| Trace Context       | `TRACEPARENT`        | `traceparent`          |
-| Trace State         | `TRACESTATE`         | `tracestate`           |
-| Baggage             | `BAGGAGE`            | `baggage`              |
+|---------------------|----------------------|-----------------------|
+| Trace Context       | `TRACEPARENT`        | `traceparent`         |
+| Trace State         | `TRACESTATE`         | `tracestate`          |
+| Baggage             | `BAGGAGE`            | `baggage`             |
 
 Implementations MAY support additional propagation formats and SHOULD provide
 configuration options to override the default environment variable.
@@ -96,7 +96,7 @@ Implementations SHOULD follow platform-specific environment variable size
 limitations:
 
 - Windows: Maximum 32,767 characters for name=value pairs according to
-  [Microsoft Documentation](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
+  [Microsoft Documentation](https://docs.microsoft.com/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
 - UNIX: System-dependent limits exist and are typically lower than Windows.
 
 Implementations SHOULD handle truncation gracefully when size limits are
@@ -111,7 +111,7 @@ within that process:
 
 - Applications SHOULD read context-related environment variables during
   initialization.
-- Applications SHOULD NOT modify environment variables on initialization of
+- Applications SHOULD NOT modify context-related environment variables of the
   environment in which the parent process exists.
 - If modification is required, applications SHOULD create a new environment
   variables dictionary with the updated values for the child process.
