@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Add `Enabled` opt-in operation to the `LogRecordProcessor`.
+  ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
+
 ### Baggage
 
 ### Resource
