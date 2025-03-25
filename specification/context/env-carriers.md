@@ -113,15 +113,13 @@ within that process:
   initialization.
 - Applications SHOULD NOT modify context-related environment variables of the
   environment in which the parent process exists.
-- If modification is required, applications SHOULD create a new environment
-  variables dictionary with the updated values for the child process.
 
 #### Process Spawning
 
 When spawning child processes:
 
-- Parent processes SHOULD inject context into environment variables before
-  spawning child processes.
+- Parent processes SHOULD copy the current environment variables (if
+  applicable), modify, and inject context when spawning child processes.
 - Child processes SHOULD extract context from environment variables at startup.
 - When spawning multiple child processes with different contexts or baggage,
   each child SHOULD receive its own copy of the environment variables with
@@ -143,6 +141,6 @@ process and with the correct permissions, can be accessed from other processes.
 Environment variable names are case-sensitive on UNIX and case-insensitive on
 Windows.
 
-- For maximum compatibility, implementations SHOULD:
+- For maximum compatibility, implementations MUST:
   - Use uppercase names consistently (`TRACEPARENT` not `TraceParent`).
   - Use the canonical case when setting environment variables.
