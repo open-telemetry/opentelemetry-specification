@@ -99,8 +99,13 @@ limitations:
   [Microsoft Documentation](https://docs.microsoft.com/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
 - UNIX: System-dependent limits exist and are typically lower than Windows.
 
-Implementations SHOULD handle truncation gracefully when size limits are
-exceeded.
+When truncation is required due to size limitations, implementations MUST
+truncate whole entries. Truncation SHOULD start at the end of the entry list.
+Implementers MUST document how graceful truncation is handled and SHOULD
+provide the link to the corresponding specification (e.g., [W3C tracestate
+Truncation guidance][w3c-truncation]).
+
+[w3c-truncation]: https://www.w3.org/TR/trace-context/#tracestate-limits
 
 ### Operational Guidance
 
