@@ -28,6 +28,7 @@ path_base_for_github_subdir:
 - API Specification
   - [Context](context/README.md)
     - [Propagators](context/api-propagators.md)
+    - [Environment Variable Carriers](context/env-carriers.md)
   - [Baggage](baggage/api.md)
   - [Tracing](trace/api.md)
   - [Metrics](metrics/api.md)
