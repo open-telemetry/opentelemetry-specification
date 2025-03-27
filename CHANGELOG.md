@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Add context propagation through Environment Variables specification.
+    ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
+
 ### Traces
 
 ### Metrics
@@ -19,6 +22,9 @@ release.
   ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
 
 ### Baggage
+
+- Add context (baggage) propagation through Environment Variables specification.
+    ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
 
 ### Resource
 

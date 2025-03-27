@@ -183,6 +183,10 @@ The API layer or an extension package MUST include the following `Propagator`s:
 See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
 for how propagators are to be distributed.
 
+See [Environment Variable Carriers](../context/env-carriers.md) for how propagation should
+be handled when using environment variables as a carrier mechanism between
+processes.
+
 Note: The W3C baggage specification does not currently assign semantic meaning
 to the optional metadata.
 
