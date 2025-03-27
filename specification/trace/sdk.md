@@ -530,7 +530,7 @@ This flag indicates that [the least-significant ("rightmost") 7 bytes or 56 bits
 Note the Random flag does not propagate through [Trace Context Level 1][W3CCONTEXTLEVEL1] implementations, which do not recognize the flag.
 When this flag is 1, it is considered meaningful.  When this flag is 0, it may be due to a non-random TraceID or because a Trace Context Level 1 propagator was used.
 To enable sampling in this and other situations where TraceIDs lack sufficient randomness,
-OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encoded in the [W3C TraceState field][W3CCONTEXTTRACESTATE].
+OpenTelemetry defines an optional [explicit trace randomness value][OTELRVALUE] encoded in the [W3C TraceState field][W3CCONTEXTTRACESTATE].
 
 This specification recommends the use of either TraceID randomness or explicit trace randomness,
 which ensures that samplers always have sufficient randomness when using W3C Trace Context propagation.
@@ -579,7 +579,7 @@ OpenTelemetry TraceState value in cases where an explicit trace
 randomness value is not already set.
 
 For example, here's a W3C Trace Context with non-random identifiers and an
-explicit randomness value:
+explicit trace randomness value:
 
 ```
 traceparent: 00-ffffffffffffffffffffffffffffffff-ffffffffffffffff-00
@@ -588,7 +588,7 @@ tracestate: ot=rv:7479cfb506891d
 
 #### Presumption of TraceID randomness
 
-For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
+For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit trace randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
 
 #### IdGenerator randomness
 
