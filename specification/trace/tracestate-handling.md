@@ -156,7 +156,7 @@ This corresponds with 25% sampling probability, as follows:
 
 - The hexadecimal value `c` is extended to `c0000000000000` for 56 bits
 - The rejection threshold is `0xc0000000000000 / 0x100000000000000` which is 75%
-- The sapmpling probability is 25%.
+- The sampling probability is 25%.
 
 ### Explicit randomness value `rv`
 
