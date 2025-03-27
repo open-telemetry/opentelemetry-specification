@@ -159,11 +159,11 @@ export STRING_VALUE="value"
 export BOOL_VALUE="true"
 export INT_VALUE="1"
 export FLOAT_VALUE="1.1"
-export HEX_VALUE="0xdeadbeef"                         # A valid integer value (i.e. 3735928559) written in hexadecimal
-export INVALID_MAP_VALUE="value\nkey:value"           # An invalid attempt to inject a map key into the YAML
-export DO_NOT_REPLACE_ME="Never use this value"       # An unused environment variable
-export REPLACE_ME='${DO_NOT_REPLACE_ME}'              # A valid replacement text, used verbatim, not replaced with "Never use this value"
-export VALUE_WITH_ESCAPE='value$$'              # A valid replacement text, used verbatim, not replaced with "Never use this value"
+export HEX_VALUE="0xdeadbeef"                   # A valid integer value (i.e. 3735928559) written in hexadecimal
+export INVALID_MAP_VALUE="value\nkey:value"     # An invalid attempt to inject a map key into the YAML
+export DO_NOT_REPLACE_ME="Never use this value" # An unused environment variable
+export REPLACE_ME='${DO_NOT_REPLACE_ME}'        # A valid replacement text, used verbatim, not replaced with "Never use this value"
+export VALUE_WITH_ESCAPE='value$$'              # A valid variable substituted without escaping
 ```
 
 | YAML - input                               | YAML - post substitution             | Resolved Tag URI          | Notes                                                                                                                                             |
