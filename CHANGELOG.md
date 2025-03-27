@@ -19,7 +19,7 @@ release.
   ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
 - Document `Extended Attributes` as the recommended term for new types representing 
   extended attributes.
-  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+  ([#4462](https://github.com/open-telemetry/opentelemetry-specification/pull/4462))
 
 ### Baggage
 
