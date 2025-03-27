@@ -204,6 +204,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | SimpleLogRecordProcessor                     |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | BatchLogRecordProcessor                      |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | Can plug custom LogRecordProcessor           |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
+| LogRecordProcessor.Enabled                   | X        | +   |      |     |        |      |        |     |      |     |      |       |
 | OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      | +   | -    |       |

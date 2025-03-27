@@ -11,24 +11,21 @@ release.
 
 ### Traces
 
-- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
-  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
-  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
 - Deprecate `exception.escaped` attribute, add link to in-development semantic-conventions
   on how to record errors across signals.
   ([#4368](https://github.com/open-telemetry/opentelemetry-specification/pull/4368))
 - Clarify STDOUT exporter format is unspecified.
   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
+  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
+  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
 
 ### Metrics
 
-- Clarify STDOUT exporter format is unspecified.
-   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
-
 ### Logs
 
-- Clarify STDOUT exporter format is unspecified.
-   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+- Add `Enabled` opt-in operation to the `LogRecordProcessor`.
+  ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
 
 ### Baggage
 
@@ -42,7 +39,37 @@ release.
 
 ### SDK Configuration
 
+- Convert declarative config env var substitution syntax to ABNF.
+  ([#4448](https://github.com/open-telemetry/opentelemetry-specification/pull/4448))
+- List declarative config supported SDK extension plugin interfaces.
+  ([#4452](https://github.com/open-telemetry/opentelemetry-specification/pull/4452))
+
 ### Common
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.43.0 (2025-03-18)
+
+### Traces
+
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+
+### Metrics
+
+- Clarify the metrics design goal, scope out StatsD client support.
+   ([#4445](https://github.com/open-telemetry/opentelemetry-specification/pull/4445))
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
+
+### Logs
+
+- Clarify that it is allowed to directly use Logs API.
+   ([#4438](https://github.com/open-telemetry/opentelemetry-specification/pull/4438))
+- Clarify STDOUT exporter format is unspecified.
+   ([#4418](https://github.com/open-telemetry/opentelemetry-specification/pull/4418))
 
 ### Supplementary Guidelines
 
@@ -50,6 +77,9 @@ release.
   ([#4407](https://github.com/open-telemetry/opentelemetry-specification/pull/4407))
 
 ### OTEPs
+
+- Composite Head Samplers.
+  ([#4321](https://github.com/open-telemetry/opentelemetry-specification/pull/4321))
 
 ## v1.42.0 (2025-02-18)
 
