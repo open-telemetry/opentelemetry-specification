@@ -40,9 +40,9 @@ linkTitle: SDK
   * [Sampling Requirements](#sampling-requirements)
     + [TraceID randomness](#traceid-randomness)
     + [Random trace flag](#random-trace-flag)
-    + [Explicit trace randomness](#explicit-trace-randomness)
-      - [Do not overwrite explicit trace randomness](#do-not-overwrite-explicit-trace-randomness)
-      - [Root samplers set explicit trace randomness for non-random TraceIDs](#root-samplers-set-explicit-trace-randomness-for-non-random-traceids)
+    + [Explicit randomness](#explicit-randomness)
+      - [Do not overwrite explicit randomness](#do-not-overwrite-explicit-randomness)
+      - [Root samplers set explicit randomness for non-random TraceIDs](#root-samplers-set-explicit-randomness-for-non-random-traceids)
     + [Presumption of TraceID randomness](#presumption-of-traceid-randomness)
     + [IdGenerator randomness](#idgenerator-randomness)
 - [Span Limits](#span-limits)
@@ -416,7 +416,7 @@ it makes a probability decision directly from the TraceID, even though
 it was not originally specified in an exact way.  In the present
 specification, the Sampler decision is more nuanced: only a portion of
 the identifier is used, after checking whether the OpenTelemetry
-TraceState field contains an explicit trace randomness value.
+TraceState field contains an explicit randomness value.
 
 [W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
 
@@ -452,7 +452,7 @@ had a sampling ratio of 1 to every 10,000 spans it could return
 This specification has been revised from the original
 `TraceIdRatioBased` Sampler definition.  The present definition for
 `TraceIdRatioBased` uses a new definition for trace randomness, where
-unless an explicit trace randomness value is set in the OpenTelemetry
+unless an explicit randomness value is set in the OpenTelemetry
 TraceState `rv` sub-key, Samplers are meant to presume that TraceIDs
 contain the necessary 56 bits of randomness.
 
@@ -530,9 +530,9 @@ This flag indicates that [the least-significant ("rightmost") 7 bytes or 56 bits
 Note the Random flag does not propagate through [Trace Context Level 1][W3CCONTEXTLEVEL1] implementations, which do not recognize the flag.
 When this flag is 1, it is considered meaningful.  When this flag is 0, it may be due to a non-random TraceID or because a Trace Context Level 1 propagator was used.
 To enable sampling in this and other situations where TraceIDs lack sufficient randomness,
-OpenTelemetry defines an optional [explicit trace randomness value][OTELRVALUE] encoded in the [W3C TraceState field][W3CCONTEXTTRACESTATE].
+OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encoded in the [W3C TraceState field][W3CCONTEXTTRACESTATE].
 
-This specification recommends the use of either TraceID randomness or explicit trace randomness,
+This specification recommends the use of either TraceID randomness or explicit randomness,
 which ensures that samplers always have sufficient randomness when using W3C Trace Context propagation.
 
 [W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
@@ -551,35 +551,35 @@ For root span contexts, the SDK SHOULD implement the TraceID randomness requirem
 
 For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags when it generates TraceIDs that meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID].
 
-#### Explicit trace randomness
+#### Explicit randomness
 
-Explicit trace randomness is a mechanism that enables API users and
+Explicit randomness is a mechanism that enables API users and
 SDK authors to control trace randomness.  The following recommendation
 applies to Trace SDKs that have disregarded the recommendation on
 TraceID randomness, above.  It has two parts.
 
-##### Do not overwrite explicit trace randomness
+##### Do not overwrite explicit randomness
 
 API users control the initial TraceState of a root span, so they can
-provide explicit trace randomness for a trace by defining the [`rv`
+provide explicit randomness for a trace by defining the [`rv`
 sub-key of the OpenTelemetry TraceState][OTELRVALUE].  SDKs and Samplers
-MUST NOT overwrite explicit trace randomness in an OpenTelemetry TraceState
+MUST NOT overwrite explicit randomness in an OpenTelemetry TraceState
 value.
 
-##### Root samplers set explicit trace randomness for non-random TraceIDs
+##### Root samplers set explicit randomness for non-random TraceIDs
 
 When the SDK has generated a TraceID that does not meet the [W3C Trace
 Context Level 2 randomness requirements][W3CCONTEXTTRACEID], indicated
 by an unset trace random flag, and when the the [`rv` sub-key of the
 OpenTelemetry TraceState][OTELRVALUE] is not already set, the Root
-sampler has the opportunity to insert explicit trace randomness.
+sampler has the opportunity to insert an explicit randomness value.
 
-Root Samplers MAY insert an explicit trace randomness value into the
-OpenTelemetry TraceState value in cases where an explicit trace
+Root Samplers MAY insert an explicit randomness value into the
+OpenTelemetry TraceState value in cases where an explicit
 randomness value is not already set.
 
 For example, here's a W3C Trace Context with non-random identifiers and an
-explicit trace randomness value:
+explicit randomness value:
 
 ```
 traceparent: 00-ffffffffffffffffffffffffffffffff-ffffffffffffffff-00
@@ -588,7 +588,7 @@ tracestate: ot=rv:7479cfb506891d
 
 #### Presumption of TraceID randomness
 
-For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit trace randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
+For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
 
 #### IdGenerator randomness
 

@@ -146,7 +146,7 @@ The adjusted count of a span is the inverse of its sampling probability and can 
 AdjustedCount = MaxAdjustedCount / (MaxAdjustedCount - Threshold)
 ```
 
-For example, here is a W3C TraceState value including an OpenTelemetry sampling thresohld value:
+For example, here is a W3C TraceState value including an OpenTelemetry sampling threshold value:
 
 ```
 tracestate: ot=th:c
@@ -165,7 +165,7 @@ Values of `rv` MUST be exactly 14 lower-case hexadecimal digits:
 
 The explicit randomness value is meant to be used instead of extracting randomness from TraceIDs, therefore it contains the same number of bits as W3C Trace Context Level 2 recommends for TraceIDs.
 
-Lowercase hexadecimal digits are specified to enable direct lexicographical comparison between a sampling thresohld and either the TraceID (as it appears in the `traceparent` header) or the explicit randomness value (as it appears in the `tracestate` header).
+Lowercase hexadecimal digits are specified to enable direct lexicographical comparison between a sampling threshold and either the TraceID (as it appears in the `traceparent` header) or the explicit randomness value (as it appears in the `tracestate` header).
 
 Explicit randomness values are meant to propagate through [span contexts](../context/README.md) unmodified.
 Explicit randomness values SHOULD NOT be erased from the OpenTelemetry TraceState or modified once associated with a new TraceID, so that sampling decisions made using the explicit randomness value are consistent across signals.
@@ -177,4 +177,4 @@ tracestate: ot=rv:6e6d1a75832a2f
 ```
 
 This corresponds with the explicit randomness value, an unsigned integer value, of 0x6e6d1a75832a2f. This randomness value is meant to be used instead of the least-significant 56 bits of the TraceID.
-In this example, the 56-bit fraction (i.e., 0x6e6d1a75832a2f / 0x100000000000000 = 43.1%) supports making a consistent positive sampling decision at probabilities ranging from 56.9% through 100% (i.e., rejection thresohld values 0x6e6d1a75832a2f through 0), the same as for a hexadecimal TraceID ending in 6e6d1a75832a2f without explicit randomness value.
+In this example, the 56-bit fraction (i.e., 0x6e6d1a75832a2f / 0x100000000000000 = 43.1%) supports making a consistent positive sampling decision at probabilities ranging from 56.9% through 100% (i.e., rejection threshold values 0x6e6d1a75832a2f through 0), the same as for a hexadecimal TraceID ending in 6e6d1a75832a2f without explicit randomness value.
