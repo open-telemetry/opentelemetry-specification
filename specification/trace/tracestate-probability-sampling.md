@@ -36,13 +36,23 @@ linkTitle: Probability Sampling
 
 ## Overview
 
-Sampling is an important lever to reduce the costs associated with collecting and processing telemetry data. It enables you to choose a representative set of items from an overall population.
+Sampling is an important lever to reduce the costs associated with collecting and processing telemetry data.
+It enables you to choose a representative set of items from an overall population.
 
-There are two key aspects for sampling of tracing data. The first is that sampling decisions can be made independently for *each* span in a trace. The second is that sampling decisions can be made at multiple points in the telemetry pipeline. For example, the sampling decision for a span at span creation time could have been to **keep** that span, while the downstream sampling decision for the *same* span at a later stage (say in an external process in the data collection pipeline) could be to **drop** it.
+There are two key aspects for sampling of tracing data.
+The first is that sampling decisions can be made independently for *each* span in a trace.
+The second is that sampling decisions can be made at multiple points in the telemetry pipeline.
+For example, the sampling decision for a span at span creation time could have been to **keep** that span, while the downstream sampling decision for the *same* span at a later stage (say in an external process in the data collection pipeline) could be to **drop** it.
 
-For each of the above aspects, if we don't make **consistent** sampling decisions, we will end up with traces that are unusable and do not contain a coherent set of spans, because of the independent sampling decisions. Instead, we want sampling decisions to be made in a **consistent** manner so that we can effectively reason about a trace.
+For each of the above aspects, if we don't make **consistent** sampling decisions, we will end up with traces that are unusable and do not contain a coherent set of spans, because of the independent sampling decisions.
+Instead, we want sampling decisions to be made in a **consistent** manner so that we can effectively reason about a trace.
 
-This specification describes a mechanism to achieve such consistent sampling decisions using a mechanism called **Consistent Probability Sampling**. To achieve this, it uses two key building blocks. The first is a common source of randomness (R) that is available to all participants, which includes a set of tracers and collectors. This can be either a custom value (called `rv`) or taken from the trailing 7 bytes of the TraceID. The second is a concept of a rejection threshold (T). This is derived directly from a participant's sampling rate. This proposal describes how these two values should be propagated and how participants should use them to make sampling decisions.
+This specification describes how to achieve consistent sampling decisions using a mechanism called **Consistent Probability Sampling**.
+To achieve this, it uses two key building blocks.
+The first is a common source of randomness (R) that is available to all participants, which includes a set of tracers and collectors.
+This can be either an explicit randomness value (called `rv`) or taken from the trailing 7 bytes of the TraceID.
+The second is a concept of a rejection threshold (T). This is derived directly from a participant's sampling rate.
+This proposal describes how these two values should be propagated and how participants should use them to make sampling decisions.
 
 For more details about this specification, see [OTEP 235](https://github.com/open-telemetry/oteps/blob/main/text/trace/0235-sampling-threshold-in-trace-state.md).
 
@@ -50,9 +60,12 @@ For more details about this specification, see [OTEP 235](https://github.com/ope
 
 ### Sampling Probability
 
-Sampling probability is the likelihood that a span will be *kept*. Each participant can choose a different sampling probability for each span. For example, if the sampling probability is 0.25, around 25% of the spans will be kept.
+Sampling probability is the likelihood that a span will be *kept*. Each participant can choose a different sampling probability for each span.
+For example, if the sampling probability is 0.25, around 25% of the spans will be kept.
 
-Sampling probability is valid in the range 2^-56 through 1.  The value 56 appearing in this expression corresponds with 7 bytes of randomness (i.e., 56 bits) which are specified for W3C Trace Context Level 2 TraceIDs.  Note that the zero value is not defined and that "never" sampling is not a form of probability sampling.
+In OpenTelemetry, sampling probability is valid in the range 2^-56 through 1.
+The value 56 appearing in this expression corresponds with 7 bytes of randomness (i.e., 56 bits) which are specified for W3C Trace Context Level 2 TraceIDs.
+Note that the zero value is not defined and that "never" sampling is not a form of probability sampling.
 
 ### Consistent Sampling Decision
 
@@ -60,7 +73,8 @@ A consistent sampling decision means that a positive sampling decision made for 
 
 ### Rejection Threshold (T)
 
-This is a 56-bit value directly derived from the sampling probability. One way to think about this is that this is the number of spans that would be *dropped* out of 2^56 considered spans. [This is an alternative to the `p` value in the previous specification. The `p` value is limited to powers of two, while this supports a large range of values.](./tracestate-probability-sampling-experimental.md)
+This is a 56-bit value directly derived from the sampling probability.
+One way to think about this is that this is the number of spans that would be *dropped* out of 2^56 considered spans.
 
 You can derive the rejection threshold from the sampling probability as follows:
 
@@ -72,13 +86,16 @@ For example, if the sampling probability is 100% (keep all spans), the rejection
 
 Similarly, if the sampling probability is 1% (drop 99% of spans), the rejection threshold with 5 digits of precision would be (1-0.01) * 2^56 ≈ 71337018784743424 = 0xfd70a400000000.
 
-We refer to this rejection threshold conceptually as `T`. We represent it using the OpenTelemetry TraceState key `th`, where the value is propagated and also stored with each span. In the example above, the `th` key has `fd70a4` as the value, because trailing zeros are removed.
+We refer to this rejection threshold conceptually as `T`.
+We represent it using the OpenTelemetry TraceState key `th`, where the value is propagated and also stored with each span.
+In the example above, the `th` key has `fd70a4` as the value, because trailing zeros are removed.
 
 See [tracestate handling](./tracestate-handling.md#sampling-threshold-value-th) for details about encoding threshold values.
 
 ### Random Value (R)
 
-A common random value (that is known or propagated to all participants) is the main ingredient that enables consistent probability sampling. Each participant can compare this value (R) with their rejection threshold (T) to make a consistent sampling decision across an entire trace (or even across a group of traces).
+A common random value (that is known or propagated to all participants) is the main ingredient that enables consistent probability sampling.
+Each participant can compare this value (R) with their rejection threshold (T) to make a consistent sampling decision across an entire trace (or even across a group of traces).
 
 This proposal supports two sources of randomness:
 
@@ -91,16 +108,16 @@ See [tracestate handling](./tracestate-handling.md#explicit-randomness-value-rv)
 
 ### Consistent Sampling Decision Approach
 
-Given the above building blocks, let's look at how a participant can make consistent sampling decisions. For this, two values MUST be present in the `SpanContext`:
+Given the above building blocks, let's look at how a participant can make consistent sampling decisions.
+For this, two values MUST be present in the `SpanContext`:
 
 1. The common source of randomness: the 56-bit `R` value.
 2. The rejection threshold: the 56-bit `T` value.
 
 If `R` >= `T`, *keep* the span, else *drop* the span.
 
-`T` represents the maximum threshold that was applied in all previous consistent sampling stages. If the current sampling stage applies a greater threshold value than any stage before, it MUST update (increase) the threshold correspondingly by re-encoding the OpenTelemetry TraceState value.
-
-## Explanation
+`T` represents the maximum threshold that was applied in all previous consistent sampling stages.
+If the current sampling stage applies a greater threshold value than any stage before, it MUST update (increase) the threshold correspondingly by re-encoding the OpenTelemetry TraceState value.
 
 ## Sampler behavior for initializing and updating T and R values
 
@@ -131,70 +148,87 @@ A downstream sampler, in contrast, may output a given ended Span with a *modifie
 
 ### Migration to consistent probability samplers
 
-The OpenTelemetry specification for TraceIdRatioBased samplers was not completed until after the SDK specification was declared stable, and the exact behavior of that sampler was left unspecified.  The `th` and `rv` sub-keys defined in the OpenTelemetry TraceState now address this behavior specifically.
+The OpenTelemetry specification for TraceIdRatioBased samplers was not completed until after the SDK specification was declared stable, and the exact behavior of that sampler was left unspecified.
+The `th` and `rv` sub-keys defined in the OpenTelemetry TraceState now address this behavior specifically.
 
 As the OpenTelemetry TraceIdRatioBased sampler changes definition, users must consider how to avoid incomplete traces due to inconsistent sampling during the transition between old and new logic.
 
 The original TraceIdRatioBased sampler specification gave a workaround for the underspecified behavior, that it was safe to use for root spans: "It is recommended to use this sampler algorithm only for root spans (in combination with [`ParentBased`](./sdk.md#parentbased)) because different language SDKs or even different versions of the same language SDKs may produce inconsistent results for the same input."
 
-To avoid inconsistency during this transition, users SHOULD follow
-this guidance until all Trace SDKs in a system have been upgraded to
-modern Trace randomness requirements based on W3C Trace Context
-Level 2.
-Users can verify that all Trace SDKs have been upgraded when all Spans
-in their system have the Trace random flag set (in Span flags).
-To assist with this migration, the TraceIdRatioBased Sampler issues a
-warning statement the first time it presumes TraceID randomness for a
-Context where the Trace random flag is not set.
+To avoid inconsistency during this transition, users SHOULD follow this guidance until all Trace SDKs in a system have been upgraded to modern Trace randomness requirements based on W3C Trace Context Level 2.
+Users can verify that all Trace SDKs have been upgraded when all Spans in their system have the Trace random flag set (in Span flags).
+To assist with this migration, the TraceIdRatioBased Sampler issues a warning statement the first time it presumes TraceID randomness for a Context where the Trace random flag is not set.
 
 ## Algorithms
 
-The `th` and `rv` values may be represented and manipulated in a variety of forms depending on the capabilities of the processor and needs of the implementation. As 56-bit values, they are compatible with byte arrays and 64-bit integers, and can also be manipulated with 64-bit floating point with a truly negligible loss of precision.
+The `th` and `rv` values may be represented and manipulated in a variety of forms depending on the capabilities of the processor and needs of the implementation.
+As 56-bit values, they are compatible with byte arrays and 64-bit integers, and can also be manipulated with 64-bit floating point with a truly negligible loss of precision.
 
-The following examples are in Golang and Python3. They are intended as examples only for clarity, and not as a suggested implementation.
+The following examples are in Python3.
+They are intended as examples only for clarity, and not as a suggested implementation.
 
 ### Converting floating-point probability to threshold value
 
-Threshold values are encoded with trailing zeros removed, which allows for variable precision. This can be accomplished by rounding, and there are several practical ways to do this with built-in string formatting libraries.
+Threshold values are encoded with trailing zeros removed, which allows for variable precision.
+This can be accomplished by rounding, and there are several practical ways to do this with built-in string formatting libraries.
 
-With up to 56 bits of precision available, implementations that use built-in floating point number support will be limited by the precision of the underlying number support.  One way to encode thresholds uses the IEEE 754-2008-standard hexadecimal floating point representation as a simple solution.  For example, in Golang,
+With up to 56 bits of precision available, implementations that use built-in floating point number support will be limited by the precision of the underlying number support.
+One way to encode thresholds uses the IEEE 754-2008-standard hexadecimal floating point representation as a simple solution.
 
-```go
-// ProbabilityToThresholdWithPrecision assumes the probability value is in the range
-// [0x1p-56, 1] and precision is in the range [1, 14].
-func ProbabilityToThresholdWithPrecision(probability float64, precision int) string {
-    if probability == 1 {
-        // Special case
+```python
+import math
+
+# ProbabilityToThresholdWithPrecision assumes the probability value is in the range
+# [2^-56, 1] and precision is in the range [1, 13], which is the maximum for a 
+# IEEE-754 double-width float value.
+def probability_to_threshold_with_precision(probability, precision):
+    if probability == 1:
+        # Special case
         return "0"
-    }
-    // Raise precision by the number of leading 'f' digits.
-    _, expF := math.Frexp(probability)
-    precision = min(14, precision+expF/-4)
 
-    // Change the probability to rejection probability, with range [0, 1),
-    // translate rejection probability by +1, into range [1, 2).
-    // Format the significand of this expression as hexadecimal floating point
-    asHex := strconv.FormatFloat(2-probability, 'x', precision, 64)
+    # Raise precision by the number of leading 'f' digits.
+    _, exp = math.frexp(probability)
+    # Precision is limited to 12 so that there is at least one digit of precision
+    # in the final [:precision] statement below.
+    precision = max(1, min(12, precision + exp // -4))
+    
+    # Change the probability to 1 + rejection probability = 1 + 1 - probability,
+    # i.e., modify the range (0, 1] into the range [1, 2).
+    rejection_prob = 2 - probability
 
-    // Strip the leading "0x1.", use the requested number of digits.
-    // Strip additional trailing zeros.
-    digits := asHex[4 : 4+precision]
-    return strings.TrimRight(digits, "0")
-}
+    # To ensure rounding correctly below, add an offset equal to half of the
+    # final digit of precision in the corresponding representation.
+    rejection_prob += math.ldexp(0.5, -4 * precision)
+
+    # The expression above technically can't produce a number >= 2.0 because
+	# of the compensation for leading Fs. This gives additional safety for 
+	# the hex_str[4:][:-3] expression below which blindly drops the exponent.
+    if rejection_prob >= 2.0:
+        digits = "fffffffffffff"
+    else:
+        # Use float.hex() to get hexadecimal representation
+        hex_str = rejection_prob.hex()
+
+        # The hex representation for values between 1 and 2 looks like '0x1.xxxxxxxp+0'
+        # Extract the part after '0x1.' (4 bytes) and before 'p' (3 bytes)
+        digits = hex_str[4:][:-3]
+
+    assert len(digits) == 13
+    # Remove trailing zeros
+    return digits[:precision].rstrip('0')
 ```
 
-Note the use of `math.Frexp(probability)` used to adjust precision
-using the base-2 exponent of the probability argument.  This makes the
-configured precision apply to the significant digits of the threshold
-for probabilities near zero.  Note that there is not a symmetrical
-adjustment made for values near unit probability, as we do not believe
-there is a practical use for sampling very precisely near 100%.
+Note the use of `math.frexp(probability)` used to adjust precision using the base-2 exponent of the probability argument.
+This makes the configured precision apply to the significant digits of the threshold for probabilities near zero.
+Note that there is not a symmetrical adjustment made for values near unit probability, as we do not believe there is a practical use for sampling very precisely near 100%.
 
-To translate directly from floating point probability into a 56-bit unsigned integer representation using `math.Round()` and shift operations, see the [OpenTelemetry Collector-Contrib `pkg/sampling` package][PKGSAMPLING] package.  This package demonstrates how to directly calculate integer thresholds from probabilities.
+To translate directly from floating point probability into a 56-bit unsigned integer representation using `math.Round()` and shift operations, see the [OpenTelemetry Collector-Contrib `pkg/sampling` package][PKGSAMPLING] package.
+This package demonstrates how to directly calculate integer thresholds from probabilities.
 
 [PKGSAMPLING]: https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/pkg/sampling/README.md
 
-OpenTelemetry SDKs are recommended to use 4 digits of precision by default. The following table shows values computed by the method above for 1-in-N probability sampling, with precision 3, 4, and 5.
+OpenTelemetry SDKs are recommended to use 4 digits of precision by default. 
+The following table shows values computed by the method above for 1-in-N probability sampling, with precision 3, 4, and 5.
 
 <!--- Program at https://go.dev/play/p/7eLM6FkuoA5 (includes function above) generates the table below --->
 | 1-in-N  | Input probability  | Threshold (precision 3, 4, 5)      | Actual probability (precision 3, 4, 5)                                       | Exact Adjusted Count (precision 3, 4, 5)                              |
@@ -215,7 +249,7 @@ OpenTelemetry SDKs are recommended to use 4 digits of precision by default. The 
 
 ### Converting integer threshold to a `th`-value
 
-To convert a 56-bit integer threshold value to the t-value representation, emit it as a hexadecimal value (without a leading '0x'), optionally with trailing zeros omitted:
+To convert a 56-bit integer rejection threshold value to the `th` representation, emit it as a hexadecimal value (without a leading '0x'), optionally with trailing zeros omitted:
 
 ```py
 if tvalue == 0:
