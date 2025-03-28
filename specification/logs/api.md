@@ -134,8 +134,6 @@ across signals.
 
 ### Enabled
 
-**Status**: [Development](../document-status.md)
-
 To help users avoid performing computationally expensive operations when
 generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
 
