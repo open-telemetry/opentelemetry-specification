@@ -15,11 +15,10 @@ linkTitle: Probability Sampling
 - [Definitions](#definitions)
   * [Sampling Probability](#sampling-probability)
   * [Consistent Sampling Decision](#consistent-sampling-decision)
-  * [Rejection Threshold (T)](#rejection-threshold-t)
-  * [Random Value (R)](#random-value-r)
+  * [Rejection Threshold (`th`)](#rejection-threshold-th)
+  * [Randomness Value (`rv`)](#randomness-value-rv)
   * [Consistent Sampling Decision Approach](#consistent-sampling-decision-approach)
-- [Explanation](#explanation)
-- [Sampler behavior for initializing and updating T and R values](#sampler-behavior-for-initializing-and-updating-t-and-r-values)
+- [Sampler behavior for initializing and updating `th` and `rv` values](#sampler-behavior-for-initializing-and-updating-th-and-rv-values)
   * [Head samplers](#head-samplers)
   * [Downstream samplers](#downstream-samplers)
   * [Migration to consistent probability samplers](#migration-to-consistent-probability-samplers)
@@ -49,9 +48,9 @@ Instead, we want sampling decisions to be made in a **consistent** manner so tha
 
 This specification describes how to achieve consistent sampling decisions using a mechanism called **Consistent Probability Sampling**.
 To achieve this, it uses two key building blocks.
-The first is a common source of randomness (R) that is available to all participants, which includes a set of tracers and collectors.
+The first is a common source of randomness (`rv`) that is available to all participants, which includes a set of tracers and collectors.
 This can be either an explicit randomness value (called `rv`) or taken from the trailing 7 bytes of the TraceID.
-The second is a concept of a rejection threshold (T). This is derived directly from a participant's sampling rate.
+The second is a concept of a rejection threshold (`th`). This is derived directly from a participant's sampling rate.
 This proposal describes how these two values should be propagated and how participants should use them to make sampling decisions.
 
 For more details about this specification, see [OTEP 235](https://github.com/open-telemetry/oteps/blob/main/text/trace/0235-sampling-threshold-in-trace-state.md).
@@ -71,7 +70,7 @@ Note that the zero value is not defined and that "never" sampling is not a form 
 
 A consistent sampling decision means that a positive sampling decision made for a particular span with probability p1 necessarily implies a positive sampling decision for any span belonging to the same trace if it is made with probability p2 >= p1.
 
-### Rejection Threshold (T)
+### Rejection Threshold (`th`)
 
 This is a 56-bit value directly derived from the sampling probability.
 One way to think about this is that this is the number of spans that would be *dropped* out of 2^56 considered spans.
@@ -86,16 +85,16 @@ For example, if the sampling probability is 100% (keep all spans), the rejection
 
 Similarly, if the sampling probability is 1% (drop 99% of spans), the rejection threshold with 5 digits of precision would be (1-0.01) * 2^56 ≈ 71337018784743424 = 0xfd70a400000000.
 
-We refer to this rejection threshold conceptually as `T`.
+We refer to this rejection threshold as `th`.
 We represent it using the OpenTelemetry TraceState key `th`, where the value is propagated and also stored with each span.
 In the example above, the `th` key has `fd70a4` as the value, because trailing zeros are removed.
 
 See [tracestate handling](./tracestate-handling.md#sampling-threshold-value-th) for details about encoding threshold values.
 
-### Random Value (R)
+### Randomness Value (`rv`)
 
 A common random value (that is known or propagated to all participants) is the main ingredient that enables consistent probability sampling.
-Each participant can compare this value (R) with their rejection threshold (T) to make a consistent sampling decision across an entire trace (or even across a group of traces).
+Each participant can compare this value (`rv`) with their rejection threshold (`th`) to make a consistent sampling decision across an entire trace (or even across a group of traces).
 
 This proposal supports two sources of randomness:
 
@@ -111,15 +110,15 @@ See [tracestate handling](./tracestate-handling.md#explicit-randomness-value-rv)
 Given the above building blocks, let's look at how a participant can make consistent sampling decisions.
 For this, two values MUST be present in the `SpanContext`:
 
-1. The common source of randomness: the 56-bit `R` value.
-2. The rejection threshold: the 56-bit `T` value.
+1. The common source of randomness: the 56-bit `rv` value.
+2. The rejection threshold: the 56-bit `th` value.
 
-If `R` >= `T`, *keep* the span, else *drop* the span.
+If `rv` >= `th`, *keep* the span, else *drop* the span.
 
-`T` represents the maximum threshold that was applied in all previous consistent sampling stages.
+`th` represents the maximum threshold that was applied in all previous consistent sampling stages.
 If the current sampling stage applies a greater threshold value than any stage before, it MUST update (increase) the threshold correspondingly by re-encoding the OpenTelemetry TraceState value.
 
-## Sampler behavior for initializing and updating T and R values
+## Sampler behavior for initializing and updating `th` and `rv` values
 
 There are two categories of samplers:
 
@@ -253,11 +252,11 @@ To convert a 56-bit integer rejection threshold value to the `th` representation
 
 ```py
 if tvalue == 0:
-  add_otel_trace_state('tv:0')
+  add_otel_trace_state('th:0')
 else:
   h = hex(tvalue).rstrip('0')
   # remove leading 0x
-  add_otel_trace_state('tv:'+h[2:])
+  add_otel_trace_state('th:'+h[2:])
 ```
 
 ### Testing randomness vs threshold
