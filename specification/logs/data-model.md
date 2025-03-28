@@ -462,6 +462,9 @@ they all have the same value of `InstrumentationScope`. This field is optional.
 
 Type: [`map<string, any>`](#type-mapstring-any).
 
+Implementations that define a new type to represent extended attributes SHOULD use
+ the term `Extended Attributes`.
+
 Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
