@@ -178,7 +178,7 @@ One way to encode thresholds uses the IEEE 754-2008-standard hexadecimal floatin
 import math
 
 # ProbabilityToThresholdWithPrecision assumes the probability value is in the range
-# [2^-56, 1] and precision is in the range [1, 13], which is the maximum for a 
+# [2^-56, 1] and precision is in the range [1, 13], which is the maximum for a
 # IEEE-754 double-width float value.
 def probability_to_threshold_with_precision(probability, precision):
     if probability == 1:
@@ -190,7 +190,7 @@ def probability_to_threshold_with_precision(probability, precision):
     # Precision is limited to 12 so that there is at least one digit of precision
     # in the final [:precision] statement below.
     precision = max(1, min(12, precision + exp // -4))
-    
+
     # Change the probability to 1 + rejection probability = 1 + 1 - probability,
     # i.e., modify the range (0, 1] into the range [1, 2).
     rejection_prob = 2 - probability
@@ -200,8 +200,8 @@ def probability_to_threshold_with_precision(probability, precision):
     rejection_prob += math.ldexp(0.5, -4 * precision)
 
     # The expression above technically can't produce a number >= 2.0 because
-	# of the compensation for leading Fs. This gives additional safety for 
-	# the hex_str[4:][:-3] expression below which blindly drops the exponent.
+    # of the compensation for leading Fs. This gives additional safety for
+    # the hex_str[4:][:-3] expression below which blindly drops the exponent.
     if rejection_prob >= 2.0:
         digits = "fffffffffffff"
     else:
@@ -226,7 +226,7 @@ This package demonstrates how to directly calculate integer thresholds from prob
 
 [PKGSAMPLING]: https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/pkg/sampling/README.md
 
-OpenTelemetry SDKs are recommended to use 4 digits of precision by default. 
+OpenTelemetry SDKs are recommended to use 4 digits of precision by default.
 The following table shows values computed by the method above for 1-in-N probability sampling, with precision 3, 4, and 5.
 
 <!--- Program at https://go.dev/play/p/7eLM6FkuoA5 (includes function above) generates the table below --->
