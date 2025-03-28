@@ -37,6 +37,16 @@ linkTitle: SDK
       - [`TraceIdRatioBased` sampler compatibility warning](#traceidratiobased-sampler-compatibility-warning)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
+    + [CompositeSampler](#compositesampler)
+      - [ComposableSampler](#composablesampler)
+        * [GetSamplingIntent](#getsamplingintent)
+      - [Built-in ComposableSamplers](#built-in-composablesamplers)
+        * [ComposableAlwaysOn](#composablealwayson)
+        * [ComposableAlwaysOff](#composablealwaysoff)
+        * [ComposableTraceIDRatio](#composabletraceidratio)
+        * [ComposableParentThreshold](#composableparentthreshold)
+        * [ComposableRuleBased](#composablerulebased)
+        * [ComposableAnnotating](#composableannotating)
   * [Sampling Requirements](#sampling-requirements)
     + [TraceID randomness](#traceid-randomness)
     + [Random trace flag](#random-trace-flag)
@@ -519,6 +529,114 @@ The following configuration properties should be available when creating the sam
 [jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#remote-sampling
 [jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/apis/#remote-sampling-configuration-stable
 [jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#adaptive-sampling
+
+#### CompositeSampler
+
+**Status**: [Development](../document-status.md)
+
+CompositeSampler is a decorator that implements the standard `Sampler` interface but uses a composition of samplers to make its decisions.
+
+The CompositeSampler takes a ComposableSampler as input and delegates the sampling decision to that interface.
+
+##### ComposableSampler
+
+ComposableSampler is a specialized interface that extends the standard Sampler functionality. It introduces a composable approach to sampling by defining a new method called `GetSamplingIntent`, which allows multiple samplers to work together in making a sampling decision.
+
+###### GetSamplingIntent
+
+Returns a SamplingIntent structure that indicates the sampler's preference for sampling a Span, without actually making the final decision.
+
+**Required arguments:**
+
+* All of the Sampler parameters are included
+* Parent threshold
+* Flag indicating if the parent threshold is reliable
+
+**Return value:**
+
+The method returns a `SamplingIntent` structure with the following elements:
+
+* `threshold` - The sampling threshold value. A lower threshold increases the likelihood of sampling.
+* `threshold_reliable` - A boolean indicating if the threshold can be reliably used for metrics estimation.
+* `attributes_provider` - An optional provider of attributes to be added to the span if it is sampled.
+
+##### Built-in ComposableSamplers
+
+###### ComposableAlwaysOn
+
+* Always returns a `SamplingIntent` with threshold set to sample all spans (threshold = 0)
+* Sets `threshold_reliable` to `true`
+* Does not add any attributes
+
+###### ComposableAlwaysOff
+
+* Always returns a `SamplingIntent` with no threshold, indicating all spans should be dropped
+* Sets `threshold_reliable` to `false`
+* Does not add any attributes
+
+###### ComposableTraceIDRatio
+
+* Returns a `SamplingIntent` with threshold determined by the configured sampling ratio
+* Sets `threshold_reliable` to `true`
+* Does not add any attributes
+
+**Required parameters:**
+
+* `ratio` - A value between 0.0 and 1.0 representing the desired probability of sampling
+
+###### ComposableParentThreshold
+
+* For spans with a parent context, returns a `SamplingIntent` that propagates the parent's sampling decision
+* Returns the parent's threshold if available
+* Sets `threshold_reliable` to match the parent's reliability
+* Does not add any attributes
+
+###### ComposableRuleBased
+
+* Evaluates a series of rules based on predicates and returns the `SamplingIntent` from the first matching sampler
+* If no rules match, returns a non-sampling intent
+
+**Required parameters:**
+
+* `rules` - A list of (Predicate, ComposableSampler) pairs, where Predicate is a function that evaluates whether a rule applies
+
+###### ComposableAnnotating
+
+* Delegates the sampling decision to another sampler but adds attributes to sampled spans
+* Returns a `SamplingIntent` that combines the delegate's threshold with additional attributes
+
+**Required parameters:**
+
+* `attributes` - Attributes to add to sampled spans
+* `delegate` - The underlying sampler that makes the actual sampling decision
+
+**Example configuration:**
+
+An example of creating a composite sampler configuration:
+
+```
+// Create a rule-based sampler for root spans
+rootSampler = ComposableRuleBased([
+  (isHealthCheck, ComposableAlwaysOff),
+  (isCheckout, ComposableAlwaysOn),
+  (isAnything, ComposableTraceIDRatio(0.1))
+])
+
+// Create a parent-based sampler for child spans
+parentSampler = ComposableParentThreshold()
+
+// Create the final composite sampler
+finalSampler = CompositeSampler(ComposableRuleBased([
+  (isRootSpan, rootSampler),
+  (isAnything, parentSampler)
+]))
+```
+
+This example creates a configuration where:
+- Health check endpoints are never sampled
+- Checkout endpoints are always sampled
+- Other root spans are sampled at 10%
+- Child spans follow their parent's sampling decision
 
 ### Sampling Requirements
 
