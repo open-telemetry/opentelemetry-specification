@@ -1,6 +1,6 @@
 # Resource SDK
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md) except where otherwise specified
 
 A [Resource](../overview.md#resources) is an immutable representation of the entity producing
 telemetry as [Attributes](../common/README.md#attribute).
@@ -129,6 +129,8 @@ impossible to merge such resources. The resulting resource is undefined, and its
 contents are implementation specific.
 
 #### Resource detector name
+
+**Status**: [Development](../document-status.md)
 
 Resource detectors SHOULD have a unique name for reference in configuration. For
 example, users list and configure individual resource detectors by name
