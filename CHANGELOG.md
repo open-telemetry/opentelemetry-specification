@@ -18,6 +18,9 @@ release.
 
 ### Logs
 
+- Add `Enabled` opt-in operation to the `LogRecordProcessor`.
+  ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
+
 ### Baggage
 
 - Add context (baggage) propagation through Environment Variables specification.
@@ -35,6 +38,8 @@ release.
 
 - Convert declarative config env var substitution syntax to ABNF.
   ([#4448](https://github.com/open-telemetry/opentelemetry-specification/pull/4448))
+- List declarative config supported SDK extension plugin interfaces.
+  ([#4452](https://github.com/open-telemetry/opentelemetry-specification/pull/4452))
 
 ### Common
 

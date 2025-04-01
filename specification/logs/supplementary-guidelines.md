@@ -203,6 +203,19 @@ func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) e
 	}
 	return p.Processor.OnEmit(ctx, record)
 }
+
+// Enabled returns false if the severity is lower than p.Min.
+func (p *SeverityProcessor) Enabled(ctx context.Context, param sdklog.EnabledParameters) bool {
+	sev := param.Severity
+	if sev != log.SeverityUndefined && sev < p.Min {
+		return false
+	}
+	if fp, ok := p.Processor.(sdklog.FilterProcessor); ok {
+		// The wrapped processor is also a filtering processor.
+		return p.Processor.Enabled(ctx, param)
+	}
+	return true
+}
 ```
 
 > [!NOTE]
@@ -242,6 +255,29 @@ func (p *IsolatedProcessor) OnEmit(ctx context.Context, record *log.Record) erro
 	}
 	return rErr
 }
+
+// Enabled honors Enabled of the wrapped processors.
+func (p *IsolatedProcessor) Enabled(ctx context.Context, param sdklog.EnabledParameters) bool  {
+	fltrProcessors := make([]sdklog.FilterProcessor, len(p.Processors))
+	for i, proc := range p.Processors {
+		fp, ok := proc.(sdklog.FilterProcessor)
+		if !ok {
+			// Processor not implementing Enabled.
+			// We assume it will be processed.
+			return true
+		}
+		fltrProcessors[i] = fp
+	}
+
+	for _, proc := range fltrProcessors {
+		if proc.Enabled(ctx, param) {
+			// At least one Processor will process the Record.
+			return true
+		}
+	}
+	// No processor will process the record.
+	return false
+}
 ```
 
 #### Routing
@@ -270,6 +306,29 @@ func (p *LogEventRouteProcessor) OnEmit(ctx context.Context, record *log.Record)
 		return p.EventProcessor.OnEmit(ctx, record)
 	}
 	return p.LogProcessor.OnEmit(ctx, record)
+}
+
+// Enabled honors Enabled of the wrapped processors.
+func (p *LogEventRouteProcessor) Enabled(ctx context.Context, param sdklog.EnabledParameters) bool  {
+	fp1, ok := p.EventProcessor.(sdklog.FilterProcessor)
+	if !ok {
+		// Processor not implementing Enabled.
+		return true
+	}
+	fp2, ok := p.LogProcessor.(sdklog.FilterProcessor)
+	if !ok {
+		// Processor not implementing Enabled.
+		return true
+	}
+
+	if fp1.Enabled(ctx, param) {
+		return true
+	}
+	if fp2.Enabled(ctx, param) {
+		return true
+	}
+	// No processor will process the record.
+	return false
 }
 ```
 
