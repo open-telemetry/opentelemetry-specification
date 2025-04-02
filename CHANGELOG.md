@@ -11,6 +11,8 @@ release.
 
 - Add context propagation through Environment Variables specification.
     ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
+- On Propagators API, stabilize `GetAll` on the `TextMap` Extract.
+    ([#4472](https://github.com/open-telemetry/opentelemetry-specification/pull/4472))
 
 ### Traces
 

@@ -1,6 +1,6 @@
 # Propagators API
 
-**Status**: [Stable](../document-status.md), except where otherwise specified.
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -232,8 +232,6 @@ Required arguments:
 The Get function is responsible for handling case sensitivity. If the getter is intended to work with an HTTP request object, the getter MUST be case insensitive.
 
 ##### GetAll
-
-**Status**: [Development](../document-status.md)
 
 For many language implementations, the `GetAll` function will be added after the stable release of `Getter`.
 For these languages, requiring implementations of `Getter` to include `GetAll` constitutes a breaking change
