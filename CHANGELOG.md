@@ -20,6 +20,8 @@ release.
 
 - Add `Enabled` opt-in operation to the `LogRecordProcessor`.
   ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
+- Stabilize `Logger.Enabled`.
+  ([#4463](https://github.com/open-telemetry/opentelemetry-specification/pull/4463))
 
 ### Baggage
 
