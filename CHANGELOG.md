@@ -16,12 +16,18 @@ release.
 
 ### Traces
 
+- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
+  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
+  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
+
 ### Metrics
 
 ### Logs
 
 - Add `Enabled` opt-in operation to the `LogRecordProcessor`.
   ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
+- Stabilize `Logger.Enabled`.
+  ([#4463](https://github.com/open-telemetry/opentelemetry-specification/pull/4463))
 
 ### Baggage
 
