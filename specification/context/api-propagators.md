@@ -1,6 +1,6 @@
 # Propagators API
 
-**Status**: [Stable](../document-status.md), except where otherwise specified.
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
