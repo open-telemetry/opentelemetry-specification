@@ -233,8 +233,6 @@ The Get function is responsible for handling case sensitivity. If the getter is 
 
 ##### GetAll
 
-**Status**: [Development](../document-status.md)
-
 For many language implementations, the `GetAll` function will be added after the stable release of `Getter`.
 For these languages, requiring implementations of `Getter` to include `GetAll` constitutes a breaking change
 since instrumentation which previously functioned would fail. Language implementations should be cognizant
