@@ -7,7 +7,7 @@ path_base_for_github_subdir:
 # Resource
 
  <details>
- <sumamry>Table of Contents</summary>
+ <summary>Table of Contents</summary>
 
 <!-- toc -->
 

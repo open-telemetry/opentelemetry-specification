@@ -95,7 +95,7 @@ conventions</a> for attributes.
    </tr>
 </table>
 
-## Minimally Sufficient Id
+## Minimally Sufficient Identity
 
 Commonly, a number of attributes of an entity are readily available for the telemetry
 producer to compose an Id from. Of the available attributes the entity Id should
@@ -105,12 +105,12 @@ a Process on a host can be uniquely identified by (`process.pid`,`process.start_
 attributes. Adding for example `process.executable.name` attribute to the Id is
 unnecessary and violates the Minimally Sufficient Id rule.
 
-## Repeatable Id
+## Repeatable Identity
 
 The identifying attributes for entity SHOULD be values that can be repeatably
 obtained by observers of that entity. For example, a `process` entity SHOULD
-have the same id (and be recognized as the same process), regardless of whether
-the id was generated from the process itself, via SDK, by an OpenTelemetry
+have the same identity (and be recognized as the same process), regardless of whether
+the identity was generated from the process itself, via SDK, by an OpenTelemetry
 Collector running on the same host, or by some other system describing the
 process.
 
