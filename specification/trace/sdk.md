@@ -31,15 +31,18 @@ linkTitle: SDK
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceIdRatioBased](#traceidratiobased)
-      - [Requirements for `TraceIdRatioBased` sampler algorithm](#requirements-for-traceidratiobased-sampler-algorithm)
+      - [`TraceIdRatioBased` sampler configuration](#traceidratiobased-sampler-configuration)
+      - [`TraceIdRatioBased` sampler algorithm](#traceidratiobased-sampler-algorithm)
+      - [`TraceIdRatioBased` sampler description](#traceidratiobased-sampler-description)
+      - [`TraceIdRatioBased` sampler compatibility warning](#traceidratiobased-sampler-compatibility-warning)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
   * [Sampling Requirements](#sampling-requirements)
     + [TraceID randomness](#traceid-randomness)
     + [Random trace flag](#random-trace-flag)
-    + [Explicit trace randomness](#explicit-trace-randomness)
-      - [Do not overwrite explicit trace randomness](#do-not-overwrite-explicit-trace-randomness)
-      - [Root samplers set explicit trace randomness for non-random TraceIDs](#root-samplers-set-explicit-trace-randomness-for-non-random-traceids)
+    + [Explicit randomness](#explicit-randomness)
+      - [Do not overwrite explicit randomness](#do-not-overwrite-explicit-randomness)
+      - [Root samplers set explicit randomness for non-random TraceIDs](#root-samplers-set-explicit-randomness-for-non-random-traceids)
     + [Presumption of TraceID randomness](#presumption-of-traceid-randomness)
     + [IdGenerator randomness](#idgenerator-randomness)
 - [Span Limits](#span-limits)
@@ -399,40 +402,78 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### TraceIdRatioBased
 
-* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
-parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
-the `ParentBased` sampler specified below.
-* Description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
-  with `RATIO` replaced with the Sampler instance's trace sampling ratio
-  represented as a decimal number. The precision of the number SHOULD follow
-  implementation language standards and SHOULD be high enough to identify when
-  Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
-  had a sampling ratio of 1 to every 10,000 spans it COULD return
-  `"TraceIdRatioBased{0.000100}"` as its description.
+**Status**: [Development](../document-status.md)
 
-TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
-of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
+The `TraceIdRatioBased` sampler implements simple, ratio-based probability sampling using randomness features specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
+OpenTelemetry follows W3C Trace Context Level 2, which specifies 56 bits of randomness,
+[specifying how to make consistent probability sampling decisions using 56 bits of randomness][CONSISTENTSAMPLING].
 
-##### Requirements for `TraceIdRatioBased` sampler algorithm
+The `TraceIdRatioBased` sampler MUST ignore the parent `SampledFlag`.
+For respecting the parent `SampledFlag`, see the `ParentBased` sampler specified below.
 
-* The sampling algorithm MUST be deterministic. A trace identified by a given
-  `TraceId` is sampled or not independent of language, time, etc. To achieve this,
-  implementations MUST use a deterministic hash of the `TraceId` when computing
-  the sampling decision. By ensuring this, running the sampler on any child `Span`
-  will produce the same decision.
-* A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
-  traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
-  sample. This is important when a backend system may want to run with a higher
-  sampling rate than the frontend system, this way all frontend traces will
-  still be sampled and extra traces will be sampled on the backend only.
-* **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
-  there will probably be changes to it in any language SDK once it is, which
-  would break code that relies on the algorithm results.
-  Only the configuration and creation APIs can be considered stable.
-  It is recommended to use this sampler algorithm only for root spans
-  (in combination with [`ParentBased`](#parentbased)) because different language
-  SDKs or even different versions of the same language SDKs may produce inconsistent
-  results for the same input.
+Note that the "ratio-based" part of this Sampler's name implies that
+it makes a probability decision directly from the TraceID, even though
+it was not originally specified in an exact way.  In the present
+specification, the Sampler decision is more nuanced: only a portion of
+the identifier is used, after checking whether the OpenTelemetry
+TraceState field contains an explicit randomness value.
+
+[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
+
+##### `TraceIdRatioBased` sampler configuration
+
+The `TraceIdRatioBased` sampler is typically configured using a 32-bit or 64-bit floating point number to express the sampling ratio.
+The minimum valid sampling ratio is `2^-56`, and the maximum valid sampling ratio is 1.0.
+From an input sampling ratio, a rejection threshold value is calculated; see [consistent-probability sampler requirements][CONSISTENTSAMPLING] for details on converting sampling ratios into thresholds with variable precision.
+
+[CONSISTENTSAMPLING]: ./tracestate-probability-sampling.md
+
+##### `TraceIdRatioBased` sampler algorithm
+
+Given a Sampler configured with a sampling threshold `T` and Context with randomness value `R` (typically, the 7 rightmost bytes of the trace ID), when `ShouldSample()` is called, it uses the expression `R >= T` to decide whether to return `RECORD_AND_SAMPLE` or `DROP`.
+
+* If randomness value (R) is greater or equal to the rejection threshold (T), meaning when (R >= T), return `RECORD_AND_SAMPLE`, otherwise, return `DROP`.
+* When (R >= T), the OpenTelemetry TraceState SHOULD be modified to include the key-value `th:T` for rejection threshold value (T), as specified for the [OpenTelemetry TraceState `th` sub-key][TRACESTATEHANDLING].
+
+[TRACESTATEHANDLING]: ./tracestate-handling.md#sampling-threshold-value-th
+
+##### `TraceIdRatioBased` sampler description
+
+The `TraceIdRatioBased` GetDescription MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
+with `RATIO` replaced with the Sampler instance's trace sampling ratio
+represented as a decimal number. The precision of the number SHOULD follow
+implementation language standards and SHOULD be high enough to identify when
+Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
+had a sampling ratio of 1 to every 10,000 spans it could return
+`"TraceIdRatioBased{0.000100}"` as its description.
+
+##### `TraceIdRatioBased` sampler compatibility warning
+
+This specification has been revised from the original
+`TraceIdRatioBased` Sampler definition.  The present definition for
+`TraceIdRatioBased` uses a new definition for trace randomness, where
+unless an explicit randomness value is set in the OpenTelemetry
+TraceState `rv` sub-key, Samplers are meant to presume that TraceIDs
+contain the necessary 56 bits of randomness.
+
+When a TraceIdRatioBased Sampler makes a decision for a non-root Span
+based on TraceID randomness, there is a possibility that the TraceID
+was in fact generated by an older SDK, unaware of this specification.
+The Trace random flag lets us disambiguate these two cases.  This flag
+propagates information to let TraceIdRatioBased Samplers confirm that
+TraceIDs are random, however this requires W3C Trace Context Level 2
+to be supported by every Trace SDK that has handled the context.
+
+When a TraceIdRatioBased Sampler makes a decision for a non-root Span
+using TraceID randomness, but the Trace random flag was not set, the
+SDK SHOULD issue a warning statement in its log with a compatibility
+warning.  As an example of this compatibility warning:
+
+```
+WARNING: The TraceIdRatioBased sampler is presuming TraceIDs are random
+and expects the Trace random flag to be set in confirmation.  Please
+upgrade your caller(s) to use W3C Trace Context Level 2.
+```
 
 #### ParentBased
 
@@ -491,7 +532,7 @@ When this flag is 1, it is considered meaningful.  When this flag is 0, it may b
 To enable sampling in this and other situations where TraceIDs lack sufficient randomness,
 OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encoded in the [W3C TraceState field][W3CCONTEXTTRACESTATE].
 
-This specification recommends the use of either TraceID randomness or explicit trace randomness,
+This specification recommends the use of either TraceID randomness or explicit randomness,
 which ensures that samplers always have sufficient randomness when using W3C Trace Context propagation.
 
 [W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
@@ -510,31 +551,31 @@ For root span contexts, the SDK SHOULD implement the TraceID randomness requirem
 
 For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags when it generates TraceIDs that meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID].
 
-#### Explicit trace randomness
+#### Explicit randomness
 
-Explicit trace randomness is a mechanism that enables API users and
+Explicit randomness is a mechanism that enables API users and
 SDK authors to control trace randomness.  The following recommendation
 applies to Trace SDKs that have disregarded the recommendation on
 TraceID randomness, above.  It has two parts.
 
-##### Do not overwrite explicit trace randomness
+##### Do not overwrite explicit randomness
 
 API users control the initial TraceState of a root span, so they can
-provide explicit trace randomness for a trace by defining the [`rv`
+provide explicit randomness for a trace by defining the [`rv`
 sub-key of the OpenTelemetry TraceState][OTELRVALUE].  SDKs and Samplers
-MUST NOT overwrite explicit trace randomness in an OpenTelemetry TraceState
+MUST NOT overwrite explicit randomness in an OpenTelemetry TraceState
 value.
 
-##### Root samplers set explicit trace randomness for non-random TraceIDs
+##### Root samplers set explicit randomness for non-random TraceIDs
 
 When the SDK has generated a TraceID that does not meet the [W3C Trace
 Context Level 2 randomness requirements][W3CCONTEXTTRACEID], indicated
 by an unset trace random flag, and when the the [`rv` sub-key of the
 OpenTelemetry TraceState][OTELRVALUE] is not already set, the Root
-sampler has the opportunity to insert explicit trace randomness.
+sampler has the opportunity to insert an explicit randomness value.
 
-Root Samplers MAY insert an explicit trace randomness value into the
-OpenTelemetry TraceState value in cases where an explicit trace
+Root Samplers MAY insert an explicit randomness value into the
+OpenTelemetry TraceState value in cases where an explicit
 randomness value is not already set.
 
 For example, here's a W3C Trace Context with non-random identifiers and an
