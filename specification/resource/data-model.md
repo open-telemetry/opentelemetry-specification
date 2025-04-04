@@ -49,7 +49,7 @@ raw attributes are different, then you can assume the resource is different.
 Implicit in the design of Resource and attributes is ensuring users are able to
 navigate their infrastructure, tools, UIs, etc. to find the *same* entity that
 telemetry is reporting against.  For example, in the definition above, we see a
-few components listed for one entity:
+few entities listed for one Resource:
 
 - A process
 - A container
