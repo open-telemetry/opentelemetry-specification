@@ -58,7 +58,7 @@ required and MUST not be empty for valid entities.
    <tr>
     <td>Id
     </td>
-    <td>map&lt;string, attribute&gt;
+    <td>map&lt;string, standard attribute value&gt;
     </td>
     <td>Attributes that identify the entity.
 <p>
@@ -66,7 +66,7 @@ MUST not change during the lifetime of the entity. The Id must contain
 at least one attribute.
 <p>
 Follows OpenTelemetry <a
-href="../../specification/common/README.md#attribute">common
+href="../../specification/common/README.md#standard-attribute">Standard
 attribute definition</a>. SHOULD follow OpenTelemetry <a
 href="https://github.com/open-telemetry/semantic-conventions">semantic
 conventions</a> for attributes.
@@ -100,19 +100,18 @@ conventions</a> for attributes.
 Commonly, a number of attributes of an entity are readily available for the telemetry
 producer to compose an Id from. Of the available attributes the entity Id should
 include the minimal set of attributes that is sufficient for uniquely identifying
-that entity. For example
-a Process on a host can be uniquely identified by (`process.pid`,`process.start_time`)
-attributes. Adding for example `process.executable.name` attribute to the Id is
-unnecessary and violates the Minimally Sufficient Id rule.
+that entity. For example a Process on a host can be uniquely identified by
+(`process.pid`,`process.start_time`) attributes. Adding for example `process.executable.name` attribute to the Id is unnecessary and violates the
+Minimally Sufficient Identity rule.
 
 ## Repeatable Identity
 
 The identifying attributes for entity SHOULD be values that can be repeatably
 obtained by observers of that entity. For example, a `process` entity SHOULD
 have the same identity (and be recognized as the same process), regardless of whether
-the identity was generated from the process itself, via SDK, by an OpenTelemetry
-Collector running on the same host, or by some other system describing the
-process.
+the identity was generated from the process itself, e.g. via SDK, or by an
+OpenTelemetry Collector running on the same host, or by some other system
+describing the process.
 
 > Aside: There are many ways to accomplish repeatable identifying attributes
 > across multiple observers. While many successful systems rely on pushing down
@@ -125,7 +124,7 @@ _This section is non-normative and is present only for the purposes of
 demonstrating the data model._
 
 Here are examples of entities, the typical identifying attributes they
-have and some examples of non-identifying attributes that may be
+have and some examples of descriptive attributes that may be
 associated with the entity.
 
 _Note: These examples MAY diverge from semantic conventions._
@@ -138,63 +137,74 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td><strong>Identifying Attributes</strong>
     </td>
-    <td><strong>Non-identifying Attributes</strong>
+    <td><strong>Descriptive Attributes</strong>
     </td>
    </tr>
    <tr>
-    <td>Service
+    <td>Container
     </td>
-    <td>"service"
+    <td><pre>container</pre>
     </td>
-    <td>service.name (required)
-<p>
-service.instance.id
-<p>
-service.namespace
+    <td>container.id
     </td>
-    <td>service.version
+    <td>container.image.id<br/>
+        container.image.name<br/>
+        container.image.tag.{key}<br/>
+        container.label.{key}<br/>
+        container.name<br/>
+        container.runtime<br/>
+        oci.manifest.digest<br/>
+        container.command<br/>
     </td>
    </tr>
    <tr>
     <td>Host
     </td>
-    <td>"host"
+    <td><pre>host</pre>
     </td>
     <td>host.id
     </td>
-    <td>host.name
-<p>
-host.type
-<p>
-host.image.id
-<p>
-host.image.name
+    <td>host.arch<br/>
+        host.name<br/>
+        host.type<br/>
+        host.image.id<br/>
+        host.image.name<br/>
+        host.image.version<br/>
+        host.type
     </td>
    </tr>
    <tr>
-    <td>K8s Pod
+    <td>Kubernetes Node
     </td>
-    <td>"k8s.pod"
+    <td><pre>k8s.node</pre>
     </td>
-    <td>k8s.pod.uid (required)
-<p>
-k8s.cluster.name
+    <td>k8s.node.uid
     </td>
-    <td>Any pod labels
+    <td>k8s.node.name
     </td>
    </tr>
    <tr>
-    <td>K8s Pod Container
+    <td>Kubernetes Pod
     </td>
-    <td>"container"
+    <td><pre>k8s.pod</pre>
     </td>
-    <td>k8s.pod.uid (required)
-<p>
-k8s.cluster.name
-<p>
-container.name
+    <td>k8s.pod.uid
     </td>
-    <td>Any container labels
+    <td>k8s.pod.name<br/>
+        k8s.pod.label.{key}<br/>
+        k8s.pod.annotation.{key}<br/>
+    </td>
+   </tr>
+   <tr>
+    <td>Service Instance
+    </td>
+    <td><pre>service.instance</pre>
+    </td>
+    <td>service.instance.id<br/>
+        service.name<br/>
+        service.namesapce
+    </td>
+    <td>service.version
     </td>
    </tr>
 </table>
