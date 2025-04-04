@@ -22,10 +22,9 @@ path_base_for_github_subdir:
 
 A Resource is an immutable representation of the entity producing telemetry.
 Within OpenTelemetry, all signals are associated with a Resource, enabling
-contextual correlation of data from the same source.  For Example, if I see
-a high latency in a span I should be able to check the metrics for the
-same entity that produced that Span during the time when the latency was
-observed.
+contextual correlation of data from the same source.  For example, if I see
+a high latency in a span I need to check the metrics for the same entity that
+produced that Span during the time when the latency was observed.
 
 ## Specifications
 
