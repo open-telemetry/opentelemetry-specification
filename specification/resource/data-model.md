@@ -67,6 +67,12 @@ one process from another.
 > load off the struggling process.
 
 If the only thing important to Resource was identity, we could simply use UUIDs.
+However, this would rely on some other, easily accessible, system to provide
+human-friendly understanding for these UUIDs. OpenTelemetry provides a model
+where a full UUID-only solution could be chosen, but defaults to a *blended*
+approach, where resource provides both Identity and Navigation.
+
+This leads to the next concept: Telescoping identity to the needs of a system.
 
 ### Telescoping
 
