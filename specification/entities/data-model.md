@@ -84,8 +84,7 @@ attributes are not part of entity's identity.
 <p>
 Follows <a
 href="../../specification/logs/data-model.md#type-any">any</a>
-value definition in the OpenTelemetry spec - it can be a scalar value,
-byte array, an array or map of values. Arbitrary deep nesting of values
+value definition in the OpenTelemetry spec. Arbitrary deep nesting of values
 for arrays and maps is allowed.
 <p>
 SHOULD follow OpenTelemetry <a
