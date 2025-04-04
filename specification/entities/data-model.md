@@ -18,20 +18,23 @@
 Entity represents an object of interest associated with produced telemetry:
 traces, metrics, profiles, or logs.
 
-For example, telemetry produced using an OpenTelemetry SDK is normally associated with
-a `service` entity. Similarly, OpenTelemetry defines system metrics for a `host`. The `host` is the
-entity we want to associate metrics with in this case.
+For example, telemetry produced using an OpenTelemetry SDK is normally
+associated with a `service` entity. Similarly, OpenTelemetry defines system
+metrics for a `host`. The `host` is the entity we want to associate metrics with
+in this case.
 
 Entities may be also associated with produced telemetry indirectly.
 For example a service that produces
 telemetry is also related to a process in which the service runs, so we say that
-the `service` entity is related to the `process` entity. The process normally also runs
-on a host, so we say that the `process` entity is related to the `host` entity.
+the `service` entity is related to the `process` entity. The process normally
+also runs on a host, so we say that the `process` entity is related to the
+`host` entity.
 
-> Note: Entity relationship modelling will be refined in future specification work.
+> Note: Entity relationship modelling will be refined in future specification
+> work.
 
-The data model below defines a logical model for an entity (irrespective of the physical
-format and encoding of how entity data is recorded).
+The data model below defines a logical model for an entity (irrespective of the
+physical format and encoding of how entity data is recorded).
 
 <table>
    <tr>
@@ -104,14 +107,22 @@ unnecessary and violates the Minimally Sufficient Id rule.
 
 ## Repeatable Id
 
-The identifying attributes for entity SHOULD be values that can be repeatably obtained by observers of that entity. For example, a `process` entity SHOULD have the same id (and be recognized as the same process), regardless of whether the id was generated from the process itself, via SDK, by an OpenTelemetry Collector running on the same host, or by some other system describing the process.
+The identifying attributes for entity SHOULD be values that can be repeatably
+obtained by observers of that entity. For example, a `process` entity SHOULD
+have the same id (and be recognized as the same process), regardless of whether
+the id was generated from the process itself, via SDK, by an OpenTelemetry
+Collector running on the same host, or by some other system describing the
+process.
 
-> Aside: There are many ways to accomplish repeatable identifying attributes across multiple observers. While many successful systems rely on pushing down identity from a central registry or knowledge store, OpenTelemetry must support all possible scenarios.
+> Aside: There are many ways to accomplish repeatable identifying attributes
+> across multiple observers. While many successful systems rely on pushing down
+> identity from a central registry or knowledge store, OpenTelemetry must
+> support all possible scenarios.
 
 ## Examples of Entities
 
-_This section is non-normative and is present only for the purposes of demonstrating
-the data model._
+_This section is non-normative and is present only for the purposes of
+demonstrating the data model._
 
 Here are examples of entities, the typical identifying attributes they
 have and some examples of non-identifying attributes that may be
