@@ -122,7 +122,7 @@ The API MUST accept the following parameters:
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
-- **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
+- [Event Name](./data-model.md#field-eventname) (optional)
 
 **Status**: [Development](../document-status.md)
 

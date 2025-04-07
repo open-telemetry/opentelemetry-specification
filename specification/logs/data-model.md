@@ -209,7 +209,7 @@ Body           |The body of the log record.
 Resource       |Describes the source of the log.
 InstrumentationScope|Describes the scope that emitted the log.
 Attributes     |Additional information about the event.
-**Status**: [Development](../document-status.md) - EventName | Name that identifies the class / type of event.
+EventName      |Name that identifies the class / type of event.
 
 Below is the detailed description of each field.
 
@@ -480,8 +480,6 @@ If included, they MUST follow the OpenTelemetry
 [semantic conventions for exception-related attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
 
 ### Field: `EventName`
-
-**Status**: [Development](../document-status.md)
 
 Type: string.
 
