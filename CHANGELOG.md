@@ -9,6 +9,34 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Resource
+
+### Profiles
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.44.0 (2025-04-10)
+
+### Context
+
 - Add context propagation through Environment Variables specification.
     ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
 
@@ -19,6 +47,9 @@ release.
   ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
 
 ### Metrics
+
+- Clarify SDK behavior for Instrument Advisory Parameter.
+  ([#4389](https://github.com/open-telemetry/opentelemetry-specification/pull/4389))
 
 ### Logs
 
