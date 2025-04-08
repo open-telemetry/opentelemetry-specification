@@ -8,8 +8,6 @@
 <!-- toc -->
 
 - [Identity](#identity)
-  * [Navigation](#navigation)
-  * [Telescoping](#telescoping)
 
 <!-- tocstop -->
 
@@ -27,71 +25,50 @@ attributes" that have prescribed meanings.
 A resource is composed of 0 or more [`Entities`](../entities/README.md) and 0
 or more attributes not associated with any entity.
 
-Resource provides two important aspects for observability:
+The data model below defines a logical model for an Resource (irrespective of the physical format and encoding of how resource data is recorded).
 
-- It MUST *identify* an entity that is producing telemetry.
-- It SHOULD allow users to determine *where* that entity resides within their infrastructure.
+<table>
+   <tr>
+    <td><strong>Field</strong>
+    </td>
+    <td><strong>Type</strong>
+    </td>
+    <td><strong>Description</strong>
+    </td>
+   </tr>
+   <tr>
+    <td>Entities
+    </td>
+    <td>set&lt;Entity&gt;
+    </td>
+    <td>Defines the set of Entities associated with this resource.
+    <p><a href="../entities/data-model.md#entity-data-model">Entity is defined
+    here</a>
+    </td>
+   </tr>
+   <tr>
+    <td>Attributes
+    </td>
+    <td>map&lt;string, standard attribute value&gt;
+    </td>
+    <td>Additional Attributes that identify the resource.
+<p>
+MUST not change during the lifetime of the resource.
+<p>
+Follows OpenTelemetry <a
+href="../../specification/common/README.md#standard-attribute">Standard
+attribute definition</a>.
+    </td>
+   </tr>
+</table>
 
 ## Identity
 
-Most resources are a composition of `Entity`. `Entity` is described
-[here](../entities/data-model.md), and includes its own notion of identity.
-The identity of a resource is the set of entities contained within it. Two
-resources are considered different if one contains an entity not found in the
-other.
+Most resources are a composition of [`Entity`](../entities/data-model.md).
+Entity includes its own notion of identity. The identity of a resource is
+the set of entities contained within it. Two resources are considered
+different if one contains an entity not found in the other.
 
 Some resources include raw attributes in additon to Entities. Raw attributes are
 considered identifying on a resource. That is, if the key-value pairs of
 raw attributes are different, then you can assume the resource is different.
-
-### Navigation
-
-Implicit in the design of Resource and attributes is ensuring users are able to
-navigate their infrastructure, tools, UIs, etc. to find the *same* entity that
-telemetry is reporting against.  For example, in the definition above, we see a
-few entities listed for one Resource:
-
-- A process
-- A container
-- A kubernetes pod name
-- A namespace
-- A deployment
-
-By including identifying attributes of each of these, we can help users navigate
-through their `kubectl` or Kubernetes UIs to find the specific process
-generating telemetry.   This is as important as being able to uniquely identify
-one process from another.
-
-> Aside: Observability signals SHOULD be actionable.  Knowing a process is
-> struggling is not as useful as being able to scale up a deployment to take
-> load off the struggling process.
-
-If the only thing important to Resource was identity, we could simply use UUIDs.
-However, this would rely on some other, easily accessible, system to provide
-human-friendly understanding for these UUIDs. OpenTelemetry provides a model
-where a full UUID-only solution could be chosen, but defaults to a *blended*
-approach, where resource provides both Identity and Navigation.
-
-This leads to the next concept: Telescoping identity to the needs of a system.
-
-### Telescoping
-
-Within OpenTelemetry, we want to give users the flexibility to decide what
-information needs to be sent *with* observability signals and what information
-can be later joined.  We call this "telescoping identity" where users can decide
-how *small* or *large* the size of an OpenTelemetry resource will be on the wire
-(and correspondingly, how large data points are when stored, depending on
-storage solution).
-
-For example, in the extreme, OpenTelemery could synthesize a UUID for every
-system which produces telemetry.  All identifying attributes for Resource and
-Entity could be sent via a side channel with known relationships to this UUID.
-While this would optimise the runtime generation and sending of telemetry, it
-comes at the cost of downstream storage systems needing to join data back
-together either at ingestion time or query time. For high performance use cases,
-e.g. alerting, these joins can be expensive.
-
-In practice, users control Resource identity via the configuration of Resource
-Detection within SDKs and the collector. Users wishing for minimal identity will
-limit their resource detection just to a `service.instance.id`, for example.
-Some users highly customize resource detection with many concepts being appended.
