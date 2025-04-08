@@ -43,7 +43,7 @@ linkTitle: SDK
       - [Built-in ComposableSamplers](#built-in-composablesamplers)
         * [ComposableAlwaysOn](#composablealwayson)
         * [ComposableAlwaysOff](#composablealwaysoff)
-        * [ComposableTraceIDRatio](#composabletraceidratio)
+        * [ComposableTraceIDRatioBased](#composabletraceidratiobased)
         * [ComposableParentThreshold](#composableparentthreshold)
         * [ComposableRuleBased](#composablerulebased)
         * [ComposableAnnotating](#composableannotating)
@@ -574,7 +574,7 @@ The method returns a `SamplingIntent` structure with the following elements:
 * Sets `threshold_reliable` to `false`
 * Does not add any attributes
 
-###### ComposableTraceIDRatio
+###### ComposableTraceIDRatioBased
 
 * Returns a `SamplingIntent` with threshold determined by the configured sampling ratio
 * Sets `threshold_reliable` to `true`
@@ -582,14 +582,19 @@ The method returns a `SamplingIntent` structure with the following elements:
 
 **Required parameters:**
 
-* `ratio` - A value between 0.0 and 1.0 representing the desired probability of sampling
+* `ratio` - A value between `2^-56` and 1.0 (inclusive) representing the desired probability of sampling
 
 ###### ComposableParentThreshold
 
+* For spans without a parent context, delegate to the root sampler
 * For spans with a parent context, returns a `SamplingIntent` that propagates the parent's sampling decision
 * Returns the parent's threshold if available
 * Sets `threshold_reliable` to match the parent's reliability
 * Does not add any attributes
+
+**Required parameters:**
+
+* `root` - A delegate for sampling spans without a parent context.
 
 ###### ComposableRuleBased
 
@@ -623,13 +628,7 @@ rootSampler = ComposableRuleBased([
 ])
 
 // Create a parent-based sampler for child spans
-parentSampler = ComposableParentThreshold()
-
-// Create the final composite sampler
-finalSampler = CompositeSampler(ComposableRuleBased([
-  (isRootSpan, rootSampler),
-  (isAnything, parentSampler)
-]))
+finalSampler = ComposableParentThreshold(rootSampler)
 ```
 
 This example creates a configuration where:
