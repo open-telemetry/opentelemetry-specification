@@ -23,7 +23,7 @@ path_base_for_github_subdir:
 
 ## Overview
 
-A Resource is an immutable representation of the entity producing telemetry.
+A Resource is a representation of the entity producing telemetry.
 Within OpenTelemetry, all signals are associated with a Resource, enabling
 contextual correlation of data from the same source.  For example, if I see
 a high latency in a span I need to check the metrics for the same entity that

@@ -13,8 +13,8 @@
 
 </details>
 
-A Resource is an immutable representation of the entity producing telemetry as
-Attributes. For example, You could have a process producing telemetry that is
+A Resource is a representation of the entity producing telemetry as Attributes.
+For example, You could have a process producing telemetry that is
 running in a container on Kubernetes, which is associated to a Pod running on a
 Node that is a VM but also is in a namespace and possibly is part of a
 Deployment. Resource could have attributes to denote information about the

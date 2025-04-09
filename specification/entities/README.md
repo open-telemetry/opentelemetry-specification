@@ -20,7 +20,8 @@ path_base_for_github_subdir:
 
 ## Overview
 
-Entity represents an object of interest associated with produced telemetry: traces, metrics, logs, profiles etc.
+Entity represents an object of interest associated with produced telemetry:
+traces, metrics, logs, profiles etc.
 
 ## Specifications
 
