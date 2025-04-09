@@ -48,8 +48,8 @@ key type of correlation in OpenTelemetry.
 
 Implicit in the design of Resource and attributes is ensuring users are able to
 navigate their infrastructure, tools, UIs, etc. to find the *same* entity that
-telemetry is reporting against.  For example, in the definition above, we see a
-few entities listed for one Resource:
+telemetry is reporting against.  For example, in practice we cloud see Resource
+including more than on entity, like:
 
 - A process
 - A container
