@@ -124,8 +124,6 @@ The API MUST accept the following parameters:
 - [Attributes](./data-model.md#field-attributes) (optional)
 - **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
 
-**Status**: [Development](../document-status.md)
-
 The API SHOULD provide functionality for users to convert
 [Standard Attributes](../common/README.md#standard-attribute)
 so they can be used, or directly accept them, in the log signal.

@@ -26,6 +26,8 @@ release.
   ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
 - Stabilize `Logger.Enabled`.
   ([#4463](https://github.com/open-telemetry/opentelemetry-specification/pull/4463))
+- Stabilize reuse of Standard Attributes.
+  ([#4474](https://github.com/open-telemetry/opentelemetry-specification/pull/4474))
 
 ### Baggage
 
