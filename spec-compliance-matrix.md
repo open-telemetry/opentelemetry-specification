@@ -88,6 +88,7 @@ formats is required. Implementing more than one format is optional.
 | [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     | +      | +    | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     | +      |      |        | +   |      |     |      |       |
 | [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)                            | X        |     |      |     |        |      |        |     |      |     |      |       |
+| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X        |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -203,6 +204,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | SimpleLogRecordProcessor                     |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | BatchLogRecordProcessor                      |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | Can plug custom LogRecordProcessor           |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
+| LogRecordProcessor.Enabled                   | X        | +   |      |     |        |      |        |     | +    |     |      |       |
 | OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      | +   | -    |       |
