@@ -63,6 +63,11 @@ release.
 - Add context (baggage) propagation through Environment Variables specification.
     ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
 
+### Resource
+
+- Add Datamodel for Entities.
+   ([#4442](https://github.com/open-telemetry/opentelemetry-specification/pull/4442))
+
 ### SDK Configuration
 
 - Convert declarative config env var substitution syntax to ABNF.
