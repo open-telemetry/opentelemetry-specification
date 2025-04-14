@@ -16,6 +16,7 @@
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
   * [LoggerConfig](#loggerconfig)
+  * [Emit a LogRecord](#emit-a-logrecord)
   * [Enabled](#enabled)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
