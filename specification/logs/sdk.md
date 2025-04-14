@@ -192,6 +192,13 @@ It consists of the following parameters:
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
 
+### Emit a LogRecord
+
+**Status**: [Development](../document-status.md)
+
+If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
+the implementation SHOULD set it equal to the current time.
+
 ### Enabled
 
 **Status**: [Development](../document-status.md)
