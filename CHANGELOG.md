@@ -61,6 +61,8 @@ release.
   ([#4463](https://github.com/open-telemetry/opentelemetry-specification/pull/4463))
 - Stabilize `EventName`.
   ([#4475](https://github.com/open-telemetry/opentelemetry-specification/pull/4475))
+- Move implementation details of the `Observed Timestamp` to the Log SDK.
+  ([#4482](https://github.com/open-telemetry/opentelemetry-specification/pull/4482))
 
 ### Baggage
 

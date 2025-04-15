@@ -16,6 +16,7 @@
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
   * [LoggerConfig](#loggerconfig)
+  * [Emit a LogRecord](#emit-a-logrecord)
   * [Enabled](#enabled)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
@@ -191,6 +192,11 @@ It consists of the following parameters:
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
+
+### Emit a LogRecord
+
+If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
+the implementation SHOULD set it equal to the current time.
 
 ### Enabled
 
