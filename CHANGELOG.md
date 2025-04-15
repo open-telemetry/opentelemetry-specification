@@ -39,6 +39,8 @@ release.
 
 - Add context propagation through Environment Variables specification.
     ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
+- On Propagators API, stabilize `GetAll` on the `TextMap` Extract.
+    ([#4472](https://github.com/open-telemetry/opentelemetry-specification/pull/4472))
 
 ### Traces
 
@@ -57,6 +59,8 @@ release.
   ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
 - Stabilize `Logger.Enabled`.
   ([#4463](https://github.com/open-telemetry/opentelemetry-specification/pull/4463))
+- Stabilize `EventName`.
+  ([#4475](https://github.com/open-telemetry/opentelemetry-specification/pull/4475))
 
 ### Baggage
 

@@ -1,6 +1,6 @@
 # Logs Data Model
 
-**Status**: [Stable](../document-status.md), except where otherwise specified
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -100,8 +100,6 @@ The Data Model aims to successfully represent 3 sorts of logs and events:
   application if needed.
 
 ### Events
-
-**Status**: [Development](../document-status.md)
 
 Events are OpenTelemetry's standardized format for LogRecords. All semantic
 conventions defined for logs SHOULD be formatted as Events. Requirements and details for the Event format can be found in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
@@ -209,7 +207,7 @@ Body           |The body of the log record.
 Resource       |Describes the source of the log.
 InstrumentationScope|Describes the scope that emitted the log.
 Attributes     |Additional information about the event.
-**Status**: [Development](../document-status.md) - EventName | Name that identifies the class / type of event.
+EventName      |Name that identifies the class / type of event.
 
 Below is the detailed description of each field.
 
@@ -480,8 +478,6 @@ If included, they MUST follow the OpenTelemetry
 [semantic conventions for exception-related attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
 
 ### Field: `EventName`
-
-**Status**: [Development](../document-status.md)
 
 Type: string.
 
