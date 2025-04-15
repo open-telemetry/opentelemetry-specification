@@ -195,7 +195,6 @@ It consists of the following parameters:
 
 ### Emit a LogRecord
 
-**Status**: [Development](../document-status.md)
 
 If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
 the implementation SHOULD set it equal to the current time.
