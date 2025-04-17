@@ -19,6 +19,9 @@ release.
 
 ### Resource
 
+- Add experimental resource detector name.
+  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
+
 ### Profiles
 
 ### OpenTelemetry Protocol
