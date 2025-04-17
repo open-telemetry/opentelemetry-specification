@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Stabilize reuse of Standard Attributes.
+  ([#4474](https://github.com/open-telemetry/opentelemetry-specification/pull/4474))
+
 ### Baggage
 
 ### Resource
@@ -61,8 +64,6 @@ release.
   ([#4463](https://github.com/open-telemetry/opentelemetry-specification/pull/4463))
 - Stabilize `EventName`.
   ([#4475](https://github.com/open-telemetry/opentelemetry-specification/pull/4475))
-- Stabilize reuse of Standard Attributes.
-  ([#4474](https://github.com/open-telemetry/opentelemetry-specification/pull/4474))
 
 ### Baggage
 
