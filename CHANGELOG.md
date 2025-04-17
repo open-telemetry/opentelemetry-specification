@@ -9,6 +9,34 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Resource
+
+### Profiles
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.44.0 (2025-04-15)
+
+### Context
+
 - Add context propagation through Environment Variables specification.
     ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
 - On Propagators API, stabilize `GetAll` on the `TextMap` Extract.
@@ -21,6 +49,9 @@ release.
   ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
 
 ### Metrics
+
+- Clarify SDK behavior for Instrument Advisory Parameter.
+  ([#4389](https://github.com/open-telemetry/opentelemetry-specification/pull/4389))
 
 ### Logs
 
@@ -40,14 +71,8 @@ release.
 
 ### Resource
 
-- Add Datamodel for Entities
+- Add Datamodel for Entities.
    ([#4442](https://github.com/open-telemetry/opentelemetry-specification/pull/4442))
-
-### Profiles
-
-### OpenTelemetry Protocol
-
-### Compatibility
 
 ### SDK Configuration
 
@@ -55,12 +80,6 @@ release.
   ([#4448](https://github.com/open-telemetry/opentelemetry-specification/pull/4448))
 - List declarative config supported SDK extension plugin interfaces.
   ([#4452](https://github.com/open-telemetry/opentelemetry-specification/pull/4452))
-
-### Common
-
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.43.0 (2025-03-18)
 
