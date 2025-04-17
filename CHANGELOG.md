@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Stabilize reuse of Standard Attributes.
+  ([#4474](https://github.com/open-telemetry/opentelemetry-specification/pull/4474))
+
 ### Baggage
 
 ### Resource
