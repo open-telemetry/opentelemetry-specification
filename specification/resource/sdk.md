@@ -158,13 +158,10 @@ reserved for built-in resource detectors published with language SDKs:
   Populates [container.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/container.md)
   attributes.
 * `host`:
-  Populates [host.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/host.md)
+  Populates [host.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/host.md) and [os.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/os.md)
   attributes.
 * `process`:
   Populates [process.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md)
-  attributes.
-* `os`:
-  Populates [os.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/os.md)
   attributes.
 * `service`: Populates `service.name` based
   on [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
