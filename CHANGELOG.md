@@ -9,7 +9,7 @@ release.
 
 ### Context
 
-- Add `EnvVarPropagator` decorator with examples for environment variables as context carrier specification. ([#]())
+- Add `EnvVarPropagator` decorator with examples for environment variables as context carrier specification. ([#4484](https://github.com/open-telemetry/opentelemetry-specification/pull/4484))
 
 ### Traces
 
@@ -19,7 +19,7 @@ release.
 
 ### Baggage
 
-- Add `EnvVarPropagator` decorator with examples for environment variables as context carrier specification. ([#]())
+- Add `EnvVarPropagator` decorator with examples for environment variables as context carrier specification. ([#4484](https://github.com/open-telemetry/opentelemetry-specification/pull/4484))
 
 ### Resource
 
