@@ -9,6 +9,8 @@ release.
 
 ### Context
 
+- Add `EnvVarPropagator` decorator with examples for environment variables as context carrier specification. ([#]())
+
 ### Traces
 
 ### Metrics
@@ -16,6 +18,8 @@ release.
 ### Logs
 
 ### Baggage
+
+- Add `EnvVarPropagator` decorator with examples for environment variables as context carrier specification. ([#]())
 
 ### Resource
 

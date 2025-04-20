@@ -19,6 +19,12 @@
     + [Process Spawning](#process-spawning)
     + [Security](#security)
     + [Case Sensitivity](#case-sensitivity)
+- [Propagator API](#propagator-api)
+  * [Environment Variable Propagator Decorator](#environment-variable-propagator-decorator)
+    + [Examples](#examples)
+      - [Go](#go)
+      - [Python](#python)
+      - [Swift](#swift)
 
 <!-- tocstop -->
 
@@ -149,3 +155,74 @@ Windows.
 - For maximum compatibility, implementations MUST:
   - Use uppercase names consistently (`TRACEPARENT` not `TraceParent`).
   - Use the canonical case when setting environment variables.
+
+## Propagator API
+
+### Environment Variable Propagator Decorator
+
+The `EnvVarPropagator` is a [decorator][dec] that wraps a `TextMapPropagator`,
+handling the injection and extraction of context and baggage into and from
+environment variables.
+
+The `EnvVarPropagator` SHOULD be configurable to match platform-specific
+restrictions and handle environment variable naming conventions as described in
+the [Environment Variable Names](#environment-variable-names) and [Format
+Restrictions](#format-restrictions) sections.
+
+The `EnvVarPropagator` MAY define an `EnvVarCarrier` type that implements the
+`TextMap` carrier interface when calling `Inject` and `Extract operations.
+
+#### Examples
+
+##### Go
+
+```go
+type TextMapPropagator interface {
+    // Includes Inject, Extract, and Fields
+    ...
+}
+
+type EnvVarPropagator func(TextMapPropagator) TextMapPropagator
+
+func (envp EnvVarPropagator) Inject(ctx context.Context, carrier TextMapCarrier) {
+    env := os.Environ()
+    // Inject context into environment variable copy
+    ...
+}
+
+func (envp EnvVarPropagator) Extract(ctx context.Context, carrier TextMapCarrier) context.Context {
+    // Extract context from environment variables
+    ...
+}
+...
+```
+
+##### Python
+
+```python
+class EnvVarPropagator(TextMapPropagator):
+    def inject(self, context, carrier):
+        env_dict = os.environ.copy()
+        # Inject context into environment variables
+        ...
+    def extract(self, carrier):
+        # Extract context from environment variables
+        ...
+```
+
+##### Swift
+
+```swift
+public struct EnvVarPropagator: TextMapPropagator {
+    public func inject(...) {
+        // Inject context into environment variables
+        ...
+    }
+    public func extract(...) -> SpanContext? {
+        // Extract context from environment variables
+        ...
+    }
+}
+```
+
+[dec]: https://wikipedia.org/wiki/Decorator_pattern
