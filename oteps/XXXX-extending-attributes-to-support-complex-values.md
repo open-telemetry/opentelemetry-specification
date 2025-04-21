@@ -24,9 +24,6 @@ Alternatively, it may use a base object or another standard library type.
 Exposing multiple `Attributes` types is NOT RECOMMENDED if conversion between them
 is non-trivial in terms of usability or performance.
 
-APIs MAY provide convenience for recording attributes using standard library types
-such as lists/maps of primitives or JSON objects.
-
 The SDK is responsible for handling unsupported attribute types depending on the signal.
 
 > [!NOTE]
@@ -39,7 +36,7 @@ The SDK is responsible for handling unsupported attribute types depending on the
 > values for a given signal. Guidance for OTel-hosted SDKs is provided in the next section.
 >
 > The API, however, is less opinionated. It should not offer conveniences for recording
-> complex attributes on metrics (or resources), but it does not have to make it impossible.
+> complex attributes on metrics (resources, etc), but it does not have to make it impossible.
 
 ### SDK
 
@@ -51,29 +48,26 @@ entity attributes.**
 Any future OTel signals SHOULD support complex attributes unless there is a
 reason not to, which MUST be documented in the specification.
 
-By default, the OTel SDK passes complex attributes to the processing pipeline.
+By default, the OTel SDK SHOULD pass complex attributes to the processing pipeline.
 The SDK MUST support reading, validating, and modifying complex attributes within
 the processing pipeline.
 
 If `AnyValue` is not defined at the API level, the OTel SDK SHOULD provide it as
-a contract for processors and exporters.
+a contract for processors and exporters. If the standard library offers a
+reasonable substitute, it MAY be used instead.
 
-If the standard library offers a reasonable substitute, it MAY be used instead.
-
-In either case, the SDK MUST document the contract and MUST convert complex values
-to this common type. If conversion is not possible — e.g., when a non-serializable
-or unknown object is passed — the SDK SHOULD drop the attribute.
-
-If an individual property of a complex object is non-serializable or unknown,
-it is RECOMMENDED to drop the entire attribute.
+In either case, the SDK MUST document the contract and SHOULD convert non-primitive
+input values to this common type. If conversion is not possible — e.g., when a non-serializable
+or unknown object is passed — the SDK SHOULD record string representation of the
+provided object.
 
 See the [Configuring complex attribute handling](#configuring-complex-attribute-handling)
 section for customization options.
 
 #### Signals that don't support complex attributes
 
-**The OTel SDK SHOULD drop complex attributes if they are added to metrics, resources,
-instrumentation scope, or used as identifying attributes on entities.**
+**The OTel SDK SHOULD serialize complex attributes to JSON string if they are added
+to metrics, resources, instrumentation scope, or used as identifying attributes on entities.**
 
 The SDK MAY allow customization of this behavior, as described in the [Configuring
 complex attribute handling](#allow-recording-structured-attributes) section.
@@ -83,19 +77,23 @@ complex attribute handling](#allow-recording-structured-attributes) section.
 The SDK MUST allow customization of how complex attributes are handled on a per-signal
 basis via [attribute limits](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute-limits).
 
+Existing attribute value length limits SHOULD be applied to all leaf string nodes
+in `AnyValue`. String values SHOULD be truncated to the configured limit.
+
+Leaf nodes of an `AnyValue` attribute SHOULD count toward the attribute count limit.
+If the limit is reached, the SDK MUST drop the entire `AnyValue` attribute;
+partial exports are not allowed.
+
 A new attribute limit property will be introduced to control whether and how complex
 attributes are handled, with the following options:
 
 - **allow**
   - Default for spans, logs, profiles, and descriptive entity attributes.
-- **drop**
+- **serialize to JSON string**
   - Default for metrics, resources, instrumentation scopes, and identifying entity attributes.
   - The SDK MUST support this option for all signals and SHOULD provide per-signal configuration.
-- **convert to string representation**
+- **drop**
   - SDKs MAY support this option
-
-Existing attribute value length limits SHOULD be applied to all leaf string nodes
-in `AnyValue` (or its equivalent). String values SHOULD be truncated to the configured limit.
 
 ### Semantic conventions
 
@@ -119,12 +117,18 @@ Semantic conventions will be updated with the following guidance
    including large, sensitive, mutable, non-serializable, or otherwise problematic
    data in telemetry.
 
-   It is RECOMMENDED to enforce `AnyValue` compatibility at the API level. If that’s not
-   feasible, enforcement SHOULD occur at the SDK level by dropping unrecognized
-   (fully or partially) types.
-
+   It is RECOMMENDED to enforce `AnyValue` compatibility at the API level.
    Users and instrumentations SHOULD define custom `AnyValue`-compatible models
    to minimize misuse and reduce performance overhead.
+
+   OTel SDKs MAY provide convenience methods to convert arbitrary objects to `AnyValue`.
+
+   If such convenience is provided, it is RECOMMENDED to limit supported types
+   to standard library lists, maps, named tuples, JSON objects, and similar structures.
+
+   If the provided object has a property with an unrecognized type, it is RECOMMENDED
+   to fall back to recording a string representation of the original complex object.
+   This helps minimize the risk of unintentional use of complex attributes.
 
 2. While it should be possible to record complex data in telemetry, many backends do not
    support it well — or at all — which can result in individual complex attributes
@@ -136,7 +140,7 @@ Semantic conventions will be updated with the following guidance
 
    In the meantime, we plan to mitigate this through:
 
-   - Requiring an SDK mode that drops complex attributes
+   - Requiring an SDK mode that serializes complex attributes
    - A collector transformation processor that already can drop, flatten, serialize, or
      truncate complex attribute values using OTTL
    - Semantic conventions guidance that discourages their use
@@ -147,10 +151,9 @@ TODO
 
 ## Open questions
 
-- What's the default for spans: drop or allow
+TODO
 
 ## Future possibilities
 
-- Additional size limitations for complex attributes:
-  - depth
-  - add total size estimation to AnyValue and drop based on that total size limit
+We can consider a separate set of attribute limits specifically for complex values,
+including a total size limit and ability to estimate `AnyValue` object size.
