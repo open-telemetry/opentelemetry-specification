@@ -1,5 +1,9 @@
 # Extending attributes to support complex values
 
+* [Why?](#why)
+  * [Why do we want complex attributes on spans?](#why-do-we-want-complex-attributes-on-spans)
+  * [Why do we want to extend standard attributes?](#why-do-we-want-to-extend-standard-attributes)
+  * [Why isn't it a breaking change?](#why-isnt-it-a-breaking-change)
 * [Changes](#changes)
   * [API](#api)
   * [SDK](#sdk)
@@ -11,6 +15,57 @@
 * [Prior art and alternatives](#prior-art-and-alternatives)
 * [Open questions](#open-questions)
 * [Future possibilities](#future-possibilities)
+
+## Why?
+
+### Why do we want complex attributes on spans?
+
+There are a number of reasons why we want to allow complex attributes on spans:
+
+- Emerging semantic conventions, such as Generative AI,
+  demonstrate the usefulness of including complex attributes on spans.
+- Many users already add complex attributes to spans by JSON-encoding them.
+  Supporting complex attributes natively enables future possibilities like
+  collector transformations, better attribute truncation, and native
+  storage of complex attributes in backends.
+- During the span event deprecation process, we found that some people
+  use span events to represent complex data on spans.
+  Providing support for complex attributes on spans would offer a more natural
+  way to store this data.
+- During the event stabilization process, it became clear that
+  [spans and events are often thought of as being conceptual
+  twins.](https://opentelemetry.io/blog/2025/opentelemetry-logging-and-you/#how-is-this-different-from-other-signals),
+  and the choice between modeling something as a span or an event should not
+  be influenced by whether complex attributes are needed.
+
+### Why do we want to extend standard attributes?
+
+Instead of introducing a second set of "extended" attributes that can be used on
+spans and events, we propose to extend the standard attributes.
+
+Having multiple attribute sets across the API
+[creates ergonomic challenges](https://github.com/open-telemetry/opentelemetry-specification/issues/4201).
+While there are some mitigations ([as demonstrated in
+Java](https://github.com/open-telemetry/opentelemetry-java/pull/7123)),
+extending the standard attributes provides a more seamless and user-friendly API experience.
+
+### Why isn't it a breaking change?
+
+Currently, the SDK specification states that extending the set of standard
+attribute types to the full set of attribute types supported by OTLP would be
+[considered a breaking change](../specification/common/README.md#standard-attribute).
+
+We propose revisiting this and allowing extending the set of standard attribute
+types to the full set of attribute types supported by OTLP, without treating it as
+a breaking change, for the following reasons:
+
+- Language SDKs can implement this without breaking their backwards
+  compatibility guarantees (e.g., [Java's](https://github.com/open-telemetry/opentelemetry-java/blob/main/VERSIONING.md)).
+- While backends will need to add support for complex attributes, this is
+  consistent with the introduction of other new features that enable
+  new capabilities.
+  A reasonably straightforward implementation option for backends is to JSON serialize
+  complex attribute values and store them as strings.
 
 ## Changes
 
