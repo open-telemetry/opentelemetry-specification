@@ -205,6 +205,7 @@ class EnvVarPropagator(TextMapPropagator):
         env_dict = os.environ.copy()
         # Inject context into environment variables
         ...
+
     def extract(self, carrier):
         # Extract context from environment variables
         ...
@@ -218,6 +219,7 @@ public struct EnvVarPropagator: TextMapPropagator {
         // Inject context into environment variables
         ...
     }
+
     public func extract(...) -> SpanContext? {
         // Extract context from environment variables
         ...
