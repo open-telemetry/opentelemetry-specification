@@ -170,7 +170,7 @@ the [Environment Variable Names](#environment-variable-names) and [Format
 Restrictions](#format-restrictions) sections.
 
 The `EnvVarPropagator` MAY define an `EnvVarCarrier` type that implements the
-`TextMap` carrier interface when calling `Inject` and `Extract operations.
+`TextMap` carrier interface when calling `Inject` and `Extract` operations.
 
 #### Examples
 
