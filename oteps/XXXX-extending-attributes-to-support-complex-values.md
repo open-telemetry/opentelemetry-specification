@@ -45,8 +45,9 @@ spans and events, we propose to extend the standard attributes.
 
 Having multiple attribute sets across the API
 [creates ergonomic challenges](https://github.com/open-telemetry/opentelemetry-specification/issues/4201).
-While there are some mitigations ([as demonstrated in
-Java](https://github.com/open-telemetry/opentelemetry-java/pull/7123)),
+While there are some mitigations (as demonstrated in
+[opentelemetry-java#7123](https://github.com/open-telemetry/opentelemetry-java/pull/7123) and
+[opentelemetry-go#6180](https://github.com/open-telemetry/opentelemetry-go/pull/6180)),
 extending the standard attributes provides a more seamless and user-friendly API experience.
 
 ### Why isn't it a breaking change?
@@ -61,11 +62,15 @@ a breaking change, for the following reasons:
 
 - Language SDKs can implement this without breaking their backwards
   compatibility guarantees (e.g., [Java's](https://github.com/open-telemetry/opentelemetry-java/blob/main/VERSIONING.md)).
-- While backends will need to add support for complex attributes, this is
-  consistent with the introduction of other new features that enable
-  new capabilities.
-  A reasonably straightforward implementation option for backends is to JSON serialize
-  complex attribute values and store them as strings.
+- The OpenTelemetry Collector already supports transforming data to complex attributes
+  via OTTL across all signals, so backends are not free from an obligation to handle
+  complex attributes gracefully (even if that just means dropping them currently).
+- While backends may still need to add support for complex attributes,
+  this is the case with the introduction of any new OTLP feature.
+  Bumping the OTLP minor version is already the normal communication mechanism
+  for this kind of change.
+  A reasonably straightforward implementation option for backends is to just
+  JSON serialize complex attributes and store them as strings.
 
 ## How
 
