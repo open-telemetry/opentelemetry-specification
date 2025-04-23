@@ -194,11 +194,13 @@ minimize the risk of unintentional use of complex attributes.
 
 ## Future possibilities
 
-### Configurable SDK behavior
+### Configurable OTLP exporter behavior
 
-The SDK behavior for complex attributes can be made customizable on a per-signal
-basis, allowing it to either **serialize complex values to JSON strings** or
-**drop** the corresponding attribute.
+The OTLP exporter behavior for complex attributes can be made customizable on a per-signal
+basis, allowing complex attributes to be:
+- passed through (the default),
+- serialized to JSON, or
+- dropped
 
 This option may be useful as a workaround for applications that don’t use a
 collector and whose backend does not handle complex attribute types gracefully.
