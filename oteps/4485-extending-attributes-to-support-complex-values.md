@@ -73,13 +73,13 @@ extending the standard attributes provides a more seamless and user-friendly API
 
 ### Why isn't it a breaking change?
 
-Currently, the SDK specification states that extending the set of standard
-attribute types to the full set of attribute types supported by OTLP would be
+Currently, the SDK specification has a clause that says extending
+the set of standard attribute would be
 [considered a breaking change](/specification/common/README.md#standard-attribute).
 
-We propose revisiting this and allowing extending the set of standard attribute
-types to the full set of attribute types supported by OTLP, without treating it as
-a breaking change, for the following reasons:
+We believe that removing this clause and extending standard 
+attributes will not in fact be a breaking change for
+anyone in the OpenTelemetry ecosystem:
 
 - Language SDKs can implement this without breaking their backwards
   compatibility guarantees (e.g., [Java's](https://github.com/open-telemetry/opentelemetry-java/blob/main/VERSIONING.md)).
