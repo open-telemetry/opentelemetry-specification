@@ -29,7 +29,7 @@ In the context of this OTEP, we use the following terminology:
   [specification](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/common/README.md)
 
 - **Complex attributes** include all other values supported by the `AnyValue` proto,
-  such as maps, heterogeneous arrays, and combinations of those with primitives.
+  such as null (empty) value, maps, heterogeneous arrays, and combinations of those with primitives.
   Byte arrays are also considered complex attributes, as they are excluded from
   the current definition of *standard* attributes.
 
@@ -77,7 +77,7 @@ Currently, the SDK specification has a clause that says extending
 the set of standard attribute would be
 [considered a breaking change](/specification/common/README.md#standard-attribute).
 
-We believe that removing this clause and extending standard 
+We believe that removing this clause and extending standard
 attributes will not in fact be a breaking change for
 anyone in the OpenTelemetry ecosystem:
 
@@ -128,6 +128,14 @@ reason not to, which MUST be documented in the specification.
 The OTel SDK SHOULD pass both simple and complex attributes to the processing
 pipeline as `AnyValue`.
 The SDK MUST support reading and modifying complex attributes during processing.
+
+#### Exporters
+
+OTLP exporter SHOULD, by default, pass `AnyValue` attributes through to the endpoint.
+
+Exporters for protocols that do not natively support complex values, such as Prometheus,
+SHOULD represent complex values as JSON-encoded strings following
+[attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute).
 
 #### Attribute limits
 
@@ -185,10 +193,11 @@ It is RECOMMENDED to enforce `AnyValue` compatibility at the API level.
 Users and instrumentations SHOULD define custom `AnyValue`-compatible models
 to minimize misuse and reduce performance overhead.
 
-OTel SDKs MAY provide convenience methods to convert arbitrary objects to `AnyValue`.
-If such convenience is provided, it is RECOMMENDED to limit supported types
-to primitives, arrays, standard library collections, named tuples, JSON objects, and
-similar structures following [mapping to OTLP AnyValue](/specification/common/attribute-type-mapping.md#mapping-arbitrary-data-to-otlp-anyvalue).
+OTel SDKs that provide convenience to convert arbitrary objects to `AnyValue`
+SHOULD limit supported types to primitives, arrays, standard library collections,
+named tuples, JSON objects, and similar structures following
+[mapping to OTLP AnyValue](/specification/common/attribute-type-mapping.md#mapping-arbitrary-data-to-otlp-anyvalue).
+
 Falling back to a string representation of unknown objects is RECOMMENDED to
 minimize the risk of unintentional use of complex attributes.
 
