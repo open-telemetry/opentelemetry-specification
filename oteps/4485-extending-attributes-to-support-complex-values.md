@@ -55,8 +55,8 @@ There are a number of reasons why we want to allow complex attributes on spans:
   way to store this data.
 - During the event stabilization process, it became clear that
   [spans and events are often thought of as being conceptual
-  twins.](https://opentelemetry.io/blog/2025/opentelemetry-logging-and-you/#how-is-this-different-from-other-signals),
-  and the choice between modeling something as a span or an event should not
+  twins](https://opentelemetry.io/blog/2025/opentelemetry-logging-and-you/#how-is-this-different-from-other-signals),
+  and that the choice between modeling something as a span or an event should not
   be influenced by whether complex attributes are needed.
 
 ### Why do we want to extend standard attributes?
@@ -143,7 +143,7 @@ partial exports are not allowed.
 
 ### Semantic conventions
 
-Semantic conventions will be updated with the following guidance
+Semantic conventions will be updated with the following guidance:
 
 - Simple attributes SHOULD be used whenever possible. Semantic conventions SHOULD
   assume that backends do not index individual properties of complex attributes,
@@ -162,12 +162,11 @@ Semantic conventions will be updated with the following guidance
 ### Backends don't support `AnyValue` attributes
 
 While it should be possible to record complex data in telemetry, many backends do not
-support it well - or at all - which can result in individual complex attributes
-being dropped or rejected.
+support it, which can result in individual complex attributes being dropped.
 
 We mitigate this through:
 
-- Introducing new APIs in the experimental parts of the OTel API which limits
+- Introducing new APIs in the experimental parts of the OTel API which will limit
   the impact of unsupported attribute types to early adopters, while giving
   backends time to add support.
 
