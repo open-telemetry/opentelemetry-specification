@@ -9,12 +9,13 @@
   * [API](#api)
   * [SDK](#sdk)
     * [Attribute limits](#attribute-limits)
+  * [Exporters](#exporters)
   * [Semantic conventions](#semantic-conventions)
 * [Trade-offs and mitigations](#trade-offs-and-mitigations)
   * [Backends don't support `AnyValue` attributes](#backends-dont-support-anyvalue-attributes)
   * [Arbitrary objects are dangerous](#arbitrary-objects-are-dangerous)
 * [Future possibilities](#future-possibilities)
-  * [Configurable SDK behavior](#configurable-sdk-behavior)
+  * [Configurable OTLP exporter behavior](#configurable-otlp-exporter-behavior)
   * [Additional size limits](#additional-size-limits)
 
 ## Glossary
@@ -129,14 +130,6 @@ The OTel SDK SHOULD pass both simple and complex attributes to the processing
 pipeline as `AnyValue`.
 The SDK MUST support reading and modifying complex attributes during processing.
 
-#### Exporters
-
-OTLP exporter SHOULD, by default, pass `AnyValue` attributes through to the endpoint.
-
-Exporters for protocols that do not natively support complex values, such as Prometheus,
-SHOULD represent complex values as JSON-encoded strings following
-[attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute).
-
 #### Attribute limits
 
 The SDK SHOULD apply [attribute limits](/specification/common/README.md#attribute-limits)
@@ -151,6 +144,14 @@ partial exports are not allowed.
 
 <!-- See https://github.com/open-telemetry/opentelemetry-specification/issues/4487,
 we should define limits even if this OTEP is not merged -->
+
+### Exporters
+
+OTLP exporter SHOULD, by default, pass `AnyValue` attributes to the endpoint.
+
+Exporters for protocols that do not natively support complex values, such as Prometheus,
+SHOULD represent complex values as JSON-encoded strings following
+[attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute).
 
 ### Semantic conventions
 
