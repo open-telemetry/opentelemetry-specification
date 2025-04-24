@@ -149,6 +149,9 @@ Leaf nodes of an `AnyValue` attribute SHOULD count toward the **attribute count 
 If the limit is reached, the SDK MUST drop the entire `AnyValue` attribute;
 partial exports are not allowed.
 
+<!-- See https://github.com/open-telemetry/opentelemetry-specification/issues/4487,
+we should define limits even if this OTEP is not merged -->
+
 ### Semantic conventions
 
 Semantic conventions will be updated with the following guidance:
