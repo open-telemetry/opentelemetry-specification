@@ -106,6 +106,21 @@ and performance.
 
 Exposing multiple `Attributes` types is NOT RECOMMENDED.
 
+OTel API MUST support setting complex attributes on spans, logs, profiles,
+descriptive entity attributes.
+
+OTel API SHOULD NOT provide convenience methods to set complex attributes on
+metrics, resources, instrumentation scope. APIs that allow to set complex attributes
+on such signals (for example, providing an arbitrary attributes collection when
+recording a metric), MUST document complex attributes usage limitations.
+
+API documentation and spec language SHOULD include a language similar to this:
+
+> Simple attributes SHOULD be used whenever possible. Instrumentations SHOULD
+> assume that backends do not index individual properties of complex attributes,
+> that querying or aggregating on such properties is inefficient and complicated,
+> and that reporting complex attributes carries higher performance overhead.
+
 > [!NOTE]
 >
 > While OTel metrics are designed for aggregation, future SDK implementations
@@ -130,6 +145,13 @@ The OTel SDK SHOULD pass both simple and complex attributes to the processing
 pipeline as `AnyValue`.
 The SDK MUST support reading and modifying complex attributes during processing.
 
+#### `AnyValue` implementation notes
+
+`AnyValue` implementation SHOULD provide efficient hash code and equality check
+since its possible (but not recommended) to use complex attributes as a resource,
+instrumentation scope, or metric attribute where hash code and equality may be
+extensively used to identify tracer/meter/logger or the time series.
+
 #### Attribute limits
 
 The SDK SHOULD apply [attribute limits](/specification/common/README.md#attribute-limits)
@@ -142,8 +164,10 @@ Leaf nodes of an `AnyValue` attribute SHOULD count toward the **attribute count 
 If the limit is reached, the SDK MUST drop the entire `AnyValue` attribute;
 partial exports are not allowed.
 
-<!-- See https://github.com/open-telemetry/opentelemetry-specification/issues/4487,
-we should define limits even if this OTEP is not merged -->
+> [!NOTE]
+>
+> We should define `AnyValue` limits even if this OTEP is not merged -
+> [#4487](https://github.com/open-telemetry/opentelemetry-specification/issues/4487)
 
 ### Exporters
 
@@ -151,7 +175,7 @@ OTLP exporter SHOULD, by default, pass `AnyValue` attributes to the endpoint.
 
 Exporters for protocols that do not natively support complex values, such as Prometheus,
 SHOULD represent complex values as JSON-encoded strings following
-[attribute specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/common/README.md#attribute).
+[attribute specification](/specification/common/README.md#attribute).
 
 ### Semantic conventions
 
@@ -205,12 +229,17 @@ named tuples, JSON objects, and similar structures following
 Falling back to a string representation of unknown objects is RECOMMENDED to
 minimize the risk of unintentional use of complex attributes.
 
+Prior art on AnyValue conversion: [Go](https://github.com/open-telemetry/opentelemetry-go-contrib/blob/72cccd8065dcfd84b69f34d8cb6f349a547fedce/bridges/otelslog/convert.go#L20),
+[.NET](https://github.com/open-telemetry/opentelemetry-dotnet/blob/71abd4169b4b6c672343b37c32e3337bc227ed32/src/OpenTelemetry/Logs/ILogger/OpenTelemetryLogger.cs#L134),
+[Python](https://github.com/open-telemetry/opentelemetry-python/blob/00329e07fb01d7c3e43bb513fe9be3748745c52e/opentelemetry-api/src/opentelemetry/attributes/__init__.py#L121)
+
 ## Future possibilities
 
 ### Configurable OTLP exporter behavior
 
 The OTLP exporter behavior for complex attributes can be made customizable on a per-signal
 basis, allowing complex attributes to be:
+
 - passed through (the default),
 - serialized to JSON, or
 - dropped
