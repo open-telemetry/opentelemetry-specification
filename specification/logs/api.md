@@ -112,8 +112,7 @@ The effect of calling this API is to emit a `LogRecord` to the processing pipeli
 The API MUST accept the following parameters:
 
 - [Timestamp](./data-model.md#field-timestamp) (optional)
-- [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified the
-  implementation SHOULD set it equal to the current time.
+- [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional)
 - The [Context](../context/README.md) associated with the `LogRecord`.
   When implicit Context is supported, then this parameter SHOULD be optional and
   if unspecified then MUST use current Context.
@@ -122,7 +121,7 @@ The API MUST accept the following parameters:
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
-- **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
+- [Event Name](./data-model.md#field-eventname) (optional)
 
 **Status**: [Development](../document-status.md)
 

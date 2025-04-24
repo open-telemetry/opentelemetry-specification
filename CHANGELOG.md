@@ -9,9 +9,6 @@ release.
 
 ### Context
 
-- Add context propagation through Environment Variables specification.
-    ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
-
 ### Traces
 
 - Define sampling threshold field in OpenTelemetry TraceState; define the behavior
@@ -24,17 +21,12 @@ release.
 
 ### Logs
 
-- Add `Enabled` opt-in operation to the `LogRecordProcessor`.
-  ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
-- Stabilize `Logger.Enabled`.
-  ([#4463](https://github.com/open-telemetry/opentelemetry-specification/pull/4463))
-
 ### Baggage
 
-- Add context (baggage) propagation through Environment Variables specification.
-    ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
-
 ### Resource
+
+- Add experimental resource detector name.
+  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
 
 ### Profiles
 
@@ -44,16 +36,59 @@ release.
 
 ### SDK Configuration
 
-- Convert declarative config env var substitution syntax to ABNF.
-  ([#4448](https://github.com/open-telemetry/opentelemetry-specification/pull/4448))
-- List declarative config supported SDK extension plugin interfaces.
-  ([#4452](https://github.com/open-telemetry/opentelemetry-specification/pull/4452))
-
 ### Common
 
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.44.0 (2025-04-15)
+
+### Context
+
+- Add context propagation through Environment Variables specification.
+    ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
+- On Propagators API, stabilize `GetAll` on the `TextMap` Extract.
+    ([#4472](https://github.com/open-telemetry/opentelemetry-specification/pull/4472))
+
+### Traces
+
+- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
+  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
+  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
+
+### Metrics
+
+- Clarify SDK behavior for Instrument Advisory Parameter.
+  ([#4389](https://github.com/open-telemetry/opentelemetry-specification/pull/4389))
+
+### Logs
+
+- Add `Enabled` opt-in operation to the `LogRecordProcessor`.
+  ([#4439](https://github.com/open-telemetry/opentelemetry-specification/pull/4439))
+- Stabilize `Logger.Enabled`.
+  ([#4463](https://github.com/open-telemetry/opentelemetry-specification/pull/4463))
+- Stabilize `EventName`.
+  ([#4475](https://github.com/open-telemetry/opentelemetry-specification/pull/4475))
+- Move implementation details of the `Observed Timestamp` to the Log SDK.
+  ([#4482](https://github.com/open-telemetry/opentelemetry-specification/pull/4482))
+
+### Baggage
+
+- Add context (baggage) propagation through Environment Variables specification.
+    ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
+
+### Resource
+
+- Add Datamodel for Entities.
+   ([#4442](https://github.com/open-telemetry/opentelemetry-specification/pull/4442))
+
+### SDK Configuration
+
+- Convert declarative config env var substitution syntax to ABNF.
+  ([#4448](https://github.com/open-telemetry/opentelemetry-specification/pull/4448))
+- List declarative config supported SDK extension plugin interfaces.
+  ([#4452](https://github.com/open-telemetry/opentelemetry-specification/pull/4452))
 
 ## v1.43.0 (2025-03-18)
 

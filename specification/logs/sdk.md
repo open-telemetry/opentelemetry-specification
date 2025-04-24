@@ -16,6 +16,7 @@
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
   * [LoggerConfig](#loggerconfig)
+  * [Emit a LogRecord](#emit-a-logrecord)
   * [Enabled](#enabled)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
@@ -192,6 +193,11 @@ It consists of the following parameters:
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
 
+### Emit a LogRecord
+
+If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
+the implementation SHOULD set it equal to the current time.
+
 ### Enabled
 
 **Status**: [Development](../document-status.md)
@@ -247,7 +253,7 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * [`TraceId`](./data-model.md#field-traceid)
 * [`SpanId`](./data-model.md#field-spanid)
 * [`TraceFlags`](./data-model.md#field-traceflags)
-* **Status**: [Development](../document-status.md) - [`EventName`](./data-model.md#field-eventname)
+* [`EventName`](./data-model.md#field-eventname)
 
 The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
 The operation can be used by asynchronous processors (e.g. [Batching processor](#batching-processor))
