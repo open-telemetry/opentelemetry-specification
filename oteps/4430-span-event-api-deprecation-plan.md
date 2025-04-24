@@ -51,7 +51,7 @@ Stabilize (log-based) Events.
 
 2. Implement the SDK-based backcompat story:
 
-   - [Sending (log-based) Events as Span Events](#via-the-sdk)
+   - [Sending (log-based) exceptions and Events as Span Events](#via-the-sdk)
 
 3. Mark
    [Span RecordException](../specification/trace/api.md#record-exception)
@@ -89,11 +89,11 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
 Non-stable instrumentations SHOULD use their best judgement on whether to follow
 the above guidance.
 
-## Sending (log-based) Events as Span Events
+## Sending (log-based) exceptions and Events as Span Events
 
 ### Via the SDK
 
-There MUST be a way to send (log-based) Events as Span Events
+There MUST be a way to send (log-based) exceptions and Events as Span Events
 for use cases that rely on Span Events being emitted in the
 same proto envelope as their containing span, and for users
 who need to preserve the prior behavior when updating to
@@ -102,21 +102,21 @@ new instrumentation.
 This mechanism SHOULD be implemented as follows (see
 [prototype](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/80adbe1cf8de647afa32c68f921aef2bbd4dfd71/processors/README.md#event-to-spanevent-bridge)):
 
-- An SDK-based log processor that converts Event records to Span Events
+- An SDK-based log processor that converts exception and Event records to Span Events
   and attaches them to the current span, whose behavior and configuration
   are defined in the OpenTelemetry Specification.
 - A standard way to add this log processor via declarative configuration
   (assuming its package has been installed).
 
 Users can add a batch log record processor and log exporter depending on
-if they also want to export Event records as logs or not.
+if they also want to export exception and Event records as logs or not.
 
 This log processor SHOULD be included in the standard
 OpenTelemetry zero-code distribution (if one exists for the language).
 
 ### Via the Collector
 
-Note: this is a nice to have only and not required for any other part
+Note: this is a nice-to-have only and not required for any other part
 of the Span Event API deprecation plan.
 
 This mechanism MAY be implemented as follows:
