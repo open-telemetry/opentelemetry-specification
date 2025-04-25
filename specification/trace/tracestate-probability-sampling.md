@@ -147,18 +147,21 @@ that precedes it in time (i.e., the parent or upstream sampler).
 
 ```mermaid
 graph TD
-    Root["Root Span"] -->|context propagation| Child1["Child 1"]
-    Root -->|context propagation| Child2["Child 2"]
+    subgraph "Span Creation (Time →)"
+        direction LR
+        Root["Root Span"] -->|context propagation| Child1["Child 1"]
+        Child1 -->|context| Child2["Child 2"]
+    end
     
-    Root -->|downstream propagation| LC1["Frontend Collector 1"]
-    LC1 -->|downstream propagation| LC2["Frontend Collector 2"]
+    Root -->|pipeline| LC1["Frontend Collector 1"]
+    LC1 -->|pipeline| LC2["Frontend Collector 2"]
     
-    Child1 -->|downstream propagation| RC1["Backend Collector 1"]
-    Child2 -->|downstream propagation| RC1
-    RC1 -->|downstream propagation| RC2["Backend Collector 2"]
+    Child1 -->|pipeline| RC1["Backend Collector 1"]
+    Child2 -->|pipeline| RC1
+    RC1 -->|pipeline| RC2["Backend Collector 2"]
     
-    LC2 -->|downstream propagation| FC["Gateway Collector"]
-    RC2 -->|downstream propagation| FC
+    LC2 -->|pipeline| FC["Gateway Collector"]
+    RC2 -->|pipeline| FC
     
     classDef span fill:#f9f,stroke:#333,stroke-width:2px;
     classDef collector fill:#bbf,stroke:#33c,stroke-width:1px;
