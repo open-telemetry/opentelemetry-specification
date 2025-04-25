@@ -160,10 +160,10 @@ graph TD
 		Child1 --> RC1["backend agent"]
 		Child2 --> RC1
 	    RC1 --> RC2["backend gateway"]
-    
-	    LC2 --> FC["destination service"]
-	    RC2 --> FC
 	end
+
+    LC2 --> FC["destination service"]
+    RC2 --> FC
     
     classDef span fill:#a7a,stroke:#333,stroke-width:2px;
     classDef collector fill:#77a,stroke:#33c,stroke-width:1px;
