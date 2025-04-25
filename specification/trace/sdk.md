@@ -536,7 +536,7 @@ The following configuration properties should be available when creating the sam
 
 CompositeSampler is a decorator that implements the standard `Sampler` interface but uses a composition of samplers to make its decisions.
 
-The CompositeSampler takes a ComposableSampler as input and delegates the sampling decision to that interface.
+The CompositeSampler takes a ComposableSampler as input and delegates the sampling decision to that interface.  See [Probability Sampling in TraceState](./tracestate-probability-sampling.md) for more details.
 
 ##### ComposableSampler
 
@@ -548,9 +548,14 @@ Returns a SamplingIntent structure that indicates the sampler's preference for s
 
 **Required arguments:**
 
-* All of the Sampler parameters are included
-* Parent threshold
-* Flag indicating if the parent threshold is reliable
+* All of the original Sampler API parameters are included
+* Parent context, threshold, incoming trace state, and trace flag
+  information MAY be precomputed so that ComposableSamplers do not
+  repeatedly probe the Context for this information.
+
+Note: ComposableSamplers MUST NOT modify the parameters passed to
+delegate GetSamplingIntent methods, as they are considered read-only
+state.
 
 **Return value:**
 
@@ -559,6 +564,13 @@ The method returns a `SamplingIntent` structure with the following elements:
 * `threshold` - The sampling threshold value. A lower threshold increases the likelihood of sampling.
 * `threshold_reliable` - A boolean indicating if the threshold can be reliably used for metrics estimation.
 * `attributes_provider` - An optional provider of attributes to be added to the span if it is sampled.
+* `trace_state_provider` - An optional provider of a modified TraceState.
+
+Note that `trace_state_provider` may be a significant source of
+complexity.  ComposableSamplers SHOULD NOT modify the OpenTelemetry
+TraceState.  The calling CompositeSampler SHOULD update the threshold
+of the outgoing TraceState (unless `!threshold_reliable`) and that the
+explicit randomness values MUST not be modified.
 
 ##### Built-in ComposableSamplers
 

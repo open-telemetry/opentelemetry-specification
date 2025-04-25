@@ -105,7 +105,9 @@ This proposal supports two sources of randomness:
 
 See [tracestate handling](./tracestate-handling.md#explicit-randomness-value-rv) for details about encoding randomness values.
 
-### Consistent Sampling Decision Approach
+## Approach and Terminology
+
+### Decision algorithm
 
 Given the above building blocks, let's look at how a participant can make consistent sampling decisions.
 For this, two values MUST be present in the `SpanContext`:
@@ -115,17 +117,61 @@ For this, two values MUST be present in the `SpanContext`:
 
 If `rv` >= `th`, *keep* the span, else *drop* the span.
 
-`th` represents the maximum threshold that was applied in all previous consistent sampling stages.
-If the current sampling stage applies a greater threshold value than any stage before, it MUST update (increase) the threshold correspondingly by re-encoding the OpenTelemetry TraceState value.
+### Sampling stages
+
+The two sampling aspects mentioned in the overview are hereby referred to as:
+
+1. Parent/Child sampling. These decisions are made for spans inside an SDK, synchronously, during the life of a trace. These decisions are based on live Contexts.
+2. Downstream sampling. These sampling decisions happen for spans on the collection path, after they finish, and may happen at multiple locations in collection pipeline.
+
+We recognize these as two dimensions in which Sampling decisions are
+made.  In Parent/Child sampling, there is a progression in the
+direction of causality, from parent to child forward in time.  In
+Downstream sampling, there is a progression from collector to
+collector forward in time.  Considering a finished span at a moment in
+time, it will have been sampled once by a Parent/Child sampler and
+zero or more times by a Collector.
+
+### Sampling base cases
+
+The CompositeSampler is meant to support combining multiple sampling
+rules into one using built-in ComposableSamplers as the base cases.
+
+Within the category of Parent/Child sampling, there are three primary
+base cases:
+
+- Root: The Root sampling decision is the first decision in both
+  sampling dimensions, made with no prior threshold. The Root sampling
+  decision is the only case where it is permitted to modify the
+  explicit trace randomness value for a Context.
+- Parent-based: When using parent-based sampling at a child, we expect
+  the child's decision to match the parent's decision.  The parent and
+  child will have matching threshold values.
+- Consistent probability: A probability sampler (e.g., TraceIDRatio)
+  makes an independent sampling decision.  A consistent probability
+  sampling decision ignores the parent's sampling threshold (if any).
+
+Some terms are not about one specific sampler, but about the approach:
+
+- Head: This mode of sampling implies that Root samplers use a
+  consistent probability base case and Child samplers are
+  parent-based. This term does not reflect on the mode or behavior of
+  Downstream samplers. By contrast, "Not Head" sampling means an
+  approach that uses unequal probabilities across Parent/Child
+  samplers withinin a trace.
+- Tail: This mode of sampling implies that Downstream samplers are
+  involved the decision. Sometimes this refers to sampling of
+  individual spans on the collection path (known as "intermediate"
+  sampling), but usually it refers to whole-trace sampling decisions
+  made downstream after assembling multiple spans into a single data
+  set.  Tail sampling may be combined with Head sampling, of course,
+  and may or may not contribute unequal probabilities across spans
+  within a trace.
 
 ## Sampler behavior for initializing and updating `th` and `rv` values
 
-There are two categories of samplers:
-
-- **Head samplers:** Implementations of [`Sampler`](./sdk.md#sampler), called by a `Tracer` during span creation for both root and child spans.
-- **Downstream samplers:** Any component that, given an ended Span, decides whether to *drop* it or *keep* it (by forwarding it to the next component in the pipeline). This category is also known as "collection path samplers" or "sampling processors". Note that *Tail samplers* are a special class of downstream samplers that buffer spans of a trace and make a sampling decision for the trace as a whole using data from any span in the buffered trace.
-
-This section defines the behavior for these two categories of samplers.
+`th` represents the maximum threshold that was applied in all previous consistent sampling stages.
+If the current sampling stage applies a greater threshold value than any stage before, it MUST update (increase) the threshold correspondingly by re-encoding the OpenTelemetry TraceState value.
 
 ### Head samplers
 
