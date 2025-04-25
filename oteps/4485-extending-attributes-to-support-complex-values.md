@@ -147,7 +147,7 @@ The SDK MUST support reading and modifying complex attributes during processing.
 
 #### `AnyValue` implementation notes
 
-`AnyValue` implementation SHOULD provide efficient hash code and equality check
+`AnyValue` implementation SHOULD provide efficient hash code and deep equality check
 since its possible (but not recommended) to use complex attributes as a resource,
 instrumentation scope, or metric attribute where hash code and equality may be
 extensively used to identify tracer/meter/logger or the time series.
