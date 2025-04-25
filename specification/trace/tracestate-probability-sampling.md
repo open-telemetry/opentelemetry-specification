@@ -147,7 +147,7 @@ that precedes it in time (i.e., the parent or upstream sampler).
 
 ```mermaid
 graph TD
-    subgraph "Span Creation (Time →)"
+    subgraph
         direction LR
         Root["Root Span"] --> Child1["Child 1"]
         Child1 --> Child2["Child 2"]
