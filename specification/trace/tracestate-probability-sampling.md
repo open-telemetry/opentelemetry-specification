@@ -153,18 +153,18 @@ graph TD
         Child1 --> Child2["Child 2"]
     end
     
-    Root --> LC1["Frontend Collector 1"]
-    LC1 --> LC2["Frontend Collector 2"]
+    Root --> LC1["Frontend Agent"]
+    LC1 --> LC2["Frontend Gateway"]
     
-    Child1 --> RC1["Backend Collector 1"]
+    Child1 --> RC1["Backend Agent"]
     Child2 --> RC1
-    RC1 --> RC2["Backend Collector 2"]
+    RC1 --> RC2["Backend Gateway"]
     
-    LC2 --> FC["Gateway Collector"]
+    LC2 --> FC["Destination Service"]
     RC2 --> FC
     
     classDef span fill:#a7a,stroke:#333,stroke-width:2px;
-    classDef collector fill:#99b,stroke:#33c,stroke-width:1px;
+    classDef collector fill:#77a,stroke:#33c,stroke-width:1px;
     
     class Root,Child1,Child2 span;
     class LC1,LC2,RC1,RC2,FC collector;
