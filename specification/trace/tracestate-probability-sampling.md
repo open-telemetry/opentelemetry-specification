@@ -163,8 +163,8 @@ graph TD
     LC2 -->|pipeline| FC["Gateway Collector"]
     RC2 -->|pipeline| FC
     
-    classDef span fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef collector fill:#bbf,stroke:#33c,stroke-width:1px;
+    classDef span fill:#a7a,stroke:#333,stroke-width:2px;
+    classDef collector fill:#99b,stroke:#33c,stroke-width:1px;
     
     class Root,Child1,Child2 span;
     class LC1,LC2,RC1,RC2,FC collector;
