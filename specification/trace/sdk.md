@@ -644,6 +644,7 @@ finalSampler = ComposableParentThreshold(rootSampler)
 ```
 
 This example creates a configuration where:
+
 - Health check endpoints are never sampled
 - Checkout endpoints are always sampled
 - Other root spans are sampled at 10%

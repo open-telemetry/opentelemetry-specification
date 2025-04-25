@@ -154,13 +154,13 @@ graph TD
     end
     
     subgraph "downstream samplers"
-		Root --> LC1["frontend agent"]
-		LC1 --> LC2["frontend gateway"]
+        Root --> LC1["frontend agent"]
+        LC1 --> LC2["frontend gateway"]
     
-		Child1 --> RC1["backend agent"]
-		Child2 --> RC1
-	    RC1 --> RC2["backend gateway"]
-	end
+        Child1 --> RC1["backend agent"]
+        Child2 --> RC1
+        RC1 --> RC2["backend gateway"]
+    end
 
     LC2 --> FC["destination service"]
     RC2 --> FC
