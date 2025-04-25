@@ -17,11 +17,20 @@ linkTitle: Probability Sampling
   * [Consistent Sampling Decision](#consistent-sampling-decision)
   * [Rejection Threshold (`th`)](#rejection-threshold-th)
   * [Randomness Value (`rv`)](#randomness-value-rv)
-  * [Consistent Sampling Decision Approach](#consistent-sampling-decision-approach)
-- [Sampler behavior for initializing and updating `th` and `rv` values](#sampler-behavior-for-initializing-and-updating-th-and-rv-values)
-  * [Head samplers](#head-samplers)
-  * [Downstream samplers](#downstream-samplers)
-  * [Migration to consistent probability samplers](#migration-to-consistent-probability-samplers)
+- [Approach and Terminology](#approach-and-terminology)
+  * [Decision algorithm](#decision-algorithm)
+  * [Sampling stages](#sampling-stages)
+  * [Sampling base cases](#sampling-base-cases)
+  * [Sampling related terms](#sampling-related-terms)
+- [Tracestate handling requirements](#tracestate-handling-requirements)
+  * [General requirements](#general-requirements)
+  * [Parent/Child threshold](#parentchild-threshold)
+    + [Independent parent/child threshold](#independent-parentchild-threshold)
+    + [Parent-based threshold](#parent-based-threshold)
+  * [Downstream threshold](#downstream-threshold)
+    + [Equalizing downstream sampler](#equalizing-downstream-sampler)
+    + [Proportional downstream sampler](#proportional-downstream-sampler)
+- [Migration to consistent probability samplers](#migration-to-consistent-probability-samplers)
 - [Algorithms](#algorithms)
   * [Converting floating-point probability to threshold value](#converting-floating-point-probability-to-threshold-value)
   * [Converting integer threshold to a `th`-value](#converting-integer-threshold-to-a-th-value)
@@ -135,6 +144,28 @@ zero or more times by a Downstream sampler.
 
 In both cases, the "previous" sampler refers to the sampling stage
 that precedes it in time (i.e., the parent or upstream sampler).
+
+```mermaid
+graph TD
+    Root["Root Span"] -->|context propagation| Child1["Child 1"]
+    Root -->|context propagation| Child2["Child 2"]
+    
+    Root -->|downstream propagation| LC1["Frontend Collector 1"]
+    LC1 -->|downstream propagation| LC2["Frontend Collector 2"]
+    
+    Child1 -->|downstream propagation| RC1["Backend Collector 1"]
+    Child2 -->|downstream propagation| RC1
+    RC1 -->|downstream propagation| RC2["Backend Collector 2"]
+    
+    LC2 -->|downstream propagation| FC["Gateway Collector"]
+    RC2 -->|downstream propagation| FC
+    
+    classDef span fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef collector fill:#bbf,stroke:#33c,stroke-width:1px;
+    
+    class Root,Child1,Child2 span;
+    class LC1,LC2,RC1,RC2,FC collector;
+```
 
 ### Sampling base cases
 
