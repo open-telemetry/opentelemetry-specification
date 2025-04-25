@@ -147,13 +147,13 @@ that precedes it in time (i.e., the parent or upstream sampler).
 
 ```mermaid
 graph TD
-    subgraph "Parent/Child"
+    subgraph "Parent/Child samplers"
         direction LR
-        Root["Root Span"] --> Child1["Child 1"]
-        Child1 --> Child2["Child 2"]
+        Root["Root span"] --> Child1["Child span"]
+        Child1 --> Child2["Child span"]
     end
     
-    subgraph "Downstream"
+    subgraph "Downstream samplers"
 		Root --> LC1["Frontend Agent"]
 		LC1 --> LC2["Frontend Gateway"]
     
