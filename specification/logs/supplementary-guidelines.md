@@ -66,7 +66,7 @@ popular logging library.
 ### Logger Name
 
 If the logging library has a concept that is similar to OpenTelemetry's
-definition of the [Instrumentation Scope's](../glossary.md#instrumentation-scope)
+definition of the [Instrumentation Scope's](../common/README.md#instrumentation-scope)
 name, then the appender's implementation should use that value as the
 name parameter when [obtaining the Logger](./api.md#get-a-logger).
 
