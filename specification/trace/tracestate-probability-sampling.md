@@ -150,18 +150,18 @@ graph TD
     subgraph "Span Creation (Time →)"
         direction LR
         Root["Root Span"] -->|context propagation| Child1["Child 1"]
-        Child1 -->|context| Child2["Child 2"]
+        Child1 -->|| Child2["Child 2"]
     end
     
-    Root -->|pipeline| LC1["Frontend Collector 1"]
-    LC1 -->|pipeline| LC2["Frontend Collector 2"]
+    Root -->|| LC1["Frontend Collector 1"]
+    LC1 -->|| LC2["Frontend Collector 2"]
     
-    Child1 -->|pipeline| RC1["Backend Collector 1"]
-    Child2 -->|pipeline| RC1
-    RC1 -->|pipeline| RC2["Backend Collector 2"]
+    Child1 -->|| RC1["Backend Collector 1"]
+    Child2 -->|| RC1
+    RC1 -->|| RC2["Backend Collector 2"]
     
-    LC2 -->|pipeline| FC["Gateway Collector"]
-    RC2 -->|pipeline| FC
+    LC2 -->|| FC["Gateway Collector"]
+    RC2 -->|| FC
     
     classDef span fill:#a7a,stroke:#333,stroke-width:2px;
     classDef collector fill:#99b,stroke:#33c,stroke-width:1px;
