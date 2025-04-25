@@ -119,25 +119,29 @@ If `rv` >= `th`, *keep* the span, else *drop* the span.
 
 ### Sampling stages
 
-The two sampling aspects mentioned in the overview are hereby referred to as:
+The two sampling aspects mentioned in the overview are referred to as
+stages of a sampling strategy:
 
 1. Parent/Child sampling. These decisions are made for spans inside an SDK, synchronously, during the life of a trace. These decisions are based on live Contexts.
-2. Downstream sampling. These sampling decisions happen for spans on the collection path, after they finish, and may happen at multiple locations in collection pipeline.
+2. Downstream sampling. These sampling decisions happen for spans on the collection path, after they finish, and may happen at multiple locations in collection pipeline. These decisions are based on historical Contexts.
 
-We recognize these as two dimensions in which Sampling decisions are
-made.  In Parent/Child sampling, there is a progression in the
-direction of causality, from parent to child forward in time.  In
-Downstream sampling, there is a progression from collector to
+We recognize these stages as two dimensions in which Sampling
+decisions are made.  In Parent/Child sampling, there is a progression
+in the direction of causality, from parent to child forward in time.
+In Downstream sampling, there is a progression from collector to
 collector forward in time.  Considering a finished span at a moment in
 time, it will have been sampled once by a Parent/Child sampler and
-zero or more times by a Collector.
+zero or more times by a Downstream sampler.
+
+In both cases, the "previous" sampler refers to the sampling stage
+that precedes it in time (i.e., the parent or upstream sampler).
 
 ### Sampling base cases
 
 The CompositeSampler is meant to support combining multiple sampling
 rules into one using built-in ComposableSamplers as the base cases.
 
-Within the category of Parent/Child sampling, there are three primary
+Within the category of Parent/Child sampling, these are the primary
 base cases:
 
 - Root: The Root sampling decision is the first decision in both
@@ -150,6 +154,9 @@ base cases:
 - Consistent probability: A probability sampler (e.g., TraceIDRatio)
   makes an independent sampling decision.  A consistent probability
   sampling decision ignores the parent's sampling threshold (if any).
+  This case covers always-on and always-off sampling behaviors.
+
+### Sampling related terms
 
 Some terms are not about one specific sampler, but about the approach:
 
@@ -158,7 +165,7 @@ Some terms are not about one specific sampler, but about the approach:
   parent-based. This term does not reflect on the mode or behavior of
   Downstream samplers. By contrast, "Not Head" sampling means an
   approach that uses unequal probabilities across Parent/Child
-  samplers withinin a trace.
+  samplers within a trace.
 - Tail: This mode of sampling implies that Downstream samplers are
   involved the decision. Sometimes this refers to sampling of
   individual spans on the collection path (known as "intermediate"
@@ -168,30 +175,123 @@ Some terms are not about one specific sampler, but about the approach:
   and may or may not contribute unequal probabilities across spans
   within a trace.
 
-## Sampler behavior for initializing and updating `th` and `rv` values
+## Tracestate handling requirements
 
-`th` represents the maximum threshold that was applied in all previous consistent sampling stages.
-If the current sampling stage applies a greater threshold value than any stage before, it MUST update (increase) the threshold correspondingly by re-encoding the OpenTelemetry TraceState value.
+This is a supplemental guideline. See [the SDK
+specification](./sdk.md) for the specific requirements of each
+built-in sampler.
 
-### Head samplers
+The OpenTelemetry TraceState sub-key `th` represents the maximum
+threshold that was applied in all previous consistent sampling stages,
+including the parent/child and downstream samplers.
 
-See [SDK requirements for trace randomness](./sdk.md#sampling-requirements), which covers potentially inserting explicit trace randomness using the OpenTelemetry TraceState `rv` sub-key.
+See [SDK requirements for trace
+randomness](./sdk.md#sampling-requirements), which covers potentially
+inserting explicit trace randomness using the OpenTelemetry TraceState
+`rv` sub-key.
 
-A head Sampler is responsible for computing the `th` value in a new span's [OpenTelemetry TraceState](./tracestate-handling.md#tracestate-handling). The main inputs to that computation include the parent context's TraceState and the TraceID.
+Refer to [TraceState handling](./tracestate-handling.md) for examples
+showing how `th` and `rv` are encoded.
 
-When a span is sampled by in accordance with this specification, the output TraceState SHOULD be set to convey probability sampling:
+### General requirements
 
-- The `th` key MUST be defined with a threshold value corresponding to the sampling probability the sampler used.
-- If trace randomness was derived from a OpenTelemetry TraceState `rv` sub-key value, the same `rv` value MUST be defined and equal to the incoming OpenTelemetry TraceState `rv` sub-key value.
+All sampling stages that modify the effective sampling threshold must
+update the sampling threshold by re-encoding the OpenTelemetry
+TraceState, to maintain the correct statistical interpretation.
 
-### Downstream samplers
+For a conditional sampling stages (e.g. rule-based samplers) to remain
+consistent, they must not condition the sampling decision on the
+randomness value or other source of randomness.
 
-A downstream sampler, in contrast, may output a given ended Span with a *modified* trace state, complying with following rules:
+Sampling stages that yield spans with unknown sampling probability,
+including parent-based samplers when they encounter a Context with
+no parent thresohld, must erase the OpenTelemetry threshold
+value in their output.
 
-- If the chosen sampling probability is 1, the sampler MUST NOT modify an existing `th` sub-key value, nor set a `th` sub-key value.
-- Otherwise, the chosen sampling probability is in `(0, 1)`. In this case the sampler MUST output the span with a `th` equal to `max(input th, chosen th)`. In other words, `th` MUST NOT be decreased (as it is not possible to retroactively adjust an earlier stage's sampling probability), and it MUST be increased if a lower sampling probability was used. This case represents the common case where a downstream sampler is reducing span throughput in the system.
+Sampling stages should check for consistency when it is a simple test,
+and they should erase the threshold when it is apparently
+inconsistent.  For example, a parent-based sampler that receives and
+propagates a sampled context with threshold should check that the
+sampled flag matches the expression `rv >= th`, otherwise it should
+erase the threshold.
 
-### Migration to consistent probability samplers
+If randomness was derived from an explicit randomness value, the
+identical `rv` value must be set in the outgoing OpenTelemetry
+TraceState.
+
+### Parent/Child threshold
+
+The Parent/Child sampler initializes the consistent probability
+threshold. This can be achieved by using one of the built-in samplers,
+either as a base case or using the logic of a ComposableSampler.
+
+#### Independent parent/child threshold
+
+Because there is no parent threshold, a root sampler always makes an
+independent decision.  Child samplers may be configured with
+independent samplers, although it can lead to incomplete traces.
+
+The independent Parent/Child sampler base cases (i.e., AlwaysOn,
+TraceIDRatio) cases encode a fixed threshold based on their
+sampling probability.
+
+#### Parent-based threshold
+
+Parent-based samplers propagate the incoming threshold as the outgoing
+threshold, subject to the general requirements:
+
+- If a sampled incoming threshold is apparently inconsistent, erase it
+- If a sampled incoming threshold is absent, ensure there is no
+  outgoing threshold.
+
+### Downstream threshold
+
+Downstream samplers are able to raise the maximum threshold, but they
+cannot lower.  For a Downstream sampler to lower a threshold equates
+with retroactively raising an earlier stage's sampling probability.
+Stated another way, downstream samplers are permitted to decrease
+sampling probability, but to raise sampling probability would
+introduce a statistical error.
+
+Two downstream probability sampling have standard terminology,
+discussed next.
+
+#### Equalizing downstream sampler
+
+An equalizing downstream sampler aims to make all spans have an equal
+threshold after passing the stage.  This stage is more selective when
+earlier stages have been less selective, resulting in spans with equal
+probability.
+
+When an equalizing downstream sampler configured with threshold `T_d`
+considers a span with threshold `T_s` for randomness value `R`:
+
+- If `T_s > T_d` an error occurs. An equalizing probability sampler
+  cannot lower the threshold, therefore it cannot equalize probability.
+- If `R >= T_d` the span is selected using outbound threshold `T_d`.
+- Otherwise, `R < T_d` indicates that the span is not sampled.
+
+#### Proportional downstream sampler
+
+A proportional downstream sampler aims to multiply the incoming
+probability with a configured multiplier. By raising the threshold
+uniformly, this stage of sampler promises to reduce traffic by a fixed
+amount, despite their arriving thresholds.
+
+When a proportional downstream sampler configured with probability `p`
+considers a span with threshold `T_s` for randomness value `R`, first
+it computes the product threshold `T_o`:
+
+```
+T_o = ProbabilityToThreshold(p * ThresholdToProbability(T_s))
+```
+
+- If `T_o` is smaller than the minimum probability threshold, the span
+  is not sampled.
+- If `R >= T_o` the span is selected using outbound threshold `T_o`.
+- Otherwise, `R < T_o` indicates that the span is not sampled.
+
+## Migration to consistent probability samplers
 
 The OpenTelemetry specification for TraceIdRatioBased samplers was not completed until after the SDK specification was declared stable, and the exact behavior of that sampler was left unspecified.
 The `th` and `rv` sub-keys defined in the OpenTelemetry TraceState now address this behavior specifically.
