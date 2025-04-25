@@ -77,7 +77,7 @@ and [Span AddEvent](../specification/trace/api.md#add-events):
   - It SHOULD stop using these,
     instead recording exceptions and events using the Logs API.
   - Users will be able to retain the prior telemetry output by opting in to
-    [Sending (log-based) Events as Span Events](#sending-log-based-events-as-span-events)
+    [Sending (log-based) exceptions and Events as Span Events](#sending-log-based-exceptions-and-events-as-span-events)
   - In case the instrumentation was using span events previously to record
     additional details about a span (i.e. details that don't need a timestamp),
     it SHOULD instead record these details as attributes on the span. See
