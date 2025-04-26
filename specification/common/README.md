@@ -32,7 +32,7 @@ path_base_for_github_subdir:
 A logical unit of the application code with which the emitted telemetry can be
 associated. It is typically the developer's choice to decide what denotes a
 reasonable instrumentation scope. The most common approach is to use the
-[instrumentation library](glossary.md#instrumentation-library) as the scope,
+[instrumentation library](../glossary.md#instrumentation-library) as the scope,
 however other scopes are also common, e.g. a module, a package, a class or
 a plugin name can be chosen as the instrumentation scope.
 
@@ -44,7 +44,7 @@ use the fully qualified name of the emitting code (e.g. fully qualified library
 name or fully qualified class name).
 
 The instrumentation scope MUST be used to obtain a
-[Tracer, Meter, or Logger](glossary.md#tracer-name--meter-name--logger-name).
+[Tracer, Meter, or Logger](../glossary.md#tracer-name--meter-name--logger-name).
 
 The instrumentation scope's optional Schema URL identifies the [Telemetry
 Schema](schemas/README.md) that the instrumentation's emitted
