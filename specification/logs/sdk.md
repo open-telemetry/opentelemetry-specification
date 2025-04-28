@@ -66,7 +66,7 @@ It SHOULD only be possible to create `Logger` instances through a `LoggerProvide
 The `LoggerProvider` MUST implement the [Get a Logger API](api.md#get-a-logger).
 
 The input provided by the user MUST be used to create
-an [`InstrumentationScope`](../commmon/README.md#instrumentation-scope) instance which
+an [`InstrumentationScope`](../common/README.md#instrumentation-scope) instance which
 is stored on the created `Logger`.
 
 In the case where an invalid `name` (null or empty string) is specified, a

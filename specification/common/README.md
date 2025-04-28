@@ -47,7 +47,7 @@ The instrumentation scope MUST be used to obtain a
 [Tracer, Meter, or Logger](../glossary.md#tracer-name--meter-name--logger-name).
 
 The instrumentation scope's optional Schema URL identifies the [Telemetry
-Schema](schemas/README.md) that the instrumentation's emitted
+Schema](../schemas/README.md) that the instrumentation's emitted
 telemetry conforms to.
 
 The instrumentation scope's optional attributes provide additional information about
@@ -187,7 +187,7 @@ at this time, as discussed in
 ## Attribute Collections
 
 [Resources](../resource/sdk.md),
-[Instrumentation Scopes](../glossary.md#instrumentation-scope),
+[Instrumentation Scopes](#instrumentation-scope),
 [Metric points](../metrics/data-model.md#metric-points),
 [Spans](../trace/api.md#set-attributes), Span
 [Events](../trace/api.md#add-events), Span
