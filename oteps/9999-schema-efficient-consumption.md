@@ -4,23 +4,27 @@
 **Author(s)**: 
 * [Bartek Płotka, Google](https://www.bwplotka.dev/)
 * [Josh Suereth, Google](https://github.com/jsuereth)
+* [Laurent Quérel, F5](https://github.com/lquerel)
 * <active co-authors/contributors welcome!>
 
 **Related**: 
-[Spec #4427](https://github.com/open-telemetry/opentelemetry-specification/issues/4427), [OTEP-0152][otep-0152],  [OTEP 0243](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0243-app-telemetry-schema-vision-roadmap.md), [Prometheus Proposal][prom-proposal], [KubeConEU 2025 Talk][kubecon-talk], [Weaver #450](https://github.com/open-telemetry/weaver/issues/450)
+[Spec Issue #4427](https://github.com/open-telemetry/opentelemetry-specification/issues/4427), [Weaver Issue #612](https://github.com/open-telemetry/weaver/issues/612), [Weaver Issue #450](https://github.com/open-telemetry/weaver/issues/450), [OTEP-0152][otep-0152], [OTEP 0243](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0243-app-telemetry-schema-vision-roadmap.md), [Prometheus Proposal][prom-proposal], [KubeConEU 2025 Talk][kubecon-talk]. 
 
-**TL;DR**: _We propose an evolution of the [Telemetry Schema (OTEP-0152)][otep-0152]
-that enables the **efficient** consumption of the Telemetry schema pieces for the emerging collection and backend use case. As a case study, we show how those changes will [enable backends like Prometheus (for metrics)](https://github.com/prometheus/prometheus/issues/16428) and vendors to practically adopt telemetry schematization with all its benefits e.g. [a powerful PromQL "versioned read" capability][prom-prototype]._
+**TL;DR**: _We propose the next evolution of the [Telemetry Schema (OTEP-0152)][otep-0152] that enables an **efficient** consumption of the Telemetry schema pieces for the emerging collection and backend use case. As a case study, we show how those changes will practically:_
+* _Enable efficient OpenTelemetry Collector Schema Processing_
+* _[Enable backends like Prometheus](https://github.com/prometheus/prometheus/issues/16428) and vendors to adopt telemetry schematization with all its benefits e.g. [a powerful PromQL "versioned read" capability][prom-prototype]._
+
+> This document is in progress; refer to PR TBD discussions for the latest updates.
 
 ## Motivation
 
 Long story short, it's challenging for the end-users to effectively **organize their observability data**, because the telemetry ecosystem is increasingly vast and rich.
  
-To start solving this, OpenTelemetry community [established the telemetry semantic convention](https://opentelemetry.io/docs/specs/semconv/) to unify the telemetry pieces into "one representation". Accompanied [Telemetry Schema (OTEP-152) was specified to start the discussion on sustainability of that schema definitions (e.g. changes over time)](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0152-telemetry-schemas.md#motivation). Specifically OTEP-152 defines [a public YAML file with all telemetry transformations between 1.0 and current version](https://github.com/open-telemetry/semantic-conventions/blob/main/schemas/1.32.0). To connect telemetry on the wire/storage with schema a [Schema URL](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0152-telemetry-schemas.md#schema-url) "link" was defined, pointing to that [schema file](https://github.com/open-telemetry/semantic-conventions/blob/main/schemas/1.32.0). Finally, [weaver](https://github.com/open-telemetry/weaver) project was established to help with various schema operations (e.g.: validation, generation of schema file, code, documentation).
+To start solving this, OpenTelemetry community [established the telemetry semantic convention](https://opentelemetry.io/docs/specs/semconv/) to unify the telemetry pieces into "one representation". Accompanied [Telemetry Schema (OTEP-152) was specified to start the discussion on sustainability of that schema definitions (e.g. changes over time)](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0152-telemetry-schemas.md#motivation). Specifically OTEP-152 defines [a public YAML file with all the telemetry transformations between 1.0 and current version](https://github.com/open-telemetry/semantic-conventions/blob/main/schemas/1.32.0). To connect telemetry on the wire (or in storage) to their schema a [Schema URL](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0152-telemetry-schemas.md#schema-url) "link" was defined, pointing to that [schema file](https://github.com/open-telemetry/semantic-conventions/blob/main/schemas/1.32.0). Finally, the [Weaver](https://github.com/open-telemetry/weaver) project was established to consolidate with various schema operations (e.g.: validation, generation of schema file, code, documentation).
 
-While it has been proven to be a great start, the Telemetry Schema [has known limitations](#current-limitations), surfaced by the lack of the adopted, pragmatic backend/tools that would use Telemetry Schema file and Schema URL. As a result, it's still hard for end-users to adopt and maintain OpenTelemetry schemas and enjoy many **incredible** benefits like generative instrumentation and documentation, consistency and stability of telemetry consumption, signal correlation and more!
+While it has been proven to be a great start, the Telemetry Schema [has known limitations](#current-limitations), surfaced by the lack of the adopted, backend and tools that would use Telemetry Schema file and Schema URL. As a result, it's still hard for end-users to adopt and maintain OpenTelemetry schemas and enjoy many **incredible** benefits like generative instrumentation and documentation, consistency and stability of telemetry consumption, signal correlations and more.
 
-This OTEP proposes the next evolution of Telemetry Schema, based on [the PromQL/Prometheus Schema Changes](#prometheus-case-study) prototype using OpenTelemetry Schema (showcased in the [KubeCon Talk][kubecon-talk].
+This OTEP proposes the next evolution of Telemetry Schema, beyond a single YAML file, based on [the PromQL/Prometheus Schema Changes](#prometheus-case-study) prototype using OpenTelemetry Schema (showcased in the [KubeCon Talk][kubecon-talk].
 
 ### Current Limitations
 
