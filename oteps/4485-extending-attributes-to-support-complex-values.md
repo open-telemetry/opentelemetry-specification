@@ -79,8 +79,7 @@ the set of standard attribute would be
 [considered a breaking change](/specification/common/README.md#standard-attribute).
 
 We believe that removing this clause and extending standard
-attributes will not in fact be a breaking change for
-anyone in the OpenTelemetry ecosystem:
+attributes will not in fact be a breaking change within the OpenTelemetry ecosystem:
 
 - Language SDKs can implement this without breaking their backwards
   compatibility guarantees (e.g., [Java's](https://github.com/open-telemetry/opentelemetry-java/blob/main/VERSIONING.md)).
