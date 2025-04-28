@@ -44,7 +44,7 @@ in the set of *standard* attributes.
 
 There are a number of reasons why we want to allow complex attributes on spans:
 
-- Emerging semantic conventions, such as Generative AI,
+- Emerging semantic conventions, such as Generative AI and GraphQL,
   demonstrate the usefulness of including complex attributes on spans.
 - Many users already add complex attributes to spans by JSON-encoding them.
   Supporting complex attributes natively enables future possibilities like
