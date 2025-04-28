@@ -1,5 +1,7 @@
 # Telemetry Schema Evolution for Efficient Consumption
 
+> This document is in progress; refer to PR TBD discussions for the latest updates.
+> 
 ----
 **Author(s)**: 
 * [Bartek Płotka, Google](https://www.bwplotka.dev/)
@@ -10,11 +12,15 @@
 **Related**: 
 [Spec Issue #4427](https://github.com/open-telemetry/opentelemetry-specification/issues/4427), [Weaver Issue #612](https://github.com/open-telemetry/weaver/issues/612), [Weaver Issue #450](https://github.com/open-telemetry/weaver/issues/450), [OTEP-0152][otep-0152], [OTEP 0243](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0243-app-telemetry-schema-vision-roadmap.md), [Prometheus Proposal][prom-proposal], [KubeConEU 2025 Talk][kubecon-talk]. 
 
-**TL;DR**: _We propose the next evolution of the [Telemetry Schema (OTEP-0152)][otep-0152] that enables an **efficient** consumption of the Telemetry schema pieces for the emerging collection and backend use case. As a case study, we show how those changes will practically:_
-* _Enable efficient OpenTelemetry Collector Schema Processing_
-* _[Enable backends like Prometheus](https://github.com/prometheus/prometheus/issues/16428) and vendors to adopt telemetry schematization with all its benefits e.g. [a powerful PromQL "versioned read" capability][prom-prototype]._
-
-> This document is in progress; refer to PR TBD discussions for the latest updates.
+> **TL;DR**: We propose the next evolution of the [Telemetry Schema (OTEP-0152)][otep-0152] that enables an **efficient** consumption of the Telemetry schema pieces for the emerging collection and backend use case. As a case study, we show how those changes will practically:
+> 
+> * Enable ingestion to handle schema changes on write e.g.:
+>  * for all telemetry in an OpenTelemetry Collector Schema Processor
+> * Enable backends to [ultimately handle schema changes][prom-proposal] on a query layer, e.g.: 
+>  * for metrics in Prometheus with [a powerful PromQL "versioned read" capability][prom-prototype].
+>  * (Help wanted!): Anyone would like to use this evolution to try implementing "versioned read" on any logging/telemetry backend to prove this OTEP?
+> * Enable ecosystems to adopt telemetry schematization with all its benefits, e.g.:
+>  * [Prometheus metrics](https://github.com/prometheus/prometheus/issues/16428), which historically were schemaless.
 
 ## Motivation
 
