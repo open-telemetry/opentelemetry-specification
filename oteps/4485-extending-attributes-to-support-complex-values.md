@@ -179,6 +179,9 @@ Exporters for protocols that do not natively support complex values, such as Pro
 SHOULD represent complex values as JSON-encoded strings following
 [attribute specification](/specification/common/README.md#attribute).
 
+When serializing `AnyValue` attributes to JSON, it is RECOMMENDED to sort map keys
+lexicographically and apply additional settings that enhance serialization stability.
+
 ### Semantic conventions
 
 Semantic conventions will be updated with the following guidance:
