@@ -154,6 +154,8 @@ since its possible (but not recommended) to use complex attributes as a resource
 instrumentation scope, or metric attribute where hash code and equality may be
 extensively used to identify tracer/meter/logger or the time series.
 
+Equality of `KeyValueList`s MUST be unaffected by the ordering of their `KeyValue` pairs.
+
 #### Attribute limits
 
 The SDK SHOULD apply [attribute limits](/specification/common/README.md#attribute-limits)
