@@ -83,15 +83,18 @@ attributes will not in fact be a breaking change within the OpenTelemetry ecosys
 
 - Language SDKs can implement this without breaking their backwards
   compatibility guarantees (e.g., [Java's](https://github.com/open-telemetry/opentelemetry-java/blob/main/VERSIONING.md)).
-- The OpenTelemetry Collector already supports transforming data to complex attributes
-  via OTTL across all signals, so backends are not free from an obligation to handle
-  complex attributes gracefully (even if that just means dropping them currently).
 - While backends may still need to add support for complex attributes,
   this is the case with the introduction of any new OTLP feature.
-  Bumping the OTLP minor version is already the normal communication mechanism
-  for this kind of change.
-  A reasonably straightforward implementation option for backends is to just
-  JSON serialize complex attributes and store them as strings.
+  - Bumping the OTLP minor version is already the normal communication mechanism
+    for this kind of change.
+  - SDKs will be required to only emit complex attributes under that OTLP version
+    or later.
+  - A reasonably straightforward implementation option for backends is to just
+    JSON serialize complex attributes and store them as strings.
+  - If we get pushback that backends need more time to adapt to the new
+    OTLP minor version, we can add a grace period similar to the
+    one we had for HTTP semconv when we included:
+    "Stable HTTP semconv SHOULD NOT be released prior to October 1, 2023."
 
 ## How
 
