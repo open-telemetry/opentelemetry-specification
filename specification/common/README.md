@@ -29,7 +29,7 @@ path_base_for_github_subdir:
 
 ## Instrumentation Scope
 
-A logical unit of the application code with which the emitted telemetry can be
+A logical unit of the application or one if its components with which the emitted telemetry can be
 associated. It is typically the developer's choice to decide what denotes a
 reasonable instrumentation scope. The most common approach is to use the
 [instrumentation library](../glossary.md#instrumentation-library) as the scope,
