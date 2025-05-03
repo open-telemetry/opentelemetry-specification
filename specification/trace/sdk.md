@@ -82,7 +82,7 @@ It SHOULD only be possible to create `Tracer` instances through a `TracerProvide
 The `TracerProvider` MUST implement the [Get a Tracer API](api.md#get-a-tracer).
 
 The input provided by the user MUST be used to create
-an [`InstrumentationScope`](../common/README.md#instrumentation-scope) instance which
+an [`InstrumentationScope`](../common/instrumentation-scope.md) instance which
 is stored on the created `Tracer`.
 
 **Status**: [Development](../document-status.md) - The `TracerProvider` MUST
@@ -117,7 +117,7 @@ the [TracerConfig](#tracerconfig) for a [Tracer](#tracer).
 The function MUST accept the following parameter:
 
 * `tracer_scope`:
-  The [`InstrumentationScope`](../common/README.md#instrumentation-scope) of
+  The [`InstrumentationScope`](../common/instrumentation-scope.md) of
   the `Tracer`.
 
 The function MUST return the relevant `TracerConfig`, or some signal indicating

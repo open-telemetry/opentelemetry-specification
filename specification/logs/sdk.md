@@ -66,7 +66,7 @@ It SHOULD only be possible to create `Logger` instances through a `LoggerProvide
 The `LoggerProvider` MUST implement the [Get a Logger API](api.md#get-a-logger).
 
 The input provided by the user MUST be used to create
-an [`InstrumentationScope`](../common/README.md#instrumentation-scope) instance which
+an [`InstrumentationScope`](../common/instrumentation-scope.md) instance which
 is stored on the created `Logger`.
 
 In the case where an invalid `name` (null or empty string) is specified, a
@@ -104,7 +104,7 @@ the [LoggerConfig](#loggerconfig) for a [Logger](#logger).
 The function MUST accept the following parameter:
 
 * `logger_scope`:
-  The [`InstrumentationScope`](../common/README.md#instrumentation-scope) of
+  The [`InstrumentationScope`](../common/instrumentation-scope.md) of
   the `Logger`.
 
 The function MUST return the relevant `LoggerConfig`, or some signal indicating

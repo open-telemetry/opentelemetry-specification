@@ -168,7 +168,7 @@ This refers to the `name` and (optional) `version` arguments specified when
 creating a new `Tracer` or `Meter` (see
 [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider))/[Obtaining a Logger](logs/api.md#loggerprovider).
 The name/version pair identifies the
-[Instrumentation Scope](common/README.md#instrumentation-scope), for example the
+[Instrumentation Scope](common/instrumentation-scope.md), for example the
 [Instrumentation Library](#instrumentation-library) or another unit of
 application in the scope of which the telemetry is emitted.
 
