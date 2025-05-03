@@ -31,3 +31,18 @@ The instrumentation scope's optional attributes provide additional information a
 the scope. For example for a scope that specifies an
 instrumentation library an additional attribute may be recorded to denote the URL of the
 repository URL the library's source code is stored.
+
+## Examples
+
+Here is a non comprehensive list of usage scenarios:
+
+* Generic instrumented library with its name, version and attributes containing
+  additional library information.
+* Database access instrumented with its own name and version (e.g. `db.system.name`).
+* Client consuming or producing information, using its name, version and `id` to set
+  `InstrumentationScope`.
+* Set a meter `short-name` in `InstrumentationScope` attributes, to be used as metric
+  prefix by Prometheus exporters.
+* Internal application components emmitting their own telemetry, relying on
+  `InstrumentationScope` attributes to differentiate themselves in case multiple
+  instances of the same type exist.
