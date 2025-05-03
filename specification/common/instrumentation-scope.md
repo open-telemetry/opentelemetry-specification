@@ -43,6 +43,6 @@ Here is a non comprehensive list of usage scenarios:
   `InstrumentationScope`.
 * Set a meter `short-name` in `InstrumentationScope` attributes, to be used as metric
   prefix by Prometheus exporters.
-* Internal application components emmitting their own telemetry, relying on
+* Internal application components emitting their own telemetry, relying on
   `InstrumentationScope` attributes to differentiate themselves in case multiple
   instances of the same type exist.
