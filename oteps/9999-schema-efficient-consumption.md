@@ -1,7 +1,7 @@
 # Telemetry Schema Evolution for Efficient Consumption
 
 > This document is in progress; refer to PR TBD discussions for the latest updates.
-> 
+
 ----
 **Author(s)**: 
 * [Bartek Płotka, Google](https://www.bwplotka.dev/)
@@ -13,15 +13,14 @@
 **Related**: 
 [Spec Issue #4427](https://github.com/open-telemetry/opentelemetry-specification/issues/4427), [Weaver Issue #612](https://github.com/open-telemetry/weaver/issues/612), [Weaver Issue #450](https://github.com/open-telemetry/weaver/issues/450), [OTEP-0152][otep-0152], [OTEP 0243](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0243-app-telemetry-schema-vision-roadmap.md), [Prometheus Proposal][prom-proposal], [KubeConEU 2025 Talk][kubecon-talk]. 
 
-> **TL;DR**: We propose the next evolution of the [Telemetry Schema (OTEP-0152)][otep-0152] that enables an **efficient** consumption of the Telemetry schema pieces for the emerging collection and backend use cases. As a case study, we demonstrate how those changes will effectively enable:
-> 
-> * Ingestion layers to handle schema changes on the fly e.g.:
->   * *OpenTelemetry Collector Schema Processor* with "versioned write" capability.
-> * Backends to [ultimately handle schema changes][prom-proposal] on the query layer, e.g.: 
->   * *Prometheus* with [a PromQL "versioned read" capability][prom-prototype].
->   * *???* logging/tracing backend with "version read" capability to prove this OTEP? Help wanted!
-> * "Traditionally schemaless" ecosystems to adopt telemetry "schematization" with all its benefits, e.g.:
->   * *[Prometheus metrics](https://github.com/prometheus/prometheus/issues/16428)* which historically were schemaless.
+**TL;DR**: We propose the next evolution of the [Telemetry Schema (OTEP-0152)][otep-0152] that enables an **efficient** consumption of the Telemetry schema pieces for the emerging collection and backend use cases. As a case study, we demonstrate how those changes will effectively enable:
+* Ingestion layers to handle schema changes on the fly e.g.:
+  * *OpenTelemetry Collector Schema Processor* with "versioned write" capability.
+* Backends to [ultimately handle schema changes][prom-proposal] on the query layer, e.g.: 
+  * *Prometheus* with [a PromQL "versioned read" capability][prom-prototype].
+  * *???* logging/tracing backend with "version read" capability to prove this OTEP? Help wanted!
+* "Traditionally schemaless" ecosystems to adopt telemetry "schematization" with all its benefits, e.g.:
+   * *[Prometheus metrics](https://github.com/prometheus/prometheus/issues/16428)* which historically were schemaless.
 
 Before reading, we recommend familiarizing with [the attached glossary](#glossary) used in this document.
 
@@ -80,40 +79,89 @@ Practical and efficient quality means:
 
 Generally, we propose the following high level changes:
 
-1. Schema Definition: Create an official specification for the Schema Definition files (starting with what is now used in [the SemConv/weaver][weaver-schema-def]).
-2. Schema Definition Changes: Establish strict format for making schema changes while preserving the same "semantic" information. Notably, the Schema Definition `id` field format that enables **semantic identification** of the elements and new `deprecated` syntax.
-3. Schema: Establish way for Schema URL to link to the specific version of the raw schema definitions.
-4. Schema: Establish way for Schema URL to link to the **latest** schema artifacts and definitions.
-5. Schema Changes: Establish the efficient transformation format (potentially per backend, potentially on-demand generated?)
-6. Schema Changes: (Best effort) Establish new Schema ID URL format for the efficient lookup from telemetry representation to telemetry definition ID.
-7. Schema Web Security: We need mechanisms for ensuring schema URL resources integrity and security (e.g. checksums, auth, caching, proxying practices)
+1. Schema Definition: Create [an official specification for the Schema Definition files](#official-schema-definition-specification).
+2. Schema Definition Semantic ID: Establish [strict format for making schema changes while preserving the same "semantic" information](#schema-definition-id-format). Notably, the Schema Definition's attribute/group `id` field format that enables **semantic identification** of the elements and new `deprecated` syntax.
+3. Schema URL: Establish way [for Schema URL to link to multiple schema artifacts and resources](#schema-url-allow-reaching-multiple-schema-artifacts-definitions-latest-other-pieces) (not only Schema File) e.g. the specific version (or latest) raw schema definitions, various transformations, well-known paths etc. 
+4. Schema Changes: Establish [the efficient transformation format](#efficient-schema-changestransformation-format) (potentially more than one, potentially per backend).
+5. Schema Changes: (Best effort) Establish new Schema ID URL format for the efficient lookup from telemetry representation to telemetry definition ID.
+6. Schema Web Security: We need mechanisms for ensuring schema URL resources integrity and security (e.g. checksums, auth, caching, proxying practices).
 
 Further sections explain all changes in details (TBD: Help wanted!):
 
 ### Official Schema Definition Specification
 
-> @bwplotka: To be motivated, self-explanatory (: 
-> Generally, we really need a way to agree on a single language for defining our telemetry pieces in. 
-> In practice, while painful, we could do breaking changes to Schema File, transformation languages, etc, but it's critically important to not change definition format (and if we change, have migration process).
-> This is because everything else could be generated from definitions, but definitions is designed to be created and carefully agree among humans.
+The schema artifacts, including the [OTEP-0152's Schema File][otep-0152] is generated from the Schema Definitions [defined in Weaver][weaver-schema-def]. This definition format is already
+used by [the OpenTelemetry Semantic Convention registry (model)](https://github.com/open-telemetry/semantic-conventions/tree/f745220f91de4adbe868bebb33a17c615216ea15/model) with hundreds of carefully designed metrics, trace spans and logging attribute definitions.
+
+Assuming, the vision is to allow OSS ecosystems and organizations to schematize their telemetry in the language compatible with OpenTelemetry, we have to focus on standardizing the schema definition structure.
+
+> @bwplotka: In other words, what's more painful? Making a hidden breaking change to Schema File or Schema Definitions? I'd argue it's easier to handle breaking changes in the former given it can be auto-generated from Schema Definitions.
+
+To enable wider adoptions, we propose releasing an official, versioned **Telemetry Schema Definition 1.0** specification based on [that schema definition format][weaver-schema-def]. We can revise it slightly (in backward compatible manner), add versioning (e.g. `version: <number>` field) and explain its semantics around the handling and validation in the [RFC-2119](https://datatracker.ietf.org/doc/html/rfc2119) format.
+
+With this specification, we can focus on the data model, instead of forcing YAML specifically -- we could easily support the same data model also in JSON, protobuf etc.
+
+**Telemetry Schema Definition 1.0** specification would allow easier discovery, education and stability that's required to encourage other ecosystem to do the extra work of defining their telemetry (or using already defined one in OpenTelemetry SemConv!). For example, not many will schematize traditionally schemaless Prometheus metrics without an official spec. For Prometheus users who wish to migrate to OpenTelemetry defined metrics, having the **current** Prometheus metrics defined is a key, so the automated transformation we discuss in this OTEP is possible for them to enable any practical migrations.
+
+In the future, we could discuss tailored definition language that might transparently compile to the `Telemetry Schema Definition 1.0` data model.
 
 ### Schema Definition ID Format
 
-The `id` field in schema definition is loosely defined. In Weaver sometimes it has to be globally unique, sometimes not (e.g. when nested for metric attribute). It seemed this field was historically only used practically by humans, not automation.
+The `id` (group and attribute) field in schema definition is loosely defined. In Weaver sometimes it has to be globally unique, sometimes not (e.g. when nested for metric attribute). It seemed this field was historically only used practically by humans, not automation.
 
 We propose to establish a strict definition of the `id` format as follows:
+
 * Top level group `id` field MUST use a short, globally unique set of characters matching `^(?P<semantic_id>[a-z_]+)(|.(?P<revision>\d+))$` regex.
 * Nested `id` field MUST use a short, locally unique set of characters matching `^(?P<nested_id>[a-z_]+)$` regex.
 
-This format allows:
+Following that, we propose to extend the `deprecated` section (for the top level group) to have `reason: updated` reason and contain `replace_by_id` field that specified full ID of the element it semantically replaces.
+
+For example:
+
+```yaml
+groups:
+- id: "my_app_latency.2"
+  type: metric
+  metric_name: my.app.latency # Previously "my.app.old_latency".
+  unit: "{second}" # Previously "{millisecond}". ("s"?)
+  instrument: "histogram"
+  brief: "Histogram with my-app latency seconds"
+  attributes:
+  - id: code
+    tag: code
+    type: int
+    brief: "HTTP status code." 
+# ...
+### Deprecated elements.
+- id: "my_app_latency"
+  type: metric
+  metric_name: my.app.old_latency
+  unit: "{millisecond}"
+  instrument: "histogram"
+  brief: "Histogram with my-app latency milliseconds"
+  deprecated:
+    reason: updated
+    note: "Ups, we did not use base unit, our bad. This metric should be auto-transformable, see diff for all changes."
+    # Points to the replacement.
+    replaced_by_id: "my_app_latency.2"
+    # Unit requires transformation, this could be implicitly defined for the trivial unit conversions.
+    forward_promql: "value{} / 1000"
+    backward_promql: "value{} * 1000"
+  attributes:
+  - id: code
+    type: int
+    brief: "HTTP status code."
+```
+
+See [the full example demo Schema Definition file](https://github.com/bwplotka/metric-rename-demo/blob/067ff33896a0eca544332d9c40485d61162ae572/my-org/semconv/registry/my-app.yaml) that follows this proposal.
+
+This format and deprecation allows:
 
 * Reliable connection for elements that share exactly the same semantic ID.
 * Reliable way for consumers to go from the element unique ID to its semantic ID.
-* Deprecation schema as it is now, where even "semantically convertible" change is a new element in the definition (we could challenge that too?) 
+* Deprecation schema as it is now, where the "semantically convertible" changed element is a new element in the definition, instead of the change in place (see [the alternative that challenges the current deprecation process](#schema-definition-in-place-changes)). 
 
-As a result we will are able to reduce the amount of data to represent useful transformations per semantic ID. The revision is then "a location" in the forward/backward chain (See [The efficient schema change format](#5-efficient-schema-changestransformation-format)).
-
-Practical example: https://github.com/bwplotka/metric-rename-demo/blob/79c0b560b9723967c427460daa92ec3de0a3853d/my-org/semconv/registry/my-app.yaml#L3
+As a result we are able to reduce the amount of data required to [represent useful transformations per semantic ID](#efficient-schema-changestransformation-format). The "revision" number, becomes then a location in the forward/backward chain (See [The efficient schema change format](#efficient-schema-changestransformation-format)).
 
 ### Schema URL allow reaching multiple Schema artifacts (definitions, latest, other pieces)
 
@@ -280,9 +328,17 @@ old_metric_name{instance="C"} 3
 
 ## Alternatives
 
+### Alternative Schema Definition Formats
+
+> TBD: Explore alternative data models?
+
+
 ### Alternative Transformation Formats/Languages
 
 > TBD: Explore alternative formats, why not purely OTTL, any query language or anything else!
+
+### Schema Definition in-place Changes
+
 
 ## Future Possibilities
 
