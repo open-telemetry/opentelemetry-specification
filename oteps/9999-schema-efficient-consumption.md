@@ -161,36 +161,63 @@ This format and deprecation allows:
 * Reliable way for consumers to go from the element unique ID to its semantic ID.
 * Deprecation schema as it is now, where the "semantically convertible" changed element is a new element in the definition, instead of the change in place (see [the alternative that challenges the current deprecation process](#schema-definition-in-place-changes)). 
 
-As a result we are able to reduce the amount of data required to [represent useful transformations per semantic ID](#efficient-schema-changestransformation-format). The "revision" number, becomes then a location in the forward/backward chain (See [The efficient schema change format](#efficient-schema-changestransformation-format)).
+As a result, we are able to reduce the amount of data required to [represent useful transformations per semantic ID](#efficient-schema-changestransformation-format). The "revision" number, becomes then a location in the forward/backward chain (See [The efficient schema change format](#efficient-schema-changestransformation-format)).
 
 ### Schema URL allow reaching multiple Schema artifacts (definitions, latest, other pieces)
 
-> @bwplotka: To be discussed but my idea was to expand URL to have a known URL paths for various Schema artifacts. In fact
-> this generally could end up as a stable HTTP API which could be a great result out of this OTEP.
-> 
-> For example for the Schema API idea, given the "http[s]://server[:port]/path/<version>" Schema URL, consumers could assume `http[s]://server[:port]/path/` is the base URL to some "Schema API".
-> 
-> * `http[s]://server[:port]/path/<version (starting by number)>` returns Schema File for the compatibility.
-> * `http[s]://server[:port]/path/v1/latest` for the latest schema version.
-> * `http[s]://server[:port]/path/v1/.well-known` for [the API/resources sitemap](https://en.wikipedia.org/wiki/Well-known_URI).
-> * `http[s]://server[:port]/path/v1/changes?filter=<signal or semantic ID>&format=<transformation format>` for the transformation and elements of the choice.
-> * `http[s]://server[:port]/path/v1/definitions?filter=<...>&version=<version or latest>` for the Schema definitions.
-> * etc..
->
-> If we follow this API route, we need to establish process for HTTP codes etc, which would be quite helpful. 
-> 
-> The alternative is to keep the Schema URL to point to plain text-based resources with PATH parameters which is also possible e.g.
->
-> * `http[s]://server[:port]/path/<version>` returns Schema File for the compatibility.
-> * `http[s]://server[:port]/path/latest` for the latest schema version.
-> * `http[s]://server[:port]/path/v1/.well-known` for [the API/resources sitemap](https://en.wikipedia.org/wiki/Well-known_URI).
-> * `http[s]://server[:port]/path/v1/changes/<signal>/<transformation format>` for the transformation and elements of the choice.
-> * `http[s]://server[:port]/path/v1/definitions?filter=<...>&version=<version or latest>` for the Schema definitions.
-> * etc..
-> 
-> The generic file based URL is less extensible (e.g. dynamic parameters), robust and secure, but serving those pieces is dead simple.
-> 
-> Requires discussion to feel the group sentiment where to go here.
+The main goal is to enable consumers to reliable and efficiently access various schema artifacts like definitions, documentation, transformation formats or anything else we will add in the future.
+
+We propose to follow the pattern, proven by [the Prometheus prototype][prom-prototype], where the schema resources are fetched using Schema URL pieces.
+ 
+Notably, given the `http[s]://server[:port]/path/<version>` Schema URL format, we propose to define the **Base Schema URL** (`<schema_base_url>`) that essentially represents the main server/location URL for the Schema resources. Base Schema URL is essentially Schema URL without the version suffix, so `http[s]://server[:port]/path/`.
+
+From here we have two high level choices -- we can either establish and define an OpenTelemetry Schema API or "generic file based URLs", so define set of known plain file-like resource location URLs.
+
+> @bwplotka: To be discussed, what's preferred by this community. The generic file based URL is less extensible (e.g. dynamic parameters), robust and secure, but serving those pieces is dead simple.
+
+#### Schema API
+
+In this idea, we propose to establish a stable, well-defined REST HTTP API for Schema resources. The `<schema_base_url>` would point to that server.
+
+The HTTP responses would need to be defined (TBD), likely in JSON.
+
+The Schema HTTP API could define following paths:
+ 
+* GET `<schema_base_url>/<version (starting by number)>` returns Schema File for the compatibility purposes.
+* GET `<schema_base_url>/v1/latest` for the latest schema version.
+* GET `<schema_base_url>/v1/.well-known` for [the API/resources sitemap](https://en.wikipedia.org/wiki/Well-known_URI).
+* GET `<schema_base_url>/v1/changes?filter=<signal or semantic ID>&format=<transformation format>` for the transformation and elements of the choice.
+* GET `<schema_base_url>/v1/definitions?filter=<...>&version=<version or latest>` for the Schema definitions.
+
+Pros:
+* Clean, reliable and secure for consumers.
+* Standard security practices apply.
+* Flexibility
+  * Clear path for iterating and adding more resources over time (e.g. new paths, new parameters).
+  * Supports dynamic parameters e.g. custom filtering.
+* This being a simple HTTP REST API makes it trivial to implement by anyone.
+
+Cons:
+ * It requires a bit more work on producer/definer side (you have to host a custom HTTP server).
+
+#### Alternative: Keep it simple and file-based
+
+The alternative is to keep the Schema URL as-is right now, so to point to plain text-based resources with some path parameters: e.g.
+
+ * `<schema_base_url>/<version>` returns Schema File for the compatibility.
+ * `<schema_base_url>h/latest` for the latest schema version.
+ * `<schema_base_url>/v1/.well-known` for [the API/resources sitemap](https://en.wikipedia.org/wiki/Well-known_URI).
+ * `<schema_base_url>/v1/changes/<signal>/<transformation format>` for the transformation and elements of the choice.
+ * `<schema_base_url>/v1/definitions/<version>` for the Schema definitions.
+ * etc..
+
+Pros:
+* Can be trivially hosted locally or remotely e.g. using GitHub.
+
+Cons:
+* We need to innovate on security practices (checksums, proxying, etc.)
+* Hard to evolve.
+* Hard to implement dynamic parameters (e.g. filtering)
 
 ### Efficient Schema Changes/Transformation Format
 
@@ -248,6 +275,16 @@ metrics_changelog:
 > @bwplotka: This file could be auto-generated on demand by Prometheus or hosted in the Schema registry and referenced by e.g. Schema URL/API like `http[s]://server[:port]/path/changes?filter=type:metric&format=promql`
 > Other formats e.g. the current OTEP-0152 one and OTTL could be a good idea to publish as well, given their own benefits.
 
+### Schema File
+
+The [OTEP-0152 specified Schema File](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0152-telemetry-schemas.md#schema-file, which describes the schema changes per version (aka "transformations").
+
+To achieve goals of this OTEP, we are proposing [new transformations](#efficient-schema-changestransformation-format) and new ways [to utilize Schema URL to access those new resources](#schema-url-allow-reaching-multiple-schema-artifacts-definitions-latest-other-pieces). This means that consumers will have a choice to get the related transformations and artifacts outside the original Schema File e.g. via `<schema_base_url>/v1/changes?filter=<signal or semantic ID>&format=<transformation format>` API or `<schema_base_url>/v1/changes/all/<transformation format>` URL.
+
+However, the current or future iterations of this single & big file with all the telemetry version's transformations could be still supported. We could allow accessing it via `<schema_base_url>/v1/changes?format=schema_file@1.1.0` or `<schema_url>` for the compatibility.
+
+> @bwplotka: How many/what type of (programmatic) users the current Schema File has? We likely should do a survey/research about current Schema File use to learn more about major use cases; not yet covered in this OTEP.
+
 ### Schema ID URL Optimization
 
 > @bwplotka: To be explained, but if we follow the [Semantic ID](#schema-definition-id-format) idea, we could establish something like Schema ID URL and attach that to our telemetry (instead or on top of the Schema URL).
@@ -277,6 +314,10 @@ old_metric_name{instance="C"} 3
 All Schema pieces are designed to be stored and access from the remote sources.
  
 > @bwplotka: TBD security considerations for this.
+
+### Aliasing
+
+https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0152-telemetry-schemas.md#name-aliases
 
 ## Prometheus Case Study
 
@@ -332,13 +373,13 @@ old_metric_name{instance="C"} 3
 
 > TBD: Explore alternative data models?
 
-
 ### Alternative Transformation Formats/Languages
 
 > TBD: Explore alternative formats, why not purely OTTL, any query language or anything else!
 
 ### Schema Definition in-place Changes
 
+> TBD:
 
 ## Future Possibilities
 
@@ -365,5 +406,5 @@ old_metric_name{instance="C"} 3
 [weaver-schema-def]: https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-syntax.md
 [prom-proposal]: https://docs.google.com/document/d/14y4wdZdRMC676qPLDqBQZfaCA6Dog_3ukzmjLOgAL-k/edit?tab=t.0#heading=h.2bo9sxs50as
 [kubecon-talk]: https://www.youtube.com/watch?v=Rw4c7lmdyFs
-[prom-prototype]: https://youtu.be/md2QBPkUoe0
+[prom-prototype]: https://docs.google.com/document/d/14y4wdZdRMC676qPLDqBQZfaCA6Dog_3ukzmjLOgAL-k/edit?tab=t.f0p1e46oa2c#heading=h.s4c27jq8n0ro
 [otep-0152]: https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0152-telemetry-schemas.md
