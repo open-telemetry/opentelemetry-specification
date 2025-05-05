@@ -291,6 +291,7 @@ defines the meaning of `SeverityNumber` value:
 
 SeverityNumber range|Range name|Meaning
 --------------------|----------|-------
+0                   |UNDEFINED |An event with unset severity.
 1-4                 |TRACE     |A fine-grained debugging event. Typically disabled in default configurations.
 5-8                 |DEBUG     |A debugging event.
 9-12                |INFO      |An informational event. Indicates that an event happened.
@@ -301,7 +302,7 @@ SeverityNumber range|Range name|Meaning
 Smaller numerical values in each range represent less important (less severe)
 events. Larger numerical values in each range represent more important (more
 severe) events. For example `SeverityNumber=17` describes an error that is less
-critical than an error with `SeverityNumber=20`.
+critical than an error with `SeverityNumber=20`. The exception to this is the zero value (SeverityNumber=0), which, since it means UNDEFINED, cannot be ordered after any importance level.
 
 #### Mapping of `SeverityNumber`
 
