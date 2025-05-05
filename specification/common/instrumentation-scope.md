@@ -23,7 +23,7 @@ name or fully qualified class name).
 The instrumentation scope MUST be used to obtain a
 [Tracer, Meter, or Logger](../glossary.md#tracer-name--meter-name--logger-name).
 
-The instrumentation scope's optional Schema URL identifies the [Telemetry
+The instrumentation scope's optional Schema URL MUST identify the [Telemetry
 Schema](../schemas/README.md) that the instrumentation's emitted
 telemetry conforms to.
 
@@ -39,6 +39,8 @@ Here is a non comprehensive list of usage scenarios:
 * Generic instrumented library with its name, version and attributes containing
   additional library information.
 * Database access instrumented with its own name and version (e.g. `db.system.name`).
+  This can be leveraged by APIs abstracting access to different underlying databases,
+  such as JDBC or SqlAlchemy.
 * Client consuming or producing information, using its name, version and `id` to set
   `InstrumentationScope`.
 * Set a meter `short-name` in `InstrumentationScope` attributes, to be used as metric
