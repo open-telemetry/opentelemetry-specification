@@ -83,8 +83,9 @@ Generally, we propose the following high level changes:
 2. Schema Definition Semantic ID: Establish [strict format for making schema changes while preserving the same "semantic" information](#schema-definition-id-format). Notably, the Schema Definition's attribute/group `id` field format that enables **semantic identification** of the elements and new `deprecated` syntax.
 3. Schema URL: Establish way [for Schema URL to link to multiple schema artifacts and resources](#schema-url-allow-reaching-multiple-schema-artifacts-definitions-latest-other-pieces) (not only Schema File) e.g. the specific version (or latest) raw schema definitions, various transformations, well-known paths etc. 
 4. Schema Changes: Establish [the efficient transformation format](#efficient-schema-changestransformation-format) (potentially more than one, potentially per backend).
-5. Schema Changes: (Best effort) Establish new Schema ID URL format for the efficient lookup from telemetry representation to telemetry definition ID.
+5. Schema Changes: (Best effort) Establish new [Schema ID URL format](#schema-id-url-optimization) for the efficient lookup from telemetry representation to telemetry definition ID.
 6. Schema Web Security: We need mechanisms for ensuring schema URL resources integrity and security (e.g. checksums, auth, caching, proxying practices).
+7. Schema Aliasing: (Best effort) Explore [aliasing mechanisms to support multiple naming conventions](#aliasing).
 
 Further sections explain all changes in details (TBD: Help wanted!):
 
@@ -169,11 +170,11 @@ The main goal is to enable consumers to reliable and efficiently access various 
 
 We propose to follow the pattern, proven by [the Prometheus prototype][prom-prototype], where the schema resources are fetched using Schema URL pieces.
  
-Notably, given the `http[s]://server[:port]/path/<version>` Schema URL format, we propose to define the **Base Schema URL** (`<schema_base_url>`) that essentially represents the main server/location URL for the Schema resources. Base Schema URL is essentially Schema URL without the version suffix, so `http[s]://server[:port]/path/`.
+Notably, given the `http[s]://server[:port]/path/<version>` Schema URL format, we propose to define the **Base Schema URL** (`<schema_base_url>`) that essentially represents the main server/location URL for the Schema resources. Base Schema URL is essentially Schema URL without the version suffix, so `http[s]://server[:port]/path/`. This allows consumers to reach schema resources given the Schema URL attached to the incoming or queried telemetry data.
 
-From here we have two high level choices -- we can either establish and define an OpenTelemetry Schema API or "generic file based URLs", so define set of known plain file-like resource location URLs.
+From here we have two high level choices -- we can either establish and define an OpenTelemetry Schema API or ["generic file based URLs", so define set of known plain file-like resource location URLs (see the alternative).](#file-based-schema-url-resources).
 
-> @bwplotka: To be discussed, what's preferred by this community. The generic file based URL is less extensible (e.g. dynamic parameters), robust and secure, but serving those pieces is dead simple.
+> @bwplotka: To be discussed what's preferred by the community - we propose a Schema API for now.
 
 #### Schema API
 
@@ -189,6 +190,8 @@ The Schema HTTP API could define following paths:
 * GET `<schema_base_url>/v1/changes?filter=<signal or semantic ID>&format=<transformation format>` for the transformation and elements of the choice.
 * GET `<schema_base_url>/v1/definitions?filter=<...>&version=<version or latest>` for the Schema definitions.
 
+The `v1` allows the future breaking Schema API iterations on the same URL.
+
 Pros:
 * Clean, reliable and secure for consumers.
 * Standard security practices apply.
@@ -200,30 +203,11 @@ Pros:
 Cons:
  * It requires a bit more work on producer/definer side (you have to host a custom HTTP server).
 
-#### Alternative: Keep it simple and file-based
-
-The alternative is to keep the Schema URL as-is right now, so to point to plain text-based resources with some path parameters: e.g.
-
- * `<schema_base_url>/<version>` returns Schema File for the compatibility.
- * `<schema_base_url>h/latest` for the latest schema version.
- * `<schema_base_url>/v1/.well-known` for [the API/resources sitemap](https://en.wikipedia.org/wiki/Well-known_URI).
- * `<schema_base_url>/v1/changes/<signal>/<transformation format>` for the transformation and elements of the choice.
- * `<schema_base_url>/v1/definitions/<version>` for the Schema definitions.
- * etc..
-
-Pros:
-* Can be trivially hosted locally or remotely e.g. using GitHub.
-
-Cons:
-* We need to innovate on security practices (checksums, proxying, etc.)
-* Hard to evolve.
-* Hard to implement dynamic parameters (e.g. filtering)
-
 ### Efficient Schema Changes/Transformation Format
 
-> @bwplotka: To be discussed but my idea was to be able to publish multiple transformation languages, as I believe there is no single one that will
-> work best for all use cases. For example for Prometheus PromQL layer, one pragmatic and efficient format would be something like this, grouped
-> by the [semantic ID](#schema-definition-id-format):
+We propose to maintain multiple transformation languages as part of the OpenTelemetry Telemetry Schemas, as we believe there is no single one that will
+work the best for all use cases. For example, for Prometheus PromQL layer, one pragmatic and efficient format would be something like outlined below, grouped
+ by the [semantic ID](#schema-definition-id-format):
 
 ```yaml
 # Version of this file.
@@ -272,7 +256,7 @@ metrics_changelog:
         - value: "other" 
 ```
 
-> @bwplotka: This file could be auto-generated on demand by Prometheus or hosted in the Schema registry and referenced by e.g. Schema URL/API like `http[s]://server[:port]/path/changes?filter=type:metric&format=promql`
+> @bwplotka: TBD, expand. This file could be auto-generated on demand by Prometheus or hosted in the Schema registry and referenced by e.g. Schema URL/API like `http[s]://server[:port]/path/changes?filter=type:metric&format=promql`
 > Other formats e.g. the current OTEP-0152 one and OTTL could be a good idea to publish as well, given their own benefits.
 
 ### Schema File
@@ -295,73 +279,115 @@ However, the current or future iterations of this single & big file with all the
 > With SchemaID the PromQL "versioned-read" could look as follows:
 
 ```
- # PromQL query with special schema_url selector; pinning query to a certain schema registry and a certain metric ID (semantic-id.2):
-old_metric_name{__schema_url__="https://example.com/semconv#semantic-id.2"}
-
 # Series in storage:
-older_metric_name{__schema_url__="https://example.com/semconv#semantic-id.1", instance="A"} 1
-old_metric_name{__schema_url__="https://example.com/semconv#semantic-id.2", instance="B"} 2
-new_metric_name{__schema_url__="https://example.com/semconv#semantic-id.3", instance="C"} 3
+older_metric_name{__schema_id_url__="https://example.com/semconv#semantic-id.1", instance="A"} 1
+old_metric_name{__schema_id_url__="https://example.com/semconv#semantic-id.2", instance="B"} 2
+new_metric_name{__schema_id_url__="https://example.com/semconv#semantic-id.3", instance="C"} 3
+  
+# PromQL query with special schema_url selector; pinning query to a certain schema registry and a certain metric ID (semantic-id.2):
+old_metric_name{__schema_id_url__="https://example.com/semconv#semantic-id.2"}
 
 # Series returned:
 old_metric_name{instance="A"} 1
 old_metric_name{instance="B"} 2
 old_metric_name{instance="C"} 3
 ```
+
+The alternative is to [NOT introduce schema ID URL and use Schema URL and publish/generate custom mappings](#prometheus-case-study).
 
 ### Security Considerations
 
 All Schema pieces are designed to be stored and access from the remote sources.
  
-> @bwplotka: TBD security considerations for this.
+> @bwplotka: TBD security considerations for this. If we go Schema API route, this is easier as we can use standard HTTP REST practices.
 
 ### Aliasing
 
-https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0152-telemetry-schemas.md#name-aliases
+The goal is to support multiple valid and "latest" "versions" of the semantically equivalent telemetry information. One use cases we have right now is for metrics to solve
+[the current incompatibility between OpenTelemetry and Prometheus metric naming conventions](https://docs.google.com/document/d/10Z1XKeQXxJAc_jKW0qEC8G4krlPTmE89k31FJfPVbro/edit?tab=t.0#heading=h.og97qjr7diru).
+
+Aliasing could allow consumers e.g. query layers to give a choice on what metric conventions user want to see, no matter what's stored.
+
+For example:
+
+```
+# Series in storage:
+metric_name_seconds{__schema_id_url__="https://example.com/semconv#semantic-id.2.prometheus", instance="A"} 1
+metric.name{__schema_id_url__="https://example.com/semconv#semantic-id.2", instance="B"} 2
+new.metric.name{__schema_id_url__="https://example.com/semconv#semantic-id.3", instance="C"} 3 
+   
+# PromQL query with special schema_url selector; pinning query to a certain schema registry, certain metric ID (semantic-id.2) and naming convention (.prometheus):
+metric_name_seconds{__schema_id_url__="https://example.com/semconv#semantic-id.2.prometheus"}
+# Series returned:
+metric_name_seconds{instance="A"} 1
+metric_name_seconds{instance="B"} 2
+metric_name_seconds{instance="C"} 3
+
+# Same but with the OpenTelemetry naming:
+metric.name{__schema_id_url__="https://example.com/semconv#semantic-id.2"}
+# Series returned:
+metric.name{instance="A"} 1
+metric.name{instance="B"} 2
+metric.name{instance="C"} 3
+```
+
+In the [Telemetry Schema Definition](#official-schema-definition-specification) we have to define the alias, ideally with the similar mechanism as we do with the deprecation and [semantic versioning](#schema-definition-id-format) e.g.:
+
+```yaml
+groups:
+- id: "my_app_latency.2"
+  type: metric
+  metric_name: my.app.latency
+  unit: "{second}"
+  instrument: "histogram"
+  brief: "Histogram with my-app latency seconds"
+  attributes:
+  - id: code
+    tag: code
+    type: int
+    brief: "HTTP status code." 
+- id: "my_app_latency.2.prometheus"
+  type: metric
+  metric_name: my_app_latency_seconds
+  unit: "{second}"
+  instrument: "histogram"
+  brief: "Histogram with my-app latency seconds"
+  attributes:
+  - id: code
+    tag: code
+    type: int
+    brief: "HTTP status code."
+```
+
+An alternative would be to **automatically** convert to different naming conventions on some schema ID URL syntax or so e.g. `.prometheus` suffix.
 
 ## Prometheus Case Study
 
 For the full context, see [the KubeCon EU talk][kubecon-talk] that motivates why Prometheus
 ecosystem needs schema and PromQL "versioned read" to automatically handle schema changes.
-See [the prototype technical details](https://docs.google.com/document/d/14y4wdZdRMC676qPLDqBQZfaCA6Dog_3ukzmjLOgAL-k/edit?tab=t.f0p1e46oa2c).
+See [the prototype technical details][prom-prototype].
 
 Generally [Prometheus users are looking for ways to automate schema changes and schema migrations](https://docs.google.com/document/d/14y4wdZdRMC676qPLDqBQZfaCA6Dog_3ukzmjLOgAL-k/edit?tab=t.0#heading=h.1hb3zptlu59q). To achieve a [prototype][prom-prototype] and [proposal][prom-proposal] were created to:
 * Allow and encourage subset of Prometheus metrics to be defined in OpenTelemetry schema (with Prometheus or OpenTelemetry naming).
 * Implement PromQL versioned read that allows "pinning" queried metrics to a certain schema and version (generally to a certain metric ID):
 
-Notably, PromQL syntax in prototype could work as follows:
+In the prototype, the classic Schema URL was used (without [the Schema ID URL optimization](#schema-id-url-optimization)) and PromQL syntax worked as follows:
 
 ``` 
-# PromQL query with special schema_url selector; pinning query to a certain schema registry and a version,
-old_metric_name{__schema_url__="https://example.com/semconv/1.1.0"}
-
 # Series in storage:
 older_metric_name{__schema_url__="https://example.com/semconv/1.0.0", instance="A"} 1
 old_metric_name{__schema_url__="https://example.com/semconv/1.1.0", instance="B"} 2
 new_metric_name{__schema_url__="https://example.com/semconv/1.2.0", instance="C"} 3
-
+   
+# PromQL query with special schema_url selector; pinning query to a certain schema registry and a version,
+old_metric_name{__schema_url__="https://example.com/semconv/1.1.0"}
 # Series returned:
 old_metric_name{instance="A"} 1
 old_metric_name{instance="B"} 2
 old_metric_name{instance="C"} 3
 ```
 
-However, more efficient evolution is proposed, that ties schema URL to true "element" ID with a certain format:
-
-```
-# PromQL query with special schema_url selector; pinning query to a certain schema registry and a certain metric ID (semantic-id.2):
-old_metric_name{__schema_url__="https://example.com/semconv#semantic-id.2"}
-
-# Series in storage:
-older_metric_name{__schema_url__="https://example.com/semconv#semantic-id.1", instance="A"} 1
-old_metric_name{__schema_url__="https://example.com/semconv#semantic-id.2", instance="B"} 2
-new_metric_name{__schema_url__="https://example.com/semconv#semantic-id.3", instance="C"} 3
-
-# Series returned:
-old_metric_name{instance="A"} 1
-old_metric_name{instance="B"} 2
-old_metric_name{instance="C"} 3
-```
+See more details on the implementation and links in [here][prom-prototype].
 
 ## Trade-offs and mitigations
 
@@ -379,7 +405,26 @@ old_metric_name{instance="C"} 3
 
 ### Schema Definition in-place Changes
 
-> TBD:
+> TBD @bwplotka explain, but what if we NOT deprecate and copy each element when changing, but instead use git/history to find changes? The downside is that the change is less verbose and not all tools will support auto-transformations.
+
+### File-based Schema URL resources
+
+The alternative to [Schema API](#schema-api) is to keep the Schema URL as-is right now, so to point to plain text-based resources with some path parameters: e.g.
+
+* `<schema_base_url>/<version>` returns Schema File for the compatibility.
+* `<schema_base_url>h/latest` for the latest schema version.
+* `<schema_base_url>/v1/.well-known` for [the API/resources sitemap](https://en.wikipedia.org/wiki/Well-known_URI).
+* `<schema_base_url>/v1/changes/<signal>/<transformation format>` for the transformation and elements of the choice.
+* `<schema_base_url>/v1/definitions/<version>` for the Schema definitions.
+* etc..
+
+Pros:
+* Can be trivially hosted locally or remotely e.g. using GitHub.
+
+Cons:
+* We need to innovate on security practices (checksums, proxying, etc.)
+* Hard to evolve.
+* Hard to implement dynamic parameters (e.g. filtering)
 
 ## Future Possibilities
 
