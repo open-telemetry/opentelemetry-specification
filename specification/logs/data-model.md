@@ -302,7 +302,7 @@ SeverityNumber range|Range name|Meaning
 Smaller numerical values in each range represent less important (less severe)
 events. Larger numerical values in each range represent more important (more
 severe) events. For example `SeverityNumber=17` describes an error that is less
-critical than an error with `SeverityNumber=20`. The exception to this is the zero value (SeverityNumber=0), which, since it means UNDEFINED, cannot be ordered after any importance level.
+critical than an error with `SeverityNumber=20`. The exception to this is the zero value (`SeverityNumber=0`), which, since it means UNDEFINED, cannot be ordered after any importance level.
 
 #### Mapping of `SeverityNumber`
 
