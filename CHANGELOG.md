@@ -9,9 +9,6 @@ release.
 
 ### Context
 
-- Drop reference to binary `Propagator`.
-  ([#4490](https://github.com/open-telemetry/opentelemetry-specification/pull/4490))
-
 ### Traces
 
 ### Metrics
@@ -21,9 +18,6 @@ release.
 ### Baggage
 
 ### Resource
-
-- Add experimental resource detector name.
-  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
 
 ### Profiles
 
@@ -38,6 +32,19 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.45.0 (2025-05-07)
+
+### Context
+
+- Drop reference to binary `Propagator`.
+  ([#4490](https://github.com/open-telemetry/opentelemetry-specification/pull/4490))
+
+### Resource
+
+- Add experimental resource detector name.
+  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
+
 
 ## v1.44.0 (2025-04-15)
 
