@@ -9,6 +9,7 @@
 
 - [Minimally Sufficient Identity](#minimally-sufficient-identity)
 - [Repeatable Identity](#repeatable-identity)
+- [Identifying Attributes](#identifying-attributes)
 - [Examples of Entities](#examples-of-entities)
 
 <!-- tocstop -->
@@ -116,6 +117,30 @@ describing the process.
 > across multiple observers. While many successful systems rely on pushing down
 > identity from a central registry or knowledge store, OpenTelemetry must
 > support all possible scenarios.
+
+## Identifying Attributes
+
+OpenTelemetry Semantic Conventions MUST define a set of identifying attribute
+keys for every defined entity type.
+
+Names of the identifying attributes SHOULD use the entity type as a prefix to avoid
+collisions with other entity types. For example, the `k8s.node` entity uses
+`k8s.node.uid` as an identifying attribute.
+
+When an entity can be emitted by multiple observers, the following rules apply:
+
+* Two independent observers that report the same entity MUST be able to
+  supply identical values for all identifying attributes.
+
+* If an observer cannot reliably obtain one or more identifying attributes, it
+  MUST NOT emit telemetry using that entity type. Instead, it SHOULD:
+  1. delegate to the observer that _can_ supply the full set and treat that
+     observer as the _source of truth_, or
+  2. emit a _different_ entity type with a set of identifying attributes it
+     can populate reliably.
+
+This ensures that entity identity is consistent and unambiguous across
+observers.
 
 ## Examples of Entities
 
