@@ -44,8 +44,6 @@ release.
 
 - Add experimental resource detector name.
   ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
-
-
 ## v1.44.0 (2025-04-15)
 
 ### Context
