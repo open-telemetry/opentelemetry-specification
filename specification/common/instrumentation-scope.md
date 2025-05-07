@@ -6,7 +6,7 @@ linkTitle: Instrumentation Scope
 
 **Status**: [Stable](../document-status.md)
 
-A logical unit of the application or one if its components, with which the emitted telemetry can be
+A logical unit of software, with which the emitted telemetry can be
 associated. It is typically the developer's choice to decide what denotes a
 reasonable instrumentation scope. The most common approach is to use the
 [instrumentation library](../glossary.md#instrumentation-library) as the scope,
@@ -15,9 +15,9 @@ a plugin name can be chosen as the instrumentation scope.
 
 The instrumentation scope is defined by the
 (name,version,schema_url,attributes) tuple where version, schema_url, and
-attributes are optional. This tuple MUST uniquely identify the logical unit of the
-code that emits the telemetry. A typical approach to ensure uniqueness is to
-use the fully qualified name of the emitting code (e.g. fully qualified library
+attributes are optional. This tuple MUST uniquely identify the logical unit of
+software that emits the telemetry. A typical approach to ensure uniqueness is to
+use the fully qualified name of the emitting software unit (e.g. fully qualified library
 name or fully qualified class name).
 
 The instrumentation scope MUST be used to obtain a
@@ -43,8 +43,6 @@ Here is a non comprehensive list of usage scenarios:
   such as JDBC or SqlAlchemy.
 * Client consuming or producing information, using its name, version and `id` to set
   `InstrumentationScope`.
-* Set a meter `short-name` in `InstrumentationScope` attributes, to be used as metric
-  prefix by Prometheus exporters.
 * Internal application components emitting their own telemetry, relying on
   `InstrumentationScope` attributes to differentiate themselves in case multiple
   instances of the same type exist.
