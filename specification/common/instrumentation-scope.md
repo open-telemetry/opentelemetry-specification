@@ -8,10 +8,11 @@ linkTitle: Instrumentation Scope
 
 A logical unit of software, with which the emitted telemetry can be
 associated. It is typically the developer's choice to decide what denotes a
-reasonable instrumentation scope. The most common approach is to use the
-[instrumentation library](../glossary.md#instrumentation-library) as the scope,
-however other scopes are also common, e.g. a module, a package, a class or
-a plugin name can be chosen as the instrumentation scope.
+reasonable instrumentation scope. The most common approach is to use
+the name and version of the [instrumentation library](../glossary.md#instrumentation-library),
+with any additional identifying information as part of the scope's attributes.
+Other software components can be used too to get name, version and additional attributes, e.g.
+e.g. a module, a package, a class or a plugin.
 
 The instrumentation scope is defined by the
 (name,version,schema_url,attributes) tuple where version, schema_url, and
@@ -22,6 +23,9 @@ name or fully qualified class name).
 
 The instrumentation scope MUST be used to obtain a
 [Tracer, Meter, or Logger](../glossary.md#tracer-name--meter-name--logger-name).
+
+The instrumentation scope's name MUST be specified to identify the `InstrumentationScope`
+name. It SHOULD be set to the empty string as last fallback.
 
 The instrumentation scope's optional Schema URL MUST identify the [Telemetry
 Schema](../schemas/README.md) that the instrumentation's emitted
