@@ -35,10 +35,10 @@ Smaller changes can follow a shorter process:
   When proposing new features, we
   encounter
   a [chicken or the egg problem](https://en.wikipedia.org/wiki/Chicken_or_the_egg)
-  in that proposals require prototyping but spec implementations require
+  in that proposals require prototyping but implementations require
   features to be in the specification. For this reason, when adding new features
   with Development maturity level, a prototype is defined as a working
-  demonstration of the feature in a spec-bound implementation which has the
+  demonstration of the feature in a specification-bound implementation which has the
   support of that SIG's maintainers. For example, this may be an unmerged
   PR with an indication of maintainers' intent to merge in the event the
   corresponding specification PR is merged.
