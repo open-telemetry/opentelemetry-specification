@@ -10,7 +10,12 @@ While the OpenTelemetry Collector supports pluggable `auth` extensions (e.g., [s
 
 This OTEP proposes adding a standard pluggable authentication interface to OTLP exporters in SDKs. It enables users to inject custom authenticators (e.g., for SigV4 or OAuth2) without altering exporter internals. This improves portability, simplifies integration with secured backends, and brings SDKs closer to feature parity with the Collector—empowering secure, direct export from applications without requiring a Collector.
 
-*[TODO] Call out the other gh issues and PRs that are opened in relation to this.*
+This requirement has been brought up in the past via multiple issues in defferent forms:
+* https://github.com/open-telemetry/opentelemetry-specification/issues/4390 
+* https://github.com/open-telemetry/opentelemetry-specification/issues/1344
+* https://github.com/open-telemetry/opentelemetry-java/issues/7002
+* https://github.com/open-telemetry/opentelemetry-java/issues/4590
+* https://github.com/open-telemetry/opentelemetry-java/issues/4292
 
 ## Explanation
 
@@ -66,24 +71,45 @@ class Authenticator:
 ### Implementation Suggestion
 The initial implementation can be language-specific and start with HTTP-based exporters, which are simpler to modify. For example, in Python, the OTLP HTTP exporter can accept a new authenticator parameter, and modify its send() method to invoke `authenticator.authenticate(request)` before dispatch.
 
-A similar pattern can be applied in Java using a decorator for OkHttpClient, though it could be a more complicated in Java since there are multiple Sender possible.
+A similar pattern can be applied in Java using a decorator for OkHttpClient, though it could be a more complicated in Java since there are multiple [Sender](https://opentelemetry.io/docs/languages/java/sdk/#senders) possible with different HTTP client in each.
 
-## Trade-offs and mitigations [TODO]
+## Trade-offs and mitigations
+The following trade-offs are mostly concerning increased surface area for complexity, misconfiguration and errors on both the SDK side and the user side.
 
-What are some (known!) drawbacks? What are some ways that they might be mitigated?
+1. Added Complexity in Exporter Configuration: Introducing an authentication plugin system adds a new layer of complexity. SDKs must support a pluggable authenticator model, and users must understand and correctly implement authenticators suitable for their telemetry destination.
 
-Note that mitigations do not need to be complete *solutions*, and that they do not need to be accomplished directly through your proposal. A suggested mitigation may even warrant its own OTEP!
+- Mitigation:
+  - Provide well-documented built-in authenticators or vendor-maintained libraries.
+  - Offer clear examples and quickstarts in official OpenTelemetry SDK docs.
 
-## Prior art and alternatives [TODO]
+2. Potential for Misconfiguration: Users may attach an incompatible authenticator to an exporter (e.g., using an HTTP authenticator with a gRPC exporter), leading to failed exports.
 
-What are some prior and/or alternative approaches? For instance, is there a corresponding feature in OpenTracing or OpenCensus? What are some ideas that you have rejected?
+- Mitigation:
+  - SDKs should validate the compatibility between exporter type and authenticator type during exporter construction.
+  - Emit clear errors or warnings during initialization when mismatches are detected.
 
-## Open questions [TODO]
+3. Increased Surface Area for Errors: Authenticator implementations may fail in complex ways—e.g., expired tokens, failed credential resolution, or transient network errors. This can degrade telemetry delivery reliability.
 
-What are some questions that you know aren't resolved yet by the OTEP? These may be questions that could be answered through further discussion, implementation experiments, or anything else that the future may bring.
+- Mitigation:
+  - Exporters should treat authentication failures as transient errors and apply standard retry logic.
+  - Encourage authenticators to expose metrics or logs to help users diagnose failures.
 
-- How would this work with auto-instrumentations??
 
-## Future possibilities [TODO]
+## Prior art and alternatives
 
-What are some future changes that this proposal would enable?
+- OpenTelemetry Collector supports pluggable authentication via [extensions](https://opentelemetry.io/docs/collector/building/authenticator-extension/). Some examples:
+  - [sigv4authextension](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/extension/sigv4authextension)
+  - [oauth2client](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/extension/oauth2clientauthextension)
+
+
+## Open questions
+
+1. How would this work with auto-instrumentations? Most auto-instrumentations configure exporters internally using well-defined environment variables, so we need to explore how to expose and inject authenticators cleanly in those flows.
+
+2. If a single application exports traces, metrics, and logs to the same backend, can or should it share a common authenticator instance?
+
+3. What is the expected lifecycle of an authenticator? Should authenticators be tied to the exporter lifecycle (init/shutdown), and how should credential caching or rotation be handled?
+
+## Future possibilities
+
+Cloud providers and SaaS vendors could publish and maintain authenticators for their services (e.g., AWS SigV4, GCP OAuth, Azure MSI), making it easier for users to export telemetry securely without writing custom logic.
