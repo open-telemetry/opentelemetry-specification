@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Drop reference to binary `Propagator`.
+  ([#4490](https://github.com/open-telemetry/opentelemetry-specification/pull/4490))
+
 ### Traces
 
 - Define sampling threshold field in OpenTelemetry TraceState; define the behavior
