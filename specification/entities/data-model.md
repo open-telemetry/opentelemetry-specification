@@ -9,6 +9,9 @@
 
 - [Minimally Sufficient Identity](#minimally-sufficient-identity)
 - [Repeatable Identity](#repeatable-identity)
+- [Resource and Entities](#resource-and-entities)
+  * [Attribute Referencing Model](#attribute-referencing-model)
+  * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
 - [Examples of Entities](#examples-of-entities)
 
 <!-- tocstop -->
@@ -116,6 +119,63 @@ describing the process.
 > across multiple observers. While many successful systems rely on pushing down
 > identity from a central registry or knowledge store, OpenTelemetry must
 > support all possible scenarios.
+
+## Resource and Entities
+
+OpenTelemetry signals (metrics, logs, traces) support attaching one or more
+entities each representing a specific infrastructure or runtime component such as
+a `k8s.cluster`, `k8s.node`, `host`, or `container`.
+
+This model improves upon the previous Resource concept, which allowed only a single
+flat set of attributes per signal. With entities, telemetry can represent multiple
+distinct but related components within the same signal, each with its own identity
+and context.
+
+### Attribute Referencing Model
+
+Entities are defined in the `resource` section of a telemetry signal. However,
+they do not carry their own key-value pairs directly. Instead, they reference keys
+defined in `resource.attributes`.
+
+Each entity reference includes:
+
+- a `type` (e.g., `k8s.node`, `host`)
+
+- a list of attribute keys that identify the entity
+
+- a list of attribute keys that describe the entity
+
+Each key listed in an entity MUST match a corresponding key in the
+`resource.attributes` section.
+
+This indirection:
+
+- provides backward compatibility with existing Resource attributes,
+
+- avoids data duplication and potential data inconsistencies,
+
+- allows more efficient encoding and transmission.
+
+### Placement of Shared Descriptive Attributes
+
+Because all attribute values reside in the shared `resource.attributes` block and
+entities reference those keys, a single attribute (e.g., `cloud.availability_zone`)
+may potentially be referenced by multiple entities. To avoid confusion, the following
+rule applies:
+
+If multiple entities share the same descriptive attribute key, the attribute
+MUST logically belong to **only one** of them. All others MUST NOT reference it.
+The attribute MUST be referenced by the **most specific** (or **lowest-level**)
+entity among those present.
+
+**Example:**  
+
+If a signal includes both `k8s.cluster` and `k8s.node` entities and the `resource`
+contains `cloud.availability_zone`, then **only** the `k8s.node` entity may reference
+this key — as it is the more specific entity.
+
+Other entities (e.g., `k8s.cluster`) may report this attribute in a separate
+telemetry channel (e.g., entity events) where full ownership context is known.
 
 ## Examples of Entities
 
