@@ -600,8 +600,8 @@ explicit randomness values MUST not be modified.
 
 * For spans without a parent context, delegate to the root sampler
 * For spans with a parent context, returns a `SamplingIntent` that propagates the parent's sampling decision
-* Returns the parent's threshold if available
-* Sets `threshold_reliable` to match the parent's reliability
+* Returns the parent's threshold if available; otherwise, if the parent's _sampled_ flag is set, returns threshold=0; otherwise, if the parent's _sampled_ flag is not set, no threshold is returned.
+* Sets `threshold_reliable` to match the parent's reliability, which is true if the parent had a threshold.
 * Does not add any attributes
 
 **Required parameters:**
