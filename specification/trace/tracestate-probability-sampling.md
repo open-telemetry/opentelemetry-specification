@@ -196,14 +196,15 @@ base cases:
 
 Some terms are not about one specific sampler, but about the approach:
 
-- Head: This mode of sampling implies that Root samplers use a
-  consistent probability base case and Child samplers are
-  parent-based. This term does not reflect on the mode or behavior of
-  Downstream samplers. By contrast, "Not Head" sampling means an
-  approach that uses unequal probabilities across Parent/Child
-  samplers within a trace.
+- Head: **Caution: This term has multiple uses.** This may refer to
+  the sampling decision an SDK makes when starting a new span, for
+  example "head sampling decisions can only consider information
+  present during span creation" (from the [API specification for Span
+  Link](./api.md#link).  This can also refer to a distributed tracing
+  setup, in which all child samplers use a parent-based sampler, for 
+  example "most distributed tracing configurations use head sampling".
 - Tail: This mode of sampling implies that Downstream samplers are
-  involved the decision. Sometimes this refers to sampling of
+  involved in the decision. Sometimes this refers to sampling of
   individual spans on the collection path (known as "intermediate"
   sampling), but usually it refers to whole-trace sampling decisions
   made downstream after assembling multiple spans into a single data
