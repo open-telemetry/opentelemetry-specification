@@ -237,7 +237,7 @@ update the sampling threshold by re-encoding the OpenTelemetry
 TraceState, to maintain the correct statistical interpretation.
 
 For a conditional sampling stages (e.g. rule-based samplers) to remain
-consistent, they must not condition the sampling decision on the
+consistent, they must not condition the provided threshold on the
 randomness value or other source of randomness.
 
 Sampling stages that yield spans with unknown sampling probability,
@@ -283,7 +283,7 @@ threshold, subject to the general requirements:
 
 ### Downstream threshold
 
-Downstream samplers are able to raise the maximum threshold, but they
+Downstream samplers are able to raise the applied threshold, but they
 cannot lower.  For a Downstream sampler to lower a threshold equates
 with retroactively raising an earlier stage's sampling probability.
 Stated another way, downstream samplers are permitted to decrease
@@ -303,8 +303,9 @@ probability.
 When an equalizing downstream sampler configured with threshold `T_d`
 considers a span with threshold `T_s` for randomness value `R`:
 
-- If `T_s > T_d` an error occurs. An equalizing probability sampler
-  cannot lower the threshold, therefore it cannot equalize probability.
+- If `T_s > T_d`, the outbound threshold is unchanged, equal to
+  `T_s`. An equalizing probability sampler cannot lower the threshold,
+  therefore it cannot equalize probability in this case.
 - If `R >= T_d` the span is selected using outbound threshold `T_d`.
 - Otherwise, `R < T_d` indicates that the span is not sampled.
 
