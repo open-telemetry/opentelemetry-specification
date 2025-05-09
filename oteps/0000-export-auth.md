@@ -11,6 +11,7 @@ While the OpenTelemetry Collector supports pluggable `auth` extensions (e.g., [s
 This OTEP proposes adding a standard pluggable authentication interface to OTLP exporters in SDKs. It enables users to inject custom authenticators (e.g., for SigV4 or OAuth2) without altering exporter internals. This improves portability, simplifies integration with secured backends, and brings SDKs closer to feature parity with the Collector—empowering secure, direct export from applications without requiring a Collector.
 
 This requirement has been brought up in the past via multiple issues in defferent forms:
+
 * [Limited OTLP exporter request authentication methods](https://github.com/open-telemetry/opentelemetry-specification/issues/4390)
 * [Exporter authentication](https://github.com/open-telemetry/opentelemetry-specification/issues/1344)
 * [Sigv4 Authentication in OtlpHttp{Signal}Exporter](https://github.com/open-telemetry/opentelemetry-java/issues/7002)
@@ -85,23 +86,26 @@ A similar pattern can be applied in Java using a decorator for OkHttpClient, tho
 
 The following trade-offs are mostly concerning increased surface area for complexity, misconfiguration and errors on both the SDK side and the user side.
 
-1. Added Complexity in Exporter Configuration: Introducing an authentication plugin system adds a new layer of complexity. SDKs must support a pluggable authenticator model, and users must understand and correctly implement authenticators suitable for their telemetry destination.
+**Added Complexity in Exporter Configuration:** 
+Introducing an authentication plugin system adds a new layer of complexity. SDKs must support a pluggable authenticator model, and users must understand and correctly implement authenticators suitable for their telemetry destination.
 
-  - Mitigation:
-    - Provide well-documented built-in authenticators or vendor-maintained libraries.
-    - Offer clear examples and quickstarts in official OpenTelemetry SDK docs.
+Mitigation:
+- Provide well-documented built-in authenticators or vendor-maintained libraries.
+- Offer clear examples and quickstarts in official OpenTelemetry SDK docs.
 
-2. Potential for Misconfiguration: Users may attach an incompatible authenticator to an exporter (e.g., using an HTTP authenticator with a gRPC exporter), leading to failed exports.
+**Potential for Misconfiguration:**
+Users may attach an incompatible authenticator to an exporter (e.g., using an HTTP authenticator with a gRPC exporter), leading to failed exports.
 
-  - Mitigation:
-    - SDKs should validate the compatibility between exporter type and authenticator type during exporter construction.
-    - Emit clear errors or warnings during initialization when mismatches are detected.
+Mitigation:
+- SDKs should validate the compatibility between exporter type and authenticator type during exporter construction.
+- Emit clear errors or warnings during initialization when mismatches are detected.
 
-3. Increased Surface Area for Errors: Authenticator implementations may fail in complex ways—e.g., expired tokens, failed credential resolution, or transient network errors. This can degrade telemetry delivery reliability.
+**Increased Surface Area for Errors:**
+Authenticator implementations may fail in complex ways—e.g., expired tokens, failed credential resolution, or transient network errors. This can degrade telemetry delivery reliability.
 
-  - Mitigation:
-    - Exporters should treat authentication failures as transient errors and apply standard retry logic.
-    - Encourage authenticators to expose metrics or logs to help users diagnose failures.
+Mitigation:
+- Exporters should treat authentication failures as transient errors and apply standard retry logic.
+- Encourage authenticators to expose metrics or logs to help users diagnose failures.
 
 ## Prior art and alternatives
 
