@@ -6,7 +6,7 @@ Introduce a pluggable authentication mechanism for OTLP exporters (traces, metri
 
 As OpenTelemetry adoption grows, many vendors—including cloud providers—now expose OTLP endpoints for traces, logs, and metrics. These endpoints often require authenticated requests, using methods ranging from simple OAuth2 bearer tokens to complex schemes like AWS SigV4.
 
-While the OpenTelemetry Collector supports pluggable `auth` extensions (e.g., [sigv4auth](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/extension/sigv4authextension), [oauth2clientauth](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/extension/oauth2clientauthextension)), the SDKs do not offer a standardized way to add authentication to OTLP exporters. Today, SDK users resort to authentication workarounds available within some SDKs (like header supplier in Java, and custom requests session in Python) but these are limited in capabilities and are not standard across all languages. Otherwise SDK users must either fork exporter implementations or build custom wrappers to inject authentication logic—leading to fragmentation and duplicated effort.
+While the OpenTelemetry Collector supports pluggable `auth` extensions (e.g., [sigv4auth](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/extension/sigv4authextension), [oauth2clientauth](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/extension/oauth2clientauthextension)), the SDKs do not offer a standardized way to add authentication to OTLP exporters. Today, SDK users resort to authentication workarounds available within some SDKs (like [header supplier in Java](https://opentelemetry.io/docs/languages/java/sdk/#authentication), and [custom requests session in Python](https://github.com/open-telemetry/opentelemetry-python/issues/4459#issuecomment-2711675191)) but these are limited in capabilities and are not standard across all languages. Otherwise SDK users must either fork exporter implementations or build custom wrappers to inject authentication logic—leading to fragmentation and duplicated effort.
 
 This OTEP proposes adding a standard pluggable authentication interface to OTLP exporters in SDKs. It enables users to inject custom authenticators (e.g., for SigV4 or OAuth2) without altering exporter internals. This improves portability, simplifies integration with secured backends, and brings SDKs closer to feature parity with the Collector—empowering secure, direct export from applications without requiring a Collector.
 
@@ -33,7 +33,7 @@ exporter = OTLPSpanExporter(
     authenticator=MyCustomAuthenticator(region="us-west-2")
 )
 ```
-In this example, the MyCustomAuthenticator injects the necessary authentication headers into each OTLP request before it is sent.
+In this example, the `MyCustomAuthenticator` injects the necessary authentication headers into each OTLP request before it is sent.
 
 The authenticator interface is transport-agnostic: exporters that send data over HTTP or gRPC both invoke the authenticator at the appropriate time, just before dispatching the request. For HTTP, this might involve mutating headers; for gRPC, it may involve setting metadata or using per-RPC credentials.
 
