@@ -36,6 +36,15 @@ What are some prior and/or alternative approaches? For instance, is there a corr
 
 What are some questions that you know aren't resolved yet by the OTEP? These may be questions that could be answered through further discussion, implementation experiments, or anything else that the future may bring.
 
+## Prototypes
+
+Link to any prototypes or proof-of-concept implementations that you have created.
+This may include code, design documents, or anything else that demonstrates the
+feasibility of your proposal.
+
+Depending on the scope of the change, prototyping in multiple programming
+languages might be required.
+
 ## Future possibilities
 
 What are some future changes that this proposal would enable?
