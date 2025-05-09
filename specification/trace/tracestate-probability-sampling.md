@@ -57,12 +57,21 @@ Instead, we want sampling decisions to be made in a **consistent** manner so tha
 
 This specification describes how to achieve consistent sampling decisions using a mechanism called **Consistent Probability Sampling**.
 To achieve this, it uses two key building blocks.
-The first is a common source of randomness (`rv`) that is available to all participants, which includes a set of tracers and collectors.
-This can be either an explicit randomness value (called `rv`) or taken from the trailing 7 bytes of the TraceID.
-The second is a concept of a rejection threshold (`th`). This is derived directly from a participant's sampling rate.
+The first is a common source of randomness (`R`) that is available to all participants, which includes a set of tracers and collectors.
+This can be either an explicit randomness value expressed in the OpenTelemetry TraceState `rv` sub-key or taken from the trailing 7 bytes of the TraceID.
+The second is a concept of a rejection threshold (`T`). This is derived directly from a participant's sampling rate and is expressed in the OpenTelemetry TraceState `th` sub-key for sampled spans.
 This proposal describes how these two values should be propagated and how participants should use them to make sampling decisions.
 
-For more details about this specification, see [OTEP 235](https://github.com/open-telemetry/oteps/blob/main/text/trace/0235-sampling-threshold-in-trace-state.md).
+For more details about this specification, see [OTEP
+235](../../oteps/trace/0235-sampling-threshold-in-trace-state.md) and
+[OTEP 235](../../oteps/trace/oteps/trace/0250-Composite_Samplers.md).
+
+For details about encoding probability sampling information in
+OpenTelemetry tracing data, in particular the OpenTelemetry TraceState
+`rv` and `th` values, see [Tracestate
+handling](./tracestate-handling.md). Hereafter, we use the variable
+`R` and `T` to represent these quantities in making sampling
+decisions.
 
 ## Definitions
 
@@ -79,7 +88,7 @@ Note that the zero value is not defined and that "never" sampling is not a form 
 
 A consistent sampling decision means that a positive sampling decision made for a particular span with probability p1 necessarily implies a positive sampling decision for any span belonging to the same trace if it is made with probability p2 >= p1.
 
-### Rejection Threshold (`th`)
+### Rejection Threshold (`T`)
 
 This is a 56-bit value directly derived from the sampling probability.
 One way to think about this is that this is the number of spans that would be *dropped* out of 2^56 considered spans.
@@ -94,16 +103,16 @@ For example, if the sampling probability is 100% (keep all spans), the rejection
 
 Similarly, if the sampling probability is 1% (drop 99% of spans), the rejection threshold with 5 digits of precision would be (1-0.01) * 2^56 ≈ 71337018784743424 = 0xfd70a400000000.
 
-We refer to this rejection threshold as `th`.
-We represent it using the OpenTelemetry TraceState key `th`, where the value is propagated and also stored with each span.
-In the example above, the `th` key has `fd70a4` as the value, because trailing zeros are removed.
+We refer to this rejection threshold as `T`.
+When a Span or Context is sampled, the sampler's effective `T` is encoded in the OpenTelemetry TraceState `th` sub-key to indicate its sampling probability.
+A span sampled at 1% in this case will have an OpenTelemetry TraceState value `ot=th:fd70a4`, because trailing zeros are removed from the encoding.
 
-See [tracestate handling](./tracestate-handling.md#sampling-threshold-value-th) for details about encoding threshold values.
+See [tracestate handling](./tracestate-handling.md#sampling-threshold-value-th) for more examples.
 
-### Randomness Value (`rv`)
+### Randomness Value (`R`)
 
 A common random value (that is known or propagated to all participants) is the main ingredient that enables consistent probability sampling.
-Each participant can compare this value (`rv`) with their rejection threshold (`th`) to make a consistent sampling decision across an entire trace (or even across a group of traces).
+Each participant can compare this value (`R`) with their rejection threshold (`T`) to make a consistent sampling decision across an entire trace (or even across a group of traces).
 
 This proposal supports two sources of randomness:
 
@@ -119,12 +128,12 @@ See [tracestate handling](./tracestate-handling.md#explicit-randomness-value-rv)
 ### Decision algorithm
 
 Given the above building blocks, let's look at how a participant can make consistent sampling decisions.
-For this, two values MUST be present in the `SpanContext`:
+For this, two values MUST be present:
 
-1. The common source of randomness: the 56-bit `rv` value.
-2. The rejection threshold: the 56-bit `th` value.
+1. In the `SpanContext`, the common source of randomness: the 56-bit randomness value (`R`).
+2. From sampler configuration, the rejection threshold: the 56-bit threshold value (`T`).
 
-If `rv` >= `th`, *keep* the span, else *drop* the span.
+If `R` >= `T`, *keep* the span, else *drop* the span.
 
 ### Sampling stages
 
@@ -152,11 +161,11 @@ graph TD
         Root["root span"] --> Child1["child span"]
         Child1 --> Child2["child span"]
     end
-    
+
     subgraph "downstream samplers"
         Root --> LC1["frontend agent"]
         LC1 --> LC2["frontend gateway"]
-    
+
         Child1 --> RC1["backend agent"]
         Child2 --> RC1
         RC1 --> RC2["backend gateway"]
@@ -164,10 +173,10 @@ graph TD
 
     LC2 --> FC["destination service"]
     RC2 --> FC
-    
+
     classDef span fill:#a7a,stroke:#333,stroke-width:2px;
     classDef collector fill:#77a,stroke:#33c,stroke-width:1px;
-    
+
     class Root,Child1,Child2 span;
     class LC1,LC2,RC1,RC2,FC collector;
 ```
@@ -201,7 +210,7 @@ Some terms are not about one specific sampler, but about the approach:
   example "head sampling decisions can only consider information
   present during span creation" (from the [API specification for Span
   Link](./api.md#link).  This can also refer to a distributed tracing
-  setup, in which all child samplers use a parent-based sampler, for 
+  setup, in which all child samplers use a parent-based sampler, for
   example "most distributed tracing configurations use head sampling".
 - Tail: This mode of sampling implies that Downstream samplers are
   involved in the decision. Sometimes this refers to sampling of
@@ -218,14 +227,13 @@ This is a supplemental guideline. See [the SDK
 specification](./sdk.md) for the specific requirements of each
 built-in sampler.
 
-The OpenTelemetry TraceState sub-key `th` represents the maximum
-threshold that was applied in all previous consistent sampling stages,
-including the parent/child and downstream samplers.
+The rejection threshold represents the maximum threshold that was
+applied in all previous consistent sampling stages, including the
+parent/child and downstream samplers.
 
 See [SDK requirements for trace
 randomness](./sdk.md#sampling-requirements), which covers potentially
-inserting explicit trace randomness using the OpenTelemetry TraceState
-`rv` sub-key.
+inserting explicit trace randomness in the Context.
 
 Refer to [TraceState handling](./tracestate-handling.md) for examples
 showing how `th` and `rv` are encoded.
@@ -332,7 +340,7 @@ T_o = ProbabilityToThreshold(p * ThresholdToProbability(T_s))
 ## Migration to consistent probability samplers
 
 The OpenTelemetry specification for TraceIdRatioBased samplers was not completed until after the SDK specification was declared stable, and the exact behavior of that sampler was left unspecified.
-The `th` and `rv` sub-keys defined in the OpenTelemetry TraceState now address this behavior specifically.
+The current specification addresses this behavior.
 
 As the OpenTelemetry TraceIdRatioBased sampler changes definition, users must consider how to avoid incomplete traces due to inconsistent sampling during the transition between old and new logic.
 
@@ -344,7 +352,7 @@ To assist with this migration, the TraceIdRatioBased Sampler issues a warning st
 
 ## Algorithms
 
-The `th` and `rv` values may be represented and manipulated in a variety of forms depending on the capabilities of the processor and needs of the implementation.
+The `T` and `R` values may be represented and manipulated in a variety of forms depending on the capabilities of the processor and needs of the implementation.
 As 56-bit values, they are compatible with byte arrays and 64-bit integers, and can also be manipulated with 64-bit floating point with a truly negligible loss of precision.
 
 The following examples are in Python3.
@@ -430,9 +438,9 @@ The following table shows values computed by the method above for 1-in-N probabi
 | 100000  | 0.00001              | ffff584<br/>ffff583a<br/>ffff583a5 | 9.998679161071777e-06<br/>1.00000761449337e-05<br/>1.0000003385357559e-05    | 100013.21013412817<br/>99999.238556461<br/>99999.96614643588          |
 | 1000000 | 0.000001              | ffffef4<br/>ffffef39<br/>ffffef391 | 9.98377799987793e-07<br/>1.00000761449337e-06<br/>9.999930625781417e-07      | 1.0016248358208955e+06<br/>999992.38556461<br/>1.0000069374699865e+06 |
 
-### Converting integer threshold to a `th`-value
+### Converting integer threshold to a `T`-value
 
-To convert a 56-bit integer rejection threshold value to the `th` representation, emit it as a hexadecimal value (without a leading '0x'), optionally with trailing zeros omitted:
+To convert a 56-bit integer rejection threshold value to the `T` representation, emit it as a hexadecimal value (without a leading '0x'), optionally with trailing zeros omitted:
 
 ```py
 if tvalue == 0:
