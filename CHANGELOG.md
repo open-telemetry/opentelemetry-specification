@@ -10,6 +10,8 @@ release.
 ### Context
 
 - Add `EnvVarPropagator` decorator with examples for environment variables as context carrier specification. ([#4484](https://github.com/open-telemetry/opentelemetry-specification/pull/4484))
+- Drop reference to binary `Propagator`.
+  ([#4490](https://github.com/open-telemetry/opentelemetry-specification/pull/4490))
 
 ### Traces
 
@@ -22,6 +24,9 @@ release.
 - Add `EnvVarPropagator` decorator with examples for environment variables as context carrier specification. ([#4484](https://github.com/open-telemetry/opentelemetry-specification/pull/4484))
 
 ### Resource
+
+- Add experimental resource detector name.
+  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
 
 ### Profiles
 
