@@ -8,15 +8,19 @@
 * [How](#how)
   * [API](#api)
   * [SDK](#sdk)
+    * [`AnyValue` implementation notes](#anyvalue-implementation-notes)
     * [Attribute limits](#attribute-limits)
   * [Exporters](#exporters)
   * [Semantic conventions](#semantic-conventions)
+  * [Proto](#proto)
 * [Trade-offs and mitigations](#trade-offs-and-mitigations)
   * [Backends don't support `AnyValue` attributes](#backends-dont-support-anyvalue-attributes)
   * [Arbitrary objects are dangerous](#arbitrary-objects-are-dangerous)
+* [Prototypes](#prototypes)
 * [Future possibilities](#future-possibilities)
   * [Configurable OTLP exporter behavior](#configurable-otlp-exporter-behavior)
   * [Additional size limits](#additional-size-limits)
+* [Backend research](#backend-research)
 
 ## Glossary
 
@@ -237,7 +241,7 @@ Prior art on AnyValue conversion: [Go](https://github.com/open-telemetry/opentel
 [.NET](https://github.com/open-telemetry/opentelemetry-dotnet/blob/71abd4169b4b6c672343b37c32e3337bc227ed32/src/OpenTelemetry/Logs/ILogger/OpenTelemetryLogger.cs#L134),
 [Python](https://github.com/open-telemetry/opentelemetry-python/blob/00329e07fb01d7c3e43bb513fe9be3748745c52e/opentelemetry-api/src/opentelemetry/attributes/__init__.py#L121)
 
-# Prototypes
+## Prototypes
 
 TODO
 
@@ -265,10 +269,10 @@ including a total size limit and ability to estimate `AnyValue` object size.
 See [the gist](https://gist.github.com/lmolkova/737ebba190b206a5d60bbc075fea538b)
 for additional details.
 
-| Backend                           | Handles complex attributes gracefully? | Comments        | 
+| Backend                           | Handles complex attributes gracefully? | Comments        |
 | --------------------------------- | ------------------------| ------------------------------ |
 | Jaeger (OTLP)                     | :white_check_mark:      | serializes to JSON string |
-| Prometheus with OTLP remote write | :white_check_mark:      | serializes to JSON string | 
+| Prometheus with OTLP remote write | :white_check_mark:      | serializes to JSON string |
 | Grafana Tempo (OTLP)              | :white_check_mark:      | serializes to JSON string, viewable but can't query using this attribute |
 | Grafana Loki (OTLP)               | :white_check_mark:      | flattens |
 | Aspire dashboard (OTLP)           | :white_check_mark:      | serializes to JSON string |
