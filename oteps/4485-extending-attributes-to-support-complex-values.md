@@ -123,15 +123,6 @@ API documentation and spec language SHOULD include a language similar to this:
 > that querying or aggregating on such properties is inefficient and complicated,
 > and that reporting complex attributes carries higher performance overhead.
 
-> [!NOTE]
->
-> While OTel metrics are designed for aggregation, future SDK implementations
-> may choose to record measurements as individual events. This would make complex
-> values acceptable in metrics.
->
-> Ultimately, it’s up to the backend to decide whether to support complex
-> values for a given signal or serialize/drop it otherwise.
-
 ### SDK
 
 **The OTel SDK MUST support complex attributes on all telemetry signals.**
@@ -200,6 +191,12 @@ Semantic conventions will be updated with the following guidance:
 - Complex attributes MUST NOT be used on metrics, resources, instrumentation scopes,
   or as identifying attributes on entities.
 
+### Proto
+
+OTLP uses `AnyValue` attributes on all signals, so the changes would be limited
+to updating comments like [this one](https://github.com/open-telemetry/opentelemetry-proto/blob/be5d58470429d0255ffdd49491f0815a3a63d6ef/opentelemetry/proto/trace/v1/trace.proto#L209-L213)
+and adding changelog record.
+
 ## Trade-offs and mitigations
 
 ### Backends don't support `AnyValue` attributes
@@ -240,6 +237,10 @@ Prior art on AnyValue conversion: [Go](https://github.com/open-telemetry/opentel
 [.NET](https://github.com/open-telemetry/opentelemetry-dotnet/blob/71abd4169b4b6c672343b37c32e3337bc227ed32/src/OpenTelemetry/Logs/ILogger/OpenTelemetryLogger.cs#L134),
 [Python](https://github.com/open-telemetry/opentelemetry-python/blob/00329e07fb01d7c3e43bb513fe9be3748745c52e/opentelemetry-api/src/opentelemetry/attributes/__init__.py#L121)
 
+# Prototypes
+
+TODO
+
 ## Future possibilities
 
 ### Configurable OTLP exporter behavior
@@ -258,3 +259,19 @@ collector and whose backend does not handle complex attribute types gracefully.
 
 We can consider a separate set of attribute limits specifically for complex values,
 including a total size limit and ability to estimate `AnyValue` object size.
+
+## Backend research
+
+See [the gist](https://gist.github.com/lmolkova/737ebba190b206a5d60bbc075fea538b)
+for additional details.
+
+| Backend                           | Handles complex attributes gracefully? | Comments        | 
+| --------------------------------- | ------------------------| ------------------------------ |
+| Jaeger (OTLP)                     | :white_check_mark:      | serializes to JSON string |
+| Prometheus with OTLP remote write | :white_check_mark:      | serializes to JSON string | 
+| Grafana Tempo (OTLP)              | :white_check_mark:      | serializes to JSON string, viewable but can't query using this attribute |
+| Grafana Loki (OTLP)               | :white_check_mark:      | flattens |
+| Aspire dashboard (OTLP)           | :white_check_mark:      | serializes to JSON string |
+| ClickHouse (collector exporter)   | :white_check_mark:      | serializes to JSON string, can parse JSON and query |
+| Honeycomb (OTLP)                  | :white_check_mark:      | flattens if less than 5 layers deep, not array or binary data, JSON string otherwise |
+| New Relic (OTLP)                  | :x: (fix is on the way) | drops spans | |
