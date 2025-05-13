@@ -29,8 +29,8 @@ The data model below defines a logical model for an Resource (irrespective of th
 
 | Field      | Type     | Description     |
 |------------|----------|-----------------|
-| Entities   | set\<Entity\> | Defines the set of Entities associated with this resource.<br/><br/>[Entity is defined here](../entities/data-model.md) |
-| Attributes | map\<string, standard attribute value\> | Additional Attributes that identify the resource.<br/><br/>MUST not change during the lifetime of the resource.<br/><br/>Follows OpenTelemetry [Standard attribute definition](../common/README.md#standard-attribute). |
+| Entities   | set\<Entity\> | Defines the set of Entities associated with this resource.<p>[Entity is defined here](../entities/data-model.md) |
+| Attributes | map\<string, standard attribute value\> | Additional Attributes that identify the resource.<p>MUST not change during the lifetime of the resource.<p>Follows OpenTelemetry [Standard attribute definition](../common/README.md#standard-attribute). |
 
 ## Identity
 
