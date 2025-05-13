@@ -12,7 +12,7 @@ reasonable instrumentation scope. The most common approach is to use
 the name and version of the [instrumentation library](../glossary.md#instrumentation-library),
 with any additional identifying information as part of the scope's attributes.
 Other software components can be used too to get name, version and additional attributes, e.g.
-e.g. a module, a package, a class or a plugin.
+a module, a package, a class or a plugin.
 
 The instrumentation scope is defined by the
 (name,version,schema_url,attributes) tuple where version, schema_url, and
