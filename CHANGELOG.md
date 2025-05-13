@@ -21,7 +21,7 @@ release.
 - Add optional `Event Name` parameter to `Logger.Enabled` and `LogRecordProcessor.Enabled`.
   ([#4489](https://github.com/open-telemetry/opentelemetry-specification/pull/4489))
 - Remove the suggestion that backends or UI may represent log records with unset `SeverityNumber` and `SeverityText` as INFO severity.
-  ([#?](https://github.com/open-telemetry/opentelemetry-specification/pull/?))
+  ([#4509](https://github.com/open-telemetry/opentelemetry-specification/pull/4509))
 
 ### Baggage
 
