@@ -280,7 +280,7 @@ Prometheus exporters MUST by default add
 the scope name as the `otel_scope_name` label,
 the scope version as the `otel_scope_version` label,
 the scope schema URL as the `otel_scope_schema_url` label,
-the scope attribbutes as labels with `otel_scope_` prefix and following the rules
+the scope attributes as labels with `otel_scope_` prefix and following the rules
 described in the [`Metric Attributes`](#metric-attributes) section below,
 on all metric points, based on the scope the original data point was nested in.
 
