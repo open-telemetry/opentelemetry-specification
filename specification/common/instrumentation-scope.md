@@ -40,7 +40,7 @@ repository URL the library's source code is stored.
 
 Here is a non comprehensive list of usage scenarios:
 
-* Generic instrumented library with its name, version and attributes containing
+* Generic instrumentation library with its name, version and attributes containing
   additional library information.
 * Database access instrumented with its own name and version (e.g. `db.system.name`).
   This can be leveraged by APIs abstracting access to different underlying databases,
