@@ -58,7 +58,7 @@ Each SDK would define an Authenticator interface (or class, depending on the lan
 
 ```python
 class Authenticator:
-    def authenticate(self, request: requests.Request) -> None:
+    def authenticate(self, request: requests.PreparedRequest) -> None:
         """Mutate the request to add auth headers, tokens, etc."""
 ```
 
@@ -115,6 +115,7 @@ Mitigation:
 - OpenTelemetry Collector supports pluggable authentication via [extensions](https://opentelemetry.io/docs/collector/building/authenticator-extension/). Some examples:
   - [sigv4authextension](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/extension/sigv4authextension)
   - [oauth2client](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/extension/oauth2clientauthextension)
+- OpenTelemetry [Python](https://github.com/open-telemetry/opentelemetry-python/blob/037e9cb100a78ee2b50d297aaa381b1097708041/exporter/opentelemetry-exporter-otlp-proto-http/src/opentelemetry/exporter/otlp/proto/http/trace_exporter/__init__.py#L76) and [Go](https://github.com/open-telemetry/opentelemetry-go/pull/6688) have mechanisms to let users provide custom `Session` or `Client` respectivelt to the exporter. This provides grounds for expanding the capabilities of these exporters beyond authentication if that's something we are interested in.
 
 ## Open questions
 
