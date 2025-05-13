@@ -27,6 +27,9 @@ release.
 
 ### Logs
 
+- Add optional `Event Name` parameter to `Logger.Enabled` and `LogRecordProcessor.Enabled`.
+  ([#4489](https://github.com/open-telemetry/opentelemetry-specification/pull/4489))
+
 ### Baggage
 
 ### Resource
