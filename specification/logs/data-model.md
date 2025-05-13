@@ -304,7 +304,7 @@ severe) events. For example `SeverityNumber=17` describes an error that is less
 critical than an error with `SeverityNumber=20`.
 
 The exception to this is the zero value (`SeverityNumber=0`), which,
-since it us undefined, cannot be ordered after any importance level.
+since it us undefined, SHOULD NOT be compared to any other severity number.
 
 #### Mapping of `SeverityNumber`
 
