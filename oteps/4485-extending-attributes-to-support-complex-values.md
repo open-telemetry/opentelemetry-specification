@@ -4,7 +4,7 @@
 * [Why?](#why)
   * [Why do we want complex attributes on spans?](#why-do-we-want-complex-attributes-on-spans)
   * [Why do we want to extend standard attributes?](#why-do-we-want-to-extend-standard-attributes)
-  * [Why isn't it a breaking change?](#why-isnt-it-a-breaking-change)
+  * [Why doesn't this require a major version bump?](#why-doesnt-this-require-a-major-version-bump)
 * [How](#how)
   * [API](#api)
   * [SDK](#sdk)
@@ -76,14 +76,15 @@ While there are some mitigations (as demonstrated in
 [opentelemetry-go#6180](https://github.com/open-telemetry/opentelemetry-go/pull/6180)),
 extending the standard attributes provides a more seamless and user-friendly API experience.
 
-### Why isn't it a breaking change?
+### Why doesn't this require a major version bump?
 
 Currently, the SDK specification has a clause that says extending
 the set of standard attribute would be
 [considered a breaking change](/specification/common/README.md#standard-attribute).
 
 We believe that removing this clause and extending standard
-attributes will not in fact be a breaking change within the OpenTelemetry ecosystem:
+attributes can be done gracefully across the OpenTelemetry ecosystem
+without requiring a major version bump:
 
 - Language SDKs can implement this without breaking their backwards
   compatibility guarantees (e.g., [Java's](https://github.com/open-telemetry/opentelemetry-java/blob/main/VERSIONING.md)).
@@ -93,12 +94,10 @@ attributes will not in fact be a breaking change within the OpenTelemetry ecosys
     for this kind of change.
   - SDKs will be required to only emit complex attributes under that OTLP version
     or later.
+  - Stable SDKs will be prohibited from emitting complex attributes until at
+    least Oct 1, 2025.
   - A reasonably straightforward implementation option for backends is to just
     JSON serialize complex attributes and store them as strings.
-  - If we get pushback that backends need more time to adapt to the new
-    OTLP minor version, we can add a grace period similar to the
-    one we had for HTTP semconv when we included:
-    "Stable HTTP semconv SHOULD NOT be released prior to October 1, 2023."
 
 ## How
 
