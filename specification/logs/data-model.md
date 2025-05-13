@@ -303,6 +303,9 @@ events. Larger numerical values in each range represent more important (more
 severe) events. For example `SeverityNumber=17` describes an error that is less
 critical than an error with `SeverityNumber=20`.
 
+The exception to this is the zero value (`SeverityNumber=0`), which,
+since it us undefined, cannot be ordered after any importance level.
+
 #### Mapping of `SeverityNumber`
 
 Mappings from existing logging systems and formats (or **source format** for
