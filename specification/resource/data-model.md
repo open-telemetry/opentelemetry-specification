@@ -56,7 +56,7 @@ The data model below defines a logical model for an Resource (irrespective of th
 MUST not change during the lifetime of the resource.
 <p>
 Follows OpenTelemetry <a
-href="../../specification/common/README.md#standard-attribute">Standard
+href="../common/README.md#standard-attribute">Standard
 attribute definition</a>.
     </td>
    </tr>

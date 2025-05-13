@@ -66,7 +66,7 @@ MUST not change during the lifetime of the entity. The Id must contain
 at least one attribute.
 <p>
 Follows OpenTelemetry <a
-href="../../specification/common/README.md#standard-attribute">Standard
+href="../common/README.md#standard-attribute">Standard
 attribute definition</a>. SHOULD follow OpenTelemetry <a
 href="https://github.com/open-telemetry/semantic-conventions">semantic
 conventions</a> for attributes.
@@ -83,7 +83,7 @@ MAY change over the lifetime of the entity. MAY be empty. These
 attributes are not part of entity's identity.
 <p>
 Follows <a
-href="../../specification/logs/data-model.md#type-any">any</a>
+href="../logs/data-model.md#type-any">any</a>
 value definition in the OpenTelemetry spec. Arbitrary deep nesting of values
 for arrays and maps is allowed.
 <p>
