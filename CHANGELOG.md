@@ -29,6 +29,9 @@ release.
 
 ### Common
 
+- Have InstrumentationScope use normative language.
+  ([#4488](https://github.com/open-telemetry/opentelemetry-specification/pull/4488))
+
 ### Supplementary Guidelines
 
 ### OTEPs
