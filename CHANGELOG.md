@@ -9,26 +9,18 @@ release.
 
 ### Context
 
-- Drop reference to binary `Propagator`.
-  ([#4490](https://github.com/open-telemetry/opentelemetry-specification/pull/4490))
-
 ### Traces
 
 ### Metrics
 
 ### Logs
 
-- Add optional `Event Name` parameter to `Logger.Enabled` and `LogRecordProcessor.Enabled`.
-  ([#4489](https://github.com/open-telemetry/opentelemetry-specification/pull/4489))
 - Remove the suggestion that backends or UI may represent log records with unset severity as INFO severity.
-  ([#4509](https://github.com/open-telemetry/opentelemetry-specification/pull/4509))
+  ([#4509](https://github.com/open-telemetry/opentelemetry-specification/pull/450))
 
 ### Baggage
 
 ### Resource
-
-- Add experimental resource detector name.
-  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
 
 ### Profiles
 
@@ -43,6 +35,28 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.45.0 (2025-05-14)
+
+### Context
+
+- Drop reference to binary `Propagator`.
+  ([#4490](https://github.com/open-telemetry/opentelemetry-specification/pull/4490))
+
+### Logs
+
+- Add optional `Event Name` parameter to `Logger.Enabled` and `LogRecordProcessor.Enabled`.
+  ([#4489](https://github.com/open-telemetry/opentelemetry-specification/pull/4489))
+
+### Resource
+
+- Add experimental resource detector name.
+  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
+
+### OTEPs
+
+- OTEP: Span Event API deprecation plan.
+  ([#4430](https://github.com/open-telemetry/opentelemetry-specification/pull/4430))
 
 ## v1.44.0 (2025-04-15)
 

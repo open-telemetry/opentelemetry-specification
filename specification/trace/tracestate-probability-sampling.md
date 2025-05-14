@@ -131,7 +131,7 @@ This section defines the behavior for these two categories of samplers.
 
 See [SDK requirements for trace randomness](./sdk.md#sampling-requirements), which covers potentially inserting explicit trace randomness using the OpenTelemetry TraceState `rv` sub-key.
 
-A head Sampler is responsible for computing the `th` value in a new span's [OpenTelemetry TraceState](./tracestate-handling.md#tracestate-handling). The main inputs to that computation include the parent context's TraceState and the TraceID.
+A head Sampler is responsible for computing the `th` value in a new span's [OpenTelemetry TraceState](./tracestate-handling.md). The main inputs to that computation include the parent context's TraceState and the TraceID.
 
 When a span is sampled by in accordance with this specification, the output TraceState SHOULD be set to convey probability sampling:
 
