@@ -9,6 +9,43 @@ release.
 
 ### Context
 
+- Drop reference to binary `Propagator`.
+  ([#4490](https://github.com/open-telemetry/opentelemetry-specification/pull/4490))
+
+### Traces
+
+### Metrics
+
+### Logs
+
+- Add optional `Event Name` parameter to `Logger.Enabled` and `LogRecordProcessor.Enabled`.
+  ([#4489](https://github.com/open-telemetry/opentelemetry-specification/pull/4489))
+
+### Baggage
+
+### Resource
+
+- Add experimental resource detector name.
+  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
+
+### Profiles
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.44.0 (2025-04-15)
+
+### Context
+
 - Add context propagation through Environment Variables specification.
     ([#4454](https://github.com/open-telemetry/opentelemetry-specification/pull/4454))
 - On Propagators API, stabilize `GetAll` on the `TextMap` Extract.
@@ -24,6 +61,8 @@ release.
 
 - Add `MeasurementProcessor` to the Metrics SDK specification
    ([#4318](https://github.com/open-telemetry/opentelemetry-specification/pull/4318))
+- Clarify SDK behavior for Instrument Advisory Parameter.
+  ([#4389](https://github.com/open-telemetry/opentelemetry-specification/pull/4389))
 
 ### Logs
 
@@ -33,6 +72,8 @@ release.
   ([#4463](https://github.com/open-telemetry/opentelemetry-specification/pull/4463))
 - Stabilize `EventName`.
   ([#4475](https://github.com/open-telemetry/opentelemetry-specification/pull/4475))
+- Move implementation details of the `Observed Timestamp` to the Log SDK.
+  ([#4482](https://github.com/open-telemetry/opentelemetry-specification/pull/4482))
 
 ### Baggage
 
@@ -41,14 +82,8 @@ release.
 
 ### Resource
 
-- Add Datamodel for Entities
+- Add Datamodel for Entities.
    ([#4442](https://github.com/open-telemetry/opentelemetry-specification/pull/4442))
-
-### Profiles
-
-### OpenTelemetry Protocol
-
-### Compatibility
 
 ### SDK Configuration
 
@@ -56,12 +91,6 @@ release.
   ([#4448](https://github.com/open-telemetry/opentelemetry-specification/pull/4448))
 - List declarative config supported SDK extension plugin interfaces.
   ([#4452](https://github.com/open-telemetry/opentelemetry-specification/pull/4452))
-
-### Common
-
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.43.0 (2025-03-18)
 

@@ -1,10 +1,12 @@
 include_fragments = true
 
-accept = ["200..=299", "403"]
+# accepting 429s for now until we implement a better way to deal with GitHub rate limiting
+# see https://github.com/open-telemetry/semantic-conventions/issues/2214
+accept = ["200..=299", "403", "429"]
 
 exclude = [
     # excluding links to pull requests and issues is done for performance
-    "^https://github.com/open-telemetry/opentelemetry-specification/(issue|pull)/\\d+$",
+    "^https://github.com/open-telemetry/opentelemetry-specification/(issues|pull)/\\d+$",
     # TODO (trask) look into this
     "^https://docs.google.com/document/d/1d0afxe3J6bQT-I6UbRXeIYNcTIyBQv4axfjKF4yvAPA/edit"
 ]

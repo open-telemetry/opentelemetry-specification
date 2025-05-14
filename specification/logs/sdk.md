@@ -16,6 +16,7 @@
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
   * [LoggerConfig](#loggerconfig)
+  * [Emit a LogRecord](#emit-a-logrecord)
   * [Enabled](#enabled)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
@@ -192,6 +193,11 @@ It consists of the following parameters:
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
 
+### Emit a LogRecord
+
+If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
+the implementation SHOULD set it equal to the current time.
+
 ### Enabled
 
 **Status**: [Development](../document-status.md)
@@ -362,6 +368,7 @@ in order to support filtering via [`Logger.Enabled`](api.md#enabled).
 * [Instrumentation Scope](./data-model.md#field-instrumentationscope) associated
   with the `Logger`
 * [Severity Number](./data-model.md#field-severitynumber) passed by the caller
+* [Event Name](./data-model.md#field-eventname) passed by the caller
 
 **Returns:** `Boolean`
 
