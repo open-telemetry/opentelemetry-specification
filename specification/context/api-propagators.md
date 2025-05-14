@@ -70,8 +70,6 @@ The Propagators API currently defines one `Propagator` type:
 - `TextMapPropagator` is a type that injects values into and extracts values
   from carriers as string key/value pairs.
 
-A binary `Propagator` type will be added in the future (see [#437](https://github.com/open-telemetry/opentelemetry-specification/issues/437)).
-
 ### Carrier
 
 A carrier is the medium used by `Propagator`s to read values from and write values to.

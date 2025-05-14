@@ -143,6 +143,7 @@ The API SHOULD accept the following parameters:
   if unspecified then MUST use current Context.
   When only explicit Context is supported, accepting this parameter is REQUIRED.
 - [Severity Number](./data-model.md#field-severitynumber) (optional)
+- **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
 
 This API MUST return a language idiomatic boolean type. A returned value of
 `true` means the `Logger` is enabled for the provided arguments, and a returned

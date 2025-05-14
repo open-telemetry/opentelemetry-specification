@@ -368,6 +368,7 @@ in order to support filtering via [`Logger.Enabled`](api.md#enabled).
 * [Instrumentation Scope](./data-model.md#field-instrumentationscope) associated
   with the `Logger`
 * [Severity Number](./data-model.md#field-severitynumber) passed by the caller
+* [Event Name](./data-model.md#field-eventname) passed by the caller
 
 **Returns:** `Boolean`
 
