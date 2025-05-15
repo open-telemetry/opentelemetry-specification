@@ -16,6 +16,7 @@ release.
 ### Logs
 
 - Remove the suggestion that backends or UI may represent log records with unset severity as INFO severity.
+  Source formats that do not define a concept of severity or log level SHOULD emit INFO.
   ([#4509](https://github.com/open-telemetry/opentelemetry-specification/pull/4509))
 
 ### Baggage

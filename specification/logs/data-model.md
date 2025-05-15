@@ -328,6 +328,9 @@ For example if the source format has an "Informational" log level and no other
 log levels with similar meaning then it is recommended to use
 `SeverityNumber=9` for "Informational".
 
+Source formats that do not define a concept of severity or log level SHOULD emit
+INFO.
+
 #### Reverse Mapping
 
 When performing a reverse mapping from `SeverityNumber` to a specific format
