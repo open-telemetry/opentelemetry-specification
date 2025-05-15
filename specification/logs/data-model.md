@@ -329,7 +329,7 @@ log levels with similar meaning then it is recommended to use
 `SeverityNumber=9` for "Informational".
 
 Source formats that do not define a concept of severity or log level SHOULD
-emit INFO.
+set `SeverityNumber=9`.
 
 #### Reverse Mapping
 
