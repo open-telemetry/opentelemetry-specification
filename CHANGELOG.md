@@ -29,7 +29,7 @@ release.
 
 ### Common
 
-- Have InstrumentationScope use normative language.
+- Move Instrumentation Scope definition from glossary to a dedicated document and use normative language.
   ([#4488](https://github.com/open-telemetry/opentelemetry-specification/pull/4488))
 
 ### Supplementary Guidelines
