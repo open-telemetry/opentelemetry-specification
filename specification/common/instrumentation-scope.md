@@ -6,7 +6,7 @@ linkTitle: Instrumentation Scope
 
 **Status**: [Stable](../document-status.md)
 
-A logical unit of software, with which the emitted telemetry can be
+A logical unit of software with which the emitted telemetry can be
 associated. It is typically the developer's choice to decide what denotes a
 reasonable instrumentation scope. The most common approach is to use
 the name and version of the [instrumentation library](../glossary.md#instrumentation-library),
