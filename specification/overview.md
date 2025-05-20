@@ -81,7 +81,7 @@ until semantic conventions are stable.
 The [YAML](https://github.com/open-telemetry/semantic-conventions/tree/main/model) files MUST be used as the
 source of truth for generation. Each language implementation SHOULD
 provide language-specific support to the
-[code generator](https://github.com/open-telemetry/build-tools/tree/main/semantic-conventions#code-generator).
+[code generator](https://github.com/open-telemetry/weaver).
 
 Additionally, attributes required by the specification will be listed
 [here](semantic-conventions.md)
