@@ -115,12 +115,11 @@ OTel API MUST support setting complex attributes on spans, logs, profiles,
 exemplars, and as descriptive entity attributes.
 
 OTel API MAY support setting complex attributes on metrics, resources,
-and instrumentation scope. OTel API SHOULD NOT provide convenience methods
-to set complex attributes on these signals. APIs that allow to set complex attributes
-on these signals (for example, providing an arbitrary attributes collection when
-recording a metric), MUST document complex attributes usage limitations.
+instrumentation scope, and span events. OTel API SHOULD NOT provide convenience methods
+to set complex attributes on these signals.
 
-API documentation and spec language SHOULD include a language similar to this:
+API documentation and spec language around complex attributes SHOULD include
+language similar to this:
 
 > Simple attributes SHOULD be used whenever possible. Instrumentations SHOULD
 > assume that backends do not index individual properties of complex attributes,
@@ -130,9 +129,10 @@ API documentation and spec language SHOULD include a language similar to this:
 ### SDK
 
 OTel SDK MUST support setting complex attributes on spans, logs, profiles,
-descriptive entity attributes.
+exemplars, and as descriptive entity attributes.
 
-OTel SDK MAY support setting complex attributes on other telemetry signals.
+OTel API MAY support setting complex attributes on metrics, resources,
+instrumentation scope, and span events.
 
 The SDK MUST support reading and modifying complex attributes during processing.
 
