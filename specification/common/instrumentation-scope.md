@@ -21,7 +21,7 @@ software that emits the telemetry. A typical approach to ensure uniqueness is to
 use the fully qualified name of the emitting software unit (e.g. fully qualified library
 name or fully qualified class name).
 
-The instrumentation scope MUST be used to obtain a
+The instrumentation scope is used to obtain a
 [Tracer, Meter, or Logger](../glossary.md#tracer-name--meter-name--logger-name).
 
 The instrumentation scope's name MUST be specified to identify the `InstrumentationScope`
