@@ -37,63 +37,11 @@ also runs on a host, so we say that the `process` entity is related to the
 The data model below defines a logical model for an entity (irrespective of the
 physical format and encoding of how entity data is recorded).
 
-<table>
-   <tr>
-    <td><strong>Field</strong>
-    </td>
-    <td><strong>Type</strong>
-    </td>
-    <td><strong>Description</strong>
-    </td>
-   </tr>
-   <tr>
-    <td>Type
-    </td>
-    <td>string
-    </td>
-    <td>Defines the type of the entity. MUST not change during the
-lifetime of the entity. For example: "service" or "host". This field is
-required and MUST not be empty for valid entities.
-    </td>
-   </tr>
-   <tr>
-    <td>Id
-    </td>
-    <td>map&lt;string, standard attribute value&gt;
-    </td>
-    <td>Attributes that identify the entity.
-<p>
-MUST not change during the lifetime of the entity. The Id must contain
-at least one attribute.
-<p>
-Follows OpenTelemetry <a
-href="../../specification/common/README.md#standard-attribute">Standard
-attribute definition</a>. SHOULD follow OpenTelemetry <a
-href="https://github.com/open-telemetry/semantic-conventions">semantic
-conventions</a> for attributes.
-    </td>
-   </tr>
-   <tr>
-    <td>Description
-    </td>
-    <td>map&lt;string, any&gt;
-    </td>
-    <td>Descriptive (non-identifying) attributes of the entity.
-<p>
-MAY change over the lifetime of the entity. MAY be empty. These
-attributes are not part of entity's identity.
-<p>
-Follows <a
-href="../../specification/logs/data-model.md#type-any">any</a>
-value definition in the OpenTelemetry spec. Arbitrary deep nesting of values
-for arrays and maps is allowed.
-<p>
-SHOULD follow OpenTelemetry <a
-href="https://github.com/open-telemetry/semantic-conventions">semantic
-conventions</a> for attributes.
-    </td>
-   </tr>
-</table>
+| Field        | Type                                   | Description     |
+|--------------|----------------------------------------|-----------------|
+| Type         | string                                 | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
+| Id           | map<string, standard attribute value>  | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<p>Follows OpenTelemetry [Standard attribute definition](../common/README.md#standard-attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| Description  | map<string, any>                       | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows [any](../logs/data-model.md#type-any) value definition in the OpenTelemetry spec. Arbitrary deep nesting of values for arrays and maps is allowed.<p>SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
 
 ## Minimally Sufficient Identity
 
