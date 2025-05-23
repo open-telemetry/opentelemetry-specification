@@ -27,40 +27,10 @@ or more attributes not associated with any entity.
 
 The data model below defines a logical model for an Resource (irrespective of the physical format and encoding of how resource data is recorded).
 
-<table>
-   <tr>
-    <td><strong>Field</strong>
-    </td>
-    <td><strong>Type</strong>
-    </td>
-    <td><strong>Description</strong>
-    </td>
-   </tr>
-   <tr>
-    <td>Entities
-    </td>
-    <td>set&lt;Entity&gt;
-    </td>
-    <td>Defines the set of Entities associated with this resource.
-    <p><a href="../entities/data-model.md#entity-data-model">Entity is defined
-    here</a>
-    </td>
-   </tr>
-   <tr>
-    <td>Attributes
-    </td>
-    <td>map&lt;string, standard attribute value&gt;
-    </td>
-    <td>Additional Attributes that identify the resource.
-<p>
-MUST not change during the lifetime of the resource.
-<p>
-Follows OpenTelemetry <a
-href="../../specification/common/README.md#standard-attribute">Standard
-attribute definition</a>.
-    </td>
-   </tr>
-</table>
+| Field      | Type     | Description     |
+|------------|----------|-----------------|
+| Entities   | set\<Entity\> | Defines the set of Entities associated with this resource.<p>[Entity is defined here](../entities/data-model.md) |
+| Attributes | map\<string, standard attribute value\> | Additional Attributes that identify the resource.<p>MUST not change during the lifetime of the resource.<p>Follows OpenTelemetry [Standard attribute definition](../common/README.md#standard-attribute). |
 
 ## Identity
 

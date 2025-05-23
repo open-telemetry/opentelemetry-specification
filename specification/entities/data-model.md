@@ -9,6 +9,7 @@
 
 - [Minimally Sufficient Identity](#minimally-sufficient-identity)
 - [Repeatable Identity](#repeatable-identity)
+- [Identifying Attributes](#identifying-attributes)
 - [Examples of Entities](#examples-of-entities)
 
 <!-- tocstop -->
@@ -36,63 +37,11 @@ also runs on a host, so we say that the `process` entity is related to the
 The data model below defines a logical model for an entity (irrespective of the
 physical format and encoding of how entity data is recorded).
 
-<table>
-   <tr>
-    <td><strong>Field</strong>
-    </td>
-    <td><strong>Type</strong>
-    </td>
-    <td><strong>Description</strong>
-    </td>
-   </tr>
-   <tr>
-    <td>Type
-    </td>
-    <td>string
-    </td>
-    <td>Defines the type of the entity. MUST not change during the
-lifetime of the entity. For example: "service" or "host". This field is
-required and MUST not be empty for valid entities.
-    </td>
-   </tr>
-   <tr>
-    <td>Id
-    </td>
-    <td>map&lt;string, standard attribute value&gt;
-    </td>
-    <td>Attributes that identify the entity.
-<p>
-MUST not change during the lifetime of the entity. The Id must contain
-at least one attribute.
-<p>
-Follows OpenTelemetry <a
-href="../../specification/common/README.md#standard-attribute">Standard
-attribute definition</a>. SHOULD follow OpenTelemetry <a
-href="https://github.com/open-telemetry/semantic-conventions">semantic
-conventions</a> for attributes.
-    </td>
-   </tr>
-   <tr>
-    <td>Description
-    </td>
-    <td>map&lt;string, any&gt;
-    </td>
-    <td>Descriptive (non-identifying) attributes of the entity.
-<p>
-MAY change over the lifetime of the entity. MAY be empty. These
-attributes are not part of entity's identity.
-<p>
-Follows <a
-href="../../specification/logs/data-model.md#type-any">any</a>
-value definition in the OpenTelemetry spec. Arbitrary deep nesting of values
-for arrays and maps is allowed.
-<p>
-SHOULD follow OpenTelemetry <a
-href="https://github.com/open-telemetry/semantic-conventions">semantic
-conventions</a> for attributes.
-    </td>
-   </tr>
-</table>
+| Field        | Type                                   | Description     |
+|--------------|----------------------------------------|-----------------|
+| Type         | string                                 | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
+| Id           | map<string, standard attribute value>  | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<p>Follows OpenTelemetry [Standard attribute definition](../common/README.md#standard-attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| Description  | map<string, any>                       | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows [any](../logs/data-model.md#type-any) value definition in the OpenTelemetry spec. Arbitrary deep nesting of values for arrays and maps is allowed.<p>SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
 
 ## Minimally Sufficient Identity
 
@@ -116,6 +65,30 @@ describing the process.
 > across multiple observers. While many successful systems rely on pushing down
 > identity from a central registry or knowledge store, OpenTelemetry must
 > support all possible scenarios.
+
+## Identifying Attributes
+
+OpenTelemetry Semantic Conventions MUST define a set of identifying attribute
+keys for every defined entity type.
+
+Names of the identifying attributes SHOULD use the entity type as a prefix to avoid
+collisions with other entity types. For example, the `k8s.node` entity uses
+`k8s.node.uid` as an identifying attribute.
+
+When an entity can be emitted by multiple observers, the following rules apply:
+
+* Two independent observers that report the same entity MUST be able to
+  supply identical values for all identifying attributes.
+
+* If an observer cannot reliably obtain one or more identifying attributes, it
+  MUST NOT emit telemetry using that entity type. Instead, it SHOULD:
+  1. delegate to the observer that _can_ supply the full set and treat that
+     observer as the _source of truth_, or
+  2. emit a _different_ entity type with a set of identifying attributes it
+     can populate reliably.
+
+This ensures that entity identity is consistent and unambiguous across
+observers.
 
 ## Examples of Entities
 

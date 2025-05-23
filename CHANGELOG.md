@@ -9,9 +9,6 @@ release.
 
 ### Context
 
-- Drop reference to binary `Propagator`.
-  ([#4490](https://github.com/open-telemetry/opentelemetry-specification/pull/4490))
-
 ### Traces
 
 - Define sampling threshold field in OpenTelemetry TraceState; define the behavior
@@ -28,9 +25,6 @@ release.
 
 ### Resource
 
-- Add experimental resource detector name.
-  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
-
 ### Profiles
 
 ### OpenTelemetry Protocol
@@ -44,6 +38,28 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.45.0 (2025-05-14)
+
+### Context
+
+- Drop reference to binary `Propagator`.
+  ([#4490](https://github.com/open-telemetry/opentelemetry-specification/pull/4490))
+
+### Logs
+
+- Add optional `Event Name` parameter to `Logger.Enabled` and `LogRecordProcessor.Enabled`.
+  ([#4489](https://github.com/open-telemetry/opentelemetry-specification/pull/4489))
+
+### Resource
+
+- Add experimental resource detector name.
+  ([#4461](https://github.com/open-telemetry/opentelemetry-specification/pull/4461))
+
+### OTEPs
+
+- OTEP: Span Event API deprecation plan.
+  ([#4430](https://github.com/open-telemetry/opentelemetry-specification/pull/4430))
 
 ## v1.44.0 (2025-04-15)
 
