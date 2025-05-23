@@ -562,15 +562,17 @@ state.
 The method returns a `SamplingIntent` structure with the following elements:
 
 * `threshold` - The sampling threshold value. A lower threshold increases the likelihood of sampling.
-* `threshold_reliable` - A boolean indicating if the threshold can be reliably used for metrics estimation.
+* `threshold_reliable` - A boolean indicating if the threshold can be reliably used for 
+   [Span-to-Metrics estimation](./tracestate-probability-sampling.md#sampling-related-terms).
 * `attributes_provider` - An optional provider of attributes to be added to the span if it is sampled.
 * `trace_state_provider` - An optional provider of a modified TraceState.
 
 Note that `trace_state_provider` may be a significant source of
-complexity.  ComposableSamplers SHOULD NOT modify the OpenTelemetry
-TraceState.  The calling CompositeSampler SHOULD update the threshold
-of the outgoing TraceState (unless `!threshold_reliable`) and that the
-explicit randomness values MUST not be modified.
+complexity.  ComposableSamplers MUST NOT modify the OpenTelemetry
+TraceState (i.e., the `ot` sub-key of TraceState).  The calling
+CompositeSampler SHOULD update the threshold of the outgoing
+TraceState (unless `!threshold_reliable`) and that the explicit
+randomness values MUST not be modified.
 
 ##### Built-in ComposableSamplers
 
@@ -594,7 +596,10 @@ explicit randomness values MUST not be modified.
 
 **Required parameters:**
 
-* `ratio` - A value between `2^-56` and 1.0 (inclusive) representing the desired probability of sampling
+* `ratio` - A value between `2^-56` and 1.0 (inclusive) representing the desired probability of sampling.
+
+A ratio value of 0 is considered non-probabilistic. For the zero case
+a `ComposableAlwaysOff` instance SHOULD be returned instead.
 
 ###### ComposableParentThreshold
 

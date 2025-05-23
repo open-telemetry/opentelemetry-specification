@@ -141,7 +141,7 @@ The two sampling aspects mentioned in the overview are referred to as
 stages of a sampling strategy:
 
 1. Parent/Child sampling. These decisions are made for spans inside an SDK, synchronously, during the life of a trace. These decisions are based on live Contexts.
-2. Downstream sampling. These sampling decisions happen for spans on the collection path, after they finish, and may happen at multiple locations in collection pipeline. These decisions are based on historical Contexts.
+2. Downstream sampling. These sampling decisions happen for spans on the collection path, after they finish, and may happen at multiple locations in a collection pipeline. These decisions are based on historical Contexts.
 
 We recognize these stages as two dimensions in which Sampling
 decisions are made.  In Parent/Child sampling, there is a progression
@@ -220,6 +220,18 @@ Some terms are not about one specific sampler, but about the approach:
   set.  Tail sampling may be combined with Head sampling, of course,
   and may or may not contribute unequal probabilities across spans
   within a trace.
+  
+The term **adjusted count** refers to the mathematical inverse
+(reciprocal) of the sampling probability, the expected number of times
+an item should be counted, for it to be representative of the
+population. Adjusted counts are useful as an estimate of the number 
+of spans there would be without sampling.
+
+The term **span-to-metrics** refers to the use of adjusted count to in
+a telemetry system to derive metrics from tracing spans using adjusted
+count information. The specifications for handling tracestate and
+managing threshold information in samplers ensure that adjusted counts
+are reliable primarily for this purpose.
 
 ## Tracestate handling requirements
 
@@ -246,7 +258,8 @@ TraceState, to maintain the correct statistical interpretation.
 
 For a conditional sampling stages (e.g. rule-based samplers) to remain
 consistent, they must not condition the provided threshold on the
-randomness value or other source of randomness.
+randomness value or a dependent source of randomness (it can use 
+_independent_ randomness).
 
 Sampling stages that yield spans with unknown sampling probability,
 including parent-based samplers when they encounter a Context with
