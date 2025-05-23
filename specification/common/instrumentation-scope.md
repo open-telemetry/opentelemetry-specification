@@ -16,7 +16,7 @@ a module, a package, a class or a plugin.
 
 The instrumentation scope is defined by the
 (name,version,schema_url,attributes) tuple where version, schema_url, and
-attributes are optional. This tuple MUST uniquely identify the logical unit of
+attributes are optional. This tuple SHOULD uniquely identify the logical unit of
 software that emits the telemetry. A typical approach to ensure uniqueness is to
 use the fully qualified name of the emitting software unit (e.g. fully qualified library
 name or fully qualified class name).
