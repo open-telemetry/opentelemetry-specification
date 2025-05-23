@@ -284,9 +284,6 @@ the scope attributes as labels with `otel_scope_` prefix and following the rules
 described in the [`Metric Attributes`](#metric-attributes) section below,
 on all metric points, based on the scope the original data point was nested in.
 
-Prometheus exporters MAY provide a configuration option to disable
-`otel_scope_` labels.
-
 ### Gauges
 
 An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to
