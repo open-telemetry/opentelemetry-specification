@@ -562,7 +562,7 @@ state.
 The method returns a `SamplingIntent` structure with the following elements:
 
 * `threshold` - The sampling threshold value. A lower threshold increases the likelihood of sampling.
-* `threshold_reliable` - A boolean indicating if the threshold can be reliably used for 
+* `threshold_reliable` - A boolean indicating if the threshold can be reliably used for
    [Span-to-Metrics estimation](./tracestate-probability-sampling.md#sampling-related-terms).
 * `attributes_provider` - An optional provider of attributes to be added to the span if it is sampled.
 * `trace_state_provider` - An optional provider of a modified TraceState.

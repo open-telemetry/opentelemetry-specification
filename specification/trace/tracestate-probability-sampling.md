@@ -220,11 +220,11 @@ Some terms are not about one specific sampler, but about the approach:
   set.  Tail sampling may be combined with Head sampling, of course,
   and may or may not contribute unequal probabilities across spans
   within a trace.
-  
+
 The term **adjusted count** refers to the mathematical inverse
 (reciprocal) of the sampling probability, the expected number of times
 an item should be counted, for it to be representative of the
-population. Adjusted counts are useful as an estimate of the number 
+population. Adjusted counts are useful as an estimate of the number
 of spans there would be without sampling.
 
 The term **span-to-metrics** refers to the use of adjusted count to in
@@ -258,8 +258,8 @@ TraceState, to maintain the correct statistical interpretation.
 
 For a conditional sampling stages (e.g. rule-based samplers) to remain
 consistent, they must not condition the provided threshold on the
-randomness value or a dependent source of randomness (it can use 
-_independent_ randomness).
+randomness value or a dependent source of randomness (it can use
+*independent* randomness).
 
 Sampling stages that yield spans with unknown sampling probability,
 including parent-based samplers when they encounter a Context with
