@@ -154,8 +154,8 @@ to complex attributes.
 `AnyValue` which SHOULD be truncated to the configured limit.
 
 Leaf nodes of an `AnyValue` attribute SHOULD count toward the **attribute count limit**.
-If the limit is reached, the SDK MUST drop the entire `AnyValue` attribute;
-partial exports are not allowed.
+If adding an `AnyValue` attribute would result in exceeding the attribute count limit,
+the SDK MUST not add the entire `AnyValue` attribute; partial exports are not allowed.
 
 > [!NOTE]
 >
@@ -237,7 +237,8 @@ Prior art on AnyValue conversion: [Go](https://github.com/open-telemetry/opentel
 
 ## Prototypes
 
-TODO
+- [opentelemetry-python#4587](https://github.com/open-telemetry/opentelemetry-python/pull/4587)
+- [opentelemetry-go#6809](https://github.com/open-telemetry/opentelemetry-go/pull/6180)
 
 ## Future possibilities
 
