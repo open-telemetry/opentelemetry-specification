@@ -13,6 +13,12 @@
     {
       "matchUpdateTypes": ["minor", "major"],
       "schedule": ["before 8am on Monday"]
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "github-actions deps"
     }
   ],
   "labels": [
