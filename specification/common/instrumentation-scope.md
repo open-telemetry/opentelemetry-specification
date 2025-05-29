@@ -24,7 +24,7 @@ name or fully qualified class name).
 The instrumentation scope is used to obtain a
 [Tracer, Meter, or Logger](../glossary.md#tracer-name--meter-name--logger-name).
 
-The instrumentation scope's name MUST be specified to identify the `InstrumentationScope`
+The instrumentation scope's name SHOULD be specified to identify the `InstrumentationScope`
 name.
 
 The instrumentation scope's optional Schema URL SHOULD identify the [Telemetry
