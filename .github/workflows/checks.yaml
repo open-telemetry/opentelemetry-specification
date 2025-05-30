@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  merge_group:
 
 jobs:
   markdownlint:
@@ -25,7 +26,7 @@ jobs:
     - name: check out code
       uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
 
-    - uses: actions/setup-python@e9aba2c848f5ebd159c070c61ea2c4e2b122355e # v2
+    - uses: actions/setup-python@e9aba2c848f5ebd159c070c61ea2c4e2b122355e # v2.3.4
 
     - name: install yamllint
       run: make install-yamllint
