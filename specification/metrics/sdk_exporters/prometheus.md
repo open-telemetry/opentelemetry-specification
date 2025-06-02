@@ -65,6 +65,7 @@ excluded from the `target` info metric. The option MAY be named `with_resource_c
 
 A Prometheus Exporter MAY support a configuration option that controls the translation of metric names from OpenTelemetry Naming Conventions to [Prometheus Naming conventions](https://prometheus.io/docs/practices/naming/).
 If the Prometheus exporter supports such configuration it MUST be named `translation_strategy`, and the translation options MUST be:
+
 - `UnderscoreEscapingWithSuffixes`, the default. This fully escapes metric names for classic Prometheus metric name compatibility, and includes appending type and unit suffixes.
 - `NoUTF8EscapingWithSuffixes` will disable changing special characters to `_`. Special suffixes like units and `_total` for counters will be attached.
 - `NoTranslation`. This strategy bypasses all metric and label name translation, passing them through unaltered.
@@ -88,5 +89,6 @@ negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prom
 Although a Prometheus Exporter MAY be configured with a `translation_strategy` for internal metric processing, the final output format and character escaping MUST follow what the content negotiation process determines based on the client's `Accept` header. The content negotiation requirements take precedence over the configured translation strategy when determining the final output format.
 
 For example:
+
 - If configured with `NoTranslation` but the client requests `escaping=underscores`, the exporter MUST apply underscore escaping
 - If configured with `UnderscoreEscapingWithSuffixes` but the client `escaping=allow-utf8`, there's no need to revert what has been translated since the SDK will continue to be compliant.
