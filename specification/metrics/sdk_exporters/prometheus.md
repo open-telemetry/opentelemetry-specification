@@ -63,11 +63,13 @@ The configuration SHOULD allow the user to select which resource attributes to c
 include / exclude or regular expression based). Copied Resource attributes MUST NOT be
 excluded from the `target` info metric. The option MAY be named `with_resource_constant_labels`.
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without a [unit suffix](../../compatibility/prometheus_and_openmetrics.md#metric-metadata)
-or UNIT metadata. The option MAY be named `without_units`, and MUST be `false` by default.
+A Prometheus Exporter MAY support a configuration option that controls the translation of metric names from OpenTelemetry Naming Conventions to [Prometheus Naming conventions](https://prometheus.io/docs/practices/naming/).
+If the Prometheus exporter supports such configuration it MUST be named `translation_strategy`, and the translation options MUST be:
+- `UnderscoreEscapingWithSuffixes`, the default. This fully escapes metric names for classic Prometheus metric name compatibility, and includes appending type and unit suffixes.
+- `NoUTF8EscapingWithSuffixes` will disable changing special characters to `_`. Special suffixes like units and `_total` for counters will be attached.
+- `NoTranslation`. This strategy bypasses all metric and label name translation, passing them through unaltered.
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without a [type suffix](../../compatibility/prometheus_and_openmetrics.md#metric-metadata).
-The option MAY be named `without_type_suffix`, and MUST be `false` by default.
+A Prometheus Exporter MAY support a configuration option to produce metrics without the UNIT metadata. The option MAY be named `without_units`, and MUST be `false` by default. Attention: this option isn't related to unit suffixes.
 
 A Prometheus Exporter MAY support a configuration option to produce metrics without [scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
 The option MAY be named `without_scope_info`, and MUST be `false` by default.
