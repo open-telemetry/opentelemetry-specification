@@ -11,17 +11,17 @@ OpenTelemetry defines its semantic conventions in a separate repository:
 
 Semantic conventions MUST provide the following attributes:
 
-- [`error.type`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/error.md#error-type)
-- [`exception.message`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/exception.md#exception-message)
-- [`exception.stacktrace`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/exception.md#exception-stacktrace)
-- [`exception.type`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/exception.md#exception-type)
-- [`server.address`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/server.md#server-address)
-- [`server.port`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/server.md#server-port)
-- [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/service.md#service-name)
-- [`telemetry.sdk.language`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/telemetry.md#telemetry-sdk-language)
-- [`telemetry.sdk.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/telemetry.md#telemetry-sdk-name)
-- [`telemetry.sdk.version`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/telemetry.md#telemetry-sdk-version)
-- [`url.scheme`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/url.md#url-scheme)
+- [`error.type`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/error.md#error-type)
+- [`exception.message`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/exception.md#exception-message)
+- [`exception.stacktrace`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/exception.md#exception-stacktrace)
+- [`exception.type`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/exception.md#exception-type)
+- [`server.address`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/server.md#server-address)
+- [`server.port`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/server.md#server-port)
+- [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-name)
+- [`telemetry.sdk.language`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/telemetry.md#telemetry-sdk-language)
+- [`telemetry.sdk.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/telemetry.md#telemetry-sdk-name)
+- [`telemetry.sdk.version`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/telemetry.md#telemetry-sdk-version)
+- [`url.scheme`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/url.md#url-scheme)
 
 Semantic conventions MUST provide the following events:
 
@@ -31,7 +31,7 @@ Semantic conventions MUST provide the following events:
 
 Semantic conventions MUST provide the following attributes:
 
-- [`service.instance.id`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/attributes-registry/service.md#service-instance-id)
+- [`service.instance.id`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-instance-id)
 
 ## Reserved Namespace
 
