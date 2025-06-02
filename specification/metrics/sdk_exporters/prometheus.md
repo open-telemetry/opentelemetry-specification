@@ -82,3 +82,11 @@ metric. The option MAY be named `without_target_info`, and MUST be `false` by de
 A Prometheus Exporter MUST support content negotiation to allow clients to request
 metrics in different formats based on the `Accept` header in HTTP requests. Content
 negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prometheus.io/docs/instrumenting/content_negotiation/).
+
+### Interaction with Translation Strategy
+
+Although a Prometheus Exporter MAY be configured with a `translation_strategy` for internal metric processing, the final output format and character escaping MUST follow what the content negotiation process determines based on the client's `Accept` header. The content negotiation requirements take precedence over the configured translation strategy when determining the final output format.
+
+For example:
+- If configured with `NoTranslation` but the client requests `escaping=underscores`, the exporter MUST apply underscore escaping
+- If configured with `UnderscoreEscapingWithSuffixes` but the client `escaping=allow-utf8`, there's no need to revert what has been translated since the SDK will continue to be compliant.
