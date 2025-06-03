@@ -14,32 +14,33 @@ aliases:
 
 <!-- toc -->
 
-- [Differences between Prometheus formats](#differences-between-prometheus-formats)
-- [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
-  * [Metric Metadata](#metric-metadata)
-  * [Counters](#counters)
-  * [Gauges](#gauges)
-  * [Info](#info)
-  * [StateSet](#stateset)
-  * [Unknown-typed](#unknown-typed)
-  * [Histograms](#histograms)
-  * [Summaries](#summaries)
-  * [Dropped Types](#dropped-types)
-  * [Start Time](#start-time)
-  * [Exemplars](#exemplars)
-  * [Instrumentation Scope](#instrumentation-scope)
-  * [Resource Attributes](#resource-attributes)
-- [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
-  * [Metric Metadata](#metric-metadata-1)
-  * [Instrumentation Scope](#instrumentation-scope-1)
-  * [Gauges](#gauges-1)
-  * [Sums](#sums)
-  * [Histograms](#histograms-1)
-  * [Exponential Histograms](#exponential-histograms)
-  * [Summaries](#summaries-1)
-  * [Metric Attributes](#metric-attributes)
-  * [Exemplars](#exemplars-1)
-  * [Resource Attributes](#resource-attributes-1)
+- [Prometheus and OpenMetrics Compatibility](#prometheus-and-openmetrics-compatibility)
+  - [Differences between Prometheus formats](#differences-between-prometheus-formats)
+  - [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
+    - [Metric Metadata](#metric-metadata)
+    - [Counters](#counters)
+    - [Gauges](#gauges)
+    - [Info](#info)
+    - [StateSet](#stateset)
+    - [Unknown-typed](#unknown-typed)
+    - [Histograms](#histograms)
+    - [Summaries](#summaries)
+    - [Dropped Types](#dropped-types)
+    - [Start Time](#start-time)
+    - [Exemplars](#exemplars)
+    - [Instrumentation Scope](#instrumentation-scope)
+    - [Resource Attributes](#resource-attributes)
+  - [OTLP Metric points to Prometheus](#otlp-metric-points-to-prometheus)
+    - [Metric Metadata](#metric-metadata-1)
+    - [Instrumentation Scope](#instrumentation-scope-1)
+    - [Gauges](#gauges-1)
+    - [Sums](#sums)
+    - [Histograms](#histograms-1)
+    - [Exponential Histograms](#exponential-histograms)
+    - [Summaries](#summaries-1)
+    - [Metric Attributes](#metric-attributes)
+    - [Exemplars](#exemplars-1)
+    - [Resource Attributes](#resource-attributes-1)
 
 <!-- tocstop -->
 
@@ -80,7 +81,7 @@ at the time of writing:
 ### Metric Metadata
 
 The [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information)
-MUST be added as the Name of the OTLP metric. By default, the name SHOULD NOT be altered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
+MUST be added as the Name of the OTLP metric. By default, the name SHOULD NOT be altered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes; and translation SHOULD provide a second configuration which, when enabled, does not alter the OTLP Name (hereafter refered to as "no-translation" configuration).
 
 [Prometheus UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily),
 if present, MUST be converted to the unit of the OTLP metric. The unit SHOULD
@@ -216,19 +217,19 @@ as [described below](#resource-attributes-1).
 The following attributes MUST be associated with scraped metrics as resource
 attributes, and MUST NOT be added as metric attributes:
 
-| OTLP Resource Attribute | Description |
-| ----------------------- | ----------- |
-| `service.name` | The configured name of the service that the target belongs to |
-| `service.instance.id` | A unique identifier of the target.  By default, it should be the `<host>:<port>` of the scraped URL |
+| OTLP Resource Attribute | Description                                                                                         |
+| ----------------------- | --------------------------------------------------------------------------------------------------- |
+| `service.name`          | The configured name of the service that the target belongs to                                       |
+| `service.instance.id`   | A unique identifier of the target.  By default, it should be the `<host>:<port>` of the scraped URL |
 
 The following attributes SHOULD be associated with scraped metrics as resource
 attributes, and MUST NOT be added as metric attributes:
 
-| OTLP Resource Attribute | Description |
-| ----------------------- | ----------- |
-| `server.address` | The `<host>` portion of the target's URL that was scraped |
-| `server.port` | The `<port>` portion of the target's URL that was scraped |
-| `url.scheme` | `http` or `https` |
+| OTLP Resource Attribute | Description                                               |
+| ----------------------- | --------------------------------------------------------- |
+| `server.address`        | The `<host>` portion of the target's URL that was scraped |
+| `server.port`           | The `<port>` portion of the target's URL that was scraped |
+| `url.scheme`            | `http` or `https`                                         |
 
 In addition to the attributes above, the
 [target](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
@@ -251,9 +252,9 @@ UNIT or HELP comments. Instead, all but one of the conflicting UNIT and HELP
 comments (but not metric points) SHOULD be dropped. If dropping a comment or
 metric points, the exporter SHOULD warn the user through error logging.
 
-The Name of an OTLP metric MUST be added as the
+The Name of an OTLP metric SHOULD be added as the
 [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information),
-with unit and type suffixes added as described below. The metric name is
+and unit and type suffixes SHOULD be added as described below. The metric name is
 required to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Invalid characters
 in the metric name MUST be replaced with the `_` character. Multiple
 consecutive `_` characters MUST be replaced with a single `_` character.
@@ -277,6 +278,10 @@ The description of an OTLP metrics point MUST be added as
 The data point type of an OTLP metric MUST be added as
 [TYPE metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
 It also dictates type-specific conversion rules listed below.
+
+The Name of an OTLP metric MAY be added without the unit and type suffixes.
+
+The Name of an OTLP metric MAY be added with no alteration.
 
 ### Instrumentation Scope
 
@@ -387,17 +392,20 @@ An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be conv
 OpenTelemetry Metric Attributes MUST be converted to
 [Prometheus labels](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).
 String Attribute values are converted directly to Metric Attributes, and
-non-string Attribute values MUST be converted to string attributes following
+non-string Attribute values SHOULD be converted to string attributes following
 the [attribute specification](../common/README.md#attribute).  Prometheus
 metric label keys are required to match the following regex:
 `[a-zA-Z_]([a-zA-Z0-9_])*`.  Metrics from OpenTelemetry with unsupported
-Attribute names MUST replace invalid characters with the `_` character.
+Attribute names SHOULD replace invalid characters with the `_` character.
 Multiple consecutive `_` characters MUST be replaced with a single `_`
 character. This may cause ambiguity in scenarios where multiple similar-named
 attributes share invalid characters at the same location.  In such unlikely
 cases, if multiple key-value pairs are converted to have the same Prometheus
 key, the values MUST be concatenated together, separated by `;`, and ordered by
 the lexicographical order of the original keys.
+
+If the "no-translation" configuration is enabled, OpenTelemetry Metric Attribute
+Names MUST be unaltered.
 
 ### Exemplars
 
