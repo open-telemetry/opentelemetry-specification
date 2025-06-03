@@ -284,7 +284,7 @@ Type: number.
 Description: numerical value of the severity, normalized to values described in
 this document. This field is optional.
 
-`SeverityNumber` is an integer number in range. Smaller numerical values correspond to
+`SeverityNumber` is an integer number. Smaller numerical values correspond to
 less severe events (such as debug events), larger numerical values correspond to
 more severe events (such as errors and critical events). The following table
 defines the meaning of `SeverityNumber` value:
@@ -304,7 +304,7 @@ severe) events. For example `SeverityNumber=17` describes an error that is less
 critical than an error with `SeverityNumber=20`.
 
 Values outside of the 1..24 range are not considered valid.
-0 value MAY be used to represent an unset value.
+0 value MAY be used to represent an unspecified value.
 
 #### Mapping of `SeverityNumber`
 
