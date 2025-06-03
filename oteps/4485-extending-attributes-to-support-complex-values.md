@@ -94,7 +94,7 @@ without requiring a major version bump:
     for this kind of change.
   - SDKs will be required to only emit complex attributes under that OTLP version
     or later.
-  - Stable SDKs and exporters will be prohibited from emitting complex attributes by default on signals
+  - Stable exporters will be prohibited from emitting complex attributes by default on signals
     other than Logs until at least Oct 1, 2025.
   - A reasonably straightforward implementation option for backends is to just
     JSON serialize complex attributes and store them as strings.
