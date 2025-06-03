@@ -16,7 +16,7 @@ release.
 ### Logs
 
 - Stabilize `Event Name` parameter of `Logger.Enabled`.
-  ([#?](https://github.com/open-telemetry/opentelemetry-specification/pull/?))
+  ([#4534](https://github.com/open-telemetry/opentelemetry-specification/pull/4534))
 
 ### Baggage
 
