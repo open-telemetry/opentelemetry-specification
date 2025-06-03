@@ -303,7 +303,7 @@ events. Larger numerical values in each range represent more important (more
 severe) events. For example `SeverityNumber=17` describes an error that is less
 critical than an error with `SeverityNumber=20`.
 
-0 value MAY be used to represent an unspecified value.
+`SeverityNumber=0` MAY be used to represent an unspecified value.
 
 #### Mapping of `SeverityNumber`
 
