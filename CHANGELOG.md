@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Clarify `SeverityNumber` allowed values.
+  ([#4535](https://github.com/open-telemetry/opentelemetry-specification/pull/4535))
+
 ### Baggage
 
 ### Resource
