@@ -204,7 +204,7 @@ It consists of the following parameters:
 
 **Status**: [Development](../document-status.md)
 
-`Enabled` MUST return `false` when:
+`Enabled` MUST return `false` when either:
 
 - there are no registered [`SpanProcessors`](#span-processor),
 - `Tracer` is disabled ([`TracerConfig.disabled`](#tracerconfig) is `true`).
