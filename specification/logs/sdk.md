@@ -200,8 +200,6 @@ the implementation SHOULD set it equal to the current time.
 
 ### Enabled
 
-**Status**: [Development](../document-status.md)
-
 `Enabled` MUST return `false` when:
 
 - there are no registered [`LogRecordProcessors`](#logrecordprocessor),
