@@ -15,7 +15,7 @@ release.
 
 ### Logs
 
-- Stabilize SDK's `Logger.Enabled`.
+- Stabilize SDK and No-Op `Logger.Enabled`.
   ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
 
 ### Baggage
