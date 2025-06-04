@@ -74,3 +74,44 @@ The option MAY be named `without_scope_info`, and MUST be `false` by default.
 
 A Prometheus Exporter MAY support a configuration option to produce metrics without a [target info](../../compatibility/prometheus_and_openmetrics.md#resource-attributes-1)
 metric. The option MAY be named `without_target_info`, and MUST be `false` by default.
+
+## Content Negotiation
+
+A Prometheus Exporter MUST support [content negotiation](https://prometheus.io/docs/instrumenting/content_negotiation/) to allow clients to request metrics in different formats based on the `Accept` header in HTTP requests.
+
+## Supported Formats
+
+A Prometheus Exporter SHOULD support the following formats, in order of preference, as defined by the [Prometheus content negotiation specification](https://prometheus.io/docs/instrumenting/content_negotiation/):
+
+1. **Prometheus Text 0.0.4** (`text/plain; version=0.0.4`) - MUST be supported as the minimum requirement
+2. **Prometheus Text 1.0.0** (`text/plain; version=1.0.0`)
+3. **OpenMetrics Text 0.0.1** (`application/openmetrics-text; version=0.0.1`)
+4. **OpenMetrics Text 1.0.0** (`application/openmetrics-text; version=1.0.0`)
+
+A Prometheus Exporter MAY additionally support:
+
+- **Prometheus Protobuf** (`application/vnd.google.protobuf; proto=io.prometheus.client.MetricFamily; encoding=delimited`)
+
+If a client doesn't provide an Accept header, a Prometheus Exporter MUST expose metrics in the Prometheus Text 0.0.4 format.
+
+## Escaping Schemes
+
+For Prometheus text format and OpenMetrics text format version 1.0.0 and above, the exporter SHOULD support [escaping schemes](https://prometheus.io/docs/instrumenting/content_negotiation/#escaping-scheme) as specified in the `Accept` header:
+
+- `underscores` - MUST be supported as the minimum requirement
+- `allow-utf8`
+- `dots`
+- `values`
+
+The behavior of each escaping scheme can be seen at Prometheus' [Escaping Schemes](https://prometheus.io/docs/instrumenting/escaping_schemes/) documentation.
+
+If a client doesn't provide a escaping scheme as part of the `Accept` header, a Prometheus Exporter MUST assume `underscores` as the default value.
+
+## Format Selection
+
+When responding to requests, a Prometheus Exporter MUST:
+
+1. Parse the `Accept` header to determine the client's preferred format and escaping scheme.
+2. Select the highest-weighted format that the exporter supports.
+3. Apply the requested escaping scheme if specified for the selected format.
+4. Respond with the appropriate `Content-Type` header indicating the selected format and escaping scheme.
