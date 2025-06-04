@@ -15,6 +15,10 @@ release.
 
 ### Logs
 
+- Fix the `SeverityProcessor` example implementation so that it filters out only
+  the records with `SeverityNumber` in the 1..24 range.
+  ([#4540](https://github.com/open-telemetry/opentelemetry-specification/pull/4540))
+
 ### Baggage
 
 ### Resource
