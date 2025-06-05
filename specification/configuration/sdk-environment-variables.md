@@ -311,7 +311,7 @@ NOT be supported by new implementations.
 Known values for `OTEL_METRICS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
-- `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
+- `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md)
 - `"console"`: [Standard Output](../metrics/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../metrics/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
 NOT be supported by new implementations.

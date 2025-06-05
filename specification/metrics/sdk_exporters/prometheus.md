@@ -15,7 +15,7 @@ OpenTelemetry metrics MUST be converted to Prometheus metrics according to the
 A Prometheus Exporter SHOULD use
 [Prometheus client libraries](https://prometheus.io/docs/instrumenting/clientlibs/)
 for serving Prometheus metrics. This allows the prometheus client to negotiate
-the [format](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md)
+the [format](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md)
 of the response using the `Content-Type` header. If a prometheus client library
 is used, the OpenTelemetry Prometheus Exporter SHOULD be modeled as a
 [custom Collector](https://prometheus.io/docs/instrumenting/writing_clientlibs/#overall-structure)
@@ -23,7 +23,7 @@ so it can be used in conjunction with existing Prometheus instrumentation.
 
 Regardless of whether a Prometheus client library is used, the Prometheus
 Exporter MUST support version `0.0.4` of the
-[Text-based format](https://github.com/prometheus/docs/blob/main/content/docs/instrumenting/exposition_formats.md#text-based-format).
+[Text-based format](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md#text-based-format).
 A Prometheus Exporter MAY support Exemplars and Exponential Histograms,
 which are [not currently supported by the Prometheus text format](../../compatibility/prometheus_and_openmetrics.md#differences-between-prometheus-formats),
 by supporting other Protocols, but is not required to implement them.
