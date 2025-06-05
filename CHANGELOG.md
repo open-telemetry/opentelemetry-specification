@@ -13,6 +13,15 @@ release.
 
 ### Metrics
 
+- Prometheus receiver can expect `otel_scope_schema_url` and `otel_scope_[attribute]` labels on all metrics.
+  ([#4505](https://github.com/open-telemetry/opentelemetry-specification/pull/4505))
+- Prometheus receiver no longer expects `otel_scope_info` metric.
+  ([#4505](https://github.com/open-telemetry/opentelemetry-specification/pull/4505))
+- Prometheus exporter adds `otel_scope_schema_url` and `otel_scope_[attribute]` labels on all metrics.
+  ([#4505](https://github.com/open-telemetry/opentelemetry-specification/pull/4505))
+- Prometheus exporter no longer exports `otel_scope_info` metric.
+  ([#4505](https://github.com/open-telemetry/opentelemetry-specification/pull/4505))
+
 ### Logs
 
 ### Baggage
