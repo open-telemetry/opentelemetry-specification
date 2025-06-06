@@ -19,6 +19,7 @@ linkTitle: SDK
   * [ForceFlush](#forceflush)
 - [Tracer](#tracer)
   * [TracerConfig](#tracerconfig)
+  * [Enabled](#enabled)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
@@ -198,6 +199,18 @@ It consists of the following parameters:
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
+
+### Enabled
+
+**Status**: [Development](../document-status.md)
+
+`Enabled` MUST return `false` when either:
+
+- there are no registered [`SpanProcessors`](#span-processor),
+- `Tracer` is disabled ([`TracerConfig.disabled`](#tracerconfig) is `true`).
+
+Otherwise, it SHOULD return `true`.
+It MAY return `false` to support additional optimizations and features.
 
 ## Additional Span Interfaces
 

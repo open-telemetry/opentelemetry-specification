@@ -202,7 +202,7 @@ the implementation SHOULD set it equal to the current time.
 
 **Status**: [Development](../document-status.md)
 
-`Enabled` MUST return `false` when:
+`Enabled` MUST return `false` when either:
 
 - there are no registered [`LogRecordProcessors`](#logrecordprocessor),
 - `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`),
