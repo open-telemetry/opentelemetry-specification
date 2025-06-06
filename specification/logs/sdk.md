@@ -200,13 +200,13 @@ the implementation SHOULD set it equal to the current time.
 
 ### Enabled
 
-**Status**: [Development](../document-status.md)
-
-`Enabled` MUST return `false` when:
+`Enabled` MUST return `false` when either:
 
 - there are no registered [`LogRecordProcessors`](#logrecordprocessor),
-- `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`),
-- all registered `LogRecordProcessors` implement [`Enabled`](#enabled-1),
+- **Status**: [Development](../document-status.md) - `Logger` is disabled
+  ([`LoggerConfig.disabled`](#loggerconfig) is `true`),
+- **Status**: [Development](../document-status.md) - all registered
+  `LogRecordProcessors` implement [`Enabled`](#enabled-1),
   and a call to `Enabled` on each of them returns `false`.
 
 Otherwise, it SHOULD return `true`.
