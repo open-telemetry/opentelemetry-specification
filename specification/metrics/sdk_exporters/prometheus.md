@@ -77,4 +77,6 @@ metric. The option MAY be named `without_target_info`, and MUST be `false` by de
 
 ## Content Negotiation
 
-A Prometheus Exporter MUST support content negotiation to allow clients to request metrics in different formats based on the `Accept` header in HTTP requests. Content negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prometheus.io/docs/instrumenting/content_negotiation/).
+A Prometheus Exporter MUST support content negotiation to allow clients to request
+metrics in different formats based on the `Accept` header in HTTP requests. Content
+negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prometheus.io/docs/instrumenting/content_negotiation/).
