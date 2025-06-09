@@ -69,8 +69,8 @@ or UNIT metadata. The option MAY be named `without_units`, and MUST be `false` b
 A Prometheus Exporter MAY support a configuration option to produce metrics without a [type suffix](../../compatibility/prometheus_and_openmetrics.md#metric-metadata).
 The option MAY be named `without_type_suffix`, and MUST be `false` by default.
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without a [scope info](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)
-metric, or scope labels. The option MAY be named `without_scope_info`, and MUST be `false` by default.
+A Prometheus Exporter MAY support a configuration option to produce metrics without [scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
+The option MAY be named `without_scope_info`, and MUST be `false` by default.
 
 A Prometheus Exporter MAY support a configuration option to produce metrics without a [target info](../../compatibility/prometheus_and_openmetrics.md#resource-attributes-1)
 metric. The option MAY be named `without_target_info`, and MUST be `false` by default.

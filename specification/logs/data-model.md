@@ -452,9 +452,9 @@ This field is optional.
 
 ### Field: `InstrumentationScope`
 
-Type: [Instrumentation Scope](../glossary.md#instrumentation-scope).
+Type: [Instrumentation Scope](../common/instrumentation-scope.md).
 
-Description: the [instrumentation scope](../glossary.md#instrumentation-scope).
+Description: the [instrumentation scope](../common/instrumentation-scope.md).
 Multiple occurrences of events coming from the same scope can happen across time and
 they all have the same value of `InstrumentationScope`. This field is optional.
 
