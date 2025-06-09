@@ -10,6 +10,9 @@
 - [Minimally Sufficient Identity](#minimally-sufficient-identity)
 - [Repeatable Identity](#repeatable-identity)
 - [Identifying Attributes](#identifying-attributes)
+- [Resource and Entities](#resource-and-entities)
+  * [Attribute Referencing Model](#attribute-referencing-model)
+  * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
 - [Examples of Entities](#examples-of-entities)
 
 <!-- tocstop -->
@@ -89,6 +92,57 @@ When an entity can be emitted by multiple observers, the following rules apply:
 
 This ensures that entity identity is consistent and unambiguous across
 observers.
+
+## Resource and Entities
+
+OpenTelemetry signals (metrics, logs, traces, and profiles) support attaching
+one or more entities each representing a specific infrastructure or runtime
+component such as a `k8s.cluster`, `k8s.node`, `host`, or `container`.
+
+Previously, the Resource data model relied on flattened attributes per signal.
+With Entities, telemetry can represent multiple distinct but related components
+within the same signal, each with its own identity and extra metadata. Entities
+leverage the same pool of attributes as the Resource model. This allows for more
+efficient encoding and transmission of the data, as well as backward
+compatibility with existing Resource attributes.
+
+### Attribute Referencing Model
+
+Entities can be defined in the `resource` section of a telemetry signal. Their
+identifying and descriptive attributes reference shared attributes defined in
+the Resource. For example, in OTLP, entities do not carry their own key-value
+pairs directly. Instead, they reference keys in `resource.attributes` to remain
+backward compatible with OTLP 1.x.
+
+This approach is designed to support attribute flattening, where attributes are
+not tied to a specific structure but can be flexibly referenced across different
+entities. The model provides:
+
+- A way for entities to be identified and described with shared attributes.
+- The ability to avoid data duplication and inconsistencies.
+- A more efficient representation for encoding and transmission.
+
+### Placement of Shared Descriptive Attributes
+
+Attribute flattening allows multiple entities to reference the same attribute key,
+but with different values across the entities. In such situations, the following
+rule applies:
+
+If multiple entities share the same descriptive attribute key with potentially
+conflicting values, the attribute MUST logically belong to **only one** of them.
+All others SHOULD NOT reference it. The attribute MUST be referenced by the
+**most specific** entity, the one closest in the topology graph to the entity
+associated with the telemetry signal.
+
+**Example:**  
+
+If a signal includes both `k8s.cluster` and `k8s.node` entities with
+the `cloud.availability_zone` descriptive attribute, which may have
+different values, then **only** the `k8s.node` entity can reference this key
+— as it is the more specific entity.
+
+Other entities (e.g., `k8s.cluster`) can report this attribute in a separate
+telemetry channel (e.g., entity events) where full ownership context is known.
 
 ## Examples of Entities
 
