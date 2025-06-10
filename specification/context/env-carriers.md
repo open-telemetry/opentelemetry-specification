@@ -21,6 +21,10 @@
     + [Process Spawning](#process-spawning)
     + [Security](#security)
     + [Case Sensitivity](#case-sensitivity)
+- [Supplementary Guidelines](#supplementary-guidelines)
+  * [Approach 1: Providing a dedicated `EnvironmentContextPropagator`](#approach-1-providing-a-dedicated-environmentcontextpropagator)
+  * [Approach 2: Using the carriers directly through `Setters` and `Getters`](#approach-2-using-the-carriers-directly-through-setters-and-getters)
+  * [Common Behaviors](#common-behaviors)
 
 <!-- tocstop -->
 
