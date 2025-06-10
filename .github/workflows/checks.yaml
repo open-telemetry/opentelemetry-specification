@@ -46,6 +46,7 @@ jobs:
     - name: run markdown-link-check
       run: make markdown-link-check
       env:
+        # see https://lychee.cli.rs/troubleshooting/rate-limits/#github-rate-limiting
         GITHUB_TOKEN: ${{ github.token }}
 
   markdown-toc-check:
