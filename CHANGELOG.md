@@ -9,6 +9,10 @@ release.
 
 ### Context
 
+- Add Supplementary Guidance for environment variables as context carrier
+  specification.
+  ([#4484](https://github.com/open-telemetry/opentelemetry-specification/pull/4484))
+
 ### Traces
 
 ### Metrics
@@ -16,6 +20,10 @@ release.
 ### Logs
 
 ### Baggage
+
+- Add Supplementary Guidance for environment variables as context carrier
+  specification.
+  ([#4484](https://github.com/open-telemetry/opentelemetry-specification/pull/4484))
 
 ### Resource
 
