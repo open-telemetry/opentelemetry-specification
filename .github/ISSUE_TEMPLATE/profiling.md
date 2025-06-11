@@ -11,3 +11,5 @@ What did you expect to see?
 **Additional context.**
 
 Add any other context about the problem here. If you followed an existing documentation, please share the link to it.
+
+<sub>**Tip**: React with 👍 to help prioritize this issue. Please use comments to provide useful context, avoiding `+1` or `me too`, to helps us triage it. Learn more [here](https://opentelemetry.io/community/end-user/issue-participation/).</sub>
