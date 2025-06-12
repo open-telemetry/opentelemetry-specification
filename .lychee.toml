@@ -1,8 +1,6 @@
 include_fragments = true
 
-# accepting 429s for now until we implement a better way to deal with GitHub rate limiting
-# see https://github.com/open-telemetry/semantic-conventions/issues/2214
-accept = ["200..=299", "403", "429"]
+accept = ["200..=299", "403"]
 
 exclude = [
     # excluding links to pull requests and issues is done for performance
@@ -13,3 +11,6 @@ exclude = [
 
 # better to be safe and avoid failures
 max_retries = 6
+
+# this helps slow down the rate of requests to avoid rate limiting
+max_concurrency = 4
