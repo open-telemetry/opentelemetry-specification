@@ -264,12 +264,12 @@ See [the gist](https://gist.github.com/lmolkova/737ebba190b206a5d60bbc075fea538b
 for additional details.
 
 | Backend                           | Handles complex attributes gracefully? | Comments        |
-| --------------------------------- | ------------------------| ------------------------------ |
-| Jaeger (OTLP)                     | :white_check_mark:      | serializes to JSON string |
-| Prometheus with OTLP remote write | :white_check_mark:      | serializes to JSON string |
-| Grafana Tempo (OTLP)              | :white_check_mark:      | serializes to JSON string, viewable but can't query using this attribute |
-| Grafana Loki (OTLP)               | :white_check_mark:      | flattens |
-| Aspire dashboard (OTLP)           | :white_check_mark:      | serializes to JSON string |
-| ClickHouse (collector exporter)   | :white_check_mark:      | serializes to JSON string, can parse JSON and query |
-| Honeycomb (OTLP)                  | :white_check_mark:      | flattens if less than 5 layers deep, not array or binary data, JSON string otherwise |
-| New Relic (OTLP)                  | :x: (fix is on the way) | drops spans | |
+| --------------------------------- | | ------------------------------ |
+| Jaeger (OTLP)                     | :white_check_mark: | serializes to JSON string |
+| Prometheus with OTLP remote write | :white_check_mark: | serializes to JSON string |
+| Grafana Tempo (OTLP)              | :white_check_mark: | serializes to JSON string, viewable but can't query using this attribute |
+| Grafana Loki (OTLP)               | :white_check_mark: | flattens |
+| Aspire dashboard (OTLP)           | :white_check_mark: | serializes to JSON string |
+| ClickHouse (collector exporter)   | :white_check_mark: | serializes to JSON string, can parse JSON and query |
+| Honeycomb (OTLP)                  | :white_check_mark: | flattens if less than 5 layers deep, not array or binary data, JSON string otherwise |
+| New Relic (OTLP)                  | :white_check_mark: | drops the complex attribute | |
