@@ -107,7 +107,7 @@ data models, send the data through OpenTelemetry Collector, where it can be
 enriched and processed in a uniform manner. For example, Collector can add to
 all telemetry data coming from a Kubernetes Pod several attributes that describe
 the pod and it can be done automatically using
-[k8sprocessor](https://pkg.go.dev/github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sprocessor?tab=doc)
+[k8sattributesprocessor](https://pkg.go.dev/github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor?tab=doc)
 without the need for the Application to do anything special. Most importantly
 such enrichment is completely uniform for all 3 signals. The Collector
 guarantees that logs, traces and metrics have precisely the same attribute names
