@@ -286,8 +286,12 @@ this document. This field is optional.
 
 `SeverityNumber` is an integer number. Smaller numerical values correspond to
 less severe events (such as debug events), larger numerical values correspond to
-more severe events (such as errors and critical events). The following table
-defines the meaning of `SeverityNumber` value:
+more severe events (such as errors and critical events).
+
+For example `SeverityNumber=17` describes an error that is less
+critical than an error with `SeverityNumber=20`.
+
+The following table defines the meaning of `SeverityNumber` value:
 
 SeverityNumber range|Range name|Meaning
 --------------------|----------|-------
@@ -297,11 +301,6 @@ SeverityNumber range|Range name|Meaning
 13-16               |WARN      |A warning event. Not an error but is likely more important than an informational event.
 17-20               |ERROR     |An error event. Something went wrong.
 21-24               |FATAL     |A fatal error such as application or system crash.
-
-Smaller numerical values in each range represent less important (less severe)
-events. Larger numerical values in each range represent more important (more
-severe) events. For example `SeverityNumber=17` describes an error that is less
-critical than an error with `SeverityNumber=20`.
 
 #### Mapping of `SeverityNumber`
 
@@ -418,9 +417,7 @@ capitalization or abbreviated, e.g. "Info" vs "Information").
 #### Comparing Severity
 
 In the contexts where severity participates in less-than / greater-than
-comparisons `SeverityNumber` field should be used. `SeverityNumber` can be
-compared to another `SeverityNumber` or to numbers in the 1..24 range (or to the
-corresponding short names).
+comparisons `SeverityNumber` field should be used.
 
 ### Field: `Body`
 
