@@ -418,6 +418,8 @@ capitalization or abbreviated, e.g. "Info" vs "Information").
 
 In the contexts where severity participates in less-than / greater-than
 comparisons `SeverityNumber` field should be used.
+Special handling MAY be given to `SeverityNumber=0`
+when it is used to represent an unspecified severity.
 
 ### Field: `Body`
 
