@@ -122,7 +122,7 @@ It SHOULD only be possible to create `Meter` instances through a `MeterProvider`
 The `MeterProvider` MUST implement the [Get a Meter API](api.md#get-a-meter).
 
 The input provided by the user MUST be used to create
-an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
+an [`InstrumentationScope`](../common/instrumentation-scope.md) instance which
 is stored on the created `Meter`.
 
 In the case where an invalid `name` (null or empty string) is specified, a
@@ -161,7 +161,7 @@ the [MeterConfig](#meterconfig) for a [Meter](#meter).
 The function MUST accept the following parameter:
 
 * `meter_scope`:
-  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  The [`InstrumentationScope`](../common/instrumentation-scope.md) of
   the `Meter`.
 
 The function MUST return the relevant `MeterConfig`, or some signal indicating
@@ -1717,7 +1717,7 @@ MAY return successfully collected results and a failed reasons list to the
 caller.
 
 If a batch of [Metric Points](./data-model.md#metric-points) can include
-[`InstrumentationScope`](../glossary.md#instrumentation-scope) information,
+[`InstrumentationScope`](../common/instrumentation-scope.md) information,
 `Produce` SHOULD include a single InstrumentationScope which identifies the
 `MetricProducer`.
 

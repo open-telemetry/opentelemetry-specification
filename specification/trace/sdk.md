@@ -19,6 +19,7 @@ linkTitle: SDK
   * [ForceFlush](#forceflush)
 - [Tracer](#tracer)
   * [TracerConfig](#tracerconfig)
+  * [Enabled](#enabled)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
@@ -92,7 +93,7 @@ It SHOULD only be possible to create `Tracer` instances through a `TracerProvide
 The `TracerProvider` MUST implement the [Get a Tracer API](api.md#get-a-tracer).
 
 The input provided by the user MUST be used to create
-an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
+an [`InstrumentationScope`](../common/instrumentation-scope.md) instance which
 is stored on the created `Tracer`.
 
 **Status**: [Development](../document-status.md) - The `TracerProvider` MUST
@@ -127,7 +128,7 @@ the [TracerConfig](#tracerconfig) for a [Tracer](#tracer).
 The function MUST accept the following parameter:
 
 * `tracer_scope`:
-  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  The [`InstrumentationScope`](../common/instrumentation-scope.md) of
   the `Tracer`.
 
 The function MUST return the relevant `TracerConfig`, or some signal indicating
@@ -208,6 +209,18 @@ It consists of the following parameters:
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
+
+### Enabled
+
+**Status**: [Development](../document-status.md)
+
+`Enabled` MUST return `false` when either:
+
+- there are no registered [`SpanProcessors`](#span-processor),
+- `Tracer` is disabled ([`TracerConfig.disabled`](#tracerconfig) is `true`).
+
+Otherwise, it SHOULD return `true`.
+It MAY return `false` to support additional optimizations and features.
 
 ## Additional Span Interfaces
 
