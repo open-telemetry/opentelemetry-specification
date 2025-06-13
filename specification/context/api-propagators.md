@@ -120,7 +120,7 @@ The carrier of propagated data on both the client (injector) and server (extract
 usually an HTTP request.
 
 In order to increase compatibility, the key/value pairs MUST only consist of US-ASCII characters
-that make up valid HTTP header fields as per [RFC 9110](https://tools.ietf.org/html/rfc9110/#name-fields).
+that make up valid HTTP header fields as per [RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110/#name-fields).
 
 `Getter` and `Setter` are optional helper components used for extraction and injection respectively,
 and are defined as separate objects from the carrier to avoid runtime allocations,
@@ -352,9 +352,9 @@ Required parameters:
 The official list of propagators that MUST be maintained by the OpenTelemetry
 organization and MUST be distributed as OpenTelemetry extension packages:
 
-* [W3C TraceContext](https://www.w3.org/TR/trace-context). MAY alternatively
+* [W3C TraceContext](https://www.w3.org/TR/trace-context/). MAY alternatively
   be distributed as part of the OpenTelemetry API.
-* [W3C Baggage](https://www.w3.org/TR/baggage). MAY alternatively
+* [W3C Baggage](https://www.w3.org/TR/baggage/). MAY alternatively
   be distributed as part of the OpenTelemetry API.
 * [B3](https://github.com/openzipkin/b3-propagation).
 * [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format).

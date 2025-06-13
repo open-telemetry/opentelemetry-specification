@@ -9,7 +9,7 @@ path_base_for_github_subdir:
 
 The OpenTelemetry protocol (OTLP) design goals, requirements, and
 [specification] have moved to
-[github.com/open-telemetry/opentelemetry-proto/docs](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/).
+[github.com/open-telemetry/opentelemetry-proto/docs](https://github.com/open-telemetry/opentelemetry-proto/tree/main/docs).
 
 You can also view the specification from the OpenTelemetry website, see [OTLP][specification].
 

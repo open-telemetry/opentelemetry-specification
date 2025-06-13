@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This proposal is to merge the Elastic Common Schema (ECS) with the OpenTelemetry Semantic Conventions (SemConv) and provide full interoperability in OpenTelemetry component implementations. We propose to implement this by aligning the OpenTelemetry Semantic Conventions with [ECS FieldSets](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html#ecs-fieldsets) and vice versa where feasible. The long-term goal is to achieve convergence of ECS and OTel Semantic Conventions into a single open schema so that OpenTelemetry Semantic Conventions truly is a successor of the Elastic Common Schema.
+This proposal is to merge the Elastic Common Schema (ECS) with the OpenTelemetry Semantic Conventions (SemConv) and provide full interoperability in OpenTelemetry component implementations. We propose to implement this by aligning the OpenTelemetry Semantic Conventions with [ECS FieldSets](https://www.elastic.co/docs/reference/ecs/ecs-field-reference#ecs-fieldsets) and vice versa where feasible. The long-term goal is to achieve convergence of ECS and OTel Semantic Conventions into a single open schema so that OpenTelemetry Semantic Conventions truly is a successor of the Elastic Common Schema.
 
 ## The Goal
 
@@ -19,8 +19,8 @@ ECS and OTel SemConv have some overlap today, but also significant areas of mutu
 <img src="https://user-images.githubusercontent.com/866830/223049510-93c5dab0-0fc1-4b54-8ac4-e5bcfef81156.png" width="300">
 </p>
 
-1. `A`: ECS comes with a rich set of fields that cover broad logging, observability and security use cases. Many fields are additive to the OTel SemConv and would enrich the OTel SemConv without major conflicts. Examples are [Geo information fields](https://www.elastic.co/guide/en/ecs/current/ecs-geo.html), [Threat Fields](https://www.elastic.co/guide/en/ecs/current/ecs-threat.html), and many others.
-2. `B`: Conversely, there are attributes in the OTel SemConv that do not exist in ECS and would be an enrichment to ECS. Examples are the [Messaging semantic conventions](https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/messaging/) or technology-specific conventions, such as the [AWS SDK conventions](https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/instrumentation/aws-sdk/).
+1. `A`: ECS comes with a rich set of fields that cover broad logging, observability and security use cases. Many fields are additive to the OTel SemConv and would enrich the OTel SemConv without major conflicts. Examples are [Geo information fields](https://www.elastic.co/docs/reference/ecs/ecs-geo), [Threat Fields](https://www.elastic.co/docs/reference/ecs/ecs-threat), and many others.
+2. `B`: Conversely, there are attributes in the OTel SemConv that do not exist in ECS and would be an enrichment to ECS. Examples are the [Messaging semantic conventions](https://opentelemetry.io/docs/specs/semconv/general/trace/) or technology-specific conventions, such as the [AWS SDK conventions](https://opentelemetry.io/docs/specs/semconv/general/trace/).
 3. `C`: There is some significant area of overlap between ECS and OTel SemConv. The are `C` represents overlapping fields/attributes that are very similar in ECS and OTel SemConv. The field conflicts in `C` can be resolved through simple field renames and simple transformations.
 4. `D`: For some of the fields and attributes there will be conflicts that cannot be resolved through simple renaming or transformation and would require introducing breaking changes on ECS or OTel SemConv side for the purpose of merging the schemas.
 
@@ -64,9 +64,9 @@ OpenTelemetry has the potential to grow exponentially if the data from these oth
 
 ### What is ECS?
 
-The [Elastic Common Schema (ECS)](https://github.com/elastic/ecs) is an open source specification, developed with support from Elastic's user community. ECS defines a common set of fields to be used when storing data in Elasticsearch, such as logs, metrics, and security and audit events. The goal of ECS is to enable and encourage users of Elasticsearch to normalize their event data, so that they can better analyze, visualize, and correlate the data represented in their events. Learn more at: [https://www.elastic.co/guide/en/ecs/current/ecs-reference.html](https://www.elastic.co/guide/en/ecs/current/ecs-reference.html)
+The [Elastic Common Schema (ECS)](https://github.com/elastic/ecs) is an open source specification, developed with support from Elastic's user community. ECS defines a common set of fields to be used when storing data in Elasticsearch, such as logs, metrics, and security and audit events. The goal of ECS is to enable and encourage users of Elasticsearch to normalize their event data, so that they can better analyze, visualize, and correlate the data represented in their events. Learn more at: [https://www.elastic.co/guide/en/ecs/current/ecs-reference.html](https://www.elastic.co/docs/reference/ecs)
 
-The coverage of ECS is very broad including in depth support for logs, security, and network events such as "[logs.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-log.html)" , "[geo.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-geo.html)", "[tls.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-tls.html)", "[dns.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-dns.html)", or "[vulnerability.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-vulnerability.html)".
+The coverage of ECS is very broad including in depth support for logs, security, and network events such as "[logs.* fields](https://www.elastic.co/docs/reference/ecs/ecs-log)" , "[geo.* fields](https://www.elastic.co/docs/reference/ecs/ecs-geo)", "[tls.* fields](https://www.elastic.co/docs/reference/ecs/ecs-tls)", "[dns.* fields](https://www.elastic.co/docs/reference/ecs/ecs-dns)", or "[vulnerability.* fields](https://www.elastic.co/docs/reference/ecs/ecs-vulnerability)".
 
 ECS has the following guiding principles:
 
@@ -147,11 +147,11 @@ Example of a Nginx Access Log entry structured with ECS
 
 ## Principles
 
-| Description | [OTel Logs and Event Record](../specification/logs/data-model.md#log-and-event-record-definition) | [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/ecs-reference.html) |
+| Description | [OTel Logs and Event Record](../specification/logs/data-model.md#log-and-event-record-definition) | [Elastic Common Schema (ECS)](https://www.elastic.co/docs/reference/ecs) |
 |-------------|-------------|--------|
 | Metadata shared by all the Log Messages / Spans / Metrics of an application instance | Resource Attributes | ECS fields |
 | Metadata specific to each Log Message / Span / Metric data point | Attributes | ECS Fields |
-| Message of log events | Body | [message field](https://www.elastic.co/guide/en/ecs/current/ecs-base.html#field-message) |
+| Message of log events | Body | [message field](https://www.elastic.co/docs/reference/ecs/ecs-base#field-message) |
 | Naming convention | Dotted names | Dotted names |
 | Reusability of namespaces | Namespaces are intended to be composed | Namespaces are intended to be composed |
 | Extensibility | Attributes can be extended by either adding a user defined field to an existing namespaces or introducing new namespaces. | Extra attributes can be added in each namespace and users can create their own namespaces |
@@ -260,8 +260,8 @@ While ECS covers many different use cases and scenarios, in the following, we ou
 The author of the "OTel Collector Access logs file receiver for web server XXX" would find in the OTel Semantic Convention specifications all
 the guidance to map the fields of the web server logs, not only the attributes that the OTel Semantic Conventions has specified today for
 [HTTP calls](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.9.0/specification/trace/semantic_conventions/http.md),
-but also attributes for the [User Agent](https://www.elastic.co/guide/en/ecs/current/ecs-user_agent.html)
-or the [Geo Data](https://www.elastic.co/guide/en/ecs/current/ecs-geo.html).
+but also attributes for the [User Agent](https://www.elastic.co/docs/reference/ecs/ecs-user_agent)
+or the [Geo Data](https://www.elastic.co/docs/reference/ecs/ecs-geo).
 
 This completeness of the mapping will help the author of the integration to produce OTel Log messages that will be compatible with access logs
 of other web components (web servers, load balancers, L7 firewalls...) allowing turnkey integration with observability solutions
@@ -270,7 +270,7 @@ and enabling richer correlations.
 ### Other Examples
 
 - [Logs with sessions (VPN Logs, Network Access Sessions, RUM sessions, etc.)](https://github.com/elastic/ecs/blob/main/rfcs/text/0004-session.md#usage)
-- [Logs from systems processing files](https://www.elastic.co/guide/en/ecs/current/ecs-file.html)
+- [Logs from systems processing files](https://www.elastic.co/docs/reference/ecs/ecs-file)
 
 ## Alternatives / Discussion
 

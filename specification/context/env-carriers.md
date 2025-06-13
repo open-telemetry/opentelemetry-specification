@@ -85,7 +85,7 @@ Environment variable names used for context propagation:
 Environment variable values used for context propagation:
 
 - MUST only use characters that are valid in HTTP header fields per [RFC
-  9110](https://tools.ietf.org/html/rfc9110)
+  9110](https://datatracker.ietf.org/doc/html/rfc9110)
 - MUST follow the format requirements of the specific propagation protocol
   (e.g., W3C Trace Context specification for `TRACEPARENT` values)
 - SHOULD NOT contain sensitive information
@@ -96,7 +96,7 @@ Implementations SHOULD follow platform-specific environment variable size
 limitations:
 
 - Windows: Maximum 32,767 characters for name=value pairs according to
-  [Microsoft Documentation](https://docs.microsoft.com/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
+  [Microsoft Documentation](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
 - UNIX: System-dependent limits exist and are typically lower than Windows.
 
 When truncation is required due to size limitations, implementations MUST
