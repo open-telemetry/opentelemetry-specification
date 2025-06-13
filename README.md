@@ -55,5 +55,5 @@ Changes to the change process itself are not currently versioned but may be inde
 By contributing to OpenTelemetry Specification repository, you agree that your contributions will be licensed under its [Apache 2.0 License](LICENSE).
 
 [OpenTelemetry]: https://opentelemetry.io
-[latest release]: https://github.com/open-telemetry/opentelemetry-specification/releases/tag/v1.46.0
+[latest release]: https://github.com/open-telemetry/opentelemetry-specification/releases/latest
 [opentelemetry.io/docs/specs/otel]: https://opentelemetry.io/docs/specs/otel/
