@@ -328,11 +328,8 @@ For example if the source format has an "Informational" log level and no other
 log levels with similar meaning then it is recommended to use
 `SeverityNumber=9` for "Informational".
 
-Source formats that do not define a concept of severity or log level MAY omit
-`SeverityNumber` and `SeverityText` fields. Backend and UI may represent log
-records with missing severity information distinctly or may interpret log
-records with missing `SeverityNumber` and `SeverityText` fields as if the
-`SeverityNumber` was set equal to INFO (numeric value of 9).
+Source formats that do not define a concept of severity or log level SHOULD
+set `SeverityNumber=9`.
 
 #### Reverse Mapping
 
