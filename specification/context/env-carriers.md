@@ -96,7 +96,7 @@ Implementations SHOULD follow platform-specific environment variable size
 limitations:
 
 - Windows: Maximum 32,767 characters for name=value pairs according to
-  [Microsoft Documentation](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
+  [Microsoft Documentation](https://learn.microsoft.com/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
 - UNIX: System-dependent limits exist and are typically lower than Windows.
 
 When truncation is required due to size limitations, implementations MUST
