@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This proposal is to merge the Elastic Common Schema (ECS) with the OpenTelemetry Semantic Conventions (SemConv) and provide full interoperability in OpenTelemetry component implementations. We propose to implement this by aligning the OpenTelemetry Semantic Conventions with [ECS FieldSets](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html#ecs-fieldsets) and vice versa where feasible. The long-term goal is to achieve convergence of ECS and OTel Semantic Conventions into a single open schema so that OpenTelemetry Semantic Conventions truly is a successor of the Elastic Common Schema.
+This proposal is to merge the Elastic Common Schema (ECS) with the OpenTelemetry Semantic Conventions (SemConv) and provide full interoperability in OpenTelemetry component implementations. We propose to implement this by aligning the OpenTelemetry Semantic Conventions with [ECS FieldSets](https://www.elastic.co/docs/reference/ecs/ecs-field-reference#ecs-fieldsets) and vice versa where feasible. The long-term goal is to achieve convergence of ECS and OTel Semantic Conventions into a single open schema so that OpenTelemetry Semantic Conventions truly is a successor of the Elastic Common Schema.
 
 ## The Goal
 
@@ -19,8 +19,8 @@ ECS and OTel SemConv have some overlap today, but also significant areas of mutu
 <img src="https://user-images.githubusercontent.com/866830/223049510-93c5dab0-0fc1-4b54-8ac4-e5bcfef81156.png" width="300">
 </p>
 
-1. `A`: ECS comes with a rich set of fields that cover broad logging, observability and security use cases. Many fields are additive to the OTel SemConv and would enrich the OTel SemConv without major conflicts. Examples are [Geo information fields](https://www.elastic.co/guide/en/ecs/current/ecs-geo.html), [Threat Fields](https://www.elastic.co/guide/en/ecs/current/ecs-threat.html), and many others.
-2. `B`: Conversely, there are attributes in the OTel SemConv that do not exist in ECS and would be an enrichment to ECS. Examples are the [Messaging semantic conventions](https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/messaging/) or technology-specific conventions, such as the [AWS SDK conventions](https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/instrumentation/aws-sdk/).
+1. `A`: ECS comes with a rich set of fields that cover broad logging, observability and security use cases. Many fields are additive to the OTel SemConv and would enrich the OTel SemConv without major conflicts. Examples are [Geo information fields](https://www.elastic.co/docs/reference/ecs/ecs-geo), [Threat Fields](https://www.elastic.co/docs/reference/ecs/ecs-threat), and many others.
+2. `B`: Conversely, there are attributes in the OTel SemConv that do not exist in ECS and would be an enrichment to ECS. Examples are the [Messaging semantic conventions](https://opentelemetry.io/docs/specs/semconv/registry/attributes/messaging/) or technology-specific conventions, such as the [AWS SDK conventions](https://opentelemetry.io/docs/specs/semconv/registry/attributes/aws/).
 3. `C`: There is some significant area of overlap between ECS and OTel SemConv. The are `C` represents overlapping fields/attributes that are very similar in ECS and OTel SemConv. The field conflicts in `C` can be resolved through simple field renames and simple transformations.
 4. `D`: For some of the fields and attributes there will be conflicts that cannot be resolved through simple renaming or transformation and would require introducing breaking changes on ECS or OTel SemConv side for the purpose of merging the schemas.
 
@@ -64,9 +64,9 @@ OpenTelemetry has the potential to grow exponentially if the data from these oth
 
 ### What is ECS?
 
-The [Elastic Common Schema (ECS)](https://github.com/elastic/ecs) is an open source specification, developed with support from Elastic's user community. ECS defines a common set of fields to be used when storing data in Elasticsearch, such as logs, metrics, and security and audit events. The goal of ECS is to enable and encourage users of Elasticsearch to normalize their event data, so that they can better analyze, visualize, and correlate the data represented in their events. Learn more at: [https://www.elastic.co/guide/en/ecs/current/ecs-reference.html](https://www.elastic.co/guide/en/ecs/current/ecs-reference.html)
+The [Elastic Common Schema (ECS)](https://github.com/elastic/ecs) is an open source specification, developed with support from Elastic's user community. ECS defines a common set of fields to be used when storing data in Elasticsearch, such as logs, metrics, and security and audit events. The goal of ECS is to enable and encourage users of Elasticsearch to normalize their event data, so that they can better analyze, visualize, and correlate the data represented in their events. Learn more at: [https://www.elastic.co/docs/reference/ecs](https://www.elastic.co/docs/reference/ecs)
 
-The coverage of ECS is very broad including in depth support for logs, security, and network events such as "[logs.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-log.html)" , "[geo.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-geo.html)", "[tls.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-tls.html)", "[dns.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-dns.html)", or "[vulnerability.* fields](https://www.elastic.co/guide/en/ecs/current/ecs-vulnerability.html)".
+The coverage of ECS is very broad including in depth support for logs, security, and network events such as "[logs.* fields](https://www.elastic.co/docs/reference/ecs/ecs-log)" , "[geo.* fields](https://www.elastic.co/docs/reference/ecs/ecs-geo)", "[tls.* fields](https://www.elastic.co/docs/reference/ecs/ecs-tls)", "[dns.* fields](https://www.elastic.co/docs/reference/ecs/ecs-dns)", or "[vulnerability.* fields](https://www.elastic.co/docs/reference/ecs/ecs-vulnerability)".
 
 ECS has the following guiding principles:
 
@@ -147,25 +147,25 @@ Example of a Nginx Access Log entry structured with ECS
 
 ## Principles
 
-| Description | [OTel Logs and Event Record](../specification/logs/data-model.md#log-and-event-record-definition) | [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/ecs-reference.html) |
+| Description | [OTel Logs and Event Record](../specification/logs/data-model.md#log-and-event-record-definition) | [Elastic Common Schema (ECS)](https://www.elastic.co/docs/reference/ecs) |
 |-------------|-------------|--------|
 | Metadata shared by all the Log Messages / Spans / Metrics of an application instance | Resource Attributes | ECS fields |
 | Metadata specific to each Log Message / Span / Metric data point | Attributes | ECS Fields |
-| Message of log events | Body | [message field](https://www.elastic.co/guide/en/ecs/current/ecs-base.html#field-message) |
+| Message of log events | Body | [message field](https://www.elastic.co/docs/reference/ecs/ecs-base#field-message) |
 | Naming convention | Dotted names | Dotted names |
 | Reusability of namespaces | Namespaces are intended to be composed | Namespaces are intended to be composed |
 | Extensibility | Attributes can be extended by either adding a user defined field to an existing namespaces or introducing new namespaces. | Extra attributes can be added in each namespace and users can create their own namespaces |
 
 ## Data Types
 
-| Category | <a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a> (all or a subset of <a href="https://developers.google.com/protocol-buffers/docs/proto3">GRPC data types</a>) | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html">ECS Data Types</a> |
+| Category | <a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a> (all or a subset of <a href="https://protobuf.dev/programming-guides/proto3/">GRPC data types</a>) | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/field-data-types">ECS Data Types</a> |
 |---|---|---|
-| Text | string | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/text.html#text-field-type">text</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/text.html#match-only-text-field-type">match_only_text</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/keyword.html#keyword-field-type">keyword</a> <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/keyword.html#constant-keyword-field-type">constant_keyword</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/keyword.html#wildcard-field-type">wildcard</a> |
-| Dates | uint64 nanoseconds since Unix epoch | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/date.html">date</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/date_nanos.html">date_nanos</a> |
-| Numbers | number | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/number.html">long</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/number.html">double</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/number.html">scaled_float</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/boolean.html">boolean</a>… |
-| Objects | uint32, uint64… | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/object.html">object</a> (JSON object), <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/flattened.html">flattened</a> (An entire JSON object as a single field value) |
-| Structured Objects | No complex semantic data type specified for the moment (e.g. string is being used for ip addresses rather than having an "ip" data structure in OTel). <br/> Note that OTel supports arrays and nested objects. | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/ip.html">ip</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/geo-point.html">geo_point</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/geo-shape.html">geo_shape</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/version.html">version</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/range.html">long_range</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/range.html">date_range</a>, <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/range.html">ip_range</a> |
-| Binary data | Byte sequence | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/binary.html">binary</a> |
+| Text | string | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#text-field-type">text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#match-only-text-field-type">match_only_text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#keyword-field-type">keyword</a> <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#constant-keyword-field-type">constant_keyword</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#wildcard-field-type">wildcard</a> |
+| Dates | uint64 nanoseconds since Unix epoch | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date">date</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date_nanos">date_nanos</a> |
+| Numbers | number | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">long</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">double</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">scaled_float</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/boolean">boolean</a>… |
+| Objects | uint32, uint64… | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/object">object</a> (JSON object), <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/flattened">flattened</a> (An entire JSON object as a single field value) |
+| Structured Objects | No complex semantic data type specified for the moment (e.g. string is being used for ip addresses rather than having an "ip" data structure in OTel). <br/> Note that OTel supports arrays and nested objects. | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/ip">ip</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/geo-point">geo_point</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/geo-shape">geo_shape</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/version">version</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/range">long_range</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/range">date_range</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/range">ip_range</a> |
+| Binary data | Byte sequence | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/binary">binary</a> |
 
 ## Known Differences
 
@@ -179,7 +179,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
   <tr>
    <td><strong><a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a></strong>
    </td>
-   <td><strong><a href="https://www.elastic.co/guide/en/ecs/current/ecs-reference.html">Elastic Common Schema (ECS)</a></strong>
+   <td><strong><a href="https://www.elastic.co/docs/reference/ecs">Elastic Common Schema (ECS)</a></strong>
    </td>
    <td><strong>Description</strong>
    </td>
@@ -187,7 +187,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
   <tr>
    <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">Timestamp</a> (uint64 nanoseconds since Unix epoch)
    </td>
-   <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-base.html#field-timestamp">@timestamp</a> (date)
+   <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-base#field-timestamp">@timestamp</a> (date)
    </td>
    <td>
    </td>
@@ -195,7 +195,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
   <tr>
    <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">TraceId</a> (byte sequence), <a href="../specification/logs/data-model.md#log-and-event-record-definition">SpanId</a> (byte sequence)
    </td>
-   <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-tracing.html#field-trace-id">trace.id</a> (keyword), <a href="https://www.elastic.co/guide/en/ecs/current/ecs-tracing.html#field-trace-id">span.id</a> (keyword)
+   <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-tracing#field-trace-id">trace.id</a> (keyword), <a href="https://www.elastic.co/docs/reference/ecs/ecs-tracing#field-trace-id">span.id</a> (keyword)
    </td>
    <td>
    </td>
@@ -203,7 +203,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
   <tr>
    <td>N/A
    </td>
-   <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-tracing.html#field-transaction-id">Transaction.id</a> (keyword)
+   <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-tracing#field-transaction-id">Transaction.id</a> (keyword)
    </td>
    <td>
    </td>
@@ -211,7 +211,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
   <tr>
    <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">SeverityText</a> (string)
    </td>
-   <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-log.html#field-log-syslog-severity-name">log.syslog.severity.name</a> (keyword), <a href="https://www.elastic.co/guide/en/ecs/current/ecs-log.html#field-log-level">log.level</a> (keyword)
+   <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-log#field-log-syslog-severity-name">log.syslog.severity.name</a> (keyword), <a href="https://www.elastic.co/docs/reference/ecs/ecs-log#field-log-level">log.level</a> (keyword)
    </td>
    <td>
    </td>
@@ -219,7 +219,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
   <tr>
    <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">SeverityNumber</a> (number)
    </td>
-   <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-log.html#field-log-syslog-severity-code">log.syslog.severity.code</a>
+   <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-log#field-log-syslog-severity-code">log.syslog.severity.code</a>
    </td>
    <td>
    </td>
@@ -227,7 +227,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
   <tr>
    <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">Body</a> (any)
    </td>
-   <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-base.html#field-message">message</a> (match_only_text)
+   <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-base#field-message">message</a> (match_only_text)
    </td>
    <td>
    </td>
@@ -239,7 +239,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
 <br/>
 <a href="https://github.com/open-telemetry/semantic-conventions/blob/main/docs/system/system-metrics.md">system.cpu.utilization</a>
    </td>
-   <td><a href="https://www.elastic.co/guide/en/ecs/current/ecs-host.html#field-host-cpu-usage">host.cpu.usage</a> (scaled_float) with a slightly different measurement than what OTel metrics measure
+   <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-host#field-host-cpu-usage">host.cpu.usage</a> (scaled_float) with a slightly different measurement than what OTel metrics measure
    </td>
    <td>Note that most metrics have slightly different names and semantics between ECS and OpenTelemetry
    </td>
@@ -260,8 +260,8 @@ While ECS covers many different use cases and scenarios, in the following, we ou
 The author of the "OTel Collector Access logs file receiver for web server XXX" would find in the OTel Semantic Convention specifications all
 the guidance to map the fields of the web server logs, not only the attributes that the OTel Semantic Conventions has specified today for
 [HTTP calls](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.9.0/specification/trace/semantic_conventions/http.md),
-but also attributes for the [User Agent](https://www.elastic.co/guide/en/ecs/current/ecs-user_agent.html)
-or the [Geo Data](https://www.elastic.co/guide/en/ecs/current/ecs-geo.html).
+but also attributes for the [User Agent](https://www.elastic.co/docs/reference/ecs/ecs-user_agent)
+or the [Geo Data](https://www.elastic.co/docs/reference/ecs/ecs-geo).
 
 This completeness of the mapping will help the author of the integration to produce OTel Log messages that will be compatible with access logs
 of other web components (web servers, load balancers, L7 firewalls...) allowing turnkey integration with observability solutions
@@ -270,7 +270,7 @@ and enabling richer correlations.
 ### Other Examples
 
 - [Logs with sessions (VPN Logs, Network Access Sessions, RUM sessions, etc.)](https://github.com/elastic/ecs/blob/main/rfcs/text/0004-session.md#usage)
-- [Logs from systems processing files](https://www.elastic.co/guide/en/ecs/current/ecs-file.html)
+- [Logs from systems processing files](https://www.elastic.co/docs/reference/ecs/ecs-file)
 
 ## Alternatives / Discussion
 

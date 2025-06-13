@@ -97,7 +97,7 @@ Examples of use cases include:
   * Triggering schema-driven transformations or processing in stream processors.
   * And more.
 
-This recent [paper](https://arxiv.org/pdf/2311.07509.pdf#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
+This recent [paper](https://arxiv.org/pdf/2311.07509#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
 from [data.world](https://data.world/home/), along with
 the [MetricFlow framework](https://docs.getdbt.com/docs/build/about-metricflow)
 which underpins the [dbt Semantic Layer](https://www.getdbt.com/product/semantic-layer),
@@ -382,5 +382,5 @@ of the Resolved Telemetry Schema.
 ## Links
 
 - [Positional Paper: Schema-First Application Telemetry](https://research.facebook.com/publications/positional-paper-schema-first-application-telemetry/)
-- [A benchmark to understand the role of knowledge graphs on Large Language Model's accuracy for question answering on enterprise sql databases](https://arxiv.org/pdf/2311.07509.pdf#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
+- [A benchmark to understand the role of knowledge graphs on Large Language Model's accuracy for question answering on enterprise sql databases](https://arxiv.org/pdf/2311.07509#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
 - [MetricFlow framework](https://docs.getdbt.com/docs/build/about-metricflow)

@@ -13,7 +13,7 @@ while still providing our end-users with some way to discover all available Open
 
 ## Explanation
 
-The [OpenTelemetry Registry](https://opentelemetry.io/registry/) serves as a central catalogue of all known OpenTelemetry components,
+The [OpenTelemetry Registry](https://opentelemetry.io/ecosystem/registry/) serves as a central catalogue of all known OpenTelemetry components,
 both provided by core maintainers of the project and any third party.
 
 In order for a component to be included into Registry its authors have to fill a [self-assessment form](#registry-self-assessment-form).

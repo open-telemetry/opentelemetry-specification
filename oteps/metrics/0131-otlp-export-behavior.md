@@ -36,7 +36,7 @@ A discussed solution is to convert deltas to cumulative in the Collector both as
 
 As stated in the previous section, delta to cumulative conversion in the Collector is needed to support Prometheus type backends. This may be necessary in the Collector in the future because the Collector may also accept metrics from other sources that report delta values. On the other hand, if sources are reporting cumulative values, cumulative to delta conversion is needed to support Statsd type backends.
 
-The future implementation for conversions in the Collector is still under discussion. There is a proposal is to add a [Metric Aggregation Processor](https://github.com/open-telemetry/opentelemetry-collector/issues/1422) in the Collector which recommends a solution for delta to cumulative conversion.
+The future implementation for conversions in the Collector is still under discussion. There is a proposal is to add a [Metric Aggregation Processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/4968) in the Collector which recommends a solution for delta to cumulative conversion.
 
 ## Future possibilities
 

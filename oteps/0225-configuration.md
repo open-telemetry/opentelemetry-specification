@@ -299,7 +299,7 @@ In choosing to recommend JSON schema, the working group looked at the following 
 * [Cue](https://cuelang.org/) - A promising simpler language to define a schema, the working group decided against CUE because:
   * Tooling available for validating CUE files in languages outside of Go were limited.
   * Familiarity and learning curve would create problems for both users and contributors of OpenTelemetry.
-* [Protobuf](https://developers.google.com/protocol-buffers) - With protobuf already used heavily in OpenTelemetry, the format was worth investigating as an option to define the schema. The working group decided against Protobuf because:
+* [Protobuf](https://protobuf.dev) - With protobuf already used heavily in OpenTelemetry, the format was worth investigating as an option to define the schema. The working group decided against Protobuf because:
   * Validation errors are the result of serlization errors which can be difficult to interpret.
   * Limitations in the schema definition language result in poor ergonomics if type safety is to be retained.
 

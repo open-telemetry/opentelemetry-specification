@@ -264,7 +264,7 @@ function that is invoked on demand by the SDK.
 ### Metrics data model and SDK
 
 The Metrics data model is [specified here](metrics/data-model.md) and is based on
-[metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/metrics/v1/metrics.proto).
+[metrics.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto).
 This data model defines three semantics: An Event model used by the API, an
 in-flight data model used by the SDK and OTLP, and a TimeSeries model which
 denotes how exporters should interpret the in-flight model.
@@ -365,7 +365,7 @@ running locally with the application) and Collector (a standalone running
 service).
 
 Read more at OpenTelemetry Service [Long-term
-Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/master/docs/vision.md).
+Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/vision.md).
 
 ## Instrumentation Libraries
 

@@ -489,7 +489,7 @@ coordinated decision ensures that some traces will be complete.
 Traces are complete when the TraceID ratio falls below the minimum
 Sampler probability across the whole trace.  Techniques have been
 developed for [analysis of partial traces that are compatible with
-TraceID ratio sampling](https://arxiv.org/pdf/2107.07703.pdf).
+TraceID ratio sampling](https://arxiv.org/pdf/2107.07703).
 
 The `TraceIDRatio` Sampler has another difficulty with testing for
 completeness.  It is impossible to know whether there are missing leaf
@@ -507,7 +507,7 @@ named `sampler.adjusted_count`.
 
 ##### Dapper's "Inflationary" Sampler
 
-Google's [Dapper](https://research.google/pubs/pub36356/) tracing
+Google's [Dapper](https://research.google/pubs/dapper-a-large-scale-distributed-systems-tracing-infrastructure/) tracing
 system describes the use of sampling to control the cost of trace
 collection at scale.  Dapper's early Sampler algorithm, referred to as
 an "inflationary" approach (although not published in the paper), is
@@ -872,7 +872,7 @@ K. Thompson](https://www.wiley.com/en-us/Sampling%2C+3rd+Edition-p-9780470402313
 
 [Stream sampling for variance-optimal estimation of subset sums](https://arxiv.org/abs/0803.0473).
 
-[Estimation from Partially Sampled Distributed Traces](https://arxiv.org/pdf/2107.07703.pdf), 2021 Dynatrace Research report, Otmar Ertl
+[Estimation from Partially Sampled Distributed Traces](https://arxiv.org/pdf/2107.07703), 2021 Dynatrace Research report, Otmar Ertl
 
 ## Acknowledgements
 

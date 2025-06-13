@@ -21,10 +21,10 @@ There are already a few implementations of system and/or runtime metric collecti
   * Collects system metrics for CPU, memory, swap, disks, filesystems, network, and load.
   * There are plans to collect process metrics for CPU, memory, and disk I/O.
   * Makes good use of labels rather than defining individual metrics.
-  * [Overview of collected metrics](https://docs.google.com/spreadsheets/d/11qSmzD9e7PnzaJPYRFdkkKbjTLrAKmvyQpjBjpJsR2s).
+  * [Overview of collected metrics](https://docs.google.com/spreadsheets/d/11qSmzD9e7PnzaJPYRFdkkKbjTLrAKmvyQpjBjpJsR2s/edit).
 
 - **Go**
-  * Go [has instrumentation](https://github.com/open-telemetry/opentelemetry-go-contrib/tree/master/instrumentation/runtime) to collect runtime metrics for GC, heap use, and goroutines.
+  * Go [has instrumentation](https://github.com/open-telemetry/opentelemetry-go-contrib/tree/main/instrumentation/runtime) to collect runtime metrics for GC, heap use, and goroutines.
   * This package does not export metrics with labels, instead exporting individual metrics.
   * [Overview of collected metrics](https://docs.google.com/spreadsheets/d/1r50cC9ass0A8SZIg2ZpLdvZf6HmQJsUSXFOu-rl4yaY/edit#gid=0).
 - **Python**

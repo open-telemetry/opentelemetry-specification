@@ -27,7 +27,7 @@ OTLP/HTTP+JSON will be consistent with the [OTLP/HTTP](0099-otlp-http.md) specif
 
 ### JSON Mapping
 
-Use proto3 standard defined [JSON Mapping](https://developers.google.com/protocol-buffers/docs/proto3#json) for mapping between protobuf and json. `trace_id`  and `span_id` is base64 encoded in OTLP/HTTP+JSON, not hex.
+Use proto3 standard defined [JSON Mapping](https://protobuf.dev/programming-guides/proto3/#json) for mapping between protobuf and json. `trace_id`  and `span_id` is base64 encoded in OTLP/HTTP+JSON, not hex.
 
 ### Request
 
@@ -78,7 +78,7 @@ specific failure cases and HTTP status codes that should be used.
 
 Response body for all `HTTP 4xx` and `HTTP 5xx` responses MUST be a
 JSON-encoded
-[Status](https://godoc.org/google.golang.org/genproto/googleapis/rpc/status#Status)
+[Status](https://pkg.go.dev/google.golang.org/genproto/googleapis/rpc/status#Status)
 message that describes the problem.
 
 This specification does not use `Status.code` field and the server MAY omit
@@ -108,7 +108,7 @@ response.
 If the server receives more requests than the client is allowed or the server is
 overloaded the server SHOULD respond with `HTTP 429 Too Many Requests` or
 `HTTP 503 Service Unavailable` and MAY include
-["Retry-After"](https://tools.ietf.org/html/rfc7231#section-7.1.3) header with a
+["Retry-After"](https://datatracker.ietf.org/doc/html/rfc7231#section-7.1.3) header with a
 recommended time interval in seconds to wait before retrying.
 
 The client SHOULD honour the waiting interval specified in "Retry-After" header

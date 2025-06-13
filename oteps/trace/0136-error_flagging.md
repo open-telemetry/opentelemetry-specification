@@ -2,7 +2,7 @@
 
 This proposal reduces the number of status codes to three, adds a new field to identify status codes set by application developers and operators, and adds a mapping of semantic conventions to status codes. This clarifies how error reporting should work in OpenTelemetry.
 
-Note: The term **end user** in this document is defined as the application developers and operators of the system running OpenTelemetry. The term **instrumentation** refers to [instrumentation libraries](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/glossary.md#instrumentation-library) for common code shared between different systems, such as web frameworks and database clients.
+Note: The term **end user** in this document is defined as the application developers and operators of the system running OpenTelemetry. The term **instrumentation** refers to [instrumentation libraries](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/glossary.md#instrumentation-library) for common code shared between different systems, such as web frameworks and database clients.
 
 ## Motivation
 

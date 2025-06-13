@@ -98,7 +98,7 @@ A key distinction between `LabelSet` and similar concepts in existing metrics li
 
 ## Prior art and alternatives
 
-Some existing metrics APIs support this concept.  For example, see `Scope` in the [Tally metric API for Go](https://godoc.org/github.com/uber-go/tally#Scope).
+Some existing metrics APIs support this concept.  For example, see `Scope` in the [Tally metric API for Go](https://pkg.go.dev/github.com/uber-go/tally#Scope).
 
 Some libraries take `LabelSet` one step further.  In the future, we may add to the the `LabelSet` API a method to extend the label set with additional labels.  For example:
 
