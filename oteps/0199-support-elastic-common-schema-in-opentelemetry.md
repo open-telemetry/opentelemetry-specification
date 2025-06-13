@@ -64,7 +64,7 @@ OpenTelemetry has the potential to grow exponentially if the data from these oth
 
 ### What is ECS?
 
-The [Elastic Common Schema (ECS)](https://github.com/elastic/ecs) is an open source specification, developed with support from Elastic's user community. ECS defines a common set of fields to be used when storing data in Elasticsearch, such as logs, metrics, and security and audit events. The goal of ECS is to enable and encourage users of Elasticsearch to normalize their event data, so that they can better analyze, visualize, and correlate the data represented in their events. Learn more at: [https://www.elastic.co/guide/en/ecs/current/ecs-reference.html](https://www.elastic.co/docs/reference/ecs)
+The [Elastic Common Schema (ECS)](https://github.com/elastic/ecs) is an open source specification, developed with support from Elastic's user community. ECS defines a common set of fields to be used when storing data in Elasticsearch, such as logs, metrics, and security and audit events. The goal of ECS is to enable and encourage users of Elasticsearch to normalize their event data, so that they can better analyze, visualize, and correlate the data represented in their events. Learn more at: [https://www.elastic.co/docs/reference/ecs](https://www.elastic.co/docs/reference/ecs)
 
 The coverage of ECS is very broad including in depth support for logs, security, and network events such as "[logs.* fields](https://www.elastic.co/docs/reference/ecs/ecs-log)" , "[geo.* fields](https://www.elastic.co/docs/reference/ecs/ecs-geo)", "[tls.* fields](https://www.elastic.co/docs/reference/ecs/ecs-tls)", "[dns.* fields](https://www.elastic.co/docs/reference/ecs/ecs-dns)", or "[vulnerability.* fields](https://www.elastic.co/docs/reference/ecs/ecs-vulnerability)".
 
