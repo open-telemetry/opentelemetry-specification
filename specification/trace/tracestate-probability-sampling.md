@@ -227,7 +227,7 @@ an item should be counted, for it to be representative of the
 population. Adjusted counts are useful as an estimate of the number
 of spans there would be without sampling.
 
-The term **span-to-metrics** refers to the use of adjusted count to in
+The term **span-to-metrics** refers to the use of adjusted count in
 a telemetry system to derive metrics from tracing spans using adjusted
 count information. The specifications for handling tracestate and
 managing threshold information in samplers ensure that adjusted counts
