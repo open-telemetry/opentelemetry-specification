@@ -11,6 +11,35 @@ release.
 
 ### Traces
 
+- Define how SDK implements `Tracer.Enabled`.
+  ([#4537](https://github.com/open-telemetry/opentelemetry-specification/pull/4537))
+
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.46.0 (2025-06-12)
+
 ### Metrics
 
 - Prometheus receiver can expect `otel_scope_schema_url` and `otel_scope_[attribute]` labels on all metrics.
@@ -22,28 +51,17 @@ release.
 - Prometheus exporter no longer exports `otel_scope_info` metric.
   ([#4505](https://github.com/open-telemetry/opentelemetry-specification/pull/4505))
 
-### Logs
+### Entities
 
-### Baggage
-
-### Resource
-
-### Profiles
-
-### OpenTelemetry Protocol
-
-### Compatibility
-
-### SDK Configuration
+- Define rules for setting identifying attributes.
+  ([#4498](https://github.com/open-telemetry/opentelemetry-specification/pull/4498))
+- Define rules for entity-resource referencing model.
+  ([#4499](https://github.com/open-telemetry/opentelemetry-specification/pull/4499))
 
 ### Common
 
 - Move Instrumentation Scope definition from glossary to a dedicated document and use normative language.
   ([#4488](https://github.com/open-telemetry/opentelemetry-specification/pull/4488))
-
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.45.0 (2025-05-14)
 
