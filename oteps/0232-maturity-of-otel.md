@@ -66,7 +66,7 @@ This OTEP allows SIG maintainers to declare the maturity of the SIG's deliverabl
 
 ## Open questions
 
-* Should SDKs be required to fully implement the specification before they can be marked as stable? See [open-telemetry/opentelemetry-specification#3673](https://github.com/open-telemetry/community/issues/2097)
+* Should SDKs be required to fully implement the specification before they can be marked as stable? See [open-telemetry/community#2097](https://github.com/open-telemetry/community/issues/2097)
 * Should this OTEP define a file name to be adopted by all repositories to declare their deliverables and their maturity levels?
 
 ## Future possibilities

@@ -149,7 +149,7 @@ There is a lot of user feedback that they want it, but
 * Reading/writing body may happen outside of HTTP client API (e.g. through
   network streams) – how users can track it too?
 
-Related issue: [open-telemetry/opentelemetry-specification#1284](https://github.com/open-telemetry/semantic-conventions/issues/1219).
+Related issue: [open-telemetry/semantic-conventions#1219](https://github.com/open-telemetry/semantic-conventions/issues/1219).
 
 ## Out of scope
 
