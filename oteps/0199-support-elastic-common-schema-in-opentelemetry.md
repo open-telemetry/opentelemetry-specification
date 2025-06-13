@@ -20,7 +20,7 @@ ECS and OTel SemConv have some overlap today, but also significant areas of mutu
 </p>
 
 1. `A`: ECS comes with a rich set of fields that cover broad logging, observability and security use cases. Many fields are additive to the OTel SemConv and would enrich the OTel SemConv without major conflicts. Examples are [Geo information fields](https://www.elastic.co/docs/reference/ecs/ecs-geo), [Threat Fields](https://www.elastic.co/docs/reference/ecs/ecs-threat), and many others.
-2. `B`: Conversely, there are attributes in the OTel SemConv that do not exist in ECS and would be an enrichment to ECS. Examples are the [Messaging semantic conventions](https://opentelemetry.io/docs/specs/semconv/general/trace/) or technology-specific conventions, such as the [AWS SDK conventions](https://opentelemetry.io/docs/specs/semconv/general/trace/).
+2. `B`: Conversely, there are attributes in the OTel SemConv that do not exist in ECS and would be an enrichment to ECS. Examples are the [Messaging semantic conventions](https://opentelemetry.io/docs/specs/semconv/registry/attributes/messaging/) or technology-specific conventions, such as the [AWS SDK conventions](https://opentelemetry.io/docs/specs/semconv/registry/attributes/aws/).
 3. `C`: There is some significant area of overlap between ECS and OTel SemConv. The are `C` represents overlapping fields/attributes that are very similar in ECS and OTel SemConv. The field conflicts in `C` can be resolved through simple field renames and simple transformations.
 4. `D`: For some of the fields and attributes there will be conflicts that cannot be resolved through simple renaming or transformation and would require introducing breaking changes on ECS or OTel SemConv side for the purpose of merging the schemas.
 
