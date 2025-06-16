@@ -41,7 +41,7 @@ specific `Propagator`s that are used to transmit baggage entries across
 component boundaries may impose their own restrictions on baggage names.
 For example, the [W3C Baggage specification](https://www.w3.org/TR/baggage/#key)
 restricts the baggage keys to strings that satisfy the `token` definition
-from [RFC7230, Section 3.2.6](https://tools.ietf.org/html/rfc7230#section-3.2.6).
+from [RFC7230, Section 3.2.6](https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6).
 For maximum compatibility, alpha-numeric names are strongly recommended
 to be used as baggage names.
 
@@ -202,4 +202,4 @@ If a new name/value pair is added and its name is the same as an existing name,
 than the new pair MUST take precedence. The value is replaced with the added
 value (regardless if it is locally generated or received from a remote peer).
 
-[w3c]: https://www.w3.org/TR/baggage
+[w3c]: https://www.w3.org/TR/baggage/

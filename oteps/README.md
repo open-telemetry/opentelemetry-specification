@@ -55,7 +55,7 @@ For example, an OTEP proposing configurable sampling *and* various samplers shou
 
 ### Writing an OTEP
 
-- First, [fork](https://help.github.com/en/articles/fork-a-repo) this repo.
+- First, [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) this repo.
 - Copy [`0000-template.md`](./0000-template.md) to `0000-my-OTEP.md`, where `my-OTEP` is a title relevant to your proposal, and `0000` is the OTEP ID.
   Leave the number as is for now. Once a Pull Request is made, update this ID to match the PR ID.
 - Fill in the template. Put care into the details: It is important to present convincing motivation, demonstrate an understanding of the design's impact, and honestly assess the drawbacks and potential alternatives.
@@ -87,7 +87,7 @@ Have suggestions? Concerns? Questions? **Please** raise an issue or raise the ma
 
 ## Background on the OpenTelemetry OTEP process
 
-Our OTEP process borrows from the [Rust RFC](https://github.com/rust-lang/rfcs) and [Kubernetes Enhancement Proposal](https://github.com/kubernetes/enhancements) processes, the former also being [very influential](https://github.com/kubernetes/enhancements/tree/master/keps/sig-architecture/0000-kep-process#prior-art) on the latter; as well as the [OpenTracing OTEP](https://github.com/opentracing/specification/tree/master/rfc_process.md) process. Massive kudos and thanks to the respective authors and communities for providing excellent prior art 💖
+Our OTEP process borrows from the [Rust RFC](https://github.com/rust-lang/rfcs) and [Kubernetes Enhancement Proposal](https://github.com/kubernetes/enhancements) processes, the former also being [very influential](https://github.com/kubernetes/enhancements/tree/master/keps/sig-architecture/0000-kep-process#prior-art) on the latter; as well as the [OpenTracing OTEP](https://github.com/opentracing/specification/blob/master/rfc_process.md) process. Massive kudos and thanks to the respective authors and communities for providing excellent prior art 💖
 
 [slack-image]: https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white
 [slack-url]: https://cloud-native.slack.com/archives/C01N7PP1THC

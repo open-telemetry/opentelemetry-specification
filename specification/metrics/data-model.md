@@ -187,7 +187,7 @@ in scope for key design decisions:
 
 - Using OTLP as an intermediary format between two non-compatible formats
   - Importing [statsd](https://github.com/statsd/statsd) => Prometheus PRW
-  - Importing [collectd](https://collectd.org/wiki/index.php/Binary_protocol)
+  - Importing [collectd](https://www.collectd.org/wiki/index.php/Binary_protocol)
     => Prometheus PRW
   - Importing Prometheus endpoint scrape => [statsd push | collectd | opencensus]
   - Importing OpenCensus "oca" => any non OC or OTel format

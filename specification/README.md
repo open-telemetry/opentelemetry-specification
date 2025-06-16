@@ -57,9 +57,9 @@ path_base_for_github_subdir:
 The keywords "MUST", "MUST NOT", "REQUIRED", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in the
 [specification][] are to be interpreted as described in [BCP
-14](https://tools.ietf.org/html/bcp14)
-[[RFC2119](https://tools.ietf.org/html/rfc2119)]
-[[RFC8174](https://tools.ietf.org/html/rfc8174)] when, and only when, they
+14](https://www.rfc-editor.org/info/bcp14)
+[[RFC2119](https://datatracker.ietf.org/doc/html/rfc2119)]
+[[RFC8174](https://datatracker.ietf.org/doc/html/rfc8174)] when, and only when, they
 appear in all capitals, as shown here.
 
 An implementation of the [specification][] is not compliant if it fails to
