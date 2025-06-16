@@ -64,7 +64,7 @@ This proposal describes how these two values should be propagated and how partic
 
 For more details about this specification, see [OTEP
 235](../../oteps/trace/0235-sampling-threshold-in-trace-state.md) and
-[OTEP 235](../../oteps/trace/oteps/trace/0250-Composite_Samplers.md).
+[OTEP 235](../../oteps/trace/0250-Composite_Samplers.md).
 
 For details about encoding probability sampling information in
 OpenTelemetry tracing data, in particular the OpenTelemetry TraceState
