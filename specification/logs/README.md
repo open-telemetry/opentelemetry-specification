@@ -107,7 +107,7 @@ data models, send the data through OpenTelemetry Collector, where it can be
 enriched and processed in a uniform manner. For example, Collector can add to
 all telemetry data coming from a Kubernetes Pod several attributes that describe
 the pod and it can be done automatically using
-[k8sattributesprocessor](https://pkg.go.dev/github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor?tab=doc)
+[k8sattributesprocessor](https://pkg.go.dev/github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor)
 without the need for the Application to do anything special. Most importantly
 such enrichment is completely uniform for all 3 signals. The Collector
 guarantees that logs, traces and metrics have precisely the same attribute names
@@ -228,7 +228,7 @@ data.
 
 OpenTelemetry Collector can read system logs (link TBD) and automatically enrich
 them with Resource information using the
-[resourcedetection](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/processor/resourcedetectionprocessor)
+[resourcedetection](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/resourcedetectionprocessor)
 processor.
 
 ### Infrastructure Logs
@@ -268,7 +268,7 @@ OpenTelemetry recommends to collect application logs using Collector's
 [filelog receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver).
 Alternatively, another log collection agent, such as FluentBit, can collect
 logs,
-[then send](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver/fluentforwardreceiver)
+[then send](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/fluentforwardreceiver)
 to OpenTelemetry Collector where the logs can be further processed and enriched.
 
 ### Legacy First-Party Applications Logs
@@ -291,7 +291,7 @@ auto-instrumenting solutions that modify trace logging libraries used by the
 application to automatically output the trace context such as the trace id or
 span id with every log statement. The trace context can be automatically
 extracted from incoming requests if standard compliant request propagation is
-used, e.g. via [W3C TraceContext](https://www.w3.org/TR/trace-context). In
+used, e.g. via [W3C TraceContext](https://www.w3.org/TR/trace-context/). In
 addition, the requests outgoing from the application may be injected with the
 same trace context data, thus resulting in context propagation through the
 application and creating an opportunity to have full trace context in logs
@@ -322,7 +322,7 @@ using OpenTelemetry
 Alternatively, if the Collector does not have the necessary file reading and
 parsing capabilities, another log collection agent, such as FluentBit can
 collect the logs,
-[then send the logs](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver/fluentforwardreceiver)
+[then send the logs](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/fluentforwardreceiver)
 to OpenTelemetry Collector.
 
 ![Application to File Logs](img/app-to-file-logs-fb.png)
@@ -338,7 +338,7 @@ see [Trace Context in Non-OTLP Log Formats](../compatibility/logging_trace_conte
 
 The second approach is to modify the application so that the logs are output via
 a network protocol, e.g. via
-[OTLP](https://github.com/open-telemetry/opentelemetry-proto/blob/master/opentelemetry/proto/logs/v1/logs.proto).
+[OTLP](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/logs/v1/logs.proto).
 The most convenient way to achieve this is to provide addons or extensions to
 the commonly used logging libraries. The addons implement sending over such
 network protocols, which would then typically require small, localized changes
@@ -438,7 +438,7 @@ auto-instrumented logging statements will do the following:
   statements.
 
 This is possible to do for certain languages (e.g. in Java) and we can reuse
-[existing open-source libraries](https://docs.datadoghq.com/tracing/connect_logs_and_traces/java/?tab=log4j2)
+[existing open-source libraries](https://docs.datadoghq.com/tracing/other_telemetry/connect_logs_and_traces/java/)
 that do this.
 
 A further optional modification would be to auto-instrument loggers to send logs

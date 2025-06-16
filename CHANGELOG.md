@@ -11,12 +11,22 @@ release.
 
 ### Traces
 
+- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
+  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
+  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
+- Define CompositeSampler implementation and built-in ComposableSampler interfaces.
+  ([#4466](https://github.com/open-telemetry/opentelemetry-specification/pull/4466))
 - Define how SDK implements `Tracer.Enabled`.
   ([#4537](https://github.com/open-telemetry/opentelemetry-specification/pull/4537))
 
 ### Metrics
 
 ### Logs
+
+- Stabilize `Event Name` parameter of `Logger.Enabled`.
+  ([#4534](https://github.com/open-telemetry/opentelemetry-specification/pull/4534))
+- Stabilize SDK and No-Op `Logger.Enabled`.
+  ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
 
 ### Baggage
 

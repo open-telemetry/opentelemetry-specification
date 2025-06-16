@@ -12,7 +12,7 @@ in instances when one of the endpoints does not support the OTelArrow protocol.
 
 **Reference implementation**: The [OTel Arrow Adapter](https://github.com/f5/otel-arrow-adapter) Go library specifies
 the protobuf spec, and implements the OTel Arrow Encoder/Decoder (main contributor [Laurent Querel](https://github.com/lquerel)).
-An [experimental OTel Collector](https://github.com/open-telemetry/experimental-arrow-collector) has been implemented to
+An [experimental OTel Collector](https://github.com/open-telemetry/otel-arrow-collector) has been implemented to
 expose the new gRPC endpoint and to provide OTel Arrow support via the previous library (main contributor [Joshua MacDonald](https://github.com/jmacd)).
 
 ## Table of contents
@@ -646,7 +646,7 @@ exactly as the OTLP exporter.
 The mechanism as described is vulnerable to partial failure scenarios.  When some of the streams are succeeding but some
 have failed with Arrow unsupported, the collector performance will be degraded because callers are blocked waiting for
 available streams.  The exact signal used to signal that Arrow and downgrade mechanism is seen as an area for future
-development.  [See the prototype's test for whether to downgrade.](https://github.com/open-telemetry/experimental-arrow-collector/blob/30e0ffb230d3d2f1ad9645ec54a90bbb7b9878c2/exporter/otlpexporter/internal/arrow/stream.go#L152)
+development.  [See the prototype's test for whether to downgrade.](https://github.com/open-telemetry/otel-arrow-collector/blob/30e0ffb230d3d2f1ad9645ec54a90bbb7b9878c2/exporter/otlpexporter/internal/arrow/stream.go#L152)
 
 ### Batch ID Generation
 
@@ -779,7 +779,7 @@ in order to include OTel-Arrow in standard regression testing of the Collector.
 ### Extending into other parts of the Arrow ecosystem
 
 A SQL support for telemetry data processing remains an open question in the current Go collector. The main OTelArrow query
-engine [Datafusion](https://github.com/apache/arrow-datafusion) is implemented in Rust. Several solutions can be
+engine [Datafusion](https://github.com/apache/datafusion) is implemented in Rust. Several solutions can be
 considered: 1) create a Go wrapper on top of Datafusion, 2) implement a Rust collector dedicated to the end-to-end
 support of OTel Arrow, 3) implement a SQL/Arrow engine in Go (big project). A proof of concept using Datafusion has been
 implemented in Rust and has shown very good results.

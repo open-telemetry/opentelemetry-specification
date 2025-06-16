@@ -2,7 +2,7 @@
 
 On 08 Mar 2023, the OpenTelemetry GC and TC held an OpenTelemetry Leadership summit, discussing various topics. One of the themes we discussed was establishing standard rules for describing the maturity of the OpenTelemetry project. This OTEP summarizes what was discussed there and is intended to have the wider community provide feedback.
 
-This OTEP builds on what was previously communicated by the project, especially the [Versioning and stability for OpenTelemetry clients](https://opentelemetry.io/docs/reference/specification/versioning-and-stability).
+This OTEP builds on what was previously communicated by the project, especially the [Versioning and stability for OpenTelemetry clients](https://opentelemetry.io/docs/specs/otel/versioning-and-stability/).
 
 The Collector's [stability levels](https://github.com/open-telemetry/opentelemetry-collector#stability-levels) inspired the maturity levels.
 
@@ -66,7 +66,7 @@ This OTEP allows SIG maintainers to declare the maturity of the SIG's deliverabl
 
 ## Open questions
 
-* Should SDKs be required to fully implement the specification before they can be marked as stable? See [open-telemetry/opentelemetry-specification#3673](https://github.com/open-telemetry/opentelemetry-specification/issues/3673)
+* Should SDKs be required to fully implement the specification before they can be marked as stable? See [open-telemetry/community#2097](https://github.com/open-telemetry/community/issues/2097)
 * Should this OTEP define a file name to be adopted by all repositories to declare their deliverables and their maturity levels?
 
 ## Future possibilities
