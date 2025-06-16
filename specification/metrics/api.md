@@ -200,7 +200,7 @@ identifying fields are equal.
 #### Instrument name syntax
 
 The instrument name syntax is defined below using the [Augmented Backus-Naur
-Form](https://tools.ietf.org/html/rfc5234):
+Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
 instrument-name = ALPHA 0*254 ("_" / "." / "-" / "/" / ALPHA / DIGIT)

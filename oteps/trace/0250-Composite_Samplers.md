@@ -37,7 +37,7 @@ Also see Draft PR 3910 [Probability Samplers based on W3C Trace Context Level 2]
 
 ## Motivation
 
-The need for configuring head sampling has been explicitly or implicitly indicated in several discussions, both within the [Sampling SIG](https://docs.google.com/document/d/1gASMhmxNt9qCa8czEMheGlUW2xpORiYoD7dBD7aNtbQ) and in the wider community.
+The need for configuring head sampling has been explicitly or implicitly indicated in several discussions, both within the [Sampling SIG](https://docs.google.com/document/d/1gASMhmxNt9qCa8czEMheGlUW2xpORiYoD7dBD7aNtbQ/edit) and in the wider community.
 Some of the discussions are going back a number of years, see for example
 
 - issue [173](https://github.com/open-telemetry/opentelemetry-specification/issues/173): Way to ignore healthcheck traces when using automatic tracer across all languages?
@@ -316,6 +316,6 @@ A number of composite samplers are already available as independent contribution
 [Stratified Sampling](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/stratified-sampling-example),
 LinksBasedSampler [for Java](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/samplers/src/main/java/io/opentelemetry/contrib/sampler/LinksBasedSampler.java)
 and [for DOTNET](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/links-based-sampler)).
-Also, historically, some Span categorization was introduced by [JaegerRemoteSampler](https://www.jaegertracing.io/docs/1.54/sampling/#remote-sampling).
+Also, historically, some Span categorization was introduced by [JaegerRemoteSampler](https://www.jaegertracing.io/docs/1.54/architecture/sampling/#remote-sampling).
 
 This proposal aims at generalizing these ideas, and at providing a bit more formal specification for the behavior of the composite samplers.

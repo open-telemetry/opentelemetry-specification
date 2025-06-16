@@ -61,9 +61,9 @@ record is, what data needs to be recorded, transferred, stored and interpreted
 by a logging system.
 
 This proposal defines a data model for [Standalone
-Logs](https://github.com/open-telemetry/oteps/blob/master/text/logs/0091-logs-vocabulary.md#standalone-log).
+Logs](https://github.com/open-telemetry/oteps/blob/main/text/logs/0091-logs-vocabulary.md#standalone-log).
 Relevant parts of it may be adopted for
-[Embedded Logs](https://github.com/open-telemetry/oteps/blob/master/text/logs/0091-logs-vocabulary.md#embedded-log)
+[Embedded Logs](https://github.com/open-telemetry/oteps/blob/main/text/logs/0091-logs-vocabulary.md#embedded-log)
 in a future OTEP.
 
 ## Design Notes
@@ -544,7 +544,7 @@ better than this one.
 
 ### RFC5424 Syslog
 
-[RFC5424](https://tools.ietf.org/html/rfc5424) defines structured log data
+[RFC5424](https://datatracker.ietf.org/doc/html/rfc5424) defines structured log data
 format and protocol. The protocol is ubiquitous (although unfortunately many
 implementations don’t follow structured data recommendations). Here are some
 drawbacks that do not make Syslog a serious contender for a data model:
@@ -1327,7 +1327,7 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
 [OpenTelemetry resource semantic convention](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource).
 
 This is a selection of the most relevant fields. See
-[for the full reference](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html)
+[for the full reference](https://www.elastic.co/docs/reference/ecs/ecs-field-reference)
 for an exhaustive list.
 
 ## Appendix B: `SeverityNumber` example mappings
