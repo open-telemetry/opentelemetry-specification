@@ -331,7 +331,7 @@ No API changes are called for in this proposal.
 #### Prometheus
 
 The Prometheus system defines four kinds of [synchronous metric
-instrument](https://prometheus.io/docs/concepts/metric_types).  
+instrument](https://prometheus.io/docs/concepts/metric_types/).  
 
 | System     | Metric Kind  | Operation           | Aggregation          | Notes               |
 | ---------- | ------------ | ------------------- | -------------------- | ------------------- |
