@@ -25,6 +25,8 @@ release.
 
 - Stabilize `Event Name` parameter of `Logger.Enabled`.
   ([#4534](https://github.com/open-telemetry/opentelemetry-specification/pull/4534))
+- Stabilize SDK and No-Op `Logger.Enabled`.
+  ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
 
 ### Baggage
 
