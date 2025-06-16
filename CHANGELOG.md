@@ -11,10 +11,15 @@ release.
 
 ### Traces
 
+- Define how SDK implements `Tracer.Enabled`.
+  ([#4537](https://github.com/open-telemetry/opentelemetry-specification/pull/4537))
+
 ### Metrics
 
 ### Logs
 
+- Stabilize `Event Name` parameter of `Logger.Enabled`.
+  ([#4534](https://github.com/open-telemetry/opentelemetry-specification/pull/4534))
 - Stabilize SDK and No-Op `Logger.Enabled`.
   ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
 

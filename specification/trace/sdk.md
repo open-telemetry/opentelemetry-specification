@@ -19,6 +19,7 @@ linkTitle: SDK
   * [ForceFlush](#forceflush)
 - [Tracer](#tracer)
   * [TracerConfig](#tracerconfig)
+  * [Enabled](#enabled)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
@@ -198,6 +199,18 @@ It consists of the following parameters:
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
+
+### Enabled
+
+**Status**: [Development](../document-status.md)
+
+`Enabled` MUST return `false` when either:
+
+- there are no registered [`SpanProcessors`](#span-processor),
+- `Tracer` is disabled ([`TracerConfig.disabled`](#tracerconfig) is `true`).
+
+Otherwise, it SHOULD return `true`.
+It MAY return `false` to support additional optimizations and features.
 
 ## Additional Span Interfaces
 
@@ -418,7 +431,7 @@ specification, the Sampler decision is more nuanced: only a portion of
 the identifier is used, after checking whether the OpenTelemetry
 TraceState field contains an explicit randomness value.
 
-[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
+[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
 
 ##### `TraceIdRatioBased` sampler configuration
 
@@ -516,9 +529,9 @@ The following configuration properties should be available when creating the sam
 * polling interval - polling interval for getting configuration from remote
 * initial sampler - initial sampler that is used before the first configuration is fetched
 
-[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#remote-sampling
-[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/apis/#remote-sampling-configuration-stable
-[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#adaptive-sampling
+[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#remote-sampling
+[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/architecture/apis/#remote-sampling-configuration-stable
+[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#adaptive-sampling
 
 ### Sampling Requirements
 
@@ -535,8 +548,8 @@ OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encode
 This specification recommends the use of either TraceID randomness or explicit randomness,
 which ensures that samplers always have sufficient randomness when using W3C Trace Context propagation.
 
-[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
-[W3CCONTEXTLEVEL1]: https://www.w3.org/TR/trace-context
+[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
+[W3CCONTEXTLEVEL1]: https://www.w3.org/TR/trace-context/
 [W3CCONTEXTTRACEID]: https://www.w3.org/TR/trace-context-2/#randomness-of-trace-id
 [W3CCONTEXTTRACESTATE]: https://www.w3.org/TR/trace-context-2/#tracestate-header
 [W3CCONTEXTSAMPLEDFLAG]: https://www.w3.org/TR/trace-context-2/#sampled-flag
