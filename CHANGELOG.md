@@ -18,6 +18,9 @@ release.
 
 ### Logs
 
+- Clarify that all `SeverityNumber` values can be used when comparing severities.
+  ([#4552](https://github.com/open-telemetry/opentelemetry-specification/pull/4552))
+
 ### Baggage
 
 ### Profiles
