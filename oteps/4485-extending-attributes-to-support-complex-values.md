@@ -275,3 +275,6 @@ for additional details.
 | Logfire (OTLP)                  | :white_check_mark: | stored as JSON, native support for JSON in queries |
 | New Relic (OTLP)                  | :white_check_mark: | drops the complex attribute | |
 | Splunk (OTLP and HEC exporter)    | :white_check_mark: | flattens for logs (HEC), serializes to JSON string for traces and metrics (OTLP) |
+
+> [!NOTE]
+> This list only reflects the behavior at the time of writing and may change in the future.
