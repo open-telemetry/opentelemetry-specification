@@ -149,7 +149,7 @@ Equality of `KeyValueList`s MUST be unaffected by the ordering of their `KeyValu
 The SDK SHOULD apply [attribute limits](/specification/common/README.md#attribute-limits)
 to complex attributes.
 
-**Attribute value length limit** SHOULD be applied to all leaf string nodes in
+**Attribute value length limit** SHOULD be applied to all leaf `string` and `bytes` nodes in
 `AnyValue` which SHOULD be truncated to the configured limit.
 
 Leaf nodes of an `AnyValue` attribute SHOULD count toward the **attribute count limit**.
