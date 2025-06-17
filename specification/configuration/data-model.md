@@ -55,7 +55,7 @@ YAML configuration files MUST use file extensions `.yaml` or `.yml`.
 
 Configuration files support environment variables substitution for references,
 defined using
-the [Augmented Backus-Naur Form](https://tools.ietf.org/html/rfc5234):
+the [Augmented Backus-Naur Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
 SUBSTITUTION-REF = "${" ["env:"] ENV-NAME [":-" DEFAULT-VALUE] "}"; valid substitution reference

@@ -798,7 +798,7 @@ All other fields |                    |                                         
 [OpenTelemetry resource semantic convention](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
 
 This is a selection of the most relevant fields. See
-[for the full reference](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html)
+[for the full reference](https://www.elastic.co/docs/reference/ecs/ecs-field-reference)
 for an exhaustive list.
 
 ## Appendix B: `SeverityNumber` example mappings

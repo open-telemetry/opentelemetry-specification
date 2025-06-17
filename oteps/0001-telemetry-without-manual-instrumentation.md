@@ -89,7 +89,7 @@ There are some languages that will have OpenTelemetry support before they have D
 
 ### Governance of the auto-instrumentation libraries
 
-Each `auto-instr-foo` repository must have at least one [Maintainer](https://github.com/open-telemetry/community/blob/master/community-membership.md#maintainer) in common with the main `opentelemetry-foo` language repository. There are no other requirements or constraints about the set of maintainers/approvers for the main language repository and the respective auto-instrumentation repository; in particular, there may be maintainers/approvers of the main language repository that are not maintainers/approvers for the auto-instrumentation repository, and vice versa.
+Each `auto-instr-foo` repository must have at least one [Maintainer](https://github.com/open-telemetry/community/blob/main/community-membership.md#maintainer) in common with the main `opentelemetry-foo` language repository. There are no other requirements or constraints about the set of maintainers/approvers for the main language repository and the respective auto-instrumentation repository; in particular, there may be maintainers/approvers of the main language repository that are not maintainers/approvers for the auto-instrumentation repository, and vice versa.
 
 ### Mini-FAQ about this proposal
 

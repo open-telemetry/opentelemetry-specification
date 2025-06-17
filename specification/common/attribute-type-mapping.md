@@ -125,9 +125,9 @@ field.
 
 Values that represent ordered sequences of other values (such as
 [arrays](https://docs.oracle.com/javase/specs/jls/se7/html/jls-10.html),
-[vectors](https://en.cppreference.com/w/cpp/container/vector), ordered
+[vectors](https://en.cppreference.com/w/cpp/container/vector.html), ordered
 [lists](https://docs.python.org/3/tutorial/datastructures.html#more-on-lists),
-[slices](https://golang.org/ref/spec#Slice_types)) SHOULD be converted to
+[slices](https://go.dev/ref/spec#Slice_types)) SHOULD be converted to
 AnyValue's
 [array_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L35)
 field. String values and byte sequences are an exception from this rule (see
@@ -223,7 +223,7 @@ of the associative array.
 
 Unordered collections of unique values (such as
 [Java Sets](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html),
-[C++ sets](https://en.cppreference.com/w/cpp/container/set),
+[C++ sets](https://en.cppreference.com/w/cpp/container/set.html),
 [Python Sets](https://docs.python.org/3/tutorial/datastructures.html#sets)) SHOULD be
 converted to AnyValue's
 [array_value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L35)

@@ -89,6 +89,7 @@ formats is required. Implementing more than one format is optional.
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     | +      |      |        | +   |      |     |      |       |
 | [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)                            | X        |     |      |     |        |      |        |     |      |     |      |       |
 | [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X        |     |      |     |        |      |        |     |      |     |      |       |
+| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)                          | X        |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -355,8 +356,8 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | [HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                                             |          | +   | +    | +  | +           | -    | -      | -   | +    | +   | +    | +     |
 | [TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                                             |          | +   | +    | +  | +           | -    | -      | -   | +    | +   | +    | +     |
 | [otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                        |          | +   | +    | -  | -           | -    | -      | -   | +    | -   | -    | -     |
-| [otel_scope_info metric](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                                                              | X        | +   | +    | -  | -           | -    | -      | -   | +    | -   | -    | -     |
-| [otel_scope_info and labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                                          | X        | +   | -    | -  | -           | -    | -      | -   | +    | -   | -    | -     |
+| [otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                                        |          | +   | -    | -  | -           | -    | -      | -   | -    | -   | -    | -     |
+| [otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                                                   | X        | +   | -    | -  | -           | -    | -      | -   | +    | -   | -    | -     |
 | [Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1)                                                                    |          | +   | +    | +  | +           | -    | -      | -   | +    | +   | +    | -     |
 | [Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)                                                   |          | +   | +    | +  | +           | -    | -      | -   | +    | +   | +    | +     |
 | [Prometheus Counters have _total suffix by default](specification/compatibility/prometheus_and_openmetrics.md#sums)                                                      |          | +   | +    | +  | +           | -    | -      | -   | +    | -   | -    | -     |
