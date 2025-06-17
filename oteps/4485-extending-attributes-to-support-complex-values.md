@@ -272,4 +272,5 @@ for additional details.
 | Aspire dashboard (OTLP)           | :white_check_mark: | serializes to JSON string |
 | ClickHouse (collector exporter)   | :white_check_mark: | serializes to JSON string, can parse JSON and query |
 | Honeycomb (OTLP)                  | :white_check_mark: | flattens if less than 5 layers deep, not array or binary data, JSON string otherwise |
+| Logfire (OTLP)                  | :white_check_mark: | stored as JSON, native support for JSON in queries |
 | New Relic (OTLP)                  | :white_check_mark: | drops the complex attribute | |
