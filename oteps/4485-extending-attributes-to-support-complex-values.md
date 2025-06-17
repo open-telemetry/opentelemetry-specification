@@ -229,7 +229,7 @@ to minimize misuse and reduce performance overhead.
 OTel SDKs that provide convenience to convert arbitrary objects to `AnyValue`
 SHOULD limit supported types to primitives, arrays, standard library collections,
 named tuples, JSON objects, and similar structures following
-[mapping to OTLP AnyValue](/specification/common/attribute-type-mapping.md#mapping-arbitrary-data-to-otlp-anyvalue).
+[mapping to OTLP AnyValue](/specification/common/attribute-type-mapping.md#converting-to-anyvalue).
 
 Falling back to a string representation of unknown objects is RECOMMENDED to
 minimize the risk of unintentional use of complex attributes.
