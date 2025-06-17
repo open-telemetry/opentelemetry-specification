@@ -39,7 +39,7 @@ This proposal uses 6 bits of information to propagate each of these
 and does not depend on built-in TraceID randomness, which is not
 sufficiently specified for probability sampling at this time.  This
 proposal closely follows [research by Otmar
-Ertl](https://arxiv.org/pdf/2107.07703.pdf).
+Ertl](https://arxiv.org/pdf/2107.07703).
 
 ### Adjusted count
 
@@ -248,7 +248,7 @@ The reasoning behind restricting the set of sampling rates is that it:
 - Makes math involving partial traces tractable.
 
 [An algorithm for making statistical inference from partially-sampled
-traces has been published](https://arxiv.org/pdf/2107.07703.pdf) that
+traces has been published](https://arxiv.org/pdf/2107.07703) that
 explains how to work with a limited number of power-of-2 sampling rates.
 
 ### Behavior of the `TraceIDRatioBased` Sampler

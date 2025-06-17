@@ -44,7 +44,7 @@ purpose.  If the simpler alternative suggested above--registering
 non-instrument-specific callbacks--were implemented instead, callers
 would demand a way to ask whether an instrument was "recording" or
 not, similar to the [`Span.IsRecording`
-API](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#isrecording).
+API](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#isrecording).
 
 Observer instruments are semantically equivalent to gauge instruments,
 except they support callbacks instead of a `Set()` operation.
