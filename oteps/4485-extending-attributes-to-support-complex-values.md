@@ -48,8 +48,12 @@ in the set of *standard* attributes.
 
 There are a number of reasons why we want to allow complex attributes on spans:
 
-- Emerging semantic conventions, such as Generative AI and GraphQL,
-  demonstrate the usefulness of including complex attributes on spans.
+- Emerging semantic conventions have demonstrated the usefulness of
+  including complex attributes on spans, such as
+  [capturing prompts and completions](https://github.com/open-telemetry/semantic-conventions/pull/2179)
+  for Generative AI
+  and [capturing request errors](https://graphql.org/learn/response/#request-errors)
+  for GraphQL.
 - Many users already add complex attributes to spans by JSON-encoding them.
   Supporting complex attributes natively enables future possibilities like
   collector transformations, better attribute truncation, and native
