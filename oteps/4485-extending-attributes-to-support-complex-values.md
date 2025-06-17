@@ -113,7 +113,7 @@ with type `AnyValue`.
 It's RECOMMENDED to expose an `AnyValue` API for type checking, ergonomics,
 and performance.
 
-Exposing multiple types of attribute sets is NOT RECOMMENDED, such as having "ExtendedAttributes" in addition "Attributes".
+Exposing multiple types of attribute sets is NOT RECOMMENDED, such as having "ExtendedAttributes" in addition to "Attributes".
 
 OTel API MUST support setting complex attributes on spans, logs, profiles,
 span links, exemplars, and as descriptive entity attributes.
