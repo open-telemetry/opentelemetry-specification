@@ -241,7 +241,7 @@ Prior art on AnyValue conversion: [Go](https://github.com/open-telemetry/opentel
 
 ## Future possibilities
 
-### Configurable OTLP exporter behavior
+### Configurable OTLP exporter behavior (both SDK and Collector)
 
 The OTLP exporter behavior for complex attributes can be made customizable on a per-signal
 basis, allowing complex attributes to be:
@@ -250,8 +250,8 @@ basis, allowing complex attributes to be:
 - serialized to JSON, or
 - dropped
 
-This option may be useful as a workaround for applications that don’t use a
-collector and whose backend does not handle complex attribute types gracefully.
+This option may be useful as a workaround for applications
+whose backend does not handle complex attribute types gracefully.
 
 ### Additional size limits
 
