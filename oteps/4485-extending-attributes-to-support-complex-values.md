@@ -168,7 +168,7 @@ the SDK MUST not add the entire `AnyValue` attribute; partial exports are not al
 
 ### Exporters
 
-OTLP exporter SHOULD, by default, pass `AnyValue` attributes to the endpoint.
+OTLP exporter SHOULD pass `AnyValue` attributes to the endpoint.
 
 Exporters for protocols that do not natively support complex values, such as Prometheus,
 SHOULD represent complex values as JSON-encoded strings following
