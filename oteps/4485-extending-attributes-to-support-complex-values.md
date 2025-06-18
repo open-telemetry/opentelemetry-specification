@@ -1,26 +1,30 @@
 # Extending attributes to support complex values
 
-* [Glossary](#glossary)
-* [Why?](#why)
+<!-- toc -->
+
+- [Glossary](#glossary)
+- [Why?](#why)
   * [Why do we want complex attributes on spans?](#why-do-we-want-complex-attributes-on-spans)
   * [Why do we want to extend standard attributes?](#why-do-we-want-to-extend-standard-attributes)
   * [Why doesn't this require a major version bump?](#why-doesnt-this-require-a-major-version-bump)
-* [How](#how)
+- [How](#how)
   * [API](#api)
   * [SDK](#sdk)
-    * [`AnyValue` implementation notes](#anyvalue-implementation-notes)
-    * [Attribute limits](#attribute-limits)
+    + [`AnyValue` implementation notes](#anyvalue-implementation-notes)
+    + [Attribute limits](#attribute-limits)
   * [Exporters](#exporters)
   * [Semantic conventions](#semantic-conventions)
   * [Proto](#proto)
-* [Trade-offs and mitigations](#trade-offs-and-mitigations)
+- [Trade-offs and mitigations](#trade-offs-and-mitigations)
   * [Backends don't support `AnyValue` attributes](#backends-dont-support-anyvalue-attributes)
   * [Arbitrary objects are dangerous](#arbitrary-objects-are-dangerous)
-* [Prototypes](#prototypes)
-* [Future possibilities](#future-possibilities)
-  * [Configurable OTLP exporter behavior](#configurable-otlp-exporter-behavior)
+- [Prototypes](#prototypes)
+- [Future possibilities](#future-possibilities)
+  * [Configurable OTLP exporter behavior (both SDK and Collector)](#configurable-otlp-exporter-behavior-both-sdk-and-collector)
   * [Additional size limits](#additional-size-limits)
-* [Backend research](#backend-research)
+- [Backend research](#backend-research)
+
+<!-- tocstop -->
 
 ## Glossary
 
