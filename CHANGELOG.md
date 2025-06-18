@@ -40,6 +40,9 @@ release.
 
 ### Compatibility
 
+- Define conversion of Prometheus native histograms to OpenTelemetry exponential histograms.
+  ([#4561](https://github.com/open-telemetry/opentelemetry-specification/pull/4561))
+
 ### SDK Configuration
 
 ### Common
