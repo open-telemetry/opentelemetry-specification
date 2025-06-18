@@ -208,6 +208,21 @@ OTel-OTLP-Exporter-Python/1.2.3
 
 The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
 
+Exporters MAY expose a configuration option to append a product identifier to the User-Agent
+header as defined in [RFC 7231][rfc-7231]. Such option should not be available as
+an environment variable since is meant to be used by [distributions][opentelemetry-distribution]
+to append their product identifier along with the exporter's one.
+
+SDKs MAY expose a similar configuration option if exporters have it. This configuration
+MUST be overridable by a signal specific option.
+
+As an example setting the option to `MyDistribution/x.y.z` in the exporter from the
+above example would report the following:
+
+```
+OTel-OTLP-Exporter-Python/1.2.3 MyDistribution/x.y.z
+```
+
 [Boolean]: ../configuration/sdk-environment-variables.md#boolean
 [Timeout]: ../configuration/sdk-environment-variables.md#timeout
 [String]: ../configuration/sdk-environment-variables.md#string
@@ -221,3 +236,4 @@ The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions use
 [otlp-http]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp
 [retryable-grpc-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures
 [retryable-http-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures-1
+[opentelemetry-distribution]: https://github.com/open-telemetry/opentelemetry.io/edit/main/content/en/docs/concepts/distributions.md#what-is-a-distribution
