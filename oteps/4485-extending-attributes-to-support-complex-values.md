@@ -66,7 +66,8 @@ There are a number of reasons why we want to allow complex attributes on spans:
   [spans and events are often thought of as being conceptual
   twins](https://opentelemetry.io/blog/2025/opentelemetry-logging-and-you/#how-is-this-different-from-other-signals),
   and that the choice between modeling something as a span or an event should not
-  be influenced by whether complex attributes are needed.
+  be influenced by whether complex attributes are needed
+  (given that logs already support complex attributes).
 
 ### Why do we want to extend standard attributes?
 
