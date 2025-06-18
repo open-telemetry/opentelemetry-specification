@@ -23,6 +23,7 @@ aliases:
   * [StateSet](#stateset)
   * [Unknown-typed](#unknown-typed)
   * [Histograms](#histograms)
+  * [Native Histograms](#native-histograms)
   * [Summaries](#summaries)
   * [Dropped Types](#dropped-types)
   * [Start Time](#start-time)
@@ -130,6 +131,29 @@ Multiple Prometheus histogram metrics MUST be merged together into a single OTLP
 * Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the histogram's sum MUST be unset.
+
+### Native Histograms
+
+A [Prometheus Native Histogram](https://prometheus.io/docs/specs/native_histograms/)
+MUST be converted to an OTLP Exponential Histogram as follows:
+
+- `Schema` is converted to the Exponential Histogram `Scale`.
+- The `NoRecordedValue` flag is set to `true` if either the `Sum` or `Count`
+  are equal to the Stale NaN value. Otherwise,
+  - `Count` is converted to Exponential Histogram `Count`.
+  - `Sum` is converted to the Exponential Histogram `Sum` if `Sum` is set.
+- `Timestamp` is converted to the Exponential Histogram `TimeUnixNano` after
+  converting milliseconds to nanoseconds.
+- `ZeroCount` is converted directly to the Exponential Histogram `ZeroCount`.
+- `ZeroThreshold`, is converted to the Exponential Histogram `ZeroThreshold`.
+- The sparse bucket layout represented by `PositiveSpans` and `PositiveDeltas` is
+  converted to the Exponential Histogram dense layout represented by `Positive`
+  bucket counts and `Offset`. The same holds for `PositiveSpans` and
+  `PositiveDeltas`. Note that Prometheus Native Histograms buckets are indexed by
+  upper boundary while Exponential Histograms are indexed by lower boundary, the
+  result being that the Offset fields are different-by-one.
+- `Min` and `Max` are not set.
+- `StartTimeUnixNano` is set to the `Created` timestamp, if available.
 
 ### Summaries
 
