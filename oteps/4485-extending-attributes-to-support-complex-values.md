@@ -121,7 +121,7 @@ and performance.
 Exposing multiple types of attribute sets is NOT RECOMMENDED, such as having "ExtendedAttributes" in addition to "Attributes".
 
 OTel API MUST support setting complex attributes on spans, logs, profiles,
-span links, exemplars, and as descriptive entity attributes.
+span links, and as descriptive entity attributes.
 
 OTel API MAY support setting complex attributes on metrics, resources,
 instrumentation scope, and span events.
