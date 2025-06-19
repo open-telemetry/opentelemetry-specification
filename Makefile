@@ -48,8 +48,6 @@ markdown-link-check:
 		-v \
 		home/repo
 
-# --max-redirects 0
-
 # This target runs markdown-toc on all files that contain
 # a comment <!-- tocstop -->.
 #
