@@ -11,6 +11,45 @@ release.
 
 ### Traces
 
+- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
+  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
+  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
+- Define CompositeSampler implementation and built-in ComposableSampler interfaces.
+  ([#4466](https://github.com/open-telemetry/opentelemetry-specification/pull/4466))
+- Define how SDK implements `Tracer.Enabled`.
+  ([#4537](https://github.com/open-telemetry/opentelemetry-specification/pull/4537))
+
+### Metrics
+
+### Logs
+
+- Stabilize `Event Name` parameter of `Logger.Enabled`.
+  ([#4534](https://github.com/open-telemetry/opentelemetry-specification/pull/4534))
+- Stabilize SDK and No-Op `Logger.Enabled`.
+  ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.46.0 (2025-06-12)
+
 ### Metrics
 
 - Prometheus receiver can expect `otel_scope_schema_url` and `otel_scope_[attribute]` labels on all metrics.
@@ -24,28 +63,17 @@ release.
 - Clarify expectations about Prometheus content negotiation for metric names.
   ([#4543](https://github.com/open-telemetry/opentelemetry-specification/pull/4543))
 
-### Logs
+### Entities
 
-### Baggage
-
-### Resource
-
-### Profiles
-
-### OpenTelemetry Protocol
-
-### Compatibility
-
-### SDK Configuration
+- Define rules for setting identifying attributes.
+  ([#4498](https://github.com/open-telemetry/opentelemetry-specification/pull/4498))
+- Define rules for entity-resource referencing model.
+  ([#4499](https://github.com/open-telemetry/opentelemetry-specification/pull/4499))
 
 ### Common
 
 - Move Instrumentation Scope definition from glossary to a dedicated document and use normative language.
   ([#4488](https://github.com/open-telemetry/opentelemetry-specification/pull/4488))
-
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.45.0 (2025-05-14)
 

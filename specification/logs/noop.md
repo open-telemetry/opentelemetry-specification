@@ -4,7 +4,7 @@ linkTitle: No-Op
 
 # Logs API No-Op Implementation
 
-**Status**: [Stable](../document-status.md), except where otherwise specified
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary> Table of Contents </summary>
@@ -58,7 +58,5 @@ The No-Op `Logger` MUST allow
 for [emitting LogRecords](./api.md#emit-a-logrecord).
 
 ### Enabled
-
-**Status**: [Development](../document-status.md)
 
 MUST always return `false`.
