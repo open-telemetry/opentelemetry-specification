@@ -164,19 +164,19 @@ Windows.
 > **IMPORTANT**: This section is non-normative and provides implementation
 > guidance only. It does not add requirements to the specification.
 
-Language SDKs have flexibility in how they implement environment variable
+Language implementations of OpenTelemetry have flexibility in how they implement environment variable
 context propagation. Two main approaches have been identified as viable.
 
 ### Approach 1: Providing a dedicated `EnvironmentContextPropagator`
 
 SDKs can create a dedicated propagator for environment variables. For example,
-the [Swift SDK][swift] implements a custom `EnvironmentContextPropagator` that
+the [OTel Swift][swift] implements a custom `EnvironmentContextPropagator` that
 handles the environment-specific logic internally, in essence decorating the
 `TextMapPropagator`.
 
 ### Approach 2: Using the carriers directly through `Setters` and `Getters`
 
-SDKs can use the existing `TextMapPropagator` interface directly with
+Language implementations can use the existing `TextMapPropagator` interface directly with
 environment-specific carriers. Go and Python SDKs follow this pattern by
 providing:
 
@@ -188,7 +188,7 @@ providing:
 ### Common Behaviors
 
 Both approaches achieve the same outcome while offering different developer
-experiences. SDK implementers may choose either approach based on their
+experiences. Language implementations may choose either approach based on their
 language's idioms and ecosystem conventions. The behaviors in both approaches
 are the same in that they:
 
