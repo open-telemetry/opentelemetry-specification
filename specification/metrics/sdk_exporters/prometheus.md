@@ -74,3 +74,9 @@ The option MAY be named `without_scope_info`, and MUST be `false` by default.
 
 A Prometheus Exporter MAY support a configuration option to produce metrics without a [target info](../../compatibility/prometheus_and_openmetrics.md#resource-attributes-1)
 metric. The option MAY be named `without_target_info`, and MUST be `false` by default.
+
+## Content Negotiation
+
+A Prometheus Exporter MUST support content negotiation to allow clients to request
+metrics in different formats based on the `Accept` header in HTTP requests. Content
+negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prometheus.io/docs/instrumenting/content_negotiation/).
