@@ -12,5 +12,10 @@
 #  https://help.github.com/en/articles/about-code-owners
 #
 
+# Entities SIG, will be owners for Resource + Entity specification.
+# This work will be folded into general Spec Sponsorship once complete
+/specification/resource/   @open-telemetry/technical-committee @open-telemetry/spec-sponsors @open-telemetry/specs-entities-approvers
+/specification/entity/   @open-telemetry/technical-committee @open-telemetry/spec-sponsors @open-telemetry/specs-entities-approvers
+
 # Global owners, will be the owners for everything in the repo. Membership is tracked via https://github.com/open-telemetry/community/blob/main/community-members.md 
 *   @open-telemetry/technical-committee @open-telemetry/spec-sponsors
