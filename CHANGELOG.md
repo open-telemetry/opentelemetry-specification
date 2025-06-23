@@ -40,6 +40,9 @@ release.
 
 ### Compatibility
 
+- Clarify expectations about Prometheus content negotiation for metric names.
+  ([#4543](https://github.com/open-telemetry/opentelemetry-specification/pull/4543))
+
 ### SDK Configuration
 
 ### Common
@@ -60,8 +63,6 @@ release.
   ([#4505](https://github.com/open-telemetry/opentelemetry-specification/pull/4505))
 - Prometheus exporter no longer exports `otel_scope_info` metric.
   ([#4505](https://github.com/open-telemetry/opentelemetry-specification/pull/4505))
-- Clarify expectations about Prometheus content negotiation for metric names.
-  ([#4543](https://github.com/open-telemetry/opentelemetry-specification/pull/4543))
 
 ### Entities
 
