@@ -66,7 +66,7 @@ It SHOULD only be possible to create `Logger` instances through a `LoggerProvide
 The `LoggerProvider` MUST implement the [Get a Logger API](api.md#get-a-logger).
 
 The input provided by the user MUST be used to create
-an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
+an [`InstrumentationScope`](../common/instrumentation-scope.md) instance which
 is stored on the created `Logger`.
 
 In the case where an invalid `name` (null or empty string) is specified, a
@@ -104,7 +104,7 @@ the [LoggerConfig](#loggerconfig) for a [Logger](#logger).
 The function MUST accept the following parameter:
 
 * `logger_scope`:
-  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  The [`InstrumentationScope`](../common/instrumentation-scope.md) of
   the `Logger`.
 
 The function MUST return the relevant `LoggerConfig`, or some signal indicating
@@ -200,13 +200,13 @@ the implementation SHOULD set it equal to the current time.
 
 ### Enabled
 
-**Status**: [Development](../document-status.md)
-
-`Enabled` MUST return `false` when:
+`Enabled` MUST return `false` when either:
 
 - there are no registered [`LogRecordProcessors`](#logrecordprocessor),
-- `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`),
-- all registered `LogRecordProcessors` implement [`Enabled`](#enabled-1),
+- **Status**: [Development](../document-status.md) - `Logger` is disabled
+  ([`LoggerConfig.disabled`](#loggerconfig) is `true`),
+- **Status**: [Development](../document-status.md) - all registered
+  `LogRecordProcessors` implement [`Enabled`](#enabled-1),
   and a call to `Enabled` on each of them returns `false`.
 
 Otherwise, it SHOULD return `true`.
@@ -368,6 +368,7 @@ in order to support filtering via [`Logger.Enabled`](api.md#enabled).
 * [Instrumentation Scope](./data-model.md#field-instrumentationscope) associated
   with the `Logger`
 * [Severity Number](./data-model.md#field-severitynumber) passed by the caller
+* [Event Name](./data-model.md#field-eventname) passed by the caller
 
 **Returns:** `Boolean`
 

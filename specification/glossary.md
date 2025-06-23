@@ -28,7 +28,6 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Exporter Library](#exporter-library)
   * [Instrumented Library](#instrumented-library)
   * [Instrumentation Library](#instrumentation-library)
-  * [Instrumentation Scope](#instrumentation-scope)
   * [Tracer Name / Meter Name / Logger Name](#tracer-name--meter-name--logger-name)
   * [Execution Unit](#execution-unit)
 - [Logs](#logs)
@@ -163,42 +162,13 @@ Example: `io.opentelemetry.contrib.mongodb`.
 
 Synonyms: *Instrumenting Library*.
 
-### Instrumentation Scope
-
-A logical unit of the application code with which the emitted telemetry can be
-associated. It is typically the developer's choice to decide what denotes a
-reasonable instrumentation scope. The most common approach is to use the
-[instrumentation library](#instrumentation-library) as the scope, however other
-scopes are also common, e.g. a module, a package, or a class can be chosen as
-the instrumentation scope.
-
-The instrumentation scope is defined by the
-(name,version,schema_url,attributes) tuple where version, schema_url, and
-attributes are optional. This tuple uniquely identifies the logical unit of the
-code that emits the telemetry. A typical approach to ensure uniqueness is to
-use the fully qualified name of the emitting code (e.g. fully qualified library
-name or fully qualified class name).
-
-The instrumentation scope is used to obtain a
-[Tracer, Meter, or Logger](#tracer-name--meter-name--logger-name).
-
-The instrumentation scope's optional Schema URL identifies the [Telemetry
-Schema](schemas/README.md) that the instrumentation's emitted
-telemetry conforms to.
-
-The instrumentation scope may have zero or more additional attributes that provide
-additional information about the scope. For example for a scope that specifies an
-instrumentation library an additional attribute may be recorded to denote the URL of the
-repository URL the library's source code is stored. Since the scope is a build-time
-concept the attributes of the scope cannot change at runtime.
-
 ### Tracer Name / Meter Name / Logger Name
 
 This refers to the `name` and (optional) `version` arguments specified when
 creating a new `Tracer` or `Meter` (see
 [Obtaining a Tracer](trace/api.md#tracerprovider)/[Obtaining a Meter](metrics/api.md#meterprovider))/[Obtaining a Logger](logs/api.md#loggerprovider).
 The name/version pair identifies the
-[Instrumentation Scope](#instrumentation-scope), for example the
+[Instrumentation Scope](common/instrumentation-scope.md), for example the
 [Instrumentation Library](#instrumentation-library) or another unit of
 application in the scope of which the telemetry is emitted.
 
@@ -240,7 +210,7 @@ Key/value pairs contained in a `Log Record`.
 
 Logs that are recorded in a format which has a well-defined structure that allows
 to differentiate between different elements of a Log Record (e.g. the Timestamp,
-the Attributes, etc). The *Syslog protocol* ([RFC 5424](https://tools.ietf.org/html/rfc5424)),
+the Attributes, etc). The *Syslog protocol* ([RFC 5424](https://datatracker.ietf.org/doc/html/rfc5424)),
 for example, defines a `structured-data` format.
 
 ### Flat File Logs

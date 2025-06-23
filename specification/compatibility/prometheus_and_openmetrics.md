@@ -51,7 +51,7 @@ This document covers OpenTelemetry compatibility with various Prometheus-related
 
 Formats used for Scraping metrics (pull):
 
-* [Prometheus text exposition format](https://github.com/Prometheus/docs/blob/777846211d502a287ab2b304cb515dc779de3474/content/docs/instrumenting/exposition_formats.md)
+* [Prometheus text exposition format](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md)
 * [Prometheus protobuf format](https://github.com/prometheus/client_model/blob/01ca24cafc7877ed5ce091083068cde086b7c3dc/io/prometheus/client/metrics.proto)
 * [OpenMetrics text format](https://github.com/prometheus/OpenMetrics/blob/1386544931307dff279688f332890c31b6c5de36/specification/OpenMetrics.md#text-format)
 * (Not yet supported by Prometheus) [OpenMetrics protobuf format](https://github.com/prometheus/OpenMetrics/blob/1386544931307dff279688f332890c31b6c5de36/specification/OpenMetrics.md#protobuf-format)
@@ -166,19 +166,14 @@ exemplar as attributes.
 
 ### Instrumentation Scope
 
-The `otel_scope_name` and `otel_scope_version` lables, if present, SHOULD be
-dropped from all metric points and used as the Instrumentation Scope name and
-version respectively. All `otel_scope_info` metrics present in a batch
-of metrics SHOULD be dropped from the incoming scrape. Labels on
-`otel_scope_info` metric points other than `otel_scope_name` and
-`otel_scope_version`, MUST be added as scope attributes to the scope with the
-matching name and version. For example, the OpenMetrics text-formatted metrics:
+Labels with `otel_scope_` prefix MUST be dropped from all metric points
+and used as the Instrumentation Scope name (`otel_scope_name`),
+version (`otel_scope_version`), schema URL (`otel_scope_schema_url`),
+attributes (`otel_scope_[attribute]`).
 
 ```
-# TYPE otel_scope_info info
-otel_scope_info{otel_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",otel_scope_version="v0.24.0",library_mascot="bear"} 1
 # TYPE http_server_duration counter
-http_server_duration{otel_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",otel_scope_version="v0.24.0"...} 1
+http_server_duration{otel_scope_name="go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp",otel_scope_schema_url="https://opentelemetry.io/schemas/1.31.0",otel_scope_version="v0.24.0",otel_scope_library_mascot="gopher"...} 1
 ```
 
 becomes:
@@ -190,7 +185,8 @@ scope_metrics:
     name: go.opentelemetry.io.contrib.instrumentation.net.http.otelhttp
     version: v0.24.0
     attributes:
-      library_mascot: bear
+      library_mascot: gopher
+  schema_url: https://opentelemetry.io/schemas/1.31.0 
   metrics:
   - name: http_server_duration
     data:
@@ -199,7 +195,7 @@ scope_metrics:
         - value: 1
 ```
 
-Metrics which do not have an `otel_scope_name` or `otel_scope_version` label
+Metrics which do not have any label with `otel_scope_` prefix
 MUST be assigned an instrumentation scope identifying the entity performing
 the translation from Prometheus to OpenTelemetry (e.g. the collector's
 prometheus receiver).
@@ -280,19 +276,13 @@ It also dictates type-specific conversion rules listed below.
 
 ### Instrumentation Scope
 
-Prometheus exporters SHOULD generate an [Info](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#info)-typed
-metric named `otel_scope_info` for each Instrumentation Scope with non-empty
-scope attributes. If present, Instrumentation Scope `name` and `version` MUST
-be added as `otel_scope_name` and `otel_scope_version` labels. Scope attributes
-MUST also be added as labels following the rules described in the
-[`Metric Attributes`](#metric-attributes) section below.
-
-Prometheus exporters MUST add the scope name as the `otel_scope_name` label and
-the scope version as the `otel_scope_version` label on all metric points by
-default, based on the scope the original data point was nested in.
-
-Prometheus exporters SHOULD provide a configuration option to disable the
-`otel_scope_info` metric and `otel_scope_` labels.
+Prometheus exporters MUST by default add
+the scope name as the `otel_scope_name` label,
+the scope version as the `otel_scope_version` label,
+the scope schema URL as the `otel_scope_schema_url` label,
+the scope attributes as labels with `otel_scope_` prefix and following the rules
+described in the [`Metric Attributes`](#metric-attributes) section below,
+on all metric points, based on the scope the original data point was nested in.
 
 ### Gauges
 

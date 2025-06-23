@@ -4,10 +4,13 @@ accept = ["200..=299", "403"]
 
 exclude = [
     # excluding links to pull requests and issues is done for performance
-    "^https://github.com/open-telemetry/opentelemetry-specification/(issue|pull)/\\d+$",
+    "^https://github.com/open-telemetry/opentelemetry-specification/(issues|pull)/\\d+$",
     # TODO (trask) look into this
     "^https://docs.google.com/document/d/1d0afxe3J6bQT-I6UbRXeIYNcTIyBQv4axfjKF4yvAPA/edit"
 ]
 
 # better to be safe and avoid failures
 max_retries = 6
+
+# this helps slow down the rate of requests to avoid rate limiting
+max_concurrency = 4

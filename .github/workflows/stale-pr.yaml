@@ -7,11 +7,15 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v3
+      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9.1.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-pr-message: 'This PR was marked stale due to lack of activity. It will be closed in 7 days.'
           close-pr-message: 'Closed as inactive. Feel free to reopen if this PR is still being worked on.'
           exempt-pr-labels: 'release:after-ga'
-          days-before-stale: 7
-          days-before-close: 7
+          # opt out of defaults to avoid marking issues as stale
+          days-before-stale: -1
+          days-before-close: -1
+          # overrides the above only for pull requests
+          days-before-pr-stale: 7
+          days-before-pr-close: 7
