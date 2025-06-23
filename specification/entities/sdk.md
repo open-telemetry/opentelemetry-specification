@@ -11,7 +11,7 @@ linkTitle: SDK
 - [Overview](#overview)
 - [Entity](#entity)
   * [Entity Creation](#entity-creation)
-  * [Entity properties](#entity-properties)
+  * [Retrieving Entity properties](#retrieving-entity-properties)
 - [EntityDetector](#entitydetector)
   * [EntityDetector operations](#entitydetector-operations)
     + [Detect a set of `Entity`](#detect-a-set-of-entity)
@@ -53,14 +53,17 @@ The SDK MUST accept the following parameters:
 The SDK MAY use a builder pattern or other language convention for
 constructing entities.
 
-### Entity properties
+### Retrieving Entity properties
 
-The SDK MUST allow access to Entity properties:
+The API MUST allow retrieving the `type`, `identity`, `description` and
+Schema URL in the following forms:
 
-- The entity's `type`.
-- The entity's `identity` attributes.
-- The entity's `description` attributes.
-- The SchemaURL associated with the entity.
+- Get the  entity's `type` as a string.
+- Get the entity's `identity` as an
+  [Attribute Collection](../common/README.md#attribute-collections).
+- Get the entity's `description` as an
+  [Attribute Collection](../common/README.md#attribute-collections).
+- Get the SchemaURL associated with the entity as a string or empty value.
 
 These MAY be provided using language conventions, e.g. public
 fields, "Getter" methods, etc.
@@ -97,9 +100,7 @@ complete.
 - Constructing a `Resource` for the SDK from detectors.
 - Dealing with conflicts between detectors and raw `Resource`.
 - Providing SDK-internal access to the final `Resource`.
-
-An `EntityProvider` MAY decide when to run entity detection
-and update the current `Resource`.
+- Deduplicating and merging discovered `Entity`s.
 
 ### EntityProvider creation
 
@@ -202,11 +203,7 @@ resolve the conflict.
 
 ### Resolve conflicts in Schema URL
 
-If the detected `Entity` set and raw `Resource` all share the
-same Schema URL, then this Schema URL SHOULD be returned.
+If all detected entities and initial `Resource` have the same URL, then
+this is chosen for the resulting `Resource`.
 
-If the detected `Entity` set have non-empty Schema URLs and
-these conflict, then Schema URL SHOULD NOT be set on the Resource.
-
-If the detected `Entity` set is empty or does not have any Schema
-URLs defined, then the raw `Resource` Schema URL SHOULD be used.
+Otherwise, the Schema URL of the resulting `Resource` SHOULD be empty.
