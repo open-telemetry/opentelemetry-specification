@@ -128,7 +128,7 @@ that allow threads or concurrency.
 The returned resource SHOULD represent the most up-to-date
 `Resource`, which includes all `Entity` found from
 `EntityDetector`s and any original `Resource`.
-The`EntityProvider` SHOULD NOT attempt to use `EntityDetector`s
+The `EntityProvider` SHOULD NOT attempt to use `EntityDetector`s
 every time this method is called, but instead cache a a result.
 
 ### Dealing with conflicts in Entity and Resource
