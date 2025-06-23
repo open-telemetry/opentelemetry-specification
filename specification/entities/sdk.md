@@ -94,9 +94,9 @@ complete.
 
  The `EntityProvider` is responsible for the following:
 
-  - Constructing a `Resource` for the SDK from detectors.
-  - Dealing with conflicts between detectors and raw `Resource`.
-  - Providing SDK-internal access to the final `Resource`.
+- Constructing a `Resource` for the SDK from detectors.
+- Dealing with conflicts between detectors and raw `Resource`.
+- Providing SDK-internal access to the final `Resource`.
 
 An `EntityProvider` MAY decide when to run entity detection
 and update the current `Resource`.
@@ -108,8 +108,8 @@ The SDK MUST accept the following parameters:
 - `detectors`: A collection or set of `EntityDetector`s.
   Note: SDKs MUST provide a mechanism to prioritize or order
   `EntityDetector`s.
-- (optional) `resource`: A `Resource` created using the
-  
+- (optional) `resource`: A `Resource` created using existing
+  Resource SDK.
 
 ### EntityProvider operations
 
@@ -154,7 +154,7 @@ Finally, select a Schema URL for the `Resource` by
 The resulting `Resource` should include the remaining `Entity`
 set, raw `Attribute`s and Schema URL.
 
-#### Construct a set of detected entities.
+#### Construct a set of detected entities
 
 Construct a set of detected entities (`E`)
 
@@ -175,8 +175,8 @@ Construct a set of detected entities (`E`)
           - otherwise, ignore the attribute.
       - If the entity `identity` is the same, but `schema_url` is
         different, drop the new entity (`d'`).
-        _Note: SDKs MAY provide configuration to preserve
-        non-conflicting description attributes in this case._
+        *Note: SDKs MAY provide configuration to preserve
+        non-conflicting description attributes in this case.*
       - If the entity identity is different, drop the new
         entity (`d'`).
       - Otherwise, add the detected entity (`d'`) to the set of
