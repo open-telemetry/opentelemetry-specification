@@ -83,7 +83,7 @@ The `EntityDetector` MUST provide the following functions:
 This operation MAY take input parameters related to the environment
 the SDK is running in, or used for SDK diagnostics and debugging.
 
-This operation MUST return a collection or set of `Entity` objects
+This operation MUST return a collection of `Entity` objects
 that were detected by the `EntityDetector`.
 
 This operation MAY return an error, in the event the detection
