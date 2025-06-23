@@ -21,7 +21,7 @@ linkTitle: SDK
     + [Providing the current Resource](#providing-the-current-resource)
   * [Dealing with conflicts in Entity and Resource](#dealing-with-conflicts-in-entity-and-resource)
   * [Merge Algorithm](#merge-algorithm)
-    + [Construct a set of detected entities.](#construct-a-set-of-detected-entities)
+    + [Construct a set of detected entities](#construct-a-set-of-detected-entities)
   * [Resolve conflicts with raw attributes](#resolve-conflicts-with-raw-attributes)
   * [Resolve conflicts in Schema URL](#resolve-conflicts-in-schema-url)
 
