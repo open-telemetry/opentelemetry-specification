@@ -46,6 +46,9 @@ release.
 
 ### Supplementary Guidelines
 
+- Add context propagation guideline for SQL Server.
+  ([#4567](https://github.com/open-telemetry/opentelemetry-specification/pull/4567))
+
 ### OTEPs
 
 ## v1.46.0 (2025-06-12)
