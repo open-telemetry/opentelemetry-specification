@@ -249,7 +249,7 @@ metric points, the exporter SHOULD warn the user through error logging.
 
 The Name of an OTLP metric MUST be added as the
 [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
-Prometheus naming conventions require metric names to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Invalid characters
+Prometheus naming conventions encourage metric names to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
 in the metric name SHOULD be replaced with the `_` character, aiming for compatibility with Prometheus conventions. Multiple
 consecutive `_` characters SHOULD be replaced with a single `_` character.
 
