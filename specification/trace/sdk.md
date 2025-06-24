@@ -19,6 +19,7 @@ linkTitle: SDK
   * [ForceFlush](#forceflush)
 - [Tracer](#tracer)
   * [TracerConfig](#tracerconfig)
+  * [Enabled](#enabled)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
@@ -37,6 +38,16 @@ linkTitle: SDK
       - [`TraceIdRatioBased` sampler compatibility warning](#traceidratiobased-sampler-compatibility-warning)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
+    + [CompositeSampler](#compositesampler)
+      - [ComposableSampler](#composablesampler)
+        * [GetSamplingIntent](#getsamplingintent)
+      - [Built-in ComposableSamplers](#built-in-composablesamplers)
+        * [ComposableAlwaysOn](#composablealwayson)
+        * [ComposableAlwaysOff](#composablealwaysoff)
+        * [ComposableTraceIDRatioBased](#composabletraceidratiobased)
+        * [ComposableParentThreshold](#composableparentthreshold)
+        * [ComposableRuleBased](#composablerulebased)
+        * [ComposableAnnotating](#composableannotating)
   * [Sampling Requirements](#sampling-requirements)
     + [TraceID randomness](#traceid-randomness)
     + [Random trace flag](#random-trace-flag)
@@ -198,6 +209,18 @@ It consists of the following parameters:
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
+
+### Enabled
+
+**Status**: [Development](../document-status.md)
+
+`Enabled` MUST return `false` when either:
+
+- there are no registered [`SpanProcessors`](#span-processor),
+- `Tracer` is disabled ([`TracerConfig.disabled`](#tracerconfig) is `true`).
+
+Otherwise, it SHOULD return `true`.
+It MAY return `false` to support additional optimizations and features.
 
 ## Additional Span Interfaces
 
@@ -418,7 +441,7 @@ specification, the Sampler decision is more nuanced: only a portion of
 the identifier is used, after checking whether the OpenTelemetry
 TraceState field contains an explicit randomness value.
 
-[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
+[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
 
 ##### `TraceIdRatioBased` sampler configuration
 
@@ -516,9 +539,134 @@ The following configuration properties should be available when creating the sam
 * polling interval - polling interval for getting configuration from remote
 * initial sampler - initial sampler that is used before the first configuration is fetched
 
-[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#remote-sampling
-[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/apis/#remote-sampling-configuration-stable
-[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#adaptive-sampling
+[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#remote-sampling
+[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/architecture/apis/#remote-sampling-configuration-stable
+[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#adaptive-sampling
+
+#### CompositeSampler
+
+**Status**: [Development](../document-status.md)
+
+CompositeSampler is a decorator that implements the standard `Sampler` interface but uses a composition of samplers to make its decisions.
+
+The CompositeSampler takes a ComposableSampler as input and delegates the sampling decision to that interface.  See [Probability Sampling in TraceState](./tracestate-probability-sampling.md) for more details.
+
+##### ComposableSampler
+
+ComposableSampler is a specialized interface that extends the standard Sampler functionality. It introduces a composable approach to sampling by defining a new method called `GetSamplingIntent`, which allows multiple samplers to work together in making a sampling decision.
+
+###### GetSamplingIntent
+
+Returns a SamplingIntent structure that indicates the sampler's preference for sampling a Span, without actually making the final decision.
+
+**Required arguments:**
+
+* All of the original Sampler API parameters are included
+* Parent context, threshold, incoming trace state, and trace flag
+  information MAY be precomputed so that ComposableSamplers do not
+  repeatedly probe the Context for this information.
+
+Note: ComposableSamplers MUST NOT modify the parameters passed to
+delegate GetSamplingIntent methods, as they are considered read-only
+state.
+
+**Return value:**
+
+The method returns a `SamplingIntent` structure with the following elements:
+
+* `threshold` - The sampling threshold value. A lower threshold increases the likelihood of sampling.
+* `threshold_reliable` - A boolean indicating if the threshold can be reliably used for
+   [Span-to-Metrics estimation](./tracestate-probability-sampling.md#sampling-related-terms).
+* `attributes_provider` - An optional provider of attributes to be added to the span if it is sampled.
+* `trace_state_provider` - An optional provider of a modified TraceState.
+
+Note that `trace_state_provider` may be a significant source of
+complexity.  ComposableSamplers MUST NOT modify the OpenTelemetry
+TraceState (i.e., the `ot` sub-key of TraceState).  The calling
+CompositeSampler SHOULD update the threshold of the outgoing
+TraceState (unless `!threshold_reliable`) and that the explicit
+randomness values MUST not be modified.
+
+##### Built-in ComposableSamplers
+
+###### ComposableAlwaysOn
+
+* Always returns a `SamplingIntent` with threshold set to sample all spans (threshold = 0)
+* Sets `threshold_reliable` to `true`
+* Does not add any attributes
+
+###### ComposableAlwaysOff
+
+* Always returns a `SamplingIntent` with no threshold, indicating all spans should be dropped
+* Sets `threshold_reliable` to `false`
+* Does not add any attributes
+
+###### ComposableTraceIDRatioBased
+
+* Returns a `SamplingIntent` with threshold determined by the configured sampling ratio
+* Sets `threshold_reliable` to `true`
+* Does not add any attributes
+
+**Required parameters:**
+
+* `ratio` - A value between `2^-56` and 1.0 (inclusive) representing the desired probability of sampling.
+
+A ratio value of 0 is considered non-probabilistic. For the zero case
+a `ComposableAlwaysOff` instance SHOULD be returned instead.
+
+###### ComposableParentThreshold
+
+* For spans without a parent context, delegate to the root sampler
+* For spans with a parent context, returns a `SamplingIntent` that propagates the parent's sampling decision
+* Returns the parent's threshold if available; otherwise, if the parent's *sampled* flag is set, returns threshold=0; otherwise, if the parent's *sampled* flag is not set, no threshold is returned.
+* Sets `threshold_reliable` to match the parent's reliability, which is true if the parent had a threshold.
+* Does not add any attributes
+
+**Required parameters:**
+
+* `root` - A delegate for sampling spans without a parent context.
+
+###### ComposableRuleBased
+
+* Evaluates a series of rules based on predicates and returns the `SamplingIntent` from the first matching sampler
+* If no rules match, returns a non-sampling intent
+
+**Required parameters:**
+
+* `rules` - A list of (Predicate, ComposableSampler) pairs, where Predicate is a function that evaluates whether a rule applies
+
+###### ComposableAnnotating
+
+* Delegates the sampling decision to another sampler but adds attributes to sampled spans
+* Returns a `SamplingIntent` that combines the delegate's threshold with additional attributes
+
+**Required parameters:**
+
+* `attributes` - Attributes to add to sampled spans
+* `delegate` - The underlying sampler that makes the actual sampling decision
+
+**Example configuration:**
+
+An example of creating a composite sampler configuration:
+
+```
+// Create a rule-based sampler for root spans
+rootSampler = ComposableRuleBased([
+  (isHealthCheck, ComposableAlwaysOff),
+  (isCheckout, ComposableAlwaysOn),
+  (isAnything, ComposableTraceIDRatio(0.1))
+])
+
+// Create a parent-based sampler for child spans
+finalSampler = ComposableParentThreshold(rootSampler)
+```
+
+This example creates a configuration where:
+
+- Health check endpoints are never sampled
+- Checkout endpoints are always sampled
+- Other root spans are sampled at 10%
+- Child spans follow their parent's sampling decision
 
 ### Sampling Requirements
 
@@ -535,8 +683,8 @@ OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encode
 This specification recommends the use of either TraceID randomness or explicit randomness,
 which ensures that samplers always have sufficient randomness when using W3C Trace Context propagation.
 
-[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2
-[W3CCONTEXTLEVEL1]: https://www.w3.org/TR/trace-context
+[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
+[W3CCONTEXTLEVEL1]: https://www.w3.org/TR/trace-context/
 [W3CCONTEXTTRACEID]: https://www.w3.org/TR/trace-context-2/#randomness-of-trace-id
 [W3CCONTEXTTRACESTATE]: https://www.w3.org/TR/trace-context-2/#tracestate-header
 [W3CCONTEXTSAMPLEDFLAG]: https://www.w3.org/TR/trace-context-2/#sampled-flag

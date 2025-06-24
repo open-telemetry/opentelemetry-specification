@@ -12,3 +12,4 @@ ol-prefix:
   style: ordered
 no-inline-html: false
 fenced-code-language: false
+descriptive-link-text: false

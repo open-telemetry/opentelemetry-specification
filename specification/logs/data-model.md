@@ -302,6 +302,8 @@ SeverityNumber range|Range name|Meaning
 17-20               |ERROR     |An error event. Something went wrong.
 21-24               |FATAL     |A fatal error such as application or system crash.
 
+`SeverityNumber=0` MAY be used to represent an unspecified value.
+
 #### Mapping of `SeverityNumber`
 
 Mappings from existing logging systems and formats (or **source format** for

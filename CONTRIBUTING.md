@@ -9,7 +9,7 @@ requirements and recommendations.
 ## Sign the CLA
 
 Before you can contribute, you will need to sign the [Contributor License
-Agreement](https://identity.linuxfoundation.org/projects/cncf).
+Agreement](https://easycla.lfx.linuxfoundation.org/).
 
 ## Proposing a change
 
@@ -56,7 +56,7 @@ Be sure to clearly define the specification requirements using appropriate
 keywords as defined in [Notation Conventions and
 Compliance](./specification/README.md#notation-conventions-and-compliance),
 while making sure to heed the guidance laid out in
-[RFC2119](https://tools.ietf.org/html/rfc2119) about the sparing use of
+[RFC2119](https://datatracker.ietf.org/doc/html/rfc2119) about the sparing use of
 imperatives:
 
 > Imperatives of the type defined in this memo must be used with care
@@ -211,7 +211,7 @@ Everyone is welcome to contribute to the OpenTelemetry specification via GitHub
 pull requests (PRs).
 
 To [create a new
-PR](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request),
+PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request),
 fork the project in GitHub and clone the upstream repo:
 
 ```sh
@@ -236,7 +236,7 @@ $ git push fork feature
 Open a pull request against the main `opentelemetry-specification` repo.
 
 If the PR is not ready for review, please mark it as
-[`draft`](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
+[`draft`](https://github.blog/news-insights/product-news/introducing-draft-pull-requests/).
 
 For non-trivial changes, please update the [CHANGELOG](./CHANGELOG.md).
 

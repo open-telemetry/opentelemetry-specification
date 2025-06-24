@@ -33,7 +33,7 @@ A default implementation of a detector that reads resource data from the
 `OTEL_RESOURCE` environment variable will be included in the SDK. The
 environment variable will contain of a list of key value pairs, and these are
 expected to be represented in a format similar to the [W3C
-Baggage](https://github.com/w3c/baggage/blob/master/baggage/HTTP_HEADER_FORMAT.md#header-content),
+Baggage](https://github.com/w3c/baggage/blob/main/baggage/HTTP_HEADER_FORMAT.md#header-content),
 except that additional semi-colon delimited metadata is not supported, i.e.:
 `key1=value1,key2=value2`. If the user does not specify any resource, this
 detector will be run by default.
@@ -149,7 +149,7 @@ specification](https://github.com/census-instrumentation/opencensus-specs/blob/m
 ### Existing OpenTelemetry implementations
 
 - Resource detection implementation in JS SDK
-  [here](https://github.com/open-telemetry/opentelemetry-js/tree/master/packages/opentelemetry-resources):
+  [here](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-resources):
   The JS implementation is very similar to this proposal. This proposal states
   that the SDK will allow detectors to be passed into telemetry providers
   directly instead of just having a global `DetectResources` function which the
