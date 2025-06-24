@@ -40,6 +40,9 @@ release.
 
 ### Compatibility
 
+- Clarify expectations about Prometheus content negotiation for metric names.
+  ([#4543](https://github.com/open-telemetry/opentelemetry-specification/pull/4543))
+
 ### SDK Configuration
 
 ### Common
