@@ -1,4 +1,4 @@
-Compatibility Considerations for SQL Server
+# Compatibility Considerations for SQL Server
 
 **Status**: [Development](../../specification/document-status.md)
 
