@@ -165,7 +165,7 @@ reserved for built-in resource detectors published with language SDKs:
   attributes.
 * `service`: Populates `service.name` based
   on [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
-  environment variable; populates `service.instance.id`
+  environment variable; SHOULD populate `service.instance.id`
   as [defined here](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-attributes).
 
 ### Specifying resource information via an environment variable
