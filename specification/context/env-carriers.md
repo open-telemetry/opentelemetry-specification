@@ -135,9 +135,9 @@ When spawning child processes:
 - When spawning multiple child processes with different contexts or baggage,
   each child SHOULD receive its own copy of the environment variables with
   appropriate information.
-- The onus is on the end-user for receiving the set context from the SDK and
-  passing it to it's own process spawning mechanism. The language implementations MUST NOT handle
-  spawning processes.
+- The onus is on the application owner for receiving the set context from the
+  SDK and passing it to it's own process spawning mechanism. The language
+  implementations MUST NOT handle spawning processes.
 
 #### Security
 
@@ -164,8 +164,9 @@ Windows.
 > **IMPORTANT**: This section is non-normative and provides implementation
 > guidance only. It does not add requirements to the specification.
 
-Language implementations of OpenTelemetry have flexibility in how they implement environment variable
-context propagation. Two main approaches have been identified as viable.
+Language implementations of OpenTelemetry have flexibility in how they implement
+environment variable context propagation. Two main approaches have been
+identified as viable.
 
 ### Approach 1: Providing a dedicated `EnvironmentContextPropagator`
 
@@ -183,7 +184,7 @@ providing:
 - `EnvironmentGetter` - creates an in-memory copy of the current environment
   variables and reads context from that copy.
 - `EnvironmentSetter` - writes context to a dictionary/map and provides the
-  dictionary/map to the end-user for them to use when spawning processes.
+  dictionary/map to the application owner for them to use when spawning processes.
 
 ### Common Behaviors
 
@@ -195,6 +196,6 @@ are the same in that they:
 1. **Extract context**: Read from environment variables and delegate to the
    configured `TextMapPropagator` (e.g., W3C, B3) for parsing
 2. **Inject context**: Return a dictionary/map of environment variables that
-   users can pass to their process spawning libraries
+   application owners can pass to their process spawning libraries
 
 [swift]: https://github.com/open-telemetry/opentelemetry-swift/blob/main/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
