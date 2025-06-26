@@ -29,4 +29,4 @@ to construct schema-appropriate values.
 
 ## Prior art and alternatives
 
-Tagging service resources with their version is generally suggested by analysis tools -- see [JAEGER_TAGS](https://www.jaegertracing.io/docs/1.8/client-features/) for an example -- but lacks standardization.
+Tagging service resources with their version is generally suggested by analysis tools -- see [JAEGER_TAGS](https://www.jaegertracing.io/docs/1.8/client-libraries/client-features/) for an example -- but lacks standardization.

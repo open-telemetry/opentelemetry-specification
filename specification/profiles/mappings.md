@@ -14,7 +14,7 @@ This document defines the required attributes of [`Mapping`](../../oteps/profile
 ## Attributes
 
 A message representing a `Mapping` MUST have at least one of the following
-[process attributes](https://opentelemetry.io/docs/specs/semconv/attributes-registry/process/#process-attributes):
+[process attributes](https://opentelemetry.io/docs/specs/semconv/registry/attributes/process/#process-attributes):
 
 - `process.executable.build_id.gnu`
 - `process.executable.build_id.go`
