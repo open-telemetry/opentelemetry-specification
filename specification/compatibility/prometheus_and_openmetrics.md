@@ -134,8 +134,7 @@ Multiple Prometheus histogram metrics MUST be merged together into a single OTLP
 
 ### Native Histograms
 
-A [Prometheus Native Histogram](https://prometheus.io/docs/specs/native_histograms/)
-MUST be converted to an OTLP Exponential Histogram as follows:
+A [Prometheus Native Histogram](https://prometheus.io/docs/specs/native_histograms/) with standard (exponential) schema, that is schemas -4 to 8, MUST be converted to an OTLP Exponential Histogram as follows:
 
 - `Schema` is converted to the Exponential Histogram `Scale`.
 - The `NoRecordedValue` flag is set to `true` if either the `Sum` or `Count`
