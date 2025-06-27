@@ -262,7 +262,7 @@ The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in P
 
 The resulting unit SHOULD be added to the metric as
 [UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily).
-A suffix to the metric name MAY be added unless the metric name already ends with the
+A suffix to the metric name SHOULD be added unless the metric name already ends with the
 unit (before type-specific suffixes). The
 unit suffix comes before any type-specific suffixes.
 
