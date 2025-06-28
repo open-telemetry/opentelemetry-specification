@@ -57,3 +57,21 @@ By contributing to OpenTelemetry Specification repository, you agree that your c
 [OpenTelemetry]: https://opentelemetry.io
 [latest release]: https://github.com/open-telemetry/opentelemetry-specification/releases/latest
 [opentelemetry.io/docs/specs/otel]: https://opentelemetry.io/docs/specs/otel/
+
+## Maintainers
+
+- [OpenTelemetry Technical Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#technical-committee)
+
+For more information about the maintainer role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#maintainer).
+
+## Approvers
+
+- [OpenTelemetry Specification Sponsors](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto)
+
+For more information about the approver role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#approver).
+
+## Triagers
+
+- [OpenTelemetry Governance Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#governance-committee)
+
+For more information about the triager role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#triager).
