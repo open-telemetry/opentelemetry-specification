@@ -70,8 +70,6 @@ If the Prometheus exporter supports such configuration it MUST be named `transla
 - `NoUTF8EscapingWithSuffixes` will disable changing special characters to `_`. Special suffixes like units and `_total` for counters will be attached.
 - `NoTranslation`. This strategy bypasses all metric and label name translation, passing them through unaltered.
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without the UNIT metadata. The option MAY be named `without_units`, and MUST be `false` by default. Attention: this option isn't related to unit suffixes.
-
 A Prometheus Exporter MAY support a configuration option to produce metrics without [scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
 The option MAY be named `without_scope_info`, and MUST be `false` by default.
 
