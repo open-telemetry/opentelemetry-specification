@@ -156,7 +156,6 @@ MUST be converted to an OTLP Exponential Histogram as follows:
   result being that the Offset fields are different-by-one.
 - `Min` and `Max` are not set.
 - `StartTimeUnixNano` is set to the `Created` timestamp, if available.
-- `IsMonotonic` is set to `true`.
 - `AggregationTemporality` is set to `cumulative`.
 
 Native histograms of the float or gauge flavors MUST be dropped.
