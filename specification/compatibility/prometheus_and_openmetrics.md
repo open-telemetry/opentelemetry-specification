@@ -378,9 +378,8 @@ OpenTelemetry Metric Attributes MUST be converted to
 String Attribute values are converted directly to Metric Attributes, and
 non-string Attribute values MUST be converted to string attributes following
 the [attribute specification](../common/README.md#attribute).  Prometheus
-naming conventions required to match the following regex:
-`[a-zA-Z_]([a-zA-Z0-9_])*`.  Metrics from OpenTelemetry with unsupported
-Attribute names SHOULD replace invalid characters with the `_` character.
+naming conventions encourage metric names to match the following regex:
+`[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replace with the `_` character.
 Multiple consecutive `_` characters SHOULD be replaced with a single `_`
 character. This may cause ambiguity in scenarios where multiple similar-named
 attributes share invalid characters at the same location.  In such unlikely
