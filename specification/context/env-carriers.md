@@ -136,7 +136,7 @@ When spawning child processes:
   each child SHOULD receive its own copy of the environment variables with
   appropriate information.
 - The onus is on the application owner for receiving the set context from the
-  SDK and passing it to it's own process spawning mechanism. The language
+  SDK and passing it to its own process spawning mechanism. The language
   implementations MUST NOT handle spawning processes.
 
 #### Security
