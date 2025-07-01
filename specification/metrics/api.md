@@ -121,7 +121,7 @@ The `MeterProvider` MUST provide the following functions:
 This API MUST accept the following parameters:
 
 * `name`: Specifies the name of the [instrumentation
-  scope](../glossary.md#instrumentation-scope), such as the
+  scope](../common/instrumentation-scope.md), such as the
   [instrumentation library](../glossary.md#instrumentation-library) (e.g.
   `io.opentelemetry.contrib.mongodb`), package,
   module or class name. If an application or library has built-in OpenTelemetry
@@ -200,7 +200,7 @@ identifying fields are equal.
 #### Instrument name syntax
 
 The instrument name syntax is defined below using the [Augmented Backus-Naur
-Form](https://tools.ietf.org/html/rfc5234):
+Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
 instrument-name = ALPHA 0*254 ("_" / "." / "-" / "/" / ALPHA / DIGIT)

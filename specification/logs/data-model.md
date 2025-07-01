@@ -303,6 +303,8 @@ events. Larger numerical values in each range represent more important (more
 severe) events. For example `SeverityNumber=17` describes an error that is less
 critical than an error with `SeverityNumber=20`.
 
+`SeverityNumber=0` MAY be used to represent an unspecified value.
+
 #### Mapping of `SeverityNumber`
 
 Mappings from existing logging systems and formats (or **source format** for
@@ -450,9 +452,9 @@ This field is optional.
 
 ### Field: `InstrumentationScope`
 
-Type: [Instrumentation Scope](../glossary.md#instrumentation-scope).
+Type: [Instrumentation Scope](../common/instrumentation-scope.md).
 
-Description: the [instrumentation scope](../glossary.md#instrumentation-scope).
+Description: the [instrumentation scope](../common/instrumentation-scope.md).
 Multiple occurrences of events coming from the same scope can happen across time and
 they all have the same value of `InstrumentationScope`. This field is optional.
 

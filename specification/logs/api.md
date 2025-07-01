@@ -67,7 +67,7 @@ The `LoggerProvider` MUST provide the following functions:
 This API MUST accept the following [instrumentation scope](data-model.md#field-instrumentationscope)
 parameters:
 
-* `name`: Specifies the name of the [instrumentation scope](../glossary.md#instrumentation-scope),
+* `name`: Specifies the name of the [instrumentation scope](../common/instrumentation-scope.md),
   such as the [instrumentation library](../glossary.md#instrumentation-library)
   (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
   If an application or library has built-in OpenTelemetry instrumentation, both
@@ -143,7 +143,7 @@ The API SHOULD accept the following parameters:
   if unspecified then MUST use current Context.
   When only explicit Context is supported, accepting this parameter is REQUIRED.
 - [Severity Number](./data-model.md#field-severitynumber) (optional)
-- **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
+- [Event Name](./data-model.md#field-eventname) (optional)
 
 This API MUST return a language idiomatic boolean type. A returned value of
 `true` means the `Logger` is enabled for the provided arguments, and a returned

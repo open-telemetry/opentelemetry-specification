@@ -12,3 +12,5 @@ ol-prefix:
   style: ordered
 no-inline-html: false
 fenced-code-language: false
+no-duplicate-heading: false
+descriptive-link-text: false
