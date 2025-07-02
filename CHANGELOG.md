@@ -44,6 +44,8 @@ release.
 
 - Clarify expectations about Prometheus content negotiation for metric names.
   ([#4543](https://github.com/open-telemetry/opentelemetry-specification/pull/4543))
+- Define conversion of Prometheus native histograms to OpenTelemetry exponential histograms.
+  ([#4561](https://github.com/open-telemetry/opentelemetry-specification/pull/4561))
 
 ### SDK Configuration
 
