@@ -156,7 +156,7 @@ implementations.
 Enum values SHOULD be interpreted in a case-insensitive manner.
 
 For variables which accept a known value out of a set, i.e., an enum value,
-implementations MAY support additional values not listed here. 
+implementations MAY support additional values not listed here.
 
 For variables accepting an enum value, if the user provides a value
 the implementation does not recognize, the implementation MUST generate
