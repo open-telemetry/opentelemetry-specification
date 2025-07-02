@@ -146,7 +146,7 @@ e.g. the maximum milliseconds representable by a 32-bit integer).
 
 String values are sub-classified into:
 
-* [Enum](#enum).
+* [Enum][].
 
 Normally, string values include notes describing how they are interpreted by
 implementations.
@@ -161,6 +161,8 @@ the setting.
 
 If a null object (empty, no-op) value is acceptable, then the enum value
 representing it MUST be `"none"`.
+
+Enum values SHOULD be interpreted in a case-insensitive manner.
 
 ## General SDK Configuration
 

@@ -47,6 +47,9 @@ release.
 
 ### SDK Configuration
 
+- Enum values provided via environment variables SHOULD be interpreted in a case-insensitive manner.
+  ([#x](https://github.com/open-telemetry/opentelemetry-specification/pull/x))
+
 ### Common
 
 ### Supplementary Guidelines
