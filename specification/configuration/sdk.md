@@ -1,6 +1,6 @@
 # Configuration SDK
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md) except where otherwise specified
 
 <!-- toc -->
 
@@ -18,7 +18,7 @@
     + [Register ComponentProvider](#register-componentprovider)
   * [Examples](#examples)
     + [Via configuration API](#via-configuration-api)
-    + [Via OTEL_EXPERIMENTAL_CONFIG_FILE](#via-otel_experimental_config_file)
+    + [Via OTEL_CONFIG_FILE](#via-otel_config_file)
   * [References](#references)
 
 <!-- tocstop -->
@@ -56,6 +56,8 @@ idiomatic for their language. If an SDK needs to expose a class or interface,
 the name `Configuration` is RECOMMENDED.
 
 ### ConfigProvider
+
+**Status**: [Development](../document-status.md)
 
 The SDK implementation of [`ConfigProvider`](./api.md#configprovider) MUST be
 created using a [`ConfigProperties`](./api.md#configproperties) representing
@@ -360,10 +362,10 @@ ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```
 
-#### Via OTEL_EXPERIMENTAL_CONFIG_FILE
+#### Via OTEL_CONFIG_FILE
 
 Setting
-the [OTEL_EXPERIMENTAL_CONFIG_FILE](./sdk-environment-variables.md#declarative-configuration)
+the [OTEL_CONFIG_FILE](./sdk-environment-variables.md#declarative-configuration)
 environment variable (for languages that support it) provides users a convenient
 way to initialize OpenTelemetry components without needing to learn
 language-specific configuration details or use a large number of environment
@@ -373,11 +375,11 @@ resemble:
 
 ```shell
 # Set the required env var to the location of the configuration file
-export OTEL_EXPERIMENTAL_CONFIG_FILE="/app/sdk-config.yaml"
+export OTEL_CONFIG_FILE="/app/sdk-config.yaml"
 ```
 
 ```java
-// Initialize SDK using autoconfigure model, which recognizes that OTEL_EXPERIMENTAL_CONFIG_FILE is set and configures the SDK accordingly
+// Initialize SDK using autoconfigure model, which recognizes that OTEL_CONFIG_FILE is set and configures the SDK accordingly
 OpenTelemetry openTelemetry = AutoConfiguredOpenTelemetrySdk.initialize().getOpenTelemetrySdk();
 
 // Access SDK components and install instrumentation
