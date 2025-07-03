@@ -184,7 +184,7 @@ providing:
 - `EnvironmentSetter` - writes context to a dictionary/map and provides the
   dictionary/map to the application owner for them to use when spawning processes.
 
-Examples: 
+Examples:
 
 - [OpenTelemetry Prototype Go Implementation][gi]
 - [OpenTelemetry Prototype Python Implementation][pi]
