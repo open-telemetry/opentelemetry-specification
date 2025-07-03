@@ -5,8 +5,6 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-
 <!-- toc -->
 
 - [Overview](#overview)
@@ -186,6 +184,14 @@ providing:
 - `EnvironmentSetter` - writes context to a dictionary/map and provides the
   dictionary/map to the application owner for them to use when spawning processes.
 
+Examples: 
+
+- [OpenTelemetry Prototype Go Implementation][gi]
+- [OpenTelemetry Prototype Python Implementation][pi]
+
+[gi]: https://github.com/open-telemetry/opentelemetry-go/pull/6778
+[pi]: https://github.com/open-telemetry/opentelemetry-python/pull/4609
+
 ### Common Behaviors
 
 Both approaches achieve the same outcome while offering different developer
@@ -194,7 +200,7 @@ language's idioms and ecosystem conventions. The behaviors in both approaches
 are the same in that they:
 
 1. **Extract context**: Read from environment variables and delegate to the
-   configured `TextMapPropagator` (e.g., W3C, B3) for parsing
+   configured `TextMapPropagator` (e.g. W3C, B3) for parsing
 2. **Inject context**: Return a dictionary/map of environment variables that
    application owners can pass to their process spawning libraries
 
