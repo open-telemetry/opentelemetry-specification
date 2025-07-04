@@ -40,6 +40,12 @@ release.
 
 ### OpenTelemetry Protocol
 
+- Add mTLS client key password and certificate revocation configuration options
+  for OTLP exporters. New environment variables: `OTEL_EXPORTER_OTLP_CLIENT_KEY_PASSWORD`,
+  `OTEL_EXPORTER_OTLP_CERTIFICATE_REVOCATION_MODE`, and `OTEL_EXPORTER_OTLP_CERTIFICATE_REVOCATION_FLAG`
+  with corresponding per-signal variants.
+  ([#XXXX](https://github.com/open-telemetry/opentelemetry-specification/pull/XXXX))
+
 ### Compatibility
 
 - Clarify expectations about Prometheus content negotiation for metric names.
