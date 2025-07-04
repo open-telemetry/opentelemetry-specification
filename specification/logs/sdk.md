@@ -258,7 +258,7 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
 The operation can be used by asynchronous processors (e.g. [Batching processor](#batching-processor))
 to avoid race conditions on the log record that is not required to be
-concurrent safe.
+concurrent-safe.
 
 ## LogRecord Limits
 
@@ -350,9 +350,13 @@ therefore it SHOULD NOT block or throw exceptions.
 For a `LogRecordProcessor` registered directly on SDK `LoggerProvider`,
 the `logRecord` mutations MUST be visible in next registered processors.
 
-A `LogRecordProcessor` may freely modify `logRecord` for the duration of
-the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
-asynchronous processing) only reads are permitted.
+A `LogRecordProcessor` may safely modify the `logRecord` for the duration of
+the `OnEmit` call. However, `ReadWriteLogRecord` is **not** required to be
+concurrent-safe. Therefore, any modification to `logRecord` concurrent
+with `OnEmit` or after `OnEmit` returns (for example, during asynchronous
+processing) may result in race conditions. To avoid such race conditions,
+it is recommended to use a clone of `logRecord` for any asynchronous
+processing, such as in a [batching processor](#batching-processor).
 
 #### Enabled
 
