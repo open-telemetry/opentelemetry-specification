@@ -350,7 +350,7 @@ therefore it SHOULD NOT block or throw exceptions.
 For a `LogRecordProcessor` registered directly on SDK `LoggerProvider`,
 the `logRecord` mutations MUST be visible in next registered processors.
 
-A `LogRecordProcessor` may safely modify the `logRecord` for the duration of
+A `LogRecordProcessor` may freely modify the `logRecord` for the duration of
 the `OnEmit` call. However, `ReadWriteLogRecord` is **not** required to be
 concurrent-safe. Therefore, any modification to `logRecord` concurrent
 with `OnEmit` or after `OnEmit` returns (for example, during asynchronous
