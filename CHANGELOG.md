@@ -29,6 +29,8 @@ release.
   ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
 - `SeverityNumber=0` MAY be used to represent an unspecified value.
   ([#4535](https://github.com/open-telemetry/opentelemetry-specification/pull/4535))
+- Improve concurrency safety description of `LogRecordProcessor.OnEmit`.
+  ([#4578](https://github.com/open-telemetry/opentelemetry-specification/pull/4578))
 
 ### Baggage
 
