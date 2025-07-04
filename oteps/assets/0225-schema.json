@@ -131,6 +131,17 @@
                 "client_certificate": {
                     "type": "string"
                 },
+                "client_key_password": {
+                    "type": "string"
+                },
+                "certificate_revocation_mode": {
+                    "type": "string",
+                    "enum": ["Online", "Offline", "NoCheck"]
+                },
+                "certificate_revocation_flag": {
+                    "type": "string",
+                    "enum": ["ExcludeRoot", "EntireChain", "EndCertificateOnly"]
+                },
                 "headers": {
                     "$ref": "#/definitions/Headers"
                 },
