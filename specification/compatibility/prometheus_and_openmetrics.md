@@ -158,7 +158,7 @@ MUST be converted to an OTLP Exponential Histogram as follows:
 - `StartTimeUnixNano` is set to the `Created` timestamp, if available.
 - `AggregationTemporality` is set to `cumulative`.
 
-Native histograms of the float or gauge flavors MUST be dropped.
+Native histograms of the float or gauge flavors MUST be dropped. Native Histograms with `Schema` outside of the range [-4, 8] MUST be dropped.
 
 ### Summaries
 
