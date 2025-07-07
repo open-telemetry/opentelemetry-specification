@@ -21,7 +21,6 @@
 - [Prototypes](#prototypes)
 - [Future possibilities](#future-possibilities)
   * [Configurable OTLP exporter behavior (both SDK and Collector)](#configurable-otlp-exporter-behavior-both-sdk-and-collector)
-  * [Additional size limits](#additional-size-limits)
 - [Backend research](#backend-research)
 
 <!-- tocstop -->
@@ -41,9 +40,6 @@ In the context of this OTEP, we use the following terminology:
   such as null (empty) value, maps, heterogeneous arrays, and combinations of those with primitives.
   Byte arrays are also considered complex attributes, as they are excluded from
   the current definition of *standard* attributes.
-
-- **AnyValue** represents a type of the attribute value that supports   as 1) API-level type or alias representing an attribute
-  or log body value 2) its SDK implementation 3) OTLP proto [AnyValue proto definition](https://github.com/open-telemetry/opentelemetry-proto/blob/42319f8b5bf330f7c3dd4a097384f9f6d5467450/opentelemetry/proto/common/v1/common.proto#L28-L40)
 
 This distinction is not intended for the spec language, but is helpful here
 because the OTEP proposes including both *simple* and *complex* attributes
@@ -115,11 +111,11 @@ without requiring a major version bump:
 
 ### API
 
-Existing APIs that create or add attributes will be extended to support value
-with type `AnyValue`.
+Existing APIs that create or add attributes will be extended to support 
+*complex attributes*.
 
-It's RECOMMENDED to expose an `AnyValue` API for type checking, ergonomics,
-and performance.
+It's RECOMMENDED to expose an `AnyValue` type - the API representing complex or 
+simple attribute value for type checking, ergonomics, and performance reasons.
 
 Exposing multiple types of attribute sets is NOT RECOMMENDED, such as having "ExtendedAttributes" in addition to "Attributes".
 
@@ -242,7 +238,8 @@ Allowing arbitrary objects as attributes is convenient but increases the risk of
 including large, sensitive, mutable, non-serializable, or otherwise problematic
 data in telemetry.
 
-It is RECOMMENDED to enforce `AnyValue` compatibility at the API level.
+It is RECOMMENDED to expose APIs that take `AnyValue`-compatible attribute values 
+that don't require additional conversion or parsing. 
 Users and instrumentations SHOULD define custom `AnyValue`-compatible models
 to minimize misuse and reduce performance overhead.
 
