@@ -143,7 +143,7 @@ MUST be converted to an OTLP Exponential Histogram as follows:
 - The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
   Stale NaN value. Otherwise,
   - `Count` is converted to Exponential Histogram `Count`.
-  - `Sum` is converted to the Exponential Histogram `Sum` if `Sum` is set.
+  - `Sum` is converted to the Exponential Histogram `Sum`.
 - `Timestamp` is converted to the Exponential Histogram `TimeUnixNano` after
   converting milliseconds to nanoseconds.
 - `ZeroCount` is converted directly to the Exponential Histogram `ZeroCount`.
