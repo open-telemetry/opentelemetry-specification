@@ -42,6 +42,9 @@ In the context of this OTEP, we use the following terminology:
   Byte arrays are also considered complex attributes, as they are excluded from
   the current definition of *standard* attributes.
 
+- **AnyValue** represents a type of the attribute value that supports   as 1) API-level type or alias representing an attribute
+  or log body value 2) its SDK implementation 3) OTLP proto [AnyValue proto definition](https://github.com/open-telemetry/opentelemetry-proto/blob/42319f8b5bf330f7c3dd4a097384f9f6d5467450/opentelemetry/proto/common/v1/common.proto#L28-L40)
+
 This distinction is not intended for the spec language, but is helpful here
 because the OTEP proposes including both *simple* and *complex* attributes
 in the set of *standard* attributes.
@@ -104,7 +107,7 @@ without requiring a major version bump:
   - SDKs will be required to only emit complex attributes under that OTLP version
     or later.
   - Stable exporters will be prohibited from emitting complex attributes by default on signals
-    other than Logs until at least Oct 1, 2025.
+    other than Logs until at least 6 months after this OTEP is merged.
   - A reasonably straightforward implementation option for backends is to just
     JSON serialize complex attributes and store them as strings.
 
