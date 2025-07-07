@@ -41,9 +41,14 @@ In the context of this OTEP, we use the following terminology:
   Byte arrays are also considered complex attributes, as they are excluded from
   the current definition of *standard* attributes.
 
-This distinction is not intended for the spec language, but is helpful here
-because the OTEP proposes including both *simple* and *complex* attributes
-in the set of *standard* attributes.
+- **AnyValue** represents the type of *any* (simple or complex) attribute value on 
+  the API, SDK, and [proto level](https://github.com/open-telemetry/opentelemetry-proto/blob/42319f8b5bf330f7c3dd4a097384f9f6d5467450/opentelemetry/proto/common/v1/common.proto#L28-L40).
+
+  It's also known as `any` in the [Log data model](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/logs/data-model.md#type-any) 
+
+This distinction between simple and complex attributes is not intended for the 
+spec language, but is helpful here because the OTEP proposes including both *simple*
+and *complex* attributes in the set of *standard* attributes.
 
 ## Why?
 
@@ -172,18 +177,19 @@ since its possible (but not recommended) to use complex attributes as a resource
 instrumentation scope, or metric attribute where equality may be
 extensively used to identify tracer/meter/logger or the time series.
 
-Span/event-to-metric aggregation pipelines MAY depend on complex (low-cardinality)
-attributes.
+It's also useful on span/event-to-metric aggregation pipelines that MAY aggregate 
+on complex (but low-cardinality) attributes.
 
 When `AnyValue` contains one or more lists of key-value pairs:
+
 - the equality of `AnyValue` instances MUST NOT be affected by the ordering of 
   the key-value pairs within the list.
 - the equality behavior is unspecified if duplicate keys are present.
 
 #### Attribute limits
 
-`AnyValue` limits are to be defined separately from this OTEP and apply to all 
-signals where `AnyValue` is allowed.
+Complex attribute limits are to be defined separately from this OTEP and apply to all 
+signals where complex attributes are allowed.
 
 This is tracked in [#4487](https://github.com/open-telemetry/opentelemetry-specification/issues/4487)
 
@@ -195,8 +201,9 @@ Exporters for protocols that do not natively support complex values, such as Pro
 SHOULD represent complex values as JSON-encoded strings following
 [attribute specification](/specification/common/README.md#attribute).
 
-When serializing `AnyValue` attributes to JSON, it is RECOMMENDED to sort map keys
-lexicographically and apply additional settings that enhance serialization stability.
+When serializing `AnyValue` objects to JSON, it is RECOMMENDED to sort lists 
+of key-value pairs lexicographically by key and apply additional settings that 
+enhance serialization stability. 
 
 ### Semantic conventions
 
