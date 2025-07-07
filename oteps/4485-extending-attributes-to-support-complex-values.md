@@ -238,11 +238,6 @@ Allowing arbitrary objects as attributes is convenient but increases the risk of
 including large, sensitive, mutable, non-serializable, or otherwise problematic
 data in telemetry.
 
-It is RECOMMENDED to expose APIs that take `AnyValue`-compatible attribute values 
-that don't require additional conversion or parsing. 
-Users and instrumentations SHOULD define custom `AnyValue`-compatible models
-to minimize misuse and reduce performance overhead.
-
 OTel SDKs that provide convenience to convert arbitrary objects to `AnyValue`
 SHOULD limit supported types to primitives, arrays, standard library collections,
 named tuples, JSON objects, and similar structures following
