@@ -177,20 +177,10 @@ Equality of `KeyValueList`s MUST be unaffected by the ordering of their `KeyValu
 
 #### Attribute limits
 
-The SDK SHOULD apply [attribute limits](/specification/common/README.md#attribute-limits)
-to complex attributes.
+`AnyValue` limits are to be defined separately from this OTEP and apply to all 
+signals where `AnyValue` is allowed.
 
-**Attribute value length limit** SHOULD be applied to all leaf `string` and `bytes` nodes in
-`AnyValue` which SHOULD be truncated to the configured limit.
-
-Leaf nodes of an `AnyValue` attribute SHOULD count toward the **attribute count limit**.
-If adding an `AnyValue` attribute would result in exceeding the attribute count limit,
-the SDK MUST not add the entire `AnyValue` attribute; partial exports are not allowed.
-
-> [!NOTE]
->
-> We should define `AnyValue` limits even if this OTEP is not merged -
-> [#4487](https://github.com/open-telemetry/opentelemetry-specification/issues/4487)
+This is tracked in [#4487](https://github.com/open-telemetry/opentelemetry-specification/issues/4487)
 
 ### Exporters
 
@@ -283,11 +273,6 @@ basis, allowing complex attributes to be:
 
 This option may be useful as a workaround for applications
 whose backend does not handle complex attribute types gracefully.
-
-### Additional size limits
-
-We can consider a separate set of attribute limits specifically for complex values,
-including a total size limit and ability to estimate `AnyValue` object size.
 
 ## Backend research
 
