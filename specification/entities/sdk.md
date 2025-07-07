@@ -9,197 +9,110 @@ linkTitle: SDK
 <!-- toc -->
 
 - [Overview](#overview)
-- [Entity](#entity)
-  * [Entity Creation](#entity-creation)
-  * [Retrieving Entity properties](#retrieving-entity-properties)
-- [EntityDetector](#entitydetector)
-  * [EntityDetector operations](#entitydetector-operations)
-    + [Detect a set of `Entity`](#detect-a-set-of-entity)
-- [EntityProvider](#entityprovider)
-  * [EntityProvider creation](#entityprovider-creation)
-  * [EntityProvider operations](#entityprovider-operations)
-    + [Providing the current Resource](#providing-the-current-resource)
-  * [Dealing with conflicts in Entity and Resource](#dealing-with-conflicts-in-entity-and-resource)
-  * [Merge Algorithm](#merge-algorithm)
-    + [Construct a set of detected entities](#construct-a-set-of-detected-entities)
-  * [Resolve conflicts with raw attributes](#resolve-conflicts-with-raw-attributes)
+- [ResourceProvider](#resourceprovider)
+  * [ResourceProvider Creation](#resourceprovider-creation)
+  * [Active Resource.](#active-resource)
   * [Resolve conflicts in Schema URL](#resolve-conflicts-in-schema-url)
+  * [Configuration](#configuration)
+  * [Shutdown](#shutdown)
+  * [ForceFlush](#forceflush)
+- [Resource](#resource)
+  * [Attach an Entity](#attach-an-entity)
 
 <!-- tocstop -->
 
 ## Overview
 
+Users of OpenTelemetry need a way for instrumentation interactions with the
+OpenTelemetry API to actually produce telemetry. The OpenTelemetry Entities SDK
+(henceforth referred to as the SDK) is an implementation of the OpenTelemetry
+API that provides users with this functionally.
+
+All language implementations of OpenTelemetry MUST provide an SDK.
+
 The Entities SDK consists of these main components:
 
-- [Entity](#entity)
-- [EntityDetector](#entitydetector)
-- [EntityProvider](#entityprovider)
+- [ResourceProvider](#resourceprovider)
+- [Resource](#resource)
 
-## Entity
+## ResourceProvider
 
-An `Entity` represents an object of interested associated with
-produced telemetry: traces, metrics, profiles or logs. Every entity
-typically describes one object for its entire lifetime.
+The ResourceProvider MUST provide a way to retrieve the current
+[Resource](../resource/sdk.md) for use in there parts of the OpenTelemetry SDK.
+This `Resource` MUST include all registered `Entity`s.
 
-### Entity Creation
+### ResourceProvider Creation
 
-The SDK MUST accept the following parameters:
+The SDK SHOULD allow the creation of multiple independent `ResourceProvider`s.
 
-- The entity's `type`.
-- The entity's `identity` attributes.
-- (optional) The entity's `description` attributes.
-- (optional) The Schema URL associated with emitted entity.
+### Active Resource
 
-The SDK MAY use a builder pattern or other language convention for
-constructing entities.
+This SDK MUST implement the
+[Get the active Resource API](api.md#get-the-active-resource).
 
-### Retrieving Entity properties
+The SDK MUST provide exactly one `Resource` per `ResourceProvider` via this API.
 
-The API MUST allow retrieving the `type`, `identity`, `description` and
-Schema URL in the following forms:
+### Configuration
 
-- Get the  entity's `type` as a string.
-- Get the entity's `identity` as an
-  [Attribute Collection](../common/README.md#attribute-collections).
-- Get the entity's `description` as an
-  [Attribute Collection](../common/README.md#attribute-collections).
-- Get the SchemaURL associated with the entity as a string or empty value.
+TBD
 
-These MAY be provided using language conventions, e.g. public
-fields, "Getter" methods, etc.
+### Shutdown
 
-## EntityDetector
+TBD
 
-An `EntityDetector` is responsible for detecting the identity and
-description for entities. A set of `EntityDetector`s will be used
-by the SDK for the purpose of determining associated `Entity`s on
-produced telemetry (metrics, log, traces).
+### ForceFlush
 
-### EntityDetector operations
+TBD
 
-The `EntityDetector` MUST provide the following functions:
+## Resource
 
-* Detect a set of `Entity`.
+The SDK `Resource` is responsible for managing the current set of associated
+`Entity`s on the `Resource.
 
-#### Detect a set of `Entity`
+The SDK MUST track associated `Entity`s on this `Resource`.
 
-This operation MAY take input parameters related to the environment
-the SDK is running in, or used for SDK diagnostics and debugging.
+### Attach an Entity
 
-This operation MUST return a collection of `Entity` objects
-that were detected by the `EntityDetector`.
+The `Resource` MUST implement the [Attach an Entity](api.md#attach-an-entity)
+operation.  This operation will try to associate a new `Entity` on the
+`Resource`.
 
-This operation MAY return an error, in the event the detection
-resulted in some kind of exceptional situation and was unable to
-complete.
+If the incoming `Entity`'s `entity_type` property is not found in the current
+set of `Entity`s on `Resource`, then the new `Entity` is added to the set.
 
-## EntityProvider
+If the incoming `Entity`'s `entity_type` property matches an existing `Entity`
+in the current set AND the `identity` attributes for these `Entity`s are
+different, then the SDK MUST ignore the new entity.
 
- The `EntityProvider` is responsible for the following:
+If the incoming `Entity`'s `entity_type` property matches an existing `Entity`
+in the current set AND the `identity` attributes for these `Entity`s are
+the same but the `schema_url` is different, then the SDK MUST ignore the new
+entity.
 
-- Constructing a `Resource` for the SDK from detectors.
-- Dealing with conflicts between detectors and raw `Resource`.
-- Providing SDK-internal access to the final `Resource`.
-- Deduplicating and merging discovered `Entity`s.
+If the incoming `Entity`'s `entity_type` property matches an existing `Entity`
+in the current set AND the `identity` attributes for these `Entity`s are
+the same AND the `schema_url` is the same, then the SDK MUST add any new
+attributes found in the `description` to the existing entity. Any new
+ `description` attributes with the same keys as existing `description`
+ attributes SHOULD replace previous values.
 
-### EntityProvider creation
+### Flattened Resource
 
-The SDK MUST accept the following parameters:
+The SDK MUST return a flattened `Resource` for usage in exporters. This
+flattened resource MUST provide the fields expected in the `Resource`
+data model:
 
-- `detectors`: A collection or set of `EntityDetector`s.
-  Note: SDKs MUST provide a mechanism to prioritize or order
-  `EntityDetector`s.
-- (optional) `resource`: A `Resource` created using existing
-  Resource SDK.
-
-### EntityProvider operations
-
-The `EntityProvider` MUST provide the following functions:
-
-- Providing the current  `Resource`.
-
-#### Providing the current Resource
-
-This operation MUST return the current, complete `Resource`
-the SDK should use when producing signals.
-
-This operation SHOULD be thread-safe, for languages or environments
-that allow threads or concurrency.
-
-The returned resource SHOULD represent the most up-to-date
-`Resource`, which includes all `Entity` found from
-`EntityDetector`s and any original `Resource`.
-The `EntityProvider` SHOULD NOT attempt to use `EntityDetector`s
-every time this method is called, but instead cache a a result.
-
-### Dealing with conflicts in Entity and Resource
-
-The `EntityProvider` MUST resolve conflicts between `Resource`
-and `EntityDetector`s that are registered with it.
-The `EntityProvider` SHOULD use the [merge algorithm](#merge-algorithm) defined to deal with these conflicts.
-
-### Merge Algorithm
-
-The `EntityProvider` SHOULD use the following algorithm
-(or an equivalent) to construct a single `Resource` using
-`EntityDetector` and `Resource` provided to it.
-
-First, [construct a set of detected entities](#construct-a-set-of-detected-entities).
-
-Next, merge loose attributes (from `Resource`) with the
-set of entities. [Resolve all conflicts](#resolve-conflicts-with-raw-attributes).
-
-Finally, select a Schema URL for the `Resource` by
-[resolving conflicts between detected entities and resource](#resolve-conflicts-in-schema-url).
-
-The resulting `Resource` should include the remaining `Entity`
-set, raw `Attribute`s and Schema URL.
-
-#### Construct a set of detected entities
-
-Construct a set of detected entities (`E`)
-
-- All entity detectors are sorted by priority (highest first).
-- For each entity detector (`D`), use the "detect a set of
-  entities" operation.
-  - For each entity detected (`d'`):
-    - If an entity (`e'`) exists in the current set of detected
-      entities (`E`) with the same `type` as the detected
-      entity (`d'`), do one of the following:
-      - If the entity `identity` and `schema_url` are the same,
-        merge the `description` of the detected entity (`d'`) into
-        the previously detected entity (`e'`).
-        - For each attribute (`da'`) in the description
-          - If the attribute key does not exist in the previously
-            detected entity (`e'`), then add the full attribute
-            (`da'`).
-          - otherwise, ignore the attribute.
-      - If the entity `identity` is the same, but `schema_url` is
-        different, drop the new entity (`d'`).
-        *Note: SDKs MAY provide configuration to preserve
-        non-conflicting description attributes in this case.*
-      - If the entity identity is different, drop the new
-        entity (`d'`).
-      - Otherwise, add the detected entity (`d'`) to the set of
-        detected entities (`E`).
-
-### Resolve conflicts with raw attributes
-
-When a "raw" attribute from `Resource` (those not associated with
-an entity) has the same key as an `Entity`'s `identity` or
-`description` attributes, then there is a conflict.
-
-If the *value* of the attribute is the same, the SDK can ignore the
-"raw" attribute.
-
-If the *value* of the attribute is different, then the SDK must
-resolve the conflict.
-
-- The SDK MUST remove the `Entity` from the detected `Entity` set
-  if the conflict is with an `identity` attribute.
-- The SDK MAY remove the `Entity` or just the conflicting attribute
-  from the `Entity` if the conflict is with a `description`
-  attribute.
+- `attributes`: The complete set of all attributes
+- `schema_url`: The Schema URL that should be recorded for this resource.
+  See [resolve conflicts in schema url](#resolve-conflicts-in-schema-url).
+- `entity_refs`: References to the `Entity` data model in `Resource`.
+  These each include:
+  - `type`: The type of the entity.
+  - `schema_url`: The Scheam URL that was recorded for this Entity.
+  - `id_keys`: The attribute keys for the Entity identity. Values are found
+    in the `Resource.attributes` property.
+  - `description_keys`: The attribute keys for the Entity description. Values
+    are found in the `Resource.attributes` property.
 
 ### Resolve conflicts in Schema URL
 
