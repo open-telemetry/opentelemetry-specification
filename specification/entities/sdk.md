@@ -11,13 +11,14 @@ linkTitle: SDK
 - [Overview](#overview)
 - [ResourceProvider](#resourceprovider)
   * [ResourceProvider Creation](#resourceprovider-creation)
-  * [Active Resource.](#active-resource)
-  * [Resolve conflicts in Schema URL](#resolve-conflicts-in-schema-url)
+  * [Active Resource](#active-resource)
   * [Configuration](#configuration)
   * [Shutdown](#shutdown)
   * [ForceFlush](#forceflush)
 - [Resource](#resource)
   * [Attach an Entity](#attach-an-entity)
+  * [Flattened Resource](#flattened-resource)
+  * [Resolve conflicts in Schema URL](#resolve-conflicts-in-schema-url)
 
 <!-- tocstop -->
 
