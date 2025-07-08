@@ -168,19 +168,17 @@ instrumentation scope, span events, and as identifying entity attributes.
 > This requirement level could change from "MAY" to "MUST" in the future
 > if we uncover use cases for complex attributes in these areas.
 
-The SDK MUST support reading and modifying complex attributes during processing.
+The SDK MUST support reading and modifying complex attributes during processing
+whenever they are allowed on the API surface.
 
 #### `AnyValue` implementation notes
 
-`AnyValue` implementation SHOULD provide a deep equality check
-since its possible (but not recommended) to use complex attributes as a resource,
-instrumentation scope, or metric attribute where equality may be
-extensively used to identify tracer/meter/logger or the time series.
+If the API supports `AnyValue` attributes on metrics, instrumentation scopes,
+resources, or identifying entity attributes where attribute equality is extensively
+used to identify tracers, meters, loggers, or time series, the `AnyValue`
+implementation MUST provide deep equality checks.
 
-It's also useful on span/event-to-metric aggregation pipelines that MAY aggregate
-on complex (but low-cardinality) attributes.
-
-When `AnyValue` contains one or more lists of key-value pairs:
+For `AnyValue` instances containing one or more lists of key-value pairs:
 
 - the equality of `AnyValue` instances MUST NOT be affected by the ordering of
   the key-value pairs within the list.
@@ -281,6 +279,14 @@ basis, allowing complex attributes to be:
 
 This option may be useful as a workaround for applications
 whose backend does not handle complex attribute types gracefully.
+
+### Record pointer to repetitive data
+
+Aggregating over structured data introduces performance overhead and additional complexity, such as requiring deep equality checks.
+
+If the data is repetitive, it can be recorded once and assigned a unique identifier. Subsequent telemetry items can then reference this identifier instead of duplicating the data.
+
+This approach reduces performance overhead and the volume of transmitted data and can be implemented incrementally as an optimization. It should not affect the instrumentation API or, more importantly, the user experience, including queries and dashboards.
 
 ## Backend research
 
