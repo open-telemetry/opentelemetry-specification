@@ -19,6 +19,10 @@
     + [Process Spawning](#process-spawning)
     + [Security](#security)
     + [Case Sensitivity](#case-sensitivity)
+- [Supplementary Guidelines](#supplementary-guidelines)
+  * [Approach 1: Providing a dedicated `EnvironmentContextPropagator`](#approach-1-providing-a-dedicated-environmentcontextpropagator)
+  * [Approach 2: Using the carriers directly through `Setters` and `Getters`](#approach-2-using-the-carriers-directly-through-setters-and-getters)
+  * [Common Behaviors](#common-behaviors)
 
 <!-- tocstop -->
 
@@ -129,6 +133,9 @@ When spawning child processes:
 - When spawning multiple child processes with different contexts or baggage,
   each child SHOULD receive its own copy of the environment variables with
   appropriate information.
+- The onus is on the application owner for receiving the set context from the
+  SDK and passing it to its own process spawning mechanism. The language
+  implementations MUST NOT handle spawning processes.
 
 #### Security
 
@@ -149,3 +156,52 @@ Windows.
 - For maximum compatibility, implementations MUST:
   - Use uppercase names consistently (`TRACEPARENT` not `TraceParent`).
   - Use the canonical case when setting environment variables.
+
+## Supplementary Guidelines
+
+> **IMPORTANT**: This section is non-normative and provides implementation
+> guidance only. It does not add requirements to the specification.
+
+Language implementations of OpenTelemetry have flexibility in how they implement
+environment variable context propagation. Two main approaches have been
+identified as viable.
+
+### Approach 1: Providing a dedicated `EnvironmentContextPropagator`
+
+SDKs can create a dedicated propagator for environment variables. For example,
+the [OTel Swift][swift] implements a custom `EnvironmentContextPropagator` that
+handles the environment-specific logic internally, in essence decorating the
+`TextMapPropagator`.
+
+### Approach 2: Using the carriers directly through `Setters` and `Getters`
+
+Language implementations can use the existing `TextMapPropagator` interface directly with
+environment-specific carriers. Go and Python SDKs follow this pattern by
+providing:
+
+- `EnvironmentGetter` - creates an in-memory copy of the current environment
+  variables and reads context from that copy.
+- `EnvironmentSetter` - writes context to a dictionary/map and provides the
+  dictionary/map to the application owner for them to use when spawning processes.
+
+Examples:
+
+- [OpenTelemetry Prototype Go Implementation][gi]
+- [OpenTelemetry Prototype Python Implementation][pi]
+
+[gi]: https://github.com/open-telemetry/opentelemetry-go/pull/6778
+[pi]: https://github.com/open-telemetry/opentelemetry-python/pull/4609
+
+### Common Behaviors
+
+Both approaches achieve the same outcome while offering different developer
+experiences. Language implementations may choose either approach based on their
+language's idioms and ecosystem conventions. The behaviors in both approaches
+are the same in that they:
+
+1. **Extract context**: Read from environment variables and delegate to the
+   configured `TextMapPropagator` (e.g. W3C, B3) for parsing
+2. **Inject context**: Return a dictionary/map of environment variables that
+   application owners can pass to their process spawning libraries
+
+[swift]: https://github.com/open-telemetry/opentelemetry-swift/blob/main/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
