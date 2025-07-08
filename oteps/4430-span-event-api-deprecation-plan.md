@@ -36,11 +36,11 @@ Stabilize (log-based) Events.
      specific with the event name field?
 
 2. Mark [Span RecordException](../specification/trace/api.md#record-exception)
-   as [Deprecated](../specification/document-status.md#lifecycle-status),
+   as [Deprecated](../specification/document-status.md#maturity-levels),
    recommending instead that exceptions are recorded using the Logs API.
 
 3. Mark [Span AddEvent](../specification/trace/api.md#add-events)
-   as [Deprecated](../specification/document-status.md#lifecycle-status),
+   as [Deprecated](../specification/document-status.md#maturity-levels),
    recommending instead that events are recorded using the Logs API.
 
    This can be done in parallel with 2.
@@ -55,11 +55,11 @@ Stabilize (log-based) Events.
 
 3. Mark
    [Span RecordException](../specification/trace/api.md#record-exception)
-   as [Deprecated](../specification/document-status.md#lifecycle-status),
+   as [Deprecated](../specification/document-status.md#maturity-levels),
    recommending instead that exceptions are recorded using the Logs API.
 
 4. Mark [Span AddEvent](../specification/trace/api.md#add-events)
-   as [Deprecated](../specification/document-status.md#lifecycle-status),
+   as [Deprecated](../specification/document-status.md#maturity-levels),
    recommending instead that events are recorded using the Logs API.
 
    This can be done in parallel with 3.
