@@ -21,6 +21,7 @@
 - [Prototypes](#prototypes)
 - [Future possibilities](#future-possibilities)
   * [Configurable OTLP exporter behavior (both SDK and Collector)](#configurable-otlp-exporter-behavior-both-sdk-and-collector)
+  * [Record pointer to repetitive data](#record-pointer-to-repetitive-data)
 - [Backend research](#backend-research)
 
 <!-- tocstop -->
