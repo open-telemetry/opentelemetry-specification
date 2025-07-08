@@ -7,7 +7,7 @@ path_base_for_github_subdir:
 
 # Context
 
-**Status**: [Stable, Feature-freeze](../document-status.md).
+**Status**: [Stable](../document-status.md).
 
 <details>
 <summary>Table of Contents</summary>

@@ -27,6 +27,8 @@ release.
   ([#4534](https://github.com/open-telemetry/opentelemetry-specification/pull/4534))
 - Stabilize SDK and No-Op `Logger.Enabled`.
   ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
+- `SeverityNumber=0` MAY be used to represent an unspecified value.
+  ([#4535](https://github.com/open-telemetry/opentelemetry-specification/pull/4535))
 
 ### Baggage
 
@@ -39,6 +41,9 @@ release.
 ### OpenTelemetry Protocol
 
 ### Compatibility
+
+- Clarify expectations about Prometheus content negotiation for metric names.
+  ([#4543](https://github.com/open-telemetry/opentelemetry-specification/pull/4543))
 
 ### SDK Configuration
 
