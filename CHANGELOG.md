@@ -33,6 +33,8 @@ release.
   ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
 - `SeverityNumber=0` MAY be used to represent an unspecified value.
   ([#4535](https://github.com/open-telemetry/opentelemetry-specification/pull/4535))
+- Clarify that `SeverityNumber` values are used when comparing severities.
+  ([#4552](https://github.com/open-telemetry/opentelemetry-specification/pull/4552))
 
 ### Baggage
 
