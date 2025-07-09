@@ -355,7 +355,7 @@ the `OnEmit` call. However, it is OPTIONAL for `ReadWriteLogRecord` to be
 concurrent-safe. Therefore, any modification to `logRecord` concurrent
 with `OnEmit` or after `OnEmit` returns (for example, during asynchronous
 processing) may result in race conditions. To avoid such race conditions,
-it is recommended to use a clone of `logRecord` for any asynchronous
+implementations SHOULD recommended to users that a clone of `logRecord` be used for any asynchronous
 processing, such as in a [batching processor](#batching-processor).
 
 #### Enabled
