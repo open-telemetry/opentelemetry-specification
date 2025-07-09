@@ -351,7 +351,7 @@ For a `LogRecordProcessor` registered directly on SDK `LoggerProvider`,
 the `logRecord` mutations MUST be visible in next registered processors.
 
 A `LogRecordProcessor` may freely modify the `logRecord` for the duration of
-the `OnEmit` call. However, `ReadWriteLogRecord` is **not** required to be
+the `OnEmit` call. However, it is OPTIONAL for `ReadWriteLogRecord` to be
 concurrent-safe. Therefore, any modification to `logRecord` concurrent
 with `OnEmit` or after `OnEmit` returns (for example, during asynchronous
 processing) may result in race conditions. To avoid such race conditions,
