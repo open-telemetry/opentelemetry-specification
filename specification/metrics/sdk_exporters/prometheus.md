@@ -67,6 +67,7 @@ A Prometheus Exporter MAY support a configuration option that controls the trans
 If the Prometheus exporter supports such configuration it MUST be named `translation_strategy`, and the translation options MUST be:
 
 - `UnderscoreEscapingWithSuffixes`, the default. This fully escapes metric names for classic Prometheus metric name compatibility, and includes appending type and unit suffixes.
+- `UnderscoreEscapingWithoutSuffixes`, metric names will continue to escape special characters to `_`, but suffixes won't be attached.
 - `NoUTF8EscapingWithSuffixes` will disable changing special characters to `_`. Special suffixes like units and `_total` for counters will be attached.
 - `NoTranslation`. This strategy bypasses all metric and label name translation, passing them through unaltered.
 
