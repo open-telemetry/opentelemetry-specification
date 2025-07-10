@@ -1087,7 +1087,8 @@ The standard OpenTelemetry SDK MUST implement default processor as described bel
 
 #### DefaultProcessor
 
-This is an implementation of `MeasurementProcessor` which calculates an in-memory state from incoming `Measurements`. The `DefaultProcessor` implementation SHOULD be private;
+This is an implementation of `MeasurementProcessor` which calculates an in-memory state from incoming `Measurements`.
+The `DefaultProcessor` implementation SHOULD be private;
 meaning it SHOULD NOT be possible for the user to create an instance of `DefaultProcessor`.
 
 ## Exemplar
