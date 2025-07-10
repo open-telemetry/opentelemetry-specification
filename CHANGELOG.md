@@ -25,6 +25,9 @@ release.
 
 ### Metrics
 
+- Add `MeasurementProcessor` to the SDK.
+   ([#4318](https://github.com/open-telemetry/opentelemetry-specification/pull/4318))
+
 ### Logs
 
 - Stabilize `Event Name` parameter of `Logger.Enabled`.
