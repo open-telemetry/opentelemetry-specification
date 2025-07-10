@@ -9,6 +9,36 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.47.0 (2025-07-10)
+
+### Context
+
 - Add Supplementary Guidelines for environment variables as context carrier
   specification.
   ([#4548](https://github.com/open-telemetry/opentelemetry-specification/pull/4548))
@@ -22,8 +52,6 @@ release.
   ([#4466](https://github.com/open-telemetry/opentelemetry-specification/pull/4466))
 - Define how SDK implements `Tracer.Enabled`.
   ([#4537](https://github.com/open-telemetry/opentelemetry-specification/pull/4537))
-
-### Metrics
 
 ### Logs
 
@@ -40,26 +68,10 @@ release.
   specification.
   ([#4548](https://github.com/open-telemetry/opentelemetry-specification/pull/4548))
 
-### Profiles
-
-### Resource
-
-### Entities
-
-### OpenTelemetry Protocol
-
 ### Compatibility
 
 - Clarify expectations about Prometheus content negotiation for metric names.
   ([#4543](https://github.com/open-telemetry/opentelemetry-specification/pull/4543))
-
-### SDK Configuration
-
-### Common
-
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.46.0 (2025-06-12)
 
