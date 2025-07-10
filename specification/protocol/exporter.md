@@ -53,6 +53,21 @@ Each configuration option MUST be overridable by a signal specific option.
   - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_CERTIFICATE` `OTEL_EXPORTER_OTLP_LOGS_CLIENT_CERTIFICATE`
   - Type: [String][]
 
+- **Client key password**: Password for encrypted client private key file (PEM).
+  - Default: n/a
+  - Env vars: `OTEL_EXPORTER_OTLP_CLIENT_KEY_PASSWORD` `OTEL_EXPORTER_OTLP_TRACES_CLIENT_KEY_PASSWORD` `OTEL_EXPORTER_OTLP_METRICS_CLIENT_KEY_PASSWORD` `OTEL_EXPORTER_OTLP_LOGS_CLIENT_KEY_PASSWORD`
+  - Type: [String][]
+
+- **Certificate revocation mode**: Certificate revocation mode (`Online`, `Offline`, or `NoCheck`).
+  - Default: `Online`
+  - Env vars: `OTEL_EXPORTER_OTLP_CERTIFICATE_REVOCATION_MODE` `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE_REVOCATION_MODE` `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE_REVOCATION_MODE` `OTEL_EXPORTER_OTLP_LOGS_CERTIFICATE_REVOCATION_MODE`
+  - Type: [Enum][]
+
+- **Certificate revocation flag**: Certificate revocation flag (`ExcludeRoot`, `EntireChain`, or `EndCertificateOnly`).
+  - Default: `ExcludeRoot`
+  - Env vars: `OTEL_EXPORTER_OTLP_CERTIFICATE_REVOCATION_FLAG` `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE_REVOCATION_FLAG` `OTEL_EXPORTER_OTLP_METRICS_CERTIFICATE_REVOCATION_FLAG` `OTEL_EXPORTER_OTLP_LOGS_CERTIFICATE_REVOCATION_FLAG`
+  - Type: [Enum][]
+
 - **Headers**: Key-value pairs to be used as headers associated with gRPC or HTTP requests. See [Specifying headers](./exporter.md#specifying-headers-via-environment-variables) for more details.
   - Default: n/a
   - Env vars: `OTEL_EXPORTER_OTLP_HEADERS` `OTEL_EXPORTER_OTLP_TRACES_HEADERS` `OTEL_EXPORTER_OTLP_METRICS_HEADERS` `OTEL_EXPORTER_OTLP_LOGS_HEADERS`
