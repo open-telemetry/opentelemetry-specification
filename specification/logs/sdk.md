@@ -352,11 +352,10 @@ the `logRecord` mutations MUST be visible in next registered processors.
 
 A `LogRecordProcessor` may freely modify the `logRecord` for the duration of
 the `OnEmit` call. However, it is OPTIONAL for `ReadWriteLogRecord` to be
-concurrent-safe. Therefore, any modification to `logRecord` concurrent
-with `OnEmit` or after `OnEmit` returns (for example, during asynchronous
-processing) may result in race conditions. To avoid such race conditions,
-implementations SHOULD recommended to users that a clone of `logRecord`
-be used for any asynchronous processing, such as in a [batching processor](#batching-processor).
+concurrent-safe. Therefore, any concurrent modifications and reads of `logRecord`
+may result in race conditions. To avoid such race conditions,
+implementations SHOULD recommended to users that a clone of `logRecord` be used
+for any concurrent processing, such as in a [batching processor](#batching-processor).
 
 #### Enabled
 
