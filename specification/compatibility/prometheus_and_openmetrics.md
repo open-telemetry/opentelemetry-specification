@@ -248,13 +248,12 @@ comments (but not metric points) SHOULD be dropped. If dropping a comment or
 metric points, the exporter SHOULD warn the user through error logging.
 
 The Name of an OTLP metric MUST be added as the
-[Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information),
-with unit and type suffixes added as described below. The metric name is
-required to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Invalid characters
-in the metric name MUST be replaced with the `_` character. Multiple
-consecutive `_` characters MUST be replaced with a single `_` character.
+[Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
+Prometheus naming conventions encourage metric names to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
+in the metric name SHOULD be replaced with the `_` character by default, aiming for compatibility with Prometheus conventions. Multiple
+consecutive `_` characters SHOULD be replaced with a single `_` character.
 
-The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible.  This includes:
+The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible. This includes:
 
 * Converting from abbreviations to full words (e.g. "ms" to "milliseconds").
 * Dropping the portions of the Unit within brackets (e.g. {packet}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
@@ -262,9 +261,9 @@ The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in P
 * Converting "foo/bar" to "foo_per_bar".
 
 The resulting unit SHOULD be added to the metric as
-[UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily)
-and as a suffix to the metric name unless the metric name already ends with the
-unit (before type-specific suffixes), or the unit metadata MUST be omitted. The
+[UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily).
+A suffix to the metric name SHOULD be added unless the metric name already ends with the
+unit (before type-specific suffixes). The
 unit suffix comes before any type-specific suffixes.
 
 The description of an OTLP metrics point MUST be added as
@@ -306,7 +305,7 @@ to a Prometheus Gauge.
   - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues](../metrics/data-model.md#sums-detecting-alignment-issues).
 - Otherwise, it MUST be dropped.
 
-If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` MUST be added by default, otherwise the name MUST remain unchanged. Exporters SHOULD provide a configuration option to disable the addition of `_total` suffixes.
+If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` SHOULD be added by default, otherwise the name MUST remain unchanged. Exporters SHOULD provide a configuration option to disable the addition of `_total` suffixes.
 Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_created` metric as well.
 
 ### Histograms
@@ -379,10 +378,9 @@ OpenTelemetry Metric Attributes MUST be converted to
 String Attribute values are converted directly to Metric Attributes, and
 non-string Attribute values MUST be converted to string attributes following
 the [attribute specification](../common/README.md#attribute).  Prometheus
-metric label keys are required to match the following regex:
-`[a-zA-Z_]([a-zA-Z0-9_])*`.  Metrics from OpenTelemetry with unsupported
-Attribute names MUST replace invalid characters with the `_` character.
-Multiple consecutive `_` characters MUST be replaced with a single `_`
+naming conventions encourage metric names to match the following regex:
+`[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replace with the `_` character.
+Multiple consecutive `_` characters SHOULD be replaced with a single `_`
 character. This may cause ambiguity in scenarios where multiple similar-named
 attributes share invalid characters at the same location.  In such unlikely
 cases, if multiple key-value pairs are converted to have the same Prometheus
