@@ -90,4 +90,4 @@ Although a Prometheus Exporter MAY be configured with a `translation_strategy` f
 Examples:
 
 - If configured with `NoTranslation` but the client requests `escaping=underscores`, the exporter MUST apply underscore escaping.
-- If configured with `UnderscoreEscapingWithSuffixes` but the client requests `escaping=allow-utf8`, there's no need to revert what has been translated since the SDK will continue to be compliant.
+- If configured with `UnderscoreEscapingWithSuffixes` but the client requests `escaping=allow-utf8`, there's no need to revert what has been translated since the exporter will continue to be compliant.
