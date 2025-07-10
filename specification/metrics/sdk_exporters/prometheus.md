@@ -64,7 +64,7 @@ include / exclude or regular expression based). Copied Resource attributes MUST 
 excluded from the `target` info metric. The option MAY be named `with_resource_constant_labels`.
 
 A Prometheus Exporter MAY support a configuration option that controls the translation of metric names from OpenTelemetry Naming Conventions to [Prometheus Naming conventions](https://prometheus.io/docs/practices/naming/).
-If the Prometheus exporter supports such configuration it MUST be named `translation_strategy`, and the translation options MUST be:
+If the Prometheus exporter supports such configuration it MUST be named to something that resembles Prometheus configuration option `translation_strategy`, and the translation options MUST be:
 
 - `UnderscoreEscapingWithSuffixes`, the default. This fully escapes metric names for classic Prometheus metric name compatibility, and includes appending type and unit suffixes.
 - `UnderscoreEscapingWithoutSuffixes`, metric names will continue to escape special characters to `_`, but suffixes won't be attached.
@@ -85,9 +85,9 @@ negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prom
 
 ### Interaction with Translation Strategy
 
-Although a Prometheus Exporter MAY be configured with a `translation_strategy` for internal metric processing, the final output format and character escaping MUST follow what the content negotiation process determines based on the client's `Accept` header. The content negotiation requirements take precedence over the configured translation strategy when determining the final output format.
+Although a Prometheus Exporter MAY be configured with a `translation_strategy` for internal metric processing, the final output format and character escaping MUST follow what the content negotiation process determines based on the client's `Accept` header. The content negotiation requirements MUST take precedence over the configured translation strategy when determining the final output format.
 
-For example:
+Examples:
 
-- If configured with `NoTranslation` but the client requests `escaping=underscores`, the exporter MUST apply underscore escaping
-- If configured with `UnderscoreEscapingWithSuffixes` but the client `escaping=allow-utf8`, there's no need to revert what has been translated since the SDK will continue to be compliant.
+- If configured with `NoTranslation` but the client requests `escaping=underscores`, the exporter MUST apply underscore escaping.
+- If configured with `UnderscoreEscapingWithSuffixes` but the client requests `escaping=allow-utf8`, there's no need to revert what has been translated since the SDK will continue to be compliant.
