@@ -4,8 +4,13 @@ on:
     - cron: "12 4 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   followup:
+    permissions:
+      issues: write # required for adding triage labels to issues
     runs-on: ubuntu-latest
     defaults:
       run:
