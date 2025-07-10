@@ -186,9 +186,6 @@ Note: Because these operations are stateless pure functions, they are not
 defined as part of any type, class, interface, etc. SDKs may organize them in
 whatever manner is idiomatic for the language.
 
-TODO: Add operation to update SDK components with new configuration for usage
-with OpAmp
-
 #### Parse
 
 Parse and validate a [configuration file](./data-model.md#file-based-configuration-model).
@@ -252,7 +249,7 @@ Interpret configuration model and return SDK components.
 * [MeterProvider](../metrics/sdk.md#meterprovider)
 * [LoggerProvider](../logs/sdk.md#loggerprovider)
 * [Propagators](../context/api-propagators.md#composite-propagator)
-* [ConfigProvider](#configprovider)
+* [ConfigProvider](#configprovider) (**Status**: [Development](../document-status.md))
 
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
@@ -281,8 +278,6 @@ This SHOULD return an error if it encounters an error in `configuration` (i.e.
 fail fast) in accordance with
 initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
-TODO: define behavior if some portion of configuration model is not supported
-
 #### Register ComponentProvider
 
 The SDK MUST provide a mechanism to
@@ -295,14 +290,18 @@ as `ComponentProvider`s.
 **Parameters:**
 
 * `component_provider` - The `ComponentProvider`.
-* `type` - The type of plugin interface it provides (e.g. SpanExporter, Sampler,
-  etc).
+* `type` - The type of plugin interface it provides.
 * `name` - The name used to identify the type of component. This is used
   in [configuration model](./data-model.md) to specify that the
   corresponding `component_provider` is to provide the component.
 
 The `type` and `name` comprise a unique key. Register MUST return an error if it
 is called multiple times with the same `type` and `name` combination.
+
+SDKs should represent `type` in a manner that is idiomatic for their language.
+For example, a class literal, an enumeration, or similar.
+See [supported SDK extension plugins](#sdk-extension-components) for the set of
+supported `type` values.
 
 ### Examples
 
