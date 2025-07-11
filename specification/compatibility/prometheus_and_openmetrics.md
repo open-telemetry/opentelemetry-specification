@@ -349,7 +349,8 @@ Histogram as follows:
   and `Offset`. Note that Prometheus Native Histograms buckets are indexed by
   upper boundary while Exponential Histograms are indexed by lower boundary, the
   result being that the Offset fields are different-by-one.
-- `Min` and `Max` are not used.
+- `Min` and `Max`, if present, SHOULD be converted to two separate Prometheus Gauge
+  metrics, `{name}_min` and `{name}_max` respectively.
 - `StartTimeUnixNano` is not used.
 
 [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram)
