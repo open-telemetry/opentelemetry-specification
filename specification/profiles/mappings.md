@@ -2,7 +2,7 @@
 
 **Status**: [Development](../document-status.md)
 
-This document defines the required attributes of [`Mapping`](https://github.com/open-telemetry/oteps/blob/main/text/profiles/0239-profiles-data-model.md#message-mapping) messages.
+This document defines the required attributes of [`Mapping`](../../oteps/profiles/0239-profiles-data-model.md#message-mapping) messages.
 
 <!-- toc -->
 
@@ -14,7 +14,7 @@ This document defines the required attributes of [`Mapping`](https://github.com/
 ## Attributes
 
 A message representing a `Mapping` MUST have at least one of the following
-[process attributes](https://opentelemetry.io/docs/specs/semconv/attributes-registry/process/#process-attributes):
+[process attributes](https://opentelemetry.io/docs/specs/semconv/registry/attributes/process/#process-attributes):
 
 - `process.executable.build_id.gnu`
 - `process.executable.build_id.go`

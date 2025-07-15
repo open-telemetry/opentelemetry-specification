@@ -87,6 +87,9 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |          |     | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Attribute Limits](specification/common/README.md#attribute-limits)                              | X        |     | +    |     | +      | +    | +      | +   |      |     |      |       |
 | Fetch InstrumentationScope from ReadableSpan                                                     |          |     | +    |     | +      |      |        | +   |      |     |      |       |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)                            | X        |     |      |     |        |      |        |     |      |     |      |       |
+| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X        |     |      |     |        |      |        |     |      |     |      |       |
+| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)                          | X        |     |      |     |        |      |        |     |      |     |      |       |
 
 ## Baggage
 
@@ -180,6 +183,9 @@ formats is required. Implementing more than one format is optional.
 | A metric Producer accepts an optional metric Filter                                                                                                                    |          |    |      |     |        |      | -      |     |      |     |      |       |
 | The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers                                                  |          |    |      |     |        |      | -      |     |      |     |      |       |
 | The metric SDK's metric Producer implementations uses the metric Filter                                                                                                |          |    |      |     |        |      | -      |     |      |     |      |       |
+| Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits)                                                                           |          |    |  +   |  +   |   -    |     |        |     |  -   |  +  |   +   |       |
+| Metric SDK supports configuring cardinality limit at MeterReader level                                                                                                 |          |    |  +   |  +   |   -    |     |        |     |  -   |  -  |   -   |       |
+| Metric SDK supports configuring cardinality limit per metric (using Views)                                                                                             |          |    |  +   |  +   |   -    |     |        |     |  -   |  -  |   +   |       |
 
 ## Logs
 
@@ -194,11 +200,12 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | LoggerProvider.ForceFlush                    |          |     | +    |     | +      |      |        | +   |      | +   | -    |       |
 | Logger.Emit(LogRecord)                       |          |     | +    |     | +      |      |        | +   |      | +   | -    |       |
 | Reuse Standard Attributes                    | X        | +   |      |     |        |      |        |     |      |     |      |       |
-| LogRecord.Set EventName                      |          |     |      |     |        |      |        |     |      |     |      |       |
+| LogRecord.Set EventName                      |          | +   |      |     |        |      |        |     | +    | +   |      |       |
 | Logger.Enabled                               | X        | +   |      |     |        |      |        |     | +    | +   |      |       |
 | SimpleLogRecordProcessor                     |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | BatchLogRecordProcessor                      |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | Can plug custom LogRecordProcessor           |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
+| LogRecordProcessor.Enabled                   | X        | +   |      |     |        |      |        |     | +    |     |      |       |
 | OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      | +   | -    |       |
@@ -349,8 +356,8 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | [HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                                             |          | +   | +    | +  | +           | -    | -      | -   | +    | +   | +    | +     |
 | [TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)                                                                             |          | +   | +    | +  | +           | -    | -      | -   | +    | +   | +    | +     |
 | [otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                        |          | +   | +    | -  | -           | -    | -      | -   | +    | -   | -    | -     |
-| [otel_scope_info metric](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                                                              | X        | +   | +    | -  | -           | -    | -      | -   | +    | -   | -    | -     |
-| [otel_scope_info and labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                                          | X        | +   | -    | -  | -           | -    | -      | -   | +    | -   | -    | -     |
+| [otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                                        |          | +   | -    | -  | -           | -    | -      | -   | -    | -   | -    | -     |
+| [otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)                                                   | X        | +   | -    | -  | -           | -    | -      | -   | +    | -   | -    | -     |
 | [Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1)                                                                    |          | +   | +    | +  | +           | -    | -      | -   | +    | +   | +    | -     |
 | [Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)                                                   |          | +   | +    | +  | +           | -    | -      | -   | +    | +   | +    | +     |
 | [Prometheus Counters have _total suffix by default](specification/compatibility/prometheus_and_openmetrics.md#sums)                                                      |          | +   | +    | +  | +           | -    | -      | -   | +    | -   | -    | -     |

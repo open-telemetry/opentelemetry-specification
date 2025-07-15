@@ -7,12 +7,12 @@
 **Abstract**: This OTEP describes a new protocol, the OTelArrow protocol, which is based on a **generic columnar representation
 for metrics, logs and traces**.  This protocol significantly improves efficiency in scenarios involving the transmission
 of large batches of metrics, logs, traces. Moreover, it provides a better representation for [multivariate time-series](#multivariate-time-series).
-The OTelArrow protocol also supports a fallback mechanism to the [OpenTelemetry protocol (OTEP 0035)](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md)
+The OTelArrow protocol also supports a fallback mechanism to the [OpenTelemetry protocol (OTEP 0035)](0035-opentelemetry-protocol.md)
 in instances when one of the endpoints does not support the OTelArrow protocol.
 
 **Reference implementation**: The [OTel Arrow Adapter](https://github.com/f5/otel-arrow-adapter) Go library specifies
 the protobuf spec, and implements the OTel Arrow Encoder/Decoder (main contributor [Laurent Querel](https://github.com/lquerel)).
-An [experimental OTel Collector](https://github.com/open-telemetry/experimental-arrow-collector) has been implemented to
+An [experimental OTel Collector](https://github.com/open-telemetry/otel-arrow-collector) has been implemented to
 expose the new gRPC endpoint and to provide OTel Arrow support via the previous library (main contributor [Joshua MacDonald](https://github.com/jmacd)).
 
 ## Table of contents
@@ -70,7 +70,7 @@ other in memory. The main benefits of a columnar approach are:
 
 ![row vs column-oriented](img/0156_OTEL%20-%20Row%20vs%20Column.png)
 
-This OTEP proposes to improve the [OpenTelemetry protocol (OTEP 0035)](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md)
+This OTEP proposes to improve the [OpenTelemetry protocol (OTEP 0035)](0035-opentelemetry-protocol.md)
 with a **generic columnar representation for metrics, logs and traces based on Apache Arrow**. Compared to the existing
 OpenTelemetry protocol this compatible extension has the following improvements:
 
@@ -85,7 +85,7 @@ OpenTelemetry protocol this compatible extension has the following improvements:
   efficiency, and data minimization require additional data processing capabilities such as data projection,
   aggregation, and filtering.
 
-These improvements not only address the aforementioned needs but also answer the [open questions](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md#open-questions)
+These improvements not only address the aforementioned needs but also answer the [open questions](0035-opentelemetry-protocol.md#open-questions)
 cited in OTEP 035 (i.e. cpu usage, memory pressure, compression optimization).
 
 **It is important to understand that this proposal is complementary to the existing protocol. The row-oriented version
@@ -646,7 +646,7 @@ exactly as the OTLP exporter.
 The mechanism as described is vulnerable to partial failure scenarios.  When some of the streams are succeeding but some
 have failed with Arrow unsupported, the collector performance will be degraded because callers are blocked waiting for
 available streams.  The exact signal used to signal that Arrow and downgrade mechanism is seen as an area for future
-development.  [See the prototype's test for whether to downgrade.](https://github.com/open-telemetry/experimental-arrow-collector/blob/30e0ffb230d3d2f1ad9645ec54a90bbb7b9878c2/exporter/otlpexporter/internal/arrow/stream.go#L152)
+development.  [See the prototype's test for whether to downgrade.](https://github.com/open-telemetry/otel-arrow-collector/blob/30e0ffb230d3d2f1ad9645ec54a90bbb7b9878c2/exporter/otlpexporter/internal/arrow/stream.go#L152)
 
 ### Batch ID Generation
 
@@ -749,7 +749,7 @@ the client select between OTLP or OTel Arrow protocol depending on the nature of
 ## Future Versions and Interoperability
 
 As far as protocol evolution and interoperability mechanisms are concerned, this extension follows the
-[recommendations](https://github.com/open-telemetry/oteps/blob/main/text/0035-opentelemetry-protocol.md#future-versions-and-interoperability)
+[recommendations](0035-opentelemetry-protocol.md#future-versions-and-interoperability)
 outlined in the OTLP spec.
 
 ## Prior Art and Alternatives
@@ -779,7 +779,7 @@ in order to include OTel-Arrow in standard regression testing of the Collector.
 ### Extending into other parts of the Arrow ecosystem
 
 A SQL support for telemetry data processing remains an open question in the current Go collector. The main OTelArrow query
-engine [Datafusion](https://github.com/apache/arrow-datafusion) is implemented in Rust. Several solutions can be
+engine [Datafusion](https://github.com/apache/datafusion) is implemented in Rust. Several solutions can be
 considered: 1) create a Go wrapper on top of Datafusion, 2) implement a Rust collector dedicated to the end-to-end
 support of OTel Arrow, 3) implement a SQL/Arrow engine in Go (big project). A proof of concept using Datafusion has been
 implemented in Rust and has shown very good results.

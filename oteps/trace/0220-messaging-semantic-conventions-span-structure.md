@@ -61,7 +61,7 @@ scenarios and different messaging systems.
 
 ## Stages of producing and consuming messages
 
-As previously described in [OTEP 173](https://github.com/open-telemetry/oteps/blob/main/text/trace/0173-messaging-semantic-conventions.md#scenarios.),
+As previously described in [OTEP 173](0173-messaging-semantic-conventions.md#scenarios),
 producing and consuming a message involves five stages:
 
 ```mermaid
@@ -409,7 +409,7 @@ OTEP.
 
 However, interest was expressed from many sides to also achieve some
 consistency for the instrumentation of "Process" operations. Therefore,
-[#3395](https://github.com/open-telemetry/opentelemetry-specification/issues/3395)
+[open-telemetry/semantic-conventions#657](https://github.com/open-telemetry/semantic-conventions/issues/657)
 covers the effort to define conventions for "Process" operations, which will
 build on the foundation that this OTEP lays.
 

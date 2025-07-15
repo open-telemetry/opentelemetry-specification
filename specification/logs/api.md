@@ -67,7 +67,7 @@ The `LoggerProvider` MUST provide the following functions:
 This API MUST accept the following [instrumentation scope](data-model.md#field-instrumentationscope)
 parameters:
 
-* `name`: Specifies the name of the [instrumentation scope](../glossary.md#instrumentation-scope),
+* `name`: Specifies the name of the [instrumentation scope](../common/instrumentation-scope.md),
   such as the [instrumentation library](../glossary.md#instrumentation-library)
   (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
   If an application or library has built-in OpenTelemetry instrumentation, both
@@ -112,8 +112,7 @@ The effect of calling this API is to emit a `LogRecord` to the processing pipeli
 The API MUST accept the following parameters:
 
 - [Timestamp](./data-model.md#field-timestamp) (optional)
-- [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional). If unspecified the
-  implementation SHOULD set it equal to the current time.
+- [Observed Timestamp](./data-model.md#field-observedtimestamp) (optional)
 - The [Context](../context/README.md) associated with the `LogRecord`.
   When implicit Context is supported, then this parameter SHOULD be optional and
   if unspecified then MUST use current Context.
@@ -122,7 +121,7 @@ The API MUST accept the following parameters:
 - [Severity Text](./data-model.md#field-severitytext) (optional)
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
-- **Status**: [Development](../document-status.md) - [Event Name](./data-model.md#field-eventname) (optional)
+- [Event Name](./data-model.md#field-eventname) (optional)
 
 **Status**: [Development](../document-status.md)
 
@@ -134,8 +133,6 @@ across signals.
 
 ### Enabled
 
-**Status**: [Development](../document-status.md)
-
 To help users avoid performing computationally expensive operations when
 generating a `LogRecord`, a `Logger` SHOULD provide this `Enabled` API.
 
@@ -146,6 +143,7 @@ The API SHOULD accept the following parameters:
   if unspecified then MUST use current Context.
   When only explicit Context is supported, accepting this parameter is REQUIRED.
 - [Severity Number](./data-model.md#field-severitynumber) (optional)
+- [Event Name](./data-model.md#field-eventname) (optional)
 
 This API MUST return a language idiomatic boolean type. A returned value of
 `true` means the `Logger` is enabled for the provided arguments, and a returned
@@ -178,4 +176,4 @@ specific guarantees and safeties.
 
 ## References
 
-- [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
+- [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)

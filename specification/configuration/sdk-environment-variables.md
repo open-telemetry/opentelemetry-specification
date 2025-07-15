@@ -201,7 +201,7 @@ Depending on the value of `OTEL_TRACES_SAMPLER`, `OTEL_TRACES_SAMPLER_ARG` may b
 
 - For `traceidratio` and `parentbased_traceidratio` samplers: Sampling probability, a number in the [0..1] range, e.g. "0.25". Default is 1.0 if unset.
 - For `jaeger_remote` and `parentbased_jaeger_remote`: The value is a comma separated list:
-  - `endpoint`: the endpoint in form of `scheme://host:port` of gRPC server that serves the sampling strategy for the service ([sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/master/proto/api_v2/sampling.proto)).
+  - `endpoint`: the endpoint in form of `scheme://host:port` of gRPC server that serves the sampling strategy for the service ([sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/main/proto/api_v2/sampling.proto)).
   - `pollingIntervalMs`:  in milliseconds indicating how often the sampler will poll the backend for updates to sampling strategy.
   - `initialSamplingRate`:  in the [0..1] range, which is used as the sampling probability when the backend cannot be reached to retrieve a sampling strategy. This value stops having an effect once a sampling strategy is retrieved successfully, as the remote strategy will be used until a new update is retrieved.
   - Example: `endpoint=http://localhost:14250,pollingIntervalMs=5000,initialSamplingRate=0.25`
@@ -311,7 +311,7 @@ NOT be supported by new implementations.
 Known values for `OTEL_METRICS_EXPORTER` are:
 
 - `"otlp"`: [OTLP](../protocol/otlp.md)
-- `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/master/content/docs/instrumenting/exposition_formats.md)
+- `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md)
 - `"console"`: [Standard Output](../metrics/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../metrics/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
 NOT be supported by new implementations.
@@ -396,16 +396,17 @@ configuration models, or overlay values from environment variables on top of a
 configuration model. Implementations MAY provide a mechanism to customize the
 configuration model parsed from `OTEL_EXPERIMENTAL_CONFIG_FILE`.
 
-Users are encouraged to use the `sdk-config.yaml` (TODO: Add link when
-available) as a starting point for `OTEL_EXPERIMENTAL_CONFIG_FILE`. This file
-represents a common SDK configuration scenario, and includes environment
-variable substitution references to environment variables which are otherwise
-ignored.
+Users are encouraged to
+use [`sdk-migration-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-migration-config.yaml)
+as a starting point for `OTEL_EXPERIMENTAL_CONFIG_FILE`. This file represents a
+common SDK configuration scenario, and includes environment variable
+substitution references to environment variables which are otherwise ignored.
+Alternatively, [`sdk-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-config.yaml)
+offers a common SDK configuration starting point without environment variable
+substitution references.
 
 TODO: deprecate env vars which are not
 compatible ([#3967](https://github.com/open-telemetry/opentelemetry-specification/issues/3967))
-TODO: provide solution for platforms to contribute to
-configure ([#3966](https://github.com/open-telemetry/opentelemetry-specification/issues/3966))
 
 ## Language Specific Environment Variables
 

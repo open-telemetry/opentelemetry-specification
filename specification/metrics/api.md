@@ -121,7 +121,7 @@ The `MeterProvider` MUST provide the following functions:
 This API MUST accept the following parameters:
 
 * `name`: Specifies the name of the [instrumentation
-  scope](../glossary.md#instrumentation-scope), such as the
+  scope](../common/instrumentation-scope.md), such as the
   [instrumentation library](../glossary.md#instrumentation-library) (e.g.
   `io.opentelemetry.contrib.mongodb`), package,
   module or class name. If an application or library has built-in OpenTelemetry
@@ -200,7 +200,7 @@ identifying fields are equal.
 #### Instrument name syntax
 
 The instrument name syntax is defined below using the [Augmented Backus-Naur
-Form](https://tools.ietf.org/html/rfc5234):
+Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
 instrument-name = ALPHA 0*254 ("_" / "." / "-" / "/" / ALPHA / DIGIT)
@@ -1352,16 +1352,16 @@ concurrently.
 
 ## References
 
-- [OTEP0003 Consolidate pre-aggregated and raw metrics APIs](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0003-measure-metric-type.md)
-- [OTEP0008 Metrics observer specification](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0008-metric-observer.md)
-- [OTEP0009 Metric Handle API specification](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0009-metric-handles.md)
-- [OTEP0010 Rename "Cumulative" to "Counter" in the metrics API](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0010-cumulative-to-counter.md)
-- [OTEP0049 Metric `LabelSet` specification](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0049-metric-label-set.md)
-- [OTEP0070 Rename metric instrument Handles to "Bound Instruments"](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0070-metric-bound-instrument.md)
-- [OTEP0072 Metric observer specification (refinement)](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0072-metric-observer.md)
-- [OTEP0080 Remove the Metric API Gauge instrument](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0080-remove-metric-gauge.md)
-- [OTEP0088 Metric Instruments](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0088-metric-instrument-optional-refinements.md)
-- [OTEP0090 Remove the LabelSet object from the metrics API](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0090-remove-labelset-from-metrics-api.md)
-- [OTEP0098 Explain the metric instruments](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0098-metric-instruments-explained.md)
-- [OTEP0108 Metric instrument naming guidelines](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0108-naming-guidelines.md)
-- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md)
+- [OTEP0003 Consolidate pre-aggregated and raw metrics APIs](../../oteps/metrics/0003-measure-metric-type.md)
+- [OTEP0008 Metrics observer specification](../../oteps/metrics/0008-metric-observer.md)
+- [OTEP0009 Metric Handle API specification](../../oteps/metrics/0009-metric-handles.md)
+- [OTEP0010 Rename "Cumulative" to "Counter" in the metrics API](../../oteps/metrics/0010-cumulative-to-counter.md)
+- [OTEP0049 Metric `LabelSet` specification](../../oteps/metrics/0049-metric-label-set.md)
+- [OTEP0070 Rename metric instrument Handles to "Bound Instruments"](../../oteps/metrics/0070-metric-bound-instrument.md)
+- [OTEP0072 Metric observer specification (refinement)](../../oteps/metrics/0072-metric-observer.md)
+- [OTEP0080 Remove the Metric API Gauge instrument](../../oteps/metrics/0080-remove-metric-gauge.md)
+- [OTEP0088 Metric Instruments](../../oteps/metrics/0088-metric-instrument-optional-refinements.md)
+- [OTEP0090 Remove the LabelSet object from the metrics API](../../oteps/metrics/0090-remove-labelset-from-metrics-api.md)
+- [OTEP0098 Explain the metric instruments](../../oteps/metrics/0098-metric-instruments-explained.md)
+- [OTEP0108 Metric instrument naming guidelines](../../oteps/metrics/0108-naming-guidelines.md)
+- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](../../oteps/metrics/0146-metrics-prototype-scenarios.md)

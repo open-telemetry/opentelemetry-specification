@@ -1,7 +1,7 @@
 # OpenTelemetry Specification
 
-[![Checks](https://github.com/open-telemetry/opentelemetry-specification/workflows/Checks/badge.svg?branch=main)](https://github.com/open-telemetry/opentelemetry-specification/actions?query=workflow%3A%22Checks%22+branch%3Amain)
-![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/open-telemetry/specification.svg)
+[![Slack](https://img.shields.io/badge/slack-@cncf/otel--specification-brightgreen.svg?logo=slack)](https://cloud-native.slack.com/archives/C01N7PP1THC)
+[![Release](https://img.shields.io/github/v/release/open-telemetry/opentelemetry-specification)](https://github.com/open-telemetry/opentelemetry-specification/releases/)
 
 ![OpenTelemetry Logo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)
 
@@ -22,7 +22,7 @@ For details, see [CONTRIBUTING.md](CONTRIBUTING.md), in particular read
 Questions that need additional attention can be brought to the regular
 specifications meeting. EU and US timezone friendly meeting is held every
 Tuesday at 8 AM Pacific time. Meeting notes are held in the [Google
-doc](https://docs.google.com/document/d/1pdvPeKjA8v8w_fGKAN68JjWBmVJtPCpqdi9IZrd6eEo).
+doc](https://docs.google.com/document/d/1pdvPeKjA8v8w_fGKAN68JjWBmVJtPCpqdi9IZrd6eEo/edit).
 APAC timezone friendly meetings are held on request. See
 [OpenTelemetry calendar](https://github.com/open-telemetry/community#calendar).
 
@@ -57,3 +57,21 @@ By contributing to OpenTelemetry Specification repository, you agree that your c
 [OpenTelemetry]: https://opentelemetry.io
 [latest release]: https://github.com/open-telemetry/opentelemetry-specification/releases/latest
 [opentelemetry.io/docs/specs/otel]: https://opentelemetry.io/docs/specs/otel/
+
+## Maintainers
+
+- [OpenTelemetry Technical Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#technical-committee)
+
+For more information about the maintainer role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#maintainer).
+
+## Approvers
+
+- [OpenTelemetry Specification Sponsors](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto)
+
+For more information about the approver role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#approver).
+
+## Triagers
+
+- [OpenTelemetry Governance Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#governance-committee)
+
+For more information about the triager role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#triager).

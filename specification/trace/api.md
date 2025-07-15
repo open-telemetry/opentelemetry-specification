@@ -114,7 +114,7 @@ The `TracerProvider` MUST provide the following functions:
 This API MUST accept the following parameters:
 
 - `name` (required): This name SHOULD uniquely identify the
-  [instrumentation scope](../glossary.md#instrumentation-scope), such as the
+  [instrumentation scope](../common/instrumentation-scope.md), such as the
   [instrumentation library](../glossary.md#instrumentation-library) (e.g.
   `io.opentelemetry.contrib.mongodb`), package, module or class name. If an
   application or library has built-in OpenTelemetry instrumentation, both
@@ -233,16 +233,17 @@ non-zero byte.
 `SpanId` A valid span identifier is an 8-byte array with at least one non-zero
 byte.
 
-`TraceFlags` contain details about the trace. Unlike TraceState values,
-TraceFlags are present in all traces. The current version of the specification
-only supports a single flag called [sampled](https://www.w3.org/TR/trace-context/#sampled-flag).
+`TraceFlags` contain details about the trace.
+Unlike TraceState values, TraceFlags are present in all traces.
+The current version of the specification supports two flags:
 
-`TraceState` carries vendor-specific trace identification data, represented as a list
-of key-value pairs. TraceState allows multiple tracing
-systems to participate in the same trace. It is fully described in the [W3C Trace Context
-specification](https://www.w3.org/TR/trace-context/#tracestate-header). For
-specific OTel values in `TraceState`, see the [TraceState Handling](tracestate-handling.md)
-document.
+- [Sampled](https://www.w3.org/TR/trace-context-2/#sampled-flag)
+- [Random](https://www.w3.org/TR/trace-context-2/#random-trace-id-flag)
+
+`TraceState` carries tracing-system-specific trace identification data, represented as a list of key-value pairs.
+TraceState allows multiple tracing systems to participate in the same trace.
+It is fully described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context-2/#tracestate-header).
+For specific OpenTelemetry values in `TraceState`, see the [TraceState Handling](tracestate-handling.md) document.
 
 `IsRemote`, a boolean indicating whether the SpanContext was received from somewhere
 else or locally generated, see [IsRemote](#isremote).
@@ -255,7 +256,7 @@ overridable.
 
 The API MUST allow retrieving the `TraceId` and `SpanId` in the following forms:
 
-* Hex - returns the lowercase [hex encoded](https://tools.ietf.org/html/rfc4648#section-8)
+* Hex - returns the lowercase [hex encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-8)
 `TraceId` (result MUST be a 32-hex-character lowercase string) or `SpanId`
 (result MUST be a 16-hex-character lowercase string).
 * Binary - returns the binary representation of the `TraceId` (result MUST be a

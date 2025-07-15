@@ -16,6 +16,7 @@
   * [ForceFlush](#forceflush)
 - [Logger](#logger)
   * [LoggerConfig](#loggerconfig)
+  * [Emit a LogRecord](#emit-a-logrecord)
   * [Enabled](#enabled)
 - [Additional LogRecord interfaces](#additional-logrecord-interfaces)
   * [ReadableLogRecord](#readablelogrecord)
@@ -24,6 +25,7 @@
 - [LogRecordProcessor](#logrecordprocessor)
   * [LogRecordProcessor operations](#logrecordprocessor-operations)
     + [OnEmit](#onemit)
+    + [Enabled](#enabled-1)
     + [ShutDown](#shutdown)
     + [ForceFlush](#forceflush-1)
   * [Built-in processors](#built-in-processors)
@@ -64,7 +66,7 @@ It SHOULD only be possible to create `Logger` instances through a `LoggerProvide
 The `LoggerProvider` MUST implement the [Get a Logger API](api.md#get-a-logger).
 
 The input provided by the user MUST be used to create
-an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
+an [`InstrumentationScope`](../common/instrumentation-scope.md) instance which
 is stored on the created `Logger`.
 
 In the case where an invalid `name` (null or empty string) is specified, a
@@ -102,7 +104,7 @@ the [LoggerConfig](#loggerconfig) for a [Logger](#logger).
 The function MUST accept the following parameter:
 
 * `logger_scope`:
-  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  The [`InstrumentationScope`](../common/instrumentation-scope.md) of
   the `Logger`.
 
 The function MUST return the relevant `LoggerConfig`, or some signal indicating
@@ -191,14 +193,21 @@ It consists of the following parameters:
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
 
+### Emit a LogRecord
+
+If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
+the implementation SHOULD set it equal to the current time.
+
 ### Enabled
 
-**Status**: [Development](../document-status.md)
-
-`Enabled` MUST return `false` when:
+`Enabled` MUST return `false` when either:
 
 - there are no registered [`LogRecordProcessors`](#logrecordprocessor),
-- `Logger` is disabled ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
+- **Status**: [Development](../document-status.md) - `Logger` is disabled
+  ([`LoggerConfig.disabled`](#loggerconfig) is `true`),
+- **Status**: [Development](../document-status.md) - all registered
+  `LogRecordProcessors` implement [`Enabled`](#enabled-1),
+  and a call to `Enabled` on each of them returns `false`.
 
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
@@ -244,7 +253,7 @@ the following information added to the [LogRecord](data-model.md#log-and-event-r
 * [`TraceId`](./data-model.md#field-traceid)
 * [`SpanId`](./data-model.md#field-spanid)
 * [`TraceFlags`](./data-model.md#field-traceflags)
-* **Status**: [Development](../document-status.md) - [`EventName`](./data-model.md#field-eventname)
+* [`EventName`](./data-model.md#field-eventname)
 
 The SDK MAY provide an operation that makes a deep clone of a `ReadWriteLogRecord`.
 The operation can be used by asynchronous processors (e.g. [Batching processor](#batching-processor))
@@ -317,6 +326,10 @@ components in the SDK:
   +-----+------------------------+
 ```
 
+Please see [Supplementary Guidelines](./supplementary-guidelines.md#advanced-processing)
+for more information on how to setup advanced log record processing like filtering or
+fanning out.
+
 ### LogRecordProcessor operations
 
 #### OnEmit
@@ -340,6 +353,47 @@ the `logRecord` mutations MUST be visible in next registered processors.
 A `LogRecordProcessor` may freely modify `logRecord` for the duration of
 the `OnEmit` call. If `logRecord` is needed after `OnEmit` returns (i.e. for
 asynchronous processing) only reads are permitted.
+
+#### Enabled
+
+**Status**: [Development](../document-status.md)
+
+`Enabled` is an operation that a `LogRecordProcessor` MAY implement
+in order to support filtering via [`Logger.Enabled`](api.md#enabled).
+
+**Parameters:**
+
+* [Context](../context/README.md) explicitly passed by the caller or the current
+  Context
+* [Instrumentation Scope](./data-model.md#field-instrumentationscope) associated
+  with the `Logger`
+* [Severity Number](./data-model.md#field-severitynumber) passed by the caller
+* [Event Name](./data-model.md#field-eventname) passed by the caller
+
+**Returns:** `Boolean`
+
+An implementation should return `false` if a `LogRecord` (if ever created)
+is supposed to be filtered out for the given parameters.
+It should default to returning `true` for any indeterminate state, for example,
+when awaiting configuration.
+
+Any modifications to parameters inside `Enabled` MUST NOT be propagated to the
+caller. Parameters are immutable or passed by value.
+
+This operation is usually called synchronously, therefore it should not block
+or throw exceptions.
+
+`LogRecordProcessor` implementations responsible for filtering and supporting
+the `Enable` operation should ensure that [`OnEmit`](#onemit) handles filtering
+independently. API users cannot be expected to call [`Enabled`](api.md#enabled)
+before invoking [`Emit a LogRecord`](api.md#emit-a-logrecord).
+Moreover, the filtering logic in `OnEmit` and `Enabled` may differ.
+
+`LogRecordProcessor` implementations that wrap other `LogRecordProcessor`
+(which may perform filtering) can implement `Enabled` and delegate to
+the wrapped processor’s `Enabled`, if available. However, the `OnEmit`
+implementation of such processors should never call the wrapped processor’s
+`Enabled`, as `OnEmit` is responsible for handling filtering independently.
 
 #### ShutDown
 
@@ -529,4 +583,4 @@ return a Failure result.
 and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
 
-- [OTEP0150 Logging Library SDK Prototype Specification](https://github.com/open-telemetry/oteps/blob/main/text/logs/0150-logging-library-sdk.md)
+- [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)

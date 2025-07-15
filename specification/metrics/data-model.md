@@ -187,7 +187,7 @@ in scope for key design decisions:
 
 - Using OTLP as an intermediary format between two non-compatible formats
   - Importing [statsd](https://github.com/statsd/statsd) => Prometheus PRW
-  - Importing [collectd](https://collectd.org/wiki/index.php/Binary_protocol)
+  - Importing [collectd](https://github.com/collectd/collectd/wiki/Binary-protocol)
     => Prometheus PRW
   - Importing Prometheus endpoint scrape => [statsd push | collectd | opencensus]
   - Importing OpenCensus "oca" => any non OC or OTel format
@@ -1305,9 +1305,9 @@ where all points are added, and lost points are ignored.
 
 ## References
 
-- [OTEP0049 Metric `LabelSet` specification](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0049-metric-label-set.md)
-- [OTEP0113 Integrate Exemplars with Metrics](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0113-exemplars.md)
-- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](https://github.com/open-telemetry/oteps/blob/main/text/metrics/0146-metrics-prototype-scenarios.md)
+- [OTEP0049 Metric `LabelSet` specification](../../oteps/metrics/0049-metric-label-set.md)
+- [OTEP0113 Integrate Exemplars with Metrics](../../oteps/metrics/0113-exemplars.md)
+- [OTEP0146 Scenarios for Metrics API/SDK Prototyping](../../oteps/metrics/0146-metrics-prototype-scenarios.md)
 
 ## Footnotes
 

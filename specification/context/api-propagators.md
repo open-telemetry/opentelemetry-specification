@@ -1,6 +1,6 @@
 # Propagators API
 
-**Status**: [Stable](../document-status.md), except where otherwise specified.
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -32,6 +32,7 @@
   * [Get Global Propagator](#get-global-propagator)
   * [Set Global Propagator](#set-global-propagator)
 - [Propagators Distribution](#propagators-distribution)
+  * [W3C Trace Context Requirements](#w3c-trace-context-requirements)
   * [B3 Requirements](#b3-requirements)
     + [B3 Extract](#b3-extract)
     + [B3 Inject](#b3-inject)
@@ -68,8 +69,6 @@ The Propagators API currently defines one `Propagator` type:
 
 - `TextMapPropagator` is a type that injects values into and extracts values
   from carriers as string key/value pairs.
-
-A binary `Propagator` type will be added in the future (see [#437](https://github.com/open-telemetry/opentelemetry-specification/issues/437)).
 
 ### Carrier
 
@@ -121,7 +120,7 @@ The carrier of propagated data on both the client (injector) and server (extract
 usually an HTTP request.
 
 In order to increase compatibility, the key/value pairs MUST only consist of US-ASCII characters
-that make up valid HTTP header fields as per [RFC 9110](https://tools.ietf.org/html/rfc9110/#name-fields).
+that make up valid HTTP header fields as per [RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110/#name-fields).
 
 `Getter` and `Setter` are optional helper components used for extraction and injection respectively,
 and are defined as separate objects from the carrier to avoid runtime allocations,
@@ -231,8 +230,6 @@ Required arguments:
 The Get function is responsible for handling case sensitivity. If the getter is intended to work with an HTTP request object, the getter MUST be case insensitive.
 
 ##### GetAll
-
-**Status**: [Development](../document-status.md)
 
 For many language implementations, the `GetAll` function will be added after the stable release of `Getter`.
 For these languages, requiring implementations of `Getter` to include `GetAll` constitutes a breaking change
@@ -355,9 +352,9 @@ Required parameters:
 The official list of propagators that MUST be maintained by the OpenTelemetry
 organization and MUST be distributed as OpenTelemetry extension packages:
 
-* [W3C TraceContext](https://www.w3.org/TR/trace-context). MAY alternatively
+* [W3C TraceContext](https://www.w3.org/TR/trace-context/). MAY alternatively
   be distributed as part of the OpenTelemetry API.
-* [W3C Baggage](https://www.w3.org/TR/baggage). MAY alternatively
+* [W3C Baggage](https://www.w3.org/TR/baggage/). MAY alternatively
   be distributed as part of the OpenTelemetry API.
 * [B3](https://github.com/openzipkin/b3-propagation).
 * [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format).
@@ -376,6 +373,17 @@ as OpenTelemetry extension packages:
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
 the Core OpenTelemetry repositories.
+
+### W3C Trace Context Requirements
+
+A W3C Trace Context propagator MUST parse and validate the `traceparent` and `tracestate` HTTP headers as specified in [W3C Trace Context Level 2](https://www.w3.org/TR/trace-context-2/).  A W3C Trace Context propagator MUST propagate a valid `traceparent` value using the same header.  A W3C Trace Context propagator MUST propagate a valid `tracestate` unless the value is empty, in which case the `tracestate` header may be omitted.
+
+When injecting and extracting trace context to or from a carrier, the following fields from the `SpanContext` are propagated.
+
+- TraceID (16 bytes)
+- SpanID (8 bytes)
+- TraceFlags (8 bits)
+- TraceState (string, unless empty)
 
 ### B3 Requirements
 

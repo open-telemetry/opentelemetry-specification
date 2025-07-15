@@ -7,7 +7,7 @@
 Discoverability, Interoperability, Type-Safe Client SDKs, Client SDKs Generation,
 CI/CD Integration, Data Governance, Data Privacy.
 
-**Related OTEPs**: [OTEP0152](https://github.com/open-telemetry/oteps/blob/main/text/0152-telemetry-schemas.md), [OTEP0202](https://github.com/open-telemetry/oteps/blob/main/text/0202-events-and-logs-api.md).
+**Related OTEPs**: [OTEP0152](0152-telemetry-schemas.md), [OTEP0202](0202-events-and-logs-api.md).
 
 ----
 _Unlike the traditional data ecosystem (OLTP and OLAP), the world of telemetry
@@ -97,7 +97,7 @@ Examples of use cases include:
   * Triggering schema-driven transformations or processing in stream processors.
   * And more.
 
-This recent [paper](https://arxiv.org/pdf/2311.07509.pdf#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
+This recent [paper](https://arxiv.org/pdf/2311.07509#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
 from [data.world](https://data.world/home/), along with
 the [MetricFlow framework](https://docs.getdbt.com/docs/build/about-metricflow)
 which underpins the [dbt Semantic Layer](https://www.getdbt.com/product/semantic-layer),
@@ -193,7 +193,7 @@ Telemetry Schemas would replace/augment existing SchemaURL.
 ![Use cases](./img/0243-otel-weaver-use-cases.svg)
 
 Note: The relationship between Telemetry Schema v1.1
-([OTEP 0152](https://github.com/open-telemetry/oteps/blob/main/text/0152-telemetry-schemas.md))
+([OTEP 0152](0152-telemetry-schemas.md))
 and the Component and Resolved Telemetry Schema concepts is still being
 discussed. This will be clarified in future OTEPs (refer to the last section).
 
@@ -382,5 +382,5 @@ of the Resolved Telemetry Schema.
 ## Links
 
 - [Positional Paper: Schema-First Application Telemetry](https://research.facebook.com/publications/positional-paper-schema-first-application-telemetry/)
-- [A benchmark to understand the role of knowledge graphs on Large Language Model's accuracy for question answering on enterprise sql databases](https://arxiv.org/pdf/2311.07509.pdf#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
+- [A benchmark to understand the role of knowledge graphs on Large Language Model's accuracy for question answering on enterprise sql databases](https://arxiv.org/pdf/2311.07509#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
 - [MetricFlow framework](https://docs.getdbt.com/docs/build/about-metricflow)

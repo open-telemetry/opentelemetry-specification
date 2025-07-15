@@ -61,7 +61,7 @@ This document describes the serialization of OpenTelemetry data as JSON objects 
 
 #### JSON lines file
 
-This file is a JSON lines file (jsonlines.org), and therefore follows those requirements:
+This file is a [JSON lines file](https://jsonlines.org), and therefore follows those requirements:
 
 * UTF-8 encoding
 * Each line is a valid JSON value

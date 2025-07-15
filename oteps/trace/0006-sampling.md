@@ -341,6 +341,6 @@ recommend the trace be sampled or not sampled until mid-way through execution;
 * [opentelemetry-specification/32](https://github.com/open-telemetry/opentelemetry-specification/issues/32)
 * [opentelemetry-specification/31](https://github.com/open-telemetry/opentelemetry-specification/issues/31)
 
-[trace-flags]: https://github.com/w3c/trace-context/blob/master/spec/20-http_request_header_format.md#trace-flags
+[trace-flags]: https://github.com/w3c/trace-context/blob/main/spec/20-http_request_header_format.md#trace-flags
 [specs-pr-216]: https://github.com/open-telemetry/opentelemetry-specification/pull/216
-[span-creation]: https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/api.md#span-creation
+[span-creation]: https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#span-creation

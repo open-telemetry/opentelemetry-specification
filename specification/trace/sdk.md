@@ -19,10 +19,12 @@ linkTitle: SDK
   * [ForceFlush](#forceflush)
 - [Tracer](#tracer)
   * [TracerConfig](#tracerconfig)
+  * [Enabled](#enabled)
 - [Additional Span Interfaces](#additional-span-interfaces)
 - [Sampling](#sampling)
   * [Recording Sampled reaction table](#recording-sampled-reaction-table)
   * [SDK Span creation](#sdk-span-creation)
+    + [Span flags](#span-flags)
   * [Sampler](#sampler)
     + [ShouldSample](#shouldsample)
     + [GetDescription](#getdescription)
@@ -30,11 +32,33 @@ linkTitle: SDK
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceIdRatioBased](#traceidratiobased)
-      - [Requirements for `TraceIdRatioBased` sampler algorithm](#requirements-for-traceidratiobased-sampler-algorithm)
+      - [`TraceIdRatioBased` sampler configuration](#traceidratiobased-sampler-configuration)
+      - [`TraceIdRatioBased` sampler algorithm](#traceidratiobased-sampler-algorithm)
+      - [`TraceIdRatioBased` sampler description](#traceidratiobased-sampler-description)
+      - [`TraceIdRatioBased` sampler compatibility warning](#traceidratiobased-sampler-compatibility-warning)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
+    + [CompositeSampler](#compositesampler)
+      - [ComposableSampler](#composablesampler)
+        * [GetSamplingIntent](#getsamplingintent)
+      - [Built-in ComposableSamplers](#built-in-composablesamplers)
+        * [ComposableAlwaysOn](#composablealwayson)
+        * [ComposableAlwaysOff](#composablealwaysoff)
+        * [ComposableTraceIDRatioBased](#composabletraceidratiobased)
+        * [ComposableParentThreshold](#composableparentthreshold)
+        * [ComposableRuleBased](#composablerulebased)
+        * [ComposableAnnotating](#composableannotating)
+  * [Sampling Requirements](#sampling-requirements)
+    + [TraceID randomness](#traceid-randomness)
+    + [Random trace flag](#random-trace-flag)
+    + [Explicit randomness](#explicit-randomness)
+      - [Do not overwrite explicit randomness](#do-not-overwrite-explicit-randomness)
+      - [Root samplers set explicit randomness for non-random TraceIDs](#root-samplers-set-explicit-randomness-for-non-random-traceids)
+    + [Presumption of TraceID randomness](#presumption-of-traceid-randomness)
+    + [IdGenerator randomness](#idgenerator-randomness)
 - [Span Limits](#span-limits)
 - [Id Generators](#id-generators)
+  * [IdGenerator randomness](#idgenerator-randomness-1)
 - [Span processor](#span-processor)
   * [Interface definition](#interface-definition)
     + [OnStart](#onstart)
@@ -69,7 +93,7 @@ It SHOULD only be possible to create `Tracer` instances through a `TracerProvide
 The `TracerProvider` MUST implement the [Get a Tracer API](api.md#get-a-tracer).
 
 The input provided by the user MUST be used to create
-an [`InstrumentationScope`](../glossary.md#instrumentation-scope) instance which
+an [`InstrumentationScope`](../common/instrumentation-scope.md) instance which
 is stored on the created `Tracer`.
 
 **Status**: [Development](../document-status.md) - The `TracerProvider` MUST
@@ -104,7 +128,7 @@ the [TracerConfig](#tracerconfig) for a [Tracer](#tracer).
 The function MUST accept the following parameter:
 
 * `tracer_scope`:
-  The [`InstrumentationScope`](../glossary.md#instrumentation-scope) of
+  The [`InstrumentationScope`](../common/instrumentation-scope.md) of
   the `Tracer`.
 
 The function MUST return the relevant `TracerConfig`, or some signal indicating
@@ -186,6 +210,18 @@ It consists of the following parameters:
   necessary for implementations to ensure that changes to `disabled` are
   immediately visible to callers of `Enabled`.
 
+### Enabled
+
+**Status**: [Development](../document-status.md)
+
+`Enabled` MUST return `false` when either:
+
+- there are no registered [`SpanProcessors`](#span-processor),
+- `Tracer` is disabled ([`TracerConfig.disabled`](#tracerconfig) is `true`).
+
+Otherwise, it SHOULD return `true`.
+It MAY return `false` to support additional optimizations and features.
+
 ## Additional Span Interfaces
 
 The [API-level definition for Span's interface](api.md#span-operations)
@@ -263,7 +299,7 @@ The OpenTelemetry API has two properties responsible for the data collection:
   receive them unless the `Sampled` flag was also set.
 * `Sampled` flag in `TraceFlags` on `SpanContext`. This flag is propagated via
   the `SpanContext` to child Spans. For more details see the [W3C Trace Context
-  specification](https://www.w3.org/TR/trace-context/#sampled-flag). This flag indicates that the `Span` has been
+  specification][W3CCONTEXTSAMPLEDFLAG]. This flag indicates that the `Span` has been
   `sampled` and will be exported. [Span Exporters](#span-exporter) MUST
   receive those spans which have `Sampled` flag set to true and they SHOULD NOT receive the ones
   that do not.
@@ -298,10 +334,7 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
 1. If there is a valid parent trace ID, use it. Otherwise generate a new trace ID
    (note: this must be done before calling `ShouldSample`, because it expects
    a valid trace ID as input).
-2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method
-   (Note that the [built-in `ParentBasedSampler`](#parentbased) can be used to
-   use the sampling decision of the parent,
-   translating a set SampledFlag to RECORD and an unset one to DROP).
+2. Query the `Sampler`'s [`ShouldSample`](#shouldsample) method.
 3. Generate a new span ID for the `Span`, independently of the sampling decision.
    This is done so other components (such as logs or exception handling) can rely on
    a unique span ID, even if the `Span` is a non-recording instance.
@@ -313,6 +346,14 @@ When asked to create a Span, the SDK MUST act as if doing the following in order
    A non-recording span MAY be implemented using the same mechanism as when a
    `Span` is created without an SDK installed or as described in
    [wrapping a SpanContext in a Span](api.md#wrapping-a-spancontext-in-a-span).
+
+#### Span flags
+
+The OTLP representation for Span and Span Link includes a 32-bit field declared as Span Flags.
+
+Bits 0-7 (8 least significant bits) of the Span Flags field are reserved for the 8 bits of Trace Context flags,
+specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
+[See the list of recognized flags](./api.md#spancontext).
 
 ### Sampler
 
@@ -384,40 +425,78 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### TraceIdRatioBased
 
-* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
-parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
-the `ParentBased` sampler specified below.
-* Description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
-  with `RATIO` replaced with the Sampler instance's trace sampling ratio
-  represented as a decimal number. The precision of the number SHOULD follow
-  implementation language standards and SHOULD be high enough to identify when
-  Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
-  had a sampling ratio of 1 to every 10,000 spans it COULD return
-  `"TraceIdRatioBased{0.000100}"` as its description.
+**Status**: [Development](../document-status.md)
 
-TODO: Add details about how the `TraceIdRatioBased` is implemented as a function
-of the `TraceID`. [#1413](https://github.com/open-telemetry/opentelemetry-specification/issues/1413)
+The `TraceIdRatioBased` sampler implements simple, ratio-based probability sampling using randomness features specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
+OpenTelemetry follows W3C Trace Context Level 2, which specifies 56 bits of randomness,
+[specifying how to make consistent probability sampling decisions using 56 bits of randomness][CONSISTENTSAMPLING].
 
-##### Requirements for `TraceIdRatioBased` sampler algorithm
+The `TraceIdRatioBased` sampler MUST ignore the parent `SampledFlag`.
+For respecting the parent `SampledFlag`, see the `ParentBased` sampler specified below.
 
-* The sampling algorithm MUST be deterministic. A trace identified by a given
-  `TraceId` is sampled or not independent of language, time, etc. To achieve this,
-  implementations MUST use a deterministic hash of the `TraceId` when computing
-  the sampling decision. By ensuring this, running the sampler on any child `Span`
-  will produce the same decision.
-* A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
-  traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
-  sample. This is important when a backend system may want to run with a higher
-  sampling rate than the frontend system, this way all frontend traces will
-  still be sampled and extra traces will be sampled on the backend only.
-* **WARNING:** Since the exact algorithm is not specified yet (see TODO above),
-  there will probably be changes to it in any language SDK once it is, which
-  would break code that relies on the algorithm results.
-  Only the configuration and creation APIs can be considered stable.
-  It is recommended to use this sampler algorithm only for root spans
-  (in combination with [`ParentBased`](#parentbased)) because different language
-  SDKs or even different versions of the same language SDKs may produce inconsistent
-  results for the same input.
+Note that the "ratio-based" part of this Sampler's name implies that
+it makes a probability decision directly from the TraceID, even though
+it was not originally specified in an exact way.  In the present
+specification, the Sampler decision is more nuanced: only a portion of
+the identifier is used, after checking whether the OpenTelemetry
+TraceState field contains an explicit randomness value.
+
+[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
+
+##### `TraceIdRatioBased` sampler configuration
+
+The `TraceIdRatioBased` sampler is typically configured using a 32-bit or 64-bit floating point number to express the sampling ratio.
+The minimum valid sampling ratio is `2^-56`, and the maximum valid sampling ratio is 1.0.
+From an input sampling ratio, a rejection threshold value is calculated; see [consistent-probability sampler requirements][CONSISTENTSAMPLING] for details on converting sampling ratios into thresholds with variable precision.
+
+[CONSISTENTSAMPLING]: ./tracestate-probability-sampling.md
+
+##### `TraceIdRatioBased` sampler algorithm
+
+Given a Sampler configured with a sampling threshold `T` and Context with randomness value `R` (typically, the 7 rightmost bytes of the trace ID), when `ShouldSample()` is called, it uses the expression `R >= T` to decide whether to return `RECORD_AND_SAMPLE` or `DROP`.
+
+* If randomness value (R) is greater or equal to the rejection threshold (T), meaning when (R >= T), return `RECORD_AND_SAMPLE`, otherwise, return `DROP`.
+* When (R >= T), the OpenTelemetry TraceState SHOULD be modified to include the key-value `th:T` for rejection threshold value (T), as specified for the [OpenTelemetry TraceState `th` sub-key][TRACESTATEHANDLING].
+
+[TRACESTATEHANDLING]: ./tracestate-handling.md#sampling-threshold-value-th
+
+##### `TraceIdRatioBased` sampler description
+
+The `TraceIdRatioBased` GetDescription MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
+with `RATIO` replaced with the Sampler instance's trace sampling ratio
+represented as a decimal number. The precision of the number SHOULD follow
+implementation language standards and SHOULD be high enough to identify when
+Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
+had a sampling ratio of 1 to every 10,000 spans it could return
+`"TraceIdRatioBased{0.000100}"` as its description.
+
+##### `TraceIdRatioBased` sampler compatibility warning
+
+This specification has been revised from the original
+`TraceIdRatioBased` Sampler definition.  The present definition for
+`TraceIdRatioBased` uses a new definition for trace randomness, where
+unless an explicit randomness value is set in the OpenTelemetry
+TraceState `rv` sub-key, Samplers are meant to presume that TraceIDs
+contain the necessary 56 bits of randomness.
+
+When a TraceIdRatioBased Sampler makes a decision for a non-root Span
+based on TraceID randomness, there is a possibility that the TraceID
+was in fact generated by an older SDK, unaware of this specification.
+The Trace random flag lets us disambiguate these two cases.  This flag
+propagates information to let TraceIdRatioBased Samplers confirm that
+TraceIDs are random, however this requires W3C Trace Context Level 2
+to be supported by every Trace SDK that has handled the context.
+
+When a TraceIdRatioBased Sampler makes a decision for a non-root Span
+using TraceID randomness, but the Trace random flag was not set, the
+SDK SHOULD issue a warning statement in its log with a compatibility
+warning.  As an example of this compatibility warning:
+
+```
+WARNING: The TraceIdRatioBased sampler is presuming TraceIDs are random
+and expects the Trace random flag to be set in confirmation.  Please
+upgrade your caller(s) to use W3C Trace Context Level 2.
+```
 
 #### ParentBased
 
@@ -460,9 +539,208 @@ The following configuration properties should be available when creating the sam
 * polling interval - polling interval for getting configuration from remote
 * initial sampler - initial sampler that is used before the first configuration is fetched
 
-[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#remote-sampling
-[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/apis/#remote-sampling-configuration-stable
-[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/sampling/#adaptive-sampling
+[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#remote-sampling
+[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/architecture/apis/#remote-sampling-configuration-stable
+[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#adaptive-sampling
+
+#### CompositeSampler
+
+**Status**: [Development](../document-status.md)
+
+CompositeSampler is a decorator that implements the standard `Sampler` interface but uses a composition of samplers to make its decisions.
+
+The CompositeSampler takes a ComposableSampler as input and delegates the sampling decision to that interface.  See [Probability Sampling in TraceState](./tracestate-probability-sampling.md) for more details.
+
+##### ComposableSampler
+
+ComposableSampler is a specialized interface that extends the standard Sampler functionality. It introduces a composable approach to sampling by defining a new method called `GetSamplingIntent`, which allows multiple samplers to work together in making a sampling decision.
+
+###### GetSamplingIntent
+
+Returns a SamplingIntent structure that indicates the sampler's preference for sampling a Span, without actually making the final decision.
+
+**Required arguments:**
+
+* All of the original Sampler API parameters are included
+* Parent context, threshold, incoming trace state, and trace flag
+  information MAY be precomputed so that ComposableSamplers do not
+  repeatedly probe the Context for this information.
+
+Note: ComposableSamplers MUST NOT modify the parameters passed to
+delegate GetSamplingIntent methods, as they are considered read-only
+state.
+
+**Return value:**
+
+The method returns a `SamplingIntent` structure with the following elements:
+
+* `threshold` - The sampling threshold value. A lower threshold increases the likelihood of sampling.
+* `threshold_reliable` - A boolean indicating if the threshold can be reliably used for
+   [Span-to-Metrics estimation](./tracestate-probability-sampling.md#sampling-related-terms).
+* `attributes_provider` - An optional provider of attributes to be added to the span if it is sampled.
+* `trace_state_provider` - An optional provider of a modified TraceState.
+
+Note that `trace_state_provider` may be a significant source of
+complexity.  ComposableSamplers MUST NOT modify the OpenTelemetry
+TraceState (i.e., the `ot` sub-key of TraceState).  The calling
+CompositeSampler SHOULD update the threshold of the outgoing
+TraceState (unless `!threshold_reliable`) and that the explicit
+randomness values MUST not be modified.
+
+##### Built-in ComposableSamplers
+
+###### ComposableAlwaysOn
+
+* Always returns a `SamplingIntent` with threshold set to sample all spans (threshold = 0)
+* Sets `threshold_reliable` to `true`
+* Does not add any attributes
+
+###### ComposableAlwaysOff
+
+* Always returns a `SamplingIntent` with no threshold, indicating all spans should be dropped
+* Sets `threshold_reliable` to `false`
+* Does not add any attributes
+
+###### ComposableTraceIDRatioBased
+
+* Returns a `SamplingIntent` with threshold determined by the configured sampling ratio
+* Sets `threshold_reliable` to `true`
+* Does not add any attributes
+
+**Required parameters:**
+
+* `ratio` - A value between `2^-56` and 1.0 (inclusive) representing the desired probability of sampling.
+
+A ratio value of 0 is considered non-probabilistic. For the zero case
+a `ComposableAlwaysOff` instance SHOULD be returned instead.
+
+###### ComposableParentThreshold
+
+* For spans without a parent context, delegate to the root sampler
+* For spans with a parent context, returns a `SamplingIntent` that propagates the parent's sampling decision
+* Returns the parent's threshold if available; otherwise, if the parent's *sampled* flag is set, returns threshold=0; otherwise, if the parent's *sampled* flag is not set, no threshold is returned.
+* Sets `threshold_reliable` to match the parent's reliability, which is true if the parent had a threshold.
+* Does not add any attributes
+
+**Required parameters:**
+
+* `root` - A delegate for sampling spans without a parent context.
+
+###### ComposableRuleBased
+
+* Evaluates a series of rules based on predicates and returns the `SamplingIntent` from the first matching sampler
+* If no rules match, returns a non-sampling intent
+
+**Required parameters:**
+
+* `rules` - A list of (Predicate, ComposableSampler) pairs, where Predicate is a function that evaluates whether a rule applies
+
+###### ComposableAnnotating
+
+* Delegates the sampling decision to another sampler but adds attributes to sampled spans
+* Returns a `SamplingIntent` that combines the delegate's threshold with additional attributes
+
+**Required parameters:**
+
+* `attributes` - Attributes to add to sampled spans
+* `delegate` - The underlying sampler that makes the actual sampling decision
+
+**Example configuration:**
+
+An example of creating a composite sampler configuration:
+
+```
+// Create a rule-based sampler for root spans
+rootSampler = ComposableRuleBased([
+  (isHealthCheck, ComposableAlwaysOff),
+  (isCheckout, ComposableAlwaysOn),
+  (isAnything, ComposableTraceIDRatio(0.1))
+])
+
+// Create a parent-based sampler for child spans
+finalSampler = ComposableParentThreshold(rootSampler)
+```
+
+This example creates a configuration where:
+
+- Health check endpoints are never sampled
+- Checkout endpoints are always sampled
+- Other root spans are sampled at 10%
+- Child spans follow their parent's sampling decision
+
+### Sampling Requirements
+
+**Status**: [Development](../document-status.md)
+
+The [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation includes [a Random trace flag][W3CCONTEXTRANDOMFLAG] for indicating that the TraceID contains 56 random bits, specified for statistical purposes.
+This flag indicates that [the least-significant ("rightmost") 7 bytes or 56 bits of the TraceID are random][W3CCONTEXTTRACEID].
+
+Note the Random flag does not propagate through [Trace Context Level 1][W3CCONTEXTLEVEL1] implementations, which do not recognize the flag.
+When this flag is 1, it is considered meaningful.  When this flag is 0, it may be due to a non-random TraceID or because a Trace Context Level 1 propagator was used.
+To enable sampling in this and other situations where TraceIDs lack sufficient randomness,
+OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encoded in the [W3C TraceState field][W3CCONTEXTTRACESTATE].
+
+This specification recommends the use of either TraceID randomness or explicit randomness,
+which ensures that samplers always have sufficient randomness when using W3C Trace Context propagation.
+
+[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
+[W3CCONTEXTLEVEL1]: https://www.w3.org/TR/trace-context/
+[W3CCONTEXTTRACEID]: https://www.w3.org/TR/trace-context-2/#randomness-of-trace-id
+[W3CCONTEXTTRACESTATE]: https://www.w3.org/TR/trace-context-2/#tracestate-header
+[W3CCONTEXTSAMPLEDFLAG]: https://www.w3.org/TR/trace-context-2/#sampled-flag
+[W3CCONTEXTRANDOMFLAG]: https://www.w3.org/TR/trace-context-2/#random-trace-id-flag
+[OTELRVALUE]: ./tracestate-handling.md#explicit-randomness-value-rv
+
+#### TraceID randomness
+
+For root span contexts, the SDK SHOULD implement the TraceID randomness requirements of the [W3C Trace Context Level 2][W3CCONTEXTTRACEID] Candidate Recommendation when generating TraceID values.
+
+#### Random trace flag
+
+For root span contexts, the SDK SHOULD set the `Random` flag in the trace flags when it generates TraceIDs that meet the [W3C Trace Context Level 2 randomness requirements][W3CCONTEXTTRACEID].
+
+#### Explicit randomness
+
+Explicit randomness is a mechanism that enables API users and
+SDK authors to control trace randomness.  The following recommendation
+applies to Trace SDKs that have disregarded the recommendation on
+TraceID randomness, above.  It has two parts.
+
+##### Do not overwrite explicit randomness
+
+API users control the initial TraceState of a root span, so they can
+provide explicit randomness for a trace by defining the [`rv`
+sub-key of the OpenTelemetry TraceState][OTELRVALUE].  SDKs and Samplers
+MUST NOT overwrite explicit randomness in an OpenTelemetry TraceState
+value.
+
+##### Root samplers set explicit randomness for non-random TraceIDs
+
+When the SDK has generated a TraceID that does not meet the [W3C Trace
+Context Level 2 randomness requirements][W3CCONTEXTTRACEID], indicated
+by an unset trace random flag, and when the the [`rv` sub-key of the
+OpenTelemetry TraceState][OTELRVALUE] is not already set, the Root
+sampler has the opportunity to insert an explicit randomness value.
+
+Root Samplers MAY insert an explicit randomness value into the
+OpenTelemetry TraceState value in cases where an explicit
+randomness value is not already set.
+
+For example, here's a W3C Trace Context with non-random identifiers and an
+explicit randomness value:
+
+```
+traceparent: 00-ffffffffffffffffffffffffffffffff-ffffffffffffffff-00
+tracestate: ot=rv:7479cfb506891d
+```
+
+#### Presumption of TraceID randomness
+
+For all span contexts, OpenTelemetry samplers SHOULD presume that TraceIDs meet the W3C Trace Context Level 2 randomness requirements, unless an explicit randomness value is present in the [`rv` sub-key of the OpenTelemetry TraceState][OTELRVALUE].
+
+#### IdGenerator randomness
+
+If the SDK uses an `IdGenerator` extension point, the SDK SHOULD allow the extension to determine whether the Random flag is set when new IDs are generated.
 
 ## Span Limits
 
@@ -531,6 +809,18 @@ public interface IdGenerator {
 Additional `IdGenerator` implementing vendor-specific protocols such as AWS
 X-Ray trace id generator MUST NOT be maintained or distributed as part of the
 Core OpenTelemetry repositories.
+
+### IdGenerator randomness
+
+**Status**: [Development](../document-status.md)
+
+Custom implementations of the `IdGenerator` SHOULD identify themselves
+appropriately when all generated TraceID values meet the [W3C Trace
+Context Level 2 randomness requirements][W3CCONTEXTTRACEID], so that
+the Trace `random` flag will be set in the associated Trace contexts.
+This is presumed to be a static property of the `IdGenerator`
+implementation which can be inferred using language features, for
+example by extending a marker interface.
 
 ## Span processor
 

@@ -1,6 +1,6 @@
 # Resource SDK
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md) except where otherwise specified
 
 A [Resource](../overview.md#resources) is an immutable representation of the entity producing
 telemetry as [Attributes](../common/README.md#attribute).
@@ -127,6 +127,46 @@ will not know what Schema URL to use). If multiple detectors are combined and
 the detectors use different non-empty Schema URL it MUST be an error since it is
 impossible to merge such resources. The resulting resource is undefined, and its
 contents are implementation specific.
+
+#### Resource detector name
+
+**Status**: [Development](../document-status.md)
+
+Resource detectors SHOULD have a unique name for reference in configuration. For
+example, users list and configure individual resource detectors by name
+in [declarative configuration](../configuration/README.md#declarative-configuration).
+Names SHOULD be [snake case](https://en.wikipedia.org/wiki/Snake_case) and
+consist of lowercase alphanumeric and `_` characters, which ensures they conform
+to declarative
+configuration [property name requirements](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#property-name-case).
+
+Resource detector names SHOULD reflect
+the [root namespace](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/naming.md#general-naming-considerations)
+of attributes they populate. For example, a resource detector named `os`
+populates `os.*` attributes. Resource detectors which populate attributes from
+multiple root namespaces SHOULD choose a name which appropriately conveys their
+purpose.
+
+An SDK which identifies multiple resource detectors with the same name SHOULD
+report an error. In order to limit collisions, resource detectors SHOULD
+document their name in a manner which is easily discoverable. Authors of
+resource detectors should check existing resource detectors to ensure their
+target name isn't already in use. Additionally, the following detector names are
+reserved for built-in resource detectors published with language SDKs:
+
+* `container`:
+  Populates [container.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/container.md)
+  attributes.
+* `host`:
+  Populates [host.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/host.md) and [os.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/os.md)
+  attributes.
+* `process`:
+  Populates [process.*](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/process.md)
+  attributes.
+* `service`: Populates `service.name` based
+  on [OTEL_SERVICE_NAME](../configuration/sdk-environment-variables.md#general-sdk-configuration)
+  environment variable; populates `service.instance.id`
+  as [defined here](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/service.md#service-attributes).
 
 ### Specifying resource information via an environment variable
 
