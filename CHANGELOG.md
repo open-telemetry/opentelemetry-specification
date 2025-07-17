@@ -35,7 +35,7 @@ release.
 
 ### OTEPs
 
-## v1.47.0 (2025-07-14)
+## v1.47.0 (2025-07-17)
 
 ### Traces
 
@@ -71,6 +71,11 @@ release.
 
 - Extend attributes to support complex values.
   ([#4485](https://github.com/open-telemetry/opentelemetry-specification/pull/4485))
+
+### Common
+
+- Update spec to comply with OTEP-232.
+  ([#4529](https://github.com/open-telemetry/opentelemetry-specification/pull/4529))
 
 ## v1.46.0 (2025-06-12)
 
