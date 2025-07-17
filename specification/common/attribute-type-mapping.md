@@ -54,6 +54,12 @@ follow the rules described below.
 
 ### Primitive Values
 
+#### Empty Value
+
+Empty values SHOULD be converted to AnyValue with no
+[value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L28-L30)
+field being set.
+
 #### Integer Values
 
 Integer values which are within the range of 64 bit signed numbers
