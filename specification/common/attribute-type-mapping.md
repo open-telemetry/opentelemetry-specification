@@ -13,6 +13,7 @@ linkTitle: Mapping to AnyValue
 
 - [Converting to AnyValue](#converting-to-anyvalue)
   * [Primitive Values](#primitive-values)
+    + [Empty Value](#empty-value)
     + [Integer Values](#integer-values)
     + [Enumerations](#enumerations)
     + [Floating Point Values](#floating-point-values)
