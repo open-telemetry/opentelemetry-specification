@@ -26,9 +26,22 @@ telemetry. Failure modes may exist when network availability drops due to a swit
 in networking – how an application performs when it has access to wifi vs when it
 does not is a critical distinction.
 
+Additionally, the notion of "Resource Detectors", while specified, is mostly
+left to SDKs to figure out the details and remains a bit of a wild west for
+non-SDK implementors. Most SDKs provide extension mechanisms for resource
+detection, and these extensions look awkwardly like other insturmentation, but
+without the benefit of a clear API and stability guarantees.
+
+Even within Semantic conventions, it has been problematic defining conventions
+for resource and sorting out code generation capabilities for providing these
+attributes. Going forward, we'd like to provide a clear, stable mechanism for
+instrumentation to provide resource attributes, with clear a "initialization"
+phase to continue to ensure consistent, reliable observability with existing
+Resource use cases.
+
 ## Explanation
 
-Changes to resources and entities are managed via a EntityProvider. When the resources
+Changes to resources and entities are managed via an EntityProvider. When the resources
 represented by an entity change, the telemetry system records these changes by updating
 the entity managed by the EntityProvider. These changes are then propagated to the
 rest of the telemetry system via EntityListeners that have been registered with the
@@ -39,7 +52,66 @@ on their various responsibilities without having to be directly aware of each ot
 For a highly extensible cross-cutting concern such as OpenTelemetry, this loose
 coupling is a valuable feature.
 
-## Internal details
+Additionally, an explicit initialization phase is added for SDK components,
+where EntityProvider while provide a clear signal when initialization across
+Resource detection has completed prior to reporting signals.
+
+## API Details
+
+A new `EntityProvider` API is added, which allows reporting resource Entity
+values.
+
+### EntityProvider
+
+The `EntityProvider` API MUST provide the following operations:
+
+* `Add or Update Entity`
+* `Replace Entity`
+* `Delete Entity`
+
+#### Add or Update Entity
+
+`Add or Update Entity` appends a new entity on to the end of the list of
+entities.  If the Entity already exists, then the description of the entity
+is updated.
+
+Add or Update Entity MUST accept the following parameters:
+
+* `type`: the type of the Entity being created.
+* `ID`: the set of attributes which identify the entity.
+* `description`: the set of attributes which describe the entity.
+* `schema_url` (optional): The Schema URL that should be recorded for entity.
+
+If the incoming Entity's `type` is not found in the current list of entities,
+then the new Entity is added to the list.
+
+If the incoming Entity conflicts with an existing entity, it is ignored.
+
+Otherwise, the description of the Entity is updated with the incoming
+description.
+
+#### Replace Entity
+
+`Replace Entity` replaces the resource attributes associated with an entity.
+
+Replace Entity MUST accept the following parameters:
+
+* `type`: the type of the Entity being created.
+* `ID`: the set of attributes which identify the entity.
+* `description`: the set of attributes which describe the entity.
+* `schema_url` (optional): The Schema URL that should be recorded for entity.
+
+This is equivalent to an (optional) "delete" then "addOrUpdate" for an entity.
+
+#### Delete Entity
+
+`Delete Entity` removes the resource attributes associated with an entity.
+
+Delete Entity MUST accept the following parameters:
+
+* `type`: the type of the Entity being removed.
+
+## SDK details
 
 Like the other Providers used in OpenTelemetry, the EntityProvider MUST allow
 for alternative implementations. This means that the EntityProvider API and
@@ -50,8 +122,17 @@ the same API/SDK pattern used everywhere in OpenTelemetry.
 
 An EntityListener MUST provide the following operations:
 
+- `On ResourceInitialize`
 - `On EntityState`
 - `On EntityDelete`
+
+#### On ResourceInitialize
+
+`On EntityState` MUST accept the following parameters:
+
+* `Resource`: represents the entire set of resources after initalize.
+
+This operation MUST only be called once per EntityProvider.
 
 #### On EntityState
 
@@ -73,13 +154,15 @@ An EntityListener MUST provide the following operations:
 
 A `EntityProvider` MUST provide the following operations:
 
-* `Update Entity`
+* `Add or Update Entity`
+* `Replace Entity`
 * `Delete Entity`
 * `Get Resource`
 * `On Change`
 
-For multithreaded systems, a lock SHOULD be used to queue all calls to `UpdateEntity`
-and `DeleteEntity`. This is to help avoid inconsistent reads and writes.
+For multithreaded systems, a lock SHOULD be used to queue all calls to
+`AddorUpdateEntity`, `UpdateEntity` and `DeleteEntity`.
+This is to help avoid inconsistent reads and writes.
 
 The resource reference held by the EntityProvider SHOULD be updated atomically,
 so that calls to `GetResource` do not require a lock.
@@ -96,36 +179,70 @@ Creation of a EntityProvider MUST accept the following parameters:
 Internally, the entities MUST be merged in the order provided to create the initial
 resource.
 
-#### Add Entity
+#### Add or Update Entity
 
-`Add Entity` appends a new entity on to the end of the list of entities.
+`Add or Update Entity` appends a new entity on to the end of the list of
+entities.  If the Entity already exists, then the description of the entity
+is updated.
 
-Add Entity MUST accept the following parameters:
+Add or Update Entity MUST accept the following parameters:
 
-* `ID`: the ID of the Entity being created.
-* `name`: the name of the Entity being created.
-* `attributes`: the set of attributes associated with the entity.
+* `type`: the type of the Entity being created.
+* `ID`: the set of attributes which identify the entity.
+* `description`: the set of attributes which describe the entity.
+* `schema_url` (optional): The Schema URL that should be recorded for entity.
+
+If the incoming Entity's `type` is not found in the current list of entities,
+then the new Entity is added to the list.
 
 After an entity is created, it MUST be appended to the list of current entities.
-A new resource object MUST be generated by merging the list of entities together in order.
+A new resource object MUST be generated by merging the list of entities together
+in order.
+
+If the incoming Entity's `type` parameter matches an existing Entity in
+the current list AND the `ID` attributes for these entities are different, then
+the SDK MUST ignore the new entity.
+
+If the incoming Entity's `type` parameter matches an existing Entity in the
+current list AND the `ID` attributes for these entities are the same but
+the `schema_url` is different, then the SDK MUST ignore the new entity.
+
+If the incoming Entity's `type` parameter matches an existing Entity in the
+current list AND the `ID` attributes for these entities are the same AND the
+`schema_url` is the same, then the SDK MUST add any new attributes found in the
+`description` to the existing entity. Any new `description` attributes with the
+same keys as existing `description` attributes SHOULD replace previous values.
 
 `Add Entity` MUST trigger the `On EntityState` operation for all
 registered `EntityListeners`.
 
-#### Update Entity
+#### Replace Entity
 
-`Update Entity` replaces the resource attributes associated with an entity.
+`Replace Entity` replaces the resource attributes associated with an entity.
 
-Update Entity MUST accept the following parameters:
+Replace Entity MUST accept the following parameters:
 
-* `ID`: the ID of the Entity being updated.
-* `attributes`: the new set of attributes associated with the entity.
+* `type`: the type of the Entity being created.
+* `ID`: the set of attributes which identify the entity.
+* `description`: the set of attributes which describe the entity.
+* `schema_url` (optional): The Schema URL that should be recorded for entity.
 
-After an entity is updated, a new resource object MUST be generated by merging
-the list of entities together in order.
+If an existing Entity with the same `type` already exists, then `Replace Entity`
+MUST trigger an `On EntityDelete` operation for all registered `EntityListener`s
+with the previous state of the Entity. The Resource reported MUST NOT include
+the removed Entity.
 
-`Update Entity` MUST trigger the `On EntityState` operation for all
-registered `EntityListeners`.
+A new entity should be created and added to the list of entities. After the
+entity is created, it MUST be appended to the list of current entities. A new
+resource object MUST be generated by merging the list of entities together
+in order.
+
+`Replace Entity` MUST trigger the `On EntityState` operation for all
+registered `EntityListener`s.
+
+NOTE: `EntityListener`s SHOULD receive an `On EntityDelete` operation when
+a previous entity was removed before receiving an `On EntityUpdate` for the
+new entity.
 
 #### Delete Entity
 
@@ -133,7 +250,7 @@ registered `EntityListeners`.
 
 Update Entity MUST accept the following parameters:
 
-* `ID`: the ID of the Entity being updated.
+* `type`: the type of the Entity being removed.
 
 After an entity is deleted, a new resource object MUST be generated by merging
 the list of entities together in order.
@@ -143,12 +260,17 @@ registered `EntityListeners`.
 
 #### Get Resource
 
-`Get Resource` MUST return a reference to the current resource held by the EntityProvider.
+`Get Resource` MUST return a reference to the current resource held by the
+EntityProvider.
 
 #### On Change
 
 `On Change` registers an `EntityListener` to be called every time an entity is updated
 or deleted.
+
+If the `EntityProvider` is already initialized, then it MUST call
+`On ResourceInitialize` immediately with the current resource held by the
+EntityProvider.
 
 ### SDK Changes
 
