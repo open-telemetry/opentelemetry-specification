@@ -57,6 +57,9 @@ release.
 
 ### Common
 
+- Add empty value to attribute.
+  ([#4595](https://github.com/open-telemetry/opentelemetry-specification/pull/4595))
+
 ### Supplementary Guidelines
 
 ### OTEPs
