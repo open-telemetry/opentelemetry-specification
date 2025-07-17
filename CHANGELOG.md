@@ -67,6 +67,11 @@ release.
   specification.
   ([#4548](https://github.com/open-telemetry/opentelemetry-specification/pull/4548))
 
+### OTEPs
+
+- Extend attributes to support complex values.
+  ([#4485](https://github.com/open-telemetry/opentelemetry-specification/pull/4485))
+
 ## v1.46.0 (2025-06-12)
 
 ### Metrics
