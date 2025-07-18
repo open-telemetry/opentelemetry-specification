@@ -33,6 +33,3 @@ discouraged from using the `Context` API directly. In those cases, users will
 manipulate `Context` through cross-cutting concerns APIs instead, in order to
 perform operations such as setting trace or baggage entries for a specified
 `Context`.
-
-A `Context` is expected to have the following operations, with their
-respective language differences:

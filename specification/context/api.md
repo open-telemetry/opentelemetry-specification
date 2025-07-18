@@ -9,6 +9,9 @@ weight: 1
 
 ## Operations
 
+A `Context` is expected to have the following operations, with their
+respective language differences:
+
 ### Create a key
 
 Keys are used to allow cross-cutting concerns to control access to their local state.
