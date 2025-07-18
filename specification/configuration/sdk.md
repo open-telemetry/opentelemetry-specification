@@ -134,7 +134,7 @@ interfaces in the configuration data model:
 | SDK extension plugin interface                                                              | Status                                                                             |
 |---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
 | [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | +                                                                                  |
-| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | +                                                                                  |
+| [text map propagator](../propagators/api.md#textmap-propagator)                     | +                                                                                  |
 | [span exporter](../trace/sdk.md#span-exporter)                                              | +                                                                                  |
 | [span processor](../trace/sdk.md#span-processor)                                            | +                                                                                  |
 | [sampler](../trace/sdk.md#sampler)                                                          | +                                                                                  |
@@ -249,7 +249,7 @@ Interpret configuration model and return SDK components.
 * [TracerProvider](../trace/sdk.md#tracer-provider)
 * [MeterProvider](../metrics/sdk.md#meterprovider)
 * [LoggerProvider](../logs/sdk.md#loggerprovider)
-* [Propagators](../context/api-propagators.md#composite-propagator)
+* [Propagators](../propagators/api.md#composite-propagator)
 * [ConfigProvider](#configprovider)
 
 The multiple responses MAY be returned using a tuple, or some other data

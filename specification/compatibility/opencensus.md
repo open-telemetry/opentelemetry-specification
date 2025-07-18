@@ -45,12 +45,12 @@ Starting with an application using entirely OpenCensus instrumention for traces 
     1. Install the OpenTelemetry SDK, with an equivalent exporter
         1. If using an OpenCensus exporter, switch to using an OTLP exporter
     2. Install equivalent OpenTelemetry resource detectors
-    3. Install OpenTelemetry [`W3c TraceContext`](../context/api-propagators.md#propagators-distribution) propagator, which is the equivalent of the OpenCensus' `TextFormat` propagator.
+    3. Install OpenTelemetry [`W3c TraceContext`](../propagators/api.md#propagators-distribution) propagator, which is the equivalent of the OpenCensus' `TextFormat` propagator.
     4. **breaking**: Install the metrics and trace bridges
     5. Remove initialization of OpenCensus exporters
 2. Migrate the instrumentation (API)
     1. **breaking**: For OpenCensus instrumentation packages, migrate to the OpenTelemetry equivalent.
-        1. If migrating gRPC, enable the [`BinaryPropagation`](../context/api-propagators.md#propagators-distribution) propagator if the language supports it. Otherwise, enable OpenCensus `BinaryPropagation` on the OpenTelemetry gRPC instrumentation.
+        1. If migrating gRPC, enable the [`BinaryPropagation`](../propagators/api.md#propagators-distribution) propagator if the language supports it. Otherwise, enable OpenCensus `BinaryPropagation` on the OpenTelemetry gRPC instrumentation.
     2. For external dependencies, wait for it to migrate to OpenTelemetry, and update the dependency.
     3. For instrumentation which is part of the application, migrate it following the "library" guidance below.
 3. Clean up: Remove the metrics and trace bridges
@@ -203,7 +203,7 @@ This adapter MUST provide an implementation of OpenCensus `BinaryPropogator` to
 write OpenCensus binary format using OpenTelemetry's context.  This
 implementation may be drawn from OpenCensus if applicable.
 
-The `BinaryPropagator` MUST be a [TextMapPropagator](../context/api-propagators.md#textmap-propagator)
+The `BinaryPropagator` MUST be a [TextMapPropagator](../propagators/api.md#textmap-propagator)
 if possible in the language. Otherwise, the `BinaryPropagator` MUST be a library,
 which is expected to be used by OpenTelemetry gRPC instrumentation. gRPC
 instrumentation in those languages SHOULD NOT enable the `BinaryPropagator` by

@@ -32,9 +32,9 @@
 
 Environment variables provide a mechanism to propagate context and baggage
 information across process boundaries when network protocols are not
-applicable. This specification extends the [API Propagators](../context/api-propagators.md)
+applicable. This specification extends the [API Propagators](../propagators/api.md)
 to define how the
-[TextMapPropagator](../context/api-propagators.md#textmap-propagator) can be
+[TextMapPropagator](../propagators/api.md#textmap-propagator) can be
 used with environment variables.
 
 Common systems where context propagation via environment variables is useful
@@ -49,7 +49,7 @@ include:
 Propagating context via environment variables involves reading and writing to
 environment variables. A `TextMapPropagator` SHOULD be used alongside its
 normal `Get`, `Set`, `Extract`, and `Inject` functionality as described in the [API
-Propagators](../context/api-propagators.md) specification.
+Propagators](../propagators/api.md) specification.
 
 ### Environment Variable Names
 
