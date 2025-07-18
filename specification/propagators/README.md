@@ -1,7 +1,7 @@
 <!--- Hugo front matter used to generate the website version of this page:
 --->
 
-# Propergators
+# Propagators
 
 **Status**: [Stable](../document-status.md)
 
