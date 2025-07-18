@@ -1,3 +1,8 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: API
+weight: 1
+--->
+
 # Propagators API
 
 **Status**: [Stable](../document-status.md)
@@ -7,12 +12,9 @@
 
 <!-- toc -->
 
-- [Overview](#overview)
-- [Propagator Types](#propagator-types)
-  * [Carrier](#carrier)
-  * [Operations](#operations)
-    + [Inject](#inject)
-    + [Extract](#extract)
+- [Operations](#operations)
+  * [Inject](#inject)
+  * [Extract](#extract)
 - [TextMap Propagator](#textmap-propagator)
   * [Fields](#fields)
   * [TextMap Inject](#textmap-inject)
@@ -43,48 +45,13 @@
 
 </details>
 
-## Overview
-
-Cross-cutting concerns send their state to the next process using
-`Propagator`s, which are defined as objects used to read and write
-context data to and from messages exchanged by the applications.
-Each concern creates a set of `Propagator`s for every supported
-`Propagator` type.
-
-`Propagator`s leverage the `Context` to inject and extract data for each
-cross-cutting concern, such as traces and `Baggage`.
-
-Propagation is usually implemented via a cooperation of library-specific request
-interceptors and `Propagators`, where the interceptors detect incoming and outgoing requests and use the `Propagator`'s extract and inject operations respectively.
-
-The Propagators API is expected to be leveraged by users writing
-instrumentation libraries.
-
-## Propagator Types
-
-A `Propagator` type defines the restrictions imposed by a specific transport
-and is bound to a data type, in order to propagate in-band context data across process boundaries.
-
-The Propagators API currently defines one `Propagator` type:
-
-- `TextMapPropagator` is a type that injects values into and extracts values
-  from carriers as string key/value pairs.
-
-### Carrier
-
-A carrier is the medium used by `Propagator`s to read values from and write values to.
-Each specific `Propagator` type defines its expected carrier type, such as a string map
-or a byte array.
-
-Carriers used at [Inject](#inject) are expected to be mutable.
-
-### Operations
+## Operations
 
 `Propagator`s MUST define `Inject` and `Extract` operations, in order to write
 values to and read values from carriers respectively. Each `Propagator` type MUST define the specific carrier type
 and MAY define additional parameters.
 
-#### Inject
+### Inject
 
 Injects the value into a carrier. For example, into the headers of an HTTP request.
 
@@ -94,7 +61,7 @@ Required arguments:
 `SpanContext`, `Baggage` or another cross-cutting concern context.
 - The carrier that holds the propagation fields. For example, an outgoing message or HTTP request.
 
-#### Extract
+### Extract
 
 Extracts the value from an incoming request. For example, from the headers of an HTTP request.
 
