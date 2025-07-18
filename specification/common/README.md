@@ -8,7 +8,7 @@ path_base_for_github_subdir:
 
 # Common specification concepts
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -38,15 +38,13 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
   - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
   - An array of primitive type values. The array MUST be homogeneous,
     i.e., it MUST NOT contain values of different types.
+  - **Status**: [Development](../document-status.md) - An empty value (e.g. `null`).
 
 For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
-Attribute values expressing a numerical value of zero, an empty string, or an
-empty array are considered meaningful and MUST be stored and passed on to
-processors / exporters.
-
-Attribute values of `null` are not valid and attempting to set a `null` value is
-undefined behavior.
+Attribute values expressing an empty value, a numerical value of zero,
+an empty string, or an empty array are considered meaningful and MUST be stored
+and passed on to processors / exporters.
 
 `null` values SHOULD NOT be allowed in arrays. However, if it is impossible to
 make sure that no `null` values are accepted
@@ -82,21 +80,6 @@ definition allowing values of [type `Any`](../logs/data-model.md#type-any). This
 reflects that LogRecord attributes are expected to model data produced from
 external log APIs, which do not necessarily have the same value type
 restrictions as the standard attribute definition.
-
-Note: Extending the set of standard attribute value types is a breaking change.
-This was decided after extensive debate, with arguments as follows:
-
-* Limiting the types of attribute values to a set which has proved sufficient
-  during several years of OpenTelemetry's development is a useful guardrail for
-  design. In taking additional value types off the table, we narrow the solution
-  space and have more productive design conversations.
-* Upon proposing to extend support for complex value types, we received significant
-  pushback. Limiting attribute value types to primitives and arrays of primitives
-  simplifies data consumers' efforts to create search indexes and perform statistical
-  analysis.
-* To address concerns over restricting standard attributes to primitive types, it was
-  called out that complex types can be encoded as existing primitive types, such as
-  representing datetime as a string or 64 bit integer.
 
 ### Attribute Limits
 
