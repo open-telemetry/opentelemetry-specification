@@ -273,7 +273,7 @@ non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 An API called `IsRemote`, that returns a boolean value, which is `true` if the SpanContext was
 propagated from a remote parent, MUST be provided.
-When extracting a `SpanContext` through the [Propagators API](../context/api-propagators.md),
+When extracting a `SpanContext` through the [Propagators API](../propagators/api.md),
 `IsRemote` MUST return true, whereas for the SpanContext of any child spans it MUST return false.
 
 ### TraceState
@@ -296,7 +296,7 @@ and MUST follow the [general error handling guidelines](../error-handling.md).
 
 Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
 Such changes then make sense only right before
-[`SpanContext` propagation](../context/api-propagators.md)
+[`SpanContext` propagation](../propagators/api.md)
 or [telemetry data exporting](sdk.md#span-exporter).
 In both cases, `Propagator`s and `SpanExporter`s may create a modified `TraceState` copy before serializing it to the wire.
 
@@ -850,7 +850,7 @@ be called concurrently.
 
 ## Included Propagators
 
-See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
+See [Propagators Distribution](../propagators/api.md#propagators-distribution)
 for how propagators are to be distributed.
 
 ## Behavior of the API in the absence of an installed SDK
