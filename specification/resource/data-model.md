@@ -1,3 +1,8 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: Data Model
+weight: 2
+--->
+
 # Resource Data Model
 
 **Status**: [Development](../document-status.md)
