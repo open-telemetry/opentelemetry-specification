@@ -70,7 +70,7 @@ Each configuration option MUST be overridable by a signal specific option.
 
 - **Protocol**: The transport protocol. Options MUST be one of: `grpc`, `http/protobuf`, `http/json`.
   See [Specify Protocol](./exporter.md#specify-protocol) for more details.
-  - Default: `http/protobuf`
+  - Default: `http/protobuf` [4]
   - Env vars: `OTEL_EXPORTER_OTLP_PROTOCOL` `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL` `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` `OTEL_EXPORTER_OTLP_LOGS_PROTOCOL`
   - Type: [Enum][]
 
@@ -85,6 +85,8 @@ they SHOULD continue to be supported as they were part of a stable release of th
 **[3]**: If no compression value is explicitly specified, SIGs can default to the value they deem
 most useful among the supported options. This is especially important in the presence of technical constraints,
 e.g. directly sending telemetry data from mobile devices to backend servers.
+
+**[4]**: The default protocol SHOULD be `http/protobuf`, unless there are strong reasons for SDKs to select `grpc` as the default. For instance, maintaining backward compatibility may require keeping `grpc` as the default if it was previously established in a stable SDK release.
 
 Supported values for `OTEL_EXPORTER_OTLP_*COMPRESSION` options:
 
