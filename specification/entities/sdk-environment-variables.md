@@ -20,7 +20,6 @@ linkTitle: SDK
   * [Validation Requirements](#validation-requirements)
   * [Error Handling](#error-handling)
   * [Environment Variable Conflict Resolution](#environment-variable-conflict-resolution)
-  * [Relationship to Programmatic Entity Configuration](#relationship-to-programmatic-entity-configuration)
 
 <!-- tocstop -->
 
@@ -55,7 +54,7 @@ Multiple entities are separated by semicolons (`;`).
 
 ```
 entities      := entity (";" entity)*
-entity        := type id_attrs desc_attrs? schema_url?
+entity        := type id_attrs desc_attrs? schema_url? | ""
 type          := [a-zA-Z][a-zA-Z0-9._-]*
 id_attrs      := "{" key_value_list "}"
 desc_attrs    := "[" key_value_list "]"
@@ -84,16 +83,20 @@ OTEL_ENTITIES="container{container.id=cont-456};host{host.id=host-789}[host.name
 
 # Minimal entity (only required fields)
 OTEL_ENTITIES="service{service.name=minimal-app}"
+
+# Empty strings are allowed (leading, trailing, and consecutive semicolons are ignored)
+OTEL_ENTITIES=";service{service.name=app1};;host{host.id=host-123};"
 ```
 
 ### Parsing Algorithm
 
 1. Split the input string by semicolons (`;`) to get individual entity definitions
 2. For each entity definition:
-   a. Extract the entity type (everything before the first `{`)
-   b. Extract identifying attributes from `{...}` block
-   c. Extract descriptive attributes from `[...]` block (if present)
-   d. Extract schema URL from `@...` portion (if present)
+   a. Skip if the entity definition is empty (allows consecutive semicolons and leading/trailing semicolons)
+   b. Extract the entity type (everything before the first `{`)
+   c. Extract identifying attributes from `{...}` block
+   d. Extract descriptive attributes from `[...]` block (if present)
+   e. Extract schema URL from `@...` portion (if present)
 3. Parse key-value lists using comma (`,`) as separator and equals (`=`) for assignment
 4. Validate that each entity has a non-empty type and at least one identifying attribute
 5. Create entity objects and associate them with the resource
@@ -129,11 +132,12 @@ The SDK SHOULD be resilient to malformed input and follow these error handling r
 1. **Invalid syntax**: If the environment variable contains invalid syntax, the SDK SHOULD log a warning and ignore the malformed portions while processing valid parts
 2. **Missing required fields**: If an entity is missing required fields (type or identifying attributes), the SDK SHOULD log a warning and skip that entity
 3. **Empty entities list**: An empty `OTEL_ENTITIES` environment variable is valid and indicates no entities are defined
-4. **Duplicate entities**: If multiple entities of the same type with identical identifying attributes are defined, the SDK SHOULD use the last occurrence and SHOULD log a warning
-5. **Invalid characters**: If unencoded reserved characters are found in attribute keys or values, the SDK SHOULD log a warning and attempt to parse the value as-is
-6. **Schema URL validation**: If a schema URL is present but invalid, the SDK SHOULD log a warning and ignore the URL while processing the entity
-7. **Conflicting attributes between entities**: If two entities define the same identifying attribute key with different values, the SDK SHOULD log a warning and discard the conflicting entity, keeping the last valid definition
-8. **Conflict with resource attributes**: If an entity attribute conflicts with a resource attribute, the SDK SHOULD log a warning and apply the conflict resolution rules defined below
+4. **Empty entity strings**: Empty strings between semicolons (including leading and trailing semicolons) SHOULD be ignored during parsing
+5. **Duplicate entities**: If multiple entities of the same type with identical identifying attributes are defined, the SDK SHOULD use the last occurrence and SHOULD log a warning
+6. **Invalid characters**: If unencoded reserved characters are found in attribute keys or values, the SDK SHOULD log a warning and attempt to parse the value as-is
+7. **Schema URL validation**: If a schema URL is present but invalid, the SDK SHOULD log a warning and ignore the URL while processing the entity
+8. **Conflicting attributes between entities**: If two entities define the same identifying attribute key with different values, the SDK SHOULD log a warning and discard the conflicting entity, keeping the last valid definition
+9. **Conflict with resource attributes**: If an entity attribute conflicts with a resource attribute, the SDK SHOULD log a warning and apply the conflict resolution rules defined below
 
 ### Environment Variable Conflict Resolution
 
