@@ -9,38 +9,16 @@ release.
 
 ### Context
 
-- Add Supplementary Guidelines for environment variables as context carrier
-  specification.
-  ([#4548](https://github.com/open-telemetry/opentelemetry-specification/pull/4548))
-
 ### Traces
-
-- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
-  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
-  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
-- Define CompositeSampler implementation and built-in ComposableSampler interfaces.
-  ([#4466](https://github.com/open-telemetry/opentelemetry-specification/pull/4466))
-- Define how SDK implements `Tracer.Enabled`.
-  ([#4537](https://github.com/open-telemetry/opentelemetry-specification/pull/4537))
 
 ### Metrics
 
 ### Logs
 
-- Stabilize `Event Name` parameter of `Logger.Enabled`.
-  ([#4534](https://github.com/open-telemetry/opentelemetry-specification/pull/4534))
-- Stabilize SDK and No-Op `Logger.Enabled`.
-  ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
-- `SeverityNumber=0` MAY be used to represent an unspecified value.
-  ([#4535](https://github.com/open-telemetry/opentelemetry-specification/pull/4535))
 - Improve concurrency safety description of `LogRecordProcessor.OnEmit`.
   ([#4578](https://github.com/open-telemetry/opentelemetry-specification/pull/4578))
 
 ### Baggage
-
-- Add Supplementary Guidelines for environment variables as context carrier
-  specification.
-  ([#4548](https://github.com/open-telemetry/opentelemetry-specification/pull/4548))
 
 ### Profiles
 
@@ -52,9 +30,6 @@ release.
 
 ### Compatibility
 
-- Clarify expectations about Prometheus content negotiation for metric names.
-  ([#4543](https://github.com/open-telemetry/opentelemetry-specification/pull/4543))
-
 ### SDK Configuration
 
 ### Common
@@ -62,6 +37,48 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.47.0 (2025-07-18)
+
+### Traces
+
+- Define sampling threshold field in OpenTelemetry TraceState; define the behavior
+  of TraceIdRatioBased sampler in terms of W3C Trace Context Level 2 randomness.
+  ([#4166](https://github.com/open-telemetry/opentelemetry-specification/pull/4166))
+- Define CompositeSampler implementation and built-in ComposableSampler interfaces.
+  ([#4466](https://github.com/open-telemetry/opentelemetry-specification/pull/4466))
+- Define how SDK implements `Tracer.Enabled`.
+  ([#4537](https://github.com/open-telemetry/opentelemetry-specification/pull/4537))
+
+### Logs
+
+- Stabilize `Event Name` parameter of `Logger.Enabled`.
+  ([#4534](https://github.com/open-telemetry/opentelemetry-specification/pull/4534))
+- Stabilize SDK and No-Op `Logger.Enabled`.
+  ([#4536](https://github.com/open-telemetry/opentelemetry-specification/pull/4536))
+- `SeverityNumber=0` MAY be used to represent an unspecified value.
+  ([#4535](https://github.com/open-telemetry/opentelemetry-specification/pull/4535))
+
+### Compatibility
+
+- Clarify expectations about Prometheus content negotiation for metric names.
+  ([#4543](https://github.com/open-telemetry/opentelemetry-specification/pull/4543))
+
+### Supplementary Guidelines
+
+- Add Supplementary Guidelines for environment variables as context carrier
+  specification.
+  ([#4548](https://github.com/open-telemetry/opentelemetry-specification/pull/4548))
+
+### OTEPs
+
+- Extend attributes to support complex values.
+  ([#4485](https://github.com/open-telemetry/opentelemetry-specification/pull/4485))
+
+### Common
+
+- Update spec to comply with OTEP-232.
+  ([#4529](https://github.com/open-telemetry/opentelemetry-specification/pull/4529))
 
 ## v1.46.0 (2025-06-12)
 
