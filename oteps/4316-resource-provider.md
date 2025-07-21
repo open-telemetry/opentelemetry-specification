@@ -56,17 +56,39 @@ Additionally, an explicit initialization phase is added for SDK components,
 where EntityProvider while provide a clear signal when initialization across
 Resource detection has completed prior to reporting signals.
 
+## High Level Details
+
+This OTEP proposes two main changes to Resource within OpenTelemetry:
+
+- The creation of an API which can be used to report entity changes where
+  the lifetime of the entity does not match the lifetime of the SDK.
+- An explicit initialization phase to the SDK, which allows for coordination
+  between resource detection and signal providers.
+
 ## API Details
 
 A new `EntityProvider` API is added, which allows reporting resource Entity
 values.
+
+The API provides three primary user cases:
+
+- Instrumentation can provide entity status in a one-time fashion, which is
+  used to identify the resource at startup of the SDK.
+- Instrumentation can provide an entity in a scoped manner (add, then delete)
+  when it can attach directly to the Entities lifecycle. For example, reporting
+  [Activity](https://developer.android.com/guide/components/activities/activity-lifecycle)
+  status in Android.
+- Instrumentation can watch for entity changes and replace or update the status
+  of the entity in the SDK. For example, updating session / page status when
+  a page comes back from inactive.
+
 
 ### EntityProvider
 
 The `EntityProvider` API MUST provide the following operations:
 
 * `Add or Update Entity`
-* `Replace Entity`
+* `Add or Replace Entity`
 * `Delete Entity`
 
 #### Add or Update Entity
@@ -90,11 +112,11 @@ If the incoming Entity conflicts with an existing entity, it is ignored.
 Otherwise, the description of the Entity is updated with the incoming
 description.
 
-#### Replace Entity
+#### Add or Replace Entity
 
-`Replace Entity` replaces the resource attributes associated with an entity.
+`Add or Replace Entity` adds replaces the resource attributes associated with an entity.
 
-Replace Entity MUST accept the following parameters:
+Add or Replace Entity MUST accept the following parameters:
 
 * `type`: the type of the Entity being created.
 * `ID`: the set of attributes which identify the entity.
@@ -171,6 +193,13 @@ Calls to EntityListeners SHOULD be serialized, to avoid thread safety issues and
 ensure that callbacks are processed in the right order.
 
 #### EntityProvider creation
+
+TODO - Rework this section.
+
+- We want to allow instrumentation to provide entities at startup. We don't want
+  a different API for managing lifecycle changes of entities vs. startup if
+  we can help it.
+- We want to defer `GetResource` calls until this has completed, ideally.
 
 Creation of a EntityProvider MUST accept the following parameters:
 
