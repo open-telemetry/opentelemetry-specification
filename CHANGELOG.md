@@ -17,6 +17,8 @@ release.
 
 - Improve concurrency safety description of `LogRecordProcessor.OnEmit`.
   ([#4578](https://github.com/open-telemetry/opentelemetry-specification/pull/4578))
+- Clarify that `SeverityNumber` values are used when comparing severities.
+  ([#4552](https://github.com/open-telemetry/opentelemetry-specification/pull/4552))
 
 ### Baggage
 
@@ -31,6 +33,9 @@ release.
 ### Compatibility
 
 ### SDK Configuration
+
+- Enum values provided via environment variables SHOULD be interpreted in a case-insensitive manner.
+  ([#4576](https://github.com/open-telemetry/opentelemetry-specification/pull/4576))
 
 ### Common
 
