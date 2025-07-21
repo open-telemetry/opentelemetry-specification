@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Clarify that `SeverityNumber` values are used when comparing severities.
+  ([#4552](https://github.com/open-telemetry/opentelemetry-specification/pull/4552))
+
 ### Baggage
 
 ### Profiles
@@ -28,6 +31,9 @@ release.
 ### Compatibility
 
 ### SDK Configuration
+
+- Enum values provided via environment variables SHOULD be interpreted in a case-insensitive manner.
+  ([#4576](https://github.com/open-telemetry/opentelemetry-specification/pull/4576))
 
 ### Common
 
