@@ -6,6 +6,7 @@
 - [Guidance](#guidance)
   * [Details](#details)
 - [API changes](#api-changes)
+- [SDK changes](#sdk-changes)
 - [Examples](#examples)
   * [Logging errors from client library in a user application](#logging-errors-from-client-library-in-a-user-application)
   * [Logging errors inside the natively instrumented library](#logging-errors-inside-the-natively-instrumented-library)
@@ -150,11 +151,11 @@ be to record exception stack traces when logging exceptions at `Error` or higher
       - The application encounters a (presumably) terminal error, such as an out-of-memory condition.
 
 6. When recording exceptions/errors in logs, applications and instrumentations are encouraged to add additional attributes
-   to describe the context in which the exception/error has happened.
+   to describe the context in which the exception/error occurred.
    They are also encouraged to define their own events and enrich them with exception/error details.
 
 7. The OTel SDK SHOULD record exception stack traces on logs with severity `Error` or higher and drop
-   then on logs with lower severity. It SHOULD allow users to change the threshold.
+   them on logs with lower severity. It SHOULD allow users to change the threshold.
 
    See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that
    records stack traces conditionally.
@@ -217,7 +218,7 @@ try {
     return response(HttpStatus.NOT_FOUND);
 } catch (ForbiddenException ex) {
     logger.logRecordBuilder()
-        // let's assume it's really unexpected for this application - service does not have access to the underlying storage.
+        // let's assume it's really unexpected for this application - the service does not have access to the underlying storage.
         .severityNumber(Severity.ERROR)
         .addAttribute(AttributeKey.stringKey("com.example.content.id"), contentId)
         // by default SDK will record stack trace for this exception since the severity is ERROR
@@ -346,7 +347,7 @@ final class InstrumentedRecordInterceptor<K, V> implements RecordInterceptor<K, 
       .setSeverity(Severity.ERROR)
       .addAttribute("messaging.message.id", record.getId())
       ...
-      .addException(ex)
+      .addException(exception)
       .setBody("Consumer error")
       .emit();
     // ..
@@ -358,7 +359,7 @@ See the [corresponding Java (tracing) instrumentation](https://github.com/open-t
 
 ## Prototypes
 
-TODO (at least prototype in the language that does not have exceptions).
+TODO (at least two prototypes: one in a language that does and other in the one that does not have exceptions).
 
 ## Prior art and alternatives
 
