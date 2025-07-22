@@ -57,6 +57,9 @@ release.
 
 ### Common
 
+- Exporters and SDKs may allow devs to append a product identifier in `User-Agent` header.
+  ([#4560](https://github.com/open-telemetry/opentelemetry-specification/pull/4560))
+
 ### Supplementary Guidelines
 
 ### OTEPs
