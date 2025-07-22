@@ -9,7 +9,7 @@ path_base_for_github_subdir:
 
 **Status**: [Stable](../document-status.md).
 
-**Concept**: [Context](/docs/context-propagation/#context)
+**Concept**: [Context](https://opentelemetry.io/docs/concepts/context-propagation/#context)
 
 ## Overview
 

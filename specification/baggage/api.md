@@ -142,11 +142,11 @@ MUST provide the following functionality to interact with a `Context` instance:
 - Insert the `Baggage` to a `Context` instance
 
 The functionality listed above is necessary because API users SHOULD NOT have
-access to the [Context Key](../context/README.md#create-a-key) used by the
+access to the [Context Key](../context/api.md#create-a-key) used by the
 Baggage API implementation.
 
 If the language has support for implicitly propagated `Context` (see
-[here](../context/README.md#optional-global-operations)), the API SHOULD also
+[here](../context/api.md#global-operations-optional)), the API SHOULD also
 provide the following functionality:
 
 - Get the currently active `Baggage` from the implicit context. This is

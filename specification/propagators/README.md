@@ -5,7 +5,7 @@
 
 **Status**: [Stable](../document-status.md)
 
-**Concept**: [Propagation](/docs/context-propagation/#propagation)
+**Concept**: [Propagation](https://opentelemetry.io/docs/concepts/context-propagation/#propagation)
 
 ## Overview
 
