@@ -6,25 +6,21 @@
 - [Guidance](#guidance)
   * [Details](#details)
 - [API changes](#api-changes)
-- [Migrating instrumentations](#migrating-instrumentations)
 - [Examples](#examples)
   * [Logging errors from client library in a user application](#logging-errors-from-client-library-in-a-user-application)
   * [Logging errors inside the natively instrumented library](#logging-errors-inside-the-natively-instrumented-library)
   * [Logging errors in messaging processor](#logging-errors-in-messaging-processor)
     + [Natively instrumented library](#natively-instrumented-library)
     + [Instrumentation library](#instrumentation-library)
-- [Trade-offs and mitigations](#trade-offs-and-mitigations)
+- [Prototypes](#prototypes)
 - [Prior art and alternatives](#prior-art-and-alternatives)
-- [Open questions](#open-questions)
 - [Future possibilities](#future-possibilities)
 
 <!-- tocstop -->
 
-This OTEP provides guidance on how to record errors using OpenTelemetry Logs,
+This OTEP continues [Span Event API deprecation plan OTEP](./4430-span-event-api-deprecation-plan.md)
+and provides guidance on how to record errors and exceptions using OpenTelemetry Logs,
 focusing on minimizing duplication and providing context to reduce noise.
-
-In the long term, errors recorded in logs **will replace span events**
-(according to the [Event vision OTEP](./0265-event-vision.md)).
 
 > [!NOTE]
 > Throughout this OTEP, the terms exception and error are defined as follows:
@@ -36,18 +32,12 @@ In the long term, errors recorded in logs **will replace span events**
 
 ## Motivation
 
-Today, OTel supports recording *exceptions* using span events available through the Trace API. Outside the OTel world,
-*errors* are usually recorded by user apps and libraries using logging libraries,
-and may be recorded as OTel logs via a logging bridge.
+Today, OTel supports recording *exceptions* using span events available through
+the Trace API that is [being deprecated](./4430-span-event-api-deprecation-plan.md).
+Outside the OTel world, *exceptions* and *errors* are usually recorded by user apps
+and libraries using logging libraries, and may be recorded as OTel logs via a logging bridge.
 
-Using logs to record errors has the following advantages over using span events:
-
-- They can be recorded for operations that don't have any tracing instrumentation.
-- They can be sampled along with or separately from spans.
-- They can have different severity levels to reflect how critical the error is.
-- They are already reported natively by many frameworks and libraries.
-
-Recording errors is essential for troubleshooting, but regardless of how they are recorded, they can be noisy:
+Recording errors is essential for troubleshooting, but they can be noisy:
 
 - Distributed applications experience transient errors at a rate proportional to their scale, and
   errors in logs can be misleading. Individual occurrences of transient errors
@@ -86,8 +76,8 @@ be to record exception stack traces when logging exceptions at `Error` or higher
 
 ### Details
 
-1. Errors SHOULD be recorded as [logs](https://github.com/open-telemetry/semantic-conventions/blob/v1.29.0/docs/exceptions/exceptions-logs.md)
-   or as [log-based events](https://github.com/open-telemetry/semantic-conventions/blob/v1.29.0/docs/general/events.md).
+1. Errors SHOULD be recorded as [logs](https://github.com/open-telemetry/semantic-conventions/blob/v1.36.0/docs/exceptions/exceptions-logs.md)
+   or as [log-based events](https://github.com/open-telemetry/semantic-conventions/blob/v1.36.0/docs/general/events.md).
 
 2. Instrumentations for incoming requests, message processing, background job execution, or others that wrap application code and usually
    create local root spans, SHOULD record logs for unhandled errors with `Error` severity.
@@ -159,19 +149,18 @@ be to record exception stack traces when logging exceptions at `Error` or higher
       - The application detects an invalid configuration at startup and shuts down.
       - The application encounters a (presumably) terminal error, such as an out-of-memory condition.
 
-6. When recording exceptions in logs, applications and instrumentations are encouraged to add additional attributes
-   to describe the context in which the exception was thrown.
-   They are also encouraged to define their own error events and enrich them with exception details.
+6. When recording exceptions/errors in logs, applications and instrumentations are encouraged to add additional attributes
+   to describe the context in which the exception/error has happened.
+   They are also encouraged to define their own events and enrich them with exception/error details.
 
-7. The OTel SDK SHOULD record stack traces on exceptions with severity `Error` or higher and SHOULD allow users to
-   change the threshold.
+7. The OTel SDK SHOULD record exception stack traces on logs with severity `Error` or higher and drop
+   then on logs with lower severity. It SHOULD allow users to change the threshold.
 
    See [logback exception config](https://logback.qos.ch/manual/layouts.html#ex) for an example of configuration that
    records stack traces conditionally.
 
 8. Instrumentation libraries that record exceptions using span events SHOULD gracefully migrate
-   to log-based exceptions, offering it as an opt-in feature first and then switching to log-based exceptions
-   in the next major version update.
+   to log-based exceptions following the migration path outlined in the [Span Event API deprecation plan OTEP](./4430-span-event-api-deprecation-plan.md).
 
 ## API changes
 
@@ -190,32 +179,17 @@ The OTel Logs API SHOULD provide methods that enrich log records with exception 
 
 The OTel SDK, based on the log severity and configuration, SHOULD record exception details fully or partially.
 
-The signature of the method is to be determined by each language
-and can be overloaded as appropriate, including the ability to customize stack trace
-collection.
+The signature of the method is to be determined by each language and can be overloaded
+as appropriate.
 
-It MUST be possible to efficiently set exception information on a log record based on configuration
+It MUST be possible to efficiently set exception and error information on a log record based on configuration
 and without using the `setException` method.
 
-## Migrating instrumentations
+## SDK changes
 
-> [!NOTE]
-> New instrumentations or existing ones that do not record exceptions on span events SHOULD
-> NOT start recording exceptions on span events. They SHOULD NOT implement the migration plan
-> described below.
->
-> This section covers migration recommendations for existing instrumentations that already
-> report exceptions using span events.
-
-We will define a configuration option to let users choose whether they want instrumentations to record exceptions
-on span events or logs.
-
-A specific instrumentation SHOULD default to recording exceptions on span events in its current major version
-and record them in logs only when the user opts in.
-
-In the next major version, this instrumentation SHOULD stop recording exceptions on span events.
-
-This is a simplified version of [stability opt-in migration](https://github.com/open-telemetry/semantic-conventions/blob/727700406f9e6cc3f4e4680a81c4c28f2eb71569/docs/http/README.md?plain=1#L13-L37) used in semantic conventions.
+TODO: we should consider if exception instances should reach log processing pipeline
+where their processing can be customized or we'd rather do it via a separate concept like exception
+customizer.
 
 ## Examples
 
@@ -382,19 +356,9 @@ final class InstrumentedRecordInterceptor<K, V> implements RecordInterceptor<K, 
 
 See the [corresponding Java (tracing) instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/spring/spring-kafka-2.7/library/src/main/java/io/opentelemetry/instrumentation/spring/kafka/v2_7/InstrumentedRecordInterceptor.java) for details.
 
-## Trade-offs and mitigations
+## Prototypes
 
-1. Switching from recording exceptions as span events to log records is a breaking change
-   for any component following existing [exception guidance](/specification/trace/exceptions.md).
-
-2. Recording exceptions as log-based events would result in UX degradation for users
-   leveraging trace-only backends such as Jaeger.
-
-**Mitigation:**
-
-In addition to the plan outlined in the [Migration](#migrating-instrumentations) section, we
-should provide opt-in [log <-> span events conversion](https://github.com/open-telemetry/opentelemetry-specification/issues/4393)
-following the [Event vision OTEP](./0265-event-vision.md#relationship-to-span-events).
+TODO (at least prototype in the language that does not have exceptions).
 
 ## Prior art and alternatives
 
@@ -404,11 +368,6 @@ Alternatives:
    This can potentially mitigate the problem for existing applications when they log exceptions extensively.
    We should still provide optimal guidance for greenfield applications and libraries,
    covering the wider problem of recording errors.
-
-## Open questions
-
-- Do we need to have log-related limits similar to [span event limits](/specification/trace/sdk.md#span-limits)
-  on the SDK level?
 
 ## Future possibilities
 
