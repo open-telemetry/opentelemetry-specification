@@ -13,6 +13,14 @@ release.
 
 ### Metrics
 
+- Flexibilie escaping of characters that are discouraged by Prometheus Conventions
+  in Prometheus exporters.
+  ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
+- Flexibilize addition of unit/type related suffixes in Prometheus exporters.
+  ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
+- Define the configuration option "Translation Strategies" for Prometheus exporters.
+  ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
+
 ### Logs
 
 - Clarify that `SeverityNumber` values are used when comparing severities.
