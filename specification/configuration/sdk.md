@@ -1,3 +1,8 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: SDK
+weight: 3
+--->
+
 # Configuration SDK
 
 **Status**: [Development](../document-status.md)
