@@ -38,6 +38,9 @@ release.
 
 ### Compatibility
 
+- Define conversion of Prometheus native histograms to OpenTelemetry exponential histograms.
+  ([#4561](https://github.com/open-telemetry/opentelemetry-specification/pull/4561))
+
 ### SDK Configuration
 
 - Enum values provided via environment variables SHOULD be interpreted in a case-insensitive manner.

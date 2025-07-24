@@ -23,6 +23,7 @@ aliases:
   * [StateSet](#stateset)
   * [Unknown-typed](#unknown-typed)
   * [Histograms](#histograms)
+  * [Native Histograms](#native-histograms)
   * [Summaries](#summaries)
   * [Dropped Types](#dropped-types)
   * [Start Time](#start-time)
@@ -131,6 +132,36 @@ Multiple Prometheus histogram metrics MUST be merged together into a single OTLP
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the histogram's sum MUST be unset.
 
+### Native Histograms
+
+A [Prometheus Native Histogram](https://prometheus.io/docs/specs/native_histograms/)
+with standard (exponential) schema (i.e. schemas -4 to 8) and which are
+of the integer and counter [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
+MUST be converted to an OTLP Exponential Histogram as follows:
+
+- `Schema` is converted to the Exponential Histogram `Scale`.
+- The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
+  Stale NaN value. Otherwise,
+  - `Count` is converted to Exponential Histogram `Count`.
+  - `Sum` is converted to the Exponential Histogram `Sum`.
+- `Timestamp` is converted to the Exponential Histogram `TimeUnixNano` after
+  converting milliseconds to nanoseconds.
+- `ZeroCount` is converted directly to the Exponential Histogram `ZeroCount`.
+- `ZeroThreshold`, is converted to the Exponential Histogram `ZeroThreshold`.
+- The sparse bucket layout represented by `PositiveSpans` and `PositiveDeltas` is
+  converted to the Exponential Histogram dense layout represented by `Positive`
+  bucket counts and `Offset`. The same holds for `NegativeSpans` and
+  `NegativeDeltas`. Note that Prometheus Native Histograms buckets are indexed by
+  upper boundary while Exponential Histograms are indexed by lower boundary, the
+  result being that the Offset fields are different-by-one.
+- `Min` and `Max` are not set.
+- `StartTimeUnixNano` is set to the `Created` timestamp, if available.
+- `AggregationTemporality` is set to `cumulative`.
+
+Native histograms of the float or gauge flavors MUST be dropped.
+
+Native Histograms with `Schema` outside of the range [-4, 8] MUST be dropped.
+
 ### Summaries
 
 [Prometheus Summary](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Summary.
@@ -147,6 +178,7 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 The following Prometheus types MUST be dropped:
 
 * [Prometheus GaugeHistogram](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#gaugehistogram)
+* [Prometheus Native GaugeHistogram](https://prometheus.io/docs/specs/native_histograms/#gauge-histograms-vs-counter-histograms)
 
 ### Start Time
 
