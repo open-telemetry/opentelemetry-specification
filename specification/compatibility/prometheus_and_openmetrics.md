@@ -282,6 +282,9 @@ the scope schema URL as the `otel_scope_schema_url` label,
 the scope attributes as labels with `otel_scope_` prefix and following the rules
 described in the [`Metric Attributes`](#metric-attributes) section below,
 on all metric points, based on the scope the original data point was nested in.
+Scope attributes with names 'name', 'version', or 'schema_url' MUST be dropped
+to avoid conflicts with the already existing `otel_scope_name`, `otel_scope_version`, and
+`otel_scope_schema_url` labels.
 
 ### Gauges
 
