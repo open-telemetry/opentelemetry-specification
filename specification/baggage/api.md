@@ -142,11 +142,11 @@ MUST provide the following functionality to interact with a `Context` instance:
 - Insert the `Baggage` to a `Context` instance
 
 The functionality listed above is necessary because API users SHOULD NOT have
-access to the [Context Key](../context/README.md#create-a-key) used by the
+access to the [Context Key](../context/api.md#create-a-key) used by the
 Baggage API implementation.
 
 If the language has support for implicitly propagated `Context` (see
-[here](../context/README.md#optional-global-operations)), the API SHOULD also
+[here](../context/api.md#global-operations-optional)), the API SHOULD also
 provide the following functionality:
 
 - Get the currently active `Baggage` from the implicit context. This is
@@ -180,7 +180,7 @@ The API layer or an extension package MUST include the following `Propagator`s:
 
 * A `TextMapPropagator` implementing the [W3C Baggage Specification][w3c].
 
-See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
+See [Propagators Distribution](../propagators/api.md#propagators-distribution)
 for how propagators are to be distributed.
 
 See [Environment Variable Carriers](../context/env-carriers.md) for how propagation should
@@ -193,7 +193,7 @@ to the optional metadata.
 On `extract`, the propagator should store all metadata as a single metadata instance per entry.
 On `inject`, the propagator should append the metadata per the W3C specification format.
 Refer to the API Propagators
-[Operation](../context/api-propagators.md#operations) section for the
+[Operation](../propagators/api.md#operations) section for the
 additional requirements these operations need to follow.
 
 ## Conflict Resolution
