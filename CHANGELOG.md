@@ -23,6 +23,8 @@ release.
 
 ### Logs
 
+- Improve concurrency safety description of `LogRecordProcessor.OnEmit`.
+  ([#4578](https://github.com/open-telemetry/opentelemetry-specification/pull/4578))
 - Clarify that `SeverityNumber` values are used when comparing severities.
   ([#4552](https://github.com/open-telemetry/opentelemetry-specification/pull/4552))
 
