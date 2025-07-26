@@ -26,3 +26,5 @@ traces, metrics, logs, profiles etc.
 ## Specifications
 
 - [Data Model](./data-model.md)
+- [API](./api.md)
+- [SDK](./sdk.md)
