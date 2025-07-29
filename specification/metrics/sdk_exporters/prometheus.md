@@ -63,11 +63,13 @@ The configuration SHOULD allow the user to select which resource attributes to c
 include / exclude or regular expression based). Copied Resource attributes MUST NOT be
 excluded from the `target` info metric. The option MAY be named `with_resource_constant_labels`.
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without a [unit suffix](../../compatibility/prometheus_and_openmetrics.md#metric-metadata)
-or UNIT metadata. The option MAY be named `without_units`, and MUST be `false` by default.
+A Prometheus Exporter MAY support a configuration option that controls the translation of metric names from OpenTelemetry Naming Conventions to [Prometheus Naming conventions](https://prometheus.io/docs/practices/naming/).
+If the Prometheus exporter supports such configuration it MUST be named to something that resembles Prometheus configuration option `translation_strategy`, and the translation options MUST be:
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without a [type suffix](../../compatibility/prometheus_and_openmetrics.md#metric-metadata).
-The option MAY be named `without_type_suffix`, and MUST be `false` by default.
+- `UnderscoreEscapingWithSuffixes`, the default. This fully escapes metric names for classic Prometheus metric name compatibility, and includes appending type and unit suffixes.
+- `UnderscoreEscapingWithoutSuffixes`, metric names will continue to escape special characters to `_`, but suffixes won't be attached.
+- `NoUTF8EscapingWithSuffixes` will disable changing special characters to `_`. Special suffixes like units and `_total` for counters will be attached.
+- `NoTranslation`. This strategy bypasses all metric and label name translation, passing them through unaltered.
 
 A Prometheus Exporter MAY support a configuration option to produce metrics without [scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
 The option MAY be named `without_scope_info`, and MUST be `false` by default.
@@ -80,3 +82,12 @@ metric. The option MAY be named `without_target_info`, and MUST be `false` by de
 A Prometheus Exporter MUST support content negotiation to allow clients to request
 metrics in different formats based on the `Accept` header in HTTP requests. Content
 negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prometheus.io/docs/instrumenting/content_negotiation/).
+
+### Interaction with Translation Strategy
+
+Although a Prometheus Exporter MAY be configured with a `translation_strategy` for internal metric processing, the final output format and character escaping MUST follow what the content negotiation process determines based on the client's `Accept` header. The content negotiation requirements MUST take precedence over the configured translation strategy when determining the final output format.
+
+Examples:
+
+- If configured with `NoTranslation` but the client requests `escaping=underscores`, the exporter MUST apply underscore escaping.
+- If configured with `UnderscoreEscapingWithSuffixes` but the client requests `escaping=allow-utf8`, there's no need to revert what has been translated since the exporter will continue to be compliant.

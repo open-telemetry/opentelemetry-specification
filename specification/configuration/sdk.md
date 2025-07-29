@@ -17,7 +17,7 @@ weight: 3
       - [Supported SDK extension plugins](#supported-sdk-extension-plugins)
       - [ComponentsProvider operations](#componentsprovider-operations)
         * [Create Plugin](#create-plugin)
-  * [Config operations](#config-operations)
+  * [SDK operations](#sdk-operations)
     + [Parse](#parse)
     + [Create](#create)
     + [Register ComponentProvider](#register-componentprovider)
@@ -45,7 +45,7 @@ components:
 * [SDK extension components](#sdk-extension-components) defines how users and
   libraries extend file configuration with custom SDK extension plugin
   interfaces (exporters, processors, etc).
-* [Config operations](#config-operations) defines user APIs to parse
+* [SDK operations](#sdk-operations) defines user APIs to parse
   configuration files and produce SDK components from their contents.
 
 ### In-Memory configuration model
@@ -181,7 +181,7 @@ and attempts to extract data according to its configuration schema. If this
 fails (e.g. a required property is not present, a type is mismatches, etc.),
 Create Plugin SHOULD return an error.
 
-### Config operations
+### SDK operations
 
 SDK implementations of configuration MUST provide the following operations.
 

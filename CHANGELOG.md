@@ -13,8 +13,18 @@ release.
 
 ### Metrics
 
+- Flexibilie escaping of characters that are discouraged by Prometheus Conventions
+  in Prometheus exporters.
+  ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
+- Flexibilize addition of unit/type related suffixes in Prometheus exporters.
+  ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
+- Define the configuration option "Translation Strategies" for Prometheus exporters.
+  ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
+
 ### Logs
 
+- Improve concurrency safety description of `LogRecordProcessor.OnEmit`.
+  ([#4578](https://github.com/open-telemetry/opentelemetry-specification/pull/4578))
 - Clarify that `SeverityNumber` values are used when comparing severities.
   ([#4552](https://github.com/open-telemetry/opentelemetry-specification/pull/4552))
 
@@ -29,6 +39,9 @@ release.
 ### OpenTelemetry Protocol
 
 ### Compatibility
+
+- Define conversion of Prometheus native histograms to OpenTelemetry exponential histograms.
+  ([#4561](https://github.com/open-telemetry/opentelemetry-specification/pull/4561))
 
 ### SDK Configuration
 
