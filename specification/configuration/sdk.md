@@ -6,7 +6,6 @@
 
 - [Overview](#overview)
   * [In-Memory configuration model](#in-memory-configuration-model)
-  * [ConfigProvider](#configprovider)
   * [SDK extension components](#sdk-extension-components)
     + [ComponentProvider](#componentprovider)
       - [Supported SDK extension plugins](#supported-sdk-extension-plugins)
@@ -55,12 +54,6 @@ SDKs are encouraged to provide this in-memory representation in a manner that is
 idiomatic for their language. If an SDK needs to expose a class or interface,
 the name `Configuration` is RECOMMENDED.
 
-### ConfigProvider
-
-The SDK implementation of [`ConfigProvider`](./api.md#configprovider) MUST be
-created using a [`ConfigProperties`](./api.md#configproperties) representing
-the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
-mapping node of the [configuration model](./data-model.md).
 
 ### SDK extension components
 
@@ -274,6 +267,11 @@ configuration `properties` as an argument. If no `ComponentProvider` is
 registered with the `type` and `name`, Create SHOULD return an error.
 If [Create Plugin](#create-plugin) returns an error, Create SHOULD propagate the
 error.
+
+The SDK implementation of [`ConfigProvider`](./api.md#configprovider) MUST be
+created using a [`ConfigProperties`](./api.md#configproperties) representing
+the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
+mapping node of the [configuration model](./data-model.md).
 
 This SHOULD return an error if it encounters an error in `configuration` (i.e.
 fail fast) in accordance with
