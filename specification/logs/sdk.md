@@ -458,8 +458,9 @@ make the flush timeout configurable.
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below.
 
-**Status**: [Development](../document-status.md) - The SDK SHOULD implement
-the severity filter and trace based filter, as described below.
+**Status**: [Development](../document-status.md) - The SDK SHOULD implement the
+[severity filter](#severity-filter) and [trace based filter](#trace-based-filter),
+as described below.
 
 Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
