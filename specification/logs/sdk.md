@@ -508,15 +508,15 @@ This processor filters log records by minimum severity level.
 
 **Required operations:**
 
-* [`Enabled`](#enabled-1) - Return `false` if the provided
+* [`Enabled`](#enabled-1) - MUST return `false` if the provided
   [Severity Number](./data-model.md#field-severitynumber) is below the
-  configured `minimumSeverity`. Otherwise, forward to the delegate's
+  configured `minimumSeverity`. Otherwise, MUST forward to the delegate's
   `Enabled` method if available and return `true` if not available.
 * [`OnEmit`](#onemit) - If the log record's severity is below the configured
-  `minimumSeverity`, do not forward it to the delegate. Otherwise, forward the
+  `minimumSeverity`, MUST NOT forward it to the delegate. Otherwise, MUST forward the
   log record to the delegate.
-* [`Shutdown`](#shutdown) - Forward to the delegate's `Shutdown` method.
-* [`ForceFlush`](#forceflush-1) - Forward to the delegate's `ForceFlush` method.
+* [`Shutdown`](#shutdown) - MUST forward to the delegate's `Shutdown` method.
+* [`ForceFlush`](#forceflush-1) - MUST forward to the delegate's `ForceFlush` method.
 
 **Configurable parameters:**
 
@@ -533,15 +533,15 @@ This processor filters log records by span sampling status.
 
 **Required operations:**
 
-* [`Enabled`](#enabled-1) - Return `false` if the current
+* [`Enabled`](#enabled-1) - MUST return `false` if the current
   [Context](../context/README.md) contains a valid span context that is not
-  sampled. Otherwise, forward to the delegate's `Enabled` method if available
+  sampled. Otherwise, MUST forward to the delegate's `Enabled` method if available
   and return `true` if not available.
 * [`OnEmit`](#onemit) - If the log record is associated with a valid span
-  context that is not sampled, do not forward it to the delegate. Otherwise,
+  context that is not sampled, MUST NOT forward it to the delegate. Otherwise, MUST
   forward the log record to the delegate.
-* [`Shutdown`](#shutdown) - Forward to the delegate's `Shutdown` method.
-* [`ForceFlush`](#forceflush-1) - Forward to the delegate's `ForceFlush` method.
+* [`Shutdown`](#shutdown) - MUST forward to the delegate's `Shutdown` method.
+* [`ForceFlush`](#forceflush-1) - MUST forward to the delegate's `ForceFlush` method.
 
 **Configurable parameters:**
 
