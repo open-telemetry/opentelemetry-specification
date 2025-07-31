@@ -507,7 +507,7 @@ to make sure that they are not invoked concurrently.
 
 This processor is intended to wrap another processor (such as the
 [batching processor](#batching-processor)), in order to filter log records
-by a minimum severity level.
+based on their [SeverityLevel](./data-model.md#field-severitynumber).
 
 See the [supplementary guidelines](./supplementary-guidelines.md#filtering)
 for an implementation example.
@@ -537,17 +537,20 @@ for an implementation example.
 
 This processor is intended to wrap another processor (such as the
 [batching processor](#batching-processor)), in order to filter log records
-by span sampling status.
+based on their associated
+[trace sampling flag](./data-model.md#field-traceflags).
 
 **Required operations:**
 
-* [`Enabled`](#enabled-1) - MUST return `false` if the current
-  [Context](../context/README.md) contains a valid span context that is not
-  sampled. Otherwise, MUST forward to the delegate's `Enabled` method if available
-  and return `true` if not available.
-* [`OnEmit`](#onemit) - If the log record is associated with a valid span
-  context that is not sampled, MUST NOT forward it to the delegate. Otherwise, MUST
-  forward the log record to the delegate.
+* [`Enabled`](#enabled-1) - MUST forward to the delegate's `Enabled` if the
+  [`TraceFlags`](./data-model.md#field-traceflags) SAMPLED flag is set or
+  [`SpanId`](./data-model.md#field-spanid) is not present
+  (returning `true` if the delegate does not implement `Enabled`).
+  Otherwise MUST return `false`.
+* [`OnEmit`](#onemit) - MUST forward to the delegate's `OnEmit` if the
+  [`TraceFlags`](./data-model.md#field-traceflags) SAMPLED flag is set or
+  [`SpanId`](./data-model.md#field-spanid) is not present.
+  Otherwise MUST NOT forward to the delegate's `OnEmit`.
 * [`Shutdown`](#shutdown) - MUST forward to the delegate's `Shutdown` method.
 * [`ForceFlush`](#forceflush-1) - MUST forward to the delegate's `ForceFlush` method.
 
