@@ -504,11 +504,19 @@ to make sure that they are not invoked concurrently.
 
 **Status**: [Development](../document-status.md)
 
-This is an implementation of `LogRecordProcessor` that filters log records based
-on minimum severity level and delegates to a downstream processor.
+This processor filters log records by minimum severity level.
 
-Only log records with severity greater than or equal to the configured minimum
-are forwarded to the delegate processor.
+**Required operations:**
+
+* [`Enabled`](#enabled-1) - Return `false` if the provided
+  [Severity Number](./data-model.md#field-severitynumber) is below the
+  configured `minimumSeverity`. Otherwise, forward to the delegate's
+  `Enabled` method if available and return `true` if not available.
+* [`OnEmit`](#onemit) - If the log record's severity is below the configured
+  `minimumSeverity`, do not forward it to the delegate. Otherwise, forward the
+  log record to the delegate.
+* [`Shutdown`](#shutdown) - Forward to the delegate's `Shutdown` method.
+* [`ForceFlush`](#forceflush-1) - Forward to the delegate's `ForceFlush` method.
 
 **Configurable parameters:**
 
@@ -521,12 +529,19 @@ are forwarded to the delegate processor.
 
 **Status**: [Development](../document-status.md)
 
-This is an implementation of `LogRecordProcessor` that filters out log records
-associated with sampled out spans.
+This processor filters log records by span sampling status.
 
-Log records not tied to any span (invalid span context) are not sampled out and
-are forwarded to the delegate processor. Log records that are associated with
-valid span contexts are only forwarded if the associated span is sampled in.
+**Required operations:**
+
+* [`Enabled`](#enabled-1) - Return `false` if the current
+  [Context](../context/README.md) contains a valid span context that is not
+  sampled. Otherwise, forward to the delegate's `Enabled` method if available
+  and return `true` if not available.
+* [`OnEmit`](#onemit) - If the log record is associated with a valid span
+  context that is not sampled, do not forward it to the delegate. Otherwise,
+  forward the log record to the delegate.
+* [`Shutdown`](#shutdown) - Forward to the delegate's `Shutdown` method.
+* [`ForceFlush`](#forceflush-1) - Forward to the delegate's `ForceFlush` method.
 
 **Configurable parameters:**
 
