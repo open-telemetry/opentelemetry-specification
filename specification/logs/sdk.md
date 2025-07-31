@@ -36,6 +36,8 @@ weight: 3
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
+    + [Severity based processor](#severity-based-processor)
+    + [Trace based processor](#trace-based-processor)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
@@ -456,6 +458,9 @@ make the flush timeout configurable.
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below.
 
+**Status**: [Development](../document-status.md) - The SDK SHOULD implement
+severity based and trace based processors, as described below.
+
 Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
@@ -494,6 +499,39 @@ to make sure that they are not invoked concurrently.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
+
+#### Severity based processor
+
+**Status**: [Development](../document-status.md)
+
+This is an implementation of `LogRecordProcessor` that filters log records based
+on minimum severity level and delegates to a downstream processor.
+
+Only log records with severity greater than or equal to the configured minimum
+are forwarded to the delegate processor.
+
+**Configurable parameters:**
+
+* `minimumSeverity` - the minimum severity level required for passing the
+  log record on to the delegate.
+* `delegate` - the processor to delegate to for log records that are not
+  filtered out.
+
+#### Trace based processor
+
+**Status**: [Development](../document-status.md)
+
+This is an implementation of `LogRecordProcessor` that filters out log records
+associated with sampled out spans.
+
+Log records not tied to any span (invalid span context) are not sampled out and
+are forwarded to the delegate processor. Log records that are associated with
+valid span contexts are only forwarded if the associated span is sampled in.
+
+**Configurable parameters:**
+
+* `delegate` - the processor to delegate to for log records that are not
+  filtered out.
 
 ## LogRecordExporter
 
