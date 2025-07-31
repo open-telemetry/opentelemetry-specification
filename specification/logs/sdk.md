@@ -36,8 +36,8 @@ weight: 3
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
-    + [Severity based processor](#severity-based-processor)
-    + [Trace based processor](#trace-based-processor)
+    + [Severity filter](#severity-filter)
+    + [Trace based filter](#trace-based-filter)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
@@ -459,7 +459,7 @@ The standard OpenTelemetry SDK MUST implement both simple and batch processors,
 as described below.
 
 **Status**: [Development](../document-status.md) - The SDK SHOULD implement
-severity based and trace based processors, as described below.
+the severity filter and trace based filter, as described below.
 
 Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
@@ -500,36 +500,36 @@ to make sure that they are not invoked concurrently.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
 
-#### Severity based processor
+#### Severity filter
 
 **Status**: [Development](../document-status.md)
 
-This processor filters log records by minimum severity level.
+This is a processor that filters log records by minimum severity level.
 
 **Required operations:**
 
 * [`Enabled`](#enabled-1) - MUST return `false` if the provided
   [Severity Number](./data-model.md#field-severitynumber) is below the
-  configured `minimumSeverity`. Otherwise, MUST forward to the delegate's
+  configured `severity`. Otherwise, MUST forward to the delegate's
   `Enabled` method if available and return `true` if not available.
 * [`OnEmit`](#onemit) - If the log record's severity is below the configured
-  `minimumSeverity`, MUST NOT forward it to the delegate. Otherwise, MUST forward the
+  `severity`, MUST NOT forward it to the delegate. Otherwise, MUST forward the
   log record to the delegate.
 * [`Shutdown`](#shutdown) - MUST forward to the delegate's `Shutdown` method.
 * [`ForceFlush`](#forceflush-1) - MUST forward to the delegate's `ForceFlush` method.
 
 **Configurable parameters:**
 
-* `minimumSeverity` - the minimum severity level required for passing the
+* `severity` - the minimum severity level required for passing the
   log record on to the delegate.
 * `delegate` - the processor to delegate to for log records that are not
   filtered out.
 
-#### Trace based processor
+#### Trace based filter
 
 **Status**: [Development](../document-status.md)
 
-This processor filters log records by span sampling status.
+This is a processor that filters log records by span sampling status.
 
 **Required operations:**
 
