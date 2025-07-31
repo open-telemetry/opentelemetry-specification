@@ -504,7 +504,12 @@ to make sure that they are not invoked concurrently.
 
 **Status**: [Development](../document-status.md)
 
-This is a processor that filters log records by minimum severity level.
+This processor is intended to wrap another processor (such as the
+[batching processor](#batching-processor)), in order to filter log records
+by a minimum severity level.
+
+See the [supplementary guidelines](./supplementary-guidelines.md#filtering)
+for an implementation example.
 
 **Required operations:**
 
@@ -529,7 +534,9 @@ This is a processor that filters log records by minimum severity level.
 
 **Status**: [Development](../document-status.md)
 
-This is a processor that filters log records by span sampling status.
+This processor is intended to wrap another processor (such as the
+[batching processor](#batching-processor)), in order to filter log records
+by span sampling status.
 
 **Required operations:**
 
