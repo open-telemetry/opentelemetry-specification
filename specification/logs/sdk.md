@@ -505,61 +505,60 @@ to make sure that they are not invoked concurrently.
 
 **Status**: [Development](../document-status.md)
 
-This processor is intended to wrap another processor (such as the
-[batching processor](#batching-processor)), in order to filter log records
-based on their [SeverityLevel](./data-model.md#field-severitynumber).
+This processor wraps another processor (such as the
+[batching processor](#batching-processor)) to filter log records
+based on their [SeverityNumber](./data-model.md#field-severitynumber).
 
 See the [supplementary guidelines](./supplementary-guidelines.md#filtering)
 for an implementation example.
 
 **Required operations:**
 
-* [`Enabled`](#enabled-1) - MUST forward on to the delegate if the
+* [`Enabled`](#enabled-1) - MUST forward to the delegate if the
   [`SeverityNumber`](./data-model.md#field-severitynumber) is unspecified (`0`)
-  or it is greater than or equal to the configured `severity` (returning `true`
-  if the delegate does not implement the optional `Enabled` operation).
-  Otherwise MUST return `false`.
-* [`OnEmit`](#onemit) - MUST forward on to the delegate if the
+  or greater than or equal to the configured `severity` (returning `true` in
+  this case if the delegate does not implement the optional `Enabled`
+  operation). Otherwise, MUST return `false`.
+* [`OnEmit`](#onemit) - MUST forward to the delegate if the
   [`SeverityNumber`](./data-model.md#field-severitynumber) is unspecified (`0`)
-  or it is greater than or equal to the configured `severity`.
-  Otherwise MUST NOT forward on to the delegate.
-* [`Shutdown`](#shutdown) - MUST forward on to the delegate.
-* [`ForceFlush`](#forceflush-1) - MUST forward on to the delegate.
+  or greater than or equal to the configured `severity`.
+  Otherwise, MUST NOT forward to the delegate.
+* [`Shutdown`](#shutdown) - MUST forward to the delegate.
+* [`ForceFlush`](#forceflush-1) - MUST forward to the delegate.
 
 **Configurable parameters:**
 
-* `severity` - the minimum severity level required for passing the
-  log record on to the delegate.
-* `delegate` - the processor to delegate to for log records that are not
-  filtered out.
+* `severity` - The minimum severity level required for log records to be
+  passed to the delegate processor.
+* `delegate` - The processor to delegate to for log records that pass
+  the severity filter.
 
 #### Trace based filter
 
 **Status**: [Development](../document-status.md)
 
-This processor is intended to wrap another processor (such as the
-[batching processor](#batching-processor)), in order to filter log records
-based on their associated
-[trace sampling flag](./data-model.md#field-traceflags).
+This processor wraps another processor (such as the
+[batching processor](#batching-processor)) to filter log records
+based on their associated [trace sampling flag](./data-model.md#field-traceflags).
 
 **Required operations:**
 
-* [`Enabled`](#enabled-1) - MUST forward on to the delegate if the
+* [`Enabled`](#enabled-1) - MUST forward to the delegate if the
   [`TraceFlags`](./data-model.md#field-traceflags) SAMPLED flag is set or
-  [`SpanId`](./data-model.md#field-spanid) is not present (returning `true`
-  if the delegate does not implement the optional `Enabled` operation).
-  Otherwise MUST return `false`.
-* [`OnEmit`](#onemit) - MUST forward on to the delegate if the
+  the [`SpanId`](./data-model.md#field-spanid) is not present (returning `true`
+  in this case if the delegate does not implement the optional `Enabled`
+  operation). Otherwise, MUST return `false`.
+* [`OnEmit`](#onemit) - MUST forward to the delegate if the
   [`TraceFlags`](./data-model.md#field-traceflags) SAMPLED flag is set or
-  [`SpanId`](./data-model.md#field-spanid) is not present.
-  Otherwise MUST NOT forward on to the delegate.
-* [`Shutdown`](#shutdown) - MUST forward on to the delegate.
-* [`ForceFlush`](#forceflush-1) - MUST forward on to the delegate.
+  the [`SpanId`](./data-model.md#field-spanid) is not present.
+  Otherwise, MUST NOT forward to the delegate.
+* [`Shutdown`](#shutdown) - MUST forward to the delegate.
+* [`ForceFlush`](#forceflush-1) - MUST forward to the delegate.
 
 **Configurable parameters:**
 
-* `delegate` - the processor to delegate to for log records that are not
-  filtered out.
+* `delegate` - The processor to delegate to for log records that pass
+  the trace-based filter.
 
 ## LogRecordExporter
 
