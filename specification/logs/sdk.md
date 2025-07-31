@@ -514,15 +514,17 @@ for an implementation example.
 
 **Required operations:**
 
-* [`Enabled`](#enabled-1) - MUST return `false` if the provided
-  [Severity Number](./data-model.md#field-severitynumber) is below the
-  configured `severity`. Otherwise, MUST forward to the delegate's
-  `Enabled` method if available and return `true` if not available.
-* [`OnEmit`](#onemit) - If the log record's severity is below the configured
-  `severity`, MUST NOT forward it to the delegate. Otherwise, MUST forward the
-  log record to the delegate.
-* [`Shutdown`](#shutdown) - MUST forward to the delegate's `Shutdown` method.
-* [`ForceFlush`](#forceflush-1) - MUST forward to the delegate's `ForceFlush` method.
+* [`Enabled`](#enabled-1) - MUST forward on to the delegate if the
+  [`SeverityNumber`](./data-model.md#field-severitynumber) is unspecified (`0`)
+  or it is greater than or equal to the configured `severity` (returning `true`
+  if the delegate does not implement the optional `Enabled` operation).
+  Otherwise MUST return `false`.
+* [`OnEmit`](#onemit) - MUST forward on to the delegate if the
+  [`SeverityNumber`](./data-model.md#field-severitynumber) is unspecified (`0`)
+  or it is greater than or equal to the configured `severity`.
+  Otherwise MUST NOT forward on to the delegate.
+* [`Shutdown`](#shutdown) - MUST forward on to the delegate.
+* [`ForceFlush`](#forceflush-1) - MUST forward on to the delegate.
 
 **Configurable parameters:**
 
@@ -542,17 +544,17 @@ based on their associated
 
 **Required operations:**
 
-* [`Enabled`](#enabled-1) - MUST forward to the delegate's `Enabled` if the
+* [`Enabled`](#enabled-1) - MUST forward on to the delegate if the
   [`TraceFlags`](./data-model.md#field-traceflags) SAMPLED flag is set or
-  [`SpanId`](./data-model.md#field-spanid) is not present
-  (returning `true` if the delegate does not implement `Enabled`).
+  [`SpanId`](./data-model.md#field-spanid) is not present (returning `true`
+  if the delegate does not implement the optional `Enabled` operation).
   Otherwise MUST return `false`.
-* [`OnEmit`](#onemit) - MUST forward to the delegate's `OnEmit` if the
+* [`OnEmit`](#onemit) - MUST forward on to the delegate if the
   [`TraceFlags`](./data-model.md#field-traceflags) SAMPLED flag is set or
   [`SpanId`](./data-model.md#field-spanid) is not present.
-  Otherwise MUST NOT forward to the delegate's `OnEmit`.
-* [`Shutdown`](#shutdown) - MUST forward to the delegate's `Shutdown` method.
-* [`ForceFlush`](#forceflush-1) - MUST forward to the delegate's `ForceFlush` method.
+  Otherwise MUST NOT forward on to the delegate.
+* [`Shutdown`](#shutdown) - MUST forward on to the delegate.
+* [`ForceFlush`](#forceflush-1) - MUST forward on to the delegate.
 
 **Configurable parameters:**
 

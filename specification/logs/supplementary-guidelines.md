@@ -195,18 +195,18 @@ type SeverityProcessor struct {
 }
 
 // OnEmit passes ctx and record to the wrapped sdklog.Processor
-// if the record's severity is greater than or equal to p.Min.
+// if the record's severity is greater than or equal to p.Min, or if the severity is 0 (unspecified).
 // Otherwise, the record is dropped (the wrapped processor is not invoked).
 func (p *SeverityProcessor) OnEmit(ctx context.Context, record *sdklog.Record) error {
-	if record.Severity() < p.Min {
+	if record.Severity() < p.Min && record.Severity() != 0 {
 		return nil
 	}
 	return p.Processor.OnEmit(ctx, record)
 }
 
-// Enabled returns false if the severity is lower than p.Min.
+// Enabled returns false if the severity is lower than p.Min and is not 0 (unspecified).
 func (p *SeverityProcessor) Enabled(ctx context.Context, param sdklog.EnabledParameters) bool {
-	if param.Severity < p.Min {
+	if param.Severity < p.Min && param.Severity != 0 {
 		return false
 	}
 	if fp, ok := p.Processor.(sdklog.FilterProcessor); ok {
