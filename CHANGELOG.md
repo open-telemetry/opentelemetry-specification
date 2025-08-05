@@ -50,6 +50,9 @@ release.
 
 ### Common
 
+- Extending the set of standard attribute value types is no longer a breaking change.
+  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/4485))
+
 ### Supplementary Guidelines
 
 ### OTEPs
