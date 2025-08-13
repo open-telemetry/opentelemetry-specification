@@ -208,7 +208,7 @@ Semantic Conventions defines the set of fields in the OTLP data model:
 
 - [Resource](resource/sdk.md)
   - attribute keys. (The key section of attributes key value pairs)
-  - [Entity References](entities/data-model.md#entity-data-model)
+  - [Entity References](entities/data-model.md)
     - Entity type
     - Identifier (inherits attribute key guarantees from the resource)
 - InstrumentationScope
