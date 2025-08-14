@@ -138,27 +138,27 @@ OTEL_ENTITIES="service{service.name=my%2Capp,service.instance.id=inst-1}[config=
 The SDK SHOULD be resilient to malformed input and follow these error handling rules:
 
 1. **Invalid syntax**: If the environment variable contains invalid syntax, the SDK SHOULD log a warning and ignore the malformed portions while processing valid parts
-   
+
    Example: `OTEL_ENTITIES="service{service.name=app1};invalid{syntax;service{service.name=app2}"` processes the first valid entity and skips the malformed part
 
 2. **Missing required fields**: If an entity is missing required fields (type or identifying attributes), the SDK SHOULD log a warning and skip that entity
-   
+
    Example: `OTEL_ENTITIES="service{};host{host.id=123}"` skips the service entity (no identifying attributes) and processes the host entity
 
 3. **Duplicate entities**: If multiple entities of the same type with identical identifying attributes are defined, the SDK SHOULD use the last occurrence and SHOULD log a warning
-   
+
    Example: `OTEL_ENTITIES="service{service.name=app1}[version=1.0];service{service.name=app1}[version=2.0]"` uses `version=2.0`
 
 4. **Schema URL validation**: If a schema URL is present but invalid, the SDK SHOULD log a warning and ignore the URL while processing the entity
-   
+
    Example: `OTEL_ENTITIES="service{service.name=app1}@invalid-url"` processes the entity but ignores the invalid URL
 
 5. **Conflicting identifying attributes**: If two entities of the same type define different values for the same identifying attribute key, the SDK SHOULD treat them as separate entities. If this results in ambiguous entity identification, the SDK SHOULD log a warning and preserve only the last entity
-   
+
    Example: `OTEL_ENTITIES="service{service.name=app1};service{service.name=app2}"` creates only service.name=app2 entity
 
 6. **Conflicting descriptive attributes**: If two entities define different values for the same descriptive attribute key, the SDK SHOULD use the value from the last entity definition and SHOULD log a warning. The conflicting attributes SHOULD NOT be recorded for entities other than the last one
-   
+
    Example: `OTEL_ENTITIES="service{service.name=app1}[version=1.0];service{service.name=app2}[version=2.0]"` results in app1 service without version attribute and app2 service with `version=2.0`
 
 ### Environment Variable Conflict Resolution
@@ -172,6 +172,7 @@ When multiple environment variables define overlapping configuration, a warning 
 5. **OTEL_RESOURCE_ATTRIBUTES**: Lowest precedence for overlapping attribute keys
 
 **Precedence rules within OTEL_ENTITIES:**
+
 - When the same entity type appears multiple times with identical identifying attributes, the last occurrence takes precedence
 
 **Example of conflict resolution:**
