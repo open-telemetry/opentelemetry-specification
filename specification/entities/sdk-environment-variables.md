@@ -106,7 +106,7 @@ OTEL_ENTITIES=";service{service.name=app1};;host{host.id=host-123};"
 All attribute values MUST be considered strings and characters outside the
 `baggage-octet` range MUST be percent-encoded following the [W3C Baggage](https://www.w3.org/TR/baggage/#header-content) specification.
 
-The reserved characters `{}[]@;,=` MUST be percent-encoded when used in attribute keys or values:
+The reserved characters `{}[]@;,=` MUST be percent-encoded when they appear literally in attribute values:
 
 - `{` → `%7B`
 - `}` → `%7D`
@@ -116,6 +116,14 @@ The reserved characters `{}[]@;,=` MUST be percent-encoded when used in attribut
 - `;` → `%3B`
 - `,` → `%2C`
 - `=` → `%3D`
+
+**Example:**
+
+```bash
+# Entity with reserved characters in attribute values
+OTEL_ENTITIES="service{service.name=my%2Capp,service.instance.id=inst-1}[config=key%3Dvalue%5Bprod%5D]"
+# Resolves to: service.name="my,app", config="key=value[prod]"
+```
 
 ### Validation Requirements
 
@@ -136,17 +144,22 @@ The SDK SHOULD be resilient to malformed input and follow these error handling r
 5. **Duplicate entities**: If multiple entities of the same type with identical identifying attributes are defined, the SDK SHOULD use the last occurrence and SHOULD log a warning
 6. **Invalid characters**: If unencoded reserved characters are found in attribute keys or values, the SDK SHOULD log a warning and attempt to parse the value as-is
 7. **Schema URL validation**: If a schema URL is present but invalid, the SDK SHOULD log a warning and ignore the URL while processing the entity
-8. **Conflicting attributes between entities**: If two entities define the same identifying attribute key with different values, the SDK SHOULD log a warning and discard the conflicting entity, keeping the last valid definition
-9. **Conflict with resource attributes**: If an entity attribute conflicts with a resource attribute, the SDK SHOULD log a warning and apply the conflict resolution rules defined below
+8. **Conflicting identifying attributes**: If two entities of the same type define different values for the same identifying attribute key, the SDK SHOULD treat them as separate entities. If this results in ambiguous entity identification, the SDK SHOULD log a warning and use the last valid definition
+9. **Conflicting descriptive attributes**: If two entities define different values for the same descriptive attribute key, the SDK SHOULD use the value from the last entity definition and SHOULD log a warning. The conflicting attributes SHOULD NOT be recorded for entities other than the last one
+10. **Conflict with resource attributes**: If an entity attribute conflicts with a resource attribute, the SDK SHOULD log a warning and apply the conflict resolution rules defined below
 
 ### Environment Variable Conflict Resolution
 
-When multiple environment variables define overlapping configuration, the following precedence order applies:
+When multiple environment variables define overlapping configuration, the following precedence order applies (highest to lowest precedence):
 
-1. **Programmatic configuration**: Entities configured via SDK API take highest precedence
-2. **OTEL_ENTITIES**: Entity definitions from this environment variable
-3. **Other OTEL_* variables**: Specific environment variables like `OTEL_SERVICE_NAME`
-4. **OTEL_RESOURCE_ATTRIBUTES**: Resource attributes that may conflict with entity attributes
+1. **Programmatic configuration**: Entities configured via SDK API take highest precedence and override all environment variable configurations
+2. **OTEL_ENTITIES**: Entity definitions from this environment variable override resource attributes and other OTEL_* environment variables for the same attribute keys
+3. **OTEL_SERVICE_NAME**: Takes precedence over `service.name` in `OTEL_RESOURCE_ATTRIBUTES` but is overridden by `service.name` in `OTEL_ENTITIES`
+4. **Other specific OTEL_* variables**: Individual environment variables (when they exist) take precedence over equivalent attributes in `OTEL_RESOURCE_ATTRIBUTES`
+5. **OTEL_RESOURCE_ATTRIBUTES**: Lowest precedence for overlapping attribute keys
+
+**Precedence rules within OTEL_ENTITIES:**
+- When the same entity type appears multiple times with identical identifying attributes, the last occurrence takes precedence
 
 **Example of conflict resolution:**
 
@@ -157,7 +170,9 @@ OTEL_RESOURCE_ATTRIBUTES="service.name=resource-service,host.name=resource-host,
 OTEL_ENTITIES="service{service.name=entity-service,service.instance.id=inst-1}[service.version=1.0.0];host{host.id=host-123}[host.name=entity-host]"
 
 # Result in:
-# - Service entity: service.name=entity-service (from OTEL_ENTITIES, overrides others)
-# - Host entity: host.name=entity-host (from OTEL_ENTITIES, overrides OTEL_RESOURCE_ATTRIBUTES)
-# - Resource: remaining attributes from OTEL_RESOURCE_ATTRIBUTES that don't conflict: custom.attr=resource-value
+# - Service entity with identifying attributes: {service.name=entity-service, service.instance.id=inst-1} (from OTEL_ENTITIES, overrides others)
+#   and descriptive attributes: {service.version=1.0.0}
+# - Host entity with identifying attributes: {host.id=host-123}
+#   and descriptive attributes: {host.name=entity-host} (from OTEL_ENTITIES, overrides OTEL_RESOURCE_ATTRIBUTES)
+# - Resource: remaining attributes from OTEL_RESOURCE_ATTRIBUTES that don't conflict: {custom.attr=resource-value}
 ```
