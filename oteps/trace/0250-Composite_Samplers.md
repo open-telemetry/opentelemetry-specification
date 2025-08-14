@@ -8,6 +8,10 @@ The composite samplers invoke the delegate samplers, but eventually make the fin
 The new samplers proposed here have been designed to work with Consistent Probability Samplers. For detailed description of this concept see [probability sampling (OTEP 235)](https://github.com/open-telemetry/oteps/blob/main/text/trace/0235-sampling-threshold-in-trace-state.md).
 Also see Draft PR 3910 [Probability Samplers based on W3C Trace Context Level 2](https://github.com/open-telemetry/opentelemetry-specification/pull/3910).
 
+Document history:
+
+- **Revision** [Specification release 1.48.0 was released before a minor update to this OTEP, which states that when an "unreliable" sampling threshold is used to make a sampling decision, a new independent randomness value should be used and discarded to preserve independence.](https://github.com/open-telemetry/opentelemetry-specification/pull/4569).
+
 **Table of content:**
 
 - [Motivation](#motivation)
@@ -101,6 +105,10 @@ The return value is a structure (`SamplingIntent`) with the following elements:
 - A function (`GetAttributes`) that provides a set of `Attributes` to be added to the `Span` in case of a positive final sampling decision,
 - A function (`UpdateTraceState`) that, given an input `Tracestate` and sampling Decision, provides a `Tracestate` to be associated with the `Span`. The samplers SHOULD NOT add or modify the `th` value for the `ot` key within these functions. The root node of the tree of composite samplers is solely responsible for setting or clearing this value (see Constructing `SamplingResult` below).
 
+Returning `IsAdjustedCountReliable` as `false` indicates that even if the THRESHOLD value can be used to make the sampling decision, such decision may not be compatible with the Consistent Probability Sampling principles outlined in [TraceState: Probability Sampling](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/tracestate-probability-sampling.md#tracestate-probability-sampling), and, as the function name indicates, estimating metrics (such as call count) based on collected spans will not be possible.
+For example, the sampling probability used in the process to arrive at the THRESHOLD value might directly or indirectly depend on the trace randomness value, the parent's `sampled` flag, or another non-probabilistic factor.
+See [ConsistentParentBased](#consistentparentbased) for an example of that.
+
 #### Requirements for the basic samplers
 
 The `ConsistentAlwaysOff` sampler MUST provide a `SamplingIntent` with
@@ -119,7 +127,7 @@ The `ConsistentAlwaysOn` sampler MUST provide a `SamplingIntent` with
 
 The `ConsistentFixedThreshold` sampler, which is essentially `TraceIdRatioBased` sampler but implementing the `Composable` interface, MUST provide a `SamplingIntent` with
 
-- The THRESHOLD value representing the threshold calculated according to the proposed [sampler requirements following OTEP 235](https://github.com/open-telemetry/opentelemetry-specification/pull/4166),
+- The THRESHOLD value representing the threshold calculated according to the proposed [Rejection Threshold](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/tracestate-probability-sampling.md#rejection-threshold-t),
 - `IsAdjustedCountReliable` returning `true`,
 - `GetAttributes` returning an empty set,
 - `UpdateTraceState` returning its argument, without any modifications.
@@ -129,11 +137,13 @@ The `ConsistentFixedThreshold` sampler, which is essentially `TraceIdRatioBased`
 The process of constructing the final `SamplingResult` in response to a call to `ShouldSample` on the root sampler of the composite samplers tree consists of the following steps.
 
 - The sampler gets its own `SamplingIntent`, it is a recursive process as described below (unless the sampler is a leaf),
-- The sampler compares the received THRESHOLD value with the trace Randomness value to arrive at the final sampling `Decision`,
+- If the received THRESHOLD value is `null`, the sampling decision is `DROP`, otherwise
+- The sampler calls the received `IsAdjustedCountReliable` function, and in case of `true` derives the Randomness value R from the TraceState or TraceId as described in [Randomness Value (R)](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/tracestate-probability-sampling.md#randomness-value-r), and in case of `false` it generates a new Randomness value R by hex-encoding a new random 56-bit number
+- The sampler compares (lexicographically or by other means, depending on the implementation) the received THRESHOLD value with the Randomness value R to arrive at the final sampling `Decision` as described in [Decision algorithm](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/tracestate-probability-sampling.md#decision-algorithm),
 - The sampler calls the received `UpdateTraceState` function passing the parent `Tracestate` and the final sampling `Decision` to get the new `Tracestate` to be associated with the `Span` - again, in most cases this is a recursive step,
 - In case of positive sampling decision:
   - the sampler calls the received `GetAttributes` function to determine the set of `Attributes` to be added to the `Span`, in most cases it will be a recursive step,
-  - the sampler calls the received `IsAdjustedCountReliable` function, and in case of `true` it modifies the `th` value for the `ot` key in the `Tracestate` according to the received THRESHOLD; if the returned value is `false`, it removes the `th` value for the `ot` key from the `Tracestate`,
+  - if the `IsAdjustedCountReliable` function returned `true` it modifies the `th` value for the `ot` key in the `Tracestate` according to the received THRESHOLD; if the returned value was `false`, it removes the `th` value for the `ot` key from the `Tracestate`,
 - In case of negative sampling decision, it removes the `th` value for the `ot` key from the `Tracestate`.
 
 ### ConsistentRuleBased
