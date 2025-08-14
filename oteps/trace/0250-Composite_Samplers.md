@@ -9,6 +9,7 @@ The new samplers proposed here have been designed to work with Consistent Probab
 Also see Draft PR 3910 [Probability Samplers based on W3C Trace Context Level 2](https://github.com/open-telemetry/opentelemetry-specification/pull/3910).
 
 Document history:
+
 - **Revision** [Specification release 1.48.0 was released before a minor update to this OTEP, which states that when an "unreliable" sampling threshold is used to make a sampling decision, a new independent randomness value should be used and discarded to preserve independence.](https://github.com/open-telemetry/opentelemetry-specification/pull/4569).
 
 **Table of content:**
