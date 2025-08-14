@@ -1,6 +1,11 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: API
+weight: 1
+--->
+
 # Baggage API
 
-**Status**: [Stable, Feature-freeze](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>

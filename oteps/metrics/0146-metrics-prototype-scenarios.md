@@ -15,7 +15,7 @@ before end of 2021:
   We might introduce additional features but there should be a high bar.
 
 * By end of 9/30/2021, we should mark the metrics API/SDK specification as
-  [`Feature-freeze`](../../specification/document-status.md#feature-freeze),
+  `Feature-freeze`,
   and focus on bug fixing or editorial changes.
 
 * By end of 11/30/2021, we want to have a stable release of metrics API/SDK

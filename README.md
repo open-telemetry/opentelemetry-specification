@@ -2,6 +2,8 @@
 
 [![Slack](https://img.shields.io/badge/slack-@cncf/otel--specification-brightgreen.svg?logo=slack)](https://cloud-native.slack.com/archives/C01N7PP1THC)
 [![Release](https://img.shields.io/github/v/release/open-telemetry/opentelemetry-specification)](https://github.com/open-telemetry/opentelemetry-specification/releases/)
+[![OpenSSF Scorecard for opentelemetry-specification](https://api.scorecard.dev/projects/github.com/open-telemetry/opentelemetry-specification/badge)](https://scorecard.dev/viewer/?uri=github.com/open-telemetry/opentelemetry-specification)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/11058/badge)](https://www.bestpractices.dev/projects/11058)
 
 ![OpenTelemetry Logo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)
 
@@ -57,3 +59,21 @@ By contributing to OpenTelemetry Specification repository, you agree that your c
 [OpenTelemetry]: https://opentelemetry.io
 [latest release]: https://github.com/open-telemetry/opentelemetry-specification/releases/latest
 [opentelemetry.io/docs/specs/otel]: https://opentelemetry.io/docs/specs/otel/
+
+## Maintainers
+
+- [OpenTelemetry Technical Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#technical-committee)
+
+For more information about the maintainer role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#maintainer).
+
+## Approvers
+
+- [OpenTelemetry Specification Sponsors](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto)
+
+For more information about the approver role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#approver).
+
+## Triagers
+
+- [OpenTelemetry Governance Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#governance-committee)
+
+For more information about the triager role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#triager).
