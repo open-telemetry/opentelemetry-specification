@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Restore `TraceIdRatioBased` and give it a deprecation timeline. Update recommended
+  warnings based on feedback in [#4601](#4601). [#4627](#4627)
+
 ### Metrics
 
 ### Logs

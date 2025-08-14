@@ -669,7 +669,7 @@ randomness values MUST not be modified.
 * Sets `threshold_reliable` to `false`
 * Does not add any attributes
 
-###### ComposableTraceIDRatioBased
+###### ComposableProbability
 
 * Returns a `SamplingIntent` with threshold determined by the configured sampling ratio
 * Sets `threshold_reliable` to `true`
@@ -681,6 +681,9 @@ randomness values MUST not be modified.
 
 A ratio value of 0 is considered non-probabilistic. For the zero case
 a `ComposableAlwaysOff` instance SHOULD be returned instead.
+
+Note that the top-level `ProbabilitySampler` can be implemented using
+a `Composite(ComposableProbability(ratio))` configuration.
 
 ###### ComposableParentThreshold
 
