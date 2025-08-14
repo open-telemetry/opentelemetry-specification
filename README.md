@@ -2,6 +2,8 @@
 
 [![Slack](https://img.shields.io/badge/slack-@cncf/otel--specification-brightgreen.svg?logo=slack)](https://cloud-native.slack.com/archives/C01N7PP1THC)
 [![Release](https://img.shields.io/github/v/release/open-telemetry/opentelemetry-specification)](https://github.com/open-telemetry/opentelemetry-specification/releases/)
+[![OpenSSF Scorecard for opentelemetry-specification](https://api.scorecard.dev/projects/github.com/open-telemetry/opentelemetry-specification/badge)](https://scorecard.dev/viewer/?uri=github.com/open-telemetry/opentelemetry-specification)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/11058/badge)](https://www.bestpractices.dev/projects/11058)
 
 ![OpenTelemetry Logo](https://opentelemetry.io/img/logos/opentelemetry-horizontal-color.png)
 
