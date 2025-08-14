@@ -168,10 +168,10 @@ instance:
 - Combine the `Span` with a `Context` instance, creating a new `Context` instance
 
 The functionality listed above is necessary because API users SHOULD NOT have
-access to the [Context Key](../context/README.md#create-a-key) used by the Tracing API implementation.
+access to the [Context Key](../context/api.md#create-a-key) used by the Tracing API implementation.
 
 If the language has support for implicitly propagated `Context` (see
-[here](../context/README.md#optional-global-operations)), the API SHOULD also provide
+[here](../context/api.md#global-operations-optional)), the API SHOULD also provide
 the following functionality:
 
 - Get the currently active span from the implicit context. This is equivalent to getting the implicit context, then extracting the `Span` from the context.
@@ -274,7 +274,7 @@ non-zero TraceID and a non-zero SpanID, MUST be provided.
 
 An API called `IsRemote`, that returns a boolean value, which is `true` if the SpanContext was
 propagated from a remote parent, MUST be provided.
-When extracting a `SpanContext` through the [Propagators API](../context/api-propagators.md),
+When extracting a `SpanContext` through the [Propagators API](../propagators/api.md),
 `IsRemote` MUST return true, whereas for the SpanContext of any child spans it MUST return false.
 
 ### TraceState
@@ -297,7 +297,7 @@ and MUST follow the [general error handling guidelines](../error-handling.md).
 
 Please note, since `SpanContext` is immutable, it is not possible to update `SpanContext` with a new `TraceState`.
 Such changes then make sense only right before
-[`SpanContext` propagation](../context/api-propagators.md)
+[`SpanContext` propagation](../propagators/api.md)
 or [telemetry data exporting](sdk.md#span-exporter).
 In both cases, `Propagator`s and `SpanExporter`s may create a modified `TraceState` copy before serializing it to the wire.
 
@@ -851,7 +851,7 @@ be called concurrently.
 
 ## Included Propagators
 
-See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
+See [Propagators Distribution](../propagators/api.md#propagators-distribution)
 for how propagators are to be distributed.
 
 ## Behavior of the API in the absence of an installed SDK

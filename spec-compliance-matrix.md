@@ -241,7 +241,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Jaeger Propagator                                                                |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | -    | +     |
 | OT Propagator                                                                    |          | +  | +    | +  | +      |      |        |     |      |     |      |       |
 | OpenCensus Binary Propagator                                                     |          | +  |      |    |        |      |        |     |      |     |      |       |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |          | +  | +    |    | +      | +    |        | +   |      | +   |      |       |
+| [TextMapPropagator](specification/propagators/api.md#textmap-propagator) |          | +  | +    |    | +      | +    |        | +   |      | +   |      |       |
 | Fields                                                                           |          | +  | +    | +  | +      | +    | +      | +   | +    | +   | +    | +     |
 | Setter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      | +   | N/A  | +   | +    | +     |
 | Getter argument                                                                  | X        | N/A| +    | +  | +      | +    | +      | +   | N/A  | +   | +    | +     |
