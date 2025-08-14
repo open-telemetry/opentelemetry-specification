@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   followup:
+    if: ${{ github.repository == 'open-telemetry/opentelemetry-specification' }}
     permissions:
       issues: write # required for adding triage labels to issues
     runs-on: ubuntu-latest
