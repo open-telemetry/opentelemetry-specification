@@ -83,21 +83,6 @@ reflects that LogRecord attributes are expected to model data produced from
 external log APIs, which do not necessarily have the same value type
 restrictions as the standard attribute definition.
 
-Note: Extending the set of standard attribute value types is a breaking change.
-This was decided after extensive debate, with arguments as follows:
-
-* Limiting the types of attribute values to a set which has proved sufficient
-  during several years of OpenTelemetry's development is a useful guardrail for
-  design. In taking additional value types off the table, we narrow the solution
-  space and have more productive design conversations.
-* Upon proposing to extend support for complex value types, we received significant
-  pushback. Limiting attribute value types to primitives and arrays of primitives
-  simplifies data consumers' efforts to create search indexes and perform statistical
-  analysis.
-* To address concerns over restricting standard attributes to primitive types, it was
-  called out that complex types can be encoded as existing primitive types, such as
-  representing datetime as a string or 64 bit integer.
-
 ### Attribute Limits
 
 Execution of erroneous code can result in unintended attributes. If there are no
