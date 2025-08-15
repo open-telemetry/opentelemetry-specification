@@ -1,6 +1,7 @@
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Data Model
 aliases: [/docs/reference/specification/metrics/datamodel]
+weight: 2
 --->
 
 # Metrics Data Model

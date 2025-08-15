@@ -146,18 +146,23 @@ e.g. the maximum milliseconds representable by a 32-bit integer).
 
 String values are sub-classified into:
 
-* [Enum](#enum).
+* [Enum][].
 
 Normally, string values include notes describing how they are interpreted by
 implementations.
 
 #### Enum
 
+Enum values SHOULD be interpreted in a case-insensitive manner.
+
 For variables which accept a known value out of a set, i.e., an enum value,
-implementations MAY support additional values not listed here. For variables
-accepting an enum value, if the user provides a value the implementation does
-not recognize, the implementation MUST generate a warning and gracefully ignore
-the setting.
+implementations MAY support additional values not listed here.
+
+For variables accepting an enum value, if the user provides a value
+the implementation does not recognize, the implementation MUST generate
+a warning and gracefully ignore the setting.
+When reporting configuration errors, implementations SHOULD display the original
+user-provided value to aid debugging.
 
 If a null object (empty, no-op) value is acceptable, then the enum value
 representing it MUST be `"none"`.
