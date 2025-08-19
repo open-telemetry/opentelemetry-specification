@@ -67,6 +67,21 @@ jobs:
     - name: validate markdown-toc
       run: git diff --exit-code ':*.md' || (echo 'Generated markdown Table of Contents is out of date, please run "make markdown-toc" and commit the changes in this PR.' && exit 1)
 
+  compliance-matrix-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out code
+      uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+
+    - name: install dependencies
+      run: npm install
+
+    - name: run compliance-matrix
+      run: make compliance-matrix
+
+    - name: validate compliance-matrix
+      run: git diff --exit-code spec-compliance-matrix.md || (echo 'Generated compliance matrix is out of date, please run "make compliance-matrix" and commit the changes in this PR.' && exit 1)
+
   misspell:
     runs-on: ubuntu-latest
     steps:
