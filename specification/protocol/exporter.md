@@ -216,9 +216,6 @@ Exporters MAY expose a configuration option to add a product identifier to the U
 MyDistribution/x.y.z OTel-OTLP-Exporter-Python/1.2.3
 ```
 
-SDKs MAY expose a similar configuration option if exporters have it. This configuration
-MUST be overridable by a signal specific option.
-
 As an example setting the option to `MyDistribution/x.y.z` in the exporter from the
 above example would report the following:
 
