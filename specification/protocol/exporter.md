@@ -238,4 +238,4 @@ OTel-OTLP-Exporter-Python/1.2.3 MyDistribution/x.y.z
 [otlp-http]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp
 [retryable-grpc-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures
 [retryable-http-status-codes]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#failures-1
-[opentelemetry-distribution]: https://github.com/open-telemetry/opentelemetry.io/edit/main/content/en/docs/concepts/distributions.md#what-is-a-distribution
+[opentelemetry-distribution]: https://opentelemetry.io/docs/concepts/distributions/
