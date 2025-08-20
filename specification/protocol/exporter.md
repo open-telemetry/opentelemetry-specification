@@ -210,10 +210,11 @@ OTel-OTLP-Exporter-Python/1.2.3
 
 The format of the header SHOULD follow [RFC 7231][rfc-7231]. The conventions used for specifying the OpenTelemetry SDK language and version are available in the [Resource semantic conventions][resource-semconv].
 
-Exporters MAY expose a configuration option to append a product identifier to the User-Agent
-header as defined in [RFC 7231][rfc-7231]. Such option MUST NOT be available as
-an environment variable since is meant to be used by [distributions][opentelemetry-distribution]
-to append their product identifier along with the exporter's one.
+Exporters MAY expose a configuration option to add a product identifier to the User-Agent header. The resulting User-Agent SHOULD include the exporter's default User-Agent string. The intention is to support an identifier for an OpenTelemetry SDK/Agent [distribution][opentelemetry-distribution]. Typically an exporter would *prepend* the given identifier to its own. For example:
+
+```
+MyDistribution/x.y.z OTel-OTLP-Exporter-Python/1.2.3
+```
 
 SDKs MAY expose a similar configuration option if exporters have it. This configuration
 MUST be overridable by a signal specific option.
