@@ -49,13 +49,12 @@ outside OpenTelemetry into OpenTelemetry attribute values.
 
 `AnyValue` is either:
 
-  - a primitive type: string, boolean, double precision floating point (IEEE 754-1985), or signed 64 bit integer,
-  - an homogeneous array of primitive type values. An homogeneous array MUST NOT contain values of different types.
-  - a byte array.
-  - an heteregonous array of [AnyValue](#anyvalue),
-  - an [Attribute Collection](#attribute-collections),
-  - an empty value (e.g. `null`).
-  
+- a primitive type: string, boolean, double precision floating point (IEEE 754-1985), or signed 64 bit integer,
+- an homogeneous array of primitive type values. An homogeneous array MUST NOT contain values of different types.
+- a byte array.
+- an heteregonous array of [AnyValue](#anyvalue),
+- an [Attribute Collection](#attribute-collections),
+- an empty value (e.g. `null`).
 
 For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
