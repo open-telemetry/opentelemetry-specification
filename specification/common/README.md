@@ -50,9 +50,9 @@ outside OpenTelemetry into OpenTelemetry attribute values.
 `AnyValue` is either:
 
 - a primitive type: string, boolean, double precision floating point (IEEE 754-1985), or signed 64 bit integer,
-- an homogeneous array of primitive type values. An homogeneous array MUST NOT contain values of different types.
+- a homogeneous array of primitive type values. A homogeneous array MUST NOT contain values of different types.
 - a byte array.
-- an heteregonous array of [AnyValue](#anyvalue),
+- a heterogeneous array of [AnyValue](#anyvalue),
 - an [Attribute Collection](#attribute-collections),
 - an empty value (e.g. `null`).
 
@@ -73,7 +73,7 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
-Arbitrary deep nesting of values for heteregonous arrays and attribute collections
+Arbitrary deep nesting of values for heterogeneous arrays and attribute collections
 is allowed (essentially allows to represent an equivalent of a JSON object).
 
 ### Attribute Limits
