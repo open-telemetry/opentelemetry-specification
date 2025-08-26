@@ -8,7 +8,7 @@ path_base_for_github_subdir:
 
 # Common specification concepts
 
-**Status**: [Stable](../document-status.md), except where otherwise specified
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -33,28 +33,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
 
 - The attribute key MUST be a non-`null` and non-empty string.
   - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
-- The attribute value is either:
-  - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
-  - An array of primitive type values. The array MUST be homogeneous,
-    i.e., it MUST NOT contain values of different types.
-  - **Status**: [Development](../document-status.md) - An empty value (e.g. `null`).
-
-For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
-
-Attribute values expressing an empty value, a numerical value of zero,
-an empty string, or an empty array are considered meaningful and MUST be stored
-and passed on to processors / exporters.
-
-`null` values SHOULD NOT be allowed in arrays. However, if it is impossible to
-make sure that no `null` values are accepted
-(e.g. in languages that do not have appropriate compile-time type checking),
-`null` values within arrays MUST be preserved as-is (i.e., passed on to span
-processors / exporters as `null`). If exporters do not support exporting `null`
-values, they MAY replace those values by 0, `false`, or empty strings.
-This is required for map/dictionary structures represented as two arrays with
-indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
-both containing an array of strings to represent a mapping
-`header_keys[i] -> header_values[i]`).
+- The attribute value MUST be one of types defined in [Attribute Value](#attribute-value).
 
 Attributes are equal when their keys and values are equal.
 
@@ -64,6 +43,38 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
+
+### Attribute Value
+
+The attribute value is either:
+
+  - a primitive type: string, boolean, double precision floating point (IEEE 754-1985), or signed 64 bit integer,
+  - an homogeneous array of primitive type values. An homogeneous array MUST NOT contain values of different types.
+  - a byte array.
+  - an heteregonous array of [Attribute Value](#attribute-value),
+  - an [Attribute Collection](#attribute-collections),
+  - an empty value (e.g. `null`).
+  
+
+For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
+
+Attribute values expressing an empty value, a numerical value of zero,
+an empty string, or an empty array are considered meaningful and MUST be stored
+and passed on to processors / exporters.
+
+`null` values SHOULD NOT be allowed in homogeneous arrays.
+However, if it is impossible to make sure that no `null` values are accepted
+(e.g. in languages that do not have appropriate compile-time type checking),
+`null` values within homogeneous arrays MUST be preserved as-is (i.e., passed on to span
+processors / exporters as `null`). If exporters do not support exporting `null`
+values, they MAY replace those values by 0, `false`, or empty strings.
+This is required for map/dictionary structures represented as two arrays with
+indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
+both containing an array of strings to represent a mapping
+`header_keys[i] -> header_values[i]`).
+
+Arbitrary deep nesting of values for heteregonous arrays and attribute collections
+is allowed (essentially allows to represent an equivalent of a JSON object).
 
 ### Attribute Limits
 
@@ -130,9 +141,12 @@ at this time, as discussed in
 [Spans](../trace/api.md#set-attributes), Span
 [Events](../trace/api.md#add-events), Span
 [Links](../trace/api.md#link) and
-[Log Records](../logs/data-model.md) may contain a collection of attributes. The
-keys in each such collection are unique, i.e. there MUST NOT exist more than one
-key-value pair with the same key. The enforcement of uniqueness may be performed
+[Log Records](../logs/data-model.md),
+and even [Attribute Value](#attribute-value) itself
+may contain a collection of attributes.
+
+Implementation MUST by default ensure that the exported attribute collections
+contain only unique keys. The enforcement of uniqueness may be performed
 in a variety of ways as it best fits the limitations of the particular
 implementation.
 
@@ -154,6 +168,12 @@ Some other implementations may use a streaming approach where every
 that individual attribute value being exported using a streaming wire protocol.
 In such cases the enforcement of uniqueness will likely be the responsibility of
 the recipient of this data.
+
+Implementations MAY have an option to allow exporting attribute collections
+with duplicate keys (e.g. for better performance).
+If such option is provided, it MUST be documented that for many receivers,
+handling of maps with duplicate keys is unpredictable and it is the users'
+responsibility to ensure keys are not duplicate.
 
 Collection of attributes are equal when they contain the same attributes,
 irrespective of the order in which those elements appear
