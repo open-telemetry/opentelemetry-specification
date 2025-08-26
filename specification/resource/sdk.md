@@ -13,7 +13,8 @@ For example, a process producing telemetry that is running in a
 container on Kubernetes has a Pod name, it is in a namespace and possibly is
 part of a Deployment which also has a name. All three of these attributes can be
 included in the `Resource`. Note that there are certain
-["standard attributes"](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md) that have prescribed meanings.
+[attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md)
+that have prescribed meanings.
 
 The primary purpose of resources as a first-class concept in the SDK is
 decoupling of discovery of resource information from exporters. This allows for

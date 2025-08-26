@@ -16,7 +16,6 @@ path_base_for_github_subdir:
 <!-- toc -->
 
 - [Attribute](#attribute)
-  * [Standard Attribute](#standard-attribute)
   * [Attribute Limits](#attribute-limits)
     + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
@@ -65,21 +64,6 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
-
-### Standard Attribute
-
-Attributes are used in various places throughout the OpenTelemetry data model.
-We designate the [previous attribute section](#attribute) as the standard
-attribute definition, in order to facilitate more intuitive and consistent API /
-SDK design.
-
-The standard attribute definition SHOULD be used to represent attributes in data
-modeling unless there is a strong justification to diverge. For example, the Log
-Data Model has an extended [attributes](../logs/data-model.md#field-attributes)
-definition allowing values of [type `Any`](../logs/data-model.md#type-any). This
-reflects that LogRecord attributes are expected to model data produced from
-external log APIs, which do not necessarily have the same value type
-restrictions as the standard attribute definition.
 
 ### Attribute Limits
 
