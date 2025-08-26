@@ -201,8 +201,8 @@ It consists of the following parameters:
 
   If a log record's [SeverityNumber](./data-model.md#field-severitynumber) is
   specified and less than the configured `minimum_severity`, the log record MUST
-  be dropped by the `Logger`. Log records with an unspecified severity are not
-  affected by this parameter.
+  be dropped by the `Logger`. Log records with an unspecified severity or severity set to `0` SHOULD NOT be
+  affected by this parameter by default.
 
 * `trace_based`: A boolean indication of whether the logger should
   only process log records associated with sampled traces.
