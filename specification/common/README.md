@@ -62,7 +62,7 @@ Attribute values expressing an empty value, a numerical value of zero,
 an empty string, or an empty array are considered meaningful and MUST be stored
 and passed on to processors / exporters.
 
-`null` values SHOULD NOT be allowed in homogeneous arrays.
+While `null` is a valid attribute value, its use within homogeneous arrays SHOULD generally be avoided unless language constraints make this impossible.
 However, if it is impossible to make sure that no `null` values are accepted
 (e.g. in languages that do not have appropriate compile-time type checking),
 `null` values within homogeneous arrays MUST be preserved as-is (i.e., passed on to span
