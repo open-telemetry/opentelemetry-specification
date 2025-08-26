@@ -347,7 +347,7 @@ when it is used to represent an unspecified severity.
 
 ### Field: `Body`
 
-Type: [Attribute Value](../common/README.md#attribute-value).
+Type: [AnyValue](../common/README.md#anyvalue).
 
 Description: A value containing the body of the log record. Can be for example
 a human-readable string message (including multi-line) describing the event in

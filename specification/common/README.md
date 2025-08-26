@@ -16,6 +16,7 @@ path_base_for_github_subdir:
 <!-- toc -->
 
 - [Attribute](#attribute)
+  * [AnyValue](#anyvalue)
   * [Attribute Limits](#attribute-limits)
     + [Configurable Parameters](#configurable-parameters)
     + [Exempt Entities](#exempt-entities)
@@ -33,7 +34,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
 
 - The attribute key MUST be a non-`null` and non-empty string.
   - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
-- The attribute value MUST be one of types defined in [Attribute Value](#attribute-value).
+- The attribute value MUST be one of types defined in [AnyValue](#anyvalue).
 
 Attributes are equal when their keys and values are equal.
 
@@ -44,21 +45,21 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
 
-### Attribute Value
+### AnyValue
 
-The attribute value is either:
+`AnyValue` is either:
 
   - a primitive type: string, boolean, double precision floating point (IEEE 754-1985), or signed 64 bit integer,
   - an homogeneous array of primitive type values. An homogeneous array MUST NOT contain values of different types.
   - a byte array.
-  - an heteregonous array of [Attribute Value](#attribute-value),
+  - an heteregonous array of [AnyValue](#anyvalue),
   - an [Attribute Collection](#attribute-collections),
   - an empty value (e.g. `null`).
   
 
 For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
 
-Attribute values expressing an empty value, a numerical value of zero,
+`AnyValue` expressing an empty value, a numerical value of zero,
 an empty string, or an empty array are considered meaningful and MUST be stored
 and passed on to processors / exporters.
 
@@ -142,7 +143,7 @@ at this time, as discussed in
 [Events](../trace/api.md#add-events), Span
 [Links](../trace/api.md#link) and
 [Log Records](../logs/data-model.md),
-and even [Attribute Value](#attribute-value) itself
+and even [AnyValue](#anyvalue)
 may contain a collection of attributes.
 
 Implementation MUST by default ensure that the exported attribute collections
