@@ -15,9 +15,6 @@ release.
 
 ### Logs
 
-- Clarify that `SeverityNumber` values are used when comparing severities.
-  ([#4552](https://github.com/open-telemetry/opentelemetry-specification/pull/4552))
-
 ### Baggage
 
 ### Profiles
@@ -32,17 +29,54 @@ release.
 
 ### SDK Configuration
 
-- Enum values provided via environment variables SHOULD be interpreted in a case-insensitive manner.
-  ([#4576](https://github.com/open-telemetry/opentelemetry-specification/pull/4576))
-
 ### Common
 
+- ⚠️ **IMPORTANT**: Extending the set of standard attribute value types is no longer a breaking change.
+  ([#4614](https://github.com/open-telemetry/opentelemetry-specification/pull/4614))
 - Add empty value attribute.
   ([#4595](https://github.com/open-telemetry/opentelemetry-specification/pull/4595))
 
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.48.0 (2025-08-13)
+
+### Logs
+
+- Improve concurrency safety description of `LogRecordProcessor.OnEmit`.
+  ([#4578](https://github.com/open-telemetry/opentelemetry-specification/pull/4578))
+- Clarify that `SeverityNumber` values are used when comparing severities.
+  ([#4552](https://github.com/open-telemetry/opentelemetry-specification/pull/4552))
+
+### Entities
+
+- Mention entity references in the stability guarantees.
+  ([#4593](https://github.com/open-telemetry/opentelemetry-specification/pull/4593))
+
+### OpenTelemetry Protocol
+
+- Clarify protocol defaults on specification.
+  ([#4585](https://github.com/open-telemetry/opentelemetry-specification/pull/4585))
+
+### Compatibility
+
+- Flexibilie escaping of characters that are discouraged by Prometheus Conventions
+  in Prometheus exporters.
+  ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
+- Flexibilize addition of unit/type related suffixes in Prometheus exporters.
+  ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
+- Define the configuration option "Translation Strategies" for Prometheus exporters.
+  ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
+- Define conversion of Prometheus native histograms to OpenTelemetry exponential histograms.
+  ([#4561](https://github.com/open-telemetry/opentelemetry-specification/pull/4561))
+- Clarify what to do when scope attribute conflicts with name, version and schema URL.
+  ([#4599](https://github.com/open-telemetry/opentelemetry-specification/pull/4599))
+
+### SDK Configuration
+
+- Enum values provided via environment variables SHOULD be interpreted in a case-insensitive manner.
+  ([#4576](https://github.com/open-telemetry/opentelemetry-specification/pull/4576))
 
 ## v1.47.0 (2025-07-18)
 
