@@ -99,6 +99,7 @@ fix: misspell-correction
 # Generate spec compliance matrix from YAML source
 .PHONY: compliance-matrix
 compliance-matrix:
+	pip install -U PyYAML
 	python .github/scripts/compliance_matrix.py
 	@echo "Compliance matrix generation complete"
 
