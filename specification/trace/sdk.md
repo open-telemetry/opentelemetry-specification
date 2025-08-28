@@ -531,19 +531,6 @@ Given a Sampler configured with a sampling threshold `T` and Context with random
 
 [TRACESTATEHANDLING]: ./tracestate-handling.md#sampling-threshold-value-th
 
-##### `ProbabilitySampler` sampler description
-
-The `ProbabilitySampler` GetDescription MUST return a string of the
-form `"ProbabilitySampler{RATIO;THRESHOLD}"` with `RATIO` replaced
-with the Sampler instance's trace sampling ratio (see
-`TraceIdRatioBased` for guidance) and `THRESHOLD` replaced with the
-exact [encoded sampling threshold](./tracestate-handling.md#sampling-threshold-value-th).  
-For example, if a ProbabilitySampler Sampler had a sampling ratio of 1
-to every 10,000 spans it could return
-`"ProbabilitySampler{0.0001;fff9}"` or
-`"ProbabilitySampler{0.0001;fff97247}"` as its description, depending
-on precision.
-
 ##### Compatibility warnings for `ProbabilitySampler`
 
 When a `ProbabilitySampler` makes a decision for a non-root Span
