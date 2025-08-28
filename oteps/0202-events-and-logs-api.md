@@ -62,7 +62,7 @@ There could be confusion on whether the Logs part of the API is end-user callabl
 
 ## Prior art and alternatives
 
-For client-side instrumentation, it was suggested initially that we use 0-duration spans to represent Events to get the benefit of Spans providing causality. For example, Splunk's RUM sdk for Android implements Events using [0-duration span](https://github.com/signalfx/splunk-otel-android/blob/main/splunk-otel-android/src/main/java/com/splunk/rum/SplunkRum.java#L213). However, 0-duration spans are confusing and not consistent with standalone Events in other domains which are represented using `LogRecord`s.  Hence, for consistency reasons it will be good to use `LogRecord`s for standalone Events everywhere. To address the requirement of modeling causality between Events, we can create wrapper spans linked to the `LogRecord`s.
+For client-side instrumentation, it was suggested initially that we use 0-duration spans to represent Events to get the benefit of Spans providing causality. For example, Splunk's RUM sdk for Android implements Events using [0-duration span](https://github.com/signalfx/splunk-otel-android/blob/3ca8584632f334671fdb6eaa09199ce01961787f/splunk-otel-android/src/main/java/com/splunk/rum/SplunkRum.java#L213). However, 0-duration spans are confusing and not consistent with standalone Events in other domains which are represented using `LogRecord`s.  Hence, for consistency reasons it will be good to use `LogRecord`s for standalone Events everywhere. To address the requirement of modeling causality between Events, we can create wrapper spans linked to the `LogRecord`s.
 
 ## Open questions
 
