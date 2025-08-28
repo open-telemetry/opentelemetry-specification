@@ -72,7 +72,7 @@ While `null` is a valid attribute value, its use within homogeneous arrays
 SHOULD generally be avoided unless language constraints make this impossible.
 However, if it is impossible to make sure that no `null` values are accepted
 (e.g. in languages that do not have appropriate compile-time type checking),
-`null` values within homogeneous arrays MUST be preserved as-is (i.e., passed on to span
+`null` values within homogeneous arrays MUST be preserved as-is (i.e., passed on to
 processors / exporters as `null`). If exporters do not support exporting `null`
 values, they MAY replace those values by 0, `false`, or empty strings.
 This is required for map/dictionary structures represented as two arrays with
