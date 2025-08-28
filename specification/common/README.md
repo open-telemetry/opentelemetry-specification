@@ -150,7 +150,9 @@ If an SDK provides a way to:
   - otherwise a value MUST NOT be truncated;
 - set an attribute count limit such that:
   - if an attribute addition into an attribute collection would result
-    in exceeding the limit (counting each attribute in the collection as 1; if an attribute is itself a collection, each key-value pair within the nested collection is also counted as a separate attribute of the parent),
+    in exceeding the limit (counting each attribute in the collection as 1;
+    if an attribute is itself a collection, each key-value pair within
+    the nested collection is also counted as a separate attribute of the parent),
     SDK MUST discard that attribute, so that the total number of attributes in
     an attribute collection is at most equal to the limit;
   - otherwise an attribute MUST NOT be discarded.
