@@ -459,10 +459,10 @@ the `ParentBased` sampler specified below.
   implementations MUST use a deterministic hash of the `TraceId` when computing
   the sampling decision. By ensuring this, running the sampler on any child `Span`
   will produce the same decision.
-* A `TraceIdRatioBased` sampler with a given sampling rate MUST also sample all
-  traces that any `TraceIdRatioBased` sampler with a lower sampling rate would
+* A `TraceIdRatioBased` sampler with a given sampling probability MUST also sample all
+  traces that any `TraceIdRatioBased` sampler with a lower sampling probability would
   sample. This is important when a backend system may want to run with a higher
-  sampling rate than the frontend system, this way all frontend traces will
+  sampling probability than the frontend system, this way all frontend traces will
   still be sampled and extra traces will be sampled on the backend only.
 
 ##### Compatibility warnings for `TraceIdRatioBased` sampler
