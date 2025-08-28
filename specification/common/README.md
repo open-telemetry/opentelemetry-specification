@@ -189,4 +189,3 @@ attribute limits for Resources.
 Attributes, which belong to Metrics, are exempt from the limits described above
 at this time, as discussed in
 [Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
-
