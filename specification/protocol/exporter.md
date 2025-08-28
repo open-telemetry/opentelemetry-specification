@@ -215,6 +215,7 @@ Exporters MAY expose a configuration option to add a product identifier to the U
 ```
 MyDistribution/x.y.z OTel-OTLP-Exporter-Python/1.2.3
 ```
+
 [Boolean]: ../configuration/sdk-environment-variables.md#boolean
 [Timeout]: ../configuration/sdk-environment-variables.md#timeout
 [String]: ../configuration/sdk-environment-variables.md#string
