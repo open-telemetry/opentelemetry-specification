@@ -143,7 +143,7 @@ If an SDK provides a way to:
 - set an attribute value length limit such that for each
   attribute value:
   - if it is a string, if it exceeds that limit (counting any character in it as
-    1), SDK MUST truncate that value, so that its length is at most equal
+    1), SDKs MUST truncate that value, so that its length is at most equal
     to the limit,
   - if it is an array or an attributes collection, then apply the above rule to
     each of its string values separately,
