@@ -16,11 +16,11 @@ path_base_for_github_subdir:
 <!-- toc -->
 
 - [Attribute](#attribute)
-  * [Standard Attribute](#standard-attribute)
-  * [Attribute Limits](#attribute-limits)
-    + [Configurable Parameters](#configurable-parameters)
-    + [Exempt Entities](#exempt-entities)
-- [Attribute Collections](#attribute-collections)
+  * [Attribute Value](#attribute-value)
+  * [Attribute Collections](#attribute-collections)
+- [Attribute Limits](#attribute-limits)
+  * [Configurable Parameters](#configurable-parameters)
+  * [Exempt Entities](#exempt-entities)
 
 <!-- tocstop -->
 
@@ -34,30 +34,7 @@ An `Attribute` is a key-value pair, which MUST have the following properties:
 
 - The attribute key MUST be a non-`null` and non-empty string.
   - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
-- The attribute value is either:
-  - A primitive type: string, boolean, double precision floating point (IEEE 754-1985) or signed 64 bit integer.
-  - An array of primitive type values. The array MUST be homogeneous,
-    i.e., it MUST NOT contain values of different types.
-
-For protocols that do not natively support non-string values, non-string values SHOULD be represented as JSON-encoded strings.  For example, the expression `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`, and an empty array of any type will be encoded as `[]`.
-
-Attribute values expressing a numerical value of zero, an empty string, or an
-empty array are considered meaningful and MUST be stored and passed on to
-processors / exporters.
-
-Attribute values of `null` are not valid and attempting to set a `null` value is
-undefined behavior.
-
-`null` values SHOULD NOT be allowed in arrays. However, if it is impossible to
-make sure that no `null` values are accepted
-(e.g. in languages that do not have appropriate compile-time type checking),
-`null` values within arrays MUST be preserved as-is (i.e., passed on to span
-processors / exporters as `null`). If exporters do not support exporting `null`
-values, they MAY replace those values by 0, `false`, or empty strings.
-This is required for map/dictionary structures represented as two arrays with
-indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
-both containing an array of strings to represent a mapping
-`header_keys[i] -> header_values[i]`).
+- The attribute value MUST be one of types defined in [Attribute Value](#attribute-value).
 
 Attributes are equal when their keys and values are equal.
 
@@ -68,79 +45,45 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
 
-### Standard Attribute
+### Attribute Value
 
-Attributes are used in various places throughout the OpenTelemetry data model.
-We designate the [previous attribute section](#attribute) as the standard
-attribute definition, in order to facilitate more intuitive and consistent API /
-SDK design.
+The attribute value is either:
 
-The standard attribute definition SHOULD be used to represent attributes in data
-modeling unless there is a strong justification to diverge. For example, the Log
-Data Model has an extended [attributes](../logs/data-model.md#field-attributes)
-definition allowing values of [type `Any`](../logs/data-model.md#type-any). This
-reflects that LogRecord attributes are expected to model data produced from
-external log APIs, which do not necessarily have the same value type
-restrictions as the standard attribute definition.
+- a primitive type: string, boolean, double precision floating point
+  (IEEE 754-1985), or signed 64 bit integer,
+- a homogeneous array of primitive type values. A homogeneous array MUST NOT
+  contain values of different types.
+- a byte array.
+- a heterogeneous array of [Attribute Values](#attribute-value),
+- an [Attribute Collection](#attribute-collections),
+- an empty value (e.g. `null`, `undefined` in JavaScript/TypeScript,
+  `None` in Python, `nil` in Go/Ruby, etc.).
 
-### Attribute Limits
+For protocols that do not natively support non-string values, non-string values
+SHOULD be represented as JSON-encoded strings. For example, the expression
+`int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`,
+and an empty array of any type will be encoded as `[]`.
 
-Execution of erroneous code can result in unintended attributes. If there are no
-limits placed on attributes, they can quickly exhaust available memory, resulting
-in crashes that are difficult to recover from safely.
+Attribute values expressing an empty value, a numerical value of zero,
+an empty string, or an empty array are considered meaningful and MUST be stored
+and passed on to processors / exporters.
 
-By default an SDK SHOULD apply truncation as per the list of
-[configurable parameters](#configurable-parameters) below.
+While `null` is a valid attribute value, its use within homogeneous arrays
+SHOULD generally be avoided unless language constraints make this impossible.
+However, if it is impossible to make sure that no `null` values are accepted
+(e.g. in languages that do not have appropriate compile-time type checking),
+`null` values within homogeneous arrays MUST be preserved as-is (i.e., passed on to
+processors / exporters as `null`). If exporters do not support exporting `null`
+values, they MAY replace those values by 0, `false`, or empty strings.
+This is required for map/dictionary structures represented as two arrays with
+indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
+both containing an array of strings to represent a mapping
+`header_keys[i] -> header_values[i]`).
 
-If an SDK provides a way to:
+Arbitrary deep nesting of values for heterogeneous arrays and attribute collections
+is allowed (essentially allows to represent an equivalent of a JSON object).
 
-- set an attribute value length limit such that for each
-  attribute value:
-  - if it is a string, if it exceeds that limit (counting any character in it as
-    1), SDKs MUST truncate that value, so that its length is at most equal
-    to the limit,
-  - if it is an array of strings, then apply the above rule to each of the
-    values separately,
-  - otherwise a value MUST NOT be truncated;
-- set a limit of unique attribute keys such that:
-  - for each unique attribute key, addition of which would result in exceeding
-    the limit, SDK MUST discard that key/value pair.
-
-There MAY be a log emitted to indicate to the user that an attribute was
-truncated or discarded. To prevent excessive logging, the log MUST NOT be
-emitted more than once per record on which an attribute is set.
-
-If the SDK implements the limits above, it MUST provide a way to change these
-limits programmatically. Names of the configuration options SHOULD be the same as
-in the list below.
-
-An SDK MAY implement model-specific limits, for example
-`SpanAttributeCountLimit` or `LogRecordAttributeCountLimit`. If both a general
-and a model-specific limit are implemented, then the SDK MUST first attempt to
-use the model-specific limit, if it isn't set, then the SDK MUST attempt to use
-the general limit. If neither are defined, then the SDK MUST try to use the
-model-specific limit default value, followed by the global limit default value.
-
-#### Configurable Parameters
-
-* `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
-* `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
-
-#### Exempt Entities
-
-Resource attributes SHOULD be exempt from the limits described above as resources
-are not susceptible to the scenarios (auto-instrumentation) that result in
-excessive attributes count or size. Resources are also sent only once per batch
-instead of per span so it is relatively cheaper to have more/larger attributes
-on them. Resources are also immutable by design and they are generally passed
-down to TracerProvider along with limits. This makes it awkward to implement
-attribute limits for Resources.
-
-Attributes, which belong to Metrics, are exempt from the limits described above
-at this time, as discussed in
-[Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
-
-## Attribute Collections
+### Attribute Collections
 
 [Resources](../resource/sdk.md),
 [Instrumentation Scopes](instrumentation-scope.md),
@@ -148,9 +91,12 @@ at this time, as discussed in
 [Spans](../trace/api.md#set-attributes), Span
 [Events](../trace/api.md#add-events), Span
 [Links](../trace/api.md#link) and
-[Log Records](../logs/data-model.md) may contain a collection of attributes. The
-keys in each such collection are unique, i.e. there MUST NOT exist more than one
-key-value pair with the same key. The enforcement of uniqueness may be performed
+[Log Records](../logs/data-model.md),
+and even [Attribute Value](#attribute-value) itself
+may contain a collection of attributes.
+
+Implementation MUST by default ensure that the exported attribute collections
+contain only unique keys. The enforcement of uniqueness may be performed
 in a variety of ways as it best fits the limitations of the particular
 implementation.
 
@@ -173,6 +119,89 @@ that individual attribute value being exported using a streaming wire protocol.
 In such cases the enforcement of uniqueness will likely be the responsibility of
 the recipient of this data.
 
+Implementations MAY have an option to allow exporting attribute collections
+with duplicate keys (e.g. for better performance).
+If such option is provided, it MUST be documented that for many receivers,
+handling of maps with duplicate keys is unpredictable and it is the users'
+responsibility to ensure keys are not duplicate.
+
 Collection of attributes are equal when they contain the same attributes,
 irrespective of the order in which those elements appear
 (unordered collection equality).
+
+## Attribute Limits
+
+Execution of erroneous code can result in unintended attributes. If there are no
+limits placed on attributes, they can quickly exhaust available memory, resulting
+in crashes that are difficult to recover from safely.
+
+By default an SDK SHOULD apply truncation as per the list of
+[configurable parameters](#configurable-parameters) below.
+
+If an SDK provides a way to:
+
+- set an attribute value length limit such that for each
+  attribute value:
+  - if it is a string, if it exceeds that limit (counting any character in it as
+    1), SDKs MUST truncate that value, so that its length is at most equal
+    to the limit,
+  - if it is an array or an attribute collection, then apply the above rule to
+    each of its string values separately,
+  - otherwise a value MUST NOT be truncated;
+- set an attribute count limit such that:
+  - if an attribute addition into an attribute collection would result
+    in exceeding the limit (counting each attribute in the collection as 1;
+    if an attribute is itself a collection, each attribute within the nested
+    collection is also counted as a separate attribute of the parent),
+    SDK MUST discard that attribute, so that the total number of attributes in
+    an attribute collection is at most equal to the limit;
+  - otherwise an attribute MUST NOT be discarded.
+
+**Attribute count example:**
+Consider an attribute collection with two attributes:
+
+- `a: 1`
+- `b: { x: "foo", y: "bar", z: "baz" }`
+
+Here, `a` is a primitive attribute, and `b` is itself a collection with 3 attributes.  
+The total attribute count is calculated as follows:  
+
+- `a` counts as 1,
+- each attribute in `b` (`x`, `y`, `z`) counts as 1 each (total 3),
+- `b` itself counts as 1 (the parent attribute).
+
+Total attribute count = 1 (`a`) + 1 (`b`) + 3 (`x`, `y`, `z`) = 5
+
+There MAY be a log emitted to indicate to the user that an attribute was
+truncated or discarded. To prevent excessive logging, the log MUST NOT be
+emitted more than once per record on which an attribute is set.
+
+If the SDK implements the limits above, it MUST provide a way to change these
+limits programmatically. Names of the configuration options SHOULD be the same as
+in the list below.
+
+An SDK MAY implement model-specific limits, for example
+`SpanAttributeCountLimit` or `LogRecordAttributeCountLimit`. If both a general
+and a model-specific limit are implemented, then the SDK MUST first attempt to
+use the model-specific limit, if it isn't set, then the SDK MUST attempt to use
+the general limit. If neither are defined, then the SDK MUST try to use the
+model-specific limit default value, followed by the global limit default value.
+
+### Configurable Parameters
+
+* `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
+* `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
+
+### Exempt Entities
+
+Resource attributes SHOULD be exempt from the limits described above as resources
+are not susceptible to the scenarios (auto-instrumentation) that result in
+excessive attributes count or size. Resources are also sent only once per batch
+instead of per span so it is relatively cheaper to have more/larger attributes
+on them. Resources are also immutable by design and they are generally passed
+down to TracerProvider along with limits. This makes it awkward to implement
+attribute limits for Resources.
+
+Attributes, which belong to Metrics, are exempt from the limits described above
+at this time, as discussed in
+[Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
