@@ -145,7 +145,7 @@ If an SDK provides a way to:
   - if it is a string, if it exceeds that limit (counting any character in it as
     1), SDKs MUST truncate that value, so that its length is at most equal
     to the limit,
-  - if it is an array or an attributes collection, then apply the above rule to
+  - if it is an array or an attribute collection, then apply the above rule to
     each of its string values separately,
   - otherwise a value MUST NOT be truncated;
 - set an attribute count limit such that:
