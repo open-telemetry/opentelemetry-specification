@@ -435,7 +435,7 @@ The `TraceIdRatioBased` sampler is deprecated in favor of the
 composable [`ProbabilitySampler`](#probability-sampler).  This
 component is being [phased out to address a "TODO" in the 1.0 trace
 specification](https://github.com/open-telemetry/opentelemetry-specification/issues/1413).
-OpenTelemetry SDK implementors SHALL NOT remove or modif the behavior
+OpenTelemetry SDK implementors SHALL NOT remove or modify the behavior
 of the original `TraceIdRatioBased` sampler until at least January 1,
 2027. At that time, SDK implementors are encouraged to silently
 replace TraceIdRatioBased configuration with an equally-configured
