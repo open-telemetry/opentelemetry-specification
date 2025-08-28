@@ -431,7 +431,7 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 **Status**: [Deprecated](../document-status.md)
 
 The `TraceIdRatioBased` sampler is deprecated in favor of the
-composable [`ProbabilitySampler`](#probability-sampler).  This
+composable [`ProbabilitySampler`](#probabilitysampler).  This
 component is being [phased out to address a "TODO" in the 1.0 trace
 specification](https://github.com/open-telemetry/opentelemetry-specification/issues/1413).
 OpenTelemetry SDK implementors SHALL NOT remove or modify the behavior
