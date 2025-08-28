@@ -165,10 +165,12 @@ Consider an attribute collection with two attributes:
 
 Here, `a` is a primitive attribute, and `b` is itself a collection with 3 attributes.  
 The total attribute count is calculated as follows:  
-- `a` counts as 1  
-- Each attribute in `b` (`x`, `y`, `z`) counts as 1 each (total 3)  
-- `b` itself counts as 1 (the parent attribute)  
-- **Total attribute count = 1 (a) + 1 (b) + 3 (x, y, z) = 5**;
+
+- `a` counts as 1,
+- each attribute in `b` (`x`, `y`, `z`) counts as 1 each (total 3),
+- `b` itself counts as 1 (the parent attribute).
+
+Total attribute count = 1 (`a`) + 1 (`b`) + 3 (`x`, `y`, `z`) = 5
 
 There MAY be a log emitted to indicate to the user that an attribute was
 truncated or discarded. To prevent excessive logging, the log MUST NOT be
