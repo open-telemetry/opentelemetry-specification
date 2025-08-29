@@ -207,7 +207,7 @@ It consists of the following parameters:
 * `trace_based`: A boolean indication of whether the logger should
   only process log records associated with sampled traces.
 
-  If not explicitly set, the `trace_based` parameter SHOULD default to `false`.
+  If not explicitly set, the `trace_based` parameter MUST default to `false`.
 
   If `trace_based` is `true`, log records associated with unsampled traces MUST
   be dropped by the `Logger`. Log records that aren't associated with a trace
