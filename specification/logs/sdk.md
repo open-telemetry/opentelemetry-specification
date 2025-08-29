@@ -197,7 +197,7 @@ It consists of the following parameters:
 * `minimum_severity`: A [SeverityNumber](./data-model.md#field-severitynumber)
   indicating the minimum severity level for log records to be processed.
 
-  If not explicitly set, the `minimum_severity` parameter SHOULD default to `0`.
+  If not explicitly set, the `minimum_severity` parameter MUST default to `0`.
 
   If a log record's [SeverityNumber](./data-model.md#field-severitynumber) is
   specified and less than the configured `minimum_severity`, the log record MUST
