@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Restore `TraceIdRatioBased` and give it a deprecation timeline. Update recommended
+  warnings based on feedback in [#4601](https://github.com/open-telemetry/opentelemetry-specification/pull/4601). [#4627](https://github.com/open-telemetry/opentelemetry-specification/pull/4627)
+
 ### Metrics
 
 ### Logs
