@@ -218,9 +218,13 @@ parameters are immediately visible to callers of `Enabled`.
 
 ### Emit a LogRecord
 
-Before processing a log record, the implementation MUST apply the filtering
-rules defined by the [LoggerConfig](#loggerconfig) (in case `Enabled` was not
-called prior to emitting the record):
+If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
+the implementation SHOULD set it equal to the current time.
+
+**Status**: [Development](../document-status.md) Before processing a log record,
+the implementation MUST apply the filtering rules defined by the
+[LoggerConfig](#loggerconfig) (in case `Enabled` was not called prior to
+emitting the record):
 
 1. **Minimum severity**: If the log record's
    [SeverityNumber](./data-model.md#field-severitynumber) is specified
@@ -231,9 +235,6 @@ called prior to emitting the record):
    [`SpanId`](./data-model.md#field-spanid) and the
    [`TraceFlags`](./data-model.md#field-traceflags) SAMPLED flag is unset,
    the log record MUST be dropped.
-
-If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
-the implementation SHOULD set it equal to the current time.
 
 ### Enabled
 
