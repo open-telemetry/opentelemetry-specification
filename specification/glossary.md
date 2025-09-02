@@ -223,8 +223,8 @@ recommended to call it out specifically.
 
 ### Log Appender / Bridge
 
-A log appender or bridge is a component which bridges logs from an existing log
-API into OpenTelemetry using the [Log API](./logs/api.md). The
+A log appender or bridge is a component which bridges logs from an existing logging
+library into OpenTelemetry using the [Log API](./logs/api.md). The
 terms "log bridge" and "log appender" are used interchangeably, reflecting that
 these components bridge data into OpenTelemetry, but are often called appenders
 in the logging domain.

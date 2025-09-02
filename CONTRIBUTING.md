@@ -167,6 +167,16 @@ To quickly fix typos, use
 make misspell-correction
 ```
 
+## Updating the Compliance Matrix
+
+To update the [compliance matrix](./spec-compliance-matrix.md), edit the
+language YAML file in `spec-compliance-matrix/` (e.g., `go.yaml`, `java.yaml`, etc.)
+and regenerate the matrix:
+
+```bash
+make compliance-matrix
+```
+
 ## Issue Triaging
 
 The following diagram shows the initial triaging of new issues.
@@ -291,13 +301,19 @@ Release Procedure:
    Don't publish it yet.
 2. Run [opentelemetry.io workflow](https://github.com/open-telemetry/opentelemetry.io/actions/workflows/build-dev.yml)
    against `opentelemetry-specification` submodule as a smoke-test for docs. Fix broken links, if any.
-3. Create a PR with updated [CHANGELOG.md](CHANGELOG.md). The CHANGELOG.md must have a
-   heading with the new version number. Ensure that no CHANGELOG entries are missing or
-   ended up in the wrong section (e.g., in the last released version rather than Unreleased).
-4. Once CHANGELOG.md PR is approved and ready to be merged we are ready to make the release.
-5. Add the changelog entries from `CHANGELOG.md` to the description of the previously
-   created [draft release here](
-   https://github.com/open-telemetry/opentelemetry-specification/releases) and publish it.
+   Confirm this with the Communications SIG (#otel-comms channel in Slack).
+   Note: this has to be re-confirmed when new PRs are merged into the release PR.
+3. Update the [CHANGELOG.md](CHANGELOG.md):
+   a) Rename the existing "Unreleased" with the new version name (e.g. "1.50.0"), while removing
+   empty subsections (e.g. remove "Context" if it has no entries).
+   b) Add at the top a new "Unreleased" section with new empty subsections (e.g. "Context", "Traces", etc).
+   c) Ensure that no CHANGELOG entries are missing or ended up in the wrong section
+   (e.g., in the last released version rather than Unreleased).
+4. Add the changelog entries from `CHANGELOG.md` to the description of the
+   [release PR](
+   https://github.com/open-telemetry/opentelemetry-specification/releases) and undraft it.
+5. Once it is approved, confirm the date in the CHANGELOG is up-to-date, and merge it,
+   creating a new release tag, e.g. "v1.50.0", containing the CHANGELOG contents.
 
 New release is then auto-discovered by [opentelemetry.io](https://github.com/open-telemetry/opentelemetry.io) pipelines which
 (via bot-generated PR) will eventually publish new version of the specification.

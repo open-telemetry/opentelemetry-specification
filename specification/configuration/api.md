@@ -1,3 +1,8 @@
+<!--- Hugo front matter used to generate the website version of this page:
+linkTitle: API
+weight: 1
+--->
+
 # Instrumentation Configuration API
 
 **Status**: [Development](../document-status.md)

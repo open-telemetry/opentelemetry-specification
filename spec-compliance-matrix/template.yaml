@@ -1,0 +1,459 @@
+# This template contains feature definitions only.
+# Language-specific implementation status is stored in individual language YAML files.
+languages:
+  - name: Go
+    location: ./go.yaml
+  - name: Java
+    location: ./java.yaml
+  - name: JS
+    location: ./js.yaml
+  - name: Python
+    location: ./python.yaml
+  - name: Ruby
+    location: ./ruby.yaml
+  - name: Erlang
+    location: ./erlang.yaml
+  - name: PHP
+    location: ./php.yaml
+  - name: Rust
+    location: ./rust.yaml
+  - name: C++
+    location: ./cpp.yaml
+  - name: .NET
+    location: ./dotnet.yaml
+  - name: Swift
+    location: ./swift.yaml
+sections:
+  - name: Traces
+    features:
+      - heading: '[TracerProvider](specification/trace/api.md#tracerprovider-operations)'
+        features:
+          - name: Create TracerProvider
+          - name: Get a Tracer
+          - name: Get a Tracer with schema_url
+          - name: Get a Tracer with scope attributes
+          - name: Associate Tracer with InstrumentationScope
+          - name: Safe for concurrent calls
+          - name: Shutdown (SDK only required)
+          - name: ForceFlush (SDK only required)
+      - heading: '[Trace / Context interaction](specification/trace/api.md#context-interaction)'
+        features:
+          - name: Get active Span
+          - name: Set active Span
+      - heading: '[Tracer](specification/trace/api.md#tracer-operations)'
+        features:
+          - name: Create a new Span
+          - name: Documentation defines adding attributes at span creation as preferred
+          - name: Get active Span
+          - name: Mark Span active
+          - name: Safe for concurrent calls
+      - heading: '[SpanContext](specification/trace/api.md#spancontext)'
+        features:
+          - name: IsValid
+          - name: IsRemote
+          - name: Conforms to the W3C TraceContext spec
+      - heading: '[Span](specification/trace/api.md#span)'
+        features:
+          - name: Create root span
+          - name: Create with default parent (active span)
+          - name: Create with parent from Context
+          - name: No explicit parent Span/SpanContext allowed
+          - name: SpanProcessor.OnStart receives parent Context
+          - name: UpdateName
+          - name: User-defined start timestamp
+          - name: End
+          - name: End with timestamp
+          - name: IsRecording
+          - name: IsRecording becomes false after End
+          - name: Set status with StatusCode (Unset, Ok, Error)
+          - name: Safe for concurrent calls
+          - name: events collection size limit
+          - name: attribute collection size limit
+          - name: links collection size limit
+          - name: '[SpanProcessor.OnEnding](specification/trace/sdk.md#onending)'
+            optional: true
+      - heading: '[Span attributes](specification/trace/api.md#set-attributes)'
+        features:
+          - name: SetAttribute
+          - name: Set order preserved
+            optional: true
+          - name: String type
+          - name: Boolean type
+          - name: Double floating-point type
+          - name: Signed int64 type
+          - name: Array of primitives (homogeneous)
+          - name: '`null` values documented as invalid/undefined'
+          - name: Unicode support for keys and string values
+      - heading: '[Span linking](specification/trace/api.md#specifying-links)'
+        features:
+          - name: Links can be recorded on span creation
+          - name: Links can be recorded after span creation
+          - name: Links order is preserved
+      - heading: '[Span events](specification/trace/api.md#add-events)'
+        features:
+          - name: AddEvent
+          - name: Add order preserved
+          - name: Safe for concurrent calls
+      - heading: '[Span exceptions](specification/trace/api.md#record-exception)'
+        features:
+          - name: RecordException
+          - name: RecordException with extra parameters
+      - heading: '[Sampling](specification/trace/sdk.md#sampling)'
+        features:
+          - name: Allow samplers to modify tracestate
+          - name: ShouldSample gets full parent Context
+          - name: 'Sampler: JaegerRemoteSampler'
+          - name: '[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation)'
+          - name: '[IdGenerators](specification/trace/sdk.md#id-generators)'
+          - name: '[SpanLimits](specification/trace/sdk.md#span-limits)'
+            optional: true
+          - name: '[Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)'
+          - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
+            optional: true
+          - name: Fetch InstrumentationScope from ReadableSpan
+          - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
+            optional: true
+          - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
+            optional: true
+          - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
+            optional: true
+  - name: Baggage
+    features:
+      - name: Basic support
+      - name: Use official header name `baggage`
+  - name: Metrics
+    features:
+      - name: The API provides a way to set and get a global default `MeterProvider`.
+        optional: true
+      - name: It is possible to create any number of `MeterProvider`s.
+        optional: true
+      - name: '`MeterProvider` provides a way to get a `Meter`.'
+      - name: '`get_meter` accepts name, `version` and `schema_url`.'
+      - name: '`get_meter` accepts `attributes`.'
+      - name: When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.
+      - name: The fallback `Meter` `name` property keeps its original invalid value.
+        optional: true
+      - name: Associate `Meter` with `InstrumentationScope`.
+      - name: '`Counter` instrument is supported.'
+      - name: '`AsynchronousCounter` instrument is supported.'
+      - name: '`Histogram` instrument is supported.'
+      - name: '`AsynchronousGauge` instrument is supported.'
+      - name: '`Gauge` instrument is supported.'
+      - name: '`UpDownCounter` instrument is supported.'
+      - name: '`AsynchronousUpDownCounter` instrument is supported.'
+      - name: Instruments have `name`
+      - name: Instruments have kind.
+      - name: Instruments have an optional unit of measure.
+      - name: Instruments have an optional description.
+      - name:
+          A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under
+          the same `Meter` using the same `name`.
+      - name: Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name.
+      - name: It is possible to register two instruments with same `name` under different `Meter`s.
+      - name: Instrument names conform to the specified syntax.
+      - name: Instrument units conform to the specified syntax.
+      - name: Instrument descriptions conform to the specified syntax.
+      - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
+      - name: Instrument supports the advisory Attributes parameter.
+      - name: All methods of `MeterProvider` are safe to be called concurrently.
+      - name: All methods of `Meter` are safe to be called concurrently.
+      - name: All methods of any instrument are safe to be called concurrently.
+      - name: '`MeterProvider` allows a `Resource` to be specified.'
+      - name: A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`.
+      - name:
+          The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary`
+          instance stored in the `Meter`.
+      - name:
+          The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope`
+          instance stored in the `Meter`.
+      - name: Configuration is managed solely by the `MeterProvider`.
+      - name: The `MeterProvider` provides methods to update the configuration
+        optional: true
+      - name: The updated configuration applies to all already returned `Meter`s.
+        optional: if above
+      - name: There is a way to register `View`s with a `MeterProvider`.
+      - name: The `View` instrument selection criteria is as specified.
+      - name: The `View` instrument selection criteria supports wildcards.
+        optional: true
+      - name: The `View` instrument selection criteria supports the match-all wildcard.
+      - name: The name of the `View` can be specified.
+      - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
+      - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
+      - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
+        optional: true
+      - name: The SDK allows more than one `View` to be specified per instrument.
+        optional: true
+      - name: The `Drop` aggregation is available.
+      - name: The `Default` aggregation is available.
+      - name: The `Default` aggregation uses the specified aggregation by instrument.
+      - name: The `Sum` aggregation is available.
+      - name: The `LastValue` aggregation is available.
+      - name: The `ExplicitBucketHistogram` aggregation is available.
+      - name: The `ExponentialBucketHistogram` aggregation is available.
+      - name: The metrics Reader implementation supports registering metric Exporters
+      - name: The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.
+      - name: The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.
+      - name: The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements).
+      - name: The metrics Exporter `export` function can not be called concurrently from the same Exporter instance.
+      - name: The metrics Exporter `export` function does not block indefinitely.
+      - name: The metrics Exporter `export` function receives a batch of metrics.
+      - name: The metrics Exporter `export` function returns `Success` or `Failure`.
+      - name: The metrics Exporter provides a `ForceFlush` function.
+      - name: The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out.
+      - name: The metrics Exporter provides a `shutdown` function.
+      - name: The metrics Exporter `shutdown` function do not block indefinitely.
+      - name: The metrics SDK samples `Exemplar`s from measurements.
+      - name: Exemplar sampling can be disabled.
+      - name: The metrics SDK supports SDK-wide exemplar filter configuration
+      - name: The metrics SDK supports `TraceBased` exemplar filter
+      - name: The metrics SDK supports `AlwaysOn` exemplar filter
+      - name: The metrics SDK supports `AlwaysOff` exemplar filter
+      - name: Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.
+      - name:
+          Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was
+          taken.
+      - name: Exemplars contain the timestamp when the measurement was taken.
+      - name: The metrics SDK provides an `ExemplarReservoir` interface or extension point.
+      - name: An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.
+      - name:
+          The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except
+          `ExplicitBucketHistogram`.
+      - name:
+          The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram`
+          aggregation.
+      - name: A metric Producer accepts an optional metric Filter
+      - name: The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers
+      - name: The metric SDK's metric Producer implementations uses the metric Filter
+      - name: Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits)
+      - name: Metric SDK supports configuring cardinality limit at MeterReader level
+      - name: Metric SDK supports configuring cardinality limit per metric (using Views)
+  - name: Logs
+    features:
+      - name: LoggerProvider.Get Logger
+      - name: LoggerProvider.Get Logger accepts attributes
+      - name: LoggerProvider.Shutdown
+      - name: LoggerProvider.ForceFlush
+      - name: Logger.Emit(LogRecord)
+      - name: Reuse Standard Attributes
+        optional: true
+      - name: LogRecord.Set EventName
+      - name: Logger.Enabled
+        optional: true
+      - name: SimpleLogRecordProcessor
+      - name: BatchLogRecordProcessor
+      - name: Can plug custom LogRecordProcessor
+      - name: LogRecordProcessor.Enabled
+        optional: true
+      - name: OTLP/gRPC exporter
+      - name: OTLP/HTTP exporter
+      - name: OTLP File exporter
+      - name: Can plug custom LogRecordExporter
+      - name: Trace Context Injection
+  - name: Resource
+    features:
+      - name: Create from Attributes
+      - name: Create empty
+      - name: '[Merge (v2)](specification/resource/sdk.md#merge)'
+      - name: Retrieve attributes
+      - name:
+          '[Default value](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource#semantic-attributes-with-dedicated-environment-variable)
+          for service.name'
+      - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
+      - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
+  - name: Context Propagation
+    features:
+      - name: Create Context Key
+      - name: Get value from Context
+      - name: Set value for Context
+      - name: Attach Context
+      - name: Detach Context
+      - name: Get current Context
+      - name: Composite Propagator
+      - name: Global Propagator
+      - name: TraceContext Propagator
+      - name: B3 Propagator
+      - name: Jaeger Propagator
+      - name: OT Propagator
+      - name: OpenCensus Binary Propagator
+      - name: '[TextMapPropagator](specification/propagators/api.md#textmap-propagator)'
+      - name: Fields
+      - name: Setter argument
+        optional: true
+      - name: Getter argument
+        optional: true
+      - name: Getter argument returning Keys
+        optional: true
+  - name: Environment Variables
+    features:
+      - name: OTEL_SDK_DISABLED
+      - name: OTEL_RESOURCE_ATTRIBUTES
+      - name: OTEL_SERVICE_NAME
+      - name: OTEL_LOG_LEVEL
+      - name: OTEL_PROPAGATORS
+      - name: OTEL_BSP_*
+      - name: OTEL_BLRP_*
+      - name: OTEL_EXPORTER_OTLP_*
+      - name: OTEL_EXPORTER_ZIPKIN_*
+      - name: OTEL_TRACES_EXPORTER
+      - name: OTEL_METRICS_EXPORTER
+      - name: OTEL_LOGS_EXPORTER
+      - name: OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT
+      - name: OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT
+      - name: OTEL_SPAN_EVENT_COUNT_LIMIT
+      - name: OTEL_SPAN_LINK_COUNT_LIMIT
+      - name: OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT
+      - name: OTEL_LINK_ATTRIBUTE_COUNT_LIMIT
+      - name: OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT
+      - name: OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT
+      - name: OTEL_TRACES_SAMPLER
+      - name: OTEL_TRACES_SAMPLER_ARG
+      - name: OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT
+      - name: OTEL_ATTRIBUTE_COUNT_LIMIT
+      - name: OTEL_METRIC_EXPORT_INTERVAL
+      - name: OTEL_METRIC_EXPORT_TIMEOUT
+      - name: OTEL_METRICS_EXEMPLAR_FILTER
+      - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+      - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
+      - name: OTEL_EXPERIMENTAL_CONFIG_FILE
+    hide_optional_column: true
+  - name: Declarative configuration
+    features:
+      - name: '`Parse` a configuration file'
+      - name: The `Parse` operation accepts the configuration YAML file format
+      - name: The `Parse` operation performs environment variable substitution
+      - name: The `Parse` operation returns configuration model
+      - name: The `Parse` operation resolves extension component configuration to `properties`
+      - name: '`Create` SDK components'
+      - name: The `Create` operation accepts configuration model
+      - name: The `Create` operation returns `TracerProvider`
+      - name: The `Create` operation returns `MeterProvider`
+      - name: The `Create` operation returns `LoggerProvider`
+      - name: The `Create` operation returns `Propagators`
+      - name: The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components
+      - name: Register a `ComponentProvider`
+    hide_optional_column: true
+  - name: Exporters
+    features:
+      - name: '[Exporter interface](specification/trace/sdk.md#span-exporter)'
+      - name: '[Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2)'
+      - name: Standard output (logging)
+      - name: In-memory (mock exporter)
+      - heading: '**[OTLP](specification/protocol/otlp.md)**'
+        features:
+          - name: OTLP/gRPC Exporter
+            optional_one_of_group_is_required: true
+          - name: OTLP/HTTP binary Protobuf Exporter
+            optional_one_of_group_is_required: true
+          - name: OTLP/HTTP JSON Protobuf Exporter
+          - name: OTLP/HTTP gzip Content-Encoding support
+            optional: true
+          - name: Concurrent sending
+          - name: Honors retryable responses with backoff
+            optional: true
+          - name: Honors non-retryable responses
+            optional: true
+          - name: Honors throttling response
+            optional: true
+          - name: Multi-destination spec compliance
+            optional: true
+          - name: SchemaURL in ResourceSpans and ScopeSpans
+          - name: SchemaURL in ResourceMetrics and ScopeMetrics
+          - name: SchemaURL in ResourceLogs and ScopeLogs
+          - name: Honors the [user agent spec](specification/protocol/exporter.md#user-agent)
+          - name:
+              '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success)
+              messages are handled and logged for OTLP/gRPC'
+            optional: true
+          - name:
+              '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1)
+              messages are handled and logged for OTLP/HTTP'
+            optional: true
+          - name: Metric Exporter configurable temporality preference
+          - name: Metric Exporter configurable default aggregation
+      - heading: '**[Zipkin](specification/trace/sdk_exporters/zipkin.md)**'
+        features:
+          - name: Zipkin V1 JSON
+            optional: true
+          - name: Zipkin V1 Thrift
+            optional: true
+          - name: Zipkin V2 JSON
+            optional_one_of_group_is_required: true
+          - name: Zipkin V2 Protobuf
+            optional_one_of_group_is_required: true
+          - name: Service name mapping
+          - name: SpanKind mapping
+          - name: InstrumentationLibrary mapping
+          - name: InstrumentationScope mapping
+          - name: Boolean attributes
+          - name: Array attributes
+          - name: Status mapping
+          - name: Error Status mapping
+          - name: Event attributes mapping to Annotations
+          - name: Integer microseconds in timestamps
+      - heading: '**Prometheus**'
+        features:
+          - name: '[Metadata Deduplication](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
+          - name: '[Name Sanitization](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
+          - name: '[UNIT Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
+            optional: true
+          - name: '[Unit Suffixes](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
+            optional: true
+          - name: '[Unit Full Words](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
+            optional: true
+          - name: '[HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
+          - name: '[TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
+          - name: '[otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
+          - name: '[otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
+          - name: '[otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
+            optional: true
+          - name: '[Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1)'
+          - name: '[Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)'
+          - name: '[Prometheus Counters have _total suffix by default](specification/compatibility/prometheus_and_openmetrics.md#sums)'
+          - name: '[Prometheus Counters _total suffixing can be disabled](specification/compatibility/prometheus_and_openmetrics.md#sums)'
+            optional: true
+          - name: '[Cumulative Non-Monotonic Sums become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#sums)'
+          - name: '[Delta Non-Monotonic Sums become Cumulative Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)'
+            optional: true
+          - name: '[Cumulative Histograms become Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1)'
+          - name: '[Delta Histograms become Cumulative Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1)'
+            optional: true
+          - name: '[Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
+          - name: '[Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
+          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)'
+            optional: true
+          - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
+            optional: true
+  - name: OpenCensus Compatibility
+    features:
+      - name: '[Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)'
+      - name: '[Metric Bridge](specification/compatibility/opencensus.md#metrics--stats)'
+    hide_optional_column: true
+    languages: # overridden just for initial PR to prove out 1-1 conversion
+      - Go
+      - Java
+      - JS
+      - Python
+      - C++
+      - .NET
+      - Erlang
+  - name: OpenTracing Compatibility
+    features:
+      - name: '[Create OpenTracing Shim](specification/compatibility/opentracing.md#create-an-opentracing-tracer-shim)'
+      - name: '[Tracer](specification/compatibility/opentracing.md#tracer-shim)'
+      - name: '[Span](specification/compatibility/opentracing.md#span-shim)'
+      - name: '[SpanContext](specification/compatibility/opentracing.md#spancontext-shim)'
+      - name: '[ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim)'
+      - name: Error mapping for attributes/events
+      - name: Migration to OpenTelemetry guide
+    hide_optional_column: true
+    languages: # overridden just for initial PR to prove out 1-1 conversion
+      - Go
+      - Java
+      - JS
+      - Python
+      - Ruby
+      - PHP
+      - Rust
+      - C++
+      - .NET
+      - Swift
