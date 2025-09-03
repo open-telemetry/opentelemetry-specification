@@ -208,15 +208,15 @@ sections:
           the same `Meter` using the same `name`.
         status: '+'
       - name: Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name.
-        status: '?'
+        status: '-'
       - name: It is possible to register two instruments with same `name` under different `Meter`s.
         status: '?'
       - name: Instrument names conform to the specified syntax.
-        status: '?'
+        status: '+'
       - name: Instrument units conform to the specified syntax.
-        status: '?'
+        status: '+'
       - name: Instrument descriptions conform to the specified syntax.
-        status: '?'
+        status: '+'
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
         status: '?'
       - name: Instrument supports the advisory Attributes parameter.
@@ -228,9 +228,9 @@ sections:
       - name: All methods of any instrument are safe to be called concurrently.
         status: '?'
       - name: '`MeterProvider` allows a `Resource` to be specified.'
-        status: '?'
+        status: '+'
       - name: A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`.
-        status: '?'
+        status: '+'
       - name:
           The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary`
           instance stored in the `Meter`.
