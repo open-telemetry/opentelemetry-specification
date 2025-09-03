@@ -162,10 +162,12 @@ If an SDK provides a way to:
     to the limit,
   - if it is a byte array, if it exceeds that limit (counting each byte as 1),
     SDKs MUST truncate that value, so that its length is at most equal to the limit,
+  - if it is an array of string, then apply the limit to
+    each value within the array separately,
   - if it is an array of [AnyValue](#anyvalue), then apply the limit to
-    each value within the array recursively,
+    each value within the array separately,
   - if it is a [map](#mapstring-anyvalue), then apply the
-    limit to each value within the map recursively,
+    limit to each value within the map separately,
   - otherwise a value MUST NOT be truncated;
 - set an attribute count limit such that:
   - if an attribute addition into an attribute collection would result
