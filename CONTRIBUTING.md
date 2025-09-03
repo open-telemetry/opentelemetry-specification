@@ -167,6 +167,16 @@ To quickly fix typos, use
 make misspell-correction
 ```
 
+## Updating the Compliance Matrix
+
+To update the [compliance matrix](./spec-compliance-matrix.md), edit the
+language YAML file in `spec-compliance-matrix/` (e.g., `go.yaml`, `java.yaml`, etc.)
+and regenerate the matrix:
+
+```bash
+make compliance-matrix
+```
+
 ## Issue Triaging
 
 The following diagram shows the initial triaging of new issues.
