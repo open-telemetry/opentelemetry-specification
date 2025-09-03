@@ -160,32 +160,19 @@ If an SDK provides a way to:
   - if it is a string, if it exceeds that limit (counting any character in it as
     1), SDKs MUST truncate that value, so that its length is at most equal
     to the limit,
-  - if it is an array or an attribute collection, then apply the above rule to
-    each of its string values separately,
+  - if it is a byte array, if it exceeds that limit (counting each byte as 1),
+    SDKs MUST truncate that value, so that its length is at most equal to the limit,
+  - if it is an array of [AnyValue](#anyvalue), then apply the limit to
+    each value within the array recursively,
+  - if it is a [`map<string, AnyValue>`](#mapstring-anyvalue), then apply the
+    limit to each value within the map recursively,
   - otherwise a value MUST NOT be truncated;
 - set an attribute count limit such that:
   - if an attribute addition into an attribute collection would result
-    in exceeding the limit (counting each attribute in the collection as 1;
-    if an attribute is itself a collection, each attribute within the nested
-    collection is also counted as a separate attribute of the parent),
+    in exceeding the limit (counting each attribute in the collection as 1),
     SDK MUST discard that attribute, so that the total number of attributes in
     an attribute collection is at most equal to the limit;
   - otherwise an attribute MUST NOT be discarded.
-
-**Attribute count example:**
-Consider an attribute collection with two attributes:
-
-- `a: 1`
-- `b: { x: "foo", y: "bar", z: "baz" }`
-
-Here, `a` is a primitive attribute, and `b` is itself a collection with 3 attributes.  
-The total attribute count is calculated as follows:  
-
-- `a` counts as 1,
-- each attribute in `b` (`x`, `y`, `z`) counts as 1 each (total 3),
-- `b` itself counts as 1 (the parent attribute).
-
-Total attribute count = 1 (`a`) + 1 (`b`) + 3 (`x`, `y`, `z`) = 5
 
 There MAY be a log emitted to indicate to the user that an attribute was
 truncated or discarded. To prevent excessive logging, the log MUST NOT be
@@ -205,7 +192,7 @@ model-specific limit default value, followed by the global limit default value.
 ### Configurable Parameters
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
-* `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length;
+* `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length (applies to string values and byte arrays);
 
 ### Exempt Entities
 
