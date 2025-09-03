@@ -16,7 +16,7 @@ path_base_for_github_subdir:
 <!-- toc -->
 
 - [AnyValue](#anyvalue)
-- [map<string, AnyValue>](#mapstring-anyvalue)
+- [map](#mapstring-anyvalue)
 - [Attribute](#attribute)
   * [Attribute Collections](#attribute-collections)
 - [Attribute Limits](#attribute-limits)
@@ -164,7 +164,7 @@ If an SDK provides a way to:
     SDKs MUST truncate that value, so that its length is at most equal to the limit,
   - if it is an array of [AnyValue](#anyvalue), then apply the limit to
     each value within the array recursively,
-  - if it is a [`map<string, AnyValue>`](#mapstring-anyvalue), then apply the
+  - if it is a [map](#mapstring-anyvalue), then apply the
     limit to each value within the map recursively,
   - otherwise a value MUST NOT be truncated;
 - set an attribute count limit such that:
