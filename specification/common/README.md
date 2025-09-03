@@ -15,8 +15,9 @@ path_base_for_github_subdir:
 
 <!-- toc -->
 
+- [AnyValue](#anyvalue)
+- [map<string, AnyValue>](#mapstring-anyvalue)
 - [Attribute](#attribute)
-  * [Attribute Value](#attribute-value)
   * [Attribute Collections](#attribute-collections)
 - [Attribute Limits](#attribute-limits)
   * [Configurable Parameters](#configurable-parameters)
@@ -26,36 +27,17 @@ path_base_for_github_subdir:
 
 </details>
 
-## Attribute
+## AnyValue
 
-<a id="attributes"></a>
-
-An `Attribute` is a key-value pair, which MUST have the following properties:
-
-- The attribute key MUST be a non-`null` and non-empty string.
-  - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
-- The attribute value MUST be one of types defined in [Attribute Value](#attribute-value).
-
-Attributes are equal when their keys and values are equal.
-
-See [Attribute Naming](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/naming.md#attributes) for naming guidelines.
-
-See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-requirement-level.md) for requirement levels guidelines.
-
-See [this document](attribute-type-mapping.md) to find out how to map values obtained
-outside OpenTelemetry into OpenTelemetry attribute values.
-
-### Attribute Value
-
-The attribute value is either:
+`AnyValue` is either:
 
 - a primitive type: string, boolean, double precision floating point
   (IEEE 754-1985), or signed 64 bit integer,
 - a homogeneous array of primitive type values. A homogeneous array MUST NOT
   contain values of different types.
 - a byte array.
-- a heterogeneous array of [Attribute Values](#attribute-value),
-- an [Attribute Collection](#attribute-collections),
+- a heterogeneous array of `AnyValue`,
+- a [`map<string, AnyValue>`](#mapstring-anyvalue),
 - an empty value (e.g. `null`, `undefined` in JavaScript/TypeScript,
   `None` in Python, `nil` in Go/Ruby, etc.).
 
@@ -64,9 +46,9 @@ SHOULD be represented as JSON-encoded strings. For example, the expression
 `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`,
 and an empty array of any type will be encoded as `[]`.
 
-Attribute values expressing an empty value, a numerical value of zero,
-an empty string, or an empty array are considered meaningful and MUST be stored
-and passed on to processors / exporters.
+AnyValues expressing an empty value, a numerical value of zero, an empty string,
+or an empty array are considered meaningful and MUST be stored and passed on to
+processors / exporters.
 
 While `null` is a valid attribute value, its use within homogeneous arrays
 SHOULD generally be avoided unless language constraints make this impossible.
@@ -80,8 +62,42 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
-Arbitrary deep nesting of values for heterogeneous arrays and attribute collections
-is allowed (essentially allows to represent an equivalent of a JSON object).
+## map<string, AnyValue>
+
+`map<string, AnyValue>` is a map of string keys to `AnyValue` values.
+The keys in the map are unique (duplicate keys are not allowed).
+
+Arbitrary deep nesting of values for arrays and maps is allowed (essentially
+allows to represent an equivalent of a JSON object).
+
+The representation of the map is language-dependent.
+
+The implementation MUST by default ensure that the exported maps contain only unique keys.
+
+The implementation MAY have an option to allow exporting maps with duplicate keys
+(e.g. for better performance).
+If such option is provided, it MUST be documented that for many receivers,
+handling of maps with duplicate keys is unpredictable and it is the users'
+responsibility to ensure keys are not duplicate.
+
+## Attribute
+
+<a id="attributes"></a>
+
+An `Attribute` is a key-value pair, which MUST have the following properties:
+
+- The attribute key MUST be a non-`null` and non-empty string.
+  - Case sensitivity of keys is preserved. Keys that differ in casing are treated as distinct keys.
+- The attribute value MUST be one of types defined in [AnyValue](#anyvalue).
+
+Attributes are equal when their keys and values are equal.
+
+See [Attribute Naming](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/naming.md#attributes) for naming guidelines.
+
+See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/attribute-requirement-level.md) for requirement levels guidelines.
+
+See [this document](attribute-type-mapping.md) to find out how to map values obtained
+outside OpenTelemetry into OpenTelemetry attribute values.
 
 ### Attribute Collections
 
@@ -92,8 +108,7 @@ is allowed (essentially allows to represent an equivalent of a JSON object).
 [Events](../trace/api.md#add-events), Span
 [Links](../trace/api.md#link) and
 [Log Records](../logs/data-model.md),
-and even [Attribute Value](#attribute-value) itself
-may contain a collection of attributes.
+contain a collection of attributes.
 
 Implementation MUST by default ensure that the exported attribute collections
 contain only unique keys. The enforcement of uniqueness may be performed

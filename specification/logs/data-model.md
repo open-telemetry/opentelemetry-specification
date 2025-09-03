@@ -347,12 +347,12 @@ when it is used to represent an unspecified severity.
 
 ### Field: `Body`
 
-Type: [Attribute Value](../common/README.md#attribute-value).
+Type: [AnyValue](../common/README.md#anyvalue).
 
 Description: A value containing the body of the log record. Can be for example
 a human-readable string message (including multi-line) describing the event in
 a free form or it can be a structured data composed of arrays and maps of other
-values. Body MUST support [Attribute Value](../common/README.md#attribute-value)
+values. Body MUST support [AnyValue](../common/README.md#anyvalue)
 to preserve the semantics of structured logs emitted by the applications.
 Can vary for each occurrence of the event coming from the same source.
 This field is optional.
