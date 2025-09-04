@@ -21,7 +21,7 @@ linkTitle: Entity Propagation
   * [Validation Requirements](#validation-requirements)
   * [Error Handling](#error-handling)
   * [Environment Variable Conflict Resolution](#environment-variable-conflict-resolution)
-- [EntityDetector](#entitydetector)
+- [EnvEntityDetector](#Enventitydetector)
 
 <!-- tocstop -->
 
@@ -53,8 +53,9 @@ To enable standardized entity propagation across OpenTelemetry implementations,
 this specification defines the `OTEL_ENTITIES` environment variable format and
 processing requirements.
 
-The SDK SHOULD provide an `EntityDetector` which will use the `OTEL_ENTITIES` environment
-variable to discover and associate defined entities with the resource.
+The SDK that has access to environment variables MUST provide
+an `EnvEntityDetector` which will use the `OTEL_ENTITIES` environment variable
+to discover and associate defined entities with the resource.
 
 The `OTEL_ENTITIES` environment variable contains a list of entities in a
 compact format designed for human readability and concise representation.
@@ -217,6 +218,6 @@ OTEL_ENTITIES="service{service.name=entity-service,service.instance.id=inst-1}[s
 # - Resource: remaining attributes from OTEL_RESOURCE_ATTRIBUTES that don't conflict: {custom.attr=resource-value}
 ```
 
-## EntityDetector
+## EnvEntityDetector
 
 TODO: fill out
