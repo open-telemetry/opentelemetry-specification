@@ -79,8 +79,8 @@ working `Logger` MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-**Status**: [Development](../document-status.md) - The `LoggerProvider` MUST
-compute the relevant [LoggerConfig](#loggerconfig) using the
+**Status**: [Development](../document-status.md) - The `LoggerProvider` SHOULD
+compute the relevant [LoggerConfig](#loggerconfig) using a
 configured [LoggerConfigurator](#loggerconfigurator), and create
 a `Logger` whose behavior conforms to that `LoggerConfig`.
 
@@ -102,6 +102,8 @@ configuration only via this reference.
 #### LoggerConfigurator
 
 **Status**: [Development](../document-status.md)
+
+The `LoggerConfigurator` MAY be supported by the SDK.
 
 A `LoggerConfigurator` is a function which computes
 the [LoggerConfig](#loggerconfig) for a [Logger](#logger).

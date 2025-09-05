@@ -131,8 +131,8 @@ working Meter MUST be returned as a fallback rather than returning null or
 throwing an exception, its `name` SHOULD keep the original invalid value, and a
 message reporting that the specified value is invalid SHOULD be logged.
 
-**Status**: [Development](../document-status.md) - The `MeterProvider` MUST
-compute the relevant [MeterConfig](#meterconfig) using the
+**Status**: [Development](../document-status.md) - The `MeterProvider` SHOULD
+compute the relevant [MeterConfig](#meterconfig) using a
 configured [MeterConfigurator](#meterconfigurator), and create
 a `Meter` whose behavior conforms to that `MeterConfig`.
 
@@ -155,6 +155,8 @@ configuration only via this reference.
 #### MeterConfigurator
 
 **Status**: [Development](../document-status.md)
+
+The `MeterConfigurator` MAY be supported by the SDK. 
 
 A `MeterConfigurator` is a function which computes
 the [MeterConfig](#meterconfig) for a [Meter](#meter).

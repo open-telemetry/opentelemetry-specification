@@ -97,8 +97,8 @@ The input provided by the user MUST be used to create
 an [`InstrumentationScope`](../common/instrumentation-scope.md) instance which
 is stored on the created `Tracer`.
 
-**Status**: [Development](../document-status.md) - The `TracerProvider` MUST
-compute the relevant [TracerConfig](#tracerconfig) using the
+**Status**: [Development](../document-status.md) - The `TracerProvider` SHOULD
+compute the relevant [TracerConfig](#tracerconfig) using a
 configured [TracerConfigurator](#tracerconfigurator), and create
 a `Tracer` whose behavior conforms to that `TracerConfig`.
 
@@ -122,6 +122,8 @@ reference.
 #### TracerConfigurator
 
 **Status**: [Development](../document-status.md)
+
+The `TracerConfigurator` MAY be supported by the SDK. 
 
 A `TracerConfigurator` is a function which computes
 the [TracerConfig](#tracerconfig) for a [Tracer](#tracer).
