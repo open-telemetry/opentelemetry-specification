@@ -156,7 +156,7 @@ configuration only via this reference.
 
 **Status**: [Development](../document-status.md)
 
-The `MeterConfigurator` MAY be supported by the SDK. 
+The `MeterConfigurator` MAY be supported by the SDK.
 
 A `MeterConfigurator` is a function which computes
 the [MeterConfig](#meterconfig) for a [Meter](#meter).

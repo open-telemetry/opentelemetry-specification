@@ -123,7 +123,7 @@ reference.
 
 **Status**: [Development](../document-status.md)
 
-The `TracerConfigurator` MAY be supported by the SDK. 
+The `TracerConfigurator` MAY be supported by the SDK.
 
 A `TracerConfigurator` is a function which computes
 the [TracerConfig](#tracerconfig) for a [Tracer](#tracer).
