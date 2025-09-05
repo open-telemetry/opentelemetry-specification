@@ -20,7 +20,7 @@ linkTitle: Entity Propagation
   * [Character Encoding](#character-encoding)
   * [Validation Requirements](#validation-requirements)
   * [Error Handling](#error-handling)
-- [EnvEntityDetector](#Enventitydetector)
+- [EnvEntityDetector](#enventitydetector)
 
 <!-- tocstop -->
 
