@@ -20,7 +20,6 @@ linkTitle: Entity Propagation
   * [Character Encoding](#character-encoding)
   * [Validation Requirements](#validation-requirements)
   * [Error Handling](#error-handling)
-  * [Environment Variable Conflict Resolution](#environment-variable-conflict-resolution)
 - [EnvEntityDetector](#Enventitydetector)
 
 <!-- tocstop -->
@@ -180,43 +179,13 @@ The SDK SHOULD be resilient to malformed input and follow these error handling r
 
    Example: `OTEL_ENTITIES="service{service.name=app1}@invalid-url"` processes the entity but ignores the invalid URL
 
-5. **Conflicting identifying attributes**: If two entities of the same type define different values for the same identifying attribute key, the SDK SHOULD treat them as separate entities. If this results in ambiguous entity identification, the SDK SHOULD log a warning and preserve only the last entity
+5. **Conflicting identifying attributes**: If two entities of the same type define different values for the same identifying attribute key, the SDK SHOULD log a warning and preserve only the last entity
 
    Example: `OTEL_ENTITIES="service{service.name=app1};service{service.name=app2}"` creates only service.name=app2 entity
 
 6. **Conflicting descriptive attributes**: If two entities define different values for the same descriptive attribute key, the SDK SHOULD use the value from the last entity definition and SHOULD log a warning. The conflicting attributes SHOULD NOT be recorded for entities other than the last one
 
    Example: `OTEL_ENTITIES="service{service.name=app1}[version=1.0];service{service.name=app2}[version=2.0]"` results in app1 service without version attribute and app2 service with `version=2.0`
-
-### Environment Variable Conflict Resolution
-
-When multiple environment variables define overlapping configuration, a warning should be logged and the following precedence order applied (highest to lowest precedence):
-
-1. **Programmatic configuration**: Entities configured via SDK API take highest precedence and override all environment variable configurations
-2. **OTEL_ENTITIES**: Entity definitions from this environment variable override resource attributes and other OTEL_* environment variables for the same attribute keys
-3. **OTEL_SERVICE_NAME**: Takes precedence over `service.name` in `OTEL_RESOURCE_ATTRIBUTES` but is overridden by `service.name` in `OTEL_ENTITIES`
-4. **Other specific OTEL_* variables**: Individual environment variables (when they exist) take precedence over equivalent attributes in `OTEL_RESOURCE_ATTRIBUTES`
-5. **OTEL_RESOURCE_ATTRIBUTES**: Lowest precedence for overlapping attribute keys
-
-**Precedence rules within OTEL_ENTITIES:**
-
-- When the same entity type appears multiple times with identical identifying attributes, the last occurrence takes precedence
-
-**Example of conflict resolution:**
-
-```bash
-# These environment variables:
-OTEL_SERVICE_NAME="old-service-name"
-OTEL_RESOURCE_ATTRIBUTES="service.name=resource-service,host.name=resource-host,custom.attr=resource-value"
-OTEL_ENTITIES="service{service.name=entity-service,service.instance.id=inst-1}[service.version=1.0.0];host{host.id=host-123}[host.name=entity-host]"
-
-# Result in:
-# - Service entity with identifying attributes: {service.name=entity-service, service.instance.id=inst-1} (from OTEL_ENTITIES, overrides others)
-#   and descriptive attributes: {service.version=1.0.0}
-# - Host entity with identifying attributes: {host.id=host-123}
-#   and descriptive attributes: {host.name=entity-host} (from OTEL_ENTITIES, overrides OTEL_RESOURCE_ATTRIBUTES)
-# - Resource: remaining attributes from OTEL_RESOURCE_ATTRIBUTES that don't conflict: {custom.attr=resource-value}
-```
 
 ## EnvEntityDetector
 
