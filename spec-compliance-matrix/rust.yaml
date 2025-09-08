@@ -357,8 +357,6 @@ sections:
         status: '?'
       - name: Logger.Emit(LogRecord)
         status: '?'
-      - name: Reuse Standard Attributes
-        status: '?'
       - name: LogRecord.Set EventName
         status: '+'
       - name: Logger.Enabled
