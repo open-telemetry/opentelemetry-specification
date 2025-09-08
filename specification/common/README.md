@@ -164,7 +164,7 @@ If an SDK provides a way to:
     to the limit,
   - **Status**: [Development](../document-status.md) - if it is a byte array, if it exceeds that limit (counting each byte as 1),
     SDKs MUST truncate that value, so that its length is at most equal to the limit,
-  - if it is an array of string, then apply the limit to
+  - if it is an array of strings, then apply the limit to
     each value within the array separately,
   - **Status**: [Development](../document-status.md) - if it is an array of [AnyValue](#anyvalue), then apply the limit to
     each value within the array separately,
@@ -172,9 +172,9 @@ If an SDK provides a way to:
     limit to each value within the map separately,
   - otherwise a value MUST NOT be truncated;
 - set an attribute count limit such that:
-  - if an attribute addition into an attribute collection would result
+  - if adding an attribute to an attribute collection would result
     in exceeding the limit (counting each attribute in the collection as 1),
-    SDK MUST discard that attribute, so that the total number of attributes in
+    the SDK MUST discard that attribute, so that the total number of attributes in
     an attribute collection is at most equal to the limit;
   - otherwise an attribute MUST NOT be discarded.
 
