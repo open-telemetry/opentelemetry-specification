@@ -204,4 +204,4 @@ are the same in that they:
 2. **Inject context**: Return a dictionary/map of environment variables that
    application owners can pass to their process spawning libraries
 
-[swift]: https://github.com/open-telemetry/opentelemetry-swift-core/blob/main/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
+[swift]: https://github.com/open-telemetry/opentelemetry-swift-core/blob/c84cdc1760e20fc3a448c4e8aaae490f7d48ac67/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
