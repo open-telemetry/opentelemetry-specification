@@ -195,7 +195,7 @@ information below, it is recommended to leverage upper-cased environment
 variables for the carrier that align with context propagator specifications.
 
 [python-env]: https://github.com/Div95/opentelemetry-python/tree/feature/env_propagator/propagator/opentelemetry-propagator-env
-[swift-env]: https://github.com/open-telemetry/opentelemetry-swift-core/blob/main/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
+[swift-env]: https://github.com/open-telemetry/opentelemetry-swift-core/blob/c84cdc1760e20fc3a448c4e8aaae490f7d48ac67/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
 
 ### UNIX Limitations
 
