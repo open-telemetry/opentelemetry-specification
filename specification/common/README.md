@@ -8,7 +8,7 @@ path_base_for_github_subdir:
 
 # Common specification concepts
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -35,10 +35,10 @@ path_base_for_github_subdir:
   (IEEE 754-1985), or signed 64 bit integer,
 - a homogeneous array of primitive type values. A homogeneous array MUST NOT
   contain values of different types.
-- a byte array.
-- a heterogeneous array of `AnyValue`,
-- a [`map<string, AnyValue>`](#mapstring-anyvalue),
-- an empty value (e.g. `null`, `undefined` in JavaScript/TypeScript,
+- **Status**: [Development](../document-status.md) - a byte array.
+- **Status**: [Development](../document-status.md) - a heterogeneous array of `AnyValue`,
+- **Status**: [Development](../document-status.md) - a [`map<string, AnyValue>`](#mapstring-anyvalue),
+- **Status**: [Development](../document-status.md) - an empty value (e.g. `null`, `undefined` in JavaScript/TypeScript,
   `None` in Python, `nil` in Go/Ruby, etc.).
 
 For protocols that do not natively support non-string values, non-string values
@@ -63,6 +63,8 @@ both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
 ## map<string, AnyValue>
+
+**Status**: [Development](../document-status.md)
 
 `map<string, AnyValue>` is a map of string keys to `AnyValue` values.
 The keys in the map are unique (duplicate keys are not allowed).
@@ -160,13 +162,13 @@ If an SDK provides a way to:
   - if it is a string, if it exceeds that limit (counting any character in it as
     1), SDKs MUST truncate that value, so that its length is at most equal
     to the limit,
-  - if it is a byte array, if it exceeds that limit (counting each byte as 1),
+  - **Status**: [Development](../document-status.md) - if it is a byte array, if it exceeds that limit (counting each byte as 1),
     SDKs MUST truncate that value, so that its length is at most equal to the limit,
   - if it is an array of string, then apply the limit to
     each value within the array separately,
-  - if it is an array of [AnyValue](#anyvalue), then apply the limit to
+  - **Status**: [Development](../document-status.md) - if it is an array of [AnyValue](#anyvalue), then apply the limit to
     each value within the array separately,
-  - if it is a [map](#mapstring-anyvalue), then apply the
+  - **Status**: [Development](../document-status.md) - if it is a [map](#mapstring-anyvalue), then apply the
     limit to each value within the map separately,
   - otherwise a value MUST NOT be truncated;
 - set an attribute count limit such that:
