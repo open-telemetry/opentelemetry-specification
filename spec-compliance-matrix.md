@@ -21,7 +21,7 @@ formats is required. Implementing more than one format is optional.
 | Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + |
 | Get a Tracer with schema_url |  | + | + |  | + |  |  | + |  | + |  |  |
 | Get a Tracer with scope attributes |  |  |  |  | + |  |  | + |  | + |  |  |
-| Associate Tracer with InstrumentationScope |  |  |  |  | + |  |  | + |  |  |  |  |
+| Associate Tracer with InstrumentationScope |  |  |  |  | + | + |  | + |  |  |  |  |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |
 | Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |
 | ForceFlush (SDK only required) |  | + | + | - | + | + | + | + | + | + | + | + |
@@ -102,70 +102,70 @@ formats is required. Implementing more than one format is optional.
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| The API provides a way to set and get a global default `MeterProvider`. | X | + | + | + | + |  | + | + | + | + | - |  |
-| It is possible to create any number of `MeterProvider`s. | X | + | + | + | + |  | + | + | + | + | + |  |
-| `MeterProvider` provides a way to get a `Meter`. |  | + | + | + | + |  | + | + | + | + | - |  |
+| The API provides a way to set and get a global default `MeterProvider`. | X | + | + | + | + | + | + | + | + | + | - |  |
+| It is possible to create any number of `MeterProvider`s. | X | + | + | + | + | + | + | + | + | + | + |  |
+| `MeterProvider` provides a way to get a `Meter`. |  | + | + | + | + | + | + | + | + | + | - |  |
 | `get_meter` accepts name, `version` and `schema_url`. |  | + | + | + | + |  | + | + | + | + | - |  |
 | `get_meter` accepts `attributes`. |  |  |  |  | + |  |  | + | + | + |  |  |
-| When an invalid `name` is specified a working `Meter` implementation is returned as a fallback. |  | + | + | + | + |  | + |  | + | + | - |  |
-| The fallback `Meter` `name` property keeps its original invalid value. | X | - | - | + | + |  | + |  | + | - | - |  |
-| Associate `Meter` with `InstrumentationScope`. |  |  | + | + | + |  | + |  | + | + |  |  |
-| `Counter` instrument is supported. |  | + | + | + | + |  | + | + | + | + | + |  |
-| `AsynchronousCounter` instrument is supported. |  | + | + | + | + |  | + | + | + | + | + |  |
-| `Histogram` instrument is supported. |  | + | + | + | + |  | + | + | + | + | + |  |
-| `AsynchronousGauge` instrument is supported. |  | + | + | + | + |  | + | + | + | + | + |  |
-| `Gauge` instrument is supported. |  | - | - | - | + |  | - | - | + | - | - |  |
-| `UpDownCounter` instrument is supported. |  | + | + | + | + |  | + | + | + | + | + |  |
-| `AsynchronousUpDownCounter` instrument is supported. |  | + | + | + | + |  | + | + | + | + | + |  |
-| Instruments have `name` |  | + | + | + | + |  | + | + | + | + | + |  |
-| Instruments have kind. |  | + | + | + | + |  | + | + | + | + | + |  |
-| Instruments have an optional unit of measure. |  | + | + | + | + |  | + | + | + | + | + |  |
-| Instruments have an optional description. |  | + | + | + | + |  | + | + | + | + | + |  |
-| A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`. |  |  | + | + | + |  | + |  |  |  |  |  |
-| Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name. |  |  | + |  |  |  | + |  |  |  |  |  |
+| When an invalid `name` is specified a working `Meter` implementation is returned as a fallback. |  | + | + | + | + | + | + |  | + | + | - |  |
+| The fallback `Meter` `name` property keeps its original invalid value. | X | - | - | + | + | + | + |  | + | - | - |  |
+| Associate `Meter` with `InstrumentationScope`. |  |  | + | + | + | + | + |  | + | + |  |  |
+| `Counter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
+| `AsynchronousCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
+| `Histogram` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
+| `AsynchronousGauge` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
+| `Gauge` instrument is supported. |  | - | - | - | + | + | - | - | + | - | - |  |
+| `UpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
+| `AsynchronousUpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
+| Instruments have `name` |  | + | + | + | + | + | + | + | + | + | + |  |
+| Instruments have kind. |  | + | + | + | + | + | + | + | + | + | + |  |
+| Instruments have an optional unit of measure. |  | + | + | + | + | + | + | + | + | + | + |  |
+| Instruments have an optional description. |  | + | + | + | + | + | + | + | + | + | + |  |
+| A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`. |  |  | + | + | + | + | + |  |  |  |  |  |
+| Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name. |  |  | + |  |  | - | + |  |  |  |  |  |
 | It is possible to register two instruments with same `name` under different `Meter`s. |  | + | + | + | + |  | + |  | + | + | + |  |
-| Instrument names conform to the specified syntax. |  | + | + | + | + |  | + |  |  | + |  |  |
-| Instrument units conform to the specified syntax. |  | - | + |  | + |  | - |  | + | + | + |  |
-| Instrument descriptions conform to the specified syntax. |  | - | + |  | - |  | - |  |  | - | + |  |
+| Instrument names conform to the specified syntax. |  | + | + | + | + | + | + |  |  | + |  |  |
+| Instrument units conform to the specified syntax. |  | - | + |  | + | + | - |  | + | + | + |  |
+| Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | - |  |  | - | + |  |
 | Instrument supports the advisory ExplicitBucketBoundaries parameter. |  |  | + |  |  |  | + |  |  |  |  |  |
 | Instrument supports the advisory Attributes parameter. |  |  | + |  |  |  | - |  |  |  |  |  |
 | All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | All methods of `Meter` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | All methods of any instrument are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
-| `MeterProvider` allows a `Resource` to be specified. |  | + | + | + | + |  |  | + | + | + | + |  |
-| A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`. |  | + | + | + | + |  |  | + | + | + | + |  |
+| `MeterProvider` allows a `Resource` to be specified. |  | + | + | + | + | + |  | + | + | + | + |  |
+| A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`. |  | + | + | + | + | + |  | + | + | + | + |  |
 | The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`. |  | + | - |  | + |  |  |  | + | + | - |  |
 | The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope` instance stored in the `Meter`. |  |  | + | + | + |  | + | + | + | + |  |  |
 | Configuration is managed solely by the `MeterProvider`. |  | + | + | + | + |  | + | + | + | + | + |  |
 | The `MeterProvider` provides methods to update the configuration | X | - | - | - | + |  | - |  |  | - | + |  |
 | The updated configuration applies to all already returned `Meter`s. | if above | - | - | - | - |  | - |  |  | - | + |  |
-| There is a way to register `View`s with a `MeterProvider`. |  | - | + | + | + |  | + | + | + | + | + |  |
-| The `View` instrument selection criteria is as specified. |  |  | + | + | + |  | + | + | + | + | + |  |
-| The `View` instrument selection criteria supports wildcards. | X |  | + | + | + |  | - |  | + | + | + |  |
-| The `View` instrument selection criteria supports the match-all wildcard. |  |  | + | + | + |  | + |  | + | + | + |  |
-| The name of the `View` can be specified. |  |  | + | + | + |  | + | + |  | + | + |  |
+| There is a way to register `View`s with a `MeterProvider`. |  | - | + | + | + | + | + | + | + | + | + |  |
+| The `View` instrument selection criteria is as specified. |  |  | + | + | + | + | + | + | + | + | + |  |
+| The `View` instrument selection criteria supports wildcards. | X |  | + | + | + | + | - |  | + | + | + |  |
+| The `View` instrument selection criteria supports the match-all wildcard. |  |  | + | + | + | + | + |  | + | + | + |  |
+| The name of the `View` can be specified. |  |  | + | + | + | + | + | + |  | + | + |  |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  |  | + | + | + |  | + | + | + | + | - |  |
 | The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  |  |  |  |  |  |  |  |  |  |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream. | X |  | - |  | - |  | - |  |  |  | - |  |
-| The SDK allows more than one `View` to be specified per instrument. | X |  | + | + | + |  | + |  | + | + | + |  |
-| The `Drop` aggregation is available. |  | + | + | + | + |  | + |  | + | + | + |  |
-| The `Default` aggregation is available. |  | + | + | + | + |  | + |  | + | + | + |  |
-| The `Default` aggregation uses the specified aggregation by instrument. |  | + | + | + | + |  | + |  | + | + | + |  |
-| The `Sum` aggregation is available. |  | + | + | + | + |  | + | + | + | + | + |  |
-| The `LastValue` aggregation is available. |  | + | + | + | + |  | + | + | + | + | + |  |
-| The `ExplicitBucketHistogram` aggregation is available. |  | - | + | + | + |  | + | + | + | + | + |  |
-| The `ExponentialBucketHistogram` aggregation is available. |  |  |  |  | + |  |  |  |  |  | + |  |
-| The metrics Reader implementation supports registering metric Exporters |  |  | + | + | + |  | + | + | + | + | + |  |
-| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  |  | + |  | + |  | + |  |  | - | - |  |
-| The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind. |  |  | + | + | + |  | + |  | + | + |  |  |
-| The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements). |  | + | + | + | + |  | + |  | + | + | + |  |
-| The metrics Exporter `export` function can not be called concurrently from the same Exporter instance. |  | + | + | + | - |  | + |  |  | + | + |  |
-| The metrics Exporter `export` function does not block indefinitely. |  | + | + | + | - |  | + |  |  | + | + |  |
-| The metrics Exporter `export` function receives a batch of metrics. |  | + | + | + | + |  | + | + | + | + | + |  |
-| The metrics Exporter `export` function returns `Success` or `Failure`. |  | + | + | + | + |  | + | + | + | + | + |  |
-| The metrics Exporter provides a `ForceFlush` function. |  | - | + | + | + |  | + | + | + | + | + |  |
-| The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out. |  |  | + | + | + |  | + | + |  | + | + |  |
-| The metrics Exporter provides a `shutdown` function. |  | + | + | + | + |  | + | + | + | + | + |  |
+| The SDK allows more than one `View` to be specified per instrument. | X |  | + | + | + | + | + |  | + | + | + |  |
+| The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
+| The `Default` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
+| The `Default` aggregation uses the specified aggregation by instrument. |  | + | + | + | + | + | + |  | + | + | + |  |
+| The `Sum` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
+| The `LastValue` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
+| The `ExplicitBucketHistogram` aggregation is available. |  | - | + | + | + | + | + | + | + | + | + |  |
+| The `ExponentialBucketHistogram` aggregation is available. |  |  |  |  | + | + |  |  |  |  | + |  |
+| The metrics Reader implementation supports registering metric Exporters |  |  | + | + | + | + | + | + | + | + | + |  |
+| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  |  | + |  | + | + | + |  |  | - | - |  |
+| The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind. |  |  | + | + | + | + | + |  | + | + |  |  |
+| The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements). |  | + | + | + | + | + | + |  | + | + | + |  |
+| The metrics Exporter `export` function can not be called concurrently from the same Exporter instance. |  | + | + | + | - | + | + |  |  | + | + |  |
+| The metrics Exporter `export` function does not block indefinitely. |  | + | + | + | - | + | + |  |  | + | + |  |
+| The metrics Exporter `export` function receives a batch of metrics. |  | + | + | + | + | + | + | + | + | + | + |  |
+| The metrics Exporter `export` function returns `Success` or `Failure`. |  | + | + | + | + | + | + | + | + | + | + |  |
+| The metrics Exporter provides a `ForceFlush` function. |  | - | + | + | + | + | + | + | + | + | + |  |
+| The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out. |  |  | + | + | + | + | + | + |  | + | + |  |
+| The metrics Exporter provides a `shutdown` function. |  | + | + | + | + | + | + | + | + | + | + |  |
 | The metrics Exporter `shutdown` function do not block indefinitely. |  | + | + | + | - |  | + |  |  | + | + |  |
 | The metrics SDK samples `Exemplar`s from measurements. |  |  | + |  | - |  | + |  |  |  | + |  |
 | Exemplar sampling can be disabled. |  |  | - |  | - |  | + |  |  |  | + |  |
@@ -194,23 +194,23 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| LoggerProvider.Get Logger |  |  | + |  | + |  |  | + |  | + | - |  |
+| LoggerProvider.Get Logger |  |  | + |  | + | + |  | + |  | + | - |  |
 | LoggerProvider.Get Logger accepts attributes |  |  |  |  | + |  |  | + |  | + |  |  |
-| LoggerProvider.Shutdown |  |  | + |  | + |  |  | + |  | + | - |  |
-| LoggerProvider.ForceFlush |  |  | + |  | + |  |  | + |  | + | - |  |
-| Logger.Emit(LogRecord) |  |  | + |  | + |  |  | + |  | + | - |  |
+| LoggerProvider.Shutdown |  |  | + |  | + | + |  | + |  | + | - |  |
+| LoggerProvider.ForceFlush |  |  | + |  | + | + |  | + |  | + | - |  |
+| Logger.Emit(LogRecord) |  |  | + |  | + | + |  | + |  | + | - |  |
 | Reuse Standard Attributes | X | + |  |  |  |  |  |  |  |  |  |  |
 | LogRecord.Set EventName |  | + |  |  |  |  |  |  | + | + |  |  |
 | Logger.Enabled | X | + |  |  |  |  |  |  | + | + |  |  |
-| SimpleLogRecordProcessor |  |  | + |  | + |  |  | + |  | + |  |  |
-| BatchLogRecordProcessor |  |  | + |  | + |  |  | + |  | + |  |  |
-| Can plug custom LogRecordProcessor |  |  | + |  | + |  |  | + |  | + |  |  |
-| LogRecordProcessor.Enabled | X | + |  |  |  |  |  |  | + |  |  |  |
+| SimpleLogRecordProcessor |  |  | + |  | + | + |  | + |  | + |  |  |
+| BatchLogRecordProcessor |  |  | + |  | + | + |  | + |  | + |  |  |
+| Can plug custom LogRecordProcessor |  |  | + |  | + | + |  | + |  | + |  |  |
+| LogRecordProcessor.Enabled | X | + |  |  |  | + |  |  | + |  |  |  |
 | OTLP/gRPC exporter |  |  | + |  | + |  |  | + |  | + | + |  |
-| OTLP/HTTP exporter |  |  | + |  | + |  |  | + |  | + | + |  |
+| OTLP/HTTP exporter |  |  | + |  | + | + |  | + |  | + | + |  |
 | OTLP File exporter |  |  | - |  | - |  |  |  |  | + | - |  |
-| Can plug custom LogRecordExporter |  |  | + |  | + |  |  | + |  | + |  |  |
-| Trace Context Injection |  |  | + |  | + |  |  | + |  | + | + |  |
+| Can plug custom LogRecordExporter |  |  | + |  | + | + |  | + |  | + |  |  |
+| Trace Context Injection |  |  | + |  | + | + |  | + |  | + | + |  |
 
 ## Resource
 
@@ -253,35 +253,35 @@ Note: Support for environment variables is optional.
 
 | Feature | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| OTEL_SDK_DISABLED | - | + | - | + | - | - | + | - | - | - | - |
+| OTEL_SDK_DISABLED | - | + | - | + | + | - | + | - | - | - | - |
 | OTEL_RESOURCE_ATTRIBUTES | + | + | + | + | + | + | + | + | + | + | - |
 | OTEL_SERVICE_NAME | + | + | + | + | + | + | + |  | + | + |  |
 | OTEL_LOG_LEVEL | - | - | + | [-][py1059] | + | - | + |  | - | - | - |
 | OTEL_PROPAGATORS | - | + |  | + | + | + | + | - | - | - | - |
 | OTEL_BSP_* | + | + | + | + | + | + | + | + | - | + | - |
-| OTEL_BLRP_* |  | + |  |  |  |  |  | + | - | + |  |
+| OTEL_BLRP_* |  | + |  |  | + |  |  | + | - | + |  |
 | OTEL_EXPORTER_OTLP_* | + | + |  | + | + | + | + | + | + | + | - |
 | OTEL_EXPORTER_ZIPKIN_* | - | + |  | + | + | - | + | - | - | + | - |
 | OTEL_TRACES_EXPORTER | - | + | + | + | + | + | + | - | - | - |  |
-| OTEL_METRICS_EXPORTER | - | + |  | + | - | - | + | - | - | - | - |
-| OTEL_LOGS_EXPORTER | - | + |  | + |  |  | + |  | - | - |  |
+| OTEL_METRICS_EXPORTER | - | + |  | + | + | - | + | - | - | - | - |
+| OTEL_LOGS_EXPORTER | - | + |  | + | + |  | + |  | - | - |  |
 | OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  |
 | OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | + | + |  | - | + |  |
 | OTEL_SPAN_EVENT_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  |
 | OTEL_SPAN_LINK_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  |
 | OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  |
 | OTEL_LINK_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  |
-| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT |  |  |  |  |  |  | + |  | - |  |  |
-| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT |  |  |  |  |  |  | + |  | - |  |  |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT |  |  |  |  | + |  | + |  | - |  |  |
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT |  |  |  |  | + |  | + |  | - |  |  |
 | OTEL_TRACES_SAMPLER | + | + | + | + | + | + | + | - | - | - |  |
 | OTEL_TRACES_SAMPLER_ARG | + | + | + | + | + | + | + | - | - | - |  |
 | OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | - | + |  | - | + |  |
 | OTEL_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | - | + |  | - | + |  |
-| OTEL_METRIC_EXPORT_INTERVAL | - | + |  | + |  |  | + |  | - | + |  |
-| OTEL_METRIC_EXPORT_TIMEOUT | - | - |  | + |  |  | + |  | - | + |  |
-| OTEL_METRICS_EXEMPLAR_FILTER | - | + |  |  |  |  | + |  | - | + |  |
-| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + |  |  | + |  | - | + |  |
-| OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |  | + |  | + |  |  |  |  | - |  |  |
+| OTEL_METRIC_EXPORT_INTERVAL | - | + |  | + | + |  | + |  | - | + |  |
+| OTEL_METRIC_EXPORT_TIMEOUT | - | - |  | + | + |  | + |  | - | + |  |
+| OTEL_METRICS_EXEMPLAR_FILTER | - | + |  |  | + |  | + |  | - | + |  |
+| OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  |
+| OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |  | + |  | + | + |  |  |  | - |  |  |
 | OTEL_EXPERIMENTAL_CONFIG_FILE |  |  |  |  |  |  |  |  | - |  |  |
 
 ## Declarative configuration
