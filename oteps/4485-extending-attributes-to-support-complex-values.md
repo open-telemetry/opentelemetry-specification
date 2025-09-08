@@ -94,7 +94,7 @@ extending the standard attributes provides a more seamless and user-friendly API
 
 Currently, the SDK specification has a clause that says extending
 the set of standard attribute would be
-[considered a breaking change](/specification/common/README.md#attribute).
+[considered a breaking change](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/common/README.md#standard-attribute).
 
 We believe that removing this clause and extending standard
 attributes can be done gracefully across the OpenTelemetry ecosystem
