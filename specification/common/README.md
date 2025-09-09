@@ -62,7 +62,7 @@ indices that are kept in sync (e.g., two attributes `header_keys` and `header_va
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
-## map<string, AnyValue>
+### map<string, AnyValue>
 
 **Status**: [Development](../document-status.md)
 
