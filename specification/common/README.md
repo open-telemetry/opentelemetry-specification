@@ -16,7 +16,7 @@ path_base_for_github_subdir:
 <!-- toc -->
 
 - [AnyValue](#anyvalue)
-- [map](#mapstring-anyvalue)
+  * [map](#mapstring-anyvalue)
 - [Attribute](#attribute)
   * [Attribute Collections](#attribute-collections)
 - [Attribute Limits](#attribute-limits)
