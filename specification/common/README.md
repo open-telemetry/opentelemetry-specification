@@ -170,7 +170,7 @@ If an SDK provides a way to:
   - **Status**: [Development](../document-status.md) - if it is an array of [AnyValue](#anyvalue),
     then apply the limit to each element of the array separately (and recursively),
   - **Status**: [Development](../document-status.md) - if it is a [map](#mapstring-anyvalue),
-    then apply the limit to each value within the map separately,
+    then apply the limit to each value within the map separately (and recursively),
   - otherwise a value MUST NOT be truncated;
 - set an attribute count limit such that:
   - if adding an attribute to an attribute collection would result
