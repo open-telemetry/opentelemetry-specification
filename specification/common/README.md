@@ -163,7 +163,7 @@ If an SDK provides a way to:
     1), SDKs MUST truncate that value, so that its length is at most equal
     to the limit,
   - **Status**: [Development](../document-status.md) - if it is a byte array,
-    if it exceeds that limit (counting each byte as 1),
+    if its length exceeds that limit (counting each byte as 1),
     SDKs MUST truncate that value, so that its length is at most equal to the limit,
   - if it is an array of strings, then apply the limit to
     each value within the array separately,
