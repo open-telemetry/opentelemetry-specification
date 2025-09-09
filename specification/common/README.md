@@ -44,6 +44,9 @@ path_base_for_github_subdir:
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
 allows to represent an equivalent of a JSON object).
 
+APIs SHOULD be documented in a way to communicate to users that using array and
+map values may carry higher performance overhead compared to primitive values.
+
 For protocols that do not natively support some of the value types, corresponding values
 SHOULD be represented as JSON-encoded strings. For example, the expression
 `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`,
