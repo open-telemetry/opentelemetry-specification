@@ -41,7 +41,7 @@ path_base_for_github_subdir:
 - **Status**: [Development](../document-status.md) - an empty value (e.g. `null`, `undefined` in JavaScript/TypeScript,
   `None` in Python, `nil` in Go/Ruby, etc.).
 
-For protocols that do not natively support non-string values, non-string values
+For protocols that do not natively support some of the value types, corresponding values
 SHOULD be represented as JSON-encoded strings. For example, the expression
 `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`,
 and an empty array of any type will be encoded as `[]`.
