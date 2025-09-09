@@ -41,6 +41,9 @@ path_base_for_github_subdir:
 - **Status**: [Development](../document-status.md) - an empty value (e.g. `null`, `undefined` in JavaScript/TypeScript,
   `None` in Python, `nil` in Go/Ruby, etc.).
 
+Arbitrary deep nesting of values for arrays and maps is allowed (essentially
+allows to represent an equivalent of a JSON object).
+
 For protocols that do not natively support some of the value types, corresponding values
 SHOULD be represented as JSON-encoded strings. For example, the expression
 `int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`,
@@ -68,9 +71,6 @@ both containing an array of strings to represent a mapping
 
 `map<string, AnyValue>` is a map of string keys to `AnyValue` values.
 The keys in the map are unique (duplicate keys are not allowed).
-
-Arbitrary deep nesting of values for arrays and maps is allowed (essentially
-allows to represent an equivalent of a JSON object).
 
 The representation of the map is language-dependent.
 
