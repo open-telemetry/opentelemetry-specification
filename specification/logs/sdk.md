@@ -210,7 +210,9 @@ It consists of the following parameters:
   If not explicitly set, the `trace_based` parameter MUST default to `false`.
 
   If `trace_based` is `true`, log records associated with unsampled traces MUST
-  be dropped by the `Logger`. Log records that aren't associated with a trace
+  be dropped by the `Logger`. A log record is considered associated with an unsampled trace
+  if it has a valid `SpanId` and its `TraceFlags` indicate that the trace is unsampled.
+  Log records that aren't associated with a trace
   context are not affected by this parameter and therefore bypass trace-based filtering.
 
 It is not necessary for implementations to ensure that changes to any of these
