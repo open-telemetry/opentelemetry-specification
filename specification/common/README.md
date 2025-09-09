@@ -168,7 +168,7 @@ If an SDK provides a way to:
   - if it is an array of strings, then apply the limit to
     each value within the array separately,
   - **Status**: [Development](../document-status.md) - if it is an array of [AnyValue](#anyvalue),
-    then apply the limit to each value within the array separately,
+    then apply the limit to each element of the array separately (and recursively),
   - **Status**: [Development](../document-status.md) - if it is a [map](#mapstring-anyvalue),
     then apply the limit to each value within the map separately,
   - otherwise a value MUST NOT be truncated;
