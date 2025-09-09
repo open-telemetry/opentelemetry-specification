@@ -244,7 +244,7 @@ emitting the record):
 - **Status**: [Development](../document-status.md) - `Logger` is disabled
   ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
 - **Status**: [Development](../document-status.md) - the provided severity
-  (if specified) is less than the configured `minimum_severity` in the
+  is specified (i.e. not `0`) and is less than the configured `minimum_severity` in the
   [`LoggerConfig`](#loggerconfig).
 - **Status**: [Development](../document-status.md) - `trace_based` is
   `true` in the [`LoggerConfig`](#loggerconfig) and the current context is
