@@ -13,7 +13,6 @@ linkTitle: Mapping to AnyValue
 
 - [Converting to AnyValue](#converting-to-anyvalue)
   * [Primitive Values](#primitive-values)
-    + [Empty Value](#empty-value)
     + [Integer Values](#integer-values)
     + [Enumerations](#enumerations)
     + [Floating Point Values](#floating-point-values)
@@ -54,12 +53,6 @@ or data coming from other formats that needs to be converted to AnyValue SHOULD
 follow the rules described below.
 
 ### Primitive Values
-
-#### Empty Value
-
-Empty values MUST be converted to AnyValue with no
-[value](https://github.com/open-telemetry/opentelemetry-proto/blob/38b5b9b6e5257c6500a843f7fdacf89dd95833e8/opentelemetry/proto/common/v1/common.proto#L28-L30)
-field being set.
 
 #### Integer Values
 
