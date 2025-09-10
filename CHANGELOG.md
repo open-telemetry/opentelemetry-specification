@@ -36,7 +36,8 @@ release.
 - ⚠️ **IMPORTANT**: Extending the set of standard attribute value types is no longer a breaking change.
   ([#4614](https://github.com/open-telemetry/opentelemetry-specification/pull/4614))
 - Define conversion of empty value to OTLP `AnyValue`.
-
+  ([#4656](https://github.com/open-telemetry/opentelemetry-specification/pull/4656))
+  
 ### Supplementary Guidelines
 
 ### OTEPs
