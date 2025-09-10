@@ -137,22 +137,7 @@ language similar to this:
 
 ### SDK
 
-OTel SDK MUST support setting complex attributes on spans, logs, profiles,
-span links, and as descriptive entity attributes.
-
-OTel SDK MAY support setting complex attributes on metrics, exemplars, resources,
-instrumentation scope, span events, and as identifying entity attributes.
-
-> [!NOTE]
-> "MAY" is used here instead of "MUST" to give flexibility to dynamically
-> typed language SDKs since there are no concrete use cases at this time
-> requiring complex attributes in these areas.
->
-> Most likely statically typed languages will choose to support
-> setting complex attributes uniformly everywhere.
->
-> This requirement level could change from "MAY" to "MUST" in the future
-> if we uncover use cases for complex attributes in these areas.
+OTel SDK MUST support setting complex attributes.
 
 The SDK MUST support reading and modifying complex attributes during processing
 whenever they are allowed on the API surface.
