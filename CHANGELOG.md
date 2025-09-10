@@ -37,7 +37,7 @@ release.
   ([#4614](https://github.com/open-telemetry/opentelemetry-specification/pull/4614))
 - Define conversion of empty value to OTLP `AnyValue`.
   ([#4656](https://github.com/open-telemetry/opentelemetry-specification/pull/4656))
-  
+
 ### Supplementary Guidelines
 
 ### OTEPs
