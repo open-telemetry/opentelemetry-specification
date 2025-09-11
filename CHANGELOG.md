@@ -11,9 +11,18 @@ release.
 
 ### Traces
 
+- Changes of `TracerrConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+
 ### Metrics
 
+- Changes of `MeterConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+
 ### Logs
+
+- Changes of `LoggerConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 
 ### Baggage
 
