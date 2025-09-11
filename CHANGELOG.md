@@ -11,7 +11,7 @@ release.
 
 ### Traces
 
-- Changes of `TracerrConfig.disabled` MUST be eventually visible.
+- Changes of `TracerConfig.disabled` MUST be eventually visible.
   ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 
 ### Metrics
