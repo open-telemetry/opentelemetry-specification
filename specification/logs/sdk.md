@@ -183,6 +183,8 @@ the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
 
 **Status**: [Development](../document-status.md)
 
+The `LoggerConfig` MAY be supported by the SDK.
+
 A `LoggerConfig` defines various configurable aspects of a `Logger`'s behavior.
 It consists of the following parameters:
 

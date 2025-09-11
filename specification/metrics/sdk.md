@@ -859,6 +859,8 @@ the `Meter` MUST be updated to behave according to the new `MeterConfig`.
 
 **Status**: [Development](../document-status.md)
 
+The `MeterConfig` MAY be supported by the SDK.
+
 A `MeterConfig` defines various configurable aspects of a `Meter`'s behavior.
 It consists of the following parameters:
 

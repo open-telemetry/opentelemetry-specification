@@ -196,6 +196,8 @@ the `Tracer` MUST be updated to behave according to the new `TracerConfig`.
 
 **Status**: [Development](../document-status.md)
 
+The `TracerConfig` MAY be supported by the SDK.
+
 A `TracerConfig` defines various configurable aspects of a `Tracer`'s behavior.
 It consists of the following parameters:
 
