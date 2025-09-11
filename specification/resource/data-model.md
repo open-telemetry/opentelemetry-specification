@@ -24,8 +24,8 @@ running in a container on Kubernetes, which is associated to a Pod running on a
 Node that is a VM but also is in a namespace and possibly is part of a
 Deployment. Resource could have attributes to denote information about the
 Container, the Pod, the Node, the VM or the Deployment. All of these help
-identify what produced the telemetry. Note that there are certain "standard
-attributes" that have prescribed meanings.
+identify what produced the telemetry. Note that there are certain attributes
+that have prescribed meanings.
 
 A resource is composed of 0 or more [`Entities`](../entities/README.md) and 0
 or more attributes not associated with any entity.
@@ -35,7 +35,7 @@ The data model below defines a logical model for an Resource (irrespective of th
 | Field      | Type     | Description     |
 |------------|----------|-----------------|
 | Entities   | set\<Entity\> | Defines the set of Entities associated with this resource.<p>[Entity is defined here](../entities/data-model.md) |
-| Attributes | map\<string, standard attribute value\> | Additional Attributes that identify the resource.<p>MUST not change during the lifetime of the resource.<p>Follows OpenTelemetry [Standard attribute definition](../common/README.md#standard-attribute). |
+| Attributes | map\<string, attribute value\> | Additional Attributes that identify the resource.<p>MUST not change during the lifetime of the resource.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). |
 
 ## Identity
 
