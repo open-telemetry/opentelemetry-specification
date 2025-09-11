@@ -11,9 +11,18 @@ release.
 
 ### Traces
 
+- `TracerConfigurator` and `TracerConfig` are now optional (it MAY be supported by the SDK).
+  ([#4648](https://github.com/open-telemetry/opentelemetry-specification/pull/4648))
+
 ### Metrics
 
+- `MeterConfigurator` and `MeterConfig` are now optional (it MAY be supported by the SDK).
+  ([#4648](https://github.com/open-telemetry/opentelemetry-specification/pull/4648))
+
 ### Logs
+
+- `LoggerConfigurator` and `LoggerConfig` are now optional (it MAY be supported by the SDK).
+  ([#4648](https://github.com/open-telemetry/opentelemetry-specification/pull/4648))
 
 ### Baggage
 
