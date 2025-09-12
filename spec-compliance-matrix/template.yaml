@@ -275,7 +275,7 @@ sections:
       - name: Jaeger Propagator
       - name: OT Propagator
       - name: OpenCensus Binary Propagator
-      - name: '[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)'
+      - name: '[TextMapPropagator](specification/propagators/api.md#textmap-propagator)'
       - name: Fields
       - name: Setter argument
         optional: true

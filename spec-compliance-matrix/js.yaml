@@ -427,7 +427,7 @@ sections:
         status: '+'
       - name: OpenCensus Binary Propagator
         status: '?'
-      - name: '[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)'
+      - name: '[TextMapPropagator](specification/propagators/api.md#textmap-propagator)'
         status: '?'
       - name: Fields
         status: '+'
