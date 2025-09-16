@@ -354,23 +354,39 @@ mechanism to remember and retrieve the latest resource.
 
 ## Trade-offs and mitigations
 
-This change should be fully backwards compatible, with one potential exception:
-fingerprinting. It is possible that an analysis tool which accepts OTLP may identify
-individual services by creating an identifier by hashing all of the resource attributes.
+This change, on the surface, breaks one key assumption in the resource SDK
+specification today:
 
-In practice, the only implementation we have discovered that does this is the OpenTelemetry
-Go SDK. But the Go SDK is not a backend; all analysis tools have a specific concept
-of identity that is fulfilled by a specific subject of resource attributes.
+> A `Resource` is an immutable representation of the entity producing telemetry
+> as `Attributes`.
 
-Since we control the Go SDK, we can develop a path forward specific to that particular
-library. That path should be identified before this OTEP is accepted.
+This allows downstream consumers of Resource to treat attributes as a
+fingerprint, for identifying the origin of telemetry and streamlining joins or
+correlation of data. In practice, most systems do not rely on this, and instead
+rely on a much more narrow subset of resource attributes
+(e.g. [OpAmp spec](https://github.com/open-telemetry/opamp-spec/blob/main/specification.md#agentdescriptionidentifying_attributes)).
 
-Beyond fingerprinting, there are no destabilizing changes because the resources
-that we have already declared "immutable" match the lifespan of the application
-and have no reason to be updated. Developers are not going to start messing with
-the `service.instance.id` resource arbitrarily just because they can, and resource
-detectors solve the problem of accidentally starting the application while async
-resources are still being fetched.
+This change also impacts the Go SDK, however as we control the implementation
+we have design options for how to prevent breakages to consumers.
+
+We expect the impact of the immutable change to have limited impact, as only
+*new* instrumentation and features (e.g. browser based instrumentation) are
+expected to leverage this new feature. Existing, working, OpenTelemetry setups
+should not break, and the design of EntityProvider and Entity in the protocol
+has been crafted to avoid the most amount of breaking change possible.
+
+However, this is still a fundamental change in the specification and
+expectations. This change will be advertised, denoted as breaking and
+communicated well in advance of allowing mutation on Resource in SDKs. We
+propose a two phase journey for this migration:
+
+- Phase 1: Opt-in to breaking behavior
+  - Allow Entity to be represented in Resource.
+  - Allow mutation of Resource, but only as an opt-in feature set.
+  - Advertise to OTLP consumers that the "Resource is immutable" invariant
+    is disappearing.
+- Phase 2: Now default
+  - Allow mutation of resource as a default for OTEL instrumentation.
 
 ## Prior art and alternatives
 
@@ -422,6 +438,8 @@ Because entity changes can now update resources, and those updates may trigger b
 
 Investigating the practical implications of this problem has not led to any examples of resources that can be expected to exhibit this behavior. For the time being, backoff or other thrash mitigation strategies are left out of this proposal. If a specific resource does end up requiring some form of throttling, the resource detector that updates that particular resource should manage this issue. If a common strategy for throttling emerges, it can be added to the EntityProvider at a later date.
 
+We also will recommmend protection stategies (via SHOULD) for SDK impelementations.
+
 ## FAQ
 
 ### Is there some distinction between "identifying resources" and "updatable resources"?
@@ -467,7 +485,30 @@ would not cause issues in this regard.
 
 ## Example Usage
 
-DRAFT
+Here's example usage for Android Activities:
+
+```java
+// Here's an example where an entity is described by a file.
+class MyAndroidActivity implements ... {
+
+  private EntityProvider entityProvider;
+  ...
+  // Called when android activity is resumed.
+  protected void onResume() {
+    entityProvider.addOrUpdateEntity("android.activity")
+    .withId(Attributes.builder().put("android.activity.id", getPersistedId()))
+    .withDescription(
+      ...
+    );
+  }
+
+  protected getPeristedId() {
+    // Here we'd pull an ID we created to track the activity, and persist
+    // it as part of the activity.
+    ...
+  }
+}
+```
 
 ## Example Implementation
 
