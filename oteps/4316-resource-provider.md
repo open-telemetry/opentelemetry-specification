@@ -257,6 +257,9 @@ The behavior MUST match the following:
 `Add or Update Entity` MUST trigger the `On EntityState` operation for all
 registered `EntityListeners`.
 
+The SDK SHOULD provide a mechanism to throttle notifications to be sent
+to all registered `EntityListeners` in the event of rapid changes to entities.
+
 #### Add or Replace Entity
 
 The `Add or Replace Entity` operation MUST match the API definition.
@@ -279,6 +282,9 @@ NOTE: `EntityListener`s SHOULD receive an `On EntityDelete` operation when
 a previous entity was removed before receiving an `On EntityUpdate` for the
 new entity.
 
+The SDK SHOULD provide a mechanism to throttle notifications to be sent
+to all registered `EntityListeners` in the event of rapid changes to entities.
+
 #### Delete Entity
 
 The `Delete Entity` operation MUST accept the parameters defined in the API.
@@ -288,6 +294,9 @@ the list of entities together in order.
 
 `Delete Entity` MUST trigger the `On EntityState` operation for all
 registered `EntityListeners`.
+
+The SDK SHOULD provide a mechanism to throttle notifications to be sent
+to all registered `EntityListeners` in the event of rapid changes to entities.
 
 #### Get Resource
 
