@@ -152,6 +152,7 @@ An EntityListener MUST provide the following operations:
 `On ResourceInitialize` MUST accept the following parameters:
 
 * `Resource`: represents the entire set of resources after initialize.
+* `status`: represents the status of resource initialization.
 
 This operation MUST only be called once per EntityProvider.
 
@@ -229,7 +230,7 @@ resource detection is completed.
 Upon failure for resource detection to complete within a timeout, a resource
 SHOULD be constructed with available completed detection, `GetResource`
 operations MUST be unblocked and `On ResourceInitialize` event MUST be fired
-to all EntityListeners.
+to all EntityListeners. This call MUST provide a failure status.
 
 #### Add or Update Entity
 
