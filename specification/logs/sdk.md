@@ -194,9 +194,11 @@ It consists of the following parameters:
 
   The value of `disabled` MUST be used to resolve whether a `Logger`
   is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
-  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
-  necessary for implementations to ensure that changes to `disabled` are
-  immediately visible to callers of `Enabled`.
+  returns `false`. If `disabled` is `false`, `Enabled` returns `true`.
+  
+  It is not necessary for implementations to ensure that changes to `disabled`
+  are immediately visible to callers of `Enabled`.
+  However, the changes MUST be eventually visible.
 
 ### Emit a LogRecord
 
