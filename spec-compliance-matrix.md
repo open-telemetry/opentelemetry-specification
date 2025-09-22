@@ -68,7 +68,7 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values                                                       |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
 | [Span linking](specification/trace/api.md#specifying-links)                                      | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation                                                           |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
-| Links can be recorded after span creation                                                        |          | +   |      |     | +      |      |        |     |      | +   | +    |       |
+| Links can be recorded after span creation                                                        |          | +   |      |     | +      |      |        | +   |      | +   | +    |       |
 | Links order is preserved                                                                         |          | +   | +    |     | +      | +    | +      | +   | +    | +   | +    |       |
 | [Span events](specification/trace/api.md#add-events)                                             | Optional | Go  | Java | JS  | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | AddEvent                                                                                         |          | +   | +    | +   | +      | +    | +      | +   | +    | +   | +    | +     |
@@ -114,7 +114,7 @@ formats is required. Implementing more than one format is optional.
 | `AsynchronousCounter` instrument is supported.                                                                                                                         |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | `Histogram` instrument is supported.                                                                                                                                   |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | `AsynchronousGauge` instrument is supported.                                                                                                                           |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
-| `Gauge` instrument is supported.                                                                                                                                       |          | -  | -    | -   | +      |      | -      | -   |  +   | -   | -    |       |
+| `Gauge` instrument is supported.                                                                                                                                       |          | -  | -    | -   | +      |      | -      | +   |  +   | -   | -    |       |
 | `UpDownCounter` instrument is supported.                                                                                                                               |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | `AsynchronousUpDownCounter` instrument is supported.                                                                                                                   |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
 | Instruments have `name`                                                                                                                                                |          | +  | +    | +   | +      |      | +      | +   |  +   | +   | +    |       |
@@ -201,11 +201,11 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Logger.Emit(LogRecord)                       |          |     | +    |     | +      |      |        | +   |      | +   | -    |       |
 | Reuse Standard Attributes                    | X        | +   |      |     |        |      |        |     |      |     |      |       |
 | LogRecord.Set EventName                      |          | +   |      |     |        |      |        |     | +    | +   |      |       |
-| Logger.Enabled                               | X        | +   |      |     |        |      |        |     | +    | +   |      |       |
+| Logger.Enabled                               | X        | +   |      |     |        |      |        | +   | +    | +   |      |       |
 | SimpleLogRecordProcessor                     |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | BatchLogRecordProcessor                      |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
 | Can plug custom LogRecordProcessor           |          |     | +    |     | +      |      |        | +   |      | +   |      |       |
-| LogRecordProcessor.Enabled                   | X        | +   |      |     |        |      |        |     | +    |     |      |       |
+| LogRecordProcessor.Enabled                   | X        | +   |      |     |        |      |        | -   | +    |     |      |       |
 | OTLP/gRPC exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP/HTTP exporter                           |          |     | +    |     | +      |      |        | +   |      | +   | +    |       |
 | OTLP File exporter                           |          |     | -    |     | -      |      |        |     |      | +   | -    |       |
@@ -259,7 +259,7 @@ Note: Support for environment variables is optional.
 | OTEL_LOG_LEVEL                                           | -  | -    | +  | [-][py1059] | +    | -      | +   |      | -   | -    | -     |
 | OTEL_PROPAGATORS                                         | -  | +    |    | +           | +    | +      | +   | -    | -   | -    | -     |
 | OTEL_BSP_*                                               | +  | +    | +  | +           | +    | +      | +   | +    | -   | +    | -     |
-| OTEL_BLRP_*                                              |    | +    |    |             |      |        |     | +    | -   | +    |       |
+| OTEL_BLRP_*                                              |    | +    |    |             |      |        | +   | +    | -   | +    |       |
 | OTEL_EXPORTER_OTLP_*                                     | +  | +    |    | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTEL_EXPORTER_ZIPKIN_*                                   | -  | +    |    | +           | +    | -      | +   | -    | -   | +    | -     |
 | OTEL_TRACES_EXPORTER                                     | -  | +    | +  | +           | +    | +      | +   | -    | -   | -    |       |
@@ -281,8 +281,8 @@ Note: Support for environment variables is optional.
 | OTEL_METRIC_EXPORT_TIMEOUT                               | -  | -    |    | +           |      |        | +   |      | -   | +    |       |
 | OTEL_METRICS_EXEMPLAR_FILTER                             | -  | +    |    |             |      |        | +   |      | -   | +    |       |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE        | +  | +    | +  | +           |      |        | +   |      | -   | +    |       |
-| OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |    | +    |    | +           |      |        |     |      | -   |      |       |
-| OTEL_EXPERIMENTAL_CONFIG_FILE                            |    |      |    |             |      |        |     |      | -   |      |       |
+| OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION |    | +    |    | +           |      |        | -   |      | -   |      |       |
+| OTEL_EXPERIMENTAL_CONFIG_FILE                            |    |      |    |             |      |        | +   |      | -   |      |       |
 
 ## Declarative configuration
 
@@ -292,19 +292,19 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 
 | Feature                                                                                                                 | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 |-------------------------------------------------------------------------------------------------------------------------|----|------|----|--------|------|--------|-----|------|-----|------|-------|
-| `Parse` a configuration file                                                                                            |    |      |    |        |      |        |     |      |     |      |       |
-| The `Parse` operation accepts the configuration YAML file format                                                        |    |      |    |        |      |        |     |      |     |      |       |
-| The `Parse` operation performs environment variable substitution                                                        |    |      |    |        |      |        |     |      |     |      |       |
-| The `Parse` operation returns configuration model                                                                       |    |      |    |        |      |        |     |      |     |      |       |
-| The `Parse` operation resolves extension component configuration to `properties`                                        |    |      |    |        |      |        |     |      |     |      |       |
+| `Parse` a configuration file                                                                                            |    |      |    |        |      |        | +   |      |     |      |       |
+| The `Parse` operation accepts the configuration YAML file format                                                        |    |      |    |        |      |        | +   |      |     |      |       |
+| The `Parse` operation performs environment variable substitution                                                        |    |      |    |        |      |        | +   |      |     |      |       |
+| The `Parse` operation returns configuration model                                                                       |    |      |    |        |      |        | +   |      |     |      |       |
+| The `Parse` operation resolves extension component configuration to `properties`                                        |    |      |    |        |      |        | +   |      |     |      |       |
 | `Create` SDK components                                                                                                 |    |      |    |        |      |        |     |      |     |      |       |
-| The `Create` operation accepts configuration model                                                                      |    |      |    |        |      |        |     |      |     |      |       |
-| The `Create` operation returns `TracerProvider`                                                                         |    |      |    |        |      |        |     |      |     |      |       |
-| The `Create` operation returns `MeterProvider`                                                                          |    |      |    |        |      |        |     |      |     |      |       |
-| The `Create` operation returns `LoggerProvider`                                                                         |    |      |    |        |      |        |     |      |     |      |       |
-| The `Create` operation returns `Propagators`                                                                            |    |      |    |        |      |        |     |      |     |      |       |
-| The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components |    |      |    |        |      |        |     |      |     |      |       |
-| Register a `ComponentProvider`                                                                                          |    |      |    |        |      |        |     |      |     |      |       |
+| The `Create` operation accepts configuration model                                                                      |    |      |    |        |      |        | +   |      |     |      |       |
+| The `Create` operation returns `TracerProvider`                                                                         |    |      |    |        |      |        | +   |      |     |      |       |
+| The `Create` operation returns `MeterProvider`                                                                          |    |      |    |        |      |        | +   |      |     |      |       |
+| The `Create` operation returns `LoggerProvider`                                                                         |    |      |    |        |      |        | +   |      |     |      |       |
+| The `Create` operation returns `Propagators`                                                                            |    |      |    |        |      |        | +   |      |     |      |       |
+| The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components |    |      |    |        |      |        | +   |      |     |      |       |
+| Register a `ComponentProvider`                                                                                          |    |      |    |        |      |        | +   |      |     |      |       |
 
 ## Exporters
 
@@ -319,9 +319,9 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | OTLP/HTTP binary Protobuf Exporter                                                                                                                                       | *        | +   | +    | +  | +           | +    | +      | +   | +    | +   | +    | -     |
 | OTLP/HTTP JSON Protobuf Exporter                                                                                                                                         |          | +   | -    | +  | [-][py1003] |      | -      | +   |      | +   | -    | -     |
 | OTLP/HTTP gzip Content-Encoding support                                                                                                                                  | X        | +   | +    | +  | +           | +    | -      | +   |      | -   | -    | -     |
-| Concurrent sending                                                                                                                                                       |          | -   | +    | +  | [-][py1108] |      | -      |     | +    | -   | -    | -     |
-| Honors retryable responses with backoff                                                                                                                                  | X        | +   | -    | +  | +           | +    | -      |     |      | -   | -    | -     |
-| Honors non-retryable responses                                                                                                                                           | X        | +   | -    | -  | +           | +    | -      |     |      | -   | -    | -     |
+| Concurrent sending                                                                                                                                                       |          | -   | +    | +  | [-][py1108] |      | -      | -   | +    | -   | -    | -     |
+| Honors retryable responses with backoff                                                                                                                                  | X        | +   | -    | +  | +           | +    | -      | +   |      | -   | -    | -     |
+| Honors non-retryable responses                                                                                                                                           | X        | +   | -    | -  | +           | +    | -      | +   |      | -   | -    | -     |
 | Honors throttling response                                                                                                                                               | X        | +   | -    | -  | +           | +    | -      |     |      | -   | -    | -     |
 | Multi-destination spec compliance                                                                                                                                        | X        | +   | -    |    | [-][py1109] |      | -      |     |      | -   | -    | -     |
 | SchemaURL in ResourceSpans and ScopeSpans                                                                                                                                |          | +   | +    |    | +           |      | +      | +   |      |     | -    |       |
