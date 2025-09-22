@@ -30,7 +30,7 @@ relevant to the metric or not.
 Additionally, today when reporting data from one "process" about mulitple resources, the only recourse available is to instantiate
 multiple SDKs and define different resources in each SDK.  This absolute separation can be highly problematic with the notion of
 "built-in" instrumentation, where libraries (e.g. gRPC) come with an out-of-the-box OpenTelemetry support and it's unclear how
-to ensure this instrumentation is use correctly in the presence of multiple SDKs. 
+to ensure this instrumentation is use correctly in the presence of multiple SDKs.
 
 ## Explanation
 
@@ -102,7 +102,7 @@ Additionally the following key changes are made to the SDK:
 - `MeterProvider` MUST treat entity found on InstrumentationScope as identifying,
   an aggregate reported events separately by scope. Note: this is the case in
   the specification today, however many implementations do not yet respect
-  InstrumentationScope loose attributes.
+  InstrumentationScope loose
 
 #### ResourceListener
 
@@ -125,7 +125,6 @@ The `ResourceInitializer` MUST provide the following operations in the SDK:
 
 * `On Change`
 * (optional) `GetResource`
-
 
 ResourceInitializer has two states:
 
@@ -183,7 +182,6 @@ ResourceInitializer.
 This operation MAY block when ResourceInitializer is in a DETECTING,
 but MUST NOT block indefinitely.
 
-
 #### ResourceDetector
 
 A `ResourceDetector` concept is updated.
@@ -204,8 +202,8 @@ failure.
 The Detect Entities Operation MUST have a mechanism to report detected `Entity`
 to the ResourceInitializer. This MUST include the following:
 
-- The `type` of the Entity
-- (optional) The `schema_url` of the Entity
+- The `type` of the Entity.
+- (optional) The `schema_url` of the Entity.
 - The `id` of the Entity (as a set of attributes).
 - (optional) The `description` of the Entity (as a set of attributes).
 
@@ -292,7 +290,7 @@ to that resource?
 
 For now:
 
-- The set of entities reported on Resource becomes locked. 
+- The set of entities reported on Resource becomes locked.
   All identifying attributes are also locked.
 - Whether we want to allow descriptive attributes to change - this can be
   determined or evolve over time. Until the ecosystem around OTLP is leveraging
@@ -313,7 +311,7 @@ while Scope allows "refinement" of that identity, within some bound.
 
 ## Prototypes
 
-**In Progress**
+TODO: **In Progress**
 
 ## Future possibilities
 
