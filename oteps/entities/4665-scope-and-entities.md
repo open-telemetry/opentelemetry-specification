@@ -260,7 +260,8 @@ and can therefore be extended to support `InstrumentationScope` based entities.
 
 ## Open questions
 
-Allowing a multi-tenant agency in the OpenTelemetry SDK has a set of known issues we must resolve.
+Adding entity in InstrumentationScope has a lot of implications that must be
+resolved.
 
 ### What are the SDK safeguards against high-cardinality Entities?
 
