@@ -49,11 +49,74 @@ We proposes these new fundamental concepts in OpenTelemetry:
 
 ## Internal details
 
-TODO
+TODO - introduction.
+
+### API Details
+
+Previously, every `Get A {signal reporter}` operation must accept the following
+instrumentation scope parameters:
+
+* `name`: Specifies the name of the [instrumentation scope](../../specification/common/instrumentation-scope.md).
+
+* `version` (optional): Specifies the version of the instrumentation scope if
+  the scope has a version (e.g. a library version). Example value: 1.0.0.
+
+* `schema_url` (optional): Specifies the Schema URL that should be recorded in
+  the emitted telemetry.
+
+* `attributes` (optional): Specifies the instrumentation scope attributes to
+  associate with emitted telemetry. This API MUST be structured to accept a
+  variable number of attributes, including none.
+
+
+Going forward, these operations (`Get a Logger`, `Get a Meter`, `Get a Tracer`)
+will be updated to include an additional optional parameter:
+
+* `entities` (optional): Specifies the `Entity` set to associate with 
+  emitted telemetry.
+
+Any `attributes` provided which conflict with those attributes in the provided
+`entities` consitutes an error and MUST be reported by the SDK.  The SDK
+MAY resolve the discrepency without causing a fatal error. In this case,
+the entity data model SHOULD take precedence over the `attributes` provided.
+
+### SDK Details
+
+TODO:
+
+- EntityDetector definition
+- ResourceInitializer SDK component
+- Implications on MeterProvider.
+
+### Protocol Details
+
+The OpenTelemetry Protocol (OTLP) will be modified such that
+`InstrumentationScope` will support carrying `Entity` objects. There are two
+ways this could be done:
+
+- A new `entity_refs` field on `InstrumentationScope` similar to what was
+  done for resource. This would avoid breaking implementations which make use
+  of additional attributes in `InstrumentationScope`, as this field would still
+  contain all new attributes for the scope.
+- A new `entities` field on `InstrumentationScope` which would contain the
+  entire set of entities and all values. Optional attributes would be stored
+  separately to `entities`, and consumers of OTLP would need to know about
+  both fields.
 
 ## Trade-offs and mitigations
 
-TODO
+The primary trade-offs to make here are around "breaking changes" and subtle
+differences in generated telemetry for code leveraging Entity vs. code which
+does not. We need give room for consumers of OTLP (vendors, databases, collector)
+time to support the new semantics of Entity prior to data showing up which would
+not be correctly interpreted without understanding these new semantics. As such,
+primarily:
+
+- Understanding that two `InstrumentationScope`s are different because of the
+  `Entity` data within them.
+- Appropriately aggregating or finding data about an `Entity`. If that entity
+  is now reported in `InstrumentationScope`, then older systems may no longer
+  be able to interact with it.
 
 ## Prior art and alternatives
 
@@ -76,6 +139,34 @@ As seen in [Issue #3062](https://github.com/open-telemetry/opentelemetry-specifi
 systems observing multiple tenants need to ensure that tenant which are only observed briefly do not
 continue to consume resources (particularly memory) for long periods of time. There needs to be
 some level of control (either direct or implicit) in allowing new "Scope with Entity" to be created.
+
+### What happens when an entity exists within Resource and InstrumentationScope?
+
+TODO
+
+### How to represent Entity in InstrumentationScope?
+
+Should we do the same thing as `Resource` or something more direct?
+
+Due to mitigations and concerns around compatibility, we recommend sticking to
+the same compatibility decision as `Resource` for `InstrumentationScope`.
+
+### Are descriptive attributes allowed to change for Resource?
+
+Its not clear how resource immutability is kept or what is meant by immutable.
+Will the resource emitted on the first export be the same as the one emitted for
+the entire lifetime of the process? Are descriptive attributes on entities
+attached to resource still allowed to change? What about attaching new entities
+to that resource?
+
+For now:
+
+- The set of entities reported on Resource becomes locked. 
+  All identifying attributes are also locked.
+- Whether we want to allow descriptive attributes to change - this can be
+  determined or evolve over time. Until the ecosystem around OTLP is leveraging
+  the "identity" attributes of Entity for Resource, we should not allow
+  mutation of descriptive attributes.
 
 ## Prototypes
 
