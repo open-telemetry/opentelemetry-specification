@@ -82,11 +82,134 @@ the entity data model SHOULD take precedence over the `attributes` provided.
 
 ### SDK Details
 
-TODO:
+The SDK is updated to, explicitly, include three new components:
 
-- EntityDetector definition
-- ResourceInitializer SDK component
-- Implications on MeterProvider.
+- `ResourceInitializer`: A formalized component that is responsible for
+  determining the `Resource` an SDK will use.
+- `ResourceListener`: A formalized component for notifying the rest of the
+  SDK that resource initialization has completed.
+- `Resource Detector`: A formalized component that is responsible for
+  detecting `entity`s on the initial `Resource`.
+
+Additionally the following key changes are made to the SDK:
+
+- All `{Tracer/Meter/Logger}Provider` components are updated to use the
+  `ResourceInitializer` instead of directly accepting a `Resource`.
+  - This MAY be done via the `ResourceListener` component defined.
+  - This MAY be done via delaying SDK initializtion until a `Resource`
+    is available on `ResourceInitializer`
+  - The default SDK constructors MUST use (or recommend) `ResourceInitializer`.
+- `MeterProvider` MUST treat entity found on InstrumentationScope as identifying,
+  an aggregate reported events separately by scope. Note: this is the case in
+  the specification today, however many implementations do not yet respect
+  InstrumentationScope loose attributes.
+
+#### ResourceListener
+
+The `ResourceListener` MUST provide the following operations in the SDK:
+
+* `On Resource Initialize`
+
+##### On ResourceInitialize
+
+`On ResourceInitialize` MUST accept the following parameters:
+
+* `Resource`: represents the entire set of resources after initialize.
+* `status`: represents the status of resource initialization.
+
+This operation MUST only be called once per ResourceInitializer.
+
+#### ResourceInitializer
+
+The `ResourceInitializer` MUST provide the following operations in the SDK:
+
+* `On Change`
+* (optional) `GetResource`
+
+
+ResourceInitializer has two states:
+
+- *DETECTING*: The provider is waiting for ResourceDetectors to complete.
+- *INITALIZED*: A complete resource is available and ResourceListeners will
+  be notified of the final resource.
+
+##### ResourceInitializer creation
+
+Creation of a ResourceInitializer MUST accept the following parameters:
+
+* `detectors`: a list of ResourceDetectors.
+* (optional) `initialization_timeout`: A timeout for when to abandon slow
+  ResourceDetectors and consider a resource initialized.
+
+ResourceInitializer MUST allow initial resource detection during its creation. This
+initialization SHOULD not block other SDK providers from initializing (e.g.
+MeterProvider, TracerProvider).
+
+A ResourceInitializer MAY allow customizable concurrency behavior, e.g. using a
+separate thread for ResourceListener events.
+
+Internally, the entities discovered via resource detection MUST be merged in
+the order provided to create the initial resource.
+
+During resource detection, ResourceInitializer MUST NOT fire any ResourceListener
+events.
+
+Upon completion of the resource detection phase, ResourceInitializer MUST fire
+an `On ResourceInitialize` event to all ResourceListeners.
+
+Any calls to `GetResource` operation, if provided, SHOULD block until
+resource detection is completed.
+
+Upon failure for resource detection to complete within a timeout, a resource
+SHOULD be constructed with available completed detection, `GetResource`
+jsuereth marked this conversation as resolved.
+operations MUST be unblocked and `On ResourceInitialize` event MUST be fired
+to all ResourceListeners. This call MUST provide a failure status.
+
+##### On Change
+
+`On Change` registers an `ResourceListener` to be called when a Resource has
+been detected or detection has failed.
+
+If the `EntityProvider` is already initialized, then it MUST call
+`On ResourceInitialize` immediately with the current resource held by the
+`ResourceInitializer`.
+
+##### Get Resource
+
+`Get Resource` MUST return a reference to the current resource held by the
+ResourceInitializer.
+
+This operation MAY block when ResourceInitializer is in a DETECTING,
+but MUST NOT block indefinitely.
+
+
+#### ResourceDetector
+
+A `ResourceDetector` concept is updated.
+
+ResourceDetector MUST provide the following operations:
+
+- `Detect entities`
+
+##### Detect Entities operation
+
+The Detect Entities Operation SHOULD allow asynchronous or long-running
+exeuction, e.g. issuing an HTTP request to a local service for identity, reading
+from disk, etc.
+
+The Detect Entities Operation SHOULD return a status to indicate completion or
+failure.
+
+The Detect Entities Operation MUST have a mechanism to report detected `Entity`
+to the ResourceInitializer. This MUST include the following:
+
+- The `type` of the Entity
+- (optional) The `schema_url` of the Entity
+- The `id` of the Entity (as a set of attributes).
+- (optional) The `description` of the Entity (as a set of attributes).
+
+The Detect Entities operation MAY be asynchronous.
 
 ### Protocol Details
 
@@ -129,11 +252,19 @@ than is naturally used when reporting the metric.
 As called out in the description, [OTEP 4316](https://github.com/open-telemetry/opentelemetry-specification/pull/4316)
 proposes making resource fully mutable, which comes with its won set of tradeoffs.
 
+Today, Semantic Conventions already defined `Entity` is uses it to group and
+report `Resource` attributes cohesively. Additionally, Semantic convention only
+models "entity associations", that is requiring a signal (e.g. a metric, event
+or span) to be attached to an entity. For example, the `system.cpu.time` metric
+is expected to be associated with a `host` entity. This association makes no
+assumption about whether that is through `Resource` or some other mechanism,
+and can therefore be extended to support `InstrumentationScope` based entities.
+
 ## Open questions
 
 Allowing a multi-tenant agency in the OpenTelemetry SDK has a set of known issues we must resolve.
 
-### How do we Garbage collecting "stale" scopes
+### What are the SDK safeguards against high-cardinality Entities?
 
 As seen in [Issue #3062](https://github.com/open-telemetry/opentelemetry-specification/issues/3062),
 systems observing multiple tenants need to ensure that tenant which are only observed briefly do not
@@ -167,6 +298,18 @@ For now:
   determined or evolve over time. Until the ecosystem around OTLP is leveraging
   the "identity" attributes of Entity for Resource, we should not allow
   mutation of descriptive attributes.
+
+### What is the expected impact on Collector components?
+
+How should standard Collector processors (like the attributes processor,
+resource processor, or filter processor) be updated to interact with Entities
+within the InstrumentationScope?
+
+### How do we guide developers on when to use InstrumenationScope vs. Resource?
+
+The distinction between an immutable Resource entity and a "mutable" Scope
+entity is subtle. The Resource begins to take on the identity of the SDK itself
+while Scope allows "refinement" of that identity, within some bound.
 
 ## Prototypes
 
