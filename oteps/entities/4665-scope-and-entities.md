@@ -249,7 +249,7 @@ than is naturally used when reporting the metric.
 As called out in the description, [OTEP 4316](https://github.com/open-telemetry/opentelemetry-specification/pull/4316)
 proposes making resource fully mutable, which comes with its own set of tradeoffs.
 
-Today, Semantic Conventions already defined `Entity` is uses it to group and
+Today, Semantic Conventions already defines `Entity` and uses it to group and
 report `Resource` attributes cohesively. Additionally, Semantic convention only
 models "entity associations", that is requiring a signal (e.g. a metric, event
 or span) to be attached to an entity. For example, the `system.cpu.time` metric
