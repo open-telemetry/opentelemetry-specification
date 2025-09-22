@@ -247,7 +247,7 @@ metric has an implicit View definition, and we leverage metric advice to allow s
 than is naturally used when reporting the metric.
 
 As called out in the description, [OTEP 4316](https://github.com/open-telemetry/opentelemetry-specification/pull/4316)
-proposes making resource fully mutable, which comes with its won set of tradeoffs.
+proposes making resource fully mutable, which comes with its own set of tradeoffs.
 
 Today, Semantic Conventions already defined `Entity` is uses it to group and
 report `Resource` attributes cohesively. Additionally, Semantic convention only
