@@ -23,11 +23,11 @@ requiring a single identity that is both immutable and matches the SDK lifetime 
 However, [OTEP 4316](https://github.com/open-telemetry/opentelemetry-specification/pull/4316) explores
 relaxing the immutability restriction vs. providing a new mechanism. During prototyping,
 initially this seemed to be easily accomplished, but ran into major complications both in interactions
-with OpAmp (where a stable idenitity for the SDK is desired), and in desinging a Metrics SDK, where
+with OpAmp (where a stable idenitity for the SDK is desired), and in designing a Metrics SDK, where
 changes in Resource mean a dynamic and divergent storage strategy, without a priori knowledge of whether these resource mutations are
 relevant to the metric or not.
 
-Additionally, today when reporting data from one "process" about mulitple resources, the only recourse available is to instantiate
+Additionally, today when reporting data from one "process" about multiple resources, the only recourse available is to instantiate
 multiple SDKs and define different resources in each SDK.  This absolute separation can be highly problematic with the notion of
 "built-in" instrumentation, where libraries (e.g. gRPC) come with an out-of-the-box OpenTelemetry support and it's unclear how
 to ensure this instrumentation is use correctly in the presence of multiple SDKs.
@@ -129,7 +129,7 @@ The `ResourceInitializer` MUST provide the following operations in the SDK:
 ResourceInitializer has two states:
 
 - *DETECTING*: The provider is waiting for ResourceDetectors to complete.
-- *INITALIZED*: A complete resource is available and ResourceListeners will
+- *INITIALIZED*: A complete resource is available and ResourceListeners will
   be notified of the final resource.
 
 ##### ResourceInitializer creation
