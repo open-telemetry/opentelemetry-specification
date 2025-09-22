@@ -265,7 +265,7 @@ resolved.
 ### What are the SDK safeguards against high-cardinality Entities?
 
 As seen in [Issue #3062](https://github.com/open-telemetry/opentelemetry-specification/issues/3062),
-systems observing multiple tenants need to ensure that tenant which are only observed briefly do not
+systems observing multiple tenants need to ensure that tenants which are only observed briefly do not
 continue to consume resources (particularly memory) for long periods of time. There needs to be
 some level of control (either direct or implicit) in allowing new "Scope with Entity" to be created.
 
