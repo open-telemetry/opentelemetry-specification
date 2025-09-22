@@ -166,7 +166,7 @@ to all ResourceListeners. This call MUST provide a failure status.
 
 ##### On Change
 
-`On Change` registers an `ResourceListener` to be called when a Resource has
+`On Change` registers a `ResourceListener` to be called when a Resource has
 been detected or detection has failed.
 
 If the `EntityProvider` is already initialized, then it MUST call
