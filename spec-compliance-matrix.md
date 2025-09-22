@@ -68,7 +68,7 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Span linking](specification/trace/api.md#specifying-links) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation |  | + | + |  | + | + | + | + | + | + | + |  |
-| Links can be recorded after span creation |  | + |  |  | + |  |  |+ |  | + | + |  |
+| Links can be recorded after span creation |  | + |  |  | + |  |  | + |  | + | + |  |
 | Links order is preserved |  | + | + |  | + | + | + | + | + | + | + |  |
 | [Span events](specification/trace/api.md#add-events) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | AddEvent |  | + | + | + | + | + | + | + | + | + | + | + |
@@ -80,7 +80,7 @@ formats is required. Implementing more than one format is optional.
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + |
-| Sampler: JaegerRemoteSampler |  | + | + |  |  |  |  |  | + |  |  |  |
+| Sampler: JaegerRemoteSampler |  | + | + |  |  |  |  | - | + |  |  |  |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + |
 | [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + |  | + | + | + | + | + | + |  | + |
 | [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + |  | + | + | + | + |  | - |  | + |
@@ -330,7 +330,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  |  |  |  |  |  |  | + |  |  | + |  |
 | [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + |  |  |  |  |  | + |  |  |  |  |
 | [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + |  |  |  |  |  | + |  |  |  |  |
-| Metric Exporter configurable temporality preference |  |  | + |  | + |  |  |  |  |  |  |  |
+| Metric Exporter configurable temporality preference |  |  | + |  | + |  |  | + |  |  |  |  |
 | Metric Exporter configurable default aggregation |  |  | + |  | + |  |  |  |  |  |  |  |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON | X | - | + |  | + | - | - | - | - | - | - | - |
