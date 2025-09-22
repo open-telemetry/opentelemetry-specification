@@ -23,7 +23,7 @@ requiring a single identity that is both immutable and matches the SDK lifetime 
 However, [OTEP 4316](https://github.com/open-telemetry/opentelemetry-specification/pull/4316) explores
 relaxing the immutability restriction vs. providing a new mechanism. During prototyping,
 initially this seemed to be easily accomplished, but ran into major complications both in interactions
-with OpAmp (where a stable idenitity for the SDK is desired), and in designing a Metrics SDK, where
+with OpAmp (where a stable identity for the SDK is desired), and in designing a Metrics SDK, where
 changes in Resource mean a dynamic and divergent storage strategy, without a priori knowledge of whether these resource mutations are
 relevant to the metric or not.
 
