@@ -474,6 +474,9 @@ It is recommended to use this sampler algorithm only for root spans
 SDKs or even different versions of the same language SDKs may produce inconsistent
 results for the same input.
 
+
+**Status**: [Development](../document-status.md)
+
 When this sampler observes a non-empty parent span context, meaning
 when it is used not as a root sampler, the SDK SHOULD emit a warning
 such as:
