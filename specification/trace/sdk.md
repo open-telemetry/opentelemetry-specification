@@ -428,7 +428,7 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### TraceIdRatioBased
 
-**Status**: [Deprecated](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The `TraceIdRatioBased` sampler is deprecated in favor of the
 composable [`ProbabilitySampler`](#probabilitysampler).  This
@@ -453,6 +453,8 @@ the `ParentBased` sampler specified below.
 
 ##### Requirements for `TraceIdRatioBased` sampler algorithm
 
+**Status**: [Stable](../document-status.md)
+
 * The sampling algorithm MUST be deterministic. A trace identified by a given
   `TraceId` is sampled or not independent of language, time, etc. To achieve this,
   implementations MUST use a deterministic hash of the `TraceId` when computing
@@ -466,6 +468,8 @@ the `ParentBased` sampler specified below.
 
 ##### Compatibility warnings for `TraceIdRatioBased` sampler
 
+**Status**: [Development](../document-status.md)
+
 **WARNING:** The exact algorithm was never specified. This sampler is not
 defined so as to be compatible with any other SDK, therefore is considered unstable.
 Only the configuration and creation APIs are stable.
@@ -473,9 +477,6 @@ It is recommended to use this sampler algorithm only for root spans
 (in combination with [`ParentBased`](#parentbased)) because different language
 SDKs or even different versions of the same language SDKs may produce inconsistent
 results for the same input.
-
-
-**Status**: [Development](../document-status.md)
 
 When this sampler observes a non-empty parent span context, meaning
 when it is used not as a root sampler, the SDK SHOULD emit a warning
