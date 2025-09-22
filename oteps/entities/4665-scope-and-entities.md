@@ -37,14 +37,14 @@ to ensure this instrumentation is use correctly in the presence of multiple SDKs
 We proposes these new fundamental concepts in OpenTelemetry:
 
 - `Resource` *remains immutable*
-  - Building on [OTEP 264`](0264-resource-and-entities.md), identifying attirbutes
+  - Building on [OTEP 264](0264-resource-and-entities.md), identifying attributes
     are clearly outlined in Resource going forward, addressing unclear real world usage of Resource attributes ([e,g, identifying attributes in OpAMP](https://github.com/open-telemetry/opamp-spec/blob/main/specification.md#agentdescriptionidentifying_attributes)).
   - SDK will be given an explicit initialization stage where `Resource` is not in a complete state, addressing OpenTelemetry JS concerns around async resource detection.
 - `InstrumentationScope` is enhanced with `Entity` similar to `Resource`.
-  - When using `Get a Meter` or `Get a Tracer` operations in OpenTelemetry, we can already optionally specific a set of `Attributes`. Now
+  - When using `Get a Meter` or `Get a Tracer` operations in OpenTelemetry, we could already optionally specify a set of `Attribute`s. Now
     we can specify a full `Entity`.
   - When an `Entity` X exists on `InstrumentationScope`, this now means "observing X in the context of the current `Resource`". For example,
-    on a Mobile device. An immutable `Resource` that idnetifies the device would be constructed. "Session" now becomes an Entity
+    on a Mobile device, an immutable `Resource` that identifies the device would be constructed. "Session" now becomes an Entity
     attached to the `InstrumentationScope`, meaning events, spans and metrics generated are against the "sesion in the context of the device".
 
 ## Internal details
