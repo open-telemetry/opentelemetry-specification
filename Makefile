@@ -96,6 +96,13 @@ check: misspell markdownlint markdown-link-check
 fix: misspell-correction
 	@echo "All autofixes complete"
 
+# Generate spec compliance matrix from YAML source
+.PHONY: compliance-matrix
+compliance-matrix:
+	pip install -U PyYAML
+	python .github/scripts/compliance_matrix.py
+	@echo "Compliance matrix generation complete"
+
 .PHONY: install-tools
 install-tools: $(MISSPELL)
 	npm install
