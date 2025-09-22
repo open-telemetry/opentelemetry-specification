@@ -488,7 +488,9 @@ to use ProbabilitySampler.
 ```
 
 In such a scenario, this sampler can also detect the use of a
-`ProbabilitySampler`, in which case the warning MAY be more direct:
+`ProbabilitySampler` by inspecting Tracestate for OpenTelemetry
+tracestate (`ot=...`) with `th` or `rv` subkeys, in which case the
+warning MAY be more direct:
 
 ```
 WARNING: The TraceIdRatioBased sampler is operating as a child sampler
@@ -513,6 +515,11 @@ it was not originally specified in an exact way.  In the present
 specification, the Sampler decision is more nuanced: only a portion of
 the identifier is used, after checking whether the OpenTelemetry
 TraceState field contains an explicit randomness value.
+
+Note that this is a non-composable form of probaiblity
+sampler. `ProbabilitySampler` directly implements the SDKs Sampler
+API, whereas [`ComposableProbability`](#composableprobability) is the
+composable form for use with [`CompositeSampler`](#compositesampler).
 
 [W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
 
