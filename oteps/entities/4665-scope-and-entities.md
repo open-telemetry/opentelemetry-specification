@@ -161,7 +161,6 @@ resource detection is completed.
 
 Upon failure for resource detection to complete within a timeout, a resource
 SHOULD be constructed with available completed detection, `GetResource`
-jsuereth marked this conversation as resolved.
 operations MUST be unblocked and `On ResourceInitialize` event MUST be fired
 to all ResourceListeners. This call MUST provide a failure status.
 
