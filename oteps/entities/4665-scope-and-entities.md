@@ -68,11 +68,10 @@ instrumentation scope parameters:
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
 
-
 Going forward, these operations (`Get a Logger`, `Get a Meter`, `Get a Tracer`)
 will be updated to include an additional optional parameter:
 
-* `entities` (optional): Specifies the `Entity` set to associate with 
+* `entities` (optional): Specifies the `Entity` set to associate with
   emitted telemetry.
 
 Any `attributes` provided which conflict with those attributes in the provided
@@ -260,7 +259,7 @@ primarily:
 
 ## Prior art and alternatives
 
-OpenCensus previously allowed contextual tags to be specified dynamically and used everywhere metric 
+OpenCensus previously allowed contextual tags to be specified dynamically and used everywhere metric
 measurements were reported. Users were then required to select which of these were useful to them via
 the definition of "Views". OpenTelemetry has aimed for a simpler solution where every
 metric has an implicit View definition, and we leverage metric advice to allow sending attributes
