@@ -123,8 +123,6 @@ Existing APIs that create or add attributes will be extended to support
 It's RECOMMENDED to expose an `AnyValue` type - the API representing complex or
 simple attribute value for type checking, ergonomics, and performance reasons.
 
-Exposing multiple types of attribute sets is NOT RECOMMENDED, such as having "ExtendedAttributes" in addition to "Attributes".
-
 OTel API MUST support setting complex attributes.
 
 API documentation and spec language around complex attributes SHOULD include
