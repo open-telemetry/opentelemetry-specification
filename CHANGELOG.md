@@ -50,12 +50,6 @@ release.
   ([#4614](https://github.com/open-telemetry/opentelemetry-specification/pull/4614))
 - Extend the set of attribute value types to support more complex data structures.
   ([#4651](https://github.com/open-telemetry/opentelemetry-specification/pull/4651))
-  - Introduce of `AnyValue` type supporting complex data structures (empty value,
-  byte arrays, heterogeneous arrays and maps).
-  - Consolidate of attribute definitions across signals to use the unified
-  `AnyValue` type.
-  - Update attribute limits to accommodate new value types.
-  - Remove "standard attribute" terminology in favor of general "attribute".
 
 ### OTEPs
 
