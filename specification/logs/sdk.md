@@ -193,7 +193,7 @@ It consists of the following parameters:
 
   If a `Logger` is disabled, it MUST behave equivalently
   to [No-op Logger](./noop.md#logger).
-  
+
 * `minimum_severity`: A [SeverityNumber](./data-model.md#field-severitynumber)
   indicating the minimum severity level for log records to be processed.
 
