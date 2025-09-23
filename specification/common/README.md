@@ -36,7 +36,7 @@ path_base_for_github_subdir:
 - a homogeneous array of primitive type values. A homogeneous array MUST NOT
   contain values of different types.
 - **Status**: [Development](../document-status.md) - a byte array.
-- **Status**: [Development](../document-status.md) - a heterogeneous array of `AnyValue`,
+- **Status**: [Development](../document-status.md) - an array of `AnyValue`,
 - **Status**: [Development](../document-status.md) - a [`map<string, AnyValue>`](#mapstring-anyvalue),
 - **Status**: [Development](../document-status.md) - an empty value (e.g. `null`, `undefined` in JavaScript/TypeScript,
   `None` in Python, `nil` in Go/Ruby, etc.).
