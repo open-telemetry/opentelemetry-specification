@@ -80,6 +80,26 @@ Any `attributes` provided which conflict with those attributes in the provided
 MAY resolve the discrepency without causing a fatal error. In this case,
 the entity data model SHOULD take precedence over the `attributes` provided.
 
+The set of `Entity` provided to these operations MUST only include one `Entity`
+per `type`.
+
+#### Entity
+
+An `Entity` is a collection of the following values:
+
+- `type`: A string describing the class of the Entity.
+- `id`: An attribute collection that identifies an instance of the Entity.
+- (optional) `description`: An attribute collection that describes the instance
+  of the Entity.
+- (optional) `schema_url`: Specifies the Schema URL that should be recorded for
+  this Entity.
+
+An `Entity` is uniquely identified by the combination of its `type` and `id`.
+
+`schema_url` defines version of the schema used to describe an `Entity`. If
+two entities exist with the same identity and different `schema_url`s, they
+MUST be considered in conflict with each other.
+
 ### SDK Details
 
 The SDK is updated to, explicitly, include three new components:
@@ -271,7 +291,14 @@ some level of control (either direct or implicit) in allowing new "Scope with En
 
 ### What happens when an entity exists within Resource and InstrumentationScope?
 
-TODO
+Should we consider this a failure or a feature?
+
+For simplicity in modeling, we plan to prototype where this is *disallowed*
+until proven we need this, in which case we need crisp language about
+what this models exactly.
+
+For now, only ONE entity of a given type will be allowed across both
+`Resource` and `InstrumentationScope` within the SDK.
 
 ### How to represent Entity in InstrumentationScope?
 
