@@ -85,6 +85,10 @@ If such option is provided, it MUST be documented that for many receivers,
 handling of maps with duplicate keys is unpredictable and it is the users'
 responsibility to ensure keys are not duplicate.
 
+Maps are equal when they contain the same key-value pairs,
+irrespective of the order in which those elements appear
+(unordered collection equality).
+
 ## Attribute
 
 <a id="attributes"></a>
