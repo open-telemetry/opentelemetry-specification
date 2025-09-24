@@ -118,7 +118,7 @@ Additionally the following key changes are made to the SDK:
   - This MAY be done via delaying SDK initializtion until a `Resource`
     is available on `ResourceInitializer`
   - The default SDK constructors MUST use (or recommend) `ResourceInitializer`.
-- `MeterProvider` MUST treat entity found on InstrumentationScope as identifying,
+- `MeterProvider` MUST treat entities found on InstrumentationScope as identifying,
   and aggregate reported events separately by scope. Note: this is the case in
   the specification today, however many implementations do not yet respect
   InstrumentationScope loose
