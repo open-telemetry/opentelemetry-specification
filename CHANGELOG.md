@@ -31,14 +31,28 @@ release.
 
 ### Common
 
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.49.0 (2025-09-16)
+
+### Entities
+
+- Specify entity information via an environment variable.
+  ([#4594](https://github.com/open-telemetry/opentelemetry-specification/pull/4594))
+
+### Common
+
 - OTLP Exporters may allow devs to prepend a product identifier in `User-Agent` header.
   ([#4560](https://github.com/open-telemetry/opentelemetry-specification/pull/4560))
 - ⚠️ **IMPORTANT**: Extending the set of standard attribute value types is no longer a breaking change.
   ([#4614](https://github.com/open-telemetry/opentelemetry-specification/pull/4614))
 
-### Supplementary Guidelines
-
 ### OTEPs
+
+- Clarify in Composite Samplers OTEP the unreliable threshold case.
+  ([#4569](https://github.com/open-telemetry/opentelemetry-specification/pull/4569))
 
 ## v1.48.0 (2025-08-13)
 
