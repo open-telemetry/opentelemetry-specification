@@ -156,8 +156,8 @@ irrespective of the order in which those elements appear
 ## Attribute Limits
 
 Execution of erroneous code can result in unintended attributes. If there are no
-limits placed on attributes, they can quickly exhaust available memory, resulting
-in crashes that are difficult to recover from safely.
+limits placed on attribute collections, they can quickly exhaust available memory,
+resulting in crashes that are difficult to recover from safely.
 
 By default an SDK SHOULD apply truncation as per the list of
 [configurable parameters](#configurable-parameters) below.
@@ -202,6 +202,10 @@ and a model-specific limit are implemented, then the SDK MUST first attempt to
 use the model-specific limit, if it isn't set, then the SDK MUST attempt to use
 the general limit. If neither are defined, then the SDK MUST try to use the
 model-specific limit default value, followed by the global limit default value.
+
+Note that the limits apply only to attributes collections.
+Therefore, they do not apply to values within other data structures such as
+[`LogRecord.Body`](../logs/data-model.md#field-body).
 
 ### Configurable Parameters
 
