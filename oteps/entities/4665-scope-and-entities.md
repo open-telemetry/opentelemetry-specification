@@ -107,7 +107,7 @@ The SDK is updated to, explicitly, include three new components:
   determining the `Resource` an SDK will use.
 - `ResourceListener`: A formalized component for notifying the rest of the
   SDK that resource initialization has completed.
-- `Resource Detector`: A formalized component that is responsible for
+- `ResourceDetector`: A formalized component that is responsible for
   detecting `entity`s on the initial `Resource`.
 
 Additionally the following key changes are made to the SDK:
