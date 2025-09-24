@@ -292,10 +292,10 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 
 | Feature | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| `Parse` a configuration file |  | + |  |  |  |  | + |  |  |  |  |
-| The `Parse` operation accepts the configuration YAML file format |  | + |  |  |  |  | + |  |  |  |  |
+| `Parse` a configuration file |  | + | + |  |  |  | + |  |  |  |  |
+| The `Parse` operation accepts the configuration YAML file format |  | + | + |  |  |  | + |  |  |  |  |
 | The `Parse` operation performs environment variable substitution |  | + |  |  |  |  | + |  |  |  |  |
-| The `Parse` operation returns configuration model |  | + |  |  |  |  | + |  |  |  |  |
+| The `Parse` operation returns configuration model |  | + | + |  |  |  | + |  |  |  |  |
 | The `Parse` operation resolves extension component configuration to `properties` |  | + |  |  |  |  | + |  |  |  |  |
 | `Create` SDK components |  | + |  |  |  |  | + |  |  |  |  |
 | The `Create` operation accepts configuration model |  | + |  |  |  |  | + |  |  |  |  |
