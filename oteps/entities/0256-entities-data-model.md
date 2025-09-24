@@ -139,7 +139,7 @@ MAY change over the lifetime of the entity. MAY be empty. These
 attributes are not part of entity's identity.
 <p>
 Follows <a
-href="../../specification/logs/data-model.md#type-any">any</a>
+href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/logs/data-model.md#type-any">any</a>
 value definition in the OpenTelemetry spec - it can be a scalar value,
 byte array, an array or map of values. Arbitrary deep nesting of values
 for arrays and maps is allowed.
@@ -682,7 +682,7 @@ There are a couple of reasons:
 ### Attribute Data Type
 
 The data model requires the Attributes field to use the extended
-[any](../../specification/logs/data-model.md#type-any)
+[any](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/logs/data-model.md#type-any)
 attribute values, that allows more complex data types. This is different from the data
 type used by the Id field, which is more restricted in the shape.
 
