@@ -197,7 +197,7 @@ If the `EntityProvider` is already initialized, then it MUST call
 `Get Resource` MUST return a reference to the current resource held by the
 ResourceInitializer.
 
-This operation MAY block when ResourceInitializer is in a DETECTING,
+This operation MAY block when ResourceInitializer is in a DETECTING state,
 but MUST NOT block indefinitely.
 
 #### ResourceDetector
