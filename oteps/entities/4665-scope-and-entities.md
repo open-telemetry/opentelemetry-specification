@@ -269,7 +269,7 @@ As called out in the description, [OTEP 4316](https://github.com/open-telemetry/
 proposes making resource fully mutable, which comes with its own set of tradeoffs.
 
 Today, Semantic Conventions already defines `Entity` and uses it to group and
-report `Resource` attributes cohesively. Additionally, Semantic convention only
+report `Resource` attributes cohesively. Additionally, Semantic Conventions only
 models "entity associations", that is requiring a signal (e.g. a metric, event
 or span) to be attached to an entity. For example, the `system.cpu.time` metric
 is expected to be associated with a `host` entity. This association makes no
