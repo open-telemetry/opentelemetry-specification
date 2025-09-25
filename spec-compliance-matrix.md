@@ -291,19 +291,19 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 
 | Feature | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| `Parse` a configuration file |  | x |  |  |  |  | + |  |  |  |  |
-| The `Parse` operation accepts the configuration YAML file format |  | x |  |  |  |  | + |  |  |  |  |
-| The `Parse` operation performs environment variable substitution |  | x |  |  |  |  | + |  |  |  |  |
-| The `Parse` operation returns configuration model |  | x |  |  |  |  | + |  |  |  |  |
-| The `Parse` operation resolves extension component configuration to `properties` |  | x |  |  |  |  | + |  |  |  |  |
-| `Create` SDK components |  | x |  |  |  |  | + |  |  |  |  |
-| The `Create` operation accepts configuration model |  | x |  |  |  |  | + |  |  |  |  |
-| The `Create` operation returns `TracerProvider` |  | x |  |  |  |  | + |  |  |  |  |
-| The `Create` operation returns `MeterProvider` |  | x |  |  |  |  | + |  |  |  |  |
-| The `Create` operation returns `LoggerProvider` |  | x |  |  |  |  | + |  |  |  |  |
-| The `Create` operation returns `Propagators` |  | x |  |  |  |  | + |  |  |  |  |
-| The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components |  | x |  |  |  |  | + |  |  |  |  |
-| Register a `ComponentProvider` |  | x |  |  |  |  | + |  |  |  |  |
+| `Parse` a configuration file |  | + | + |  |  |  | + |  |  |  |  |
+| The `Parse` operation accepts the configuration YAML file format |  | + | + |  |  |  | + |  |  |  |  |
+| The `Parse` operation performs environment variable substitution |  | + |  |  |  |  | + |  |  |  |  |
+| The `Parse` operation returns configuration model |  | + | + |  |  |  | + |  |  |  |  |
+| The `Parse` operation resolves extension component configuration to `properties` |  | + |  |  |  |  | + |  |  |  |  |
+| `Create` SDK components |  | + |  |  |  |  | + |  |  |  |  |
+| The `Create` operation accepts configuration model |  | + |  |  |  |  | + |  |  |  |  |
+| The `Create` operation returns `TracerProvider` |  | + |  |  |  |  | + |  |  |  |  |
+| The `Create` operation returns `MeterProvider` |  | + |  |  |  |  | + |  |  |  |  |
+| The `Create` operation returns `LoggerProvider` |  | + |  |  |  |  | + |  |  |  |  |
+| The `Create` operation returns `Propagators` |  | + |  |  |  |  | + |  |  |  |  |
+| The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components |  | + |  |  |  |  | + |  |  |  |  |
+| Register a `ComponentProvider` |  | + |  |  |  |  | + |  |  |  |  |
 
 ## Exporters
 
