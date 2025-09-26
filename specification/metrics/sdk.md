@@ -1013,6 +1013,7 @@ aggregation when no matching views match the instrument.
 
 It is not necessary for implementations to ensure that changes
 to `MeterConfig.disabled` are immediately visible to callers of `Enabled`.
+However, the changes MUST be eventually visible.
 
 ## Attribute limits
 
