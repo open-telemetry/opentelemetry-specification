@@ -576,7 +576,7 @@ Concurrent requests and retry logic is the responsibility of the exporter. The
 default SDK's `LogRecordProcessors` SHOULD NOT implement retry logic, as the
 required logic is likely to depend heavily on the specific protocol and backend
 the logs are being sent to. For example,
-the [OpenTelemetry Protocol (OTLP) specification](../protocol/otlp.md) defines
+the [OpenTelemetry Protocol (OTLP) specification](https://opentelemetry.io/docs/specs/otlp/) defines
 logic for both sending concurrent requests and retrying requests.
 
 **Parameters:**
