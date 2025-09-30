@@ -209,9 +209,11 @@ It consists of the following parameters:
 
   The value of `disabled` MUST be used to resolve whether a `Tracer`
   is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
-  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
-  necessary for implementations to ensure that changes to `disabled` are
-  immediately visible to callers of `Enabled`.
+  returns `false`. If `disabled` is `false`, `Enabled` returns `true`.
+  
+  It is not necessary for implementations to ensure that changes to `disabled`
+  are immediately visible to callers of `Enabled`.
+  However, the changes MUST be eventually visible.
 
 ### Enabled
 
@@ -1139,7 +1141,7 @@ Concurrent requests and retry logic is the responsibility of the exporter. The
 default SDK's Span Processors SHOULD NOT implement retry logic, as the required
 logic is likely to depend heavily on the specific protocol and backend the spans
 are being sent to. For example, the [OpenTelemetry Protocol (OTLP)
-specification](../protocol/otlp.md)
+specification](https://opentelemetry.io/docs/specs/otlp/)
 defines logic for both sending concurrent requests and retrying requests.
 
 **Parameters:**
