@@ -1074,7 +1074,7 @@ Concurrent requests and retry logic is the responsibility of the exporter. The
 default SDK's Span Processors SHOULD NOT implement retry logic, as the required
 logic is likely to depend heavily on the specific protocol and backend the spans
 are being sent to. For example, the [OpenTelemetry Protocol (OTLP)
-specification](../protocol/otlp.md)
+specification](https://opentelemetry.io/docs/specs/otlp/)
 defines logic for both sending concurrent requests and retrying requests.
 
 **Parameters:**
