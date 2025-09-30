@@ -217,6 +217,7 @@ It consists of the following parameters:
 
 It is not necessary for implementations to ensure that changes to any of these
 parameters are immediately visible to callers of `Enabled`.
+However, the changes MUST be eventually visible.
 
 ### Emit a LogRecord
 
