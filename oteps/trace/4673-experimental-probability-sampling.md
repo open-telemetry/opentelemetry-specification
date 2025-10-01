@@ -7,6 +7,9 @@ This document contains the final state of the old, experimental
 recorded as an OTEP so that we can remove it from the OpenTelemetry
 specification and still refer to it.
 
+One modification was made below: the link to [`tracestate-handling.md`
+links refer to the current specification](../../specification/trace/tracestate-handling.md).
+
 <details>
 <summary>Table of Contents</summary>
 
