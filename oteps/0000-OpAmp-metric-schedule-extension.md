@@ -42,18 +42,18 @@ monitoring infrastructure in large-scale environments.
 This protocol extension would unlock several powerful use cases for dynamically
 managing telemetry data at the source.
 
-*   **Dynamic Sampling and Throttling:** The backend could instruct a client to
-    change the collection period for a specific metric on a particular resource.
-    For instance, it could reduce the reporting frequency for a stable,
-    high-volume metric or increase it during a critical incident investigation.
+* **Dynamic Sampling and Throttling:** The backend could instruct a client to
+  change the collection period for a specific metric on a particular resource.
+  For instance, it could reduce the reporting frequency for a stable,
+  high-volume metric or increase it during a critical incident investigation.
 
-*   **Intelligent Data Routing:** The protocol could convey dynamic routing
-    information, allowing clients to send specific types of telemetry directly
-    to the most efficient storage or processing backend. A client could be
-    instructed to send high-cardinality metrics to a time-series database
-    optimized for that workload, while sending critical health check metrics to
-    a high-availability alerting system. This optimizes data write paths and
-    improves overall system performance.
+* **Intelligent Data Routing:** The protocol could convey dynamic routing
+  information, allowing clients to send specific types of telemetry directly
+  to the most efficient storage or processing backend. A client could be
+  instructed to send high-cardinality metrics to a time-series database
+  optimized for that workload, while sending critical health check metrics to
+  a high-availability alerting system. This optimizes data write paths and
+  improves overall system performance.
 
 Initially, this proposal focuses on metrics, but the framework could easily be
 extended to manage other signals like traces and logs in the future.
@@ -67,31 +67,31 @@ telemetry data is collected.
 
 Here's how it works:
 
-*   **Server-Driven Configuration:** Instead of relying on client-side polling,
-    your backend can now define sampling periods and routing instructions for
-    your metrics. This means your backend can tell your OpenTelemetry agents
-    exactly how often to send specific metric data and where to send it, based
-    on the metric name and the resource being monitored.
-*   **Reduced Operational Costs:** By proactively managing telemetry flow, you
-    can avoid overwhelming your ingestion systems. This leads to reduced
-    operational costs and improved efficiency, similar to what's possible with
-    pull-based systems like Prometheus, but without the need for client-side
-    polling.
-*   **Dynamic Metric Scheduling:** The system uses a state machine to manage the
-    interaction between your agents and servers. When a new metric with a new
-    resource is written, your agent sends a request to the OpAmp server for
-    scheduling information. The server then provides the sampling periods and
-    other configuration parameters.
-*   **Flexible Sampling:** You can have different sampling rates for different
-    metrics and resources. For example, critical metrics like RPC status, which
-    are used for alerting, can be collected at a high frequency (e.g., every few
-    seconds), while less critical metrics like machine addresses can be
-    collected much more slowly (e.g., every few hours). This allows you to
-    tailor data collection to the specific needs of your systems.
-*   **Collector Integration:** If you use an OpenTelemetry collector, it can act
-    as a proxy for the original requests, potentially with caching capabilities,
-    or even take on the role of an agent or server itself, providing further
-    flexibility in your metric management setup.
+* **Server-Driven Configuration:** Instead of relying on client-side polling,
+  your backend can now define sampling periods and routing instructions for
+  your metrics. This means your backend can tell your OpenTelemetry agents
+  exactly how often to send specific metric data and where to send it, based
+  on the metric name and the resource being monitored.
+* **Reduced Operational Costs:** By proactively managing telemetry flow, you
+  can avoid overwhelming your ingestion systems. This leads to reduced
+  operational costs and improved efficiency, similar to what's possible with
+  pull-based systems like Prometheus, but without the need for client-side
+  polling.
+* **Dynamic Metric Scheduling:** The system uses a state machine to manage the
+  interaction between your agents and servers. When a new metric with a new
+  resource is written, your agent sends a request to the OpAmp server for
+  scheduling information. The server then provides the sampling periods and
+  other configuration parameters.
+* **Flexible Sampling:** You can have different sampling rates for different
+  metrics and resources. For example, critical metrics like RPC status, which
+  are used for alerting, can be collected at a high frequency (e.g., every few
+  seconds), while less critical metrics like machine addresses can be
+  collected much more slowly (e.g., every few hours). This allows you to
+  tailor data collection to the specific needs of your systems.
+* **Collector Integration:** If you use an OpenTelemetry collector, it can act
+  as a proxy for the original requests, potentially with caching capabilities,
+  or even take on the role of an agent or server itself, providing further
+  flexibility in your metric management setup.
 
 In essence, this enhancement gives you more granular control over your telemetry
 data, allowing you to optimize data collection for performance and cost
@@ -101,12 +101,12 @@ efficiency.
 
 In this example, let's assume that we have a new metric reader and exporter:
 
-*   The `ControlledExporter` is an exporter that uses OpAmp to control its
-    export, similar to other configurations retrieved from the management
-    protocol.
-*   The `MultiPeriodicExportingMetricReader` is a reader that pushes metrics
-    similarly to the `PeriodicExportingMetricReader`, except it permits multiple
-    sampling periods per metric, and accepts a `ControlledExporter` as input.
+* The `ControlledExporter` is an exporter that uses OpAmp to control its
+  export, similar to other configurations retrieved from the management
+  protocol.
+* The `MultiPeriodicExportingMetricReader` is a reader that pushes metrics
+  similarly to the `PeriodicExportingMetricReader`, except it permits multiple
+  sampling periods per metric, and accepts a `ControlledExporter` as input.
 
 During initialization, the `ControlledExporter` contacts the OpAmp server,
 informing it that it requires the server to provide the sampling periods per
@@ -243,37 +243,37 @@ message ScheduleInfoResponse {
 These extensions would enable the proposed reader and exporter, together with
 OpAmp, to implement the following state machine:
 
-1.  Whenever a metric with a new resource is written, the SDK (through the
-    reader and exporter described above) sends an `AgentToServer` message to the
-    OpAmp endpoint, asking for the scheduling.
-2.  The server will check its internal configuration, and construct an answer
-    for the client. For each scheduled request, it will also compute a
-    `schedules_fingerprint` that summarizes the schedule. If the fingerprint
-    matches the one sent by the client for that schedule, the server will skip
-    that change and not send it in the response.
-3.  The client reads the response and stores it in its internal memory.
-    1.  If no schedule is provided, the client will assume the metric is not
-        expected to be collected by the server, and just not configure any
-        exporter. This saves resources on both the client that doesn't have to
-        create RPCs for the metric and on the server that doesn't have to do any
-        processing for a metric that will not be retained.
-    2.  Otherwise, the sampling period provided will then be used to configure
-        the push metric period **instead of using one set in the code**. Clients
-        are expected to spread writes over time to avoid overloading a server.
-        1.  If multiple entries are provided, the client is expected to perform
-            separate collections, once for each sampling period provided. This
-            enables cases where the same metric should be retained at different
-            frequencies at the discretion of the server. For example, the server
-            could collect a metric at higher frequency and keep it in memory yet
-            have a separate, lower frequency that is immediately stored in disk,
-            or forwarded to a separate system that does some form of analytics.
-        2.  Each request should have its resource description extended by the
-            extra_resources provided by the server. 
-4.  Once the client receives the response, it should wait for `next_delay` and
-    then send a new `AgentToServer` request to the server, sending any previous
-    fingerprint it received from the server.
-    1.  In case changes are reported, the client is expected to update the
-        sampling periods accordingly.
+1. Whenever a metric with a new resource is written, the SDK (through the
+   reader and exporter described above) sends an `AgentToServer` message to the
+   OpAmp endpoint, asking for the scheduling.
+2. The server will check its internal configuration, and construct an answer
+   for the client. For each scheduled request, it will also compute a
+   `schedules_fingerprint` that summarizes the schedule. If the fingerprint
+   matches the one sent by the client for that schedule, the server will skip
+   that change and not send it in the response.
+3. The client reads the response and stores it in its internal memory.
+   1. If no schedule is provided, the client will assume the metric is not
+      expected to be collected by the server, and just not configure any
+      exporter. This saves resources on both the client that doesn't have to
+      create RPCs for the metric and on the server that doesn't have to do any
+      processing for a metric that will not be retained.
+   2. Otherwise, the sampling period provided will then be used to configure
+      the push metric period **instead of using one set in the code**. Clients
+      are expected to spread writes over time to avoid overloading a server.
+      1. If multiple entries are provided, the client is expected to perform
+         separate collections, once for each sampling period provided. This
+         enables cases where the same metric should be retained at different
+         frequencies at the discretion of the server. For example, the server
+         could collect a metric at higher frequency and keep it in memory yet
+         have a separate, lower frequency that is immediately stored in disk,
+         or forwarded to a separate system that does some form of analytics.
+      2. Each request should have its resource description extended by the
+         extra_resources provided by the server.
+4. Once the client receives the response, it should wait for `next_delay` and
+   then send a new `AgentToServer` request to the server, sending any previous
+   fingerprint it received from the server.
+   1. In case changes are reported, the client is expected to update the
+      sampling periods accordingly.
 
 These can be seen in the diagram below
 
@@ -341,20 +341,20 @@ digraph opentelemetry_control_plane {
 In case a collector is present, the collector would be expected to act in one of
 the following modes:
 
-*   If the collector is not doing any major data transformations, it could be
-    seen purely as a proxy for the original request from the agent to OpAmp,
-    perhaps with some caching capabilities to avoid sending too many requests to
-    the original storage system, but retaining the ability of the central system
-    to configure sampling periods for all collected metrics.
-    *   Note that it is also possible that the agents contact the OpAmp server
-        directly even though a collector is used in the collection path.
-*   Otherwise, the collector can assume either the role of the agent or the
-    server, or even both. Let's say that a collector has a rule where, for a
-    given metric, it should always collect 10 samples and report the highest
-    value out of the 10 samples during an interval. The collector could first
-    request the sampling period from the configuration system to determine
-    whether the metric has an active schedule and at what frequency, allowing it
-    to apply its custom collection rule within the server-defined interval.
+* If the collector is not doing any major data transformations, it could be
+  seen purely as a proxy for the original request from the agent to OpAmp,
+  perhaps with some caching capabilities to avoid sending too many requests to
+  the original storage system, but retaining the ability of the central system
+  to configure sampling periods for all collected metrics.
+  * Note that it is also possible that the agents contact the OpAmp server
+    directly even though a collector is used in the collection path.
+* Otherwise, the collector can assume either the role of the agent or the
+  server, or even both. Let's say that a collector has a rule where, for a
+  given metric, it should always collect 10 samples and report the highest
+  value out of the 10 samples during an interval. The collector could first
+  request the sampling period from the configuration system to determine
+  whether the metric has an active schedule and at what frequency, allowing it
+  to apply its custom collection rule within the server-defined interval.
 
 ## Trade-offs and mitigations
 
@@ -400,7 +400,7 @@ with the sampling period being controlled by a central repository.
 While no external prototype is available, the mechanism described above is the
 one used internally in Google to collect telemetry data across all jobs and have
 them available at Monarch, as the instrumentation library mentioned in
-https://www.vldb.org/pvldb/vol13/p3181-adams.pdf, section 4.1.
+[section 4.1 of the VLDB paper about Monarch](https://www.vldb.org/pvldb/vol13/p3181-adams.pdf)
 
 ## Future possibilities
 
