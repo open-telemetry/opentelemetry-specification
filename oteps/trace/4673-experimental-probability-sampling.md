@@ -257,7 +257,7 @@ values via the context, termed "p-value" and "r-value".
 
 Both fields are propagated via the OpenTelemetry `tracestate` under
 the `ot` vendor tag using the rules for [tracestate
-handling](tracestate-handling.md).  Both fields are represented as
+handling](../../specification/trace/tracestate-handling.md).  Both fields are represented as
 unsigned decimal integers requiring at most 6 bits of information.
 
 This sampling scheme selects items from among a fixed set of 63
