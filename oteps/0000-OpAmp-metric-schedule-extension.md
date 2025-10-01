@@ -277,63 +277,49 @@ OpAmp, to implement the following state machine:
 
 These can be seen in the diagram below
 
-```dot
-digraph opentelemetry_control_plane {
-  stylesheet = "/frameworks/g3doc/includes/graphviz-style.css" # TODO: find public version
-  rankdir=TB;
-  compound=true;
+```mermaid
+graph TD
+    %% Agent Subgraph
+    subgraph Agent
+        init("Initialization")
+        send_request("Send AgentToServer Request")
+        read_response("Read Server Response")
+        store_schedule{"Has updated<br>schedule?"}
+        wait_next_delay("Wait for Next Delay")
+        metric_write("Metric write with new resource")
+        no_schedule("No schedule, stop exporting")
+        configure_exporter("Configure MetricReader<br>with provided<br>sampling period")
+    end
 
-  // --- Nodes ---
-  node [shape=box, style=filled, fillcolor="#f0f0f0"];
+    %% Server Subgraph
+    subgraph Server
+        receive_request("Receive AgentToServer Request")
+        check_config("Check Internal Config")
+        build_response("Build Response with Schedules<br> and Extra Resources")
+        compute_fingerprint("Compute Schedules Fingerprint")
+        compare_fingerprint{"Compare Fingerprint"}
+        skip_response("Skip sending Schedule")
+        send_server_response("Send Server Response")
+    end
 
-  subgraph cluster_agent {
-    label = "Agent";
-    style=filled;
-    fillcolor="#e6f4ea";
-
-    init [label="Initialization"];
-    send_request [label="Send AgentToServer Request"];
-    read_response [label="Read Server Response"];
-    store_schedule [label="Has updated\nschedule?", shape=diamond];
-    wait_next_delay [label="Wait for Next Delay"];
-    metric_write [label="Metric write with new resource"];
-    no_schedule [label="No schedule, stop exporting", shape=box, style="filled, dashed"]
-    configure_exporter [label="Configure MetricReader\nwith provided\nsampling period"];
-  }
-
-  subgraph cluster_server {
-    label = "Server";
-    style=filled;
-    fillcolor="#e8f0fe";
-
-    receive_request [label="Receive AgentToServer Request"];
-    check_config [label="Check Internal Config"];
-    build_response [label="Build Response with Schedules\n and Extra Resources"];
-    compute_fingerprint [label="Compute Schedules Fingerprint"];
-    compare_fingerprint [label="Compare Fingerprint", shape=diamond];
-    skip_response [label="Skip sending Schedule", style="filled, dashed"];
-    send_server_response [label="Send Server Response"];
-  }
-
-  // --- Edges ---
-  init -> metric_write
-  metric_write -> send_request [label="New Resource"];
-  send_request -> receive_request [lhead=cluster_server, minlen=2];
-  receive_request -> check_config;
-  check_config -> build_response;
-  build_response -> compute_fingerprint;
-  compute_fingerprint -> compare_fingerprint;
-  compare_fingerprint -> skip_response [label="Fingerprint matches"];
-  compare_fingerprint -> send_server_response [label="Fingerprint differs"];
-  skip_response -> send_server_response;
-  send_server_response -> read_response [ltail=cluster_server, minlen=2];
-  read_response -> store_schedule;
-  store_schedule -> configure_exporter [label="Schedule provided"];
-  store_schedule -> no_schedule [label="No schedule provided"];
-  configure_exporter -> wait_next_delay;
-  no_schedule -> wait_next_delay;
-  wait_next_delay -> send_request [label="After Delay"];
-}
+    %% Connections
+    init --> metric_write
+    metric_write -- "New Resource" --> send_request
+    send_request --> receive_request
+    receive_request --> check_config
+    check_config --> build_response
+    build_response --> compute_fingerprint
+    compute_fingerprint --> compare_fingerprint
+    compare_fingerprint -- "Fingerprint matches" --> skip_response
+    compare_fingerprint -- "Fingerprint differs" --> send_server_response
+    skip_response --> send_server_response
+    send_server_response --> read_response
+    read_response --> store_schedule
+    store_schedule -- "Schedule provided" --> configure_exporter
+    store_schedule -- "No schedule provided" --> no_schedule
+    configure_exporter --> wait_next_delay
+    no_schedule --> wait_next_delay
+    wait_next_delay -- "After Delay" --> send_request
 ```
 
 ### Adding an OTel collector to the protocol
