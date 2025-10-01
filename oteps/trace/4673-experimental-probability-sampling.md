@@ -1,10 +1,11 @@
-<!--- Hugo front matter used to generate the website version of this page:
-linkTitle: Probability Sampling
---->
-
 # TraceState: Probability Sampling
 
-**Status**: [Development](../document-status.md)
+**Status**: [Deprecated](../document-status.md)
+
+This document contains the final state of the old, experimental
+"tracestate probability sampling" specification. This specification is
+recorded as an OTEP so that we can remove it from the OpenTelemetry
+specification and still refer to it.
 
 <details>
 <summary>Table of Contents</summary>
