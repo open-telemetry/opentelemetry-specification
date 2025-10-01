@@ -1,7 +1,5 @@
 # Enhancing OpenTelemetry for Large-Scale Metric Management
 
-[TOC]
-
 ## Summary
 
 This proposal outlines an enhancement to OpenTelemetry's OpAmp control plane to
