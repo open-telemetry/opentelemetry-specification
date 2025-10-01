@@ -1,21 +1,33 @@
 # TraceState: Probability Sampling
 
-**Status**: [Deprecated](../document-status.md)
+**Status**: [Deprecated](../../specification/document-status.md)
 
 This document contains the final state of the old, experimental
 "tracestate probability sampling" specification. This specification is
 recorded as an OTEP so that we can remove it from the OpenTelemetry
 specification and still refer to it.
 
-One modification was made below: the link to [`tracestate-handling.md`
-links refer to the current specification](../../specification/trace/tracestate-handling.md).
+Changes were to the document made below: links were updated:
+
+- [`sdk.md`][SDK_SPEC] references were general in nature, as the SDK
+  specification was never updated to refer to this document; these
+  links were updated to a current permalink to avoid breaking in the
+  future.
+- [`tracestate-handling.md`][TRACESTATE_HANDLING]
+  these links were updated to a version of the file that was current
+  when this file was written, before 
+  [PR#4162](https://github.com/open-telemetry/opentelemetry-specification/pull/4162)
+  added the new specification.
+
+[TRACESTATE_HANDLING]: https://github.com/open-telemetry/opentelemetry-specification/blob/ec3779c3d0044503a1ec
+[SDK_SPEC]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/tracestate-handling.md
 
 <details>
-<summary>Table of Contents</summary>
+
+summary>Table of Contents</summary>
 
 <!-- toc -->
-
-- [Overview](#overview)
+<- [Overview](#overview)
   * [Definitions](#definitions)
     + [Sampling](#sampling)
     + [Adjusted count](#adjusted-count)
@@ -330,7 +342,7 @@ information: the TraceId, the SpanId, and the trace flags.  The
 `sampled` trace flag has been defined by W3C to signal an intent to
 sample the context.
 
-The [Sampler API](sdk.md#sampler) is responsible for setting the
+The [Sampler API](../../specification/trace/sdk.md#sampler) is responsible for setting the
 `sampled` flag and the `tracestate`.
 
 P-value and r-value are set in the OpenTelemetry `tracestate`, under
@@ -482,7 +494,7 @@ unsampled context.
 #### ParentConsistentProbabilityBased sampler
 
 The `ParentConsistentProbabilityBased` sampler is meant as an optional
-replacement for the [`ParentBased` Sampler](sdk.md#parentbased). It is
+replacement for the [`ParentBased` Sampler](../../specification/trace/sdk.md#parentbased). It is
 required to first validate the `tracestate` and then respect the
 `sampled` flag in the W3C traceparent.
 
@@ -512,7 +524,7 @@ traceparent header.
 
 The `ConsistentProbabilityBased` sampler is meant as an optional
 replacement for the [`TraceIdRatioBased`
-Sampler](sdk.md#traceidratiobased).  In the case where it is used as a
+Sampler](../../specification/trace/sdk.md#traceidratiobased).  In the case where it is used as a
 root sampler, the `ConsistentProbabilityBased` sampler is required to
 produce a valid `tracestate`.  In the case where it is used in a
 non-root context, it is required to validate the incoming `tracestate`
@@ -768,7 +780,7 @@ the parent's sampled trace flag or the OpenTelemetry tracestate
 r-value and p-value, as these decisions would lead to incorrect
 adjusted counts.
 
-For example, the built-in [`ParentBased` sampler](sdk.md#parentbased)
+For example, the built-in [`ParentBased` sampler](../../specification/trace/sdk.md#parentbased)
 supports configuring the delegated-to sampler based on whether the parent
 context is remote or non-remote, sampled or unsampled.  If a
 `ParentBased` sampler delegates to a `ConsistentProbabilityBased`
@@ -798,7 +810,7 @@ replacing `TraceIDRatioBased` samplers with conforming
 
 #### Trace producer: interoperability with `TraceIDRatioBased` sampler
 
-The [`TraceIDRatioBased` specification](sdk.md#traceidratiobased)
+The [`TraceIDRatioBased` specification](../../specification/trace/sdk.md#traceidratiobased)
 includes a RECOMMENDATION against being used for non-root spans
 because it does not specify how to make the sampler decision
 consistent across the trace.  A `TraceIDRatioBased` sampler at the
