@@ -33,10 +33,12 @@ weight: 3
     + [AlwaysOn](#alwayson)
     + [AlwaysOff](#alwaysoff)
     + [TraceIdRatioBased](#traceidratiobased)
-      - [`TraceIdRatioBased` sampler configuration](#traceidratiobased-sampler-configuration)
-      - [`TraceIdRatioBased` sampler algorithm](#traceidratiobased-sampler-algorithm)
-      - [`TraceIdRatioBased` sampler description](#traceidratiobased-sampler-description)
-      - [`TraceIdRatioBased` sampler compatibility warning](#traceidratiobased-sampler-compatibility-warning)
+      - [Requirements for `TraceIdRatioBased` sampler algorithm](#requirements-for-traceidratiobased-sampler-algorithm)
+      - [Compatibility warnings for `TraceIdRatioBased` sampler](#compatibility-warnings-for-traceidratiobased-sampler)
+    + [ProbabilitySampler](#probabilitysampler)
+      - [`ProbabilitySampler` sampler configuration](#probabilitysampler-sampler-configuration)
+      - [`ProbabilitySampler` sampler algorithm](#probabilitysampler-sampler-algorithm)
+      - [Compatibility warnings for `ProbabilitySampler`](#compatibility-warnings-for-probabilitysampler)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
     + [CompositeSampler](#compositesampler)
@@ -45,7 +47,7 @@ weight: 3
       - [Built-in ComposableSamplers](#built-in-composablesamplers)
         * [ComposableAlwaysOn](#composablealwayson)
         * [ComposableAlwaysOff](#composablealwaysoff)
-        * [ComposableTraceIDRatioBased](#composabletraceidratiobased)
+        * [ComposableProbability](#composableprobability)
         * [ComposableParentThreshold](#composableparentthreshold)
         * [ComposableRuleBased](#composablerulebased)
         * [ComposableAnnotating](#composableannotating)
@@ -207,9 +209,11 @@ It consists of the following parameters:
 
   The value of `disabled` MUST be used to resolve whether a `Tracer`
   is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
-  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
-  necessary for implementations to ensure that changes to `disabled` are
-  immediately visible to callers of `Enabled`.
+  returns `false`. If `disabled` is `false`, `Enabled` returns `true`.
+  
+  It is not necessary for implementations to ensure that changes to `disabled`
+  are immediately visible to callers of `Enabled`.
+  However, the changes MUST be eventually visible.
 
 ### Enabled
 
@@ -426,13 +430,86 @@ The default sampler is `ParentBased(root=AlwaysOn)`.
 
 #### TraceIdRatioBased
 
+**Status**: [Stable](../document-status.md)
+
+The `TraceIdRatioBased` sampler is deprecated in favor of the
+composable [`ProbabilitySampler`](#probabilitysampler).  This
+component is being [phased out to address a "TODO" in the 1.0 trace
+specification](https://github.com/open-telemetry/opentelemetry-specification/issues/1413).
+OpenTelemetry SDK implementors SHALL NOT remove or modify the behavior
+of the original `TraceIdRatioBased` sampler until at least January 1,
+2027. At that time, SDK implementors are encouraged to silently
+replace TraceIdRatioBased configuration with an equally-configured
+`ProbabilitySampler`.
+
+* The `TraceIdRatioBased` MUST ignore the parent `SampledFlag`. To respect the
+parent `SampledFlag`, the `TraceIdRatioBased` should be used as a delegate of
+the `ParentBased` sampler specified below.
+* Description MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
+  with `RATIO` replaced with the Sampler instance's trace sampling ratio
+  represented as a decimal number. The precision of the number SHOULD follow
+  implementation language standards and SHOULD be high enough to identify when
+  Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
+  had a sampling ratio of 1 to every 10,000 spans it COULD return
+  `"TraceIdRatioBased{0.000100}"` as its description.
+
+##### Requirements for `TraceIdRatioBased` sampler algorithm
+
+**Status**: [Stable](../document-status.md)
+
+* The sampling algorithm MUST be deterministic. A trace identified by a given
+  `TraceId` is sampled or not independent of language, time, etc. To achieve this,
+  implementations MUST use a deterministic hash of the `TraceId` when computing
+  the sampling decision. By ensuring this, running the sampler on any child `Span`
+  will produce the same decision.
+* A `TraceIdRatioBased` sampler with a given sampling probability MUST also sample all
+  traces that any `TraceIdRatioBased` sampler with a lower sampling probability would
+  sample. This is important when a backend system may want to run with a higher
+  sampling probability than the frontend system, this way all frontend traces will
+  still be sampled and extra traces will be sampled on the backend only.
+
+##### Compatibility warnings for `TraceIdRatioBased` sampler
+
 **Status**: [Development](../document-status.md)
 
-The `TraceIdRatioBased` sampler implements simple, ratio-based probability sampling using randomness features specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
+**WARNING:** The exact algorithm was never specified. This sampler is not
+defined so as to be compatible with any other SDK, therefore is considered unstable.
+Only the configuration and creation APIs are stable.
+It is recommended to use this sampler algorithm only for root spans
+(in combination with [`ParentBased`](#parentbased)) because different language
+SDKs or even different versions of the same language SDKs may produce inconsistent
+results for the same input.
+
+When this sampler observes a non-empty parent span context, meaning
+when it is used not as a root sampler, the SDK SHOULD emit a warning
+such as:
+
+```
+WARNING: The TraceIdRatioBased sampler is operating as a child sampler;
+the behavior is subject to change. Please upgrade this SDK configuration 
+to use ProbabilitySampler.
+```
+
+In such a scenario, this sampler can also detect the use of a
+`ProbabilitySampler` by inspecting Tracestate for OpenTelemetry
+tracestate (`ot=...`) with `th` or `rv` subkeys, in which case the
+warning MAY be more direct:
+
+```
+WARNING: The TraceIdRatioBased sampler is operating as a child sampler
+and a parent is using ProbabilitySampler. Please upgrade this SDK configuration 
+to use ProbabilitySampler.
+```
+
+#### ProbabilitySampler
+
+**Status**: [Development](../document-status.md)
+
+The `ProbabilitySampler` implements simple, ratio-based probability sampling using randomness features specified in the [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation.
 OpenTelemetry follows W3C Trace Context Level 2, which specifies 56 bits of randomness,
 [specifying how to make consistent probability sampling decisions using 56 bits of randomness][CONSISTENTSAMPLING].
 
-The `TraceIdRatioBased` sampler MUST ignore the parent `SampledFlag`.
+The `ProbabilitySampler` sampler MUST ignore the parent `SampledFlag`.
 For respecting the parent `SampledFlag`, see the `ParentBased` sampler specified below.
 
 Note that the "ratio-based" part of this Sampler's name implies that
@@ -442,17 +519,22 @@ specification, the Sampler decision is more nuanced: only a portion of
 the identifier is used, after checking whether the OpenTelemetry
 TraceState field contains an explicit randomness value.
 
+Note that this is a non-composable form of probaiblity
+sampler. `ProbabilitySampler` directly implements the SDKs Sampler
+API, whereas [`ComposableProbability`](#composableprobability) is the
+composable form for use with [`CompositeSampler`](#compositesampler).
+
 [W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
 
-##### `TraceIdRatioBased` sampler configuration
+##### `ProbabilitySampler` sampler configuration
 
-The `TraceIdRatioBased` sampler is typically configured using a 32-bit or 64-bit floating point number to express the sampling ratio.
+The `ProbabilitySampler` sampler is typically configured using a 32-bit or 64-bit floating point number to express the sampling ratio.
 The minimum valid sampling ratio is `2^-56`, and the maximum valid sampling ratio is 1.0.
 From an input sampling ratio, a rejection threshold value is calculated; see [consistent-probability sampler requirements][CONSISTENTSAMPLING] for details on converting sampling ratios into thresholds with variable precision.
 
 [CONSISTENTSAMPLING]: ./tracestate-probability-sampling.md
 
-##### `TraceIdRatioBased` sampler algorithm
+##### `ProbabilitySampler` sampler algorithm
 
 Given a Sampler configured with a sampling threshold `T` and Context with randomness value `R` (typically, the 7 rightmost bytes of the trace ID), when `ShouldSample()` is called, it uses the expression `R >= T` to decide whether to return `RECORD_AND_SAMPLE` or `DROP`.
 
@@ -461,40 +543,24 @@ Given a Sampler configured with a sampling threshold `T` and Context with random
 
 [TRACESTATEHANDLING]: ./tracestate-handling.md#sampling-threshold-value-th
 
-##### `TraceIdRatioBased` sampler description
+##### Compatibility warnings for `ProbabilitySampler`
 
-The `TraceIdRatioBased` GetDescription MUST return a string of the form `"TraceIdRatioBased{RATIO}"`
-with `RATIO` replaced with the Sampler instance's trace sampling ratio
-represented as a decimal number. The precision of the number SHOULD follow
-implementation language standards and SHOULD be high enough to identify when
-Samplers have different ratios. For example, if a TraceIdRatioBased Sampler
-had a sampling ratio of 1 to every 10,000 spans it could return
-`"TraceIdRatioBased{0.000100}"` as its description.
-
-##### `TraceIdRatioBased` sampler compatibility warning
-
-This specification has been revised from the original
-`TraceIdRatioBased` Sampler definition.  The present definition for
-`TraceIdRatioBased` uses a new definition for trace randomness, where
-unless an explicit randomness value is set in the OpenTelemetry
-TraceState `rv` sub-key, Samplers are meant to presume that TraceIDs
-contain the necessary 56 bits of randomness.
-
-When a TraceIdRatioBased Sampler makes a decision for a non-root Span
+When a `ProbabilitySampler` makes a decision for a non-root Span
 based on TraceID randomness, there is a possibility that the TraceID
 was in fact generated by an older SDK, unaware of this specification.
 The Trace random flag lets us disambiguate these two cases.  This flag
-propagates information to let TraceIdRatioBased Samplers confirm that
+propagates information to let ProbabilitySampler Samplers confirm that
 TraceIDs are random, however this requires W3C Trace Context Level 2
 to be supported by every Trace SDK that has handled the context.
 
-When a TraceIdRatioBased Sampler makes a decision for a non-root Span
-using TraceID randomness, but the Trace random flag was not set, the
-SDK SHOULD issue a warning statement in its log with a compatibility
-warning.  As an example of this compatibility warning:
+When a ProbabilitySampler Sampler makes a decision for a non-root Span
+using [TraceID randomness when the Trace random flag was not
+set](#presumption-of-traceid-randomness), the SDK SHOULD issue a
+warning statement in its log with a compatibility warning.  As an
+example of this compatibility warning:
 
 ```
-WARNING: The TraceIdRatioBased sampler is presuming TraceIDs are random
+WARNING: The ProbabilitySampler sampler is presuming TraceIDs are random
 and expects the Trace random flag to be set in confirmation.  Please
 upgrade your caller(s) to use W3C Trace Context Level 2.
 ```
@@ -602,7 +668,7 @@ randomness values MUST not be modified.
 * Sets `threshold_reliable` to `false`
 * Does not add any attributes
 
-###### ComposableTraceIDRatioBased
+###### ComposableProbability
 
 * Returns a `SamplingIntent` with threshold determined by the configured sampling ratio
 * Sets `threshold_reliable` to `true`
@@ -614,6 +680,9 @@ randomness values MUST not be modified.
 
 A ratio value of 0 is considered non-probabilistic. For the zero case
 a `ComposableAlwaysOff` instance SHOULD be returned instead.
+
+Note that the top-level `ProbabilitySampler` can be implemented using
+a `Composite(ComposableProbability(ratio))` configuration.
 
 ###### ComposableParentThreshold
 
@@ -1072,7 +1141,7 @@ Concurrent requests and retry logic is the responsibility of the exporter. The
 default SDK's Span Processors SHOULD NOT implement retry logic, as the required
 logic is likely to depend heavily on the specific protocol and backend the spans
 are being sent to. For example, the [OpenTelemetry Protocol (OTLP)
-specification](../protocol/otlp.md)
+specification](https://opentelemetry.io/docs/specs/otlp/)
 defines logic for both sending concurrent requests and retrying requests.
 
 **Parameters:**
