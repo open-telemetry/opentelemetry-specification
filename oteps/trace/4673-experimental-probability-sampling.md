@@ -15,7 +15,7 @@ Changes to the document made below, summarized:
   future.
 - Links to [`tracestate-handling.md`][TRACESTATE_HANDLING]:
   these links were updated to a version of the file that was current
-  when this file was written, before 
+  when this file was written, before
   [PR#4162](https://github.com/open-telemetry/opentelemetry-specification/pull/4162)
   added the new specification.
 - Remove the table of contents.
