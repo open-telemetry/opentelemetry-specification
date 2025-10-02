@@ -11,16 +11,25 @@ release.
 
 ### Traces
 
+- Changes of `TracerConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 - `TracerConfigurator` and `TracerConfig` are now optional (it MAY be supported by the SDK).
   ([#4648](https://github.com/open-telemetry/opentelemetry-specification/pull/4648))
 
 ### Metrics
 
+- Changes of `MeterConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 - `MeterConfigurator` and `MeterConfig` are now optional (it MAY be supported by the SDK).
   ([#4648](https://github.com/open-telemetry/opentelemetry-specification/pull/4648))
 
 ### Logs
 
+- Restore `TraceIdRatioBased` and give it a deprecation timeline. Update recommended
+  warnings based on feedback in issue [#4601](https://github.com/open-telemetry/opentelemetry-specification/issues/4601).
+  ([#4627](https://github.com/open-telemetry/opentelemetry-specification/pull/4627))
+- Changes of `LoggerConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 - `LoggerConfigurator` and `LoggerConfig` are now optional (it MAY be supported by the SDK).
   ([#4648](https://github.com/open-telemetry/opentelemetry-specification/pull/4648))
 
