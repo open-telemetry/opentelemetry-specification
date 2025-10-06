@@ -38,8 +38,8 @@ path_base_for_github_subdir:
 - **Status**: [Development](../document-status.md) - a byte array.
 - **Status**: [Development](../document-status.md) - an array of `AnyValue`,
 - **Status**: [Development](../document-status.md) - a [`map<string, AnyValue>`](#mapstring-anyvalue),
-- **Status**: [Development](../document-status.md) - an empty value (e.g. `null`, `undefined` in JavaScript/TypeScript,
-  `None` in Python, `nil` in Go/Ruby, etc.).
+- **Status**: [Development](../document-status.md) - an empty value if supported by the language,
+  (e.g. `null`, `undefined` in JavaScript/TypeScript, `None` in Python, `nil` in Go/Ruby, not supported in Erlang, etc.)
 
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
 allows to represent an equivalent of a JSON object).
