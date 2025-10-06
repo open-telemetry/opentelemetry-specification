@@ -1225,8 +1225,8 @@ bucket has seen so far to determine if the offered measurements should be
 sampled. Alternatively, the implementation MAY instead keep the last seen
 measurement that falls within a histogram bucket.
 
-  The reservoir will accept
-measurements using the equivalent of the following naive algorithm:
+The reservoir will accept measurements using the equivalent of the following
+naive algorithm:
 
   ```
   bucket = find_histogram_bucket(measurement)
