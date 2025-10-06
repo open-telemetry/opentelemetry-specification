@@ -1231,7 +1231,7 @@ measurements using the equivalent of the following naive algorithm:
   ```
   bucket = find_histogram_bucket(measurement)
   num_measurements_seen_bucket = num_measurements_seen[bucket]
-  if num_measurements_seen_bucket == 0 or random_integer(0, num_measurements_seen_bucket) == 0 then
+  if random_integer(0, num_measurements_seen_bucket) == 0 then
     reservoir[bucket] = measurement
   end
   num_measurements_seen[bucket] += 1
