@@ -21,6 +21,8 @@ release.
 
 - Changes of `MeterConfig.disabled` MUST be eventually visible.
   ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+- `AlignedHistogramBucketExemplarReservoir` SHOULD use a time-weighted algorithm.
+  ([#4678](https://github.com/open-telemetry/opentelemetry-specification/pull/4678))
 
 ### Logs
 

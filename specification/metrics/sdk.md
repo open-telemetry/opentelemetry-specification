@@ -1203,6 +1203,7 @@ algorithm](https://en.wikipedia.org/wiki/Reservoir_sampling) can be used:
   if bucket < num_buckets then
     reservoir[bucket] = measurement
   end
+  num_measurements_seen += 1
   ```
 
 Any stateful portion of sampling computation SHOULD be reset every collection
@@ -1217,15 +1218,23 @@ contention. Otherwise, a default size of `1` SHOULD be used.
 #### AlignedHistogramBucketExemplarReservoir
 
 This Exemplar reservoir MUST take a configuration parameter that is the
-configuration of a Histogram.  This implementation MUST keep the last seen
-measurement that falls within a histogram bucket.  The reservoir will accept
+configuration of a Histogram.  This implementation MUST store at most one
+measurement that falls within a histogram bucket, and SHOULD use a
+uniformly-weighted sampling algorithm based on the number of measurements the
+bucket has seen so far to determine if the offered measurements should be
+sampled. Alternatively, the implementation MAY instead keep the last seen
+measurement that falls within a histogram bucket.
+
+  The reservoir will accept
 measurements using the equivalent of the following naive algorithm:
 
   ```
   bucket = find_histogram_bucket(measurement)
-  if bucket < num_buckets then
+  num_measurements_seen_bucket = num_measurements_seen[bucket]
+  if num_measurements_seen_bucket == 0 or random_integer(0, num_measurements_seen_bucket) == 0 then
     reservoir[bucket] = measurement
   end
+  num_measurements_seen[bucket] += 1
 
   def find_histogram_bucket(measurement):
     for boundary, idx in bucket_boundaries do
