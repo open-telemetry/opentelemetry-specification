@@ -2,6 +2,11 @@ include_fragments = true
 
 accept = ["200..=299", "403"]
 
+remap = [
+  # workaround for https://github.com/lycheeverse/lychee/issues/1729
+  'https://github.com/(.*?)/(.*?)/blob/(.*?)/(.*#.*)$ https://raw.githubusercontent.com/$1/$2/$3/$4'
+]
+
 exclude = [
     # excluding links to pull requests and issues is done for performance
     "^https://github.com/open-telemetry/opentelemetry-specification/(issues|pull)/\\d+$",
