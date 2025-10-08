@@ -500,25 +500,25 @@ sections:
   - name: Declarative configuration
     features:
       - name: '`Parse` a configuration file'
-        status: '?'
+        status: '+'
       - name: The `Parse` operation accepts the configuration YAML file format
-        status: '?'
+        status: '+'
       - name: The `Parse` operation performs environment variable substitution
         status: '?'
       - name: The `Parse` operation returns configuration model
-        status: '?'
+        status: '+'
       - name: The `Parse` operation resolves extension component configuration to `properties`
         status: '?'
       - name: '`Create` SDK components'
-        status: '?'
+        status: '+'
       - name: The `Create` operation accepts configuration model
-        status: '?'
+        status: '+'
       - name: The `Create` operation returns `TracerProvider`
-        status: '?'
+        status: '+'
       - name: The `Create` operation returns `MeterProvider`
-        status: '?'
+        status: '+'
       - name: The `Create` operation returns `LoggerProvider`
-        status: '?'
+        status: '+'
       - name: The `Create` operation returns `Propagators`
         status: '?'
       - name: The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components
