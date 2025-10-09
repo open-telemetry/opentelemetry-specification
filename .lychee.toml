@@ -18,7 +18,8 @@ exclude = [
   '^https://docs.google.com/.*/edit.*$',
   'https://semver.org/#spec-item-11',
   'https://w3c.github.io/trace-context/#trace-id',
-  'https://facebook.github.io/zstd/#small-data'
+  'https://facebook.github.io/zstd/#small-data',
+  'https://javadoc.io/doc/org.apache.logging.log4j/log4j-api/latest/org.apache.logging.log4j/org/apache/logging/log4j/Logger.html'
 ]
 
 # better to be safe and avoid failures
