@@ -265,7 +265,7 @@ Both FlatBuffers and Capnproto are worth to be re-evaluated for future versions 
 
 It is also worth researching transports other than gRPC. Other transports are not included in this RFC due to time limitations.
 
-Experimental implementation of OTLP over WebSockets exists and was researched as an alternate. WebSockets were not chosen as the primary transport for OTLP due to lack or immaturity of certain capabilities (such as [lack of universal support](https://github.com/gorilla/websocket#gorilla-websocket-compared-with-other-packages) for [RFC 7692](https://datatracker.ietf.org/doc/html/rfc7692) message compression extension). Despite limitations the experimental implementation demonstrated good performance and WebSocket transport will be considered for inclusion in a future OTLP Extensions RFC.
+Experimental implementation of OTLP over WebSockets exists and was researched as an alternate. WebSockets were not chosen as the primary transport for OTLP due to lack or immaturity of certain capabilities (such as lack of universal support for [RFC 7692](https://datatracker.ietf.org/doc/html/rfc7692) message compression extension). Despite limitations the experimental implementation demonstrated good performance and WebSocket transport will be considered for inclusion in a future OTLP Extensions RFC.
 
 ## Open Questions
 

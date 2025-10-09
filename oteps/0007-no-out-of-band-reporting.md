@@ -57,5 +57,5 @@ instance configured with it's own `Resource`.
 * [opentelemetry-specification/62](https://github.com/open-telemetry/opentelemetry-specification/issues/62)
 * [opentelemetry-specification/61](https://github.com/open-telemetry/opentelemetry-specification/issues/61)
 
-[otelsvc-receiver]: https://github.com/open-telemetry/opentelemetry-collector#config-receivers
+[otelsvc-receiver]: https://github.com/open-telemetry/opentelemetry-collector/blob/main/receiver/README.md
 [create-metric]: https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#get-a-meter
