@@ -10,13 +10,15 @@ remap = [
 
 exclude = [
   # workaround for https://github.com/lycheeverse/lychee/issues/1729
-  '^https://github.com/.*/pull/.*#discussion-.*$',
-  '^https://github.com/.*/issues/.*#issue-.*$',
+  '^https://github.com/.*/pull/.*#.*$',
+  '^https://github.com/.*/issues/.*#issue.*$',
+  'https://github.com/open-telemetry/opentelemetry-proto-profile/blob/54bba7a86d839b9d29488de8e22d8c567d283e7b/opentelemetry/proto/profiles/v1/decision-log.md#L0-L1',
   # excluding links to pull requests and issues is done for performance
   '^https://github.com/open-telemetry/opentelemetry-specification/(issues|pull)/\d+$',
   # TODO (trask) look into this
   '^https://docs.google.com/.*/edit.*$',
-  'https://semver.org/#spec-item-11'
+  'https://semver.org/#spec-item-11',
+  'https://w3c.github.io/trace-context/#trace-id',
 ]
 
 # better to be safe and avoid failures

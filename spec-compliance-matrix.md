@@ -214,15 +214,15 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 ## Resource
 
-| Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| Create from Attributes |  | + | + | + | + | + | + | + | + | + | + | + |
-| Create empty |  | + | + | + | + | + | + | + | + | + | + | + |
-| [Merge (v2)](specification/resource/sdk.md#merge) |  | + | + |  | + | + | + | + | + | + | + |  |
-| Retrieve attributes |  | + | + | + | + | + | + | + | + | + | + | + |
-| [Default value](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  |
-| [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + |
-| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + |  |  | - |  |
+| Feature                                                                                                                                                                            | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
+| Create from Attributes                                                                                                                                                             |  | + | + | + | + | + | + | + | + | + | + | + |
+| Create empty                                                                                                                                                                       |  | + | + | + | + | + | + | + | + | + | + | + |
+| [Merge (v2)](specification/resource/sdk.md#merge)                                                                                                                                  |  | + | + |  | + | + | + | + | + | + | + |  |
+| Retrieve attributes                                                                                                                                                                |  | + | + | + | + | + | + | + | + | + | + | + |
+| [Default value](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  |
+| [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism                                                         |  | + | + | + | + | + | + | + | + | + | + | + |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)                                                        |  | + | + |  |  |  | - | + |  |  | - |  |
 
 ## Context Propagation
 
