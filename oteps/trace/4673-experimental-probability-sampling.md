@@ -1,6 +1,6 @@
 # TraceState: Probability Sampling
 
-**Status**: [Deprecated](../../specification/document-status.md)
+**Status**: Archived
 
 This document contains the final state of the old, experimental
 "tracestate probability sampling" specification. This specification is
