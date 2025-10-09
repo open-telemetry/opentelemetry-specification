@@ -11,11 +11,12 @@ remap = [
 exclude = [
   # workaround for https://github.com/lycheeverse/lychee/issues/1729
   '^https://github.com/.*/pull/.*#discussion-.*$',
+  '^https://github.com/.*/issues/.*#issue-.*$',
   # excluding links to pull requests and issues is done for performance
   '^https://github.com/open-telemetry/opentelemetry-specification/(issues|pull)/\d+$',
   # TODO (trask) look into this
-  '^https://docs.google.com/document/d/1d0afxe3J6bQT-I6UbRXeIYNcTIyBQv4axfjKF4yvAPA/edit',
-  '^https://docs.google.com/spreadsheets/.*/edit.*$',
+  '^https://docs.google.com/.*/edit.*$',
+  'https://semver.org/#spec-item-11'
 ]
 
 # better to be safe and avoid failures
