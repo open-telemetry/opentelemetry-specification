@@ -512,14 +512,7 @@ OpenTelemetry follows W3C Trace Context Level 2, which specifies 56 bits of rand
 The `ProbabilitySampler` sampler MUST ignore the parent `SampledFlag`.
 For respecting the parent `SampledFlag`, see the `ParentBased` sampler specified below.
 
-Note that the "ratio-based" part of this Sampler's name implies that
-it makes a probability decision directly from the TraceID, even though
-it was not originally specified in an exact way.  In the present
-specification, the Sampler decision is more nuanced: only a portion of
-the identifier is used, after checking whether the OpenTelemetry
-TraceState field contains an explicit randomness value.
-
-Note that this is a non-composable form of probaiblity
+Note that this is a non-composable form of probability
 sampler. `ProbabilitySampler` directly implements the SDKs Sampler
 API, whereas [`ComposableProbability`](#composableprobability) is the
 composable form for use with [`CompositeSampler`](#compositesampler).
