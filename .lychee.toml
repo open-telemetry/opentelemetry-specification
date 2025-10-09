@@ -4,14 +4,18 @@ accept = ["200..=299", "403"]
 
 remap = [
   # workaround for https://github.com/lycheeverse/lychee/issues/1729
-  'https://github.com/(.*?)/(.*?)/blob/(.*?)/(.*#.*)$ https://raw.githubusercontent.com/$1/$2/$3/$4'
+  'https://github.com/(.*?)/(.*?)/blob/(.*?)/(.*#.*)$ https://raw.githubusercontent.com/$1/$2/$3/$4',
+  'https://docs.oracle.com/(.*)#.*$ https://docs.oracle.com/$1'
 ]
 
 exclude = [
-    # excluding links to pull requests and issues is done for performance
-    "^https://github.com/open-telemetry/opentelemetry-specification/(issues|pull)/\\d+$",
-    # TODO (trask) look into this
-    "^https://docs.google.com/document/d/1d0afxe3J6bQT-I6UbRXeIYNcTIyBQv4axfjKF4yvAPA/edit"
+  # workaround for https://github.com/lycheeverse/lychee/issues/1729
+  '^https://github.com/.*/pull/.*#discussion-.*$',
+  # excluding links to pull requests and issues is done for performance
+  '^https://github.com/open-telemetry/opentelemetry-specification/(issues|pull)/\d+$',
+  # TODO (trask) look into this
+  '^https://docs.google.com/document/d/1d0afxe3J6bQT-I6UbRXeIYNcTIyBQv4axfjKF4yvAPA/edit',
+  '^https://docs.google.com/spreadsheets/.*/edit.*$',
 ]
 
 # better to be safe and avoid failures
