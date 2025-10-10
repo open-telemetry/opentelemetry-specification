@@ -294,7 +294,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
 | `Parse` a configuration file | + | + | + |  |  |  | + |  |  |  |  |
 | The `Parse` operation accepts the configuration YAML file format | + | + | + |  |  |  | + |  |  |  |  |
-| The `Parse` operation performs environment variable substitution |  | + |  |  |  |  | + |  |  |  |  |
+| The `Parse` operation performs environment variable substitution | + | + |  |  |  |  | + |  |  |  |  |
 | The `Parse` operation returns configuration model | + | + | + |  |  |  | + |  |  |  |  |
 | The `Parse` operation resolves extension component configuration to `properties` |  | + |  |  |  |  | + |  |  |  |  |
 | `Create` SDK components | + | + |  |  |  |  | + |  |  |  |  |
