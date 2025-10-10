@@ -11,7 +11,7 @@
 - Reviewer:
   - Person whose Approval is needed to merge the PR.
 - Sponsor:
-  - The [specification sponsors](https://github.com/open-telemetry/community/blob/main/community-membership.md#specification-sponsor), identified as the assignee of the issue, is responsible for the completion of the issue.
+  - The [specification sponsors](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#specification-sponsor), identified as the assignee of the issue, is responsible for the completion of the issue.
 - Triager:
   - This person is responsible for applying appropriate labels as outlined below,
     following up on issues to ensure they are complete,

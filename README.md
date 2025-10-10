@@ -29,7 +29,7 @@ APAC timezone friendly meetings are held on request. See
 [OpenTelemetry calendar](https://github.com/open-telemetry/community#calendar).
 
 Escalations to technical committee may be made over the
-[e-mail](https://github.com/open-telemetry/community#tc-technical-committee).
+[e-mail](https://github.com/open-telemetry/community/blob/main/README.md#mailing-lists).
 Technical committee holds regular meetings, notes are held
 [here](https://docs.google.com/document/d/1hOHPCu5TGenqTeWPB9qQB_qd33uITZBcvK1FnWxYJAw/edit?usp=sharing).
 

@@ -413,7 +413,7 @@ The following functionality exists to enable log collection:
 
 - Ability to parse logs in common text formats and to allow end users to
   customize parsing formats and add custom parsers as needed. Collector's
-  [parsers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver#operators)
+  [parsers](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/filelogreceiver/README.md#operators)
   or parsing in the external agent is used for this.
 
 - Ability to receive logs via common network protocols for logs, such as Syslog
