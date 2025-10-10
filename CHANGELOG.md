@@ -11,21 +11,9 @@ release.
 
 ### Traces
 
-- Restore `TraceIdRatioBased` and give it a deprecation timeline. Update recommended
-  warnings based on feedback in issue [#4601](https://github.com/open-telemetry/opentelemetry-specification/issues/4601).
-  ([#4627](https://github.com/open-telemetry/opentelemetry-specification/pull/4627))
-- Changes of `TracerConfig.disabled` MUST be eventually visible.
-  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
-
 ### Metrics
 
-- Changes of `MeterConfig.disabled` MUST be eventually visible.
-  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
-
 ### Logs
-
-- Changes of `LoggerConfig.disabled` MUST be eventually visible.
-  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 
 ### Baggage
 
@@ -46,6 +34,28 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.50.0 (2025-10-14)
+
+### Traces
+
+- Restore `TraceIdRatioBased` and give it a deprecation timeline. Update recommended
+  warnings based on feedback in issue [#4601](https://github.com/open-telemetry/opentelemetry-specification/issues/4601).
+  ([#4627](https://github.com/open-telemetry/opentelemetry-specification/pull/4627))
+- Changes of `TracerConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+
+### Metrics
+
+- Changes of `MeterConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+
+### Logs
+
+- Add minimum_severity and trace_based logger configuration parameters.
+  ([#4612](https://github.com/open-telemetry/opentelemetry-specification/pull/4612))
+- Changes of `LoggerConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 
 ## v1.49.0 (2025-09-16)
 
