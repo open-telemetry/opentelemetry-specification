@@ -44,6 +44,8 @@ release.
   ([#4627](https://github.com/open-telemetry/opentelemetry-specification/pull/4627))
 - Changes of `TracerConfig.disabled` MUST be eventually visible.
   ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+- Remove text related to the former expermental probability sampling specification.
+  ([#4673](https://github.com/open-telemetry/opentelemetry-specification/pull/4673))
 
 ### Metrics
 
