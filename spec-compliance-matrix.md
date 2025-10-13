@@ -219,7 +219,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Create empty |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Merge (v2)](specification/resource/sdk.md#merge) |  | + | + |  | + | + | + | + | + | + | + |  |
 | Retrieve attributes |  | + | + | + | + | + | + | + | + | + | + | + |
-| [Default value](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  |
+| [Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + |  |  | - |  |
 
@@ -293,7 +293,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
 | `Parse` a configuration file | + | + | + |  |  |  | + |  |  |  |  |
 | The `Parse` operation accepts the configuration YAML file format | + | + | + |  |  |  | + |  |  |  |  |
-| The `Parse` operation performs environment variable substitution |  | + |  |  |  |  | + |  |  |  |  |
+| The `Parse` operation performs environment variable substitution | + | + |  |  |  |  | + |  |  |  |  |
 | The `Parse` operation returns configuration model | + | + | + |  |  |  | + |  |  |  |  |
 | The `Parse` operation resolves extension component configuration to `properties` |  | + |  |  |  |  | + |  |  |  |  |
 | `Create` SDK components | + | + |  |  |  |  | + |  |  |  |  |

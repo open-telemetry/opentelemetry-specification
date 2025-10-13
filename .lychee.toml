@@ -2,11 +2,24 @@ include_fragments = true
 
 accept = ["200..=299", "403"]
 
+remap = [
+  # workaround for https://github.com/lycheeverse/lychee/issues/1729
+  'https://github.com/(.*?)/(.*?)/blob/(.*?)/(.*#.*)$ https://raw.githubusercontent.com/$1/$2/$3/$4',
+  'https://docs.oracle.com/(.*)#.*$ https://docs.oracle.com/$1'
+]
+
 exclude = [
-    # excluding links to pull requests and issues is done for performance
-    "^https://github.com/open-telemetry/opentelemetry-specification/(issues|pull)/\\d+$",
-    # TODO (trask) look into this
-    "^https://docs.google.com/document/d/1d0afxe3J6bQT-I6UbRXeIYNcTIyBQv4axfjKF4yvAPA/edit"
+  # workaround for https://github.com/lycheeverse/lychee/issues/1729
+  '^https://github.com/.*/(pull|issues|commit|compare)/.*#.*$',
+  '.*decision-log.md#L0-L1',
+  # excluding links to pull requests and issues is done for performance
+  '^https://github.com/open-telemetry/opentelemetry-specification/(issues|pull)/\d+$',
+  # TODO (trask) look into this
+  '^https://docs.google.com/.*/edit.*$',
+  'https://semver.org/#spec-item-11',
+  'https://w3c.github.io/trace-context/#trace-id',
+  'https://facebook.github.io/zstd/#small-data',
+  'https://javadoc.io/doc/org.apache.logging.log4j/log4j-api/latest/org.apache.logging.log4j/org/apache/logging/log4j/Logger.html'
 ]
 
 # better to be safe and avoid failures
