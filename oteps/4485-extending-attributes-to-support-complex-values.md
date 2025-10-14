@@ -23,6 +23,7 @@
   * [Configurable OTLP exporter behavior (both SDK and Collector)](#configurable-otlp-exporter-behavior-both-sdk-and-collector)
   * [Record pointer to repetitive data](#record-pointer-to-repetitive-data)
 - [Backend research](#backend-research)
+- [Appendix](#appendix)
 
 <!-- tocstop -->
 
@@ -123,7 +124,24 @@ Existing APIs that create or add attributes will be extended to support
 It's RECOMMENDED to expose an `AnyValue` type - the API representing complex or
 simple attribute value for type checking, ergonomics, and performance reasons.
 
-OTel API MUST support setting complex attributes.
+Exposing multiple types of attribute sets is NOT RECOMMENDED, such as having "ExtendedAttributes" in addition to "Attributes".
+
+OTel API MUST support setting complex attributes on spans, logs, profiles,
+span links, and as descriptive entity attributes.
+
+OTel API MAY support setting complex attributes on metrics, resources,
+instrumentation scope, span events, and as identifying entity attributes.
+
+> [!NOTE]
+> "MAY" is used here instead of "MUST" to give flexibility to dynamically
+> typed language APIs since there are no concrete use cases at this time
+> requiring complex attributes in these areas.
+>
+> Most likely statically typed languages will choose to support
+> setting complex attributes uniformly everywhere.
+>
+> This requirement level could change from "MAY" to "MUST" in the future
+> if we uncover use cases for complex attributes in these areas.
 
 API documentation and spec language around complex attributes SHOULD include
 language similar to this:
@@ -135,7 +153,22 @@ language similar to this:
 
 ### SDK
 
-OTel SDK MUST support setting complex attributes.
+OTel SDK MUST support setting complex attributes on spans, logs, profiles,
+span links, and as descriptive entity attributes.
+
+OTel SDK MAY support setting complex attributes on metrics, exemplars, resources,
+instrumentation scope, span events, and as identifying entity attributes.
+
+> [!NOTE]
+> "MAY" is used here instead of "MUST" to give flexibility to dynamically
+> typed language SDKs since there are no concrete use cases at this time
+> requiring complex attributes in these areas.
+>
+> Most likely statically typed languages will choose to support
+> setting complex attributes uniformly everywhere.
+>
+> This requirement level could change from "MAY" to "MUST" in the future
+> if we uncover use cases for complex attributes in these areas.
 
 The SDK MUST support reading and modifying complex attributes during processing
 whenever they are allowed on the API surface.
@@ -277,3 +310,9 @@ for additional details.
 
 > [!NOTE]
 > This list only reflects the behavior at the time of writing and may change in the future.
+
+## Appendix
+
+The [Extend the set of attribute value types #4651](https://github.com/open-telemetry/opentelemetry-specification/pull/4651) PR implements part of this OTEP by requiring that both the OTel API and SDK MUST support complex attributes.
+Some languages aim to support complex attributes for all kinds of telemetry.
+To maintain consistency across languages, we agreed that all languages should provide the same level of support for complex attributes.
