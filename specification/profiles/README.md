@@ -20,7 +20,7 @@ path_base_for_github_subdir:
 
 ## Overview
 
-Profiles are emerging as the fourth essential pillar of observability, alongside logs, metrics, and traces. They offer unparalleled insights into system and application behavior, often uncovering performance bottlenecks overlooked by other signals.
+Profiles are emerging as the fourth essential signal of observability, alongside logs, metrics, and traces. They offer unparalleled insights into system and application behavior, often uncovering performance bottlenecks overlooked by other signals.
 
 Profiling data provides granular, time-based views of resource consumption and code execution, encompassing:
 
