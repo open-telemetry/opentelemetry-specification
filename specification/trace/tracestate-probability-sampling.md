@@ -1,5 +1,6 @@
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Probability Sampling
+aliases: [tracestate-probability-sampling-experimental]
 --->
 
 # TraceState: Probability Sampling
