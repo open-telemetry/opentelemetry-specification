@@ -60,4 +60,4 @@ tools, known values are utilized.
 
 | Profile field | Known values |
 | -------------- | ------------ |
-  | Profile.original_payload_format  | [pprof](https://github.com/google/pprof/tree/main/proto), [jfr](https://en.wikipedia.org/wiki/JDK_Flight_Recorder) or [linux_perf](https://perfwiki.github.io/) |
+  | original_payload_format  | [pprof](https://github.com/google/pprof/tree/main/proto), [jfr](https://en.wikipedia.org/wiki/JDK_Flight_Recorder) or [linux_perf](https://perfwiki.github.io/) |
