@@ -51,7 +51,7 @@ observability.
 ## Known values
 
 [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/)
-are vital for Profiles to correlate with other OpenTelemetry signals, enabling
+are vital for profiles to correlate with other OpenTelemetry signals, enabling
 unified analysis of traces, metrics, logs, and profiling data for a holistic
 system understanding.
 
