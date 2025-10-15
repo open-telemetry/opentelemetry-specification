@@ -58,6 +58,6 @@ system understanding.
 To enhance the compatibility of OpenTelemetry Profiles with existing profiling
 tools, known values are utilized.
 
-| Profiles field | Known values |
+| Profile field | Known values |
 | -------------- | ------------ |
   | Profile.original_payload_format  | [pprof](https://github.com/google/pprof/tree/main/proto), [jfr](https://en.wikipedia.org/wiki/JDK_Flight_Recorder) or [linux_perf](https://perfwiki.github.io/) |
