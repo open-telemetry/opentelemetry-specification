@@ -25,7 +25,7 @@ logs, metrics, and traces. They offer unparalleled insights into system and
 application behavior, often uncovering performance bottlenecks overlooked by
 other signals.
 
-Profiling data provides granular, time-based views of resource consumption and
+Profiles provide granular, time-based views of resource consumption and
 code execution, encompassing:
 
 * **Application-level profiling**: Reveals how software functions consume CPU,
