@@ -18,10 +18,10 @@ path_base_for_github_subdir:
 - [AnyValue](#anyvalue)
   * [map](#mapstring-anyvalue)
 - [Attribute](#attribute)
-  * [Attribute Collections](#attribute-collections)
-- [Attribute Limits](#attribute-limits)
-  * [Configurable Parameters](#configurable-parameters)
-  * [Exempt Entities](#exempt-entities)
+  * [Attribute Limits](#attribute-limits)
+    + [Configurable Parameters](#configurable-parameters)
+    + [Exempt Entities](#exempt-entities)
+- [Attribute Collections](#attribute-collections)
 
 <!-- tocstop -->
 
@@ -111,52 +111,7 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
 
-### Attribute Collections
-
-[Resources](../resource/sdk.md),
-[Instrumentation Scopes](instrumentation-scope.md),
-[Metric points](../metrics/data-model.md#metric-points),
-[Spans](../trace/api.md#set-attributes), Span
-[Events](../trace/api.md#add-events), Span
-[Links](../trace/api.md#link) and
-[Log Records](../logs/data-model.md),
-contain a collection of attributes.
-
-Implementation MUST by default ensure that the exported attribute collections
-contain only unique keys. The enforcement of uniqueness may be performed
-in a variety of ways as it best fits the limitations of the particular
-implementation.
-
-Normally for the telemetry generated using OpenTelemetry SDKs the attribute
-key-value pairs are set via an API that either accepts a single key-value pair
-or a collection of key-value pairs. Setting an attribute with the same key as an
-existing attribute SHOULD overwrite the existing attribute's value. See for
-example Span's [SetAttribute](../trace/api.md#set-attributes) API.
-
-A typical implementation of [SetAttribute](../trace/api.md#set-attributes) API
-will enforce the uniqueness by overwriting any existing attribute values pending
-to be exported, so that when the Span is eventually exported the exporters see
-only unique attributes. The OTLP format in particular requires that exported
-Resources, Spans, Metric data points and Log Records contain only unique
-attributes.
-
-Some other implementations may use a streaming approach where every
-[SetAttribute](../trace/api.md#set-attributes) API call immediately results in
-that individual attribute value being exported using a streaming wire protocol.
-In such cases the enforcement of uniqueness will likely be the responsibility of
-the recipient of this data.
-
-Implementations MAY have an option to allow exporting attribute collections
-with duplicate keys (e.g. for better performance).
-If such option is provided, it MUST be documented that for many receivers,
-handling of maps with duplicate keys is unpredictable and it is the users'
-responsibility to ensure keys are not duplicate.
-
-Collection of attributes are equal when they contain the same attributes,
-irrespective of the order in which those elements appear
-(unordered collection equality).
-
-## Attribute Limits
+### Attribute Limits
 
 Execution of erroneous code can result in unintended attributes. If there are no
 limits placed on attribute collections, they can quickly exhaust available memory,
@@ -210,12 +165,12 @@ Note that the limits apply only to attributes collections.
 Therefore, they do not apply to values within other data structures such as
 [`LogRecord.Body`](../logs/data-model.md#field-body).
 
-### Configurable Parameters
+#### Configurable Parameters
 
 * `AttributeCountLimit` (Default=128) - Maximum allowed attribute count per record;
 * `AttributeValueLengthLimit` (Default=Infinity) - Maximum allowed attribute value length (applies to string values and byte arrays);
 
-### Exempt Entities
+#### Exempt Entities
 
 Resource attributes SHOULD be exempt from the limits described above as resources
 are not susceptible to the scenarios (auto-instrumentation) that result in
@@ -228,3 +183,48 @@ attribute limits for Resources.
 Attributes, which belong to Metrics, are exempt from the limits described above
 at this time, as discussed in
 [Metrics Attribute Limits](../metrics/sdk.md#attribute-limits).
+
+## Attribute Collections
+
+[Resources](../resource/sdk.md),
+[Instrumentation Scopes](instrumentation-scope.md),
+[Metric points](../metrics/data-model.md#metric-points),
+[Spans](../trace/api.md#set-attributes), Span
+[Events](../trace/api.md#add-events), Span
+[Links](../trace/api.md#link) and
+[Log Records](../logs/data-model.md),
+contain a collection of attributes.
+
+Implementation MUST by default ensure that the exported attribute collections
+contain only unique keys. The enforcement of uniqueness may be performed
+in a variety of ways as it best fits the limitations of the particular
+implementation.
+
+Normally for the telemetry generated using OpenTelemetry SDKs the attribute
+key-value pairs are set via an API that either accepts a single key-value pair
+or a collection of key-value pairs. Setting an attribute with the same key as an
+existing attribute SHOULD overwrite the existing attribute's value. See for
+example Span's [SetAttribute](../trace/api.md#set-attributes) API.
+
+A typical implementation of [SetAttribute](../trace/api.md#set-attributes) API
+will enforce the uniqueness by overwriting any existing attribute values pending
+to be exported, so that when the Span is eventually exported the exporters see
+only unique attributes. The OTLP format in particular requires that exported
+Resources, Spans, Metric data points and Log Records contain only unique
+attributes.
+
+Some other implementations may use a streaming approach where every
+[SetAttribute](../trace/api.md#set-attributes) API call immediately results in
+that individual attribute value being exported using a streaming wire protocol.
+In such cases the enforcement of uniqueness will likely be the responsibility of
+the recipient of this data.
+
+Implementations MAY have an option to allow exporting attribute collections
+with duplicate keys (e.g. for better performance).
+If such option is provided, it MUST be documented that for many receivers,
+handling of maps with duplicate keys is unpredictable and it is the users'
+responsibility to ensure keys are not duplicate.
+
+Collection of attributes are equal when they contain the same attributes,
+irrespective of the order in which those elements appear
+(unordered collection equality).
