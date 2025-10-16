@@ -52,7 +52,7 @@ observability.
 
 [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/)
 are vital for profiles to correlate with other OpenTelemetry signals, enabling
-unified analysis of traces, metrics, logs, and profiling data for a holistic
+unified analysis of traces, metrics, logs, and profiles for a holistic
 system understanding.
 
 To enhance the compatibility of OpenTelemetry Profiles with existing profiling
