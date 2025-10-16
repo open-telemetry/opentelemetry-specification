@@ -142,7 +142,7 @@ If an SDK provides a way to:
     in exceeding the limit (counting each attribute in the collection as 1),
     the SDK MUST discard that attribute, so that the total number of attributes in
     an attribute collection is at most equal to the limit;
-  - the count limit applies only to top-level attributes, not to nested key-value
+  - **Status**: [Development](../document-status.md) - the count limit applies only to top-level attributes, not to nested key-value
     pairs within [maps](#mapstring-anyvalue);
   - otherwise an attribute MUST NOT be discarded.
 
