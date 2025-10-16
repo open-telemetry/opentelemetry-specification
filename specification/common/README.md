@@ -75,6 +75,9 @@ both containing an array of strings to represent a mapping
 `map<string, AnyValue>` is a map of string keys to `AnyValue` values.
 The keys in the map are unique (duplicate keys are not allowed).
 
+Case sensitivity of keys MUST be preserved.
+Keys that differ in casing are treated as distinct keys.
+
 The representation of the map is language-dependent.
 
 The implementation MUST by default ensure that the exported maps contain only unique keys.
