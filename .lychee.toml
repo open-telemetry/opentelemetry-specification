@@ -5,7 +5,8 @@ accept = ["200..=299", "403"]
 remap = [
   # workaround for https://github.com/lycheeverse/lychee/issues/1729
   'https://github.com/(.*?)/(.*?)/blob/(.*?)/(.*#.*)$ https://raw.githubusercontent.com/$1/$2/$3/$4',
-  'https://docs.oracle.com/(.*)#.*$ https://docs.oracle.com/$1'
+  'https://docs.oracle.com/(.*)#.*$ https://docs.oracle.com/$1',
+  'https://www.elastic.co/(.*)#.*$ https://www.elastic.co/$1'
 ]
 
 exclude = [
