@@ -23,6 +23,7 @@
   * [Configurable OTLP exporter behavior (both SDK and Collector)](#configurable-otlp-exporter-behavior-both-sdk-and-collector)
   * [Record pointer to repetitive data](#record-pointer-to-repetitive-data)
 - [Backend research](#backend-research)
+- [Appendix](#appendix)
 
 <!-- tocstop -->
 
@@ -94,7 +95,7 @@ extending the standard attributes provides a more seamless and user-friendly API
 
 Currently, the SDK specification has a clause that says extending
 the set of standard attribute would be
-[considered a breaking change](/specification/common/README.md#standard-attribute).
+[considered a breaking change](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/common/README.md#standard-attribute).
 
 We believe that removing this clause and extending standard
 attributes can be done gracefully across the OpenTelemetry ecosystem
@@ -309,3 +310,9 @@ for additional details.
 
 > [!NOTE]
 > This list only reflects the behavior at the time of writing and may change in the future.
+
+## Appendix
+
+The [Extend the set of attribute value types #4651](https://github.com/open-telemetry/opentelemetry-specification/pull/4651) PR implements part of this OTEP by requiring that both the OTel API and SDK MUST support complex attributes.
+Some languages aim to support complex attributes for all kinds of telemetry.
+To maintain consistency across languages, we agreed that all languages should provide the same level of support for complex attributes.

@@ -6,7 +6,7 @@ aliases: [bridge-api]
 
 # Logs API
 
-**Status**: [Stable](../document-status.md), except where otherwise specified
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -123,14 +123,6 @@ The API MUST accept the following parameters:
 - [Body](./data-model.md#field-body) (optional)
 - [Attributes](./data-model.md#field-attributes) (optional)
 - [Event Name](./data-model.md#field-eventname) (optional)
-
-**Status**: [Development](../document-status.md)
-
-The API SHOULD provide functionality for users to convert
-[Standard Attributes](../common/README.md#standard-attribute)
-so they can be used, or directly accept them, in the log signal.
-This allows the reuse of [Standard Attributes](../common/README.md#standard-attribute)
-across signals.
 
 ### Enabled
 
