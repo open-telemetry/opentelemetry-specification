@@ -17,6 +17,8 @@ weight: 2
 - [Identifying Attributes](#identifying-attributes)
 - [Resource and Entities](#resource-and-entities)
   * [Attribute Referencing Model](#attribute-referencing-model)
+  * [Entity Type Uniqueness](#entity-type-uniqueness)
+  * [Attribute Ownership](#attribute-ownership)
   * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
 - [Examples of Entities](#examples-of-entities)
 
@@ -127,17 +129,40 @@ entities. The model provides:
 - The ability to avoid data duplication and inconsistencies.
 - A more efficient representation for encoding and transmission.
 
+### Entity Type Uniqueness
+
+All entities associated with a resource MUST have unique types. No two entities
+within the same resource can share the same entity type.
+
+This ensures unambiguous identification when referencing entities within a
+resource. Combined with the convention that identifying attributes use the
+entity type as a prefix (e.g., `host.id` for `host` entity, `k8s.node.uid` for
+`k8s.node` entity), this guarantees that identifying attributes from different
+entities will never share the same keys in the resource attributes map.
+
+### Attribute Ownership
+
+Each resource attribute key MUST be owned by at most one entity within a
+resource. When an entity adds an attribute to the shared resource attributes
+map, no other entity in that resource can reference or modify that same
+attribute key. This prevents data inconsistencies where multiple entities could
+otherwise compete for control of the same attribute.
+
+For identifying attributes, ownership is implicitly enforced by the combination
+of entity type uniqueness and the prefix naming convention. For descriptive
+attributes, ownership is determined by the placement rules described in the
+following section.
+
 ### Placement of Shared Descriptive Attributes
 
 Attribute flattening allows multiple entities to reference the same attribute key,
 but with different values across the entities. In such situations, the following
 rule applies:
 
-If multiple entities share the same descriptive attribute key with potentially
-conflicting values, the attribute MUST logically belong to **only one** of them.
-All others SHOULD NOT reference it. The attribute MUST be referenced by the
-**most specific** entity, the one closest in the topology graph to the entity
-associated with the telemetry signal.
+If multiple entities share the same descriptive attribute key, the attribute
+MUST logically belong to **only one** of them. All others SHOULD NOT reference
+it. The attribute MUST be referenced by the **most specific** entity, the one
+closest in the topology graph to the entity associated with the telemetry signal.
 
 **Example:**  
 
