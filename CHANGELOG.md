@@ -35,6 +35,9 @@ release.
 
 ### OTEPs
 
+- Support multiple Resources within an SDK.
+  ([#4665](https://github.com/open-telemetry/opentelemetry-specification/pull/4665))
+
 ## v1.52.0 (2025-12-12)
 
 ### Context
