@@ -51,6 +51,7 @@ weight: 3
         * [ComposableParentThreshold](#composableparentthreshold)
         * [ComposableRuleBased](#composablerulebased)
         * [ComposableAnnotating](#composableannotating)
+    + [AlwaysRecord](#alwaysrecord)
   * [Sampling Requirements](#sampling-requirements)
     + [TraceID randomness](#traceid-randomness)
     + [Random trace flag](#random-trace-flag)
@@ -730,6 +731,20 @@ This example creates a configuration where:
 - Checkout endpoints are always sampled
 - Other root spans are sampled at 10%
 - Child spans follow their parent's sampling decision
+
+#### AlwaysRecord
+
+**Status**: [Development](../document-status.md)
+
+This is a sampler decorator. `AlwaysRecord` helps to have spans between always be processed by `SpanProcessor`s. It returns the following given a sampled flag from the root sampler:
+* Root sampler returns `DROP` -> AlwaysRecord returns `RECORD_ONLY`
+* Root sampler returns `RECORD_ONLY` -> AlwaysRecord returns `RECORD_ONLY`
+* Root sampler returns `RECORD_AND_SAMPLE` -> AlwaysRecord returns `RECORD_AND_SAMPLE`
+
+**Required parameters:**
+
+* `root(Sampler)` - A delegate sampler called to determine whether a span
+is sampled or dropped
 
 ### Sampling Requirements
 
