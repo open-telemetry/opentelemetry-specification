@@ -90,6 +90,7 @@ formats is required. Implementing more than one format is optional.
 | [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - |  |  |  |  |  |  |  |  |  |  |
+| [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - |  |  |  |  |  |  |  |  |  |  |
 
 ## Baggage
 
