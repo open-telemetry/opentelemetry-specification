@@ -392,7 +392,7 @@ sections:
       - name: Retrieve attributes
         status: '+'
       - name:
-          '[Default value](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/resource#semantic-attributes-with-dedicated-environment-variable)
+          '[Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable)
           for service.name'
         status: '+'
       - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
@@ -506,7 +506,7 @@ sections:
       - name: The `Parse` operation accepts the configuration YAML file format
         status: '+'
       - name: The `Parse` operation performs environment variable substitution
-        status: '?'
+        status: '+'
       - name: The `Parse` operation returns configuration model
         status: '+'
       - name: The `Parse` operation resolves extension component configuration to `properties`

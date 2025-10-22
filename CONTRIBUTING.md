@@ -289,7 +289,7 @@ on each other), the owner should try to get people aligned by:
 
 If none of the above worked and the PR has been stuck for more than 2 weeks, the
 owner should bring it to the [OpenTelemetry Specification SIG
-meeting](https://github.com/open-telemetry/community#cross-language-specification).
+meeting](https://github.com/open-telemetry/community/blob/main/README.md#specification-sigs).
 
 [nvm]: https://github.com/nvm-sh/nvm/blob/master/README.md#installing-and-updating
 

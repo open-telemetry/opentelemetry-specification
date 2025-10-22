@@ -29,7 +29,7 @@ misspell-correction:	$(MISSPELL)
 markdown-link-check:
 	docker run --rm \
 		--mount 'type=bind,source=$(PWD),target=/home/repo' \
-		lycheeverse/lychee:sha-2aa22f8@sha256:2e3786630482c41f9f2dd081e06d7da1c36d66996e8cf6573409b8bc418d48c4 \
+		lycheeverse/lychee:sha-8222559@sha256:6f49010cc46543af3b765f19d5319c0cdd4e8415d7596e1b401d5b4cec29c799 \
 		--config home/repo/.lychee.toml \
 		--root-dir /home/repo \
 		-v \
@@ -39,7 +39,7 @@ markdown-link-check:
     # see https://github.com/open-telemetry/opentelemetry-specification/pull/4554
 	docker run --rm \
 		--mount 'type=bind,source=$(PWD),target=/home/repo' \
-		lycheeverse/lychee:sha-2aa22f8@sha256:2e3786630482c41f9f2dd081e06d7da1c36d66996e8cf6573409b8bc418d48c4 \
+		lycheeverse/lychee:sha-8222559@sha256:6f49010cc46543af3b765f19d5319c0cdd4e8415d7596e1b401d5b4cec29c799 \
 		--config home/repo/.lychee.toml \
 		--root-dir /home/repo \
 		--max-redirects 0 \

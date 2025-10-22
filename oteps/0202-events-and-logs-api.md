@@ -30,7 +30,7 @@ Here are a few situations that require recording of Events, there will be more. 
   - Swift on iOS has Logger interface that has methods corresponding to severity level too.
 - The current Log APIs do not have a standard way to pass event attributes.
   - It may be possible to use the interpolation string args as the parameter to pass event attributes. However, the logging spec seems to map the human readable message (which is obtained after replacing the args in the interpolated string) to the Body field of LogRecord.
-  - Log4j has an EventLogger interface that can be used to create structured messages with arbitrary key-value pairs, but log4j is not commonly used in Android apps as it is not officially supported on Android as per this [Stack Overflow thread](https://stackoverflow.com/questions/60398799/disable-log4j-jmx-on-android/60407849#60407849) by one of log4j’s maintainers.
+  - Log4j has an EventLogger interface that can be used to create structured messages with arbitrary key-value pairs, but log4j is not commonly used in Android apps as it is not officially supported on Android as per this [Stack Overflow thread](https://stackoverflow.com/a/60407849) by one of log4j’s maintainers.
   - In Python, logging.LogRecord's extra field is mapped to Otel LogRecord's attributes but this field is a hidden field and not part of the public interface.
 - The current Log APIs have a message parameter which could map to the Body field of LogRecord. However, this is restricted to String messages and does not allow for structured logs.
 
