@@ -41,6 +41,7 @@ weight: 3
       - [Compatibility warnings for `ProbabilitySampler`](#compatibility-warnings-for-probabilitysampler)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
+    + [AlwaysRecord](#alwaysrecord)
     + [CompositeSampler](#compositesampler)
       - [ComposableSampler](#composablesampler)
         * [GetSamplingIntent](#getsamplingintent)
@@ -602,6 +603,23 @@ The following configuration properties should be available when creating the sam
 [jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#remote-sampling
 [jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/architecture/apis/#remote-sampling-configuration-stable
 [jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#adaptive-sampling
+
+#### AlwaysRecord
+
+**Status**: [Development](../document-status.md)
+
+This is a sampler decorator. `AlwaysRecord` helps to have spans between
+always be processed by `SpanProcessor`s. It returns the following given
+a sampled flag from the root sampler:
+
+* Root sampler returns `DROP` -> AlwaysRecord returns `RECORD_ONLY`
+* Root sampler returns `RECORD_ONLY` -> AlwaysRecord returns `RECORD_ONLY`
+* Root sampler returns `RECORD_AND_SAMPLE` -> AlwaysRecord returns `RECORD_AND_SAMPLE`
+
+Required parameters:
+
+* `root(Sampler)` - A delegate sampler called to determine whether a span
+is sampled or dropped
 
 #### CompositeSampler
 
