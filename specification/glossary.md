@@ -238,7 +238,7 @@ Profiles describes the OpenTelemetry signal.
 
 ### Profile
 
-In the context of the profiles signal, profile holds one or more stacktraces of
+In the context of the profiles signal, profile holds one or more samples (stacktraces with associated metadata) of
 a OpenTelemetry instrumentation scope.
 
 ### Profiling
