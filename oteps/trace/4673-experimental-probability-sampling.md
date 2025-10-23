@@ -1,91 +1,27 @@
-<!--- Hugo front matter used to generate the website version of this page:
-linkTitle: Probability Sampling
---->
-
 # TraceState: Probability Sampling
 
-**Status**: [Development](../document-status.md)
+**Status**: Archived
 
-<details>
-<summary>Table of Contents</summary>
+This document contains the final state of the old, experimental
+"tracestate probability sampling" specification. This specification is
+recorded as an OTEP so that we can remove it from the OpenTelemetry
+specification and still refer to it.
 
-<!-- toc -->
+Changes to the document made below, summarized:
 
-- [Overview](#overview)
-  * [Definitions](#definitions)
-    + [Sampling](#sampling)
-    + [Adjusted count](#adjusted-count)
-    + [Sampler](#sampler)
-    + [Parent-based sampler](#parent-based-sampler)
-    + [Probability sampler](#probability-sampler)
-    + [Consistent probability sampler](#consistent-probability-sampler)
-    + [Trace completeness](#trace-completeness)
-    + [Non-probability sampler](#non-probability-sampler)
-    + [Always-on consistent probability sampler](#always-on-consistent-probability-sampler)
-    + [Always-off sampler](#always-off-sampler)
-- [Consistent Probability sampling](#consistent-probability-sampling)
-  * [Conformance](#conformance)
-  * [Completeness guarantee](#completeness-guarantee)
-  * [Context invariants](#context-invariants)
-    + [Sampled flag](#sampled-flag)
-      - [Requirement: Inconsistent p-values are unset](#requirement-inconsistent-p-values-are-unset)
-    + [P-value](#p-value)
-      - [Requirement: Out-of-range p-values are unset](#requirement-out-of-range-p-values-are-unset)
-    + [R-value](#r-value)
-      - [Requirement: Out-of-range r-values unset both p and r](#requirement-out-of-range-r-values-unset-both-p-and-r)
-      - [Requirement: R-value is generated with the correct probabilities](#requirement-r-value-is-generated-with-the-correct-probabilities)
-    + [Examples: Context invariants](#examples-context-invariants)
-      - [Example: Probability sampled context](#example-probability-sampled-context)
-      - [Example: Probability unsampled](#example-probability-unsampled)
-  * [Samplers](#samplers)
-    + [ParentConsistentProbabilityBased sampler](#parentconsistentprobabilitybased-sampler)
-      - [Requirement: ParentConsistentProbabilityBased API](#requirement-parentconsistentprobabilitybased-api)
-      - [Requirement: ParentConsistentProbabilityBased does not modify valid tracestate](#requirement-parentconsistentprobabilitybased-does-not-modify-valid-tracestate)
-      - [Requirement: ParentConsistentProbabilityBased calls the configured root sampler for root spans](#requirement-parentconsistentprobabilitybased-calls-the-configured-root-sampler-for-root-spans)
-      - [Requirement: ParentConsistentProbabilityBased respects the sampled flag for non-root spans](#requirement-parentconsistentprobabilitybased-respects-the-sampled-flag-for-non-root-spans)
-    + [ConsistentProbabilityBased sampler](#consistentprobabilitybased-sampler)
-      - [Requirement: TraceIdRatioBased API compatibility](#requirement-traceidratiobased-api-compatibility)
-      - [Requirement: ConsistentProbabilityBased sampler sets r for root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-root-span)
-      - [Requirement: ConsistentProbabilityBased sampler unsets p when not sampled](#requirement-consistentprobabilitybased-sampler-unsets-p-when-not-sampled)
-      - [Requirement: ConsistentProbabilityBased sampler sets p when sampled](#requirement-consistentprobabilitybased-sampler-sets-p-when-sampled)
-      - [Requirement: ConsistentProbabilityBased sampler records unbiased adjusted counts](#requirement-consistentprobabilitybased-sampler-records-unbiased-adjusted-counts)
-      - [Requirement: ConsistentProbabilityBased sampler sets r for non-root span](#requirement-consistentprobabilitybased-sampler-sets-r-for-non-root-span)
-      - [Requirement: ConsistentProbabilityBased sampler decides not to sample for probabilities less than 2**-62](#requirement-consistentprobabilitybased-sampler-decides-not-to-sample-for-probabilities-less-than-2-62)
-    + [Examples: Consistent probability samplers](#examples-consistent-probability-samplers)
-      - [Example: Setting R-value for a root span](#example-setting-r-value-for-a-root-span)
-      - [Example: Handling inconsistent P-value](#example-handling-inconsistent-p-value)
-      - [Example: Handling corrupt R-value](#example-handling-corrupt-r-value)
-  * [Composition rules](#composition-rules)
-    + [List of requirements](#list-of-requirements)
-      - [Requirement: Combining multiple sampling decisions using logical `or`](#requirement-combining-multiple-sampling-decisions-using-logical-or)
-      - [Requirement: Combine multiple consistent probability samplers using the minimum p-value](#requirement-combine-multiple-consistent-probability-samplers-using-the-minimum-p-value)
-      - [Requirement: Unset p when multiple consistent probability samplers decide not to sample](#requirement-unset-p-when-multiple-consistent-probability-samplers-decide-not-to-sample)
-      - [Requirement: Use probability sampler p-value when its decision to sample is combined with non-probability samplers](#requirement-use-probability-sampler-p-value-when-its-decision-to-sample-is-combined-with-non-probability-samplers)
-      - [Requirement: Use p-value 63 when a probability sampler decision not to sample is combined with a non-probability sampler decision to sample](#requirement-use-p-value-63-when-a-probability-sampler-decision-not-to-sample-is-combined-with-a-non-probability-sampler-decision-to-sample)
-    + [Examples: Composition](#examples-composition)
-      - [Example: Probability and non-probability sampler in a root context](#example-probability-and-non-probability-sampler-in-a-root-context)
-      - [Example: Two consistent probability samplers](#example-two-consistent-probability-samplers)
-  * [Producer and consumer recommendations](#producer-and-consumer-recommendations)
-    + [Trace producer: completeness](#trace-producer-completeness)
-      - [Recommendation: use non-descending power-of-two probabilities](#recommendation-use-non-descending-power-of-two-probabilities)
-    + [Trace producer: correctness](#trace-producer-correctness)
-      - [Recommendation: sampler delegation](#recommendation-sampler-delegation)
-    + [Trace producer: interoperability with `ParentBased` sampler](#trace-producer-interoperability-with-parentbased-sampler)
-    + [Trace producer: interoperability with `TraceIDRatioBased` sampler](#trace-producer-interoperability-with-traceidratiobased-sampler)
-    + [Trace consumer](#trace-consumer)
-      - [Recommendation: Recognize inconsistent r-values](#recommendation-recognize-inconsistent-r-values)
-  * [Appendix: Statistical test requirements](#appendix-statistical-test-requirements)
-    + [Test procedure: non-powers of two](#test-procedure-non-powers-of-two)
-      - [Requirement: Pass 12 non-power-of-two statistical tests](#requirement-pass-12-non-power-of-two-statistical-tests)
-    + [Test procedure: exact powers of two](#test-procedure-exact-powers-of-two)
-      - [Requirement: Pass 3 power-of-two statistical tests](#requirement-pass-3-power-of-two-statistical-tests)
-    + [Test implementation](#test-implementation)
-- [Appendix](#appendix)
-  * [Methods for generating R-values](#methods-for-generating-r-values)
+- Links to [`sdk.md`][SDK_SPEC]: references were general in nature, as the SDK
+  specification was never updated to refer to this document; these
+  links were updated to a current permalink to avoid breaking in the
+  future.
+- Links to [`tracestate-handling.md`][TRACESTATE_HANDLING]:
+  these links were updated to a version of the file that was current
+  when this file was written, before
+  [PR#4162](https://github.com/open-telemetry/opentelemetry-specification/pull/4162)
+  added the new specification.
+- Remove the table of contents.
 
-<!-- tocstop -->
-
-</details>
+[TRACESTATE_HANDLING]: https://github.com/open-telemetry/opentelemetry-specification/blob/ec3779c3d0044503a1ec
+[SDK_SPEC]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/tracestate-handling.md
 
 ## Overview
 
@@ -256,7 +192,7 @@ values via the context, termed "p-value" and "r-value".
 
 Both fields are propagated via the OpenTelemetry `tracestate` under
 the `ot` vendor tag using the rules for [tracestate
-handling](tracestate-handling.md).  Both fields are represented as
+specification][TRACESTATE_HANDLING].  Both fields are represented as
 unsigned decimal integers requiring at most 6 bits of information.
 
 This sampling scheme selects items from among a fixed set of 63
@@ -326,7 +262,7 @@ information: the TraceId, the SpanId, and the trace flags.  The
 `sampled` trace flag has been defined by W3C to signal an intent to
 sample the context.
 
-The [Sampler API](sdk.md#sampler) is responsible for setting the
+The [Sampler API][SDK_SPEC#sampler] is responsible for setting the
 `sampled` flag and the `tracestate`.
 
 P-value and r-value are set in the OpenTelemetry `tracestate`, under
@@ -478,7 +414,7 @@ unsampled context.
 #### ParentConsistentProbabilityBased sampler
 
 The `ParentConsistentProbabilityBased` sampler is meant as an optional
-replacement for the [`ParentBased` Sampler](sdk.md#parentbased). It is
+replacement for the [`ParentBased` Sampler][SDK_SPEC#parentbased]. It is
 required to first validate the `tracestate` and then respect the
 `sampled` flag in the W3C traceparent.
 
@@ -508,7 +444,7 @@ traceparent header.
 
 The `ConsistentProbabilityBased` sampler is meant as an optional
 replacement for the [`TraceIdRatioBased`
-Sampler](sdk.md#traceidratiobased).  In the case where it is used as a
+Sampler][SDK_SPEC#traceidratiobased].  In the case where it is used as a
 root sampler, the `ConsistentProbabilityBased` sampler is required to
 produce a valid `tracestate`.  In the case where it is used in a
 non-root context, it is required to validate the incoming `tracestate`
@@ -764,7 +700,7 @@ the parent's sampled trace flag or the OpenTelemetry tracestate
 r-value and p-value, as these decisions would lead to incorrect
 adjusted counts.
 
-For example, the built-in [`ParentBased` sampler](sdk.md#parentbased)
+For example, the built-in [`ParentBased` sampler][SDK_SPEC#parentbased]
 supports configuring the delegated-to sampler based on whether the parent
 context is remote or non-remote, sampled or unsampled.  If a
 `ParentBased` sampler delegates to a `ConsistentProbabilityBased`
@@ -794,7 +730,7 @@ replacing `TraceIDRatioBased` samplers with conforming
 
 #### Trace producer: interoperability with `TraceIDRatioBased` sampler
 
-The [`TraceIDRatioBased` specification](sdk.md#traceidratiobased)
+The [`TraceIDRatioBased` specification][SDK_SPEC#traceidratiobased]
 includes a RECOMMENDATION against being used for non-root spans
 because it does not specify how to make the sampler decision
 consistent across the trace.  A `TraceIDRatioBased` sampler at the

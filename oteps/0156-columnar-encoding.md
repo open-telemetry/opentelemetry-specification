@@ -804,7 +804,7 @@ dictionary and schema information.  This remains an area for study.
 ### Further-integrated compression techniques
 
 ZSTD offers a training mode, which can be used to tune the algorithm for a selected type of data. The result of this
-training is a dictionary that can be used to compress the data. Using this [dictionary](http://facebook.github.io/zstd/#small-data)
+training is a dictionary that can be used to compress the data. Using this [dictionary](https://facebook.github.io/zstd/#small-data)
 can dramatically improve the compression rate for small batches. This future development will build on both the gRPC
 stream approach used in this proposal and the ability to send a ZSTD dictionary over the OTel Arrow stateful protocol,
 allowing us to train the ZSTD algorithm on the first batches and then update the configuration of the ZSTD

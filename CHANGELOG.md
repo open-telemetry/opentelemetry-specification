@@ -11,23 +11,12 @@ release.
 
 ### Traces
 
-- Restore `TraceIdRatioBased` and give it a deprecation timeline. Update recommended
-  warnings based on feedback in issue [#4601](https://github.com/open-telemetry/opentelemetry-specification/issues/4601).
-  ([#4627](https://github.com/open-telemetry/opentelemetry-specification/pull/4627))
-- Changes of `TracerConfig.disabled` MUST be eventually visible.
-  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
-
 ### Metrics
 
-- Changes of `MeterConfig.disabled` MUST be eventually visible.
-  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 - `AlignedHistogramBucketExemplarReservoir` SHOULD use a time-weighted algorithm.
   ([#4678](https://github.com/open-telemetry/opentelemetry-specification/pull/4678))
 
 ### Logs
-
-- Changes of `LoggerConfig.disabled` MUST be eventually visible.
-  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 
 ### Baggage
 
@@ -48,6 +37,30 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.50.0 (2025-10-17)
+
+### Traces
+
+- Restore `TraceIdRatioBased` and give it a deprecation timeline. Update recommended
+  warnings based on feedback in issue [#4601](https://github.com/open-telemetry/opentelemetry-specification/issues/4601).
+  ([#4627](https://github.com/open-telemetry/opentelemetry-specification/pull/4627))
+- Changes of `TracerConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+- Remove text related to the former expermental probability sampling specification.
+  ([#4673](https://github.com/open-telemetry/opentelemetry-specification/pull/4673))
+
+### Metrics
+
+- Changes of `MeterConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+
+### Logs
+
+- Add minimum_severity and trace_based logger configuration parameters.
+  ([#4612](https://github.com/open-telemetry/opentelemetry-specification/pull/4612))
+- Changes of `LoggerConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
 
 ## v1.49.0 (2025-09-16)
 
