@@ -153,6 +153,14 @@ of entity type uniqueness and the prefix naming convention. For descriptive
 attributes, ownership is determined by the placement rules described in the
 following section.
 
+> **Implementation Note**: The above constraints (entity type uniqueness,
+> attribute ownership, and identifying attribute naming conventions) define
+> validity requirements for Resources. Implementations (SDKs, Collectors) SHOULD
+> validate these constraints when constructing or processing Resources.
+> Implementations SHOULD reject or log errors for invalid Resources and MAY use
+> fallback strategies such as dropping conflicting entities or attributes to
+> maintain data integrity.
+
 ### Placement of Shared Descriptive Attributes
 
 Attribute flattening allows multiple entities to reference the same attribute key,
