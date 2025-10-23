@@ -44,7 +44,7 @@ and efficiency.
 * **Enhanced Developer Productivity**: Helps developers validate code performance
 and prevent regressions.
 
-In essence, while logs, metrics, and traces show "what" and "how much/where,"
+In essence, while logs, metrics, and traces show "what" and "how much/where"
 profiles explain "why" and "how efficiently," making them indispensable in modern
 observability.
 
