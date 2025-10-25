@@ -161,7 +161,7 @@ use the model-specific limit, if it isn't set, then the SDK MUST attempt to use
 the general limit. If neither are defined, then the SDK MUST try to use the
 model-specific limit default value, followed by the global limit default value.
 
-Note that the limits apply only to attributes collections.
+Note that the limits apply only to attribute collections.
 Therefore, they do not apply to values within other data structures such as
 [`LogRecord.Body`](../logs/data-model.md#field-body).
 
