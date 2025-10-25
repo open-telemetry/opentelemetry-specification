@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Development: Define `remove` operations for synchronous metric instruments. [#4702](https://github.com/open-telemetry/opentelemetry-specification/pulls/4702)
+
 ### Logs
 
 ### Baggage

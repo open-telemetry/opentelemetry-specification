@@ -604,6 +604,8 @@ counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_gree
 
 ##### Remove
 
+Status: Development
+
 Unregister the Counter. It will no longer be reported.
 
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
@@ -863,6 +865,8 @@ httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", schem
 
 ##### Remove
 
+Status: Development
+
 Unregister the Histogram. It will no longer be reported.
 
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
@@ -979,6 +983,8 @@ backgroundNoiseLevel.record(2.5, roomB);
 ```
 
 ##### Remove
+
+Status: Development
 
 Unregister the Gauge. It will no longer be reported.
 
@@ -1243,6 +1249,8 @@ customersInStore.Add(-1, new Account { Type = "residential" });
 ```
 
 ##### Remove
+
+Status: Development
 
 Unregister the UpDownCounter. It will no longer be reported.
 
