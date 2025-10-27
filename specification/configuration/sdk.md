@@ -34,7 +34,7 @@ The configuration SDK is part of
 the [declarative configuration interface](./README.md#declarative-configuration).
 
 The SDK is an implementation
-of [Instrumenation Config API](./api.md) and other
+of [Instrumentation Config API](./api.md) and other
 user facing declarative configuration capabilities. It consists of the following main
 components:
 
@@ -326,7 +326,7 @@ try {
     // Create SDK components from configuration model
     openTelemetry = create(configurationModel);
 } catch (Throwable e) {
-    log.error("Error initializing SDK from configuration file", e);    
+    log.error("Error initializing SDK from configuration file", e);
 }
 
 // Access SDK components and install instrumentation
@@ -347,14 +347,14 @@ try {
     // Parse local and remote configuration files to configuration models
     OpenTelemetryConfiguration localConfigurationModel = parse(new File("/app/sdk-config.yaml"));
     OpenTelemetryConfiguration remoteConfigurationModel = parse(getRemoteConfiguration("http://example-host/config/my-application"));
-    
+
     // Merge the configuration models using custom logic
     OpenTelemetryConfiguration resolvedConfigurationModel = merge(localConfigurationModel, remoteConfigurationModel);
-    
+
     // Create SDK components from resolved configuration model
     openTelemetry = create(resolvedConfigurationModel);
 } catch (Throwable e) {
-    log.error("Error initializing SDK from configuration file", e);    
+    log.error("Error initializing SDK from configuration file", e);
 }
 
 // Access SDK components and install instrumentation
