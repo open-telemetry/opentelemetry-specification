@@ -34,6 +34,9 @@ release.
 
 ### Common
 
+- Extend the set of attribute value types to support more complex data structures.
+  ([#4651](https://github.com/open-telemetry/opentelemetry-specification/pull/4651))
+
 ### Supplementary Guidelines
 
 ### OTEPs
