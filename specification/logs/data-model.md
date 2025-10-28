@@ -430,14 +430,15 @@ when it is used to represent an unspecified severity.
 
 ### Field: `Body`
 
-Type: [`any`](#type-any).
+Type: [`any`](#type-any) or [AnyValue](../common/README.md#anyvalue).
 
 Description: A value containing the body of the log record. Can be for example
 a human-readable string message (including multi-line) describing the event in
 a free form or it can be a structured data composed of arrays and maps of other
-values. Body MUST support [`any` type](#type-any) to preserve the semantics of
-structured logs emitted by the applications. Can vary for each occurrence of the
-event coming from the same source. This field is optional.
+values. Body MUST support [AnyValue](../common/README.md#anyvalue)
+to preserve the semantics of structured logs emitted by the applications.
+Can vary for each occurrence of the event coming from the same source.
+This field is optional.
 
 ### Field: `Resource`
 
@@ -464,15 +465,12 @@ they all have the same value of `InstrumentationScope`. This field is optional.
 
 ### Field: `Attributes`
 
-Type: [`map<string, any>`](#type-mapstring-any).
+Type: [`map<string, any>`](#type-mapstring-any) or [Attribute Collection](../common/README.md#attribute-collections).
 
 Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
 information about the request context (other than [Trace Context Fields](#trace-context-fields)).
-The log attribute model MUST support [`any` type](#type-any),
-a superset of [standard Attribute](../common/README.md#attribute),
-to preserve the semantics of structured attributes emitted by the applications.
 This field is optional.
 
 #### Errors and Exceptions
