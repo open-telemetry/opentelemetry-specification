@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- `AlignedHistogramBucketExemplarReservoir` SHOULD use a time-weighted algorithm.
+  ([#4678](https://github.com/open-telemetry/opentelemetry-specification/pull/4678))
+
 ### Logs
 
 ### Baggage
