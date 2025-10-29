@@ -4,7 +4,14 @@ linkTitle: Zipkin
 
 # OpenTelemetry to Zipkin Transformation
 
-**Status**: [Stable](../../document-status.md)
+**Status**: [Deprecated](../../document-status.md)
+
+Zipkin exporter support will be removed from OpenTelemetry in Jan 2027.
+
+_Note: This document remains here for backwards compatibility and
+will be removed in a future version. SDKs MAY include Zipkin exporters,
+but Zipkin export is not required.
+Users may export to Zipkin using [zipkin-otel](https://github.com/openzipkin-contrib/zipkin-otel)_
 
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
 The generic transformation [rules specified here](../../common/mapping-to-non-otlp.md) also apply. If a
