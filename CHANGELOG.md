@@ -22,6 +22,9 @@ release.
 
 ### Profiles
 
+- Document the profiles signal.
+  ([#4685](https://github.com/open-telemetry/opentelemetry-specification/pull/4685))
+
 ### Resource
 
 ### Entities
