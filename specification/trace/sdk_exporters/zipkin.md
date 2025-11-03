@@ -6,12 +6,14 @@ linkTitle: Zipkin
 
 **Status**: [Deprecated](../../document-status.md)
 
-Zipkin exporter support will be removed from OpenTelemetry in Jan 2027.
+Zipkin exporter support will be removed from OpenTelemetry specification in Jan 2027.
 
 _Note: This document remains here for backwards compatibility and
 will be removed in a future version. SDKs MAY include Zipkin exporters,
-but Zipkin export is not required.
-Users may export to Zipkin using [zipkin-otel](https://github.com/openzipkin-contrib/zipkin-otel)_
+but Zipkin exporter is not required.
+
+Users may export to Zipkin using [zipkin exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/zipkinexporter) collector component or [zipkin-otel](https://github.com/openzipkin-contrib/zipkin-otel)
+Zipkin server module_
 
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
 The generic transformation [rules specified here](../../common/mapping-to-non-otlp.md) also apply. If a
@@ -76,7 +78,7 @@ not work properly. OpenTelemetry doesn't provide this consistency guarantee.
 Exporter may chose to override the value for service name based on a local root
 span to improve Zipkin user experience.
 
-*Note*, the attribute `service.namespace` MUST NOT be used for the Zipkin
+_Note_, the attribute `service.namespace` MUST NOT be used for the Zipkin
 service name and should be sent as a Zipkin tag.
 
 ### SpanKind
