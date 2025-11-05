@@ -102,10 +102,10 @@ Publishing the context should follow these steps:
 3. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data
 4. **Encode payload**: Serialize the `OtelProcessCtx` message using protobuf (storing it either following the header OR in a regular memory block)
 5. **Write header fields**: Populate `version`, `published_at_ns`, `payload_size`, `payload`
-7. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding
-8. **Write signature**: Write `OTEL_CTX` to the signature field last
-9. **Set read-only**: Apply `mprotect(..., PROT_READ)` to mark the mapping as read-only
-10. **Name mapping** (Linux ≥5.17): Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping
+6. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding
+7. **Write signature**: Write `OTEL_CTX` to the signature field last
+8. **Set read-only**: Apply `mprotect(..., PROT_READ)` to mark the mapping as read-only
+9. **Name mapping** (Linux ≥5.17): Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping
 
 The signature MUST be written last to ensure readers never observe incomplete or invalid data. Once the signature is present and the mapping set to read-only, the entire mapping is considered valid and immutable.
 
@@ -164,6 +164,7 @@ When a process forks, child processes do not inherit the parent's process contex
 **Why this matters**: Without this protection, child processes would inherit stale resource attributes from the parent. For example, if a parent process has `service.instance.id=uuid-parent` and forks a child that initializes its own OpenTelemetry SDK with `service.instance.id=uuid-child`, the child would initially expose the parent's UUID until it publishes its own context. This could lead to misattribution of telemetry in backend systems.
 
 **Behavior**:
+
 - Child processes that initialize their own OpenTelemetry SDK will publish their own process context mapping with their own resource attributes
 - Child processes that do not initialize an OpenTelemetry SDK will simply not have a process context mapping, which readers handle gracefully
 
@@ -190,6 +191,7 @@ The OTEL eBPF Profiler currently [requires Linux 5.4+](https://github.com/open-t
 As requirements evolve, we may need to extend the payload format.
 
 **Mitigation**: The design includes both versioning as well as allowing extension points
+
 1. **Additional `resources` keys**: For experimentation and vendor extensions
 2. **New protobuf fields**: For adding recommended fields following protobuf compatibility practices
 3. **Version number**: For incompatible changes (not expected to change frequently)
@@ -226,81 +228,87 @@ Both approaches demonstrate the need for process-level data sharing and validate
 
 ### Alternatives Considered and Rejected
 
-**1. Global Variables (Current Approach in OTEL eBPF Profiler)**
+1. Global Variables (Current Approach in OTEL eBPF Profiler)
 
-Use global variables with well-known symbol names to store process context.
+   Use global variables with well-known symbol names to store process context.
 
-**Pros**: Low overhead, straightforward access
-**Cons**:
-- Symbols may not be accessible in stripped binaries
-- Difficult to expose in managed languages (Java, Python) without native libraries
-- Static linking can hide symbols
-- Child processes inherit the parent's global variables after `fork()`, potentially exposing stale resource attributes until overwritten
-- Requires polling to detect context publishing and changes
+   **Pros**: Low overhead, straightforward access
+   **Cons**:
 
-**Why rejected**: The anonymous mapping approach is more universally accessible across languages and build configurations.
+   - Symbols may not be accessible in stripped binaries
+   - Difficult to expose in managed languages (Java, Python) without native libraries
+   - Static linking can hide symbols
+   - Child processes inherit the parent's global variables after `fork()`, potentially exposing stale resource attributes until overwritten
+   - Requires polling to detect context publishing and changes
 
-**2. Environment Variables**
+   **Why rejected**: The anonymous mapping approach is more universally accessible across languages and build configurations.
 
-Share resource attributes via environment variables using `setenv()`.
+2. Environment Variables
 
-**Cons**:
-- `/proc/<pid>/environ` is not updated by `setenv()` at runtime
-- `setenv()` is not thread-safe and can cause crashes in multithreaded applications
-- Some runtimes (e.g., Java) don't expose APIs to modify environment variables
-- Difficult to guarantee safe timing in managed runtimes with background threads
-- Child processes inherit the parent's environment, potentially exposing stale resource attributes until overwritten
-- Requires polling to detect context publishing and changes
+   Share resource attributes via environment variables using `setenv()`.
 
-**Why rejected**: Technical limitations make this approach non-viable.
+   **Cons**:
 
-**3. Collector-Based Enrichment**
+   - `/proc/<pid>/environ` is not updated by `setenv()` at runtime
+   - `setenv()` is not thread-safe and can cause crashes in multithreaded applications
+   - Some runtimes (e.g., Java) don't expose APIs to modify environment variables
+   - Difficult to guarantee safe timing in managed runtimes with background threads
+   - Child processes inherit the parent's environment, potentially exposing stale resource attributes until overwritten
+   - Requires polling to detect context publishing and changes
 
-Have the OpenTelemetry Collector correlate resource attributes across signals.
+   **Why rejected**: Technical limitations make this approach non-viable.
 
-**Cons**:
-- Adds significant complexity and statefulness to the Collector
-- Conflicts with the Collector's stateless design philosophy
-- Would require tracking resource attributes for each signal and correlating by process/container IDs
+3. Collector-Based Enrichment
 
-**Why rejected**: Wide impact on collector for all OTEL signals.
+   Have the OpenTelemetry Collector correlate resource attributes across signals.
 
-**4. Custom ELF Sections**
+   **Cons**:
 
-Use custom ELF sections (via section attribute in C/C++ or link_section in Rust).
+   - Adds significant complexity and statefulness to the Collector
+   - Conflicts with the Collector's stateless design philosophy
+   - Would require tracking resource attributes for each signal and correlating by process/container IDs
 
-**Pros**: Fast lookup without searching all mappings
-**Cons**:
-- Not supported in all languages (e.g., Go, Java)
-- Requires build-time configuration
-- Still faces challenges with stripped binaries
-- Requires polling to detect context publishing and changes
+   **Why rejected**: Wide impact on collector for all OTEL signals.
 
-**Why rejected**: Limited language support and similar limitations to global variables.
+4. Custom ELF Sections
 
-**5. Dynamic Symbol Export**
+   Use custom ELF sections (via section attribute in C/C++ or link_section in Rust).
 
-Ensure symbols are preserved with `-Wl,--export-dynamic` linker flags.
+   **Pros**: Fast lookup without searching all mappings
+   **Cons**:
 
-**Pros**: Similar to Custom ELF sections.
-**Cons**:
-- Similar to Custom ELF sections
-- Requires users to modify build configurations
+   - Not supported in all languages (e.g., Go, Java)
+   - Requires build-time configuration
+   - Still faces challenges with stripped binaries
+   - Requires polling to detect context publishing and changes
 
-**Why rejected**: Creates adoption barriers and doesn't work for key languages.
+   **Why rejected**: Limited language support and similar limitations to global variables.
 
-**6. File/Socket-Based Communication**
+5. Dynamic Symbol Export
 
-Write resource attributes to a file or socket.
+   Ensure symbols are preserved with `-Wl,--export-dynamic` linker flags.
 
-**Pros**: Can use regular file/socket based APIs
-**Cons**:
-- File/socket lifecycle management (creation, cleanup, permissions)
-- Also needs to deal with `fork()` and how child processes inherit the parent's open files/sockets
-- Requires polling to detect context publishing and changes
-- File-based not compatible with services deployed on read-only filesystems
+   **Pros**: Similar to Custom ELF sections.
+   **Cons**:
 
-**Why rejected**: The technical and operational complexities (especially regarding lifecycle, `fork()` and access control) outweigh the benefits over anonymous memory mappings.
+   - Similar to Custom ELF sections
+   - Requires users to modify build configurations
+
+   **Why rejected**: Creates adoption barriers and doesn't work for key languages.
+
+6. File/Socket-Based Communication
+
+   Write resource attributes to a file or socket.
+
+   **Pros**: Can use regular file/socket based APIs
+   **Cons**:
+
+   - File/socket lifecycle management (creation, cleanup, permissions)
+   - Also needs to deal with `fork()` and how child processes inherit the parent's open files/sockets
+   - Requires polling to detect context publishing and changes
+   - File-based not compatible with services deployed on read-only filesystems
+
+   **Why rejected**: The technical and operational complexities (especially regarding lifecycle, `fork()` and access control) outweigh the benefits over anonymous memory mappings.
 
 ## Open questions
 
@@ -321,6 +329,7 @@ The following proof-of-concept implementations demonstrate feasibility across mu
 - **[OpenTelemetry eBPF Profiler PR](https://github.com/DataDog/dd-otel-host-profiler/pull/210)**: Integration in Datadog's experimental fork
 
 Additional implementations have been tested with:
+
 - [Datadog Java SDK](https://github.com/DataDog/java-profiler/pull/266)
 - [Datadog Ruby SDK](https://github.com/DataDog/dd-trace-rb/pull/4865)
 - [Datadog Go SDK](https://github.com/DataDog/dd-trace-go/pull/3937)
