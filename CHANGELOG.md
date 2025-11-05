@@ -13,11 +13,17 @@ release.
 
 ### Metrics
 
+- `AlignedHistogramBucketExemplarReservoir` SHOULD use a time-weighted algorithm.
+  ([#4678](https://github.com/open-telemetry/opentelemetry-specification/pull/4678))
+
 ### Logs
 
 ### Baggage
 
 ### Profiles
+
+- Document the profiles signal.
+  ([#4685](https://github.com/open-telemetry/opentelemetry-specification/pull/4685))
 
 ### Resource
 
@@ -33,6 +39,9 @@ release.
   to other configuration interfaces. ([#4723](https://github.com/open-telemetry/opentelemetry-specification/pull/4723))
 
 ### Common
+
+- Extend the set of attribute value types to support more complex data structures.
+  ([#4651](https://github.com/open-telemetry/opentelemetry-specification/pull/4651))
 
 ### Supplementary Guidelines
 

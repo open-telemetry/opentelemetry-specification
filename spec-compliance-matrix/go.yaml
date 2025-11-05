@@ -18,9 +18,9 @@ sections:
           - name: Get a Tracer with schema_url
             status: '+'
           - name: Get a Tracer with scope attributes
-            status: '?'
+            status: '+'
           - name: Associate Tracer with InstrumentationScope
-            status: '?'
+            status: '+'
           - name: Safe for concurrent calls
             status: '+'
           - name: Shutdown (SDK only required)
@@ -38,7 +38,7 @@ sections:
           - name: Create a new Span
             status: '+'
           - name: Documentation defines adding attributes at span creation as preferred
-            status: '?'
+            status: '+'
           - name: Get active Span
             status: 'N/A'
           - name: Mark Span active
@@ -128,9 +128,9 @@ sections:
       - heading: '[Span exceptions](specification/trace/api.md#record-exception)'
         features:
           - name: RecordException
-            status: '-'
+            status: '+'
           - name: RecordException with extra parameters
-            status: '-'
+            status: '+'
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
           - name: Allow samplers to modify tracestate
@@ -146,17 +146,17 @@ sections:
           - name: '[SpanLimits](specification/trace/sdk.md#span-limits)'
             status: '+'
           - name: '[Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)'
-            status: '?'
+            status: '+'
           - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
-            status: '?'
+            status: '+'
           - name: Fetch InstrumentationScope from ReadableSpan
-            status: '?'
+            status: '+'
           - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
-            status: '?'
+            status: '-'
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
-            status: '?'
+            status: '-'
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
-            status: '?'
+            status: '-'
   - name: Baggage
     features:
       - name: Basic support
@@ -174,13 +174,13 @@ sections:
       - name: '`get_meter` accepts name, `version` and `schema_url`.'
         status: '+'
       - name: '`get_meter` accepts `attributes`.'
-        status: '?'
+        status: '+'
       - name: When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.
         status: '+'
       - name: The fallback `Meter` `name` property keeps its original invalid value.
-        status: '-'
+        status: '+'
       - name: Associate `Meter` with `InstrumentationScope`.
-        status: '?'
+        status: '+'
       - name: '`Counter` instrument is supported.'
         status: '+'
       - name: '`AsynchronousCounter` instrument is supported.'
@@ -190,7 +190,7 @@ sections:
       - name: '`AsynchronousGauge` instrument is supported.'
         status: '+'
       - name: '`Gauge` instrument is supported.'
-        status: '-'
+        status: '+'
       - name: '`UpDownCounter` instrument is supported.'
         status: '+'
       - name: '`AsynchronousUpDownCounter` instrument is supported.'
@@ -206,7 +206,7 @@ sections:
       - name:
           A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under
           the same `Meter` using the same `name`.
-        status: '?'
+        status: '+'
       - name: Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name.
         status: '?'
       - name: It is possible to register two instruments with same `name` under different `Meter`s.
@@ -218,9 +218,9 @@ sections:
       - name: Instrument descriptions conform to the specified syntax.
         status: '-'
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
-        status: '?'
+        status: '+'
       - name: Instrument supports the advisory Attributes parameter.
-        status: '?'
+        status: '-'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
         status: '+'
       - name: All methods of `Meter` are safe to be called concurrently.
@@ -238,7 +238,7 @@ sections:
       - name:
           The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope`
           instance stored in the `Meter`.
-        status: '?'
+        status: '+'
       - name: Configuration is managed solely by the `MeterProvider`.
         status: '+'
       - name: The `MeterProvider` provides methods to update the configuration
@@ -246,23 +246,23 @@ sections:
       - name: The updated configuration applies to all already returned `Meter`s.
         status: '-'
       - name: There is a way to register `View`s with a `MeterProvider`.
-        status: '-'
+        status: '+'
       - name: The `View` instrument selection criteria is as specified.
-        status: '?'
+        status: '+'
       - name: The `View` instrument selection criteria supports wildcards.
-        status: '?'
+        status: '+'
       - name: The `View` instrument selection criteria supports the match-all wildcard.
-        status: '?'
+        status: '+'
       - name: The name of the `View` can be specified.
-        status: '?'
+        status: '-'
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
-        status: '?'
+        status: '+'
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
         status: '+'
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
-        status: '?'
+        status: '+'
       - name: The SDK allows more than one `View` to be specified per instrument.
-        status: '?'
+        status: '+'
       - name: The `Drop` aggregation is available.
         status: '+'
       - name: The `Default` aggregation is available.
@@ -274,15 +274,15 @@ sections:
       - name: The `LastValue` aggregation is available.
         status: '+'
       - name: The `ExplicitBucketHistogram` aggregation is available.
-        status: '-'
+        status: '+'
       - name: The `ExponentialBucketHistogram` aggregation is available.
-        status: '?'
+        status: '+'
       - name: The metrics Reader implementation supports registering metric Exporters
-        status: '?'
+        status: '+'
       - name: The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.
-        status: '?'
+        status: '+'
       - name: The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.
-        status: '?'
+        status: '+'
       - name: The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements).
         status: '+'
       - name: The metrics Exporter `export` function can not be called concurrently from the same Exporter instance.
@@ -294,93 +294,91 @@ sections:
       - name: The metrics Exporter `export` function returns `Success` or `Failure`.
         status: '+'
       - name: The metrics Exporter provides a `ForceFlush` function.
-        status: '-'
+        status: '+'
       - name: The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out.
-        status: '?'
+        status: '+'
       - name: The metrics Exporter provides a `shutdown` function.
         status: '+'
       - name: The metrics Exporter `shutdown` function do not block indefinitely.
         status: '+'
       - name: The metrics SDK samples `Exemplar`s from measurements.
-        status: '?'
+        status: '+'
       - name: Exemplar sampling can be disabled.
-        status: '?'
+        status: '+'
       - name: The metrics SDK supports SDK-wide exemplar filter configuration
-        status: '?'
+        status: '+'
       - name: The metrics SDK supports `TraceBased` exemplar filter
-        status: '?'
+        status: '+'
       - name: The metrics SDK supports `AlwaysOn` exemplar filter
-        status: '?'
+        status: '+'
       - name: The metrics SDK supports `AlwaysOff` exemplar filter
-        status: '?'
+        status: '+'
       - name: Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.
-        status: '?'
+        status: '+'
       - name:
           Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was
           taken.
-        status: '?'
+        status: '+'
       - name: Exemplars contain the timestamp when the measurement was taken.
-        status: '?'
+        status: '+'
       - name: The metrics SDK provides an `ExemplarReservoir` interface or extension point.
-        status: '?'
+        status: '+'
       - name: An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.
-        status: '?'
+        status: '+'
       - name:
           The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except
           `ExplicitBucketHistogram`.
-        status: '?'
+        status: '+'
       - name:
           The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram`
           aggregation.
-        status: '?'
+        status: '+'
       - name: A metric Producer accepts an optional metric Filter
-        status: '?'
+        status: '-'
       - name: The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers
-        status: '?'
+        status: '-'
       - name: The metric SDK's metric Producer implementations uses the metric Filter
-        status: '?'
+        status: '-'
       - name: Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits)
-        status: '?'
+        status: '+'
       - name: Metric SDK supports configuring cardinality limit at MeterReader level
-        status: '?'
+        status: '-'
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
-        status: '?'
+        status: '-'
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
-        status: '?'
+        status: '+'
       - name: LoggerProvider.Get Logger accepts attributes
-        status: '?'
+        status: '+'
       - name: LoggerProvider.Shutdown
-        status: '?'
+        status: '+'
       - name: LoggerProvider.ForceFlush
-        status: '?'
+        status: '+'
       - name: Logger.Emit(LogRecord)
-        status: '?'
-      - name: Reuse Standard Attributes
         status: '+'
       - name: LogRecord.Set EventName
         status: '+'
       - name: Logger.Enabled
         status: '+'
       - name: SimpleLogRecordProcessor
-        status: '?'
+        status: '+'
       - name: BatchLogRecordProcessor
-        status: '?'
+        status: '+'
       - name: Can plug custom LogRecordProcessor
-        status: '?'
+        status: '+'
       - name: LogRecordProcessor.Enabled
         status: '+'
       - name: OTLP/gRPC exporter
-        status: '?'
+        status: '+'
       - name: OTLP/HTTP exporter
-        status: '?'
+        status: '+'
       - name: OTLP File exporter
-        status: '?'
+        status: '-'
       - name: Can plug custom LogRecordExporter
-        status: '?'
+        status: '+'
       - name: Trace Context Injection
-        status: '?'
+        status: '+'
   - name: Resource
     features:
       - name: Create from Attributes
@@ -452,11 +450,11 @@ sections:
       - name: OTEL_BSP_*
         status: '+'
       - name: OTEL_BLRP_*
-        status: '?'
+        status: '+'
       - name: OTEL_EXPORTER_OTLP_*
         status: '+'
       - name: OTEL_EXPORTER_ZIPKIN_*
-        status: '-'
+        status: '+'
       - name: OTEL_TRACES_EXPORTER
         status: '-'
       - name: OTEL_METRICS_EXPORTER
@@ -476,9 +474,9 @@ sections:
       - name: OTEL_LINK_ATTRIBUTE_COUNT_LIMIT
         status: '+'
       - name: OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT
-        status: '?'
+        status: '+'
       - name: OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT
-        status: '?'
+        status: '+'
       - name: OTEL_TRACES_SAMPLER
         status: '+'
       - name: OTEL_TRACES_SAMPLER_ARG
@@ -488,17 +486,17 @@ sections:
       - name: OTEL_ATTRIBUTE_COUNT_LIMIT
         status: '+'
       - name: OTEL_METRIC_EXPORT_INTERVAL
-        status: '-'
+        status: '+'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
-        status: '-'
+        status: '+'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
-        status: '-'
+        status: '+'
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
         status: '+'
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
-        status: '?'
+        status: '+'
       - name: OTEL_EXPERIMENTAL_CONFIG_FILE
-        status: '?'
+        status: '-'
   - name: Declarative configuration
     features:
       - name: '`Parse` a configuration file'
@@ -530,9 +528,9 @@ sections:
   - name: Exporters
     features:
       - name: '[Exporter interface](specification/trace/sdk.md#span-exporter)'
-        status: '?'
+        status: '+'
       - name: '[Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2)'
-        status: '?'
+        status: '+'
       - name: Standard output (logging)
         status: '+'
       - name: In-memory (mock exporter)
@@ -548,7 +546,7 @@ sections:
           - name: OTLP/HTTP gzip Content-Encoding support
             status: '+'
           - name: Concurrent sending
-            status: '-'
+            status: '+'
           - name: Honors retryable responses with backoff
             status: '+'
           - name: Honors non-retryable responses
@@ -560,11 +558,11 @@ sections:
           - name: SchemaURL in ResourceSpans and ScopeSpans
             status: '+'
           - name: SchemaURL in ResourceMetrics and ScopeMetrics
-            status: '?'
+            status: '+'
           - name: SchemaURL in ResourceLogs and ScopeLogs
-            status: '?'
+            status: '+'
           - name: Honors the [user agent spec](specification/protocol/exporter.md#user-agent)
-            status: '?'
+            status: '+'
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success)
               messages are handled and logged for OTLP/gRPC'
@@ -574,9 +572,9 @@ sections:
               messages are handled and logged for OTLP/HTTP'
             status: '+'
           - name: Metric Exporter configurable temporality preference
-            status: '?'
+            status: '+'
           - name: Metric Exporter configurable default aggregation
-            status: '?'
+            status: '+'
       - heading: '**[Zipkin](specification/trace/sdk_exporters/zipkin.md)**'
         features:
           - name: Zipkin V1 JSON
@@ -650,7 +648,7 @@ sections:
           - name: '[Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
             status: '+'
           - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)'
-            status: '-'
+            status: '+'
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
             status: '+'
   - name: OpenCensus Compatibility
