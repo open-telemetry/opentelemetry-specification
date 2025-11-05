@@ -19,12 +19,12 @@ formats is required. Implementing more than one format is optional.
 | [TracerProvider](specification/trace/api.md#tracerprovider-operations) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create TracerProvider |  | + | + | + | + | + | + | + | + | + | + | + |
 | Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + |
-| Get a Tracer with schema_url |  | + | + |  | + |  |  | + |  | + |  |  |
+| Get a Tracer with schema_url |  | + | + | + | + |  |  | + |  | + |  |  |
 | Get a Tracer with scope attributes |  | + |  |  | + |  |  | + |  | + |  |  |
-| Associate Tracer with InstrumentationScope |  | + |  |  | + | + |  | + |  |  |  |  |
+| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + |  |  |  |  |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |
 | Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |
-| ForceFlush (SDK only required) |  | + | + | - | + | + | + | + | + | + | + | + |
+| ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |
 | Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |
@@ -67,9 +67,9 @@ formats is required. Implementing more than one format is optional.
 | `null` values documented as invalid/undefined |  | + | + | + | + | + | N/A | + |  | + |  | N/A |
 | Unicode support for keys and string values |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Span linking](specification/trace/api.md#specifying-links) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| Links can be recorded on span creation |  | + | + |  | + | + | + | + | + | + | + |  |
+| Links can be recorded on span creation |  | + | + | + | + | + | + | + | + | + | + |  |
 | Links can be recorded after span creation |  | + |  |  | + |  |  | + |  | + | + |  |
-| Links order is preserved |  | + | + |  | + | + | + | + | + | + | + |  |
+| Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  |
 | [Span events](specification/trace/api.md#add-events) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | AddEvent |  | + | + | + | + | + | + | + | + | + | + | + |
 | Add order preserved |  | + | + | + | + | + | + | + | + | + | + | + |
@@ -82,8 +82,8 @@ formats is required. Implementing more than one format is optional.
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + |
 | Sampler: JaegerRemoteSampler |  | + | + |  |  |  |  | - | + |  |  |  |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + |
-| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + |  | + | + | + | + | + | + |  | + |
-| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + |  | + | + | + | + |  | - |  | + |
+| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + |  | + |
+| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + |  | - |  | + |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + |  | + | + | + | + | + | + | + |  |
 | [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + |  | + | + | + | + |  |  |  |  |
 | Fetch InstrumentationScope from ReadableSpan |  | + | + |  | + |  |  | + |  |  |  |  |
@@ -106,7 +106,7 @@ formats is required. Implementing more than one format is optional.
 | It is possible to create any number of `MeterProvider`s. | X | + | + | + | + | + | + | + | + | + | + |  |
 | `MeterProvider` provides a way to get a `Meter`. |  | + | + | + | + | + | + | + | + | + | - |  |
 | `get_meter` accepts name, `version` and `schema_url`. |  | + | + | + | + |  | + | + | + | + | - |  |
-| `get_meter` accepts `attributes`. |  | + |  |  | + |  |  | + | + | + |  |  |
+| `get_meter` accepts `attributes`. |  | + |  | - | + |  |  | + | + | + |  |  |
 | When an invalid `name` is specified a working `Meter` implementation is returned as a fallback. |  | + | + | + | + | + | + |  | + | + | - |  |
 | The fallback `Meter` `name` property keeps its original invalid value. | X | + | - | + | + | + | + |  | + | - | - |  |
 | Associate `Meter` with `InstrumentationScope`. |  | + | + | + | + | + | + |  | + | + |  |  |
@@ -114,7 +114,7 @@ formats is required. Implementing more than one format is optional.
 | `AsynchronousCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
 | `Histogram` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
 | `AsynchronousGauge` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
-| `Gauge` instrument is supported. |  | + | - | - | + | + | - | + | + | - | - |  |
+| `Gauge` instrument is supported. |  | + | - | + | + | + | - | + | + | - | - |  |
 | `UpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
 | `AsynchronousUpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
 | Instruments have `name` |  | + | + | + | + | + | + | + | + | + | + |  |
@@ -194,19 +194,19 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| LoggerProvider.Get Logger |  | + | + |  | + | + |  | + |  | + | - |  |
+| LoggerProvider.Get Logger |  | + | + | + | + | + |  | + |  | + | - |  |
 | LoggerProvider.Get Logger accepts attributes |  | + |  |  | + |  |  | + |  | + |  |  |
-| LoggerProvider.Shutdown |  | + | + |  | + | + |  | + |  | + | - |  |
-| LoggerProvider.ForceFlush |  | + | + |  | + | + |  | + |  | + | - |  |
-| Logger.Emit(LogRecord) |  | + | + |  | + | + |  | + |  | + | - |  |
+| LoggerProvider.Shutdown |  | + | + | + | + | + |  | + |  | + | - |  |
+| LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + |  | + | - |  |
+| Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + |  | + | - |  |
 | LogRecord.Set EventName |  | + |  |  |  |  |  |  | + | + |  |  |
 | Logger.Enabled | X | + |  |  |  |  |  | + | + | + |  |  |
-| SimpleLogRecordProcessor |  | + | + |  | + | + |  | + |  | + |  |  |
-| BatchLogRecordProcessor |  | + | + |  | + | + |  | + |  | + |  |  |
-| Can plug custom LogRecordProcessor |  | + | + |  | + | + |  | + |  | + |  |  |
+| SimpleLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
+| BatchLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
+| Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
 | LogRecordProcessor.Enabled | X | + |  |  |  | + |  |  | + |  |  |  |
-| OTLP/gRPC exporter |  | + | + |  | + |  |  | + |  | + | + |  |
-| OTLP/HTTP exporter |  | + | + |  | + | + |  | + |  | + | + |  |
+| OTLP/gRPC exporter |  | + | + | + | + |  |  | + |  | + | + |  |
+| OTLP/HTTP exporter |  | + | + | + | + | + |  | + |  | + | + |  |
 | OTLP File exporter |  | - | - |  | - |  |  |  |  | + | - |  |
 | Can plug custom LogRecordExporter |  | + | + |  | + | + |  | + |  | + |  |  |
 | Trace Context Injection |  | + | + |  | + | + |  | + |  | + | + |  |

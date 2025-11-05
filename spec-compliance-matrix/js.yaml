@@ -16,17 +16,17 @@ sections:
           - name: Get a Tracer
             status: '+'
           - name: Get a Tracer with schema_url
-            status: '?'
+            status: '+'
           - name: Get a Tracer with scope attributes
             status: '?'
           - name: Associate Tracer with InstrumentationScope
-            status: '?'
+            status: '+'
           - name: Safe for concurrent calls
             status: '+'
           - name: Shutdown (SDK only required)
             status: '+'
           - name: ForceFlush (SDK only required)
-            status: '-'
+            status: '+'
       - heading: '[Trace / Context interaction](specification/trace/api.md#context-interaction)'
         features:
           - name: Get active Span
@@ -112,11 +112,11 @@ sections:
       - heading: '[Span linking](specification/trace/api.md#specifying-links)'
         features:
           - name: Links can be recorded on span creation
-            status: '?'
+            status: '+'
           - name: Links can be recorded after span creation
             status: '?'
           - name: Links order is preserved
-            status: '?'
+            status: '+'
       - heading: '[Span events](specification/trace/api.md#add-events)'
         features:
           - name: AddEvent
@@ -142,9 +142,9 @@ sections:
           - name: '[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation)'
             status: '?'
           - name: '[IdGenerators](specification/trace/sdk.md#id-generators)'
-            status: '?'
+            status: '+'
           - name: '[SpanLimits](specification/trace/sdk.md#span-limits)'
-            status: '?'
+            status: '+'
           - name: '[Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)'
             status: '?'
           - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
@@ -174,7 +174,7 @@ sections:
       - name: '`get_meter` accepts name, `version` and `schema_url`.'
         status: '+'
       - name: '`get_meter` accepts `attributes`.'
-        status: '?'
+        status: '-'
       - name: When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.
         status: '+'
       - name: The fallback `Meter` `name` property keeps its original invalid value.
@@ -190,7 +190,7 @@ sections:
       - name: '`AsynchronousGauge` instrument is supported.'
         status: '+'
       - name: '`Gauge` instrument is supported.'
-        status: '-'
+        status: '+'
       - name: '`UpDownCounter` instrument is supported.'
         status: '+'
       - name: '`AsynchronousUpDownCounter` instrument is supported.'
@@ -348,31 +348,31 @@ sections:
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
-        status: '?'
+        status: '+'
       - name: LoggerProvider.Get Logger accepts attributes
         status: '?'
       - name: LoggerProvider.Shutdown
-        status: '?'
+        status: '+'
       - name: LoggerProvider.ForceFlush
-        status: '?'
+        status: '+'
       - name: Logger.Emit(LogRecord)
-        status: '?'
+        status: '+'
       - name: LogRecord.Set EventName
         status: '?'
       - name: Logger.Enabled
         status: '?'
       - name: SimpleLogRecordProcessor
-        status: '?'
+        status: '+'
       - name: BatchLogRecordProcessor
-        status: '?'
+        status: '+'
       - name: Can plug custom LogRecordProcessor
-        status: '?'
+        status: '+'
       - name: LogRecordProcessor.Enabled
         status: '?'
       - name: OTLP/gRPC exporter
-        status: '?'
+        status: '+'
       - name: OTLP/HTTP exporter
-        status: '?'
+        status: '+'
       - name: OTLP File exporter
         status: '?'
       - name: Can plug custom LogRecordExporter
