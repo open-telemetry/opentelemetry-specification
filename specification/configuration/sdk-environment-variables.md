@@ -75,7 +75,9 @@ empty, or unset is used, a warning SHOULD be logged to inform users about the
 fallback to false being applied. All Boolean environment variables SHOULD be
 named and defined such that false is the expected safe default behavior.
 Renaming or changing the default value MUST NOT happen without a major version
-upgrade.
+upgrade. The guidance on this paragraph is only applicable to environment
+variables and not to other configuration interfaces such as the declarative
+configuration interface.
 
 ### Numeric
 
