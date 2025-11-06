@@ -114,7 +114,7 @@ sections:
           - name: Links can be recorded on span creation
             status: '+'
           - name: Links can be recorded after span creation
-            status: '?'
+            status: '+'
           - name: Links order is preserved
             status: '+'
       - heading: '[Span events](specification/trace/api.md#add-events)'
@@ -138,7 +138,7 @@ sections:
           - name: ShouldSample gets full parent Context
             status: '+'
           - name: 'Sampler: JaegerRemoteSampler'
-            status: '?'
+            status: '+'
           - name: '[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation)'
             status: '?'
           - name: '[IdGenerators](specification/trace/sdk.md#id-generators)'
@@ -146,11 +146,11 @@ sections:
           - name: '[SpanLimits](specification/trace/sdk.md#span-limits)'
             status: '+'
           - name: '[Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)'
-            status: '?'
+            status: '+'
           - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
-            status: '?'
+            status: '+'
           - name: Fetch InstrumentationScope from ReadableSpan
-            status: '?'
+            status: '+'
           - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
             status: '?'
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
@@ -260,7 +260,7 @@ sections:
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
         status: '?'
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
-        status: '?'
+        status: '-'
       - name: The SDK allows more than one `View` to be specified per instrument.
         status: '+'
       - name: The `Drop` aggregation is available.
@@ -276,11 +276,11 @@ sections:
       - name: The `ExplicitBucketHistogram` aggregation is available.
         status: '+'
       - name: The `ExponentialBucketHistogram` aggregation is available.
-        status: '?'
+        status: '+'
       - name: The metrics Reader implementation supports registering metric Exporters
         status: '+'
       - name: The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.
-        status: '?'
+        status: '+'
       - name: The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.
         status: '+'
       - name: The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements).
@@ -302,37 +302,37 @@ sections:
       - name: The metrics Exporter `shutdown` function do not block indefinitely.
         status: '+'
       - name: The metrics SDK samples `Exemplar`s from measurements.
-        status: '?'
+        status: '-'
       - name: Exemplar sampling can be disabled.
-        status: '?'
+        status: '-'
       - name: The metrics SDK supports SDK-wide exemplar filter configuration
-        status: '?'
+        status: '-'
       - name: The metrics SDK supports `TraceBased` exemplar filter
-        status: '?'
+        status: '-'
       - name: The metrics SDK supports `AlwaysOn` exemplar filter
-        status: '?'
+        status: '-'
       - name: The metrics SDK supports `AlwaysOff` exemplar filter
-        status: '?'
+        status: '-'
       - name: Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.
-        status: '?'
+        status: '-'
       - name:
           Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was
           taken.
-        status: '?'
+        status: '-'
       - name: Exemplars contain the timestamp when the measurement was taken.
-        status: '?'
+        status: '-'
       - name: The metrics SDK provides an `ExemplarReservoir` interface or extension point.
-        status: '?'
+        status: '-'
       - name: An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.
-        status: '?'
+        status: '-'
       - name:
           The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except
           `ExplicitBucketHistogram`.
-        status: '?'
+        status: '-'
       - name:
           The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram`
           aggregation.
-        status: '?'
+        status: '-'
       - name: A metric Producer accepts an optional metric Filter
         status: '?'
       - name: The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers
@@ -376,7 +376,7 @@ sections:
       - name: OTLP File exporter
         status: '?'
       - name: Can plug custom LogRecordExporter
-        status: '?'
+        status: '+'
       - name: Trace Context Injection
         status: '?'
   - name: Resource

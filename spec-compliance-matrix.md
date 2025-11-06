@@ -68,7 +68,7 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Span linking](specification/trace/api.md#specifying-links) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation |  | + | + | + | + | + | + | + | + | + | + |  |
-| Links can be recorded after span creation |  | + |  |  | + |  |  | + |  | + | + |  |
+| Links can be recorded after span creation |  | + |  | + | + |  |  | + |  | + | + |  |
 | Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  |
 | [Span events](specification/trace/api.md#add-events) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | AddEvent |  | + | + | + | + | + | + | + | + | + | + | + |
@@ -80,13 +80,13 @@ formats is required. Implementing more than one format is optional.
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + |
-| Sampler: JaegerRemoteSampler |  | + | + |  |  |  |  | - | + |  |  |  |
+| Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  |  |  |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + |
 | [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + |  | + |
 | [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + |  | - |  | + |
-| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + |  | + | + | + | + | + | + | + |  |
-| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + |  | + | + | + | + |  |  |  |  |
-| Fetch InstrumentationScope from ReadableSpan |  | + | + |  | + |  |  | + |  |  |  |  |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  |
+| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  |
+| Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  |  |  |
 | [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - |  |  |  |  |  |  |  |  |  |  |
@@ -146,7 +146,7 @@ formats is required. Implementing more than one format is optional.
 | The name of the `View` can be specified. |  | - | + | + | + | + | + | + |  | + | + |  |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  |
 | The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  |  |  |  |  |  |  |  |  |  |
-| The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - |  | - |  | - |  |  |  | - |  |
+| The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  |
 | The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  |
 | The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
 | The `Default` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
@@ -154,9 +154,9 @@ formats is required. Implementing more than one format is optional.
 | The `Sum` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
 | The `LastValue` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
 | The `ExplicitBucketHistogram` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The `ExponentialBucketHistogram` aggregation is available. |  | + |  |  | + | + |  |  |  |  | + |  |
+| The `ExponentialBucketHistogram` aggregation is available. |  | + |  | + | + | + |  |  |  |  | + |  |
 | The metrics Reader implementation supports registering metric Exporters |  | + | + | + | + | + | + | + | + | + | + |  |
-| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  | + | + |  | + | + | + |  |  | - | - |  |
+| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  | + | + | + | + | + | + |  |  | - | - |  |
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind. |  | + | + | + | + | + | + |  | + | + |  |  |
 | The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements). |  | + | + | + | + | + | + |  | + | + | + |  |
 | The metrics Exporter `export` function can not be called concurrently from the same Exporter instance. |  | + | + | + | - | + | + |  |  | + | + |  |
@@ -167,19 +167,19 @@ formats is required. Implementing more than one format is optional.
 | The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out. |  | + | + | + | + | + | + | + |  | + | + |  |
 | The metrics Exporter provides a `shutdown` function. |  | + | + | + | + | + | + | + | + | + | + |  |
 | The metrics Exporter `shutdown` function do not block indefinitely. |  | + | + | + | - |  | + |  |  | + | + |  |
-| The metrics SDK samples `Exemplar`s from measurements. |  | + | + |  | - |  | + |  |  |  | + |  |
-| Exemplar sampling can be disabled. |  | + | - |  | - |  | + |  |  |  | + |  |
-| The metrics SDK supports SDK-wide exemplar filter configuration |  | + | + |  | - |  | + |  |  |  | + |  |
-| The metrics SDK supports `TraceBased` exemplar filter |  | + | + |  | - |  | + |  |  |  | + |  |
-| The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + |  | - |  | + |  |  |  | + |  |
-| The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + |  | - |  | + |  |  |  | + |  |
-| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + |  | - |  | + |  |  |  | + |  |
-| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + |  | - |  | + |  |  |  | + |  |
-| Exemplars contain the timestamp when the measurement was taken. |  | + | + |  | - |  | + |  |  |  | + |  |
-| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - |  | - |  | + | + |  |  | - |  |
-| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - |  | - |  | + | + |  |  | - |  |
-| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + |  | - |  | + | + |  |  | - |  |
-| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + |  | - |  | + |  |  |  | - |  |
+| The metrics SDK samples `Exemplar`s from measurements. |  | + | + | - | - |  | + |  |  |  | + |  |
+| Exemplar sampling can be disabled. |  | + | - | - | - |  | + |  |  |  | + |  |
+| The metrics SDK supports SDK-wide exemplar filter configuration |  | + | + | - | - |  | + |  |  |  | + |  |
+| The metrics SDK supports `TraceBased` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  |
+| The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  |
+| The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  |
+| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + | - | - |  | + |  |  |  | + |  |
+| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + | - | - |  | + |  |  |  | + |  |
+| Exemplars contain the timestamp when the measurement was taken. |  | + | + | - | - |  | + |  |  |  | + |  |
+| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | - |  | + | + |  |  | - |  |
+| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - | - | - |  | + | + |  |  | - |  |
+| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + | - | - |  | + | + |  |  | - |  |
+| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + | - | - |  | + |  |  |  | - |  |
 | A metric Producer accepts an optional metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
 | The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers |  | - |  |  |  |  | - |  |  |  |  |  |
 | The metric SDK's metric Producer implementations uses the metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
@@ -208,7 +208,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | OTLP/gRPC exporter |  | + | + | + | + |  |  | + |  | + | + |  |
 | OTLP/HTTP exporter |  | + | + | + | + | + |  | + |  | + | + |  |
 | OTLP File exporter |  | - | - |  | - |  |  |  |  | + | - |  |
-| Can plug custom LogRecordExporter |  | + | + |  | + | + |  | + |  | + |  |  |
+| Can plug custom LogRecordExporter |  | + | + | + | + | + |  | + |  | + |  |  |
 | Trace Context Injection |  | + | + |  | + | + |  | + |  | + | + |  |
 
 ## Resource
