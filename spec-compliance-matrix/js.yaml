@@ -258,7 +258,7 @@ sections:
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
         status: '+'
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
-        status: '?'
+        status: '+'
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
         status: '-'
       - name: The SDK allows more than one `View` to be specified per instrument.

@@ -145,7 +145,7 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  |
 | The name of the `View` can be specified. |  | - | + | + | + | + | + | + |  | + | + |  |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  |
-| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  |  |  |  |  |  |  |  |  |  |
+| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  | + |  |  |  |  |  |  |  |  |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  |
 | The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  |
 | The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
