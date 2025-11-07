@@ -6,8 +6,6 @@ linkTitle: Zipkin
 
 **Status**: [Deprecated](../../document-status.md)
 
-Zipkin exporter support will be removed from OpenTelemetry specification in Jan 2027.
-
 _Note: This document remains here for backwards compatibility and
 will be removed in a future version. SDKs MAY include Zipkin exporters,
 but Zipkin exporter is not required.
