@@ -15,33 +15,32 @@ aliases:
 
 <!-- toc -->
 
-- [OpenTelemetry Environment Variable Specification](#opentelemetry-environment-variable-specification)
-  - [Implementation guidelines](#implementation-guidelines)
-  - [Parsing empty value](#parsing-empty-value)
-  - [Configuration types](#configuration-types)
-    - [Boolean](#boolean)
-    - [Numeric](#numeric)
-      - [Integer](#integer)
-      - [Duration](#duration)
-      - [Timeout](#timeout)
-    - [String](#string)
-      - [Enum](#enum)
-  - [General SDK Configuration](#general-sdk-configuration)
-  - [Batch Span Processor](#batch-span-processor)
-  - [Batch LogRecord Processor](#batch-logrecord-processor)
-  - [Attribute Limits](#attribute-limits)
-  - [Span Limits](#span-limits)
-  - [LogRecord Limits](#logrecord-limits)
-  - [OTLP Exporter](#otlp-exporter)
-  - [Zipkin Exporter](#zipkin-exporter)
-  - [Prometheus Exporter](#prometheus-exporter)
-  - [Exporter Selection](#exporter-selection)
-    - [In-development Exporter Selection](#in-development-exporter-selection)
-  - [Metrics SDK Configuration](#metrics-sdk-configuration)
-    - [Exemplar](#exemplar)
-    - [Periodic exporting MetricReader](#periodic-exporting-metricreader)
-  - [Declarative configuration](#declarative-configuration)
-  - [Language Specific Environment Variables](#language-specific-environment-variables)
+- [Implementation guidelines](#implementation-guidelines)
+- [Parsing empty value](#parsing-empty-value)
+- [Configuration types](#configuration-types)
+  * [Boolean](#boolean)
+  * [Numeric](#numeric)
+    + [Integer](#integer)
+    + [Duration](#duration)
+    + [Timeout](#timeout)
+  * [String](#string)
+    + [Enum](#enum)
+- [General SDK Configuration](#general-sdk-configuration)
+- [Batch Span Processor](#batch-span-processor)
+- [Batch LogRecord Processor](#batch-logrecord-processor)
+- [Attribute Limits](#attribute-limits)
+- [Span Limits](#span-limits)
+- [LogRecord Limits](#logrecord-limits)
+- [OTLP Exporter](#otlp-exporter)
+- [Zipkin Exporter](#zipkin-exporter)
+- [Prometheus Exporter](#prometheus-exporter)
+- [Exporter Selection](#exporter-selection)
+  * [In-development Exporter Selection](#in-development-exporter-selection)
+- [Metrics SDK Configuration](#metrics-sdk-configuration)
+  * [Exemplar](#exemplar)
+  * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
+- [Declarative configuration](#declarative-configuration)
+- [Language Specific Environment Variables](#language-specific-environment-variables)
 
 <!-- tocstop -->
 
@@ -311,7 +310,7 @@ The implementation MAY accept a comma-separated list to enable setting multiple 
 Known values for `OTEL_TRACES_EXPORTER` are:
 
 - `"otlp"`: [OTLP](https://opentelemetry.io/docs/specs/otlp/)
-- `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format).
+- `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"console"`: [Standard Output](../trace/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../trace/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
 NOT be supported by new implementations.
