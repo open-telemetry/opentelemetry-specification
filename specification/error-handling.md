@@ -93,10 +93,9 @@ func main() {
     // Other setup ...
     opentelemetrysdk.SetHandler(IgnoreExporterErrorsHandler{})
 }
-
 ```
 
-##### Java
+#### Java
 
 OpenTelemetry Java uses [java.util.logging](https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html)
 to output and handle all logs, including errors. Custom handlers and filters can be registered both in code and using the Java logging configuration file.  
