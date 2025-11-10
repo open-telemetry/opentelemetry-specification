@@ -50,7 +50,7 @@ Notably, as we define semantic conventions within the [CI/CD Working Group][cicd
 we'll need the specification defined for the industry to be able to adopt
 native tracing within CI/CD systems.
 
-[cicd-wg]: https://github.com/open-telemetry/community/blob/main/projects/ci-cd.md
+[cicd-wg]: https://github.com/open-telemetry/community/blob/main/projects/ci-cd-phase-2.md
 [issue-740]: https://github.com/open-telemetry/opentelemetry-specification/issues/740#issue-665588273
 [tmp]: https://opentelemetry.io/docs/specs/otel/context/api-propagators/#textmap-propagator
 
