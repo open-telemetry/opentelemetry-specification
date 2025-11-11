@@ -368,7 +368,7 @@ sections:
       - name: Can plug custom LogRecordProcessor
         status: '+'
       - name: LogRecordProcessor.Enabled
-        status: '+'
+        status: '?'
       - name: OTLP/gRPC exporter
         status: '?'
       - name: OTLP/HTTP exporter
