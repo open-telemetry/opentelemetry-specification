@@ -18,6 +18,9 @@ release.
 
 ### Logs
 
+- Stabilize `LogRecordProcessor.Enabled`.
+  ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
+
 ### Baggage
 
 ### Profiles

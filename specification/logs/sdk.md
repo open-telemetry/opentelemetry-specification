@@ -252,8 +252,7 @@ emitting the record):
 - **Status**: [Development](../document-status.md) - `trace_based` is
   `true` in the [`LoggerConfig`](#loggerconfig) and the current context is
   associated with an unsampled trace.
-- **Status**: [Development](../document-status.md) - all registered
-  `LogRecordProcessors` implement [`Enabled`](#enabled-1),
+- all registered `LogRecordProcessors` implement [`Enabled`](#enabled-1),
   and a call to `Enabled` on each of them returns `false`.
 
 Otherwise, it SHOULD return `true`.
@@ -405,8 +404,6 @@ implementations SHOULD recommended to users that a clone of `logRecord` be used
 for any concurrent processing, such as in a [batching processor](#batching-processor).
 
 #### Enabled
-
-**Status**: [Development](../document-status.md)
 
 `Enabled` is an operation that a `LogRecordProcessor` MAY implement
 in order to support filtering via [`Logger.Enabled`](api.md#enabled).
