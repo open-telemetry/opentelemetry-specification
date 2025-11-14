@@ -80,7 +80,10 @@ Keys that differ in casing are treated as distinct keys.
 
 The representation of the map is language-dependent.
 
-The implementation MUST by default ensure that the exported maps contain only unique keys.
+The implementation MUST by default enforce that the exported maps contain only
+unique keys. The enforcement of uniqueness may be performed
+in a variety of ways as it best fits the limitations of the particular
+implementation (e.g. by removing duplicates).
 
 The implementation MAY have an option to allow exporting maps with duplicate keys
 (e.g. for better performance).
@@ -128,10 +131,10 @@ Note that they are distinct from [`map<string, AnyValue>`](#mapstring-anyvalue),
 which is a type of [`AnyValue`](#anyvalue) used to represent nested data
 structures e.g. in attribute values and [log record body](../logs/data-model.md#field-body).
 
-Implementation MUST by default ensure that the exported attribute collections
+Implementation MUST by default enforce that the exported attribute collections
 contain only unique keys. The enforcement of uniqueness may be performed
 in a variety of ways as it best fits the limitations of the particular
-implementation.
+implementation (e.g. by removing duplicates).
 
 Normally for the telemetry generated using OpenTelemetry SDKs the attribute
 key-value pairs are set via an API that either accepts a single key-value pair
