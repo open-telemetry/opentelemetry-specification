@@ -69,7 +69,7 @@ configuration sources with the default.
 
 #### Integer
 
-If an implementation chooses to support an integer-valued configuratin source,
+If an implementation chooses to support an integer-valued configuration source,
 it SHOULD support non-negative values between 0 and 2³¹ − 1 (inclusive).
 Individual SDKs MAY choose to support a larger range of values.
 
