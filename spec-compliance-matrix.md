@@ -334,8 +334,8 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON | X | - | + |  | + | - | - | - | - | - | - | - |
 | Zipkin V1 Thrift | X | - | + |  | [-][py1174] | - | - | - | - | - | - | - |
-| Zipkin V2 JSON | * | + | + |  | + | + | - | + | + | + | + | + |
-| Zipkin V2 Protobuf | * | - | + |  | + | - | + | - | - | - | - | - |
+| Zipkin V2 JSON | X | + | + |  | + | + | - | + | + | + | + | + |
+| Zipkin V2 Protobuf | X | - | + |  | + | - | + | - | - | - | - | - |
 | Service name mapping |  | + | + | + | + | + | + | + | + | + | + | + |
 | SpanKind mapping |  | + | + | + | + | + | + | + | + | + | + | + |
 | InstrumentationLibrary mapping |  | + | + | - | + | + | - | + | + | + | + | + |
