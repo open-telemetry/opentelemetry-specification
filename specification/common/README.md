@@ -125,6 +125,12 @@ outside OpenTelemetry into OpenTelemetry attribute values.
 [Log Records](../logs/data-model.md),
 contain a collection of attributes.
 
+Attribute Collections are top-level collections of key-value pairs used in
+OpenTelemetry data models.
+Note that they are distinct from [`map<string, AnyValue>`](#mapstring-anyvalue),
+which is a type of [`AnyValue`](#anyvalue) used to represent nested data
+structures e.g. in attribute values and [log record body](../logs/data-model.md#field-body).
+
 Implementation MUST by default enforce that the exported attribute collections
 contain only unique keys. The enforcement of uniqueness may be performed
 in a variety of ways as it best fits the limitations of the particular
