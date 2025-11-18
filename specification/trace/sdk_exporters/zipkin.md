@@ -11,7 +11,7 @@ linkTitle: Zipkin
 > but Zipkin exporter is not required.
 >
 > Users may export to Zipkin using [zipkin exporter](https://github.com/open-telemetry/opentelemetry-collector->contrib/tree/main/exporter/zipkinexporter) collector component or [zipkin-otel](https://github.com/openzipkin-contrib/zipkin-otel)
->Zipkin server module.
+> Zipkin server module.
 
 This document defines the transformation between OpenTelemetry and Zipkin Spans.
 The generic transformation [rules specified here](../../common/mapping-to-non-otlp.md) also apply. If a
