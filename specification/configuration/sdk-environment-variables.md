@@ -15,32 +15,33 @@ aliases:
 
 <!-- toc -->
 
-- [Implementation guidelines](#implementation-guidelines)
-- [Parsing empty value](#parsing-empty-value)
-- [Configuration types](#configuration-types)
-  * [Boolean](#boolean)
-  * [Numeric](#numeric)
-    + [Integer](#integer)
-    + [Duration](#duration)
-    + [Timeout](#timeout)
-  * [String](#string)
-    + [Enum](#enum)
-- [General SDK Configuration](#general-sdk-configuration)
-- [Batch Span Processor](#batch-span-processor)
-- [Batch LogRecord Processor](#batch-logrecord-processor)
-- [Attribute Limits](#attribute-limits)
-- [Span Limits](#span-limits)
-- [LogRecord Limits](#logrecord-limits)
-- [OTLP Exporter](#otlp-exporter)
-- [Zipkin Exporter](#zipkin-exporter)
-- [Prometheus Exporter](#prometheus-exporter)
-- [Exporter Selection](#exporter-selection)
-  * [In-development Exporter Selection](#in-development-exporter-selection)
-- [Metrics SDK Configuration](#metrics-sdk-configuration)
-  * [Exemplar](#exemplar)
-  * [Periodic exporting MetricReader](#periodic-exporting-metricreader)
-- [Declarative configuration](#declarative-configuration)
-- [Language Specific Environment Variables](#language-specific-environment-variables)
+- [OpenTelemetry Environment Variable Specification](#opentelemetry-environment-variable-specification)
+  - [Implementation guidelines](#implementation-guidelines)
+  - [Parsing empty value](#parsing-empty-value)
+  - [Configuration types](#configuration-types)
+    - [Boolean](#boolean)
+    - [Numeric](#numeric)
+      - [Integer](#integer)
+      - [Duration](#duration)
+      - [Timeout](#timeout)
+    - [String](#string)
+      - [Enum](#enum)
+  - [General SDK Configuration](#general-sdk-configuration)
+  - [Batch Span Processor](#batch-span-processor)
+  - [Batch LogRecord Processor](#batch-logrecord-processor)
+  - [Attribute Limits](#attribute-limits)
+  - [Span Limits](#span-limits)
+  - [LogRecord Limits](#logrecord-limits)
+  - [OTLP Exporter](#otlp-exporter)
+  - [Zipkin Exporter](#zipkin-exporter)
+  - [Prometheus Exporter](#prometheus-exporter)
+  - [Exporter Selection](#exporter-selection)
+    - [In-development Exporter Selection](#in-development-exporter-selection)
+  - [Metrics SDK Configuration](#metrics-sdk-configuration)
+    - [Exemplar](#exemplar)
+    - [Periodic exporting MetricReader](#periodic-exporting-metricreader)
+  - [Declarative configuration](#declarative-configuration)
+  - [Language Specific Environment Variables](#language-specific-environment-variables)
 
 <!-- tocstop -->
 
@@ -270,7 +271,7 @@ See [OpenTelemetry Protocol Exporter Configuration Options](../protocol/exporter
 
 ## Zipkin Exporter
 
-**Status**: [Deprecated](../../document-status.md)
+**Status**: [Deprecated](../document-status.md)
 
 | Name                          | Description                                                                        | Default                              | Type        |
 |-------------------------------|------------------------------------------------------------------------------------|--------------------------------------|-------------|
