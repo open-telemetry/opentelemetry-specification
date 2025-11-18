@@ -11,7 +11,7 @@ release.
 
 ### Traces
 
-- Deprecate Zipkin exporter document and make exporter implementation optional
+- Deprecate Zipkin exporter document and make exporter implementation optional.
   ([#4715](https://github.com/open-telemetry/opentelemetry-specification/pull/4715/))
 
 ### Metrics
