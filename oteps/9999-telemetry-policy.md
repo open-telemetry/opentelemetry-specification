@@ -7,7 +7,7 @@ Defines a new concept for OpenTelemetry: Telemetry Policy.
 OpenTelemetry provides a robust, standards based instrumentation solution.
 this includes many great components, e.g.
 
-- File based configuration
+- Declarative configuration
 - Control Protocol via OpAMP
 - X-language extension points in the SDK (samplers, processors, views)
 - Telemetry-Plane controls via the OpenTelemetry collector.
