@@ -6,11 +6,16 @@ linkTitle: Zipkin
 
 **Status**: [Deprecated](../../document-status.md)
 
+Zipkin exporter support will be removed from OpenTelemetry specification in December
+2026.
+
 > Note: This document remains here for backwards compatibility and
-> will be removed in a future version. SDKs MAY include Zipkin exporters,
-> but Zipkin exporter is not required.
+> will be removed in a future version. Existing stable Zipkin exporters MUST
+> continue to be supported for at least one year after the artifact is deprecated,
+> following the [SDK stability guarantees](/specification/versioning-and-stability.md#sdk-support).
+> Implementing a Zipkin exporter is not required for new SDKs.
 >
-> Users may export to Zipkin using [zipkin exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/zipkinexporter)
+> Users may use [Zipkin exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/zipkinexporter)
 > collector component or [zipkin-otel](https://github.com/openzipkin-contrib/zipkin-otel)
 > Zipkin server module.
 
