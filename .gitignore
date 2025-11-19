@@ -29,6 +29,9 @@ internal/tools/bin
 node_modules/
 package-lock.json
 
+# Python virtual environment
+venv/
+
 # Visual Studio Code
 .vscode
 
