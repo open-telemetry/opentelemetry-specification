@@ -4,13 +4,13 @@ Introduce a standard mechanism for OpenTelemetry SDKs to publish process-level r
 
 ## Motivation
 
-External readers like the OpenTelemetry eBPF Profiler operate outside the instrumented process and cannot access resource attributes configured within OpenTelemetry SDKs. This creates several problems:
+External readers like OpenTelemetry eBPF Profiler or OpenTelemetry eBPF Instrumentation operate outside the instrumented process and cannot access resource attributes configured within OpenTelemetry SDKs. This creates several problems:
 
 - **Missing cross-signal correlation identifiers**: Runtime-generated attributes ([`service.instance.id`](https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-instance-id) being a key example) are often inaccessible to external readers, making it hard to correlate profiles with other telemetry (such as traces and spans!) from the same service instance (especially in runtimes that employ multiple processes).
 
-- **Inconsistent resource attributes across signals**: Configuration such as `service.name`, `deployment.environment.name`, and `service.version` is not always available or resolves consistently between the OpenTelemetry SDKs and external readers, leading to configuration drift and inconsistent tagging.
+- **Inconsistent resource attributes across signals**: Running in different scopes, configuration such as `service.name`, `deployment.environment.name`, and `service.version` are not always available or resolves consistently between the OpenTelemetry SDKs and external readers, leading to configuration drift and inconsistent tagging.
 
-- **Correlation is dependent on process activity**: If a service is idle or not emitting other signals, external readers have difficulty identifying it, since resource attributes or identifiers are only sent along when signals are reported.
+- **Correlation is dependent on process activity**: If a service is blocked (such as when doing slow I/O, or threads are actually deadlocked) and not emitting other signals, external readers have difficulty identifying it, since resource attributes or identifiers are only sent along when signals are reported. 
 
 ## Explanation
 
@@ -30,7 +30,7 @@ The header is stored in a fixed-size anonymous memory mapping of 2 pages with th
 
 | Field             | Type      | Description                                                          |
 |-------------------|-----------|----------------------------------------------------------------------|
-| `signature`       | `char[8]` | Set to `"OTEL_CTX"` when the payload is ready (written last)         |
+| `signature`       | `char[8]` | Always set to `"OTEL_CTX"`|
 | `version`         | `uint32`  | Format version. Currently `2` (`1` was used for development)         |
 | `published_at_ns` | `uint64`  | Timestamp when the context was published, in nanoseconds since epoch |
 | `payload_size`    | `uint32`  | Number of bytes of the encoded payload                               |
@@ -109,7 +109,7 @@ Publishing the context should follow these steps:
 
 The signature MUST be written last to ensure readers never observe incomplete or invalid data. Once the signature is present and the mapping set to read-only, the entire mapping is considered valid and immutable.
 
-If resource attributes are updated during the process lifetime, the previous mapping should be removed and a new one published following the same steps.
+If resource attributes are updated during the process lifetime, the previous mapping should be removed before publishing new ones following the same steps.
 
 If any of the steps above fail (other than naming the mapping on older Linux versions), publication is considered to have failed, and the process context will not be available.
 
