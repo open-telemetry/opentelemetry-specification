@@ -178,8 +178,8 @@ that it is better suited for direct usage by instrumentation libraries,
 instrumented libraries, and applications.
 
 The ergonomic API SHOULD make it easier to emit logs and events following the
-[general log semantics](https://opentelemetry.io/docs/specs/semconv/general/logs/#general-log-semantics)
-and the [general event semantics](https://opentelemetry.io/docs/specs/semconv/general/events/#general-event-semantics).
+[log semantics](https://opentelemetry.io/docs/specs/semconv/general/logs/)
+and the [event semantics](https://opentelemetry.io/docs/specs/semconv/general/events/).
 
 The design of the ergonomic API SHOULD be idiomatic for its language.
 
