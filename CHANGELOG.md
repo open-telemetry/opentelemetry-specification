@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Add spec for `AlwaysRecord` sampler
+  ([#4699](https://github.com/open-telemetry/opentelemetry-specification/pull/4699))
+
 ### Metrics
 
 ### Logs
