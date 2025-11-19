@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Add optional Ergonomic API.
+  ([#ABC](https://github.com/open-telemetry/opentelemetry-specification/pull/ABC))
+
 ### Baggage
 
 ### Profiles
