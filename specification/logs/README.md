@@ -143,15 +143,22 @@ Given the above state of the logging space we took the following approach:
   OpenTelemetry log data model. OpenTelemetry Collector can read such logs and
   translate them to OpenTelemetry log data model.
 
-- OpenTelemetry defines a Logs API
-  for [emitting LogRecords](./api.md#emit-a-logrecord). It is provided for
-  library authors to build [log appender](../glossary.md#log-appender--bridge),
+- OpenTelemetry defines a [Logs API](./api.md)
+  for [emitting LogRecords](./api.md#emit-a-logrecord). It is primarily provided
+  for library authors to build [log appenders](../glossary.md#log-appender--bridge),
   which use the API to bridge between existing logging libraries and the
-  OpenTelemetry log data model. Existing logging libraries generally provide
-  a much richer set of features than what is defined in OpenTelemetry.
-  It is NOT a goal of OpenTelemetry to ship a feature-rich logging library.
-  Yet, the Logs API can also be used directly if one prefers to couple the code
-  to it instead of using a bridged logging library.
+  OpenTelemetry log data model. The Logs API can also be used directly by
+  applications, which is particularly important for:
+
+  - **Instrumentation libraries** to avoid coupling to a particular logging library.
+  - **Emitting structured logs and events** following [semantic conventions](https://opentelemetry.io/docs/specs/semconv/),
+  - **Scenarios requiring direct control** over log emission without
+    intermediary logging frameworks.
+  
+  Note that existing logging libraries generally provide a much richer set of
+  features (e.g., string formatting, log levels) than what is defined in
+  OpenTelemetry. Yet, languages may provide a more ergonomic API for better
+  developer experience when using it directly.
 
 - OpenTelemetry defines an [SDK](./sdk.md) implementation of the [API](./api.md),
   which enables configuration of [processing](./sdk.md#logrecordprocessor)
@@ -375,17 +382,30 @@ application startup.
 
 These are greenfield developments. OpenTelemetry provides recommendations and
 best practices about how to emit logs (along with traces and metrics) from these
-applications. For applicable languages and frameworks the auto-instrumentation
-or simple configuration of a logging library to use an OpenTelemetry log appender
-will still be the easiest way to emit context-enriched logs. As
-already described earlier we provide extensions to some popular logging
-libraries languages to support the manual instrumentation cases. The extensions
-will support the inclusion of the trace context in the logs and allow to send
-logs using OTLP protocol to the backend or to the Collector, bypassing the need
-to have the logs represented as text files. Emitted logs are automatically
-augmented by application-specific resource context (e.g. process id, programming
-language, logging library name and version, etc). Full correlation across all
-context dimensions will be available for these logs.
+applications.
+
+Applications have several options for emitting logs:
+
+1. **Using existing logging libraries with OpenTelemetry log appenders**: For
+   applicable languages and frameworks, auto-instrumentation or simple
+   configuration of a logging library to use an OpenTelemetry log appender will
+   be the easiest way to emit context-enriched logs. As already described earlier,
+   we provide extensions to some popular logging libraries to support manual
+   instrumentation cases. The extensions support the inclusion of the trace
+   context in the logs and allow sending logs via OTLP protocol to the backend
+   or to the Collector, bypassing the need to have the logs represented as text
+   files.
+
+2. **Using the OpenTelemetry Logs API directly**: Applications can use the
+   [Logs API](./api.md) directly to emit structured logs and events. This approach
+   works well for emitting logs following [semantic conventions](https://opentelemetry.io/docs/specs/semconv/)
+   and enables easier reuse of attributes used across different signals. Note
+   that a language can provide a more convenient and ergonomic logging interface.
+
+Regardless of the approach, emitted logs are automatically augmented by
+application-specific resource context (e.g. process id, programming language,
+logging library name and version, etc). Full correlation across all context
+dimensions will be available for these logs.
 
 This is how a typical new application uses OpenTelemetry API, SDK and the
 existing log libraries:
