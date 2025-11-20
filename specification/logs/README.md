@@ -156,9 +156,8 @@ Given the above state of the logging space we took the following approach:
     intermediary logging frameworks.
   
   Note that existing logging libraries generally provide a much richer set of
-  features (e.g., string formatting, log levels) than what is defined in
-  OpenTelemetry. Yet, languages may provide a more ergonomic API for better
-  developer experience when using it directly.
+  features than what is defined in OpenTelemetry. Yet, languages may provide
+  a more ergonomic API for better developer experience when using it directly.
 
 - OpenTelemetry defines an [SDK](./sdk.md) implementation of the [API](./api.md),
   which enables configuration of [processing](./sdk.md#logrecordprocessor)
