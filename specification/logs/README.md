@@ -152,8 +152,9 @@ Given the above state of the logging space we took the following approach:
 
   - **Instrumentation libraries** to avoid coupling to a particular logging library.
   - **Emitting structured logs and events** following [semantic conventions](https://opentelemetry.io/docs/specs/semconv/),
+    especially when the existing logging library cannot emit structured data or specify event names.
   - **Scenarios requiring direct control** over log emission without
-    intermediary logging frameworks.
+    intermediary logging library.
   
   Note that existing logging libraries generally provide a much richer set of
   features than what is defined in OpenTelemetry. Yet, languages may provide
