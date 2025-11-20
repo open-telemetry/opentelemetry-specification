@@ -157,7 +157,8 @@ Given the above state of the logging space we took the following approach:
   
   Note that existing logging libraries generally provide a much richer set of
   features than what is defined in OpenTelemetry. Yet, languages may provide
-  a more ergonomic API for better developer experience when using it directly.
+  an [ergonomic API](./api.md#ergonomic-api) for better developer experience
+  when using it directly.
 
 - OpenTelemetry defines an [SDK](./sdk.md) implementation of the [API](./api.md),
   which enables configuration of [processing](./sdk.md#logrecordprocessor)
@@ -399,7 +400,7 @@ Applications have several options for emitting logs:
    [Logs API](./api.md) directly to emit structured logs and events. This approach
    works well for emitting logs following [semantic conventions](https://opentelemetry.io/docs/specs/semconv/)
    and enables easier reuse of attributes used across different signals. Note
-   that a language can provide a more convenient and ergonomic logging interface.
+   that a language can provide a more convenient [ergonomic API](./api.md#ergonomic-api).
 
 Regardless of the approach, emitted logs are automatically augmented by
 application-specific resource context (e.g. process id, programming language,
