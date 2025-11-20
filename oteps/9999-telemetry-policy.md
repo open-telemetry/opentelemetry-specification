@@ -130,7 +130,87 @@ Note that mitigations do not need to be complete *solutions*, and that they do n
 
 TODO - discuss https://github.com/open-telemetry/opentelemetry-specification/pull/4672
 
-What are some prior and/or alternative approaches? For instance, is there a corresponding feature in OpenTracing or OpenCensus? What are some ideas that you have rejected?
+### Declarative Config + OpAMP as sole control for telemetry
+
+The declarative config + OpAMP could be used to send any config to any
+component in OpenTelemetry. Here, we would leverage OpAMP configuration passing
+and the open-extension and definitions of Declarative Config to pass the whole
+behavior of an SDK or Collector from an OpAMP "controlling server" down to a
+component and have them dynamically reload behavior.
+
+What this solution doesn't do is answer how to understand what config can be
+sent to what component, and how to drive control / policy independent of
+implementation or pipeline set-up.  For example, imagine a simple collector
+configuration:
+
+```yaml
+recievers:
+  otlp:
+  prometheus:
+    # ... config ...
+processors:
+  batch:
+  memorylimiter:
+  transform/drop_attribute:
+    # config to drop an attribute
+exporters:
+  otlp:
+pipelines:
+  metrics/crtical:
+    receivers: [otlp]
+    processors: [batch, transform/drop_attribute]
+    exporters: [otlp]
+  metrics/all:
+    receivers: [prometheus]
+    processors: [memorylimiter]
+    exporters: [otlp]
+```
+
+Here, we have two pipelines with intended purposes and tuned configurations.
+One which will *not* drop metrics when memory limits are reached and another
+that will. Now - if we want to drop a particular metric from being reported,
+which pipeline do we modify?  Should we construct a new processor for that
+purpose?  Should we always do so?
+
+Now imagine we *also* have an SDK we're controlling with declarative config. If
+we want to control metric inclusion in that SDK, we'd need to generate a
+completely different looking configuration file, as follows:
+
+```yaml
+file_format: '1.0-rc.1'
+# ... other config ...
+meter_provider:
+  readers:
+    - my_custom_metric_filtering_reader:
+        my_filter_config: # defines what to filter
+        wrapped: 
+          periodic:
+            exporter:
+              otlp_http:
+                endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://localhost:4318}/v1/metric
+```
+
+Here, I've created a custom component in java to allow filtering which metrics are read.
+However, to insert / use this component I need to have all of the following:
+
+- Know that this component exists in the java SDK
+- Know how to wire it into any existing metric export pipeline (e.g. my reader
+  wraps another reader that has the real export config).
+  Note: This likely means I need to understand the rest of the exporter
+  configuration or be able to parse it.
+
+This is not ideal for a few reasons:
+
+- Anyone designing a server that can control telemetry flow MUST have a deep
+  understanding of all components it could control and their implementations.
+- We don't have a "safe" mechanism to declare what configuration is supported
+  or could be sent to a specific component (note: we can design one)
+- The level of control we'd expose from our telemetry systems is *expansive*
+  and possibly dangerous. 
+  - We cannot limit the impact of any remote configuration on the working of a
+    system. We cannot prevent changes that may take down a process.
+  - We cannot limit the execution overhead of configuration or fine-grained
+    control over what changes would be allowed remotely.
 
 ## Open questions
 
