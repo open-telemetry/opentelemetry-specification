@@ -237,6 +237,8 @@ sections:
       - name: LogRecord.Set EventName
       - name: Logger.Enabled
         optional: true
+      - name: Ergonomic API
+        optional: true
       - name: SimpleLogRecordProcessor
       - name: BatchLogRecordProcessor
       - name: Can plug custom LogRecordProcessor
