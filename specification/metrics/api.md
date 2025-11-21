@@ -472,16 +472,14 @@ or something else).
 
 ### General operations
 
-All instruments SHOULD provide functions to:
+All synchronous instruments SHOULD provide functions to:
 
 * [Report if instrument is `Enabled`](#enabled)
 
 #### Enabled
 
-**Status**: [Development](../document-status.md)
-
 To help users avoid performing computationally expensive operations when
-recording measurements, [synchronous Instruments](#synchronous-instrument-api)
+recording measurements, [synchronous instruments](#synchronous-instrument-api)
 SHOULD provide this `Enabled` API.
 
 There are currently no required parameters for this API. Parameters can be

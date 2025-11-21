@@ -16,6 +16,9 @@ release.
 
 ### Metrics
 
+- Stabilize `Enabled` for synchronous instruments.
+  ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
+
 ### Logs
 
 - Stabilize `LogRecordProcessor.Enabled`.
