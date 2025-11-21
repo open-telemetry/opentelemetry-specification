@@ -999,13 +999,15 @@ must be retained.
 
 **Status**: [Development](../document-status.md)
 
-The instrument [Enabled](./api.md#enabled) operation MUST return `false` if any
-of the following conditions are true, and `true` otherwise:
+The instrument [`Enabled`](./api.md#enabled) MUST return `false` when either:
 
 * The [MeterConfig](#meterconfig) of the `Meter` used to create the instrument
   has parameter `disabled=true`.
 * All [resolved views](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
+
+Otherwise, it SHOULD return `true`.
+It MAY return `false` to support additional optimizations and features.
 
 Note: If a user makes no configuration changes, `Enabled` returns `true` since by
 default `MeterConfig.disabled=false` and instruments use the default
