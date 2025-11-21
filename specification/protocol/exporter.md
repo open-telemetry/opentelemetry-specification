@@ -217,9 +217,9 @@ MyDistribution/x.y.z OTel-OTLP-Exporter-Python/1.2.3
 ```
 
 [Boolean]: ../configuration/sdk-environment-variables.md#boolean
-[Timeout]: ../configuration/sdk-environment-variables.md#timeout
-[String]: ../configuration/sdk-environment-variables.md#string
-[Enum]: ../configuration/sdk-environment-variables.md#enum
+[Timeout]: ../configuration/common.md#timeout
+[String]: ../configuration/common.md#string
+[Enum]: ../configuration/common.md#enum
 
 [resource-semconv]: https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#telemetry-sdk
 [otlphttp-req]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-request
