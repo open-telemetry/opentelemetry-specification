@@ -14,10 +14,10 @@ weight: 2
 
 - [Minimally Sufficient Identity](#minimally-sufficient-identity)
 - [Repeatable Identity](#repeatable-identity)
-- [Identifying Attributes](#identifying-attributes)
+- [Attributes of Entity Identity](#attributes-of-entity-identity)
 - [Resource and Entities](#resource-and-entities)
   * [Attribute Referencing Model](#attribute-referencing-model)
-  * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
+  * [Placement of Shared Attributes of Entity Description](#placement-of-shared-attributes-of-entity-description)
 - [Examples of Entities](#examples-of-entities)
 
 <!-- tocstop -->
@@ -48,8 +48,8 @@ physical format and encoding of how entity data is recorded).
 | Field        | Type                                   | Description     |
 |--------------|----------------------------------------|-----------------|
 | Type         | string                                 | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
-| Id           | map<string, attribute value>  | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
-| Description  | map<string, attribute value>                       | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
+| Id           | map<string, attribute value>           | Attributes of entity identity.<p>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<p>Follows OpenTelemetry [Standard attribute definition](../common/README.md#standard-attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| Description  | map<string, attribute value>           | Attributes of entity description.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows [any](../logs/data-model.md#type-any) value definition in the OpenTelemetry spec. Arbitrary deep nesting of values for arrays and maps is allowed.<p>SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
 
 ## Minimally Sufficient Identity
 
@@ -62,37 +62,37 @@ Minimally Sufficient Identity rule.
 
 ## Repeatable Identity
 
-The identifying attributes for entity SHOULD be values that can be repeatably
+The attributes of entity identity SHOULD be values that can be repeatably
 obtained by observers of that entity. For example, a `process` entity SHOULD
 have the same identity (and be recognized as the same process), regardless of whether
 the identity was generated from the process itself, e.g. via SDK, or by an
 OpenTelemetry Collector running on the same host, or by some other system
 describing the process.
 
-> Aside: There are many ways to accomplish repeatable identifying attributes
+> Aside: There are many ways to accomplish repeatable attributes of entity identity
 > across multiple observers. While many successful systems rely on pushing down
 > identity from a central registry or knowledge store, OpenTelemetry must
 > support all possible scenarios.
 
-## Identifying Attributes
+## Attributes of Entity Identity
 
-OpenTelemetry Semantic Conventions MUST define a set of identifying attribute
+OpenTelemetry Semantic Conventions MUST define a set of identity attribute
 keys for every defined entity type.
 
-Names of the identifying attributes SHOULD use the entity type as a prefix to avoid
+Names of the identity attributes SHOULD use the entity type as a prefix to avoid
 collisions with other entity types. For example, the `k8s.node` entity uses
-`k8s.node.uid` as an identifying attribute.
+`k8s.node.uid` as an identity attribute.
 
 When an entity can be emitted by multiple observers, the following rules apply:
 
 * Two independent observers that report the same entity MUST be able to
-  supply identical values for all identifying attributes.
+  supply identical values for all identity attributes.
 
-* If an observer cannot reliably obtain one or more identifying attributes, it
+* If an observer cannot reliably obtain one or more identity attributes, it
   MUST NOT emit telemetry using that entity type. Instead, it SHOULD:
   1. delegate to the observer that _can_ supply the full set and treat that
      observer as the _source of truth_, or
-  2. emit a _different_ entity type with a set of identifying attributes it
+  2. emit a _different_ entity type with a set of identity attributes it
      can populate reliably.
 
 This ensures that entity identity is consistent and unambiguous across
@@ -113,8 +113,8 @@ compatibility with existing Resource attributes.
 
 ### Attribute Referencing Model
 
-Entities can be defined in the `resource` section of a telemetry signal. Their
-identifying and descriptive attributes reference shared attributes defined in
+Entities can be defined in the `resource` section of a telemetry signal. Attributes
+of their identity and description reference shared attributes defined in
 the Resource. For example, in OTLP, entities do not carry their own key-value
 pairs directly. Instead, they reference keys in `resource.attributes` to remain
 backward compatible with OTLP 1.x.
@@ -127,13 +127,13 @@ entities. The model provides:
 - The ability to avoid data duplication and inconsistencies.
 - A more efficient representation for encoding and transmission.
 
-### Placement of Shared Descriptive Attributes
+### Placement of Shared Attributes of Entity Description
 
 Attribute flattening allows multiple entities to reference the same attribute key,
 but with different values across the entities. In such situations, the following
 rule applies:
 
-If multiple entities share the same descriptive attribute key with potentially
+If multiple entities share the same description attribute key with potentially
 conflicting values, the attribute MUST logically belong to **only one** of them.
 All others SHOULD NOT reference it. The attribute MUST be referenced by the
 **most specific** entity, the one closest in the topology graph to the entity
@@ -142,7 +142,7 @@ associated with the telemetry signal.
 **Example:**  
 
 If a signal includes both `k8s.cluster` and `k8s.node` entities with
-the `cloud.availability_zone` descriptive attribute, which may have
+the `cloud.availability_zone` description attribute, which may have
 different values, then **only** the `k8s.node` entity can reference this key
 — as it is the more specific entity.
 
@@ -154,8 +154,8 @@ telemetry channel (e.g., entity events) where full ownership context is known.
 _This section is non-normative and is present only for the purposes of
 demonstrating the data model._
 
-Here are examples of entities, the typical identifying attributes they
-have and some examples of descriptive attributes that may be
+Here are examples of entities, the typical identity attributes they
+have and some examples of description attributes that may be
 associated with the entity.
 
 _Note: These examples MAY diverge from semantic conventions._
@@ -166,9 +166,9 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td><strong>Entity Type</strong>
     </td>
-    <td><strong>Identifying Attributes</strong>
+    <td><strong>Identity Attributes</strong>
     </td>
-    <td><strong>Descriptive Attributes</strong>
+    <td><strong>Description Attributes</strong>
     </td>
    </tr>
    <tr>
