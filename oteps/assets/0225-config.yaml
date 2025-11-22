@@ -404,7 +404,7 @@ sdk:
           #
           # Environment variable: OTEL_BLRP_MAX_EXPORT_BATCH_SIZE
           max_export_batch_size: 512
-          # Sets the exporter. Exporter must refer to a key in sdk.loger_provider.exporters.
+          # Sets the exporter. Exporter must refer to a key in sdk.logger_provider.exporters.
           #
           # Environment variable: OTEL_LOGS_EXPORTER
           exporter: otlp

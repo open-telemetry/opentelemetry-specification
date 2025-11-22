@@ -1,3 +1,4 @@
+<!--- cspell:ignorewords configz rpcz statsz tracez --->
 # zPages
 
 ## Table of Contents

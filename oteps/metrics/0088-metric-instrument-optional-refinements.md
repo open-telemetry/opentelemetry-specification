@@ -246,7 +246,7 @@ properties, it is natural to compute the sum.
 When performing spatial aggregation over data without additive
 properties, it is natural to combine the distributions.  The
 distinction is about how we interpret the values when aggregating.
-Use one of the sum-only refinments to report a sum in the default
+Use one of the sum-only refinements to report a sum in the default
 configuration, otherwise use one of the non-sum-only instruments to
 report a distribution.
 
@@ -260,7 +260,7 @@ to type names like `Int64Measure` and `Float64Measure`.
 A language with support for unsigned integer types may wish to create
 dedicated instruments to report these values, leading to type names
 like `UnsignedInt64Observer` and `UnsignedFloat64Observer`.  These
-would naturally apply a non-negative refinment.
+would naturally apply a non-negative refinement.
 
 Other uses for built-in type refinements involve the type for duration
 measurements.  For example, where there is built-in type for the
@@ -280,7 +280,7 @@ instrument.  There are a total of twelve hypothetical instruments
 listed in the table below, of which only one has been standardized.
 Hypothetical future instrument names are _italicized_.
 
-| Foundation instrument | Sum-only? | Precomputed-sum? | Non-negative? | Non-negative-rate? | Instrument name _(hyptothetical)_ |
+| Foundation instrument | Sum-only? | Precomputed-sum? | Non-negative? | Non-negative-rate? | Instrument name _(hypothetical)_ |
 | --- | ---- | ---- | ---- | --- | --- |
 | Measure | sum-only | | non-negative | non-negative-rate | Counter |
 | Measure | sum-only | precomputed-sum | | non-negative-rate | _CumulativeCounter_ |
@@ -296,7 +296,7 @@ Hypothetical future instrument names are _italicized_.
 | Observer | | | | | _LastValueObserver_ |
 
 To arrive at this listing, several assumptions have been made.  For
-example, the precomputed-sum and non-negative-rate refeinments are
+example, the precomputed-sum and non-negative-rate refinements are
 only applicable in conjunction with a sum-only refinement.
 
 For the precomputed-sum instruments, we technically do not care
@@ -464,7 +464,7 @@ We have identified important cases that should be standardized:
 
 Observer refinements that could be standardized in the future:
 
-- _UpDownCumulativeObserver_: Observe a non-monotonic cumluative counter
+- _UpDownCumulativeObserver_: Observe a non-monotonic cumulative counter
 - _UpDownDeltaObserver_: Observe positive and negative deltas
 - _AbsoluteLastValueObserver_: Observe non-negative current values.
 

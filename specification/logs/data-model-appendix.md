@@ -53,37 +53,37 @@ this data model.
     <td>FACILITY</td>
     <td>enum</td>
     <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: <code>mail system</code></td>
-    <td>Attributes["syslog.facility"]</td>
+    <td>Attributes[`syslog.facility`]</td>
   </tr>
   <tr>
     <td>VERSION</td>
     <td>number</td>
     <td>Meta: protocol version, orthogonal to the event.</td>
-    <td>Attributes["syslog.version"]</td>
+    <td>Attributes[`syslog.version`]</td>
   </tr>
   <tr>
     <td>HOSTNAME</td>
     <td>string</td>
     <td>Describes the location where the event originated. Possible values are FQDN, IP address, etc.</td>
-    <td>Resource["host.name"]</td>
+    <td>Resource[`host.name`]</td>
   </tr>
   <tr>
     <td>APP-NAME</td>
     <td>string</td>
     <td>User-defined app name. Part of event source identity.</td>
-    <td>Resource["service.name"]</td>
+    <td>Resource[`service.name`]</td>
   </tr>
   <tr>
     <td>PROCID</td>
     <td>string</td>
     <td>Not well defined. May be used as a meta field for protocol operation purposes or may be part of event source identity.</td>
-    <td>Attributes["syslog.procid"]</td>
+    <td>Attributes[`syslog.procid`]</td>
   </tr>
   <tr>
     <td>MSGID</td>
     <td>string</td>
     <td>Defines the type of the event. Part of event source identity. Example: "TCPIN"</td>
-    <td>Attributes["syslog.msgid"]</td>
+    <td>Attributes[`syslog.msgid`]</td>
   </tr>
   <tr>
     <td>STRUCTURED-DATA</td>
@@ -92,7 +92,7 @@ this data model.
 Can describe event source identity.<br>
 Can include data that describes particular occurrence of the event.<br>
 Can be meta-information, e.g. quality of timestamp value.</td>
-    <td>SDID origin.swVersion map to Resource["service.version"]. SDID origin.ip map to Attributes["client.address"]. Rest of SDIDs -> Attributes["syslog.*"]</td>
+    <td>SDID origin.swVersion map to Resource[`service.version`]. SDID origin.ip map to Attributes[`client.address`]. Rest of SDIDs -> Attributes[`syslog.*`]</td>
   </tr>
   <tr>
     <td>MSG</td>
@@ -127,13 +127,13 @@ Can be meta-information, e.g. quality of timestamp value.</td>
     <td>Computer</td>
     <td>string</td>
     <td>The name of the computer on which the event occurred.</td>
-    <td>Resource["host.name"]</td>
+    <td>Resource[`host.name`]</td>
   </tr>
   <tr>
     <td>EventID</td>
     <td>uint</td>
     <td>The identifier that the provider used to identify the event.</td>
-    <td>Attributes["winlog.event_id"]</td>
+    <td>Attributes[`winlog.event_id`]</td>
   </tr>
   <tr>
     <td>Message</td>
@@ -145,7 +145,7 @@ Can be meta-information, e.g. quality of timestamp value.</td>
     <td>Rest of the fields.</td>
     <td>any</td>
     <td>All other fields in the event.</td>
-    <td>Attributes["winlog.*"]</td>
+    <td>Attributes[`winlog.*`]</td>
   </tr>
 </table>
 
@@ -168,13 +168,13 @@ Can be meta-information, e.g. quality of timestamp value.</td>
     <td>EventType</td>
     <td>string</td>
     <td>Short machine understandable string describing the event type. SignalFx specific concept. Non-namespaced. Example: k8s Event Reason field.</td>
-    <td>Attributes["com.splunk.signalfx.event_type"]</td>
+    <td>Attributes[`com.splunk.signalfx.event_type`]</td>
   </tr>
   <tr>
     <td>Category</td>
     <td>enum</td>
     <td>Describes where the event originated and why. SignalFx specific concept. Example: AGENT. </td>
-    <td>Attributes["com.splunk.signalfx.event_category"]</td>
+    <td>Attributes[`com.splunk.signalfx.event_category`]</td>
   </tr>
   <tr>
     <td>Dimensions</td>
@@ -211,19 +211,19 @@ We apply this mapping from HEC to the unified model:
     <td>host</td>
     <td>string</td>
     <td>The host value to assign to the event data. This is typically the host name of the client that you are sending data from.</td>
-    <td>Resource["host.name"]</td>
+    <td>Resource[`host.name`]</td>
   </tr>
   <tr>
     <td>source</td>
     <td>string</td>
     <td>The source value to assign to the event data. For example, if you are sending data from an app you are developing, you could set this key to the name of the app.</td>
-    <td>Resource["com.splunk.source"]</td>
+    <td>Resource[`com.splunk.source`]</td>
   </tr>
   <tr>
     <td>sourcetype</td>
     <td>string</td>
     <td>The sourcetype value to assign to the event data.</td>
-    <td>Resource["com.splunk.sourcetype"]</td>
+    <td>Resource[`com.splunk.sourcetype`]</td>
   </tr>
   <tr>
     <td>event</td>
@@ -241,7 +241,7 @@ We apply this mapping from HEC to the unified model:
     <td>index</td>
     <td>string</td>
     <td>The name of the index by which the event data is to be indexed. The index you specify here must be within the list of allowed indexes if the token has the indexes parameter set.</td>
-    <td>Attributes["com.splunk.index"]</td>
+    <td>Attributes[`com.splunk.index`]</td>
   </tr>
 </table>
 
@@ -258,37 +258,37 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>SeverityText</td>
     <td>string</td>
     <td>The severity of the event as a human-readable string.</td>
-    <td>fields['otel.log.severity.text']</td>
+    <td>fields[`otel.log.severity.text`]</td>
   </tr>
     <tr>
     <td>SeverityNumber</td>
     <td>string</td>
     <td>The severity of the event as a number.</td>
-    <td>fields['otel.log.severity.number']</td>
+    <td>fields[`otel.log.severity.number`]</td>
   </tr>
   <tr>
     <td>Name</td>
     <td>string</td>
     <td>Short event identifier that does not contain varying parts.</td>
-    <td>fields['otel.log.name']</td>
+    <td>fields[`otel.log.name`]</td>
   </tr>
   <tr>
     <td>TraceId</td>
     <td>string</td>
     <td>Request trace id.</td>
-    <td>fields['trace_id']</td>
+    <td>fields[`trace_id`]</td>
   </tr>
   <tr>
     <td>SpanId</td>
     <td>string</td>
     <td>Request span id.</td>
-    <td>fields['span_id']</td>
+    <td>fields[`span_id`]</td>
   </tr>
   <tr>
     <td>TraceFlags</td>
     <td>string</td>
     <td>W3C trace flags.</td>
-    <td>fields['trace_flags']</td>
+    <td>fields[`trace_flags`]</td>
   </tr>
 </table>
 
@@ -388,37 +388,37 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>%a</td>
     <td>string</td>
     <td>Client address</td>
-    <td>Attributes["network.peer.address"]</td>
+    <td>Attributes[`network.peer.address`]</td>
   </tr>
   <tr>
     <td>%A</td>
     <td>string</td>
     <td>Server address</td>
-    <td>Attributes["network.local.address"]</td>
+    <td>Attributes[`network.local.address`]</td>
   </tr>
   <tr>
     <td>%h</td>
     <td>string</td>
     <td>Client hostname.</td>
-    <td>Attributes["client.address"]</td>
+    <td>Attributes[`client.address`]</td>
   </tr>
   <tr>
     <td>%m</td>
     <td>string</td>
     <td>The request method.</td>
-    <td>Attributes["http.request.method"]</td>
+    <td>Attributes[`http.request.method`]</td>
   </tr>
   <tr>
     <td>%v,%p,%U,%q</td>
     <td>string</td>
     <td>Multiple fields that can be composed into URL.</td>
-    <td>Attributes["url.full"]</td>
+    <td>Attributes[`url.full`]</td>
   </tr>
   <tr>
     <td>%>s</td>
     <td>string</td>
     <td>Response status.</td>
-    <td>Attributes["http.response.status_code"]</td>
+    <td>Attributes[`http.response.status_code`]</td>
   </tr>
   <tr>
     <td>All other fields</td>
@@ -447,25 +447,25 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>eventSource</td>
     <td>string</td>
     <td>The service that the request was made to. This name is typically a short form of the service name without spaces plus .amazonaws.com.</td>
-    <td>Resource["service.name"]?</td>
+    <td>Resource[`service.name`]?</td>
   </tr>
   <tr>
     <td>awsRegion</td>
     <td>string</td>
     <td>The AWS region that the request was made to, such as us-east-2.</td>
-    <td>Resource["cloud.region"]</td>
+    <td>Resource[`cloud.region`]</td>
   </tr>
   <tr>
     <td>sourceIPAddress</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>Attributes["client.address"]</td>
+    <td>Attributes[`client.address`]</td>
   </tr>
   <tr>
     <td>errorCode</td>
     <td>string</td>
     <td>The AWS service error if the request returns an error.</td>
-    <td>Attributes["cloudtrail.error_code"]</td>
+    <td>Attributes[`cloudtrail.error_code`]</td>
   </tr>
   <tr>
     <td>errorMessage</td>
@@ -477,7 +477,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>All other fields</td>
     <td>*</td>
     <td></td>
-    <td>Attributes["cloudtrail.*"]</td>
+    <td>Attributes[`cloudtrail.*`]</td>
   </tr>
 </table>
 
@@ -487,7 +487,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 | ----- | ---- | ----------- | --------------------------- |
 | timestamp | string | The time the event described by the log entry occurred. | Timestamp |
 | resource | MonitoredResource | The monitored resource that produced this log entry. | Resource |
-| log_name | string | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Attributes["gcp.log_name"] |
+| log_name | string | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Attributes[`gcp.log_name`] |
 | json_payload | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body |
 | proto_payload | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body |
 | text_payload | string | The log entry payload, represented as a Unicode string (UTF-8). | Body |
@@ -495,9 +495,9 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 | trace | string | The trace associated with the log entry, if any. | TraceId |
 | span_id | string | The span ID within the trace associated with the log entry. | SpanId |
 | labels | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes |
-| http_request | HttpRequest | The HTTP request associated with the log entry, if any. | Attributes["gcp.http_request"] |
+| http_request | HttpRequest | The HTTP request associated with the log entry, if any. | Attributes[`gcp.http_request`] |
 | trace_sampled | boolean | The sampling decision of the trace associated with the log entry. | TraceFlags.SAMPLED |
-| All other fields | | | Attributes["gcp.*"] |
+| All other fields | | | Attributes[`gcp.*`] |
 
 ### Elastic Common Schema
 
@@ -560,37 +560,37 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>agent.name</td>
     <td>string</td>
     <td>Name given to the agent</td>
-    <td>Resource["telemetry.sdk.name"]</td>
+    <td>Resource[`telemetry.sdk.name`]</td>
   </tr>
   <tr>
     <td>agent.type</td>
     <td>string</td>
     <td>Type of agent</td>
-    <td>Resource["telemetry.sdk.language"]</td>
+    <td>Resource[`telemetry.sdk.language`]</td>
   </tr>
   <tr>
     <td>agent.version</td>
     <td>string</td>
     <td>Version of agent</td>
-    <td>Resource["telemetry.sdk.version"]</td>
+    <td>Resource[`telemetry.sdk.version`]</td>
   </tr>
   <tr>
     <td>source.ip, client.ip</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>Attributes["client.address"]</td>
+    <td>Attributes[`client.address`]</td>
   </tr>
   <tr>
     <td>cloud.account.id</td>
     <td>string</td>
     <td>ID of the account in the given cloud</td>
-    <td>Resource["cloud.account.id"]</td>
+    <td>Resource[`cloud.account.id`]</td>
   </tr>
   <tr>
     <td>cloud.availability_zone</td>
     <td>string</td>
     <td>Availability zone in which this host is running.</td>
-    <td>Resource["cloud.zone"]</td>
+    <td>Resource[`cloud.zone`]</td>
   </tr>
   <tr>
     <td>cloud.instance.id</td>
@@ -614,31 +614,31 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>cloud.provider</td>
     <td>string</td>
     <td>Name of the cloud provider. Example values are aws, azure, gcp, or digitalocean.</td>
-    <td>Resource["cloud.provider"]</td>
+    <td>Resource[`cloud.provider`]</td>
   </tr>
   <tr>
     <td>cloud.region</td>
     <td>string</td>
     <td>Region in which this host is running.</td>
-    <td>Resource["cloud.region"]</td>
+    <td>Resource[`cloud.region`]</td>
   </tr>
   <tr>
     <td>cloud.image.id*</td>
     <td>string</td>
     <td></td>
-    <td>Resource["host.image.name"]</td>
+    <td>Resource[`host.image.name`]</td>
   </tr>
   <tr>
     <td>container.id</td>
     <td>string</td>
     <td>Unique container id</td>
-    <td>Resource["container.id"]</td>
+    <td>Resource[`container.id`]</td>
   </tr>
   <tr>
     <td>container.image.name</td>
     <td>string</td>
     <td>Name of the image the container was built on.</td>
-    <td>Resource["container.image.name"]</td>
+    <td>Resource[`container.image.name`]</td>
   </tr>
   <tr>
     <td>container.image.tag</td>
@@ -656,7 +656,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>container.name</td>
     <td>string</td>
     <td>Container name.</td>
-    <td>Resource["container.name"]</td>
+    <td>Resource[`container.name`]</td>
   </tr>
   <tr>
     <td>container.runtime</td>
@@ -668,31 +668,31 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>destination.address</td>
     <td>string</td>
     <td>Destination address for the event</td>
-    <td>Attributes["destination.address"]</td>
+    <td>Attributes[`destination.address`]</td>
   </tr>
   <tr>
     <td>error.code</td>
     <td>string</td>
     <td>Error code describing the error.</td>
-    <td>Attributes["error.code"]</td>
+    <td>Attributes[`error.code`]</td>
   </tr>
   <tr>
     <td>error.id</td>
     <td>string</td>
     <td>Unique identifier for the error.</td>
-    <td>Attributes["error.id"]</td>
+    <td>Attributes[`error.id`]</td>
   </tr>
   <tr>
     <td>error.message</td>
     <td>string</td>
     <td>Error message.</td>
-    <td>Attributes["error.message"]</td>
+    <td>Attributes[`error.message`]</td>
   </tr>
   <tr>
     <td>error.stack_trace</td>
     <td>string</td>
     <td>The stack trace of this error in plain text.</td>
-    <td>Attributes["error.stack_trace]</td>
+    <td>Attributes[`error.stack_trace]</td>
   </tr>
   <tr>
     <td>host.architecture</td>
@@ -710,37 +710,37 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>host.name</td>
     <td>string</td>
     <td>Hostname of the host.<br>It normally contains what the hostname command returns on the host machine.</td>
-    <td>Resource["host.name"]</td>
+    <td>Resource[`host.name`]</td>
   </tr>
   <tr>
     <td>host.id</td>
     <td>string</td>
     <td>Unique host id.</td>
-    <td>Resource["host.id"]</td>
+    <td>Resource[`host.id`]</td>
   </tr>
   <tr>
     <td>host.ip</td>
     <td>Array of string</td>
     <td>Host IP</td>
-    <td>Resource["host.ip"]</td>
+    <td>Resource[`host.ip`]</td>
   </tr>
   <tr>
     <td>host.mac</td>
     <td>array of string</td>
     <td>MAC addresses of the host</td>
-    <td>Resource["host.mac"]</td>
+    <td>Resource[`host.mac`]</td>
   </tr>
   <tr>
     <td>host.name</td>
     <td>string</td>
     <td>Name of the host.<br>It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
-    <td>Resource["host.name"]</td>
+    <td>Resource[`host.name`]</td>
   </tr>
   <tr>
     <td>host.type</td>
     <td>string</td>
     <td>Type of host.</td>
-    <td>Resource["host.type"]</td>
+    <td>Resource[`host.type`]</td>
   </tr>
   <tr>
     <td>host.uptime</td>
@@ -764,19 +764,19 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>service.name</td>
     <td>string</td>
     <td>Name of the service data is collected from.</td>
-    <td>Resource["service.name"]</td>
+    <td>Resource[`service.name`]</td>
   </tr>
   <tr>
     <td>service.node.name</td>
     <td>string</td>
     <td>Specific node serving that service</td>
-    <td>Resource["service.instance.id"]</td>
+    <td>Resource[`service.instance.id`]</td>
   </tr>
   <tr>
     <td>service.state</td>
     <td>string</td>
     <td>Current state of the service.</td>
-    <td>Attributes["service.state"]</td>
+    <td>Attributes[`service.state`]</td>
   </tr>
   <tr>
     <td>service.type</td>
@@ -788,7 +788,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
     <td>service.version</td>
     <td>string</td>
     <td>Version of the service the data was collected from.</td>
-    <td>Resource["service.version"]</td>
+    <td>Resource[`service.version`]</td>
   </tr>
 </table>
 

@@ -70,7 +70,7 @@ For example, an OTEP proposing configurable sampling *and* various samplers shou
 ### Integrating the OTEP into the Spec
 
 - Once an OTEP is `approved`, an issue is created in this repo to integrate the OTEP into the actual spec.
-- When reviewing the spec PR for the OTEP, focus on whether the spec is written clearly, and reflects the changes approved in the OTEP. Please abstain from relitigating the approved OTEP changes at this stage.
+- When reviewing the spec PR for the OTEP, focus on whether the spec is written clearly, and reflects the changes approved in the OTEP. Please abstain from re-litigating the approved OTEP changes at this stage.
 - An OTEP is `integrated` when four reviewers github-approve the spec PR. The PR is then merged, and the spec is versioned.
 
 ### Implementing the OTEP

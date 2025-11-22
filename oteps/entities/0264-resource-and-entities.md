@@ -44,7 +44,7 @@ It is an expansion on the [previous entity proposal](0256-entities-data-model.md
 - [Trade-offs and mitigations](#trade-offs-and-mitigations)
   * [Why don't we download schema url contents?](#why-dont-we-download-schema-url-contents)
 - [Prior art and alternatives](#prior-art-and-alternatives)
-- [Future Posibilities](#future-posibilities)
+- [Future Possibilities](#future-possibilities)
 - [Use Cases](#use-cases)
   * [SDK - Multiple Detectors of the same Entity type](#sdk---multiple-detectors-of-the-same-entity-type)
   * [SDK and Collector - Simple coordination](#sdk-and-collector---simple-coordination)
@@ -93,7 +93,7 @@ The SDK Resource Provider is responsible for running all configured Resource and
   - Resource detectors otherwise follow existing merge semantics.
     - The Specification merge rules will be updated to account for violations prevalent in ALL implementation of resource detection.
     - Specifically: This means the [rules around merging Resource across schema-url will be dropped](../../specification/resource/sdk.md#merge).  Instead only conflicting attributes will be dropped.
-    - SchemaURL on Resource will be deprecated with entity-specific schema-url replacing it. SDKs will only fill out SchemaURL on Resource when SchemaURL matches across all entities discovered. Additionally, only existing stable resource attributes can be used in Resource SchemaURL in stable OpenTelemetry components (Specifially `service.*` and `sdk.*` are the only stabilized resource convnetions). Given prevalent concerns of implementations around Resource merge specification, we suspect impact of this deprecation to be minimal, and existing usage was within the "experimental" phase of semantic conventions.
+    - SchemaURL on Resource will be deprecated with entity-specific schema-url replacing it. SDKs will only fill out SchemaURL on Resource when SchemaURL matches across all entities discovered. Additionally, only existing stable resource attributes can be used in Resource SchemaURL in stable OpenTelemetry components (Specifically `service.*` and `sdk.*` are the only stabilized resource conventions). Given prevalent concerns of implementations around Resource merge specification, we suspect impact of this deprecation to be minimal, and existing usage was within the "experimental" phase of semantic conventions.
   - An OOTB ["Env Variable Entity Detector"](#environment-variable-detector) will be specified and provided vs. requiring SDK wide ENV variables for resource detection.
 - *Additionally, Resource Provider would be responsible for understanding Entity lifecycle events, for Entities whose lifetimes do not match or exceed the SDK's own lifetime (e.g. browser session).*
 
@@ -123,7 +123,7 @@ We provide a simple algorithm for this behavior:
   - For each entity detector `D`, detect entities
     - For each entity detected, `d'`
       - If an entity `e'` exists in `E` with same entity type as `d'`, do one of the following:
-        - If the entity identiy and schema_url are the same, merge the descriptive attributes of `d'` into `e'`:
+        - If the entity identity and schema_url are the same, merge the descriptive attributes of `d'` into `e'`:
           - For each descriptive attribute `da'` in `d'`
             - If `da'.key` does not exist in `e'`, then add `da'` to `ei`
             - otherwise, ignore.
@@ -187,7 +187,7 @@ processor:
 
 The list of detectors is given in priority order (first wins, in event of a tie, outside of override configuration). The processor may need to be updated to allow the override flag to apply to each individual detector.
 
-The rules for attributes would follow entity merging rules, as defined for the SDK resource proivder.
+The rules for attributes would follow entity merging rules, as defined for the SDK resource provider.
 
 Note: While this proposals shows a new processor replacing the `resourcedetection` processor, the details of whether to modify-in-place the existing `resourcedetection` processor or create a new one would be determined as a follow up to this design. Ideally, we don't want users to need new configuration for resource in the otel collector.
 
@@ -196,7 +196,7 @@ Note: While this proposals shows a new processor replacing the `resourcedetectio
 Given our desired design and algorithms for detecting, merging and manipulating Entities, we need the ability to denote how entity and resource relate. These changes must not break existing usage of Resource, therefore:
 
 - The Entity model must be *layered on top of* the Resource model.  A system does not need to interact with entities for correct behavior.
-- Existing key usage of Resource must remain when using Entities, specifically navigationality (see: [OpenTelemetry Resources: Principles and Characteristics](https://docs.google.com/document/d/1Xd1JP7eNhRpdz1RIBLeA1_4UYPRJaouloAYqldCeNSc/edit))
+- Existing key usage of Resource must remain when using Entities, specifically navigation (see: [OpenTelemetry Resources: Principles and Characteristics](https://docs.google.com/document/d/1Xd1JP7eNhRpdz1RIBLeA1_4UYPRJaouloAYqldCeNSc/edit))
 - Downstream components should be able to engage with the Entity model in Resource.
 
 The following changes are made:
@@ -338,7 +338,7 @@ Here's a few (non-exhaustive) options for what this could look like:
   - By default all identifying labels on Resource are promoted to resource attributes.
   - All descriptive labels are placed on `target_info`.
   - (likely) `job`/`instance` will need to be synthesized for resources lacking a `service` entity.
-- Option #3 - Enocde entities into prometheus as info metrics
+- Option #3 - Encode entities into prometheus as info metrics
   - Create `{entity_type}_entity_info` metrics.
   - Synthesize `job`/`instance` labels for joins between all `*_info` metrics.
   - Expand the scope of info-typed metrics work in Prometheus to work with this encoding.
@@ -348,7 +348,7 @@ These designs will be explored and evaluated in light of the requirements. For n
 
 ### Should entities have a domain?
 
-Is it worth having a `domain` in addition to type for entity?  We could force each entity to exist in one domain and leverage domain generically in resource management.  Entity Detectors would be responsible for an entire domain, selecting only ONE to apply a resource. Domains could be layered, e.g. a Cloud-specific domain may layer on top of a Kubernetes domain, where "GKE cluster entity" identifies *which* kubernetes cluster a kuberntes infra entity is part of.  This layer would be done naively, via automatic join of participating entities or explicit relationships derived from GKE specific hooks.
+Is it worth having a `domain` in addition to type for entity?  We could force each entity to exist in one domain and leverage domain generically in resource management.  Entity Detectors would be responsible for an entire domain, selecting only ONE to apply a resource. Domains could be layered, e.g. a Cloud-specific domain may layer on top of a Kubernetes domain, where "GKE cluster entity" identifies *which* kubernetes cluster a kubernetes infra entity is part of.  This layer would be done naively, via automatic join of participating entities or explicit relationships derived from GKE specific hooks.
 
 It's unclear if this is needed initially, and we believe this could be layered in later.
 
@@ -411,7 +411,7 @@ Below is a brief discussion of some design decisions:
 - **Embed fully Entity in Resource.** This was rejected because it makes it easy/trivial for Resource attributes and Entities to diverge.  This would prevent the backwards/forwards compatibility goals and also require all participating OTLP users to leverage entities. Entity should be an opt-in / additional feature that may or may not be engaged with, depending on user need.
 - **Re-using resource detection as-is** This was rejected as not having a viable compatibility path forward.  Creating a new set of components that can preserve existing behavior while allowing users to adopt the new functionality means that users have better control of when they see / change system behavior, and adoption is more obvious across the ecosystem.
 
-## Future Posibilities
+## Future Possibilities
 
 This proposal opens the door for addressing issues where an Entity's lifetime does not match an SDK's lifetime, in addition to providing a data model where mutable (descriptive) attributes can be changed over the lifetime of a resource without affecting its identity.  We expect a follow-on OTEP which directly handles this issue.
 
@@ -476,7 +476,7 @@ The resulting OTLP from the collector would contain a resource with all
 of the entities (`process`, `service`, `ec2`, and `host`).  This is because
 the entities are all disjoint.
 
-*Note: this matches today's behavior of existing resource detection and OpenTelmetry collector where all attributes wind up on resource.*
+*Note: this matches today's behavior of existing resource detection and OpenTelemetry collector where all attributes wind up on resource.*
 
 ### SDK and Collector - Entity coordination with descriptive attributes
 
@@ -851,7 +851,7 @@ included".
 However, this can be refined.  Resources today provide a [few key features](https://docs.google.com/document/d/1Xd1JP7eNhRpdz1RIBLeA1_4UYPRJaouloAYqldCeNSc/edit):
 
 - They provide identity - Uniquely identifying the origin of the data.
-- They provide "navigationality" - allowing users to find the source of the data within their o11y and infrastructure tools.
+- They provide "navigation" - allowing users to find the source of the data within their o11y and infrastructure tools.
 - They allow aggregation / slicing of data on interesting domains.
 
 A litmus test for what entities to include on resource should be as follows:
