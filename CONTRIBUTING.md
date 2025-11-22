@@ -104,7 +104,7 @@ checks directly.
 See:
 
 - [MarkdownStyle](#markdown-style)
-- [cspell Check](#cspell-check)
+- [CSpell Check](#cspell-check)
 - Markdown link checking (docs TODO)
 
 ### Autoformatting
@@ -147,7 +147,7 @@ with the Node version of markdownlint. If you are using Visual Studio Code,
 you can also use the `fixAll` command of the
 [vscode markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint).
 
-### cspell check
+### CSpell check
 
 In addition, please make sure to clean up typos before you submit the change.
 
