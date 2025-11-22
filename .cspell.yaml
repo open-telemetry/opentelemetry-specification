@@ -7,7 +7,9 @@ caseSensitive: false
 allowCompoundWords: true
 useGitignore: true
 ignorePaths:
-  - '*.svg'
+  - '**/*.svg'
+files:
+  - '**/*.md'
 patterns:
   - name: CodeBlock
     pattern: |

@@ -84,6 +84,13 @@ jobs:
     steps:
     - name: check out code
       uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      with:
+        persist-credentials: false
 
-    - name: run cspell
-      run: make cspell
+    - uses: streetsidesoftware/cspell-action@v8
+      with:
+        incremental_files_only: false # check all files, not just changed files
+        config: .cspell.yaml
+        suggestions: true
+        treat_flagged_words_as_errors: true
+        use_cspell_files: true
