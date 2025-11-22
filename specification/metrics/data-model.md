@@ -200,6 +200,7 @@ in scope for key design decisions:
 
 OpenTelemetry fragments metrics into three interacting models:
 
+<!--- cSpell:ignore emetry --->
 - An Event model, representing how instrumentation reports metric data.
 - A Timeseries model, representing how backends store metric data.
 - A Metric Stream model, defining the *O*pen*T*e*L*emetry *P*rotocol (OTLP)
@@ -415,7 +416,7 @@ in OTLP consist of the following:
     - The time interval is inclusive of the end time.
     - Times are specified in Value is UNIX Epoch time in nanoseconds since
       `00:00:00 UTC on 1 January 1970`
-  - (optional) a set of examplars (see [Exemplars](#exemplars)).
+  - (optional) a set of exemplars (see [Exemplars](#exemplars)).
   - (optional) Data point flags (see [Data point flags](#data-point-flags)).
 
 The aggregation temporality is used to understand the context in which the sum
@@ -451,7 +452,7 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
   - (optional) A timestamp (`start_time_unix_nano`) which best represents the
     first possible moment a measurement could be recorded.  This is commonly
     set to the timestamp when a metric collection system started.
-  - (optional) a set of examplars (see [Exemplars](#exemplars)).
+  - (optional) a set of exemplars (see [Exemplars](#exemplars)).
   - (optional) Data point flags (see [Data point flags](#data-point-flags)).
 
 In OTLP, a point within a Gauge stream represents the last-sampled event for a
@@ -498,7 +499,7 @@ Histograms consist of the following:
       for buckets and whether not a given observation would be recorded in this
       bucket.
     - A count of the number of observations that fell within this bucket.
-  - (optional) a set of examplars (see [Exemplars](#exemplars)).
+  - (optional) a set of exemplars (see [Exemplars](#exemplars)).
   - (optional) Data point flags (see [Data point flags](#data-point-flags)).
 
 Like Sums, Histograms also define an aggregation temporality.  The picture above

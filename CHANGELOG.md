@@ -168,10 +168,10 @@ release.
 
 ### Compatibility
 
-- Flexibilie escaping of characters that are discouraged by Prometheus Conventions
+- Flexible escaping of characters that are discouraged by Prometheus Conventions
   in Prometheus exporters.
   ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
-- Flexibilize addition of unit/type related suffixes in Prometheus exporters.
+- Flexibility in addition of unit/type related suffixes in Prometheus exporters.
   ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
 - Define the configuration option "Translation Strategies" for Prometheus exporters.
   ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
@@ -967,7 +967,7 @@ release.
 
 - Add optional configuration for Prometheus exporters to promote resource attributes to metric attributes
   ([#3761](https://github.com/open-telemetry/opentelemetry-specification/pull/3761))
-- Clarifications and flexibility in Exemplar speicification.
+- Clarifications and flexibility in Exemplar specification.
   ([#3760](https://github.com/open-telemetry/opentelemetry-specification/pull/3760))
 
 ### Logs
@@ -1171,7 +1171,7 @@ release.
 
 - No changes.
 
-### Supplemenatary Guidelines
+### Supplementary Guidelines
 
 - No changes.
 
@@ -1226,7 +1226,7 @@ release.
 
 - No changes.
 
-### Supplemenatary Guidelines
+### Supplementary Guidelines
 
 - No changes.
 
@@ -1287,7 +1287,7 @@ release.
 
 - No changes.
 
-### Supplemenatary Guidelines
+### Supplementary Guidelines
 
 - No changes.
 
@@ -1337,7 +1337,7 @@ release.
   namespaces.
   ([#3507](https://github.com/open-telemetry/opentelemetry-specification/pull/3507))
 
-### Supplemenatary Guidelines
+### Supplementary Guidelines
 
 - No changes.
 
@@ -1416,7 +1416,7 @@ release.
 - Add log entries to specification README.md contents.
   ([#3435](https://github.com/open-telemetry/opentelemetry-specification/pull/3435))
 
-### Supplemenatary Guidelines
+### Supplementary Guidelines
 
 - Add guidance to use service-supported propagation formats as default for AWS SDK client calls.
   ([#3212](https://github.com/open-telemetry/opentelemetry-specification/pull/3212))
@@ -2677,7 +2677,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 ### OpenTelemetry Protocol
 
 - Add environment variables for configuring the OTLP exporter protocol (`grpc`, `http/protobuf`, `http/json`) ([#1880](https://github.com/open-telemetry/opentelemetry-specification/pull/1880))
-- Allow implementations to use their own default for OTLP compression, with `none` denotating no compression
+- Allow implementations to use their own default for OTLP compression, with `none` indicating no compression
   ([#1923](https://github.com/open-telemetry/opentelemetry-specification/pull/1923))
 - Clarify OTLP server components MUST support none/gzip compression
   ([#1955](https://github.com/open-telemetry/opentelemetry-specification/pull/1955))

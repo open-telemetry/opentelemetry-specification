@@ -43,7 +43,7 @@ Without further ado, here are a set of requirements for “official” OpenTelem
   * Note that this also makes it easy to test against multiple different versions of any given library
 * A fully pluggable architecture, where plugins can be registered at runtime without requiring changes to the central repo at github.com/open-telemetry
   * E.g., for ops teams that want to write a plugin for a proprietary piece of legacy software they are unable to recompile
-* Augemntation of whitebox instrumentation by blackbox instrumentation (or, perhaps, vice versa). That is, not only can the trace context be shared by these different flavors of instrumentation, but even things like in-flight Span objects can be shared and co-modified (e.g., to use runtime interposition to grab local variables and attach them to a manually-instrumented span).
+* Augmentation of whitebox instrumentation by blackbox instrumentation (or, perhaps, vice versa). That is, not only can the trace context be shared by these different flavors of instrumentation, but even things like in-flight Span objects can be shared and co-modified (e.g., to use runtime interposition to grab local variables and attach them to a manually-instrumented span).
 
 ## Trade-offs and mitigations
 

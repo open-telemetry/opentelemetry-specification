@@ -3,7 +3,9 @@
 # https://www.streetsidesoftware.com/vscode-spell-checker/docs/configuration/
 version: '0.2'
 language: en-US
-caseSensitive: true
+caseSensitive: false
+allowCompoundWords: true
+useGitignore: true
 ignorePaths:
   - '*.svg'
 patterns:
@@ -15,10 +17,26 @@ patterns:
           [\s\S]*?         # content
           \1               # code-block end - cSpell:disable-next-line
       /igmx
+  - name: CodeName
+    pattern: |
+      /
+          ([~`])
+          [^~`]*?
+          \1
+      /x
+  - name: UnderscoreName
+    pattern: |
+      /
+          ([_])
+          [^_]*?
+          \1
+      /x
 languageSettings:
   - languageId: markdown
     ignoreRegExpList:
       - CodeBlock
+      - CodeName
+      - UnderscoreName
 dictionaryDefinitions:
   - name: en-words
     path: .cspell/en-words.txt
