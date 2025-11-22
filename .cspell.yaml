@@ -1,0 +1,43 @@
+# cSpell:ignore textlintrc
+# For settings, see
+# https://www.streetsidesoftware.com/vscode-spell-checker/docs/configuration/
+version: '0.2'
+language: en-US
+caseSensitive: true
+ignorePaths:
+  - '*.svg'
+patterns:
+  - name: CodeBlock
+    pattern: |
+      /
+          ^(\s*[~`]{3,})   # code-block start
+          .*               # all languages and options, e.g. shell {hl_lines=[12]}
+          [\s\S]*?         # content
+          \1               # code-block end - cSpell:disable-next-line
+      /igmx
+languageSettings:
+  - languageId: markdown
+    ignoreRegExpList:
+      - CodeBlock
+dictionaryDefinitions:
+  - name: en-words
+    path: .cspell/en-words.txt
+dictionaries:
+  # Local word lists
+  - en-words
+  # Programming languages and software terms
+  - cpp
+  - dotnet
+  - golang
+  - node
+  - softwareTerms
+  # Other
+  - companies
+words: # Valid words across all locales
+  - Docsy
+  - htmltest
+  - jsonify
+  - nvmrc
+  - opentelemetrybot
+  - warnf
+  - warnidf

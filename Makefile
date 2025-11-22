@@ -1,10 +1,6 @@
 # All documents to be used in spell check.
-ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' -not -path '*semantic_conventions*' -not -name 'spec-compliance-matrix.md' | sort)
+ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' -not -name 'spec-compliance-matrix.md' | sort)
 PWD := $(shell pwd)
-
-TOOLS_DIR := ./internal/tools
-MISSPELL_BINARY=bin/misspell
-MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
@@ -12,18 +8,11 @@ SEMCONVGEN_VERSION=0.17.0
 
 # TODO: add `yamllint` step to `all` after making sure it works on Mac.
 .PHONY: all
-all: install-tools markdownlint markdown-link-check misspell
+all: install-tools markdownlint markdown-link-check cspell
 
-$(MISSPELL):
-	cd $(TOOLS_DIR) && go build -o $(MISSPELL_BINARY) github.com/client9/misspell/cmd/misspell
-
-.PHONY: misspell
-misspell:	$(MISSPELL)
-	$(MISSPELL) -error $(ALL_DOCS)
-
-.PHONY: misspell-correction
-misspell-correction:	$(MISSPELL)
-	$(MISSPELL) -w $(ALL_DOCS)
+.PHONY: cspell
+cspell:
+	npx cspell --no-progress --config .cspell.yaml $(ALL_DOCS)
 
 .PHONY: markdown-link-check
 markdown-link-check:
@@ -88,13 +77,8 @@ yamllint:
 
 # Run all checks in order of speed / likely failure.
 .PHONY: check
-check: misspell markdownlint markdown-link-check
+check: cspell markdownlint markdown-link-check
 	@echo "All checks complete"
-
-# Attempt to fix issues / regenerate tables.
-.PHONY: fix
-fix: misspell-correction
-	@echo "All autofixes complete"
 
 # Generate spec compliance matrix from YAML source
 .PHONY: compliance-matrix
@@ -104,6 +88,6 @@ compliance-matrix:
 	@echo "Compliance matrix generation complete"
 
 .PHONY: install-tools
-install-tools: $(MISSPELL)
+install-tools:
 	npm install
 	@echo "All tools installed"
