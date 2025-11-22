@@ -1,4 +1,3 @@
-# cSpell:ignore textlintrc
 # For settings, see
 # https://www.streetsidesoftware.com/vscode-spell-checker/docs/configuration/
 version: '0.2'
@@ -53,11 +52,3 @@ dictionaries:
   - softwareTerms
   # Other
   - companies
-words: # Valid words across all locales
-  - Docsy
-  - htmltest
-  - jsonify
-  - nvmrc
-  - opentelemetrybot
-  - warnf
-  - warnidf

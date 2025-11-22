@@ -1,8 +1,7 @@
 # Words listed here are only for their spelling. If there is a certain way to
-# capitalize the word, add capitalization rules to text-lint rules in
-# .textlintrc.yml
+# capitalize the word, ensure textlint is configured, add capitalization rules
+# to text-lint rules in .textlintrc.yaml.
 #
-# cSpell:ignore textlintrc
 ABNF
 accountingservice
 actix
