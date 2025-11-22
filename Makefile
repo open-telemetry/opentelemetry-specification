@@ -1,5 +1,3 @@
-# All documents to be used in spell check.
-ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' -not -name 'spec-compliance-matrix.md' | sort)
 PWD := $(shell pwd)
 
 # Detect Python and pip commands
@@ -28,7 +26,8 @@ all: install-tools markdownlint markdown-link-check cspell
 
 .PHONY: cspell
 cspell:
-	npx cspell --no-progress --config .cspell.yaml $(ALL_DOCS)
+	@if ! npm ls cspell; then npm install; fi
+	npx cspell --no-progress
 
 .PHONY: markdown-link-check
 markdown-link-check:

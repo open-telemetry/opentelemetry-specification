@@ -1,8 +1,8 @@
 {
   "devDependencies": {
+    "cspell": "9.3.2",
     "markdown-link-check": "3.14.2",
     "markdown-toc": "1.2.0",
-    "markdownlint-cli": "0.47.0",
-    "cspell": "^9.3.2"
+    "markdownlint-cli": "0.47.0"
   }
 }
