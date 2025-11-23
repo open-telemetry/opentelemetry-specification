@@ -68,7 +68,7 @@ Examples (based on existing contribution libraries from OpenTracing and OpenCens
 * `io.opentracing.contrib.asynchttpclient`
 * `io.opencensus.contrib.http.servlet`
 * `io.opencensus.contrib.spring.sleuth.v1x`
-* `io.opencesus.contrib.http.jaxrs`
+* `io.opencensus.contrib.http.jaxrs`
 * `github.com/opentracing-contrib/go-amqp` (Go)
 * `github.com/opentracing-contrib/go-grpc` (Go)
 * `OpenTracing.Contrib.NetCore.AspNetCore` (.NET)

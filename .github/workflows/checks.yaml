@@ -79,11 +79,16 @@ jobs:
     - name: validate compliance-matrix
       run: git diff --exit-code spec-compliance-matrix.md || (echo 'Generated compliance matrix is out of date, please run "make compliance-matrix" and commit the changes in this PR.' && exit 1)
 
-  misspell:
+  cspell:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
       uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
-    - name: run misspell
-      run: make misspell
+    - uses: streetsidesoftware/cspell-action@v8
+      with:
+        incremental_files_only: false # check all files, not just changed files
+        config: .cspell.yaml
+        suggestions: true
+        treat_flagged_words_as_errors: true
+        use_cspell_files: true
