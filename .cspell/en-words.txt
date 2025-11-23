@@ -112,6 +112,8 @@ Neumüller
 nginx
 NUMA
 ocaml
+OLAP
+OLTP
 Omnition
 OOTB
 opamp

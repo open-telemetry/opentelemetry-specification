@@ -27,7 +27,7 @@ all: install-tools markdownlint markdown-link-check cspell
 .PHONY: cspell
 cspell:
 	@if ! npm ls cspell; then npm install; fi
-	npx cspell --no-progress
+	npx cspell . --no-progress
 
 .PHONY: markdown-link-check
 markdown-link-check:

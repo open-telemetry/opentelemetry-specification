@@ -354,7 +354,7 @@ It's unclear if this is needed initially, and we believe this could be layered i
 
 ### Should resources have only one associated entity?
 
-Given the problems leading to the Entities working group, and the needs of existing Resource users today, we think it is infeasible and unscalable to limit resource to only one entity.  This would place restrictions on modeling Entities that would require OpenTelemetry to be the sole source of entity definitions and hurt building an open and extensible ecosystem.  Additionally it would need careful definition of solutions for the following problems/rubrics:
+Given the problems leading to the Entities working group, and the needs of existing Resource users today, we think it is infeasible and un-scalable to limit resource to only one entity.  This would place restrictions on modeling Entities that would require OpenTelemetry to be the sole source of entity definitions and hurt building an open and extensible ecosystem.  Additionally it would need careful definition of solutions for the following problems/rubrics:
 
 - New entities added by extension should not break existing code
 - Collector augmentation / enrichment (resource, e.g.) - Should be extensible and not hard-coded. We need a general algorithm not specific rulesets.

@@ -7,37 +7,38 @@ allowCompoundWords: true
 useGitignore: true
 ignorePaths:
   - '**/*.svg'
-files:
-  - '**/*.md'
 patterns:
   - name: CodeBlock
     pattern: |
       /
-          ^(\s*[~`]{3,})   # code-block start
+          ^(\s*[~`]{3,})   # Matches 3 or more backticks or tildes to start a code block.
           .*               # all languages and options, e.g. shell {hl_lines=[12]}
           [\s\S]*?         # content
-          \1               # code-block end - cSpell:disable-next-line
+          \1               # Matches the same symbol which started the match.
       /igmx
   - name: CodeName
     pattern: |
       /
-          ([~`])
-          [^~`]*?
-          \1
+          ([~`])          # Matches a single backtick or tilde to start a code block.
+          [^~`]*?         # Matches any characters except backticks or tildes, non-greedy.
+          \1              # Matches the same symbol which started the match.
       /x
-  - name: UnderscoreName
+  - name: Links
     pattern: |
       /
-          ([_])
-          [^_]*?
-          \1
+          \[[^\]]+\]      # Matches the link text inside square brackets [ ... ].
+          \(              # Match the opening parentheses for the URL.
+          [^)]+           # Matches any URL/path until the closing ) — works for both relative and absolute.
+          \)              # Match the closing parentheses for the URL.
       /x
 languageSettings:
-  - languageId: markdown
+  - languageId:
+      - markdown
+      - yaml
     ignoreRegExpList:
       - CodeBlock
       - CodeName
-      - UnderscoreName
+      - Links
 dictionaryDefinitions:
   - name: en-words
     path: .cspell/en-words.txt
@@ -49,6 +50,10 @@ dictionaries:
   - dotnet
   - golang
   - node
+  - npm
+  - php
+  - python
+  - ruby
   - softwareTerms
   # Other
   - companies
