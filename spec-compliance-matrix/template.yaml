@@ -377,9 +377,9 @@ sections:
           - name: Zipkin V1 Thrift
             optional: true
           - name: Zipkin V2 JSON
-            optional_one_of_group_is_required: true
+            optional: true
           - name: Zipkin V2 Protobuf
-            optional_one_of_group_is_required: true
+            optional: true
           - name: Service name mapping
           - name: SpanKind mapping
           - name: InstrumentationLibrary mapping
