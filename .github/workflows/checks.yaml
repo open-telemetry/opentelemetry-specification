@@ -91,4 +91,3 @@ jobs:
         config: .cspell.yaml
         suggestions: true
         treat_flagged_words_as_errors: true
-        use_cspell_files: true
