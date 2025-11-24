@@ -79,7 +79,7 @@ jobs:
     - name: validate compliance-matrix
       run: git diff --exit-code spec-compliance-matrix.md || (echo 'Generated compliance matrix is out of date, please run "make compliance-matrix" and commit the changes in this PR.' && exit 1)
 
-  cspell:
+  misspell:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
