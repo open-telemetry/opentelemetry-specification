@@ -16,7 +16,7 @@ release.
 
 ### Metrics
 
-- Stabilize `Enabled` for synchronous instruments.
+- Stabilize `Enabled` API for synchronous instruments.
   ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
 
 ### Logs
