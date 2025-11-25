@@ -50,13 +50,13 @@ The following guidance applies to all numeric types.
 > For new
 > implementations, these should be treated as MUST requirements.
 
-For sources accepting a numeric value, if the user provides a value the
-implementation cannot parse, or which is outside the valid range for the
-configuration item, the implementation SHOULD generate a warning and gracefully
-ignore the setting, i.e., treat them as not set. In particular, implementations
-SHOULD NOT assign a custom interpretation e.g. to negative values if a negative
-value does not naturally apply to a configuration and does not have an
-explicitly specified meaning, but treat it like any other invalid value.
+For sources accepting a numeric value, if the user provides a value which is
+outside the valid range for the configuration item, the implementation SHOULD
+generate a warning and gracefully ignore the setting, i.e., treat them as not
+set. In particular, implementations SHOULD NOT assign a custom interpretation
+e.g. to negative values if a negative value does not naturally apply to a
+configuration and does not have an explicitly specified meaning, but treat it
+like any other invalid value.
 
 For example, a value specifying a buffer size must naturally be non-negative.
 Treating a negative value as "buffer everything" would be an example of such a
