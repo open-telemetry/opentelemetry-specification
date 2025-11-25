@@ -472,7 +472,7 @@ or something else).
 
 ### General operations
 
-All synchronous instruments SHOULD provide functions to:
+All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functions to:
 
 * [Report if instrument is `Enabled`](#enabled)
 
