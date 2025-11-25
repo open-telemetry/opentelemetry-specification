@@ -15,7 +15,7 @@ this includes many great components, e.g.
 However, OpenTelemetry still struggles to provide true "remote control"
 capabilities that are implementation agnostic. When using OpAMP with an
 OpenTelemetry collector, the "controlling server" of OpAMP needs to understand
-the configuraiton layout of an OpenTelemetry collector.  If a user asked the
+the configuration layout of an OpenTelemetry collector.  If a user asked the
 server to "filter out all attributes starting with `x.`", the server would
 need to understand/parse the OpenTelemetry collector configuration. If the
 controlling sever was also managing an OpenTelemetry SDK, then it would need
@@ -34,7 +34,7 @@ not require dynamic reloading of configuration. This means attempting to
 provide a solution like Jaeger-remote-sampler with just OpAMP + file-based
 config is impossible, today.
 
-However, we believe there is a way to acheive our goals without changing
+However, we believe there is a way to achieve our goals without changing
 the direction of OpAmp or File-based configuration. Instead we can break apart
 the notion of "Configuration" from "Policy", providing a new capability in
 OpenTelemetry.
@@ -63,12 +63,22 @@ intent-based specification from a user of OpenTelemetry.
 Every policy is defined with the following:
 
 - A `type` denoting the use case for the policy
-- A json schema denoting what a valid definitin of the policy entails.
+- A json schema denoting what a valid definitions of the policy entails.
 - TODO - A merge algorithm, denoting how multiple policies can be merged
   together in a component to create desired behavior.
 - TODO - A specification denoting the behavior the policy enforces.
-- TODO - *implicily* a policy has a target resource / signal it is aimed at.
-  This will be used to route policies to destinations.
+
+Policies MUST NOT:
+
+- Specify configuration relating to the underlying policy applier implementation.
+  - A policy cannot know where the policy is going to be run.
+- Specify its transport methodlogy.
+- Interfere with telemetry upon failure.
+  - Policies MUST be fail-open.
+- Contain logical waterfalls.
+  - Each policy's application is distinct from one another and at this moment
+  MUST not depend on another running. This is in keeping with the idempotency
+  principle.
 
 Example policy types include: 
 - `trace-sampling`: define how traces are sampled
@@ -77,34 +87,142 @@ Example policy types include:
 - `attribute-redaction`: define attributes which need redaction/removal.
 - `metric-aggregation`: define how metrics should be aggregated (i.e. views).
 - `exemplar-sampling`: define how exemplars are sampled
+- `attribute-filter`: define data that should be rejected based on attributes
 
-TODO - more examples?
+## Policy Ecosystem
 
-TODO - Remaining high level pieces:
+Policies are designed to be straightforward objects with little to no logic
+tied to them. Policies are also designed to be agnostic to the transport, 
+implementation, and data type. It is the goal of the ecosystem to support
+policies in various ways. Policies MUST be additive and MUST NOT break existing
+standards. It is therefore our goal to extend the ecosystem by recommending
+implementations through the following architecture.
 
-- SDK Components
-  - `PolicyProvider`
-    - Can "push" policies into the provider.
-    - Provides "observable" access to policies (e.g. notify on change)
-  - Extension Points
-    - `PolicySampler`: Pulls relevant `trace-sampling` policies from
-      PolicyProvider, and uses them.
-    - `PolicyLogProcessor`: Pulls Relevant `log-filter` policies from
-      PolicyProvider and uses them.
-    - `PolicyPeriodicMetricReader`: Pulls Relevant `metric-rate` policies
-      from PolicyProvider and uses them to export metrics.
-    - TODO: SDK-wide attribute processors
-    - TODO: SDK-view policies
-- Collector Components
-  - `PolicyProcessor`
-    - Pulls configured policies that can be enforced as a processor.
-    - E.g. `log-filter`, `attribute-redaction`
-  - TODO - others?
-- OpAmp Interaction
-  - Policy = custom extension
-  - Can we safely "roll back" a policy if it caused a breakage?
-- Confguration Interaction: We always expect "policy-aware" components to be configured, policies are ignorant of pipelines.
+The architectural decisions are meant to be flexible to allow users optionality
+in their infrastructure. For example, a user may decide to run a multi-stage
+policy architecture where the SDK, daemon collector, and gateway collector work
+in tandem where the SDK and Daemons are given set policies while the gateway is
+remotely managed. Another user may choose to solely remotely manage their SDKs.
+As a result of this scalable architecture, it's recommended the policy providers
+updates are asynchronous. An out of date policy (i.e. one updated in a policy
+provider but not yet in the applier) should not be lethal to the functionality
+of the system.
 
+```mermaid
+---
+title: Policy Architecture
+---
+flowchart TB
+    subgraph providers ["Policy Providers"]
+        direction TB
+        PP["«interface» Policy Provider"]
+        
+        File["File Provider"]
+        HTTP["HTTP Server Provider"]
+        OpAMP["OpAMP Server Provider"]
+        Custom["Custom Provider"]
+        
+        PP -.->|implements| File
+        PP -.->|implements| HTTP
+        PP -.->|implements| OpAMP
+        PP -.->|implements| Custom
+    end
+
+    subgraph aggregator ["Policy Aggregator"]
+        PA["Policy Aggregator (Special Provider)"]
+    end
+
+    subgraph implementation ["Policy Implementation"]
+        PI["Policy Implementation"]
+        PT["Supported Policy Types"]
+        PI --- PT
+    end
+
+    subgraph policies ["Policies"]
+        P1["Policy 1"]
+        P2["Policy 2"]
+        P3["Policy N..."]
+    end
+
+    %% Provider relationships
+    PP -.->|implements| PA
+    
+    %% Aggregator pulls from providers
+    File -->|policies| PA
+    HTTP -->|policies| PA
+    OpAMP -->|policies| PA
+    Custom -->|policies| PA
+
+    %% Providers supply policies to implementation
+    File -->|supplies policies| PI
+    HTTP -->|supplies policies| PI
+    OpAMP -->|supplies policies| PI
+    Custom -->|supplies policies| PI
+    PA -->|supplies policies| PI
+
+    %% Policies relationship
+    PP -->|provides| policies
+    PI -->|runs| policies
+
+    %% Optional type info
+    PP -.->|"may supply supported policy types (optional)"| PI
+```
+
+## Example Ecosystem implementations
+
+We make the following observations and recommendations for how the community may
+integrate with this specification.
+
+### OpenTelemetry SDKs
+
+An SDK's declaritive configuration may be extended to support a list of policy
+providers. An SDK with no policy providers set is the same behavior as today as
+policies are fail open. The simplest policy provider is the file provider. The SDK
+should read this file upon startup, and optionally watch the file for changes. The
+policy provider may supply the configuration for watching. 
+
+The policy providers for the SDK push policies into the SDK, allowing the SDK to become
+a policy implementation. An SDK may receive updates at any time for these policies, so
+it must allow for the reloading in its extension points. Sample SDK extension points:
+
+- `PolicySampler`: Pulls relevant `trace-sampling` policies from
+  PolicyProvider, and uses them.
+- `PolicyLogProcessor`: Pulls Relevant `log-filter` policies from
+  PolicyProvider and uses them.
+- `PolicyPeriodicMetricReader`: Pulls Relevant `metric-rate` policies
+  from PolicyProvider and uses them to export metrics.
+
+### OpenTelemetry Collector
+
+The collector is a natural place to run these policies. A policy processor may be
+introduced to execute its set of policies. It is recommended that the collector uses
+the same declaritive configuration the SDK uses for policy provider configuration. The
+collector may introduce an inline policy provider that provides a set of default policies
+to execute in addition to whatever may be received from the policy providers.
+
+The collector may also have a policy extension which allows it to serve as a policy
+aggregator. In this world, the collector's policy extension would have a list of policy
+providers it pulls from while other policy implementations set the collector as a policy
+provider. This is akin to the proxy pattern you see in other control plane implementations.
+This pattern should allow for a horizontally scalable architecture where all extensions
+eventually report the same policies.
+
+### OpAMP
+
+Per the constraints above, this specification makes NO requirements to the transport layer
+for policy providers. OpAMP is a great extension point which may serve as a
+policy provider through the use of custom messages. A policy implementation with OpAMP
+support may use the OpAMP connection to transport policies. This specification makes no
+recommendation as to what that custom message may look currently.
+
+### Summary
+
+While we make no requirements of these groups in this specification, it is recommended
+that they all adhere to a consistent experience for users to enhance portability. The
+authors here will coordinate with other SIGs to ensure agreement upon this configuration.
+This may involve a follow up to this specification recommending policy provider specifics
+such as an HTTP/gRPC definition. This definition would then serve as a basis for custom
+implementations like that for OpAMP. More on this in `Future Possibilities`
 
 ## Internal details
 
@@ -144,7 +262,7 @@ implementation or pipeline set-up.  For example, imagine a simple collector
 configuration:
 
 ```yaml
-recievers:
+receivers:
   otlp:
   prometheus:
     # ... config ...
@@ -156,7 +274,7 @@ processors:
 exporters:
   otlp:
 pipelines:
-  metrics/crtical:
+  metrics/critical:
     receivers: [otlp]
     processors: [batch, transform/drop_attribute]
     exporters: [otlp]
@@ -215,6 +333,10 @@ This is not ideal for a few reasons:
 ## Open questions
 
 What are some questions that you know aren't resolved yet by the OTEP? These may be questions that could be answered through further discussion, implementation experiments, or anything else that the future may bring.
+
+- Should this specification give recommendations for the server protobufs
+- How should we handle policy merging?
+  - (jacob) Could policies contain a priority and it's up to the providers to design around this?
 
 ## Prototypes
 
