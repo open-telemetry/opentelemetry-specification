@@ -95,7 +95,30 @@ MUST be considered in conflict with each other.
 
 ### SDK Details
 
-TODO
+When `For Entity` operation is received by a provider, A new child
+`Entity Bound Provider` of the same type MUST be created and returned with the
+following restrictions:
+
+- `Entity Bound Provider` MUST be associated with a newly created `Resource`
+  which is the result of the incoming `Entity` set merged into the original
+  `Provider`'s resource following the existing `Resource` merging algorithm.
+  Telemetry created by the parent MUST continue to be associated with the
+  original unmodified resource.
+- The `Bound Provider` MUST share an export pipeline with its parent. The export
+  component (`SpanProcessor`, `MetricReader`, `LogsProcessor`, etc) MUST not be
+  `Shutdown` by the `Bound Provider`. This MAY be achieved by wrapping the export
+  component in a proxy component which ignores calls to `Shutdown` or translates
+  them into `Force Flush`.
+- The `Bound Provider` MUST be configured exactly the same as its parent.
+  A configuration change on a parent `Provider` MUST be reflected in all of its
+  child `Entity Bound Providers`. This MAY be achieved by directly sharing
+  the configuration object between `Providers`.
+- A `Bound Provider` MUST NOT be directly configurable.
+  All configuration comes from its parent.
+- If `ForceFlush` or `Shutdown` is called on a `Provider` it MUST also flush all
+  of its child `Entity Bound Providers`.
+- If `Shutdown` is called on a `Bound Provider` it MUST be treated as a
+  `Force Flush`. It MUST NOT shut down its export pipeline.
 
 ## Trade-offs and mitigations
 
