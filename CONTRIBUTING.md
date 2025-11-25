@@ -104,7 +104,7 @@ checks directly.
 See:
 
 - [MarkdownStyle](#markdown-style)
-- [Misspell Check](#misspell-check)
+- [CSpell Check](#cspell-check)
 - Markdown link checking (docs TODO)
 
 ### Autoformatting
@@ -120,7 +120,6 @@ You can also run these fixes individually.
 
 See:
 
-- [Misspell Correction](#misspell-check)
 - Table Generation (docs TODO)
 
 ### Markdown style
@@ -148,23 +147,14 @@ with the Node version of markdownlint. If you are using Visual Studio Code,
 you can also use the `fixAll` command of the
 [vscode markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint).
 
-### Misspell check
+### CSpell check
 
 In addition, please make sure to clean up typos before you submit the change.
 
 To check for typos, run the following command:
 
 ```bash
-make misspell
-```
-
-> **NOTE**: The `misspell` make target will also fetch and build the tool if
-> necessary. You'll need [Go](https://go.dev) to build the spellchecker.
-
-To quickly fix typos, use
-
-```bash
-make misspell-correction
+make cspell
 ```
 
 ## Updating the Compliance Matrix
@@ -311,7 +301,7 @@ Release Procedure:
    (e.g., in the last released version rather than Unreleased).
 4. Add the changelog entries from `CHANGELOG.md` to the description of the
    [release PR](
-   https://github.com/open-telemetry/opentelemetry-specification/releases) and undraft it.
+   https://github.com/open-telemetry/opentelemetry-specification/releases) and un-draft it.
 5. Once it is approved, confirm the date in the CHANGELOG is up-to-date, and merge it,
    creating a new release tag, e.g. "v1.50.0", containing the CHANGELOG contents.
 

@@ -1,0 +1,59 @@
+# For settings, see
+# https://www.streetsidesoftware.com/vscode-spell-checker/docs/configuration/
+version: '0.2'
+language: en-US
+caseSensitive: false
+allowCompoundWords: true
+useGitignore: true
+ignorePaths:
+  - '**/*.svg'
+patterns:
+  - name: CodeBlock
+    pattern: |
+      /
+          ^(\s*[~`]{3,})   # Matches 3 or more backticks or tildes to start a code block.
+          .*               # all languages and options, e.g. shell {hl_lines=[12]}
+          [\s\S]*?         # content
+          \1               # Matches the same symbol which started the match.
+      /igmx
+  - name: CodeName
+    pattern: |
+      /
+          ([~`])          # Matches a single backtick or tilde to start a code block.
+          [^~`]*?         # Matches any characters except backticks or tildes, non-greedy.
+          \1              # Matches the same symbol which started the match.
+      /x
+  - name: Links
+    pattern: |
+      /
+          \[[^\]]+\]      # Matches the link text inside square brackets [ ... ].
+          \(              # Match the opening parentheses for the URL.
+          [^)]+           # Matches any URL/path until the closing ) — works for both relative and absolute.
+          \)              # Match the closing parentheses for the URL.
+      /x
+languageSettings:
+  - languageId:
+      - markdown
+      - yaml
+    ignoreRegExpList:
+      - CodeBlock
+      - CodeName
+      - Links
+dictionaryDefinitions:
+  - name: en-words
+    path: .cspell/en-words.txt
+dictionaries:
+  # Local word lists
+  - en-words
+  # Programming languages and software terms
+  - cpp
+  - dotnet
+  - golang
+  - node
+  - npm
+  - php
+  - python
+  - ruby
+  - softwareTerms
+  # Other
+  - companies
