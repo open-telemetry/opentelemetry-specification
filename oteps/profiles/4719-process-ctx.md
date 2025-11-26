@@ -49,56 +49,65 @@ The `payload` can optionally be placed after the header (with the `payload` poin
 
 ### Payload Format
 
-The payload uses protobuf with the [following schema](https://github.com/open-telemetry/sig-profiling/pull/13):
-
-The implementation distinguishes between:
-
-* **First-class fields** correspond to recommended OpenTelemetry semantic conventions. If a key in the `resources` map matches a first-class field name, the first-class field takes precedence. Readers MAY fall back to `resources` if the corresponding first-class field is empty, or they MAY ignore it entirely.
-
-* **Resources map** allows for arbitrary additional attributes. This enables easily adding more information that needs to be carried over, as well as vendor-specific extensions and experimentation.
+The payload uses protobuf with the OTEL [`opentelemetry.proto.resource.v1.Resource`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/resource/v1/resource.proto) schema (reproduced below for quick reference).
 
 ```protobuf
+// Copyright 2019, OpenTelemetry Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 syntax = "proto3";
 
-package otel_process_ctx.v1development;
+package opentelemetry.proto.resource.v1;
 
-message OtelProcessCtx {
-  // Additional key/value pairs as resources https://opentelemetry.io/docs/specs/otel/resource/sdk/
-  // Similar to baggage https://opentelemetry.io/docs/concepts/signals/baggage/ / https://opentelemetry.io/docs/specs/otel/overview/#baggage-signal
+import "opentelemetry/proto/common/v1/common.proto";
+
+option csharp_namespace = "OpenTelemetry.Proto.Resource.V1";
+option java_multiple_files = true;
+option java_package = "io.opentelemetry.proto.resource.v1";
+option java_outer_classname = "ResourceProto";
+option go_package = "go.opentelemetry.io/proto/otlp/resource/v1";
+
+// Resource information.
+message Resource {
+  // Set of attributes that describe the resource.
+  // Attribute keys MUST be unique (it is not allowed to have more than one
+  // attribute with the same key).
+  // The behavior of software that receives duplicated keys can be unpredictable.
+  repeated opentelemetry.proto.common.v1.KeyValue attributes = 1;
+
+  // The number of dropped attributes. If the value is 0, then
+  // no attributes were dropped.
+  uint32 dropped_attributes_count = 2;
+
+  // Set of entities that participate in this Resource.
   //
-  // Providing resources is optional.
+  // Note: keys in the references MUST exist in attributes of this message.
   //
-  // If a key in this field would match one of the attributes already defined as a first-class field below (e.g. `service.name`),
-  // the first-class field must always take priority.
-  // Readers MAY choose to fallback to a value in `resources` if its corresponding first-class field is empty, or they CAN ignore it.
-  map<string, string> resources = 1;
-
-  // We strongly recommend that the following first-class fields are provided, but they can be empty if needed.
-  // In particular for `deployment_environment_name` and `service_version` often need to be configured for a given application
-  // and cannot be inferred. For the others, see the semantic conventions documentation for recommended ways of setting them.
-
-  // https://opentelemetry.io/docs/specs/semconv/registry/attributes/deployment/#deployment-environment-name
-  string deployment_environment_name = 2;
-  // https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-instance-id
-  string service_instance_id = 3;
-  // https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-name
-  string service_name = 4;
-  // https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-version
-  string service_version = 5;
-  // https://opentelemetry.io/docs/specs/semconv/registry/attributes/telemetry/#telemetry-sdk-language
-  string telemetry_sdk_language = 6;
-  // https://opentelemetry.io/docs/specs/semconv/registry/attributes/telemetry/#telemetry-sdk-version
-  string telemetry_sdk_version = 7;
-  // https://opentelemetry.io/docs/specs/semconv/registry/attributes/telemetry/#telemetry-sdk-name
-  string telemetry_sdk_name = 8;
-
-  // New first-class fields should be added only if:
-  // * Providing them is strongly recommended
-  // * They match a new or existing OTEL semantic convention
-  //
-  // Otherwise, `resources` should be used instead.
+  // Status: [Development]
+  repeated opentelemetry.proto.common.v1.EntityRef entity_refs = 3;
 }
 ```
+
+The following attributes are especially relevant to the OTEL eBPF Profiler and thus are recommended to be provided by publishers:
+
+* [service.instance.id](https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-instance-id)
+* [deployment.environment.name](https://opentelemetry.io/docs/specs/semconv/registry/attributes/deployment/#deployment-environment-name)
+* [service.name](https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-name)
+* [service.version](https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-version)
+* [telemetry.sdk.language](https://opentelemetry.io/docs/specs/semconv/registry/attributes/telemetry/#telemetry-sdk-language)
+* [telemetry.sdk.version](https://opentelemetry.io/docs/specs/semconv/registry/attributes/telemetry/#telemetry-sdk-version)
+* [telemetry.sdk.name](https://opentelemetry.io/docs/specs/semconv/registry/attributes/telemetry/#telemetry-sdk-name)
 
 ### Publication Protocol
 
@@ -107,7 +116,7 @@ Publishing the context should follow these steps:
 1. **Drop existing mapping**: If a previous context was published, unmap/free it
 2. **Allocate new mapping**: Create a 2-page anonymous mapping via `mmap()` (These pages are always zeroed by Linux)
 3. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data
-4. **Encode payload**: Serialize the `OtelProcessCtx` message using protobuf (storing it either following the header OR in a regular memory block)
+4. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation)
 5. **Write header fields**: Populate `version`, `published_at_ns`, `payload_size`, `payload`
 6. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding
 7. **Write signature**: Write `OTEL_CTX` to the signature field last
@@ -141,7 +150,7 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 
 4. **Re-read header**: If the header has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context. If the header changed, restart at 1.
 
-5. **Decode payload**: Deserialize the bytes as a Protocol Buffer `OtelProcessCtx` message
+5. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
 
 6. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process
 
@@ -199,7 +208,7 @@ As requirements evolve, we may need to extend the payload format.
 
 **Mitigation**: The design includes both versioning as well as allowing extension points
 
-1. **Additional `resources` keys**: For experimentation and vendor extensions
+1. **Additional `attributes` keys**: These can be used for experimentation and vendor extensions
 2. **New protobuf fields**: For adding recommended fields following protobuf compatibility practices
 3. **Version number**: For incompatible changes (not expected to change frequently)
 
@@ -211,7 +220,7 @@ Each process publishes a 2-page (typically 8KB) mapping per SDK instance + the a
 
 The proposal uses protobuf. Not all SDKs may want to carry a protobuf encoder dependency.
 
-**Mitigation**: Our reference implementations optionally include a limited protobuf implementation that implements only the feature set needed to emit the `OtelProcessCtx` message in < 500 LoC (C/C++ and Java). Alternatively, existing protobuf encoders can be used.
+**Mitigation**: Our reference implementations optionally include a limited protobuf implementation that implements only the feature set needed to emit a minimal payload message in < 500 LoC (C/C++ and Java). Alternatively, existing protobuf encoders can be used.
 
 Aside from protobuf, msgpack was also considered (see [this earlier msgpack-based reference implementation](https://github.com/ivoanjo/proc-level-demo/tree/main/anonmapping-clib)). Like for protobuf, it's possible to provide a small encoder with similar complexity. We're hoping that the community can make the final choice during specification review.
 
@@ -323,7 +332,7 @@ Both approaches demonstrate the need for process-level data sharing and validate
 
 2. **SDK implementation requirements**: Should SDKs publish this information by default whenever possible, or be opt-in?
 
-3. **First-class fields**: Should we expand the set of first-class fields beyond the current seven? The current set covers the most critical attributes, but we may discover others during implementation.
+3. **Protobuf format**: Is the `opentelemetry.proto.resource.v1.Resource` message the right one to use for this? Do we want or need to wrap it in some other envelope?
 
 ## Prototypes
 
