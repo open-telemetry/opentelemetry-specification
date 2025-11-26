@@ -10,7 +10,7 @@ External readers like OpenTelemetry eBPF Profiler or OpenTelemetry eBPF Instrume
 
 - **Inconsistent resource attributes across signals**: Running in different scopes, configuration such as `service.name`, `deployment.environment.name`, and `service.version` are not always available or resolves consistently between the OpenTelemetry SDKs and external readers, leading to configuration drift and inconsistent tagging.
 
-- **Correlation is dependent on process activity**: If a service is blocked (such as when doing slow I/O, or threads are actually deadlocked) and not emitting other signals, external readers have difficulty identifying it, since resource attributes or identifiers are only sent along when signals are reported. 
+- **Correlation is dependent on process activity**: If a service is blocked (such as when doing slow I/O, or threads are actually deadlocked) and not emitting other signals, external readers have difficulty identifying it, since resource attributes or identifiers are only sent along when signals are reported.
 
 ## Explanation
 
@@ -18,7 +18,14 @@ We propose a mechanism for OpenTelemetry SDKs to publish process-level resource 
 
 When an SDK initializes (or updates its resource attributes) it publishes this information to a small, fixed-size memory region that external processes can discover and read.
 
-The OTEL eBPF profiler will then, upon observing a previously-unseen process, probe and read this information, associating it with any profiling samples taken from a given process.
+This mechanism is designed to support loose coordination between the publishing process and external readers:
+
+- **Publisher-first deployment**: The publishing process can start and publish its context before any readers are running, with readers discovering it later
+- **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external process with sufficient system permissions to read `/proc/<pid>/maps` and process memory can access this information
+- **Runtime compatibility**: The mechanism works even in environments where eBPF function hooking is unavailable or restricted
+- **Independent of process activity**: The context can be read at any time, including when the application is deadlocked, blocked on I/O, or otherwise idle, without relying on active hook points or the process emitting signals
+
+External readers such as the OpenTelemetry eBPF Profiler will, upon observing a previously-unseen process, probe and read this information, associating it with any profiling samples or other telemetry collected from that process.
 
 ## Internal details
 
