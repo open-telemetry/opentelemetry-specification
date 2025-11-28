@@ -49,7 +49,7 @@ coming from an unstable instrumentation.
 
 ## Stable Instrumentations
 
-> **Warning**
+> [!Warning]
 > There is a moratorium on relying on schema transformations for telemetry stability.
 
 Stable telemetry-producing instrumentations (stable instrumentations for short) SHOULD

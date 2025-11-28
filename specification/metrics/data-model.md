@@ -224,7 +224,8 @@ for telemetry collection purposes. The best example of this is the Histogram
 metric where raw events are recorded in a compressed format rather than
 individual timeseries.
 
-> Note: The above picture shows how one instrument can transform events into
+> [!Note]
+> The above picture shows how one instrument can transform events into
 > more than one type of metric stream. There are caveats and nuances for when
 > and how to do this.  Instrument and metric configuration are outlined
 > in the [metrics API specification](api.md).
@@ -1238,7 +1239,8 @@ sums to be reported, the timeseries model we target does not support delta
 counters.  To this end, converting from delta to cumulative needs to be defined
 so that backends can use this mechanism.
 
-> Note: This is not the only possible Delta to Cumulative algorithm.  It is
+> [!Note]
+> This is not the only possible Delta to Cumulative algorithm.  It is
 > just one possible implementation that fits the OTel Data Model.
 
 Converting from delta points to cumulative point is inherently a stateful

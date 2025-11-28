@@ -39,7 +39,8 @@ the `service` entity is related to the `process` entity. The process normally
 also runs on a host, so we say that the `process` entity is related to the
 `host` entity.
 
-> Note: Entity relationship modelling will be refined in future specification
+> [!Note]
+> Entity relationship modelling will be refined in future specification
 > work.
 
 The data model below defines a logical model for an entity (irrespective of the
@@ -69,7 +70,8 @@ the identity was generated from the process itself, e.g. via SDK, or by an
 OpenTelemetry Collector running on the same host, or by some other system
 describing the process.
 
-> Aside: There are many ways to accomplish repeatable identifying attributes
+> [!TIP]
+> There are many ways to accomplish repeatable identifying attributes
 > across multiple observers. While many successful systems rely on pushing down
 > identity from a central registry or knowledge store, OpenTelemetry must
 > support all possible scenarios.
