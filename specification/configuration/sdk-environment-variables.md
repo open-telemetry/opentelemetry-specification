@@ -87,6 +87,23 @@ For variables accepting a numeric value, if the user provides a value the
 implementation cannot parse, the implementation SHOULD generate a warning and gracefully
 ignore the setting, i.e., treat them as not set.
 
+### String
+
+String values are sub-classified into:
+
+* [Enum][].
+
+#### Enum
+
+The following guidance extends the [common configuration specification 'Enum'
+guidance](common.md#enum).
+
+Enum values SHOULD be interpreted in a case-insensitive manner.
+
+For sources accepting an enum value, if the user provides a value
+the implementation does not recognize, the implementation MUST generate
+a warning and gracefully ignore the setting.
+
 ## General SDK Configuration
 
 | Name                     | Description                                                                                                                                                 | Default                                                                                                                                                                                            | Type         | Notes                                                                                                                                                                                                                                                                                    |
