@@ -15,12 +15,12 @@ jobs:
       - uses: actions/stale@5f858e3efba33a5ca4407a664cc011ad407f2008 # v10.1.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          stale-pr-message: 'This PR was marked stale. It will be closed in 30 days without additional activity.'
+          stale-pr-message: 'This PR was marked stale. It will be closed in 14 days without additional activity.'
           close-pr-message: 'Closed as inactive. Feel free to reopen if this PR is still being worked on.'
           exempt-pr-labels: 'release:after-ga'
           # opt out of defaults to avoid marking issues as stale
           days-before-stale: -1
           days-before-close: -1
           # overrides the above only for pull requests
-          days-before-pr-stale: 90
-          days-before-pr-close: 30
+          days-before-pr-stale: 14
+          days-before-pr-close: 14
