@@ -75,7 +75,8 @@ upgrade.
 
 ### Numeric
 
-The following guidance applies to all numeric types.
+The following guidance applies to all numeric types and extends the [common
+configuration specification 'Numeric' guidance](common.md#numeric).
 
 > The following paragraph was added after stabilization and the requirements are
 > thus qualified as "SHOULD" to allow implementations to avoid breaking changes.
