@@ -74,7 +74,7 @@ resource.
     do one of the following:
     - If an entity `e'` exsits in `E` with the same entity type as `new_entity`:
        - Perform a [Entity DataModel Merge](../entities/data-model.md#merging-of-entities), if applicable, otherwise ignore `new_entity`.
-    - Otherwise, add the entity `d'` to set `E`
+    - Otherwise, add the entity `new_entity` to set `E`
 - Update the Resource to use the set of entities `E`.
   - If all entities within `E` have the same `schema_url`, set the
     resources `schema_url` to match.
