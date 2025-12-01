@@ -30,7 +30,8 @@ aliases:
 The goal of this specification is to describe common guidance that is applicable
 to all OpenTelemetry SDK configuration sources.
 
-Implementations MAY choose to allow configuration via any source in this specification, but are not required to.
+Implementations MAY choose to allow configuration via any configuration source
+in this specification, but are not required to.
 If they do, they SHOULD follow the guidance listed in this document.
 
 ## Type-specific guidance
