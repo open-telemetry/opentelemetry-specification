@@ -56,23 +56,24 @@ intent-based specification from a user of OpenTelemetry.
 - **Dynamic**: We expect policies to be defined and driven outside the lifecycle
   of a single collector or SDK. This means the SDK behavior needs the ability
   to change post-instantiation.
-- **Idempotnent**: I can give a policy to multiple components in a
+- **Idempotent**: I can give a policy to multiple components in a
   telemetry-plane safely. E.g. if both an SDK and collector obtain an
   attribute-filter policy, it would only occur once.
 
 Every policy is defined with the following:
 
 - A `type` denoting the use case for the policy
-- A json schema denoting what a valid definitions of the policy entails.
-- TODO - A merge algorithm, denoting how multiple policies can be merged
-  together in a component to create desired behavior.
-- TODO - A specification denoting the behavior the policy enforces.
+- A JSON schema denoting what a valid definitions of the policy entails, 
+  describing how servers should present the policy to customers.
+- An specification denoting behavior the policy enforces, i.e., for a given
+  JSON entry, to which elements the policy applies and which behaviors is
+  expected from an agent or collector implementing the policy.
 
 Policies MUST NOT:
 
 - Specify configuration relating to the underlying policy applier implementation.
   - A policy cannot know where the policy is going to be run.
-- Specify its transport methodlogy.
+- Specify its transport methodology.
 - Interfere with telemetry upon failure.
   - Policies MUST be fail-open.
 - Contain logical waterfalls.
@@ -226,15 +227,41 @@ implementations like that for OpAMP. More on this in `Future Possibilities`
 
 ## Internal details
 
-TDOO - write
+### Merging policies
 
-From a technical perspective, how do you propose accomplishing the proposal? In particular, please explain:
+Since the policy itself does not enforce a transport mechanism or format, it is
+natural that the merge algorithm is also not enforced by the policy. As such,
+whenever a policy is transmitted it should specify how it is expected to be merged, either by
+relying on a standard merge mechanism from the protocol or by setting it up explicitly during transmission,
 
-* How the change would impact and interact with existing functionality
-* Likely error modes (and how to handle them)
-* Corner cases (and how to handle them)
+For JSON, a service can follow either [JSON Patch](https://datatracker.ietf.org/doc/html/rfc6902) or 
+[JSON Merge Patch](https://datatracker.ietf.org/doc/html/rfc6902) to create policies that can be merged and
+remain idempotent. Below we have the same update for a hypothetical `metric-rate` policy that can be merged following the RFCs
 
-While you do not need to prescribe a particular implementation - indeed, OTEPs should be about **behaviour**, not implementation! - it may be useful to provide at least one suggestion as to how the proposal *could* be implemented. This helps reassure reviewers that implementation is at least possible, and often helps them inspire them to think more deeply about trade-offs, alternatives, etc.
+```json
+# JSON Merge Patch
+{
+  "rpc.server.latency": { "sampling_rate_ms": 10000 }
+}
+
+# JSON Patch
+[
+  { "op": "add", 
+    "path": "/rpc.server.latency", 
+    "value": { 
+      "sampling_rate_ms": 10000 
+    }
+  }
+]
+```
+
+Proto based transmission protocols can rely on [`Merge`](https://pkg.go.dev/google.golang.org/protobuf/proto#Merge) or [`MergeFrom`](https://protobuf.dev/reference/cpp/api-docs/google.protobuf.message/#Message.MergeFrom.details) provided by the library
+
+The mechanism for negotiating a protocol will depend on the specific `PolicyProvider` implementation, some options are:
+
+* A `FileProvider` will either use a default merger from the format (like the default proto merge), or accept a parameter that specifies which merger is expected when reading the specific file format (for example, for JSON).
+* A HTTP provider can use different file formats to decide which merger to use, as specified in the RFCs for JSON patch formats.
+* OpAmp providers could add a field specifying the merger as well as the data being transmitted, plus a mechanism for systems to inform each other which mergers are avaliable and how the data is expected to be merged.
 
 ## Trade-offs and mitigations
 
