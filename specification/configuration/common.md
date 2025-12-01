@@ -112,14 +112,9 @@ implementations.
 
 #### Enum
 
-Enum values SHOULD be interpreted in a case-insensitive manner.
-
 For configuration sources which accept a known value out of a set, i.e., an enum
 value, implementations MAY support additional values not listed here.
 
-For sources accepting an enum value, if the user provides a value
-the implementation does not recognize, the implementation MUST generate
-a warning and gracefully ignore the setting.
 When reporting configuration errors, implementations SHOULD display the original
 user-provided value to aid debugging.
 
