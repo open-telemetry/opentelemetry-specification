@@ -13,6 +13,8 @@ weight: 2
 <!-- toc -->
 
 - [Identity](#identity)
+- [Merging Resources](#merging-resources)
+  * [Merging Entities into a Resource](#merging-entities-into-a-resource)
 
 <!-- tocstop -->
 

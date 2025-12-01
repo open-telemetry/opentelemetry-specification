@@ -18,6 +18,7 @@ weight: 2
 - [Resource and Entities](#resource-and-entities)
   * [Attribute Referencing Model](#attribute-referencing-model)
   * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
+- [Merging of Entities](#merging-of-entities)
 - [Examples of Entities](#examples-of-entities)
 
 <!-- tocstop -->
