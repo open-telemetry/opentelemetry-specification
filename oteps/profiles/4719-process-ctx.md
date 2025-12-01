@@ -99,16 +99,6 @@ message Resource {
 }
 ```
 
-The following attributes are especially relevant to the OTEL eBPF Profiler and thus are recommended to be provided by publishers:
-
-* [service.instance.id](https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-instance-id)
-* [deployment.environment.name](https://opentelemetry.io/docs/specs/semconv/registry/attributes/deployment/#deployment-environment-name)
-* [service.name](https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-name)
-* [service.version](https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-version)
-* [telemetry.sdk.language](https://opentelemetry.io/docs/specs/semconv/registry/attributes/telemetry/#telemetry-sdk-language)
-* [telemetry.sdk.version](https://opentelemetry.io/docs/specs/semconv/registry/attributes/telemetry/#telemetry-sdk-version)
-* [telemetry.sdk.name](https://opentelemetry.io/docs/specs/semconv/registry/attributes/telemetry/#telemetry-sdk-name)
-
 ### Publication Protocol
 
 Publishing the context should follow these steps:
