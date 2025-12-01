@@ -154,7 +154,7 @@ telemetry channel (e.g., entity events) where full ownership context is known.
 
 ## Merging of Entities
 
-Entities MAY be merged if and only if their types are the same, their 
+Entities MAY be merged if and only if their types are the same, their
 identity attributes are exactly the same AND their schema_url is the same.
 This means both Entities MUST have the same identity attribute keys and
 for each key, the values of the key MUST be the same.
