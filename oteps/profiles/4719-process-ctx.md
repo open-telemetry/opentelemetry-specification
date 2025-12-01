@@ -178,7 +178,7 @@ When a process forks, child processes do not inherit the parent's process contex
 
 Creating memory mappings and managing them adds complexity to SDK implementations.
 
-**Mitigation**: We've created a reference implementation in [C/C++](https://github.com/ivoanjo/proc-level-demo), as well as a [demo OTEL Java SDK extension](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo) and a [Go port as well](https://github.com/DataDog/dd-trace-go/pull/3937).
+**Mitigation**: We've created a reference implementation in [C/C++](https://github.com/open-telemetry/sig-profiling/pull/23), as well as a [demo OTEL Java SDK extension](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo) and a [Go port as well](https://github.com/DataDog/dd-trace-go/pull/3937).
 
 For Go as well as modern versions of Java it's possible to create an implementation that doesn't rely on third-party libraries or native code (e.g. by directly calling into the OS or libc). Older versions of Java will need to rely on building the C/C++ into a Java native library.
 
@@ -212,7 +212,7 @@ The proposal uses protobuf. Not all SDKs may want to carry a protobuf encoder de
 
 **Mitigation**: Our reference implementations optionally include a limited protobuf implementation that implements only the feature set needed to emit a minimal payload message in < 500 LoC (C/C++ and Java). Alternatively, existing protobuf encoders can be used.
 
-Aside from protobuf, msgpack was also considered (see [this earlier msgpack-based reference implementation](https://github.com/ivoanjo/proc-level-demo/tree/main/anonmapping-clib)). Like for protobuf, it's possible to provide a small encoder with similar complexity. We're hoping that the community can make the final choice during specification review.
+Aside from protobuf, msgpack was also trialed; similarly to protobuf, it's possible to provide a small msgpack encoder with low complexity. We're hoping that the community can make the final choice during specification review.
 
 ### Trace Correlation
 
@@ -328,7 +328,7 @@ Both approaches demonstrate the need for process-level data sharing and validate
 
 The following proof-of-concept implementations demonstrate feasibility across multiple languages:
 
-- **[anonmapping-clib](https://github.com/ivoanjo/proc-level-demo/tree/main/anonmapping-clib)**: Complete reference implementation in C/C++ with protobuf payload
+- **[anonmapping-clib](https://github.com/open-telemetry/sig-profiling/pull/23)**: Complete reference implementation in C/C++ with protobuf payload
 - **[otel-java-extension-demo](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo)**: OTEL Java SDK extension for automatic publication
 - **[anonmapping-java](https://github.com/ivoanjo/proc-level-demo/tree/main/anonmapping-java)**: Pure Java implementation using FFM (no dependencies)
 - **[ebpf-program](https://github.com/ivoanjo/proc-level-demo/tree/main/ebpf-program)**: Example eBPF program demonstrating event-driven publishing detection
