@@ -54,7 +54,8 @@ raw attributes are different, then you can assume the resource is different.
 
 Note: The current SDK specification outlines a [merge algorithm](sdk#merge).
 This specification updates the algorithm to be compliant with entities. This
-section will replace that section upon stabilization of entities.
+section will replace that section upon stabilization of entities. SDKs SHOULD
+NOT update their merge algorithm until full Entity SDK support is provided.
 
 Merging resources is an action of joining together the context of observation.
 That is, we can look at the resource context for a signal and *expand* that
@@ -72,7 +73,7 @@ resource.
   - For each entity, `new_entity`, in priority order (highest first),
     do one of the following:
     - If an entity `e'` exsits in `E` with the same entity type as `new_entity`:
-       - Profrm a [Entity DataModel Merge](../entities/data-model.md#merging-of-entities), if applicable, otherwise ignore `new_entity`.
+       - Perform a [Entity DataModel Merge](../entities/data-model.md#merging-of-entities), if applicable, otherwise ignore `new_entity`.
     - Otherwise, add the entity `d'` to set `E`
 - Update the Resource to use the set of entities `E`.
   - If all entities within `E` have the same `schema_url`, set the
