@@ -4,7 +4,7 @@ We introduce an Events and Logs API that is based on the OpenTelemetry Log signa
 
 ## Motivation
 
-In OpenTelemetry's perspective Log Records and Events are different names for the same concept - however, there is a subtle difference in how they are represented using the underlying data model that is described below. We will describe why the existing Logging APIs are not sufficient for the purpose of creating events.  It will then be evident that we will need an API in OpenTelementry for creating events. Note that the Events here refer to standalone Events and not to be confused with Span Events which occur only in the context of a span.
+In OpenTelemetry's perspective Log Records and Events are different names for the same concept - however, there is a subtle difference in how they are represented using the underlying data model that is described below. We will describe why the existing Logging APIs are not sufficient for the purpose of creating events.  It will then be evident that we will need an API in OpenTelemetry for creating events. Note that the Events here refer to standalone Events and not to be confused with Span Events which occur only in the context of a span.
 
 The Logs part of the API introduced here is supposed to be used only by the Log Appenders and end-users should continue to use the logging APIs available in the languages.
 
