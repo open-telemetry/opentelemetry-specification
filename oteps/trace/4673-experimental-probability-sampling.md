@@ -20,11 +20,11 @@ Changes to the document made below, summarized:
   added the new specification.
 - Remove the table of contents.
 
-[TRACESTATE_HANDLING]: https://github.com/open-telemetry/opentelemetry-specification/blob/ec3779c3d0044503a1ec
-[SDK_SPEC]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/tracestate-handling.md
-[SDK_SPEC#parentbased]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/tracestate-handling.md#parentbased
-[SDK_SPEC#sampler]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/tracestate-handling.md#sampler
-[SDK_SPEC#traceidratiobased]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/tracestate-handling.md#traceidratiobased
+[TRACESTATE_HANDLING]: https://github.com/open-telemetry/opentelemetry-specification/blob/ec3779c3d0044503a1ec/specification/trace/tracestate-handling.md
+[SDK_SPEC]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/sdk.md
+[SDK_SPEC#parentbased]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/sdk.md#parentbased
+[SDK_SPEC#sampler]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/sdk.md#sampling
+[SDK_SPEC#traceidratiobased]: https://github.com/open-telemetry/opentelemetry-specification/blob/03e4ea2748e18e63d1e00e58e373ca55768fb1b0/specification/trace/sdk.md#traceidratiobased
 
 ## Overview
 
