@@ -18,6 +18,8 @@ release.
 
 - Stabilize `Enabled` API for synchronous instruments.
   ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
+- Allow instrument `Enabled` implementation to have additional optimizations and features.
+  ([#4747](https://github.com/open-telemetry/opentelemetry-specification/pull/4747))
 
 ### Logs
 
