@@ -7,6 +7,8 @@ allowCompoundWords: true
 useGitignore: true
 ignorePaths:
   - '**/*.svg'
+  - '.*.yml'
+  - '.*.yaml'
 patterns:
   - name: CodeBlock
     pattern: |
