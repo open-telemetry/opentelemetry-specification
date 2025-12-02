@@ -211,7 +211,7 @@ It consists of the following parameters:
   The value of `disabled` MUST be used to resolve whether a `Tracer`
   is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`.
-  
+
   It is not necessary for implementations to ensure that changes to `disabled`
   are immediately visible to callers of `Enabled`.
   However, the changes MUST be eventually visible.
@@ -487,7 +487,7 @@ such as:
 
 ```
 WARNING: The TraceIdRatioBased sampler is operating as a child sampler;
-the behavior is subject to change. Please upgrade this SDK configuration 
+the behavior is subject to change. Please upgrade this SDK configuration
 to use ProbabilitySampler.
 ```
 
@@ -498,7 +498,7 @@ warning MAY be more direct:
 
 ```
 WARNING: The TraceIdRatioBased sampler is operating as a child sampler
-and a parent is using ProbabilitySampler. Please upgrade this SDK configuration 
+and a parent is using ProbabilitySampler. Please upgrade this SDK configuration
 to use ProbabilitySampler.
 ```
 
@@ -580,13 +580,13 @@ Optional parameters:
 * `localParentSampled(Sampler)` (default: AlwaysOn)
 * `localParentNotSampled(Sampler)` (default: AlwaysOff)
 
-| Parent | parent.isRemote() | parent.IsSampled() | Invoke sampler |
-| --- | --- | --- | --- |
-| absent | n/a | n/a | `root()` |
-| present | true | true | `remoteParentSampled()` |
-| present | true | false | `remoteParentNotSampled()` |
-| present | false | true | `localParentSampled()` |
-| present | false | false | `localParentNotSampled()` |
+| Parent  | parent.isRemote() | parent.IsSampled() | Invoke sampler             |
+| ------- | ----------------- | ------------------ | -------------------------- |
+| absent  | n/a               | n/a                | `root()`                   |
+| present | true              | true               | `remoteParentSampled()`    |
+| present | true              | false              | `remoteParentNotSampled()` |
+| present | false             | true               | `localParentSampled()`     |
+| present | false             | false              | `localParentNotSampled()`  |
 
 #### JaegerRemoteSampler
 
@@ -618,7 +618,7 @@ Based on the decision from the wrapped root sampler, `AlwaysRecord` MUST behave
 as follows:
 
 | Root sampler decision | AlwaysRecord decision |
-|-----------------------|-----------------------|
+| --------------------- | --------------------- |
 | `DROP`                | `RECORD_ONLY`         |
 | `RECORD_ONLY`         | `RECORD_ONLY`         |
 | `RECORD_AND_SAMPLE`   | `RECORD_AND_SAMPLE`   |
@@ -1105,7 +1105,7 @@ an empty batch OR skip the export and consider it to be completed immediately.
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.
-* `maxQueueSize` - the maximum queue size. After the size is reached spans are
+* `maxQueueSize` - the maximum queue size. After the size is reached, spans are
   dropped. The default value is `2048`.
 * `scheduledDelayMillis` - the maximum delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
@@ -1122,7 +1122,7 @@ an empty batch OR skip the export and consider it to be completed immediately.
 implement so that they can be plugged into OpenTelemetry SDK and support sending
 of telemetry data.
 
-The goal of the interface is to minimize burden of implementation for
+The goal of the interface is to minimize the burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
@@ -1188,7 +1188,7 @@ spans.
 #### `Shutdown()`
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
-for exporter to do any cleanup required.
+for the exporter to do any cleanup required.
 
 `Shutdown` should be called only once for each `Exporter` instance. After the
 call to `Shutdown` subsequent calls to `Export` are not allowed and should

@@ -204,7 +204,7 @@ additional requirements these operations need to follow.
 ## Conflict Resolution
 
 If a new name/value pair is added and its name is the same as an existing name,
-than the new pair MUST take precedence. The value is replaced with the added
-value (regardless if it is locally generated or received from a remote peer).
+then the new pair MUST take precedence. The value is replaced with the added
+value (regardless of whether it is locally generated or received from a remote peer).
 
 [w3c]: https://www.w3.org/TR/baggage/
