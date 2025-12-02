@@ -425,7 +425,6 @@ OTEL_{LANGUAGE}_{FEATURE}
 ```
 
 [Boolean]: #boolean
-[Float]: #float
 [Integer]: #integer
 [Duration]: #duration
 [Timeout]: #timeout

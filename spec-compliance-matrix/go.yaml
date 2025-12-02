@@ -157,6 +157,8 @@ sections:
             status: '-'
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
             status: '-'
+          - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
+            status: '-'
   - name: Baggage
     features:
       - name: Basic support

@@ -116,6 +116,7 @@ sections:
             optional: true
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
             optional: true
+          - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
   - name: Baggage
     features:
       - name: Basic support

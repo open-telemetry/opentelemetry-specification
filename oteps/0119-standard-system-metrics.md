@@ -57,6 +57,7 @@ In the tables below, units of `1` refer to a ratio value that is always in the r
 #### `system.cpu.`
 
 **Description:** System level processor metrics.
+
 |Name                  |Units  |Instrument Type  |Value Type|Label Key|Label Values                       |
 |----------------------|-------|-----------------|----------|---------|-----------------------------------|
 |system.cpu.time       |seconds|SumObserver      |Double    |state    |idle, user, system, interrupt, etc.|
@@ -67,6 +68,7 @@ In the tables below, units of `1` refer to a ratio value that is always in the r
 #### `system.memory.`
 
 **Description:** System level memory metrics.
+
 |Name                     |Units|Instrument Type  |Value Type|Label Key|Label Values            |
 |-------------------------|-----|-----------------|----------|---------|------------------------|
 |system.memory.usage      |bytes|UpDownSumObserver|Int64     |state    |used, free, cached, etc.|
@@ -75,6 +77,7 @@ In the tables below, units of `1` refer to a ratio value that is always in the r
 #### `system.swap.`
 
 **Description:** System level swap/paging metrics.
+
 |Name                        |Units     |Instrument Type  |Value Type|Label Key|Label Values|
 |----------------------------|----------|-----------------|----------|---------|------------|
 |system.swap.usage           |pages     |UpDownSumObserver|Int64     |state    |used, free  |
@@ -86,6 +89,7 @@ In the tables below, units of `1` refer to a ratio value that is always in the r
 #### `system.disk.`
 
 **Description:** System level disk performance metrics.
+
 |Name                        |Units     |Instrument Type|Value Type|Label Key|Label Values|
 |----------------------------|----------|---------------|----------|---------|------------|
 |system.disk.io<!--notlink-->|bytes     |SumObserver    |Int64     |device   |(identifier)|
@@ -100,6 +104,7 @@ In the tables below, units of `1` refer to a ratio value that is always in the r
 #### `system.filesystem.`
 
 **Description:** System level filesystem metrics.
+
 |Name                         |Units|Instrument Type  |Value Type|Label Key|Label Values        |
 |-----------------------------|-----|-----------------|----------|---------|--------------------|
 |system.filesystem.usage      |bytes|UpDownSumObserver|Int64     |device   |(identifier)        |
@@ -110,6 +115,7 @@ In the tables below, units of `1` refer to a ratio value that is always in the r
 #### `system.network.`
 
 **Description:** System level network metrics.
+
 |Name                           |Units      |Instrument Type  |Value Type|Label Key|Label Values                                                                                  |
 |-------------------------------|-----------|-----------------|----------|---------|----------------------------------------------------------------------------------------------|
 |system.network.dropped\_packets|packets    |SumObserver      |Int64     |device   |(identifier)                                                                                  |
