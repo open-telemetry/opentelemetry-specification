@@ -104,7 +104,7 @@ checks directly.
 See:
 
 - [MarkdownStyle](#markdown-style)
-- [Misspell Check](#misspell-check)
+- [Text Correction](#text-correction)
 - Markdown link checking (docs TODO)
 
 ### Autoformatting
@@ -120,7 +120,7 @@ You can also run these fixes individually.
 
 See:
 
-- [Misspell Correction](#misspell-check)
+- [Text Correction](#text-correction)
 - Table Generation (docs TODO)
 
 ### Markdown style
@@ -148,24 +148,24 @@ with the Node version of markdownlint. If you are using Visual Studio Code,
 you can also use the `fixAll` command of the
 [vscode markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint).
 
-### Misspell check
+### Text Correction
 
 In addition, please make sure to clean up typos before you submit the change.
 
-To check for typos, run the following command:
+To check for typos (misspell) and style of writing (textlint), run the following command:
 
 ```bash
-make misspell
+make language-analysis
 ```
 
 > [!NOTE]
 > The `misspell` make target will also fetch and build the tool if
 > necessary. You'll need [Go](https://go.dev) to build the spellchecker.
 
-To quickly fix typos, use
+To quickly common misspellings and style, use
 
 ```bash
-make misspell-correction
+make textlint-correction
 ```
 
 ## Updating the Compliance Matrix
