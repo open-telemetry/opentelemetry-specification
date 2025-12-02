@@ -145,7 +145,6 @@ Defining the specification for Environment Variables as carriers will have a
 wide impact to the industry in enabling better observability to systems outside
 of the normal HTTP microservice architecture.
 
-[w3c-bag]: https://www.w3.org/TR/baggage/#header-name
 [bag-api]: https://opentelemetry.io/docs/specs/otel/baggage/api/
 
 The above prototype example came from the resources mentioned in [this
@@ -280,9 +279,9 @@ mentioned in [opentelemetry-specification #740](https://github.com/open-telemetr
 * [hotel-california](https://github.com/parsonsmatt/hotel-california/issues/3)
 
 Additionally, there was a prototype implementation for environment variables as
-context carriers written in the [Python SDK][python-env].
+context carriers written in the [Python SDK][python-sdkenv].
 
-[python-env]: https://github.com/open-telemetry/opentelemetry-specification/issues/740#issuecomment-919657003
+[python-sdkenv]: https://github.com/open-telemetry/opentelemetry-specification/issues/740#issuecomment-919657003
 
 ## Alternatives and why they were not chosen
 

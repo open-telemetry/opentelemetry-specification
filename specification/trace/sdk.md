@@ -580,13 +580,13 @@ Optional parameters:
 * `localParentSampled(Sampler)` (default: AlwaysOn)
 * `localParentNotSampled(Sampler)` (default: AlwaysOff)
 
-|Parent| parent.isRemote() | parent.IsSampled()| Invoke sampler|
-|--|--|--|--|
-|absent| n/a | n/a |`root()`|
-|present|true|true|`remoteParentSampled()`|
-|present|true|false|`remoteParentNotSampled()`|
-|present|false|true|`localParentSampled()`|
-|present|false|false|`localParentNotSampled()`|
+| Parent | parent.isRemote() | parent.IsSampled() | Invoke sampler |
+| --- | --- | --- | --- |
+| absent | n/a | n/a | `root()` |
+| present | true | true | `remoteParentSampled()` |
+| present | true | false | `remoteParentNotSampled()` |
+| present | false | true | `localParentSampled()` |
+| present | false | false | `localParentNotSampled()` |
 
 #### JaegerRemoteSampler
 
@@ -760,7 +760,7 @@ This example creates a configuration where:
 
 **Status**: [Development](../document-status.md)
 
-The [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation includes [a Random trace flag][W3CCONTEXTRANDOMFLAG] for indicating that the TraceID contains 56 random bits, specified for statistical purposes.
+The [W3C Trace Context Level 2][W3CCONTEXTLEVEL2] Candidate Recommendation includes [a Random trace flag][W3CCONTEXTRANDOMFLAG] for indicating that the TraceID contains 56 random bits, specified for statistical purposes.
 This flag indicates that [the least-significant ("rightmost") 7 bytes or 56 bits of the TraceID are random][W3CCONTEXTTRACEID].
 
 Note the Random flag does not propagate through [Trace Context Level 1][W3CCONTEXTLEVEL1] implementations, which do not recognize the flag.
@@ -771,7 +771,7 @@ OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encode
 This specification recommends the use of either TraceID randomness or explicit randomness,
 which ensures that samplers always have sufficient randomness when using W3C Trace Context propagation.
 
-[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
+[W3CCONTEXTLEVEL2]: https://www.w3.org/TR/trace-context-2/
 [W3CCONTEXTLEVEL1]: https://www.w3.org/TR/trace-context/
 [W3CCONTEXTTRACEID]: https://www.w3.org/TR/trace-context-2/#randomness-of-trace-id
 [W3CCONTEXTTRACESTATE]: https://www.w3.org/TR/trace-context-2/#tracestate-header
