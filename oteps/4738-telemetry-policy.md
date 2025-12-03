@@ -227,6 +227,10 @@ implementations like that for OpAMP. More on this in `Future Possibilities`
 
 ## Internal details
 
+NOTE: We need to include a section here about recording status. 
+NOTE 2: Each provider should only care about the status of the policies they are responsible for.
+NOTE 3: Each provider is responsible for ensuring that a single policy is not disruptive.
+
 ### Merging policies
 
 Since the policy itself does not enforce a transport mechanism or format, it is
