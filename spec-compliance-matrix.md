@@ -38,6 +38,7 @@ formats is required. Implementing more than one format is optional.
 | IsValid |  | + | + | + | + | + | + | + | + | + | + | + |
 | IsRemote |  | + | + | + | + | + | + | + | + | + | + | + |
 | Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - |  |  |  |  |  |  |  |  |  |  |
 | [Span](specification/trace/api.md#span) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create root span |  | + | + | + | + | + | + | + | + | + | + | + |
 | Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + |
@@ -87,7 +88,6 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  |
 | [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  |
 | Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  |  |  |
-| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - |  |  |  |  |  |  |  |  |  |  |
