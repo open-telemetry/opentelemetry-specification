@@ -17,7 +17,7 @@ instrumented codebases.
 Migrating from OpenCensus to OpenTelemetry may require breaking changes to the telemetry produced
 because of:
 
-* Different or new semantic conventions for names and attributes (e.g. [`grpc.io/server/server_latency`](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/gRPC.md#server) vs [`rpc.server.duration`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/rpc/rpc-metrics.md#metric-rpcserverduration))
+* Different or new semantic conventions for names and attributes (e.g. [`grpc.io/server/server_latency`](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/gRPC.md#server) vs [`rpc.server.call.duration`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/rpc/rpc-metrics.md#metric-rpcservercallduration))
 * Data model differences (e.g. OpenCensus supports [SumOfSquaredDeviations](https://github.com/census-instrumentation/opencensus-proto/blob/v0.3.0/src/opencensus/proto/metrics/v1/metrics.proto#L195), OTLP does not)
 * Instrumentation API feature differences (e.g. OpenCensus supports [context-based attributes](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/Record.md#recording-stats)), OTel does not)
 * Differences between equivalent OC and OTel exporters (e.g. the OpenTelemetry Prometheus exporter [adds type and unit suffixes](prometheus_and_openmetrics.md#metric-metadata-1); OpenCensus [does not](https://github.com/census-ecosystem/opencensus-go-exporter-prometheus/blob/v0.4.1/prometheus.go#L227))
