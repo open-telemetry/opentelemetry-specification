@@ -13,8 +13,15 @@ release.
 
 - Deprecate Zipkin exporter document and make exporter implementation optional.
   ([#4715](https://github.com/open-telemetry/opentelemetry-specification/pull/4715/))
+- Add spec for `AlwaysRecord` sampler
+  ([#4699](https://github.com/open-telemetry/opentelemetry-specification/pull/4699))
 
 ### Metrics
+
+- Stabilize `Enabled` API for synchronous instruments.
+  ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
+- Allow instrument `Enabled` implementation to have additional optimizations and features.
+  ([#4747](https://github.com/open-telemetry/opentelemetry-specification/pull/4747))
 
 ### Logs
 

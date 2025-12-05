@@ -362,9 +362,8 @@ OTEL_{LANGUAGE}_{FEATURE}
 ```
 
 [Boolean]: #boolean
-[Float]: #float
-[Integer]: common.md#integer
-[Duration]: common.md#duration
-[Timeout]: common.md#timeout
-[String]: common.md#string
-[Enum]: common.md#enum
+[Integer]: #integer
+[Duration]: #duration
+[Timeout]: #timeout
+[String]: #string
+[Enum]: #enum
