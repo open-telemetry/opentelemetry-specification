@@ -10,7 +10,7 @@ weight: 2
 <!-- toc -->
 
 - [Overview](#overview)
-  * [Stability definition](#stability-definition)
+  * [Versioning policy and stability guarantees](#versioning-policy-and-stability-guarantees)
   * [File-based configuration model](#file-based-configuration-model)
     + [YAML file format](#yaml-file-format)
     + [Environment variable substitution](#environment-variable-substitution)
@@ -34,9 +34,9 @@ The data model itself is an abstraction with multiple built-in representations:
 * [File-based configuration model](#file-based-configuration-model)
 * [SDK in-memory configuration model](./sdk.md#in-memory-configuration-model)
 
-### Stability definition
+### Versioning policy and stability guarantees
 
-See `opentelemetry-configuration` [stability definition](https://github.com/open-telemetry/opentelemetry-configuration?tab=readme-ov-file#stability-definition).
+See `opentelemetry-configuration` [versioning policy](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/VERSIONING.md).
 
 ### File-based configuration model
 
