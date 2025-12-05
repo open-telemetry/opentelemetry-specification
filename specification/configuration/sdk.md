@@ -260,15 +260,29 @@ Interpret configuration model and return SDK components.
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
 
-If a property has a default value defined (i.e. is _not_ required) and is
-missing or present but null, Create MUST ensure the SDK component is configured
-with the default value. If a property is required and is missing or present but
-null, Create SHOULD return an error. For example, if configuring
-the [span batching processor](../trace/sdk.md#batching-processor) and
-the `scheduleDelayMillis` property is missing or present but null, the component
-is configured with the default value of `5000`. However, if the `exporter`
-property is missing or present but null, Create fails fast since there is no
-default value for `exporter`.
+Create requirements around default and null behavior are described below. Note that
+[`defaultBehavior` and `nullBehavior`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#json-schema-source-and-output)
+are defined in the configuration data model.
+
+* If a property is present and the value is non-null, Create MUST use the value.
+* If a property is not present, Create MUST use `defaultBehavior`.
+* If a property is present and the value is null, Create MUST use the
+  `nullBehavior`, or `defaultBehavior` if `nullBehavior` is not set.
+* If a property is required, and not present, Create MUST return an error.
+* If a property is not nullable, and present and the value is null, Create MUST
+  return an error.
+
+A few examples to illustrate:
+
+* If configuring [`BatchSpanProcessor`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#batchspanprocessor-)
+  and `schedule_delay` is not present or present but null, the component is
+  configured according to the `defaultBehavior` of `5000`.
+* If configuring `BatchSpanProcessor` and `exporter` is not present or present
+  but null, Create returns an error since `exporter` is required and not
+  nullable.
+* If configuring [`SpanExporter`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter)
+  and `console` is present and null, the component is configured with a
+  `console` exporter with default configuration since `console` is nullable.
 
 When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to
