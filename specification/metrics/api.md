@@ -602,7 +602,7 @@ counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_gree
 
 ##### Remove
 
-Status: Development
+**Status**: [Development](../document-status.md)
 
 Unregister the Counter. It will no longer be reported.
 
