@@ -11,22 +11,9 @@ release.
 
 ### Traces
 
-- Deprecate Zipkin exporter document and make exporter implementation optional.
-  ([#4715](https://github.com/open-telemetry/opentelemetry-specification/pull/4715/))
-- Add spec for `AlwaysRecord` sampler
-  ([#4699](https://github.com/open-telemetry/opentelemetry-specification/pull/4699))
-
 ### Metrics
 
-- Stabilize `Enabled` API for synchronous instruments.
-  ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
-- Allow instrument `Enabled` implementation to have additional optimizations and features.
-  ([#4747](https://github.com/open-telemetry/opentelemetry-specification/pull/4747))
-
 ### Logs
-
-- Stabilize `LogRecordProcessor.Enabled`.
-  ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
 
 ### Baggage
 
@@ -47,6 +34,32 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.52.0 (2025-12-09)
+
+### Context
+
+- Make the W3C randomness flag required.
+  ([#4761](https://github.com/open-telemetry/opentelemetry-specification/pull/4761))
+
+### Traces
+
+- Deprecate Zipkin exporter document and make exporter implementation optional.
+  ([#4715](https://github.com/open-telemetry/opentelemetry-specification/pull/4715/))
+- Add spec for `AlwaysRecord` sampler
+  ([#4699](https://github.com/open-telemetry/opentelemetry-specification/pull/4699))
+
+### Metrics
+
+- Stabilize `Enabled` API for synchronous instruments.
+  ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
+- Allow instrument `Enabled` implementation to have additional optimizations and features.
+  ([#4747](https://github.com/open-telemetry/opentelemetry-specification/pull/4747))
+
+### Logs
+
+- Stabilize `LogRecordProcessor.Enabled`.
+  ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
 
 ## v1.51.0 (2025-11-17)
 
