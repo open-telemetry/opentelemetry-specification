@@ -55,6 +55,8 @@ Declarative configuration consists of the following main components:
   operations to parse configuration files and interpret the configuration data
   model.
 
+See also [supplementary guidelines](./supplementary-guidelines.md).
+
 ### Other Mechanisms
 
 Additional configuration mechanisms SHOULD be provided in whatever
