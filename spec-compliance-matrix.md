@@ -202,6 +202,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + |  | + | - |  |
 | LogRecord.Set EventName |  | + |  |  |  |  |  |  | + | + |  |  |
 | Logger.Enabled | X | + |  |  |  |  |  | + | + | + |  |  |
+| Ergonomic API | X |  |  |  |  |  |  |  |  |  |  |  |
 | SimpleLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
 | BatchLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
 | Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
