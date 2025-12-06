@@ -1,0 +1,63 @@
+name: "Verify CHANGELOG Update"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+jobs:
+  check-changelog:
+    runs-on: ubuntu-latest
+    name: Enforce CHANGELOG updates
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: diff
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
+          echo "changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Detect skip labels
+        id: skip
+        run: |
+          labels="${{ toJson(github.event.pull_request.labels) }}"
+          echo "Labels on PR: $labels"
+
+          if echo "$labels" | grep -q '"Skip Changelog"'; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          elif echo "$labels" | grep -q '"dependencies"'; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+
+      - name: Skip changelog check
+        if: steps.skip.outputs.skip == 'true'
+        run: echo "Skip Changelog or dependencies label detected — skipping check."
+
+      - name: Enforce CHANGELOG.md update
+        if: steps.skip.outputs.skip == 'false'
+        run: |
+          changed_files="${{ steps.diff.outputs.changed_files }}"
+
+          echo "Changed files:"
+          echo "$changed_files"
+
+          # Allow PRs that only edit CHANGELOG.md
+          if echo "$changed_files" | grep -Eq '^CHANGELOG\.md$' && \
+             [ "$(echo "$changed_files" | wc -l)" -eq 1 ]; then
+            echo "Only CHANGELOG.md changed — OK"
+            exit 0
+          fi
+
+          # If other files changed but CHANGELOG.md did NOT change → FAIL
+          if ! echo "$changed_files" | grep -q '^CHANGELOG\.md'; then
+            echo "::error ::This PR changes repository files but does NOT update CHANGELOG.md."
+            echo "Please update CHANGELOG.md or add the 'Skip Changelog' label for valid exceptions."
+            exit 1
+          fi
+
+          echo "CHANGELOG updated — OK"
