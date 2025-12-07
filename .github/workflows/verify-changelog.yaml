@@ -33,6 +33,7 @@ jobs:
             echo "skip=true" >> $GITHUB_OUTPUT
           else
             echo "skip=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Skip changelog check
         if: steps.skip.outputs.skip == 'true'
@@ -46,16 +47,9 @@ jobs:
           echo "Changed files:"
           echo "$changed_files"
 
-          # Allow PRs that only edit CHANGELOG.md
-          if echo "$changed_files" | grep -Eq '^CHANGELOG\.md$' && \
-             [ "$(echo "$changed_files" | wc -l)" -eq 1 ]; then
-            echo "Only CHANGELOG.md changed — OK"
-            exit 0
-          fi
-
           # If other files changed but CHANGELOG.md did NOT change → FAIL
           if ! echo "$changed_files" | grep -q '^CHANGELOG\.md'; then
-            echo "::error ::This PR changes repository files but does NOT update CHANGELOG.md."
+            echo "::error::This PR changes repository files but does NOT update CHANGELOG.md."
             echo "Please update CHANGELOG.md or add the 'Skip Changelog' label for valid exceptions."
             exit 1
           fi
