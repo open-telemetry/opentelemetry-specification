@@ -175,9 +175,8 @@ specific guarantees and safeties.
 
 Languages MAY additionally provide a more ergonomic and convenient logging API.
 
-The ergonomic API SHOULD make it easier to emit logs and events following the
-[log semantics](https://opentelemetry.io/docs/specs/semconv/general/logs/)
-and the [event semantics](https://opentelemetry.io/docs/specs/semconv/general/events/).
+The ergonomic API SHOULD make it more convenient to emit logs and events
+following the [semantic conventions](https://opentelemetry.io/docs/specs/semconv).
 
 The design of the ergonomic API SHOULD be idiomatic for its language.
 
