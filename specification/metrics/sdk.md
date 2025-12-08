@@ -1001,8 +1001,6 @@ must be retained.
 
 ### Instrument enabled
 
-**Status**: [Development](../document-status.md)
-
 The synchronous instrument [`Enabled`](./api.md#enabled) MUST return `false`
 when either:
 
