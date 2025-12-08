@@ -37,7 +37,7 @@ The header is stored in a fixed-size anonymous memory mapping of 2 pages with th
 
 | Field             | Type      | Description                                                          |
 |-------------------|-----------|----------------------------------------------------------------------|
-| `signature`       | `char[8]` | Always set to `"OTEL_CTX"`|
+| `signature`       | `char[8]` | Always set to `"OTEL_CTX"`                                           |
 | `version`         | `uint32`  | Format version. Currently `2` (`1` was used for development)         |
 | `published_at_ns` | `uint64`  | Timestamp when the context was published, in nanoseconds since epoch |
 | `payload_size`    | `uint32`  | Number of bytes of the encoded payload                               |
