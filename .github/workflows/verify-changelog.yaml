@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1 
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0
 
@@ -43,5 +43,5 @@ jobs:
           else
             echo "::error::No CHANGELOG file was updated in this PR."
             echo "Please update CHANGELOG or use the 'Skip Changelog' label if appropriate."
-            exit 1
+            False
           fi
