@@ -39,7 +39,7 @@ the `service` entity is related to the `process` entity. The process normally
 also runs on a host, so we say that the `process` entity is related to the
 `host` entity.
 
-> [!Note]
+> [!NOTE]
 > Entity relationship modelling will be refined in future specification
 > work.
 

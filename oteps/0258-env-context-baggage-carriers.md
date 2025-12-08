@@ -65,7 +65,7 @@ and produced by an arbitrary TextMapPropagator.
 
 Consider the following diagram in the context of process forking:
 
-> [!Note]
+> [!NOTE]
 > The diagram is simply an example and simplification of process forking.
 > There are other ways to spawn processes which are more performant like
 > exec().
@@ -79,7 +79,7 @@ propagate context to the child process such that it can be tied to the parent.
 Without `TRACEPARENT`, a tracing backend would not be able to connect the child
 process spans to the parent span, forming an end-to-end trace.
 
-> [!Note]
+> [!NOTE]
 > While the below exclusively follows the W3C Specification translated
 > into environment variables, this proposal is not exclusive to W3C and is
 > instead focused on the mechanism of Text Map Propagation with a potential set
@@ -104,7 +104,7 @@ This could be set in the environment as follows:
 export TRACEPARENT=00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
 ```
 
-> [!Note]
+> [!NOTE]
 > The value of TRACEPARENT is a combination of the above field values as
 > unsigned integer values serialized as ASCII strings, delimited by `-`.
 

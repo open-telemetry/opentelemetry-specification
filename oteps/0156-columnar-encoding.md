@@ -190,7 +190,7 @@ the compression ratio. This is illustrated in the following diagram.
 
 ![Traffic reduction](img/0156_traffic_reduction_use_case.png)
 
-> [!Note]
+> [!NOTE]
 > **1:** A fallback mechanism can be used to handle the case where the new protocol is not supported by the target.
 > More on this mechanism in this [section](#protocol-extension-and-fallback-mechanism).
 
@@ -393,7 +393,7 @@ By storing Arrow buffers in a protobuf field of type 'bytes' we can leverage the
 protobuf implementations (e.g. C++, Java, Rust) in order to get the most out of Arrow (relying on zero-copy ser/deser
 framework).
 
-> [!Note]
+> [!NOTE]
 > By default, ZSTD compression is enabled at the Arrow IPC level in order to benefit from the best compression
 > ratio regardless of the collector configuration. However, this compression can be disabled to enable it at the global
 > gRPC level if it makes more sense for a particular configuration.
@@ -453,7 +453,7 @@ To indicate not-retryable errors the server is recommended to use code INVALID_A
 details
 via `error_message`.
 
-> [!Note]
+> [!NOTE]
 > [Appendix A](#appendix-a---protocol-buffer-definitions) contains the full protobuf definition.
 
 ### Mapping OTel Entities to Arrow Records
@@ -493,7 +493,7 @@ same schema are grouped in a homogeneous stream. The first message sent contains
 the schema definition and the dictionaries. The following messages will not need to define the schema anymore.
 The dictionaries will only be sent again when their content change. The following diagram illustrates this process.
 
-> [!Note]
+> [!NOTE]
 > The approach of using a single Arrow record per OTel entity, which employs list, struct, and union Arrow data
 > types, was not adopted mainly due to the inability to sort each level of the OTel hierarchy independently. The mapping
 > delineated in this document, on average, provides a superior compression ratio.
@@ -538,7 +538,7 @@ engines.
 - The avoidance of complex Arrow data types (like union, list of struct) optimizes compatibility with the Arrow
 ecosystem.
 
-> [!Note]
+> [!NOTE]
 > Complex attribute values could also be encoded in protobuf once the `pdata` library provides support for it.
 
 #### Spans Arrow Mapping
@@ -587,7 +587,7 @@ As usual, each of these Arrow records is sorted by specific columns to optimize 
 batch of metrics containing a large number of data points sharing the same attributes and timestamp will be highly
 compressible (multivariate time-series scenario).
 
-> [!Note]
+> [!NOTE]
 > every OTLP timestamps are represented as Arrow timestamps as Epoch timestamps with nanosecond precision. This representation will
 > simplify the integration with the rest of the Arrow ecosystem (numerous time/date functions are supported in
 > DataFusion for example).

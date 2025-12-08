@@ -109,7 +109,7 @@ and [Honeycomb Query Assistant](https://www.honeycomb.io/blog/introducing-query-
 are likely to become increasingly prevalent and efficient in the near future,
 thanks to the adoption of a schema-first approach.
 
-> [!Note]
+> [!NOTE]
 > The names and formats of these concepts are still under discussion. A
 > detailed analysis of pros and cons will be covered later in the document. The
 > final decision will be deferred to future dedicated OTEPs.
