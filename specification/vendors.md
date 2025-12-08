@@ -32,7 +32,7 @@ ensuring that any language with an OpenTelemetry SDK implementation is able to
 work with any vendor who claims support for OpenTelemetry.
 
 This document will explain what is required of a vendor to be considered to
-"Support OpenTelemetry" or "Implements OpenTelemetry".
+"Support OpenTelemetry" or "Implement OpenTelemetry".
 
 ## Supports OpenTelemetry
 
@@ -44,8 +44,8 @@ SDK through one of two mechanisms:
 
 ## Implements OpenTelemetry
 
-A vendor with a custom SDK implementation will be listed as "Implements
-OpenTelemetry". If the custom SDK is optional then the vendor can be listed as
+"Implements OpenTelemetry" means the vendor requires a custom SDK implementation.
+If the custom SDK is optional then the vendor can be listed as
 "Supports OpenTelemetry".
 
 ## Qualifications
