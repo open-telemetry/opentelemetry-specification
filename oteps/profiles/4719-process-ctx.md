@@ -43,7 +43,7 @@ The header is stored in a fixed-size anonymous memory mapping of 2 pages with th
 | `payload_size`    | `uint32`  | Number of bytes of the encoded payload                               |
 | `payload`         | `char*`   | Pointer to payload, in protobuf format                               |
 
-**Why 2 pages**: On Linux kernels prior to 5.17, readers cannot filter mappings by name and must scan anonymous mappings. Using a fixed size allows readers to quickly filter candidate mappings by size (among other attributes) before checking the signature, avoiding the need to check most mappings in a process.
+**Why 2 pages**: On Linux kernels prior to 5.17 as well as those without the `CONFIG_ANON_VMA_NAME` feature, readers cannot filter mappings by name and must scan anonymous mappings. Using a fixed size allows readers to quickly filter candidate mappings by a combination of attributes before checking the signature, avoiding the need to check most mappings in a process.
 
 The `payload` can optionally be placed after the header (with the `payload` pointer field correctly pointing at it) or optionally elsewhere in the process memory.
 
@@ -111,7 +111,7 @@ Publishing the context should follow these steps:
 6. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding
 7. **Write signature**: Write `OTEL_CTX` to the signature field last
 8. **Set read-only**: Apply `mprotect(..., PROT_READ)` to mark the mapping as read-only
-9. **Name mapping** (Linux ≥5.17): Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping
+9. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping. This step should be done unconditionally, although naming mappings is not always supported by the kernel.
 
 The signature MUST be written last to ensure readers never observe incomplete or invalid data. Once the signature is present and the mapping set to read-only, the entire mapping is considered valid and immutable.
 
@@ -123,13 +123,17 @@ The process context is treated as a singleton: there SHOULD NOT be more than one
 
 The context MAY be dropped during SDK shutdown, or kept around until the process itself terminates and the OS takes care of cleaning the process memory.
 
+Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. On earlier kernel versions or kernels without the feature, the `prctl` call with return an error which should be ignored. The reading protocol specified below is able to work regardless on naming being available.
+
+Note that on legacy kernels and those without `CONFIG_ANON_VMA_NAME` it's possible, using eBPF, [to optionally hook on `prctl`](https://github.com/ivoanjo/proc-level-demo/tree/main/ebpf-program) naming attempts as a way of detecting new mappings being published. For this reason, this step should always be done even if the publisher somehow is aware that naming will not be successful on the current system.
+
 ### Reading Protocol
 
 External readers (such as the OpenTelemetry eBPF Profiler) discover and read process context as follows:
 
 1. **Locate mapping**:
-   - **Preferred** (Linux ≥5.17): Parse `/proc/<pid>/maps` and search for read-only entries with name `[anon:OTEL_CTX]`
-   - **Fallback** (older kernels): Parse `/proc/<pid>/maps` and search for anonymous read-only mappings exactly 2 pages in size, then read the first 8 bytes to check for the `"OTEL_CTX"` signature
+   - **Preferred** (Linux 5.17+ with `CONFIG_ANON_VMA_NAME`): Parse `/proc/<pid>/maps` and search for read-only entries with name `[anon:OTEL_CTX]`
+   - **Fallback**: Parse `/proc/<pid>/maps` and search for anonymous read-only mappings exactly 2 pages in size, then read the first 8 bytes to check for the `"OTEL_CTX"` signature
 
 2. **Validate signature and version**:
    - Read the header and verify first 8 bytes matches `OTEL_CTX`
@@ -187,10 +191,6 @@ For Go as well as modern versions of Java it's possible to create an implementat
 This mechanism relies on Linux-specific features (`mmap`, `prctl`, `/proc`).
 
 **Mitigation**: The feature is optional. SDKs on other platforms or environments where these features are unavailable can simply not implement it. In the future, we may explore similar mechanisms for other operating systems.
-
-One specific part of the design takes advantage of a Linux 5.17+ feature: adding a name to the anonymous mapping. For older Linux versions, the design includes a fallback to accommodates legacy kernels.
-
-The OTEL eBPF Profiler currently [requires Linux 5.4+](https://github.com/open-telemetry/opentelemetry-ebpf-profiler?tab=readme-ov-file#supported-linux-kernel-version) (old versions are Linux 4.19+).
 
 ### Protocol Evolution
 
