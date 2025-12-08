@@ -43,5 +43,5 @@ jobs:
           else
             echo "::error::No CHANGELOG file was updated in this PR."
             echo "Please update CHANGELOG or use the 'Skip Changelog' label if appropriate."
-            False
+            false
           fi
