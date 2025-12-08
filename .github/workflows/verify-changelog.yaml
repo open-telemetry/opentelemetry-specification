@@ -1,57 +1,47 @@
-name: "Verify CHANGELOG Update"
+# This action requires that any PR targeting the main branch should touch at
+# least one CHANGELOG file. If a CHANGELOG entry is not required, add the
+# "Skip Changelog" label, the "dependencies" label, or include "[chore]" in
+# the PR title.
+
+name: changelog
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
+    branches:
+      - main
+
+permissions: read-all
 
 jobs:
-  check-changelog:
+  changelog:
     runs-on: ubuntu-latest
-    name: Enforce CHANGELOG updates
+
+    # Skip if:
+    # - PR has "Skip Changelog" label
+    # - PR has "dependencies" label
+    # - PR title contains "[chore]"
+    if: >
+      ! contains(github.event.pull_request.labels.*.name, 'Skip Changelog') &&
+      ! contains(github.event.pull_request.labels.*.name, 'dependencies') &&
+      ! contains(github.event.pull_request.title, '[chore]')
 
     steps:
-      - name: Checkout full history
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Get changed files
-        id: diff
+      - name: Verify CHANGELOG updated
         run: |
+          echo "Fetching base branch..."
           git fetch origin ${{ github.base_ref }} --depth=1
-          echo "changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Detect skip labels
-        id: skip
-        run: |
-          labels="${{ toJson(github.event.pull_request.labels) }}"
-          echo "Labels on PR: $labels"
-
-          if echo "$labels" | grep -q '"Skip Changelog"'; then
-            echo "skip=true" >> $GITHUB_OUTPUT
-          elif echo "$labels" | grep -q '"dependencies"'; then
-            echo "skip=true" >> $GITHUB_OUTPUT
+          echo "Checking for CHANGELOG modifications..."
+          if git diff --name-only FETCH_HEAD | grep -q 'CHANGELOG'; then
+            echo "CHANGELOG updated — OK"
           else
-            echo "skip=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Skip changelog check
-        if: steps.skip.outputs.skip == 'true'
-        run: echo "Skip Changelog or dependencies label detected — skipping check."
-
-      - name: Enforce CHANGELOG.md update
-        if: steps.skip.outputs.skip == 'false'
-        run: |
-          changed_files="${{ steps.diff.outputs.changed_files }}"
-
-          echo "Changed files:"
-          echo "$changed_files"
-
-          # If other files changed but CHANGELOG.md did NOT change → FAIL
-          if ! echo "$changed_files" | grep -q '^CHANGELOG\.md'; then
-            echo "::error::This PR changes repository files but does NOT update CHANGELOG.md."
-            echo "Please update CHANGELOG.md or add the 'Skip Changelog' label for valid exceptions."
+            echo "::error::No CHANGELOG file was updated in this PR."
+            echo "Please update CHANGELOG or use the 'Skip Changelog' label if appropriate."
             exit 1
           fi
-
-          echo "CHANGELOG updated — OK"
