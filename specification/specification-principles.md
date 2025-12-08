@@ -97,7 +97,7 @@ with in OpenTelemetry.  This has three sub-principles:
 
 - Favor simple, broadly applicable features.
 - Prefer similar concepts and behaviors between signals.
-- Reuse naming conventions between signals, components, where possible.
+- Reuse naming conventions between signals and components where possible.
 
 ### Be Simple
 
@@ -108,4 +108,4 @@ easier evolution in the future.
 
 Additionally, a Specification is read and interpreted by many individuals.
 Complex language, nuanced wording and unclear descriptions lead to confusion and
-often times poor user experience as sections are not interpreted as desired.
+oftentimes poor user experience as sections are not interpreted as desired.
