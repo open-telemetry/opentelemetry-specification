@@ -11,19 +11,26 @@ release.
 
 ### Traces
 
+- Deprecate Zipkin exporter document and make exporter implementation optional.
+  ([#4715](https://github.com/open-telemetry/opentelemetry-specification/pull/4715/))
+- Add spec for `AlwaysRecord` sampler
+  ([#4699](https://github.com/open-telemetry/opentelemetry-specification/pull/4699))
+
 ### Metrics
 
-- `AlignedHistogramBucketExemplarReservoir` SHOULD use a time-weighted algorithm.
-  ([#4678](https://github.com/open-telemetry/opentelemetry-specification/pull/4678))
+- Stabilize `Enabled` API for synchronous instruments.
+  ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
+- Allow instrument `Enabled` implementation to have additional optimizations and features.
+  ([#4747](https://github.com/open-telemetry/opentelemetry-specification/pull/4747))
 
 ### Logs
+
+- Stabilize `LogRecordProcessor.Enabled`.
+  ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
 
 ### Baggage
 
 ### Profiles
-
-- Document the profiles signal.
-  ([#4685](https://github.com/open-telemetry/opentelemetry-specification/pull/4685))
 
 ### Resource
 
@@ -37,12 +44,26 @@ release.
 
 ### Common
 
-- Extend the set of attribute value types to support more complex data structures.
-  ([#4651](https://github.com/open-telemetry/opentelemetry-specification/pull/4651))
-
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.51.0 (2025-11-17)
+
+### Metrics
+
+- `AlignedHistogramBucketExemplarReservoir` SHOULD use a time-weighted algorithm.
+  ([#4678](https://github.com/open-telemetry/opentelemetry-specification/pull/4678))
+
+### Profiles
+
+- Document the profiles signal.
+  ([#4685](https://github.com/open-telemetry/opentelemetry-specification/pull/4685))
+
+### Common
+
+- Extend the set of attribute value types to support more complex data structures.
+  ([#4651](https://github.com/open-telemetry/opentelemetry-specification/pull/4651))
 
 ## v1.50.0 (2025-10-17)
 

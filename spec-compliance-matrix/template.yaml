@@ -52,6 +52,7 @@ sections:
           - name: IsValid
           - name: IsRemote
           - name: Conforms to the W3C TraceContext spec
+          - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
       - heading: '[Span](specification/trace/api.md#span)'
         features:
           - name: Create root span
@@ -111,12 +112,11 @@ sections:
           - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
             optional: true
           - name: Fetch InstrumentationScope from ReadableSpan
-          - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
-            optional: true
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
             optional: true
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
             optional: true
+          - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
   - name: Baggage
     features:
       - name: Basic support
@@ -375,9 +375,9 @@ sections:
           - name: Zipkin V1 Thrift
             optional: true
           - name: Zipkin V2 JSON
-            optional_one_of_group_is_required: true
+            optional: true
           - name: Zipkin V2 Protobuf
-            optional_one_of_group_is_required: true
+            optional: true
           - name: Service name mapping
           - name: SpanKind mapping
           - name: InstrumentationLibrary mapping

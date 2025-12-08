@@ -270,6 +270,8 @@ See [OpenTelemetry Protocol Exporter Configuration Options](../protocol/exporter
 
 ## Zipkin Exporter
 
+**Status**: [Deprecated](../document-status.md)
+
 | Name                          | Description                                                                        | Default                              | Type        |
 |-------------------------------|------------------------------------------------------------------------------------|--------------------------------------|-------------|
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces                                                         | `http://localhost:9411/api/v2/spans` | [String][]  |
@@ -423,7 +425,6 @@ OTEL_{LANGUAGE}_{FEATURE}
 ```
 
 [Boolean]: #boolean
-[Float]: #float
 [Integer]: #integer
 [Duration]: #duration
 [Timeout]: #timeout

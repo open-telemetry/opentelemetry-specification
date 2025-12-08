@@ -53,6 +53,8 @@ sections:
             status: '+'
           - name: Conforms to the W3C TraceContext spec
             status: '+'
+          - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
+            status: '?'
       - heading: '[Span](specification/trace/api.md#span)'
         features:
           - name: Create root span
@@ -151,11 +153,11 @@ sections:
             status: '+'
           - name: Fetch InstrumentationScope from ReadableSpan
             status: '?'
-          - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
-            status: '?'
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
             status: '?'
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
+            status: '?'
+          - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
             status: '?'
   - name: Baggage
     features:
@@ -368,7 +370,7 @@ sections:
       - name: Can plug custom LogRecordProcessor
         status: '+'
       - name: LogRecordProcessor.Enabled
-        status: '+'
+        status: '?'
       - name: OTLP/gRPC exporter
         status: '?'
       - name: OTLP/HTTP exporter

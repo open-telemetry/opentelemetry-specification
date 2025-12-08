@@ -9,7 +9,7 @@ status of the feature is not known.
 
 For the `Optional` column, `X` means the feature is optional, blank means the
 feature is required, and columns marked with `*` mean that for each type of
-exporter (OTLP and Zipkin), implementing at least one of the supported
+exporter (e.g. OTLP), implementing at least one of the supported
 formats is required. Implementing more than one format is optional.
 
 ## Traces
@@ -19,12 +19,12 @@ formats is required. Implementing more than one format is optional.
 | [TracerProvider](specification/trace/api.md#tracerprovider-operations) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create TracerProvider |  | + | + | + | + | + | + | + | + | + | + | + |
 | Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + |
-| Get a Tracer with schema_url |  | + | + |  | + |  |  | + |  | + |  |  |
+| Get a Tracer with schema_url |  | + | + | + | + |  |  | + |  | + |  |  |
 | Get a Tracer with scope attributes |  | + |  |  | + |  |  | + |  | + |  |  |
-| Associate Tracer with InstrumentationScope |  | + |  |  | + | + |  | + |  |  |  |  |
+| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + |  |  |  |  |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |
 | Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |
-| ForceFlush (SDK only required) |  | + | + | - | + | + | + | + | + | + | + | + |
+| ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |
 | Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |
@@ -38,6 +38,7 @@ formats is required. Implementing more than one format is optional.
 | IsValid |  | + | + | + | + | + | + | + | + | + | + | + |
 | IsRemote |  | + | + | + | + | + | + | + | + | + | + | + |
 | Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - |  |  |  |  |  |  |  |  |  |  |
 | [Span](specification/trace/api.md#span) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create root span |  | + | + | + | + | + | + | + | + | + | + | + |
 | Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + |
@@ -67,9 +68,9 @@ formats is required. Implementing more than one format is optional.
 | `null` values documented as invalid/undefined |  | + | + | + | + | + | N/A | + |  | + |  | N/A |
 | Unicode support for keys and string values |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Span linking](specification/trace/api.md#specifying-links) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| Links can be recorded on span creation |  | + | + |  | + | + | + | + | + | + | + |  |
-| Links can be recorded after span creation |  | + |  |  | + |  |  | + |  | + | + |  |
-| Links order is preserved |  | + | + |  | + | + | + | + | + | + | + |  |
+| Links can be recorded on span creation |  | + | + | + | + | + | + | + | + | + | + |  |
+| Links can be recorded after span creation |  | + |  | + | + |  |  | + |  | + | + |  |
+| Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  |
 | [Span events](specification/trace/api.md#add-events) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | AddEvent |  | + | + | + | + | + | + | + | + | + | + | + |
 | Add order preserved |  | + | + | + | + | + | + | + | + | + | + | + |
@@ -80,16 +81,16 @@ formats is required. Implementing more than one format is optional.
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + |
-| Sampler: JaegerRemoteSampler |  | + | + |  |  |  |  | - | + |  |  |  |
+| Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  |  |  |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + |
-| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + |  | + | + | + | + | + | + |  | + |
-| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + |  | + | + | + | + |  | - |  | + |
-| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + |  | + | + | + | + | + | + | + |  |
-| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + |  | + | + | + | + |  |  |  |  |
-| Fetch InstrumentationScope from ReadableSpan |  | + | + |  | + |  |  | + |  |  |  |  |
-| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) | X | - |  |  |  |  |  |  |  |  |  |  |
+| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + |  | + |
+| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + |  | - |  | + |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  |
+| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  |
+| Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  |  |  |
 | [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - |  |  |  |  |  |  |  |  |  |  |
+| [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - |  |  |  |  |  |  |  |  |  |  |
 
 ## Baggage
 
@@ -106,7 +107,7 @@ formats is required. Implementing more than one format is optional.
 | It is possible to create any number of `MeterProvider`s. | X | + | + | + | + | + | + | + | + | + | + |  |
 | `MeterProvider` provides a way to get a `Meter`. |  | + | + | + | + | + | + | + | + | + | - |  |
 | `get_meter` accepts name, `version` and `schema_url`. |  | + | + | + | + |  | + | + | + | + | - |  |
-| `get_meter` accepts `attributes`. |  | + |  |  | + |  |  | + | + | + |  |  |
+| `get_meter` accepts `attributes`. |  | + |  | - | + |  |  | + | + | + |  |  |
 | When an invalid `name` is specified a working `Meter` implementation is returned as a fallback. |  | + | + | + | + | + | + |  | + | + | - |  |
 | The fallback `Meter` `name` property keeps its original invalid value. | X | + | - | + | + | + | + |  | + | - | - |  |
 | Associate `Meter` with `InstrumentationScope`. |  | + | + | + | + | + | + |  | + | + |  |  |
@@ -114,7 +115,7 @@ formats is required. Implementing more than one format is optional.
 | `AsynchronousCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
 | `Histogram` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
 | `AsynchronousGauge` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
-| `Gauge` instrument is supported. |  | + | - | - | + | + | - | + | + | - | - |  |
+| `Gauge` instrument is supported. |  | + | - | + | + | + | - | + | + | - | - |  |
 | `UpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
 | `AsynchronousUpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  |
 | Instruments have `name` |  | + | + | + | + | + | + | + | + | + | + |  |
@@ -145,8 +146,8 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  |
 | The name of the `View` can be specified. |  | - | + | + | + | + | + | + |  | + | + |  |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  |
-| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  |  |  |  |  |  |  |  |  |  |
-| The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - |  | - |  | - |  |  |  | - |  |
+| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  | + |  |  |  |  |  |  |  |  |
+| The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  |
 | The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  |
 | The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
 | The `Default` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
@@ -154,9 +155,9 @@ formats is required. Implementing more than one format is optional.
 | The `Sum` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
 | The `LastValue` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
 | The `ExplicitBucketHistogram` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  |
-| The `ExponentialBucketHistogram` aggregation is available. |  | + |  |  | + | + |  |  |  |  | + |  |
+| The `ExponentialBucketHistogram` aggregation is available. |  | + |  | + | + | + |  |  |  |  | + |  |
 | The metrics Reader implementation supports registering metric Exporters |  | + | + | + | + | + | + | + | + | + | + |  |
-| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  | + | + |  | + | + | + |  |  | - | - |  |
+| The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  | + | + | + | + | + | + |  |  | - | - |  |
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind. |  | + | + | + | + | + | + |  | + | + |  |  |
 | The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements). |  | + | + | + | + | + | + |  | + | + | + |  |
 | The metrics Exporter `export` function can not be called concurrently from the same Exporter instance. |  | + | + | + | - | + | + |  |  | + | + |  |
@@ -167,19 +168,19 @@ formats is required. Implementing more than one format is optional.
 | The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out. |  | + | + | + | + | + | + | + |  | + | + |  |
 | The metrics Exporter provides a `shutdown` function. |  | + | + | + | + | + | + | + | + | + | + |  |
 | The metrics Exporter `shutdown` function do not block indefinitely. |  | + | + | + | - |  | + |  |  | + | + |  |
-| The metrics SDK samples `Exemplar`s from measurements. |  | + | + |  | - |  | + |  |  |  | + |  |
-| Exemplar sampling can be disabled. |  | + | - |  | - |  | + |  |  |  | + |  |
-| The metrics SDK supports SDK-wide exemplar filter configuration |  | + | + |  | - |  | + |  |  |  | + |  |
-| The metrics SDK supports `TraceBased` exemplar filter |  | + | + |  | - |  | + |  |  |  | + |  |
-| The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + |  | - |  | + |  |  |  | + |  |
-| The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + |  | - |  | + |  |  |  | + |  |
-| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + |  | - |  | + |  |  |  | + |  |
-| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + |  | - |  | + |  |  |  | + |  |
-| Exemplars contain the timestamp when the measurement was taken. |  | + | + |  | - |  | + |  |  |  | + |  |
-| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - |  | - |  | + | + |  |  | - |  |
-| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - |  | - |  | + | + |  |  | - |  |
-| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + |  | - |  | + | + |  |  | - |  |
-| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + |  | - |  | + |  |  |  | - |  |
+| The metrics SDK samples `Exemplar`s from measurements. |  | + | + | - | - |  | + |  |  |  | + |  |
+| Exemplar sampling can be disabled. |  | + | - | - | - |  | + |  |  |  | + |  |
+| The metrics SDK supports SDK-wide exemplar filter configuration |  | + | + | - | - |  | + |  |  |  | + |  |
+| The metrics SDK supports `TraceBased` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  |
+| The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  |
+| The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  |
+| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + | - | - |  | + |  |  |  | + |  |
+| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + | - | - |  | + |  |  |  | + |  |
+| Exemplars contain the timestamp when the measurement was taken. |  | + | + | - | - |  | + |  |  |  | + |  |
+| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | - |  | + | + |  |  | - |  |
+| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - | - | - |  | + | + |  |  | - |  |
+| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + | - | - |  | + | + |  |  | - |  |
+| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + | - | - |  | + |  |  |  | - |  |
 | A metric Producer accepts an optional metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
 | The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers |  | - |  |  |  |  | - |  |  |  |  |  |
 | The metric SDK's metric Producer implementations uses the metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
@@ -194,21 +195,21 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| LoggerProvider.Get Logger |  | + | + |  | + | + |  | + |  | + | - |  |
+| LoggerProvider.Get Logger |  | + | + | + | + | + |  | + |  | + | - |  |
 | LoggerProvider.Get Logger accepts attributes |  | + |  |  | + |  |  | + |  | + |  |  |
-| LoggerProvider.Shutdown |  | + | + |  | + | + |  | + |  | + | - |  |
-| LoggerProvider.ForceFlush |  | + | + |  | + | + |  | + |  | + | - |  |
-| Logger.Emit(LogRecord) |  | + | + |  | + | + |  | + |  | + | - |  |
+| LoggerProvider.Shutdown |  | + | + | + | + | + |  | + |  | + | - |  |
+| LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + |  | + | - |  |
+| Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + |  | + | - |  |
 | LogRecord.Set EventName |  | + |  |  |  |  |  |  | + | + |  |  |
 | Logger.Enabled | X | + |  |  |  |  |  | + | + | + |  |  |
-| SimpleLogRecordProcessor |  | + | + |  | + | + |  | + |  | + |  |  |
-| BatchLogRecordProcessor |  | + | + |  | + | + |  | + |  | + |  |  |
-| Can plug custom LogRecordProcessor |  | + | + |  | + | + |  | + |  | + |  |  |
-| LogRecordProcessor.Enabled | X | + |  |  |  | + |  |  | + |  |  |  |
-| OTLP/gRPC exporter |  | + | + |  | + |  |  | + |  | + | + |  |
-| OTLP/HTTP exporter |  | + | + |  | + | + |  | + |  | + | + |  |
+| SimpleLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
+| BatchLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
+| Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
+| LogRecordProcessor.Enabled | X | + |  |  |  |  |  |  | + |  |  |  |
+| OTLP/gRPC exporter |  | + | + | + | + |  |  | + |  | + | + |  |
+| OTLP/HTTP exporter |  | + | + | + | + | + |  | + |  | + | + |  |
 | OTLP File exporter |  | - | - |  | - |  |  |  |  | + | - |  |
-| Can plug custom LogRecordExporter |  | + | + |  | + | + |  | + |  | + |  |  |
+| Can plug custom LogRecordExporter |  | + | + | + | + | + |  | + |  | + |  |  |
 | Trace Context Injection |  | + | + |  | + | + |  | + |  | + | + |  |
 
 ## Resource
@@ -334,8 +335,8 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Zipkin V1 JSON | X | - | + |  | + | - | - | - | - | - | - | - |
 | Zipkin V1 Thrift | X | - | + |  | [-][py1174] | - | - | - | - | - | - | - |
-| Zipkin V2 JSON | * | + | + |  | + | + | - | + | + | + | + | + |
-| Zipkin V2 Protobuf | * | - | + |  | + | - | + | - | - | - | - | - |
+| Zipkin V2 JSON | X | + | + |  | + | + | - | + | + | + | + | + |
+| Zipkin V2 Protobuf | X | - | + |  | + | - | + | - | - | - | - | - |
 | Service name mapping |  | + | + | + | + | + | + | + | + | + | + | + |
 | SpanKind mapping |  | + | + | + | + | + | + | + | + | + | + | + |
 | InstrumentationLibrary mapping |  | + | + | - | + | + | - | + | + | + | + | + |

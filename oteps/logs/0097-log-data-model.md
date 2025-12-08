@@ -164,18 +164,18 @@ about the meaning of the field reviewing the examples may be helpful.
 
 Here is the list of fields in a log record:
 
-Field Name     |Description
----------------|--------------------------------------------
-Timestamp      |Time when the event occurred.
-TraceId        |Request trace id.
-SpanId         |Request span id.
-TraceFlags     |W3C trace flag.
-SeverityText   |The severity text (also known as log level).
-SeverityNumber |Numerical value of the severity.
-Name           |Short event identifier.
-Body           |The body of the log record.
-Resource       |Describes the source of the log.
-Attributes     |Additional information about the event.
+| Field Name     | Description                                  |
+| -------------- | -------------------------------------------- |
+| Timestamp      | Time when the event occurred.                |
+| TraceId        | Request trace id.                            |
+| SpanId         | Request span id.                             |
+| TraceFlags     | W3C trace flag.                              |
+| SeverityText   | The severity text (also known as log level). |
+| SeverityNumber | Numerical value of the severity.             |
+| Name           | Short event identifier.                      |
+| Body           | The body of the log record.                  |
+| Resource       | Describes the source of the log.             |
+| Attributes     | Additional information about the event.      |
 
 Below is the detailed description of each field.
 
@@ -238,14 +238,14 @@ less severe events (such as debug events), larger numerical values correspond to
 more severe events (such as errors and critical events). The following table
 defines the meaning of `SeverityNumber` value:
 
-SeverityNumber range|Range name|Meaning
---------------------|----------|-------
-1-4                 |TRACE     |A fine-grained debugging event. Typically disabled in default configurations.
-5-8                 |DEBUG     |A debugging event.
-9-12                |INFO      |An informational event. Indicates that an event happened.
-13-16               |WARN      |A warning event. Not an error but is likely more important than an informational event.
-17-20               |ERROR     |An error event. Something went wrong.
-21-24               |FATAL     |A fatal error such as application or system crash.
+| SeverityNumber range | Range name | Meaning                                                                                |
+| -------------------- | ---------- | -------------------------------------------------------------------------------------- |
+| 1-4                  | TRACE      | A fine-grained debugging event. Typically disabled in default configurations.          |
+| 5-8                  | DEBUG      | A debugging event.                                                                     |
+| 9-12                 | INFO       | An informational event. Indicates that an event happened.                              |
+| 13-16                | WARN       | A warning event. Not an error but is likely more important than an informational event.|
+| 17-20                | ERROR      | An error event. Something went wrong.                                                  |
+| 21-24                | FATAL      | A fatal error such as application or system crash.                                     |
 
 Smaller numerical values in each range represent less important (less severe)
 events. Larger numerical values in each range represent more important (more
@@ -317,32 +317,32 @@ The following table defines the recommended short name for each
 `SeverityNumber` value. The short name can be used for example for representing
 the `SeverityNumber` in the UI:
 
-SeverityNumber|Short Name
---------------|----------
-1             |TRACE
-2             |TRACE2
-3             |TRACE3
-4             |TRACE4
-5             |DEBUG
-6             |DEBUG2
-7             |DEBUG3
-8             |DEBUG4
-9             |INFO
-10            |INFO2
-11            |INFO3
-12            |INFO4
-13            |WARN
-14            |WARN2
-15            |WARN3
-16            |WARN4
-17            |ERROR
-18            |ERROR2
-19            |ERROR3
-20            |ERROR4
-21            |FATAL
-22            |FATAL2
-23            |FATAL3
-24            |FATAL4
+| SeverityNumber | Short Name |
+| -------------- | ---------- |
+| 1              | TRACE      |
+| 2              | TRACE2     |
+| 3              | TRACE3     |
+| 4              | TRACE4     |
+| 5              | DEBUG      |
+| 6              | DEBUG2     |
+| 7              | DEBUG3     |
+| 8              | DEBUG4     |
+| 9              | INFO       |
+| 10             | INFO2      |
+| 11             | INFO3      |
+| 12             | INFO4      |
+| 13             | WARN       |
+| 14             | WARN2      |
+| 15             | WARN3      |
+| 16             | WARN4      |
+| 17             | ERROR      |
+| 18             | ERROR2     |
+| 19             | ERROR3     |
+| 20             | ERROR4     |
+| 21             | FATAL      |
+| 22             | FATAL2     |
+| 23             | FATAL3     |
+| 24             | FATAL4     |
 
 When an individual log record is displayed it is recommended to show both
 `SeverityText` and `SeverityNumber` values. A recommended combined string in
@@ -995,19 +995,19 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
 
 ### Google Cloud Logging
 
-Field            | Type               | Description                                             | Maps to Unified Model Field
------------------|--------------------| ------------------------------------------------------- | ---------------------------
-timestamp        | string             | The time the event described by the log entry occurred. | Timestamp
-resource         | MonitoredResource  | The monitored resource that produced this log entry.    | Resource
-log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Name
-json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
-proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
-text_payload     | string             | The log entry payload, represented as a Unicode string (UTF-8). | Body
-severity         | LogSeverity        | The severity of the log entry.                          | Severity
-trace            | string             | The trace associated with the log entry, if any.        | TraceId
-span_id          | string             | The span ID within the trace associated with the log entry. | SpanId
-labels           | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes
-All other fields |                    |                                                         | Attributes["google.*"]
+| Field | Type | Description | Maps to Unified Model Field |
+| ----- | ---- | ----------- | --------------------------- |
+| timestamp | string | The time the event described by the log entry occurred. | Timestamp |
+| resource | MonitoredResource | The monitored resource that produced this log entry. | Resource |
+| log_name | string | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Name |
+| json_payload | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body |
+| proto_payload | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body |
+| text_payload | string | The log entry payload, represented as a Unicode string (UTF-8). | Body |
+| severity | LogSeverity | The severity of the log entry. | Severity |
+| trace | string | The trace associated with the log entry, if any. | TraceId |
+| span_id | string | The span ID within the trace associated with the log entry. | SpanId |
+| labels | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes |
+| All other fields | | | Attributes["google.*"] |
 
 ## Elastic Common Schema
 
@@ -1332,19 +1332,19 @@ for an exhaustive list.
 
 ## Appendix B: `SeverityNumber` example mappings
 
-|Syslog       |WinEvtLog  |Log4j |Zap   |java.util.logging|SeverityNumber|
-|-------------|-----------|------|------|-----------------|--------------|
-|             |           |TRACE |      | FINEST          |TRACE         |
-|Debug        |Verbose    |DEBUG |Debug | FINER           |DEBUG         |
-|             |           |      |      | FINE            |DEBUG2        |
-|             |           |      |      | CONFIG          |DEBUG3        |
-|Informational|Information|INFO  |Info  | INFO            |INFO          |
-|Notice       |           |      |      |                 |INFO2         |
-|Warning      |Warning    |WARN  |Warn  | WARNING         |WARN          |
-|Error        |Error      |ERROR |Error | SEVERE          |ERROR         |
-|Critical     |Critical   |      |Dpanic|                 |ERROR2        |
-|Emergency    |           |      |Panic |                 |ERROR3        |
-|Alert        |           |FATAL |Fatal |                 |FATAL         |
+| Syslog | WinEvtLog | Log4j | Zap | java.util.logging | SeverityNumber |
+| ------ | --------- | ----- | --- | ----------------- | -------------- |
+| | | TRACE | | FINEST | TRACE |
+| Debug | Verbose | DEBUG | Debug | FINER | DEBUG |
+| | | | | FINE | DEBUG2 |
+| | | | | CONFIG | DEBUG3 |
+| Informational | Information | INFO | Info | INFO | INFO |
+| Notice | | | | | INFO2 |
+| Warning | Warning | WARN | Warn | WARNING | WARN |
+| Error | Error | ERROR | Error | SEVERE | ERROR |
+| Critical | Critical | | Dpanic | | ERROR2 |
+| Emergency | | | Panic | | ERROR3 |
+| Alert | | FATAL | Fatal | | FATAL |
 
 ## References
 

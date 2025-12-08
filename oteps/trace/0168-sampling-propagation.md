@@ -77,16 +77,16 @@ shown in the following table.  The p-value for known sampling
 probabilities is the negative base-2 logarithm of the probability:
 
 | p-value | Parent Probability |
-| -----   | -----------      |
-| 0       | 1                |
-| 1       | 1/2              |
-| 2       | 1/4              |
-| ...     | ...              |
-| N       | 2**-N            |
-| ...     | ...              |
-| 61      | 2**-61           |
-| 62      | 2**-62           |
-| 63      | 0                |
+| ------- | ------------------ |
+| 0       | 1                  |
+| 1       | 1/2                |
+| 2       | 1/4                |
+| ...     | ...                |
+| N       | 2**-N              |
+| ...     | ...                |
+| 61      | 2**-61             |
+| 62      | 2**-62             |
+| 63      | 0                  |
 
 [As specified in OTEP 170 for the Trace data
 model](0170-sampling-probability.md),
@@ -348,8 +348,8 @@ respect to the incoming and outgoing values for `p`, `r`, and
 | Sampler                | Incoming `r` | Incoming `p` | Incoming `sampled` | Outgoing `r`               | Outgoing `p`               | Outgoing `sampled`         |
 | --                     | --           | --           | --                 | --                         | --                         | --                         |
 | Parent                 | unused       | expected     | respected          | checked and passed through | checked and passed through | checked and passed through |
-| TraceIDRatio(Non-Root) | used         | unused       | ignored            | checked and passed through | set to `s`                 | set to `p <= r`          |
-| TraceIDRatio(Root)     | n/a          | n/a          | n/a                | random variable            | set to `s`                 | set to `p <= r`          |
+| TraceIDRatio(Non-Root) | used         | unused       | ignored            | checked and passed through | set to `s`                 | set to `p <= r`            |
+| TraceIDRatio(Root)     | n/a          | n/a          | n/a                | random variable            | set to `s`                 | set to `p <= r`            |
 
 There are several cases where the resulting span's parent sampling
 probability is unknown:
