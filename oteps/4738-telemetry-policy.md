@@ -267,6 +267,89 @@ The mechanism for negotiating a protocol will depend on the specific `PolicyProv
 * A HTTP provider can use different file formats to decide which merger to use, as specified in the RFCs for JSON patch formats.
 * OpAmp providers could add a field specifying the merger as well as the data being transmitted, plus a mechanism for systems to inform each other which mergers are avaliable and how the data is expected to be merged.
 
+#### Conflict resolution in case of a merge
+
+Since policies must be idempotent and multiple policies are allowed, it is
+important that no assumptions are made about how specific merging protocol
+works. Therefore, we suggest the following:
+* Do not rely on the order of fields, and set explicit rules on how to
+  compare fields added in distinct order
+* Do not rely on array operations, since not all merge protocols support
+  them
+* Avoid mechanisms that require storing all policies since these lead to
+  unconstrained memory to handle them, i.e., keep only the most recent 
+  state.
+
+As an example, let's look at a possible per-metric sampling period operation.
+At first, we could assume that there is just a sampling period for a given
+metric is set:
+
+```json
+{
+  "rpc.server.latency" {
+    "sampling_rate_ms": 10000
+  }
+}
+```
+
+However, by doing so we will end up in a situation that the latest processed
+sampling period will be chosen, which makes it not idempotent, since multiple
+agents might receive or process them in different order, leading to distinct
+sampling rate across agents, or through a stack of agents and collectors.
+
+For these cases, we recommend that the policy uses a distinct field between the 
+existing and new value, and runs a **post-merge algorithm** that applies a 
+commutative operation that is applied immediately over the data, effectively
+resolving the conflict.
+
+In the example, let's turn the sampling rate into a struct with two fields:
+* a `minimum` that contains the resolved minimum sampling 
+  period. Initially, this field is unset. A policy provider **must not** set
+  this field.
+* a `recommended`, which is the field set by a policy. A 
+  policy provider **should** set this field if it wants to recommend a sampling
+  rate.
+
+The policy above would be rewritten as the following
+
+```json
+{
+  "rpc.server.latency" {
+    "sampling_rate_ms": {
+      "recommended": 10000
+    }
+  }
+}
+```
+
+And, as a post-merge algorithm we could use:
+
+```python
+def post_merge(merged):
+  for metric in merged:
+    # If there is a new recommended sampling rate
+    if metric.sampling_rate_ms is not None and
+        has(metric.sampling_rate_ms.recommended):
+      if not(has(metric.sampling_rate_ms.minimum)):
+        # If there was no minimum, just use the new recommended one
+        metric.sampling_rate_ms.minimum = metric.sampling_rate_ms.recommended
+      else:
+        # Otherwise, keep the smallest one.
+        metric.sampling_rate_ms.minimum = min(
+            metric.sampling_rate_ms.minimum,
+            metric.sampling_rate_ms.recommended)
+    # Cleanup: remove the new recommendation after processing
+    del(metric.sampling_rate_ms.recommended)      
+```
+
+This guarantees that policies can be applied in any order and yet the end
+result will be the same. It also allow for more complex policies like taking
+into account timestamps and sources, provided the operations can be demonstrated
+to be commutative and applied in any order. For example, we could have a policy
+where a given provider value always overrides another provider if one of 
+the fields is the provider name and the post-merge algorithm takes this 
+information into account.
+
 ## Trade-offs and mitigations
 
 TODO - write
