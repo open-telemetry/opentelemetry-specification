@@ -3,7 +3,7 @@
 # "Skip Changelog" label, the "dependencies" label, or include "[chore]" in
 # the PR title.
 
-name: changelog
+name: Verify CHANGELOG
 
 on:
   pull_request:
