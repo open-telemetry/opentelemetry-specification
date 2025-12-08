@@ -21,7 +21,7 @@ When an SDK initializes (or updates its resource attributes) it publishes this i
 This mechanism is designed to support loose coordination between the publishing process and external readers:
 
 - **Publisher-first deployment**: The publishing process can start and publish its context before any readers are running, with readers discovering it later
-- **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external process with sufficient system permissions to read `/proc/<pid>/maps` and process memory can access this information
+- **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external process with sufficient system permissions to read `/proc/<pid>/maps` and read target process memory can access this information
 - **Runtime compatibility**: The mechanism works even in environments where eBPF function hooking is unavailable or restricted
 - **Independent of process activity**: The context can be read at any time, including when the application is deadlocked, blocked on I/O, or otherwise idle, without relying on active hook points or the process emitting signals
 
@@ -159,7 +159,7 @@ SDKs that do not implement this feature continue to function normally; external 
 
 ### Host and Permission Requirements
 
-This mechanism requires that the external reader (such as an eBPF profiler) is running on the same host as the instrumented process and has sufficient privileges to access the memory mappings exposed by the process.
+This mechanism requires that the external reader (such as an eBPF profiler) is running on the same host as the instrumented process and has sufficient privileges to both access the memory mappings exposed by the process and read target process memory.
 
 The OpenTelemetry eBPF profiler, by design, has the necessary permissions and operates on the same machine to read this metadata. This approach does **not** support remote or cross-host correlation of process context, and attempts to access the process context mappings without appropriate permissions (e.g., from an unprivileged user) will fail.
 
