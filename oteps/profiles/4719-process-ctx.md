@@ -4,7 +4,7 @@ Introduce a standard mechanism for OpenTelemetry SDKs to publish process-level r
 
 ## Motivation
 
-External readers like OpenTelemetry eBPF Profiler or OpenTelemetry eBPF Instrumentation operate outside the instrumented process and cannot access resource attributes configured within OpenTelemetry SDKs. This creates several problems:
+External readers like the OpenTelemetry eBPF Profiler operate outside the instrumented process and cannot access resource attributes configured within OpenTelemetry SDKs. This creates several problems:
 
 - **Missing cross-signal correlation identifiers**: Runtime-generated attributes ([`service.instance.id`](https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-instance-id) being a key example) are often inaccessible to external readers, making it hard to correlate various signals with each other (especially in runtimes that employ multiple processes).
 
@@ -221,6 +221,14 @@ The proposed mechanism only supports sharing process-level resource attributes.
 In particular, it does not support carrying trace and span ids, which would be required to provide finer-grained correlation. Prior art by Elastic and Polar Signals (see below) provide such thread-level context sharing, and there's a working doc [for supporting thread-level context sharing in the OTEL eBPF Profiler](https://docs.google.com/document/d/1eatbHpEXXhWZEPrXZpfR58-5RIx-81mUgF69Zpn3Rz4/edit?tab=t.0#heading=h.fvztn3xtjxxm) under development for this. We expect that in the future, such correlation would be proposed as a separate OTEP.
 
 Process-level and thread-level context are complementary: The process-level mechanism proposed in this OTEP can be generically adopted by SDKs, and allows for flexibility in publishing metadata and in parsing it. Thread-level mechanisms, in contrast, may need specific support for individual languages/runtimes, and because they would be updated for every span, will need careful performance work.
+
+### Applicability to OpenTelemetry eBPF Instrumentation
+
+The [OpenTelemetry eBPF Instrumentation (OBI)](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation) auto-instrumentation tool, when used in the application observability mode, uses a combination of Linux uprobes and [userspace writes](https://opentelemetry.io/docs/zero-code/obi/security/) to emit traces and metrics from otherwise unmodified applications.
+
+The protocol proposed by this specification requires the ability to, inside the target application, allocate (small amounts of) memory, as well as invoking system calls to set up the naming and the inheritance permissions. This is not something that can currently be done with an eBPF-based approach and thus this spec can't currently be implemented using OBI.
+
+**Mitigation**: For OBI-to-OTEL eBPF Profiler communication, we can separately introduce an out-of-band channel using the existing kernel eBPF primitives, given both tools operate in kernel space.
 
 ## Prior art and alternatives
 
