@@ -173,9 +173,7 @@ specific guarantees and safeties.
 
 **Status**: [Development](../document-status.md)
 
-Languages MAY additionally provide a more ergonomic and convenient logging API
-that it is better suited for direct usage by instrumentation libraries,
-instrumented libraries, and applications.
+Languages MAY additionally provide a more ergonomic and convenient logging API.
 
 The ergonomic API SHOULD make it easier to emit logs and events following the
 [log semantics](https://opentelemetry.io/docs/specs/semconv/general/logs/)
