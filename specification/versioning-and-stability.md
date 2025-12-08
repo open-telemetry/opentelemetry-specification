@@ -354,7 +354,7 @@ There is one version number that applies to all signals that are included in the
 Signals MUST NOT have separate version numbers.
 There is one version number that applies to all signals that are included in the SDK release that is labeled with that particular version number.
 * Semantic Conventions are a single package with a single version number.
-* Each contrib package MAY have it's own version number.
+* Each contrib package MAY have its own version number.
 * The API, SDK, Semantic Conventions, and contrib components have independent version numbers.
 For example, the latest version of `opentelemetry-python-api` MAY be at v1.2.3 while the latest version of `opentelemetry-python-sdk` is at v2.3.1.
 * Different language implementations have independent version numbers.

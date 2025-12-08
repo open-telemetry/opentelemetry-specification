@@ -45,11 +45,11 @@ also runs on a host, so we say that the `process` entity is related to the
 The data model below defines a logical model for an entity (irrespective of the
 physical format and encoding of how entity data is recorded).
 
-| Field        | Type                                   | Description     |
-|--------------|----------------------------------------|-----------------|
-| Type         | string                                 | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
-| Id           | map<string, attribute value>  | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
-| Description  | map<string, attribute value>                       | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| Type | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
+| Id | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| Description | map<string, attribute value> | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
 
 ## Minimally Sufficient Identity
 
