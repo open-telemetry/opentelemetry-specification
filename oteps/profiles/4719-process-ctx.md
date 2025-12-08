@@ -39,8 +39,8 @@ The header is stored in a fixed-size anonymous memory mapping of 2 pages with th
 |-------------------|-----------|----------------------------------------------------------------------|
 | `signature`       | `char[8]` | Always set to `"OTEL_CTX"`                                           |
 | `version`         | `uint32`  | Format version. Currently `2` (`1` was used for development)         |
-| `published_at_ns` | `uint64`  | Timestamp when the context was published, in nanoseconds since epoch |
 | `payload_size`    | `uint32`  | Number of bytes of the encoded payload                               |
+| `published_at_ns` | `uint64`  | Timestamp when the context was published, in nanoseconds since epoch |
 | `payload`         | `char*`   | Pointer to payload, in protobuf format                               |
 
 **Why 2 pages**: On Linux kernels prior to 5.17 as well as those without the `CONFIG_ANON_VMA_NAME` feature, readers cannot filter mappings by name and must scan anonymous mappings. Using a fixed size allows readers to quickly filter candidate mappings by a combination of attributes before checking the signature, avoiding the need to check most mappings in a process.
