@@ -5,6 +5,8 @@ language: en-US
 caseSensitive: false
 allowCompoundWords: true
 useGitignore: true
+import:
+  - '@cspell/dict-people-names/cspell-ext.json'
 ignorePaths:
   - '**/*.svg'
   - '.*.yml'
@@ -49,13 +51,34 @@ dictionaries:
   - en-words
   # Programming languages and software terms
   - cpp
+  - csharp
+  - dart
+  - django
+  - docker
   - dotnet
+  - elixir
+  - flutter
+  - fsharp
   - golang
+  - haskell
+  - html
+  - java
+  - julia
+  - k8s
+  - kotlin
+  - markdown
   - node
   - npm
   - php
   - python
   - ruby
+  - rust
+  - scala
   - softwareTerms
+  - swift
+  - typescript
   # Other
   - companies
+  - aws
+  - google
+  - people-names
