@@ -62,7 +62,8 @@ through their `kubectl` or Kubernetes UIs to find the specific process
 generating telemetry.   This is as important as being able to uniquely identify
 one process from another.
 
-> Aside: Observability signals SHOULD be actionable.  Knowing a process is
+> [!TIP]
+> Observability signals SHOULD be actionable.  Knowing a process is
 > struggling is not as useful as being able to scale up a deployment to take
 > load off the struggling process.
 
