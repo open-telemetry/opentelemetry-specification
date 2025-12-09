@@ -269,8 +269,8 @@ are defined in the configuration data model.
 * If a property is present and the value is null, Create MUST use the
   `nullBehavior`, or `defaultBehavior` if `nullBehavior` is not set.
 * If a property is required, and not present, Create MUST return an error.
-* If a property is not nullable, and present and the value is null, Create MUST
-  return an error.
+* If a property is not nullable, and the value is null, Create MUST return an
+  error.
 
 A few examples to illustrate:
 
