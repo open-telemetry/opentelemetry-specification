@@ -33,7 +33,7 @@ precedence:
 * [`create`](./sdk.md#create) is responsible for interpreting an in-memory
   config data model and creating SDK components.
 
-There is no precedence ambiguity with the environemnt variable configuration
+There is no precedence ambiguity with the environment variable configuration
 interface: The language of `parse` and `create` is explicit about
 responsibilities and makes no mention of merging environment variables outside
 of environment variable substitution.
@@ -45,7 +45,7 @@ the [programmatic configuration interface](./README.md#programmatic): `create`
 consumes an in-memory config data model and creates SDK components. According to
 the trace, metric, and log specs, SDKs MAY support updating the config, but
 there is no conflict with declarative config which doesn't already exist.
-However the SDK handles programmatic config updates to SDK components which
+However, the SDK handles programmatic config updates to SDK components which
 originally programmatically configured applies here as well. If an SDK supports
 it, all programmatic config updates are applied after `create` initializes SDK
 components and therefore take precedence. The semantics of what programmatic
