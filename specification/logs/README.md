@@ -151,7 +151,7 @@ Given the above state of the logging space we took the following approach:
   applications, which is particularly important for:
 
   - **Instrumentation libraries** to avoid coupling to a particular logging library.
-  - **Emitting structured logs and events** following [semantic conventions](https://opentelemetry.io/docs/specs/semconv/),
+  - **Emitting structured events** following [semantic conventions](https://opentelemetry.io/docs/specs/semconv/),
     especially when the existing logging library cannot emit structured data or specify event names.
   - **Scenarios requiring direct control** over log emission without
     intermediary logging library.
@@ -399,7 +399,7 @@ Applications have several options for emitting logs:
 
 2. **Using the OpenTelemetry Logs API directly**: Applications can use the
    [Logs API](./api.md) directly to emit structured logs and events. This approach
-   works well for emitting logs following [semantic conventions](https://opentelemetry.io/docs/specs/semconv/)
+   works well for emitting events following [semantic conventions](https://opentelemetry.io/docs/specs/semconv/)
    and enables easier reuse of attributes used across different signals. Note
    that a language can provide a more convenient [ergonomic API](./api.md#ergonomic-api).
 
