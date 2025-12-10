@@ -427,6 +427,12 @@ sections:
       - name: Linux RPM-based distributions
     hide_optional_column: true
     languages: # overridden just for initial PR to prove out 1-1 conversion
+      - Java
+      - JS
+      - Python
+      - Ruby
+      - PHP
+      - .NET
   - name: OpenCensus Compatibility
     features:
       - name: '[Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)'

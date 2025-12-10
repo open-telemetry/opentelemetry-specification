@@ -525,6 +525,12 @@ sections:
         status: '?'
       - name: Register a `ComponentProvider`
         status: '?'
+  - name: Autoinstrumentation System Packages
+    features:
+      - name: Linux DEB-based distributions
+        status: '-'
+      - name: Linux RPM-based distributions
+        status: '-'
   - name: Exporters
     features:
       - name: '[Exporter interface](specification/trace/sdk.md#span-exporter)'
