@@ -105,7 +105,7 @@ e.g. the maximum milliseconds representable by a 32-bit integer).
 
 String values are sub-classified into:
 
-* [Enum][].
+* [Enum](#enum).
 
 Normally, string values include notes describing how they are interpreted by
 implementations.
