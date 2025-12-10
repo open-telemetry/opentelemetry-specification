@@ -239,7 +239,9 @@ Parse SHOULD return an error if:
 
 * The `file` doesn't exist or is invalid
 * The parsed `file` content does not conform to
-  the [configuration model](data-model.md) schema.
+  the [configuration model](data-model.md) schema. Note that this includes
+  enforcing all constraints encoded into the schema (e.g. required properties
+  are present, that properties adhere to specified types, etc.).
 
 #### Create
 
@@ -264,25 +266,27 @@ Create requirements around default and null behavior are described below. Note t
 [`defaultBehavior` and `nullBehavior`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#json-schema-source-and-output)
 are defined in the configuration data model.
 
-* If a property is present and the value is non-null, Create MUST use the value.
-* If a property is not present, Create MUST use `defaultBehavior`.
 * If a property is present and the value is null, Create MUST use the
   `nullBehavior`, or `defaultBehavior` if `nullBehavior` is not set.
 * If a property is required, and not present, Create MUST return an error.
-* If a property is not nullable, and the value is null, Create MUST return an
-  error.
 
 A few examples to illustrate:
 
 * If configuring [`BatchSpanProcessor`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#batchspanprocessor-)
   and `schedule_delay` is not present or present but null, the component is
   configured according to the `defaultBehavior` of `5000`.
-* If configuring `BatchSpanProcessor` and `exporter` is not present or present
-  but null, Create returns an error since `exporter` is required and not
-  nullable.
 * If configuring [`SpanExporter`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter)
   and `console` is present and null, the component is configured with a
   `console` exporter with default configuration since `console` is nullable.
+
+The [configuration model](data-model.md) uses the JSON schema
+[`description`](https://json-schema.org/understanding-json-schema/reference/annotations)
+annotation to capture property semantics which cannot be encoded using standard
+JSON schema keywords. Create SHOULD return an error if it encounters a value
+which is invalid according to the property `description`. For example, if
+configuring [`HttpTls`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#httptls-)
+and `ca_file` is not an absolute file path as defined in the property
+description, return an error.
 
 When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to
