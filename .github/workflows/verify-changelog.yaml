@@ -34,11 +34,8 @@ jobs:
 
       - name: Verify CHANGELOG updated
         run: |
-          echo "Fetching base branch..."
-          git fetch origin ${{ github.base_ref }} --depth=1
-
           echo "Checking for CHANGELOG modifications..."
-          if git diff --name-only FETCH_HEAD | grep -q 'CHANGELOG'; then
+          if git diff --name-only --merge-base origin/${{ github.base_ref }} | grep -q 'CHANGELOG'; then
             echo "CHANGELOG updated — OK"
           else
             echo "::error::No CHANGELOG file was updated in this PR."
