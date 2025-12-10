@@ -1,6 +1,6 @@
 # Process Context: Sharing Resource Attributes with External Readers
 
-Introduce a standard mechanism for OpenTelemetry SDKs to publish process-level resource attributes for access by out-of-process readers such as the OpenTelemetry eBPF Profiler.
+Introduce a standard mechanism for OpenTelemetry SDKs to publish resource attributes for access by out-of-process readers such as the OpenTelemetry eBPF Profiler.
 
 ## Motivation
 
