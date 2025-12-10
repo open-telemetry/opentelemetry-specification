@@ -421,6 +421,12 @@ sections:
             optional: true
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
             optional: true
+  - name: Autoinstrumentation System Packages
+    features:
+      - name: Linux DEB-based distributions
+      - name: Linux RPM-based distributions
+    hide_optional_column: true
+    languages: # overridden just for initial PR to prove out 1-1 conversion
   - name: OpenCensus Compatibility
     features:
       - name: '[Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)'
