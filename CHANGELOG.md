@@ -29,9 +29,6 @@ release.
 
 ### SDK Configuration
 
-- Clarifies that guidance related to boolean environment variables is not applicable
-  to other configuration interfaces. ([#4723](https://github.com/open-telemetry/opentelemetry-specification/pull/4723))
-
 ### Common
 
 ### Supplementary Guidelines
@@ -63,6 +60,11 @@ release.
 
 - Stabilize `LogRecordProcessor.Enabled`.
   ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
+
+### SDK Configuration
+
+- Clarifies that guidance related to boolean environment variables is not applicable
+  to other configuration interfaces. ([#4723](https://github.com/open-telemetry/opentelemetry-specification/pull/4723))
 
 ## v1.51.0 (2025-11-17)
 
