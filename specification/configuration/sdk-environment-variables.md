@@ -20,6 +20,8 @@ aliases:
 - [Type-specific guidance](#type-specific-guidance)
   * [Boolean](#boolean)
   * [Numeric](#numeric)
+  * [String](#string)
+    + [Enum](#enum)
 - [General SDK Configuration](#general-sdk-configuration)
 - [Batch Span Processor](#batch-span-processor)
 - [Batch LogRecord Processor](#batch-logrecord-processor)
@@ -362,8 +364,8 @@ OTEL_{LANGUAGE}_{FEATURE}
 ```
 
 [Boolean]: #boolean
-[Integer]: #integer
-[Duration]: #duration
-[Timeout]: #timeout
-[String]: #string
-[Enum]: #enum
+[Integer]: common.md#integer
+[Duration]: common.md#duration
+[Timeout]: common.md#timeout
+[String]: common.md#string
+[Enum]: common.md#enum
