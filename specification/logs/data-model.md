@@ -199,20 +199,20 @@ about the meaning of the field reviewing the examples may be helpful.
 
 Here is the list of fields in a log record:
 
-Field Name     |Description
----------------|--------------------------------------------
-Timestamp      |Time when the event occurred.
-ObservedTimestamp|Time when the event was observed.
-TraceId        |Request trace id.
-SpanId         |Request span id.
-TraceFlags     |W3C trace flag.
-SeverityText   |The severity text (also known as log level).
-SeverityNumber |Numerical value of the severity.
-Body           |The body of the log record.
-Resource       |Describes the source of the log.
-InstrumentationScope|Describes the scope that emitted the log.
-Attributes     |Additional information about the event.
-EventName      |Name that identifies the class / type of event.
+| Field Name | Description |
+| ---------- | ----------- |
+| Timestamp | Time when the event occurred. |
+| ObservedTimestamp | Time when the event was observed. |
+| TraceId | Request trace id. |
+| SpanId | Request span id. |
+| TraceFlags | W3C trace flag. |
+| SeverityText | The severity text (also known as log level). |
+| SeverityNumber | Numerical value of the severity. |
+| Body | The body of the log record. |
+| Resource | Describes the source of the log. |
+| InstrumentationScope | Describes the scope that emitted the log. |
+| Attributes | Additional information about the event. |
+| EventName | Name that identifies the class / type of event. |
 
 Below is the detailed description of each field.
 
@@ -298,14 +298,14 @@ critical than an error with `SeverityNumber=20`.
 
 The following table defines the meaning of `SeverityNumber` value:
 
-SeverityNumber range|Range name|Meaning
---------------------|----------|-------
-1-4                 |TRACE     |A fine-grained debugging event. Typically disabled in default configurations.
-5-8                 |DEBUG     |A debugging event.
-9-12                |INFO      |An informational event. Indicates that an event happened.
-13-16               |WARN      |A warning event. Not an error but is likely more important than an informational event.
-17-20               |ERROR     |An error event. Something went wrong.
-21-24               |FATAL     |A fatal error such as application or system crash.
+| SeverityNumber range | Range name | Meaning                                                                                 |
+| -------------------- | ---------- | --------------------------------------------------------------------------------------- |
+| 1-4                  | TRACE      | A fine-grained debugging event. Typically disabled in default configurations.           |
+| 5-8                  | DEBUG      | A debugging event.                                                                      |
+| 9-12                 | INFO       | An informational event. Indicates that an event happened.                               |
+| 13-16                | WARN       | A warning event. Not an error but is likely more important than an informational event. |
+| 17-20                | ERROR      | An error event. Something went wrong.                                                   |
+| 21-24                | FATAL      | A fatal error such as application or system crash.                                      |
 
 `SeverityNumber=0` MAY be used to represent an unspecified value.
 
@@ -374,32 +374,32 @@ The following table defines the recommended short name for each
 `SeverityNumber` value. The short name can be used for example for representing
 the `SeverityNumber` in the UI:
 
-SeverityNumber|Short Name
---------------|----------
-1             |TRACE
-2             |TRACE2
-3             |TRACE3
-4             |TRACE4
-5             |DEBUG
-6             |DEBUG2
-7             |DEBUG3
-8             |DEBUG4
-9             |INFO
-10            |INFO2
-11            |INFO3
-12            |INFO4
-13            |WARN
-14            |WARN2
-15            |WARN3
-16            |WARN4
-17            |ERROR
-18            |ERROR2
-19            |ERROR3
-20            |ERROR4
-21            |FATAL
-22            |FATAL2
-23            |FATAL3
-24            |FATAL4
+| SeverityNumber | Short Name |
+| -------------- | ---------- |
+| 1              | TRACE      |
+| 2              | TRACE2     |
+| 3              | TRACE3     |
+| 4              | TRACE4     |
+| 5              | DEBUG      |
+| 6              | DEBUG2     |
+| 7              | DEBUG3     |
+| 8              | DEBUG4     |
+| 9              | INFO       |
+| 10             | INFO2      |
+| 11             | INFO3      |
+| 12             | INFO4      |
+| 13             | WARN       |
+| 14             | WARN2      |
+| 15             | WARN3      |
+| 16             | WARN4      |
+| 17             | ERROR      |
+| 18             | ERROR2     |
+| 19             | ERROR3     |
+| 20             | ERROR4     |
+| 21             | FATAL      |
+| 22             | FATAL2     |
+| 23             | FATAL3     |
+| 24             | FATAL4     |
 
 When an individual log record is displayed it is recommended to show both
 `SeverityText` and `SeverityNumber` values. A recommended combined string in

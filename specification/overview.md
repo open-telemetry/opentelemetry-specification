@@ -84,7 +84,7 @@ provide language-specific support to the
 [code generator](https://github.com/open-telemetry/weaver).
 
 Additionally, attributes required by the specification will be listed
-[here](semantic-conventions.md)
+[here](semantic-conventions.md).
 
 ### Contrib Packages
 
@@ -211,7 +211,7 @@ aggregated back in a single **Span**. This last **Span** is linked to many
 operations it aggregates. All of them are the **Spans** from the same Trace. And
 similar to the Parent field of a **Span**. It is recommended, however, to not
 set parent of the **Span** in this scenario as semantically the parent field
-represents a single parent scenario, in many cases the parent **Span** fully
+represents a single parent scenario, and in many cases the parent **Span** fully
 encloses the child **Span**. This is not the case in scatter/gather and batch
 scenarios.
 
@@ -253,12 +253,12 @@ API are `Measurement`, `Instrument` and `Meter`. A `Meter` is obtained from a
 #### Instruments
 
 [Instruments](metrics/api.md#instrument) are used to report `Measurement`s, and are identified
-by a name, kind, description and a unit of values.
+by a name, kind, description, and unit of values.
 
 There are several types of metric instruments for specific use cases, such as counters for
 incrementing values, gauges for capturing current values, and histograms for capturing
 distributions of measurements. Instruments can be synchronous, meaning that they are invoked
-inline by application logic, or asynchronous where the user registers a callback
+inline by application logic, or asynchronous, where the user registers a callback
 function that is invoked on demand by the SDK.
 
 ### Metrics data model and SDK
@@ -338,7 +338,7 @@ All of OpenTelemetry cross-cutting concerns, such as traces and metrics,
 share an underlying `Context` mechanism for storing state and
 accessing data across the lifespan of a distributed transaction.
 
-See the [Context](context/README.md)
+See [Context](context/README.md) for more information.
 
 ## Propagators
 
@@ -364,12 +364,10 @@ The OpenTelemetry collector has two primary modes of operation: Agent (a daemon
 running locally with the application) and Collector (a standalone running
 service).
 
-Read more at OpenTelemetry Service [Long-term
+Read more at OpenTelemetry Collector [Long-term
 Vision](https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/vision.md).
 
 ## Instrumentation Libraries
-
-See [Instrumentation Library](glossary.md#instrumentation-library)
 
 The inspiration of the project is to make every library and application
 observable out of the box by having them call OpenTelemetry API directly. However,
@@ -398,3 +396,5 @@ project name:
 
 * {company}-opentelemetry-instrumentation-{component} (Python)
 * @{company}/opentelemetry-instrumentation-{component} (Javascript)
+
+See [Instrumentation Library](glossary.md#instrumentation-library) for more information.

@@ -54,7 +54,7 @@ There are three kinds of metric instrument, `CumulativeMetric`, `GaugeMetric`, a
 Metric instruments are constructed through the `Meter` API. Constructing an instrument automatically registers it with the SDK. The common attributes of a metric instrument are:
 
 | Field | Description |
-|------|-----------|
+| ----- | ----------- |
 | Name | A string. |
 | Kind | One of Cumulative, Gauge, or Measure. |
 | Recommended Keys | Default aggregation keys. |
@@ -119,13 +119,13 @@ Metric instruments are enabled by default, meaning that SDKs will export metric 
 The kind-specific optional properties of a metric instrument are:
 
 | Property | Description | Metric kind |
-|----------|-------------|-------------|
-| Monotonic(true)  | Indicates a cumulative that accepts only non-negative values | Cumulative (default) |
-|                  | Indicate a gauge supports ascending value sequences starting at 0 | Gauge |
+| -------- | ----------- | ----------- |
+| Monotonic(true) | Indicates a cumulative that accepts only non-negative values | Cumulative (default) |
+| | Indicate a gauge supports ascending value sequences starting at 0 | Gauge |
 | Monotonic(false) | Indicates a cumulative that accepts positive and negative values | Cumulative |
-|                  | Indicate a gauge that expresses a monotonic cumulative value | Gauge (default) |
-| Absolute(true)   | Indicates a measure that accepts non-negative values | Measure (default) |
-| Absolute(false)  | Indicates a measure that accepts positive and negative values | Measure |
+| | Indicate a gauge that expresses a monotonic cumulative value | Gauge (default) |
+| Absolute(true) | Indicates a measure that accepts non-negative values | Measure (default) |
+| Absolute(false) | Indicates a measure that accepts positive and negative values | Measure |
 
 ### RecordBatch API
 

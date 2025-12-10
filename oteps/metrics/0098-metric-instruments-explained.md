@@ -21,12 +21,12 @@ The following table summarizes the final proposed standard instruments resulting
 
 | Existing name | **Standard name** | Instrument kind | Function name | Input temporal quality | Default aggregation | Rate support (Monotonic) | Notes |
 | ------------- | ----------------------- | ----- | --------- | -------------- | ------------- | --- | ------------------------------------ |
-| Counter       | **Counter**             | Sync  | Add()     | Delta | Sum | Yes | Per-request, part of a monotonic sum |
-|               | **UpDownCounter**       | Sync  | Add()     | Delta | Sum | No  | Per-request, part of a non-monotonic sum |
-| Measure       | **ValueRecorder**       | Sync  | Record()  | Instantaneous | MinMaxSumCount | No  | Per-request, any non-additive measurement |
-|               | **SumObserver**         | Async | Observe() | Cumulative | Sum | Yes | Per-interval, reporting a monotonic sum |
-|               | **UpDownSumObserver**   | Async | Observe() | Cumulative | Sum | No  | Per-interval, reporting a non-monotonic sum |
-| Observer      | **ValueObserver**       | Async | Observe() | Instantaneous | MinMaxSumCount | No  | Per-interval, any non-additive measurement |
+| Counter | **Counter** | Sync | Add() | Delta | Sum | Yes | Per-request, part of a monotonic sum |
+| | **UpDownCounter** | Sync | Add() | Delta | Sum | No | Per-request, part of a non-monotonic sum |
+| Measure | **ValueRecorder** | Sync | Record() | Instantaneous | MinMaxSumCount | No | Per-request, any non-additive measurement |
+| | **SumObserver** | Async | Observe() | Cumulative | Sum | Yes | Per-interval, reporting a monotonic sum |
+| | **UpDownSumObserver** | Async | Observe() | Cumulative | Sum | No | Per-interval, reporting a non-monotonic sum |
+| Observer | **ValueObserver** | Async | Observe() | Instantaneous | MinMaxSumCount | No | Per-interval, any non-additive measurement |
 
 There are three synchronous instruments and three asynchronous instruments in this proposal, although a hypothetical 10 instruments were discussed in [OTEP 88][otep-88].  Although we consider them rational and logical, two categories of instrument are excluded in this proposal: synchronous cumulative instruments and asynchronous delta instruments.
 

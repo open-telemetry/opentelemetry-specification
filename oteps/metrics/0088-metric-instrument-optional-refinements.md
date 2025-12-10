@@ -281,19 +281,19 @@ listed in the table below, of which only one has been standardized.
 Hypothetical future instrument names are _italicized_.
 
 | Foundation instrument | Sum-only? | Precomputed-sum? | Non-negative? | Non-negative-rate? | Instrument name _(hyptothetical)_ |
-|--|--|--|--|--|--|
-| Measure  | sum-only |                 | non-negative  | non-negative-rate | Counter |
-| Measure  | sum-only | precomputed-sum |               | non-negative-rate | _CumulativeCounter_ |
-| Measure  | sum-only |                 |               |                   | _UpDownCounter_ |
-| Measure  | sum-only | precomputed-sum |               |                   | _UpDownCumulativeCounter_ |
-| Measure  |          |                 | non-negative  |                   | _AbsoluteDistribution_ |
-| Measure  |          |                 |               |                   | _Distribution_ |
-| Observer | sum-only |                 | non-negative  | non-negative-rate | _DeltaObserver_ |
-| Observer | sum-only | precomputed-sum |               | non-negative-rate | _CumulativeObserver_ |
-| Observer | sum-only |                 |               |                   | _UpDownDeltaObserver_ |
-| Observer | sum-only | precomputed-sum |               |                   | _UpDownCumulativeObserver_ |
-| Observer |          |                 | non-negative  |                   | _AbsoluteLastValueObserver_ |
-| Observer |          |                 |               |                   | _LastValueObserver_ |
+| --- | ---- | ---- | ---- | --- | --- |
+| Measure | sum-only | | non-negative | non-negative-rate | Counter |
+| Measure | sum-only | precomputed-sum | | non-negative-rate | _CumulativeCounter_ |
+| Measure | sum-only | | | | _UpDownCounter_ |
+| Measure | sum-only | precomputed-sum | | | _UpDownCumulativeCounter_ |
+| Measure | | | non-negative | | _AbsoluteDistribution_ |
+| Measure | | | | | _Distribution_ |
+| Observer | sum-only | | non-negative | non-negative-rate | _DeltaObserver_ |
+| Observer | sum-only | precomputed-sum | | non-negative-rate | _CumulativeObserver_ |
+| Observer | sum-only | | | | _UpDownDeltaObserver_ |
+| Observer | sum-only | precomputed-sum | | | _UpDownCumulativeObserver_ |
+| Observer | | | non-negative | | _AbsoluteLastValueObserver_ |
+| Observer | | | | | _LastValueObserver_ |
 
 To arrive at this listing, several assumptions have been made.  For
 example, the precomputed-sum and non-negative-rate refeinments are
@@ -333,15 +333,15 @@ No API changes are called for in this proposal.
 The Prometheus system defines four kinds of [synchronous metric
 instrument](https://prometheus.io/docs/concepts/metric_types/).  
 
-| System     | Metric Kind  | Operation           | Aggregation          | Notes               |
-| ---------- | ------------ | ------------------- | -------------------- | ------------------- |
-| Prometheus | Counter      | Inc()               | Sum                  | Sum of positive deltas |
-| Prometheus | Counter      | Add()               | Sum                  | Sum of positive deltas |
+| System     | Metric Kind  | Operation           | Aggregation          | Notes                                |
+| ---------- | ------------ | ------------------- | -------------------- | ------------------------------------ |
+| Prometheus | Counter      | Inc()               | Sum                  | Sum of positive deltas               |
+| Prometheus | Counter      | Add()               | Sum                  | Sum of positive deltas               |
 | Prometheus | Gauge        | Set()               | Last Value           | Non-additive or monotonic cumulative |
-| Prometheus | Gauge        | Inc()/Dec()         | Sum                  | Sum of deltas |
-| Prometheus | Gauge        | Add()/Sub()         | Sum                  | Sum of deltas |
-| Prometheus | Histogram    | Observe()           | Histogram            | Non-negative values |
-| Prometheus | Summary      | Observe()           | Summary              | Aggregation does not merge |
+| Prometheus | Gauge        | Inc()/Dec()         | Sum                  | Sum of deltas                        |
+| Prometheus | Gauge        | Add()/Sub()         | Sum                  | Sum of deltas                        |
+| Prometheus | Histogram    | Observe()           | Histogram            | Non-negative values                  |
+| Prometheus | Summary      | Observe()           | Summary              | Aggregation does not merge           |
 
 Note that the Prometheus Gauge supports five methods (`Set`, `Inc`,
 `Dec`, `Add`, and `Sub`), one which sets the last value while the
@@ -368,14 +368,14 @@ supported in Prometheus.
 
 The Statsd system supports only synchronous reporting.  
 
-| System | Metric Event | Operation           | Aggregation          | Notes               |
-| ------ | ------------ | ------------------- | -------------------- | ------------------- |
-| Statsd | Count        | Count()             | Sum                  | Sum of deltas       |
-| Statsd | Gauge        | Gauge()             | Last Value           |     |
-| Statsd | Histogram    | Histogram()         | Histogram            |     |
-| Statsd | Distribution | Distribution()      | _Not specified_      | A distribution summary |
+| System | Metric Event | Operation           | Aggregation          | Notes                                                 |
+| ------ | ------------ | ------------------- | -------------------- | ----------------------------------------------------- |
+| Statsd | Count        | Count()             | Sum                  | Sum of deltas                                         |
+| Statsd | Gauge        | Gauge()             | Last Value           |                                                       |
+| Statsd | Histogram    | Histogram()         | Histogram            |                                                       |
+| Statsd | Distribution | Distribution()      | _Not specified_      | A distribution summary                                |
 | Statsd | Timing       | Timing()            | _Not specified_      | Non-negative, distribution summary, Millisecond units |
-| Statsd | Set          | Set()               | Cardinality          | Unique value count |
+| Statsd | Set          | Set()               | Cardinality          | Unique value count                                    |
 
 The Statsd Count operation translates into either a Counter, if
 increments are non-negative, or an _UpDownCounter_ if values may be
@@ -399,12 +399,12 @@ element and no aggregation operator.
 
 The OpenCensus system defines three kinds of instrument:
 
-| System | Metric Kind      | Operation      | Aggregation       | Notes               |
-| ------ | ---------------- | -------------- | ----------------- | ------------------- |
-| OpenCensus | Cumulative   | Inc()          | Sum               | Positive deltas     |
-| OpenCensus | Gauge        | Set()          | LastValue         | |
-| OpenCensus | Gauge        | Add()          | Sum               | Deltas |
-| OpenCensus | Raw-Stats    | Record()       | Sum, Count, Mean, or Distribution | |
+| System     | Metric Kind  | Operation      | Aggregation                       | Notes               |
+| ---------- | ------------ | -------------- | --------------------------------- | ------------------- |
+| OpenCensus | Cumulative   | Inc()          | Sum                               | Positive deltas     |
+| OpenCensus | Gauge        | Set()          | LastValue                         |                     |
+| OpenCensus | Gauge        | Add()          | Sum                               | Deltas              |
+| OpenCensus | Raw-Stats    | Record()       | Sum, Count, Mean, or Distribution |                     |
 
 OpenCensus departed from convention with the introduction of a Views
 API, which makes it possible to support fewer kinds of instrument

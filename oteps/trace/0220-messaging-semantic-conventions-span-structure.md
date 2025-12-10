@@ -243,12 +243,12 @@ The following operations related to messages are covered by these semantic
 conventions:
 
 | Operation name | Description |
-|----------------|-------------|
-| `publish`      | One or more messages are provided for publishing to an intermediary. |
-| `create`       | A message is created. |
-| `receive`      | One or more messages are requested by a consumer. |
-| `deliver`      | One or more messages are passed to a consumer. |
-| `settle`       | One or more messages are settled. |
+| -------------- | ----------- |
+| `publish` | One or more messages are provided for publishing to an intermediary. |
+| `create` | A message is created. |
+| `receive` | One or more messages are requested by a consumer. |
+| `deliver` | One or more messages are passed to a consumer. |
+| `settle` | One or more messages are settled. |
 
 For further details about each of those operations refer to the [section about trace structure](#trace-structure).
 
@@ -257,13 +257,13 @@ For further details about each of those operations refer to the [section about t
 [Span kinds](../../specification/trace/api.md#spankind)
 SHOULD be set according to the following table, based on the operation a span describes.
 
-| Operation name | Span kind|
-|----------------|-------------|
-| `publish`      | `PRODUCER`, if no `create` spans are present. |
-| `create`       | `PRODUCER` |
-| `receive`      | `CONSUMER` |
-| `deliver`      | `CONSUMER` |
-| `settle`       | (see below) |
+| Operation name | Span kind |
+| -------------- | --------- |
+| `publish` | `PRODUCER`, if no `create` spans are present. |
+| `create` | `PRODUCER` |
+| `receive` | `CONSUMER` |
+| `deliver` | `CONSUMER` |
+| `settle` | (see below) |
 
 The kind of `settle` spans should be set according to the [generic specification about span kinds](../../specification/trace/api.md#spankind),
 e. g. it should be set to `CLIENT` if the `settle` spans models a synchronous call
