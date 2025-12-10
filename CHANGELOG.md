@@ -44,6 +44,9 @@ release.
 
 - Clarifies that guidance related to boolean environment variables is not applicable
   to other configuration interfaces. ([#4723](https://github.com/open-telemetry/opentelemetry-specification/pull/4723))
+- Declarative configuration: add optional programmatic customization to
+  `create`, and add related supplemental guidelines.
+  ([#4777](https://github.com/open-telemetry/opentelemetry-specification/pull/4777))
 
 ### Common
 
