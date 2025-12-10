@@ -99,6 +99,9 @@ message Resource {
 }
 ```
 
+Note that attributes mean not ["process attributes"](https://opentelemetry.io/docs/specs/semconv/resource/process/) in particular, but any attribute that the publisher wants to share with external readers, including custom attributes.
+If applicable, these should follow [existing semantic conventions](https://opentelemetry.io/docs/specs/semconv/).
+
 ### Publication Protocol
 
 Publishing the context should follow these steps:
