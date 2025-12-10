@@ -19,7 +19,8 @@ stable state is a crucial step for users and instrumentation authors, as it
 allows them to rely on [stability guarantees](../../specification/versioning-and-stability.md#semantic-conventions-stability),
 and thus to ship and use stable instrumentation.
 
-> NOTE. This OTEP captures a scope for changes should be done to existing
+> [!NOTE]
+> This OTEP captures a scope for changes should be done to existing
 experimental semantic conventions for HTTP, but does not propose solutions.
 
 ## Roadmap for v1.0
@@ -43,7 +44,8 @@ some steps can be worked on in parallel.
 
 ## Scope for v1.0: scenarios and open questions
 
-> NOTE. The scope defined here is subject for discussions and can be adjusted
+> [!NOTE]
+> The scope defined here is subject for discussions and can be adjusted
   until this OTEP is merged.
 
 Scenarios and open questions mentioned below must be addressed via separate PRs.
@@ -111,7 +113,8 @@ Some attributes can contain potentially sensitive information. Most likely, by
 default web frameworks/http clients should not expose that. For example,
 `http.target` has a query string that may contain credentials.
 
-> NOTE. We didn’t omit security concerns from v1.0 on purpose, it’s just not
+> [!NOTE]
+> We didn’t omit security concerns from v1.0 on purpose, it’s just not
   something we’ve fleshed out so far.
 
 ### Sampling for noop case
@@ -135,7 +138,8 @@ Need some real-life/expertize here.
 
 ### Request/Response body capturing
 
-> NOTE. This is technically out-of-scope, but we should have an idea how to let
+> [!NOTE]
+> This is technically out-of-scope, but we should have an idea how to let
   users do it
 
 There is a lot of user feedback that they want it, but
