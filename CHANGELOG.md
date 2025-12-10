@@ -44,6 +44,9 @@ release.
 
 ### Common
 
+- Stabilize complex `AnyValue` attribute value types and related attribute limits.
+  ([#4710](https://github.com/open-telemetry/opentelemetry-specification/issues/4710))
+
 ### Supplementary Guidelines
 
 ### OTEPs
