@@ -44,6 +44,9 @@ release.
 
 ### SDK Configuration
 
+- Clarifies that guidance related to boolean environment variables is not applicable
+  to other configuration interfaces. ([#4723](https://github.com/open-telemetry/opentelemetry-specification/pull/4723))
+
 ### Common
 
 ### Supplementary Guidelines

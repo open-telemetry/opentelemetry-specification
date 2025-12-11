@@ -480,9 +480,9 @@ sections:
       - name: OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT
         status: '?'
       - name: OTEL_TRACES_SAMPLER
-        status: '-'
+        status: '+'
       - name: OTEL_TRACES_SAMPLER_ARG
-        status: '-'
+        status: '+'
       - name: OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT
         status: '?'
       - name: OTEL_ATTRIBUTE_COUNT_LIMIT
