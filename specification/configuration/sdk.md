@@ -64,8 +64,9 @@ the name `Configuration` is RECOMMENDED.
 
 The SDK implementation of [`ConfigProvider`](./api.md#configprovider) MUST be
 created using a [`ConfigProperties`](./api.md#configproperties) representing
-the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
-mapping node of the [configuration model](./data-model.md).
+the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/41518147ca741d6ce811f143ce463630147c9986/examples/kitchen-sink.yaml#L378-L433)
+and [`.distribution`](https://github.com/open-telemetry/opentelemetry-configuration/blob/41518147ca741d6ce811f143ce463630147c9986/examples/kitchen-sink.yaml#L434-L436)
+mapping nodes of the [configuration model](./data-model.md).
 
 ### SDK extension components
 

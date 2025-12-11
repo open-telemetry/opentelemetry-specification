@@ -36,12 +36,12 @@ It consists of the following main components:
 ### ConfigProvider
 
 `ConfigProvider` provides access to configuration properties relevant to
-instrumentation.
+instrumentation and distribution.
 
-Instrumentation libraries access `ConfigProvider` during
-initialization. `ConfigProvider` may be passed as an argument to the
-instrumentation library, or the instrumentation library may access it from a
-central place. Thus, the API SHOULD provide a way to access a global
+Instrumentation libraries and vendor's custom code can access `ConfigProvider` during
+and after initialization. `ConfigProvider` may be passed as an argument, or may be accessed from a
+central place.
+Thus, the API SHOULD provide a way to access a global
 default `ConfigProvider`, and set/register it.
 
 #### ConfigProvider operations
@@ -49,6 +49,7 @@ default `ConfigProvider`, and set/register it.
 The `ConfigProvider` MUST provide the following functions:
 
 * [Get instrumentation config](#get-instrumentation-config)
+* [Get distribution config](#get-distribution-config)
 
 TODO: decide if additional operations are needed to improve API ergonomics
 
@@ -61,6 +62,18 @@ the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configu
 configuration mapping node.
 
 If the `.instrumentation` node is not set, get instrumentation config MUST
+return nil, null, undefined or another language-specific idiomatic pattern
+denoting empty.
+
+##### Get distribution config
+
+Obtain configuration relevant to vendor specific distribution.
+
+**Returns:** [`ConfigProperties`](#configproperties) representing
+the [`.distribution`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
+configuration mapping node.
+
+If the `.distribution` node is not set, get distribution config MUST
 return nil, null, undefined or another language-specific idiomatic pattern
 denoting empty.
 
