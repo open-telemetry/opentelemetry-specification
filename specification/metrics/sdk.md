@@ -872,6 +872,10 @@ It consists of the following parameters:
   is [Enabled](./api.md#enabled). See [Instrument Enabled](#instrument-enabled)
   for details.
 
+It is not necessary for implementations to ensure that changes to any of these
+parameters are immediately visible to callers of `Enabled`.
+However, the changes MUST be eventually visible.
+
 ### Duplicate instrument registration
 
 A _duplicate instrument registration_ occurs when more than one Instrument of
@@ -997,13 +1001,12 @@ must be retained.
 
 ### Instrument enabled
 
-**Status**: [Development](../document-status.md)
+The synchronous instrument [`Enabled`](./api.md#enabled) MUST return `false`
+when either:
 
-The instrument [`Enabled`](./api.md#enabled) MUST return `false` when either:
-
-* The [MeterConfig](#meterconfig) of the `Meter` used to create the instrument
-  has parameter `disabled=true`.
-* All [resolved views](#measurement-processing) for the instrument are
+- **Status**: [Development](../document-status.md) - The [MeterConfig](#meterconfig)
+  of the `Meter` used to create the instrument has parameter `disabled=true`.
+- All [resolved views](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
 
 Otherwise, it SHOULD return `true`.
@@ -1012,10 +1015,6 @@ It MAY return `false` to support additional optimizations and features.
 Note: If a user makes no configuration changes, `Enabled` returns `true` since by
 default `MeterConfig.disabled=false` and instruments use the default
 aggregation when no matching views match the instrument.
-
-It is not necessary for implementations to ensure that changes
-to `MeterConfig.disabled` are immediately visible to callers of `Enabled`.
-However, the changes MUST be eventually visible.
 
 ## Attribute limits
 
