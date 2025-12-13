@@ -35,7 +35,7 @@ weight: 1
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
       - [Add](#add)
-      - [Remove](#remove)
+      - [Finish](#finish)
   * [Asynchronous Counter](#asynchronous-counter)
     + [Asynchronous Counter creation](#asynchronous-counter-creation)
     + [Asynchronous Counter operations](#asynchronous-counter-operations)
@@ -43,12 +43,12 @@ weight: 1
     + [Histogram creation](#histogram-creation)
     + [Histogram operations](#histogram-operations)
       - [Record](#record)
-      - [Remove](#remove-1)
+      - [Finish](#finish-1)
   * [Gauge](#gauge)
     + [Gauge creation](#gauge-creation)
     + [Gauge operations](#gauge-operations)
       - [Record](#record-1)
-      - [Remove](#remove-2)
+      - [Finish](#finish-2)
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
@@ -56,7 +56,7 @@ weight: 1
     + [UpDownCounter creation](#updowncounter-creation)
     + [UpDownCounter operations](#updowncounter-operations)
       - [Add](#add-1)
-      - [Remove](#remove-3)
+      - [Finish](#finish-3)
   * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
     + [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
@@ -600,11 +600,11 @@ counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
 
-##### Remove
+##### Finish
 
 **Status**: [Development](../document-status.md)
 
-Unregister the Counter. It will no longer be reported.
+Unregister the attribute set. It will no longer be reported.
 
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
@@ -619,17 +619,17 @@ This API MUST accept the following parameter:
 ```python
 # Python
 
-exception_counter.remove({"exception_type": "IOError", "handled_by_user": True})
-exception_counter.remove(exception_type="IOError", handled_by_user=True)
+exception_counter.finish({"exception_type": "IOError", "handled_by_user": True})
+exception_counter.finish(exception_type="IOError", handled_by_user=True)
 ```
 
 ```csharp
 // C#
 
-counterExceptions.Remove(("exception_type", "FileLoadException"), ("handled_by_user", true));
+counterExceptions.Finish(("exception_type", "FileLoadException"), ("handled_by_user", true));
 
-counterPowerUsed.Remove(new PowerConsumption { customer = "Tom" });
-counterPowerUsed.Remove(new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
+counterPowerUsed.Finish(new PowerConsumption { customer = "Tom" });
+counterPowerUsed.Finish(new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
 
 ### Asynchronous Counter
@@ -861,11 +861,11 @@ httpServerDuration.Record(50, ("http.request.method", "POST"), ("url.scheme", "h
 httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
 ```
 
-##### Remove
+##### Finish
 
-Status: Development
+**Status**: [Development](../document-status.md)
 
-Unregister the Histogram. It will no longer be reported.
+Unregister the attribute set. It will no longer be reported.
 
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
@@ -880,15 +880,15 @@ This API MUST accept the following parameter:
 ```python
 # Python
 
-http_server_duration.Remove({"http.request.method": "POST", "url.scheme": "https"})
-http_server_duration.Remove(http_method="GET", http_scheme="http")
+http_server_duration.Finish({"http.request.method": "POST", "url.scheme": "https"})
+http_server_duration.Finish(http_method="GET", http_scheme="http")
 ```
 
 ```csharp
 // C#
 
-httpServerDuration.Remove(("http.request.method", "POST"), ("url.scheme", "https"));
-httpServerDuration.Remove(new HttpRequestAttributes { method = "GET", scheme = "http" });
+httpServerDuration.Finish(("http.request.method", "POST"), ("url.scheme", "https"));
+httpServerDuration.Finish(new HttpRequestAttributes { method = "GET", scheme = "http" });
 ```
 
 ### Gauge
@@ -980,11 +980,11 @@ backgroundNoiseLevel.record(4.3, roomA);
 backgroundNoiseLevel.record(2.5, roomB);
 ```
 
-##### Remove
+##### Finish
 
-Status: Development
+**Status**: [Development](../document-status.md)
 
-Unregister the Gauge. It will no longer be reported.
+Unregister the attribute set. It will no longer be reported.
 
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
@@ -1001,8 +1001,8 @@ This API MUST accept the following parameter:
 Attributes roomA = Attributes.builder().put("room.id", "Rack A");
 Attributes roomB = Attributes.builder().put("room.id", "Rack B");
 
-backgroundNoiseLevel.remove(roomA);
-backgroundNoiseLevel.remove(roomB);
+backgroundNoiseLevel.finish(roomA);
+backgroundNoiseLevel.finish(roomB);
 ```
 
 ### Asynchronous Gauge
@@ -1246,11 +1246,11 @@ customersInStore.Add(1, ("account.type", "commercial"));
 customersInStore.Add(-1, new Account { Type = "residential" });
 ```
 
-##### Remove
+##### Finish
 
-Status: Development
+**Status**: [Development](../document-status.md)
 
-Unregister the UpDownCounter. It will no longer be reported.
+Unregister the attribute set. It will no longer be reported.
 
 This API SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
@@ -1264,14 +1264,14 @@ This API MUST accept the following parameter:
 
 ```python
 # Python
-customers_in_store.remove({"account.type": "commercial"})
-customers_in_store.remove(account_type="residential")
+customers_in_store.finish({"account.type": "commercial"})
+customers_in_store.finish(account_type="residential")
 ```
 
 ```csharp
 // C#
-customersInStore.Remove(("account.type", "commercial"));
-customersInStore.Remove(new Account { Type = "residential" });
+customersInStore.Finish(("account.type", "commercial"));
+customersInStore.Finish(new Account { Type = "residential" });
 ```
 
 ### Asynchronous UpDownCounter
