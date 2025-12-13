@@ -35,8 +35,6 @@ weight: 2
     + [Displaying Severity](#displaying-severity)
     + [Comparing Severity](#comparing-severity)
   * [Field: `Body`](#field-body)
-  * [Field: `Resource`](#field-resource)
-  * [Field: `InstrumentationScope`](#field-instrumentationscope)
   * [Field: `Attributes`](#field-attributes)
     + [Errors and Exceptions](#errors-and-exceptions)
   * [Field: `EventName`](#field-eventname)
@@ -209,8 +207,6 @@ Here is the list of fields in a log record:
 | SeverityText | The severity text (also known as log level). |
 | SeverityNumber | Numerical value of the severity. |
 | Body | The body of the log record. |
-| Resource | Describes the source of the log. |
-| InstrumentationScope | Describes the scope that emitted the log. |
 | Attributes | Additional information about the event. |
 | EventName | Name that identifies the class / type of event. |
 
@@ -440,35 +436,12 @@ to preserve the semantics of structured logs emitted by the applications.
 Can vary for each occurrence of the event coming from the same source.
 This field is optional.
 
-### Field: `Resource`
-
-Type: [Resource](../resource/sdk.md).
-
-Description: Describes the source of the log, aka
-[resource](../overview.md#resources). Multiple occurrences of events coming from
-the same event source can happen across time and they all have the same value of
-`Resource`. Can contain for example information about the application that emits
-the record or about the infrastructure where the application runs. Data formats
-that represent this data model may be designed in a manner that allows the
-`Resource` field to be recorded only once per batch of log records that come
-from the same source. SHOULD follow OpenTelemetry
-[semantic conventions for Resources](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md).
-This field is optional.
-
-### Field: `InstrumentationScope`
-
-Type: [Instrumentation Scope](../common/instrumentation-scope.md).
-
-Description: the [instrumentation scope](../common/instrumentation-scope.md).
-Multiple occurrences of events coming from the same scope can happen across time and
-they all have the same value of `InstrumentationScope`. This field is optional.
-
 ### Field: `Attributes`
 
 Type: [`map<string, any>`](#type-mapstring-any) or [Attribute Collection](../common/README.md#attribute-collections).
 
 Description: Additional information about the specific event occurrence. Unlike
-the `Resource` field, which is fixed for a particular source, `Attributes` can
+the [`Resource`](../resource/sdk.md), which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
 information about the request context (other than [Trace Context Fields](#trace-context-fields)).
 This field is optional.
