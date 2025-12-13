@@ -29,8 +29,5 @@ internal/tools/bin
 node_modules/
 package-lock.json
 
-# Visual Studio Code
-.vscode
-
 # Visual Studio
 .vs
