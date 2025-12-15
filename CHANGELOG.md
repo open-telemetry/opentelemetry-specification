@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Stabilize part of `Enabled` SDK for synchronous instruments.
+  ([#4787](https://github.com/open-telemetry/opentelemetry-specification/pull/4787))
+
 ### Logs
 
 ### Baggage
@@ -55,8 +58,6 @@ release.
   ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
 - Allow instrument `Enabled` implementation to have additional optimizations and features.
   ([#4747](https://github.com/open-telemetry/opentelemetry-specification/pull/4747))
-- Stabilize part of `Enabled` SDK for synchronous instruments.
-  ([#4787](https://github.com/open-telemetry/opentelemetry-specification/pull/4787))
 
 ### Logs
 
