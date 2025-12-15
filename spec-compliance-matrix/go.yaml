@@ -348,7 +348,7 @@ sections:
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
         status: '-'
       - name: Metric SDK supports per-timeseries cumulative start timestamps
-        status: '-'
+        status: '?'
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
