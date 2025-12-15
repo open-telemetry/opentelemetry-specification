@@ -187,6 +187,7 @@ formats is required. Implementing more than one format is optional.
 | Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits) |  | + | + | + | - |  | - |  | - | + | + |  |
 | Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  | - |  | - | - | - |  |
 | Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  |
+| Metric SDK supports per-timeseries start timestamps |  |  |  |  |  |  |  |  |  |  |  |  |
 
 ## Logs
 
