@@ -273,8 +273,8 @@ Note: Support for environment variables is optional.
 | OTEL_LINK_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  |
 | OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT | + |  |  |  | + |  | + |  | - |  |  |
 | OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | + |  |  |  | + |  | + |  | - |  |  |
-| OTEL_TRACES_SAMPLER | + | + | + | + | + | + | + | - | - | - |  |
-| OTEL_TRACES_SAMPLER_ARG | + | + | + | + | + | + | + | - | - | - |  |
+| OTEL_TRACES_SAMPLER | + | + | + | + | + | + | + | + | - | - |  |
+| OTEL_TRACES_SAMPLER_ARG | + | + | + | + | + | + | + | + | - | - |  |
 | OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | - | + |  | - | + |  |
 | OTEL_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | - | + |  | - | + |  |
 | OTEL_METRIC_EXPORT_INTERVAL | + | + |  | + | + |  | + |  | - | + |  |
