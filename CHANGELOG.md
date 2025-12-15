@@ -28,6 +28,8 @@ release.
 ### Compatibility
 
 ### SDK Configuration
+- Add `Get distribution config` operation to the `Config Provider` specification.
+  ([#4770](https://github.com/open-telemetry/opentelemetry-specification/issues/4770))
 
 ### Common
 

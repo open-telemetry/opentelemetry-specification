@@ -13,6 +13,7 @@ weight: 1
   * [ConfigProvider](#configprovider)
     + [ConfigProvider operations](#configprovider-operations)
       - [Get instrumentation config](#get-instrumentation-config)
+      - [Get distribution config](#get-distribution-config)
   * [ConfigProperties](#configproperties)
 
 <!-- tocstop -->
