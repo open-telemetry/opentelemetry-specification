@@ -29,6 +29,9 @@ release.
 
 ### SDK Configuration
 
+- Declarative configuration: clarify Registry ComponentProvider `type` parameter
+  ([#4799](https://github.com/open-telemetry/opentelemetry-specification/pull/4799))
+
 ### Common
 
 ### Supplementary Guidelines
@@ -68,8 +71,6 @@ release.
 - Declarative configuration: add optional programmatic customization to
   `create`, and add related supplemental guidelines.
   ([#4777](https://github.com/open-telemetry/opentelemetry-specification/pull/4777))
-- Declarative configuration: clarify Registry ComponentProvider `type` parameter
-  ([#4799](https://github.com/open-telemetry/opentelemetry-specification/pull/4799))
 
 ## v1.51.0 (2025-11-17)
 
