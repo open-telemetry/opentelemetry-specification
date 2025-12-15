@@ -479,6 +479,7 @@ or something else).
 All instruments SHOULD provide functions to:
 
 * [Report if instrument is `Enabled`](#enabled)
+* [Finish the reporting of a set of attributes](#finish)
 
 #### Enabled
 
@@ -499,6 +500,23 @@ value of `false` means the instrument is disabled for the provided arguments.
 The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they record a measurement to ensure they have the most up-to-date response.
+
+#### Finish
+
+**Status**: [Development](../document-status.md)
+
+To stop reporting attribute sets which are no longer used, [synchronous Instruments](#synchronous-instrument-api) 
+SHOULD provide this `Finish` API.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to identify the Instrument.
+
+  Users can provide attributes to identify the Instrument.
+  This API MUST be structured to accept a variable number of attributes, including none.
 
 ### Counter
 

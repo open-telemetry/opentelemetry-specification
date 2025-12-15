@@ -1015,6 +1015,13 @@ It is not necessary for implementations to ensure that changes
 to `MeterConfig.disabled` are immediately visible to callers of `Enabled`.
 However, the changes MUST be eventually visible.
 
+### Finish
+
+**Status**: [Development](../document-status.md)
+
+The instrument [Finish](./api.md#finish) SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
 ## Attribute limits
 
 **Status**: [Stable](../document-status.md)
