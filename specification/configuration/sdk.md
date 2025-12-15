@@ -258,7 +258,7 @@ Interpret configuration model and return SDK components.
 * [MeterProvider](../metrics/sdk.md#meterprovider)
 * [LoggerProvider](../logs/sdk.md#loggerprovider)
 * [Propagators](../context/api-propagators.md#composite-propagator)
-* [ConfigProvider](#configprovider) (**Status**: [Development](../document-status.md))
+* **Status**: [Development](../document-status.md) - [ConfigProvider](#configprovider)
 
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
