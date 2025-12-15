@@ -29,6 +29,10 @@ release.
 
 ### SDK Configuration
 
+- Declarative configuration: clarify default behavior and validation
+  requirements of `create` and `parse`.
+  ([#4780](https://github.com/open-telemetry/opentelemetry-specification/pull/4780))
+
 ### Common
 
 ### Supplementary Guidelines
@@ -68,9 +72,6 @@ release.
 - Declarative configuration: add optional programmatic customization to
   `create`, and add related supplemental guidelines.
   ([#4777](https://github.com/open-telemetry/opentelemetry-specification/pull/4777))
-- Declarative configuration: clarify default behavior and validation
-  requirements of `create` and `parse`.
-  ([#4780](https://github.com/open-telemetry/opentelemetry-specification/pull/4780))
 
 ## v1.51.0 (2025-11-17)
 
