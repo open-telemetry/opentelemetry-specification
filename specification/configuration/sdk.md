@@ -191,6 +191,8 @@ Note: Because these operations are stateless pure functions, they are not
 defined as part of any type, class, interface, etc. SDKs may organize them in
 whatever manner is idiomatic for the language.
 
+<!-- TODO: https://github.com/open-telemetry/opentelemetry-specification/issues/3771 -->
+
 #### Parse
 
 Parse and validate a [configuration file](./data-model.md#file-based-configuration-model).
@@ -323,6 +325,8 @@ The callback would be invoked with the SDK representation of an OTLP HTTP export
 Batch SpanProcessor, and a Tracer Provider. This pattern provides the opportunity
 to programmatically configure lower-level without needing to walk to a particular
 component from the resolved top level SDK components.
+
+<!-- TODO: https://github.com/open-telemetry/opentelemetry-specification/issues/4804 -->
 
 #### Register ComponentProvider
 
