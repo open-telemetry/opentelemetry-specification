@@ -205,7 +205,8 @@ We will have clear guidance on the `For Entity` methods
 
 ## Prototypes
 
-TODO: **In Progress**
+- Java: https://github.com/open-telemetry/opentelemetry-java/compare/main...jsuereth:opentelemetry-java:wip-entity-and-providers
+- TypeScript: https://github.com/open-telemetry/opentelemetry-js/pull/5620
 
 ## Future possibilities
 
