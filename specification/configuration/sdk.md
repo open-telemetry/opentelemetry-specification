@@ -302,6 +302,29 @@ This SHOULD return an error if it encounters an error in `configuration` (i.e.
 fail fast) in accordance with
 initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
+SDK implementations MAY provide options to allow programmatic customization of
+the components initialized by `Create`. This allows configuration of concepts which
+are not yet or may never be representable in the configuration model. For example,
+java OTLP exporters allow configuration of the [ExecutorService](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html),
+a niche but important option for applications which need strict control of thread pools.
+This programmatic customization might take the form of passing an optional callback to
+`Create`, invoked with each SDK subcomponent (or a subset of SDK component types) as
+they are initialized. For example, consider the following snippet:
+
+```yaml
+file_format: 1.0
+tracer_provider:
+  processors:
+    - batch:
+        exporter:
+          otlp_http:
+```
+
+The callback would be invoked with the SDK representation of an OTLP HTTP exporter, a
+Batch SpanProcessor, and a Tracer Provider. This pattern provides the opportunity
+to programmatically configure lower-level without needing to walk to a particular
+component from the resolved top level SDK components.
+
 TODO: define behavior if some portion of configuration model is not supported
 
 #### Register ComponentProvider
