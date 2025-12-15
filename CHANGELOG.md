@@ -29,6 +29,10 @@ release.
 
 ### SDK Configuration
 
+- Declarative configuration: add links between SDK extension plugins and
+  corresponding declarative config types.
+  ([#4802](https://github.com/open-telemetry/opentelemetry-specification/pull/4802))
+
 ### Common
 
 ### Supplementary Guidelines
