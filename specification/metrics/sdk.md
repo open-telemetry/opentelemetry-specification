@@ -37,6 +37,7 @@ weight: 3
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
         * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
+  * [Start timestamps](#start-timestamps)
   * [Cardinality limits](#cardinality-limits)
     + [Configuration](#configuration-1)
     + [Overflow attribute](#overflow-attribute)
