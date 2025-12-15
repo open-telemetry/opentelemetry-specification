@@ -11,6 +11,42 @@ release.
 
 ### Traces
 
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Common
+
+- Stabilize complex `AnyValue` attribute value types and related attribute limits.
+  ([#4794](https://github.com/open-telemetry/opentelemetry-specification/issues/4794))
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.52.0 (2025-12-12)
+
+### Context
+
+- Make the W3C randomness flag required.
+  ([#4761](https://github.com/open-telemetry/opentelemetry-specification/pull/4761))
+
+### Traces
+
 - Deprecate Zipkin exporter document and make exporter implementation optional.
   ([#4715](https://github.com/open-telemetry/opentelemetry-specification/pull/4715/))
 - Add spec for `AlwaysRecord` sampler
@@ -28,31 +64,10 @@ release.
 - Stabilize `LogRecordProcessor.Enabled`.
   ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
 
-### Baggage
-
-### Profiles
-
-### Resource
-
-### Entities
-
-### OpenTelemetry Protocol
-
-### Compatibility
-
 ### SDK Configuration
 
 - Clarifies that guidance related to boolean environment variables is not applicable
   to other configuration interfaces. ([#4723](https://github.com/open-telemetry/opentelemetry-specification/pull/4723))
-
-### Common
-
-- Stabilize complex `AnyValue` attribute value types and related attribute limits.
-  ([#4794](https://github.com/open-telemetry/opentelemetry-specification/issues/4794))
-
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.51.0 (2025-11-17)
 
