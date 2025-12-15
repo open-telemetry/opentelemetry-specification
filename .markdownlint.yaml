@@ -14,3 +14,5 @@ no-inline-html: false
 fenced-code-language: false
 no-duplicate-heading: false
 descriptive-link-text: false
+first-line-h1: false
+no-alt-text: false

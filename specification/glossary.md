@@ -39,6 +39,9 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Structured Logs](#structured-logs)
   * [Flat File Logs](#flat-file-logs)
   * [Log Appender / Bridge](#log-appender--bridge)
+- [Profiles](#profiles)
+  * [Profile](#profile)
+  * [Profiling](#profiling)
 
 <!-- tocstop -->
 
@@ -68,7 +71,7 @@ The maintainer of an OpenTelemetry SDK Plugin, written against OpenTelemetry SDK
 ### Signals
 
 OpenTelemetry is structured around signals, or categories of telemetry.
-Metrics, logs, traces, and baggage are examples of signals.
+Metrics, logs, traces, profiles, and baggage are examples of signals.
 Each signal represents a coherent, stand-alone set of functionality.
 Each signal follows a separate lifecycle, defining its current stability level.
 
@@ -223,8 +226,22 @@ recommended to call it out specifically.
 
 ### Log Appender / Bridge
 
-A log appender or bridge is a component which bridges logs from an existing log
-API into OpenTelemetry using the [Log API](./logs/api.md). The
+A log appender or bridge is a component which bridges logs from an existing logging
+library into OpenTelemetry using the [Log API](./logs/api.md). The
 terms "log bridge" and "log appender" are used interchangeably, reflecting that
 these components bridge data into OpenTelemetry, but are often called appenders
 in the logging domain.
+
+## Profiles
+
+Profiles describes the OpenTelemetry signal.
+
+### Profile
+
+In the context of the profiles signal, profile holds one or more samples (stacktraces with associated metadata) of
+an OpenTelemetry instrumentation scope.
+
+### Profiling
+
+Profiling describes the process of collecting data that will be reported with
+the profiles signal.

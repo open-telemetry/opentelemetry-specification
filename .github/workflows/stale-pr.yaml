@@ -12,15 +12,15 @@ jobs:
       pull-requests: write # required for marking and closing stale PRs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9.1.0
+      - uses: actions/stale@997185467fa4f803885201cee163a9f38240193d # v10.1.1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          stale-pr-message: 'This PR was marked stale due to lack of activity. It will be closed in 7 days.'
+          stale-pr-message: 'This PR was marked stale. It will be closed in 14 days without additional activity.'
           close-pr-message: 'Closed as inactive. Feel free to reopen if this PR is still being worked on.'
           exempt-pr-labels: 'release:after-ga'
           # opt out of defaults to avoid marking issues as stale
           days-before-stale: -1
           days-before-close: -1
           # overrides the above only for pull requests
-          days-before-pr-stale: 7
-          days-before-pr-close: 7
+          days-before-pr-stale: 14
+          days-before-pr-close: 14

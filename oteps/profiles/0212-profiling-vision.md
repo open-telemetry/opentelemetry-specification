@@ -36,7 +36,7 @@ terms as follows:
 ## How profiling aligns with the OpenTelemetry vision
 
 The [OpenTelemetry
-vision](https://opentelemetry.io/community/mission/#vision-mdash-the-world-we-imagine-for-otel-end-users)
+vision](https://opentelemetry.io/community/mission/#vision)
 states:
 
 _Effective observability is powerful because it enables developers to innovate

@@ -34,7 +34,7 @@ The configuration SDK is part of
 the [declarative configuration interface](./README.md#declarative-configuration).
 
 The SDK is an implementation
-of [Instrumenation Config API](./api.md) and other
+of [Instrumentation Config API](./api.md) and other
 user facing declarative configuration capabilities. It consists of the following main
 components:
 
@@ -238,7 +238,9 @@ Parse SHOULD return an error if:
 
 * The `file` doesn't exist or is invalid
 * The parsed `file` content does not conform to
-  the [configuration model](data-model.md) schema.
+  the [configuration model](data-model.md) schema. Note that this includes
+  enforcing all constraints encoded into the schema (e.g. required properties
+  are present, that properties adhere to specified types, etc.).
 
 #### Create
 
@@ -259,15 +261,31 @@ Interpret configuration model and return SDK components.
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
 
-If a property has a default value defined (i.e. is _not_ required) and is
-missing or present but null, Create MUST ensure the SDK component is configured
-with the default value. If a property is required and is missing or present but
-null, Create SHOULD return an error. For example, if configuring
-the [span batching processor](../trace/sdk.md#batching-processor) and
-the `scheduleDelayMillis` property is missing or present but null, the component
-is configured with the default value of `5000`. However, if the `exporter`
-property is missing or present but null, Create fails fast since there is no
-default value for `exporter`.
+Create requirements around default and null behavior are described below. Note that
+[`defaultBehavior` and `nullBehavior`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#json-schema-source-and-output)
+are defined in the configuration data model.
+
+* If a property is present and the value is null, Create MUST use the
+  `nullBehavior`, or `defaultBehavior` if `nullBehavior` is not set.
+* If a property is required, and not present, Create MUST return an error.
+
+A few examples to illustrate:
+
+* If configuring [`BatchSpanProcessor`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#batchspanprocessor-)
+  and `schedule_delay` is not present or present but null, the component is
+  configured according to the `defaultBehavior` of `5000`.
+* If configuring [`SpanExporter`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter)
+  and `console` is present and null, the component is configured with a
+  `console` exporter with default configuration since `console` is nullable.
+
+The [configuration model](data-model.md) uses the JSON schema
+[`description`](https://json-schema.org/understanding-json-schema/reference/annotations)
+annotation to capture property semantics which cannot be encoded using standard
+JSON schema keywords. Create SHOULD return an error if it encounters a value
+which is invalid according to the property `description`. For example, if
+configuring [`HttpTls`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#httptls-)
+and `ca_file` is not an absolute file path as defined in the property
+description, return an error.
 
 When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to
@@ -282,6 +300,29 @@ error.
 This SHOULD return an error if it encounters an error in `configuration` (i.e.
 fail fast) in accordance with
 initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
+
+SDK implementations MAY provide options to allow programmatic customization of
+the components initialized by `Create`. This allows configuration of concepts which
+are not yet or may never be representable in the configuration model. For example,
+java OTLP exporters allow configuration of the [ExecutorService](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html),
+a niche but important option for applications which need strict control of thread pools.
+This programmatic customization might take the form of passing an optional callback to
+`Create`, invoked with each SDK subcomponent (or a subset of SDK component types) as
+they are initialized. For example, consider the following snippet:
+
+```yaml
+file_format: 1.0
+tracer_provider:
+  processors:
+    - batch:
+        exporter:
+          otlp_http:
+```
+
+The callback would be invoked with the SDK representation of an OTLP HTTP exporter, a
+Batch SpanProcessor, and a Tracer Provider. This pattern provides the opportunity
+to programmatically configure lower-level without needing to walk to a particular
+component from the resolved top level SDK components.
 
 #### Register ComponentProvider
 
@@ -323,7 +364,7 @@ try {
     // Create SDK components from configuration model
     openTelemetry = create(configurationModel);
 } catch (Throwable e) {
-    log.error("Error initializing SDK from configuration file", e);    
+    log.error("Error initializing SDK from configuration file", e);
 }
 
 // Access SDK components and install instrumentation
@@ -344,14 +385,14 @@ try {
     // Parse local and remote configuration files to configuration models
     OpenTelemetryConfiguration localConfigurationModel = parse(new File("/app/sdk-config.yaml"));
     OpenTelemetryConfiguration remoteConfigurationModel = parse(getRemoteConfiguration("http://example-host/config/my-application"));
-    
+
     // Merge the configuration models using custom logic
     OpenTelemetryConfiguration resolvedConfigurationModel = merge(localConfigurationModel, remoteConfigurationModel);
-    
+
     // Create SDK components from resolved configuration model
     openTelemetry = create(resolvedConfigurationModel);
 } catch (Throwable e) {
-    log.error("Error initializing SDK from configuration file", e);    
+    log.error("Error initializing SDK from configuration file", e);
 }
 
 // Access SDK components and install instrumentation

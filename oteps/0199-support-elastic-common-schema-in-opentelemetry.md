@@ -148,7 +148,7 @@ Example of a Nginx Access Log entry structured with ECS
 ## Principles
 
 | Description | [OTel Logs and Event Record](../specification/logs/data-model.md#log-and-event-record-definition) | [Elastic Common Schema (ECS)](https://www.elastic.co/docs/reference/ecs) |
-|-------------|-------------|--------|
+| ----------- | ------------- | -------- |
 | Metadata shared by all the Log Messages / Spans / Metrics of an application instance | Resource Attributes | ECS fields |
 | Metadata specific to each Log Message / Span / Metric data point | Attributes | ECS Fields |
 | Message of log events | Body | [message field](https://www.elastic.co/docs/reference/ecs/ecs-base#field-message) |
@@ -159,7 +159,7 @@ Example of a Nginx Access Log entry structured with ECS
 ## Data Types
 
 | Category | <a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a> (all or a subset of <a href="https://protobuf.dev/programming-guides/proto3/">GRPC data types</a>) | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/field-data-types">ECS Data Types</a> |
-|---|---|---|
+| --- | --- | --- |
 | Text | string | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#text-field-type">text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#match-only-text-field-type">match_only_text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#keyword-field-type">keyword</a> <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#constant-keyword-field-type">constant_keyword</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#wildcard-field-type">wildcard</a> |
 | Dates | uint64 nanoseconds since Unix epoch | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date">date</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date_nanos">date_nanos</a> |
 | Numbers | number | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">long</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">double</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">scaled_float</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/boolean">boolean</a>… |

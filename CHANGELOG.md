@@ -35,6 +35,100 @@ release.
 
 ### OTEPs
 
+## v1.52.0 (2025-12-12)
+
+### Context
+
+- Make the W3C randomness flag required.
+  ([#4761](https://github.com/open-telemetry/opentelemetry-specification/pull/4761))
+
+### Traces
+
+- Deprecate Zipkin exporter document and make exporter implementation optional.
+  ([#4715](https://github.com/open-telemetry/opentelemetry-specification/pull/4715/))
+- Add spec for `AlwaysRecord` sampler
+  ([#4699](https://github.com/open-telemetry/opentelemetry-specification/pull/4699))
+
+### Metrics
+
+- Stabilize `Enabled` API for synchronous instruments.
+  ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
+- Allow instrument `Enabled` implementation to have additional optimizations and features.
+  ([#4747](https://github.com/open-telemetry/opentelemetry-specification/pull/4747))
+
+### Logs
+
+- Stabilize `LogRecordProcessor.Enabled`.
+  ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
+
+### SDK Configuration
+
+- Clarifies that guidance related to boolean environment variables is not applicable
+  to other configuration interfaces. ([#4723](https://github.com/open-telemetry/opentelemetry-specification/pull/4723))
+- Declarative configuration: add optional programmatic customization to
+  `create`, and add related supplemental guidelines.
+  ([#4777](https://github.com/open-telemetry/opentelemetry-specification/pull/4777))
+
+## v1.51.0 (2025-11-17)
+
+### Metrics
+
+- `AlignedHistogramBucketExemplarReservoir` SHOULD use a time-weighted algorithm.
+  ([#4678](https://github.com/open-telemetry/opentelemetry-specification/pull/4678))
+
+### Profiles
+
+- Document the profiles signal.
+  ([#4685](https://github.com/open-telemetry/opentelemetry-specification/pull/4685))
+
+### Common
+
+- Extend the set of attribute value types to support more complex data structures.
+  ([#4651](https://github.com/open-telemetry/opentelemetry-specification/pull/4651))
+
+## v1.50.0 (2025-10-17)
+
+### Traces
+
+- Restore `TraceIdRatioBased` and give it a deprecation timeline. Update recommended
+  warnings based on feedback in issue [#4601](https://github.com/open-telemetry/opentelemetry-specification/issues/4601).
+  ([#4627](https://github.com/open-telemetry/opentelemetry-specification/pull/4627))
+- Changes of `TracerConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+- Remove text related to the former expermental probability sampling specification.
+  ([#4673](https://github.com/open-telemetry/opentelemetry-specification/pull/4673))
+
+### Metrics
+
+- Changes of `MeterConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+
+### Logs
+
+- Add minimum_severity and trace_based logger configuration parameters.
+  ([#4612](https://github.com/open-telemetry/opentelemetry-specification/pull/4612))
+- Changes of `LoggerConfig.disabled` MUST be eventually visible.
+  ([#4645](https://github.com/open-telemetry/opentelemetry-specification/pull/4645))
+
+## v1.49.0 (2025-09-16)
+
+### Entities
+
+- Specify entity information via an environment variable.
+  ([#4594](https://github.com/open-telemetry/opentelemetry-specification/pull/4594))
+
+### Common
+
+- OTLP Exporters may allow devs to prepend a product identifier in `User-Agent` header.
+  ([#4560](https://github.com/open-telemetry/opentelemetry-specification/pull/4560))
+- ⚠️ **IMPORTANT**: Extending the set of standard attribute value types is no longer a breaking change.
+  ([#4614](https://github.com/open-telemetry/opentelemetry-specification/pull/4614))
+
+### OTEPs
+
+- Clarify in Composite Samplers OTEP the unreliable threshold case.
+  ([#4569](https://github.com/open-telemetry/opentelemetry-specification/pull/4569))
+
 ## v1.48.0 (2025-08-13)
 
 ### Logs

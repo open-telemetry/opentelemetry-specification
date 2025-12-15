@@ -17,12 +17,9 @@ aliases:
 
 - [Implementation guidelines](#implementation-guidelines)
 - [Parsing empty value](#parsing-empty-value)
-- [Configuration types](#configuration-types)
+- [Type-specific guidance](#type-specific-guidance)
   * [Boolean](#boolean)
   * [Numeric](#numeric)
-    + [Integer](#integer)
-    + [Duration](#duration)
-    + [Timeout](#timeout)
   * [String](#string)
     + [Enum](#enum)
 - [General SDK Configuration](#general-sdk-configuration)
@@ -46,10 +43,11 @@ aliases:
 
 </details>
 
-The goal of this specification is to unify the environment variable names between different OpenTelemetry implementations.
+The goal of this specification is to unify the environment variable names and value parsing between different OpenTelemetry implementations.
 
 Implementations MAY choose to allow configuration via the environment variables in this specification, but are not required to.
-If they do, they SHOULD use the names listed in this document.
+If they do, they SHOULD use the names and value parsing behavior specified in this document.
+They SHOULD also follow the [common configuration specification](common.md).
 
 ## Implementation guidelines
 
@@ -61,7 +59,7 @@ The environment-based configuration MUST have a direct code configuration equiva
 
 The SDK MUST interpret an empty value of an environment variable the same way as when the variable is unset.
 
-## Configuration types
+## Type-specific guidance
 
 ### Boolean
 
@@ -79,13 +77,8 @@ upgrade.
 
 ### Numeric
 
-Variables accepting numeric values are sub-classified into:
-
-* [Integer](#integer)
-* [Duration](#duration)
-* [Timeout](#timeout)
-
-The following guidance applies to all numeric types.
+The following guidance applies to all numeric types and extends the [common
+configuration specification 'Numeric' guidance](common.md#numeric).
 
 > The following paragraph was added after stabilization and the requirements are
 > thus qualified as "SHOULD" to allow implementations to avoid breaking changes.
@@ -93,54 +86,8 @@ The following guidance applies to all numeric types.
 > implementations, these should be treated as MUST requirements.
 
 For variables accepting a numeric value, if the user provides a value the
-implementation cannot parse, or which is outside the valid range for the
-configuration item, the implementation SHOULD generate a warning and gracefully
-ignore the setting, i.e., treat them as not set. In particular, implementations
-SHOULD NOT assign a custom interpretation e.g. to negative values if a negative
-value does not naturally apply to a configuration and does not have an
-explicitly specified meaning, but treat it like any other invalid value.
-
-For example, a value specifying a buffer size must naturally be non-negative.
-Treating a negative value as "buffer everything" would be an example of such a
-discouraged custom interpretation. Instead the default buffer size should be
-used.
-
-Note that this could make a difference even if the custom interpretation is
-identical with the default value, because it might reset a value set from other
-configuration sources with the default.
-
-#### Integer
-
-If an implementation chooses to support an integer-valued environment variable,
-it SHOULD support non-negative values between 0 and 2³¹ − 1 (inclusive).
-Individual SDKs MAY choose to support a larger range of values.
-
-#### Duration
-
-Any value that represents a duration MUST be an integer representing a number of
-milliseconds. The value is non-negative - if a negative value is provided, the
-implementation MUST generate a warning, gracefully ignore the setting and use
-the default value if it is defined.
-
-For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
-
-#### Timeout
-
-Timeout values are similar to [duration](#duration) values, but are treated as a
-separate type because of differences in how they interpret timeout zero values (
-see below).
-
-Any value that represents a timeout MUST be an integer representing a number of
-milliseconds. The value is non-negative - if a negative value is provided, the
-implementation MUST generate a warning, gracefully ignore the setting and use
-the default value if it is defined.
-
-For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
-
-Implementations SHOULD interpret timeout zero values (i.e. `0` indicating 0
-milliseconds) as no limit (i.e. infinite). In practice, implementations MAY
-treat no limit as "a very long time" and substitute a very large duration (
-e.g. the maximum milliseconds representable by a 32-bit integer).
+implementation cannot parse, the implementation SHOULD generate a warning and gracefully
+ignore the setting, i.e., treat them as not set.
 
 ### String
 
@@ -148,30 +95,23 @@ String values are sub-classified into:
 
 * [Enum][].
 
-Normally, string values include notes describing how they are interpreted by
-implementations.
-
 #### Enum
+
+The following guidance extends the [common configuration specification 'Enum'
+guidance](common.md#enum).
 
 Enum values SHOULD be interpreted in a case-insensitive manner.
 
-For variables which accept a known value out of a set, i.e., an enum value,
-implementations MAY support additional values not listed here.
-
-For variables accepting an enum value, if the user provides a value
+For sources accepting an enum value, if the user provides a value
 the implementation does not recognize, the implementation MUST generate
 a warning and gracefully ignore the setting.
-When reporting configuration errors, implementations SHOULD display the original
-user-provided value to aid debugging.
-
-If a null object (empty, no-op) value is acceptable, then the enum value
-representing it MUST be `"none"`.
 
 ## General SDK Configuration
 
 | Name                     | Description                                                                                                                                                 | Default                                                                                                                                                                                            | Type         | Notes                                                                                                                                                                                                                                                                                    |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | OTEL_SDK_DISABLED        | Disable the SDK for all signals                                                                                                                             | false                                                                                                                                                                                              | [Boolean][]  | If "true", a no-op SDK implementation will be used for all telemetry signals. Any other value or absence of the variable will have no effect and the SDK will remain enabled. This setting has no effect on propagators configured through the OTEL_PROPAGATORS variable.                |
+| OTEL_ENTITIES            | Entity information to be associated with the resource                                                                                                       |                                                                                                                                                                                                    | [String][]   | See [Entities SDK](../entities/entity-propagation.md#specifying-entity-information-via-an-environment-variable) for more details.                                                                                                                                                        |
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes                                                                                                           | See [Resource semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for details. | [String][]   | See [Resource SDK](../resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details.                                                                                                                                                                     |
 | OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#service) resource attribute |                                                                                                                                                                                                    | [String][]   | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence.                                                                                                                                                                             |
 | OTEL_LOG_LEVEL           | Log level used by the [SDK internal logger](../error-handling.md#self-diagnostics)                                                                          | "info"                                                                                                                                                                                             | [Enum][]     |                                                                                                                                                                                                                                                                                          |
@@ -269,6 +209,8 @@ See [OpenTelemetry Protocol Exporter Configuration Options](../protocol/exporter
 
 ## Zipkin Exporter
 
+**Status**: [Deprecated](../document-status.md)
+
 | Name                          | Description                                                                        | Default                              | Type        |
 |-------------------------------|------------------------------------------------------------------------------------|--------------------------------------|-------------|
 | OTEL_EXPORTER_ZIPKIN_ENDPOINT | Endpoint for Zipkin traces                                                         | `http://localhost:9411/api/v2/spans` | [String][]  |
@@ -306,7 +248,7 @@ The implementation MAY accept a comma-separated list to enable setting multiple 
 
 Known values for `OTEL_TRACES_EXPORTER` are:
 
-- `"otlp"`: [OTLP](../protocol/otlp.md)
+- `"otlp"`: [OTLP](https://opentelemetry.io/docs/specs/otlp/)
 - `"zipkin"`: [Zipkin](https://zipkin.io/zipkin-api/) (Defaults to [protobuf](https://github.com/openzipkin/zipkin-api/blob/master/zipkin.proto) format)
 - `"console"`: [Standard Output](../trace/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../trace/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
@@ -315,7 +257,7 @@ NOT be supported by new implementations.
 
 Known values for `OTEL_METRICS_EXPORTER` are:
 
-- `"otlp"`: [OTLP](../protocol/otlp.md)
+- `"otlp"`: [OTLP](https://opentelemetry.io/docs/specs/otlp/)
 - `"prometheus"`: [Prometheus](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md)
 - `"console"`: [Standard Output](../metrics/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../metrics/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
@@ -324,7 +266,7 @@ NOT be supported by new implementations.
 
 Known values for `OTEL_LOGS_EXPORTER` are:
 
-- `"otlp"`: [OTLP](../protocol/otlp.md)
+- `"otlp"`: [OTLP](https://opentelemetry.io/docs/specs/otlp/)
 - `"console"`: [Standard Output](../logs/sdk_exporters/stdout.md)
 - `"logging"`: [Standard Output](../logs/sdk_exporters/stdout.md). It is a deprecated value left for backwards compatibility. It SHOULD
 NOT be supported by new implementations.
@@ -421,9 +363,8 @@ OTEL_{LANGUAGE}_{FEATURE}
 ```
 
 [Boolean]: #boolean
-[Float]: #float
-[Integer]: #integer
-[Duration]: #duration
-[Timeout]: #timeout
-[String]: #string
-[Enum]: #enum
+[Integer]: common.md#integer
+[Duration]: common.md#duration
+[Timeout]: common.md#timeout
+[String]: common.md#string
+[Enum]: common.md#enum

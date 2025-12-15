@@ -238,7 +238,7 @@ When scraping a Prometheus endpoint, resource attributes MUST be added to the
 scraped metrics to distinguish them from metrics from other Prometheus
 endpoints. In particular, `service.name` and `service.instance.id`, are needed
 to ensure Prometheus exporters can disambiguate metrics using
-[`job` and `instance` labels](https://prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances)
+[`job` and `instance` labels](https://prometheus.io/docs/concepts/jobs_instances/)
 as [described below](#resource-attributes-1).
 
 The following attributes MUST be associated with scraped metrics as resource
@@ -454,7 +454,7 @@ possible for metrics from multiple targets to be sent together, so targets must
 be disambiguated from one another. However, the Prometheus exposition format
 and [remote-write](https://github.com/Prometheus/Prometheus/blob/main/prompb/remote.proto)
 formats do not include a notion of resource, and expect metric labels to
-distinguish scraped targets. By convention, [`job` and `instance`](https://prometheus.io/docs/concepts/jobs_instances/#jobs-and-instances)
+distinguish scraped targets. By convention, [`job` and `instance`](https://prometheus.io/docs/concepts/jobs_instances/)
 labels distinguish targets and are expected to be present on metrics exposed on
 a Prometheus pull exporter (a ["federated"](https://prometheus.io/docs/prometheus/latest/federation/)
 Prometheus endpoint) or pushed via Prometheus remote-write. In OpenTelemetry

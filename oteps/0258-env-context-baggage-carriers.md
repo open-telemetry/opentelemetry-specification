@@ -50,7 +50,7 @@ Notably, as we define semantic conventions within the [CI/CD Working Group][cicd
 we'll need the specification defined for the industry to be able to adopt
 native tracing within CI/CD systems.
 
-[cicd-wg]: https://github.com/open-telemetry/community/blob/main/projects/ci-cd.md
+[cicd-wg]: https://github.com/open-telemetry/community/blob/main/projects/ci-cd-phase-2.md
 [issue-740]: https://github.com/open-telemetry/opentelemetry-specification/issues/740#issue-665588273
 [tmp]: https://opentelemetry.io/docs/specs/otel/context/api-propagators/#textmap-propagator
 
@@ -65,7 +65,8 @@ and produced by an arbitrary TextMapPropagator.
 
 Consider the following diagram in the context of process forking:
 
-> Note: The diagram is simply an example and simplification of process forking.
+> [!NOTE]
+> The diagram is simply an example and simplification of process forking.
 > There are other ways to spawn processes which are more performant like
 > exec().
 
@@ -78,7 +79,8 @@ propagate context to the child process such that it can be tied to the parent.
 Without `TRACEPARENT`, a tracing backend would not be able to connect the child
 process spans to the parent span, forming an end-to-end trace.
 
-> Note: While the below exclusively follows the W3C Specification translated
+> [!NOTE]
+> While the below exclusively follows the W3C Specification translated
 > into environment variables, this proposal is not exclusive to W3C and is
 > instead focused on the mechanism of Text Map Propagation with a potential set
 > of well-known environment variable names. See the [Core Specification
@@ -102,7 +104,8 @@ This could be set in the environment as follows:
 export TRACEPARENT=00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
 ```
 
-> Note: The value of TRACEPARENT is a combination of the above field values as
+> [!NOTE]
+> The value of TRACEPARENT is a combination of the above field values as
 > unsigned integer values serialized as ASCII strings, delimited by `-`.
 
 The `tracestate` (lowercase) header is defined in [W3C
@@ -145,7 +148,6 @@ Defining the specification for Environment Variables as carriers will have a
 wide impact to the industry in enabling better observability to systems outside
 of the normal HTTP microservice architecture.
 
-[w3c-bag]: https://www.w3.org/TR/baggage/#header-name
 [bag-api]: https://opentelemetry.io/docs/specs/otel/baggage/api/
 
 The above prototype example came from the resources mentioned in [this
@@ -195,7 +197,7 @@ information below, it is recommended to leverage upper-cased environment
 variables for the carrier that align with context propagator specifications.
 
 [python-env]: https://github.com/Div95/opentelemetry-python/tree/feature/env_propagator/propagator/opentelemetry-propagator-env
-[swift-env]: https://github.com/open-telemetry/opentelemetry-swift/blob/main/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
+[swift-env]: https://github.com/open-telemetry/opentelemetry-swift-core/blob/c84cdc1760e20fc3a448c4e8aaae490f7d48ac67/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
 
 ### UNIX Limitations
 
@@ -280,9 +282,9 @@ mentioned in [opentelemetry-specification #740](https://github.com/open-telemetr
 * [hotel-california](https://github.com/parsonsmatt/hotel-california/issues/3)
 
 Additionally, there was a prototype implementation for environment variables as
-context carriers written in the [Python SDK][python-env].
+context carriers written in the [Python SDK][python-sdkenv].
 
-[python-env]: https://github.com/open-telemetry/opentelemetry-specification/issues/740#issuecomment-919657003
+[python-sdkenv]: https://github.com/open-telemetry/opentelemetry-specification/issues/740#issuecomment-919657003
 
 ## Alternatives and why they were not chosen
 

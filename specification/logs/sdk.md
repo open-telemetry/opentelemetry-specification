@@ -129,6 +129,8 @@ accommodate common use cases:
 * Select one or more loggers by name, with exact match or pattern matching.
 * Disable one or more specific loggers.
 * Disable all loggers, and selectively enable one or more specific loggers.
+* Set the minimum severity levels for specific loggers or logger patterns.
+* Enable trace-based filtering for specific loggers or logger patterns.
 
 ### Shutdown
 
@@ -192,26 +194,65 @@ It consists of the following parameters:
   If a `Logger` is disabled, it MUST behave equivalently
   to [No-op Logger](./noop.md#logger).
 
-  The value of `disabled` MUST be used to resolve whether a `Logger`
-  is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
-  returns `false`. If `disabled` is `false`, `Enabled` returns `true`. It is not
-  necessary for implementations to ensure that changes to `disabled` are
-  immediately visible to callers of `Enabled`.
+* `minimum_severity`: A [SeverityNumber](./data-model.md#field-severitynumber)
+  indicating the minimum severity level for log records to be processed.
+
+  If not explicitly set, the `minimum_severity` parameter MUST default to `0`.
+
+  If a log record's [SeverityNumber](./data-model.md#field-severitynumber) is
+  specified (i.e. not `0`) and is less than the configured `minimum_severity`, the log record MUST
+  be dropped by the `Logger`. Log records with an unspecified severity (i.e. `0`) are not
+  affected by this parameter and therefore bypass minimum severity filtering.
+
+* `trace_based`: A boolean indication of whether the logger should
+  only process log records associated with sampled traces.
+
+  If not explicitly set, the `trace_based` parameter MUST default to `false`.
+
+  If `trace_based` is `true`, log records associated with unsampled traces MUST
+  be dropped by the `Logger`. A log record is considered associated with an unsampled trace
+  if it has a valid `SpanId` and its `TraceFlags` indicate that the trace is unsampled.
+  Log records that aren't associated with a trace
+  context are not affected by this parameter and therefore bypass trace-based filtering.
+
+It is not necessary for implementations to ensure that changes to any of these
+parameters are immediately visible to callers of `Enabled`.
+However, the changes MUST be eventually visible.
 
 ### Emit a LogRecord
 
 If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
 the implementation SHOULD set it equal to the current time.
 
+**Status**: [Development](../document-status.md) Before processing a log record,
+the implementation MUST apply the filtering rules defined by the
+[LoggerConfig](#loggerconfig) (in case `Enabled` was not called prior to
+emitting the record):
+
+1. **Minimum severity**: If the log record's
+   [SeverityNumber](./data-model.md#field-severitynumber) is specified
+   (i.e. not `0`) and is less than the configured `minimum_severity`, the log
+   record MUST be dropped.
+
+2. **Trace-based**: If `trace_based` is `true`, and if the log record has a
+   [`SpanId`](./data-model.md#field-spanid) and the
+   [`TraceFlags`](./data-model.md#field-traceflags) SAMPLED flag is unset,
+   the log record MUST be dropped.
+
 ### Enabled
 
 `Enabled` MUST return `false` when either:
 
-- there are no registered [`LogRecordProcessors`](#logrecordprocessor),
+- there are no registered [`LogRecordProcessors`](#logrecordprocessor).
 - **Status**: [Development](../document-status.md) - `Logger` is disabled
-  ([`LoggerConfig.disabled`](#loggerconfig) is `true`),
-- **Status**: [Development](../document-status.md) - all registered
-  `LogRecordProcessors` implement [`Enabled`](#enabled-1),
+  ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
+- **Status**: [Development](../document-status.md) - the provided severity
+  is specified (i.e. not `0`) and is less than the configured `minimum_severity` in the
+  [`LoggerConfig`](#loggerconfig).
+- **Status**: [Development](../document-status.md) - `trace_based` is
+  `true` in the [`LoggerConfig`](#loggerconfig) and the current context is
+  associated with an unsampled trace.
+- all registered `LogRecordProcessors` implement [`Enabled`](#enabled-1),
   and a call to `Enabled` on each of them returns `false`.
 
 Otherwise, it SHOULD return `true`.
@@ -363,8 +404,6 @@ implementations SHOULD recommended to users that a clone of `logRecord` be used
 for any concurrent processing, such as in a [batching processor](#batching-processor).
 
 #### Enabled
-
-**Status**: [Development](../document-status.md)
 
 `Enabled` is an operation that a `LogRecordProcessor` MAY implement
 in order to support filtering via [`Logger.Enabled`](api.md#enabled).
@@ -535,7 +574,7 @@ Concurrent requests and retry logic is the responsibility of the exporter. The
 default SDK's `LogRecordProcessors` SHOULD NOT implement retry logic, as the
 required logic is likely to depend heavily on the specific protocol and backend
 the logs are being sent to. For example,
-the [OpenTelemetry Protocol (OTLP) specification](../protocol/otlp.md) defines
+the [OpenTelemetry Protocol (OTLP) specification](https://opentelemetry.io/docs/specs/otlp/) defines
 logic for both sending concurrent requests and retrying requests.
 
 **Parameters:**

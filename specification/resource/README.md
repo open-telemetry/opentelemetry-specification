@@ -49,7 +49,7 @@ key type of correlation in OpenTelemetry.
 Implicit in the design of Resource and attributes is ensuring users are able to
 navigate their infrastructure, tools, UIs, etc. to find the *same* entity that
 telemetry is reporting against.  For example, in practice we could see Resource
-including more than on entity, like:
+including more than one entity, like:
 
 - A process
 - A container
@@ -62,7 +62,8 @@ through their `kubectl` or Kubernetes UIs to find the specific process
 generating telemetry.   This is as important as being able to uniquely identify
 one process from another.
 
-> Aside: Observability signals SHOULD be actionable.  Knowing a process is
+> [!TIP]
+> Observability signals SHOULD be actionable.  Knowing a process is
 > struggling is not as useful as being able to scale up a deployment to take
 > load off the struggling process.
 

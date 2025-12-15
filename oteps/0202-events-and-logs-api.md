@@ -30,7 +30,7 @@ Here are a few situations that require recording of Events, there will be more. 
   - Swift on iOS has Logger interface that has methods corresponding to severity level too.
 - The current Log APIs do not have a standard way to pass event attributes.
   - It may be possible to use the interpolation string args as the parameter to pass event attributes. However, the logging spec seems to map the human readable message (which is obtained after replacing the args in the interpolated string) to the Body field of LogRecord.
-  - Log4j has an EventLogger interface that can be used to create structured messages with arbitrary key-value pairs, but log4j is not commonly used in Android apps as it is not officially supported on Android as per this [Stack Overflow thread](https://stackoverflow.com/questions/60398799/disable-log4j-jmx-on-android/60407849#60407849) by one of log4j’s maintainers.
+  - Log4j has an EventLogger interface that can be used to create structured messages with arbitrary key-value pairs, but log4j is not commonly used in Android apps as it is not officially supported on Android as per this [Stack Overflow thread](https://stackoverflow.com/a/60407849) by one of log4j’s maintainers.
   - In Python, logging.LogRecord's extra field is mapped to Otel LogRecord's attributes but this field is a hidden field and not part of the public interface.
 - The current Log APIs have a message parameter which could map to the Body field of LogRecord. However, this is restricted to String messages and does not allow for structured logs.
 
@@ -62,7 +62,7 @@ There could be confusion on whether the Logs part of the API is end-user callabl
 
 ## Prior art and alternatives
 
-For client-side instrumentation, it was suggested initially that we use 0-duration spans to represent Events to get the benefit of Spans providing causality. For example, Splunk's RUM sdk for Android implements Events using [0-duration span](https://github.com/signalfx/splunk-otel-android/blob/main/splunk-otel-android/src/main/java/com/splunk/rum/SplunkRum.java#L213). However, 0-duration spans are confusing and not consistent with standalone Events in other domains which are represented using `LogRecord`s.  Hence, for consistency reasons it will be good to use `LogRecord`s for standalone Events everywhere. To address the requirement of modeling causality between Events, we can create wrapper spans linked to the `LogRecord`s.
+For client-side instrumentation, it was suggested initially that we use 0-duration spans to represent Events to get the benefit of Spans providing causality. For example, Splunk's RUM sdk for Android implements Events using [0-duration span](https://github.com/signalfx/splunk-otel-android/blob/3ca8584632f334671fdb6eaa09199ce01961787f/splunk-otel-android/src/main/java/com/splunk/rum/SplunkRum.java#L213). However, 0-duration spans are confusing and not consistent with standalone Events in other domains which are represented using `LogRecord`s.  Hence, for consistency reasons it will be good to use `LogRecord`s for standalone Events everywhere. To address the requirement of modeling causality between Events, we can create wrapper spans linked to the `LogRecord`s.
 
 ## Open questions
 

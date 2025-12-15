@@ -1,5 +1,5 @@
 # All documents to be used in spell check.
-ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' -not -path '*semantic_conventions*' | sort)
+ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' -not -path '*semantic_conventions*' -not -name 'spec-compliance-matrix.md' | sort)
 PWD := $(shell pwd)
 
 TOOLS_DIR := ./internal/tools
@@ -29,7 +29,7 @@ misspell-correction:	$(MISSPELL)
 markdown-link-check:
 	docker run --rm \
 		--mount 'type=bind,source=$(PWD),target=/home/repo' \
-		lycheeverse/lychee:sha-2aa22f8@sha256:2e3786630482c41f9f2dd081e06d7da1c36d66996e8cf6573409b8bc418d48c4 \
+		lycheeverse/lychee:sha-8222559@sha256:6f49010cc46543af3b765f19d5319c0cdd4e8415d7596e1b401d5b4cec29c799 \
 		--config home/repo/.lychee.toml \
 		--root-dir /home/repo \
 		-v \
@@ -39,7 +39,7 @@ markdown-link-check:
     # see https://github.com/open-telemetry/opentelemetry-specification/pull/4554
 	docker run --rm \
 		--mount 'type=bind,source=$(PWD),target=/home/repo' \
-		lycheeverse/lychee:sha-2aa22f8@sha256:2e3786630482c41f9f2dd081e06d7da1c36d66996e8cf6573409b8bc418d48c4 \
+		lycheeverse/lychee:sha-8222559@sha256:6f49010cc46543af3b765f19d5319c0cdd4e8415d7596e1b401d5b4cec29c799 \
 		--config home/repo/.lychee.toml \
 		--root-dir /home/repo \
 		--max-redirects 0 \
@@ -95,6 +95,13 @@ check: misspell markdownlint markdown-link-check
 .PHONY: fix
 fix: misspell-correction
 	@echo "All autofixes complete"
+
+# Generate spec compliance matrix from YAML source
+.PHONY: compliance-matrix
+compliance-matrix:
+	pip install -U PyYAML
+	python .github/scripts/compliance_matrix.py
+	@echo "Compliance matrix generation complete"
 
 .PHONY: install-tools
 install-tools: $(MISSPELL)

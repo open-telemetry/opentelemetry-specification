@@ -23,6 +23,7 @@
   * [Configurable OTLP exporter behavior (both SDK and Collector)](#configurable-otlp-exporter-behavior-both-sdk-and-collector)
   * [Record pointer to repetitive data](#record-pointer-to-repetitive-data)
 - [Backend research](#backend-research)
+- [Appendix](#appendix)
 
 <!-- tocstop -->
 
@@ -94,7 +95,7 @@ extending the standard attributes provides a more seamless and user-friendly API
 
 Currently, the SDK specification has a clause that says extending
 the set of standard attribute would be
-[considered a breaking change](/specification/common/README.md#standard-attribute).
+[considered a breaking change](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/common/README.md#standard-attribute).
 
 We believe that removing this clause and extending standard
 attributes can be done gracefully across the OpenTelemetry ecosystem
@@ -294,18 +295,24 @@ This approach reduces performance overhead and the volume of transmitted data an
 See [the gist](https://gist.github.com/lmolkova/737ebba190b206a5d60bbc075fea538b)
 for additional details.
 
-| Backend                           | Handles complex attributes gracefully? | Comments        |
-| --------------------------------- | ----- | ------------------------------ |
-| Jaeger (OTLP)                     | :white_check_mark: | serializes to JSON string |
+| Backend | Handles complex attributes gracefully? | Comments |
+| ------- | -------------------------------------- | -------- |
+| Jaeger (OTLP) | :white_check_mark: | serializes to JSON string |
 | Prometheus with OTLP remote write | :white_check_mark: | serializes to JSON string |
-| Grafana Tempo (OTLP)              | :white_check_mark: | serializes to JSON string, viewable but can't query using this attribute |
-| Grafana Loki (OTLP)               | :white_check_mark: | flattens |
-| Aspire dashboard (OTLP)           | :white_check_mark: | serializes to JSON string |
-| ClickHouse (collector exporter)   | :white_check_mark: | serializes to JSON string, can parse JSON and query |
-| Honeycomb (OTLP)                  | :white_check_mark: | flattens if less than 5 layers deep, not array or binary data, JSON string otherwise |
-| Logfire (OTLP)                  | :white_check_mark: | stored as JSON, native support for JSON in queries |
-| New Relic (OTLP)                  | :white_check_mark: | drops the complex attribute | |
-| Splunk (OTLP and HEC exporter)    | :white_check_mark: | flattens for logs (HEC), serializes to JSON string for traces and metrics (OTLP) |
+| Grafana Tempo (OTLP) | :white_check_mark: | serializes to JSON string, viewable but can't query using this attribute |
+| Grafana Loki (OTLP) | :white_check_mark: | flattens |
+| Aspire dashboard (OTLP) | :white_check_mark: | serializes to JSON string |
+| ClickHouse (collector exporter) | :white_check_mark: | serializes to JSON string, can parse JSON and query |
+| Honeycomb (OTLP) | :white_check_mark: | flattens if less than 5 layers deep, not array or binary data, JSON string otherwise |
+| Logfire (OTLP) | :white_check_mark: | stored as JSON, native support for JSON in queries |
+| New Relic (OTLP) | :white_check_mark: | drops the complex attribute |
+| Splunk (OTLP and HEC exporter) | :white_check_mark: | flattens for logs (HEC), serializes to JSON string for traces and metrics (OTLP) |
 
 > [!NOTE]
 > This list only reflects the behavior at the time of writing and may change in the future.
+
+## Appendix
+
+The [Extend the set of attribute value types #4651](https://github.com/open-telemetry/opentelemetry-specification/pull/4651) PR implements part of this OTEP by requiring that both the OTel API and SDK MUST support complex attributes.
+Some languages aim to support complex attributes for all kinds of telemetry.
+To maintain consistency across languages, we agreed that all languages should provide the same level of support for complex attributes.

@@ -206,8 +206,8 @@ The following changes are made:
 | Field | Type | Description | Changes |
 | ----- | ---- | ----------- | ------- |
 | schema_url | string | The Schema URL, if known. This is the identifier of the Schema that the resource data  is recorded in.  This field is deprecated and should no longer be used. | Will be deprecated |
-| dropped_attributes_count |  integer | dropped_attributes_count is the number of dropped attributes. If the value is 0, then no attributes were dropped. | Unchanged |
-| attributes | repeated KeyValue | Set of attributes that describe the resource.<br/><br/>Attribute keys MUST be unique (it is not allowed to have more than one attribute with the same key).| Unchanged |
+| dropped_attributes_count | integer | dropped_attributes_count is the number of dropped attributes. If the value is 0, then no attributes were dropped. | Unchanged |
+| attributes | repeated KeyValue | Set of attributes that describe the resource.<br/><br/>Attribute keys MUST be unique (it is not allowed to have more than one attribute with the same key). | Unchanged |
 | entities | repeated ResourceEntityRef | Set of entities that participate in this Resource. | Added |
 
 The DataModel would ensure that attributes in Resource are produced from both the identifying and descriptive attributes of Entity.  This does not mean the protocol needs to transmit duplicate data, that design is TBD.
@@ -220,8 +220,8 @@ The entityref data model, would have the following changes from the original [en
 | ----- | ---- | ----------- | ------- |
 | schema_url | string | The Schema URL, if known. This is the identifier of the Schema that the entity data  is recorded in. To learn more about Schema URL ([see docs](https://opentelemetry.io/docs/specs/otel/schemas/#schema-url)) | added |
 | type | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. | unchanged |
-| identifying_attributes_keys | repeated string | Attribute Keys that identify the entity.<br/>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<br/><br/>These keys MUST exists in Resource.attributes.<br/><br/>Follows OpenTelemetry common attribute definition. SHOULD follow OpenTelemetry semantic conventions for attributes.| now a reference |
-| descriptive_attributes_keys | repeated string | Descriptive (non-identifying) attribute keys of the entity.<br/>MAY change over the lifetime of the entity. MAY be empty. These attribute keys are not part of entity's identity.<br/><br/>These keys MUST exist in Resource.attributes.<br/><br/>Follows any value definition in the OpenTelemetry spec - it can be a scalar value, byte array, an array or map of values. Arbitrary deep nesting of values for arrays and maps is allowed.<br/><br/>SHOULD follow OpenTelemetry semantic conventions for attributes.| now a reference |
+| identifying_attributes_keys | repeated string | Attribute Keys that identify the entity.<br/>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<br/><br/>These keys MUST exists in Resource.attributes.<br/><br/>Follows OpenTelemetry common attribute definition. SHOULD follow OpenTelemetry semantic conventions for attributes. | now a reference |
+| descriptive_attributes_keys | repeated string | Descriptive (non-identifying) attribute keys of the entity.<br/>MAY change over the lifetime of the entity. MAY be empty. These attribute keys are not part of entity's identity.<br/><br/>These keys MUST exist in Resource.attributes.<br/><br/>Follows any value definition in the OpenTelemetry spec - it can be a scalar value, byte array, an array or map of values. Arbitrary deep nesting of values for arrays and maps is allowed.<br/><br/>SHOULD follow OpenTelemetry semantic conventions for attributes. | now a reference |
 
 ### Resource Identity
 
@@ -322,7 +322,7 @@ Today, [Prometheus compatibility](../../specification/compatibility/prometheus_a
 Here's a list of requirements for the solution:
 
 - Existing prometheus/OpenTelemetry users should be able to migrate from where they are today.
-- Any solution MUST work with the [info-typed metrics](https://github.com/prometheus/proposals/blob/main/proposals/2024-04-10-native-support-for-info-metrics-metadata.md#goals) being added in prometheus.
+- Any solution MUST work with the [info-typed metrics](https://github.com/prometheus/proposals/blob/main/proposals/0037-native-support-for-info-metrics-metadata.md#goals) being added in prometheus.
   - Resource descriptive attributes should leverage `info()` or metadata.
   - Resource identifying attributes need more thought/design from OpenTelemetry semconv + entities WG.
   - Note: Current `info()` design will only work with `target_info` metric by default (other info metrics can be specified per `info` call), and `job/instance` labels for joins.  These labels MUST be generated by the OTLP endpoint in prometheus.

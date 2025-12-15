@@ -93,7 +93,7 @@ When an error is returned by the server it falls into 2 broad categories: retrya
 
 - Not-retryable errors indicate that processing of telemetry data failed and the client MUST NOT retry sending the same telemetry data. The telemetry data MUST be dropped. This can happen, for example, when the request contains bad data and cannot be deserialized or otherwise processed by the server. The client SHOULD maintain a counter of such dropped data.
 
-When using gRPC transport the server SHOULD indicate retryable errors using code [Unavailable](https://pkg.go.dev/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://pkg.go.dev/google.golang.org/grpc/status#Status.WithDetails) using [RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40) containing 0 value of RetryDelay. Here is a sample Go code to illustrate:
+When using gRPC transport the server SHOULD indicate retryable errors using code [Unavailable](https://pkg.go.dev/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://pkg.go.dev/google.golang.org/grpc/status#Status) using [RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40) containing 0 value of RetryDelay. Here is a sample Go code to illustrate:
 
 ```go
   // Do this on server side.
@@ -106,7 +106,7 @@ When using gRPC transport the server SHOULD indicate retryable errors using code
   return st.Err()
 ```
 
-To indicate not-retryable errors the server is recommended to use code [InvalidArgument](https://pkg.go.dev/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://pkg.go.dev/google.golang.org/grpc/status#Status.WithDetails) using [BadRequest](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L119). Other gRPC status code may be used if it is more appropriate. Here is a sample Go code to illustrate:
+To indicate not-retryable errors the server is recommended to use code [InvalidArgument](https://pkg.go.dev/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://pkg.go.dev/google.golang.org/grpc/status#Status) using [BadRequest](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L119). Other gRPC status code may be used if it is more appropriate. Here is a sample Go code to illustrate:
 
 ```go
   // Do this on server side.
@@ -148,7 +148,7 @@ OTLP allows backpressure signalling.
 
 If the server is unable to keep up with the pace of data it receives from the client then it SHOULD signal that fact to the client. The client MUST then throttle itself to avoid overwhelming the server.
 
-To signal backpressure when using gRPC transport, the server SHOULD return an error with code [Unavailable](https://pkg.go.dev/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://pkg.go.dev/google.golang.org/grpc/status#Status.WithDetails) using [RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40). Here is a sample Go code to illustrate:
+To signal backpressure when using gRPC transport, the server SHOULD return an error with code [Unavailable](https://pkg.go.dev/google.golang.org/grpc/codes) and MAY supply additional [details via status](https://pkg.go.dev/google.golang.org/grpc/status#Status) using [RetryInfo](https://github.com/googleapis/googleapis/blob/6a8c7914d1b79bd832b5157a09a9332e8cbd16d4/google/rpc/error_details.proto#L40). Here is a sample Go code to illustrate:
 
 ```go
   // Do this on server side.
@@ -265,7 +265,7 @@ Both FlatBuffers and Capnproto are worth to be re-evaluated for future versions 
 
 It is also worth researching transports other than gRPC. Other transports are not included in this RFC due to time limitations.
 
-Experimental implementation of OTLP over WebSockets exists and was researched as an alternate. WebSockets were not chosen as the primary transport for OTLP due to lack or immaturity of certain capabilities (such as [lack of universal support](https://github.com/gorilla/websocket#gorilla-websocket-compared-with-other-packages) for [RFC 7692](https://datatracker.ietf.org/doc/html/rfc7692) message compression extension). Despite limitations the experimental implementation demonstrated good performance and WebSocket transport will be considered for inclusion in a future OTLP Extensions RFC.
+Experimental implementation of OTLP over WebSockets exists and was researched as an alternate. WebSockets were not chosen as the primary transport for OTLP due to lack or immaturity of certain capabilities (such as [lack of universal support](https://github.com/gorilla/websocket/blob/v1.4.2/README.md#gorilla-websocket-compared-with-other-packages) for [RFC 7692](https://datatracker.ietf.org/doc/html/rfc7692) message compression extension). Despite limitations the experimental implementation demonstrated good performance and WebSocket transport will be considered for inclusion in a future OTLP Extensions RFC.
 
 ## Open Questions
 
