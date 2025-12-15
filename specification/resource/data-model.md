@@ -46,20 +46,20 @@ Entity includes its own notion of identity. The identity of a resource is
 the set of entities contained within it. Two resources are considered
 different if one contains an entity not found in the other.
 
-Some resources include raw attributes in additon to Entities. Raw attributes are
-considered identifying on a resource. That is, if the key-value pairs of
+Some resources include raw attributes in addition to Entities. Raw attributes
+are considered identifying on a resource. That is, if the key-value pairs of
 raw attributes are different, then you can assume the resource is different.
 
 ## Merging Resources
 
-Note: The current SDK specification outlines a [merge algorithm](sdk#merge).
+Note: The current SDK specification outlines a [merge algorithm](sdk.md#merge).
 This specification updates the algorithm to be compliant with entities. This
 section will replace that section upon stabilization of entities. SDKs SHOULD
 NOT update their merge algorithm until full Entity SDK support is provided.
 
 Merging resources is an action of joining together the context of observation.
 That is, we can look at the resource context for a signal and *expand* that
-context to include more details (see 
+context to include more details (see
 [telescoping identity](README.md#telescoping)). As such, a merge SHOULD preserve
 any identity that already existed on a Resource while adding in new identifying
 information or descriptive attributes.
@@ -73,8 +73,8 @@ resource.
   - For each entity, `new_entity`, in priority order (highest first),
     do one of the following:
     - If an entity `e` exists in `E` with the same entity type as `new_entity`:
-       - Perform an [Entity DataModel Merge](../entities/data-model.md#merging-of-entities) with `e` and `new_entity`
-       - Note: If unable to merge `e` and `new_entity`, then no change is made.
+      - Perform an [Entity DataModel Merge](../entities/data-model.md#merging-of-entities) with `e` and `new_entity`
+      - Note: If unable to merge `e` and `new_entity`, then no change is made.
     - Otherwise, add the entity `new_entity` to set `E`
 - Update the Resource to use the set of entities `E`.
   - If all entities within `E` have the same `schema_url`, set the
