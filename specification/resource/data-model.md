@@ -72,8 +72,9 @@ resource.
 - Construct a set of existing entities on the resource, `E`.
   - For each entity, `new_entity`, in priority order (highest first),
     do one of the following:
-    - If an entity `e'` exsits in `E` with the same entity type as `new_entity`:
-       - Perform a [Entity DataModel Merge](../entities/data-model.md#merging-of-entities), if applicable, otherwise ignore `new_entity`.
+    - If an entity `e` exists in `E` with the same entity type as `new_entity`:
+       - Perform an [Entity DataModel Merge](../entities/data-model.md#merging-of-entities) with `e` and `new_entity`
+       - Note: If unable to merge `e` and `new_entity`, then no change is made.
     - Otherwise, add the entity `new_entity` to set `E`
 - Update the Resource to use the set of entities `E`.
   - If all entities within `E` have the same `schema_url`, set the
@@ -81,3 +82,15 @@ resource.
   - Otherwise set the Resource `schema_url` blank.
   - Remove any attribute from `Attributes` which exists in either the
     description or identity of an entity in `E`.
+- Solve for resource flattening issues (See
+  [Attribute Referencing Model](../entities/data-model.md#attribute-referencing-model)).
+  - If, for all entities, there are now overlapping attribute keys, then nothing
+    is needed.
+  - If there is a conflict where two entities use the same attribute key, but
+    both have the same value, then nothing is needed.
+  - If there is a conflict where two entities use the same attribute key, and
+    one of those entities treats has the attribute in its description, then
+    remove this attribute from the entity's description.
+  - If there is a conflict where two entities use the same attribute key and
+    both use that attribute for the entity identity, then remove the lower
+    priority entity from the Resource.
