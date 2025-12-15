@@ -31,11 +31,12 @@ weight: 1
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
   * [General operations](#general-operations)
     + [Enabled](#enabled)
+    + [Finish](#finish)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
       - [Add](#add)
-      - [Finish](#finish)
+      - [Finish](#finish-1)
   * [Asynchronous Counter](#asynchronous-counter)
     + [Asynchronous Counter creation](#asynchronous-counter-creation)
     + [Asynchronous Counter operations](#asynchronous-counter-operations)
@@ -43,12 +44,12 @@ weight: 1
     + [Histogram creation](#histogram-creation)
     + [Histogram operations](#histogram-operations)
       - [Record](#record)
-      - [Finish](#finish-1)
+      - [Finish](#finish-2)
   * [Gauge](#gauge)
     + [Gauge creation](#gauge-creation)
     + [Gauge operations](#gauge-operations)
       - [Record](#record-1)
-      - [Finish](#finish-2)
+      - [Finish](#finish-3)
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
@@ -56,7 +57,7 @@ weight: 1
     + [UpDownCounter creation](#updowncounter-creation)
     + [UpDownCounter operations](#updowncounter-operations)
       - [Add](#add-1)
-      - [Finish](#finish-3)
+      - [Finish](#finish-4)
   * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
     + [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
@@ -479,6 +480,7 @@ or something else).
 All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functions to:
 
 * [Report if instrument is `Enabled`](#enabled)
+* [Finish the reporting of a set of attributes](#finish)
 
 #### Enabled
 
@@ -497,6 +499,22 @@ value of `false` means the instrument is disabled for the provided arguments.
 The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they record a measurement to ensure they have the most up-to-date response.
+
+#### Finish
+
+**Status**: [Development](../document-status.md)
+
+To stop reporting attribute sets which are no longer used, [synchronous Instruments](#synchronous-instrument-api) SHOULD provide this `Finish` API.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to identify the Instrument.
+
+  Users can provide attributes to identify the Instrument.
+  This API MUST be structured to accept a variable number of attributes, including none.
 
 ### Counter
 
