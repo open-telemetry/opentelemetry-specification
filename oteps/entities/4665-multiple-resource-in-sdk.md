@@ -53,7 +53,8 @@ We proposes these new fundamental concepts in OpenTelemetry:
 
 ## Internal details
 
-TODO - introduction.
+This proposal splits between an instrumentation facing API, and required
+behavior of that API in the SDK.
 
 ### API Details
 
