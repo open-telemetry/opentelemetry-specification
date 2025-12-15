@@ -15,6 +15,9 @@ release.
 
 ### Logs
 
+- Add optional Ergonomic API.
+  ([#4741](https://github.com/open-telemetry/opentelemetry-specification/pull/4741))
+
 ### Baggage
 
 ### Profiles
@@ -60,8 +63,6 @@ release.
 
 - Stabilize `LogRecordProcessor.Enabled`.
   ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
-- Add optional Ergonomic API.
-  ([#4741](https://github.com/open-telemetry/opentelemetry-specification/pull/4741))
 
 ### SDK Configuration
 
