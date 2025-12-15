@@ -303,10 +303,11 @@ This SHOULD return an error if it encounters an error in `configuration` (i.e.
 fail fast) in accordance with
 initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
-SDK implementations MAY provide options to allow programmatic customization of
-the components initialized by `Create`. This allows configuration of concepts which
-are not yet or may never be representable in the configuration model. For example,
-java OTLP exporters allow configuration of the [ExecutorService](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html),
+**Status**: [Development](../document-status.md) SDK implementations MAY provide
+options to allow programmatic customization of the components initialized by `Create`.
+This allows configuration of concepts which are not yet or may never be representable
+in the configuration model. For example, java OTLP exporters allow configuration
+of the [ExecutorService](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html),
 a niche but important option for applications which need strict control of thread pools.
 This programmatic customization might take the form of passing an optional callback to
 `Create`, invoked with each SDK subcomponent (or a subset of SDK component types) as
