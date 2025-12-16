@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add the DefaultDisabled advisory parameter.
+  ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
+
 ### Logs
 
 ### Baggage
