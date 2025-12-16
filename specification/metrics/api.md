@@ -283,9 +283,9 @@ the recommended set of attribute keys to be used for the resulting metrics.
 
 Applies to all instrument types.
 
-`DefaultDisabled` indicates that the instrument should not produce metric data
-and functions on the instrument should be no-ops unless the user has explicitly
-enabled the metric.
+`DefaultDisabled` (bool) if true, indicates that the instrument should not
+produce metric data and that functions on the instrument should be no-ops
+unless the user has explicitly enabled the metric.
 
 #### Synchronous and Asynchronous instruments
 
