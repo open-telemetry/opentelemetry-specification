@@ -16,6 +16,8 @@ release.
 - Clarify `maxExportBatchSize` behavior, timeouts, and error handling for
   Periodic exporting MetricReader.
   ([#5265](https://github.com/open-telemetry/opentelemetry-specification/pull/5265))
+- Add the DefaultDisabled advisory parameter.
+  ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
 
 ### Logs
 
