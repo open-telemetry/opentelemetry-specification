@@ -56,7 +56,7 @@ There is not going to be a risk of breaking applications by injecting applicatio
 
 ## Prior art and alternatives
 
-The [Dash0 Operator](https://github.com/dash0hq/dash0-operator) has been using very similar mechanics (delivering an injector and autoinstrumentation files for various SDKs) on Kubernetes in production for more than year. The [OpenTelemetry Operator](https://github.com/open-telemetry/opentelemetry-operator/) also has injection mechanics processed runtime inside pods' containers, but the injection requires opt-in at the pod level via labels.
+The [Dash0 Operator](https://github.com/dash0hq/dash0-operator) has been using very similar mechanics (delivering an injector and autoinstrumentation files for various SDKs) on Kubernetes in production for more than year. The [OpenTelemetry Operator](https://github.com/open-telemetry/opentelemetry-operator/) also has injection mechanics processed runtime inside pods' containers, but the injection requires opt-in at the pod level or namespace level via labels.
 
 Considering the more larger goal of autoinstrumenting applications running on Linux hosts, the [OpenTelemetry eBPF Instrumentation](https://opentelemetry.io/docs/zero-code/obi/) fulfills a similar scope, with very different tradeoffs in terms of user experience including, but not limited to, configurability of SDK, coverage of instrumentations and supporting vendor distributions for specific runtimes.
 
