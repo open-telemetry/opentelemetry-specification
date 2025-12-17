@@ -196,7 +196,7 @@ Logs can be correlated with the rest of observability data in a few dimensions:
 - By the **origin of the telemetry**, also known as the Resource context.
   OpenTelemetry traces and metrics contain information about the Resource they
   come from. We extend this practice to logs by including the
-  [Resource](data-model.md#field-resource) in LogRecords.
+  [Resource](../resource/README.md) in Log data streams.
 
 These 3 correlations can be the foundation of powerful navigational, filtering,
 querying and analytical capabilities. OpenTelemetry aims to record and collects

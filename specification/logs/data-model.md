@@ -12,32 +12,36 @@ weight: 2
 
 <!-- toc -->
 
+- [Overview](#overview)
 - [Design Notes](#design-notes)
   * [Requirements](#requirements)
-  * [Events](#events)
   * [Definitions Used in this Document](#definitions-used-in-this-document)
     + [Type `any`](#type-any)
     + [Type `map`](#type-mapstring-any)
   * [Field Kinds](#field-kinds)
-- [Log and Event Record Definition](#log-and-event-record-definition)
-  * [Field: `Timestamp`](#field-timestamp)
-  * [Field: `ObservedTimestamp`](#field-observedtimestamp)
-  * [Trace Context Fields](#trace-context-fields)
+- [Model Details](#model-details)
+  * [Open Telemetry Protocol data model](#open-telemetry-protocol-data-model)
+    + [Field: `Timestamp`](#field-timestamp)
+    + [Field: `ObservedTimestamp`](#field-observedtimestamp)
     + [Field: `TraceId`](#field-traceid)
     + [Field: `SpanId`](#field-spanid)
     + [Field: `TraceFlags`](#field-traceflags)
-  * [Severity Fields](#severity-fields)
     + [Field: `SeverityText`](#field-severitytext)
     + [Field: `SeverityNumber`](#field-severitynumber)
-    + [Mapping of `SeverityNumber`](#mapping-of-severitynumber)
-    + [Reverse Mapping](#reverse-mapping)
-    + [Error Semantics](#error-semantics)
-    + [Displaying Severity](#displaying-severity)
-    + [Comparing Severity](#comparing-severity)
-  * [Field: `Body`](#field-body)
-  * [Field: `Attributes`](#field-attributes)
-    + [Errors and Exceptions](#errors-and-exceptions)
-  * [Field: `EventName`](#field-eventname)
+    + [Field: `Body`](#field-body)
+    + [Field: `Attributes`](#field-attributes)
+      - [Errors and Exceptions](#errors-and-exceptions)
+    + [Field: `EventName`](#field-eventname)
+- [Log Records](#log-records)
+  * [Logs](#logs)
+  * [Events](#events)
+- [Severity](#severity)
+  * [Mapping of `Severity`](#mapping-of-severity)
+    + [Mapping to `SeverityNumber`](#mapping-to-severitynumber)
+    + [Mapping from `SeverityNumber`](#mapping-from-severitynumber)
+  * [Error Semantics](#error-semantics)
+  * [Displaying Severity](#displaying-severity)
+  * [Comparing Severity](#comparing-severity)
 - [Example Log Records](#example-log-records)
 - [Example Mappings](#example-mappings)
 - [References](#references)
@@ -45,6 +49,8 @@ weight: 2
 <!-- tocstop -->
 
 </details>
+
+## Overview
 
 This is a data model and semantic conventions that allow to represent logs from
 various sources: application log files, machine generated events, system logs,
@@ -101,14 +107,6 @@ The Data Model aims to successfully represent 3 sorts of logs and events:
   some control over how the logs and events are generated and what information
   we include in the logs. We can likely modify the source code of the
   application if needed.
-
-### Events
-
-Events are OpenTelemetry's standardized format for LogRecords. All semantic
-conventions defined for logs SHOULD be formatted as Events. Requirements and details for the Event format can be found in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
-
-Events are intended to be used by OpenTelemetry instrumentation. It is not a
-requirement that all LogRecords are formatted as Events.
 
 ### Definitions Used in this Document
 
@@ -189,30 +187,40 @@ decision about when to use a top-level named field:
 Both of the above conditions were required to give the field a place in the
 top-level structure of the record.
 
-## Log and Event Record Definition
+## Model Details
 
-[Appendix A](./data-model-appendix.md#appendix-a-example-mappings) contains many examples that show how
-existing log formats map to the fields defined below. If there are questions
-about the meaning of the field reviewing the examples may be helpful.
+### Open Telemetry Protocol data model
 
-Here is the list of fields in a log record:
+The OpenTelemetry protocol (OTLP) data model is composed of Log data streams. These streams are in turn composed of log records.
 
-| Field Name | Description |
-| ---------- | ----------- |
-| Timestamp | Time when the event occurred. |
-| ObservedTimestamp | Time when the event was observed. |
-| TraceId | Request trace id. |
-| SpanId | Request span id. |
-| TraceFlags | W3C trace flag. |
-| SeverityText | The severity text (also known as log level). |
-| SeverityNumber | Numerical value of the severity. |
-| Body | The body of the log record. |
-| Attributes | Additional information about the event. |
-| EventName | Name that identifies the class / type of event. |
+Log streams are grouped into individual Log objects, identified by:
+
+- The originating Resource attributes
+- The instrumentation Scope (e.g., instrumentation library name, version)
+
+The `Log` record is defined by the following properties:
+
+| Field Name | Category | Description |
+| ---------- | -------- | ----------- |
+| Timestamp | | Time when the event occurred. |
+| ObservedTimestamp | | Time when the event was observed. |
+| TraceId | Trace Context | Request trace id. |
+| SpanId | Trace Context | Request span id. |
+| TraceFlags Trace Context | Trace Context | W3C trace flag. |
+| SeverityText | Severity | The severity text (also known as log level). |
+| SeverityNumber | Severity | Numerical value of the severity. |
+| Body | | The body of the log record. |
+| Attributes | | Additional information about the event. |
+| EventName | | Name that identifies the class / type of event. |
+
+> [!NOTE]
+> [Appendix A](./data-model-appendix.md#appendix-a-example-mappings) contains many examples that show how
+> existing log formats map to the fields defined above. If there are questions
+> about the meaning of the field reviewing the examples may be helpful.
 
 Below is the detailed description of each field.
 
-### Field: `Timestamp`
+#### Field: `Timestamp`
 
 Type: Timestamp, uint64 nanoseconds since Unix epoch.
 
@@ -220,7 +228,7 @@ Description: Time when the event occurred measured by the origin clock, i.e. the
 time at the source. This field is optional, it may be missing if the source
 timestamp is unknown.
 
-### Field: `ObservedTimestamp`
+#### Field: `ObservedTimestamp`
 
 Type: Timestamp, uint64 nanoseconds since Unix epoch.
 
@@ -237,8 +245,6 @@ or when receiving OpenTelemetry log data by recipients that support only one
 timestamp internally the following logic is recommended:
 
 - Use `Timestamp` if it is present, otherwise use `ObservedTimestamp`.
-
-### Trace Context Fields
 
 #### Field: `TraceId`
 
@@ -265,8 +271,6 @@ Description: Trace flag as defined in
 [W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-flags)
 specification. At the time of writing the specification defines one flag - the
 SAMPLED flag. This field is optional.
-
-### Severity Fields
 
 #### Field: `SeverityText`
 
@@ -305,7 +309,77 @@ The following table defines the meaning of `SeverityNumber` value:
 
 `SeverityNumber=0` MAY be used to represent an unspecified value.
 
-#### Mapping of `SeverityNumber`
+#### Field: `Body`
+
+Type: [`any`](#type-any) or [AnyValue](../common/README.md#anyvalue).
+
+Description: A value containing the body of the log record. Can be for example
+a human-readable string message (including multi-line) describing the event in
+a free form or it can be a structured data composed of arrays and maps of other
+values. Body MUST support [AnyValue](../common/README.md#anyvalue)
+to preserve the semantics of structured logs emitted by the applications.
+Can vary for each occurrence of the event coming from the same source.
+This field is optional.
+
+#### Field: `Attributes`
+
+Type: [`map<string, any>`](#type-mapstring-any) or [Attribute Collection](../common/README.md#attribute-collections).
+
+Description: Additional information about the specific event occurrence. Unlike
+the [`Resource`](../resource/sdk.md), which is fixed for a particular source, `Attributes` can
+vary for each occurrence of the event coming from the same source. Can contain
+information about the request context.
+This field is optional.
+
+##### Errors and Exceptions
+
+Additional information about errors and/or exceptions that are associated with
+a log record MAY be included in the structured data in the `Attributes` section
+of the record.
+If included, they MUST follow the OpenTelemetry
+[semantic conventions for exception-related attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
+
+#### Field: `EventName`
+
+Type: string.
+
+Description: Name that identifies the class / type of the [Event](#events).
+This name SHOULD uniquely identify the event structure (both attributes and body).
+A log record with a non-empty event name is an [Event](#events).
+
+## Log Records
+
+It is not a requirement that all LogRecords are formatted as Events hence the 2 formats described below.
+
+> [!NOTE]
+> Events are intended to be used by OpenTelemetry instrumentation.
+
+### Logs
+
+The requirements of logs are:
+
+- A log MUST NOT have an event name.
+- Attributes SHOULD be used to represent details and provide additional context about the event.
+- Body may be used.
+- Events SHOULD specify a severity number.
+
+Logs are not defined in semantic conventions.
+
+### Events
+
+Events are OpenTelemetry's standardized format for LogRecords. The requirements of events are:
+
+- An event MUST have an event name that uniquely identifies the event structure.
+- Attributes SHOULD be used to represent details and provide additional context about the event.
+- Events SHOULD specify a severity number.
+
+All semantic conventions defined for logs SHOULD be formatted as Events with the requirements and details for the Event format can be found in the [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/events.md).
+
+## Severity
+
+### Mapping of `Severity`
+
+#### Mapping to `SeverityNumber`
 
 Mappings from existing logging systems and formats (or **source format** for
 short) must define how severity (or log level) of that particular format
@@ -336,7 +410,7 @@ records with missing severity information distinctly or may interpret log
 records with missing `SeverityNumber` and `SeverityText` fields as if the
 `SeverityNumber` was set equal to INFO (numeric value of 9).
 
-#### Reverse Mapping
+#### Mapping from `SeverityNumber`
 
 When performing a reverse mapping from `SeverityNumber` to a specific format
 and the `SeverityNumber` has no corresponding mapping entry for that format
@@ -347,7 +421,7 @@ For example Zap has only one severity in the INFO range, called "Info". When
 doing reverse mapping all `SeverityNumber` values in INFO range (numeric 9-12)
 will be mapped to Zap’s "Info" level.
 
-#### Error Semantics
+### Error Semantics
 
 If `SeverityNumber` is present and has a value of ERROR (numeric 17) or higher
 then it is an indication that the log record represents an erroneous situation.
@@ -364,7 +438,7 @@ recommended value in this case is INFO (numeric 9). See
 [Appendix B](./data-model-appendix.md#appendix-b-severitynumber-example-mappings) for more mapping
 examples.
 
-#### Displaying Severity
+### Displaying Severity
 
 The following table defines the recommended short name for each
 `SeverityNumber` value. The short name can be used for example for representing
@@ -417,50 +491,12 @@ dropdown list, which lists all distinct `SeverityText` values that are known to
 the system (which can be a large number of elements, often differing only in
 capitalization or abbreviated, e.g. "Info" vs "Information").
 
-#### Comparing Severity
+### Comparing Severity
 
 In the contexts where severity participates in less-than / greater-than
 comparisons `SeverityNumber` field should be used.
 Special handling MAY be given to `SeverityNumber=0`
 when it is used to represent an unspecified severity.
-
-### Field: `Body`
-
-Type: [`any`](#type-any) or [AnyValue](../common/README.md#anyvalue).
-
-Description: A value containing the body of the log record. Can be for example
-a human-readable string message (including multi-line) describing the event in
-a free form or it can be a structured data composed of arrays and maps of other
-values. Body MUST support [AnyValue](../common/README.md#anyvalue)
-to preserve the semantics of structured logs emitted by the applications.
-Can vary for each occurrence of the event coming from the same source.
-This field is optional.
-
-### Field: `Attributes`
-
-Type: [`map<string, any>`](#type-mapstring-any) or [Attribute Collection](../common/README.md#attribute-collections).
-
-Description: Additional information about the specific event occurrence. Unlike
-the [`Resource`](../resource/sdk.md), which is fixed for a particular source, `Attributes` can
-vary for each occurrence of the event coming from the same source. Can contain
-information about the request context (other than [Trace Context Fields](#trace-context-fields)).
-This field is optional.
-
-#### Errors and Exceptions
-
-Additional information about errors and/or exceptions that are associated with
-a log record MAY be included in the structured data in the `Attributes` section
-of the record.
-If included, they MUST follow the OpenTelemetry
-[semantic conventions for exception-related attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
-
-### Field: `EventName`
-
-Type: string.
-
-Description: Name that identifies the class / type of the [Event](#events).
-This name SHOULD uniquely identify the event structure (both attributes and body).
-A log record with a non-empty event name is an [Event](#events).
 
 ## Example Log Records
 
