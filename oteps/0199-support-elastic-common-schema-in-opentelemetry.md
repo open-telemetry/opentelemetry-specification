@@ -147,7 +147,7 @@ Example of a Nginx Access Log entry structured with ECS
 
 ## Principles
 
-| Description | [OTel Logs and Event Record](../specification/logs/data-model.md#log-and-event-record-definition) | [Elastic Common Schema (ECS)](https://www.elastic.co/docs/reference/ecs) |
+| Description | [OTel Logs and Event Record](../specification/logs/data-model.md#open-telemetry-protocol-data-model) | [Elastic Common Schema (ECS)](https://www.elastic.co/docs/reference/ecs) |
 | ----------- | ------------- | -------- |
 | Metadata shared by all the Log Messages / Spans / Metrics of an application instance | Resource Attributes | ECS fields |
 | Metadata specific to each Log Message / Span / Metric data point | Attributes | ECS Fields |
@@ -158,7 +158,7 @@ Example of a Nginx Access Log entry structured with ECS
 
 ## Data Types
 
-| Category | <a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a> (all or a subset of <a href="https://protobuf.dev/programming-guides/proto3/">GRPC data types</a>) | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/field-data-types">ECS Data Types</a> |
+| Category | <a href="../specification/logs/data-model.md#open-telemetry-protocol-data-model">OTel Logs and Event Record</a> (all or a subset of <a href="https://protobuf.dev/programming-guides/proto3/">GRPC data types</a>) | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/field-data-types">ECS Data Types</a> |
 | --- | --- | --- |
 | Text | string | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#text-field-type">text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#match-only-text-field-type">match_only_text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#keyword-field-type">keyword</a> <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#constant-keyword-field-type">constant_keyword</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#wildcard-field-type">wildcard</a> |
 | Dates | uint64 nanoseconds since Unix epoch | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date">date</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date_nanos">date_nanos</a> |
@@ -177,7 +177,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
 
 <table>
   <tr>
-   <td><strong><a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a></strong>
+   <td><strong><a href="../specification/logs/data-model.md#open-telemetry-protocol-data-model">OTel Logs and Event Record</a></strong>
    </td>
    <td><strong><a href="https://www.elastic.co/docs/reference/ecs">Elastic Common Schema (ECS)</a></strong>
    </td>
@@ -185,7 +185,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">Timestamp</a> (uint64 nanoseconds since Unix epoch)
+   <td><a href="../specification/logs/data-model.md#open-telemetry-protocol-data-model">Timestamp</a> (uint64 nanoseconds since Unix epoch)
    </td>
    <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-base#field-timestamp">@timestamp</a> (date)
    </td>
@@ -193,7 +193,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">TraceId</a> (byte sequence), <a href="../specification/logs/data-model.md#log-and-event-record-definition">SpanId</a> (byte sequence)
+   <td><a href="../specification/logs/data-model.md#open-telemetry-protocol-data-model">TraceId</a> (byte sequence), <a href="../specification/logs/data-model.md#open-telemetry-protocol-data-model">SpanId</a> (byte sequence)
    </td>
    <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-tracing#field-trace-id">trace.id</a> (keyword), <a href="https://www.elastic.co/docs/reference/ecs/ecs-tracing#field-trace-id">span.id</a> (keyword)
    </td>
@@ -209,7 +209,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">SeverityText</a> (string)
+   <td><a href="../specification/logs/data-model.md#open-telemetry-protocol-data-model">SeverityText</a> (string)
    </td>
    <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-log#field-log-syslog-severity-name">log.syslog.severity.name</a> (keyword), <a href="https://www.elastic.co/docs/reference/ecs/ecs-log#field-log-level">log.level</a> (keyword)
    </td>
@@ -217,7 +217,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">SeverityNumber</a> (number)
+   <td><a href="../specification/logs/data-model.md#open-telemetry-protocol-data-model">SeverityNumber</a> (number)
    </td>
    <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-log#field-log-syslog-severity-code">log.syslog.severity.code</a>
    </td>
@@ -225,7 +225,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">Body</a> (any)
+   <td><a href="../specification/logs/data-model.md#open-telemetry-protocol-data-model">Body</a> (any)
    </td>
    <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-base#field-message">message</a> (match_only_text)
    </td>
