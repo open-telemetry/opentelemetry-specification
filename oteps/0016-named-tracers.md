@@ -1,6 +1,6 @@
 # Named Tracers and Meters
 
-_Associate Tracers and Meters with the name and version of the instrumentation library which reports telemetry data by parameterizing the API which the library uses to acquire the Tracer or Meter._
+_Associate Tracers and Meters with the name and version of the instrumentation library which reports telemetry data by parameterization of the API which the library uses to acquire the Tracer or Meter._
 
 ## Suggested reading
 
