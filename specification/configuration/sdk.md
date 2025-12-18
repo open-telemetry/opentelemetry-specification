@@ -339,14 +339,18 @@ as `ComponentProvider`s.
 **Parameters:**
 
 * `component_provider` - The `ComponentProvider`.
-* `type` - The type of plugin interface it provides (e.g. SpanExporter, Sampler,
-  etc).
+* `type` - The type of plugin interface it provides.
 * `name` - The name used to identify the type of component. This is used
   in [configuration model](./data-model.md) to specify that the
   corresponding `component_provider` is to provide the component.
 
 The `type` and `name` comprise a unique key. Register MUST return an error if it
 is called multiple times with the same `type` and `name` combination.
+
+SDKs SHOULD represent `type` in a manner that is idiomatic for their language.
+For example, a class literal, an enumeration, or similar.
+See [supported SDK extension plugins](#sdk-extension-components) for the set of
+supported `type` values.
 
 ### Examples
 
