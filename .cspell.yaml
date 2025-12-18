@@ -11,6 +11,9 @@ ignorePaths:
   - '**/*.svg'
   - '.*.yml'
   - '.*.yaml'
+  - 'schemas/**'
+  - 'spec-compliance-matrix/*.yaml'
+  - 'oteps/assets/0225*.*'
 patterns:
   - name: CodeBlock
     pattern: |
@@ -35,6 +38,11 @@ patterns:
           [^)]+           # Matches any URL/path until the closing ) — works for both relative and absolute.
           \)              # Match the closing parentheses for the URL.
       /x
+  - name: Redirect
+    pattern: |
+      /
+        redirect:.+$     # Matches any front-matter redirect line.
+      /mx
 languageSettings:
   - languageId:
       - markdown
@@ -43,6 +51,7 @@ languageSettings:
       - CodeBlock
       - CodeName
       - Links
+      - Redirect
 dictionaryDefinitions:
   - name: en-words
     path: .cspell/en-words.txt

@@ -182,7 +182,7 @@ decisions within the metrics data model.
 
 ### Out of Scope Use-cases
 
-The metrics data model is NOT designed to be a perfect rosetta stone of metrics.
+The metrics data model is NOT designed to be a perfect Rosetta Stone of metrics.
 Here are a set of use cases that, while won't be outright unsupported, are not
 in scope for key design decisions:
 

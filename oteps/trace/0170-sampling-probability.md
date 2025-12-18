@@ -155,7 +155,7 @@ interval, begin weighted sampling using the adjusted count of each
 span as input weight.
 
 This processor drops spans when the configured rate threshold is
-exceeeded, otherwise it passes spans through with unmodified adjusted
+exceeded, otherwise it passes spans through with unmodified adjusted
 counts.
 
 When the interval expires and the sample frame is considered complete,
@@ -815,7 +815,7 @@ of composition we assign unknowns `p=64`, which is 1 beyond the range
 of the 6-bit that represent known p-values.  The assignment of `p=64`
 simplifies the formulas below .
 
-By following these simple rules, any numher of consistent probability
+By following these simple rules, any number of consistent probability
 samplers and non-probability samplers can be combined.  Starting with
 `p=64` representing unknown and `sampled=false`, update the composite
 p-value to the minimum value of the prior composite p-value and the
