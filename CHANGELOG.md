@@ -20,6 +20,9 @@ release.
 
 ### Logs
 
+- Add optional Ergonomic API.
+  ([#4741](https://github.com/open-telemetry/opentelemetry-specification/pull/4741))
+
 ### Baggage
 
 ### Profiles
