@@ -347,7 +347,7 @@ as `ComponentProvider`s.
 The `type` and `name` comprise a unique key. Register MUST return an error if it
 is called multiple times with the same `type` and `name` combination.
 
-SDKs should represent `type` in a manner that is idiomatic for their language.
+SDKs SHOULD represent `type` in a manner that is idiomatic for their language.
 For example, a class literal, an enumeration, or similar.
 See [supported SDK extension plugins](#sdk-extension-components) for the set of
 supported `type` values.
