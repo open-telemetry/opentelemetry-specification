@@ -107,7 +107,7 @@ Publishing the context should follow these steps:
 1. **Check for existing mapping**: If a previous context was published, follow the "Updating Protocol" instead
 2. **Allocate new memfd and size it**: Create a new memfd using `memfd_create("OTEL_CTX", ...)`, size it with `ftruncate`
 3. **Allocate a new mmap from the memfd then close the memfd**: This makes the memfd show up in `/proc/<pid>/maps`; afterwards the file descriptor can be closed
-4. **If memfd is not available (step 2)**: Fall back to creating a new anonymous mapping using `mmap` and use that instead
+4. **If memfd is not available (step 2)**: If system security restrictions disallow memfd, fall back to creating a new anonymous mapping using `mmap` and use that instead
 5. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data
 6. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation)
 7. **Write header fields**: Populate `version`, `published_at_ns`, `payload_size`, `payload`
