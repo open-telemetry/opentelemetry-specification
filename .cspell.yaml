@@ -2,7 +2,7 @@
 # https://www.streetsidesoftware.com/vscode-spell-checker/docs/configuration/
 version: '0.2'
 language: en-US
-caseSensitive: false
+caseSensitive: true
 allowCompoundWords: true
 useGitignore: true
 import:

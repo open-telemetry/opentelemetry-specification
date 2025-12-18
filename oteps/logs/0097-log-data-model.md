@@ -645,15 +645,15 @@ this data model.
   <tr>
     <td>STRUCTURED-DATA</td>
     <td>array of maps of string to string</td>
-    <td>A variety of use cases depending on the SDID:
+    <td>A variety of use cases depending on the SD-ID:
 Can describe event source identity
 Can include data that describes particular occurrence of the event.
 Can be meta-information, e.g. quality of timestamp value.</td>
-    <td>SDID origin.swVersion map to Resource[`service.version`]
+    <td>SD-ID origin.swVersion map to Resource[`service.version`]
 
-SDID origin.ip map to attribute[net.host.ip"]
+SD-ID origin.ip map to attribute[net.host.ip"]
 
-Rest of SDIDs -> Attributes[`syslog.*`]</td>
+Rest of SD-IDs -> Attributes[`syslog.*`]</td>
   </tr>
   <tr>
     <td>MSG</td>
