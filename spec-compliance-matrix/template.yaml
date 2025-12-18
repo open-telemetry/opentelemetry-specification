@@ -322,15 +322,15 @@ sections:
       - name: The `Parse` operation accepts the configuration YAML file format
       - name: The `Parse` operation performs environment variable substitution
       - name: The `Parse` operation returns configuration model
-      - name: The `Parse` operation resolves extension component configuration to `properties`
+      - name: The `Parse` operation resolves plugin component configuration to `properties`
       - name: '`Create` SDK components'
       - name: The `Create` operation accepts configuration model
       - name: The `Create` operation returns `TracerProvider`
       - name: The `Create` operation returns `MeterProvider`
       - name: The `Create` operation returns `LoggerProvider`
       - name: The `Create` operation returns `Propagators`
-      - name: The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components
-      - name: Register a `ComponentProvider`
+      - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
+      - name: Register a `PluginComponentProvider`
     hide_optional_column: true
   - name: Exporters
     features:
