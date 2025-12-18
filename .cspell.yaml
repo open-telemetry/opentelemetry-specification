@@ -6,7 +6,7 @@ caseSensitive: true
 allowCompoundWords: true
 useGitignore: true
 import:
-  - '@cspell/dict-people-names/cspell-ext.json'
+  - https://cdn.jsdelivr.net/npm/@cspell/dict-people-names/cspell-ext.json
 ignorePaths:
   - '**/*.svg'
   - '.*.yml'
