@@ -212,9 +212,9 @@ It consists of the following parameters:
   is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`.
 
-  It is not necessary for implementations to ensure that changes to `disabled`
-  are immediately visible to callers of `Enabled`.
-  However, the changes MUST be eventually visible.
+It is not necessary for implementations to ensure that changes to any of these
+parameters are immediately visible to callers of `Enabled`.
+However, the changes MUST be eventually visible.
 
 ### Enabled
 
