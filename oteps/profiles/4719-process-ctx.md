@@ -14,16 +14,16 @@ External readers like the OpenTelemetry eBPF Profiler operate outside the instru
 
 ## Explanation
 
-We propose a mechanism for OpenTelemetry SDKs to publish process-level resource attributes, through a standard format based on Linux anonymous memory mappings.
+We propose a mechanism for OpenTelemetry SDKs to publish process-level resource attributes, through a standard format based on Linux memory mappings.
 
-When an SDK initializes (or updates its resource attributes) it publishes this information to a small, fixed-size memory region that external processes can discover and read.
+When an SDK initializes (or updates its resource attributes) it publishes this information to a small memory region that external processes can discover and read.
 
 This mechanism is designed to support loose coordination between the publishing process and external readers:
 
 - **Publisher-first deployment**: The publishing process can start and publish its context before any readers are running, with readers discovering it later
 - **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external process with sufficient system permissions to read `/proc/<pid>/maps` and read target process memory can access this information
 - **Runtime compatibility**: The mechanism works even in environments where eBPF function hooking is unavailable or restricted
-- **Independent of process activity**: The context can be read at any time, including when the application is deadlocked, blocked on I/O, or otherwise idle, without relying on active hook points or the process emitting signals
+- **Independent of process activity**: The context can be read at any time, including while the application is deadlocked, blocked on I/O, or otherwise idle, without relying on active hook points or the process emitting signals
 
 External readers such as the OpenTelemetry eBPF Profiler will, upon observing a previously-unseen process, probe and read this information, associating it with any profiling samples or other telemetry collected from that process.
 
@@ -33,19 +33,17 @@ The process context is split between a header (stored in an anonymous mapping) a
 
 ### Header Structure
 
-The header is stored in a fixed-size anonymous memory mapping of 2 pages with the following format:
+The header is stored in a memory mapping with the following format:
 
 | Field             | Type      | Description                                                          |
 |-------------------|-----------|----------------------------------------------------------------------|
 | `signature`       | `char[8]` | Always set to `"OTEL_CTX"`                                           |
-| `version`         | `uint32`  | Format version. Currently `2` (`1` was used for development)         |
+| `version`         | `uint32`  | Format version. Currently `2` (`1` can be used for development)      |
 | `payload_size`    | `uint32`  | Number of bytes of the encoded payload                               |
 | `published_at_ns` | `uint64`  | Timestamp when the context was published, in nanoseconds since epoch |
 | `payload`         | `char*`   | Pointer to payload, in protobuf format                               |
 
-**Why 2 pages**: On Linux kernels prior to 5.17 as well as those without the `CONFIG_ANON_VMA_NAME` feature, readers cannot filter mappings by name and must scan anonymous mappings. Using a fixed size allows readers to quickly filter candidate mappings by a combination of attributes before checking the signature, avoiding the need to check most mappings in a process.
-
-The `payload` can optionally be placed after the header (with the `payload` pointer field correctly pointing at it) or optionally elsewhere in the process memory.
+The `payload` can optionally be placed after the header (with the `payload` pointer field correctly pointing at it) or elsewhere in the process memory.
 
 ### Payload Format
 
@@ -106,27 +104,28 @@ If applicable, these should follow [existing semantic conventions](https://opent
 
 Publishing the context should follow these steps:
 
-1. **Drop existing mapping**: If a previous context was published, unmap/free it
-2. **Allocate new mapping**: Create a 2-page anonymous mapping via `mmap()` (These pages are always zeroed by Linux)
-3. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data
-4. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation)
-5. **Write header fields**: Populate `version`, `published_at_ns`, `payload_size`, `payload`
-6. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding
-7. **Write signature**: Write `OTEL_CTX` to the signature field last
-8. **Set read-only**: Apply `mprotect(..., PROT_READ)` to mark the mapping as read-only
-9. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping. This step should be done unconditionally, although naming mappings is not always supported by the kernel.
+1. **Check for existing mapping**: If a previous context was published, follow the "Updating Protocol" instead
+2. **Allocate new memfd and size it**: Create a new memfd using `memfd_create("OTEL_CTX", ...)`, size it with `ftruncate`
+3. **Allocate a new mmap from the memfd then close the memfd**: This makes the memfd show up in `/proc/<pid>/maps`; afterwards the file descriptor can be closed
+4. **If memfd is not available (step 2)**: Fall back to creating a new anonymous mapping using `mmap` and use that instead
+5. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data
+6. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation)
+7. **Write header fields**: Populate `version`, `published_at_ns`, `payload_size`, `payload`
+8. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding
+9. **Write signature**: Write `"OTEL_CTX"` to the signature field last
+10. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping. This step should be done unconditionally, although naming mappings is not always supported by the kernel.
 
-The signature MUST be written last to ensure readers never observe incomplete or invalid data. Once the signature is present and the mapping set to read-only, the entire mapping is considered valid and immutable.
+The signature MUST be written last to ensure readers never observe incomplete or invalid data. Once the signature is present (and thus all fields are non-zero), the entire mapping is considered valid.
 
-If resource attributes are updated during the process lifetime, the previous mapping should be removed before publishing new ones following the same steps.
+If resource attributes are updated during the process lifetime, the "Updating Protocol" should be followed.
 
-If any of the steps above fail (other than naming the mapping on older Linux versions), publication is considered to have failed, and the process context will not be available.
+If any of the steps above fail (other than naming or allocating a new memfd), publication is considered to have failed, and the process context will not be available.
 
 The process context is treated as a singleton: there SHOULD NOT be more than one process context active for the same process.
 
 The context MAY be dropped during SDK shutdown, or kept around until the process itself terminates and the OS takes care of cleaning the process memory.
 
-Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. On earlier kernel versions or kernels without the feature, the `prctl` call with return an error which should be ignored. The reading protocol specified below is able to work regardless on naming being available.
+Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. On earlier kernel versions or kernels without the feature, the `prctl` call will return an error which should be ignored. The reading protocol specified below is able to work regardless of naming being available.
 
 Note that on legacy kernels and those without `CONFIG_ANON_VMA_NAME` it's possible, using eBPF, [to optionally hook on `prctl`](https://github.com/ivoanjo/proc-level-demo/tree/main/ebpf-program) naming attempts as a way of detecting new mappings being published. For this reason, this step should always be done even if the publisher somehow is aware that naming will not be successful on the current system.
 
@@ -134,24 +133,37 @@ Note that on legacy kernels and those without `CONFIG_ANON_VMA_NAME` it's possib
 
 External readers (such as the OpenTelemetry eBPF Profiler) discover and read process context as follows:
 
-1. **Locate mapping**:
-   - **Preferred** (Linux 5.17+ with `CONFIG_ANON_VMA_NAME`): Parse `/proc/<pid>/maps` and search for read-only entries with name `[anon:OTEL_CTX]`
-   - **Fallback**: Parse `/proc/<pid>/maps` and search for anonymous read-only mappings exactly 2 pages in size, then read the first 8 bytes to check for the `"OTEL_CTX"` signature
+1. **Locate mapping**: Parse `/proc/<pid>/maps` and search for entries with name starting with `[anon_shmem:OTEL_CTX]` or `/memfd:OTEL_CTX`
 
 2. **Validate signature and version**:
    - Read the header and verify first 8 bytes matches `OTEL_CTX`
    - Read the version field and verify it is supported (currently `2`)
+   - Verify that all other fields are non-zero (indicating the context is currently being written)
    - If either check fails, skip this mapping
 
 3. **Read payload**: Read `payload_size` bytes starting after the header
 
-4. **Re-read header**: If the header has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context. If the header changed, restart at 1.
+4. **Re-read header**: If the header has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context. If the header changed, restart at 2.
 
 5. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
 
 6. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process
 
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
+
+### Updating Protocol
+
+When the resource attributes change, the process context mapping should be updated following these steps:
+
+1. **Prepare new payload**: Serialize the new payload message
+2. **Signal update start**: Write `0` to the `published_at_ns` field. This signals to readers that an update is in progress (readers verify this field is non-zero).
+3. **Memory barrier**: Ensure the write to `published_at_ns` is visible before proceeding.
+4. **Update payload fields**: Update the `payload` pointer and `payload_size` fields to point to the new payload.
+5. **Memory barrier**: Ensure the payload fields are updated before finalizing the timestamp.
+6. **Signal update complete**: Write the new timestamp to `published_at_ns`.
+7. **Name mapping**: Re-issue the `prctl(PR_SET_VMA, ...)` call to name the mapping. This step should be done unconditionally, although naming mappings is not always supported by the kernel.
+
+As the reader checks `published_at_ns` before and after reading the payload, it will detect concurrent updates and avoid concurrency issues.
 
 ### Interaction with Existing Functionality
 
@@ -185,7 +197,7 @@ When a process forks, child processes do not inherit the parent's process contex
 
 Creating memory mappings and managing them adds complexity to SDK implementations.
 
-**Mitigation**: We've created a reference implementation in [C/C++](https://github.com/open-telemetry/sig-profiling/pull/23), as well as a [demo OTEL Java SDK extension](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo) and a [Go port as well](https://github.com/DataDog/dd-trace-go/pull/3937).
+**Mitigation**: We've created a reference implementation in [C/C++](https://github.com/open-telemetry/sig-profiling/tree/main/process-context/c-and-cpp), as well as a [demo OTEL Java SDK extension](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo) and a [Go port as well](https://github.com/DataDog/dd-trace-go/pull/3937).
 
 For Go as well as modern versions of Java it's possible to create an implementation that doesn't rely on third-party libraries or native code (e.g. by directly calling into the OS or libc). Older versions of Java will need to rely on building the C/C++ into a Java native library.
 
@@ -201,13 +213,12 @@ As requirements evolve, we may need to extend the payload format.
 
 **Mitigation**: The design includes both versioning as well as allowing extension points
 
-1. **Additional `attributes` keys**: These can be used for experimentation and vendor extensions
-2. **New protobuf fields**: For adding recommended fields following protobuf compatibility practices
-3. **Version number**: For incompatible changes (not expected to change frequently)
+1. **Additional `attributes` keys**: The `Resource` message can carry custom attributes
+2. **Version number**: For incompatible changes (not expected to change frequently)
 
 ### Memory Overhead
 
-Each process publishes a 2-page (typically 8KB) mapping per SDK instance + the amount of memory needed for the payload, expected to also be in the KB range.
+Each process publishes a small (typically one memory page) mapping + the amount of memory needed for the payload, expected to also be in the KB range.
 
 ### Payload Format Choice
 
@@ -258,7 +269,7 @@ Both approaches demonstrate the need for process-level data sharing and validate
    - Child processes inherit the parent's global variables after `fork()`, potentially exposing stale resource attributes until overwritten
    - Requires polling to detect context publishing and changes
 
-   **Why rejected**: The anonymous mapping approach is more universally accessible across languages and build configurations.
+   **Why rejected**: The mapping approach is more universally accessible across languages and build configurations.
 
 2. Environment Variables
 
@@ -325,7 +336,7 @@ Both approaches demonstrate the need for process-level data sharing and validate
    - Requires polling to detect context publishing and changes
    - File-based not compatible with services deployed on read-only filesystems
 
-   **Why rejected**: The technical and operational complexities (especially regarding lifecycle, `fork()` and access control) outweigh the benefits over anonymous memory mappings.
+   **Why rejected**: The technical and operational complexities (especially regarding lifecycle, `fork()` and access control) outweigh the benefits over memory mappings.
 
 ## Open questions
 
@@ -339,7 +350,7 @@ Both approaches demonstrate the need for process-level data sharing and validate
 
 The following proof-of-concept implementations demonstrate feasibility across multiple languages:
 
-- **[anonmapping-clib](https://github.com/open-telemetry/sig-profiling/pull/23)**: Complete reference implementation in C/C++ with protobuf payload
+- **[process-context-c-and-cpp](https://github.com/open-telemetry/sig-profiling/tree/main/process-context/c-and-cpp)**: Complete reference implementation in C/C++ with protobuf payload
 - **[otel-java-extension-demo](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo)**: OTEL Java SDK extension for automatic publication
 - **[anonmapping-java](https://github.com/ivoanjo/proc-level-demo/tree/main/anonmapping-java)**: Pure Java implementation using FFM (no dependencies)
 - **[ebpf-program](https://github.com/ivoanjo/proc-level-demo/tree/main/ebpf-program)**: Example eBPF program demonstrating event-driven publishing detection
