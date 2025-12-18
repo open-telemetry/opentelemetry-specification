@@ -335,7 +335,7 @@ There are likely more questions related to the final design that will be discuss
 
 ### Additional configuration providers
 
-Although the initial proposal for configuration supports only describes in-code and file representations, it's possible additional sources (remote, opamp, ...) for configuration will be desirable. The implementation of the configuration model and components should be extensible to allow for this.
+Although the initial proposal for configuration supports only describes in-code and file representations, it's possible additional sources (remote, OpAMP, ...) for configuration will be desirable. The implementation of the configuration model and components should be extensible to allow for this.
 
 ### Integration with auto-instrumentation
 

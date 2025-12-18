@@ -352,7 +352,7 @@ one of the additive methods (`Inc`, `Dec`, `Add`, and `Sub`).
 
 If we restrict Prometheus Gauges to support only a `Set` method, or to
 support only the additive methods, then we can model these two
-instruments seprately, in a way that is compatible with OpenTelemetry.
+instruments separately, in a way that is compatible with OpenTelemetry.
 A Prometheus Gauge that is used exclusively with `Set()` can be
 modeled as a Measure instrument with Last Value aggregation.  A
 Prometheus Gauge that is used exclusively with the additive methods be

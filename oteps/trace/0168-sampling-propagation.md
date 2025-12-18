@@ -362,7 +362,7 @@ probability is unknown:
 
 The inputs are recognized as out-of-range as follows:
 
-| Range invariate | Remedy                           |
+| Range invariant | Remedy                           |
 | --              | --                               |
 | `p < 0`         | drop `p` from tracestate         |
 | `p > 63`        | drop `p` from tracestate         |

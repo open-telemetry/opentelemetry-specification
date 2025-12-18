@@ -585,7 +585,7 @@ release.
 
 ### Compatibility
 
-- Clarify prometheus exporter should have `host` and `port` configuration options.
+- Clarify Prometheus exporter should have `host` and `port` configuration options.
   ([#4147](https://github.com/open-telemetry/opentelemetry-specification/pull/4147))
 
 ### Common
@@ -767,7 +767,7 @@ release.
   ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
 - Prometheus: represent Prometheus Info, StateSet and Unknown-typed metrics in OTLP.
   ([#3868](https://github.com/open-telemetry/opentelemetry-specification/pull/3868))
-- Update and reorganize the prometheus sdk exporter specification.
+- Update and reorganize the Prometheus sdk exporter specification.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 
 ### SDK Configuration
@@ -1557,13 +1557,13 @@ release.
 
 - Move X-Ray Env Variable propagation to span link instead of parent for AWS Lambda.
   ([#3166](https://github.com/open-telemetry/opentelemetry-specification/pull/3166))
-- Add heroku resource semantic conventions.
+- Add Heroku resource semantic conventions.
   [#3075](https://github.com/open-telemetry/opentelemetry-specification/pull/3075)
-- BREAKING: Rename faas.execution to faas.invocation_id
+- BREAKING: Rename `faas.execution` to `faas.invocation_id`
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
-- BREAKING: Change faas.max_memory units to Bytes instead of MB
+- BREAKING: Change `faas.max_memory` units to Bytes instead of MB
   ([#3209](https://github.com/open-telemetry/opentelemetry-specification/pull/3209))
-- BREAKING: Expand scope of faas.id to cloud.resource_id
+- BREAKING: Expand scope of `faas.id` to `cloud.resource_id`
   ([#3188](https://github.com/open-telemetry/opentelemetry-specification/pull/3188))
 - Add Connect RPC specific conventions
   ([#3116](https://github.com/open-telemetry/opentelemetry-specification/pull/3116))
@@ -1663,7 +1663,7 @@ release.
 
 - Add condition with sum and count for Prometheus summaries
   ([3059](https://github.com/open-telemetry/opentelemetry-specification/pull/3059)).
-- Clarify prometheus unit conversions
+- Clarify Prometheus unit conversions
   ([#3066](https://github.com/open-telemetry/opentelemetry-specification/pull/3066)).
 - Define conversion mapping from OTel Exponential Histograms to Prometheus Native
   Histograms.
@@ -1906,7 +1906,7 @@ release.
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
-- Define semantic conventions yaml for non-otlp conventions
+- Define semantic conventions yaml for Non-OTLP conventions
   ([#2850](https://github.com/open-telemetry/opentelemetry-specification/pull/2850))
 - Add more semantic convetion attributes of Apache RocketMQ
   ([#2881](https://github.com/open-telemetry/opentelemetry-specification/pull/2881))
@@ -1951,7 +1951,7 @@ release.
 - Changed the default buckets for Explicit Bucket Histogram to better match the
   official Prometheus clients.
   ([#2770](https://github.com/open-telemetry/opentelemetry-specification/pull/2770)).
-- Fix OpenMetrics valid label keys, and specify prometheus conversion for metric name.
+- Fix OpenMetrics valid label keys, and specify Prometheus conversion for metric name.
   ([#2788](https://github.com/open-telemetry/opentelemetry-specification/pull/2788))
 
 ### Logs
@@ -2204,7 +2204,7 @@ release.
 
 ### Common
 
-- Move non-otlp.md to common directory
+- Move `non-otlp.md` to common directory
   ([#2587](https://github.com/open-telemetry/opentelemetry-specification/pull/2587)).
 
 ## v1.11.0 (2022-05-04)
@@ -2313,7 +2313,7 @@ release.
   ([#2317](https://github.com/open-telemetry/opentelemetry-specification/pull/2317)).
 - Clarify that expectations for user callback behavior are documentation REQUIREMENTs.
   ([#2361](https://github.com/open-telemetry/opentelemetry-specification/pull/2361)).
-- Specify how to handle prometheus exemplar timestamp and attributes
+- Specify how to handle Prometheus exemplar timestamp and attributes
   ([#2376](https://github.com/open-telemetry/opentelemetry-specification/pull/2376))
 - Clarify that the periodic metric reader is the default metric reader to be
   paired with push metric exporters (OTLP, stdout, in-memory)
@@ -2322,7 +2322,7 @@ release.
   ([#2380](https://github.com/open-telemetry/opentelemetry-specification/pull/2380))
 - Clarify that MetricReader has one-to-one mapping to MeterProvider.
   ([#2406](https://github.com/open-telemetry/opentelemetry-specification/pull/2406)).
-- For prometheus metrics without sums, leave the sum unset
+- For Prometheus metrics without sums, leave the sum unset
   ([#2413](https://github.com/open-telemetry/opentelemetry-specification/pull/2413))
 - Specify default configuration for a periodic metric reader that is associated with
   the stdout metric exporter.
@@ -2573,7 +2573,7 @@ release.
   ([#1945](https://github.com/open-telemetry/opentelemetry-specification/pull/1945))
 - Add "IBM z/Architecture" (`s390x`) to `host.arch`
   ([#2055](https://github.com/open-telemetry/opentelemetry-specification/pull/2055))
-- BREAKING: Remove db.cassandra.keyspace and db.hbase.namespace, and clarify db.name
+- BREAKING: Remove `db.cassandra.keyspace` and `db.hbase.namespace`, and clarify db.name
   ([#1973](https://github.com/open-telemetry/opentelemetry-specification/pull/1973))
 - Add AWS App Runner as a cloud platform
   ([#2004](https://github.com/open-telemetry/opentelemetry-specification/pull/2004))
@@ -2721,7 +2721,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 ### Semantic Conventions
 
 - Add mobile-related network state: `net.host.connection.type`, `net.host.connection.subtype` & `net.host.carrier.*` [#1647](https://github.com/open-telemetry/opentelemetry-specification/issues/1647)
-- Adding alibaba cloud as a cloud provider.
+- Adding Alibaba cloud as a cloud provider.
   ([#1831](https://github.com/open-telemetry/opentelemetry-specification/pull/1831))
 
 ### Compatibility
@@ -2796,7 +2796,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 ### Traces
 
 - Add schema_url support to `Tracer`. ([#1666](https://github.com/open-telemetry/opentelemetry-specification/pull/1666))
-- Add Dropped Links Count to non-otlp exporters section ([#1697](https://github.com/open-telemetry/opentelemetry-specification/pull/1697))
+- Add Dropped Links Count to Non-OTLP exporters section ([#1697](https://github.com/open-telemetry/opentelemetry-specification/pull/1697))
 - Add note about reporting dropped counts for attributes, events, links. ([#1699](https://github.com/open-telemetry/opentelemetry-specification/pull/1699))
 
 ### Metrics
@@ -3049,7 +3049,7 @@ New:
   ([#1066](https://github.com/open-telemetry/opentelemetry-specification/pull/1066))
 - Change Status to be consistent with Link and Event
   ([#1067](https://github.com/open-telemetry/opentelemetry-specification/pull/1067))
-- Clarify env variables in otlp exporter
+- Clarify env variables in OTLP exporter
   ([#975](https://github.com/open-telemetry/opentelemetry-specification/pull/975))
 - Add Prometheus exporter environment variables
   ([#1021](https://github.com/open-telemetry/opentelemetry-specification/pull/1021))
@@ -3293,7 +3293,7 @@ Updates:
 - [OTEP-0002](oteps/trace/0002-remove-spandata.md):
   Removed SpanData interface in favor of Span Start and End options.
 - [OTEP-0003](oteps/metrics/0003-measure-metric-type.md)
-  Consolidatesd pre-aggregated and raw metrics APIs.
+  Consolidated pre-aggregated and raw metrics APIs.
 - [OTEP-0008](oteps/metrics/0008-metric-observer.md)
   Added Metrics Observers API.
 - [OTEP-0009](oteps/metrics/0009-metric-handles.md)
