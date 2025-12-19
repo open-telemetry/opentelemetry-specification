@@ -18,6 +18,7 @@ weight: 2
 - [Resource and Entities](#resource-and-entities)
   * [Attribute Referencing Model](#attribute-referencing-model)
   * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
+- [Merging of Entities](#merging-of-entities)
 - [Examples of Entities](#examples-of-entities)
 
 <!-- tocstop -->
@@ -150,6 +151,42 @@ different values, then **only** the `k8s.node` entity can reference this key
 
 Other entities (e.g., `k8s.cluster`) can report this attribute in a separate
 telemetry channel (e.g., entity events) where full ownership context is known.
+
+## Merging of Entities
+
+Entities MAY be merged if and only if their types are the same, their
+identity attributes are exactly the same AND their schema_url is the same.
+This means both Entities MUST have the same identity attribute keys and
+for each key, the values of the key MUST be the same.
+
+Here's an example algorithm that will check compatibility:
+
+```
+can_merge(e, e') {
+  e.type == e'.type &&
+  e.schema_url == e'.schema_url &&
+  has_same_attributes(e.identity, e'.identity)
+}
+```
+
+When merging entities, all attributes in description are merged together, with
+one entity acting as "primary" where any conficting attribute values will be
+chosen from the "primary" entity.
+
+Here's an example algorithm that will merge:
+
+```
+merge(e, e') {
+  if can_merge(e, e') {
+    for attribute in e'.description {
+      if !e.description.contains(attribute.key) {
+        e.description.insert(attribute)
+      }
+      // Ignore otehrwise.
+    }
+  }
+}
+```
 
 ## Examples of Entities
 
