@@ -35,6 +35,8 @@ release.
 
 ### SDK Configuration
 
+- Declarative configuration: add `Get distribution config` operation to the `Config Provider` specification.
+  ([#4770](https://github.com/open-telemetry/opentelemetry-specification/issues/4770))
 - Declarative configuration: clarify default behavior and validation
   requirements of `create` and `parse`.
   ([#4780](https://github.com/open-telemetry/opentelemetry-specification/pull/4780))
