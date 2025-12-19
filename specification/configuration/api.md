@@ -68,7 +68,7 @@ denoting empty.
 
 ##### Get distribution config
 
-Obtain configuration relevant to vendor specific distribution.
+Obtain configuration relevant to a distribution.
 
 **Returns:** [`ConfigProperties`](#configproperties) representing
 the [`.distribution`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
