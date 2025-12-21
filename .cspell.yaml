@@ -52,9 +52,6 @@ languageSettings:
       - CodeName
       - Links
       - Redirect
-dictionaryDefinitions:
-  - name: en-words
-    path: .cspell/en-words.txt
 dictionaries:
   # Local word lists
   - en-words
@@ -91,3 +88,18 @@ dictionaries:
   - aws
   - google
   - people-names
+words:
+  - BLRP
+  - Kubecon
+  - OpAMP
+  - OTCA
+  - OTEP
+  - OTTL
+  - cumulatives
+  - deser
+  - inclusivity
+  - oteps
+  - representivity
+  - relatedly
+  - Naur
+  - configurator
