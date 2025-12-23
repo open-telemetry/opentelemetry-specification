@@ -335,11 +335,11 @@ Generality SHOULD be prioritized over human-readability.
 For example, here are potential span names for an endpoint that gets a
 hypothetical account information:
 
-| Span Name         | Guidance     |
-| ----------------- | ------------ |
-| `get`             | Too general  |
-| `get_account/42`  | Too specific |
-| `get_account`     | Good, and account_id=42 would make a nice Span attribute |
+| Span Name | Guidance |
+| --------- | -------- |
+| `get` | Too general |
+| `get_account/42` | Too specific |
+| `get_account` | Good, and account_id=42 would make a nice Span attribute |
 | `get_account/{accountId}` | Also good (using the "HTTP route") |
 
 The `Span`'s start and end timestamps reflect the elapsed real time of the
@@ -764,7 +764,7 @@ are built and instrumented.
 [Semantic conventions](../overview.md#semantic-conventions) for
 specific technologies should document kind for each span they define.
 
-For instance, [Database Client Semantic Conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/database/database-spans.md)
+For instance, [Database Client Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/database/database-spans/)
 recommend using `CLIENT` span kind to describes database calls.
 If the database client communicates to the server over HTTP, the HTTP
 instrumentation (when enabled) creates nested `CLIENT` spans to track individual

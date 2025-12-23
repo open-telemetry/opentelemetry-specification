@@ -483,21 +483,21 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 
 ### Google Cloud Logging
 
-Field            | Type               | Description                                             | Maps to Unified Model Field
------------------|--------------------| ------------------------------------------------------- | ---------------------------
-timestamp        | string             | The time the event described by the log entry occurred. | Timestamp
-resource         | MonitoredResource  | The monitored resource that produced this log entry.    | Resource
-log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Attributes["gcp.log_name"]
-json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
-proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
-text_payload     | string             | The log entry payload, represented as a Unicode string (UTF-8). | Body
-severity         | LogSeverity        | The severity of the log entry.                          | Severity
-trace            | string             | The trace associated with the log entry, if any.        | TraceId
-span_id          | string             | The span ID within the trace associated with the log entry. | SpanId
-labels           | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes
-http_request     | HttpRequest        | The HTTP request associated with the log entry, if any. | Attributes["gcp.http_request"]
-trace_sampled    | boolean            | The sampling decision of the trace associated with the log entry. | TraceFlags.SAMPLED
-All other fields |                    |                                                         | Attributes["gcp.*"]
+| Field | Type | Description | Maps to Unified Model Field |
+| ----- | ---- | ----------- | --------------------------- |
+| timestamp | string | The time the event described by the log entry occurred. | Timestamp |
+| resource | MonitoredResource | The monitored resource that produced this log entry. | Resource |
+| log_name | string | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Attributes["gcp.log_name"] |
+| json_payload | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body |
+| proto_payload | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body |
+| text_payload | string | The log entry payload, represented as a Unicode string (UTF-8). | Body |
+| severity | LogSeverity | The severity of the log entry. | Severity |
+| trace | string | The trace associated with the log entry, if any. | TraceId |
+| span_id | string | The span ID within the trace associated with the log entry. | SpanId |
+| labels | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes |
+| http_request | HttpRequest | The HTTP request associated with the log entry, if any. | Attributes["gcp.http_request"] |
+| trace_sampled | boolean | The sampling decision of the trace associated with the log entry. | TraceFlags.SAMPLED |
+| All other fields | | | Attributes["gcp.*"] |
 
 ### Elastic Common Schema
 

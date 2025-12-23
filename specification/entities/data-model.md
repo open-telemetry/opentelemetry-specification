@@ -39,17 +39,18 @@ the `service` entity is related to the `process` entity. The process normally
 also runs on a host, so we say that the `process` entity is related to the
 `host` entity.
 
-> Note: Entity relationship modelling will be refined in future specification
+> [!NOTE]
+> Entity relationship modelling will be refined in future specification
 > work.
 
 The data model below defines a logical model for an entity (irrespective of the
 physical format and encoding of how entity data is recorded).
 
-| Field        | Type                                   | Description     |
-|--------------|----------------------------------------|-----------------|
-| Type         | string                                 | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
-| Id           | map<string, attribute value>  | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
-| Description  | map<string, attribute value>                       | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| Type | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
+| Id | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| Description | map<string, attribute value> | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
 
 ## Minimally Sufficient Identity
 
@@ -69,7 +70,8 @@ the identity was generated from the process itself, e.g. via SDK, or by an
 OpenTelemetry Collector running on the same host, or by some other system
 describing the process.
 
-> Aside: There are many ways to accomplish repeatable identifying attributes
+> [!TIP]
+> There are many ways to accomplish repeatable identifying attributes
 > across multiple observers. While many successful systems rely on pushing down
 > identity from a central registry or knowledge store, OpenTelemetry must
 > support all possible scenarios.

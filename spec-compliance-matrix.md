@@ -38,6 +38,7 @@ formats is required. Implementing more than one format is optional.
 | IsValid |  | + | + | + | + | + | + | + | + | + | + | + |
 | IsRemote |  | + | + | + | + | + | + | + | + | + | + | + |
 | Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - |  |  |  |  |  |  |  |  |  |  |
 | [Span](specification/trace/api.md#span) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create root span |  | + | + | + | + | + | + | + | + | + | + | + |
 | Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + |
@@ -87,9 +88,9 @@ formats is required. Implementing more than one format is optional.
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  |
 | [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  |
 | Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  |  |  |
-| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  |
 | [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - |  |  |  |  |  |  |  |  |  |  |
+| [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - |  |  |  |  |  |  |  |  |  |  |
 
 ## Baggage
 
@@ -201,6 +202,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + |  | + | - |  |
 | LogRecord.Set EventName |  | + |  |  |  |  |  |  | + | + |  |  |
 | Logger.Enabled | X | + |  |  |  |  |  | + | + | + |  |  |
+| Ergonomic API | X |  |  |  |  |  |  |  |  |  |  |  |
 | SimpleLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
 | BatchLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
 | Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
@@ -272,8 +274,8 @@ Note: Support for environment variables is optional.
 | OTEL_LINK_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  |
 | OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT | + |  |  |  | + |  | + |  | - |  |  |
 | OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | + |  |  |  | + |  | + |  | - |  |  |
-| OTEL_TRACES_SAMPLER | + | + | + | + | + | + | + | - | - | - |  |
-| OTEL_TRACES_SAMPLER_ARG | + | + | + | + | + | + | + | - | - | - |  |
+| OTEL_TRACES_SAMPLER | + | + | + | + | + | + | + | + | - | - |  |
+| OTEL_TRACES_SAMPLER_ARG | + | + | + | + | + | + | + | + | - | - |  |
 | OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | - | + |  | - | + |  |
 | OTEL_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | - | + |  | - | + |  |
 | OTEL_METRIC_EXPORT_INTERVAL | + | + |  | + | + |  | + |  | - | + |  |

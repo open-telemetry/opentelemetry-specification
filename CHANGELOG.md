@@ -11,15 +11,15 @@ release.
 
 ### Traces
 
-- Deprecate Zipkin exporter document and make exporter implementation optional.
-  ([#4715](https://github.com/open-telemetry/opentelemetry-specification/pull/4715/))
-
 ### Metrics
+
+- Stabilize part of `Enabled` SDK for synchronous instruments.
+  ([#4787](https://github.com/open-telemetry/opentelemetry-specification/pull/4787))
 
 ### Logs
 
-- Stabilize `LogRecordProcessor.Enabled`.
-  ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
+- Add optional Ergonomic API.
+  ([#4741](https://github.com/open-telemetry/opentelemetry-specification/pull/4741))
 
 ### Baggage
 
@@ -35,11 +35,54 @@ release.
 
 ### SDK Configuration
 
+- Declarative configuration: clarify default behavior and validation
+  requirements of `create` and `parse`.
+  ([#4780](https://github.com/open-telemetry/opentelemetry-specification/pull/4780))
+- Declarative configuration: add optional programmatic customization to
+  `create`, and add related supplemental guidelines.
+  ([#4777](https://github.com/open-telemetry/opentelemetry-specification/pull/4777))
+- Declarative configuration: add links between SDK extension plugins and
+  corresponding declarative config types.
+  ([#4802](https://github.com/open-telemetry/opentelemetry-specification/pull/4802))
+- Declarative configuration: clarify Registry ComponentProvider `type` parameter
+  ([#4799](https://github.com/open-telemetry/opentelemetry-specification/pull/4799))
+
 ### Common
 
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.52.0 (2025-12-12)
+
+### Context
+
+- Make the W3C randomness flag required.
+  ([#4761](https://github.com/open-telemetry/opentelemetry-specification/pull/4761))
+
+### Traces
+
+- Deprecate Zipkin exporter document and make exporter implementation optional.
+  ([#4715](https://github.com/open-telemetry/opentelemetry-specification/pull/4715/))
+- Add spec for `AlwaysRecord` sampler
+  ([#4699](https://github.com/open-telemetry/opentelemetry-specification/pull/4699))
+
+### Metrics
+
+- Stabilize `Enabled` API for synchronous instruments.
+  ([#4746](https://github.com/open-telemetry/opentelemetry-specification/pull/4746))
+- Allow instrument `Enabled` implementation to have additional optimizations and features.
+  ([#4747](https://github.com/open-telemetry/opentelemetry-specification/pull/4747))
+
+### Logs
+
+- Stabilize `LogRecordProcessor.Enabled`.
+  ([#4717](https://github.com/open-telemetry/opentelemetry-specification/pull/4717))
+
+### SDK Configuration
+
+- Clarifies that guidance related to boolean environment variables is not applicable
+  to other configuration interfaces. ([#4723](https://github.com/open-telemetry/opentelemetry-specification/pull/4723))
 
 ## v1.51.0 (2025-11-17)
 

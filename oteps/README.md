@@ -88,6 +88,3 @@ Have suggestions? Concerns? Questions? **Please** raise an issue or raise the ma
 ## Background on the OpenTelemetry OTEP process
 
 Our OTEP process borrows from the [Rust RFC](https://github.com/rust-lang/rfcs) and [Kubernetes Enhancement Proposal](https://github.com/kubernetes/enhancements) processes, the former also being [very influential](https://github.com/kubernetes/enhancements/blob/master/keps/sig-architecture/0000-kep-process/README.md#prior-art) on the latter; as well as the [OpenTracing OTEP](https://github.com/opentracing/specification/blob/master/rfc_process.md) process. Massive kudos and thanks to the respective authors and communities for providing excellent prior art 💖
-
-[slack-image]: https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white
-[slack-url]: https://cloud-native.slack.com/archives/C01N7PP1THC

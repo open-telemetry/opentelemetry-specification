@@ -41,6 +41,7 @@ weight: 3
       - [Compatibility warnings for `ProbabilitySampler`](#compatibility-warnings-for-probabilitysampler)
     + [ParentBased](#parentbased)
     + [JaegerRemoteSampler](#jaegerremotesampler)
+    + [AlwaysRecord](#alwaysrecord)
     + [CompositeSampler](#compositesampler)
       - [ComposableSampler](#composablesampler)
         * [GetSamplingIntent](#getsamplingintent)
@@ -210,10 +211,10 @@ It consists of the following parameters:
   The value of `disabled` MUST be used to resolve whether a `Tracer`
   is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
   returns `false`. If `disabled` is `false`, `Enabled` returns `true`.
-  
-  It is not necessary for implementations to ensure that changes to `disabled`
-  are immediately visible to callers of `Enabled`.
-  However, the changes MUST be eventually visible.
+
+It is not necessary for implementations to ensure that changes to any of these
+parameters are immediately visible to callers of `Enabled`.
+However, the changes MUST be eventually visible.
 
 ### Enabled
 
@@ -486,7 +487,7 @@ such as:
 
 ```
 WARNING: The TraceIdRatioBased sampler is operating as a child sampler;
-the behavior is subject to change. Please upgrade this SDK configuration 
+the behavior is subject to change. Please upgrade this SDK configuration
 to use ProbabilitySampler.
 ```
 
@@ -497,7 +498,7 @@ warning MAY be more direct:
 
 ```
 WARNING: The TraceIdRatioBased sampler is operating as a child sampler
-and a parent is using ProbabilitySampler. Please upgrade this SDK configuration 
+and a parent is using ProbabilitySampler. Please upgrade this SDK configuration
 to use ProbabilitySampler.
 ```
 
@@ -579,13 +580,13 @@ Optional parameters:
 * `localParentSampled(Sampler)` (default: AlwaysOn)
 * `localParentNotSampled(Sampler)` (default: AlwaysOff)
 
-|Parent| parent.isRemote() | parent.IsSampled()| Invoke sampler|
-|--|--|--|--|
-|absent| n/a | n/a |`root()`|
-|present|true|true|`remoteParentSampled()`|
-|present|true|false|`remoteParentNotSampled()`|
-|present|false|true|`localParentSampled()`|
-|present|false|false|`localParentNotSampled()`|
+| Parent  | parent.isRemote() | parent.IsSampled() | Invoke sampler             |
+| ------- | ----------------- | ------------------ | -------------------------- |
+| absent  | n/a               | n/a                | `root()`                   |
+| present | true              | true               | `remoteParentSampled()`    |
+| present | true              | false              | `remoteParentNotSampled()` |
+| present | false             | true               | `localParentSampled()`     |
+| present | false             | false              | `localParentNotSampled()`  |
 
 #### JaegerRemoteSampler
 
@@ -602,6 +603,30 @@ The following configuration properties should be available when creating the sam
 [jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#remote-sampling
 [jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/architecture/apis/#remote-sampling-configuration-stable
 [jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#adaptive-sampling
+
+#### AlwaysRecord
+
+**Status**: [Development](../document-status.md)
+
+`AlwaysRecord` is a sampler decorator that ensures every span is passed to
+the `SpanProcessor`, even those that would normally be dropped. It does this
+by converting `DROP` decisions from the wrapped sampler into `RECORD_ONLY`
+decisions, allowing processors to see all spans without sending them to
+exporters. This is typically used to enable accurate span-to-metrics processing.
+
+Based on the decision from the wrapped root sampler, `AlwaysRecord` MUST behave
+as follows:
+
+| Root sampler decision | AlwaysRecord decision |
+| --------------------- | --------------------- |
+| `DROP`                | `RECORD_ONLY`         |
+| `RECORD_ONLY`         | `RECORD_ONLY`         |
+| `RECORD_AND_SAMPLE`   | `RECORD_AND_SAMPLE`   |
+
+Required parameters:
+
+* `root(Sampler)` - The sampler being wrapped; it provides the original
+sample/drop decision that AlwaysRecord modifies.
 
 #### CompositeSampler
 
@@ -735,7 +760,7 @@ This example creates a configuration where:
 
 **Status**: [Development](../document-status.md)
 
-The [W3C Trace Context Level 2][W3CCONTEXTMAIN] Candidate Recommendation includes [a Random trace flag][W3CCONTEXTRANDOMFLAG] for indicating that the TraceID contains 56 random bits, specified for statistical purposes.
+The [W3C Trace Context Level 2][W3CCONTEXTLEVEL2] Candidate Recommendation includes [a Random trace flag][W3CCONTEXTRANDOMFLAG] for indicating that the TraceID contains 56 random bits, specified for statistical purposes.
 This flag indicates that [the least-significant ("rightmost") 7 bytes or 56 bits of the TraceID are random][W3CCONTEXTTRACEID].
 
 Note the Random flag does not propagate through [Trace Context Level 1][W3CCONTEXTLEVEL1] implementations, which do not recognize the flag.
@@ -746,7 +771,7 @@ OpenTelemetry defines an optional [explicit randomness value][OTELRVALUE] encode
 This specification recommends the use of either TraceID randomness or explicit randomness,
 which ensures that samplers always have sufficient randomness when using W3C Trace Context propagation.
 
-[W3CCONTEXTMAIN]: https://www.w3.org/TR/trace-context-2/
+[W3CCONTEXTLEVEL2]: https://www.w3.org/TR/trace-context-2/
 [W3CCONTEXTLEVEL1]: https://www.w3.org/TR/trace-context/
 [W3CCONTEXTTRACEID]: https://www.w3.org/TR/trace-context-2/#randomness-of-trace-id
 [W3CCONTEXTTRACESTATE]: https://www.w3.org/TR/trace-context-2/#tracestate-header
@@ -1080,7 +1105,7 @@ an empty batch OR skip the export and consider it to be completed immediately.
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.
-* `maxQueueSize` - the maximum queue size. After the size is reached spans are
+* `maxQueueSize` - the maximum queue size. After the size is reached, spans are
   dropped. The default value is `2048`.
 * `scheduledDelayMillis` - the maximum delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
@@ -1097,7 +1122,7 @@ an empty batch OR skip the export and consider it to be completed immediately.
 implement so that they can be plugged into OpenTelemetry SDK and support sending
 of telemetry data.
 
-The goal of the interface is to minimize burden of implementation for
+The goal of the interface is to minimize the burden of implementation for
 protocol-dependent telemetry exporters. The protocol exporter is expected to be
 primarily a simple telemetry data encoder and transmitter.
 
@@ -1163,7 +1188,7 @@ spans.
 #### `Shutdown()`
 
 Shuts down the exporter. Called when SDK is shut down. This is an opportunity
-for exporter to do any cleanup required.
+for the exporter to do any cleanup required.
 
 `Shutdown` should be called only once for each `Exporter` instance. After the
 call to `Shutdown` subsequent calls to `Export` are not allowed and should

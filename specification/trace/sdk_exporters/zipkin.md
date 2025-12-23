@@ -9,7 +9,8 @@ linkTitle: Zipkin
 Zipkin exporter support will be removed from OpenTelemetry specification in December
 2026.
 
-> Note: This document remains here for backwards compatibility and
+> [!NOTE]
+> This document remains here for backwards compatibility and
 > will be removed in a future version. Existing stable Zipkin exporters MUST
 > continue to be supported for at least one year after the artifact is deprecated,
 > following the [SDK stability guarantees](/specification/versioning-and-stability.md#sdk-support).
@@ -32,23 +33,23 @@ Zipkin's v2 API is defined in the
 The following table summarizes the major transformations between OpenTelemetry
 and Zipkin.
 
-| OpenTelemetry              | Zipkin           | Notes                                                                                         |
-| -------------------------- | ---------------- | --------------------------------------------------------------------------------------------- |
-| Span.TraceId               | Span.trace_id    |                                                                                               |
-| Span.ParentId              | Span.parent_id   |                                                                                               |
-| Span.SpanId                | Span.id          |                                                                                               |
-| Span.TraceState            | TBD              | TBD                                                                                           |
-| Span.Name                  | Span.name        |                                                                                               |
-| Span.Kind                  | Span.kind        | See [SpanKind](#spankind) for values mapping                                                  |
-| Span.StartTime             | Span.timestamp   | See [Unit of time](#unit-of-time)                                                             |
-| Span.EndTime               | Span.duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time) |
-| Span.Attributes            | Add to Span.tags | See [Attributes](../../common/README.md#attribute) for data types for the mapping.           |
+| OpenTelemetry              | Zipkin           | Notes                                                                                                                 |
+| -------------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Span.TraceId               | Span.trace_id    |                                                                                                                       |
+| Span.ParentId              | Span.parent_id   |                                                                                                                       |
+| Span.SpanId                | Span.id          |                                                                                                                       |
+| Span.TraceState            | TBD              | TBD                                                                                                                   |
+| Span.Name                  | Span.name        |                                                                                                                       |
+| Span.Kind                  | Span.kind        | See [SpanKind](#spankind) for values mapping                                                                          |
+| Span.StartTime             | Span.timestamp   | See [Unit of time](#unit-of-time)                                                                                     |
+| Span.EndTime               | Span.duration    | Duration is calculated based on StartTime and EndTime. See also [Unit of time](#unit-of-time)                         |
+| Span.Attributes            | Add to Span.tags | See [Attributes](../../common/README.md#attribute) for data types for the mapping.                                    |
 | Span.DroppedAttributesCount| Add to Span.tags | See [Dropped Attributes Count](../../common/mapping-to-non-otlp.md#dropped-attributes-count) for tag name to use.     |
-| Span.Events                | Span.annotations | See [Events](#events) for the mapping format.                                                 |
+| Span.Events                | Span.annotations | See [Events](#events) for the mapping format.                                                                         |
 | Span.DroppedEventsCount    | Add to Span.tags | See [Dropped Events Count](../../common/mapping-to-non-otlp.md#dropped-events-count) for tag name to use.             |
-| Span.Links                 | TBD              | TBD                                                                                           |
+| Span.Links                 | TBD              | TBD                                                                                                                   |
 | Span.DroppedLinksCount     | Add to Span.tags | See [Dropped Links Count](../../common/mapping-to-non-otlp.md#dropped-links-count) for tag name to use.               |
-| Span.Status                | Add to Span.tags | See [Status](#status) for tag names to use.                                                   |
+| Span.Status                | Add to Span.tags | See [Status](#status) for tag names to use.                                                                           |
 
 TBD : This is work in progress document and it is currently doesn't specify
 mapping for these fields:
@@ -92,11 +93,11 @@ Zipkin.
 
 | OpenTelemetry | Zipkin | Note |
 | ------------- | ------ | ---- |
-| `SpanKind.CLIENT`|`SpanKind.CLIENT`||
-| `SpanKind.SERVER`|`SpanKind.SERVER`||
-| `SpanKind.CONSUMER`|`SpanKind.CONSUMER`||
-| `SpanKind.PRODUCER`|`SpanKind.PRODUCER` ||
-| `SpanKind.INTERNAL`|`null` |must be omitted (set to `null`)|
+| `SpanKind.CLIENT` | `SpanKind.CLIENT` | |
+| `SpanKind.SERVER` | `SpanKind.SERVER` | |
+| `SpanKind.CONSUMER` | `SpanKind.CONSUMER` | |
+| `SpanKind.PRODUCER` | `SpanKind.PRODUCER` | |
+| `SpanKind.INTERNAL` | `null` | must be omitted (set to `null`) |
 
 ### Remote endpoint
 
@@ -159,10 +160,10 @@ In the latter case it MUST NOT be reported.
 
 The following table defines the OpenTelemetry `Status` to Zipkin `tags` mapping.
 
-| Status|Tag Key| Tag Value |
-|--|--|--|
-|Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
-|Description| `error` | Description of the `Status`. MUST be set if the code is `ERROR`, use an empty string if Description has no value. MUST NOT be set for `OK` and `UNSET` codes. |
+| Status | Tag Key | Tag Value |
+| --- | --- | ---- |
+| Code | `otel.status_code` | Name of the code, either `OK` or `ERROR`. MUST NOT be set if the code is `UNSET`. |
+| Description | `error` | Description of the `Status`. MUST be set if the code is `ERROR`, use an empty string if Description has no value. MUST NOT be set for `OK` and `UNSET` codes. |
 
 Note: The `error` tag should only be set if `Status` is `Error`. If a boolean
 version (`{"error":false}` or `{"error":"false"}`) is present, it SHOULD be
