@@ -53,6 +53,10 @@ release.
 
 ### OTEPs
 
+- OTEP: Stable by Default - distributions enable only stable components by default,
+  decouple instrumentation stability from semantic convention stability.
+  ([#4813](https://github.com/open-telemetry/opentelemetry-specification/pull/4813))
+
 ## v1.52.0 (2025-12-12)
 
 ### Context
