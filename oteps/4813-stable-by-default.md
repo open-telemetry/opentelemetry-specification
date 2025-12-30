@@ -109,6 +109,7 @@ All OpenTelemetry implementations SHOULD provide a consistent mechanism for opti
 3. **Configuration file:** A dedicated section for experimental feature flags
 
 The mechanism SHOULD:
+
 - Be consistent across all language implementations
 - Produce clear log messages when experimental features are enabled
 - Be discoverable through documentation and error messages
@@ -125,6 +126,7 @@ Distributions that currently enable experimental components by default will need
 4. Communicate changes to users with appropriate migration guidance
 
 **Rollout consideration:** To avoid breaking existing users, implementations MAY provide a transitional period where:
+
 - A deprecation warning is emitted when experimental features are used without explicit opt-in
 - The default behavior changes to stable-only in a subsequent release
 
@@ -192,6 +194,7 @@ The `status.telemetry` stability levels align with the existing semantic convent
 #### Tooling Integration
 
 This metadata enables:
+
 - **Distribution builders** to automatically include only components meeting stability thresholds
 - **Documentation generators** to surface stability information consistently
 - **Registry** to display unified component information
@@ -201,11 +204,13 @@ This metadata enables:
 ### Error Modes
 
 **Experimental feature without opt-in:** When code attempts to use an experimental feature without explicit opt-in, implementations SHOULD:
+
 - Log a warning explaining how to enable the feature
 - Either disable the feature or fail fast (language-specific decision)
 - NOT silently enable the experimental behavior
 
 **Semantic convention migration:** When semantic conventions change, instrumentation SHOULD:
+
 - Support a dual-emission period where both old and new conventions are emitted
 - Provide configuration to control emission behavior during migration
 - Log clear messages about the migration status
@@ -217,6 +222,7 @@ This metadata enables:
 **Concern:** Users may get less functionality out of the box if experimental features are disabled by default.
 
 **Mitigation:**
+
 - Accelerate stabilization of high-value components
 - Provide clear, single-command instructions for enabling experimental features
 - Ensure the stable subset provides genuine value for common use cases
@@ -226,6 +232,7 @@ This metadata enables:
 **Concern:** Maintaining stability metadata, dual-emission, and opt-in mechanisms adds work for maintainers.
 
 **Mitigation:**
+
 - Provide shared tooling and libraries for common patterns
 - Automate stability checks in CI/CD
 - This burden is offset by reduced support load from users hitting stability issues
@@ -235,6 +242,7 @@ This metadata enables:
 **Concern:** Users may be confused if instrumentation is "stable" but emits "experimental" semantic conventions.
 
 **Mitigation:**
+
 - Clear documentation explaining the two dimensions of stability
 - Tooling that surfaces this information
 - Consistent messaging across all OpenTelemetry materials
@@ -259,15 +267,15 @@ This metadata enables:
 
 ### Alternatives Considered
 
-**Alternative 1: Status quo with better documentation**
+#### Alternative 1: Status quo with better documentation
 
 Keep current defaults but improve documentation about stability. Rejected because documentation alone does not prevent users from hitting production issues with experimental features they didn't realize they were using.
 
-**Alternative 2: Strict coupling of instrumentation and semantic convention stability**
+#### Alternative 2: Strict coupling of instrumentation and semantic convention stability
 
 Require semantic conventions to be stable before instrumentation can stabilize. Rejected because this blocks useful, mature instrumentation indefinitely and doesn't match how users evaluate stability.
 
-**Alternative 3: Per-feature opt-out instead of opt-in**
+#### Alternative 3: Per-feature opt-out instead of opt-in
 
 Default to enabling everything, with opt-out for experimental features. Rejected because this still causes production issues for users who don't know to opt out, and the current pain points demonstrate this approach doesn't work.
 
