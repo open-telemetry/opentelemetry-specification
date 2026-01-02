@@ -1,21 +1,20 @@
-# Semantic Convention Schemas v2
+# Semantic Convention Schema v2
 
 <!-- toc -->
 
-- [Semantic Convention Schemas v2](#semantic-convention-schemas-v2)
-  - [Motivation](#motivation)
-  - [Details](#details)
-    - [Resolved schema](#resolved-schema)
-    - [Do we need to talk about importing and decentralization in details?](#do-we-need-to-talk-about-importing-and-decentralization-in-details)
-    - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
-  - [Trade-offs and mitigations](#trade-offs-and-mitigations)
-    - [Schema Transformation](#schema-transformation)
-    - [Documentation and code generation](#documentation-and-code-generation)
-  - [Prior art and alternatives](#prior-art-and-alternatives)
-  - [Open questions](#open-questions)
-    - [Schema processing evolution](#schema-processing-evolution)
-  - [Prototypes](#prototypes)
-  - [Future possibilities](#future-possibilities)
+- [Motivation](#motivation)
+- [Details](#details)
+  - [Resolved schema](#resolved-schema)
+  - [Do we need to talk about importing and decentralization in details?](#do-we-need-to-talk-about-importing-and-decentralization-in-details)
+  - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
+- [Trade-offs and mitigations](#trade-offs-and-mitigations)
+  - [Schema Transformation](#schema-transformation)
+  - [Documentation and code generation](#documentation-and-code-generation)
+- [Prior art and alternatives](#prior-art-and-alternatives)
+- [Open questions](#open-questions)
+  - [Schema processing evolution](#schema-processing-evolution)
+- [Prototypes](#prototypes)
+- [Future possibilities](#future-possibilities)
 
 <!-- tocstop -->
 
@@ -165,18 +164,18 @@ is estimated around 3MB uncompressed and around 350KB compressed.
 
 ### Differentiating between stable and not stable schemas
 
-Schema URL includes semantic convention version, but does not include indication
-of stability.
+Currently, Schema URL includes semantic convention version, but does not include
+indication of stability.
 
 In addition to the version, we will leverage [SemVer pre-release](https://semver.org/#spec-item-9)
 syntax to communicate the stability of the conventions and telemetry.
 
-OpenTelemetry Semantic Conventions will publish two versions of the schema with each release:
+OpenTelemetry Semantic Conventions will publish two versions with each release:
 
 - stable (e.g. `https://opentelemetry.io/schemas/1.42.0`) which will include only
   a stable subset of semantic conventions
 - development (e.g. `https://opentelemetry.io/schemas/1.42.0-dev`) which will
-  include all semantic conventions defined in this registry regardless of their
+  include all semantic conventions defined in the registry regardless of their
   stability
 
 Manifest file MUST include actual stability level.
@@ -185,8 +184,8 @@ OpenTelemetry instrumentation SHOULD provide a Schema URL depending on which ver
 of conventions they follow.
 
 For example, when HTTP instrumentation supports experimental features available
-on top of HTTP conventions, and user enabled experimental features, instrumentation
-should provide a `-dev` Schema URL.
+on top of HTTP conventions, and user enabled these experimental features, instrumentation
+should specify a `-dev` Schema URL.
 
 ### Do we need to talk about importing and decentralization in details?
 
@@ -307,14 +306,13 @@ in a release preparation step would:
 - publish SemConv artifact as a GitHub release asset (and potentially on opentelemetry.io)
 - TODO: stable and not stable publishing
 
-TODO: do we need collector prototype?
+TODO: do we need collector prototype for schema transformation?
 TODO: do we need imports/decentralized example
 
 ## Future possibilities
 
 1. Schema transformation may be applicable between different convention registries.
-   For example, between Prometheus and OTel definitions or between
-   [OTel gRPC and native gRPC conventions](https://github.com/open-telemetry/semantic-conventions/pull/3229)
+   For example, between ECS and OTel or between [OTel gRPC and native gRPC conventions](https://github.com/open-telemetry/semantic-conventions/pull/3229)
 
 2. We've been serving OTel schemas on opentelemetry.io and are proposing to start
    serving artifacts from GitHub assets. If we see significantly higher demand,
