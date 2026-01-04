@@ -64,19 +64,18 @@ an upgrade to support arbitrary convention registries.
 When an HTTP GET is issued against a valid Schema URL, the service hosting that
 Schema URL SHOULD return a valid *manifest* in response.
 
-Here's an example of the *manifest* returned in response:
+Here's an example of the *manifest*:
 
 ```yaml
 file_format: 2.0.0
 name: open-telemetry
 description: OpenTelemetry Semantic Conventions
-version: 1.39.0
+version: 1.39.0-dev
 repository_url: https://github.com/open-telemetry/semantic-conventions
 stability: development
-resolved_schema_url: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/schema-v1.39.0-dev.tar.gz
+resolved_schema_url: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/schema-v1.39.0-dev.yaml
 
 # future
-# minified_schema_url: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/schema-v1.39.0-dev.minified.tar.gz
 # diff_url: ...
 # all_in_one_url: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/v1.39.0-dev.tar.gz
 ```
@@ -84,14 +83,14 @@ resolved_schema_url: https://github.com/open-telemetry/semantic-conventions/arch
 The manifest contains metadata about the semantic convention registry including its
 version, stability, and `resolved_schema_url`.
 
-The `resolved_schema_url` MUST point to a valid `tar.gz` archive containing one YAML file
-with the [*resolved* schema](#resolved-schema).
+The `resolved_schema_url` MUST be a valid URL that returns YAML file with the [*resolved* schema](#resolved-schema).
+The service hosting Schema URL MUST support gzip compression that caller MAY control with `Content-Encoding`.
 
-The manifest format will evolve. For example, we may add a minified version of resolved schema
-to optimize its volume and publish resolved schema along with its minified version.
-Consumers can decide to download only the parts they actually use.
+The manifest format will evolve. For example, we may start publishing diffs againts
+previous version(s) and corresponding URL will be added as the new property with a
+minor version bump. Consumers will decide to download parts they actually use.
 
-Artifacts for a given release MUST be immutable. Consumers SHOULD make best efforts
+All artifacts for a given release MUST be immutable. Consumers SHOULD make best efforts
 to cache manifests and resolved schemas or any parts of them used on the hot path.
 
 The manifest schema and REST API to obtain it using Schema URL will be formally
@@ -109,58 +108,68 @@ For example, a metric could be defined in the following way in the *source* sche
 
 ```yaml
 # source schema
+attributes:
+- key: my.operation.name
+  type: string
+  stability: development
+  brief: My service operation name as defined in this Open API spec
+  examples: ["get_object", "create_collection"]
+...
 metrics:
 - name: my.client.operation.duration
   stability: stable
   instrument: histogram
   unit: s
   attributes:
-    - ref: server.address
-    - ref: server.port
-    - ref: error.type
     - ref: my.operation.name
+    - ref_group: my.operation.server.attributes
+    - ref: error.type
 ```
 
 Attributes are defined separately from metrics and are referenced,
 optimizing reusability and consistency. Defaults or inherited properties are
 omitted.
 
-*Resolved* schema for this metric is self-sufficient and includes all properties
-that were defaulted or inherited:
+The *resolved* schema is a single file produced from a set of source schemas. It contains resolved
+signal definitions and refinements. It is optimized for
+distribution and in-memory representation.
+
+*Resolved* schema for this metric would look like:
 
 ```yaml
 # resolved schema
-metrics:
-- name: my.client.operation.duration
-  instrument: histogram
-  unit: s
+file_format: 2.0.0  # this could be versioned independently of manifest format
+schema_url: https://opentelemetry.io/schemas/1.39.0
+attribute_catalog:
+...
+- key: my.operation.name
+  type: string
+  stability: development
+  brief: My service operation name as defined in this Open API spec
+  examples: ["get_object", "create_collection"]
+...
+registry:
   attributes:
-    - key: my.operation.name
-      brief: My service operation name as defined in this Open API spec
-      stability: stable
-      requirement_level: required
-      type:
-        members:
-        - id: get_my_order
-          ...
-        - id: create_my_order
-          ...
-    - key: server.address
-      type: string
-      brief: My server host name
+  ...
+  - 888   # this is the index of `server.address` in the attribute_catalog
+  - 1042  # this is the index of `my.operation.name` in attribute_catalog
+  ...
+  metrics:
+  - name: my.client.operation.duration
+    instrument: histogram
+    unit: s
+    attributes:
+      - base: 1042  # this is the index of `my.operation.name` in attributes list
+        requirement_level: required
+      - base: 888  # this is the index of `server.address` in the attributes list
+        requirement_level: recommended
       ...
-      examples: ["us-west-prod.my.com"]
-      requirement_level: recommended
-    ...
 ```
 
-Resolved schema will be formally documented as [JSON schema](https://github.com/lmolkova/weaver/blob/6e17fc0ca6d52f60e56cd94a2783c22d9ec5dc5b/schemas/semconv.resolved-schema.v2.json), see [overview](https://github.com/lmolkova/weaver/blob/6e17fc0ca6d52f60e56cd94a2783c22d9ec5dc5b/schemas/semconv-schemas.md#resolved-schema).
-
-Only the *resolved* schema should be published; the original semantic convention
-source definitions are considered internal to that registry.
+Resolved schema is formally documented as [JSON schema](https://github.com/lmolkova/weaver/blob/c61cfd13b8f4f1694b451862ea7345868978819e/schemas/semconv.resolved-schema.v2.json), see [overview](https://github.com/lmolkova/weaver/blob/c61cfd13b8f4f1694b451862ea7345868978819e/schemas/semconv-schemas.md#resolved-schema).
 
 Volume data point: resolved schema for [OTel Semantic Conventions v1.38.0](https://github.com/open-telemetry/semantic-conventions/releases/tag/v1.38.0)
-is estimated around 3MB uncompressed and around 350KB compressed.
+is estimated around 1.2MB uncompressed and around 200KB compressed.
 
 ### Differentiating between stable and not stable schemas
 
@@ -172,9 +181,9 @@ syntax to communicate the stability of the conventions and telemetry.
 
 OpenTelemetry Semantic Conventions will publish two versions with each release:
 
-- stable (e.g. `https://opentelemetry.io/schemas/1.42.0`) which will include only
+- stable (e.g. `https://opentelemetry.io/schemas/1.39.0`) which will include only
   a stable subset of semantic conventions
-- development (e.g. `https://opentelemetry.io/schemas/1.42.0-dev`) which will
+- development (e.g. `https://opentelemetry.io/schemas/1.39.0-dev`) which will
   include all semantic conventions defined in the registry regardless of their
   stability
 
@@ -215,6 +224,7 @@ Schema transformations (diffs) will not be published due to:
 
 - limited adoption and functionality not covering many existing upgrade cases
 - ability to generate them on demand
+- lack of test infrastructure around tranformations and known
 
 While it's possible to publish old schema side-by-side with a new one, it would mean
 using a different URL format (such as `https://opentelemetry.io/schemas/v2/1.42.0`)
@@ -249,8 +259,8 @@ registry:
 ...
 ```
 
-Diff schema is formally documented as JSON schema, see [overview](https://github.com/lmolkova/weaver/blob/6e17fc0ca6d52f60e56cd94a2783c22d9ec5dc5b/schemas/semconv-schemas.md#diff-schema)
-and [full schema](https://github.com/lmolkova/weaver/blob/6e17fc0ca6d52f60e56cd94a2783c22d9ec5dc5b/schemas/semconv.diff.v2.json).
+Diff schema is formally documented as JSON schema, see [overview](https://github.com/lmolkova/weaver/blob/c61cfd13b8f4f1694b451862ea7345868978819e/schemas/semconv-schemas.md#diff-schema)
+and [full schema](https://github.com/lmolkova/weaver/blob/c61cfd13b8f4f1694b451862ea7345868978819e/schemas/semconv.diff.v2.json).
 
 <details>
 
@@ -264,10 +274,10 @@ resolve source schema, and can be optimized further by leveraging resolved schem
 
 ### Documentation and code generation
 
-Weaver supports Schema V2 as opt-in feature and will default to old schema formats
+Weaver supports Schema V2 as opt-in feature and will default to old schema format
 until a majority of OTel code-generation scripts use it.
 
-Migration will involve minor changes in Jinja templates and weaver config files.
+Migration will involve minor changes in Jinja2 templates and weaver config files.
 Migration steps and recipes will be documented. There should be no impact on the
 generated documentation or artifacts affecting end users.
 
