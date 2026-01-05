@@ -130,7 +130,7 @@ formats is required. Implementing more than one format is optional.
 | Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | + |  |  | - | + |  |
 | Instrument supports the advisory ExplicitBucketBoundaries parameter. |  | + | + |  |  |  | + |  |  |  |  |  |
 | Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  |  |  |
-| Instrument supports the advisory DefaultDisabled parameter. |  | - | - | - | - | - | - | - | - | - | - | - |
+| Instrument supports the advisory OptIn parameter. |  | - | - | - | - | - | - | - | - | - | - | - |
 | All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | All methods of `Meter` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | All methods of any instrument are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
