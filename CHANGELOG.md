@@ -43,6 +43,11 @@ release.
 - Declarative configuration: add optional programmatic customization to
   `create`, and add related supplemental guidelines.
   ([#4777](https://github.com/open-telemetry/opentelemetry-specification/pull/4777))
+- Declarative configuration: add links between SDK extension plugins and
+  corresponding declarative config types.
+  ([#4802](https://github.com/open-telemetry/opentelemetry-specification/pull/4802))
+- Declarative configuration: clarify Registry ComponentProvider `type` parameter
+  ([#4799](https://github.com/open-telemetry/opentelemetry-specification/pull/4799))
 
 ### Common
 
