@@ -421,7 +421,8 @@ The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
-* If the `MeterProvider` has no `View` registered:
+* If the `MeterProvider` has no `View` registered, or if the Instrument does
+  not match any View's instrument selection criteria:
   * **Status**: [Development](../document-status.md) - If the instrument's
     [OptIn advisory parameter](#instrument-advisory-parameter-OptIn)
     is set to true, use the [Drop Aggregation](#drop-aggregation).
@@ -430,28 +431,26 @@ made with an Instrument:
     [MetricReader](#metricreader) instance's `aggregation` property.
     [Instrument advisory parameters](#instrument-advisory-parameters), if any,
     MUST be honored.
-* If the `MeterProvider` has one or more `View`(s) registered:
-  * If the Instrument could match the instrument selection criteria, for each
-    View:
-    * Try to apply the View's stream configuration independently of any other
-      Views registered for the same matching Instrument (i.e. Views are not
-      merged). This may result in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
-      even if stream configurations specify non-overlapping properties (e.g.
-      one View setting `aggregation` and another View setting `attribute_keys`,
-      both leaving the stream `name` as the default configured by the
-      Instrument). If applying the View results in conflicting metric identities
-      the implementation SHOULD apply the View and emit a warning. If it is not
-      possible to apply the View without producing semantic errors (e.g. the
-      View sets an asynchronous instrument to use the [Explicit bucket
-      histogram aggregation](#explicit-bucket-histogram-aggregation)) the
-      implementation SHOULD emit a warning and proceed as if the View did not
-      If both a View and [Instrument advisory parameters](#instrument-advisory-parameters)
-      specify the same aspect of the [Stream configuration](#stream-configuration),
-      the setting defined by the View MUST take precedence over the advisory parameters.
-  * If the Instrument could not match with any of the registered `View`(s), the
-    SDK SHOULD enable the instrument using the default aggregation and temporality.
-    Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
-    to disable instruments by default.
+* If the `MeterProvider` has one or more matching `View`(s) registered, for
+  each `View` that matches the instrument selection criteria:
+  * Try to apply the View's stream configuration independently of any other
+    Views registered for the same matching Instrument (i.e. Views are not
+    merged). This may result in [conflicting metric identities](./data-model.md#opentelemetry-protocol-data-model-producer-recommendations)
+    even if stream configurations specify non-overlapping properties (e.g.
+    one View setting `aggregation` and another View setting `attribute_keys`,
+    both leaving the stream `name` as the default configured by the
+    Instrument). If applying the View results in conflicting metric identities
+    the implementation SHOULD apply the View and emit a warning. If it is not
+    possible to apply the View without producing semantic errors (e.g. the
+    View sets an asynchronous instrument to use the [Explicit bucket
+    histogram aggregation](#explicit-bucket-histogram-aggregation)) the
+    implementation SHOULD emit a warning and proceed as if the View did not
+    If both a View and [Instrument advisory parameters](#instrument-advisory-parameters)
+    specify the same aspect of the [Stream configuration](#stream-configuration),
+    the setting defined by the View MUST take precedence over the advisory parameters.
+
+Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
+to disable instruments by default.
 
 #### View examples
 
