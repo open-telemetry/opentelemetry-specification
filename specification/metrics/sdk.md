@@ -52,7 +52,7 @@ weight: 3
   * [Instrument advisory parameters](#instrument-advisory-parameters)
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
-    + [Instrument advisory parameter: `DefaultDisabled`](#instrument-advisory-parameter-defaultdisabled)
+    + [Instrument advisory parameter: `OptIn`](#instrument-advisory-parameter-OptIn)
   * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
@@ -423,9 +423,9 @@ made with an Instrument:
 * Determine the `MeterProvider` which "owns" the Instrument.
 * If the `MeterProvider` has no `View` registered:
   * **Status**: [Development](../document-status.md) - If the instrument's
-    [DefaultDisabled advisory parameter](#instrument-advisory-parameter-defaultdisabled)
-    is set, use the [Drop Aggregation](#drop-aggregation).
-  * If DefaultDisabled is not set, take the Instrument and apply the default
+    [OptIn advisory parameter](#instrument-advisory-parameter-OptIn)
+    is set to true, use the [Drop Aggregation](#drop-aggregation).
+  * If OptIn is false, take the Instrument and apply the default
     Aggregation on the basis of instrument kind according to the
     [MetricReader](#metricreader) instance's `aggregation` property.
     [Instrument advisory parameters](#instrument-advisory-parameters), if any,
@@ -1004,13 +1004,13 @@ If no View is configured, or if a matching view does not specify attribute keys,
 the advisory parameter should be used. If neither is provided, all attributes
 must be retained.
 
-#### Instrument advisory parameter: `DefaultDisabled`
+#### Instrument advisory parameter: `OptIn`
 
 **Status**: [Development](../document-status.md)
 
 This advisory parameter applies to all aggregations.
 
-When an instrument is `DefaultDisabled`, the SDK MUST use the
+When an instrument is `OptIn`, the SDK MUST use the
 [Drop Aggregation](#drop-aggregation) by default. If the user has provided an
 Aggregation via View(s), that aggregation takes precedence.
 
