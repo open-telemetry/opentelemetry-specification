@@ -305,7 +305,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | The `Create` operation returns `LoggerProvider` | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation returns `Propagators` |  | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components |  | + |  |  |  |  | + |  | + |  |  |
-| Register a `PluginComponentProvider` |  |  |  |  |  |  |  |  |  |  |  |
+| Register a `PluginComponentProvider` |  | + |  |  |  |  | + |  | + |  |  |
 
 ## Exporters
 

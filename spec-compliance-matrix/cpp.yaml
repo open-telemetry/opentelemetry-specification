@@ -525,7 +525,7 @@ sections:
         status: '+'
       - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
         status: '+'
-      - name: Register a `ComponentProvider`
+      - name: Register a `PluginComponentProvider`
         status: '+'
   - name: Exporters
     features:
