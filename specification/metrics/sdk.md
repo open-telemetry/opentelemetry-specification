@@ -468,7 +468,8 @@ The SDK SHOULD use the following logic to determine how to process Measurements
 made with an Instrument:
 
 * Determine the `MeterProvider` which "owns" the Instrument.
-* If the `MeterProvider` has no `View` registered:
+* If the `MeterProvider` has no `View` registered, or if the Instrument does
+  not match any View's instrument selection criteria:
   * **Status**: [Development](../document-status.md) - If the instrument's
     [OptIn advisory parameter](#instrument-advisory-parameter-OptIn)
     is set to true, use the [Drop Aggregation](#drop-aggregation).
@@ -521,10 +522,9 @@ made with an Instrument:
         parameters](#instrument-advisory-parameters) specify the same aspect of
         the [Stream configuration](#stream-configuration), the setting defined
         by the Views MUST take precedence over the advisory parameters.
-  * If the Instrument could not match with any of the registered `View`(s), the
-    SDK SHOULD enable the instrument using the default aggregation and temporality.
-    Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
-    to disable instruments by default.
+
+Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
+to disable instruments by default.
 
 #### View examples
 
