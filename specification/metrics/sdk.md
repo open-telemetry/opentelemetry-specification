@@ -52,7 +52,7 @@ weight: 3
   * [Instrument advisory parameters](#instrument-advisory-parameters)
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
-    + [Instrument advisory parameter: `OptIn`](#instrument-advisory-parameter-OptIn)
+    + [Instrument advisory parameter: `OptIn`](#instrument-advisory-parameter-optin)
   * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
@@ -424,7 +424,7 @@ made with an Instrument:
 * If the `MeterProvider` has no `View` registered, or if the Instrument does
   not match any View's instrument selection criteria:
   * **Status**: [Development](../document-status.md) - If the instrument's
-    [OptIn advisory parameter](#instrument-advisory-parameter-OptIn)
+    [OptIn advisory parameter](#instrument-advisory-parameter-optin)
     is set to true, use the [Drop Aggregation](#drop-aggregation).
   * If OptIn is false, take the Instrument and apply the default
     Aggregation on the basis of instrument kind according to the
