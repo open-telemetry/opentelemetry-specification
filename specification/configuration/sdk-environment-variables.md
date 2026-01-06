@@ -344,11 +344,11 @@ configuration model. Implementations MAY provide a mechanism to customize the
 configuration model parsed from `OTEL_EXPERIMENTAL_CONFIG_FILE`.
 
 Users are encouraged to
-use [`sdk-migration-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-migration-config.yaml)
+use [`sdk-migration-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/otel-sdk-migration-config.yaml)
 as a starting point for `OTEL_EXPERIMENTAL_CONFIG_FILE`. This file represents a
 common SDK configuration scenario, and includes environment variable
 substitution references to environment variables which are otherwise ignored.
-Alternatively, [`sdk-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-config.yaml)
+Alternatively, [`sdk-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/otel-sdk-config.yaml)
 offers a common SDK configuration starting point without environment variable
 substitution references.
 
