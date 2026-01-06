@@ -133,23 +133,23 @@ all SDK extension plugin interfaces. SDKs SHOULD
 support [registration](#register-componentprovider) of custom implementations of
 SDK extension plugin interfaces via the `ComponentProvider` mechanism.
 
-The following table lists the current status of all SDK extension plugin
-interfaces in the configuration data model:
+The following table lists each SDK extension plugin interface and its
+corresponding type in the configuration data model:
 
-| SDK extension plugin interface                                                              | Status                                                                             |
-|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
-| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | +                                                                                  |
-| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | +                                                                                  |
-| [span exporter](../trace/sdk.md#span-exporter)                                              | +                                                                                  |
-| [span processor](../trace/sdk.md#span-processor)                                            | +                                                                                  |
-| [sampler](../trace/sdk.md#sampler)                                                          | +                                                                                  |
-| [id generator](../trace/sdk.md#id-generators)                                               | - [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)   |
-| [pull metric reader](../metrics/sdk.md#metricreader)                                        | +                                                                                  |
-| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | +                                                                                  |
-| [metric producer](../metrics/sdk.md#metricproducer)                                         | +                                                                                  |
-| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | - [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189) |
-| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | +                                                                                  |
-| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | +                                                                                  |
+| SDK extension plugin interface                                                              | Declarative config type                                                                                                                                |
+|---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#experimentalresourcedetection-) |
+| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#textmappropagator-)                         |
+| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter-)                                   |
+| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanprocessor-)                                 |
+| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#sampler-)                                             |
+| [id generator](../trace/sdk.md#id-generators)                                               | not yet available [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)                                                       |
+| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pullmetricexporter-)                       |
+| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pushmetricexporter-)                       |
+| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#metricproducer-)                               |
+| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                                                     |
+| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordexporter-)                         |
+| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordprocessor-)                       |
 
 ##### ComponentsProvider operations
 
@@ -239,7 +239,9 @@ Parse SHOULD return an error if:
 
 * The `file` doesn't exist or is invalid
 * The parsed `file` content does not conform to
-  the [configuration model](data-model.md) schema.
+  the [configuration model](data-model.md) schema. Note that this includes
+  enforcing all constraints encoded into the schema (e.g. required properties
+  are present, that properties adhere to specified types, etc.).
 
 #### Create
 
@@ -260,15 +262,31 @@ Interpret configuration model and return SDK components.
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
 
-If a property has a default value defined (i.e. is _not_ required) and is
-missing or present but null, Create MUST ensure the SDK component is configured
-with the default value. If a property is required and is missing or present but
-null, Create SHOULD return an error. For example, if configuring
-the [span batching processor](../trace/sdk.md#batching-processor) and
-the `scheduleDelayMillis` property is missing or present but null, the component
-is configured with the default value of `5000`. However, if the `exporter`
-property is missing or present but null, Create fails fast since there is no
-default value for `exporter`.
+Create requirements around default and null behavior are described below. Note that
+[`defaultBehavior` and `nullBehavior`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#json-schema-source-and-output)
+are defined in the configuration data model.
+
+* If a property is present and the value is null, Create MUST use the
+  `nullBehavior`, or `defaultBehavior` if `nullBehavior` is not set.
+* If a property is required, and not present, Create MUST return an error.
+
+A few examples to illustrate:
+
+* If configuring [`BatchSpanProcessor`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#batchspanprocessor-)
+  and `schedule_delay` is not present or present but null, the component is
+  configured according to the `defaultBehavior` of `5000`.
+* If configuring [`SpanExporter`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter)
+  and `console` is present and null, the component is configured with a
+  `console` exporter with default configuration since `console` is nullable.
+
+The [configuration model](data-model.md) uses the JSON schema
+[`description`](https://json-schema.org/understanding-json-schema/reference/annotations)
+annotation to capture property semantics which cannot be encoded using standard
+JSON schema keywords. Create SHOULD return an error if it encounters a value
+which is invalid according to the property `description`. For example, if
+configuring [`HttpTls`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#httptls-)
+and `ca_file` is not an absolute file path as defined in the property
+description, return an error.
 
 When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to
@@ -284,6 +302,29 @@ This SHOULD return an error if it encounters an error in `configuration` (i.e.
 fail fast) in accordance with
 initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
+SDK implementations MAY provide options to allow programmatic customization of
+the components initialized by `Create`. This allows configuration of concepts which
+are not yet or may never be representable in the configuration model. For example,
+java OTLP exporters allow configuration of the [ExecutorService](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html),
+a niche but important option for applications which need strict control of thread pools.
+This programmatic customization might take the form of passing an optional callback to
+`Create`, invoked with each SDK subcomponent (or a subset of SDK component types) as
+they are initialized. For example, consider the following snippet:
+
+```yaml
+file_format: 1.0
+tracer_provider:
+  processors:
+    - batch:
+        exporter:
+          otlp_http:
+```
+
+The callback would be invoked with the SDK representation of an OTLP HTTP exporter, a
+Batch SpanProcessor, and a Tracer Provider. This pattern provides the opportunity
+to programmatically configure lower-level without needing to walk to a particular
+component from the resolved top level SDK components.
+
 TODO: define behavior if some portion of configuration model is not supported
 
 #### Register ComponentProvider
@@ -298,14 +339,18 @@ as `ComponentProvider`s.
 **Parameters:**
 
 * `component_provider` - The `ComponentProvider`.
-* `type` - The type of plugin interface it provides (e.g. SpanExporter, Sampler,
-  etc).
+* `type` - The type of plugin interface it provides.
 * `name` - The name used to identify the type of component. This is used
   in [configuration model](./data-model.md) to specify that the
   corresponding `component_provider` is to provide the component.
 
 The `type` and `name` comprise a unique key. Register MUST return an error if it
 is called multiple times with the same `type` and `name` combination.
+
+SDKs SHOULD represent `type` in a manner that is idiomatic for their language.
+For example, a class literal, an enumeration, or similar.
+See [supported SDK extension plugins](#sdk-extension-components) for the set of
+supported `type` values.
 
 ### Examples
 
