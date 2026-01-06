@@ -786,7 +786,7 @@ The start timestamp for a timeseries is the timestamp which best represents the
 first possible moment a measurement for this timeseries could have been
 recorded. SDKs MUST ensure that the start timestamp excludes any collection
 intervals where the first measurement for the timeseries had not yet occurred.
-In other words, when an SDK observes a measurment for a timeseries it has no
+In other words, when an SDK observes a measurement for a timeseries it has no
 record of, it MUST use a timestamp that is later than or equal to the
 timestamp of the previous collection interval. This implies that SDKs MUST
 NOT simply use the process start time as the start time for all cumulative

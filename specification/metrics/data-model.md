@@ -1088,7 +1088,7 @@ Every OTLP metric data point has two associated timestamps.  The
 first, mandatory timestamp is the one associated with the observation,
 the moment when the measurement became current or took effect, and is
 referred to as `TimeUnixNano`. The second, optional timestamp is used
-to indicate when a sequence of points is unbroken and to inidcate when a
+to indicate when a sequence of points is unbroken and to indicate when a
 timeseries began accumulating measurements. The second timestamp is referred to
 as `StartTimeUnixNano`.
 
