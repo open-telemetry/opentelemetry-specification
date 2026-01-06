@@ -14,7 +14,7 @@ PIP := $(shell command -v pip3 2>/dev/null || command -v pip 2>/dev/null)
 .PHONY: check-python
 check-python:
 	@if [ -z "$(PYTHON)" ]; then \
-		echo "Error: Python is not installed. Please install Python 3."; \
+		echo "Error: Python is not installed. Please install Python (Python 3 recommended)."; \
 		exit 1; \
 	fi
 	@if [ -z "$(PIP)" ]; then \
