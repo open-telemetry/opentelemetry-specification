@@ -600,9 +600,9 @@ The following configuration properties should be available when creating the sam
 * polling interval - polling interval for getting configuration from remote
 * initial sampler - initial sampler that is used before the first configuration is fetched
 
-[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#remote-sampling
-[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/architecture/apis/#remote-sampling-configuration-stable
-[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#adaptive-sampling
+[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/2.14/architecture/sampling/#remote-sampling
+[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/2.14/architecture/apis/#remote-sampling-configuration
+[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/2.14/architecture/sampling/#adaptive-sampling
 
 #### AlwaysRecord
 
