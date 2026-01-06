@@ -43,7 +43,7 @@ The Logs API consist of these main components:
 
 * [LoggerProvider](#loggerprovider) is the entry point of the API. It provides access to `Logger`s.
 * [Logger](#logger) is responsible for emitting logs as
-  [LogRecords](./data-model.md#log-and-event-record-definition).
+  [LogRecords](./data-model.md#open-telemetry-protocol-data-model).
 
 ```mermaid
 graph TD
@@ -67,10 +67,10 @@ The `LoggerProvider` MUST provide the following functions:
 
 #### Get a Logger
 
-This API MUST accept the following [instrumentation scope](data-model.md#field-instrumentationscope)
+This API MUST accept the following [instrumentation scope](../common/instrumentation-scope.md)
 parameters:
 
-* `name`: Specifies the name of the [instrumentation scope](../common/instrumentation-scope.md),
+* `name`: Specifies the name of the instrumentation scope,
   such as the [instrumentation library](../glossary.md#instrumentation-library)
   (e.g. `io.opentelemetry.contrib.mongodb`), package, module or class name.
   If an application or library has built-in OpenTelemetry instrumentation, both
