@@ -1,7 +1,7 @@
 # Exceptions
 
 **Status**: [Deprecated](../document-status.md), follow the
-[semantic conventions for recording exceptions](https://opentelemetry.io/docs/specs/semconv/general/recording-errors/#recording-exceptions)
+[semantic conventions for recording exceptions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/recording-errors.md#recording-exceptions)
 instead.
 
 This document defines how to record exceptions and their attributes.
