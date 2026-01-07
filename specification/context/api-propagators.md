@@ -216,7 +216,7 @@ The `Keys` function can be called by `Propagator`s which are using variable key 
 iterate over all the keys in the specified carrier.
 
 For example, it can be used to detect all keys following the `uberctx-{user-defined-key}` pattern, as defined by the
-[Jaeger Propagation Format](https://www.jaegertracing.io/docs/1.18/client-libraries/#baggage).
+[Jaeger Propagation Format](https://www.jaegertracing.io/docs/1.76/architecture/#baggage).
 
 ##### Get
 

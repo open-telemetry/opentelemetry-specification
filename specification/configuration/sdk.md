@@ -134,23 +134,23 @@ all SDK extension plugin interfaces. SDKs SHOULD
 support [registration](#register-componentprovider) of custom implementations of
 SDK extension plugin interfaces via the `ComponentProvider` mechanism.
 
-The following table lists the current status of all SDK extension plugin
-interfaces in the configuration data model:
+The following table lists each SDK extension plugin interface and its
+corresponding type in the configuration data model:
 
-| SDK extension plugin interface                                                              | Status                                                                             |
-|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
-| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | +                                                                                  |
-| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | +                                                                                  |
-| [span exporter](../trace/sdk.md#span-exporter)                                              | +                                                                                  |
-| [span processor](../trace/sdk.md#span-processor)                                            | +                                                                                  |
-| [sampler](../trace/sdk.md#sampler)                                                          | +                                                                                  |
-| [id generator](../trace/sdk.md#id-generators)                                               | - [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)   |
-| [pull metric reader](../metrics/sdk.md#metricreader)                                        | +                                                                                  |
-| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | +                                                                                  |
-| [metric producer](../metrics/sdk.md#metricproducer)                                         | +                                                                                  |
-| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | - [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189) |
-| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | +                                                                                  |
-| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | +                                                                                  |
+| SDK extension plugin interface                                                              | Declarative config type                                                                                                                                |
+|---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#experimentalresourcedetection-) |
+| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#textmappropagator-)                         |
+| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter-)                                   |
+| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanprocessor-)                                 |
+| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#sampler-)                                             |
+| [id generator](../trace/sdk.md#id-generators)                                               | not yet available [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)                                                       |
+| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pullmetricexporter-)                       |
+| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pushmetricexporter-)                       |
+| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#metricproducer-)                               |
+| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                                                     |
+| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordexporter-)                         |
+| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordprocessor-)                       |
 
 ##### ComponentsProvider operations
 
@@ -340,14 +340,18 @@ as `ComponentProvider`s.
 **Parameters:**
 
 * `component_provider` - The `ComponentProvider`.
-* `type` - The type of plugin interface it provides (e.g. SpanExporter, Sampler,
-  etc).
+* `type` - The type of plugin interface it provides.
 * `name` - The name used to identify the type of component. This is used
   in [configuration model](./data-model.md) to specify that the
   corresponding `component_provider` is to provide the component.
 
 The `type` and `name` comprise a unique key. Register MUST return an error if it
 is called multiple times with the same `type` and `name` combination.
+
+SDKs SHOULD represent `type` in a manner that is idiomatic for their language.
+For example, a class literal, an enumeration, or similar.
+See [supported SDK extension plugins](#sdk-extension-components) for the set of
+supported `type` values.
 
 ### Examples
 
