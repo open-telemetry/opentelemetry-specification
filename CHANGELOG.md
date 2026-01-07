@@ -20,6 +20,8 @@ release.
 
 - Add optional Ergonomic API.
   ([#4741](https://github.com/open-telemetry/opentelemetry-specification/pull/4741))
+- Add optional `Exception` parameter to Emit LogRecord.
+  ([#4824](https://github.com/open-telemetry/opentelemetry-specification/pull/4824))
 
 ### Baggage
 

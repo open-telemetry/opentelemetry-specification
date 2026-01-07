@@ -224,6 +224,11 @@ However, the changes MUST be eventually visible.
 If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
 the implementation SHOULD set it equal to the current time.
 
+**Status**: [Development](../document-status.md) - If an
+[Exception](api.md#emit-a-logrecord) is provided, the SDK MUST set attributes
+from the exception on the `LogRecord` with the conventions outlined in the
+[exception semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
+
 **Status**: [Development](../document-status.md) Before processing a log record,
 the implementation MUST apply the filtering rules defined by the
 [LoggerConfig](#loggerconfig) (in case `Enabled` was not called prior to
