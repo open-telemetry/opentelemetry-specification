@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Deprecate Record Exception API in favor of using Logs.
+  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+
 ### Metrics
 
 - Stabilize part of `Enabled` SDK for synchronous instruments.

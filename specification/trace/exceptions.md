@@ -1,6 +1,8 @@
 # Exceptions
 
-**Status**: [Stable](../document-status.md), Unless otherwise specified.
+**Status**: [Deprecated](../document-status.md), follow the
+[semantic conventions for recording exceptions](https://opentelemetry.io/docs/specs/semconv/general/recording-errors/#recording-exceptions)
+instead.
 
 This document defines how to record exceptions and their attributes.
 

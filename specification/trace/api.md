@@ -683,6 +683,8 @@ in the scope of this requirement and recommendation.
 
 #### Record Exception
 
+**Status**: [Deprecated](../document-status.md)
+
 To facilitate recording an exception languages SHOULD provide a
 `RecordException` method if the language uses exceptions.
 This is a specialized variant of [`AddEvent`](#add-events),
