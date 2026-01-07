@@ -35,10 +35,10 @@ path_base_for_github_subdir:
   (IEEE 754-1985), or signed 64 bit integer,
 - a homogeneous array of primitive type values. A homogeneous array MUST NOT
   contain values of different types.
-- **Status**: [Development](../document-status.md) - a byte array.
-- **Status**: [Development](../document-status.md) - an array of `AnyValue`,
-- **Status**: [Development](../document-status.md) - a [`map<string, AnyValue>`](#mapstring-anyvalue),
-- **Status**: [Development](../document-status.md) - an empty value if supported by the language,
+- a byte array.
+- an array of `AnyValue`,
+- a [`map<string, AnyValue>`](#mapstring-anyvalue),
+- an empty value if supported by the language,
   (e.g. `null`, `undefined` in JavaScript/TypeScript, `None` in Python, `nil` in Go/Ruby, not supported in Erlang, etc.)
 
 Arbitrary deep nesting of values for arrays and maps is allowed (essentially
@@ -69,8 +69,6 @@ both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
 ### map<string, AnyValue>
-
-**Status**: [Development](../document-status.md)
 
 `map<string, AnyValue>` is a map of string keys to `AnyValue` values.
 The keys in the map are unique (duplicate keys are not allowed).
@@ -181,14 +179,14 @@ If an SDK provides a way to:
   - if it is a string, if it exceeds that limit (counting any character in it as
     1), SDKs MUST truncate that value, so that its length is at most equal
     to the limit,
-  - **Status**: [Development](../document-status.md) - if it is a byte array,
+  - if it is a byte array,
     if its length exceeds that limit (counting each byte as 1),
     SDKs MUST truncate that value, so that its length is at most equal to the limit,
   - if it is an array of strings, then apply the limit to
     each value within the array separately,
-  - **Status**: [Development](../document-status.md) - if it is an array of [AnyValue](#anyvalue),
+  - if it is an array of [AnyValue](#anyvalue),
     then apply the limit to each element of the array separately (and recursively),
-  - **Status**: [Development](../document-status.md) - if it is a [map](#mapstring-anyvalue),
+  - if it is a [map](#mapstring-anyvalue),
     then apply the limit to each value within the map separately (and recursively),
   - otherwise a value MUST NOT be truncated;
 - set an attribute count limit such that:
@@ -196,7 +194,7 @@ If an SDK provides a way to:
     in exceeding the limit (counting each attribute in the collection as 1),
     the SDK MUST discard that attribute, so that the total number of attributes in
     an attribute collection is at most equal to the limit;
-  - **Status**: [Development](../document-status.md) - the count limit applies only to top-level attributes, not to nested key-value
+  - the count limit applies only to top-level attributes, not to nested key-value
     pairs within [maps](#mapstring-anyvalue);
   - otherwise an attribute MUST NOT be discarded.
 
