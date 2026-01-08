@@ -358,7 +358,7 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 This is a list of additional propagators that MAY be maintained and distributed
 as OpenTelemetry extension packages:
 
-* [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format) - **Status**: [Deprecated](../document-status.md).
+* [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format) - **Status**: [Deprecated](../document-status.md), use the [W3C TraceContext](https://www.w3.org/TR/trace-context/) instead.
 * [OT Trace](https://github.com/opentracing?q=basic&type=&language=). Propagation format
   used by the OpenTracing Basic Tracers. It MUST NOT use `OpenTracing` in the resulting
   propagator name as it is not widely adopted format in the OpenTracing ecosystem.
