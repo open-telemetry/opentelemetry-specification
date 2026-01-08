@@ -414,6 +414,11 @@ The SDK MUST accept the following stream configuration parameters:
   `aggregation_cardinality_limit` value, the `MeterProvider` MUST apply the
   [default aggregation cardinality limit](#metricreader) the `MetricReader` is
   configured with.
+* **Status**: [Development](../document-status.md) - `enabled` (optional): A
+  boolean denoting whether the instrument should be enabled. When `enabled` is
+  `false`, the View uses the `DropAggregation`, regardless of the `aggregation`
+  provided. If unset, the default is `true` unless the `OptIn` 
+  parameter is `true`.
 
 #### Measurement processing
 
@@ -449,8 +454,8 @@ made with an Instrument:
     specify the same aspect of the [Stream configuration](#stream-configuration),
     the setting defined by the View MUST take precedence over the advisory parameters.
 
-Users can configure match-all Views using [Drop aggregation](#drop-aggregation)
-to disable instruments by default.
+Users can configure match-all Views with `enabled=false` or with the
+[Drop aggregation](#drop-aggregation), to disable instruments by default.
 
 #### View examples
 
@@ -1010,11 +1015,12 @@ must be retained.
 This advisory parameter applies to all aggregations.
 
 When an instrument has `OptIn=true`, the SDK MUST use the
-[Drop Aggregation](#drop-aggregation) by default. If the user has provided an
-Aggregation via View(s), that aggregation takes precedence. If the user
-provides the [Default Aggregation](#default-aggregation) using a View, this
-"enables" the instrument with the same behavior as-if the instrument was not
-`OptIn`--including respecting other advisory parameters.
+[Drop Aggregation](#drop-aggregation). If the user sets `enabled=true` on a
+View's [Stream configuration](#stream-configuration), this "enables" the
+instrument with the same behavior as-if the instrument was not `OptIn` --
+including respecting other advisory parameters. Setting fields other than
+`enabled` on the View, including setting the `aggregation`, does not enable
+the instrument.
 
 ### Instrument enabled
 
