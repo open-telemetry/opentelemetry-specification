@@ -1017,7 +1017,7 @@ This advisory parameter applies to all aggregations.
 When an instrument has `OptIn=true`, the SDK MUST use the
 [Drop Aggregation](#drop-aggregation). If the user sets `enabled=true` on a
 View's [Stream configuration](#stream-configuration), this "enables" the
-instrument with the same behavior as-if the instrument was not `OptIn` --
+instrument with the same behavior as-if the instrument was `OptIn=false` --
 including respecting other advisory parameters. Setting fields other than
 `enabled` on the View, including setting the `aggregation`, does not enable
 the instrument.
