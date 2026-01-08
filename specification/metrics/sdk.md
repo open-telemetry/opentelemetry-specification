@@ -455,7 +455,7 @@ made with an Instrument:
     the setting defined by the View MUST take precedence over the advisory parameters.
 
 Users can configure match-all Views with `enabled=false` or with the
-[Drop aggregation](#drop-aggregation), to disable instruments by default.
+[Drop aggregation](#drop-aggregation) to disable instruments by default.
 
 #### View examples
 
