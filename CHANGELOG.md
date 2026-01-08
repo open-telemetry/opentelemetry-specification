@@ -13,13 +13,7 @@ release.
 
 ### Metrics
 
-- Stabilize part of `Enabled` SDK for synchronous instruments.
-  ([#4787](https://github.com/open-telemetry/opentelemetry-specification/pull/4787))
-
 ### Logs
-
-- Add optional Ergonomic API.
-  ([#4741](https://github.com/open-telemetry/opentelemetry-specification/pull/4741))
 
 ### Baggage
 
@@ -32,6 +26,24 @@ release.
 ### OpenTelemetry Protocol
 
 ### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.53.0 (2026-01-09)
+
+### Metrics
+
+- Stabilize part of `Enabled` SDK for synchronous instruments.
+  ([#4787](https://github.com/open-telemetry/opentelemetry-specification/pull/4787))
+
+### Logs
+
+- Add optional Ergonomic API.
+  ([#4741](https://github.com/open-telemetry/opentelemetry-specification/pull/4741))
 
 ### SDK Configuration
 
@@ -51,10 +63,6 @@ release.
 
 - Stabilize complex `AnyValue` attribute value types and related attribute limits.
   ([#4794](https://github.com/open-telemetry/opentelemetry-specification/issues/4794))
-
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.52.0 (2025-12-12)
 
