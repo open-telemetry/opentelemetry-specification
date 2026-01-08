@@ -15,7 +15,7 @@ release.
 
 - Stabilize part of `Enabled` SDK for synchronous instruments.
   ([#4787](https://github.com/open-telemetry/opentelemetry-specification/pull/4787))
-- Add the OptIn advisory parameter.
+- Add the OptIn advisory parameter and Enabled view parameter.
   ([#4809](https://github.com/open-telemetry/opentelemetry-specification/pull/4809))
 
 ### Logs
