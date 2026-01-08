@@ -31,10 +31,12 @@ weight: 1
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
   * [General operations](#general-operations)
     + [Enabled](#enabled)
+    + [Finish](#finish)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
       - [Add](#add)
+      - [Finish](#finish-1)
   * [Asynchronous Counter](#asynchronous-counter)
     + [Asynchronous Counter creation](#asynchronous-counter-creation)
     + [Asynchronous Counter operations](#asynchronous-counter-operations)
@@ -42,10 +44,12 @@ weight: 1
     + [Histogram creation](#histogram-creation)
     + [Histogram operations](#histogram-operations)
       - [Record](#record)
+      - [Finish](#finish-2)
   * [Gauge](#gauge)
     + [Gauge creation](#gauge-creation)
     + [Gauge operations](#gauge-operations)
       - [Record](#record-1)
+      - [Finish](#finish-3)
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
@@ -53,6 +57,7 @@ weight: 1
     + [UpDownCounter creation](#updowncounter-creation)
     + [UpDownCounter operations](#updowncounter-operations)
       - [Add](#add-1)
+      - [Finish](#finish-4)
   * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
     + [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
@@ -475,6 +480,7 @@ or something else).
 All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functions to:
 
 * [Report if instrument is `Enabled`](#enabled)
+* [Finish the reporting of a set of attributes](#finish)
 
 #### Enabled
 
@@ -493,6 +499,22 @@ value of `false` means the instrument is disabled for the provided arguments.
 The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they record a measurement to ensure they have the most up-to-date response.
+
+#### Finish
+
+**Status**: [Development](../document-status.md)
+
+To stop reporting attribute sets which are no longer used, [synchronous Instruments](#synchronous-instrument-api) SHOULD provide this `Finish` API.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to identify the Instrument.
+
+  Users can provide attributes to identify the Instrument.
+  This API MUST be structured to accept a variable number of attributes, including none.
 
 ### Counter
 
@@ -594,6 +616,38 @@ counterExceptions.Add(1, ("exception_type", "FileLoadException"), ("handled_by_u
 
 counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
+```
+
+##### Finish
+
+**Status**: [Development](../document-status.md)
+
+Unregister the attribute set. It will no longer be reported.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to identify the Counter.
+
+  Users can provide attributes to identify the Counter.
+  This API MUST be structured to accept a variable number of attributes, including none.
+
+```python
+# Python
+
+exception_counter.finish({"exception_type": "IOError", "handled_by_user": True})
+exception_counter.finish(exception_type="IOError", handled_by_user=True)
+```
+
+```csharp
+// C#
+
+counterExceptions.Finish(("exception_type", "FileLoadException"), ("handled_by_user", true));
+
+counterPowerUsed.Finish(new PowerConsumption { customer = "Tom" });
+counterPowerUsed.Finish(new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
 
 ### Asynchronous Counter
@@ -825,6 +879,36 @@ httpServerDuration.Record(50, ("http.request.method", "POST"), ("url.scheme", "h
 httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
 ```
 
+##### Finish
+
+**Status**: [Development](../document-status.md)
+
+Unregister the attribute set. It will no longer be reported.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to identify the Histogram.
+
+  Users can provide attributes to identify the Histogram.
+  This API MUST be structured to accept a variable number of attributes, including none.
+
+```python
+# Python
+
+http_server_duration.Finish({"http.request.method": "POST", "url.scheme": "https"})
+http_server_duration.Finish(http_method="GET", http_scheme="http")
+```
+
+```csharp
+// C#
+
+httpServerDuration.Finish(("http.request.method", "POST"), ("url.scheme", "https"));
+httpServerDuration.Finish(new HttpRequestAttributes { method = "GET", scheme = "http" });
+```
+
 ### Gauge
 
 `Gauge` is a [synchronous Instrument](#synchronous-instrument-api) which can be
@@ -912,6 +996,31 @@ Attributes roomB = Attributes.builder().put("room.id", "Rack B");
 
 backgroundNoiseLevel.record(4.3, roomA);
 backgroundNoiseLevel.record(2.5, roomB);
+```
+
+##### Finish
+
+**Status**: [Development](../document-status.md)
+
+Unregister the attribute set. It will no longer be reported.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to identify the Gauge.
+
+  Users can provide attributes to identify the Gauge.
+  This API MUST be structured to accept a variable number of attributes, including none.
+
+```java
+// Java
+Attributes roomA = Attributes.builder().put("room.id", "Rack A");
+Attributes roomB = Attributes.builder().put("room.id", "Rack B");
+
+backgroundNoiseLevel.finish(roomA);
+backgroundNoiseLevel.finish(roomB);
 ```
 
 ### Asynchronous Gauge
@@ -1153,6 +1262,34 @@ customers_in_store.add(-1, account_type="residential")
 // C#
 customersInStore.Add(1, ("account.type", "commercial"));
 customersInStore.Add(-1, new Account { Type = "residential" });
+```
+
+##### Finish
+
+**Status**: [Development](../document-status.md)
+
+Unregister the attribute set. It will no longer be reported.
+
+This API SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to identify the UpDownCounter.
+
+  Users can provide attributes to identify the UpDownCounter.
+  This API MUST be structured to accept a variable number of attributes, including none.
+
+```python
+# Python
+customers_in_store.finish({"account.type": "commercial"})
+customers_in_store.finish(account_type="residential")
+```
+
+```csharp
+// C#
+customersInStore.Finish(("account.type", "commercial"));
+customersInStore.Finish(new Account { Type = "residential" });
 ```
 
 ### Asynchronous UpDownCounter
