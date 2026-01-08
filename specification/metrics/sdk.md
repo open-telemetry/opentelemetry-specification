@@ -1009,7 +1009,7 @@ must be retained.
 
 This advisory parameter applies to all aggregations.
 
-When an instrument is `OptIn`, the SDK MUST use the
+When an instrument has `OptIn=true`, the SDK MUST use the
 [Drop Aggregation](#drop-aggregation) by default. If the user has provided an
 Aggregation via View(s), that aggregation takes precedence. If the user
 provides the [Default Aggregation](#default-aggregation) using a View, this
