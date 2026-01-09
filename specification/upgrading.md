@@ -97,7 +97,7 @@ separate version numbers.
 ### API changes
 
 When new functionality is added to the OpenTelemetry API, a new minor version of
-the API is released. These API changes are always additive and backwards compatible
+the API is released. These API changes are always additive and backward compatible
 from the perspective of existing Instrumentation packages which import and call
 prior versions. Instrumentation written against all prior minor versions of the
 API continues to work, and may be composed together into the same application without
@@ -160,5 +160,5 @@ We believe this is sufficient time for any Plugin which is actively maintained
 to make an upgrade, and for defunct Plugins to be identified and replaced.
 
 By ensuring that the SDK can be easily upgraded, we also provide a path for application
-owners and operators to rapidly consume critical bug fixes and security patches,
+owners and operators to rapidly consume critical bugfixes and security patches,
 without the need to backport these patches across a large number of prior SDK versions.
