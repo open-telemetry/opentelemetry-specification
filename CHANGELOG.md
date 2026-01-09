@@ -169,7 +169,7 @@ release.
 
 ### Common
 
-- OTLP Exporters may allow devs to prepend a product identifier in `User-Agent` header.
+- OTLP Exporters may allow developers to prepend a product identifier in `User-Agent` header.
   ([#4560](https://github.com/open-telemetry/opentelemetry-specification/pull/4560))
 - ⚠️ **IMPORTANT**: Extending the set of standard attribute value types is no longer a breaking change.
   ([#4614](https://github.com/open-telemetry/opentelemetry-specification/pull/4614))

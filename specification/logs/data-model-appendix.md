@@ -82,7 +82,7 @@ this data model.
   <tr>
     <td>MSGID</td>
     <td>string</td>
-    <td>Defines the type of the event. Part of event source identity. Example: "TCPIN"</td>
+    <td>Defines the type of the event. Part of event source identity. Example: `"TCPIN"`</td>
     <td>`Attributes["syslog.msgid"]`</td>
   </tr>
   <tr>
