@@ -350,37 +350,37 @@ sections:
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
-        status: '?'
+        status: '+'
       - name: LoggerProvider.Get Logger accepts attributes
-        status: '?'
+        status: '+'
       - name: LoggerProvider.Shutdown
-        status: '?'
+        status: '-'
       - name: LoggerProvider.ForceFlush
-        status: '?'
+        status: '-'
       - name: Logger.Emit(LogRecord)
-        status: '?'
+        status: '+'
       - name: LogRecord.Set EventName
-        status: '?'
+        status: '+'
       - name: Logger.Enabled
-        status: '?'
+        status: '-'
       - name: SimpleLogRecordProcessor
-        status: '?'
+        status: '+'
       - name: BatchLogRecordProcessor
-        status: '?'
+        status: '+'
       - name: Can plug custom LogRecordProcessor
-        status: '?'
+        status: '+'
       - name: LogRecordProcessor.Enabled
-        status: '?'
+        status: '-'
       - name: OTLP/gRPC exporter
-        status: '?'
+        status: '-'
       - name: OTLP/HTTP exporter
-        status: '?'
+        status: '+'
       - name: OTLP File exporter
-        status: '?'
+        status: '-'
       - name: Can plug custom LogRecordExporter
-        status: '?'
+        status: '+'
       - name: Trace Context Injection
-        status: '?'
+        status: '+'
   - name: Resource
     features:
       - name: Create from Attributes
