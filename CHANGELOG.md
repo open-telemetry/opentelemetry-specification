@@ -58,6 +58,8 @@ release.
   ([#4802](https://github.com/open-telemetry/opentelemetry-specification/pull/4802))
 - Declarative configuration: clarify Registry ComponentProvider `type` parameter
   ([#4799](https://github.com/open-telemetry/opentelemetry-specification/pull/4799))
+- Swap Tracer/Meter/LoggerConfig `disabled` for `enabled` to avoid double negatives
+  ([#4823](https://github.com/open-telemetry/opentelemetry-specification/pull/4823))
 
 ### Common
 
