@@ -215,6 +215,9 @@ Required arguments:
 The `Keys` function can be called by `Propagator`s which are using variable key names in order to
 iterate over all the keys in the specified carrier.
 
+For example, it can be used to detect all keys following the `X-B3-${name}` pattern, as defined by the
+[B3 Propagation: Multiple Headers](https://github.com/openzipkin/b3-propagation/blob/master/README.md#multiple-headers).
+
 ##### Get
 
 The Get function MUST return the first value of the given propagation key or return null if the key doesn't exist.
