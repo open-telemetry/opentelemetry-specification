@@ -14,7 +14,7 @@ OTLP Trace Data Format is primarily inherited from OpenCensus protocol. Several 
 
 1. Removed `Node` as a concept.
 2. Extended `Resource` to better describe the source of the telemetry data.
-3. Replaced attribute maps by lists of key/value pairs.
+3. Replaced attribute maps by lists of key-value pairs.
 4. Eliminated unnecessary additional nesting in various values.
 
 Changes 1-2 are conceptual, changes 3-4 improve performance.
@@ -368,4 +368,4 @@ The benchmark encodes/decodes 1000 batches of 100 spans, each span containing 3 
 
 The results show OTLP/AttrList is 5-6 times faster than OpenCensus in encoding and about 3 times faster in decoding.
 
-Using google.protobuf.Timestamp instead of int64-encoded unix timestamp results in 1.18-1.32 times slower encoding and 1.21-1.38 times slower decoding (depending on what the span contains).
+Using google.protobuf.Timestamp instead of int64-encoded Unix timestamp results in 1.18-1.32 times slower encoding and 1.21-1.38 times slower decoding (depending on what the span contains).

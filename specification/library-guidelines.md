@@ -53,7 +53,7 @@ In order to enable telemetry the application must take a dependency on the OpenT
 
 ### API and Minimal Implementation
 
-The API package is a self-sufficient dependency, in the sense that if the end-user application or a third-party library depends only on it and does not plug a full SDK implementation then the application will still build and run without failing, although no telemetry data will be actually delivered to a telemetry backend.
+The API package is a self-sufficient dependency, in the sense that if the end user application or a third-party library depends only on it and does not plug a full SDK implementation then the application will still build and run without failing, although no telemetry data will be actually delivered to a telemetry backend.
 
 This self-sufficiency is achieved the following way.
 
@@ -87,13 +87,13 @@ Vendors are encouraged to keep protocol-specific exporters as simple as possible
 
 End users should be given the flexibility of making many of the decisions regarding the queuing, retrying, tagging, batching functionality that make the most sense for their application. For example, if an application's telemetry data must be delivered to a remote backend that has no guaranteed availability the end user may choose to use a persistent local queue and an `Exporter` to retry sending on failures. As opposed to that for an application that sends telemetry to a locally running Agent daemon, the end user may prefer to have a simpler exporting configuration without retrying or queueing.
 
-If additional exporters for the sdk are provided as separate libraries, the
+If additional exporters for the SDK are provided as separate libraries, the
 name of the library should be prefixed with the terms "OpenTelemetry" and "Exporter" in accordance with the naming conventions of the respective technology.
 
 For example:
 
 - Python and Java: opentelemetry-exporter-{vendor_name}
-- Javascript: @opentelemetry/exporter-{vendor_name}
+- JavaScript: @opentelemetry/exporter-{vendor_name}
 
 #### Resource Detection
 
@@ -101,7 +101,7 @@ Cloud vendors are encouraged to provide packages to detect resource information 
 
 ### Alternative Implementations
 
-The end-user application may decide to take a dependency on alternative implementation.
+The end user application may decide to take a dependency on alternative implementation.
 
 SDK provides flexibility and extensibility that may be used by many implementations. Before developing an alternative implementation, please, review extensibility points provided by OpenTelemetry.
 

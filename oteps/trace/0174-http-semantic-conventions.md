@@ -110,7 +110,7 @@ Related issue: [open-telemetry/opentelemetry-specification#2114](https://github.
 ### Security concerns
 
 Some attributes can contain potentially sensitive information. Most likely, by
-default web frameworks/http clients should not expose that. For example,
+default web frameworks/HTTP clients should not expose that. For example,
 `http.target` has a query string that may contain credentials.
 
 > [!NOTE]
@@ -148,7 +148,7 @@ There is a lot of user feedback that they want it, but
 * We can let users collect them
 * Attaching to server span is trivial
 * Spec for client: we should have an approach to let users unambiguously
-  associate body with http client span (e.g. outer manual span that wraps HTTP
+  associate body with HTTP client span (e.g. outer manual span that wraps HTTP
   call and response reading and has event/log with body)
 * Reading/writing body may happen outside of HTTP client API (e.g. through
   network streams) – how users can track it too?
@@ -168,7 +168,7 @@ limited to, are considered out of scope for this workgroup:
 * Fan-in and fan-out operations (e.g., GraphQL).
 * Hedging policies. Hedging enables aggressively sending multiple copies of a
   single request without waiting for a response. Hedged RPCs may be be executed
-  multiple times on the server side, typically by different backends.
+  multiple times on the server-side, typically by different backends.
 * HTTP as a transport layer for other systems (e.g., Messaging system built on
   top of HTTP).
 

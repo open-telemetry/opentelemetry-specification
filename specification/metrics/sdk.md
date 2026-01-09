@@ -1043,8 +1043,8 @@ information:
 - The `time` the API call was made to record a `Measurement`.
 - The set of [Attributes](../common/README.md#attribute) associated with the
   `Measurement` not already included in a metric data point.
-- The associated [trace id and span
-  id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
+- The associated [trace ID and span
+  ID](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
   within Context](../trace/api.md#determining-the-parent-span-from-a-context) of
   the `Measurement` at API call time.
 
@@ -1067,7 +1067,7 @@ Then an exemplar output in OTLP would consist of:
 - The `time` when the `add` method was called.
 - The `Attributes` of `{"Z": "z-value"}`, as these are not preserved in the
   resulting metric point.
-- The trace/span id for the `makeRequest` span.
+- The trace/span ID for the `makeRequest` span.
 
 While the metric data point for the counter would carry the attributes `X` and
 `Y`.

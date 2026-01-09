@@ -1,6 +1,6 @@
 # OTLP: JSON Encoding for OTLP/HTTP
 
-This is a proposal to add HTTP Transport extension supporting json serialization for
+This is a proposal to add HTTP Transport extension supporting JSON serialization for
 [OTLP](0035-opentelemetry-protocol.md) (OpenTelemetry Protocol).
 
 ## Table of Contents
@@ -27,7 +27,7 @@ OTLP/HTTP+JSON will be consistent with the [OTLP/HTTP](0099-otlp-http.md) specif
 
 ### JSON Mapping
 
-Use proto3 standard defined [JSON Mapping](https://protobuf.dev/programming-guides/proto3/#json) for mapping between protobuf and json. `trace_id`  and `span_id` is base64 encoded in OTLP/HTTP+JSON, not hex.
+Use proto3 standard defined [JSON Mapping](https://protobuf.dev/programming-guides/proto3/#json) for mapping between protobuf and JSON. `trace_id`  and `span_id` is base64 encoded in OTLP/HTTP+JSON, not hex.
 
 ### Request
 

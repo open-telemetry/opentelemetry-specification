@@ -41,7 +41,7 @@ In this document, the terms "OpenTelemetry" and "language implementations" both 
 These terms do not refer to the specification or the Collector in this document.
 
 Each language implementation MUST take these versioning and stability requirements, and produce a language-specific document which details how these requirements will be met.
-This document MUST be placed in the root of each repo and named `VERSIONING` or `VERSIONING.md`.
+This document MUST be placed in the root of each repository and named `VERSIONING` or `VERSIONING.md`.
 
 ## Design goals
 
@@ -110,7 +110,7 @@ Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.
 
 #### SDK Stability
 
-Public portions of SDK packages MUST remain backwards compatible.
+Public portions of SDK packages MUST remain backward compatible.
 There are two categories of public features: **plugin interfaces** and **constructors**.
 A plugin interface is an extension point provided by the SDK which is intended to be implemented by end users in order to customize SDK behaviors.
 Examples of plugins interfaces include SpanProcessor, Exporter, and Sampler.
@@ -141,7 +141,7 @@ manner (e.g. by providing default implementations). Hereby, backwards-compatible
 the plugin interfaces MUST continue to be possible to use with newer versions of the SDK without making changes to the end user's code.
 For languages that commonly share code via binary artifacts, e.g. Java, backwards-compatible means that end user's code that implements plugin interfaces MUST continue to be possible to use with newer minor or patch versions without recompiling the end user's code.
 
-If this backwards compatible addition of methods to interfaces is not possible for a language,
+If this backward compatible addition of methods to interfaces is not possible for a language,
 the language maintainers SHOULD still implement the addition using backwards-compatible
 workarounds without incrementing the major version.
 For example, a possible workaround might be to add a new interface instead of extending the existing one and accept the
@@ -173,7 +173,7 @@ in [Telemetry Stability](telemetry-stability.md).) The goal is to ensure users c
 update to the latest version of OpenTelemetry, and not be held back by the
 plugins that they depend on.
 
-Public portions of contrib packages (constructors, configuration, interfaces) SHOULD remain backwards compatible.
+Public portions of contrib packages (constructors, configuration, interfaces) SHOULD remain backward compatible.
 
 Languages which ship binary artifacts SHOULD offer [ABI compatibility](glossary.md#abi-compatibility) for contrib packages.
 
@@ -207,7 +207,7 @@ default configuration, e.g. Samplers, Views, etc.
 Semantic Conventions defines the set of fields in the OTLP data model:
 
 - [Resource](resource/sdk.md)
-  - attribute keys. (The key section of attributes key value pairs)
+  - attribute keys. (The key section of attributes key-value pairs)
   - [Entity References](entities/data-model.md)
     - Entity type
     - Identifier (inherits attribute key guarantees from the resource)
@@ -285,7 +285,7 @@ instrumentations can use schemas to change the instrumentation they produce.
 **Exception:** Some resource attributes are embedded in various locations of the
 Specification, e.g. the `service.*` attributes which are required by SDKs to be
 produced and have corresponding [environment variables defined in general SDK configuration](configuration/sdk-environment-variables.md#general-sdk-configuration). These resource
-attributes MUST NOT be ever changed. They are considered a hard-coded part of
+attributes MUST NOT be ever changed. They are considered a hardcoded part of
 this specification.
 
 In addition to the 3 types of changes described above there are certain types
@@ -387,12 +387,12 @@ Most changes to OpenTelemetry clients result in a minor version bump.
 Patch versions make no changes which would require recompilation or potentially break application code.
 The following are examples of patch fixes.
 
-* Bug fixes which don't require minor version bump per rules above.
+* Bugfixes which don't require minor version bump per rules above.
 * Security fixes.
 * Documentation.
 
 Currently, the OpenTelemetry project does NOT have plans to backport bug and security fixes to prior minor versions of the SDK.
-Security and bug fixes MAY only be applied to the latest minor version.
+Security and bugfixes MAY only be applied to the latest minor version.
 We are committed to making it feasible for end users to stay up to date with the latest version of the OpenTelemetry SDK.
 
 ### Language version support

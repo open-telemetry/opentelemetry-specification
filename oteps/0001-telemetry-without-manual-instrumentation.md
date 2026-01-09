@@ -4,7 +4,7 @@ _Cross-language requirements for automated approaches to extracting portable tel
 
 ## Motivation
 
-The purpose of OpenTelemetry is to make robust, portable telemetry a built-in feature of cloud-native software. For some software and some situations, that instrumentation can literally be part of the source code. In other situations, it’s not so simple: for example, we can’t necessarily edit or even recompile some of our software, the OpenTelemetry instrumentation only exists as a plugin, or instrumentation just never rises to the top of the priority list for a service-owner. Furthermore, there is occasionally a desire to disable instrumentation for a single plugin or module at runtime, again without requiring developers to make changes to source code.
+The purpose of OpenTelemetry is to make robust, portable telemetry a built-in feature of cloud native software. For some software and some situations, that instrumentation can literally be part of the source code. In other situations, it’s not so simple: for example, we can’t necessarily edit or even recompile some of our software, the OpenTelemetry instrumentation only exists as a plugin, or instrumentation just never rises to the top of the priority list for a service-owner. Furthermore, there is occasionally a desire to disable instrumentation for a single plugin or module at runtime, again without requiring developers to make changes to source code.
 
 One way to navigate situations like these is with a software layer that adds OpenTelemetry instrumentation to a service without modifying the source code for that service. (In the conventional APM world, these software layers are often called “agents”, though that term is overloaded and ambiguous so we try avoid it in this document.)
 
@@ -36,12 +36,12 @@ Without further ado, here are a set of requirements for “official” OpenTelem
 * The code in the OpenTelemetry package must not take a hard dependency on any particular vendor/vendors (that sort of functionality should work via a plugin or registry mechanism)
   * Further, the code in the OpenTelemetry package must be isolated to avoid possible conflicts with the host application (e.g., shading in Java, etc)
 
-### Nice-to-have properties
+### Nice to have properties
 
-* Run-time integration (vs compile-time integration)
+* Runtime integration (vs compile-time integration)
 * Automated and modular testing of individual library/package plugins
   * Note that this also makes it easy to test against multiple different versions of any given library
-* A fully pluggable architecture, where plugins can be registered at runtime without requiring changes to the central repo at github.com/open-telemetry
+* A fully pluggable architecture, where plugins can be registered at runtime without requiring changes to the central repository at github.com/open-telemetry
   * E.g., for ops teams that want to write a plugin for a proprietary piece of legacy software they are unable to recompile
 * Augmentation of whitebox instrumentation by blackbox instrumentation (or, perhaps, vice versa). That is, not only can the trace context be shared by these different flavors of instrumentation, but even things like in-flight Span objects can be shared and co-modified (e.g., to use runtime interposition to grab local variables and attach them to a manually-instrumented span).
 
@@ -53,12 +53,12 @@ There is also a school of thought that we should only be focusing on the bits an
 
 ## Proposal
 
-### What is our desired end state for OpenTelemetry end-users?
+### What is our desired end state for OpenTelemetry end users?
 
 To reiterate much of the above:
 
 * First and foremost, **portable OpenTelemetry instrumentation can be installed without manual source code modification**
-* There’s one “clear winner” when it comes to portable, automatic instrumentation; just like with OpenTracing and OpenCensus, this is a situation where choice is not necessarily a good thing. End-users who wish to contribute instrumentation plugins should not have their enthusiasm and generosity diluted across competing projects.
+* There’s one “clear winner” when it comes to portable, automatic instrumentation; just like with OpenTracing and OpenCensus, this is a situation where choice is not necessarily a good thing. End users who wish to contribute instrumentation plugins should not have their enthusiasm and generosity diluted across competing projects.
 * As much as such a thing is possible, consistency across languages
 * Broad coverage / “plugin support”
 * Broad vendor support for OpenTelemetry
@@ -72,18 +72,18 @@ Given the desired end state, the Datadog tracers seem like the closest-fit, perm
 
 * Start with [the Datadog `dd-trace-foo` tracers](https://github.com/DataDog)
 * For each language:
-  * Fork the Datadog `datadog/dd-trace-foo` repo into a `open-telemetry/auto-instr-foo` OpenTelemetry repo (exact naming TBD)
+  * Fork the Datadog `datadog/dd-trace-foo` repository into a `open-telemetry/auto-instr-foo` OpenTelemetry repository (exact naming TBD)
   * In parallel:
     * The `dd-trace-foo` codebases already do a good job separating Datadog-specific functionality from general-purpose functionality. Where needed, make that boundary even more explicit through an API (or "SPI", really).
     * Create a new `dd-trace-foo` lib that wraps `auto-instr-foo` and includes the Datadog-specific pieces factored out above
     * Show that it’s also possible to bind to arbitrary OpenTelemetry-based tracers to the above API/SPI
   * Declare the forked `auto-instr-foo` repository ready for production beta use
   * For some (ideally brief) period:
-    * When new plugins are added to Datadog's (original) repo, merge them over into the `auto-instr-foo` repo
-    * Allow Datadog end-users to bind to either for some period of time (ultimately Datadog's decision on timeline here, and does not prevent other tracers from using `auto-instr-foo`)
+    * When new plugins are added to Datadog's (original) repository, merge them over into the `auto-instr-foo` repository
+    * Allow Datadog end users to bind to either for some period of time (ultimately Datadog's decision on timeline here, and does not prevent other tracers from using `auto-instr-foo`)
     * Finally, when the combination of `auto-instr-foo` and a Datadog wrapper is functionally equivalent to the `dd-trace-foo` mainline, the latter can be safely replaced by the former.
-      * Note that, by design, this is not expected to affect Datadog end-users
-  * Moved repo is GA’d: all new plugins (and improvements to the auto-instrumentation core) happen in the `auto-instr-foo` repo
+      * Note that, by design, this is not expected to affect Datadog end users
+  * Moved repository is GA’d: all new plugins (and improvements to the auto-instrumentation core) happen in the `auto-instr-foo` repository
 
 There are some languages that will have OpenTelemetry support before they have Datadog `dd-trace-foo` support. In those situations, we will fall back to the requirements in this OTEP and leave the technical determinations up to the language SIG and the OpenTelemetry TC.
 

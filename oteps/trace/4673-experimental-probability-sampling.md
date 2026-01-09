@@ -932,7 +932,7 @@ predetermined list of seeds.
     } {
 ```
 
-Note that seed indexes in the example above have what appears to be
+Note that seed indices in the example above have what appears to be
 the correct distribution.  The five 0s, two 1s, five 2s, one 3s, and
 one 4 demonstrate that it is relatively easy to find examples where
 there is exactly one failure.  Probability 0.001, with seed index 6 in

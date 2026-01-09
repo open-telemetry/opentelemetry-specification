@@ -27,7 +27,7 @@ Each signal provides a mechanism for software to describe itself. A codebase, su
 
 OpenTelemetry is designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions of OpenTelemetry which can be managed independently. OpenTelemetry is also designed to be an extensible framework. To accomplish this these goals, each signal consists of four types of packages:
 
-**API -** API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of OpenTelemetry which 3rd-party libraries and application code depend upon is considered part of the API. To manage different levels of stability, every signal has its own, independent API package. These individual APIs may also be bundled up into a shared global API, for convenience.
+**API -** API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of OpenTelemetry which third-party libraries and application code depend upon is considered part of the API. To manage different levels of stability, every signal has its own, independent API package. These individual APIs may also be bundled up into a shared global API, for convenience.
 
 **SDK -** The implementation of the API. The SDK is managed by the application owner. Note that the SDKs includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as **constructors** and **plugin interfaces**. Examples of plugin interfaces include the SpanProcessor, Exporter, and Sampler interfaces. Examples of constructors include configuration objects, environment variables, and SDK builders. Application owners may interact with SDK constructors; plugin authors may interact with SDK plugin interfaces. Instrumentation authors must never directly reference any SDK package of any kind, only the API.
 
@@ -65,7 +65,7 @@ Once a signal component is marked as stable, the following rules apply until the
 No backward-incompatible changes to the API are allowed unless the major version number is incremented. All existing API calls must continue to compile and function against all future minor versions of the same major version. ABI compatibility for the API may be offered on a language by language basis.
 
 **SDK Stability -**
-Public portions of the SDK must remain backwards compatible. There are two categories: **plugin interfaces** and **constructors**. Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces. Examples of constructors include configuration objects, environment variables, and SDK builders.
+Public portions of the SDK must remain backward compatible. There are two categories: **plugin interfaces** and **constructors**. Examples of plugins include the SpanProcessor, Exporter, and Sampler interfaces. Examples of constructors include configuration objects, environment variables, and SDK builders.
 
 ABI compatibility for SDK plugin interfaces and constructors may be offered on a language by language basis.
 
@@ -75,15 +75,15 @@ Semantic Conventions may not be removed once they are stable. New conventions ma
 **Contrib Stability -**
 Plugins and instrumentation are kept up to date, and are released simultaneously (or shortly after) the latest release of the API. The goal is to ensure users can update to the latest version of OpenTelemetry, and not be held back by the plugins that they depend on.
 
-Public portions of contrib packages (constructors, configuration, interfaces) must remain backwards compatible. ABI compatibility for contrib packages may be offered on a language by language basis.
+Public portions of contrib packages (constructors, configuration, interfaces) must remain backward compatible. ABI compatibility for contrib packages may be offered on a language by language basis.
 
-Telemetry produced by contrib instrumentation must also remain stable and backwards compatible, to avoid breaking alerts and dashboards. This means that existing data may not be mutated or removed without a major version bump. Additional data may be added. This applies to spans, metrics, resources, attributes, events, and any other data types that OpenTelemetry emits.
+Telemetry produced by contrib instrumentation must also remain stable and backward compatible, to avoid breaking alerts and dashboards. This means that existing data may not be mutated or removed without a major version bump. Additional data may be added. This applies to spans, metrics, resources, attributes, events, and any other data types that OpenTelemetry emits.
 
 ### Deprecation
 
 In theory, signals could be replaced. When this happens, they are marked as deprecated.
 
-Code is only marked as deprecated when the replacement becomes stable. Deprecated code still abides by the same support guarantees as stable code. Deprecated APIs remain stable and backwards compatible.
+Code is only marked as deprecated when the replacement becomes stable. Deprecated code still abides by the same support guarantees as stable code. Deprecated APIs remain stable and backward compatible.
 
 ### Removal
 
@@ -99,7 +99,7 @@ This is not actually a theoretical example. OpenTelemetry already supports two t
 
 ## Version Numbers
 
-OpenTelemetry follows [semver 2.0](https://semver.org/) conventions, with the following distinction.
+OpenTelemetry follows [SemVer 2.0](https://semver.org/) conventions, with the following distinction.
 
 OpenTelemetry clients have four components: API, Semantic Conventions, SDK, and Contrib.
 
@@ -113,7 +113,7 @@ For the purposes of versioning, all code within a component is treated as if it 
 * Different language implementations do not need to have matching version numbers. For example, it is fine to have `opentelemetry-python-api` at v1.2.8 when `opentelemetry-java-api` is at v1.3.2.
 * Language implementations do not need to match the version of the specification they implement. For example, it is fine for v1.8.2 of `opentelemetry-python-api` to implement v1.1.1 of the specification.
 
-**Exception:** in some languages, package managers may react poorly to experimental packages having a version higher than 0.X. In these cases, a language-specific workaround is required. Go, Ruby, and Javascript are examples.
+**Exception:** in some languages, package managers may react poorly to experimental packages having a version higher than 0.X. In these cases, a language-specific workaround is required. Go, Ruby, and JavaScript are examples.
 
 **Major version bump**
 Major version bumps only occur when there is a breaking change to a stable interface, or the removal of deprecated signals.
@@ -132,11 +132,11 @@ Most changes to OpenTelemetry result in a minor version bump.
 **Patch version bump**
 Patch versions make no changes which would require recompilation or potentially break application code. The following are examples of patch fixes.
 
-* Bug fixes which don't require minor version bump per rules above.
+* Bugfixes which don't require minor version bump per rules above.
 * Security fixes.
 * Documentation.
 
-Currently, OpenTelemetry does NOT have plans to backport bug and security fixes to prior minor versions. Security and bug fixes are only applied to the latest minor version. We are committed to making it feasible for end users to stay up to date with the latest version of OpenTelemetry.
+Currently, OpenTelemetry does NOT have plans to backport bug and security fixes to prior minor versions. Security and bugfixes are only applied to the latest minor version. We are committed to making it feasible for end users to stay up to date with the latest version of OpenTelemetry.
 
 ## Long Term Support
 

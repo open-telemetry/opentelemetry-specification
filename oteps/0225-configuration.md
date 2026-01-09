@@ -15,7 +15,7 @@ The environment variable interface suffers from the following identified limitat
   * Configuring views.
   * Configuring arguments for parent based sampler (sampler parent is remote and sampled vs. not sampled, sampler when parent is local and sampled vs. not sampled).
 * **Runtime dependent**. Different systems expose this interface differently (Linux, BSD, Windows). This usually means unique instructions are required to properly interact with the configuration interface on different systems.
-* **Limited values**. Many systems only allow string values to be used, but OpenTelemetry specifies many configuration values other than this type. For example, OTEL_RESOURCE_ATTRIBUTES specifies a list of key value pairs to be used as resource attributes, but there is no way to specify array values, or indicate that the value should be interpreted as non-string type.
+* **Limited values**. Many systems only allow string values to be used, but OpenTelemetry specifies many configuration values other than this type. For example, OTEL_RESOURCE_ATTRIBUTES specifies a list of key-value pairs to be used as resource attributes, but there is no way to specify array values, or indicate that the value should be interpreted as non-string type.
 * **Limited validation**. Validation can only be performed by the receiver, there is no meta-configuration language to validate input.
 * **Lacks versioning**. The lack of versioning support for environment variables prevents evolution over time.
 
@@ -41,7 +41,7 @@ Using a configuration model or configuration file, users can configure all optio
 
 ## Internal details
 
-The schema for OpenTelemetry configuration is to be published in a repository to allow language implementations to leverage that definition to automatically generate code and/or validate end-user configuration. This will ensure that all implementations provide a consistent experience for any version of the schema they support. An example of such a proposed schema is available [here](./assets/0225-schema.json).
+The schema for OpenTelemetry configuration is to be published in a repository to allow language implementations to leverage that definition to automatically generate code and/or validate end user configuration. This will ensure that all implementations provide a consistent experience for any version of the schema they support. An example of such a proposed schema is available [here](./assets/0225-schema.json).
 
 The working group proposes the use of [JSON Schema](https://json-schema.org/) as the language to define the schema. It provides:
 
@@ -119,7 +119,7 @@ Create a `Configurer` from a [configuration model](#configuration-model).
 
 #### Get TracerProvider, MeterProvider, LoggerProvider
 
-Interpret the [configuration model](#configuration-model) and return SDK TracerProvider, MeterProvider, LoggerProvider which strictly reflect the configuration object's details and ignores the [opentelemetry environment variable configuration scheme](../specification/configuration/sdk-environment-variables.md).
+Interpret the [configuration model](#configuration-model) and return SDK TracerProvider, MeterProvider, LoggerProvider which strictly reflect the configuration object's details and ignores the [OpenTelemetry environment variable configuration scheme](../specification/configuration/sdk-environment-variables.md).
 
 ### Configuration model
 
@@ -309,7 +309,7 @@ In choosing to recommend JSON schema, the working group looked at the following 
 
 How should the SDK be configured when both no-code configuration (either environment variable or file config) and programmatic configuration are present? NOTE: this question exists today with only the environment variable interface available.
 
-* Solution 1: Make it clear that interpretation of the environment shouldn’t be built into components. Instead, SDKs should have a component that explicitly interprets the environment and returns a configured instance of the SDK. This is how the java SDK works today and it nicely separates concerns.
+* Solution 1: Make it clear that interpretation of the environment shouldn’t be built into components. Instead, SDKs should have a component that explicitly interprets the environment and returns a configured instance of the SDK. This is how the Java SDK works today and it nicely separates concerns.
 
 ### What is the exact configuration file format to use?
 
@@ -363,9 +363,9 @@ pip install opentelemetry-instrumentation
 opentelemetry-instrument --config ./config.yaml ./python/app.py
 ```
 
-#### OpAmp
+#### OpAMP
 
-The configuration may be used in the future in conjunction with the OpAmp protocol to make remote configuration of SDKs available as a feature supported by OpenTelemetry.
+The configuration may be used in the future in conjunction with the OpAMP protocol to make remote configuration of SDKs available as a feature supported by OpenTelemetry.
 
 ## Related Spec issues address
 

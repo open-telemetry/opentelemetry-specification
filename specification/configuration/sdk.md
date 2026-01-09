@@ -138,7 +138,7 @@ The following table lists the current status of all SDK plugin components in the
 | [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter-)                                   |
 | [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanprocessor-)                                 |
 | [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#sampler-)                                             |
-| [id generator](../trace/sdk.md#id-generators)                                               | not yet available [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)                                                       |
+| [ID generator](../trace/sdk.md#id-generators)                                               | not yet available [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)                                                       |
 | [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pullmetricexporter-)                       |
 | [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pushmetricexporter-)                       |
 | [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#metricproducer-)                               |
@@ -184,7 +184,7 @@ defined as part of any type, class, interface, etc. SDKs may organize them in
 whatever manner is idiomatic for the language.
 
 TODO: Add operation to update SDK components with new configuration for usage
-with OpAmp
+with OpAMP
 
 #### Parse
 
@@ -194,7 +194,7 @@ Parse and validate a [configuration file](./data-model.md#file-based-configurati
 
 * `file`: The [configuration file](./data-model.md#file-based-configuration-model) to parse. This MAY be a
   file path, or language specific file data structure, or a stream of a file's content.
-* `file_format`: The file format of the `file` (e.g. [yaml](./data-model.md#yaml-file-format)).
+* `file_format`: The file format of the `file` (e.g. [YAML](./data-model.md#yaml-file-format)).
   Implementations MAY accept a `file_format` parameter, or infer it from
   the `file` extension, or include file format specific overloads of `parse`,
   e.g. `parseYaml(file)`. If `parse` accepts `file_format`, the API SHOULD be
@@ -224,7 +224,7 @@ user MUST not be required to specify an empty object (i.e. `drop: {}`) in these
 cases.
 
 When encountering a reference to
-a [SDK extension component](#sdk-extension-components) which is not built in to
+a [SDK extension component](#sdk-extension-components) which is not built-in to
 the SDK, Parse MUST resolve corresponding configuration to a
 generic [ConfigProperties](./api.md#configproperties) representation as described
 in [Create Component](#create-component).
@@ -299,7 +299,7 @@ initialization [error handling principles](../error-handling.md#basic-error-hand
 SDK implementations MAY provide options to allow programmatic customization of
 the components initialized by `Create`. This allows configuration of concepts which
 are not yet or may never be representable in the configuration model. For example,
-java OTLP exporters allow configuration of the [ExecutorService](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html),
+Java OTLP exporters allow configuration of the [ExecutorService](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html),
 a niche but important option for applications which need strict control of thread pools.
 This programmatic customization might take the form of passing an optional callback to
 `Create`, invoked with each SDK subcomponent (or a subset of SDK component types) as

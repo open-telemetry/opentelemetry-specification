@@ -22,7 +22,7 @@ successful prototypes first. This OTEP is first and foremost a specification and
 guidelines on how to create the prototypes.
 
 The specification defines how the OpenTelemetry Logging Library SDK exposes its
-functionality to authors of extensions to language-specific 3rd party logging
+functionality to authors of extensions to language-specific third-party logging
 libraries and to end users that want to produce logs in the
 [OpenTelemetry manner](../../specification/logs/README.md).
 
@@ -49,7 +49,7 @@ emit logs in OpenTelemetry formats.
 
 Note: The functionality that this document proposes will be an SDK package. A
 logging-related API package may be added in the future if we decide to have an
-end-user callable logging API. Until then the functions and methods callable
+end user callable logging API. Until then the functions and methods callable
 from this SDK package are intended to be used by Logging Libraries only and are
 NOT intended to be used by the end user and will NOT be exposed in the
 OpenTelemetry API package.
@@ -167,7 +167,7 @@ popular logging library.
 One of the possible approaches to emit and collect logs that OpenTelemetry
 supports is via intermediary files. When configuring the LogEmitterProvider,
 OTLP File exporter should be used to write logs to a file or stdout in either
-OTLP JSON or OTLP Protobuf binary format.
+OTLP JSON or OTLP protobuf binary format.
 
 ![Logging to File](images/otep0150/otlp-file.png)
 
@@ -256,7 +256,7 @@ user-facing logging API more complicated.
   
 ## Future possibilities
 
-In the future we may also add end-user callable OpenTelemetry Logging API
+In the future we may also add end user callable OpenTelemetry Logging API
 specification.
 
 ## References

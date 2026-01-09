@@ -8,7 +8,7 @@ capabilities).
 ## Motivation
 
 The [`LabelSet`](./0049-metric-label-set.md) API type was added to serve as a
-handle on a pre-defined set of labels for the Metrics API.
+handle on a predefined set of labels for the Metrics API.
 
 This API represents an optimization for the current metrics API that allows the
 implementations to avoid encoding and checking labels restrictions multiple

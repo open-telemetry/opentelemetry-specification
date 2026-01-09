@@ -78,7 +78,7 @@ processors and exporters.
 
 OpenTelemetry requires a [separation of the API from the
 SDK](../library-guidelines.md#requirements), so that different SDKs can be
-configured at run time. Please refer to the overall [OpenTelemetry
+configured at runtime. Please refer to the overall [OpenTelemetry
 SDK](../overview.md#sdk) concept for more information.
 
 #### Programming Model

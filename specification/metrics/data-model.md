@@ -85,7 +85,7 @@ model supports reliability and statelessness controls, through the choice of
 cumulative and delta transport. The model supports cost controls, through
 spatial and temporal reaggregation.
 
-The OpenTelemetry collector is designed to accept metrics data in a number of
+The OpenTelemetry Collector is designed to accept metrics data in a number of
 formats, transport data using the OpenTelemetry data model, and then export into
 existing systems. The data model can be unambiguously translated into the
 Prometheus Remote Write protocol without loss of features or semantics, through
@@ -177,7 +177,7 @@ breadth of OTel metrics usage.
     - With cumulative temporality: stateful collector
 7. OTel SDK exports directly to 3P backend
 
-These are considered the "core" use-cases used to analyze tradeoffs and design
+These are considered the "core" use-cases used to analyze trade-offs and design
 decisions within the metrics data model.
 
 ### Out of Scope Use-cases
@@ -414,7 +414,7 @@ in OTLP consist of the following:
   - An independent set of Attribute name-value pairs.
   - A time window (of `(start, end]`) time for which the Sum was calculated.
     - The time interval is inclusive of the end time.
-    - Times are specified in Value is UNIX Epoch time in nanoseconds since
+    - Times are specified in Value is Unix Epoch time in nanoseconds since
       `00:00:00 UTC on 1 January 1970`
   - (optional) a set of exemplars (see [Exemplars](#exemplars)).
   - (optional) Data point flags (see [Data point flags](#data-point-flags)).
@@ -430,7 +430,7 @@ full sum since 'start' (where usually start means a process/application start):
 
 ![Cumulative Sum](img/model-cumulative-sum.png)
 
-There are various tradeoffs between using Delta vs. Cumulative aggregation, in
+There are various trade-offs between using Delta vs. Cumulative aggregation, in
 various use cases, e.g.:
 
 - Detecting process restarts
@@ -438,7 +438,7 @@ various use cases, e.g.:
 - Push vs. Pull based metric reporting
 
 OTLP supports both models, and allows APIs, SDKs and users to determine the
-best tradeoff for their use case.
+best trade-off for their use case.
 
 ### Gauge
 
@@ -488,7 +488,7 @@ Histograms consist of the following:
   - An independent set of Attribute name-value pairs.
   - A time window (of `(start, end]`) time for which the Histogram was bundled.
     - The time interval is inclusive of the end time.
-    - Time values are specified as nanoseconds since the UNIX Epoch
+    - Time values are specified as nanoseconds since the Unix Epoch
       (00:00:00 UTC on 1 January 1970).
   - A count (`count`) of the total population of points in the histogram.
   - A sum (`sum`) of all the values in the histogram.
@@ -611,8 +611,8 @@ index `offset+i`.
 For a given range, positive or negative:
 
 - Bucket index `0` counts measurements in the range `(1, base]`
-- Positive indexes correspond with absolute values greater than `base`
-- Negative indexes correspond with absolute values less than or equal to 1
+- Positive indices correspond with absolute values greater than `base`
+- Negative indices correspond with absolute values less than or equal to 1
 - There are `2**scale` buckets between successive powers of 2.
 
 For example, with `scale=3` there are `2**3` buckets between 1 and 2.
@@ -674,7 +674,7 @@ which scales can be usefully applied.  Regardless of scale, producers
 SHOULD ensure that the index of any encoded bucket falls within the
 range of a signed 32-bit integer.  This recommendation is applied to
 limit the width of integers used in standard processing pipelines such
-as the OpenTelemetry collector.  The wire-level protocol could be
+as the OpenTelemetry Collector.  The wire-level protocol could be
 extended for 64-bit bucket indices in a future release.
 
 Producers use a mapping function to compute bucket indices.  Producers
@@ -887,7 +887,7 @@ Implementations are expected to verify that their mapping function and
 inverse mapping function are correct near the lowest and highest IEEE
 floating point values.  A mathematically correct formula may produce
 the wrong result, because of accumulated floating point calculation error
-or underflow/overflow of intermediate results.  In the Golang
+or underflow/overflow of intermediate results.  In the Go
 reference implementation, for example, the above formula computes
 `+Inf` for the maximum-index bucket.  In this case, it is appropriate
 to subtract `1<<scale` from the index and multiply the result by `2`.
@@ -901,7 +901,7 @@ func LowerBoundary(index, scale int) float64 {
 }
 ```
 
-In the Golang reference implementation, for example, the above formula
+In the Go reference implementation, for example, the above formula
 does not accurately compute the lower boundary of the minimum-index
 bucket (it is a subnormal value).  In this case, it is appropriate to
 add `1<<scale` to the index and divide the result by `2`.
