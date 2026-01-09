@@ -15,7 +15,7 @@ weight: 3
   * [SDK extension components](#sdk-extension-components)
     + [PluginComponentProvider](#plugincomponentprovider)
       - [Supported SDK plugin components](#supported-sdk-plugin-components)
-      - [PluginComponentsProvider operations](#plugincomponentsprovider-operations)
+      - [PluginComponentProvider operations](#plugincomponentprovider-operations)
         * [Create Component](#create-component)
   * [SDK operations](#sdk-operations)
     + [Parse](#parse)
@@ -146,9 +146,9 @@ The following table lists the current status of all SDK plugin components in the
 | [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordexporter-)                         |
 | [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordprocessor-)                       |
 
-##### PluginComponentsProvider operations
+##### PluginComponentProvider operations
 
-The `ComponentsProvider` MUST provide the following functions:
+The `PluginComponentProvider` MUST provide the following functions:
 
 * [Create Component](#create-component)
 
