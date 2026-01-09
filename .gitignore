@@ -22,6 +22,9 @@ bin
 # Vim
 .swp
 
+# Misspell binary
+internal/tools/bin
+
 # Node.js files for tools (e.g. markdown-toc)
 node_modules/
 package-lock.json

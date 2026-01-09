@@ -1,7 +1,6 @@
 {
     "rewrap.wrappingColumn": 80,
     "editor.rulers": [80],
-    "cSpell.autoFormatConfigFile": true,
     "markdownlint.config": {
         "MD004": false,
         "MD013": false,
