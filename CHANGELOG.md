@@ -29,6 +29,11 @@ release.
 
 ### SDK Configuration
 
+- Declarative configuration: rename `ComponentProvider` to
+  `PluginComponentProvider`, `CreatePlugin` to `CreateComponent` in effort to
+  use consistent vocabulary
+  ([#4806](https://github.com/open-telemetry/opentelemetry-specification/pull/4806))
+
 ### Supplementary Guidelines
 
 ### OTEPs

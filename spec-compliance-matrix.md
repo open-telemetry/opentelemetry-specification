@@ -297,15 +297,15 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | The `Parse` operation accepts the configuration YAML file format | + | + | + |  |  |  | + |  | + |  |  |
 | The `Parse` operation performs environment variable substitution | + | + |  |  |  |  | + |  | + |  |  |
 | The `Parse` operation returns configuration model | + | + | + |  |  |  | + |  | + |  |  |
-| The `Parse` operation resolves extension component configuration to `properties` |  | + |  |  |  |  | + |  | + |  |  |
+| The `Parse` operation resolves plugin component configuration to `properties` |  | + |  |  |  |  | + |  | + |  |  |
 | `Create` SDK components | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation accepts configuration model | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation returns `TracerProvider` | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation returns `MeterProvider` | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation returns `LoggerProvider` | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation returns `Propagators` |  | + |  |  |  |  | + |  | + |  |  |
-| The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components |  | + |  |  |  |  | + |  | + |  |  |
-| Register a `ComponentProvider` |  | + |  |  |  |  | + |  | + |  |  |
+| The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components |  | + |  |  |  |  | + |  | + |  |  |
+| Register a `PluginComponentProvider` |  | + |  |  |  |  | + |  | + |  |  |
 
 ## Exporters
 
