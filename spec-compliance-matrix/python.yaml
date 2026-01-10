@@ -223,6 +223,8 @@ sections:
         status: '?'
       - name: Instrument supports the advisory Attributes parameter.
         status: '?'
+      - name: Instrument supports the advisory OptIn parameter.
+        status: '-'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
         status: '-'
       - name: All methods of `Meter` are safe to be called concurrently.
