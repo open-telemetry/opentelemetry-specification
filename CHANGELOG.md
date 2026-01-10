@@ -9,6 +9,9 @@ release.
 
 ### Context
 
+- Deprecate Jaeger propagator and make propagator implementation optional.
+  ([#4827](https://github.com/open-telemetry/opentelemetry-specification/pull/4827))
+
 ### Traces
 
 ### Metrics

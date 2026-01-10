@@ -273,6 +273,7 @@ sections:
       - name: TraceContext Propagator
       - name: B3 Propagator
       - name: Jaeger Propagator
+        optional: true
       - name: OT Propagator
       - name: OpenCensus Binary Propagator
       - name: '[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)'
