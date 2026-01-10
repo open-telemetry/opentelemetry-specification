@@ -168,10 +168,10 @@ release.
 
 ### Compatibility
 
-- Flexible escaping of characters that are discouraged by Prometheus Conventions
+- Introduced flexible escaping of characters that are discouraged by Prometheus Conventions
   in Prometheus exporters.
   ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
-- Flexibility in addition of unit/type related suffixes in Prometheus exporters.
+- Introduced flexible addition of unit/type related suffixes in Prometheus exporters.
   ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
 - Define the configuration option "Translation Strategies" for Prometheus exporters.
   ([#4533](https://github.com/open-telemetry/opentelemetry-specification/pull/4533))
