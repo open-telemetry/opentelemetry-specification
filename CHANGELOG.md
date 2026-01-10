@@ -14,6 +14,9 @@ release.
 
 ### Traces
 
+- Deprecate Record Exception API in favor of using Events.
+  ([#4825](https://github.com/open-telemetry/opentelemetry-specification/pull/4825))
+
 ### Metrics
 
 ### Logs
