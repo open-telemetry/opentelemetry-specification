@@ -860,15 +860,15 @@ the `Meter` MUST be updated to behave according to the new `MeterConfig`.
 A `MeterConfig` defines various configurable aspects of a `Meter`'s behavior.
 It consists of the following parameters:
 
-* `disabled`: A boolean indication of whether the Meter is enabled.
+* `enabled`: A boolean indication of whether the Meter is enabled.
 
-  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  If not explicitly set, the `enabled` parameter SHOULD default to `true` (
   i.e. `Meter`s are enabled by default).
 
   If a `Meter` is disabled, it MUST behave equivalently
   to [No-op Meter](./noop.md#meter).
 
-  The value of `disabled` MUST be used to resolve whether an instrument
+  The value of `enabled` MUST be used to resolve whether an instrument
   is [Enabled](./api.md#enabled). See [Instrument Enabled](#instrument-enabled)
   for details.
 
@@ -1005,7 +1005,7 @@ The synchronous instrument [`Enabled`](./api.md#enabled) MUST return `false`
 when either:
 
 - **Status**: [Development](../document-status.md) - The [MeterConfig](#meterconfig)
-  of the `Meter` used to create the instrument has parameter `disabled=true`.
+  of the `Meter` used to create the instrument has parameter `enabled=false`.
 - All [resolved views](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
 
@@ -1013,7 +1013,7 @@ Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
 
 Note: If a user makes no configuration changes, `Enabled` returns `true` since by
-default `MeterConfig.disabled=false` and instruments use the default
+default `MeterConfig.enabled=true` and instruments use the default
 aggregation when no matching views match the instrument.
 
 ## Attribute limits
