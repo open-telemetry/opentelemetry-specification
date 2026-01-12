@@ -31,6 +31,7 @@ weight: 1
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
   * [General operations](#general-operations)
     + [Enabled](#enabled)
+    + [WithAttributes](#withattributes)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -476,6 +477,10 @@ All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functi
 
 * [Report if instrument is `Enabled`](#enabled)
 
+All instruments MAY provide a function to:
+
+* **Status**: [Development](../document-status.md) [Bind an attribute set to an instrument](#withattributes).
+
 #### Enabled
 
 To help users avoid performing computationally expensive operations when
@@ -493,6 +498,42 @@ value of `false` means the instrument is disabled for the provided arguments.
 The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they record a measurement to ensure they have the most up-to-date response.
+
+#### WithAttributes
+
+**Status**: [Development](../document-status.md)
+
+`WithAttributes` is an *optional* operation on instruments.
+
+All Instruments allow making measurements, such as [Add] on
+[Synchronous counters], with associated attributes. The API MAY allow attribute
+to be provided by a separate operation on the instrument in addition to
+accepting attributes on the measurement operation itself. If attributes are
+accepted in this manner, the operation SHOULD be called `WithAttributes`.
+`WithAttributes` MUST accept one or more attributes, and MUST return an
+instrument of the same type it was invoked on. The returned instrument is
+considered "bound" to the provided attributes, and subsequent measurement
+operations on the returned instrument behave as-if the attributes were provided
+on the measurement operation itself. Repeated calls to `WithAttributes` append
+additional attributes to the attributes associated with the measurement
+operations. `WithAttributes` MUST NOT modify the instrument it is called on.
+For example, the following are behaviorally equivalent:
+
+```python
+# Python
+
+# attribute provided with the add operation
+work_counter.add(1, {"work.type": work_item_type})
+
+# attribute provided with the withAttributes operation
+work_counter.withAttributes({"work.type": work_item_type}).add(1)
+```
+
+`WithAttributes` can be useful for users that need to make repeated
+measurements with the same attributes. It such cases it is generally more
+ergonomic, and it can also allow the implementation to be more performant by
+avoiding the need to perform a lookup based on the provided attributes each
+time a measurement operation is made.
 
 ### Counter
 

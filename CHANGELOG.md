@@ -16,6 +16,9 @@ release.
 
 ### Metrics
 
+- Add optional WithAttributes function on Instrument to support "bound" instruments.
+  ([#4835](https://github.com/open-telemetry/opentelemetry-specification/pull/4835))
+
 ### Logs
 
 ### Baggage
