@@ -34,6 +34,9 @@ release.
 
 ### Entities
 
+- Add specification for communicating entity information as structured log events.
+  ([#4836](https://github.com/open-telemetry/opentelemetry-specification/pull/4836))
+
 ### Common
 
 - Add string representation guidance for complex attribute value types (byte arrays,
