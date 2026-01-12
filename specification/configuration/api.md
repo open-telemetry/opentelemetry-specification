@@ -61,7 +61,7 @@ the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configu
 configuration mapping node.
 
 If the `.instrumentation` node is not set, get instrumentation config SHOULD
-return empty object (as if `.instrumentation: {}` was set).
+return an empty object (as if `.instrumentation: {}` was set).
 
 ### ConfigProperties
 
