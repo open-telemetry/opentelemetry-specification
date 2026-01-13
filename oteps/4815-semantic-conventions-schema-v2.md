@@ -2,21 +2,22 @@
 
 <!-- toc -->
 
-- [Motivation](#motivation)
-- [Details](#details)
-  - [Semantic Conventions Schemas](#semantic-conventions-schemas)
-  - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
-  - [Building and publishing arbitrary semantic convention registries](#building-and-publishing-arbitrary-semantic-convention-registries)
-- [Trade-offs and mitigations](#trade-offs-and-mitigations)
-  - [Schema Transformations](#schema-transformations)
-    - [Migration option 1: generate diff on demand](#migration-option-1-generate-diff-on-demand)
-    - [Migration option 2: upgrades based on resolved schema only](#migration-option-2-upgrades-based-on-resolved-schema-only)
-  - [Documentation and code generation](#documentation-and-code-generation)
-- [Prior art and alternatives](#prior-art-and-alternatives)
-- [Open questions](#open-questions)
-  - [Schema transformations evolution](#schema-transformations-evolution)
-- [Prototypes](#prototypes)
-- [Future possibilities](#future-possibilities)
+- [Semantic Convention Schema v2](#semantic-convention-schema-v2)
+  - [Motivation](#motivation)
+  - [Details](#details)
+    - [Semantic Conventions Schemas](#semantic-conventions-schemas)
+    - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
+    - [Building and publishing arbitrary semantic convention registries](#building-and-publishing-arbitrary-semantic-convention-registries)
+  - [Trade-offs and mitigations](#trade-offs-and-mitigations)
+    - [Schema Transformations](#schema-transformations)
+      - [Migration option 1: upgrades based on resolved schema only](#migration-option-1-upgrades-based-on-resolved-schema-only)
+      - [Migration option 2: generate diff on demand](#migration-option-2-generate-diff-on-demand)
+    - [Documentation and code generation](#documentation-and-code-generation)
+  - [Prior art and alternatives](#prior-art-and-alternatives)
+  - [Open questions](#open-questions)
+    - [Schema transformations evolution](#schema-transformations-evolution)
+  - [Prototypes](#prototypes)
+  - [Future possibilities](#future-possibilities)
 
 <!-- tocstop -->
 
@@ -266,7 +267,6 @@ attributes:
 The schema version 1.N includes information on how to upgrade from v1.N-M to v1.N.
 This approach is limited to one major version and covers upgrades only.
 
-
 #### Migration option 2: generate diff on demand
 
 In order to perform schema transformations, the schema processor and other possible consumers
@@ -388,7 +388,23 @@ TODO: do we need collector prototype for schema transformation?
 
 ## Future possibilities
 
-We've been serving OTel schemas on opentelemetry.io and are proposing to also
-serve artifacts from GitHub release assets. If we see significantly higher demand,
-we'd need to consider other distribution options to support scale or
-reliability needs.
+1. Return a list of all released semconv versions. E.g. `https://opentelemetry.io/schemas`
+   would return a list of versions:
+
+   ```json
+   [
+    "1.39.0",
+    "1.39.0-dev",
+    "1.38.0",
+    //...
+   ]
+   ```
+
+2. When releasing, publish `latest` version - `https://opentelemetry.io/schemas/latest/`.
+   It should not be used by instrumentation/application code, but consumers can
+   leverage it to learn about latest schema (version and content).
+
+3. We've been serving OTel schemas on opentelemetry.io and are proposing to also
+   serve artifacts from GitHub release assets. If we see significantly higher demand,
+   we'd need to consider other distribution options to support scale or
+   reliability needs.
