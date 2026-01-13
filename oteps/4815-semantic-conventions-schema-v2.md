@@ -16,6 +16,7 @@
   - [Prior art and alternatives](#prior-art-and-alternatives)
   - [Open questions](#open-questions)
     - [Schema transformations evolution](#schema-transformations-evolution)
+    - [Where should conventions belong?](#where-should-conventions-belong)
   - [Prototypes](#prototypes)
   - [Future possibilities](#future-possibilities)
 
@@ -136,7 +137,7 @@ This approach optimizes for reusability and consistency. Defaults and inherited 
 omitted. Definitions can be spread across an arbitrary set of files.
 
 The *resolved* schema is a single file produced from a set of definitions. It contains
-all attributes, along with signal definitions and refinements. It is optimized for
+all attributes along with signal definitions and refinements. It is optimized for
 distribution and in-memory representation.
 
 *Resolved* schema for this metric looks like:
@@ -191,7 +192,7 @@ OpenTelemetry Semantic Conventions will publish two versions with each release:
   a stable subset of semantic conventions
 - development (e.g. `https://opentelemetry.io/schemas/1.39.0-dev`) which will
   include all semantic conventions defined in the registry regardless of their
-  stability
+  stability.
 
 The manifest file MUST include the actual stability level.
 
@@ -200,7 +201,7 @@ of conventions it follows.
 
 For example, when HTTP instrumentation supports experimental features available
 on top of HTTP conventions, and the user has enabled these experimental features, the instrumentation
-should specify a `-dev` Schema URL.
+SHOULD specify a `-dev` Schema URL.
 
 ### Building and publishing arbitrary semantic convention registries
 
@@ -220,16 +221,16 @@ TODO
 
 Schema transformations (diffs) will **not** be published due to the following reasons:
 
-- the resolved schema already includes information about deprecated (renamed) attributes
-  and signals that can be used to apply rename transformations when upgrading versions
-- ability to generate diffs on demand
-- limited adoption and functionality not covering many existing transformation needs
-- lack of test infrastructure around transformations, which resulted in several
-  immutable schema files being incorrect (with no one complaining about it due to limited adoption)
+- The resolved schema already includes information about deprecated (renamed) attributes
+  and signals that can be used to apply rename transformations when upgrading versions.
+- Ability to generate diffs on demand.
+- Limited adoption and functionality not covering many existing transformation needs.
+- Lack of test infrastructure around transformations, which resulted in several
+  immutable schema files being incorrect (with no one complaining about it due to limited adoption).
 
-While it's possible to publish old schema in addition to new manifest, it would mean
+While it's possible to publish the old schema in addition to the new manifest, it would mean
 using a different URL format (such as `https://opentelemetry.io/schemas/v2/1.42.0` for
-the new manifest) which would be confusing. More importantly, we believe it's not justified given
+the new manifest), which would be confusing. More importantly, we believe it's not justified given
 actual usage.
 
 Consumers that download Schema URL content today will start receiving a new
@@ -269,10 +270,10 @@ This approach is limited to one major version and covers upgrades only.
 
 #### Migration option 2: generate diff on demand
 
-In order to perform schema transformations, the schema processor and other possible consumers
+To perform schema transformations, the schema processor and other possible consumers
 are encouraged to use [`weaver registry diff`](https://github.com/open-telemetry/weaver/blob/main/docs/usage.md#registry-diff)
 to generate diffs at startup (or lazily at runtime)
-for versions they want to support such as vN -> vTarget, vN+1 -> vTarget, etc:
+for versions they want to support, such as vN -> vTarget, vN+1 -> vTarget, etc.:
 
 ```bash
 weaver registry diff \
@@ -298,7 +299,7 @@ registry:
 ...
 ```
 
-Diff schema is formally documented as JSON schema, see [overview](https://github.com/lmolkova/weaver/blob/99af9dcc68cc271b9c719deec82a72e6fd5b4f40/schemas/semconv-schemas.md#diff-schema)
+The diff schema is formally documented as JSON schema; see the [overview](https://github.com/lmolkova/weaver/blob/99af9dcc68cc271b9c719deec82a72e6fd5b4f40/schemas/semconv-schemas.md#diff-schema)
 and [full schema](https://github.com/lmolkova/weaver/blob/99af9dcc68cc271b9c719deec82a72e6fd5b4f40/schemas/semconv.diff.v2.json).
 
 <details>
@@ -336,22 +337,22 @@ generated documentation or artifacts affecting end users.
 See [Telemetry Schema](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/schemas/README.md)
 for the current state of the art.
 
-See [Semantic Conventions YAML schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-syntax.md) for the
-current (v1) definition schema and [weaver docs](https://github.com/open-telemetry/weaver?tab=readme-ov-file#usage)
+See the [Semantic Conventions YAML schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-syntax.md) for the
+current (v1) definition schema and [Weaver docs](https://github.com/open-telemetry/weaver?tab=readme-ov-file#usage)
 for usage details.
 
 ## Open questions
 
 ### Schema transformations evolution
 
-During stabilization efforts, when we overhauled HTTP, database and code conventions
-we've introduced different types of changes. To name a few:
+During stabilization efforts, when we overhauled HTTP, database, and code conventions,
+we introduced different types of changes. To name a few:
 
-- renamed attributes and metrics with or without behavior changes
-- merged two attributes into one and split existing ones
-- added or removed attributes to specific metrics and spans
-- changed span name templates, error criteria, made attributes opt-in due to
-  cardinality or sensitivity
+- Renamed attributes and metrics with or without behavior changes.
+- Merged two attributes into one and split existing ones.
+- Added or removed attributes to/from specific metrics and spans.
+- Changed span name templates, error criteria, and made attributes opt-in due to
+  cardinality or sensitivity.
 
 Only simple renames without behavior changes could have been covered by the existing
 schema transformation. We handled migration by supporting side-by-side new/old
@@ -373,15 +374,26 @@ There are many design decisions to be made (e.g., a DSL to describe
 transformations). We haven't gone through an extensive development and feedback cycle
 and don't yet have confidence in how to solve this problem.
 
+### Where should conventions belong?
+
+Semantic convention maintainers have discussed rough criteria: conventions used by
+multiple distinct instrumentations SHOULD be documented in the central
+`semantic-conventions` repository (e.g., database drivers implemented across multiple
+languages), while component-specific conventions (e.g., JMX metrics for the Kafka client)
+SHOULD remain in their respective repositories.
+
+This OTEP focuses on building the technical stack to support multiple registries;
+defining strict criteria is not a goal.
+
 ## Prototypes
 
 [Semantic conventions](https://github.com/open-telemetry/semantic-conventions/pull/2469)
 in a release preparation step would:
 
-- resolve schema
-- generate manifest
-- publish SemConv artifact as a GitHub release asset (and potentially on opentelemetry.io)
-- TODO: stable and not stable publishing
+- Resolve schema.
+- Generate manifest.
+- Publish SemConv artifact as a GitHub release asset (and potentially on opentelemetry.io).
+- TODO: stable and not stable publishing.
 
 TODO: imports/decentralized example
 TODO: do we need collector prototype for schema transformation?
