@@ -162,191 +162,191 @@ sections:
   - name: Baggage
     features:
       - name: Basic support
-        status: '?'
+        status: '-'
       - name: Use official header name `baggage`
-        status: '?'
+        status: '-'
   - name: Metrics
     features:
       - name: The API provides a way to set and get a global default `MeterProvider`.
-        status: '?'
+        status: '-'
       - name: It is possible to create any number of `MeterProvider`s.
-        status: '?'
+        status: '-'
       - name: '`MeterProvider` provides a way to get a `Meter`.'
-        status: '?'
+        status: '-'
       - name: '`get_meter` accepts name, `version` and `schema_url`.'
-        status: '?'
+        status: '-'
       - name: '`get_meter` accepts `attributes`.'
-        status: '?'
+        status: '-'
       - name: When an invalid `name` is specified a working `Meter` implementation is returned as a fallback.
-        status: '?'
+        status: '-'
       - name: The fallback `Meter` `name` property keeps its original invalid value.
-        status: '?'
+        status: '-'
       - name: Associate `Meter` with `InstrumentationScope`.
-        status: '?'
+        status: '-'
       - name: '`Counter` instrument is supported.'
-        status: '?'
+        status: '-'
       - name: '`AsynchronousCounter` instrument is supported.'
-        status: '?'
+        status: '-'
       - name: '`Histogram` instrument is supported.'
-        status: '?'
+        status: '-'
       - name: '`AsynchronousGauge` instrument is supported.'
-        status: '?'
+        status: '-'
       - name: '`Gauge` instrument is supported.'
-        status: '?'
+        status: '-'
       - name: '`UpDownCounter` instrument is supported.'
-        status: '?'
+        status: '-'
       - name: '`AsynchronousUpDownCounter` instrument is supported.'
-        status: '?'
+        status: '-'
       - name: Instruments have `name`
-        status: '?'
+        status: '-'
       - name: Instruments have kind.
-        status: '?'
+        status: '-'
       - name: Instruments have an optional unit of measure.
-        status: '?'
+        status: '-'
       - name: Instruments have an optional description.
-        status: '?'
+        status: '-'
       - name:
           A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under
           the same `Meter` using the same `name`.
-        status: '?'
+        status: '-'
       - name: Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name.
-        status: '?'
+        status: '-'
       - name: It is possible to register two instruments with same `name` under different `Meter`s.
-        status: '?'
+        status: '-'
       - name: Instrument names conform to the specified syntax.
-        status: '?'
+        status: '-'
       - name: Instrument units conform to the specified syntax.
-        status: '?'
+        status: '-'
       - name: Instrument descriptions conform to the specified syntax.
-        status: '?'
+        status: '-'
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
-        status: '?'
+        status: '-'
       - name: Instrument supports the advisory Attributes parameter.
-        status: '?'
+        status: '-'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
-        status: '?'
+        status: '-'
       - name: All methods of `Meter` are safe to be called concurrently.
-        status: '?'
+        status: '-'
       - name: All methods of any instrument are safe to be called concurrently.
-        status: '?'
+        status: '-'
       - name: '`MeterProvider` allows a `Resource` to be specified.'
-        status: '?'
+        status: '-'
       - name: A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`.
-        status: '?'
+        status: '-'
       - name:
           The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary`
           instance stored in the `Meter`.
-        status: '?'
+        status: '-'
       - name:
           The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope`
           instance stored in the `Meter`.
-        status: '?'
+        status: '-'
       - name: Configuration is managed solely by the `MeterProvider`.
-        status: '?'
+        status: '-'
       - name: The `MeterProvider` provides methods to update the configuration
-        status: '?'
+        status: '-'
       - name: The updated configuration applies to all already returned `Meter`s.
-        status: '?'
+        status: '-'
       - name: There is a way to register `View`s with a `MeterProvider`.
-        status: '?'
+        status: '-'
       - name: The `View` instrument selection criteria is as specified.
-        status: '?'
+        status: '-'
       - name: The `View` instrument selection criteria supports wildcards.
-        status: '?'
+        status: '-'
       - name: The `View` instrument selection criteria supports the match-all wildcard.
-        status: '?'
+        status: '-'
       - name: The name of the `View` can be specified.
-        status: '?'
+        status: '-'
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
-        status: '?'
+        status: '-'
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
-        status: '?'
+        status: '-'
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
-        status: '?'
+        status: '-'
       - name: The SDK allows more than one `View` to be specified per instrument.
-        status: '?'
+        status: '-'
       - name: The `Drop` aggregation is available.
-        status: '?'
+        status: '-'
       - name: The `Default` aggregation is available.
-        status: '?'
+        status: '-'
       - name: The `Default` aggregation uses the specified aggregation by instrument.
-        status: '?'
+        status: '-'
       - name: The `Sum` aggregation is available.
-        status: '?'
+        status: '-'
       - name: The `LastValue` aggregation is available.
-        status: '?'
+        status: '-'
       - name: The `ExplicitBucketHistogram` aggregation is available.
-        status: '?'
+        status: '-'
       - name: The `ExponentialBucketHistogram` aggregation is available.
-        status: '?'
+        status: '-'
       - name: The metrics Reader implementation supports registering metric Exporters
-        status: '?'
+        status: '-'
       - name: The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.
-        status: '?'
+        status: '-'
       - name: The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind.
-        status: '?'
+        status: '-'
       - name: The metrics Exporter has access to the aggregated metrics data (aggregated points, not raw measurements).
-        status: '?'
+        status: '-'
       - name: The metrics Exporter `export` function can not be called concurrently from the same Exporter instance.
-        status: '?'
+        status: '-'
       - name: The metrics Exporter `export` function does not block indefinitely.
-        status: '?'
+        status: '-'
       - name: The metrics Exporter `export` function receives a batch of metrics.
-        status: '?'
+        status: '-'
       - name: The metrics Exporter `export` function returns `Success` or `Failure`.
-        status: '?'
+        status: '-'
       - name: The metrics Exporter provides a `ForceFlush` function.
-        status: '?'
+        status: '-'
       - name: The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out.
-        status: '?'
+        status: '-'
       - name: The metrics Exporter provides a `shutdown` function.
-        status: '?'
+        status: '-'
       - name: The metrics Exporter `shutdown` function do not block indefinitely.
-        status: '?'
+        status: '-'
       - name: The metrics SDK samples `Exemplar`s from measurements.
-        status: '?'
+        status: '-'
       - name: Exemplar sampling can be disabled.
-        status: '?'
+        status: '-'
       - name: The metrics SDK supports SDK-wide exemplar filter configuration
-        status: '?'
+        status: '-'
       - name: The metrics SDK supports `TraceBased` exemplar filter
-        status: '?'
+        status: '-'
       - name: The metrics SDK supports `AlwaysOn` exemplar filter
-        status: '?'
+        status: '-'
       - name: The metrics SDK supports `AlwaysOff` exemplar filter
-        status: '?'
+        status: '-'
       - name: Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.
-        status: '?'
+        status: '-'
       - name:
           Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was
           taken.
-        status: '?'
+        status: '-'
       - name: Exemplars contain the timestamp when the measurement was taken.
-        status: '?'
+        status: '-'
       - name: The metrics SDK provides an `ExemplarReservoir` interface or extension point.
-        status: '?'
+        status: '-'
       - name: An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.
-        status: '?'
+        status: '-'
       - name:
           The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except
           `ExplicitBucketHistogram`.
-        status: '?'
+        status: '-'
       - name:
           The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram`
           aggregation.
-        status: '?'
+        status: '-'
       - name: A metric Producer accepts an optional metric Filter
-        status: '?'
+        status: '-'
       - name: The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers
-        status: '?'
+        status: '-'
       - name: The metric SDK's metric Producer implementations uses the metric Filter
-        status: '?'
+        status: '-'
       - name: Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits)
-        status: '?'
+        status: '-'
       - name: Metric SDK supports configuring cardinality limit at MeterReader level
-        status: '?'
+        status: '-'
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
-        status: '?'
+        status: '-'
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
@@ -440,93 +440,93 @@ sections:
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
-        status: '?'
+        status: '-'
       - name: OTEL_RESOURCE_ATTRIBUTES
-        status: '?'
+        status: '-'
       - name: OTEL_SERVICE_NAME
-        status: '?'
+        status: '-'
       - name: OTEL_LOG_LEVEL
-        status: '?'
+        status: '-'
       - name: OTEL_PROPAGATORS
-        status: '?'
+        status: '-'
       - name: OTEL_BSP_*
-        status: '?'
+        status: '-'
       - name: OTEL_BLRP_*
-        status: '?'
+        status: '-'
       - name: OTEL_EXPORTER_OTLP_*
-        status: '?'
+        status: '-'
       - name: OTEL_EXPORTER_ZIPKIN_*
-        status: '?'
+        status: '-'
       - name: OTEL_TRACES_EXPORTER
-        status: '?'
+        status: '-'
       - name: OTEL_METRICS_EXPORTER
-        status: '?'
+        status: '-'
       - name: OTEL_LOGS_EXPORTER
-        status: '?'
+        status: '-'
       - name: OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_SPAN_EVENT_COUNT_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_SPAN_LINK_COUNT_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_LINK_ATTRIBUTE_COUNT_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_TRACES_SAMPLER
-        status: '?'
+        status: '-'
       - name: OTEL_TRACES_SAMPLER_ARG
-        status: '?'
+        status: '-'
       - name: OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_ATTRIBUTE_COUNT_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_METRIC_EXPORT_INTERVAL
-        status: '?'
+        status: '-'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
-        status: '?'
+        status: '-'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
-        status: '?'
+        status: '-'
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-        status: '?'
+        status: '-'
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
-        status: '?'
+        status: '-'
       - name: OTEL_EXPERIMENTAL_CONFIG_FILE
-        status: '?'
+        status: '-'
   - name: Declarative configuration
     features:
       - name: '`Parse` a configuration file'
-        status: '?'
+        status: '-'
       - name: The `Parse` operation accepts the configuration YAML file format
-        status: '?'
+        status: '-'
       - name: The `Parse` operation performs environment variable substitution
-        status: '?'
+        status: '-'
       - name: The `Parse` operation returns configuration model
-        status: '?'
+        status: '-'
       - name: The `Parse` operation resolves extension component configuration to `properties`
-        status: '?'
+        status: '-'
       - name: '`Create` SDK components'
-        status: '?'
+        status: '-'
       - name: The `Create` operation accepts configuration model
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `TracerProvider`
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `MeterProvider`
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `LoggerProvider`
-        status: '?'
+        status: '-'
       - name: The `Create` operation returns `Propagators`
-        status: '?'
+        status: '-'
       - name: The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components
-        status: '?'
+        status: '-'
       - name: Register a `ComponentProvider`
-        status: '?'
+        status: '-'
   - name: Exporters
     features:
       - name: '[Exporter interface](specification/trace/sdk.md#span-exporter)'
@@ -580,98 +580,98 @@ sections:
       - heading: '**[Zipkin](specification/trace/sdk_exporters/zipkin.md)**'
         features:
           - name: Zipkin V1 JSON
-            status: '?'
+            status: '-'
           - name: Zipkin V1 Thrift
-            status: '?'
+            status: '-'
           - name: Zipkin V2 JSON
-            status: '?'
+            status: '-'
           - name: Zipkin V2 Protobuf
-            status: '?'
+            status: '-'
           - name: Service name mapping
-            status: '?'
+            status: '-'
           - name: SpanKind mapping
-            status: '?'
+            status: '-'
           - name: InstrumentationLibrary mapping
-            status: '?'
+            status: '-'
           - name: InstrumentationScope mapping
-            status: '?'
+            status: '-'
           - name: Boolean attributes
-            status: '?'
+            status: '-'
           - name: Array attributes
-            status: '?'
+            status: '-'
           - name: Status mapping
-            status: '?'
+            status: '-'
           - name: Error Status mapping
-            status: '?'
+            status: '-'
           - name: Event attributes mapping to Annotations
-            status: '?'
+            status: '-'
           - name: Integer microseconds in timestamps
-            status: '?'
+            status: '-'
       - heading: '**Prometheus**'
         features:
           - name: '[Metadata Deduplication](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[Name Sanitization](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[UNIT Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[Unit Suffixes](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[Unit Full Words](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
-            status: '?'
+            status: '-'
           - name: '[otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
-            status: '?'
+            status: '-'
           - name: '[otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
-            status: '?'
+            status: '-'
           - name: '[Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1)'
-            status: '?'
+            status: '-'
           - name: '[Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Prometheus Counters have _total suffix by default](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Prometheus Counters _total suffixing can be disabled](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Cumulative Non-Monotonic Sums become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Delta Non-Monotonic Sums become Cumulative Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Cumulative Histograms become Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1)'
-            status: '?'
+            status: '-'
           - name: '[Delta Histograms become Cumulative Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1)'
-            status: '?'
+            status: '-'
           - name: '[Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
-            status: '?'
+            status: '-'
           - name: '[Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
-            status: '?'
+            status: '-'
           - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)'
-            status: '?'
+            status: '-'
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
-            status: '?'
+            status: '-'
   - name: OpenCensus Compatibility
     features:
       - name: '[Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)'
-        status: '?'
+        status: '-'
       - name: '[Metric Bridge](specification/compatibility/opencensus.md#metrics--stats)'
-        status: '?'
+        status: '-'
   - name: OpenTracing Compatibility
     features:
       - name: '[Create OpenTracing Shim](specification/compatibility/opentracing.md#create-an-opentracing-tracer-shim)'
-        status: '?'
+        status: '-'
       - name: '[Tracer](specification/compatibility/opentracing.md#tracer-shim)'
-        status: '?'
+        status: '-'
       - name: '[Span](specification/compatibility/opentracing.md#span-shim)'
-        status: '?'
+        status: '-'
       - name: '[SpanContext](specification/compatibility/opentracing.md#spancontext-shim)'
-        status: '?'
+        status: '-'
       - name: '[ScopeManager](specification/compatibility/opentracing.md#scopemanager-shim)'
-        status: '?'
+        status: '-'
       - name: Error mapping for attributes/events
-        status: '?'
+        status: '-'
       - name: Migration to OpenTelemetry guide
-        status: '?'
+        status: '-'
