@@ -17,28 +17,28 @@ formats is required. Implementing more than one format is optional.
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
 | [TracerProvider](specification/trace/api.md#tracerprovider-operations) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Create TracerProvider |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Get a Tracer with schema_url |  | + | + | + | + |  |  | + | + | + |  |  |  |
-| Get a Tracer with scope attributes |  | + |  |  | + |  |  | + | + | + |  |  |  |
-| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + | + |  |  |  |  |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| Create TracerProvider |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Get a Tracer with schema_url |  | + | + | + | + |  |  | + | + | + |  |  | + |
+| Get a Tracer with scope attributes |  | + |  |  | + |  |  | + | + | + |  |  | + |
+| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + | + |  |  |  | + |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
-| Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
+| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
+| Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
 | [Tracer](specification/trace/api.md#tracer-operations) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Create a new Span |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Documentation defines adding attributes at span creation as preferred |  | + |  |  | + | + |  | + |  |  | + |  |  |
+| Create a new Span |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Documentation defines adding attributes at span creation as preferred |  | + |  |  | + | + |  | + |  |  | + |  | - |
 | Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
 | Mark Span active |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [SpanContext](specification/trace/api.md#spancontext) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| IsValid |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| IsRemote |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - |  |  |  |  |  |  |  |  |  |  |  |
+| IsValid |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| IsRemote |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - |  |  |  |  |  |  |  |  |  |  | - |
 | [Span](specification/trace/api.md#span) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Create root span |  | + | + | + | + | + | + | + | + | + | + | + |  |
 | Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
