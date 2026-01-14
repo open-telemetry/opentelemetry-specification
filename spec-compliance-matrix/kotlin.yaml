@@ -384,59 +384,59 @@ sections:
   - name: Resource
     features:
       - name: Create from Attributes
-        status: '?'
+        status: '-'
       - name: Create empty
-        status: '?'
+        status: '-'
       - name: '[Merge (v2)](specification/resource/sdk.md#merge)'
-        status: '?'
+        status: '+'
       - name: Retrieve attributes
-        status: '?'
+        status: '+'
       - name:
           '[Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable)
           for service.name'
-        status: '?'
+        status: '-'
       - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
-        status: '?'
+        status: '-'
       - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
-        status: '?'
+        status: '-'
   - name: Context Propagation
     features:
       - name: Create Context Key
-        status: '?'
+        status: '+'
       - name: Get value from Context
-        status: '?'
+        status: '+'
       - name: Set value for Context
-        status: '?'
+        status: '+'
       - name: Attach Context
-        status: '?'
+        status: '+'
       - name: Detach Context
-        status: '?'
+        status: '+'
       - name: Get current Context
-        status: '?'
+        status: '+'
       - name: Composite Propagator
-        status: '?'
+        status: '-'
       - name: Global Propagator
-        status: '?'
+        status: '-'
       - name: TraceContext Propagator
-        status: '?'
+        status: '-'
       - name: B3 Propagator
-        status: '?'
+        status: '-'
       - name: Jaeger Propagator
-        status: '?'
+        status: '-'
       - name: OT Propagator
-        status: '?'
+        status: '-'
       - name: OpenCensus Binary Propagator
-        status: '?'
+        status: '-'
       - name: '[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)'
-        status: '?'
+        status: '-'
       - name: Fields
-        status: '?'
+        status: '-'
       - name: Setter argument
-        status: '?'
+        status: '-'
       - name: Getter argument
-        status: '?'
+        status: '-'
       - name: Getter argument returning Keys
-        status: '?'
+        status: '-'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
@@ -530,41 +530,41 @@ sections:
   - name: Exporters
     features:
       - name: '[Exporter interface](specification/trace/sdk.md#span-exporter)'
-        status: '?'
+        status: '_'
       - name: '[Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2)'
-        status: '?'
+        status: '_'
       - name: Standard output (logging)
-        status: '?'
+        status: '-'
       - name: In-memory (mock exporter)
-        status: '?'
+        status: '-'
       - heading: '**[OTLP](specification/protocol/otlp.md)**'
         features:
           - name: OTLP/gRPC Exporter
-            status: '?'
+            status: '-'
           - name: OTLP/HTTP binary Protobuf Exporter
-            status: '?'
+            status: '+'
           - name: OTLP/HTTP JSON Protobuf Exporter
-            status: '?'
+            status: '-'
           - name: OTLP/HTTP gzip Content-Encoding support
-            status: '?'
+            status: '+'
           - name: Concurrent sending
-            status: '?'
+            status: '-'
           - name: Honors retryable responses with backoff
-            status: '?'
+            status: '-'
           - name: Honors non-retryable responses
-            status: '?'
+            status: '-'
           - name: Honors throttling response
-            status: '?'
+            status: '-'
           - name: Multi-destination spec compliance
-            status: '?'
+            status: '-'
           - name: SchemaURL in ResourceSpans and ScopeSpans
-            status: '?'
+            status: '+'
           - name: SchemaURL in ResourceMetrics and ScopeMetrics
-            status: '?'
+            status: '-'
           - name: SchemaURL in ResourceLogs and ScopeLogs
-            status: '?'
+            status: '+'
           - name: Honors the [user agent spec](specification/protocol/exporter.md#user-agent)
-            status: '?'
+            status: '-'
           - name:
               '[Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success)
               messages are handled and logged for OTLP/gRPC'
@@ -574,85 +574,85 @@ sections:
               messages are handled and logged for OTLP/HTTP'
             status: '?'
           - name: Metric Exporter configurable temporality preference
-            status: '?'
+            status: '-'
           - name: Metric Exporter configurable default aggregation
-            status: '?'
+            status: '-'
       - heading: '**[Zipkin](specification/trace/sdk_exporters/zipkin.md)**'
         features:
           - name: Zipkin V1 JSON
-            status: '?'
+            status: '-'
           - name: Zipkin V1 Thrift
-            status: '?'
+            status: '-'
           - name: Zipkin V2 JSON
-            status: '?'
+            status: '-'
           - name: Zipkin V2 Protobuf
-            status: '?'
+            status: '-'
           - name: Service name mapping
-            status: '?'
+            status: '-'
           - name: SpanKind mapping
-            status: '?'
+            status: '-'
           - name: InstrumentationLibrary mapping
-            status: '?'
+            status: '-'
           - name: InstrumentationScope mapping
-            status: '?'
+            status: '-'
           - name: Boolean attributes
-            status: '?'
+            status: '-'
           - name: Array attributes
-            status: '?'
+            status: '-'
           - name: Status mapping
-            status: '?'
+            status: '-'
           - name: Error Status mapping
-            status: '?'
+            status: '-'
           - name: Event attributes mapping to Annotations
-            status: '?'
+            status: '-'
           - name: Integer microseconds in timestamps
-            status: '?'
+            status: '-'
       - heading: '**Prometheus**'
         features:
           - name: '[Metadata Deduplication](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[Name Sanitization](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[UNIT Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[Unit Suffixes](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[Unit Full Words](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1)'
-            status: '?'
+            status: '-'
           - name: '[otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
-            status: '?'
+            status: '-'
           - name: '[otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
-            status: '?'
+            status: '-'
           - name: '[otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1)'
-            status: '?'
+            status: '-'
           - name: '[Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1)'
-            status: '?'
+            status: '-'
           - name: '[Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Prometheus Counters have _total suffix by default](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Prometheus Counters _total suffixing can be disabled](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Cumulative Non-Monotonic Sums become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Delta Non-Monotonic Sums become Cumulative Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums)'
-            status: '?'
+            status: '-'
           - name: '[Cumulative Histograms become Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1)'
-            status: '?'
+            status: '-'
           - name: '[Delta Histograms become Cumulative Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1)'
-            status: '?'
+            status: '-'
           - name: '[Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
-            status: '?'
+            status: '-'
           - name: '[Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
-            status: '?'
+            status: '-'
           - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)'
-            status: '?'
+            status: '-'
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
-            status: '?'
+            status: '-'
   - name: OpenCensus Compatibility
     features:
       - name: '[Trace Bridge](specification/compatibility/opencensus.md#trace-bridge)'

@@ -217,36 +217,36 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
-| Create from Attributes |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Create empty |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| [Merge (v2)](specification/resource/sdk.md#merge) |  | + | + |  | + | + | + | + | + | + | + |  |  |
-| Retrieve attributes |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| [Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  |  |
-| [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + | + |  | - |  |  |
+| Create from Attributes |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Create empty |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| [Merge (v2)](specification/resource/sdk.md#merge) |  | + | + |  | + | + | + | + | + | + | + |  | + |
+| Retrieve attributes |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| [Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  | - |
+| [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + | + |  | - |  | - |
 
 ## Context Propagation
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
-| Create Context Key |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Get value from Context |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Set value for Context |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Attach Context |  | N/A | + | + | + | + | + | + | + | + | - | - |  |
-| Detach Context |  | N/A | + | + | + | + | + | + | + | + | - | - |  |
-| Get current Context |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
-| Composite Propagator |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Global Propagator |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Jaeger Propagator |  | + | + | + | + | + | + | + | + | + | - | + |  |
-| OT Propagator |  | + | + | + | + |  |  |  |  |  |  |  |  |
-| OpenCensus Binary Propagator |  | + |  |  |  |  |  |  |  |  |  |  |  |
-| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |  | + | + |  | + | + |  | + |  | + |  |  |  |
-| Fields |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Setter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + |  |
-| Getter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + |  |
-| Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + |  |
+| Create Context Key |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Get value from Context |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Set value for Context |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Attach Context |  | N/A | + | + | + | + | + | + | + | + | - | - | + |
+| Detach Context |  | N/A | + | + | + | + | + | + | + | + | - | - | + |
+| Get current Context |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
+| Composite Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Global Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Jaeger Propagator |  | + | + | + | + | + | + | + | + | + | - | + | - |
+| OT Propagator |  | + | + | + | + |  |  |  |  |  |  |  | - |
+| OpenCensus Binary Propagator |  | + |  |  |  |  |  |  |  |  |  |  | - |
+| [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |  | + | + |  | + | + |  | + |  | + |  |  | - |
+| Fields |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Setter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
+| Getter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
+| Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + | - |
 
 ## Environment Variables
 
@@ -311,66 +311,66 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
-| [Exporter interface](specification/trace/sdk.md#span-exporter) |  | + | + |  | + | + | + | + | + | + | + |  |  |
-| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |  | + | + |  | + | + | + | + | - |  | + |  |  |
-| Standard output (logging) |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| In-memory (mock exporter) |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| [Exporter interface](specification/trace/sdk.md#span-exporter) |  | + | + |  | + | + | + | + | + | + | + |  | _ |
+| [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |  | + | + |  | + | + | + | + | - |  | + |  | _ |
+| Standard output (logging) |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| In-memory (mock exporter) |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | **[OTLP](specification/protocol/otlp.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| OTLP/gRPC Exporter | * | + | + | + | + |  | + | + | + | + | + | + |  |
-| OTLP/HTTP binary Protobuf Exporter | * | + | + | + | + | + | + | + | + | + | + | - |  |
-| OTLP/HTTP JSON Protobuf Exporter |  | + | - | + | [-][py1003] |  | - | + |  | + | - | - |  |
-| OTLP/HTTP gzip Content-Encoding support | X | + | + | + | + | + | - | + |  | - | - | - |  |
-| Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - |  |
-| Honors retryable responses with backoff | X | + | - | + | + | + | - | + |  | - | - | - |  |
-| Honors non-retryable responses | X | + | - | - | + | + | - | + |  | - | - | - |  |
-| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - |  |
-| Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - |  |
-| SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | - |  |  |
-| SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | - |  |  |
-| SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  |  |
-| Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  | + |  |  |  |  |  | + |  |  | + |  |  |
+| OTLP/gRPC Exporter | * | + | + | + | + |  | + | + | + | + | + | + | - |
+| OTLP/HTTP binary Protobuf Exporter | * | + | + | + | + | + | + | + | + | + | + | - | + |
+| OTLP/HTTP JSON Protobuf Exporter |  | + | - | + | [-][py1003] |  | - | + |  | + | - | - | - |
+| OTLP/HTTP gzip Content-Encoding support | X | + | + | + | + | + | - | + |  | - | - | - | + |
+| Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - | - |
+| Honors retryable responses with backoff | X | + | - | + | + | + | - | + |  | - | - | - | - |
+| Honors non-retryable responses | X | + | - | - | + | + | - | + |  | - | - | - | - |
+| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - | - |
+| Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - | - |
+| SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | - |  | + |
+| SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | - |  | - |
+| SchemaURL in ResourceLogs and ScopeLogs |  | + | + |  | + |  | - | + |  |  | - |  | + |
+| Honors the [user agent spec](specification/protocol/exporter.md#user-agent) |  | + |  |  |  |  |  | + |  |  | + |  | - |
 | [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success) messages are handled and logged for OTLP/gRPC | X | + |  |  |  |  |  | + |  |  |  |  |  |
 | [Partial Success](https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#partial-success-1) messages are handled and logged for OTLP/HTTP | X | + |  |  |  |  |  | + |  |  |  |  |  |
-| Metric Exporter configurable temporality preference |  | + | + |  | + |  |  | + |  |  |  |  |  |
-| Metric Exporter configurable default aggregation |  | + | + |  | + |  |  |  |  |  |  |  |  |
+| Metric Exporter configurable temporality preference |  | + | + |  | + |  |  | + |  |  |  |  | - |
+| Metric Exporter configurable default aggregation |  | + | + |  | + |  |  |  |  |  |  |  | - |
 | **[Zipkin](specification/trace/sdk_exporters/zipkin.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Zipkin V1 JSON | X | - | + |  | + | - | - | - | - | - | - | - |  |
-| Zipkin V1 Thrift | X | - | + |  | [-][py1174] | - | - | - | - | - | - | - |  |
-| Zipkin V2 JSON | X | + | + |  | + | + | - | + | + | + | + | + |  |
-| Zipkin V2 Protobuf | X | - | + |  | + | - | + | - | - | - | - | - |  |
-| Service name mapping |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| SpanKind mapping |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| InstrumentationLibrary mapping |  | + | + | - | + | + | - | + | + | + | + | + |  |
-| InstrumentationScope mapping |  |  | + |  |  |  |  |  |  |  |  |  |  |
-| Boolean attributes |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Array attributes |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Status mapping |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Error Status mapping |  | + | + |  | + | + | - | + | + | + | + | - |  |
-| Event attributes mapping to Annotations |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Integer microseconds in timestamps |  | N/A | + |  | + | + | - | + | + | + | + | + |  |
+| Zipkin V1 JSON | X | - | + |  | + | - | - | - | - | - | - | - | - |
+| Zipkin V1 Thrift | X | - | + |  | [-][py1174] | - | - | - | - | - | - | - | - |
+| Zipkin V2 JSON | X | + | + |  | + | + | - | + | + | + | + | + | - |
+| Zipkin V2 Protobuf | X | - | + |  | + | - | + | - | - | - | - | - | - |
+| Service name mapping |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| SpanKind mapping |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| InstrumentationLibrary mapping |  | + | + | - | + | + | - | + | + | + | + | + | - |
+| InstrumentationScope mapping |  |  | + |  |  |  |  |  |  |  |  |  | - |
+| Boolean attributes |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Array attributes |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Status mapping |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Error Status mapping |  | + | + |  | + | + | - | + | + | + | + | - | - |
+| Event attributes mapping to Annotations |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Integer microseconds in timestamps |  | N/A | + |  | + | + | - | + | + | + | + | + | - |
 | **Prometheus** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| [Metadata Deduplication](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | - | - | - | - | - | + | - | - | - |  |
-| [Name Sanitization](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | + | + | - | - | - | + | + | + | + |  |
-| [UNIT Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | - | - | + | + | - | - | - | - | - | + | - |  |
-| [Unit Suffixes](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | + | + | - | + | - | - | - | + | + | + | - |  |
-| [Unit Full Words](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | + | + | - | - | - | - | - | + | - | - | - |  |
-| [HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | + | + | - | - | - | + | + | + | + |  |
-| [TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | + | + | - | - | - | + | + | + | + |  |
-| [otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) |  | + | + | - | - | - | - | - | + | - | - | - |  |
-| [otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) |  | + | - | - | - | - | - | - | - | - | - | - |  |
-| [otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) | X | + | - | - | - | - | - | - | + | - | - | - |  |
-| [Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1) |  | + | + | + | + | - | - | - | + | + | + | - |  |
-| [Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums) |  | + | + | + | + | - | - | - | + | + | + | + |  |
-| [Prometheus Counters have _total suffix by default](specification/compatibility/prometheus_and_openmetrics.md#sums) |  | + | + | + | + | - | - | - | + | - | - | - |  |
-| [Prometheus Counters _total suffixing can be disabled](specification/compatibility/prometheus_and_openmetrics.md#sums) | X | + | - | - | - | - | - | - | - | - | - | - |  |
-| [Cumulative Non-Monotonic Sums become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#sums) |  | + | + | + | + | - | - | - | + | + | + | - |  |
-| [Delta Non-Monotonic Sums become Cumulative Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums) | X | - | - | - | - | - | - | - | - | - | - | - |  |
-| [Cumulative Histograms become Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1) |  | + | + | + | + | - | - | - | + | + | + | + |  |
-| [Delta Histograms become Cumulative Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1) | X | - | - | - | - | - | - | - | - | - | - | - |  |
-| [Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | + | + | - | - | - | + | + | + | + |  |
-| [Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | - | - | - | - | - | + | - | - | - |  |
-| [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1) | X | + | - | - | - | - | - | - | - | - | - | - |  |
-| [`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1) | X | + | + | + | + | - | - | - | + | - | - | - |  |
+| [Metadata Deduplication](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | - | - | - | - | - | + | - | - | - | - |
+| [Name Sanitization](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | + | + | - | - | - | + | + | + | + | - |
+| [UNIT Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | - | - | + | + | - | - | - | - | - | + | - | - |
+| [Unit Suffixes](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | + | + | - | + | - | - | - | + | + | + | - | - |
+| [Unit Full Words](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) | X | + | + | - | - | - | - | - | + | - | - | - | - |
+| [HELP Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | + | + | - | - | - | + | + | + | + | - |
+| [TYPE Metadata](specification/compatibility/prometheus_and_openmetrics.md#metric-metadata-1) |  | + | + | + | + | - | - | - | + | + | + | + | - |
+| [otel_scope_name and otel_scope_version labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) |  | + | + | - | - | - | - | - | + | - | - | - | - |
+| [otel_scope_[attribute] labels on all Metrics](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) |  | + | - | - | - | - | - | - | - | - | - | - | - |
+| [otel_scope labels can be disabled](specification/compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1) | X | + | - | - | - | - | - | - | + | - | - | - | - |
+| [Gauges become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#gauges-1) |  | + | + | + | + | - | - | - | + | + | + | - | - |
+| [Cumulative Monotonic Sums become Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums) |  | + | + | + | + | - | - | - | + | + | + | + | - |
+| [Prometheus Counters have _total suffix by default](specification/compatibility/prometheus_and_openmetrics.md#sums) |  | + | + | + | + | - | - | - | + | - | - | - | - |
+| [Prometheus Counters _total suffixing can be disabled](specification/compatibility/prometheus_and_openmetrics.md#sums) | X | + | - | - | - | - | - | - | - | - | - | - | - |
+| [Cumulative Non-Monotonic Sums become Prometheus Gauges](specification/compatibility/prometheus_and_openmetrics.md#sums) |  | + | + | + | + | - | - | - | + | + | + | - | - |
+| [Delta Non-Monotonic Sums become Cumulative Prometheus Counters](specification/compatibility/prometheus_and_openmetrics.md#sums) | X | - | - | - | - | - | - | - | - | - | - | - | - |
+| [Cumulative Histograms become Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1) |  | + | + | + | + | - | - | - | + | + | + | + | - |
+| [Delta Histograms become Cumulative Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1) | X | - | - | - | - | - | - | - | - | - | - | - | - |
+| [Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | + | + | - | - | - | + | + | + | + | - |
+| [Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | - | - | - | - | - | + | - | - | - | - |
+| [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1) | X | + | - | - | - | - | - | - | - | - | - | - | - |
+| [`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1) | X | + | + | + | + | - | - | - | + | - | - | - | - |
 
 ## OpenCensus Compatibility
 
