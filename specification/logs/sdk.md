@@ -186,9 +186,9 @@ the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
 A `LoggerConfig` defines various configurable aspects of a `Logger`'s behavior.
 It consists of the following parameters:
 
-* `disabled`: A boolean indication of whether the logger is enabled.
+* `enabled`: A boolean indication of whether the logger is enabled.
 
-  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  If not explicitly set, the `enabled` parameter SHOULD default to `true` (
   i.e. `Logger`s are enabled by default).
 
   If a `Logger` is disabled, it MUST behave equivalently
@@ -250,7 +250,7 @@ emitting the record):
 
 - there are no registered [`LogRecordProcessors`](#logrecordprocessor).
 - **Status**: [Development](../document-status.md) - `Logger` is disabled
-  ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
+  ([`LoggerConfig.enabled`](#loggerconfig) is `false`).
 - **Status**: [Development](../document-status.md) - the provided severity
   is specified (i.e. not `0`) and is less than the configured `minimum_severity` in the
   [`LoggerConfig`](#loggerconfig).
