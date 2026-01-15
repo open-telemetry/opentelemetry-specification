@@ -126,9 +126,9 @@ The process context is treated as a singleton: there SHOULD NOT be more than one
 
 The context MAY be dropped during SDK shutdown, or kept around until the process itself terminates and the OS takes care of cleaning the process memory.
 
-Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. On earlier kernel versions or kernels without the feature, the `prctl` call will return an error which should be ignored. The reading protocol specified below is able to work regardless of naming being available.
+Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. On earlier kernel versions or kernels without the feature, the `prctl` call will return an error which should be ignored. The reading protocol specified below is able to work regardless of `CONFIG_ANON_VMA_NAME` being available.
 
-Note that on legacy kernels and those without `CONFIG_ANON_VMA_NAME` it's possible, using eBPF, [to optionally hook on `prctl`](https://github.com/ivoanjo/proc-level-demo/tree/main/ebpf-program) naming attempts as a way of detecting new mappings being published. For this reason, this step should always be done even if the publisher somehow is aware that naming will not be successful on the current system.
+Note that on legacy kernels and those without `CONFIG_ANON_VMA_NAME` it's still possible, using eBPF, [to optionally hook on `prctl`](https://github.com/ivoanjo/proc-level-demo/tree/main/ebpf-program) naming attempts as a way of detecting new mappings being published. For this reason, this step should always be done even if the publisher somehow is aware that naming will not be successful on the current system.
 
 ### Reading Protocol
 
