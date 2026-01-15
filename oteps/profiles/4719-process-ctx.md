@@ -120,6 +120,7 @@ The signature MUST be written last to ensure readers never observe incomplete or
 If resource attributes are updated during the process lifetime, the "Updating Protocol" should be followed.
 
 If any of the steps above fail (other than naming or allocating a new memfd), publication is considered to have failed, and the process context will not be available.
+Finally, if both `memfd_create` fails (step 2, thus requiring falling back to step 4) and naming the mapping fails (step 10), then the process context will not be available either.
 
 The process context is treated as a singleton: there SHOULD NOT be more than one process context active for the same process.
 
