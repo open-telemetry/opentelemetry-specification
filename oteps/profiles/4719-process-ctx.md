@@ -138,16 +138,20 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 2. **Validate signature and version**:
    - Read the header and verify first 8 bytes matches `OTEL_CTX`
    - Read the version field and verify it is supported (currently `2`)
-   - Verify that all other fields are non-zero (indicating the context is currently being written)
-   - If either check fails, skip this mapping
+   - If both of these checks succeed, the reader SHOULD consider the mapping established and MAY optionally cache the mapping address for that process for subsequent process context reads.
+   - If either check fails, skip this mapping.
 
-3. **Read payload**: Read `payload_size` bytes starting after the header
+3. **Verify the rest of the header**:
+   - Verify that `published_at_ns` is non-zero (indicating the context is currently being written)
+   - If this fails, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
-4. **Re-read header**: If the header has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context. If the header changed, restart at 2.
+4. **Read payload**: Read `payload_size` bytes starting after the header
 
-5. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
+5. **Re-read header**: If `published_at_ns` has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context. If `published_at_ns` changed, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
-6. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process
+6. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
+
+7. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process
 
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
 
@@ -161,7 +165,7 @@ When the resource attributes change, the process context mapping should be updat
 4. **Update payload fields**: Update the `payload` pointer and `payload_size` fields to point to the new payload.
 5. **Memory barrier**: Ensure the payload fields are updated before finalizing the timestamp.
 6. **Signal update complete**: Write the new timestamp to `published_at_ns`.
-7. **Name mapping**: Re-issue the `prctl(PR_SET_VMA, ...)` call to name the mapping. This step should be done unconditionally, although naming mappings is not always supported by the kernel.
+7. **Name mapping**: Re-issue the `prctl(PR_SET_VMA, ...)` call to name the mapping. This step SHOULD be done unconditionally, although naming mappings is not always supported by the kernel.
 
 As the reader checks `published_at_ns` before and after reading the payload, it will detect concurrent updates and avoid concurrency issues.
 
@@ -199,7 +203,7 @@ Creating memory mappings and managing them adds complexity to SDK implementation
 
 **Mitigation**: We've created a reference implementation in [C/C++](https://github.com/open-telemetry/sig-profiling/tree/main/process-context/c-and-cpp), as well as a [demo OTEL Java SDK extension](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo) and a [Go port as well](https://github.com/DataDog/dd-trace-go/pull/3937).
 
-For Go as well as modern versions of Java it's possible to create an implementation that doesn't rely on third-party libraries or native code (e.g. by directly calling into the OS or libc). Older versions of Java will need to rely on building the C/C++ into a Java native library.
+For Go as well as modern versions of Java it's possible to create an implementation that doesn't rely on third-party libraries or native code (e.g. by directly calling into the OS or libc). Older versions of Java will need to rely on building the C/C++ code into a Java native library.
 
 ### Platform Limitations
 
