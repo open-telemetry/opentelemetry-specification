@@ -524,7 +524,7 @@ sections:
       - name: The `Create` operation returns `LoggerProvider`
         status: '+'
       - name: The `Create` operation returns `Propagators`
-        status: '?'
+        status: '+'
       - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
         status: '?'
       - name: Register a `PluginComponentProvider`
