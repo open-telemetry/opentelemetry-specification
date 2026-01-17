@@ -1,324 +1,155 @@
 # Stable by Default: Improving OpenTelemetry's Default User Experience
 
-This OTEP proposes that OpenTelemetry distributions enable only stable components by default, decouple instrumentation stability from semantic convention stability, and establish expanded stability criteria that include documentation, performance benchmarks, and practical usability.
+This OTEP defines goals and acceptance criteria for making OpenTelemetry production-ready by default. It identifies workstreams requiring dedicated effort and coordination across SIGs, each of which may spawn follow-up OTEPs with detailed designs.
 
 ## Motivation
 
-OpenTelemetry has grown into a massive ecosystem supporting four telemetry signals across more than a dozen programming languages. This growth has come with complexity that creates real barriers to production adoption. Community feedback consistently identifies several pain points:
+OpenTelemetry has grown into a massive ecosystem supporting four telemetry signals across more than a dozen programming languages. This growth has come with complexity that creates real barriers to production adoption.
 
-**Experimental features break production deployments.** Users report configuration breaking between minor versions, silent failures in telemetry pipelines, and unexpected performance regressions that only appear at scale. As one practitioner noted: "The silent failure policy of OTEL makes flames shoot out of the top of my head."
+Community feedback consistently identifies several pain points. Experimental features break production deployments—users report configuration breaking between minor versions, silent failures in telemetry pipelines, and unexpected performance regressions that only appear at scale. As one practitioner noted: "The silent failure policy of OTEL makes flames shoot out of the top of my head."
 
-**Semantic convention changes destroy existing dashboards.** When semantic conventions change, users must update instrumentation across their entire infrastructure while simultaneously updating dashboards, alerts, and downstream tooling. Organizations report significant resistance from developers asked to coordinate these changes.
+Semantic convention changes destroy existing dashboards. When conventions change, users must update instrumentation across their entire infrastructure while simultaneously updating dashboards, alerts, and downstream tooling. Organizations report significant resistance from developers asked to coordinate these changes.
 
-**Instrumentation libraries are stuck on pre-release.** Many instrumentation libraries cannot reach stable status because they depend on experimental semantic conventions, even when the instrumentation API surface itself is mature and battle-tested.
+Many instrumentation libraries are stuck on pre-release because they depend on experimental semantic conventions, even when the instrumentation API surface itself is mature and battle-tested. The "batteries not included" philosophy means users must assemble many components before achieving basic functionality. Documentation assumes expertise, and newcomers describe the experience as "overwhelming" with "no discoverability." Auto-instrumentation can add significant resource consumption that only becomes apparent at scale, with reports of "four times the CPU usage" compared to simpler alternatives. Users evaluating OpenTelemetry for production deployment need confidence in CVE response timelines, dependency hygiene, and supply chain security—areas where commitments are not well documented.
 
-**Defaults are not useful out of the box.** The "batteries not included" philosophy means users must assemble many components before achieving basic functionality. Documentation assumes expertise, and newcomers describe the experience as "overwhelming" with "no discoverability."
+These all stem from the same problem: OpenTelemetry's default configuration prioritizes feature completeness over production readiness. This OTEP establishes the goals and workstreams needed to address this.
 
-**Performance overhead surprises users.** Auto-instrumentation can add significant resource consumption that only becomes apparent at scale, with reports of "four times the CPU usage" compared to simpler alternatives.
+## Goals
 
-These issues share a common root cause: OpenTelemetry's default configuration prioritizes feature completeness over production readiness. This OTEP addresses that by making stability the default.
+This OTEP aims to achieve six outcomes:
 
-## Explanation
+- Users should be able to trust default installations. Someone who installs an OpenTelemetry SDK, agent, or Collector distribution without additional configuration should receive production-ready functionality that will not break between minor versions.
 
-### Principle: Stable by Default
+- Experimental features should be clearly marked and require explicit opt-in. Users who want cutting-edge functionality can access it, but they must take deliberate action that signals they understand the stability trade-offs.
 
-All OpenTelemetry distributions SHOULD enable only stable components by default. Users who want experimental features MUST explicitly opt in through a consistent, well-documented mechanism.
+- Stability information should be visible and consistent. Users should be able to easily determine the stability status of any component before adopting it, and this information should be presented consistently across all OpenTelemetry projects.
 
-This means:
+- Instrumentation should be able to stabilize independently of semantic conventions. Battle-tested instrumentation libraries should not be blocked from reaching stable status solely because the semantic conventions they emit are still evolving.
 
-1. **Default installations are production-ready.** A user who installs an OpenTelemetry SDK or agent without additional configuration receives only stable, tested functionality.
+- Performance characteristics should be known. Users should be able to understand the overhead implications of OpenTelemetry before deploying to production, and maintainers should be able to detect regressions between releases.
 
-2. **Experimental features require explicit action.** Enabling experimental components requires configuration that clearly signals the user understands they are opting into potentially unstable behavior.
+- Security commitments should be documented. Users should be able to evaluate OpenTelemetry's security posture, including CVE response timelines and dependency management practices.
 
-3. **No silent experimental dependencies.** Stable components MUST NOT silently depend on experimental components in a way that could break user deployments.
+## Success Criteria
 
-### Decoupling Instrumentation Stability from Semantic Convention Stability
+This initiative succeeds when official OpenTelemetry distributions—Collector distributions, the Java agent, and similar—enable only stable components by default. Users should be able to enable experimental features through a consistent, well-documented mechanism. Each component's stability status should be clearly documented and discoverable. Instrumentation libraries should be able to declare API stability independently from telemetry output stability. Performance benchmarks should exist for stable components, with published baseline characteristics. Security policies and CVE response commitments should be documented and followed.
 
-An instrumentation library's stability status SHOULD be independent of the stability status of the semantic conventions it emits.
+## Workstreams
 
-**Rationale:** Instrumentation libraries have two surfaces that can be evaluated independently:
+Achieving these goals requires coordinated effort across multiple areas. Each workstream below represents a body of work that may require its own detailed OTEP, tooling, or process changes. The current recommendations are just that -- it's probable that separate projects may need to be created to focus on these specific workstreams.
 
-1. **API surface** - The programmatic interface developers use (method signatures, configuration options, lifecycle hooks)
-2. **Telemetry output** - The semantic conventions used in emitted spans, metrics, and logs
+### Workstream 1: Experimental Feature Opt-In
 
-If an instrumentation library's API surface is stable, mature, and well-tested, blocking its stabilization on experimental semantic conventions harms users by:
+There is no consistent mechanism across OpenTelemetry for users to opt into experimental features. The Collector uses feature gates, some SDKs use environment variables like `OTEL_SEMCONV_STABILITY_OPT_IN`, and others have ad-hoc approaches. This workstream should define a consistent pattern for experimental feature opt-in that works across SDKs, the Collector, and instrumentation libraries.
 
-- Keeping useful, production-ready code in a "pre-release" state indefinitely
-- Preventing distributions from including battle-tested instrumentation by default
-- Creating a false signal that the instrumentation is immature when only the conventions are evolving
+The work is complete when we have a documented mechanism for enabling experimental features—whether through environment variables, configuration, or programmatic API—along with clear guidance on what "experimental" means and what users are opting into. Experimental features should be disabled by default with clear logging when enabled. Where possible, the design should align with existing patterns like Collector feature gates and `OTEL_SEMCONV_STABILITY_OPT_IN`.
 
-**Migration pathway requirement:** When instrumentation libraries stabilize before their semantic conventions, they MUST document:
+The Configuration SIG is the natural owner for this work.
 
-- Which semantic conventions are currently experimental
-- How telemetry output may change when conventions stabilize
-- Recommended approaches for handling convention migrations (e.g., dual-emission, schema transformations)
+### Workstream 2: Federated Schema and Stability
 
-### Expanded Stability Criteria
+Instrumentation libraries are blocked from stabilization because they depend on experimental semantic conventions, even when the instrumentation code itself is mature. There is also no standard way to declare which semantic conventions an instrumentation uses or to report schema URLs consistently.
 
-The definition of "stable" SHOULD expand beyond API compatibility to include:
+This workstream should enable instrumentation stability to be assessed independently from semantic convention stability, with clear mechanisms for communicating telemetry stability to users. Instrumentation libraries should be able to declare API stability separately from telemetry output stability. Schema URLs should be populated consistently across instrumentations, enabling downstream tooling. Migration pathways should be documented when instrumentation stabilizes before its semantic conventions. Breaking changes to telemetry output should be treated as breaking changes, requiring major version bumps.
 
-1. **Documentation completeness**
-   - Getting started guide with working examples
-   - Configuration reference with all options documented
-   - Troubleshooting guide for common issues
-   - Migration guide from previous versions
+The Semantic Conventions SIG and Weaver maintainers are the natural owners. Related work includes the [OTEP on federated semantic conventions](https://github.com/open-telemetry/opentelemetry-specification/pull/4815).
 
-2. **Performance benchmarks**
-   - A consistent benchmark suite that runs in CI
-   - Published baseline overhead characteristics for typical scenarios
-   - Historical tracking to detect regressions over time
+### Workstream 3: Distribution and Component Definitions
 
-   Note: The goal of benchmarking is **visibility, not gatekeeping**. We acknowledge that instrumentation adds overhead—we are not promising zero-cost observability. What we need is:
-   - **Knowledge**: Users should be able to understand what overhead to expect in typical scenarios before deploying
-   - **Tracking**: Maintainers should be able to detect performance regressions between releases
-   - **Improvement path**: Contributors who care about performance should have benchmarks they can optimize against
+The term "component" means different things in different contexts—a Collector receiver is quite different from an SDK plugin or an instrumentation library. There is no clear definition of what criteria a component must meet to be included in an official distribution, or what "official distribution" even means.
 
-   Benchmarks may take various forms depending on the component: microbenchmarks for hot paths, integration benchmarks for end-to-end scenarios, or memory profiling for allocation-heavy components. The specific approach is left to maintainers, but stable components SHOULD have *some* published benchmark suite that runs consistently.
+This workstream needs to define what a component is, what an official distribution is, and what criteria govern inclusion in distributions. The definitions need to work across the Collector, SDKs, and instrumentation. We need governance around official OpenTelemetry distributions, criteria for including components in those distributions—stability requirements, documentation, testing—and a process for promoting components from contrib/community to official distributions.
 
-3. **Tested integration points**
-   - Verified compatibility with common frameworks and libraries
-   - Example configurations for popular deployment patterns
-   - Known limitations clearly documented
+The GC and Technical Committee should own this work.
 
-4. **Operational readiness**
-   - Health check and diagnostic capabilities
-   - Graceful degradation under resource pressure
-   - Clear feedback mechanisms (no silent failures)
+### Workstream 4: Production Readiness Criteria
 
-### Promoting Instrumentation to Distributions
+Users cannot easily assess whether a component is ready for production use. Stability status alone does not convey documentation quality, performance characteristics, or operational readiness.
 
-Instrumentation libraries that meet stability criteria SHOULD be promoted into official distributions when:
+This workstream should define what "production-ready" means for OpenTelemetry components. The goal is visibility, not gatekeeping. Documented guidance should cover what production-ready components typically include: getting started documentation, configuration reference, troubleshooting guides, migration guides, performance visibility through benchmarks and published overhead characteristics, tested integration points and known limitations, and operational features like health checks, graceful degradation, and clear error messages.
 
-1. The instrumentation API surface is stable
-2. The instrumentation covers a widely-used framework or library
-3. The instrumentation has demonstrated production usage
-4. The semantic conventions used are either:
-   - Stable, OR
-   - Experimental but with a documented migration pathway
+This guidance should be aspirational rather than a set of blocking requirements. Components can be stable without meeting every criterion. Requiring extensive benchmarks and documentation for every component would worsen the "stuck on pre-release" problem, not improve it. The goal is to help maintainers understand what production users need without creating barriers to stabilization.
 
-This enables distributions to provide useful functionality by default while maintaining clear communication about what stability guarantees apply to different aspects of the telemetry.
+The End User SIG and Communications SIG should own this work.
 
-### Consistent Opt-In Mechanism
+### Workstream 5: Performance Benchmarking
 
-All OpenTelemetry implementations SHOULD provide a consistent mechanism for opting into experimental features:
+Users report unexpected performance overhead with OpenTelemetry, sometimes discovering issues only at scale. Maintainers lack consistent tooling to detect performance regressions.
 
-1. **Environment variable:** `OTEL_EXPERIMENTAL_FEATURES_ENABLED=feature1,feature2` or `OTEL_EXPERIMENTAL_FEATURES_ENABLED=all`
+This workstream should establish patterns and tooling for performance benchmarking that give users visibility into overhead and maintainers ability to detect regressions. We need guidance on benchmark approaches—microbenchmarks, integration benchmarks, memory profiling—along with recommended tooling or frameworks that maintainers can adopt, examples of effective benchmark suites from existing projects, and historical tracking patterns to detect regressions over time.
 
-2. **Programmatic configuration:** A clearly-named API for enabling experimental features at initialization time
+Benchmarks will take various forms depending on the component, and the specific approach should be left to maintainers. That said, stable components should have some published benchmark suite that runs consistently.
 
-3. **Configuration file:** A dedicated section for experimental feature flags
+Per-language SIGs should own this work with coordination from the TC.
 
-The mechanism SHOULD:
+### Workstream 6: Security Standards
 
-- Be consistent across all language implementations
-- Produce clear log messages when experimental features are enabled
-- Be discoverable through documentation and error messages
+Users evaluating OpenTelemetry for production need confidence in security practices, but commitments around CVE response timelines, dependency updates, and supply chain security are not well documented.
 
-## Internal details
+This workstream should document OpenTelemetry's security commitments and establish consistent practices across projects: published CVE response timeline commitments, documented dependency update and hygiene practices, supply chain security practices including signing, provenance, and SBOM, and security policies that are consistent across OpenTelemetry projects.
 
-### Impact on Existing Distributions
+The Security SIG, GC, and TC should own this work.
 
-Distributions that currently enable experimental components by default will need to:
+## Impact
 
-1. Audit which components are experimental vs. stable
-2. Move experimental components behind opt-in flags
-3. Update documentation to explain how to enable experimental features
-4. Communicate changes to users with appropriate migration guidance
+### On Existing Distributions
 
-**Rollout consideration:** To avoid breaking existing users, implementations MAY provide a transitional period where:
+Distributions that currently enable experimental components by default will need to audit their component list and develop a migration plan. To avoid breaking existing users, implementations may provide a transitional period with deprecation warnings before changing defaults. The specifics of this transition are left to individual distributions and the workstreams above.
 
-- A deprecation warning is emitted when experimental features are used without explicit opt-in
-- The default behavior changes to stable-only in a subsequent release
+### On Instrumentation Libraries
 
-### Impact on Instrumentation Libraries
+Instrumentation library maintainers will benefit from the ability to declare API stability independently from telemetry stability. They will need to clearly document which semantic conventions they use and provide migration guidance when conventions change.
 
-Instrumentation library maintainers will need to:
+### On Users
 
-1. Clearly document which semantic conventions they use and their stability status
-2. Implement migration pathways for convention changes (e.g., dual-emission periods)
-3. Meet expanded stability criteria before being included in default distributions
+Users will experience a more predictable default installation. Those who depend on experimental features will need to explicitly opt in, which may require configuration changes during the transition period.
 
-### Unified Component Metadata
+## Trade-offs
 
-OpenTelemetry currently has fragmented metadata approaches: semantic conventions use Weaver's YAML schema with stability fields, the Collector has `metadata.yaml` for components, and instrumentation libraries have no standardized format. This OTEP proposes a unified component metadata schema that works across all OpenTelemetry components.
+Disabling experimental features by default means users may get less functionality out of the box, potentially worsening the "batteries not included" perception. The mitigation is to accelerate stabilization of high-value components, provide clear and discoverable instructions for enabling experimental features, and ensure the stable subset provides genuine value for common use cases.
 
-Every OpenTelemetry component (instrumentation library, Collector component, SDK plugin) SHOULD include a `metadata.yaml` file with a consistent schema:
+Defining workstreams and requiring cross-SIG coordination may slow progress compared to individual SIGs acting independently. However, each workstream can proceed independently once acceptance criteria are agreed. This OTEP provides alignment on goals without requiring lockstep execution.
 
-```yaml
-# metadata.yaml - Unified OpenTelemetry Component Metadata
-type: instrumentation  # instrumentation | receiver | processor | exporter | extension
+Decoupling instrumentation stability from semantic convention stability may confuse users who see "stable" instrumentation emitting "experimental" semantic conventions. Clear documentation explaining the two dimensions of stability and tooling that surfaces this information consistently should address this. The alternative—keeping useful instrumentation in pre-release indefinitely—causes more confusion.
 
-status:
-  # API/programmatic interface stability (method signatures, config options)
-  api:
-    stability: stable  # development | alpha | beta | release_candidate | stable
+Expanding what "production-ready" means to include documentation, benchmarks, and security could make it harder for components to stabilize, worsening the "stuck on pre-release" problem. This is why production readiness criteria should be guidance rather than gatekeeping. Components can be stable without meeting every criterion.
 
-  # Telemetry output stability, per-signal
-  telemetry:
-    traces: stable
-    metrics: beta
-    logs: development
+## Prior Art
 
-  # Overall component lifecycle
-  class: maintained  # maintained | unmaintained | deprecated
-  codeowners:
-    - "@username"
-    - "@org/team"
+OTEP 0143 on Versioning and Stability established the foundation for stability guarantees in OpenTelemetry clients. This OTEP extends those concepts to distributions and instrumentation.
 
-# Which semantic conventions this component emits
-semantic_conventions:
-  - http.client
-  - http.server
-  - url
+OTEP 0232 on Maturity Levels defined maturity levels: Development, Alpha, Beta, RC, Stable, and Deprecated. This OTEP builds on these levels by specifying how they should affect default behavior. Workstreams should use these maturity levels consistently rather than inventing new terminology.
 
-# Target framework/library information
-target:
-  name: express
-  versions: ">=4.0.0 <6.0.0"
+OTEP 0227 on Separate Semantic Conventions moved semantic conventions to a separate repository with independent versioning. This OTEP leverages that separation to enable independent stability assessments.
 
-# Where to find more information
-documentation: https://opentelemetry.io/docs/instrumentation/js/libraries/express/
-```
+OTEP 0152 on Telemetry Schemas defined schema URLs and transformation mechanisms for semantic convention evolution. Workstream 2 builds on this foundation.
 
-This unified schema:
+The OpenTelemetry Collector's `metadata.yaml` and feature gates provide established patterns for component metadata and experimental feature opt-in that workstreams should consider.
 
-1. **Extends the Collector's existing `metadata.yaml` pattern** rather than inventing something new
-2. **Separates API stability from telemetry stability** - the core insight of this OTEP
-3. **References semantic conventions by ID** - inherits stability from Weaver-managed semconv definitions rather than duplicating
-4. **Links to documentation** - single source of truth for details about the component
+Kubernetes uses [feature gates](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/) with alpha/beta/stable progression, where beta features are typically enabled by default. Workstreams should consider whether OpenTelemetry should follow a similar pattern.
 
-#### Schema Alignment
+## Alternatives Considered
 
-The `status.telemetry` stability levels align with the existing semantic conventions schema (development, alpha, beta, release_candidate, stable) as defined in [Weaver](https://github.com/open-telemetry/weaver). The `status.class` field aligns with OTEP 0232's maturity levels.
+An earlier version of this OTEP attempted to specify detailed requirements for stability criteria, metadata schemas, and opt-in mechanisms. Community feedback indicated this approach was too prescriptive and should be broken into manageable workstreams that can be tackled independently with their own detailed designs.
 
-#### Tooling Integration
+We also considered keeping current defaults but improving documentation about stability. This does not address the core problem: users hit production issues with experimental features they did not realize they were using. Documentation alone is insufficient.
 
-This metadata enables:
+We considered requiring semantic conventions to be stable before instrumentation can stabilize. This blocks useful, mature instrumentation indefinitely and does not match how users evaluate stability.
 
-- **Distribution builders** to automatically include only components meeting stability thresholds
-- **Documentation generators** to surface stability information consistently
-- **Registry** to display unified component information
-- **CI/CD** to enforce stability policies and detect regressions
-- **IDEs/editors** to warn when using experimental components without opt-in
+## Open Questions
 
-### Error Modes
+Who will own each workstream? Should ownership be assigned before this OTEP is approved, or can workstreams proceed as volunteers emerge?
 
-**Experimental feature without opt-in:** When code attempts to use an experimental feature without explicit opt-in, implementations SHOULD:
+Can workstreams proceed in parallel, or do some depend on others? For example, does "Distribution and Component Definitions" need to complete before "Experimental Feature Opt-In" can finalize its design?
 
-- Log a warning explaining how to enable the feature
-- Either disable the feature or fail fast (language-specific decision)
-- NOT silently enable the experimental behavior
+Should the default be "stable only" or "beta and above"? The Collector and Kubernetes enable beta features by default. Is that the right model for OpenTelemetry broadly?
 
-**Semantic convention migration:** When semantic conventions change, instrumentation SHOULD:
+Which distributions are considered "official" and subject to these requirements? Just the Collector distributions and Java agent? What about language-specific SDK packages?
 
-- Support a dual-emission period where both old and new conventions are emitted
-- Provide configuration to control emission behavior during migration
-- Log clear messages about the migration status
+How do we ensure workstream outcomes are adopted across the federated OpenTelemetry project? What enforcement mechanisms exist beyond social pressure?
 
-## Trade-offs and mitigations
+How will we measure whether this initiative is successful? User surveys? Reduced support burden? Faster adoption?
 
-### Trade-off: Reduced default functionality
+## Future Possibilities
 
-**Concern:** Users may get less functionality out of the box if experimental features are disabled by default.
-
-**Mitigation:**
-
-- Accelerate stabilization of high-value components
-- Provide clear, single-command instructions for enabling experimental features
-- Ensure the stable subset provides genuine value for common use cases
-
-### Trade-off: Increased maintenance burden
-
-**Concern:** Maintaining stability metadata, dual-emission, and opt-in mechanisms adds work for maintainers.
-
-**Mitigation:**
-
-- Provide shared tooling and libraries for common patterns
-- Automate stability checks in CI/CD
-- This burden is offset by reduced support load from users hitting stability issues
-
-### Trade-off: Decoupling creates confusion
-
-**Concern:** Users may be confused if instrumentation is "stable" but emits "experimental" semantic conventions.
-
-**Mitigation:**
-
-- Clear documentation explaining the two dimensions of stability
-- Tooling that surfaces this information
-- Consistent messaging across all OpenTelemetry materials
-
-## Prior art and alternatives
-
-### Prior Art
-
-**OTEP 0143 (Versioning and Stability):** Established the foundation for stability guarantees in OpenTelemetry clients. This OTEP extends those concepts to distributions and instrumentation.
-
-**OTEP 0232 (Maturity Levels):** Defined maturity levels (Development, Alpha, Beta, RC, Stable, Deprecated). This OTEP builds on these levels by specifying how they should affect default behavior.
-
-**OTEP 0227 (Separate Semantic Conventions):** Moved semantic conventions to a separate repository with independent versioning. This OTEP leverages that separation to enable independent stability assessments.
-
-**OTEP 0152 (Telemetry Schemas):** Defined schema URLs and transformation mechanisms for semantic convention evolution. This OTEP references schemas as a migration pathway mechanism.
-
-**OTEP 0155 (External Modules):** Defined the Registry self-assessment form and component quality indicators. The unified metadata schema incorporates these concepts.
-
-**Semantic Conventions YAML Schema (Weaver):** The [Weaver](https://github.com/open-telemetry/weaver) project defines a YAML schema for semantic conventions that includes `stability` (development, alpha, beta, release_candidate, stable), `deprecated`, and `requirement_level` fields. The unified metadata schema aligns with these stability levels.
-
-**OpenTelemetry Collector `metadata.yaml`:** The Collector already requires [`metadata.yaml`](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/system/metadata.yaml) files for components, defining `status.stability` per-signal, `status.codeowners`, and resource attributes. The unified metadata schema extends this pattern to instrumentation libraries.
-
-### Alternatives Considered
-
-#### Alternative 1: Status quo with better documentation
-
-Keep current defaults but improve documentation about stability. Rejected because documentation alone does not prevent users from hitting production issues with experimental features they didn't realize they were using.
-
-#### Alternative 2: Strict coupling of instrumentation and semantic convention stability
-
-Require semantic conventions to be stable before instrumentation can stabilize. Rejected because this blocks useful, mature instrumentation indefinitely and doesn't match how users evaluate stability.
-
-#### Alternative 3: Per-feature opt-out instead of opt-in
-
-Default to enabling everything, with opt-out for experimental features. Rejected because this still causes production issues for users who don't know to opt out, and the current pain points demonstrate this approach doesn't work.
-
-## Open questions
-
-1. **Transition timeline:** How long should the deprecation period be before changing defaults? Should this be coordinated across all language implementations?
-
-2. **Granularity of opt-in:** Should opt-in be at the feature level, component level, or signal level? What's the right balance between simplicity and control?
-
-3. **Semantic convention migration tooling:** What tooling should OpenTelemetry provide to help users migrate when semantic conventions change? Is schema-based transformation sufficient?
-
-4. **Certification or compliance:** Should there be a formal process for certifying that a distribution meets "stable by default" requirements?
-
-5. **Contrib vs. core promotion criteria:** What specific criteria determine when an instrumentation library should be promoted from contrib to core distributions?
-
-6. **Unified metadata schema scope:** Should the unified `metadata.yaml` schema be defined in this OTEP, or should it be a separate OTEP? The Collector SIG and Semantic Conventions SIG already have metadata formats - how do we coordinate convergence?
-
-7. **Metadata schema governance:** Who owns the unified metadata schema? Should it live in the specification repo, a dedicated schema repo, or be managed by Weaver?
-
-8. **Backwards compatibility with existing Collector metadata:** The Collector's existing `metadata.yaml` format has existing tooling (mdatagen). How do we evolve toward a unified schema without breaking existing Collector component builds?
-
-9. **Benchmark guidance:** Should OpenTelemetry provide recommended benchmark scenarios or tooling to help maintainers get started? How do we balance flexibility (let maintainers choose their approach) with comparability (users want to compare overhead across instrumentations)?
-
-## Future possibilities
-
-### Stability Selection in Configuration
-
-Future work could enable users to specify minimum stability thresholds through configuration:
-
-```yaml
-# Example: only enable components at beta or higher
-otel:
-  minimum_stability: beta
-```
-
-### Federated Semantic Convention Development
-
-This OTEP supports future work on federating semantic convention development to domain experts outside the core OpenTelemetry organization, as the decoupling reduces the blast radius of convention changes.
-
-### Automated Stability Assessment
-
-Tooling could automatically assess stability criteria (documentation completeness, performance benchmarks, test coverage) and surface this information to users and maintainers.
-
-### Cross-Language Stability Coordination
-
-Future work could establish mechanisms for coordinating stability status across language implementations, ensuring users have consistent expectations regardless of language choice.
+Once the workstreams defined in this OTEP complete, several additional improvements become possible. Users could specify minimum stability thresholds—for example, "only enable beta or above components"—through configuration files or environment variables. Tooling could automatically assess and surface stability information such as documentation completeness, benchmark availability, and test coverage to help users and maintainers. Mechanisms for coordinating stability status across language implementations would ensure users have consistent expectations regardless of language choice. Decoupling instrumentation stability from semantic conventions enables domain experts outside core OpenTelemetry to develop and stabilize conventions for their domains.
