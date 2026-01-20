@@ -231,6 +231,11 @@ from the exception on the `LogRecord` with the conventions outlined in the
 User-provided attributes MUST take precedence and MUST NOT be overwritten by
 exception-derived attributes.
 
+Note: For performance optimization, SDKs MAY take the configured
+[attribute limits](#logrecord-limits) into consideration when generating large
+exception attributes (e.g., `exception.stacktrace`). This can help avoid
+unnecessary processing of large attribute values that would be truncated anyway.
+
 **Status**: [Development](../document-status.md) Before processing a log record,
 the implementation MUST apply the filtering rules defined by the
 [LoggerConfig](#loggerconfig) (in case `Enabled` was not called prior to
