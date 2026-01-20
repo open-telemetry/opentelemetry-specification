@@ -228,6 +228,8 @@ the implementation SHOULD set it equal to the current time.
 [Exception](api.md#emit-a-logrecord) is provided, the SDK MUST by default set attributes
 from the exception on the `LogRecord` with the conventions outlined in the
 [exception semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
+User-provided attributes MUST take precedence and MUST NOT be overwritten by
+exception-derived attributes.
 
 **Status**: [Development](../document-status.md) Before processing a log record,
 the implementation MUST apply the filtering rules defined by the
