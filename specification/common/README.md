@@ -100,31 +100,31 @@ those values SHOULD be represented as strings following the encoding rules below
 
 #### Byte Arrays
 
-Byte arrays SHOULD be Base64-encoded. Standalone values appear unquoted; nested values
-(within arrays or maps) are quoted as JSON strings.
+Byte arrays SHOULD be Base64-encoded.
+The SHOULD NOT be encoded as JSON strings (with explicit surrounding quotes).
 
-Example when standalone: `aGVsbG8gd29ybGQ=`
-
-Example when nested in arrays/maps: `"aGVsbG8gd29ybGQ="`
+Example: `aGVsbG8gd29ybGQ=`
 
 #### Empty Values
 
-Empty values SHOULD be represented as an empty string when standalone,
-or as JSON null when nested in arrays or maps.
-
-Example when standalone: empty string (no content)
-
-Example when nested in arrays/maps: `null`
+Empty values SHOULD be represented as an empty string.
+The SHOULD NOT be encoded as a JSON string (with explicit surrounding quotes).
 
 #### Arrays
 
 Arrays SHOULD be represented as JSON arrays.
+
+Nested byte arrays SHOULD be represented as Base64-encoded JSON strings.
+Nested empty values SHOULD be represented as JSON null.
 
 Examples: `[]`, `[1, "a", true, {"nested": "aGVsbG8gd29ybGQ="}]`
 
 #### Maps
 
 Maps SHOULD be represented as JSON objects.
+
+Nested byte arrays SHOULD be represented as Base64-encoded JSON strings.
+Nested empty values SHOULD be represented as JSON null.
 
 Examples: `{}`, `{"a": "1", "b": 2, "c": [3, null]}`
 
