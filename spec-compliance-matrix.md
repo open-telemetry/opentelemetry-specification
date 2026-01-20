@@ -17,80 +17,80 @@ formats is required. Implementing more than one format is optional.
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
 | [TracerProvider](specification/trace/api.md#tracerprovider-operations) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Create TracerProvider |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Get a Tracer with schema_url |  | + | + | + | + |  |  | + | + | + |  |  |  |
-| Get a Tracer with scope attributes |  | + |  |  | + |  |  | + | + | + |  |  |  |
-| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + | + |  |  |  |  |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| Create TracerProvider |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Get a Tracer with schema_url |  | + | + | + | + |  |  | + | + | + |  |  | + |
+| Get a Tracer with scope attributes |  | + |  |  | + |  |  | + | + | + |  |  | + |
+| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + | + |  |  |  | + |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
-| Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
+| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
+| Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
 | [Tracer](specification/trace/api.md#tracer-operations) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Create a new Span |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Documentation defines adding attributes at span creation as preferred |  | + |  |  | + | + |  | + |  |  | + |  |  |
+| Create a new Span |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Documentation defines adding attributes at span creation as preferred |  | + |  |  | + | + |  | + |  |  | + |  | - |
 | Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
 | Mark Span active |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [SpanContext](specification/trace/api.md#spancontext) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| IsValid |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| IsRemote |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - |  |  |  |  |  |  |  |  |  |  |  |
+| IsValid |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| IsRemote |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - |  |  |  |  |  |  |  |  |  |  | - |
 | [Span](specification/trace/api.md#span) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Create root span |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
-| Create with parent from Context |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| No explicit parent Span/SpanContext allowed |  | + | + | + | + | + | + | + | + | + | - | + |  |
-| SpanProcessor.OnStart receives parent Context |  | + | + | + | + | + | + | + | + | - | - | + |  |
-| UpdateName |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| User-defined start timestamp |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| End |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| End with timestamp |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| IsRecording |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| IsRecording becomes false after End |  | + | + | + | + | + | + | + | + | + | - | + |  |
-| Set status with StatusCode (Unset, Ok, Error) |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| events collection size limit |  | + | + | + | + | + | + | + | + | - | - | + |  |
-| attribute collection size limit |  | + | + | + | + | + | + | + | + | - | - | + |  |
-| links collection size limit |  | + | + | + | + | + | + | + | + | - | - | + |  |
-| [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | - | - | - | - | - | - | - | - | - | - |  |
+| Create root span |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
+| Create with parent from Context |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| No explicit parent Span/SpanContext allowed |  | + | + | + | + | + | + | + | + | + | - | + | + |
+| SpanProcessor.OnStart receives parent Context |  | + | + | + | + | + | + | + | + | - | - | + | + |
+| UpdateName |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| User-defined start timestamp |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| End |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| End with timestamp |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| IsRecording |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| IsRecording becomes false after End |  | + | + | + | + | + | + | + | + | + | - | + | + |
+| Set status with StatusCode (Unset, Ok, Error) |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| events collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
+| attribute collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
+| links collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
+| [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | - | - | - | - | - | - | - | - | - | - | - |
 | [Span attributes](specification/trace/api.md#set-attributes) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| SetAttribute |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Set order preserved | X | + | - | + | + | + | + | + | + | + | + | + |  |
-| String type |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Boolean type |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Double floating-point type |  | + | + | + | + | + | + | - | + | + | + | + |  |
-| Signed int64 type |  | + | + | + | + | + | + | - | + | + | + | + |  |
-| Array of primitives (homogeneous) |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| `null` values documented as invalid/undefined |  | + | + | + | + | + | N/A | + |  | + |  | N/A |  |
-| Unicode support for keys and string values |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| SetAttribute |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Set order preserved | X | + | - | + | + | + | + | + | + | + | + | + | - |
+| String type |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Boolean type |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Double floating-point type |  | + | + | + | + | + | + | - | + | + | + | + | + |
+| Signed int64 type |  | + | + | + | + | + | + | - | + | + | + | + | + |
+| Array of primitives (homogeneous) |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| `null` values documented as invalid/undefined |  | + | + | + | + | + | N/A | + |  | + |  | N/A | + |
+| Unicode support for keys and string values |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Span linking](specification/trace/api.md#specifying-links) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Links can be recorded on span creation |  | + | + | + | + | + | + | + | + | + | + |  |  |
-| Links can be recorded after span creation |  | + |  | + | + |  |  | + | + | + | + |  |  |
-| Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  |  |
+| Links can be recorded on span creation |  | + | + | + | + | + | + | + | + | + | + |  | + |
+| Links can be recorded after span creation |  | + |  | + | + |  |  | + | + | + | + |  | + |
+| Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | [Span events](specification/trace/api.md#add-events) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| AddEvent |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Add order preserved |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| AddEvent |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Add order preserved |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Span exceptions](specification/trace/api.md#record-exception) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| RecordException |  | + | + | + | + | + | + | + | - | - | + | - |  |
-| RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - |  |
+| RecordException |  | + | + | + | + | + | + | + | - | - | + | - | + |
+| RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - | + |
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + |  |
-| ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + |  |
-| Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  |  |  |  |
-| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + |  |
-| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + |  | + |  |
-| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + | + | - |  | + |  |
+| Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + | - |
+| ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + | - |
+| Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  |  |  | - |
+| [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + | - |
+| [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + |  | + | + |
+| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + | + | - |  | + | + |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  |  |
-| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  |  |
-| Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  |  |  |  |
-| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  |  |
-| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - |  |  |  |  |  |  |  |  |  |  |  |
-| [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - |  |  |  |  |  |  |  |  |  |  |  |
+| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  | + |
+| Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  |  |  | + |
+| [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  | - |
+| [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - |  |  |  |  |  |  |  |  |  |  | - |
+| [Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord) |  | - |  |  |  |  |  |  |  |  |  |  | - |
 
 ## Baggage
 

@@ -12,153 +12,153 @@ sections:
       - heading: '[TracerProvider](specification/trace/api.md#tracerprovider-operations)'
         features:
           - name: Create TracerProvider
-            status: '?'
+            status: '+'
           - name: Get a Tracer
-            status: '?'
+            status: '+'
           - name: Get a Tracer with schema_url
-            status: '?'
+            status: '+'
           - name: Get a Tracer with scope attributes
-            status: '?'
+            status: '+'
           - name: Associate Tracer with InstrumentationScope
-            status: '?'
+            status: '+'
           - name: Safe for concurrent calls
-            status: '?'
+            status: '+'
           - name: Shutdown (SDK only required)
-            status: '?'
+            status: '-'
           - name: ForceFlush (SDK only required)
-            status: '?'
+            status: '-'
       - heading: '[Trace / Context interaction](specification/trace/api.md#context-interaction)'
         features:
           - name: Get active Span
-            status: '?'
+            status: '+'
           - name: Set active Span
-            status: '?'
+            status: '+'
       - heading: '[Tracer](specification/trace/api.md#tracer-operations)'
         features:
           - name: Create a new Span
-            status: '?'
+            status: '+'
           - name: Documentation defines adding attributes at span creation as preferred
-            status: '?'
+            status: '-'
           - name: Get active Span
             status: '?'
           - name: Mark Span active
             status: '?'
           - name: Safe for concurrent calls
-            status: '?'
+            status: '+'
       - heading: '[SpanContext](specification/trace/api.md#spancontext)'
         features:
           - name: IsValid
-            status: '?'
+            status: '+'
           - name: IsRemote
-            status: '?'
+            status: '-'
           - name: Conforms to the W3C TraceContext spec
-            status: '?'
+            status: '+'
           - name: '[Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness)'
-            status: '?'
+            status: '-'
       - heading: '[Span](specification/trace/api.md#span)'
         features:
           - name: Create root span
-            status: '?'
+            status: '+'
           - name: Create with default parent (active span)
-            status: '?'
+            status: '+'
           - name: Create with parent from Context
-            status: '?'
+            status: '+'
           - name: No explicit parent Span/SpanContext allowed
-            status: '?'
+            status: '+'
           - name: SpanProcessor.OnStart receives parent Context
-            status: '?'
+            status: '+'
           - name: UpdateName
-            status: '?'
+            status: '+'
           - name: User-defined start timestamp
-            status: '?'
+            status: '+'
           - name: End
-            status: '?'
+            status: '+'
           - name: End with timestamp
-            status: '?'
+            status: '+'
           - name: IsRecording
-            status: '?'
+            status: '+'
           - name: IsRecording becomes false after End
-            status: '?'
+            status: '+'
           - name: Set status with StatusCode (Unset, Ok, Error)
-            status: '?'
+            status: '+'
           - name: Safe for concurrent calls
-            status: '?'
+            status: '+'
           - name: events collection size limit
-            status: '?'
+            status: '+'
           - name: attribute collection size limit
-            status: '?'
+            status: '+'
           - name: links collection size limit
-            status: '?'
+            status: '+'
           - name: '[SpanProcessor.OnEnding](specification/trace/sdk.md#onending)'
-            status: '?'
+            status: '-'
       - heading: '[Span attributes](specification/trace/api.md#set-attributes)'
         features:
           - name: SetAttribute
-            status: '?'
+            status: '+'
           - name: Set order preserved
-            status: '?'
+            status: '-'
           - name: String type
-            status: '?'
+            status: '+'
           - name: Boolean type
-            status: '?'
+            status: '+'
           - name: Double floating-point type
-            status: '?'
+            status: '+'
           - name: Signed int64 type
-            status: '?'
+            status: '+'
           - name: Array of primitives (homogeneous)
-            status: '?'
+            status: '+'
           - name: '`null` values documented as invalid/undefined'
-            status: '?'
+            status: '+'
           - name: Unicode support for keys and string values
-            status: '?'
+            status: '+'
       - heading: '[Span linking](specification/trace/api.md#specifying-links)'
         features:
           - name: Links can be recorded on span creation
-            status: '?'
+            status: '+'
           - name: Links can be recorded after span creation
-            status: '?'
+            status: '+'
           - name: Links order is preserved
-            status: '?'
+            status: '+'
       - heading: '[Span events](specification/trace/api.md#add-events)'
         features:
           - name: AddEvent
-            status: '?'
+            status: '+'
           - name: Add order preserved
-            status: '?'
+            status: '+'
           - name: Safe for concurrent calls
-            status: '?'
+            status: '+'
       - heading: '[Span exceptions](specification/trace/api.md#record-exception)'
         features:
           - name: RecordException
-            status: '?'
+            status: '+'
           - name: RecordException with extra parameters
-            status: '?'
+            status: '+'
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
           - name: Allow samplers to modify tracestate
-            status: '?'
+            status: '-'
           - name: ShouldSample gets full parent Context
-            status: '?'
+            status: '-'
           - name: 'Sampler: JaegerRemoteSampler'
-            status: '?'
+            status: '-'
           - name: '[New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation)'
-            status: '?'
+            status: '-'
           - name: '[IdGenerators](specification/trace/sdk.md#id-generators)'
-            status: '?'
+            status: '+'
           - name: '[SpanLimits](specification/trace/sdk.md#span-limits)'
-            status: '?'
+            status: '+'
           - name: '[Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)'
             status: '?'
           - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
-            status: '?'
+            status: '+'
           - name: Fetch InstrumentationScope from ReadableSpan
-            status: '?'
+            status: '+'
           - name: '[TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased)'
-            status: '?'
+            status: '-'
           - name: '[CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler)'
-            status: '?'
+            status: '-'
           - name: '[Sampler: AlwaysRecord](specification/trace/sdk.md#alwaysrecord)'
-            status: '?'
+            status: '-'
   - name: Baggage
     features:
       - name: Basic support
