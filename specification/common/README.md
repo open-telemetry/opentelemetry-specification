@@ -17,7 +17,10 @@ path_base_for_github_subdir:
 
 - [AnyValue](#anyvalue)
   * [map](#mapstring-anyvalue)
-  * [String representation of non-primitive value types](#string-representation-of-non-primitive-value-types)
+  * [AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols)
+    + [Strings](#strings)
+    + [Booleans](#booleans)
+    + [Numbers](#numbers)
     + [Byte Arrays](#byte-arrays)
     + [Empty Values](#empty-values)
     + [Arrays](#arrays)
@@ -93,22 +96,43 @@ Maps are equal when they contain the same key-value pairs,
 irrespective of the order in which those elements appear
 (unordered collection equality).
 
-### String representation of non-primitive value types
+### AnyValue representation for non-OTLP protocols
 
-For protocols that do not natively support non-primitive value types,
+For protocols that do not natively support some of the AnyValue types,
 those values SHOULD be represented as strings following the encoding rules below.
+
+#### Strings
+
+Strings SHOULD be represented as-is without any additional encoding.
+They SHOULD NOT be encoded as JSON strings (with explicit surrounding quotes).
+
+Examples: `hello world`, (the empty string)
+
+#### Booleans
+
+Booleans SHOULD be represented as
+[JSON booleans](https://datatracker.ietf.org/doc/html/rfc8259#section-3).
+
+Examples: `true`, `false`
+
+#### Numbers
+
+Integers and floating point numbers SHOULD be represented as
+[JSON numbers](https://datatracker.ietf.org/doc/html/rfc8259#section-6).
+
+Examples: `42`, `-123`, `3.14159`, `1.23e10`
 
 #### Byte Arrays
 
 Byte arrays SHOULD be Base64-encoded.
-The SHOULD NOT be encoded as JSON strings (with explicit surrounding quotes).
+They SHOULD NOT be encoded as JSON strings (with explicit surrounding quotes).
 
 Example: `aGVsbG8gd29ybGQ=`
 
 #### Empty Values
 
-Empty values SHOULD be represented as an empty string.
-The SHOULD NOT be encoded as a JSON string (with explicit surrounding quotes).
+Empty values SHOULD be represented as the empty string.
+They SHOULD NOT be encoded as a JSON string (with explicit surrounding quotes).
 
 #### Arrays
 
