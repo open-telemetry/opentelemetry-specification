@@ -509,7 +509,7 @@ sections:
         status: '+'
       - name: The `Parse` operation returns configuration model
         status: '+'
-      - name: The `Parse` operation resolves extension component configuration to `properties`
+      - name: The `Parse` operation resolves plugin component configuration to `properties`
         status: '?'
       - name: '`Create` SDK components'
         status: '+'
@@ -522,10 +522,10 @@ sections:
       - name: The `Create` operation returns `LoggerProvider`
         status: '+'
       - name: The `Create` operation returns `Propagators`
+        status: '+'
+      - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
         status: '?'
-      - name: The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components
-        status: '?'
-      - name: Register a `ComponentProvider`
+      - name: Register a `PluginComponentProvider`
         status: '?'
   - name: Exporters
     features:

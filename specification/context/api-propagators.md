@@ -1,6 +1,6 @@
 # Propagators API
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md) except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -215,8 +215,8 @@ Required arguments:
 The `Keys` function can be called by `Propagator`s which are using variable key names in order to
 iterate over all the keys in the specified carrier.
 
-For example, it can be used to detect all keys following the `uberctx-{user-defined-key}` pattern, as defined by the
-[Jaeger Propagation Format](https://www.jaegertracing.io/docs/1.18/client-libraries/#baggage).
+For example, it can be used to detect all keys following the `X-B3-${name}` pattern, as defined by the
+[B3 Propagation: Multiple Headers](https://github.com/openzipkin/b3-propagation/blob/master/README.md#multiple-headers).
 
 ##### Get
 
@@ -357,11 +357,13 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 * [W3C Baggage](https://www.w3.org/TR/baggage/). MAY alternatively
   be distributed as part of the OpenTelemetry API.
 * [B3](https://github.com/openzipkin/b3-propagation).
-* [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format).
 
 This is a list of additional propagators that MAY be maintained and distributed
 as OpenTelemetry extension packages:
 
+* [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format).
+  **Status**: [Deprecated](../document-status.md), use the
+  [W3C TraceContext](https://www.w3.org/TR/trace-context/) instead.
 * [OT Trace](https://github.com/opentracing?q=basic&type=&language=). Propagation format
   used by the OpenTracing Basic Tracers. It MUST NOT use `OpenTracing` in the resulting
   propagator name as it is not widely adopted format in the OpenTracing ecosystem.
