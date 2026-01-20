@@ -234,6 +234,8 @@ sections:
       - name: LoggerProvider.Shutdown
       - name: LoggerProvider.ForceFlush
       - name: Logger.Emit(LogRecord)
+      - name: Logger.Emit(LogRecord) with Exception parameter
+        optional: true
       - name: LogRecord.Set EventName
       - name: Logger.Enabled
         optional: true

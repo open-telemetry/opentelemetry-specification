@@ -358,6 +358,8 @@ sections:
       - name: LoggerProvider.ForceFlush
         status: '?'
       - name: Logger.Emit(LogRecord)
+        status: '+'
+      - name: Logger.Emit(LogRecord) with Exception parameter
         status: '?'
       - name: LogRecord.Set EventName
         status: '?'
