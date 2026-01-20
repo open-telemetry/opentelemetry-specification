@@ -17,6 +17,11 @@ path_base_for_github_subdir:
 
 - [AnyValue](#anyvalue)
   * [map](#mapstring-anyvalue)
+  * [String representation of non-primitive value types](#string-representation-of-non-primitive-value-types)
+    + [Byte Arrays](#byte-arrays)
+    + [Empty Values](#empty-values)
+    + [Arrays](#arrays)
+    + [Maps](#maps)
 - [Attribute](#attribute)
   * [Attribute Collections](#attribute-collections)
 - [Attribute Limits](#attribute-limits)
@@ -46,11 +51,6 @@ allows to represent an equivalent of a JSON object).
 
 APIs SHOULD be documented in a way to communicate to users that using array and
 map values may carry higher performance overhead compared to primitive values.
-
-For protocols that do not natively support some of the value types, corresponding values
-SHOULD be represented as JSON-encoded strings. For example, the expression
-`int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`,
-and an empty array of any type will be encoded as `[]`.
 
 AnyValues expressing an empty value, a numerical value of zero, an empty string,
 or an empty array are considered meaningful and MUST be stored and passed on to
@@ -92,6 +92,41 @@ responsibility to ensure keys are not duplicate.
 Maps are equal when they contain the same key-value pairs,
 irrespective of the order in which those elements appear
 (unordered collection equality).
+
+### String representation of non-primitive value types
+
+For protocols that do not natively support non-primitive value types,
+those values SHOULD be represented as strings following the encoding rules below.
+
+#### Byte Arrays
+
+Byte arrays SHOULD be Base64-encoded. Standalone values appear unquoted; nested values
+(within arrays or maps) are quoted as JSON strings.
+
+Example when standalone: `aGVsbG8gd29ybGQ=`
+
+Example when nested in arrays/maps: `"aGVsbG8gd29ybGQ="`
+
+#### Empty Values
+
+Empty values SHOULD be represented as an empty string when standalone,
+or as JSON null when nested in arrays or maps.
+
+Example when standalone: empty string (no content)
+
+Example when nested in arrays/maps: `null`
+
+#### Arrays
+
+Arrays SHOULD be represented as JSON arrays.
+
+Examples: `[]`, `[1, "a", true, {"nested": "aGVsbG8gd29ybGQ="}]`
+
+#### Maps
+
+Maps SHOULD be represented as JSON objects.
+
+Examples: `{}`, `{"a": "1", "b": 2, "c": [3, null]}`
 
 ## Attribute
 
