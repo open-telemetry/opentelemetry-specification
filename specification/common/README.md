@@ -112,7 +112,7 @@ The SHOULD NOT be encoded as a JSON string (with explicit surrounding quotes).
 
 #### Arrays
 
-Arrays SHOULD be represented as JSON arrays.
+Arrays, except for byte arrays, SHOULD be represented as JSON arrays.
 
 Nested byte arrays SHOULD be represented as Base64-encoded JSON strings.
 Nested empty values SHOULD be represented as JSON null.
