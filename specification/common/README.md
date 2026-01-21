@@ -20,7 +20,8 @@ path_base_for_github_subdir:
   * [AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols)
     + [Strings](#strings)
     + [Booleans](#booleans)
-    + [Numbers](#numbers)
+    + [Integers](#integers)
+    + [Floating Point Numbers](#floating-point-numbers)
     + [Byte Arrays](#byte-arrays)
     + [Empty Values](#empty-values)
     + [Arrays](#arrays)
@@ -115,12 +116,23 @@ Booleans SHOULD be represented as
 
 Examples: `true`, `false`
 
-#### Numbers
+#### Integers
 
-Integers and floating point numbers SHOULD be represented as
+Integers SHOULD be represented as
 [JSON numbers](https://datatracker.ietf.org/doc/html/rfc8259#section-6).
 
-Examples: `42`, `-123`, `3.14159`, `1.23e10`
+Examples: `42`, `-123`
+
+#### Floating Point Numbers
+
+Floating point numbers SHOULD be represented as
+[JSON numbers](https://datatracker.ietf.org/doc/html/rfc8259#section-6).
+
+The special floating point values NaN and Infinity SHOULD be represented as
+`NaN`, `Infinity`, and `-Infinity`.
+They SHOULD NOT be encoded as JSON strings (with explicit surrounding quotes).
+
+Examples: `3.14159`, `1.23e10`, `NaN`, `Infinity`, `-Infinity`
 
 #### Byte Arrays
 
@@ -140,8 +152,10 @@ Arrays, except for byte arrays, SHOULD be represented as JSON arrays.
 
 Nested byte arrays SHOULD be represented as Base64-encoded JSON strings.
 Nested empty values SHOULD be represented as JSON null.
+The special floating point values NaN and Infinity SHOULD be represented as
+JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
 
-Examples: `[]`, `[1, "a", true, {"nested": "aGVsbG8gd29ybGQ="}]`
+Examples: `[]`, `[1, "-Infinity", "a", true, {"nested": "aGVsbG8gd29ybGQ="}]`
 
 #### Maps
 
@@ -149,8 +163,10 @@ Maps SHOULD be represented as JSON objects.
 
 Nested byte arrays SHOULD be represented as Base64-encoded JSON strings.
 Nested empty values SHOULD be represented as JSON null.
+The special floating point values NaN and Infinity SHOULD be represented as
+JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
 
-Examples: `{}`, `{"a": "1", "b": 2, "c": [3, null]}`
+Examples: `{}`, `{"a": "-Infinity", "b": 2, "c": [3, null]}`
 
 ## Attribute
 
