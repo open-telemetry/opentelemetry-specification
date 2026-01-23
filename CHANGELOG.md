@@ -11,6 +11,8 @@ release.
 
 - Deprecate Jaeger propagator and make propagator implementation optional.
   ([#4827](https://github.com/open-telemetry/opentelemetry-specification/pull/4827))
+- Deprecate OT Trace propagator and make propagator implementation optional.
+  ([#4851](https://github.com/open-telemetry/opentelemetry-specification/pull/4851))
 
 ### Traces
 
