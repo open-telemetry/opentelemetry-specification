@@ -240,7 +240,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + |
 | B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + |
 | Jaeger Propagator | X | + | + | + | + | + | + | + | + | + | - | + |
-| OT Propagator |  | + | + | + | + |  |  |  |  |  |  |  |
+| OT Propagator | X | + | + | + | + |  |  |  |  |  |  |  |
 | OpenCensus Binary Propagator |  | + |  |  |  |  |  |  |  |  |  |  |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |  | + | + |  | + | + |  | + |  | + |  |  |
 | Fields |  | + | + | + | + | + | + | + | + | + | + | + |
