@@ -18,6 +18,9 @@ release.
 
 ### Logs
 
+- Add optional `Exception` parameter to Emit LogRecord.
+  ([#4824](https://github.com/open-telemetry/opentelemetry-specification/pull/4824))
+
 ### Baggage
 
 ### Profiles
