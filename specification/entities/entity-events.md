@@ -39,7 +39,7 @@ specifically as [Events](../logs/data-model.md#events) with a defined `EventName
 
 ## When to Use Entity Events
 
-Entity events SHOULD be used when:
+Entity events are particularly useful when:
 
 1. **No Associated Telemetry**: The entity has no telemetry signals associated with it, or
    the telemetry is less important than the entity data itself.
@@ -54,6 +54,9 @@ Entity events SHOULD be used when:
 
 4. **Lifecycle Tracking**: There is a need to explicitly track entity lifecycle events
    (creation, state changes, deletion) independently from telemetry signals.
+
+Entity events can be used alongside telemetry signals associated with entities to provide
+additional context and relationship information.
 
 ## Entity Events Data Model
 
@@ -77,9 +80,9 @@ The Entity State Event stores information about the state of an entity at a part
 
 | Attribute | Type | Description |
 | --------- | ---- | ----------- |
-| `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. MAY change over the lifetime of the entity. These attributes are not part of the entity's identity. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
-| `entity.interval` | int64 (milliseconds) | Defines the reporting period, i.e., how frequently information about this entity is reported via Entity State events even if the entity does not change. The next expected Entity State event for this entity is expected at (Timestamp + Interval) time. Can be used by receivers to infer that a no longer reported entity is gone, even if the Entity Delete event was not observed. |
-| `entity.relationships` | array of map<string, AnyValue> | Array of relationships that this entity has with other entities. See [Entity Relationships](#entity-relationships) for details. |
+| `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. MAY change over the lifetime of the entity. These attributes are not part of the entity's identity. Each Entity State event with a non-empty `entity.description` completely replaces the previously reported description. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| `entity.interval` | int64 (milliseconds) | Defines the reporting period, i.e., how frequently information about this entity is reported via Entity State events even if the entity does not change. MUST be a positive value. A value of `0` indicates that no periodic reporting is expected. The next expected Entity State event for this entity is expected at (Timestamp + Interval) time. Can be used by receivers to infer that a no longer reported entity is gone, even if the Entity Delete event was not observed. |
+| `entity.relationships` | array of map<string, AnyValue> | Array of relationships that this entity has with other entities. MAY change over the lifetime of the entity. Each Entity State event with a non-empty `entity.relationships` completely replaces the previously reported relationships. See [Entity Relationships](#entity-relationships) for details. |
 
 **Timestamp Field**:
 
@@ -159,7 +162,7 @@ Each relationship in the `entity.relationships` array is a map containing:
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `attributes` | map<string, AnyValue> | Additional relationship-specific attributes that provide context about the relationship. |
+| `attributes` | map<string, AnyValue> | Additional relationship-specific attributes that provide context about the relationship. These attributes can change over time as the entire `entity.relationships` array is replaced in subsequent Entity State events. |
 
 **Relationship Direction**:
 
@@ -182,8 +185,9 @@ The following are recommended relationship types with their semantic meanings:
 | `manages` | Controller → Controlled | An entity manages the lifecycle of another | Deployment → ReplicaSet |
 | `hosts` | Infrastructure → Workload | Infrastructure hosts a workload (reverse of scheduled_on) | Node → Pod |
 
-Custom relationship types MAY be defined to represent domain-specific relationships.
-Semantic conventions MUST define standard relationship types for common entity types.
+Relationship types form an open enumeration. Custom relationship types MAY be defined to
+represent domain-specific relationships. Semantic conventions SHOULD define standard
+relationship types for common entity types.
 
 ### Relationship Lifecycle
 
