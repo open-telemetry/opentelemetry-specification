@@ -88,7 +88,7 @@ Distributed tracing introduced the notion of trace context propagation.
 
 Fundamentally, though, nothing prevents the logs to adopt the same context
 propagation concepts. If the recorded logs contained trace context identifiers
-(such as trace and span ids or user-defined baggage) it would result
+(such as trace and span IDs or user-defined baggage) it would result
 in much richer correlation between logs and traces, as well as correlation
 between logs emitted by different components of a distributed system. This would
 make logs significantly more valuable in distributed systems.
@@ -185,7 +185,7 @@ Logs can be correlated with the rest of observability data in a few dimensions:
   form of correlation.
 
 - By the **execution context**, also known as the trace context. It is a
-  standard practice to record the execution context (trace and span ids as well
+  standard practice to record the execution context (trace and span IDs as well
   as user-defined context) in the spans. OpenTelemetry extends this practice to
   logs where possible by including [TraceId](data-model.md#field-traceid) and
   [SpanId](data-model.md#field-spanid) in the LogRecords. This allows to
@@ -230,7 +230,7 @@ if included it is highly idiosyncratic and thus difficult to identify, parse and
 use. This makes it nearly impossible to perform trace context correlation for
 system logs. However we can and should automatically enrich system logs with the
 resource context - the information about the host that is available during
-collection. This can include the host name, IP address, container or pod name,
+collection. This can include the hostname, IP address, container or pod name,
 etc. This information should be added to the Resource field of collected log
 data.
 
@@ -284,7 +284,7 @@ to OpenTelemetry Collector where the logs can be further processed and enriched.
 These are applications that are created in-house. People tasked with setting up
 log collection infrastructure sometimes are able to modify these applications to
 alter how logs are written and what information is included in the logs. For
-example, the application’s log formatters may be reconfigured to output json
+example, the application’s log formatters may be reconfigured to output JSON
 instead of plain text and by doing so help improve the reliability of log
 collection.
 
@@ -296,8 +296,8 @@ required.
 As opposed to manual efforts we have an interesting opportunity to "upgrade"
 application logs in a less laborious way by providing full or semi
 auto-instrumenting solutions that modify trace logging libraries used by the
-application to automatically output the trace context such as the trace id or
-span id with every log statement. The trace context can be automatically
+application to automatically output the trace context such as the trace ID or
+span ID with every log statement. The trace context can be automatically
 extracted from incoming requests if standard compliant request propagation is
 used, e.g. via [W3C TraceContext](https://www.w3.org/TR/trace-context/). In
 addition, the requests outgoing from the application may be injected with the
@@ -320,7 +320,7 @@ rotation is used, optionally also parse the logs to convert them into more
 structured formats. Parsing requires support for different parser types, which
 can also be configured to parse custom formats as well as ability to add custom
 parsers. Examples of common formats that parsers need to support are: CSV,
-Common Log Format, Labeled Tab-separated Values (LTSV), Key/Value Pair format,
+Common Log Format, Labeled Tab-separated Values (LTSV), key-value Pair format,
 JSON, etc. To support this approach OpenTelemetry recommends to collect logs
 using OpenTelemetry
 [Collector](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver).
@@ -404,7 +404,7 @@ Applications have several options for emitting logs:
    that a language can provide a more convenient [ergonomic API](./api.md#ergonomic-api).
 
 Regardless of the approach, emitted logs are automatically augmented by
-application-specific resource context (e.g. process id, programming language,
+application-specific resource context (e.g. process ID, programming language,
 logging library name and version, etc). Full correlation across all context
 dimensions will be available for these logs.
 
@@ -454,12 +454,12 @@ auto-instrumented logging statements will do the following:
 - Read incoming trace context (this is part of broader instrumentation that
   auto-instrumenting libraries perform).
 
-- Configure logging libraries to use trace id and span id fields from request
+- Configure logging libraries to use trace ID and span ID fields from request
   context as logging context and automatically include them in all logged
   statements.
 
 This is possible to do for certain languages (e.g. in Java) and we can reuse
-[existing open-source libraries](https://docs.datadoghq.com/tracing/other_telemetry/connect_logs_and_traces/java/)
+[existing open source libraries](https://docs.datadoghq.com/tracing/other_telemetry/connect_logs_and_traces/java/)
 that do this.
 
 A further optional modification would be to auto-instrument loggers to send logs

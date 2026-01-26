@@ -33,11 +33,11 @@ maintainers of the specification, this should not change the bar for acceptance.
 
 The following changes would occur:
 
-- The following files would be moved to the specification repo:
+- The following files would be moved to the specification repository:
   - `text/` directory -> `oteps/text/`
   - `0000-template.md` -> `oteps/0000-template.md`
 - Update the specification `Makefile` to include linting, spell checking, link checking and TOC-ing the oteps directory.
-- A one-time cleanup of OTEP markdown upon import to the specification repository.
+- A one-time cleanup of OTEP Markdown upon import to the specification repository.
 - Close existing OTEP PRs and ask folks to reopen against the specification repository.
 - New labels within the specification repository to tag OTEPs, including automation to set these on PR open.
 - Updating contributing guidelines to include a section about OTEPs.
@@ -63,6 +63,6 @@ What are the important portions of the OTEP process to bring over? Have we misse
 
 ## Future possibilities
 
-In the future, we could figure out how to make OTEPs more searchable, discoverable and highlighted within the opentelemetry.io website.
+In the future, we could figure out how to make OTEPs more searchable, discoverable and highlighted within the opentelemetry.io site.
 
 Additionally, we can look at extending staleness deadlines for OTEP labeled PRs.

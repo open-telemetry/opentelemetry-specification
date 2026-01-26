@@ -11,7 +11,7 @@ processes.
   * [Example Context](#example-context)
     * [Distributed Tracing in OpenTofu Prototype Example](#distributed-tracing-in-opentofu-prototype-example)
 * [Core Specification Changes](#core-specification-changes)
-  * [UNIX](#unix-limitations)
+  * [Unix](#unix-limitations)
   * [Windows](#windows-limitations)
   * [Allowed Characters](#allowed-characters)
 * [Trade-offs and Mitigations](#trade-offs-and-mitigations)
@@ -199,9 +199,9 @@ variables for the carrier that align with context propagator specifications.
 [python-env]: https://github.com/Div95/opentelemetry-python/tree/feature/env_propagator/propagator/opentelemetry-propagator-env
 [swift-env]: https://github.com/open-telemetry/opentelemetry-swift-core/blob/c84cdc1760e20fc3a448c4e8aaae490f7d48ac67/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
 
-### UNIX Limitations
+### Unix Limitations
 
-UNIX system utilities use upper-case for environment variables and lower-case
+Unix system utilities use upper-case for environment variables and lower-case
 are reserved for applications. Using upper-case will prevent conflicts with
 internal application variables.
 
@@ -210,7 +210,7 @@ Environment variable names used by the utilities in the Shell and Utilities
 (underscore) from the characters defined in Portable Character Set. Other
 characters may be permitted by an implementation; applications must tolerate
 the presence of such names. Upper-case and lower-case letters retain their
-unique identities and are not folded together. The name space of environment
+unique identities and are not folded together. The namespace of environment
 variable names containing lower-case letters is reserved for applications.
 Applications can define any environment variables with names from this name
 space without modifying the behaviour of the standard utilities.
@@ -232,7 +232,7 @@ this [documentation][cpython-doc] was added to clarify the behavior.
 ### Allowed characters
 
 To ensure compatibility, specification for Environment Variables SHOULD adhere
-to the current specification for `TextMapPropagator` where key/value pairs MUST
+to the current specification for `TextMapPropagator` where key-value pairs MUST
 only consist of US-ASCII characters that make up valid HTTP header fields as
 per RFC 7230.
 
