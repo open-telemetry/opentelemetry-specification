@@ -33,3 +33,4 @@ Entities can be instantiated through two complementary approaches:
 
 - [Data Model](./data-model.md)
 - [Entity Propagation](./entity-propagation.md) - Describes the push-based model for entity instantiation
+- [Entity Events](./entity-events.md) - Describes how to communicate entity information as structured log events
