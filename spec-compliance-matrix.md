@@ -200,6 +200,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | LoggerProvider.Shutdown |  | + | + | + | + | + |  | + | + | + | - |  |
 | LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + | + | + | - |  |
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + | + | + | - |  |
+| Logger.Emit(LogRecord) with Exception parameter | X |  |  |  |  |  |  |  |  |  |  |  |
 | LogRecord.Set EventName |  | + |  |  |  |  |  |  | + | + |  |  |
 | Logger.Enabled | X | + |  |  |  |  |  | + | + | + |  |  |
 | Ergonomic API | X |  |  |  |  |  |  |  |  |  |  |  |
