@@ -127,7 +127,7 @@ Known values for `OTEL_PROPAGATORS` are:
 - `"b3multi"`: [B3 Multi](../context/api-propagators.md#configuration)
 - `"jaeger"`: [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format) - **Status**: [Deprecated](../document-status.md)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
-- `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
+- `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_) - **Status**: [Deprecated](../document-status.md)
 - `"none"`: No automatically configured propagator.
 
 Known values for `OTEL_TRACES_SAMPLER` are:
