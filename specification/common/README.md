@@ -102,6 +102,12 @@ irrespective of the order in which those elements appear
 For protocols that do not natively support some of the AnyValue types,
 those values SHOULD be represented as strings following the encoding rules below.
 
+> [!NOTE]
+> This string representation is lossy. Type information is lost as all
+> values are converted to strings, and precision loss may occur for numeric values
+> (particularly for floating point numbers and large integers that exceed the
+> precision capabilities of the receiving system's string-to-number conversion).
+
 #### Strings
 
 Strings SHOULD be represented as-is without any additional encoding.
