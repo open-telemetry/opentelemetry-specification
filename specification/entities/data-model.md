@@ -162,10 +162,10 @@ for each key, the values of the key MUST be the same.
 Here's an example algorithm that will check compatibility:
 
 ```
-can_merge(e, e') {
-  e.type == e'.type &&
-  e.schema_url == e'.schema_url &&
-  has_same_attributes(e.identity, e'.identity)
+can_merge(current_entity, new_entity) {
+  current_entity.type == new_entity.type &&
+  current_entity.schema_url == new_entity.schema_url &&
+  has_same_attributes(current_entity.identity, new_entity.identity)
 }
 ```
 
@@ -176,11 +176,11 @@ chosen from the "primary" entity.
 Here's an example algorithm that will merge:
 
 ```
-merge(e, e') {
-  if can_merge(e, e') {
-    for attribute in e'.description {
-      if !e.description.contains(attribute.key) {
-        e.description.insert(attribute)
+merge(current_entity, new_entity) {
+  if can_merge(current_entity, new_entity) {
+    for attribute in new_entity.description {
+      if !current_entity.description.contains(attribute.key) {
+        current_entity.description.insert(attribute)
       }
       // Ignore otehrwise.
     }

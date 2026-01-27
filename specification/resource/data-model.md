@@ -86,11 +86,5 @@ resource.
   [Attribute Referencing Model](../entities/data-model.md#attribute-referencing-model)).
   - If, for all entities, there are now overlapping attribute keys, then nothing
     is needed.
-  - If there is a conflict where two entities use the same attribute key, but
-    both have the same value, then nothing is needed.
-  - If there is a conflict where two entities use the same attribute key, and
-    one of those entities treats has the attribute in its description, then
-    remove this attribute from the entity's description.
-  - If there is a conflict where two entities use the same attribute key and
-    both use that attribute for the entity identity, then remove the lower
-    priority entity from the Resource.
+  - If there is a conflict where two entities use the same attribute key then
+    remove the lower priority entity from the Resource.
