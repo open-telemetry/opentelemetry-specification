@@ -189,7 +189,7 @@ All attribute values MUST be considered strings and characters outside the
 `baggage-octet` range SHOULD be percent-encoded. In the case of errors during the
 decoding process, the entire environment variable value SHOULD be discarded
 and an error SHOULD be reported following the
-[Error Handling principles](../error-handling.md#basic-error-handling-principles)
+[Error Handling principles](../error-handling.md#basic-error-handling-principles).
 
 ## Resource operations
 
