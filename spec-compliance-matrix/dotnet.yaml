@@ -359,6 +359,8 @@ sections:
         status: '-'
       - name: Logger.Emit(LogRecord)
         status: '-'
+      - name: Logger.Emit(LogRecord) with Exception parameter
+        status: '?'
       - name: LogRecord.Set EventName
         status: '?'
       - name: Logger.Enabled
@@ -424,7 +426,7 @@ sections:
       - name: Jaeger Propagator
         status: '-'
       - name: OT Propagator
-        status: '?'
+        status: '-'
       - name: OpenCensus Binary Propagator
         status: '?'
       - name: '[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)'

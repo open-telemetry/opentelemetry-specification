@@ -234,6 +234,8 @@ sections:
       - name: LoggerProvider.Shutdown
       - name: LoggerProvider.ForceFlush
       - name: Logger.Emit(LogRecord)
+      - name: Logger.Emit(LogRecord) with Exception parameter
+        optional: true
       - name: LogRecord.Set EventName
       - name: Logger.Enabled
         optional: true
@@ -275,6 +277,7 @@ sections:
       - name: Jaeger Propagator
         optional: true
       - name: OT Propagator
+        optional: true
       - name: OpenCensus Binary Propagator
       - name: '[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)'
       - name: Fields

@@ -11,12 +11,17 @@ release.
 
 - Deprecate Jaeger propagator and make propagator implementation optional.
   ([#4827](https://github.com/open-telemetry/opentelemetry-specification/pull/4827))
+- Deprecate OT Trace propagator and make propagator implementation optional.
+  ([#4851](https://github.com/open-telemetry/opentelemetry-specification/pull/4851))
 
 ### Traces
 
 ### Metrics
 
 ### Logs
+
+- Add optional `Exception` parameter to Emit LogRecord.
+  ([#4824](https://github.com/open-telemetry/opentelemetry-specification/pull/4824))
 
 ### Baggage
 
@@ -69,6 +74,9 @@ release.
   ([#4802](https://github.com/open-telemetry/opentelemetry-specification/pull/4802))
 - Declarative configuration: clarify Registry ComponentProvider `type` parameter
   ([#4799](https://github.com/open-telemetry/opentelemetry-specification/pull/4799))
+- Declarative configuration: Update instrumentation config behavior to return
+  empty object when not set
+  ([#4817](https://github.com/open-telemetry/opentelemetry-specification/pull/4817))
 - Swap Tracer/Meter/LoggerConfig `disabled` for `enabled` to avoid double negatives
   ([#4823](https://github.com/open-telemetry/opentelemetry-specification/pull/4823))
 
