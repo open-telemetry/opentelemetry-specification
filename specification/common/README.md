@@ -142,7 +142,7 @@ Examples: `3.14159`, `1.23e10`, `NaN`, `Infinity`, `-Infinity`
 
 #### Byte Arrays
 
-Byte arrays SHOULD be Base64-encoded.
+Byte arrays SHOULD be [Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4).
 They SHOULD NOT be encoded as JSON strings (with explicit surrounding quotes).
 
 Example: `aGVsbG8gd29ybGQ=`
@@ -156,7 +156,8 @@ They SHOULD NOT be encoded as a JSON string (with explicit surrounding quotes).
 
 Arrays, except for byte arrays, SHOULD be represented as JSON arrays.
 
-Nested byte arrays SHOULD be represented as Base64-encoded JSON strings.
+Nested byte arrays SHOULD be represented as
+[Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4) JSON strings.
 Nested empty values SHOULD be represented as JSON null.
 The special floating point values NaN and Infinity SHOULD be represented as
 JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
@@ -167,7 +168,8 @@ Examples: `[]`, `[1, "-Infinity", "a", true, {"nested": "aGVsbG8gd29ybGQ="}]`
 
 Maps SHOULD be represented as JSON objects.
 
-Nested byte arrays SHOULD be represented as Base64-encoded JSON strings.
+Nested byte arrays SHOULD be represented as
+[Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4) JSON strings.
 Nested empty values SHOULD be represented as JSON null.
 The special floating point values NaN and Infinity SHOULD be represented as
 JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
