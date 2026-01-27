@@ -186,7 +186,10 @@ key value pairs, and these are expected to be represented in a format matching
 to the [W3C Baggage](https://www.w3.org/TR/baggage/#header-content), except that additional
 semi-colon delimited metadata is not supported, i.e.: `key1=value1,key2=value2`.
 All attribute values MUST be considered strings and characters outside the
-`baggage-octet` range MUST be percent-encoded.
+`baggage-octet` range SHOULD be percent-encoded. In the case of errors during the
+decoding process, the entire environment variable value SHOULD be discarded
+and an error SHOULD be reported following the
+[Error Handling principles](../error-handling.md#basic-error-handling-principles)
 
 ## Resource operations
 
