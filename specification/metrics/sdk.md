@@ -782,24 +782,24 @@ of metrics across successive collections.
 
 **Status**: [Development](../document-status.md)
 
-The start timestamp for a timeseries is the timestamp which best represents the
-first possible moment a measurement for this timeseries could have been
-recorded. SDKs MUST ensure that the start timestamp excludes any collection
-intervals where the first measurement for the timeseries had not yet occurred.
-In other words, when an SDK observes a measurment for a timeseries it has no
-record of, it MUST use a timestamp that is later than or equal to the
-timestamp of the previous collection interval. This implies that SDKs MUST
-NOT simply use the process start time as the start time for all cumulative
-instruments.
+The start timestamp for a timeseries is the timestamp which best represents
+the first possible moment a measurement for this timeseries could have been
+recorded.
 
-As described in the [data model](./data-model.md#resets-and-gaps)) SDKs MUST
-ensure that for Delta temporality aggregations, the start timestamp MUST equal
-the previous interval's timestamp if the timeseries was exported in the
-previous interval.
+For delta aggregations, the start timestamp MUST equal the previous collection
+interval's timestamp, or the creation time of the instrument if this is the
+first collection interval for the instrument. This implies that all delta
+aggregations for an instrument MUST share the same start timestamp.
 
-Cumulative aggregations for synchronous instruments SHOULD use the timestamp of
-the first observed measurement when it observes a measurement it has no record
-of.
+Cumulative aggregations for synchronous instruments MUST use the time of the
+first measurement for each attribute set as the start time. Cumulative
+aggregations for asynchronous instruments MUST use the previous collection
+interval's timestamp, or the creation time of the instrument if this is the
+first collection interval for the instrument, when the instrument records a
+measurement for an attribute set it has no record of. To do this, the SDK MUST
+track the start timestamp for each unique attribute set of cumulative
+aggregations. All cumulative timeseries MUST use the initial start timestamp in
+subsequent collection intervals.
 
 ### Cardinality limits
 
