@@ -17,6 +17,15 @@ path_base_for_github_subdir:
 
 - [AnyValue](#anyvalue)
   * [map](#mapstring-anyvalue)
+  * [AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols)
+    + [Strings](#strings)
+    + [Booleans](#booleans)
+    + [Integers](#integers)
+    + [Floating Point Numbers](#floating-point-numbers)
+    + [Byte Arrays](#byte-arrays)
+    + [Empty Values](#empty-values)
+    + [Arrays](#arrays)
+    + [Maps](#maps)
 - [Attribute](#attribute)
   * [Attribute Collections](#attribute-collections)
 - [Attribute Limits](#attribute-limits)
@@ -46,11 +55,6 @@ allows to represent an equivalent of a JSON object).
 
 APIs SHOULD be documented in a way to communicate to users that using array and
 map values may carry higher performance overhead compared to primitive values.
-
-For protocols that do not natively support some of the value types, corresponding values
-SHOULD be represented as JSON-encoded strings. For example, the expression
-`int64(100)` will be encoded as `100`, `float64(1.5)` will be encoded as `1.5`,
-and an empty array of any type will be encoded as `[]`.
 
 AnyValues expressing an empty value, a numerical value of zero, an empty string,
 or an empty array are considered meaningful and MUST be stored and passed on to
@@ -92,6 +96,85 @@ responsibility to ensure keys are not duplicate.
 Maps are equal when they contain the same key-value pairs,
 irrespective of the order in which those elements appear
 (unordered collection equality).
+
+### AnyValue representation for non-OTLP protocols
+
+For protocols that do not natively support some of the AnyValue types,
+those values SHOULD be represented as strings following the encoding rules below.
+
+> [!NOTE]
+> This string representation is lossy. Type information is lost as all
+> values are converted to strings, and precision loss may occur for numeric values
+> (particularly for floating point numbers and large integers that exceed the
+> precision capabilities of the receiving system's string-to-number conversion).
+
+#### Strings
+
+Strings SHOULD be represented as-is without any additional encoding.
+They SHOULD NOT be encoded as JSON strings (with explicit surrounding quotes).
+
+Examples: `hello world`, (the empty string)
+
+#### Booleans
+
+Booleans SHOULD be represented as
+[JSON booleans](https://datatracker.ietf.org/doc/html/rfc8259#section-3).
+
+Examples: `true`, `false`
+
+#### Integers
+
+Integers SHOULD be represented as
+[JSON numbers](https://datatracker.ietf.org/doc/html/rfc8259#section-6).
+
+Examples: `42`, `-123`
+
+#### Floating Point Numbers
+
+Floating point numbers SHOULD be represented as
+[JSON numbers](https://datatracker.ietf.org/doc/html/rfc8259#section-6).
+
+The special floating point values NaN and Infinity SHOULD be represented as
+`NaN`, `Infinity`, and `-Infinity`.
+They SHOULD NOT be encoded as JSON strings (with explicit surrounding quotes).
+
+Examples: `3.14159`, `1.23e10`, `NaN`, `Infinity`, `-Infinity`
+
+#### Byte Arrays
+
+Byte arrays SHOULD be [Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4).
+They SHOULD NOT be encoded as JSON strings (with explicit surrounding quotes).
+
+Example: `aGVsbG8gd29ybGQ=`
+
+#### Empty Values
+
+Empty values SHOULD be represented as the empty string.
+They SHOULD NOT be encoded as a JSON string (with explicit surrounding quotes).
+
+#### Arrays
+
+Arrays, except for byte arrays, SHOULD be represented as JSON arrays.
+
+Nested byte arrays SHOULD be represented as
+[Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4) JSON strings.
+Nested empty values SHOULD be represented as JSON null.
+The special floating point values NaN and Infinity SHOULD be represented as
+JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
+
+Examples: `[]`, `[1, "-Infinity", "a", true, {"nested": "aGVsbG8gd29ybGQ="}]`
+
+#### Maps
+
+Maps SHOULD be represented as JSON objects.
+
+Nested byte arrays SHOULD be represented as
+[Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4) JSON strings.
+Nested empty values SHOULD be represented as JSON null.
+The special floating point values NaN and Infinity SHOULD be represented as
+JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
+
+Examples: `{}`, `{"a": "-Infinity", "b": 2, "c": [3, null]}`
 
 ## Attribute
 
