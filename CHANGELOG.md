@@ -18,6 +18,9 @@ release.
 
 ### Metrics
 
+- Add additional in-development requirements to metric start timestamps.
+  ([#4807](https://github.com/open-telemetry/opentelemetry-specification/pull/4807))
+
 ### Logs
 
 - Add optional `Exception` parameter to Emit LogRecord.
