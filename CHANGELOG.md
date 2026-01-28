@@ -29,6 +29,9 @@ release.
 
 ### Resource
 
+- Refine the handling of OTEL_RESOURCE_ATTRIBUTES.
+  ([#4856](https://github.com/open-telemetry/opentelemetry-specification/pull/4856))
+
 ### Entities
 
 ### OpenTelemetry Protocol
