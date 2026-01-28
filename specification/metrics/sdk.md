@@ -791,12 +791,12 @@ interval's timestamp, or the creation time of the instrument if this is the
 first collection interval for the instrument. This implies that all delta
 aggregations for an instrument MUST share the same start timestamp.
 
-Cumulative aggregations for synchronous instruments MUST use the time of the
+Cumulative aggregations for synchronous instruments SHOULD use the time of the
 first measurement for each attribute set as the start time. Cumulative
-aggregations for asynchronous instruments MUST use the previous collection
+aggregations for asynchronous instruments SHOULD use the previous collection
 interval's timestamp, or the creation time of the instrument if this is the
 first collection interval for the instrument, when the instrument records a
-measurement for an attribute set it has no record of. To do this, the SDK MUST
+measurement for an attribute set it has no record of. To do this, the SDK SHOULD
 track the start timestamp for each unique attribute set of cumulative
 aggregations. All cumulative timeseries MUST use the initial start timestamp in
 subsequent collection intervals.
