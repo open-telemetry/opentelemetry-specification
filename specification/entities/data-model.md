@@ -235,7 +235,7 @@ _Note: These examples MAY diverge from semantic conventions._
     </td>
     <td>service.instance.id<br/>
         service.name<br/>
-        service.namesapce
+        service.namespace
     </td>
     <td>service.version
     </td>

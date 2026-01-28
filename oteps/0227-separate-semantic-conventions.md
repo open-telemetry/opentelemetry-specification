@@ -63,7 +63,7 @@ required attribute names and their interaction with the SDK.
 The following process would be used to ensure semantic conventions are
 seamlessly moved to their new location. This process lists steps in order:
 
-- A moratorium will be placed on Semantic Convention PRs to the specififcation
+- A moratorium will be placed on Semantic Convention PRs to the specification
   repository. (Caveat that PRs related to this proposal would be allowed).
 - Interactions between Semantic Conventions and the Specification will be
   extracted such that the Specification can place requirements on Semantic

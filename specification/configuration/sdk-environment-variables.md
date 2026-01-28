@@ -240,9 +240,9 @@ We define environment variables for setting one or more exporters per signal.
 
 | Name                  | Description                 | Default | Type     |
 |-----------------------|-----------------------------|---------|----------|
-| OTEL_TRACES_EXPORTER  | Trace exporter to be used   | "otlp"  | [Enum][] |
-| OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  | [Enum][] |
-| OTEL_LOGS_EXPORTER    | Logs exporter to be used    | "otlp"  | [Enum][] |
+| OTEL_TRACES_EXPORTER  | Trace exporter to be used   | `otlp`  | [Enum][] |
+| OTEL_METRICS_EXPORTER | Metrics exporter to be used | `otlp`  | [Enum][] |
+| OTEL_LOGS_EXPORTER    | Logs exporter to be used    | `otlp`  | [Enum][] |
 
 The implementation MAY accept a comma-separated list to enable setting multiple exporters.
 

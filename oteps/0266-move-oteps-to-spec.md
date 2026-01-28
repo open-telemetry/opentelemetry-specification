@@ -16,7 +16,7 @@ Originally, OTEPs were kept as a separate repository to keep disjoint/disruptive
 
 - OTEPs are expected to be directional and subject to change when actually entered into the specification.
 - OTEPs require more approvals than specification PRs
-- OTEPs have different PR worklfows (whether due to accidental omission or conscious decision), e.g. staleness checks, linting.
+- OTEPs have different PR workflows (whether due to accidental omission or conscious decision), e.g. staleness checks, linting.
 
 As OpenTelemetry is stabilizing, the need for OTEPs to live outside the specification is growing less, and we face challenges like:
 
@@ -55,7 +55,7 @@ aspects of the current OTEP status.
 OTEPs were originally based on common enhancement proposal processes in other ecosystems, where enhancements live outside core repositories and follow a more rigorous criteria and evaluation. We are finding this
 problematic for OpenTelemetry for reasons discussed above. Additionally, unlike many other ecosystems where enhancement/design is kept separate from core code, OpenTelemetry *already* keeps its design separate
 form core code via the Specification vs. implementation repositories. Unlike these other OSS projects, our Specification generally requires rigorous discussion, design and prototyping prior to acceptance.  Even
-after acceptance into the specification, work is still required for improvements to roll out to the ecosystem. Effectively: The OpenTelemetry specification has no such thing as a "small" change: There are only medium changes that appear small, but would be enhancements in other proejcts or large changes that require an OTEP.
+after acceptance into the specification, work is still required for improvements to roll out to the ecosystem. Effectively: The OpenTelemetry specification has no such thing as a "small" change: There are only medium changes that appear small, but would be enhancements in other projects or large changes that require an OTEP.
 
 ## Open questions
 
