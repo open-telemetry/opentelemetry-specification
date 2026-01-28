@@ -417,8 +417,10 @@ The SDK MUST accept the following stream configuration parameters:
 * **Status**: [Development](../document-status.md) - `enabled` (optional): A
   boolean denoting whether the instrument should be enabled. When `enabled` is
   `false`, the View uses the `DropAggregation`, regardless of the `aggregation`
-  provided. If unset, the default is `true` unless the `OptIn`
-  parameter is `true`.
+  provided. When `enabled` is `true` for an instrument with `OptIn` set to
+  `true`, the SDK treats the instrument as-if `OptIn` was set to false. The
+  SDK must allow `enabled` to be unset (neither true nor false). If unset,
+  `enabled` has no effect.
 
 #### Measurement processing
 
