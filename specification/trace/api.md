@@ -766,7 +766,7 @@ are built and instrumented.
 [Semantic conventions](../overview.md#semantic-conventions) for
 specific technologies should document kind for each span they define.
 
-For instance, [Database Client Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/database/database-spans/)
+For instance, [Database Client Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/db/database-spans/)
 recommend using `CLIENT` span kind to describes database calls.
 If the database client communicates to the server over HTTP, the HTTP
 instrumentation (when enabled) creates nested `CLIENT` spans to track individual
