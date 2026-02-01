@@ -2,8 +2,8 @@
 linkTitle: Logs
 aliases:
   - /docs/reference/specification/logs/overview
-  - ./event-api
-  - ./event-sdk
+  - logs/event-api
+  - logs/event-sdk
 path_base_for_github_subdir:
   from: tmp/otel/specification/logs/_index.md
   to: logs/README.md
@@ -155,7 +155,7 @@ Given the above state of the logging space we took the following approach:
     especially when the existing logging library cannot emit structured data or specify event names.
   - **Scenarios requiring direct control** over log emission without
     intermediary logging library.
-  
+
   Note that existing logging libraries generally provide a much richer set of
   features than what is defined in OpenTelemetry. Yet, languages may provide
   an [ergonomic API](./api.md#ergonomic-api) for better developer experience

@@ -9,17 +9,19 @@ release.
 
 ### Context
 
+- Deprecate Jaeger propagator and make propagator implementation optional.
+  ([#4827](https://github.com/open-telemetry/opentelemetry-specification/pull/4827))
+- Deprecate OT Trace propagator and make propagator implementation optional.
+  ([#4851](https://github.com/open-telemetry/opentelemetry-specification/pull/4851))
+
 ### Traces
 
 ### Metrics
 
-- Stabilize part of `Enabled` SDK for synchronous instruments.
-  ([#4787](https://github.com/open-telemetry/opentelemetry-specification/pull/4787))
-
 ### Logs
 
-- Add optional Ergonomic API.
-  ([#4741](https://github.com/open-telemetry/opentelemetry-specification/pull/4741))
+- Add optional `Exception` parameter to Emit LogRecord.
+  ([#4824](https://github.com/open-telemetry/opentelemetry-specification/pull/4824))
 
 ### Baggage
 
@@ -35,6 +37,29 @@ release.
 
 ### SDK Configuration
 
+- Declarative configuration: rename `ComponentProvider` to
+  `PluginComponentProvider`, `CreatePlugin` to `CreateComponent` in effort to
+  use consistent vocabulary
+  ([#4806](https://github.com/open-telemetry/opentelemetry-specification/pull/4806))
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.53.0 (2026-01-09)
+
+### Metrics
+
+- Stabilize part of `Enabled` SDK for synchronous instruments.
+  ([#4787](https://github.com/open-telemetry/opentelemetry-specification/pull/4787))
+
+### Logs
+
+- Add optional Ergonomic API.
+  ([#4741](https://github.com/open-telemetry/opentelemetry-specification/pull/4741))
+
+### SDK Configuration
+
 - Declarative configuration: clarify default behavior and validation
   requirements of `create` and `parse`.
   ([#4780](https://github.com/open-telemetry/opentelemetry-specification/pull/4780))
@@ -46,12 +71,16 @@ release.
   ([#4802](https://github.com/open-telemetry/opentelemetry-specification/pull/4802))
 - Declarative configuration: clarify Registry ComponentProvider `type` parameter
   ([#4799](https://github.com/open-telemetry/opentelemetry-specification/pull/4799))
+- Declarative configuration: Update instrumentation config behavior to return
+  empty object when not set
+  ([#4817](https://github.com/open-telemetry/opentelemetry-specification/pull/4817))
+- Swap Tracer/Meter/LoggerConfig `disabled` for `enabled` to avoid double negatives
+  ([#4823](https://github.com/open-telemetry/opentelemetry-specification/pull/4823))
 
 ### Common
 
-### Supplementary Guidelines
-
-### OTEPs
+- Stabilize complex `AnyValue` attribute value types and related attribute limits.
+  ([#4794](https://github.com/open-telemetry/opentelemetry-specification/issues/4794))
 
 ## v1.52.0 (2025-12-12)
 

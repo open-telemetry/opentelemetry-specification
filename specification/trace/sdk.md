@@ -200,17 +200,17 @@ the `Tracer` MUST be updated to behave according to the new `TracerConfig`.
 A `TracerConfig` defines various configurable aspects of a `Tracer`'s behavior.
 It consists of the following parameters:
 
-* `disabled`: A boolean indication of whether the Tracer is enabled.
+* `enabled`: A boolean indication of whether the Tracer is enabled.
 
-  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  If not explicitly set, the `enabled` parameter SHOULD default to `true` (
   i.e. `Tracer`s are enabled by default).
 
   If a `Tracer` is disabled, it MUST behave equivalently
   to a [No-op Tracer](./api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk).
 
-  The value of `disabled` MUST be used to resolve whether a `Tracer`
-  is [Enabled](./api.md#enabled). If `disabled` is `true`, `Enabled`
-  returns `false`. If `disabled` is `false`, `Enabled` returns `true`.
+  The value of `enabled` MUST be used to resolve whether a `Tracer`
+  is [Enabled](./api.md#enabled). If `enabled` is `false`, `Enabled`
+  returns `false`. If `enabled` is `true`, `Enabled` returns `true`.
 
 It is not necessary for implementations to ensure that changes to any of these
 parameters are immediately visible to callers of `Enabled`.
@@ -223,7 +223,7 @@ However, the changes MUST be eventually visible.
 `Enabled` MUST return `false` when either:
 
 - there are no registered [`SpanProcessors`](#span-processor),
-- `Tracer` is disabled ([`TracerConfig.disabled`](#tracerconfig) is `true`).
+- `Tracer` is disabled ([`TracerConfig.enabled`](#tracerconfig) is `false`).
 
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
@@ -600,9 +600,9 @@ The following configuration properties should be available when creating the sam
 * polling interval - polling interval for getting configuration from remote
 * initial sampler - initial sampler that is used before the first configuration is fetched
 
-[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#remote-sampling
-[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/1.41/architecture/apis/#remote-sampling-configuration-stable
-[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/1.41/architecture/sampling/#adaptive-sampling
+[jaeger-remote-sampling]: https://www.jaegertracing.io/docs/2.14/architecture/sampling/#remote-sampling
+[jaeger-remote-sampling-api]: https://www.jaegertracing.io/docs/2.14/architecture/apis/#remote-sampling-configuration
+[jaeger-adaptive-sampling]: https://www.jaegertracing.io/docs/2.14/architecture/sampling/#adaptive-sampling
 
 #### AlwaysRecord
 

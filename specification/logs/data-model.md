@@ -153,11 +153,12 @@ fields:
 
 - Named top-level fields of specific type and meaning.
 
-- Fields stored as `map<string, any>`, which can contain arbitrary values of
-  different types. The keys and values for well-known fields follow semantic
-  conventions for key names and possible values that allow all parties that work
-  with the field to have the same interpretation of the data. See references to
-  semantic conventions for `Resource` and `Attributes` fields and examples in
+- Fields stored as [Attribute Collections](../common/README.md#attribute-collections),
+  whose values are [AnyValue](../common/README.md#anyvalue). The keys and values
+  for well-known fields follow semantic conventions for key names and possible
+  values that allow all parties that work with the field to have the same
+  interpretation of the data. See references to semantic conventions for
+  `Resource` and `Attributes` fields and examples in
   [Appendix A](./data-model-appendix.md#appendix-a-example-mappings).
 
 The reasons for having these 2 kinds of fields are:
@@ -169,7 +170,7 @@ The reasons for having these 2 kinds of fields are:
 - Ability to enforce types of named fields, which is very useful for compiled
   languages with type checks.
 
-- Flexibility to represent less frequent data as `map<string, any>`. This
+- Flexibility to represent less frequent data in Attribute Collections. This
   includes well-known data that has standardized semantics as well as arbitrary
   custom data that the application may want to include in the logs.
 
@@ -311,7 +312,7 @@ The following table defines the meaning of `SeverityNumber` value:
 
 #### Field: `Body`
 
-Type: [`any`](#type-any) or [AnyValue](../common/README.md#anyvalue).
+Type: [AnyValue](../common/README.md#anyvalue).
 
 Description: A value containing the body of the log record. Can be for example
 a human-readable string message (including multi-line) describing the event in
@@ -319,16 +320,16 @@ a free form or it can be a structured data composed of arrays and maps of other
 values. Body MUST support [AnyValue](../common/README.md#anyvalue)
 to preserve the semantics of structured logs emitted by the applications.
 Can vary for each occurrence of the event coming from the same source.
-This field is optional.
+This field is optiona
 
 #### Field: `Attributes`
 
-Type: [`map<string, any>`](#type-mapstring-any) or [Attribute Collection](../common/README.md#attribute-collections).
+Type: [Attribute Collection](../common/README.md#attribute-collections).
 
 Description: Additional information about the specific event occurrence. Unlike
-the [`Resource`](../resource/sdk.md), which is fixed for a particular source, `Attributes` can
+the `Resource` field, which is fixed for a particular source, `Attributes` can
 vary for each occurrence of the event coming from the same source. Can contain
-information about the request context.
+information about the request context (other than [Trace Context Fields](#trace-context-fields)).
 This field is optional.
 
 ##### Errors and Exceptions
