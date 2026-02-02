@@ -60,9 +60,8 @@ Obtain configuration relevant to instrumentation libraries.
 the [`.instrumentation`](https://github.com/open-telemetry/opentelemetry-configuration/blob/670901762dd5cce1eecee423b8660e69f71ef4be/examples/kitchen-sink.yaml#L438-L439)
 configuration mapping node.
 
-If the `.instrumentation` node is not set, get instrumentation config MUST
-return nil, null, undefined or another language-specific idiomatic pattern
-denoting empty.
+If the `.instrumentation` node is not set, get instrumentation config SHOULD
+return an empty `ConfigProperties` (as if `.instrumentation: {}` was set).
 
 ### ConfigProperties
 
