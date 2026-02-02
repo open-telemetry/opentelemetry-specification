@@ -31,6 +31,12 @@ release.
 
 ### Entities
 
+### Common
+
+- Add string representation guidance for complex attribute value types (byte arrays,
+  empty values, arrays, and maps) for non-OTLP protocols.
+  ([#4485](https://github.com/open-telemetry/opentelemetry-specification/pull/4485))
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
