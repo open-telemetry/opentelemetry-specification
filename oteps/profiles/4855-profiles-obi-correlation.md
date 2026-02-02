@@ -20,19 +20,17 @@ Currently, OBI traces and profiles operate independently, making it difficult to
 
 ### Communication Channel
 
-The communication channel between OBI and the profiler is implemented via an eBPF map pinned at `$PINPATH/otel_traces_ctx_v1`.
+The communication channel between OBI and the profiler is implemented via an eBPF map pinned at `$PINPATH/otel/traces_ctx_v1`.
 
 $PINPATH will default to bpffs (`/sys/fs/bpf`) but there must be options to specify an alternative location. If set, the user-configured
 
 location in OBI must match the one set in the profiler.
 
-On startup, both OBI and the profiler, will create the map and pin it if it doesn't exist. OBI will expose an helper function for the profiler
-
-to do so.
+On startup, both OBI and the profiler, will create the map and pin it if it doesn't exist.
 
 ### Data Model
 
-As described in the [Profiles Data Model](./0239-profiles-data-model.md), the shared eBPF map uses a minimal structure to store correlation data.
+As described in the [Profiles Data Model](./0239-profiles-data-model.md), the shared eBPF map uses a minimal structure to store correlation data. OBI will be responsible of removing entries in order to avoid keeping stale contexts.
 
 #### eBPF Map Specification
 
@@ -43,7 +41,7 @@ struct {
     __type(value, struct trace_context);
     __uint(max_entries, 1 << 14);
     __uint(pinning, LIBBPF_PIN_BY_NAME);
-} otel_traces_ctx_v1 SEC(".maps");
+} traces_ctx_v1 SEC(".maps");
 ```
 
 - **Key:** `(u64)pid_tgid`
