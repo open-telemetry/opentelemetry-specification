@@ -258,7 +258,7 @@ scope_metrics:
 Metrics which do not have any label with `otel_scope_` prefix
 MUST be assigned an instrumentation scope identifying the entity performing
 the translation from Prometheus to OpenTelemetry (e.g. the collector's
-prometheus receiver).
+Prometheus receiver).
 
 ### Resource Attributes
 

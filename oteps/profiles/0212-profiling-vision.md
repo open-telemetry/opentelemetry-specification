@@ -151,7 +151,7 @@ However, the output of OpenTelemetry's standardization effort must take into
 account that some existing profilers are designed to be low overhead and high
 performance. For example, they may operate in a whole-datacenter, always-on
 manner, and/or in environments where they must guarantee low CPU/RAM/network
-usage. The OpenTelemetry standardisation effort should take this into account
+usage. The OpenTelemetry standardization effort should take this into account
 and strive to produce a format that is usable by profilers of this nature
 without sacrificing their performance guarantees.
 

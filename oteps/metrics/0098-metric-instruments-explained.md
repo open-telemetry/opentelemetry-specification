@@ -205,7 +205,7 @@ This proposal continues to specify the use of MinMaxSumCount for these two instr
 
 There has been a question about labeling `ValueObserver` measurements with the temporal quality Delta vs. Instantaneous.  There is a related question: What does it mean aggregate a Min and Max value for an asynchronous instrument, which may only produce one measurement per collection interval?
 
-The purpose of defining the default aggregation, when there is only one measurement per interval, is to specify how values will be aggregated across multiple collection intervals.  When there is no aggregation being applied, the result of MinMaxSumCount aggregation for a single collection interval is a single measurement equal to the Min, the Max, and the Sum, as well as a Count equal to 1.  Before we apply aggregation to a `ValueObserver` measurement, we can clearly define it as an Intantaneous measurement.  A measurement, captured at an instant near the end of the collection interval, is neither a cumulative nor a delta with respect to the prior collection interval.
+The purpose of defining the default aggregation, when there is only one measurement per interval, is to specify how values will be aggregated across multiple collection intervals.  When there is no aggregation being applied, the result of MinMaxSumCount aggregation for a single collection interval is a single measurement equal to the Min, the Max, and the Sum, as well as a Count equal to 1.  Before we apply aggregation to a `ValueObserver` measurement, we can clearly define it as an Instantaneous measurement.  A measurement, captured at an instant near the end of the collection interval, is neither a cumulative nor a delta with respect to the prior collection interval.
 
 [OTEP 88][otep-88] discusses the Last Value relationship to help address this question.  After capturing a single `ValueObserver` measurement for a given instrument and label set, that measurement becomes the Last value associated with that instrument until the next measurement is taken.
 
@@ -224,7 +224,7 @@ Aggregating `ValueObserver` measurements across both spatial and time dimensions
 3. For each distinct label set and timestamp, compute the spatial aggregation using the last-value definition at that timestamp.  This results in a set of timestamped aggregate measurements with comparable counts.
 4. Aggregate the timestamped measurements from step 3.
 
-Steps 2 and 3 ensure that measurements taken less frequently have equal representation in the output, by virtue of computing the spatial aggregation first.  If we were to compute the temporal aggregation first, then aggreagate across spatial dimensions, then instruments collected at a higher frequency will contribute correspondingly more points to the aggregation.  Thus, we must aggregate across `ValueObserver` instruments across spatial dimensions before averaging across time.
+Steps 2 and 3 ensure that measurements taken less frequently have equal representation in the output, by virtue of computing the spatial aggregation first.  If we were to compute the temporal aggregation first, then aggregate across spatial dimensions, then instruments collected at a higher frequency will contribute correspondingly more points to the aggregation.  Thus, we must aggregate across `ValueObserver` instruments across spatial dimensions before averaging across time.
 
 ## Open Questions
 
@@ -242,7 +242,7 @@ This may be revisited in the future.
 
 A cumulative measurement can be converted into delta measurement by remembering the last-reported value.  A helper instrument could offer to emulate synchronous cumulative measurements by remembering the last-reported value and reporting deltas synchronously.
 
-A delta measurement can be converted into a cumluative measurement by remembering the sum of all reported values.  A helper instrument could offer to emulate asynchronous delta measurements in this way.
+A delta measurement can be converted into a cumulative measurement by remembering the sum of all reported values.  A helper instrument could offer to emulate asynchronous delta measurements in this way.
 
 Should helpers of this nature be standardized, if there is demand?  These helpers are excluded from the standard because they carry a number of caveats, but as helpers they can easily do what an OpenTelemery SDK cannot do in general.  For example, we are avoiding synchronous cumulative instruments because they seem to imply ordering that an SDK is not required to support, however an instrument helper that itself uses a lock can easily convert to deltas.
 
