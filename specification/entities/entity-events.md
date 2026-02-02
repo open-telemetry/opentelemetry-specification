@@ -14,12 +14,14 @@ weight: 3
 
 - [Overview](#overview)
 - [When to Use Entity Events](#when-to-use-entity-events)
-- [Entity Events Data Model](#entity-events-data-model)
+- [Event Types](#event-types)
   * [Entity State Event](#entity-state-event)
   * [Entity Delete Event](#entity-delete-event)
+  * [Aggregated Reporting](#aggregated-reporting)
 - [Entity Relationships](#entity-relationships)
   * [Relationship Structure](#relationship-structure)
   * [Standard Relationship Types](#standard-relationship-types)
+  * [Relationship Placement](#relationship-placement)
   * [Relationship Lifecycle](#relationship-lifecycle)
 - [Examples](#examples)
   * [Kubernetes Pod Entity State](#kubernetes-pod-entity-state)
@@ -58,14 +60,21 @@ Entity events are particularly useful when:
 Entity events can be used alongside telemetry signals associated with entities to provide
 additional context and relationship information.
 
-## Entity Events Data Model
+## Event Types
 
-Entity events use the OpenTelemetry Logs Data Model with specific conventions for the
-`EventName` and `Attributes` fields.
+Entity information is communicated through the following event types:
+
+1. **Entity State Event** (`entity.state`): Emitted when an entity is created, when its
+   attributes change, or periodically to indicate the entity still exists. The presence or
+   absence of the `entity.updated` attribute distinguishes between state changes and
+   periodic reports.
+
+2. **Entity Delete Event** (`entity.delete`): Emitted when an entity is removed.
 
 ### Entity State Event
 
-The Entity State Event stores information about the state of an entity at a particular moment in time.
+The Entity State Event is emitted when an entity is created, when its descriptive attributes
+change, or periodically to indicate the entity still exists.
 
 **Event Name**: `entity.state`
 
@@ -74,39 +83,36 @@ The Entity State Event stores information about the state of an entity at a part
 | Attribute | Type | Description |
 | --------- | ---- | ----------- |
 | `entity.type` | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service", "host", "k8s.pod". |
-| `entity.id` | map<string, AnyValue> | Attributes that identify the entity. MUST not change during the lifetime of the entity. The map MUST contain at least one attribute. Follows OpenTelemetry [attribute definition](../common/README.md#attribute). |
+| `entity.id` | map<string, string> | Attributes that identify the entity. MUST not change during the lifetime of the entity. The map MUST contain at least one attribute. Keys and values MUST be strings. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attribute names. |
+| `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. These attributes are not part of the entity's identity. Each Entity State event contains the complete current state of the entity's description. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| `entity.relationships` | array of maps | Relationships to other entities. Each relationship is a map containing: `type` (string, describes the relationship), `entity.type` (string, the type of the related entity), and `entity.id` (map<string, string>, identifying attributes of the related entity). |
+| `report.interval` | int64 (milliseconds) | The reporting interval for this entity. MUST be a non-negative value. A value of `0` indicates that periodic reporting is disabled and only state changes will be reported. A positive value indicates the interval at which periodic state events (without `entity.updated`) will be emitted. Can be used by receivers to infer that a no longer reported entity is gone, even if the Entity Delete event was not observed. |
 
 **Optional Attributes**:
 
 | Attribute | Type | Description |
 | --------- | ---- | ----------- |
-| `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. MAY change over the lifetime of the entity. These attributes are not part of the entity's identity. Each Entity State event with a non-empty `entity.description` completely replaces the previously reported description. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
-| `entity.interval` | int64 (milliseconds) | Defines the reporting period, i.e., how frequently information about this entity is reported via Entity State events even if the entity does not change. MUST be a positive value. A value of `0` indicates that no periodic reporting is expected. The next expected Entity State event for this entity is expected at (Timestamp + Interval) time. Can be used by receivers to infer that a no longer reported entity is gone, even if the Entity Delete event was not observed. |
-| `entity.relationships` | array of map<string, AnyValue> | Array of relationships that this entity has with other entities. MAY change over the lifetime of the entity. Each Entity State event with a non-empty `entity.relationships` completely replaces the previously reported relationships. See [Entity Relationships](#entity-relationships) for details. |
+| `entity.updated` | string | The timestamp when the entity's state last changed, in ISO 8601 format. When present, indicates this is a state change event. When absent, indicates this is a periodic report with no changes since the last report. When multiple changes occur between reports (aggregated reporting), this represents the timestamp of the most recent change. |
 
 **Timestamp Field**:
 
-The `Timestamp` field of the LogRecord represents the time when the entity state described
-by this event became effective. This is the time measured by the origin clock.
+The `Timestamp` field of the LogRecord represents the time when this event was generated and sent.
+For immediate reporting without aggregation, this will typically match `entity.updated`. For
+aggregated reporting, this represents when the event was sent, while `entity.updated` represents
+when the most recent state change occurred.
 
-**State Mutations**:
+**State Changes vs Periodic Reports**:
 
-An entity mutates (changes) when one or more of its descriptive attributes changes, or when
-its relationships change. A new descriptive attribute may be added, an existing descriptive
-attribute may be deleted, or a value of an existing descriptive attribute may be changed.
-All these changes represent valid mutations of an entity over time. When these mutations
-happen, the identity of the entity does not change.
+- When `entity.updated` is **present**, this is a state change event indicating the entity
+  was created or its attributes were modified. The value of `entity.updated` indicates when
+  the most recent change occurred.
+- When `entity.updated` is **absent**, this is a periodic report indicating the entity still
+  exists but has not changed since the last report.
 
-When the entity's state changes, sources SHOULD emit a new Entity State event with a fresh
-timestamp and the complete current state of all fields.
-
-**Periodic Reporting**:
-
-Entity event producers SHOULD periodically emit Entity State events even if the entity does
-not change. In this case, the `entity.type`, `entity.id`, `entity.description`, and
-`entity.relationships` fields will remain the same, but a fresh `Timestamp` will be recorded.
-Producing such events allows the system to be resilient to event losses and serves as a
-liveliness indicator.
+Implementations SHOULD emit state change events whenever entity descriptive attributes change,
+periodic state events based on the `report.interval` value, and delete events when entities
+are removed. Implementations MAY provide configuration options to allow users to disable
+state change events or periodic state events independently.
 
 ### Entity Delete Event
 
@@ -119,7 +125,7 @@ The Entity Delete Event indicates that a particular entity is gone.
 | Attribute | Type | Description |
 | --------- | ---- | ----------- |
 | `entity.type` | string | The type of the entity being deleted. |
-| `entity.id` | map<string, AnyValue> | Attributes that identify the entity being deleted. |
+| `entity.id` | map<string, string> | Attributes that identify the entity being deleted. |
 
 **Optional Attributes**:
 
@@ -129,17 +135,41 @@ The Entity Delete Event indicates that a particular entity is gone.
 
 **Timestamp Field**:
 
-The `Timestamp` field of the LogRecord represents the time when the entity was deleted,
-measured by the origin clock.
+The `Timestamp` field of the LogRecord represents the time when the entity was deleted.
 
 **Delivery Guarantees**:
 
 Transmitting Entity Delete events is not guaranteed when an entity is gone. Recipients of
 entity signals MUST be prepared to handle this situation by expiring entities that are no
 longer seeing Entity State events reported. The expiration mechanism is based on the
-previously reported `entity.interval` field. Recipients can use this value to compute when
+previously reported `report.interval` field. Recipients can use this value to compute when
 to expect the next Entity State event and, if the event does not arrive in a timely manner
 (plus some slack), consider the entity to be gone even if the Entity Delete event was not observed.
+
+### Aggregated Reporting
+
+Implementations MAY provide aggregated reporting as an optional capability to reduce the amount
+of data sent over the wire. When aggregated reporting is enabled:
+
+- Multiple rapid changes to the same entity are collapsed into a single Entity State event
+- Only the **latest state** of the entity is reported
+- Intermediate state changes are not preserved
+- The `entity.updated` attribute contains the timestamp of the **most recent change** that
+  occurred during the aggregation period
+- The LogRecord `Timestamp` represents when the aggregated event was sent
+
+**Example**:
+
+If a Pod's phase changes from "Pending" → "Running" → "Running" (with label update) between
+reports, only one event is sent with:
+
+- The final state (Running with updated labels)
+- `entity.updated` = timestamp of the label update (the most recent change)
+- LogRecord `Timestamp` = when the aggregated event was sent
+
+Aggregated reporting reduces data volume at the cost of losing visibility into intermediate
+states. When provided, implementations SHOULD document the aggregated reporting capability
+and allow configuration of the aggregation behavior.
 
 ## Entity Relationships
 
@@ -156,7 +186,7 @@ Each relationship in the `entity.relationships` array is a map containing:
 | ----- | ---- | ----------- |
 | `relationship.type` | string | The type of relationship. Describes the semantic meaning of the relationship (e.g., "scheduled_on", "contains", "depends_on"). See [Standard Relationship Types](#standard-relationship-types). |
 | `entity.type` | string | The type of the target entity. |
-| `entity.id` | map<string, AnyValue> | The identifying attributes of the target entity. |
+| `entity.id` | map<string, string> | The identifying attributes of the target entity. |
 
 **Optional Fields**:
 
@@ -189,6 +219,39 @@ Relationship types form an open enumeration. Custom relationship types MAY be de
 represent domain-specific relationships. Semantic conventions SHOULD define standard
 relationship types for common entity types.
 
+### Relationship Placement
+
+When choosing which entity should contain a relationship in its `entity.relationships` array,
+implementations SHOULD prefer placing relationships on the entity type with the **shorter
+lifespan** or **higher churn rate**. This minimizes the total number of Entity State events
+that need to be sent.
+
+**Rationale**: Since relationships are embedded in Entity State events, every time an entity's
+relationships change, a new state event must be emitted. Placing relationships on the more
+stable entity would require frequent state event emissions whenever the shorter-lived entities
+are created or destroyed.
+
+**Examples**:
+
+- **Prefer**: `k8s.pod -> part_of -> k8s.replicaset` (relationship on the pod)
+  - **Rather than**: `k8s.replicaset -> contains -> k8s.pod` (relationship on the replicaset)
+  - **Reason**: Pods churn frequently. With relationships on pods, only new pod state events
+    are sent when pods are created/destroyed. If relationships were on the replicaset, every
+    pod creation/destruction would require a new replicaset state event with an updated list
+    of all contained pods.
+
+- **Prefer**: `container -> part_of -> k8s.pod` (relationship on the container)
+  - **Rather than**: `k8s.pod -> contains -> container` (relationship on the pod)
+  - **Reason**: Containers may restart independently, so placing the relationship on the
+    container reduces the number of pod state events.
+
+- **Prefer**: `process -> runs_on -> host` (relationship on the process)
+  - **Rather than**: `host -> hosts -> process` (relationship on the host)
+  - **Reason**: Processes start and stop frequently, while hosts are long-lived.
+
+When both entities have similar lifespans, either direction is acceptable. Semantic conventions
+SHOULD provide guidance on relationship placement for common entity types.
+
 ### Relationship Lifecycle
 
 **Creating Relationships**:
@@ -206,86 +269,104 @@ entity is the source are implicitly deleted. Backends SHOULD handle this accordi
 
 ## Examples
 
+The following examples show the logical representation of entity events. These are NOT
+actual OTLP wire format representations, but rather illustrate the semantic structure
+of the events.
+
 ### Kubernetes Pod Entity State
 
-```json
-{
-  "timestamp": "2026-01-12T10:30:00.000000000Z",
-  "eventName": "entity.state",
-  "resource": {
-    "attributes": {
-      "k8s.cluster.name": "prod-cluster"
-    }
-  },
-  "attributes": {
-    "entity.type": "k8s.pod",
-    "entity.id": {
-      "k8s.pod.uid": "abc-123-def-456"
-    },
-    "entity.description": {
-      "k8s.pod.name": "nginx-deployment-66b6c",
-      "k8s.namespace.name": "default",
-      "k8s.pod.labels": {
-        "app": "nginx",
-        "version": "1.21",
-        "tier": "frontend"
-      },
-      "k8s.pod.phase": "Running",
-    },
-    "entity.interval": 60000,
-    "entity.relationships": [
-      {
-        "relationship.type": "scheduled_on",
-        "entity.type": "k8s.node",
-        "entity.id": {
-          "k8s.node.uid": "node-001"
-        }
-      },
-      {
-        "relationship.type": "contains",
-        "entity.type": "container",
-        "entity.id": {
-          "container.id": "container-456"
-        }
-      },
-      {
-        "relationship.type": "contains",
-        "entity.type": "container",
-        "entity.id": {
-          "container.id": "container-789"
-        }
-      },
-      {
-        "relationship.type": "part_of",
-        "entity.type": "k8s.replicaset",
-        "entity.id": {
-          "k8s.replicaset.uid": "rs-456"
-        }
-      }
-    ]
-  }
-}
+When a Kubernetes Pod is created or its attributes change:
+
+```
+LogRecord:
+  Timestamp: 2026-01-12T10:30:00.000000000Z
+  EventName: entity.state
+  Resource:
+    k8s.cluster.name: prod-cluster
+  Attributes:
+    entity.type: k8s.pod
+    entity.id:
+      k8s.pod.uid: abc-123-def-456
+    entity.description:
+      k8s.pod.name: nginx-deployment-66b6c
+      k8s.pod.labels:
+        app: nginx
+        version: "1.21"
+        tier: frontend
+      k8s.pod.phase: Running
+    entity.updated: 2026-01-12T10:30:00.000000000Z
+    report.interval: 60000
+    entity.relationships:
+      - relationship.type: scheduled_on
+        entity.type: k8s.node
+        entity.id:
+          k8s.node.uid: node-001
+      - relationship.type: part_of
+        entity.type: k8s.replicaset
+        entity.id:
+          k8s.replicaset.uid: rs-456
 ```
 
-### Entity Delete Event
+### Periodic Entity Report
+
+Periodic report for the same Pod with no changes:
+
+```
+LogRecord:
+  Timestamp: 2026-01-12T10:31:00.000000000Z
+  EventName: entity.state
+  Resource:
+    k8s.cluster.name: prod-cluster
+  Attributes:
+    entity.type: k8s.pod
+    entity.id:
+      k8s.pod.uid: abc-123-def-456
+    entity.description:
+      k8s.pod.name: nginx-deployment-66b6c
+      k8s.pod.labels:
+        app: nginx
+        version: "1.21"
+      k8s.pod.phase: Running
+    report.interval: 60000
+```
+
+### Aggregated Entity Update
+
+When multiple changes are aggregated and sent in a single event:
+
+```
+LogRecord:
+  Timestamp: 2026-01-12T10:31:00.000000000Z
+  EventName: entity.state
+  Resource:
+    k8s.cluster.name: prod-cluster
+  Attributes:
+    entity.type: k8s.pod
+    entity.id:
+      k8s.pod.uid: abc-123-def-456
+    entity.description:
+      k8s.pod.name: nginx-deployment-66b6c
+      k8s.pod.labels:
+        app: nginx
+        version: "1.21"
+      k8s.pod.phase: Running
+    entity.updated: 2026-01-12T10:30:45.000000000Z
+    report.interval: 60000
+```
+
+### Entity Delete
 
 When the Pod is terminated:
 
-```json
-{
-  "timestamp": "2026-01-12T11:00:00.000000000Z",
-  "eventName": "entity.delete",
-  "resource": {
-    "attributes": {
-      "k8s.cluster.name": "prod-cluster"
-    }
-  },
-  "attributes": {
-    "entity.type": "k8s.pod",
-    "entity.id": {
-      "k8s.pod.uid": "abc-123-def-456"
-    },
-    "entity.delete.reason": "terminated"
-  }
-}
+```
+LogRecord:
+  Timestamp: 2026-01-12T11:00:00.000000000Z
+  EventName: entity.delete
+  Resource:
+    k8s.cluster.name: prod-cluster
+  Attributes:
+    entity.type: k8s.pod
+    entity.id:
+      k8s.pod.uid: abc-123-def-456
+    entity.delete.reason: terminated
 ```
