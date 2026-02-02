@@ -162,7 +162,7 @@ make language-analysis
 > The `misspell` make target will also fetch and build the tool if
 > necessary. You'll need [Go](https://go.dev) to build the spell checker.
 
-To quickly common misspellings and style, use
+To quickly fix common misspellings and style, use
 
 ```bash
 make textlint-correction
