@@ -126,16 +126,16 @@ formats is required. Implementing more than one format is optional.
 | Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name. |  |  | + |  |  | - | + |  |  |  |  |  |
 | It is possible to register two instruments with same `name` under different `Meter`s. |  | + | + | + | + |  | + |  | + | + | + |  |
 | Instrument names conform to the specified syntax. |  | + | + | + | + | + | + |  |  | + |  |  |
-| Instrument units conform to the specified syntax. |  | - | + |  | + | + | - |  | + | + | + |  |
-| Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | - |  |  | - | + |  |
+| Instrument units conform to the specified syntax. |  | - | + |  | + | + | + |  | + | + | + |  |
+| Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | + |  |  | - | + |  |
 | Instrument supports the advisory ExplicitBucketBoundaries parameter. |  | + | + |  |  |  | + |  |  |  |  |  |
-| Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | - |  |  |  |  |  |
+| Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  |  |  |
 | All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | All methods of `Meter` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | All methods of any instrument are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | `MeterProvider` allows a `Resource` to be specified. |  | + | + | + | + | + |  | + | + | + | + |  |
-| A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`. |  | + | + | + | + | + |  | + | + | + | + |  |
-| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`. |  | + | - |  | + |  |  |  | + | + | - |  |
+| A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`. |  | + | + | + | + | + | + | + | + | + | + |  |
+| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`. |  | + | - |  | + |  | + |  | + | + | - |  |
 | The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope` instance stored in the `Meter`. |  | + | + | + | + |  | + | + | + | + |  |  |
 | Configuration is managed solely by the `MeterProvider`. |  | + | + | + | + |  | + | + | + | + | + |  |
 | The `MeterProvider` provides methods to update the configuration | X | - | - | - | + |  | - |  |  | - | + |  |
@@ -146,7 +146,7 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  |
 | The name of the `View` can be specified. |  | - | + | + | + | + | + | + |  | + | + |  |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  |
-| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  | + |  |  |  |  |  |  |  |  |
+| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  | + |  |  | - |  |  |  |  |  |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  |
 | The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  |
 | The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
@@ -184,9 +184,9 @@ formats is required. Implementing more than one format is optional.
 | A metric Producer accepts an optional metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
 | The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers |  | - |  |  |  |  | - |  |  |  |  |  |
 | The metric SDK's metric Producer implementations uses the metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
-| Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits) |  | + | + | + | - |  |  |  | - | + | + |  |
-| Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  |  |  | - | - | - |  |
-| Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  |  |  | - | - | + |  |
+| Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits) |  | + | + | + | - |  | - |  | - | + | + |  |
+| Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  | - |  | - | - | - |  |
+| Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  |
 
 ## Logs
 
