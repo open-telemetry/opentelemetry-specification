@@ -155,7 +155,7 @@ interval, begin weighted sampling using the adjusted count of each
 span as input weight.
 
 This processor drops spans when the configured rate threshold is
-exceeeded, otherwise it passes spans through with unmodifed adjusted
+exceeded, otherwise it passes spans through with unmodified adjusted
 counts.
 
 When the interval expires and the sample frame is considered complete,
@@ -293,7 +293,7 @@ subpopulations being counted.  For example, although the estimates for
 the rate of spans by distinct name drawn from a one-minute sample may
 have high variance, combining an hour of one-minute sample frames into
 an aggregate data set is guaranteed to lower variance (assuming the
-numebr of span names stays fixed).  It must, because the data remains
+number of span names stays fixed).  It must, because the data remains
 unbiased, so more data results in lower variance.
 
 ### Conveying the sampling probability
@@ -319,7 +319,7 @@ way to understand sampling because larger numbers mean greater
 representivity.
 
 Note that it is possible, given this description, to produce adjusted
-counts that are not integers.  Adjusted counts are an approximatation,
+counts that are not integers.  Adjusted counts are an approximation,
 and the expected value of an integer can be a fractional count.
 Floating-point adjusted counts can be avoided with the use of
 integer-reciprocal inclusion probabilities.
@@ -815,7 +815,7 @@ of composition we assign unknowns `p=64`, which is 1 beyond the range
 of the 6-bit that represent known p-values.  The assignment of `p=64`
 simplifies the formulas below .
 
-By following these simple rules, any numher of consistent probability
+By following these simple rules, any number of consistent probability
 samplers and non-probability samplers can be combined.  Starting with
 `p=64` representing unknown and `sampled=false`, update the composite
 p-value to the minimum value of the prior composite p-value and the

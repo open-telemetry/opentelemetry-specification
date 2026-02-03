@@ -19,7 +19,7 @@ Deliverables of a SIG MUST have a declared maturity level, established by SIG ma
 * the Collector core distribution might declare itself stable and include a receiver that is not stable. In that case, the receiver has to be clearly marked as such
 * the Java Agent might be declared stable, while individual instrumentation packages are not
 
-Components SHOULD NOT be marked as stable if their user-visible interfaces are not stable. For instance, if the Collector's component "otlpreceiver" declares a dependency on the OpenTelemetry Collector API "config" package which is marked with a maturity level of "beta", the "otlpreceiver" should be at most "beta". Maintainers are free to deviate from this recommendation if they believe users are not going to be affected by future changes.
+Components SHOULD NOT be marked as stable if their user-visible interfaces are not stable. For instance, if the Collector's component `otlpreceiver` declares a dependency on the OpenTelemetry Collector API "config" package which is marked with a maturity level of "beta", the `otlpreceiver` should be at most "beta". Maintainers are free to deviate from this recommendation if they believe users are not going to be affected by future changes.
 
 For the purposes of this document, a breaking change is defined as a change that may require consumers of our components to adapt themselves in order to avoid disruption to their usage of our components.
 
