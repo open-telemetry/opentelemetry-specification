@@ -146,7 +146,7 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
    - Verify that `published_at_ns` is non-zero (indicating the context is currently being written)
    - If this fails, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
-4. **Read payload**: Read `payload_size` bytes starting after the header
+4. **Read payload**: Read `payload_size` bytes from `payload` pointer
 
 5. **Re-read header**: If `published_at_ns` has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context. If `published_at_ns` changed, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
