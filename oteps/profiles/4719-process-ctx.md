@@ -8,7 +8,7 @@ External readers like the OpenTelemetry eBPF Profiler operate outside the instru
 
 - **Missing cross-signal correlation identifiers**: Runtime-generated attributes ([`service.instance.id`](https://opentelemetry.io/docs/specs/semconv/registry/attributes/service/#service-instance-id) being a key example) are often inaccessible to external readers, making it hard to correlate various signals with each other (especially in runtimes that employ multiple processes).
 
-- **Inconsistent resource attributes across signals**: Running in different scopes, configuration such as `service.name`, `deployment.environment.name`, and `service.version` are not always available or resolves consistently between the OpenTelemetry SDKs and external readers, leading to configuration drift and inconsistent tagging.
+- **Inconsistent resource attributes across signals**: Running in different scopes, configuration such as `service.name`, `deployment.environment.name`, and `service.version` are not always available or resolve consistently between the OpenTelemetry SDKs and external readers, leading to configuration drift and inconsistent tagging.
 
 - **Correlation is dependent on process activity**: If a service is blocked (such as when doing slow I/O, or threads are actually deadlocked) and not emitting other signals, external readers have difficulty identifying it, since resource attributes or identifiers are only sent along when signals are reported.
 
