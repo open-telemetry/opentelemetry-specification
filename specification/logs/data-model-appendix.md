@@ -52,7 +52,7 @@ this data model.
   <tr>
     <td>FACILITY</td>
     <td>enum</td>
-    <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: <code>mail system</code></td>
+    <td>Describes where the event originated. A predefined list of UNIX processes. Part of event source identity. Example: <code>mail system</code></td>
     <td>`Attributes["syslog.facility"]`</td>
   </tr>
   <tr>
@@ -733,7 +733,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
   <tr>
     <td>host.name</td>
     <td>string</td>
-    <td>Name of the host.<br>It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
+    <td>Name of the host.<br>It may contain what hostname returns on UNIX systems, the fully qualified, or a name specified by the user. </td>
     <td>`Resource["host.name"]`</td>
   </tr>
   <tr>

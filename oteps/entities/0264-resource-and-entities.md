@@ -348,7 +348,7 @@ These designs will be explored and evaluated in light of the requirements. For n
 
 ### Should entities have a domain?
 
-Is it worth having a `domain` in addition to type for entity?  We could force each entity to exist in one domain and leverage domain generically in resource management.  Entity Detectors would be responsible for an entire domain, selecting only ONE to apply a resource. Domains could be layered, e.g. a Cloud-specific domain may layer on top of a Kubernetes domain, where "GKE cluster entity" identifies *which* kubernetes cluster a kubernetes infra entity is part of.  This layer would be done naively, via automatic join of participating entities or explicit relationships derived from GKE specific hooks.
+Is it worth having a `domain` in addition to type for entity?  We could force each entity to exist in one domain and leverage domain generically in resource management.  Entity Detectors would be responsible for an entire domain, selecting only ONE to apply a resource. Domains could be layered, e.g. a Cloud-specific domain may layer on top of a Kubernetes domain, where "GKE cluster entity" identifies *which* Kubernetes cluster a Kubernetes infra entity is part of.  This layer would be done naively, via automatic join of participating entities or explicit relationships derived from GKE specific hooks.
 
 It's unclear if this is needed initially, and we believe this could be layered in later.
 
@@ -476,7 +476,7 @@ The resulting OTLP from the collector would contain a resource with all
 of the entities (`process`, `service`, `ec2`, and `host`).  This is because
 the entities are all disjoint.
 
-*Note: this matches today's behavior of existing resource detection and OpenTelemetry collector where all attributes wind up on resource.*
+*Note: this matches today's behavior of existing resource detection and OpenTelemetry Collector where all attributes wind up on resource.*
 
 ### SDK and Collector - Entity coordination with descriptive attributes
 
@@ -602,7 +602,7 @@ Ideally, we'd like a solution where:
     - `host.cpu.cache.l2.size`
     - `os.description`
     - `os.type`
-  - [docker](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/docker/metadata.yaml)
+  - [Docker](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/docker/metadata.yaml)
     - `host.name`
     - `os.type`
   - [heroku](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/heroku/metadata.yaml)
@@ -614,7 +614,7 @@ Ideally, we'd like a solution where:
     - `service.instance.id`
     - `service.name`
     - `service.version`
-  - [gcp](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/gcp/metadata.yaml)
+  - [GCP](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/gcp/metadata.yaml)
     - gke
       - `cloud.provider`
       - `cloud.platform`
@@ -702,7 +702,7 @@ Ideally, we'd like a solution where:
     - `host.id`
     - `host.name`
     - *exploded consul metadata*
-  - k8s Node
+  - K8s Node
     - `k8s.node.uid`
   - Openshift
     - `cloud.provider`
@@ -780,10 +780,10 @@ Ideally, we'd like a solution where:
       - `process.command_line`
       - `process.command_args`
       - `process.owner`
-    - [builtin](https://github.com/open-telemetry/opentelemetry-go/blob/main/sdk/resource/builtin.go)
+    - [built-in](https://github.com/open-telemetry/opentelemetry-go/blob/main/sdk/resource/builtin.go)
       - `service.instance.id`
       - `service.name`
-- [OTEL operator](https://github.com/open-telemetry/opentelemetry-operator/blob/a1e8f927909b81eb368c0483940e0b90d7fdb057/pkg/instrumentation/sdk_test.go#L752) injected ENV variables
+- [OTel operator](https://github.com/open-telemetry/opentelemetry-operator/blob/a1e8f927909b81eb368c0483940e0b90d7fdb057/pkg/instrumentation/sdk_test.go#L752) injected ENV variables
   - `service.instance.id`
   - `service.name`
   - `service.version`

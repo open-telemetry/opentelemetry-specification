@@ -413,7 +413,7 @@ release.
 - Define syntax for escaping declarative configuration environment variable
   references.
   ([#4375](https://github.com/open-telemetry/opentelemetry-specification/pull/4375))
-- Resolve various declarative config todos.
+- Resolve various declarative config TODOs.
   ([#4394](https://github.com/open-telemetry/opentelemetry-specification/pull/4394))
 
 ## v1.41.0 (2025-01-21)
@@ -805,7 +805,7 @@ release.
   ([#3945](https://github.com/open-telemetry/opentelemetry-specification/pull/3945))
 - Prometheus: represent Prometheus Info, StateSet and Unknown-typed metrics in OTLP.
   ([#3868](https://github.com/open-telemetry/opentelemetry-specification/pull/3868))
-- Update and reorganize the Prometheus sdk exporter specification.
+- Update and reorganize the Prometheus SDK exporter specification.
   ([#3872](https://github.com/open-telemetry/opentelemetry-specification/pull/3872))
 
 ### SDK Configuration
@@ -1484,9 +1484,9 @@ release.
 
 ### Logs
 
-- Update log readme "request context" to "trace context".
+- Update log README "request context" to "trace context".
   ([#3332](https://github.com/open-telemetry/opentelemetry-specification/pull/3332))
-- Remove log readme document status.
+- Remove log README document status.
   ([#3334](https://github.com/open-telemetry/opentelemetry-specification/pull/3334))
 - Break out compatibility document on recording trace context in non-OTLP Log Format
   ([#3331](https://github.com/open-telemetry/opentelemetry-specification/pull/3331))
@@ -1583,7 +1583,7 @@ release.
 
 - Rename Logs API to Logs Bridge API to prevent confusion.
   ([#3197](https://github.com/open-telemetry/opentelemetry-specification/pull/3197))
-- Move event language from log readme to event-api.
+- Move event language from log README to event-api.
   ([#3252](https://github.com/open-telemetry/opentelemetry-specification/pull/3252))
 
 ### Resource
@@ -1609,7 +1609,7 @@ release.
   ([#3250](https://github.com/open-telemetry/opentelemetry-specification/pull/3250))
 - Mark the attribute naming guidelines in the specification as stable.
   ([#3220](https://github.com/open-telemetry/opentelemetry-specification/pull/3220))
-- Mark telemetry schema readme stable.
+- Mark telemetry schema README stable.
   ([#3221](https://github.com/open-telemetry/opentelemetry-specification/pull/3221))
 - Remove mention of `net.transport` from HTTP semantic conventions
   ([#3244](https://github.com/open-telemetry/opentelemetry-specification/pull/3244))
@@ -1944,7 +1944,7 @@ release.
   ([#2874](https://github.com/open-telemetry/opentelemetry-specification/pull/2874))
 - Add `process.paging.faults` metric to semantic conventions
   ([#2827](https://github.com/open-telemetry/opentelemetry-specification/pull/2827))
-- Define semantic conventions yaml for Non-OTLP conventions
+- Define semantic conventions YAML for Non-OTLP conventions
   ([#2850](https://github.com/open-telemetry/opentelemetry-specification/pull/2850))
 - Add more semantic convetion attributes of Apache RocketMQ
   ([#2881](https://github.com/open-telemetry/opentelemetry-specification/pull/2881))
@@ -1996,7 +1996,7 @@ release.
 
 - Add environment variables for configuring the `BatchLogRecordProcessor`.
   ([#2785](https://github.com/open-telemetry/opentelemetry-specification/pull/2785))
-- Fix inconsistencies in log readme
+- Fix inconsistencies in log README
   ([#2800](https://github.com/open-telemetry/opentelemetry-specification/pull/2800)).
 
 ### Resource
@@ -3058,7 +3058,7 @@ Updates:
 - Resource attributes: lowerecased the allowed values of the `aws.ecs.launchtype`
   attribute
   ([#1339](https://github.com/open-telemetry/opentelemetry-specification/pull/1339))
-- Trace Exporters: Fix todos in Jaeger exporter spec
+- Trace Exporters: Fix TODOs in Jaeger exporter spec
   ([#1374](https://github.com/open-telemetry/opentelemetry-specification/pull/1374))
 - Clarify that Jaeger/Zipkin exporters must rely on the default Resource to
   get service.name if none was specified.

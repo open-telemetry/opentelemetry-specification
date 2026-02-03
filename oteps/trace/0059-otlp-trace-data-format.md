@@ -317,7 +317,7 @@ message AttributeKeyValue {
 
 ## Trade-offs and mitigations
 
-Timestamps were changed from google.protobuf.Timestamp to a int64 representation in Unix epoch nanoseconds. This change reduces the type-safety but benchmarks show that for small spans there is 15-20% encoding/decoding CPU speed gain. This is the right trade-off to make because encoding/decoding CPU consumption tends to dominate many workloads (particularly in OpenTelemetry Service).
+Timestamps were changed from google.protobuf.Timestamp to a int64 representation in UNIX epoch nanoseconds. This change reduces the type-safety but benchmarks show that for small spans there is 15-20% encoding/decoding CPU speed gain. This is the right trade-off to make because encoding/decoding CPU consumption tends to dominate many workloads (particularly in OpenTelemetry Service).
 
 ## Prior art and alternatives
 
@@ -368,4 +368,4 @@ The benchmark encodes/decodes 1000 batches of 100 spans, each span containing 3 
 
 The results show OTLP/AttrList is 5-6 times faster than OpenCensus in encoding and about 3 times faster in decoding.
 
-Using google.protobuf.Timestamp instead of int64-encoded Unix timestamp results in 1.18-1.32 times slower encoding and 1.21-1.38 times slower decoding (depending on what the span contains).
+Using google.protobuf.Timestamp instead of int64-encoded UNIX timestamp results in 1.18-1.32 times slower encoding and 1.21-1.38 times slower decoding (depending on what the span contains).

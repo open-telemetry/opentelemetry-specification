@@ -1047,7 +1047,7 @@ The downsides are:
 
 ## Prior Art
 
-- [OpenTelemetry Log Data Model: Body metadata](https://docs.google.com/document/d/1ZExye1lW43owwaxcbjOvl0P2qER-UaYd_MyxItc2h0k/edit#)
+- [OpenTelemetry Log Data Model: Body Metadata](https://docs.google.com/document/d/1ZExye1lW43owwaxcbjOvl0P2qER-UaYd_MyxItc2h0k/edit#)
   by Christian Beedgen.
 
 - [Generic event encoding schemas](https://docs.google.com/document/d/11ccT_zBbiCfwKyi6TMuy2sA3nUdElNQsDJOQ79icVKs/edit#)

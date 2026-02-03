@@ -101,7 +101,7 @@ limitations:
 
 - Windows: Maximum 32,767 characters for name=value pairs according to
   [Microsoft Documentation](https://learn.microsoft.com/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
-- Unix: System-dependent limits exist and are typically lower than Windows.
+- UNIX: System-dependent limits exist and are typically lower than Windows.
 
 When truncation is required due to size limitations, implementations MUST
 truncate whole entries. Truncation SHOULD start at the end of the entry list.
@@ -150,7 +150,7 @@ process and with the correct permissions, can be accessed from other processes.
 
 #### Case Sensitivity
 
-Environment variable names are case-sensitive on Unix and case-insensitive on
+Environment variable names are case-sensitive on UNIX and case-insensitive on
 Windows.
 
 - For maximum compatibility, implementations MUST:

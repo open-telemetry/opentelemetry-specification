@@ -73,7 +73,7 @@ The representation of those values is language specific.
 
 #### Timestamp
 
-A timestamp is the time elapsed since the Unix epoch.
+A timestamp is the time elapsed since the UNIX epoch.
 
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.

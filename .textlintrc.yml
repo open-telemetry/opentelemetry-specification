@@ -24,6 +24,9 @@ rules:
   terminology:
     defaultTerms: true
     skip: []
+    exclude:
+      - 'readme(s)?'
+      - 'to-?do(s)?(?=[ ,.])'
     terms:
       - Actix
       - Ajax
@@ -87,6 +90,7 @@ rules:
       - Python
       - Quarkus
       - Rails
+      - README
       - Redis
       - Ruby
       - Rust
@@ -99,6 +103,7 @@ rules:
       - Thanos
       - Traefik
       - TypeScript
+      - UNIX
       - URL
       - WordPress
       - WSGI
@@ -169,6 +174,7 @@ rules:
       - [repos, repositories]
       - ['screen[- ]shot(s)?', screenshot$1]
       - ['time[- ]stamp(s)?', timestamp$1]
+      - ["to-?do(s)?", "TODO$1"]
       - ["uid['’]?(s)?", UID$1]
       - ['(walk)-(throughs?)', $1$2] # cSpell:disable-line
       - ['(work)-(arounds?)', $1$2]

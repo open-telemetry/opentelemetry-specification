@@ -11,7 +11,7 @@ processes.
   * [Example Context](#example-context)
     * [Distributed Tracing in OpenTofu Prototype Example](#distributed-tracing-in-opentofu-prototype-example)
 * [Core Specification Changes](#core-specification-changes)
-  * [Unix](#unix-limitations)
+  * [UNIX](#unix-limitations)
   * [Windows](#windows-limitations)
   * [Allowed Characters](#allowed-characters)
 * [Trade-offs and Mitigations](#trade-offs-and-mitigations)
@@ -199,9 +199,9 @@ variables for the carrier that align with context propagator specifications.
 [python-env]: https://github.com/Div95/opentelemetry-python/tree/feature/env_propagator/propagator/opentelemetry-propagator-env
 [swift-env]: https://github.com/open-telemetry/opentelemetry-swift-core/blob/c84cdc1760e20fc3a448c4e8aaae490f7d48ac67/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
 
-### Unix Limitations
+### UNIX Limitations
 
-Unix system utilities use upper-case for environment variables and lower-case
+UNIX system utilities use upper-case for environment variables and lower-case
 are reserved for applications. Using upper-case will prevent conflicts with
 internal application variables.
 

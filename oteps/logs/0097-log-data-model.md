@@ -181,7 +181,7 @@ Below is the detailed description of each field.
 
 ### Field: `Timestamp`
 
-Type: Timestamp, uint64 nanoseconds since Unix epoch.
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
 Description: Time when the event occurred measured by the origin clock. This
 field is optional, it may be missing if the timestamp is unknown.
@@ -609,7 +609,7 @@ this data model.
   <tr>
     <td>FACILITY</td>
     <td>enum</td>
-    <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: `mail system`</td>
+    <td>Describes where the event originated. A predefined list of UNIX processes. Part of event source identity. Example: `mail system`</td>
     <td>`Attributes["syslog.facility"]`</td>
   </tr>
   <tr>
@@ -1252,7 +1252,7 @@ It normally contains what the hostname command returns on the host machine.</td>
     <td>string</td>
     <td>Name of the host.
 
-It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
+It may contain what hostname returns on UNIX systems, the fully qualified, or a name specified by the user. </td>
 
 <td>`Resource["host.name"]`</td>
 

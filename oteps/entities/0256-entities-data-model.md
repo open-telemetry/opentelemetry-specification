@@ -689,7 +689,7 @@ type used by the ID field, which is more restricted in the shape.
 Are we happy with this discrepancy?
 
 Here is corresponding
-[Todo item](https://github.com/orgs/open-telemetry/projects/85/views/1?pane=issue&itemId=62411493).
+[TODO item](https://github.com/orgs/open-telemetry/projects/85/views/1?pane=issue&itemId=62411493).
 
 ### Classes of Entity Types
 
@@ -698,7 +698,7 @@ and non-infrastructure entities (logical entities) such as Service? Is this dist
 important?
 
 Here is corresponding
-[Todo item](https://github.com/orgs/open-telemetry/projects/85/views/1?pane=issue&itemId=62411407).
+[TODO item](https://github.com/orgs/open-telemetry/projects/85/views/1?pane=issue&itemId=62411407).
 
 ### Multiple Observers
 
@@ -733,7 +733,7 @@ events that contain the same ObserverId value will overwrite attributes from the
 reporting of the EntityState event from that observer.
 
 Here is corresponding
-[Todo item](https://github.com/orgs/open-telemetry/projects/85/views/1?pane=issue&itemId=62411289).
+[TODO item](https://github.com/orgs/open-telemetry/projects/85/views/1?pane=issue&itemId=62411289).
 
 ### Is Type part of Entity's identity?
 
@@ -750,7 +750,7 @@ entity that describes the Collector has some other attribute in its ID (for exam
 `agent.type` attribute [if it gets accepted](https://github.com/open-telemetry/semantic-conventions/pull/950)).
 
 Here is corresponding
-[Todo item](https://github.com/orgs/open-telemetry/projects/85?pane=issue&itemId=57053320).
+[TODO item](https://github.com/orgs/open-telemetry/projects/85?pane=issue&itemId=57053320).
 
 ### Choosing from Multiple IDs
 
@@ -762,7 +762,7 @@ We need to provide a recommendation for the cases when more than one valid ident
 exists about how to make a choice between the identifiers.
 
 Here is corresponding
-[Todo item](https://github.com/orgs/open-telemetry/projects/85?pane=issue&itemId=57053415).
+[TODO item](https://github.com/orgs/open-telemetry/projects/85?pane=issue&itemId=57053415).
 
 ## Future Work
 

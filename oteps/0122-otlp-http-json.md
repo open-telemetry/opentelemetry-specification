@@ -19,7 +19,7 @@ This is a proposal to add HTTP Transport extension supporting JSON serialization
 
 ## Motivation
 
-Protobuf is a relatively big dependency, which some clients are not willing to take. For example, WebJS, iOS/Android (in some scenarios, the size of the installation package is limited, do not want to introduce protobuf dependencies). Plain JSON is a smaller dependency and is built in the standard libraries of many programming languages.
+Protobuf is a relatively big dependency, which some clients are not willing to take. For example, WebJS, iOS/Android (in some scenarios, the size of the installation package is limited, do not want to introduce protobuf dependencies). Plain JSON is a smaller dependency and is built-in the standard libraries of many programming languages.
 
 ## OTLP/HTTP+JSON Protocol Details
 

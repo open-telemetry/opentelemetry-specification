@@ -756,13 +756,13 @@ This field is required.
 ##### Field `start_time_unix_nano`
 
 start_time_unix_nano is the start time of the profile.
-Value is Unix Epoch time in nanoseconds since 00:00:00 UTC on 1 January 1970.
+Value is UNIX Epoch time in nanoseconds since 00:00:00 UTC on 1 January 1970.
 This field is semantically required and it is expected that end_time >= start_time.
 
 ##### Field `end_time_unix_nano`
 
 end_time_unix_nano is the end time of the profile.
-Value is Unix Epoch time in nanoseconds since 00:00:00 UTC on 1 January 1970.
+Value is UNIX Epoch time in nanoseconds since 00:00:00 UTC on 1 January 1970.
 This field is semantically required and it is expected that end_time >= start_time.
 
 ##### Field `attributes`

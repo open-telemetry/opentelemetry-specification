@@ -478,7 +478,7 @@ The OpenTelemetry tracing specification includes a built-in Sampler
 designed for probability sampling using a deterministic sampling
 decision based on the TraceID.  This Sampler was not finished before
 the OpenTelemetry version 1.0 specification was released; it was left
-in place, with [a todo and the recommendation to use it only for trace
+in place, with [a TODO and the recommendation to use it only for trace
 roots](https://github.com/open-telemetry/opentelemetry-specification/issues/1413).
 [OTEP 135 proposed a solution](https://github.com/open-telemetry/oteps/pull/135).
 

@@ -179,7 +179,7 @@ Below is the detailed description of each field.
 
 ### Field: `Timestamp`
 
-Type: Timestamp, uint64 nanoseconds since Unix epoch.
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
 Description: Time when the event occurred measured by the origin clock, i.e. the
 time at the source. This field is optional, it may be missing if the source
@@ -187,7 +187,7 @@ timestamp is unknown.
 
 ### Field: `ObservedTimestamp`
 
-Type: Timestamp, uint64 nanoseconds since Unix epoch.
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
 Description: Time when the event was observed by the collection system. For
 events that originate in OpenTelemetry (e.g. using OpenTelemetry Logging SDK)

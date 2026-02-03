@@ -20,7 +20,7 @@ cleaner code and OpenTelemetry needs to address them as well, so this means that
 it is important for OpenTelemetry to support record APIs where users can pass
 directly the labels.
 
-OpenTelemetry can always add this optimization later (backwards compatible
+OpenTelemetry can always add this optimization later (backward compatible
 change) if we determine that it is very important to have.
 
 ## Trade-offs and mitigations

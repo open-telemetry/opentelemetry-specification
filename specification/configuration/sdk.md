@@ -283,7 +283,7 @@ and `ca_file` is not an absolute file path as defined in the property
 description, return an error.
 
 When encountering a reference to
-an [SDK plugin component](#sdk-extension-components) which is not built in to
+an [SDK plugin component](#sdk-extension-components) which is not built-in to
 the SDK, Create MUST resolve the component using [Create Component](#create-component)
 of the [`PluginComponentProvider`](#plugincomponentprovider) of the corresponding `type`
 and `name` used to [register](#register-plugincomponentprovider), including the
@@ -325,7 +325,7 @@ TODO: define behavior if some portion of configuration model is not supported
 
 The SDK MUST provide a mechanism to
 register [`PluginComponentProvider`](#plugincomponentprovider). The mechanism MAY be
-language-specific and automatic. For example, a java implementation might use
+language-specific and automatic. For example, a Java implementation might use
 the [service provider interface](https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html)
 mechanism to register implementations of a particular interface
 as `PluginComponentProvider`s.
