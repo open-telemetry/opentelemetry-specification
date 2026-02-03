@@ -143,7 +143,7 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
    - If either check fails, skip this mapping.
 
 3. **Verify the rest of the header**:
-   - Verify that `published_at_ns` is non-zero (indicating the context is currently being written)
+   - Verify that `published_at_ns` is non-zero (zero indicates the context is currently being written)
    - If this fails, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
 4. **Read payload**: Read `payload_size` bytes from `payload` pointer
