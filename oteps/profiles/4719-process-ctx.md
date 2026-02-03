@@ -41,7 +41,7 @@ The header is stored in a memory mapping with the following format:
 | `version`         | `uint32`  | Format version. Currently `2` (`1` can be used for development)      |
 | `payload_size`    | `uint32`  | Number of bytes of the encoded payload                               |
 | `published_at_ns` | `uint64`  | Timestamp when the context was published, in nanoseconds since epoch |
-| `payload`         | `char*`   | Pointer to payload, in protobuf format                               |
+| `payload`         | `uint64`  | Pointer to payload, in protobuf format, cast to uint64               |
 
 The `payload` can optionally be placed after the header (with the `payload` pointer field correctly pointing at it) or elsewhere in the process memory.
 
