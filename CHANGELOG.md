@@ -44,6 +44,9 @@ release.
 
 ### Compatibility
 
+- Stabilize Prometheus Summary to OTLP Summary transformation.
+  ([#4872](https://github.com/open-telemetry/opentelemetry-specification/pull/4872))
+
 ### SDK Configuration
 
 - Declarative configuration: rename `ComponentProvider` to

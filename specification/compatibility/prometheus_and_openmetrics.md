@@ -182,7 +182,7 @@ Native Histograms with `Schema` outside of the range [-4, 8] MUST be dropped.
 
 ### Summaries
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 [Prometheus Summary](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Summary.
 
