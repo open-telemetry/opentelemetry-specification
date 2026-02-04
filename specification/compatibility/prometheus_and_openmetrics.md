@@ -137,9 +137,9 @@ A [Prometheus Unknown](https://prometheus.io/docs/instrumenting/exposition_forma
 
 ### Histograms
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-A [Prometheus Histogram](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Histogram.
+A [Prometheus Histogram](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#histogram) MUST be converted to an OTLP Histogram.
 
 Multiple Prometheus histogram metrics MUST be merged together into a single OTLP Histogram:
 
