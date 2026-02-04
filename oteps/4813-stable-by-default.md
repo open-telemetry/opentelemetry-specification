@@ -80,7 +80,7 @@ This workstream should establish patterns and tooling for performance benchmarki
 
 Benchmarks will take various forms depending on the component, and the specific approach should be left to maintainers. That said, stable components should have some published benchmark suite that runs consistently.
 
-Per-language SIGs should own this work with coordination from the TC.
+Each implementation SIG should own this work with coordination from the TC.
 
 ### Workstream 6: Security Standards
 
