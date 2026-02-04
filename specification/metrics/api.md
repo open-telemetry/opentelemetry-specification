@@ -1342,11 +1342,11 @@ APIs without introducing breaking changes, if possible.
 For languages which support concurrent execution the Metrics APIs provide
 specific guarantees and safeties.
 
-**MeterProvider** - all methods are safe to be called concurrently.
+**MeterProvider** - all methods SHOULD be safe to be called concurrently.
 
-**Meter** - all methods are safe to be called concurrently.
+**Meter** - all methods SHOULD be safe to be called concurrently.
 
-**Instrument** - All methods of any Instrument are safe to be called
+**Instrument** - All methods of any Instrument SHOULD be safe to be called
 concurrently.
 
 ## References
