@@ -107,7 +107,7 @@ under the `prometheus.type` key (e.g. `prometheus.type="unknown"`).
 
 ### Counters
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 A [Prometheus Counter](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
 
