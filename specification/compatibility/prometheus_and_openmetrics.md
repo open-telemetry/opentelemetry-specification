@@ -113,7 +113,7 @@ A [Prometheus Counter](https://prometheus.io/docs/instrumenting/exposition_forma
 
 ### Gauges
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 A [Prometheus Gauge](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Gauge.
 

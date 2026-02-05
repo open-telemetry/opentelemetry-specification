@@ -46,6 +46,8 @@ release.
 
 - Stabilize Prometheus Counter to OTLP Sum transformation.
   ([#4862](https://github.com/open-telemetry/opentelemetry-specification/pull/4862))
+- Stabilize Prometheus Gauge to OTLP Gauge transformation.
+  ([#4871](https://github.com/open-telemetry/opentelemetry-specification/pull/4871))
 
 ### SDK Configuration
 
