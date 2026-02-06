@@ -62,7 +62,8 @@ through their `kubectl` or Kubernetes UIs to find the specific process
 generating telemetry.   This is as important as being able to uniquely identify
 one process from another.
 
-> Aside: Observability signals SHOULD be actionable.  Knowing a process is
+> [!TIP]
+> Observability signals SHOULD be actionable.  Knowing a process is
 > struggling is not as useful as being able to scale up a deployment to take
 > load off the struggling process.
 
@@ -86,7 +87,7 @@ storage solution).
 For example, in the extreme, OpenTelemery could synthesize a UUID for every
 system which produces telemetry.  All identifying attributes for Resource and
 Entity could be sent via a side channel with known relationships to this UUID.
-While this would optimise the runtime generation and sending of telemetry, it
+While this would optimize the runtime generation and sending of telemetry, it
 comes at the cost of downstream storage systems needing to join data back
 together either at ingestion time or query time. For high performance use cases,
 e.g. alerting, these joins can be expensive.

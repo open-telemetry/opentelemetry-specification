@@ -32,9 +32,9 @@ or more attributes not associated with any entity.
 
 The data model below defines a logical model for an Resource (irrespective of the physical format and encoding of how resource data is recorded).
 
-| Field      | Type     | Description     |
-|------------|----------|-----------------|
-| Entities   | set\<Entity\> | Defines the set of Entities associated with this resource.<p>[Entity is defined here](../entities/data-model.md) |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| Entities | set\<Entity\> | Defines the set of Entities associated with this resource.<p>[Entity is defined here](../entities/data-model.md) |
 | Attributes | map\<string, attribute value\> | Additional Attributes that identify the resource.<p>MUST not change during the lifetime of the resource.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). |
 
 ## Identity
@@ -44,6 +44,6 @@ Entity includes its own notion of identity. The identity of a resource is
 the set of entities contained within it. Two resources are considered
 different if one contains an entity not found in the other.
 
-Some resources include raw attributes in additon to Entities. Raw attributes are
+Some resources include raw attributes in addition to Entities. Raw attributes are
 considered identifying on a resource. That is, if the key-value pairs of
 raw attributes are different, then you can assume the resource is different.

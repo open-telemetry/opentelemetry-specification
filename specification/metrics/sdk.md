@@ -590,14 +590,14 @@ The Default Aggregation informs the SDK to use the Instrument `kind` to select
 an aggregation and `advisory` parameters to influence aggregation configuration
 parameters (as noted in the "Selected Aggregation" column).
 
-| Instrument Kind                                                   | Selected Aggregation                                                                                                                                                           |
-|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Counter](./api.md#counter)                                       | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
-| [Asynchronous Counter](./api.md#asynchronous-counter)             | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
-| [UpDownCounter](./api.md#updowncounter)                           | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
-| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                    |
-| [Gauge](./api.md#gauge)                                           | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                      |
-| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                      |
+| Instrument Kind                                                   | Selected Aggregation                                                                                                                                                                                   |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Counter](./api.md#counter)                                       | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                                            |
+| [Asynchronous Counter](./api.md#asynchronous-counter)             | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                                            |
+| [UpDownCounter](./api.md#updowncounter)                           | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                                            |
+| [Asynchronous UpDownCounter](./api.md#asynchronous-updowncounter) | [Sum Aggregation](./sdk.md#sum-aggregation)                                                                                                                                                            |
+| [Gauge](./api.md#gauge)                                           | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                                              |
+| [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                                              |
 | [Histogram](./api.md#histogram)                                   | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation), with the `ExplicitBucketBoundaries` [advisory parameter](./api.md#instrument-advisory-parameters) if provided |
 
 This Aggregation does not have any configuration parameters.
@@ -860,17 +860,21 @@ the `Meter` MUST be updated to behave according to the new `MeterConfig`.
 A `MeterConfig` defines various configurable aspects of a `Meter`'s behavior.
 It consists of the following parameters:
 
-* `disabled`: A boolean indication of whether the Meter is enabled.
+* `enabled`: A boolean indication of whether the Meter is enabled.
 
-  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  If not explicitly set, the `enabled` parameter SHOULD default to `true` (
   i.e. `Meter`s are enabled by default).
 
   If a `Meter` is disabled, it MUST behave equivalently
   to [No-op Meter](./noop.md#meter).
 
-  The value of `disabled` MUST be used to resolve whether an instrument
+  The value of `enabled` MUST be used to resolve whether an instrument
   is [Enabled](./api.md#enabled). See [Instrument Enabled](#instrument-enabled)
   for details.
+
+It is not necessary for implementations to ensure that changes to any of these
+parameters are immediately visible to callers of `Enabled`.
+However, the changes MUST be eventually visible.
 
 ### Duplicate instrument registration
 
@@ -997,23 +1001,20 @@ must be retained.
 
 ### Instrument enabled
 
-**Status**: [Development](../document-status.md)
+The synchronous instrument [`Enabled`](./api.md#enabled) MUST return `false`
+when either:
 
-The instrument [Enabled](./api.md#enabled) operation MUST return `false` if any
-of the following conditions are true, and `true` otherwise:
-
-* The [MeterConfig](#meterconfig) of the `Meter` used to create the instrument
-  has parameter `disabled=true`.
-* All [resolved views](#measurement-processing) for the instrument are
+- **Status**: [Development](../document-status.md) - The [MeterConfig](#meterconfig)
+  of the `Meter` used to create the instrument has parameter `enabled=false`.
+- All [resolved views](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
 
-Note: If a user makes no configuration changes, `Enabled` returns `true` since by
-default `MeterConfig.disabled=false` and instruments use the default
-aggregation when no matching views match the instrument.
+Otherwise, it SHOULD return `true`.
+It MAY return `false` to support additional optimizations and features.
 
-It is not necessary for implementations to ensure that changes
-to `MeterConfig.disabled` are immediately visible to callers of `Enabled`.
-However, the changes MUST be eventually visible.
+Note: If a user makes no configuration changes, `Enabled` returns `true` since by
+default `MeterConfig.enabled=true` and instruments use the default
+aggregation when no matching views match the instrument.
 
 ## Attribute limits
 

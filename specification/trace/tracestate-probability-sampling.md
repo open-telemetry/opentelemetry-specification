@@ -264,7 +264,7 @@ randomness value or a dependent source of randomness (it can use
 
 Sampling stages that yield spans with unknown sampling probability,
 including parent-based samplers when they encounter a Context with
-no parent thresohld, must erase the OpenTelemetry threshold
+no parent threshold, must erase the OpenTelemetry threshold
 value in their output.
 
 Sampling stages should check for consistency when it is a simple test,
@@ -435,9 +435,10 @@ This package demonstrates how to directly calculate integer thresholds from prob
 OpenTelemetry SDKs are recommended to use 4 digits of precision by default.
 The following table shows values computed by the method above for 1-in-N probability sampling, with precision 3, 4, and 5.
 
+<!--- cSpell:disable --->
 <!--- Program at https://go.dev/play/p/7eLM6FkuoA5 (includes function above) generates the table below --->
 | 1-in-N  | Input probability  | Threshold (precision 3, 4, 5)      | Actual probability (precision 3, 4, 5)                                       | Exact Adjusted Count (precision 3, 4, 5)                              |
-|---------|--------------------|------------------------------------|------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| ------- | ------------------ | ---------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | 1       | 1                  | 0<br/>0<br/>0                      | 1<br/>1<br/>1                                                                | 1<br/>1<br/>1                                                         |
 | 2       | 0.5                | 8<br/>8<br/>8                      | 0.5<br/>0.5<br/>0.5                                                          | 2<br/>2<br/>2                                                         |
 | 3       | 0.3333333333333333 | aab<br/>aaab<br/>aaaab             | 0.333251953125<br/>0.3333282470703125<br/>0.33333301544189453                | 3.0007326007326007<br/>3.00004577706569<br/>3.0000028610256777        |
@@ -449,8 +450,9 @@ The following table shows values computed by the method above for 1-in-N probabi
 | 100     | 0.01               | fd71<br/>fd70a<br/>fd70a4          | 0.0099945068359375<br/>0.010000228881835938<br/>0.009999990463256836         | 100.05496183206107<br/>99.99771123402633<br/>100.00009536752259       |
 | 1000    | 0.001              | ffbe7<br/>ffbe77<br/>ffbe76d       | 0.0010004043579101562<br/>0.0009999871253967285<br/>0.000999998301267624     | 999.5958055290753<br/>1000.012874769029<br/>1000.0016987352618        |
 | 10000   | 0.0001             | fff972<br/>fff9724<br/>fff97247    | 0.00010001659393310547<br/>0.00010000169277191162<br/>0.00010000006295740604 | 9998.340882002383<br/>9999.830725674266<br/>9999.99370426336          |
-| 100000  | 0.00001              | ffff584<br/>ffff583a<br/>ffff583a5 | 9.998679161071777e-06<br/>1.00000761449337e-05<br/>1.0000003385357559e-05    | 100013.21013412817<br/>99999.238556461<br/>99999.96614643588          |
-| 1000000 | 0.000001              | ffffef4<br/>ffffef39<br/>ffffef391 | 9.98377799987793e-07<br/>1.00000761449337e-06<br/>9.999930625781417e-07      | 1.0016248358208955e+06<br/>999992.38556461<br/>1.0000069374699865e+06 |
+| 100000  | 0.00001            | ffff584<br/>ffff583a<br/>ffff583a5 | 9.998679161071777e-06<br/>1.00000761449337e-05<br/>1.0000003385357559e-05    | 100013.21013412817<br/>99999.238556461<br/>99999.96614643588          |
+| 1000000 | 0.000001           | ffffef4<br/>ffffef39<br/>ffffef391 | 9.98377799987793e-07<br/>1.00000761449337e-06<br/>9.999930625781417e-07      | 1.0016248358208955e+06<br/>999992.38556461<br/>1.0000069374699865e+06 |
+<!--- cSpell:enable --->
 
 ### Converting integer threshold to a `T`-value
 

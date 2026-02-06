@@ -17,7 +17,7 @@ instrumented codebases.
 Migrating from OpenCensus to OpenTelemetry may require breaking changes to the telemetry produced
 because of:
 
-* Different or new semantic conventions for names and attributes (e.g. [`grpc.io/server/server_latency`](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/gRPC.md#server) vs [`rpc.server.duration`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/rpc/rpc-metrics.md#metric-rpcserverduration))
+* Different or new semantic conventions for names and attributes (e.g. [`grpc.io/server/server_latency`](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/gRPC.md#server) vs [`rpc.server.call.duration`](https://opentelemetry.io/docs/specs/semconv/rpc/rpc-metrics/#metric-rpcservercallduration))
 * Data model differences (e.g. OpenCensus supports [SumOfSquaredDeviations](https://github.com/census-instrumentation/opencensus-proto/blob/v0.3.0/src/opencensus/proto/metrics/v1/metrics.proto#L195), OTLP does not)
 * Instrumentation API feature differences (e.g. OpenCensus supports [context-based attributes](https://github.com/census-instrumentation/opencensus-specs/blob/master/stats/Record.md#recording-stats)), OTel does not)
 * Differences between equivalent OC and OTel exporters (e.g. the OpenTelemetry Prometheus exporter [adds type and unit suffixes](prometheus_and_openmetrics.md#metric-metadata-1); OpenCensus [does not](https://github.com/census-ecosystem/opencensus-go-exporter-prometheus/blob/v0.4.1/prometheus.go#L227))
@@ -63,7 +63,7 @@ Libraries which want a simple migration can choose to replace instrumentation in
 
 Starting with a library using OpenCensus Instrumentation:
 
-1. Annouce to users the library's transition from OpenCensus to OpenTelemetry, and recommend users adopt OC bridges.
+1. Announce to users the library's transition from OpenCensus to OpenTelemetry, and recommend users adopt OC bridges.
 2. Change unit tests to use the OC bridges, and use OpenTelemetry unit testing frameworks.
 3. After a notification period, migrate instrumentation line-by-line to OpenTelemetry. The notification period should be long for popular libraries.
 4. Remove the OC bridge from unit tests.
@@ -195,11 +195,11 @@ using the OpenCensus <-> OpenTelemetry bridge.
 
 ## OpenCensus Binary Context Propagation
 
-The shim will provide an OpenCensus `BinaryPropogator` implementation which
-maps [OpenCenus binary trace context format](https://github.com/census-instrumentation/opencensus-specs/blob/master/encodings/BinaryEncoding.md#trace-context) to an OpenTelemetry
+The shim will provide an OpenCensus `BinaryPropagator` implementation which
+maps [OpenCensus binary trace context format](https://github.com/census-instrumentation/opencensus-specs/blob/master/encodings/BinaryEncoding.md#trace-context) to an OpenTelemetry
 [SpanContext](../overview.md#spancontext).
 
-This adapter MUST provide an implementation of OpenCensus `BinaryPropogator` to
+This adapter MUST provide an implementation of OpenCensus `BinaryPropagator` to
 write OpenCensus binary format using OpenTelemetry's context.  This
 implementation may be drawn from OpenCensus if applicable.
 

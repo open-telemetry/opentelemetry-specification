@@ -15,9 +15,6 @@ weight: 2
 - [Design Notes](#design-notes)
   * [Requirements](#requirements)
   * [Events](#events)
-  * [Definitions Used in this Document](#definitions-used-in-this-document)
-    + [Type `any`](#type-any)
-    + [Type `map`](#type-mapstring-any)
   * [Field Kinds](#field-kinds)
 - [Log and Event Record Definition](#log-and-event-record-definition)
   * [Field: `Timestamp`](#field-timestamp)
@@ -112,43 +109,6 @@ conventions defined for logs SHOULD be formatted as Events. Requirements and det
 Events are intended to be used by OpenTelemetry instrumentation. It is not a
 requirement that all LogRecords are formatted as Events.
 
-### Definitions Used in this Document
-
-In this document we refer to types `any` and `map<string, any>`, defined as
-follows.
-
-#### Type `any`
-
-Value of type `any` can be one of the following:
-
-- A scalar value: string, boolean, signed 64 bit integer, or double precision floating point (IEEE 754-1985)
-
-- A byte array,
-
-- An array (a list) of `any` values,
-
-- A `map<string, any>`,
-
-- [since 1.31.0] An empty value (e.g. `null`).
-
-#### Type `map<string, any>`
-
-Value of type `map<string, any>` is a map of string keys to `any` values. The
-keys in the map are unique (duplicate keys are not allowed).
-
-Arbitrary deep nesting of values for arrays and maps is allowed (essentially
-allows to represent an equivalent of a JSON object).
-
-The representation of the map is language-dependent.
-
-The implementation MUST by default ensure that the exported maps contain only unique keys.
-
-The implementation MAY have an option to allow exporting maps with duplicate keys
-(e.g. for better performance).
-If such option is provided, it MUST be documented that for many receivers,
-handling of maps with duplicate keys is unpredictable and it is the users'
-responsibility to ensure keys are not duplicate.
-
 ### Field Kinds
 
 This Data Model defines a logical model for a log record (irrespective of the
@@ -157,11 +117,12 @@ fields:
 
 - Named top-level fields of specific type and meaning.
 
-- Fields stored as `map<string, any>`, which can contain arbitrary values of
-  different types. The keys and values for well-known fields follow semantic
-  conventions for key names and possible values that allow all parties that work
-  with the field to have the same interpretation of the data. See references to
-  semantic conventions for `Resource` and `Attributes` fields and examples in
+- Fields stored as [Attribute Collections](../common/README.md#attribute-collections),
+  whose values are [AnyValue](../common/README.md#anyvalue). The keys and values
+  for well-known fields follow semantic conventions for key names and possible
+  values that allow all parties that work with the field to have the same
+  interpretation of the data. See references to semantic conventions for
+  `Resource` and `Attributes` fields and examples in
   [Appendix A](./data-model-appendix.md#appendix-a-example-mappings).
 
 The reasons for having these 2 kinds of fields are:
@@ -173,7 +134,7 @@ The reasons for having these 2 kinds of fields are:
 - Ability to enforce types of named fields, which is very useful for compiled
   languages with type checks.
 
-- Flexibility to represent less frequent data as `map<string, any>`. This
+- Flexibility to represent less frequent data in Attribute Collections. This
   includes well-known data that has standardized semantics as well as arbitrary
   custom data that the application may want to include in the logs.
 
@@ -199,20 +160,20 @@ about the meaning of the field reviewing the examples may be helpful.
 
 Here is the list of fields in a log record:
 
-Field Name     |Description
----------------|--------------------------------------------
-Timestamp      |Time when the event occurred.
-ObservedTimestamp|Time when the event was observed.
-TraceId        |Request trace id.
-SpanId         |Request span id.
-TraceFlags     |W3C trace flag.
-SeverityText   |The severity text (also known as log level).
-SeverityNumber |Numerical value of the severity.
-Body           |The body of the log record.
-Resource       |Describes the source of the log.
-InstrumentationScope|Describes the scope that emitted the log.
-Attributes     |Additional information about the event.
-EventName      |Name that identifies the class / type of event.
+| Field Name | Description |
+| ---------- | ----------- |
+| Timestamp | Time when the event occurred. |
+| ObservedTimestamp | Time when the event was observed. |
+| TraceId | Request trace id. |
+| SpanId | Request span id. |
+| TraceFlags | W3C trace flag. |
+| SeverityText | The severity text (also known as log level). |
+| SeverityNumber | Numerical value of the severity. |
+| Body | The body of the log record. |
+| Resource | Describes the source of the log. |
+| InstrumentationScope | Describes the scope that emitted the log. |
+| Attributes | Additional information about the event. |
+| EventName | Name that identifies the class / type of event. |
 
 Below is the detailed description of each field.
 
@@ -298,14 +259,14 @@ critical than an error with `SeverityNumber=20`.
 
 The following table defines the meaning of `SeverityNumber` value:
 
-SeverityNumber range|Range name|Meaning
---------------------|----------|-------
-1-4                 |TRACE     |A fine-grained debugging event. Typically disabled in default configurations.
-5-8                 |DEBUG     |A debugging event.
-9-12                |INFO      |An informational event. Indicates that an event happened.
-13-16               |WARN      |A warning event. Not an error but is likely more important than an informational event.
-17-20               |ERROR     |An error event. Something went wrong.
-21-24               |FATAL     |A fatal error such as application or system crash.
+| SeverityNumber range | Range name | Meaning                                                                                 |
+| -------------------- | ---------- | --------------------------------------------------------------------------------------- |
+| 1-4                  | TRACE      | A fine-grained debugging event. Typically disabled in default configurations.           |
+| 5-8                  | DEBUG      | A debugging event.                                                                      |
+| 9-12                 | INFO       | An informational event. Indicates that an event happened.                               |
+| 13-16                | WARN       | A warning event. Not an error but is likely more important than an informational event. |
+| 17-20                | ERROR      | An error event. Something went wrong.                                                   |
+| 21-24                | FATAL      | A fatal error such as application or system crash.                                      |
 
 `SeverityNumber=0` MAY be used to represent an unspecified value.
 
@@ -374,32 +335,32 @@ The following table defines the recommended short name for each
 `SeverityNumber` value. The short name can be used for example for representing
 the `SeverityNumber` in the UI:
 
-SeverityNumber|Short Name
---------------|----------
-1             |TRACE
-2             |TRACE2
-3             |TRACE3
-4             |TRACE4
-5             |DEBUG
-6             |DEBUG2
-7             |DEBUG3
-8             |DEBUG4
-9             |INFO
-10            |INFO2
-11            |INFO3
-12            |INFO4
-13            |WARN
-14            |WARN2
-15            |WARN3
-16            |WARN4
-17            |ERROR
-18            |ERROR2
-19            |ERROR3
-20            |ERROR4
-21            |FATAL
-22            |FATAL2
-23            |FATAL3
-24            |FATAL4
+| SeverityNumber | Short Name |
+| -------------- | ---------- |
+| 1              | TRACE      |
+| 2              | TRACE2     |
+| 3              | TRACE3     |
+| 4              | TRACE4     |
+| 5              | DEBUG      |
+| 6              | DEBUG2     |
+| 7              | DEBUG3     |
+| 8              | DEBUG4     |
+| 9              | INFO       |
+| 10             | INFO2      |
+| 11             | INFO3      |
+| 12             | INFO4      |
+| 13             | WARN       |
+| 14             | WARN2      |
+| 15             | WARN3      |
+| 16             | WARN4      |
+| 17             | ERROR      |
+| 18             | ERROR2     |
+| 19             | ERROR3     |
+| 20             | ERROR4     |
+| 21             | FATAL      |
+| 22             | FATAL2     |
+| 23             | FATAL3     |
+| 24             | FATAL4     |
 
 When an individual log record is displayed it is recommended to show both
 `SeverityText` and `SeverityNumber` values. A recommended combined string in
@@ -430,7 +391,7 @@ when it is used to represent an unspecified severity.
 
 ### Field: `Body`
 
-Type: [`any`](#type-any) or [AnyValue](../common/README.md#anyvalue).
+Type: [AnyValue](../common/README.md#anyvalue).
 
 Description: A value containing the body of the log record. Can be for example
 a human-readable string message (including multi-line) describing the event in
@@ -465,7 +426,7 @@ they all have the same value of `InstrumentationScope`. This field is optional.
 
 ### Field: `Attributes`
 
-Type: [`map<string, any>`](#type-mapstring-any) or [Attribute Collection](../common/README.md#attribute-collections).
+Type: [Attribute Collection](../common/README.md#attribute-collections).
 
 Description: Additional information about the specific event occurrence. Unlike
 the `Resource` field, which is fixed for a particular source, `Attributes` can

@@ -1129,7 +1129,7 @@ Offset in the binary that corresponds to the first mapped address.
 
 The object this entry is loaded from.  This can be a filename on
 disk for the main binary and shared libraries, or virtual
-abstractions like "[vdso]".
+abstractions like "[vDSO]".
 
 ##### Field `build_id`
 

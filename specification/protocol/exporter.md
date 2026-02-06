@@ -177,7 +177,7 @@ release).
 
 ### Specifying headers via environment variables
 
-The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXPORTER_OTLP_METRICS_HEADERS`, `OTEL_EXPORTER_OTLP_LOGS_HEADERS` environment variables will contain a list of key value pairs, and these are expected to be represented in a format matching to the [W3C Baggage](https://www.w3.org/TR/baggage/#header-content), except that additional semi-colon delimited metadata is not supported, i.e.: key1=value1,key2=value2. All attribute values MUST be considered strings.
+The `OTEL_EXPORTER_OTLP_HEADERS`, `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXPORTER_OTLP_METRICS_HEADERS`, `OTEL_EXPORTER_OTLP_LOGS_HEADERS` environment variables will contain a list of key value pairs, and these are expected to be represented in a format matching to the [W3C Baggage](https://www.w3.org/TR/baggage/#header-content) i.e., `key1=value1,key2=value2`. [Semi-colon delimited metadata](https://www.w3.org/TR/baggage/#property) is not supported. All attribute values MUST be considered strings.
 
 ## Retry
 
@@ -217,9 +217,9 @@ MyDistribution/x.y.z OTel-OTLP-Exporter-Python/1.2.3
 ```
 
 [Boolean]: ../configuration/sdk-environment-variables.md#boolean
-[Timeout]: ../configuration/sdk-environment-variables.md#timeout
-[String]: ../configuration/sdk-environment-variables.md#string
-[Enum]: ../configuration/sdk-environment-variables.md#enum
+[Timeout]: ../configuration/common.md#timeout
+[String]: ../configuration/common.md#string
+[Enum]: ../configuration/common.md#enum
 
 [resource-semconv]: https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#telemetry-sdk
 [otlphttp-req]: https://github.com/open-telemetry/opentelemetry-proto/blob/main/docs/specification.md#otlphttp-request

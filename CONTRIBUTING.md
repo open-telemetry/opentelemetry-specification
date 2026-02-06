@@ -158,7 +158,8 @@ To check for typos, run the following command:
 make misspell
 ```
 
-> **NOTE**: The `misspell` make target will also fetch and build the tool if
+> [!NOTE]
+> The `misspell` make target will also fetch and build the tool if
 > necessary. You'll need [Go](https://go.dev) to build the spellchecker.
 
 To quickly fix typos, use
@@ -311,7 +312,7 @@ Release Procedure:
    (e.g., in the last released version rather than Unreleased).
 4. Add the changelog entries from `CHANGELOG.md` to the description of the
    [release PR](
-   https://github.com/open-telemetry/opentelemetry-specification/releases) and undraft it.
+   https://github.com/open-telemetry/opentelemetry-specification/releases) and un-draft it.
 5. Once it is approved, confirm the date in the CHANGELOG is up-to-date, and merge it,
    creating a new release tag, e.g. "v1.50.0", containing the CHANGELOG contents.
 

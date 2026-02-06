@@ -186,9 +186,9 @@ the `Logger` MUST be updated to behave according to the new `LoggerConfig`.
 A `LoggerConfig` defines various configurable aspects of a `Logger`'s behavior.
 It consists of the following parameters:
 
-* `disabled`: A boolean indication of whether the logger is enabled.
+* `enabled`: A boolean indication of whether the logger is enabled.
 
-  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  If not explicitly set, the `enabled` parameter SHOULD default to `true` (
   i.e. `Logger`s are enabled by default).
 
   If a `Logger` is disabled, it MUST behave equivalently
@@ -224,6 +224,18 @@ However, the changes MUST be eventually visible.
 If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
 the implementation SHOULD set it equal to the current time.
 
+**Status**: [Development](../document-status.md) - If an
+[Exception](api.md#emit-a-logrecord) is provided, the SDK MUST by default set attributes
+from the exception on the `LogRecord` with the conventions outlined in the
+[exception semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
+User-provided attributes MUST take precedence and MUST NOT be overwritten by
+exception-derived attributes.
+
+Note: For performance optimization, SDKs MAY take the configured
+[attribute limits](#logrecord-limits) into consideration when generating large
+exception attributes (e.g., `exception.stacktrace`). This can help avoid
+unnecessary processing of large attribute values that would be truncated anyway.
+
 **Status**: [Development](../document-status.md) Before processing a log record,
 the implementation MUST apply the filtering rules defined by the
 [LoggerConfig](#loggerconfig) (in case `Enabled` was not called prior to
@@ -245,15 +257,14 @@ emitting the record):
 
 - there are no registered [`LogRecordProcessors`](#logrecordprocessor).
 - **Status**: [Development](../document-status.md) - `Logger` is disabled
-  ([`LoggerConfig.disabled`](#loggerconfig) is `true`).
+  ([`LoggerConfig.enabled`](#loggerconfig) is `false`).
 - **Status**: [Development](../document-status.md) - the provided severity
   is specified (i.e. not `0`) and is less than the configured `minimum_severity` in the
   [`LoggerConfig`](#loggerconfig).
 - **Status**: [Development](../document-status.md) - `trace_based` is
   `true` in the [`LoggerConfig`](#loggerconfig) and the current context is
   associated with an unsampled trace.
-- **Status**: [Development](../document-status.md) - all registered
-  `LogRecordProcessors` implement [`Enabled`](#enabled-1),
+- all registered `LogRecordProcessors` implement [`Enabled`](#enabled-1),
   and a call to `Enabled` on each of them returns `false`.
 
 Otherwise, it SHOULD return `true`.
@@ -405,8 +416,6 @@ implementations SHOULD recommended to users that a clone of `logRecord` be used
 for any concurrent processing, such as in a [batching processor](#batching-processor).
 
 #### Enabled
-
-**Status**: [Development](../document-status.md)
 
 `Enabled` is an operation that a `LogRecordProcessor` MAY implement
 in order to support filtering via [`Logger.Enabled`](api.md#enabled).

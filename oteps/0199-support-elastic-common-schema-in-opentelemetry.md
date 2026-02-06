@@ -42,7 +42,7 @@ Adding the coverage of ECS to OTel would provide guidance to authors of OpenTele
 
 In addition to the use case of structured logs, the maturity of ECS for SIEM (Security Information and Event Management) is a great opportunity for OpenTelemetry to expand its scope to the security use cases.
 
-Another significant use case is providing first-class support for Kubernetes application logs, system logs, and application introspection events. We would also like to see support for structured events (e.g. [k8seventsreceiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/k8seventsreceiver)) and using 'content-type' to identify event types.
+Another significant use case is providing first-class support for Kubernetes application logs, system logs, and application introspection events. We would also like to see support for structured events (e.g. [`k8seventsreceiver`](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/k8seventsreceiver)) and using 'content-type' to identify event types.
 
 We'd like to see different categories of structured logs being well-supported in the [OTel Log Data Model](../specification/logs/data-model.md), presumably through [semantic conventions for log attributes](../specification/logs/data-model.md#field-attributes). For example, NGINX access logs and Apache access logs should be processed the same way as structured logs. This would help in trace and metric correlation with such log data as well as it would help grow the ecosystem of curated UIs provided by observability backends and monitoring dashboards (e.g. one single HTTP access log dashboard benefiting Apache httpd, Nginx, and HAProxy).
 
@@ -148,7 +148,7 @@ Example of a Nginx Access Log entry structured with ECS
 ## Principles
 
 | Description | [OTel Logs and Event Record](../specification/logs/data-model.md#log-and-event-record-definition) | [Elastic Common Schema (ECS)](https://www.elastic.co/docs/reference/ecs) |
-|-------------|-------------|--------|
+| ----------- | ------------- | -------- |
 | Metadata shared by all the Log Messages / Spans / Metrics of an application instance | Resource Attributes | ECS fields |
 | Metadata specific to each Log Message / Span / Metric data point | Attributes | ECS Fields |
 | Message of log events | Body | [message field](https://www.elastic.co/docs/reference/ecs/ecs-base#field-message) |
@@ -159,7 +159,7 @@ Example of a Nginx Access Log entry structured with ECS
 ## Data Types
 
 | Category | <a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a> (all or a subset of <a href="https://protobuf.dev/programming-guides/proto3/">GRPC data types</a>) | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/field-data-types">ECS Data Types</a> |
-|---|---|---|
+| --- | --- | --- |
 | Text | string | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#text-field-type">text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#match-only-text-field-type">match_only_text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#keyword-field-type">keyword</a> <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#constant-keyword-field-type">constant_keyword</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#wildcard-field-type">wildcard</a> |
 | Dates | uint64 nanoseconds since Unix epoch | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date">date</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date_nanos">date_nanos</a> |
 | Numbers | number | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">long</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">double</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">scaled_float</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/boolean">boolean</a>… |

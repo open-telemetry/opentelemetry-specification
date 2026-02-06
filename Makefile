@@ -1,10 +1,26 @@
 # All documents to be used in spell check.
-ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' -not -path '*semantic_conventions*' | sort)
+ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' -not -path '*semantic_conventions*' -not -name 'spec-compliance-matrix.md' | sort)
 PWD := $(shell pwd)
 
 TOOLS_DIR := ./internal/tools
 MISSPELL_BINARY=bin/misspell
 MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
+
+# Detect Python and pip commands
+PYTHON := $(shell command -v python3 2>/dev/null || command -v python 2>/dev/null)
+PIP := $(shell command -v pip3 2>/dev/null || command -v pip 2>/dev/null)
+
+# Validate Python and pip are available
+.PHONY: check-python
+check-python:
+	@if [ -z "$(PYTHON)" ]; then \
+		echo "Error: Python is not installed. Please install Python (Python 3 recommended)."; \
+		exit 1; \
+	fi
+	@if [ -z "$(PIP)" ]; then \
+		echo "Error: pip is not installed. Please install pip."; \
+		exit 1; \
+	fi
 
 # see https://github.com/open-telemetry/build-tools/releases for semconvgen updates
 # Keep links in semantic_conventions/README.md and .vscode/settings.json in sync!
@@ -78,9 +94,9 @@ markdownlint:
 	done
 
 .PHONY: install-yamllint
-install-yamllint:
+install-yamllint: check-python
     # Using a venv is recommended
-	pip install -U yamllint~=1.26.1
+	$(PIP) install -U yamllint~=1.26.1
 
 .PHONY: yamllint
 yamllint:
@@ -98,9 +114,9 @@ fix: misspell-correction
 
 # Generate spec compliance matrix from YAML source
 .PHONY: compliance-matrix
-compliance-matrix:
-	pip install -U PyYAML
-	python .github/scripts/compliance_matrix.py
+compliance-matrix: check-python
+	$(PIP) install -U PyYAML
+	$(PYTHON) .github/scripts/compliance_matrix.py
 	@echo "Compliance matrix generation complete"
 
 .PHONY: install-tools

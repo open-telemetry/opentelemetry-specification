@@ -164,18 +164,18 @@ about the meaning of the field reviewing the examples may be helpful.
 
 Here is the list of fields in a log record:
 
-Field Name     |Description
----------------|--------------------------------------------
-Timestamp      |Time when the event occurred.
-TraceId        |Request trace id.
-SpanId         |Request span id.
-TraceFlags     |W3C trace flag.
-SeverityText   |The severity text (also known as log level).
-SeverityNumber |Numerical value of the severity.
-Name           |Short event identifier.
-Body           |The body of the log record.
-Resource       |Describes the source of the log.
-Attributes     |Additional information about the event.
+| Field Name     | Description                                  |
+| -------------- | -------------------------------------------- |
+| Timestamp      | Time when the event occurred.                |
+| TraceId        | Request trace id.                            |
+| SpanId         | Request span id.                             |
+| TraceFlags     | W3C trace flag.                              |
+| SeverityText   | The severity text (also known as log level). |
+| SeverityNumber | Numerical value of the severity.             |
+| Name           | Short event identifier.                      |
+| Body           | The body of the log record.                  |
+| Resource       | Describes the source of the log.             |
+| Attributes     | Additional information about the event.      |
 
 Below is the detailed description of each field.
 
@@ -238,14 +238,14 @@ less severe events (such as debug events), larger numerical values correspond to
 more severe events (such as errors and critical events). The following table
 defines the meaning of `SeverityNumber` value:
 
-SeverityNumber range|Range name|Meaning
---------------------|----------|-------
-1-4                 |TRACE     |A fine-grained debugging event. Typically disabled in default configurations.
-5-8                 |DEBUG     |A debugging event.
-9-12                |INFO      |An informational event. Indicates that an event happened.
-13-16               |WARN      |A warning event. Not an error but is likely more important than an informational event.
-17-20               |ERROR     |An error event. Something went wrong.
-21-24               |FATAL     |A fatal error such as application or system crash.
+| SeverityNumber range | Range name | Meaning                                                                                |
+| -------------------- | ---------- | -------------------------------------------------------------------------------------- |
+| 1-4                  | TRACE      | A fine-grained debugging event. Typically disabled in default configurations.          |
+| 5-8                  | DEBUG      | A debugging event.                                                                     |
+| 9-12                 | INFO       | An informational event. Indicates that an event happened.                              |
+| 13-16                | WARN       | A warning event. Not an error but is likely more important than an informational event.|
+| 17-20                | ERROR      | An error event. Something went wrong.                                                  |
+| 21-24                | FATAL      | A fatal error such as application or system crash.                                     |
 
 Smaller numerical values in each range represent less important (less severe)
 events. Larger numerical values in each range represent more important (more
@@ -317,32 +317,32 @@ The following table defines the recommended short name for each
 `SeverityNumber` value. The short name can be used for example for representing
 the `SeverityNumber` in the UI:
 
-SeverityNumber|Short Name
---------------|----------
-1             |TRACE
-2             |TRACE2
-3             |TRACE3
-4             |TRACE4
-5             |DEBUG
-6             |DEBUG2
-7             |DEBUG3
-8             |DEBUG4
-9             |INFO
-10            |INFO2
-11            |INFO3
-12            |INFO4
-13            |WARN
-14            |WARN2
-15            |WARN3
-16            |WARN4
-17            |ERROR
-18            |ERROR2
-19            |ERROR3
-20            |ERROR4
-21            |FATAL
-22            |FATAL2
-23            |FATAL3
-24            |FATAL4
+| SeverityNumber | Short Name |
+| -------------- | ---------- |
+| 1              | TRACE      |
+| 2              | TRACE2     |
+| 3              | TRACE3     |
+| 4              | TRACE4     |
+| 5              | DEBUG      |
+| 6              | DEBUG2     |
+| 7              | DEBUG3     |
+| 8              | DEBUG4     |
+| 9              | INFO       |
+| 10             | INFO2      |
+| 11             | INFO3      |
+| 12             | INFO4      |
+| 13             | WARN       |
+| 14             | WARN2      |
+| 15             | WARN3      |
+| 16             | WARN4      |
+| 17             | ERROR      |
+| 18             | ERROR2     |
+| 19             | ERROR3     |
+| 20             | ERROR4     |
+| 21             | FATAL      |
+| 22             | FATAL2     |
+| 23             | FATAL3     |
+| 24             | FATAL4     |
 
 When an individual log record is displayed it is recommended to show both
 `SeverityText` and `SeverityNumber` values. A recommended combined string in
@@ -610,31 +610,31 @@ this data model.
     <td>FACILITY</td>
     <td>enum</td>
     <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: `mail system`</td>
-    <td>Attributes["syslog.facility"]</td>
+    <td>`Attributes["syslog.facility"]`</td>
   </tr>
   <tr>
     <td>VERSION</td>
     <td>number</td>
     <td>Meta: protocol version, orthogonal to the event.</td>
-    <td>Attributes["syslog.version"]</td>
+    <td>`Attributes["syslog.version"]`</td>
   </tr>
   <tr>
     <td>HOSTNAME</td>
     <td>string</td>
     <td>Describes the location where the event originated. Possible values are FQDN, IP address, etc.</td>
-    <td>Resource["host.hostname"]</td>
+    <td>`Resource["host.hostname"]`</td>
   </tr>
   <tr>
     <td>APP-NAME</td>
     <td>string</td>
     <td>User-defined app name. Part of event source identity.</td>
-    <td>Resource["service.name"]</td>
+    <td>`Resource["service.name"]`</td>
   </tr>
   <tr>
     <td>PROCID</td>
     <td>string</td>
     <td>Not well defined. May be used as a meta field for protocol operation purposes or may be part of event source identity.</td>
-    <td>Attributes["syslog.procid"]</td>
+    <td>`Attributes["syslog.procid"]`</td>
   </tr>
   <tr>
     <td>MSGID</td>
@@ -645,15 +645,15 @@ this data model.
   <tr>
     <td>STRUCTURED-DATA</td>
     <td>array of maps of string to string</td>
-    <td>A variety of use cases depending on the SDID:
+    <td>A variety of use cases depending on the SD-ID:
 Can describe event source identity
 Can include data that describes particular occurrence of the event.
 Can be meta-information, e.g. quality of timestamp value.</td>
-    <td>SDID origin.swVersion map to Resource["service.version"]
+    <td>SD-ID origin.swVersion map to `Resource["service.version"]`
 
-SDID origin.ip map to attribute[net.host.ip"]
+SD-ID origin.ip map to `Attributes["net.host.ip"]`
 
-Rest of SDIDs -> Attributes["syslog.*"]</td>
+Rest of SD-IDs -> `Attributes["syslog.*"]`</td>
   </tr>
   <tr>
     <td>MSG</td>
@@ -688,7 +688,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>Computer</td>
     <td>string</td>
     <td>The name of the computer on which the event occurred.</td>
-    <td>Resource["host.hostname"]</td>
+    <td>`Resource["host.hostname"]`</td>
   </tr>
   <tr>
     <td>EventID</td>
@@ -706,7 +706,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>Rest of the fields.</td>
     <td>any</td>
     <td>All other fields in the event.</td>
-    <td>Attributes["winlog.*"]</td>
+    <td>`Attributes["winlog.*"]`</td>
   </tr>
 </table>
 
@@ -734,8 +734,8 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
   <tr>
     <td>Category</td>
     <td>enum</td>
-    <td>Describes where the event originated and why. SignalFx specific concept. Example: AGENT. If this attribute is not present on the SignalFx Event, it should be set to the null attribute value in the LogRecord -- this will allow unambigous identification of SignalFx events when they are represented as LogRecords.</td>
-    <td>Attributes["com.splunk.signalfx.event_category"]</td>
+    <td>Describes where the event originated and why. SignalFx specific concept. Example: AGENT. If this attribute is not present on the SignalFx Event, it should be set to the null attribute value in the LogRecord -- this will allow unambiguous identification of SignalFx events when they are represented as LogRecords.</td>
+    <td>`Attributes["com.splunk.signalfx.event_category"]`</td>
   </tr>
   <tr>
     <td>Dimensions</td>
@@ -747,7 +747,7 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>Properties</td>
     <td>map of string to any</td>
     <td>Additional information about the specific event occurrence. Unlike Dimensions which are fixed for a particular event source, Properties can have different values for each occurrence of the event coming from the same event source. In SignalFx, event Properties are considered additional metadata about an event and do not factor into the identity of an Event Time Series (ETS).</td>
-    <td>Attributes["com.splunk.signalfx.event_properties"]</td>
+    <td>`Attributes["com.splunk.signalfx.event_properties"]`</td>
   </tr>
 </table>
 
@@ -770,19 +770,19 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>host</td>
     <td>string</td>
     <td>The host value to assign to the event data. This is typically the host name of the client that you are sending data from.</td>
-    <td>Resource["host.hostname"]</td>
+    <td>`Resource["host.hostname"]`</td>
   </tr>
   <tr>
     <td>source</td>
     <td>string</td>
     <td>The source value to assign to the event data. For example, if you are sending data from an app you are developing, you could set this key to the name of the app.</td>
-    <td>Resource["service.name"]</td>
+    <td>`Resource["service.name"]`</td>
   </tr>
   <tr>
     <td>sourcetype</td>
     <td>string</td>
     <td>The sourcetype value to assign to the event data.</td>
-    <td>Attributes["source.type"]</td>
+    <td>`Attributes["source.type"]`</td>
   </tr>
   <tr>
     <td>event</td>
@@ -900,37 +900,37 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>%a</td>
     <td>string</td>
     <td>Client IP</td>
-    <td>Attributes["net.peer.ip"]</td>
+    <td>`Attributes["net.peer.ip"]`</td>
   </tr>
   <tr>
     <td>%A</td>
     <td>string</td>
     <td>Server IP</td>
-    <td>Attributes["net.host.ip"]</td>
+    <td>`Attributes["net.host.ip"]`</td>
   </tr>
   <tr>
     <td>%h</td>
     <td>string</td>
     <td>Remote hostname. </td>
-    <td>Attributes["net.peer.name"]</td>
+    <td>`Attributes["net.peer.name"]`</td>
   </tr>
   <tr>
     <td>%m</td>
     <td>string</td>
     <td>The request method.</td>
-    <td>Attributes["http.method"]</td>
+    <td>`Attributes["http.method"]`</td>
   </tr>
   <tr>
     <td>%v,%p,%U,%q</td>
     <td>string</td>
     <td>Multiple fields that can be composed into URL.</td>
-    <td>Attributes["http.url"]</td>
+    <td>`Attributes["http.url"]`</td>
   </tr>
   <tr>
     <td>%>s</td>
     <td>string</td>
     <td>Response status.</td>
-    <td>Attributes["http.status_code"]</td>
+    <td>`Attributes["http.status_code"]`</td>
   </tr>
   <tr>
     <td>All other fields</td>
@@ -959,19 +959,19 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>eventSource</td>
     <td>string</td>
     <td>The service that the request was made to. This name is typically a short form of the service name without spaces plus .amazonaws.com.</td>
-    <td>Resource["service.name"]?</td>
+    <td>`Resource["service.name"]`?</td>
   </tr>
   <tr>
     <td>awsRegion</td>
     <td>string</td>
     <td>The AWS region that the request was made to, such as us-east-2.</td>
-    <td>Resource["cloud.region"]</td>
+    <td>`Resource["cloud.region"]`</td>
   </tr>
   <tr>
     <td>sourceIPAddress</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>Resource["net.peer.ip"] or Resource["net.host.ip"]? TBD</td>
+    <td>`Resource["net.peer.ip"]` or `Resource["net.host.ip"]`? TBD</td>
   </tr>
   <tr>
     <td>errorCode</td>
@@ -989,25 +989,25 @@ Rest of SDIDs -> Attributes["syslog.*"]</td>
     <td>All other fields</td>
     <td>*</td>
     <td></td>
-    <td>Attributes["cloudtrail.*"]</td>
+    <td>`Attributes["cloudtrail.*"]`</td>
   </tr>
 </table>
 
 ### Google Cloud Logging
 
-Field            | Type               | Description                                             | Maps to Unified Model Field
------------------|--------------------| ------------------------------------------------------- | ---------------------------
-timestamp        | string             | The time the event described by the log entry occurred. | Timestamp
-resource         | MonitoredResource  | The monitored resource that produced this log entry.    | Resource
-log_name         | string             | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Name
-json_payload     | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body
-proto_payload    | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body
-text_payload     | string             | The log entry payload, represented as a Unicode string (UTF-8). | Body
-severity         | LogSeverity        | The severity of the log entry.                          | Severity
-trace            | string             | The trace associated with the log entry, if any.        | TraceId
-span_id          | string             | The span ID within the trace associated with the log entry. | SpanId
-labels           | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes
-All other fields |                    |                                                         | Attributes["google.*"]
+| Field | Type | Description | Maps to Unified Model Field |
+| ----- | ---- | ----------- | --------------------------- |
+| timestamp | string | The time the event described by the log entry occurred. | Timestamp |
+| resource | MonitoredResource | The monitored resource that produced this log entry. | Resource |
+| log_name | string | The URL-encoded LOG_ID suffix of the log_name field identifies which log stream this entry belongs to. | Name |
+| json_payload | google.protobuf.Struct | The log entry payload, represented as a structure that is expressed as a JSON object. | Body |
+| proto_payload | google.protobuf.Any | The log entry payload, represented as a protocol buffer. | Body |
+| text_payload | string | The log entry payload, represented as a Unicode string (UTF-8). | Body |
+| severity | LogSeverity | The severity of the log entry. | Severity |
+| trace | string | The trace associated with the log entry, if any. | TraceId |
+| span_id | string | The span ID within the trace associated with the log entry. | SpanId |
+| labels | map<string,string> | A set of user-defined (key, value) data that provides additional information about the log entry. | Attributes |
+| All other fields | | | `Attributes["google.*"]` |
 
 ## Elastic Common Schema
 
@@ -1070,37 +1070,37 @@ All other fields |                    |                                         
     <td>agent.name</td>
     <td>string</td>
     <td>Name given to the agent</td>
-    <td>resource["telemetry.sdk.name"]</td>
+    <td>`Resource["telemetry.sdk.name"]`</td>
   </tr>
   <tr>
     <td>agent.type</td>
     <td>string</td>
     <td>Type of agent</td>
-    <td>resource["telemetry.sdk.language"]</td>
+    <td>`Resource["telemetry.sdk.language"]`</td>
   </tr>
   <tr>
     <td>agent.version</td>
     <td>string</td>
     <td>Version of agent</td>
-    <td>resource["telemetry.sdk.version"]</td>
+    <td>`Resource["telemetry.sdk.version"]`</td>
   </tr>
   <tr>
     <td>source.ip, client.ip</td>
     <td>string</td>
     <td>The IP address that the request was made from.</td>
-    <td>attributes["net.peer.ip"] or attributes["net.host.ip"]</td>
+    <td>`Attributes["net.peer.ip"]` or `Attributes["net.host.ip"]`</td>
   </tr>
   <tr>
     <td>cloud.account.id</td>
     <td>string</td>
     <td>ID of the account in the given cloud</td>
-    <td>resource["cloud.account.id"]</td>
+    <td>`Resource["cloud.account.id"]`</td>
   </tr>
   <tr>
     <td>cloud.availability_zone</td>
     <td>string</td>
     <td>Availability zone in which this host is running.</td>
-    <td>resource["cloud.zone"]</td>
+    <td>`Resource["cloud.zone"]`</td>
   </tr>
   <tr>
     <td>cloud.instance.id</td>
@@ -1124,31 +1124,31 @@ All other fields |                    |                                         
     <td>cloud.provider</td>
     <td>string</td>
     <td>Name of the cloud provider. Example values are aws, azure, gcp, or digitalocean.</td>
-    <td>resource["cloud.provider"]</td>
+    <td>`Resource["cloud.provider"]`</td>
   </tr>
   <tr>
     <td>cloud.region</td>
     <td>string</td>
     <td>Region in which this host is running.</td>
-    <td>resource["cloud.region"]</td>
+    <td>`Resource["cloud.region"]`</td>
   </tr>
   <tr>
     <td>cloud.image.id*</td>
     <td>string</td>
     <td></td>
-    <td>resource["host.image.name"]</td>
+    <td>`Resource["host.image.name"]`</td>
   </tr>
   <tr>
     <td>container.id</td>
     <td>string</td>
     <td>Unique container id</td>
-    <td>resource["container.id"]</td>
+    <td>`Resource["container.id"]`</td>
   </tr>
   <tr>
     <td>container.image.name</td>
     <td>string</td>
     <td>Name of the image the container was built on.</td>
-    <td>resource["container.image.name"]</td>
+    <td>`Resource["container.image.name"]`</td>
   </tr>
   <tr>
     <td>container.image.tag</td>
@@ -1166,7 +1166,7 @@ All other fields |                    |                                         
     <td>container.name</td>
     <td>string</td>
     <td>Container name.</td>
-    <td>resource["container.name"]</td>
+    <td>`Resource["container.name"]`</td>
   </tr>
   <tr>
     <td>container.runtime</td>
@@ -1178,31 +1178,31 @@ All other fields |                    |                                         
     <td>destination.address</td>
     <td>string</td>
     <td>Destination address for the event</td>
-    <td>attributes["destination.address"]</td>
+    <td>`Attributes["destination.address"]`</td>
   </tr>
   <tr>
     <td>error.code</td>
     <td>string</td>
     <td>Error code describing the error.</td>
-    <td>attributes["error.code"]</td>
+    <td>`Attributes["error.code"]`</td>
   </tr>
   <tr>
     <td>error.id</td>
     <td>string</td>
     <td>Unique identifier for the error.</td>
-    <td>attributes["error.id"]</td>
+    <td>`Attributes["error.id"]`</td>
   </tr>
   <tr>
     <td>error.message</td>
     <td>string</td>
     <td>Error message.</td>
-    <td>attributes["error.message"]</td>
+    <td>`Attributes["error.message"]`</td>
   </tr>
   <tr>
     <td>error.stack_trace</td>
     <td>string</td>
     <td>The stack trace of this error in plain text.</td>
-    <td>attributes["error.stack_trace]</td>
+    <td>`Attributes["error.stack_trace]</td>
   </tr>
   <tr>
     <td>host.architecture</td>
@@ -1226,26 +1226,26 @@ For example, on Windows this could be the host’s Active Directory domain or Ne
 
 It normally contains what the hostname command returns on the host machine.</td>
 
-<td>resource["host.hostname"]</td>
+<td>`Resource["host.hostname"]`</td>
 
   </tr>
   <tr>
     <td>host.id</td>
     <td>string</td>
     <td>Unique host id.</td>
-    <td>resource["host.id"]</td>
+    <td>`Resource["host.id"]`</td>
   </tr>
   <tr>
     <td>host.ip</td>
     <td>Array of string</td>
     <td>Host IP</td>
-    <td>resource["host.ip"]</td>
+    <td>`Resource["host.ip"]`</td>
   </tr>
   <tr>
     <td>host.mac</td>
     <td>array of string</td>
     <td>MAC addresses of the host</td>
-    <td>resource["host.mac"]</td>
+    <td>`Resource["host.mac"]`</td>
   </tr>
   <tr>
     <td>host.name</td>
@@ -1254,14 +1254,14 @@ It normally contains what the hostname command returns on the host machine.</td>
 
 It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
 
-<td>resource["host.name"]</td>
+<td>`Resource["host.name"]`</td>
 
   </tr>
   <tr>
     <td>host.type</td>
     <td>string</td>
     <td>Type of host.</td>
-    <td>resource["host.type"]</td>
+    <td>`Resource["host.type"]`</td>
   </tr>
   <tr>
     <td>host.uptime</td>
@@ -1287,19 +1287,19 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
     <td>service.name</td>
     <td>string</td>
     <td>Name of the service data is collected from.</td>
-    <td>resource["service.name"]</td>
+    <td>`Resource["service.name"]`</td>
   </tr>
   <tr>
     <td>service.node.name</td>
     <td>string</td>
     <td>Specific node serving that service</td>
-    <td>resource["service.instance.id"]</td>
+    <td>`Resource["service.instance.id"]`</td>
   </tr>
   <tr>
     <td>service.state</td>
     <td>string</td>
     <td>Current state of the service.</td>
-    <td>attributes["service.state"]</td>
+    <td>`Attributes["service.state"]`</td>
   </tr>
   <tr>
     <td>service.type</td>
@@ -1311,7 +1311,7 @@ It may contain what hostname returns on Unix systems, the fully qualified, or a 
     <td>service.version</td>
     <td>string</td>
     <td>Version of the service the data was collected from.</td>
-    <td>resource["service.version"]</td>
+    <td>`Resource["service.version"]`</td>
   </tr>
   <tr>
     <td></td>
@@ -1332,19 +1332,19 @@ for an exhaustive list.
 
 ## Appendix B: `SeverityNumber` example mappings
 
-|Syslog       |WinEvtLog  |Log4j |Zap   |java.util.logging|SeverityNumber|
-|-------------|-----------|------|------|-----------------|--------------|
-|             |           |TRACE |      | FINEST          |TRACE         |
-|Debug        |Verbose    |DEBUG |Debug | FINER           |DEBUG         |
-|             |           |      |      | FINE            |DEBUG2        |
-|             |           |      |      | CONFIG          |DEBUG3        |
-|Informational|Information|INFO  |Info  | INFO            |INFO          |
-|Notice       |           |      |      |                 |INFO2         |
-|Warning      |Warning    |WARN  |Warn  | WARNING         |WARN          |
-|Error        |Error      |ERROR |Error | SEVERE          |ERROR         |
-|Critical     |Critical   |      |Dpanic|                 |ERROR2        |
-|Emergency    |           |      |Panic |                 |ERROR3        |
-|Alert        |           |FATAL |Fatal |                 |FATAL         |
+| Syslog | WinEvtLog | Log4j | Zap | java.util.logging | SeverityNumber |
+| ------ | --------- | ----- | --- | ----------------- | -------------- |
+| | | TRACE | | FINEST | TRACE |
+| Debug | Verbose | DEBUG | Debug | FINER | DEBUG |
+| | | | | FINE | DEBUG2 |
+| | | | | CONFIG | DEBUG3 |
+| Informational | Information | INFO | Info | INFO | INFO |
+| Notice | | | | | INFO2 |
+| Warning | Warning | WARN | Warn | WARNING | WARN |
+| Error | Error | ERROR | Error | SEVERE | ERROR |
+| Critical | Critical | | Dpanic | | ERROR2 |
+| Emergency | | | Panic | | ERROR3 |
+| Alert | | FATAL | Fatal | | FATAL |
 
 ## References
 

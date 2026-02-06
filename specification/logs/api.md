@@ -6,7 +6,7 @@ aliases: [bridge-api]
 
 # Logs API
 
-**Status**: [Stable](../document-status.md)
+**Status**: [Stable](../document-status.md), except where otherwise specified
 
 <details>
 <summary>Table of Contents</summary>
@@ -23,6 +23,7 @@ aliases: [bridge-api]
   * [Enabled](#enabled)
 - [Optional and required parameters](#optional-and-required-parameters)
 - [Concurrency requirements](#concurrency-requirements)
+- [Ergonomic API](#ergonomic-api)
 - [References](#references)
 
 <!-- tocstop -->
@@ -35,7 +36,8 @@ which use this API to bridge between existing logging libraries and the
 OpenTelemetry log data model.
 
 The Logs API can also be directly called by instrumentation libraries
-as well as instrumented libraries or applications.
+as well as instrumented libraries or applications. However, languages are also
+free to provide a more [ergonomic API](#ergonomic-api) for direct usage.
 
 The Logs API consist of these main components:
 
@@ -124,6 +126,10 @@ The API MUST accept the following parameters:
 - [Attributes](./data-model.md#field-attributes) (optional)
 - [Event Name](./data-model.md#field-eventname) (optional)
 
+**Status**: [Development](../document-status.md) - The API MAY accept the following parameter:
+
+- Exception (optional): An exception (or error) associated with the log record.
+
 ### Enabled
 
 To help users avoid performing computationally expensive operations when
@@ -166,6 +172,17 @@ specific guarantees and safeties.
 **LoggerProvider** - all methods are safe to be called concurrently.
 
 **Logger** - all methods are safe to be called concurrently.
+
+## Ergonomic API
+
+**Status**: [Development](../document-status.md)
+
+Languages MAY additionally provide a more ergonomic and convenient logging API.
+
+The ergonomic API SHOULD make it more convenient to emit event records following
+the [event semantics](https://opentelemetry.io/docs/specs/semconv/general/events/).
+
+The design of the ergonomic API SHOULD be idiomatic for its language.
 
 ## References
 
