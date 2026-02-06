@@ -16,7 +16,7 @@ External readers like the OpenTelemetry eBPF Profiler operate outside the instru
 
 We propose a mechanism for OpenTelemetry SDKs to publish process-level resource attributes, through a standard format based on Linux memory mappings.
 
-When an SDK initializes (or updates its resource attributes) it publishes this information to a small memory region that external processes can discover and read.
+When an SDK initializes (or updates its attributes) it publishes this information to a small memory region that external processes can discover and read.
 
 This mechanism is designed to support loose coordination between the publishing process and external readers:
 
@@ -47,7 +47,7 @@ The `payload` can optionally be placed after the header (with the `payload` poin
 
 ### Payload Format
 
-The payload uses protobuf with the OTEL [`opentelemetry.proto.resource.v1.Resource`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/resource/v1/resource.proto) schema (reproduced below for quick reference).
+The payload uses protobuf with the `ProcessContext` message:
 
 ```protobuf
 // Copyright 2019, OpenTelemetry Authors
@@ -66,39 +66,49 @@ The payload uses protobuf with the OTEL [`opentelemetry.proto.resource.v1.Resour
 
 syntax = "proto3";
 
-package opentelemetry.proto.resource.v1;
+// TODO: Is this in the right namespace? Since this is not only for profiling,
+// `opentelemetry.proto.profiles` doesn't seem the right place, but perhaps common ain't
+// it either? Feedback very welcome!
+package opentelemetry.proto.common.v1;
 
 import "opentelemetry/proto/common/v1/common.proto";
+import "opentelemetry/proto/resource/v1/resource.proto";
 
-option csharp_namespace = "OpenTelemetry.Proto.Resource.V1";
+option csharp_namespace = "OpenTelemetry.Proto.Common.V1";
 option java_multiple_files = true;
-option java_package = "io.opentelemetry.proto.resource.v1";
-option java_outer_classname = "ResourceProto";
-option go_package = "go.opentelemetry.io/proto/otlp/resource/v1";
+option java_package = "io.opentelemetry.proto.common.v1";
+option java_outer_classname = "ProcessContextProto";
+option go_package = "go.opentelemetry.io/proto/otlp/common/v1";
 
-// Resource information.
-message Resource {
-  // Set of attributes that describe the resource.
+// ProcessContext represents the payload for the process context sharing mechanism.
+//
+// This message is designed to be published by OpenTelemetry SDKs via a memory-mapped
+// region, allowing external readers (such as the OpenTelemetry eBPF Profiler) to
+// discover and read resource attributes from instrumented processes without requiring
+// direct integration or process activity.
+message ProcessContext {
+  // The resource attributes describing this process.
+  //
   // Attribute keys MUST be unique (it is not allowed to have more than one
-  // attribute with the same key).
-  // The behavior of software that receives duplicated keys can be unpredictable.
-  repeated opentelemetry.proto.common.v1.KeyValue attributes = 1;
-
-  // The number of dropped attributes. If the value is 0, then
-  // no attributes were dropped.
-  uint32 dropped_attributes_count = 2;
-
-  // Set of entities that participate in this Resource.
+  // attribute with the same key). The behavior of software that receives
+  // duplicated keys can be unpredictable.
   //
-  // Note: keys in the references MUST exist in attributes of this message.
+  // Attributes SHOULD follow OpenTelemetry semantic conventions where applicable.
+  // See: https://opentelemetry.io/docs/specs/semconv/
+  opentelemetry.proto.resource.v1.Resource resource = 1;
+
+  // Additional attributes to share with external readers that are not part of
+  // the standard Resource. [Optional]
   //
-  // Status: [Development]
-  repeated opentelemetry.proto.common.v1.EntityRef entity_refs = 3;
+  // This field allows publishers to include supplementary key-value pairs that
+  // may be useful for external readers but are not part of the SDK's configured
+  // Resource.
+  repeated opentelemetry.proto.common.v1.KeyValue extra_attributes = 2;
 }
+
 ```
 
-Note that attributes mean not ["process attributes"](https://opentelemetry.io/docs/specs/semconv/resource/process/) in particular, but any attribute that the publisher wants to share with external readers, including custom attributes.
-If applicable, these should follow [existing semantic conventions](https://opentelemetry.io/docs/specs/semconv/).
+Whenever applicable, attributes should follow [existing semantic conventions](https://opentelemetry.io/docs/specs/semconv/).
 
 ### Publication Protocol
 
@@ -117,7 +127,7 @@ Publishing the context should follow these steps:
 
 The signature MUST be written last to ensure readers never observe incomplete or invalid data. Once the signature is present (and thus all fields are non-zero), the entire mapping is considered valid.
 
-If resource attributes are updated during the process lifetime, the "Updating Protocol" should be followed.
+If attributes are updated during the process lifetime, the "Updating Protocol" should be followed.
 
 If any of the steps above fail (other than naming or allocating a new memfd), publication is considered to have failed, and the process context will not be available.
 Finally, if both `memfd_create` fails (step 2, thus requiring falling back to step 4) and naming the mapping fails (step 10), then the process context will not be available either.
@@ -158,7 +168,7 @@ Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a 
 
 ### Updating Protocol
 
-When the resource attributes change, the process context mapping should be updated following these steps:
+When the attributes change, the process context mapping should be updated following these steps:
 
 1. **Prepare new payload**: Serialize the new payload message
 2. **Signal update start**: Write `0` to the `published_at_ns` field. This signals to readers that an update is in progress (readers verify this field is non-zero).
@@ -218,8 +228,9 @@ As requirements evolve, we may need to extend the payload format.
 
 **Mitigation**: The design includes both versioning as well as allowing extension points
 
-1. **Additional `attributes` keys**: The `Resource` message can carry custom attributes
-2. **Version number**: For incompatible changes (not expected to change frequently)
+1. **Additional `extra_attributes` keys**: The `ProcessContext` message can carry custom attributes
+2. **Use of `ProcessContext` protobuf format**: The `ProcessContext` can be expanded in backwards-compatible ways by following usual protobuf evolution guidelines
+3. **Version number**: For incompatible changes (not expected to change frequently)
 
 ### Memory Overhead
 
@@ -348,8 +359,6 @@ Both approaches demonstrate the need for process-level data sharing and validate
 1. **Protobuf vs. msgpack vs. other**: Should the payload use protobuf or msgpack, or something else entirely (such as [Type, Length, Value](https://docs.google.com/document/d/1Ij6SYfv0lHOhTNsXNGVFpra3ZCfz-WC7QBXdB_OaoYc/edit?tab=t.0#heading=h.llbgke6lmlbd))? In our experiments, they all work well, the choice is primarily about ease of implementation in the ecosystem and standardization.
 
 2. **SDK implementation requirements**: Should SDKs publish this information by default whenever possible, or be opt-in?
-
-3. **Protobuf format**: Is the `opentelemetry.proto.resource.v1.Resource` message the right one to use for this? Do we want or need to wrap it in some other envelope?
 
 ## Prototypes
 
