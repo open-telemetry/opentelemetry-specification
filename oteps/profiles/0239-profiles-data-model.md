@@ -409,7 +409,7 @@ message Profile {
   // should not be used to store any machine-readable information, it is only
   // for human-friendly content. The profile must stay functional if this field
   // is cleaned.
-  repeated int64 comment = 13; // Indices into string table.
+  repeated int64 comment = 13; // Indexes into string table.
   // Index into the string table of the type of the preferred sample
   // value. If unset, clients should default to the last sample value.
   int64 default_sample_type = 14;
@@ -515,7 +515,7 @@ message ValueType {
 // augmented with auxiliary information like the thread-id, some
 // indicator of a higher level request being handled etc.
 message Sample {
-  // The indices recorded here correspond to locations in Profile.location.
+  // The indexes recorded here correspond to locations in Profile.location.
   // The leaf is at location_index[0]. [deprecated, superseded by locations_start_index / locations_length]
   repeated uint64 location_index = 1;
   // locations_start_index along with locations_length refers to to a slice of locations in Profile.location.
@@ -911,7 +911,7 @@ is cleaned.
 
 ##### Field `default_sample_type`
 
-Indices into string table.
+Indexes into string table.
 Index into the string table of the type of the preferred sample
 value. If unset, clients should default to the last sample value.
 </details>
@@ -944,7 +944,7 @@ indicator of a higher level request being handled etc.
 
 ##### Field `location_index`
 
-The indices recorded here correspond to locations in Profile.location.
+The indexes recorded here correspond to locations in Profile.location.
 The leaf is at location_index[0]. [deprecated, superseded by locations_start_index / locations_length]
 
 ##### Field `locations_start_index`
@@ -1431,7 +1431,7 @@ In the process of refining the data model, multiple alternative representations 
 
 * `pprof` representation is data in original pprof format.
 * `denormalized` representation, where all messages are embedded and no references by index are used. This is the simplest representation, but it is also the least efficient (by a huge margin) in terms of CPU utilization, memory consumption and size of the resulting protobuf payload.
-* `normalized` representation, where messages that repeat often are stored in separate tables and are referenced by indices. See [this chapter](#relationships-between-messages) for more details. This technique reduces the size of the resulting protobuf payload and the number of objects that need to be allocated to parse such payload.
+* `normalized` representation, where messages that repeat often are stored in separate tables and are referenced by indexes. See [this chapter](#relationships-between-messages) for more details. This technique reduces the size of the resulting protobuf payload and the number of objects that need to be allocated to parse such payload.
 * `arrays` representation, which is based on `normalized` representation, but uses arrays of integers instead of arrays of structures to represent messages. It further reduces the number of allocations, and the size of the resulting protobuf payload.
 * `pprofextended` is a modified `pprof` representation. It is the one presented in this OTEP.
 

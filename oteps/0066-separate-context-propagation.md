@@ -102,7 +102,7 @@ from the current span.
 ### Correlations API
 
 In addition to trace propagation, OpenTelemetry provides a simple mechanism for
-propagating indices, called the Correlations API. Correlations are
+propagating indexes, called the Correlations API. Correlations are
 intended for indexing observability events in one service with attributes
 provided by a prior service in the same transaction. This helps to establish a
 causal relationship between these events. For example, determining that a

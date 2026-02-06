@@ -28,6 +28,7 @@ rules:
       - 'bug[- ]fix(es)?'
       - 'readme(s)?'
       - 'to-?do(s)?(?=[ ,.])'
+      - "indexes\\b"
     terms:
       - Actix
       - Ajax
@@ -140,6 +141,7 @@ rules:
       - ['http[ /]?2(?:\.0)?', HTTP/2]
       - [he(/| or )she, they]
       - [\(s\)he, they]
+      - ["indices\\b", "indexes"]
       - ["id['’]?s", IDs]
       - # Capitalize Java, but NOT for strings like:
         # - File names: file.java
@@ -183,3 +185,4 @@ rules:
       # - ["(auto(matic)?[- ])?instrumentation (module|package)", "instrumentation library"]
       # - ["(auto(matic)?[- ])?instrumentation (modules|packages)", "instrumentation libraries"]
       - snake_case
+      - location_indices
