@@ -11,6 +11,7 @@ requirements to the existing specifications.
 
 - [Configuration interface prioritization and `create`](#configuration-interface-prioritization-and-create)
 - [Programmatic customization and `create`](#programmatic-customization-and-create)
+- [Strict YAML parsing](#strict-yaml-parsing)
 
 <!-- tocstop -->
 
@@ -63,3 +64,33 @@ exporters is not possible to express with declarative config should not
 encourage the OpenTelemetry community to have better programmatic customization.
 Instead, we should pursue adding authentication as an SDK plugin component and
 modeling in declarative config.
+
+## Strict YAML parsing
+
+Implementations SHOULD use strict YAML parsing when processing configuration
+files. Strict parsing helps prevent unintended behaviors and security issues
+that can arise from YAML's implicit type conversions and complex features.
+
+Recommended practices for strict YAML parsing include:
+
+* Use the [YAML 1.2 Core Schema](https://yaml.org/spec/1.2.2/#103-core-schema)
+  as specified in the [data model](./data-model.md#yaml-file-format). The Core
+  Schema provides a minimal type system (strings, integers, floats, booleans,
+  null) that avoids the ambiguities and security concerns of the JSON Schema or
+  Failsafe Schema.
+* Disable language-specific object deserialization features that allow
+  arbitrary code execution (e.g., Python's `!!python/object` tags, Ruby's
+  `!ruby/object` tags). The Core Schema naturally excludes these features.
+* Validate that parsed values conform to expected types based on the
+  configuration schema before using them.
+* Consider using "safe" or "strict" parser modes when available in your YAML
+  library (e.g., `yaml.safe_load()` in Python, safe mode in Ruby's Psych).
+
+By following strict YAML parsing practices, implementations can avoid common
+pitfalls such as:
+
+* Unintended type coercion (e.g., `NO` being parsed as boolean `false` instead
+  of the string `"NO"`)
+* Security vulnerabilities from arbitrary code execution
+* Unexpected behavior from complex YAML features like anchors and aliases in
+  untrusted input
