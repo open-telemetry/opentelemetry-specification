@@ -639,7 +639,7 @@ this data model.
   <tr>
     <td>MSGID</td>
     <td>string</td>
-    <td>Defines the type of the event. Part of event source identity. Example: "TCPIN"</td>
+    <td>Defines the type of the event. Part of event source identity. Example: `"TCPIN"`</td>
     <td>Name</td>
   </tr>
   <tr>
