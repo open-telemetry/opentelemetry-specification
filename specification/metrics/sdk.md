@@ -53,6 +53,7 @@ weight: 3
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
   * [Instrument enabled](#instrument-enabled)
+  * [Finish](#finish)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -1015,6 +1016,13 @@ It MAY return `false` to support additional optimizations and features.
 Note: If a user makes no configuration changes, `Enabled` returns `true` since by
 default `MeterConfig.enabled=true` and instruments use the default
 aggregation when no matching views match the instrument.
+
+### Finish
+
+**Status**: [Development](../document-status.md)
+
+The instrument [Finish](./api.md#finish) SHOULD NOT return a value (it MAY return a dummy value if required by
+certain programming languages or systems, for example `null`, `undefined`).
 
 ## Attribute limits
 
