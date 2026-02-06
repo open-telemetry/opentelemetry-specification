@@ -127,6 +127,13 @@ release.
   empty object when not set
   ([#4817](https://github.com/open-telemetry/opentelemetry-specification/pull/4817))
 
+### Supplementary Guidelines
+
+- Add strict YAML parsing guidance to configuration supplementary guidelines.
+  ([#4878](https://github.com/open-telemetry/opentelemetry-specification/pull/4878))
+
+### OTEPs
+
 ## v1.53.0 (2026-01-09)
 
 ### Metrics
