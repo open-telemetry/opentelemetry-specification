@@ -2919,7 +2919,7 @@ Added telemetry schemas documents to the specification ([#2008](https://github.c
 - Fix the inconsistent formatting of semantic convention enums. ([#1598](https://github.com/open-telemetry/opentelemetry-specification/pull/1598/))
 - Add details for filling resource for AWS Lambda. ([#1610](https://github.com/open-telemetry/opentelemetry-specification/pull/1610))
 - Add already specified `messaging.rabbitmq.routing_key` span attribute key to the respective YAML file. ([#1651](https://github.com/open-telemetry/opentelemetry-specification/pull/1651))
-- Clarify usage of "OTel." attribute namespace. ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640))
+- Clarify usage of `otel.*` attribute namespace. ([#1640](https://github.com/open-telemetry/opentelemetry-specification/pull/1640))
 - Add possibility to disable `db.statement` via instrumentation configuration. ([#1659](https://github.com/open-telemetry/opentelemetry-specification/pull/1659))
 
 ### Compatibility
