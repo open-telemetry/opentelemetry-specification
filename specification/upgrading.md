@@ -160,5 +160,5 @@ We believe this is sufficient time for any Plugin which is actively maintained
 to make an upgrade, and for defunct Plugins to be identified and replaced.
 
 By ensuring that the SDK can be easily upgraded, we also provide a path for application
-owners and operators to rapidly consume critical bugfixes and security patches,
+owners and operators to rapidly consume critical bug fixes and security patches,
 without the need to backport these patches across a large number of prior SDK versions.

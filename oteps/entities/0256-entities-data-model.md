@@ -380,7 +380,7 @@ events as a liveliness indicator).
 
 The expiration mechanism is based on the previously reported `Interval` field of
 EntityState event. The recipient can use this value to compute when to expect the next
-EntityState event and if the event does not arrive in a timely manner (plus some Slack)
+EntityState event and if the event does not arrive in a timely manner (plus some tolerance)
 it can consider the entity to be gone even if the EntityDelete event was not observed.
 
 ## Entity Identification

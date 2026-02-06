@@ -25,6 +25,7 @@ rules:
     defaultTerms: true
     skip: []
     exclude:
+      - 'bug[- ]fix(es)?'
       - 'readme(s)?'
       - 'to-?do(s)?(?=[ ,.])'
     terms:
@@ -124,7 +125,7 @@ rules:
       - ['3rd[- ]party', third-party]
       - ['auto[- ]c(onfigur)(es?|ations?)', 'autoc$1$2'] # cSpell:disable-line
       - ['back[- ]end(s)?', 'backend$1']
-      - [bugfix, bug fix]
+      - ['bugfix(es?)', 'bug fix$1']
       - [byte code, bytecode]
       - ['(cloud)-(native)', '$1 $2']
       - [cpp, C++]
@@ -181,3 +182,4 @@ rules:
       # Enable the following to find and replace "instrumentation module/package" with "instrumentation library":
       # - ["(auto(matic)?[- ])?instrumentation (module|package)", "instrumentation library"]
       # - ["(auto(matic)?[- ])?instrumentation (modules|packages)", "instrumentation libraries"]
+      - snake_case

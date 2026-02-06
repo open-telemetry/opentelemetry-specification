@@ -36,7 +36,7 @@ In practice, this means that OTEPs should be used for such changes as:
 
 On the other hand, they do not need to be used for such changes as:
 
-- Bugfixes
+- Bug fixes
 - Rephrasing, grammatical fixes, typos, etc.
 - Refactoring
 - Things that affect only a single language or implementation
