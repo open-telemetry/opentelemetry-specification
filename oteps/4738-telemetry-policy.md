@@ -70,8 +70,10 @@ SDK, a Collector, or any other component that implements the specification.
 We define a new concept called a `Telemetry Policy`. A Policy is an intent-based
 specification from a user of OpenTelemetry.
 
-- **Typed**: A policy self identifies its "type". Policies of different types
-  cannot be merged, but policies of the same type MUST be merged together.
+- **Typed**: A policy self-identifies its "type" through its target signal. In
+  the proto schema, this is enforced by the `oneof target` field — a policy
+  targets exactly one signal (e.g. log, metric, trace). Policies of different
+  types cannot be merged, but policies of the same type MUST be merged together.
 - **Clearly specified behavior**: A policy type enforces a specific behavior for
   a clear use case, e.g. trace sampling, metric aggregation, attribute
   filtering.
@@ -89,10 +91,10 @@ specification from a user of OpenTelemetry.
 Every policy is defined with the following:
 
 - A `type` denoting the use case for the policy
-- A JSON schema denoting what a valid definitions of the policy entails,
-  describing how servers should present the policy to customers.
-- An specification denoting behavior the policy enforces, i.e., for a given JSON
-  entry, to which elements the policy applies and which behaviors is expected
+- A schema denoting what a valid definition of the policy entails, describing
+  how servers should present the policy to customers.
+- A specification denoting behavior the policy enforces, i.e., for a given JSON
+  entry, to which elements the policy applies and which behavior is expected
   from an agent or collector implementing the policy.
 
 Policies MUST NOT:
@@ -105,7 +107,7 @@ Policies MUST NOT:
   - Policies MUST be fail-open.
 - Contain logical waterfalls.
   - Each policy's application is distinct from one another and at this moment
-    MUST not depend on another running. This is in keeping with the idempotency
+    MUST NOT depend on another running. This is in keeping with the idempotency
     principle.
 
 Example policy types include:
@@ -113,7 +115,7 @@ Example policy types include:
 - `trace-sampling`: define how traces are sampled
 - `metric-rate`: define sampling period for metrics
 - `log-filter`: define how logs are sampled/filtered
-- `attribute-redaction`: define attributes which need redaction/removal.
+- `attribute-redaction`: define attributes that need redaction/removal.
 - `metric-aggregation`: define how metrics should be aggregated (i.e. views).
 - `exemplar-sampling`: define how exemplars are sampled
 - `attribute-filter`: define data that should be rejected based on attributes
@@ -132,8 +134,8 @@ in their infrastructure. For example, a user may decide to run a multi-stage
 policy architecture where the SDK, daemon collector, and gateway collector work
 in tandem where the SDK and Daemons are given set policies while the gateway is
 remotely managed. Another user may choose to solely remotely manage their SDKs.
-As a result of this scalable architecture, it's recommended the policy providers
-updates are asynchronous. An out of date policy (i.e. one updated in a policy
+As a result of this scalable architecture, it's recommended that policy provider
+updates are asynchronous. An out-of-date policy (i.e. one updated in a policy
 provider but not yet in the applier) should not be lethal to the functionality
 of the system.
 
@@ -257,139 +259,241 @@ See `Future Possibilities` for more.
 
 ## Internal details
 
-NOTE: We need to include a section here about recording status. NOTE 2: Each
-provider should only care about the status of the policies they are responsible
-for. NOTE 3: Each provider is responsible for ensuring that a single policy is
-not disruptive.
+### Typed Schema
+
+Below is a sample for the schema of a policy, defined in the protobuf format. We
+make an effort to adhere to OpenTelemetry Semantic Conventions and previous
+specifications.
+
+```proto
+message Policy {
+  // Unique identifier for this policy
+  string id = 1;
+
+  // Human-readable name
+  string name = 2;
+
+  // Optional description
+  string description = 3;
+
+  // Whether this policy is enabled
+  bool enabled = 4;
+
+  // Timestamp when this policy was created (Unix epoch nanoseconds)
+  fixed64 created_at_unix_nano = 5;
+
+  // Timestamp when this policy was last modified (Unix epoch nanoseconds)
+  fixed64 modified_at_unix_nano = 6;
+
+  // Labels for metadata and routing
+  repeated opentelemetry.proto.common.v1.KeyValue labels = 7;
+
+  // Target configuration. Exactly one must be set.
+  oneof target {
+    LogTarget log = 10;
+    MetricTarget metric = 11;
+    TraceTarget trace = 12;
+    ...
+  }
+}
+```
+
+Every policy MUST have an id and name. Each policy MAY specify associated labels
+and metadata about its creation. Each policy MUST specify only one target
+configuration to promote specificity for users when creating a policy.
+Throughout the schema, we take advantage of `oneof` to prevent invalid
+configuration (i.e. someone specifying type: trace and then a metric-only
+configuration).
+
+#### Policy Matchers
+
+To optimize the performance of policies and adhere to the above requirements for
+policies, each policy target configuration begins with setting a list of ANDed
+matchers. The `LogMatcher` configuration below allows a user to easily target a
+log or group of logs through any fields available to the log. A policy MUST
+contain at least one matcher. Regular expressions MUST use RE2 syntax for
+cross-implementation consistency.
+
+```proto
+message LogMatcher {
+  // The field to match against. Exactly one must be set.
+  oneof field {
+    // Simple fields (body, severity_text, trace_id, span_id, etc.)
+    LogField log_field = 1;
+
+    // Log record attribute by key or path
+    AttributePath log_attribute = 2;
+
+    // Resource attribute by key or path
+    AttributePath resource_attribute = 3;
+
+    // Scope attribute by key or path
+    AttributePath scope_attribute = 4;
+  }
+
+  // Match type. Exactly one must be set.
+  oneof match {
+    // Exact string match
+    string exact = 10;
+
+    // Regular expression match
+    string regex = 11;
+
+    ...
+  }
+
+  // If true, inverts the match result
+  bool negate = 20;
+
+  // If true, applies case-insensitive matching to all match types
+  bool case_insensitive = 21;
+}
+```
+
+### Policy Design
+
+The configuration for the actions for policies will be determined after this
+OTEP is accepted and is currently being developed. Each policy MUST specify its
+runtime requirements. Policy actions MUST be run in designated stages. When
+designing a new policy, a policy SHOULD begin with a filter to select the
+targeted data.
+
+### Runtime Requirements
+
+#### Evaluation
+
+Implementations MAY evaluate policies concurrently. The independence of policies
+enables parallel matching without coordination.
+
+#### Error Handling
+
+Implementations MUST be fail-open:
+
+- If a policy fails to parse, it MUST be skipped. Other policies MUST continue
+  to execute.
+- If a policy fails to evaluate (e.g., invalid regex at runtime), the telemetry
+  MUST pass through unmodified by that policy.
+- Policy failures MUST NOT cause telemetry loss.
+
+Implementations SHOULD log policy evaluation errors for debugging.
+
+#### Disabled Policies
+
+Policies with `enabled: false` MUST NOT be evaluated. Implementations MUST treat
+disabled policies as if they do not exist.
 
 ### Merging policies
 
-Since the policy itself does not enforce a transport mechanism or format, it is
-natural that the merge algorithm is also not enforced by the policy. As such,
-whenever a policy is transmitted it should specify how it is expected to be
-merged, either by relying on a standard merge mechanism from the protocol or by
-setting it up explicitly during transmission,
+Policy merging has two distinct concerns: how a provider **transports** policy
+updates to a client, and how a runtime **resolves** overlapping policies at
+evaluation time. We address each in turn.
 
-For JSON, a service can follow either
-[JSON Patch](https://datatracker.ietf.org/doc/html/rfc6902) or
-[JSON Merge Patch](https://datatracker.ietf.org/doc/html/rfc6902) to create
-policies that can be merged and remain idempotent. Below we have the same update
-for a hypothetical `metric-rate` policy that can be merged following the RFCs
+#### Transport-level sync
 
-```json
-# JSON Merge Patch
-{
-  "rpc.server.latency": { "sampling_rate_ms": 10000 }
-}
+Since the policy itself does not enforce a transport mechanism or format, the
+sync mechanism is also not enforced by the policy. However, all transport
+implementations SHOULD follow these principles:
 
-# JSON Patch
-[
-  { "op": "add",
-    "path": "/rpc.server.latency",
-    "value": {
-      "sampling_rate_ms": 10000
-    }
-  }
-]
-```
+**Prefer full-set replacement over patching.** Transmitting the complete policy
+set on each sync avoids traditional merge pitfalls — field ordering ambiguity,
+partial update conflicts, and array operation incompatibilities. A provider
+SHOULD send the full list of active policies and the client SHOULD atomically
+replace its local set. Implementations SHOULD support a hash or version
+identifier for change detection so that clients can skip processing when the
+policy set has not changed.
 
-Proto based transmission protocols can rely on
-[`Merge`](https://pkg.go.dev/google.golang.org/protobuf/proto#Merge) or
-[`MergeFrom`](https://protobuf.dev/reference/cpp/api-docs/google.protobuf.message/#Message.MergeFrom.details)
-provided by the library
+**Support incremental updates as an optimization, not a requirement.** Transport
+protocols MAY support incremental diffs (e.g., add/remove individual policies by
+ID) as a bandwidth optimization. When incremental updates are supported, the
+protocol MUST also provide a mechanism for the client to request a full sync to
+recover from drift or missed updates.
 
-The mechanism for negotiating a protocol will depend on the specific
-`PolicyProvider` implementation, some options are:
+**Report policy status back to the provider.** Transport protocols SHOULD
+provide a mechanism for clients to report per-policy status (match counts,
+errors) back to the provider. This feedback loop enables providers to detect
+misconfigured or ineffective policies. Status SHOULD be scoped to each provider
+— a provider only receives status for the policies it supplies. Each provider is
+responsible for ensuring its policies are not disruptive to the system.
 
-- A `FileProvider` will either use a default merger from the format (like the
-  default proto merge), or accept a parameter that specifies which merger is
-  expected when reading the specific file format (for example, for JSON).
-- An HTTP provider can use different file formats to decide which merger to use,
-  as specified in the RFCs for JSON patch formats.
-- OpAmp providers could add a field specifying the merger as well as the data
-  being transmitted, plus a mechanism for systems to inform each other which
-  mergers are available and how the data is expected to be merged.
+**Resolve duplicate policy IDs by provider priority.** When multiple providers
+supply a policy with the same `id`, the client must decide which one to keep.
+Implementations SHOULD assign each provider a priority — for example, OPAMP (1),
+HTTP (2), FILE (3), CUSTOM (user-defined) — where a lower number is higher
+priority. When two policies share the same `id`, the policy from the
+higher-priority provider wins and the other is dropped. Where a policy from a
+lower-priority provider cannot be merged consistently with the higher-priority
+version, the lower-priority policy SHOULD be dropped in its entirety.
 
-#### Conflict resolution in case of a merge
+The specific mechanism will depend on the `PolicyProvider` implementation:
 
-Since policies must be idempotent and multiple policies are allowed, it is
-important that no assumptions are made about how specific merging protocol
-works. Therefore, we suggest the following:
+- A `FileProvider` reads the full policy set from disk (YAML, JSON, or proto
+  binary). Each read produces a complete snapshot; no patch semantics are
+  needed.
+- An HTTP or gRPC provider SHOULD implement request/response sync with
+  hash-based change detection and support for client metadata (supported policy
+  stages, resource attributes).
+- OpAMP providers can embed the policy set in an OpAMP custom-message or
+  agent-config payload, reusing OpAMP's existing change-detection mechanisms.
 
-- Do not rely on the order of fields, and set explicit rules on how to compare
-  fields added in distinct order
-- Do not rely on array operations, since not all merge protocols support them
-- Avoid mechanisms that require storing all policies since these lead to
-  unconstrained memory to handle them, i.e., keep only the most recent state.
+#### Runtime conflict resolution
 
-As an example, let's look at a possible per-metric sampling period operation. At
-first, we could assume that there is just a sampling period for a given metric
-is set:
+Because policies are independent and self-contained, multiple policies may match
+the same piece of telemetry. When this happens, the runtime must combine their
+effects. Regardless of how an implementation structures its evaluation, the
+following properties MUST hold:
 
-```json
-{
-  "rpc.server.latency" {
-    "sampling_rate_ms": 10000
-  }
-}
-```
+- **Commutativity.** The result of applying a set of matching policies MUST NOT
+  depend on the order in which they are processed.
+- **Idempotency.** Applying the same policy twice MUST produce the same result
+  as applying it once.
+- **Determinism.** Given the same set of matching policies and the same
+  telemetry, every instance MUST produce the same output.
 
-However, by doing so we will end up in a situation that the latest processed
-sampling period will be chosen, which makes it not idempotent, since multiple
-agents might receive or process them in different order, leading to distinct
-sampling rate across agents, or through a stack of agents and collectors.
+These properties ensure that policies can be distributed across agents and
+collectors without coordination, and that the outcome is reproducible regardless
+of processing order.
 
-For these cases, we recommend that the policy uses a distinct field between the
-existing and new value, and runs a **post-merge algorithm** that applies a
-commutative operation that is applied immediately over the data, effectively
-resolving the conflict.
-
-In the example, let's turn the sampling rate into a struct with two fields:
-
-- a `minimum` that contains the resolved minimum sampling period. Initially,
-  this field is unset. A policy provider **must not** set this field.
-- a `recommended`, which is the field set by a policy. A policy provider
-  **should** set this field if it wants to recommend a sampling rate.
-
-The policy above would be rewritten as the following
-
-```json
-{
-  "rpc.server.latency" {
-    "sampling_rate_ms": {
-      "recommended": 10000
-    }
-  }
-}
-```
-
-And, as a post-merge algorithm we could use:
+As a concrete example, consider how a runtime might resolve conflicting `keep`
+values. A naïve approach — last write wins — violates commutativity:
 
 ```python
-def post_merge(merged):
-  for metric in merged:
-    # If there is a new recommended sampling rate
-    if metric.sampling_rate_ms is not None and
-        has(metric.sampling_rate_ms.recommended):
-      if not(has(metric.sampling_rate_ms.minimum)):
-        # If there was no minimum, just use the new recommended one
-        metric.sampling_rate_ms.minimum = metric.sampling_rate_ms.recommended
-      else:
-        # Otherwise, keep the smallest one.
-        metric.sampling_rate_ms.minimum = min(
-            metric.sampling_rate_ms.minimum,
-            metric.sampling_rate_ms.recommended)
-    # Cleanup: remove the new recommendation after processing
-    del(metric.sampling_rate_ms.recommended)
+# Bad: result depends on processing order
+def resolve_keep_naive(matching_policies):
+    result = "all"
+    for policy in matching_policies:
+        result = policy.keep  # last one wins
+    return result
 ```
 
-This guarantees that policies can be applied in any order and yet the end result
-will be the same. It also allow for more complex policies like taking into
-account timestamps and sources, provided the operations can be demonstrated to
-be commutative and applied in any order. For example, we could have a policy
-where a given provider value always overrides another provider if one of the
-fields is the provider name and the post-merge algorithm takes this information
-into account.
+Instead, the runtime can apply a **commutative reduction** that always converges
+to the same answer. For `keep`, a natural choice is "most restrictive wins":
+
+```python
+def resolve_keep(matching_policies):
+    """Resolve conflicting keep values.
+
+    Applies a commutative 'most restrictive' merge:
+      none < N/s < N/m < N% < all
+
+    The result is independent of policy ordering.
+    """
+    result = Keep("all")
+    for policy in matching_policies:
+        if policy.keep is None:
+            continue
+        candidate = Keep(policy.keep)
+        # Keep the more restrictive of the two
+        result = most_restrictive(result, candidate)
+    return result
+```
+
+The same principle extends to any policy field where multiple policies may
+contribute values. For each such field, the implementation should define a
+commutative merge operation — for example, taking the minimum, taking the union,
+or applying a deterministic priority order. Where no natural commutative
+operation exists (e.g., two policies set different values for the same
+attribute), implementations MUST process policies in a consistent order (e.g.,
+alphanumerically by policy ID) to ensure reproducible results across instances.
 
 ## Trade-offs and mitigations
 
@@ -408,7 +512,7 @@ to understand and easy to generate.
 
 **No cross-policy references.** A policy cannot reference another policy's
 output or depend on another policy having run. This limits composition but
-ensures every policy is self-contained allowing a user to run a policy anywhere
+ensures every policy is self-contained, allowing a user to run a policy anywhere
 and verify its correctness. You can reason about each policy in isolation.
 
 These constraints exist because the primary goal is scale—tens of thousands of
@@ -511,13 +615,13 @@ configured in YAML as part of the collector pipeline.
 - Not portable to SDKs or other runtimes without reimplementation.
 - No native support for dynamic updates without configuration reload.
 - Scale is limited by the sequential processing model.
-- No defined grammar for OTTL making it impossible to run other than the
+- No defined grammar for OTTL, making it impossible to run outside the
   collector.
 
 ### Declarative Config + OpAMP as sole control for telemetry
 
-The declarative config + OpAMP could be used to send any config to any component
-in OpenTelemetry. Here, we would leverage OpAMP configuration passing and the
+Declarative config + OpAMP could be used to send any config to any component in
+OpenTelemetry. Here, we would leverage OpAMP configuration passing and the
 open-extension and definitions of Declarative Config to pass the whole behavior
 of an SDK or Collector from an OpAMP "controlling server" down to a component
 and have them dynamically reload behavior.
@@ -611,11 +715,6 @@ OpenTelemetry's data model for portability.
 What are some questions that you know aren't resolved yet by the OTEP? These may
 be questions that could be answered through further discussion, implementation
 experiments, or anything else that the future may bring.
-
-- Should this specification give recommendations for the server protobufs
-- For regex matching, should this be RE2 (safe, no backtracking), PCRE, or
-  something else? Implementations need to agree for portability.
-  - [jacob] I think we should do RE2, backtracking gets expensive.
 
 ## Prototypes
 
