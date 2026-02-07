@@ -50,6 +50,7 @@ textlint:
 	else \
 		npx textlint .; \
 	fi
+
 .PHONY: textlint-correction
 textlint-correction:
 	@if ! npm ls textlint; then npm install; fi
