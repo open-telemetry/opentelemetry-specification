@@ -19,7 +19,7 @@ However, we have identified important sub-cases of Counter that are treated as f
 - True-cumulative Counter: By default, `Add()` arguments must be >= 0.
 - Bi-directional Counter: As an option, `Add()` arguments must be +/-0.
 
-Gauges are sometimes used to monitoring non-descending quantities (e.g., cpu usage), as an option:
+Gauges are sometimes used to monitoring non-descending quantities (e.g., CPU usage), as an option:
 
 - Bi-directional Gauge: By default, `Set()` arguments may by +/- 0.
 - Uni-directional Gauge: As an option, `Set()` arguments must change by >= 0.
