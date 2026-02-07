@@ -98,4 +98,4 @@ jobs:
       run: npm install
 
     - name: run textlint
-      run: make textlint
+      run: make textlint format=github

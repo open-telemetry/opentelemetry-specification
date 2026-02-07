@@ -44,8 +44,12 @@ misspell:	$(MISSPELL)
 .PHONY: textlint
 textlint:
 	@if ! npm ls textlint; then npm install; fi
-	npx textlint .
 
+	@if [ "$(format)" = "github" ]; then \
+		npx textlint --format github .; \
+	else \
+		npx textlint .; \
+	fi
 .PHONY: textlint-correction
 textlint-correction:
 	@if ! npm ls textlint; then npm install; fi
