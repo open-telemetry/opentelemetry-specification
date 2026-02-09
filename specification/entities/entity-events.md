@@ -17,7 +17,6 @@ weight: 3
 - [Event Types](#event-types)
   * [Entity State Event](#entity-state-event)
   * [Entity Delete Event](#entity-delete-event)
-  * [Aggregated Reporting](#aggregated-reporting)
 - [Entity Relationships](#entity-relationships)
   * [Relationship Structure](#relationship-structure)
   * [Standard Relationship Types](#standard-relationship-types)
@@ -65,9 +64,7 @@ additional context and relationship information.
 Entity information is communicated through the following event types:
 
 1. **Entity State Event** (`entity.state`): Emitted when an entity is created, when its
-   attributes change, or periodically to indicate the entity still exists. The presence or
-   absence of the `entity.updated` attribute distinguishes between state changes and
-   periodic reports.
+   attributes change, or periodically to indicate the entity still exists.
 
 2. **Entity Delete Event** (`entity.delete`): Emitted when an entity is removed.
 
@@ -86,33 +83,17 @@ change, or periodically to indicate the entity still exists.
 | `entity.id` | map<string, string> | Attributes that identify the entity. MUST not change during the lifetime of the entity. The map MUST contain at least one attribute. Keys and values MUST be strings. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attribute names. |
 | `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. These attributes are not part of the entity's identity. Each Entity State event contains the complete current state of the entity's description. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | `entity.relationships` | array of maps | Relationships to other entities. Each relationship is a map containing: `type` (string, describes the relationship), `entity.type` (string, the type of the related entity), and `entity.id` (map<string, string>, identifying attributes of the related entity). |
-| `report.interval` | int64 (milliseconds) | The reporting interval for this entity. MUST be a non-negative value. A value of `0` indicates that periodic reporting is disabled and only state changes will be reported. A positive value indicates the interval at which periodic state events (without `entity.updated`) will be emitted. Can be used by receivers to infer that a no longer reported entity is gone, even if the Entity Delete event was not observed. |
-
-**Optional Attributes**:
-
-| Attribute | Type | Description |
-| --------- | ---- | ----------- |
-| `entity.updated` | string | The timestamp when the entity's state last changed, in ISO 8601 format. When present, indicates this is a state change event. When absent, indicates this is a periodic report with no changes since the last report. When multiple changes occur between reports (aggregated reporting), this represents the timestamp of the most recent change. |
+| `report.interval` | int64 (milliseconds) | The reporting interval for this entity. MUST be a non-negative value. A value of `0` indicates that periodic reporting is disabled and only state changes will be reported. A positive value indicates the interval at which periodic state events will be emitted. Can be used by receivers to infer that a no longer reported entity is gone, even if the Entity Delete event was not observed. |
 
 **Timestamp Field**:
 
 The `Timestamp` field of the LogRecord represents the time when this event was generated and sent.
-For immediate reporting without aggregation, this will typically match `entity.updated`. For
-aggregated reporting, this represents when the event was sent, while `entity.updated` represents
-when the most recent state change occurred.
 
-**State Changes vs Periodic Reports**:
+**Event Emission**:
 
-- When `entity.updated` is **present**, this is a state change event indicating the entity
-  was created or its attributes were modified. The value of `entity.updated` indicates when
-  the most recent change occurred.
-- When `entity.updated` is **absent**, this is a periodic report indicating the entity still
-  exists but has not changed since the last report.
-
-Implementations SHOULD emit state change events whenever entity descriptive attributes change,
-periodic state events based on the `report.interval` value, and delete events when entities
-are removed. Implementations MAY provide configuration options to allow users to disable
-state change events or periodic state events independently.
+Implementations SHOULD emit Entity State events whenever entity descriptive attributes change,
+and periodically based on the `report.interval` value to indicate the entity still exists.
+Implementations SHOULD also emit Entity Delete events when entities are removed.
 
 ### Entity Delete Event
 
@@ -145,31 +126,6 @@ longer seeing Entity State events reported. The expiration mechanism is based on
 previously reported `report.interval` field. Recipients can use this value to compute when
 to expect the next Entity State event and, if the event does not arrive in a timely manner
 (plus some slack), consider the entity to be gone even if the Entity Delete event was not observed.
-
-### Aggregated Reporting
-
-Implementations MAY provide aggregated reporting as an optional capability to reduce the amount
-of data sent over the wire. When aggregated reporting is enabled:
-
-- Multiple rapid changes to the same entity are collapsed into a single Entity State event
-- Only the **latest state** of the entity is reported
-- Intermediate state changes are not preserved
-- The `entity.updated` attribute contains the timestamp of the **most recent change** that
-  occurred during the aggregation period
-- The LogRecord `Timestamp` represents when the aggregated event was sent
-
-**Example**:
-
-If a Pod's phase changes from "Pending" → "Running" → "Running" (with label update) between
-reports, only one event is sent with:
-
-- The final state (Running with updated labels)
-- `entity.updated` = timestamp of the label update (the most recent change)
-- LogRecord `Timestamp` = when the aggregated event was sent
-
-Aggregated reporting reduces data volume at the cost of losing visibility into intermediate
-states. When provided, implementations SHOULD document the aggregated reporting capability
-and allow configuration of the aggregation behavior.
 
 ## Entity Relationships
 
@@ -294,7 +250,6 @@ LogRecord:
         version: "1.21"
         tier: frontend
       k8s.pod.phase: Running
-    entity.updated: 2026-01-12T10:30:00.000000000Z
     report.interval: 60000
     entity.relationships:
       - relationship.type: scheduled_on
@@ -327,30 +282,6 @@ LogRecord:
         app: nginx
         version: "1.21"
       k8s.pod.phase: Running
-    report.interval: 60000
-```
-
-### Aggregated Entity Update
-
-When multiple changes are aggregated and sent in a single event:
-
-```
-LogRecord:
-  Timestamp: 2026-01-12T10:31:00.000000000Z
-  EventName: entity.state
-  Resource:
-    k8s.cluster.name: prod-cluster
-  Attributes:
-    entity.type: k8s.pod
-    entity.id:
-      k8s.pod.uid: abc-123-def-456
-    entity.description:
-      k8s.pod.name: nginx-deployment-66b6c
-      k8s.pod.labels:
-        app: nginx
-        version: "1.21"
-      k8s.pod.phase: Running
-    entity.updated: 2026-01-12T10:30:45.000000000Z
     report.interval: 60000
 ```
 
