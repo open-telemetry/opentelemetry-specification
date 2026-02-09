@@ -83,7 +83,12 @@ change, or periodically to indicate the entity still exists.
 | `entity.id` | map<string, string> | Attributes that identify the entity. MUST not change during the lifetime of the entity. The map MUST contain at least one attribute. Keys and values MUST be strings. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attribute names. |
 | `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. These attributes are not part of the entity's identity. Each Entity State event contains the complete current state of the entity's description. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | `entity.relationships` | array of maps | Relationships to other entities. Each relationship is a map containing: `type` (string, describes the relationship), `entity.type` (string, the type of the related entity), and `entity.id` (map<string, string>, identifying attributes of the related entity). |
-| `report.interval` | int64 (milliseconds) | The reporting interval for this entity. MUST be a non-negative value. A value of `0` indicates that periodic reporting is disabled and only state changes will be reported. A positive value indicates the interval at which periodic state events will be emitted. Can be used by receivers to infer that a no longer reported entity is gone, even if the Entity Delete event was not observed. |
+
+**Optional Attributes**:
+
+| Attribute | Type | Description |
+| --------- | ---- | ----------- |
+| `report.interval` | int64 (seconds) | The reporting interval for this entity. MUST be a non-negative value when present. When absent, the reporting interval is unknown. A value of `0` indicates that no periodic heartbeat events will be sent. A positive value indicates the interval at which periodic state events will be emitted. Can be used by receivers to determine when to expect the next event and infer that an entity is gone if events stop arriving. |
 
 **Timestamp Field**:
 
@@ -256,7 +261,7 @@ LogRecord:
         version: "1.21"
         tier: frontend
       k8s.pod.phase: Running
-    report.interval: 60000
+    report.interval: 60
     entity.relationships:
       - relationship.type: scheduled_on
         entity.type: k8s.node
