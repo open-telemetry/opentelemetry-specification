@@ -788,8 +788,9 @@ recorded.
 
 For delta aggregations, the start timestamp MUST equal the previous collection
 interval's timestamp, or the creation time of the instrument if this is the
-first collection interval for the instrument. This implies that all delta
-aggregations for an instrument MUST share the same start timestamp.
+first collection interval for the instrument. This implies that all data points
+with delta temporality aggregation for an instrument MUST share the same start
+timestamp.
 
 Cumulative aggregations for synchronous instruments SHOULD use the time of the
 first measurement for each attribute set as the start time. Cumulative
