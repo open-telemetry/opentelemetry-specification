@@ -24,7 +24,7 @@ weight: 3
   * [Relationship Lifecycle](#relationship-lifecycle)
 - [Examples](#examples)
   * [Kubernetes Pod Entity State](#kubernetes-pod-entity-state)
-  * [Entity Delete Event](#entity-delete-event-1)
+  * [Entity Delete](#entity-delete)
 
 <!-- tocstop -->
 
@@ -266,29 +266,6 @@ LogRecord:
         entity.type: k8s.replicaset
         entity.id:
           k8s.replicaset.uid: rs-456
-```
-
-### Periodic Entity Report
-
-Periodic report for the same Pod with no changes:
-
-```
-LogRecord:
-  Timestamp: 2026-01-12T10:31:00.000000000Z
-  EventName: entity.state
-  Resource:
-    k8s.cluster.name: prod-cluster
-  Attributes:
-    entity.type: k8s.pod
-    entity.id:
-      k8s.pod.uid: abc-123-def-456
-    entity.description:
-      k8s.pod.name: nginx-deployment-66b6c
-      k8s.pod.labels:
-        app: nginx
-        version: "1.21"
-      k8s.pod.phase: Running
-    report.interval: 60000
 ```
 
 ### Entity Delete
