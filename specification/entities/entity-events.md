@@ -95,6 +95,12 @@ Implementations SHOULD emit Entity State events whenever entity descriptive attr
 and periodically based on the `report.interval` value to indicate the entity still exists.
 Implementations SHOULD also emit Entity Delete events when entities are removed.
 
+**Future Considerations**:
+
+Each Entity State event contains the complete current state of the entity. If scalability
+issues arise in the future, the specification may introduce a "patch" event mechanism to
+communicate only the changes rather than the full state.
+
 ### Entity Delete Event
 
 The Entity Delete Event indicates that a particular entity is gone.
