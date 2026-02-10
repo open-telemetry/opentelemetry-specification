@@ -24,7 +24,7 @@ This OTEP aims to achieve six outcomes:
 
 - Stability information should be visible and consistent. Users should be able to easily determine the stability status of any component before adopting it, and this information should be presented consistently across all OpenTelemetry projects.
 
-- Instrumentation should be able to stabilize independently of semantic conventions. Battle-tested instrumentation libraries should not be blocked from reaching stable status solely because the semantic conventions they emit are still evolving.
+- Instrumentation should be able to stabilize based on production readiness. The bar for a stable instrumentation library should be whether the instrumentation code itself is production-ready, not whether the semantic conventions it depends on have been finalized. However, once an instrumentation library stabilizes, any breaking change to its telemetry output must be treated as a breaking change requiring a major version bump.
 
 - Performance characteristics should be known. Users should be able to understand the overhead implications of OpenTelemetry before deploying to production, and maintainers should be able to detect regressions between releases.
 
@@ -32,7 +32,7 @@ This OTEP aims to achieve six outcomes:
 
 ## Success Criteria
 
-This initiative succeeds when official OpenTelemetry distributions—Collector distributions, the Java agent, and similar—enable only stable components by default. Users should be able to enable experimental features through a consistent, well-documented mechanism. Each component's stability status should be clearly documented and discoverable. Instrumentation libraries should be able to declare API stability independently from telemetry output stability. Performance benchmarks should exist for stable components, with published baseline characteristics. Security policies and CVE response commitments should be documented and followed.
+This initiative succeeds when official OpenTelemetry distributions—Collector distributions, the Java agent, and similar—enable only stable components by default. Users should be able to enable experimental features through a consistent, well-documented mechanism. Each component's stability status should be clearly documented and discoverable. Instrumentation libraries should be able to reach stable status based on the production readiness of their code, even if the semantic conventions they depend on are still evolving. Once stable, any breaking change to telemetry output requires a major version bump. Performance benchmarks should exist for stable components, with published baseline characteristics. Security policies and CVE response commitments should be documented and followed.
 
 ## Workstreams
 
@@ -40,17 +40,17 @@ Achieving these goals requires coordinated effort across multiple areas. Each wo
 
 ### Workstream 1: Experimental Feature Opt-In
 
-There is no consistent mechanism across OpenTelemetry for users to opt into experimental features. The Collector uses feature gates, some SDKs use environment variables like `OTEL_SEMCONV_STABILITY_OPT_IN`, and others have ad-hoc approaches. This workstream should define a consistent pattern for experimental feature opt-in that works across SDKs, the Collector, and instrumentation libraries.
+There is no consistent mechanism across OpenTelemetry for users to opt into experimental features. The Collector uses feature gates, some SDKs use environment variables like `OTEL_SEMCONV_STABILITY_OPT_IN`, and others have ad-hoc approaches. Users have no reliable way to know what they are opting into or what the stability implications are.
 
-The work is complete when we have a documented mechanism for enabling experimental features—whether through environment variables, configuration, or programmatic API—along with clear guidance on what "experimental" means and what users are opting into. Experimental features should be disabled by default with clear logging when enabled. Where possible, the design should align with existing patterns like Collector feature gates and `OTEL_SEMCONV_STABILITY_OPT_IN`.
+This workstream should result in a consistent pattern for experimental feature opt-in that works across SDKs, the Collector, and instrumentation libraries.
 
 The Configuration SIG is the natural owner for this work.
 
 ### Workstream 2: Federated Schema and Stability
 
-Instrumentation libraries are blocked from stabilization because they depend on experimental semantic conventions, even when the instrumentation code itself is mature. There is also no standard way to declare which semantic conventions an instrumentation uses or to report schema URLs consistently.
+Instrumentation libraries are blocked from stabilization because they depend on experimental semantic conventions, even when the instrumentation code itself is mature and battle-tested. There is also no consistent mechanism to declare which semantic conventions an instrumentation uses or to report schema URLs consistently.
 
-This workstream should enable instrumentation stability to be assessed independently from semantic convention stability, with clear mechanisms for communicating telemetry stability to users. Instrumentation libraries should be able to declare API stability separately from telemetry output stability. Schema URLs should be populated consistently across instrumentations, enabling downstream tooling. Migration pathways should be documented when instrumentation stabilizes before its semantic conventions. Breaking changes to telemetry output should be treated as breaking changes, requiring major version bumps.
+This workstream should establish a path for instrumentation libraries to stabilize based on the production readiness of their code, rather than requiring all upstream semantic conventions to be stable first. Once stable, instrumentation libraries own the stability of their full output—any breaking change to emitted telemetry must be treated as a breaking change requiring a major version bump, regardless of whether the change originates from updated semantic conventions or from the instrumentation itself. The workstream should also address how instrumentation communicates its semantic convention dependencies to users and downstream tooling, and how migration works when conventions evolve after instrumentation has stabilized.
 
 The Semantic Conventions SIG and Weaver maintainers are the natural owners. Related work includes the [OTEP on federated semantic conventions](https://github.com/open-telemetry/opentelemetry-specification/pull/4815).
 
@@ -58,7 +58,7 @@ The Semantic Conventions SIG and Weaver maintainers are the natural owners. Rela
 
 The term "component" means different things in different contexts—a Collector receiver is quite different from an SDK plugin or an instrumentation library. There is no clear definition of what criteria a component must meet to be included in an official distribution, or what "official distribution" even means.
 
-This workstream needs to define what a component is, what an official distribution is, and what criteria govern inclusion in distributions. The definitions need to work across the Collector, SDKs, and instrumentation. We need governance around official OpenTelemetry distributions, criteria for including components in those distributions—stability requirements, documentation, testing—and a process for promoting components from contrib/community to official distributions.
+This workstream needs to define what a component is, what an official distribution is, and what criteria govern inclusion in distributions. The definitions need to work across the Collector, SDKs, and instrumentation.
 
 The GC and Technical Committee should own this work.
 
@@ -66,9 +66,7 @@ The GC and Technical Committee should own this work.
 
 Users cannot easily assess whether a component is ready for production use. Stability status alone does not convey documentation quality, performance characteristics, or operational readiness.
 
-This workstream should define what "production-ready" means for OpenTelemetry components. The goal is visibility, not gatekeeping. Documented guidance should cover what production-ready components typically include: getting started documentation, configuration reference, troubleshooting guides, migration guides, performance visibility through benchmarks and published overhead characteristics, tested integration points and known limitations, and operational features like health checks, graceful degradation, and clear error messages.
-
-This guidance should be aspirational rather than a set of blocking requirements. Components can be stable without meeting every criterion. Requiring extensive benchmarks and documentation for every component would worsen the "stuck on pre-release" problem, not improve it. The goal is to help maintainers understand what production users need without creating barriers to stabilization.
+This workstream should define what "production-ready" means for OpenTelemetry components. The goal is visibility, not gatekeeping — helping maintainers understand what production users need without creating barriers to stabilization.
 
 The End User SIG and Communications SIG should own this work.
 
@@ -76,9 +74,7 @@ The End User SIG and Communications SIG should own this work.
 
 Users report unexpected performance overhead with OpenTelemetry, sometimes discovering issues only at scale. Maintainers lack consistent tooling to detect performance regressions.
 
-This workstream should establish patterns and tooling for performance benchmarking that give users visibility into overhead and maintainers ability to detect regressions. We need guidance on benchmark approaches—microbenchmarks, integration benchmarks, memory profiling—along with recommended tooling or frameworks that maintainers can adopt, examples of effective benchmark suites from existing projects, and historical tracking patterns to detect regressions over time.
-
-Benchmarks will take various forms depending on the component, and the specific approach should be left to maintainers. That said, stable components should have some published benchmark suite that runs consistently.
+This workstream should address how users understand performance overhead and how maintainers detect regressions. Benchmarks will take different forms depending on the component.
 
 Each implementation SIG should own this work with coordination from the TC.
 
@@ -86,7 +82,7 @@ Each implementation SIG should own this work with coordination from the TC.
 
 Users evaluating OpenTelemetry for production need confidence in security practices, but commitments around CVE response timelines, dependency updates, and supply chain security are not well documented.
 
-This workstream should document OpenTelemetry's security commitments and establish consistent practices across projects: published CVE response timeline commitments, documented dependency update and hygiene practices, supply chain security practices including signing, provenance, and SBOM, and security policies that are consistent across OpenTelemetry projects.
+This workstream should result in documented, consistent security commitments across OpenTelemetry projects.
 
 The Security SIG, GC, and TC should own this work.
 
@@ -98,7 +94,7 @@ Distributions that currently enable experimental components by default will need
 
 ### On Instrumentation Libraries
 
-Instrumentation library maintainers will benefit from the ability to declare API stability independently from telemetry stability. They will need to clearly document which semantic conventions they use and provide migration guidance when conventions change.
+Instrumentation library maintainers will be able to stabilize based on the production readiness of their code, without waiting for all upstream semantic conventions to stabilize. Once stable, they own the stability of their telemetry output—any breaking change to emitted telemetry requires a major version bump. They will need to clearly document which semantic conventions they use and provide migration guidance when conventions evolve.
 
 ### On Users
 
@@ -106,13 +102,13 @@ Users will experience a more predictable default installation. Those who depend 
 
 ## Trade-offs
 
-Disabling experimental features by default means users may get less functionality out of the box, potentially worsening the "batteries not included" perception. The mitigation is to accelerate stabilization of high-value components, provide clear and discoverable instructions for enabling experimental features, and ensure the stable subset provides genuine value for common use cases.
+Disabling experimental features by default means users get less functionality out of the box, which could worsen the "batteries not included" perception. The workstreams above will need to account for this.
 
 Defining workstreams and requiring cross-SIG coordination may slow progress compared to individual SIGs acting independently. However, each workstream can proceed independently once acceptance criteria are agreed. This OTEP provides alignment on goals without requiring lockstep execution.
 
-Decoupling instrumentation stability from semantic convention stability may confuse users who see "stable" instrumentation emitting "experimental" semantic conventions. Clear documentation explaining the two dimensions of stability and tooling that surfaces this information consistently should address this. The alternative—keeping useful instrumentation in pre-release indefinitely—causes more confusion.
+Allowing instrumentation to stabilize before its upstream semantic conventions may confuse users who see "stable" instrumentation emitting telemetry based on "experimental" semantic conventions. However, this does not mean telemetry output is free to change without consequence—once stable, the instrumentation library commits to the telemetry it emits, and any breaking change requires a major version bump. How to communicate this to users is something the workstreams will need to sort out. The alternative — keeping production-ready instrumentation in pre-release indefinitely — is worse.
 
-Expanding what "production-ready" means to include documentation, benchmarks, and security could make it harder for components to stabilize, worsening the "stuck on pre-release" problem. This is why production readiness criteria should be guidance rather than gatekeeping. Components can be stable without meeting every criterion.
+Expanding what "production-ready" means could make it harder for components to stabilize, worsening the "stuck on pre-release" problem. The workstreams should avoid creating new barriers to stabilization.
 
 ## Prior Art
 
