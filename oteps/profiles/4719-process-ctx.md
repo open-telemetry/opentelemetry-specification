@@ -103,12 +103,19 @@ message ProcessContext {
   // This field allows publishers to include supplementary key-value pairs that
   // may be useful for external readers but are not part of the SDK's configured
   // Resource.
+  //
+  // Consider adding any keys here to the profiles semantic conventions in
+  // https://opentelemetry.io/docs/specs/semconv/general/profiles/
   repeated opentelemetry.proto.common.v1.KeyValue extra_attributes = 2;
 }
 
 ```
 
 Whenever applicable, attributes should follow [existing semantic conventions](https://opentelemetry.io/docs/specs/semconv/).
+
+We expect that once converted to an OTEP, the `threadlocal.`-prefixed keys from the proposed
+[thread context sharing specification](https://docs.google.com/document/d/1eatbHpEXXhWZEPrXZpfR58-5RIx-81mUgF69Zpn3Rz4/edit?tab=t.bmgoq3yor67o)
+will be the first users of `extra_attributes` section.
 
 ### Publication Protocol
 
