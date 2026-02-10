@@ -1847,15 +1847,15 @@ existing methods without introducing breaking changes, if possible.
 For languages which support concurrent execution the Metrics SDKs provide
 specific guarantees and safeties.
 
-**MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` SHOULD be safe
+**MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` MUST be safe
 to be called concurrently.
 
-**ExemplarReservoir** - all methods SHOULD be safe to be called concurrently.
+**ExemplarReservoir** - all methods MUST be safe to be called concurrently.
 
 **MetricReader** - `Collect`, `ForceFlush` (for periodic exporting MetricReader)
-and `Shutdown` SHOULD be safe to be called concurrently.
+and `Shutdown` MUST be safe to be called concurrently.
 
-**MetricExporter** - `ForceFlush` and `Shutdown` SHOULD be safe to be called
+**MetricExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
 concurrently.
 
 ## References
