@@ -19,7 +19,7 @@ release.
 ### Metrics
 
 - Add normative language to the Metrics API/SDK spec concurrency requirements.
-  ([#4827](https://github.com/open-telemetry/opentelemetry-specification/pull/4868))
+  ([#4868](https://github.com/open-telemetry/opentelemetry-specification/pull/4868))
 
 ### Logs
 
