@@ -18,6 +18,9 @@ release.
 
 ### Metrics
 
+- Add normative language to the Metrics API/SDK spec concurrency requirements.
+  ([#4868](https://github.com/open-telemetry/opentelemetry-specification/pull/4868))
+
 ### Logs
 
 - Add optional `Exception` parameter to Emit LogRecord.
