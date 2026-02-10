@@ -16,6 +16,7 @@
     - [Schema Transformations](#schema-transformations)
       - [Migration option 1: upgrades based on resolved schema only](#migration-option-1-upgrades-based-on-resolved-schema-only)
       - [Migration option 2: generate diff on demand](#migration-option-2-generate-diff-on-demand)
+      - [Migration option 3: publish diff in the future](#migration-option-3-publish-diff-in-the-future)
     - [Documentation and code generation](#documentation-and-code-generation)
   - [Prior art and alternatives](#prior-art-and-alternatives)
   - [Open questions](#open-questions)
@@ -292,7 +293,7 @@ specific conventions in this registry and publish one Schema URL for all of them
 Here's how the definition might look:
 
 ```yaml
-file_format: definition/2.0.0
+file_format: definition/2
 # new attributes defined in this registry
 attributes:
   - key: activemq.broker.name
@@ -324,18 +325,28 @@ The *resolved* schema contains
 - definitions and refinements (from dependencies) for signals and attributes imported or referenced explicitly
 
 Attributes and signals from dependencies that are not used by the registry are not
-included.
+included by default.
 
 Check out [full example](https://github.com/open-telemetry/opentelemetry-weaver-examples/pull/33).
 
 ### Dependency resolution mechanism
 
 The number of direct dependencies is initially limited to one. This will change in the future.
-Conflicts are not allowed (Weaver resolution fails). The conflict resolution
-(in cases like diamond dependency on OTel semconv registry) would rely on unique attribute
-key or signal identifier and provenance information attached to that attribute and
-signal definition. Provenance will be exposed along with the resolved schema.
 Details to be fleshed out.
+
+Principles:
+
+- **Latest version wins:** When a registry depends on multiple versions of the same registry,
+  only the latest version of that dependency is used during the resolution process.
+  - If an object is referenced but only exists in an older version that was not selected,
+    the resolution fails.
+- **Only exact dependency versions are supported:** Version ranges are not supported at this time.
+- **All signals and attributes are identifiable** via a specific property: metric name,
+  event name, span type, entity type, or attribute key. Signal refinements have a unique ID.
+- **Conflicts are not allowed:** If the resolution process discovers multiple attributes
+  with the same key, or multiple signals or refinements with the same identity, the resolution fails.
+- **Source tracking:** Attributes and signal definitions, including their refinements,
+  include provenance metadata identifying the source registry and its version
 
 ### Schema URL for OTel schemas
 
@@ -414,12 +425,6 @@ This approach is limited to one major version and covers upgrades only.
 
 #### Migration option 2: generate diff on demand
 
-> [!NOTE]
->
-> In the future, based on the feedback and demand, we can return to publishing diffs.
-> This can be done in non-breaking manner via a new field in the manifest pointing
-> to a diff.
-
 To perform schema transformations, the schema processor and other possible consumers
 are encouraged to use [`weaver registry diff`](https://github.com/open-telemetry/weaver/blob/main/docs/usage.md#registry-diff)
 to generate diffs at startup (or lazily at runtime)
@@ -464,6 +469,21 @@ This currently includes time to unpack, read, validate, and resolve the source s
 and can be optimized further by leveraging the resolved schema.
 
 </details>
+
+#### Migration option 3: publish diff in the future
+
+In the future, based on the feedback and demand, we can return to publishing diffs.
+
+At that point, we could update `weaver registry package` to allow diff-generation:
+
+```bash
+weaver registry package --include-diff --schema_url <url>
+```
+
+and consider extending published manifest file format to include
+`diff_url` field.
+
+This can be done in non-breaking manner.
 
 ### Documentation and code generation
 
