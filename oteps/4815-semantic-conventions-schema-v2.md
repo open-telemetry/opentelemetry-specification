@@ -568,11 +568,12 @@ in a release preparation step would:
 
 - Resolve schema.
 - Generate manifest.
-- Publish SemConv artifact as a GitHub release asset (and potentially on opentelemetry.io).
-- TODO: stable and not stable publishing.
+- TODOs:
+  - generate stable and not stable.
+  - publish SemConv artifact as a GitHub release asset (and potentially on opentelemetry.io).
 
 [Decentralized conventions example](https://github.com/open-telemetry/opentelemetry-weaver-examples/pull/33).
-TODO: do we need collector prototype for schema transformation?
+Generating [OTel Collector transformprocessor config to run schema transformations](https://github.com/open-telemetry/opentelemetry-weaver-examples/pull/36).
 
 ## Future possibilities
 
