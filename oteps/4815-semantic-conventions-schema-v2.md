@@ -210,7 +210,7 @@ is approximately 1.2MB uncompressed and 200KB compressed.
 Currently, Schema URL includes the semantic convention version but does not include any
 indication of stability.
 
-In addition to the version, we will leverage [SemVer pre-release](https://semver.org/#spec-item-9)
+In addition to the version, we will leverage [SemVer pre-release](https://semver.org)
 syntax to communicate the stability of the conventions and telemetry.
 
 OpenTelemetry Semantic Conventions will publish two versions with each release:
