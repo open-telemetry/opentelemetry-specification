@@ -216,13 +216,13 @@ sections:
       - name: Instrument names conform to the specified syntax.
         status: '+'
       - name: Instrument units conform to the specified syntax.
-        status: '-'
+        status: '+'
       - name: Instrument descriptions conform to the specified syntax.
-        status: '-'
+        status: '+'
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
         status: '+'
       - name: Instrument supports the advisory Attributes parameter.
-        status: '-'
+        status: '+'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
         status: '+'
       - name: All methods of `Meter` are safe to be called concurrently.
@@ -232,11 +232,11 @@ sections:
       - name: '`MeterProvider` allows a `Resource` to be specified.'
         status: '?'
       - name: A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`.
-        status: '?'
+        status: '+'
       - name:
           The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary`
           instance stored in the `Meter`.
-        status: '?'
+        status: '+'
       - name:
           The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope`
           instance stored in the `Meter`.
@@ -260,7 +260,7 @@ sections:
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
         status: '+'
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
-        status: '?'
+        status: '-'
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
         status: '-'
       - name: The SDK allows more than one `View` to be specified per instrument.
@@ -342,11 +342,11 @@ sections:
       - name: The metric SDK's metric Producer implementations uses the metric Filter
         status: '-'
       - name: Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits)
-        status: '?'
+        status: '-'
       - name: Metric SDK supports configuring cardinality limit at MeterReader level
-        status: '?'
+        status: '-'
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
-        status: '?'
+        status: '-'
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
@@ -358,6 +358,8 @@ sections:
       - name: LoggerProvider.ForceFlush
         status: '?'
       - name: Logger.Emit(LogRecord)
+        status: '?'
+      - name: Logger.Emit(LogRecord) with Exception parameter
         status: '?'
       - name: LogRecord.Set EventName
         status: '?'
@@ -509,7 +511,7 @@ sections:
         status: '?'
       - name: The `Parse` operation returns configuration model
         status: '?'
-      - name: The `Parse` operation resolves extension component configuration to `properties`
+      - name: The `Parse` operation resolves plugin component configuration to `properties`
         status: '?'
       - name: '`Create` SDK components'
         status: '?'
@@ -523,9 +525,9 @@ sections:
         status: '?'
       - name: The `Create` operation returns `Propagators`
         status: '?'
-      - name: The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components
+      - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
         status: '?'
-      - name: Register a `ComponentProvider`
+      - name: Register a `PluginComponentProvider`
         status: '?'
   - name: Exporters
     features:

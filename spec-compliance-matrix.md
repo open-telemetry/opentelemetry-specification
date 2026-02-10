@@ -19,9 +19,9 @@ formats is required. Implementing more than one format is optional.
 | [TracerProvider](specification/trace/api.md#tracerprovider-operations) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Create TracerProvider |  | + | + | + | + | + | + | + | + | + | + | + |
 | Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + |
-| Get a Tracer with schema_url |  | + | + | + | + |  |  | + |  | + |  |  |
-| Get a Tracer with scope attributes |  | + |  |  | + |  |  | + |  | + |  |  |
-| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + |  |  |  |  |
+| Get a Tracer with schema_url |  | + | + | + | + |  |  | + | + | + |  |  |
+| Get a Tracer with scope attributes |  | + |  |  | + |  |  | + | + | + |  |  |
+| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + | + |  |  |  |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |
 | Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |
 | ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |
@@ -69,22 +69,22 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Span linking](specification/trace/api.md#specifying-links) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Links can be recorded on span creation |  | + | + | + | + | + | + | + | + | + | + |  |
-| Links can be recorded after span creation |  | + |  | + | + |  |  | + |  | + | + |  |
+| Links can be recorded after span creation |  | + |  | + | + |  |  | + | + | + | + |  |
 | Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  |
 | [Span events](specification/trace/api.md#add-events) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | AddEvent |  | + | + | + | + | + | + | + | + | + | + | + |
 | Add order preserved |  | + | + | + | + | + | + | + | + | + | + | + |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Span exceptions](specification/trace/api.md#record-exception) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
-| RecordException |  | + | + | + | + | + | + | + | + | - | + | - |
-| RecordException with extra parameters |  | + | + | + | + | + | + | + | + | - | + | - |
+| RecordException |  | + | + | + | + | + | + | + | - | - | + | - |
+| RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - |
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + |
 | ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + |
 | Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  |  |  |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + |
 | [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + |  | + |
-| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + |  | - |  | + |
+| [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + | + | - |  | + |
 | [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  |
 | [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  |
 | Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  |  |  |
@@ -126,16 +126,16 @@ formats is required. Implementing more than one format is optional.
 | Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name. |  |  | + |  |  | - | + |  |  |  |  |  |
 | It is possible to register two instruments with same `name` under different `Meter`s. |  | + | + | + | + |  | + |  | + | + | + |  |
 | Instrument names conform to the specified syntax. |  | + | + | + | + | + | + |  |  | + |  |  |
-| Instrument units conform to the specified syntax. |  | - | + |  | + | + | - |  | + | + | + |  |
-| Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | - |  |  | - | + |  |
+| Instrument units conform to the specified syntax. |  | - | + |  | + | + | + |  | + | + | + |  |
+| Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | + |  |  | - | + |  |
 | Instrument supports the advisory ExplicitBucketBoundaries parameter. |  | + | + |  |  |  | + |  |  |  |  |  |
-| Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | - |  |  |  |  |  |
+| Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  |  |  |
 | All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | All methods of `Meter` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | All methods of any instrument are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  |
 | `MeterProvider` allows a `Resource` to be specified. |  | + | + | + | + | + |  | + | + | + | + |  |
-| A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`. |  | + | + | + | + | + |  | + | + | + | + |  |
-| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`. |  | + | - |  | + |  |  |  | + | + | - |  |
+| A specified `Resource` can be associated with all the produced metrics from any `Meter` from the `MeterProvider`. |  | + | + | + | + | + | + | + | + | + | + |  |
+| The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationLibrary` instance stored in the `Meter`. |  | + | - |  | + |  | + |  | + | + | - |  |
 | The supplied `name`, `version` and `schema_url` arguments passed to the `MeterProvider` are used to create an `InstrumentationScope` instance stored in the `Meter`. |  | + | + | + | + |  | + | + | + | + |  |  |
 | Configuration is managed solely by the `MeterProvider`. |  | + | + | + | + |  | + | + | + | + | + |  |
 | The `MeterProvider` provides methods to update the configuration | X | - | - | - | + |  | - |  |  | - | + |  |
@@ -146,7 +146,7 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  |
 | The name of the `View` can be specified. |  | - | + | + | + | + | + | + |  | + | + |  |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  |
-| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  | + |  |  |  |  |  |  |  |  |
+| The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  | + |  |  | - |  |  |  |  |  |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  |
 | The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  |
 | The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  |
@@ -184,9 +184,9 @@ formats is required. Implementing more than one format is optional.
 | A metric Producer accepts an optional metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
 | The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers |  | - |  |  |  |  | - |  |  |  |  |  |
 | The metric SDK's metric Producer implementations uses the metric Filter |  | - |  |  |  |  | - |  |  |  |  |  |
-| Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits) |  | + | + | + | - |  |  |  | - | + | + |  |
-| Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  |  |  | - | - | - |  |
-| Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  |  |  | - | - | + |  |
+| Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits) |  | + | + | + | - |  | - |  | - | + | + |  |
+| Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  | - |  | - | - | - |  |
+| Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  |
 
 ## Logs
 
@@ -195,23 +195,24 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
-| LoggerProvider.Get Logger |  | + | + | + | + | + |  | + |  | + | - |  |
-| LoggerProvider.Get Logger accepts attributes |  | + |  |  | + |  |  | + |  | + |  |  |
-| LoggerProvider.Shutdown |  | + | + | + | + | + |  | + |  | + | - |  |
-| LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + |  | + | - |  |
-| Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + |  | + | - |  |
+| LoggerProvider.Get Logger |  | + | + | + | + | + |  | + | + | + | - |  |
+| LoggerProvider.Get Logger accepts attributes |  | + |  |  | + |  |  | + | + | + |  |  |
+| LoggerProvider.Shutdown |  | + | + | + | + | + |  | + | + | + | - |  |
+| LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + | + | + | - |  |
+| Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + | + | + | - |  |
+| Logger.Emit(LogRecord) with Exception parameter | X |  |  |  |  |  |  |  |  |  |  |  |
 | LogRecord.Set EventName |  | + |  |  |  |  |  |  | + | + |  |  |
 | Logger.Enabled | X | + |  |  |  |  |  | + | + | + |  |  |
 | Ergonomic API | X |  |  |  |  |  |  |  |  |  |  |  |
-| SimpleLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
-| BatchLogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
-| Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + |  | + |  |  |
+| SimpleLogRecordProcessor |  | + | + | + | + | + |  | + | + | + |  |  |
+| BatchLogRecordProcessor |  | + | + | + | + | + |  | + | + | + |  |  |
+| Can plug custom LogRecordProcessor |  | + | + | + | + | + |  | + | + | + |  |  |
 | LogRecordProcessor.Enabled | X | + |  |  |  |  |  |  | + |  |  |  |
-| OTLP/gRPC exporter |  | + | + | + | + |  |  | + |  | + | + |  |
-| OTLP/HTTP exporter |  | + | + | + | + | + |  | + |  | + | + |  |
-| OTLP File exporter |  | - | - |  | - |  |  |  |  | + | - |  |
-| Can plug custom LogRecordExporter |  | + | + | + | + | + |  | + |  | + |  |  |
-| Trace Context Injection |  | + | + |  | + | + |  | + |  | + | + |  |
+| OTLP/gRPC exporter |  | + | + | + | + |  |  | + | + | + | + |  |
+| OTLP/HTTP exporter |  | + | + | + | + | + |  | + | + | + | + |  |
+| OTLP File exporter |  | - | - |  | - |  |  |  | - | + | - |  |
+| Can plug custom LogRecordExporter |  | + | + | + | + | + |  | + | + | + |  |  |
+| Trace Context Injection |  | + | + |  | + | + |  | + | + | + | + |  |
 
 ## Resource
 
@@ -223,7 +224,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Retrieve attributes |  | + | + | + | + | + | + | + | + | + | + | + |
 | [Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + |
-| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + |  |  | - |  |
+| [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + | + |  | - |  |
 
 ## Context Propagation
 
@@ -239,8 +240,8 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Global Propagator |  | + | + | + | + | + | + | + | + | + | + | + |
 | TraceContext Propagator |  | + | + | + | + | + | + | + | + | + | + | + |
 | B3 Propagator |  | + | + | + | + | + | + | + | + | + | + | + |
-| Jaeger Propagator |  | + | + | + | + | + | + | + | + | + | - | + |
-| OT Propagator |  | + | + | + | + |  |  |  |  |  |  |  |
+| Jaeger Propagator | X | + | + | + | + | + | + | + | + | + | - | + |
+| OT Propagator | X | + | + | + | + |  |  |  |  |  | - |  |
 | OpenCensus Binary Propagator |  | + |  |  |  |  |  |  |  |  |  |  |
 | [TextMapPropagator](specification/context/api-propagators.md#textmap-propagator) |  | + | + |  | + | + |  | + |  | + |  |  |
 | Fields |  | + | + | + | + | + | + | + | + | + | + | + |
@@ -256,7 +257,7 @@ Note: Support for environment variables is optional.
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- |
 | OTEL_SDK_DISABLED | - | + | - | + | + | - | + | - | - | - | - |
 | OTEL_RESOURCE_ATTRIBUTES | + | + | + | + | + | + | + | + | + | + | - |
-| OTEL_SERVICE_NAME | + | + | + | + | + | + | + |  | + | + |  |
+| OTEL_SERVICE_NAME | + | + | + | + | + | + | + | + | + | + |  |
 | OTEL_LOG_LEVEL | - | - | + | [-][py1059] | + | - | + |  | - | - | - |
 | OTEL_PROPAGATORS | - | + |  | + | + | + | + | - | - | - | - |
 | OTEL_BSP_* | + | + | + | + | + | + | + | + | - | + | - |
@@ -265,15 +266,15 @@ Note: Support for environment variables is optional.
 | OTEL_EXPORTER_ZIPKIN_* | + | + |  | + | + | - | + | - | - | + | - |
 | OTEL_TRACES_EXPORTER | - | + | + | + | + | + | + | - | - | - |  |
 | OTEL_METRICS_EXPORTER | - | + |  | + | + | - | + | - | - | - | - |
-| OTEL_LOGS_EXPORTER | - | + |  | + | + |  | + |  | - | - |  |
+| OTEL_LOGS_EXPORTER | - | + |  | + | + |  | + | - | - | - |  |
 | OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  |
 | OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | + | + |  | - | + |  |
 | OTEL_SPAN_EVENT_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  |
 | OTEL_SPAN_LINK_COUNT_LIMIT | + | + | + | + | + | + | + | + | - | + |  |
 | OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  |
 | OTEL_LINK_ATTRIBUTE_COUNT_LIMIT | + | - |  | + | + | + | + |  | - | + |  |
-| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT | + |  |  |  | + |  | + |  | - |  |  |
-| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | + |  |  |  | + |  | + |  | - |  |  |
+| OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT | + |  |  |  | + |  | + | - | - |  |  |
+| OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT | + |  |  |  | + |  | + | - | - |  |  |
 | OTEL_TRACES_SAMPLER | + | + | + | + | + | + | + | + | - | - |  |
 | OTEL_TRACES_SAMPLER_ARG | + | + | + | + | + | + | + | + | - | - |  |
 | OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | - | + |  | - | + |  |
@@ -297,15 +298,15 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | The `Parse` operation accepts the configuration YAML file format | + | + | + |  |  |  | + |  | + |  |  |
 | The `Parse` operation performs environment variable substitution | + | + |  |  |  |  | + |  | + |  |  |
 | The `Parse` operation returns configuration model | + | + | + |  |  |  | + |  | + |  |  |
-| The `Parse` operation resolves extension component configuration to `properties` |  | + |  |  |  |  | + |  | + |  |  |
+| The `Parse` operation resolves plugin component configuration to `properties` |  | + |  |  |  |  | + |  | + |  |  |
 | `Create` SDK components | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation accepts configuration model | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation returns `TracerProvider` | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation returns `MeterProvider` | + | + |  |  |  |  | + |  | + |  |  |
 | The `Create` operation returns `LoggerProvider` | + | + |  |  |  |  | + |  | + |  |  |
-| The `Create` operation returns `Propagators` |  | + |  |  |  |  | + |  | + |  |  |
-| The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components |  | + |  |  |  |  | + |  | + |  |  |
-| Register a `ComponentProvider` |  | + |  |  |  |  | + |  | + |  |  |
+| The `Create` operation returns `Propagators` | + | + |  |  |  |  | + |  | + |  |  |
+| The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components |  | + |  |  |  |  | + |  | + |  |  |
+| Register a `PluginComponentProvider` |  | + |  |  |  |  | + |  | + |  |  |
 
 ## Exporters
 
@@ -314,7 +315,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | [Exporter interface](specification/trace/sdk.md#span-exporter) |  | + | + |  | + | + | + | + | + | + | + |  |
 | [Exporter interface has `ForceFlush`](specification/trace/sdk.md#forceflush-2) |  | + | + |  | + | + | + | + | - |  | + |  |
 | Standard output (logging) |  | + | + | + | + | + | + | + | + | + | + | + |
-| In-memory (mock exporter) |  | + | + | + | + | + | + | + | - | + | + | + |
+| In-memory (mock exporter) |  | + | + | + | + | + | + | + | + | + | + | + |
 | **[OTLP](specification/protocol/otlp.md)** | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift |
 | OTLP/gRPC Exporter | * | + | + | + | + |  | + | + | + | + | + | + |
 | OTLP/HTTP binary Protobuf Exporter | * | + | + | + | + | + | + | + | + | + | + | - |

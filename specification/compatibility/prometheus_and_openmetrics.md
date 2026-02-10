@@ -7,7 +7,7 @@ aliases:
 
 # Prometheus and OpenMetrics Compatibility
 
-**Status**: [Development](../document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -78,7 +78,11 @@ at the time of writing:
 
 ## Prometheus Metric points to OTLP
 
+**Status**: [Development](../document-status.md)
+
 ### Metric Metadata
+
+**Status**: [Development](../document-status.md)
 
 The [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information)
 MUST be added as the Name of the OTLP metric. By default, the name SHOULD NOT be altered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
@@ -103,25 +107,37 @@ under the `prometheus.type` key (e.g. `prometheus.type="unknown"`).
 
 ### Counters
 
+**Status**: [Stable](../document-status.md)
+
 A [Prometheus Counter](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
 
 ### Gauges
+
+**Status**: [Development](../document-status.md)
 
 A [Prometheus Gauge](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Gauge.
 
 ### Info
 
+**Status**: [Development](../document-status.md)
+
 A [Prometheus Info](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#info) metric MUST be converted to an OTLP Non-Monotonic Sum unless it is the `target` info metric, which is used to populate [resource attributes](#resource-attributes). A Prometheus Info metric can be thought of as a special-case of the Prometheus Gauge metric which has a value of 1, and whose labels generally stays constant over the life of the process. It is converted to a OTLP Non-Monotonic Sum, rather than an OTLP Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 
 ### StateSet
+
+**Status**: [Development](../document-status.md)
 
 A [Prometheus StateSet](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#stateset) metric MUST be converted to an OTLP Non-Monotonic Sum. A Prometheus StateSet metric can be thought of as a special-case of the Prometheus Gauge which has a 0 or 1 value, and has one metric point for every possible state. It is converted to an OTLP Non-Monotonic Sum, rather than an OTLP Gauge, because the value of 1 is intended to be viewed as a count, which should be summed together when aggregating away labels.
 
 ### Unknown-typed
 
+**Status**: [Development](../document-status.md)
+
 A [Prometheus Unknown](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Gauge.
 
 ### Histograms
+
+**Status**: [Development](../document-status.md)
 
 A [Prometheus Histogram](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Histogram.
 
@@ -133,6 +149,8 @@ Multiple Prometheus histogram metrics MUST be merged together into a single OTLP
 * If `_sum` is not present, the histogram's sum MUST be unset.
 
 ### Native Histograms
+
+**Status**: [Development](../document-status.md)
 
 A [Prometheus Native Histogram](https://prometheus.io/docs/specs/native_histograms/)
 with standard (exponential) schema (i.e. schemas -4 to 8) and which are
@@ -164,6 +182,8 @@ Native Histograms with `Schema` outside of the range [-4, 8] MUST be dropped.
 
 ### Summaries
 
+**Status**: [Development](../document-status.md)
+
 [Prometheus Summary](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Summary.
 
 Multiple Prometheus metrics are merged together into a single OTLP Summary:
@@ -175,6 +195,8 @@ Multiple Prometheus metrics are merged together into a single OTLP Summary:
 
 ### Dropped Types
 
+**Status**: [Development](../document-status.md)
+
 The following Prometheus types MUST be dropped:
 
 * [Prometheus GaugeHistogram](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#gaugehistogram)
@@ -182,9 +204,13 @@ The following Prometheus types MUST be dropped:
 
 ### Start Time
 
+**Status**: [Development](../document-status.md)
+
 Prometheus Cumulative metrics can include the start time using the [`_created` sample series](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#counter-1). When converting Prometheus Counters to OTLP, conversion SHOULD use `_created` where available. When no `_created` metric is available, conversion MUST follow [Cumulative streams: handling unknown start time](../metrics/data-model.md#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
 
 ### Exemplars
+
+**Status**: [Development](../document-status.md)
 
 [Prometheus Exemplars](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars)
 can be attached to Prometheus Histogram bucket metric points and counter metric
@@ -197,6 +223,8 @@ labels not used for the trace and span ids MUST be added to the OpenTelemetry
 exemplar as attributes.
 
 ### Instrumentation Scope
+
+**Status**: [Development](../document-status.md)
 
 Labels with `otel_scope_` prefix MUST be dropped from all metric points
 and used as the Instrumentation Scope name (`otel_scope_name`),
@@ -230,9 +258,11 @@ scope_metrics:
 Metrics which do not have any label with `otel_scope_` prefix
 MUST be assigned an instrumentation scope identifying the entity performing
 the translation from Prometheus to OpenTelemetry (e.g. the collector's
-prometheus receiver).
+Prometheus receiver).
 
 ### Resource Attributes
+
+**Status**: [Development](../document-status.md)
 
 When scraping a Prometheus endpoint, resource attributes MUST be added to the
 scraped metrics to distinguish them from metrics from other Prometheus
@@ -269,7 +299,11 @@ in keys).
 
 ## OTLP Metric points to Prometheus
 
+**Status**: [Development](../document-status.md)
+
 ### Metric Metadata
+
+**Status**: [Development](../document-status.md)
 
 Prometheus Pull exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
 comments for the same metric name to be returned in a single scrape of the
@@ -307,6 +341,8 @@ It also dictates type-specific conversion rules listed below.
 
 ### Instrumentation Scope
 
+**Status**: [Development](../document-status.md)
+
 Prometheus exporters MUST by default add
 the scope name as the `otel_scope_name` label,
 the scope version as the `otel_scope_version` label,
@@ -320,12 +356,16 @@ to avoid conflicts with the already existing `otel_scope_name`, `otel_scope_vers
 
 ### Gauges
 
+**Status**: [Development](../document-status.md)
+
 An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted to
 a Prometheus Unknown-typed metric if the `prometheus.type` key of
 [metric.metadata][metricMetadata] is `unknown`. Otherwise, it MUST be converted
 to a Prometheus Gauge.
 
 ### Sums
+
+**Status**: [Development](../document-status.md)
 
 [OpenTelemetry Sums](../metrics/data-model.md#sums) follows this logic:
 
@@ -345,6 +385,8 @@ Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_c
 
 ### Histograms
 
+**Status**: [Development](../document-status.md)
+
 An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus metric family with the following metrics:
 
 - A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
@@ -355,6 +397,8 @@ An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulati
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
 
 ### Exponential Histograms
+
+**Status**: [Development](../document-status.md)
 
 An [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram) with
 a cumulative aggregation temporality MUST be converted to a Prometheus Native
@@ -391,6 +435,8 @@ metrics with the delta aggregation temporality are dropped.
 
 ### Summaries
 
+**Status**: [Development](../document-status.md)
+
 An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be converted to a Prometheus metric family with the following metrics:
 
 - A single `{name}_count` metric denoting the count field of the summary.
@@ -408,6 +454,8 @@ An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be conv
 
 ### Metric Attributes
 
+**Status**: [Development](../document-status.md)
+
 OpenTelemetry Metric Attributes MUST be converted to
 [Prometheus labels](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).
 String Attribute values are converted directly to Metric Attributes, and
@@ -424,6 +472,8 @@ the lexicographical order of the original keys.
 
 ### Exemplars
 
+**Status**: [Development](../document-status.md)
+
 [Exemplars](../metrics/data-model.md#exemplars) on OpenTelemetry Histograms and Monotonic Sums SHOULD
 be converted to Prometheus exemplars. Exemplars on other OpenTelemetry data
 points MUST be dropped. For Prometheus Remote Write exporters, multiple exemplars are
@@ -439,6 +489,8 @@ Prometheus exemplar unless they would exceed the
 [limit on characters](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars).
 
 ### Resource Attributes
+
+**Status**: [Development](../document-status.md)
 
 In Prometheus exporters, an OpenTelemetry Resource SHOULD be converted to
 a [`target` info metric](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
