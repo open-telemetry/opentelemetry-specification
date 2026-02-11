@@ -46,7 +46,7 @@ weight: 1
   * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
 - [SpanKind](#spankind)
 - [Link](#link)
-- [Concurrency](#concurrency)
+- [Concurrency requirements](#concurrency-requirements)
 - [Included Propagators](#included-propagators)
 - [Behavior of the API in the absence of an installed SDK](#behavior-of-the-api-in-the-absence-of-an-installed-sdk)
 
@@ -833,21 +833,21 @@ The API documentation MUST state that adding links at span creation is preferred
 to calling `AddLink` later, for contexts that are available during span creation,
 because head sampling decisions can only consider information present during span creation.
 
-## Concurrency
+## Concurrency requirements
 
 For languages which support concurrent execution the Tracing APIs provide
 specific guarantees and safeties. Not all of API functions are safe to
 be called concurrently.
 
-**TracerProvider** - all methods are safe to be called concurrently.
+**TracerProvider** - all methods MUST be safe to be called concurrently.
 
-**Tracer** - all methods are safe to be called concurrently.
+**Tracer** - all methods MUST be safe to be called concurrently.
 
-**Span** - All methods of Span are safe to be called concurrently.
+**Span** - all methods MUST be safe to be called concurrently.
 
-**Event** - Events are immutable and safe to be used concurrently.
+**Event** - Events are immutable and MUST be safe to be called concurrently.
 
-**Link** - Links are immutable and safe to be used concurrently.
+**Link** - Links are immutable and MUST be safe to be called concurrently.
 
 ## Included Propagators
 
