@@ -845,6 +845,10 @@ be called concurrently.
 
 **Span** - all methods MUST be safe to be called concurrently.
 
+**Event** - Events are immutable and MUST be safe to be consumed concurrently.
+
+**Link** - Links are immutable and MUST be safe to be consumed concurrently.
+
 ## Included Propagators
 
 See [Propagators Distribution](../context/api-propagators.md#propagators-distribution)
