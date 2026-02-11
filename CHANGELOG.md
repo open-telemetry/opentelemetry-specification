@@ -25,7 +25,7 @@ release.
 
 - Add optional `Exception` parameter to Emit LogRecord.
   ([#4824](https://github.com/open-telemetry/opentelemetry-specification/pull/4824))
-- - Add normative language to the Logging API/SDK spec concurrency requirements.
+- Add normative language to the Logging API/SDK spec concurrency requirements.
   ([#4885](https://github.com/open-telemetry/opentelemetry-specification/pull/4885))
 
 ### Baggage
