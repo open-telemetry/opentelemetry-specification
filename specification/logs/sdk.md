@@ -41,7 +41,7 @@ weight: 3
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
-
+- [Concurrency requirements](#concurrency-requirements)
 <!-- tocstop -->
 
 </details>
@@ -643,3 +643,18 @@ and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
 
 - [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)
+
+## Concurrency requirements
+
+**Status**: [Stable](../document-status.md)
+
+For languages which support concurrent execution the Logging SDKs provide
+specific guarantees and safeties.
+
+**LoggerProvider** - Logger creation, `ForceFlush` and `Shutdown` MUST be safe
+to be called concurrently.
+
+**Logger** - all methods MUST be safe to be called concurrently.
+
+**LogRecordExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
+concurrently.
