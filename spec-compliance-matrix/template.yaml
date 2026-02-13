@@ -234,8 +234,12 @@ sections:
       - name: LoggerProvider.Shutdown
       - name: LoggerProvider.ForceFlush
       - name: Logger.Emit(LogRecord)
+      - name: Logger.Emit(LogRecord) with Exception parameter
+        optional: true
       - name: LogRecord.Set EventName
       - name: Logger.Enabled
+        optional: true
+      - name: Ergonomic API
         optional: true
       - name: SimpleLogRecordProcessor
       - name: BatchLogRecordProcessor
@@ -271,7 +275,9 @@ sections:
       - name: TraceContext Propagator
       - name: B3 Propagator
       - name: Jaeger Propagator
+        optional: true
       - name: OT Propagator
+        optional: true
       - name: OpenCensus Binary Propagator
       - name: '[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)'
       - name: Fields
@@ -320,15 +326,15 @@ sections:
       - name: The `Parse` operation accepts the configuration YAML file format
       - name: The `Parse` operation performs environment variable substitution
       - name: The `Parse` operation returns configuration model
-      - name: The `Parse` operation resolves extension component configuration to `properties`
+      - name: The `Parse` operation resolves plugin component configuration to `properties`
       - name: '`Create` SDK components'
       - name: The `Create` operation accepts configuration model
       - name: The `Create` operation returns `TracerProvider`
       - name: The `Create` operation returns `MeterProvider`
       - name: The `Create` operation returns `LoggerProvider`
       - name: The `Create` operation returns `Propagators`
-      - name: The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components
-      - name: Register a `ComponentProvider`
+      - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
+      - name: Register a `PluginComponentProvider`
     hide_optional_column: true
   - name: Exporters
     features:

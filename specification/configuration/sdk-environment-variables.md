@@ -125,9 +125,9 @@ Known values for `OTEL_PROPAGATORS` are:
 - `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
 - `"b3"`: [B3 Single](../context/api-propagators.md#configuration)
 - `"b3multi"`: [B3 Multi](../context/api-propagators.md#configuration)
-- `"jaeger"`: [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format)
+- `"jaeger"`: [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format) - **Status**: [Deprecated](../document-status.md)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
-- `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
+- `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_) - **Status**: [Deprecated](../document-status.md)
 - `"none"`: No automatically configured propagator.
 
 Known values for `OTEL_TRACES_SAMPLER` are:
@@ -240,9 +240,9 @@ We define environment variables for setting one or more exporters per signal.
 
 | Name                  | Description                 | Default | Type     |
 |-----------------------|-----------------------------|---------|----------|
-| OTEL_TRACES_EXPORTER  | Trace exporter to be used   | "otlp"  | [Enum][] |
-| OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  | [Enum][] |
-| OTEL_LOGS_EXPORTER    | Logs exporter to be used    | "otlp"  | [Enum][] |
+| OTEL_TRACES_EXPORTER  | Trace exporter to be used   | `otlp`  | [Enum][] |
+| OTEL_METRICS_EXPORTER | Metrics exporter to be used | `otlp`  | [Enum][] |
+| OTEL_LOGS_EXPORTER    | Logs exporter to be used    | `otlp`  | [Enum][] |
 
 The implementation MAY accept a comma-separated list to enable setting multiple exporters.
 
@@ -343,11 +343,11 @@ configuration model. Implementations MAY provide a mechanism to customize the
 configuration model parsed from `OTEL_CONFIG_FILE`.
 
 Users are encouraged to
-use [`sdk-migration-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-migration-config.yaml)
+use [`otel-sdk-migration-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/otel-sdk-migration-config.yaml)
 as a starting point for `OTEL_CONFIG_FILE`. This file represents a
 common SDK configuration scenario, and includes environment variable
 substitution references to environment variables which are otherwise ignored.
-Alternatively, [`sdk-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-config.yaml)
+Alternatively, [`otel-sdk-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/otel-sdk-config.yaml)
 offers a common SDK configuration starting point without environment variable
 substitution references.
 

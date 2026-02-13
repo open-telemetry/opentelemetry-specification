@@ -16,11 +16,11 @@ sections:
           - name: Get a Tracer
             status: '+'
           - name: Get a Tracer with schema_url
-            status: '?'
+            status: '+'
           - name: Get a Tracer with scope attributes
-            status: '?'
+            status: '+'
           - name: Associate Tracer with InstrumentationScope
-            status: '?'
+            status: '+'
           - name: Safe for concurrent calls
             status: '+'
           - name: Shutdown (SDK only required)
@@ -116,7 +116,7 @@ sections:
           - name: Links can be recorded on span creation
             status: '+'
           - name: Links can be recorded after span creation
-            status: '?'
+            status: '+'
           - name: Links order is preserved
             status: '+'
       - heading: '[Span events](specification/trace/api.md#add-events)'
@@ -130,9 +130,9 @@ sections:
       - heading: '[Span exceptions](specification/trace/api.md#record-exception)'
         features:
           - name: RecordException
-            status: '+'
+            status: '-'
           - name: RecordException with extra parameters
-            status: '+'
+            status: '-'
       - heading: '[Sampling](specification/trace/sdk.md#sampling)'
         features:
           - name: Allow samplers to modify tracestate
@@ -146,7 +146,7 @@ sections:
           - name: '[IdGenerators](specification/trace/sdk.md#id-generators)'
             status: '+'
           - name: '[SpanLimits](specification/trace/sdk.md#span-limits)'
-            status: '?'
+            status: '+'
           - name: '[Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1)'
             status: '+'
           - name: '[Attribute Limits](specification/common/README.md#attribute-limits)'
@@ -350,37 +350,39 @@ sections:
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
-        status: '?'
+        status: '+'
       - name: LoggerProvider.Get Logger accepts attributes
-        status: '?'
+        status: '+'
       - name: LoggerProvider.Shutdown
-        status: '?'
+        status: '+'
       - name: LoggerProvider.ForceFlush
-        status: '?'
+        status: '+'
       - name: Logger.Emit(LogRecord)
+        status: '+'
+      - name: Logger.Emit(LogRecord) with Exception parameter
         status: '?'
       - name: LogRecord.Set EventName
         status: '+'
       - name: Logger.Enabled
         status: '+'
       - name: SimpleLogRecordProcessor
-        status: '?'
+        status: '+'
       - name: BatchLogRecordProcessor
-        status: '?'
+        status: '+'
       - name: Can plug custom LogRecordProcessor
-        status: '?'
+        status: '+'
       - name: LogRecordProcessor.Enabled
         status: '+'
       - name: OTLP/gRPC exporter
-        status: '?'
+        status: '+'
       - name: OTLP/HTTP exporter
-        status: '?'
+        status: '+'
       - name: OTLP File exporter
-        status: '?'
+        status: '-'
       - name: Can plug custom LogRecordExporter
-        status: '?'
+        status: '+'
       - name: Trace Context Injection
-        status: '?'
+        status: '+'
   - name: Resource
     features:
       - name: Create from Attributes
@@ -398,7 +400,7 @@ sections:
       - name: '[Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism'
         status: '+'
       - name: '[Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment)'
-        status: '?'
+        status: '+'
   - name: Context Propagation
     features:
       - name: Create Context Key
@@ -444,7 +446,7 @@ sections:
       - name: OTEL_RESOURCE_ATTRIBUTES
         status: '+'
       - name: OTEL_SERVICE_NAME
-        status: '?'
+        status: '+'
       - name: OTEL_LOG_LEVEL
         status: '?'
       - name: OTEL_PROPAGATORS
@@ -462,7 +464,7 @@ sections:
       - name: OTEL_METRICS_EXPORTER
         status: '-'
       - name: OTEL_LOGS_EXPORTER
-        status: '?'
+        status: '-'
       - name: OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT
         status: '+'
       - name: OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT
@@ -476,9 +478,9 @@ sections:
       - name: OTEL_LINK_ATTRIBUTE_COUNT_LIMIT
         status: '?'
       - name: OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT
-        status: '?'
+        status: '-'
       - name: OTEL_TRACES_SAMPLER
         status: '+'
       - name: OTEL_TRACES_SAMPLER_ARG
@@ -509,7 +511,7 @@ sections:
         status: '?'
       - name: The `Parse` operation returns configuration model
         status: '?'
-      - name: The `Parse` operation resolves extension component configuration to `properties`
+      - name: The `Parse` operation resolves plugin component configuration to `properties`
         status: '?'
       - name: '`Create` SDK components'
         status: '?'
@@ -523,9 +525,9 @@ sections:
         status: '?'
       - name: The `Create` operation returns `Propagators`
         status: '?'
-      - name: The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components
+      - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
         status: '?'
-      - name: Register a `ComponentProvider`
+      - name: Register a `PluginComponentProvider`
         status: '?'
   - name: Exporters
     features:
@@ -536,7 +538,7 @@ sections:
       - name: Standard output (logging)
         status: '+'
       - name: In-memory (mock exporter)
-        status: '-'
+        status: '+'
       - heading: '**[OTLP](specification/protocol/otlp.md)**'
         features:
           - name: OTLP/gRPC Exporter

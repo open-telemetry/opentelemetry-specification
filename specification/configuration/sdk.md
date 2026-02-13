@@ -13,14 +13,14 @@ weight: 3
   * [In-Memory configuration model](#in-memory-configuration-model)
   * [ConfigProvider](#configprovider)
   * [SDK extension components](#sdk-extension-components)
-    + [ComponentProvider](#componentprovider)
-      - [Supported SDK extension plugins](#supported-sdk-extension-plugins)
-      - [ComponentsProvider operations](#componentsprovider-operations)
-        * [Create Plugin](#create-plugin)
+    + [PluginComponentProvider](#plugincomponentprovider)
+      - [Supported SDK plugin components](#supported-sdk-plugin-components)
+      - [PluginComponentProvider operations](#plugincomponentprovider-operations)
+        * [Create Component](#create-component)
   * [SDK operations](#sdk-operations)
     + [Parse](#parse)
     + [Create](#create)
-    + [Register ComponentProvider](#register-componentprovider)
+    + [Register PluginComponentProvider](#register-plugincomponentprovider)
   * [Examples](#examples)
     + [Via configuration API](#via-configuration-api)
     + [Via OTEL_CONFIG_FILE](#via-otel_config_file)
@@ -71,19 +71,20 @@ mapping node of the [configuration model](./data-model.md).
 
 ### SDK extension components
 
-The SDK supports a variety of
-extension [plugin interfaces](../glossary.md#sdk-plugins), allowing users and
-libraries to customize behaviors including the sampling, processing, and
-exporting of data. In general, the [configuration data model](./data-model.md)
-defines specific types for built-in implementations of these plugin interfaces.
-For example,
+The SDK supports a variety of [plugin components](../glossary.md#sdk-plugins),
+also called "extension plugin interfaces", allowing users and libraries to
+customize behaviors including the sampling, processing, and exporting of data.
+
+The [configuration data model](./data-model.md) SHOULD define specific types
+for built-in implementations of these plugin components. For example,
 the [BatchSpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/f38ac7c3a499ae5f81924ef9c455c27a56130562/schema/tracer_provider.json#L22)
 type refers to the
-built-in [Batching span processor](../trace/sdk.md#batching-processor). The
-schema SHOULD also support the ability to specify custom implementations of
-plugin interfaces defined by libraries or users.
+built-in [Batching span processor](../trace/sdk.md#batching-processor).
 
-For example, a custom [span exporter](../trace/sdk.md#span-exporter) might be configured as follows:
+The schema SHOULD support the ability to specify custom implementations of
+plugin components defined by libraries or users. For example, a
+custom [span exporter](../trace/sdk.md#span-exporter) might be configured as
+follows:
 
 ```yaml
 tracer_provider:
@@ -97,14 +98,14 @@ tracer_provider:
 Here we specify that the tracer provider has a batch span processor
 paired with a custom span exporter named `my-exporter`, which is configured
 with `config-parameter: value`. For this configuration to succeed,
-a [`ComponentProvider`](#componentprovider) must
-be [registered](#register-componentprovider) with `type: SpanExporter`,
+a [`PluginComponentProvider`](#plugincomponentprovider) must
+be [registered](#register-plugincomponentprovider) with `type: SpanExporter`,
 and `name: my-exporter`. When [parse](#parse) is called, the implementation will
 encounter `my-exporter` and translate the corresponding configuration to an
 equivalent [`ConfigProperties`](./api.md#configproperties) representation (
 i.e. `properties: {config-parameter: value}`). When [create](#create) is called,
 the implementation will encounter `my-exporter` and
-invoke [create plugin](#create-plugin) on the registered `ComponentProvider`with
+invoke [create component](#create-component) on the registered `PluginComponentProvider`with
 the `ConfigProperties` determined during `parse`.
 
 Given the inherent differences across languages, the details of extension
@@ -112,57 +113,50 @@ component mechanisms are likely to vary to a greater degree than is the case
 with other APIs defined by OpenTelemetry. This is to be expected and is
 acceptable so long as the implementation results in the defined behaviors.
 
-#### ComponentProvider
+#### PluginComponentProvider
 
-A `ComponentProvider` is responsible for interpreting configuration and returning
-an implementation of a particular type of SDK extension plugin interface.
+A `PluginComponentProvider` is responsible for interpreting configuration and returning
+an implementation of a particular type of SDK plugin component.
 
-`ComponentProvider`s are registered with an SDK implementation of configuration
-via [register](#register-componentprovider). This MAY be done automatically or
+`PluginComponentProvider`s are registered with an SDK implementation of configuration
+via [register](#register-plugincomponentprovider). This MAY be done automatically or
 require manual intervention by the user based on what is possible and idiomatic
-in the language ecosystem. For example in Java, `ComponentProvider`s might be
+in the language ecosystem. For example in Java, `PluginComponentProvider`s might be
 registered automatically using
 the [service provider interface (SPI)](https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html)
 mechanism.
 
-See [create](#create), which details `ComponentProvider` usage in
+See [create](#create), which details `PluginComponentProvider` usage in
 configuration model interpretation.
 
-##### Supported SDK extension plugins
+##### Supported SDK plugin components
 
-The [configuration data model](./data-model.md) SHOULD support configuration of
-all SDK extension plugin interfaces. SDKs SHOULD
-support [registration](#register-componentprovider) of custom implementations of
-SDK extension plugin interfaces via the `ComponentProvider` mechanism.
+The following table lists the current status of all SDK plugin components in the configuration data model:
 
-The following table lists the current status of all SDK extension plugin
-interfaces in the configuration data model:
+| SDK plugin component                                                                        | Declarative config type                                                                                                                                |
+|---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | [ExperimentalResourceDetection](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#experimentalresourcedetection-) |
+| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | [TextMapPropagator](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#textmappropagator-)                         |
+| [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter-)                                   |
+| [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanprocessor-)                                 |
+| [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#sampler-)                                             |
+| [id generator](../trace/sdk.md#id-generators)                                               | not yet available [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)                                                       |
+| [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pullmetricexporter-)                       |
+| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pushmetricexporter-)                       |
+| [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#metricproducer-)                               |
+| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | not yet available [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189)                                                     |
+| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | [LogRecordExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordexporter-)                         |
+| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | [LogRecordProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#logrecordprocessor-)                       |
 
-| SDK extension plugin interface                                                              | Status                                                                             |
-|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
-| [resource detector](../resource/sdk.md#detecting-resource-information-from-the-environment) | +                                                                                  |
-| [text map propagator](../context/api-propagators.md#textmap-propagator)                     | +                                                                                  |
-| [span exporter](../trace/sdk.md#span-exporter)                                              | +                                                                                  |
-| [span processor](../trace/sdk.md#span-processor)                                            | +                                                                                  |
-| [sampler](../trace/sdk.md#sampler)                                                          | +                                                                                  |
-| [id generator](../trace/sdk.md#id-generators)                                               | - [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)   |
-| [pull metric reader](../metrics/sdk.md#metricreader)                                        | +                                                                                  |
-| [push metric exporter](../metrics/sdk.md#metricexporter)                                    | +                                                                                  |
-| [metric producer](../metrics/sdk.md#metricproducer)                                         | +                                                                                  |
-| [exemplar reservoir](../metrics/sdk.md#exemplarreservoir)                                   | - [#189](https://github.com/open-telemetry/opentelemetry-configuration/issues/189) |
-| [log record exporter](../logs/sdk.md#logrecordexporter)                                     | +                                                                                  |
-| [log record processor](../logs/sdk.md#logrecordprocessor)                                   | +                                                                                  |
+##### PluginComponentProvider operations
 
-##### ComponentsProvider operations
+The `PluginComponentProvider` MUST provide the following functions:
 
-The `ComponentsProvider` MUST provide the following functions:
+* [Create Component](#create-component)
 
-* [Create Plugin](#create-plugin)
+###### Create Component
 
-###### Create Plugin
-
-Interpret configuration to create a instance of a SDK extension plugin
-interface.
+Interpret configuration to create an instance of an SDK plugin component.
 
 **Parameters:**
 
@@ -170,18 +164,18 @@ interface.
   configuration specified for the component in
   the [configuration model](#in-memory-configuration-model).
 
-**Returns:** A configured SDK extension plugin interface implementation.
+**Returns:** A configured SDK plugin component.
 
-The plugin interface MAY have properties which are optional or required, and
+The plugin component MAY have properties which are optional or required, and
 have specific requirements around type or format. The set of properties a
-`ComponentProvider` accepts, along with their requirement level and expected
-type, comprise a configuration schema. A `ComponentProvider` SHOULD document its
+`PluginComponentProvider` accepts, along with their requirement level and expected
+type, comprise a configuration schema. A `PluginComponentProvider` SHOULD document its
 configuration schema and include examples.
 
-When Create Plugin is invoked, the `ComponentProvider` interprets `properties`
+When Create Component is invoked, the `PluginComponentProvider` interprets `properties`
 and attempts to extract data according to its configuration schema. If this
 fails (e.g. a required property is not present, a type is mismatches, etc.),
-Create Plugin SHOULD return an error.
+Create Component SHOULD return an error.
 
 ### SDK operations
 
@@ -234,7 +228,7 @@ When encountering a reference to
 a [SDK extension component](#sdk-extension-components) which is not built in to
 the SDK, Parse MUST resolve corresponding configuration to a
 generic [ConfigProperties](./api.md#configproperties) representation as described
-in [Create Plugin](#create-plugin).
+in [Create Component](#create-component).
 
 Parse SHOULD return an error if:
 
@@ -290,13 +284,13 @@ and `ca_file` is not an absolute file path as defined in the property
 description, return an error.
 
 When encountering a reference to
-a [SDK extension component](#sdk-extension-components) which is not built in to
-the SDK, Create MUST resolve the component using [Create Plugin](#create-plugin)
-of the [`ComponentProvider`](#componentprovider) of the corresponding `type`
-and `name` used to [register](#register-componentprovider), including the
-configuration `properties` as an argument. If no `ComponentProvider` is
+an [SDK plugin component](#sdk-extension-components) which is not built in to
+the SDK, Create MUST resolve the component using [Create Component](#create-component)
+of the [`PluginComponentProvider`](#plugincomponentprovider) of the corresponding `type`
+and `name` used to [register](#register-plugincomponentprovider), including the
+configuration `properties` as an argument. If no `PluginComponentProvider` is
 registered with the `type` and `name`, Create SHOULD return an error.
-If [Create Plugin](#create-plugin) returns an error, Create SHOULD propagate the
+If [Create Component](#create-component) returns an error, Create SHOULD propagate the
 error.
 
 This SHOULD return an error if it encounters an error in `configuration` (i.e.
@@ -329,19 +323,19 @@ component from the resolved top level SDK components.
 
 <!-- TODO: https://github.com/open-telemetry/opentelemetry-specification/issues/4804 -->
 
-#### Register ComponentProvider
+#### Register PluginComponentProvider
 
 The SDK MUST provide a mechanism to
-register [`ComponentProvider`](#componentprovider). The mechanism MAY be
+register [`PluginComponentProvider`](#plugincomponentprovider). The mechanism MAY be
 language-specific and automatic. For example, a java implementation might use
 the [service provider interface](https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html)
 mechanism to register implementations of a particular interface
-as `ComponentProvider`s.
+as `PluginComponentProvider`s.
 
 **Parameters:**
 
-* `component_provider` - The `ComponentProvider`.
-* `type` - The type of plugin interface it provides (e.g. SpanExporter, Sampler,
+* `plugin_component_provider` - The `PluginComponentProvider`.
+* `type` - The type of plugin component it provides (e.g. SpanExporter, Sampler,
   etc).
 * `name` - The name used to identify the type of component. This is used
   in [configuration model](./data-model.md) to specify that the
@@ -349,6 +343,11 @@ as `ComponentProvider`s.
 
 The `type` and `name` comprise a unique key. Register MUST return an error if it
 is called multiple times with the same `type` and `name` combination.
+
+SDKs SHOULD represent `type` in a manner that is idiomatic for their language.
+For example, a class literal, an enumeration, or similar.
+See [supported SDK extension plugins](#sdk-extension-components) for the set of
+supported `type` values.
 
 ### Examples
 

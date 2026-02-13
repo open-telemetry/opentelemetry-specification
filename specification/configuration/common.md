@@ -1,6 +1,6 @@
 <!--- Hugo front matter used to generate the website version of this page:
 title: Common Configuration Specification
-linkTitle: Env var
+linkTitle: Common
 aliases:
   - /docs/reference/specification/common
   - /docs/specs/otel/common-configuration
