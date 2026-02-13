@@ -37,6 +37,7 @@ weight: 3
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
         * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
+  * [Start timestamps](#start-timestamps)
   * [Cardinality limits](#cardinality-limits)
     + [Configuration](#configuration-1)
     + [Overflow attribute](#overflow-attribute)
@@ -776,6 +777,29 @@ The implementation SHOULD NOT produce aggregated metric data for a
 previously-observed attribute set which is not observed during a successful
 callback. See [MetricReader](#metricreader) for more details on the persistence
 of metrics across successive collections.
+
+### Start timestamps
+
+**Status**: [Development](../document-status.md)
+
+The start timestamp for a timeseries is the timestamp which best represents
+the first possible moment a measurement for this timeseries could have been
+recorded.
+
+For delta aggregations, the start timestamp MUST equal the previous collection
+interval's timestamp, or the creation time of the instrument if this is the
+first collection interval for the instrument. This implies that all data points
+with delta temporality aggregation for an instrument MUST share the same start
+timestamp.
+
+Cumulative aggregations for synchronous instruments SHOULD use the time of the
+first measurement for each attribute set as the start time. Cumulative
+aggregations for asynchronous instruments SHOULD use the most recent collection
+interval's timestamp. If this is the first collection interval for the
+aggregation, it SHOULD use the creation time of the instrument. To do this, the
+SDK SHOULD track the start timestamp for each unique attribute set of cumulative
+aggregations. All cumulative timeseries MUST use the initial start timestamp in
+subsequent collection intervals.
 
 ### Cardinality limits
 
