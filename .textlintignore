@@ -1,0 +1,4 @@
+.textlintrc.yml
+.cspell/*
+.github/**
+spec-compliance-matrix.md
