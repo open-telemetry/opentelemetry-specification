@@ -169,9 +169,11 @@ provide it.
 For languages which support concurrent execution the Logs APIs provide
 specific guarantees and safeties.
 
-**LoggerProvider** - all methods are safe to be called concurrently.
+**LoggerProvider** - all methods MUST be documented that implementations need to
+be safe for concurrent use by default.
 
-**Logger** - all methods are safe to be called concurrently.
+**Logger** - all methods MUST be documented that implementations need to
+be safe for concurrent use by default.
 
 ## Ergonomic API
 
