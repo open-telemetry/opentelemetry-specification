@@ -88,6 +88,15 @@ DIGIT = %x30-39 ; 0-9
     whitespace except `}`
 * Must follow with `}`
 
+Language implementations MAY support additional prefixes beyond `env:` to access
+language-specific configuration sources (e.g., Java system properties). Such
+prefixes MUST follow the same syntactic structure as `env:` (prefix followed by
+colon). For example, Java implementations may support `sys:` to access system
+properties: `${sys:otel.service.name}`. Language-specific prefixes enable
+idiomatic configuration patterns while maintaining the universal `env:` prefix
+for cross-language compatibility. Language implementations SHOULD document any
+additional prefixes they support.
+
 `INVALID-SUBSTITUTION-REF` defines an invalid environment variable substitution
 reference:
 
