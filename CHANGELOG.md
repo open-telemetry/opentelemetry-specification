@@ -31,6 +31,9 @@ release.
 
 ### SDK Configuration
 
+- Mark significant portions of declarative configuration as stable.
+  ([#4568](https://github.com/open-telemetry/opentelemetry-specification/pull/4568))
+
 ### Supplementary Guidelines
 
 ### OTEPs
