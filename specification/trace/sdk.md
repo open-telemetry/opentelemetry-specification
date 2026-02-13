@@ -82,6 +82,7 @@ weight: 3
     + [Examples](#examples)
       - [Go SpanExporter Interface](#go-spanexporter-interface)
       - [Java SpanExporter Interface](#java-spanexporter-interface)
+- [Concurrency requirements](#concurrency-requirements)
 
 <!-- tocstop -->
 
@@ -1271,3 +1272,21 @@ public interface SpanExporter {
  void shutdown();
 }
 ```
+
+## Concurrency requirements
+
+For languages which support concurrent execution the Tracing SDKs provide
+specific guarantees and safeties.
+
+**Tracer Provider** - Tracer creation, `ForceFlush` and `Shutdown` MUST be safe
+to be called concurrently.
+
+**Tracer** - `Enabled` MUST be safe to be called concurrently.
+
+**Sampler** -  `ShouldSample` and `GetDescription` MUST be safe to be called
+concurrently.
+
+**Span processor** - all methods MUST be safe to be called concurrently.
+
+**Span Exporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
+concurrently.
