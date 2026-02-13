@@ -839,15 +839,20 @@ For languages which support concurrent execution the Tracing APIs provide
 specific guarantees and safeties. Not all of API functions are safe to
 be called concurrently.
 
-**TracerProvider** - all methods MUST be safe to be called concurrently.
+**TracerProvider** - all methods MUST be documented that implementations need to
+be safe for concurrent use by default.
 
-**Tracer** - all methods MUST be safe to be called concurrently.
+**Tracer** - all methods MUST be documented that implementations need to be safe
+for concurrent use by default.
 
-**Span** - all methods MUST be safe to be called concurrently.
+**Span** - all methods MUST be documented that implementations need to be safe
+for concurrent use by default.
 
-**Event** - Events are immutable and MUST be safe to be consumed concurrently.
+**Event** - Events are immutable and MUST be documented that implementations
+need to be safe for concurrent use by default.
 
-**Link** - Links are immutable and MUST be safe to be consumed concurrently.
+**Link** - Links are immutable and MUST be documented that implementations need
+to be safe for concurrent use by default.
 
 ## Included Propagators
 
