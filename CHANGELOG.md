@@ -60,6 +60,9 @@ release.
   `PluginComponentProvider`, `CreatePlugin` to `CreateComponent` in effort to
   use consistent vocabulary
   ([#4806](https://github.com/open-telemetry/opentelemetry-specification/pull/4806))
+- Declarative configuration: allow language-specific prefixes in environment
+  variable substitution.
+  ([#4891](https://github.com/open-telemetry/opentelemetry-specification/pull/4891))
 
 ### Supplementary Guidelines
 
