@@ -2,28 +2,29 @@
 
 <!-- toc -->
 
-- [Motivation](#motivation)
-- [Details](#details)
-  * [Listing available schema versions](#listing-available-schema-versions)
-  * [Semantic Conventions Schemas](#semantic-conventions-schemas)
-  * [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
-  * [Building and publishing arbitrary semantic convention registries](#building-and-publishing-arbitrary-semantic-convention-registries)
-    + [Creating a registry that depends on OpenTelemetry semantic conventions](#creating-a-registry-that-depends-on-opentelemetry-semantic-conventions)
-  * [Dependency resolution mechanism](#dependency-resolution-mechanism)
-  * [Schema URL for OTel schemas](#schema-url-for-otel-schemas)
-- [Trade-offs and mitigations](#trade-offs-and-mitigations)
-  * [Schema Transformations](#schema-transformations)
-    + [Migration option 1: upgrades based on resolved schema only](#migration-option-1-upgrades-based-on-resolved-schema-only)
-    + [Migration option 2: generate diff on demand](#migration-option-2-generate-diff-on-demand)
-    + [Migration option 3: publish diff in the future](#migration-option-3-publish-diff-in-the-future)
-  * [Documentation and code generation](#documentation-and-code-generation)
-- [Prior art and alternatives](#prior-art-and-alternatives)
-- [Open questions](#open-questions)
-  * [Schema transformations evolution](#schema-transformations-evolution)
-  * [Where should conventions belong?](#where-should-conventions-belong)
-  * [What's the granularity for Collector and instrumentation-specific conventions](#whats-the-granularity-for-collector-and-instrumentation-specific-conventions)
-- [Prototypes](#prototypes)
-- [Future possibilities](#future-possibilities)
+- [Semantic Convention Schema v2](#semantic-convention-schema-v2)
+  - [Motivation](#motivation)
+  - [Details](#details)
+    - [Listing available schema versions](#listing-available-schema-versions)
+    - [Semantic Conventions Schemas](#semantic-conventions-schemas)
+    - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
+    - [Building and publishing arbitrary semantic convention registries](#building-and-publishing-arbitrary-semantic-convention-registries)
+      - [Creating a registry that depends on OpenTelemetry semantic conventions](#creating-a-registry-that-depends-on-opentelemetry-semantic-conventions)
+    - [Dependency resolution mechanism](#dependency-resolution-mechanism)
+    - [Schema URL for OTel schemas](#schema-url-for-otel-schemas)
+  - [Trade-offs and mitigations](#trade-offs-and-mitigations)
+    - [Schema Transformations](#schema-transformations)
+      - [Migration option 1: upgrades based on resolved schema only](#migration-option-1-upgrades-based-on-resolved-schema-only)
+      - [Migration option 2: generate diff on demand](#migration-option-2-generate-diff-on-demand)
+      - [Migration option 3: publish diff in the future](#migration-option-3-publish-diff-in-the-future)
+    - [Documentation and code generation](#documentation-and-code-generation)
+  - [Prior art and alternatives](#prior-art-and-alternatives)
+  - [Open questions](#open-questions)
+    - [Schema transformations evolution](#schema-transformations-evolution)
+    - [Where should conventions belong?](#where-should-conventions-belong)
+    - [What's the granularity for Collector and instrumentation-specific conventions](#whats-the-granularity-for-collector-and-instrumentation-specific-conventions)
+  - [Prototypes](#prototypes)
+  - [Future possibilities](#future-possibilities)
 
 <!-- tocstop -->
 
@@ -39,7 +40,7 @@ common concepts like HTTP, as well as telemetry produced by various OTel instrum
 
 OTel Collector and language-specific instrumentations should be able to publish their
 own conventions that are only applicable within their ecosystem. They should
-also have a means to communicate the schema they use via [Schema URL](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/schemas/README.md#schema-url).
+also have a means to communicate the schema they use via [Schema URL](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.54.0/specification/schemas/README.md#schema-url).
 
 Instrumentations that are not hosted by OTel should be able to document and publish
 their own conventions that may take a dependency on the OTel ones.
@@ -78,25 +79,26 @@ Here's an example of the *manifest*:
 ```yaml
 file_format: 2.0.0
 stability: development
-version: 1.39.0-dev
-resolved_schema_url: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/schema-v1.39.0-dev.yaml
+# schema_url serves as the primary source of registry name and version
+# registry name (everything before version) must be unique
+schema_url: https://opentelemetry.io/schemas/semconv/1.40.0-dev
+# MAY point to a file under schema_url or to an arbitrary location.
+resolved_schema_uri: https://opentelemetry.io/schemas/semconv/1.40.0-dev/resolved.yaml
 
 # metadata
-name: open-telemetry
 description: OpenTelemetry Semantic Conventions
-repository_url: https://github.com/open-telemetry/semantic-conventions
 
 # future
-# diff_url: ...
-# all_in_one_url: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/v1.39.0-dev.tar.gz
+# diff_uri: ...
+# all_in_one_uri: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/v1.40.0-dev.tar.gz
 ```
 
 The manifest contains metadata about the semantic convention registry including its
-version, stability, and `resolved_schema_url`.
+version, stability, and `resolved_schema_uri`.
 
-The `resolved_schema_url` MUST be a valid URL that returns a YAML file with the [*resolved* schema](#semantic-conventions-schemas).
+The `resolved_schema_uri` MUST be a valid URL that returns a YAML file with the [*resolved* schema](#semantic-conventions-schemas).
 
-The service hosting Schema URL MUST support gzip compression that the caller MAY control with `Content-Encoding`
+The service hosting the Schema URL MUST support gzip compression that the caller MAY control with `Content-Encoding`
 (this is already supported by `opentelemetry.io`).
 
 The manifest format can evolve in a non-breaking manner. For example, we may start
@@ -116,10 +118,10 @@ for details on the `-dev` suffix.
 
 ### Listing available schema versions
 
-The service hosting Schema URL SHOULD also support listing available versions.
+The service hosting the Schema URL SHOULD also support listing available versions.
 
 [Schema URL format](/specification/schemas/README.md#schema-url) is defined as `http[s]://server[:port]/path/<version>`,
-so the service should return a list of available Schema URLs on `http[s]://server[:port]/path/`.
+so the service SHOULD return a list of available Schema URLs on `http[s]://server[:port]/path/`.
 
 For example, `https://opentelemetry.io/schemas` would return
 
@@ -142,6 +144,7 @@ For example, a metric could be defined in the following way in the *definition* 
 
 ```yaml
 # definition schema
+file_format: definition/2
 attributes:
 - key: my.operation.name
   type: string
@@ -173,6 +176,7 @@ distribution and in-memory representation.
 ```yaml
 # resolved schema
 file_format: resolved/2.0.0  # this could be versioned independently of manifest format
+schema_url: https://acme.com/schemas/1.0.0
 attribute_catalog:
 ...
 - key: my.operation.name
@@ -199,8 +203,8 @@ registry:
       ...
 ```
 
-Resolved schema is formally documented as [JSON schema](https://github.com/lmolkova/weaver/blob/46c2a1d6c977d59fca4a827ec15ffd3a9ca5db1b/schemas/semconv.resolved.v2.json),
-see [overview](https://github.com/lmolkova/weaver/blob/46c2a1d6c977d59fca4a827ec15ffd3a9ca5db1b/schemas/semconv-schemas.md#resolved-schema).
+Resolved schema is formally documented as a [JSON schema](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv.resolved.v2.json),
+see [overview](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv-schemas.md#resolved-schema).
 
 As a data point on volume: the resolved schema for [OTel Semantic Conventions v1.38.0](https://github.com/open-telemetry/semantic-conventions/releases/tag/v1.38.0)
 is approximately 1.2MB uncompressed and 200KB compressed.
@@ -238,12 +242,12 @@ described above.
 
 Weaver will provide `weaver registry package --schema_url <url>` to read, resolve, and produce publication
 artifacts (manifest, resolved schema, and any future additions). The command consumes
-*definition* manifest and local semconv definitions, then outputs the resolved schema
+a *definition* manifest and local semconv definitions, then outputs the resolved schema
 and the publication manifest.
 
 ```yaml
 Local registry repository
-  - registry_manifest.yaml (definition manifest)
+  - manifest.yaml (definition manifest)
   - semconv definitions (attributes, entities, signals)
   - dependencies (optional)
             |
@@ -260,10 +264,8 @@ at development time and is used to create the published manifest.
 Here's an example of a definition manifest:
 
 ```yaml
-name: acme-conventions
+schema_url: https://acme.com/schemas/1.0.0
 description: This registry contains semantic conventions for Acme Corp.
-version: 1.0.0
-repository_url: https://github.com/acme/conventions
 stability: stable
 ```
 
@@ -282,11 +284,16 @@ version: 1.0.0-dev
 repository_url: https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/jmx-metrics/library/activemq.md
 stability: development
 dependencies:
-  - name: otel
-    registry_path: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/v1.38.0.zip[model]
+  - schema_url: https://opentelemetry.io/schemas/semconv/1.39.0-dev
+    # schema_url is the primary distribution mechanism and a source of
+    # unique registry name and version.
+    # To support v1 registries and for local development needs, it's possible to
+    # provide alternative location via registry_path property
+    # which may be a local folder or a link to the registry on GitHub
+    registry_path: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/v1.39.0.zip[model]
 ```
 
-This example is simplified—in practice, we would likely include all Java-instrumentation-
+This example is simplified — in practice, we would likely include all Java-instrumentation-
 specific conventions in this registry and publish one Schema URL for all of them.
 
 Here's how the definition might look:
@@ -318,7 +325,7 @@ imports:
 
 ```
 
-The *resolved* schema contains
+The *resolved* schema contains:
 
 - everything defined in the registry
 - definitions and refinements (from dependencies) for signals and attributes imported or referenced explicitly
@@ -335,8 +342,9 @@ Details to be fleshed out.
 
 Principles:
 
-- **Latest version wins:** When a registry depends on multiple versions of the same registry,
-  only the latest version of that dependency is used during the resolution process.
+- **Latest version wins:** When a registry depends (transiently) on multiple versions
+  of the same registry, only the latest version of that dependency is used during
+  the resolution process.
   - If an object is referenced but only exists in an older version that was not selected,
     the resolution fails.
 - **Only exact dependency versions are supported:** Version ranges are not supported at this time.
@@ -344,6 +352,7 @@ Principles:
   event name, span type, entity type, or attribute key. Signal refinements have a unique ID.
 - **Conflicts are not allowed:** If the resolution process discovers multiple attributes
   with the same key, or multiple signals or refinements with the same identity, the resolution fails.
+  This rule applies within a single registry and across all its dependencies.
 - **Source tracking:** Attributes and signal definitions, including their refinements,
   include provenance metadata identifying the source registry and its version
 
@@ -352,7 +361,7 @@ Principles:
 The Schema URL pattern today does not provide per-registry differentiation —
 `opentelemetry.io/schemas/{version}`.
 
-OTel components that want to publish their conventions, SHOULD follow a new
+OTel components that want to publish their conventions SHOULD follow a new
 pattern `opentelemetry.io/schemas/{component}/{version}`.
 
 For example:
@@ -404,7 +413,7 @@ schema files.
 OpenTelemetry Semantic Conventions don't allow removing attributes, metrics,
 and other identifiable signals from the registry.
 
-When an attribute or signal is no longer recommended, it gets deprecated. Backward compatibility checks enforce this policy.
+When an attribute or signal is no longer recommended, it is deprecated. Backward compatibility checks enforce this policy.
 
 Here's an example of deprecation in the resolved schema:
 
@@ -453,8 +462,8 @@ registry:
 ...
 ```
 
-The diff schema is formally documented as JSON schema; see [overview](https://github.com/lmolkova/weaver/blob/46c2a1d6c977d59fca4a827ec15ffd3a9ca5db1b/schemas/semconv-schemas.md#diff-schema)
-and [full schema](https://github.com/lmolkova/weaver/blob/46c2a1d6c977d59fca4a827ec15ffd3a9ca5db1b/schemas/semconv.diff.v2.json).
+The diff schema is formally documented as a JSON schema; see [overview](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv-schemas.md#diff-schema)
+and [full schema](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv.diff.v2.json).
 
 <details>
 
@@ -479,10 +488,10 @@ At that point, we could update `weaver registry package` to allow diff-generatio
 weaver registry package --include-diff --schema_url <url>
 ```
 
-and consider extending published manifest file format to include
-`diff_url` field.
+and consider extending the published manifest file format to include
+a `diff_url` field.
 
-This can be done in non-breaking manner.
+This can be done in a non-breaking manner.
 
 ### Documentation and code generation
 
@@ -491,7 +500,7 @@ Weaver will continue to support this format while the majority of OTel code-gene
 scripts still use it.
 
 In addition, Weaver allows opting into schema v2. Code and documentation
-generation then receives [materialized resolved schema v2](https://github.com/lmolkova/weaver/blob/46c2a1d6c977d59fca4a827ec15ffd3a9ca5db1b/schemas/semconv-schemas.md#materialized-resolved-schema).
+generation then receives [materialized resolved schema v2](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv-schemas.md#materialized-resolved-schema).
 
 Migration to v2 involves minor changes to Jinja2 templates and Weaver config files.
 Migration steps and recipes will be documented. There should be no impact on the
@@ -499,7 +508,7 @@ generated documentation or artifacts affecting end users.
 
 ## Prior art and alternatives
 
-See [Telemetry Schema](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/schemas/README.md)
+See [Telemetry Schema](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.54.0/specification/schemas/README.md)
 for the current state of the art.
 
 See the [Semantic Conventions YAML schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-syntax.md) for the
@@ -568,8 +577,8 @@ in a release preparation step would:
 - Resolve schema.
 - Generate manifest.
 - TODOs:
-  - generate stable and not stable.
-  - publish SemConv artifact as a GitHub release asset (and potentially on opentelemetry.io).
+  - Generate stable and development versions.
+  - Publish SemConv artifact as a GitHub release asset (and potentially on opentelemetry.io).
 
 [Decentralized conventions example](https://github.com/open-telemetry/opentelemetry-weaver-examples/pull/33).
 Generating [OTel Collector transformprocessor config to run schema transformations](https://github.com/open-telemetry/opentelemetry-weaver-examples/pull/36).
