@@ -224,13 +224,10 @@ registry:
       ...
 ```
 
-Resolved schema file is immutable after it's published for a given version.
-Manifest and resolved schema are versioned together and each release MUST use
-a unique `schema_url`.
+The resolved schema file is immutable once published for a given version.
+The manifest and resolved schema are versioned together, and each release MUST use a unique `schema_url`.
 
-
-If resolved schema needs to be updated, a new version of the manifest and resolved schema
-MUST be released.
+If the resolved schema needs to change, a new version of both the manifest and the resolved schema MUST be released.
 
 Resolved schema is formally documented as a [JSON schema](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv.resolved.v2.json),
 see [overview](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv-schemas.md#resolved-schema).
@@ -274,21 +271,19 @@ artifacts (manifest, resolved schema, and any future additions). The command con
 a *definition* manifest and local semconv definitions, then outputs the resolved schema
 and the publication manifest.
 
-```yaml
-Local registry repository
-  - manifest.yaml (definition manifest)
-  - semconv definitions (attributes, entities, signals)
-  - dependencies (optional)
-            |
-            | weaver registry package
-            v
-Publication artifacts (to be published on provided Schema URL)
-  - manifest.yaml (publication manifest, file_format: 2.0.0)
-  - resolved-schema.yaml
-```
+**Local registry repository:**
+
+- semconv definitions (attributes, entities, signals)
+- `manifest.yaml` (definition manifest, includes information about dependencies)
 
 The *definition manifest* contains information about the registry that's available
-at development time and is used to create the published manifest.
+at development time and is used to create the publication manifest.
+
+**Publication artifacts:**
+
+- `manifest.yaml` (publication manifest, `file_format: 2.0.0`). To be published at the Schema URL.
+- `resolved-schema.yaml`. To be published at the URL specified in the manifest.
+
 
 Here's an example of a definition manifest:
 
@@ -533,7 +528,7 @@ At that point, we could update `weaver registry package` to allow diff-generatio
 weaver registry package --include-diff --schema_url <url>
 ```
 
-and consider extending the published manifest file format to include
+and consider extending the publication manifest file format to include
 a `diff_url` field.
 
 This can be done in a non-breaking manner.
@@ -599,7 +594,7 @@ There are many design decisions to be made and gaps to be covered:
 - Tooling that validates transformations against semantic conventions and telemetry.
 
 We haven't gone through an extensive development and feedback cycle
-and don't have confidence yet in how to solve these problems.
+and don't yet have confidence in how to solve these problems.
 
 ### Where should conventions belong?
 
