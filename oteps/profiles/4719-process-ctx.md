@@ -173,6 +173,9 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
 
+After the first successful read, if using polling to check for updates, readers can assume that if `published_at_ns` has not changed, then the read payload is still consistent.
+That is, the `published_at_ns` can be thought of as an "cache key" for parsing the payload.
+
 ### Updating Protocol
 
 When the attributes change, the process context mapping should be updated following these steps:
