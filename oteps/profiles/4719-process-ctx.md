@@ -182,7 +182,7 @@ When the attributes change, the process context mapping should be updated follow
 3. **Memory barrier**: Ensure the write to `published_at_ns` is visible before proceeding.
 4. **Update payload fields**: Update the `payload` pointer and `payload_size` fields to point to the new payload.
 5. **Memory barrier**: Ensure the payload fields are updated before finalizing the timestamp.
-6. **Signal update complete**: Write the new timestamp to `published_at_ns`.
+6. **Signal update complete**: Write the new timestamp to `published_at_ns`, this is an aligned word-size write and thus expected to be atomic.
 7. **Name mapping**: Re-issue the `prctl(PR_SET_VMA, ...)` call to name the mapping. This step SHOULD be done unconditionally, although naming mappings is not always supported by the kernel.
 
 As the reader checks `published_at_ns` before and after reading the payload, it will detect concurrent updates and avoid concurrency issues.
