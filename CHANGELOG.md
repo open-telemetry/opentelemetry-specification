@@ -31,11 +31,11 @@ release.
 
 ### SDK Configuration
 
-### Supplementary Guidelines
-
 - Declarative configuration: allow language-specific prefixes in environment
   variable substitution.
   ([#4891](https://github.com/open-telemetry/opentelemetry-specification/pull/4891))
+
+### Supplementary Guidelines
 
 ### OTEPs
 
@@ -86,10 +86,6 @@ release.
   `PluginComponentProvider`, `CreatePlugin` to `CreateComponent` in effort to
   use consistent vocabulary
   ([#4806](https://github.com/open-telemetry/opentelemetry-specification/pull/4806))
-
-### Supplementary Guidelines
-
-### OTEPs
 - Declarative configuration: Update instrumentation config behavior to return
   empty object when not set
   ([#4817](https://github.com/open-telemetry/opentelemetry-specification/pull/4817))
