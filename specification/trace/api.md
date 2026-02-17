@@ -848,11 +848,9 @@ for concurrent use by default.
 **Span** - all methods MUST be documented that implementations need to be safe
 for concurrent use by default.
 
-**Event** - Events are immutable and MUST be documented that implementations
-need to be safe for concurrent use by default.
+**Event** - Events are immutable and MUST be safe for concurrent use by default.
 
-**Link** - Links are immutable and MUST be documented that implementations need
-to be safe for concurrent use by default.
+**Link** - Links are immutable and MUST be safe for concurrent use by default.
 
 ## Included Propagators
 
