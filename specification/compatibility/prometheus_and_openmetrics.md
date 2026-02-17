@@ -186,11 +186,11 @@ Native Histograms with `Schema` outside of the range [-4, 8] MUST be dropped.
 
 [Prometheus Summary](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an [OTLP Summary](https://opentelemetry.io/docs/specs/otel/metrics/data-model/#summary-legacy).
 
-Prometheus Summary Quantiles become OTLP Summary Quantiles. Prometheus Summary Count becomes OTLP Summary Count and Prometheus Summary Sum becomes OTLP Summary Sums.
+Prometheus Summary Quantiles become OTLP Summary Quantiles. Prometheus Summary Count becomes OTLP Summary Count and Prometheus Summary Sum becomes OTLP Summary Sum.
 
 In the text format, samples without suffixes have the `quantile` label to identify the quantile points of the Prometheus Summary. Extra samples with the same metric name but with the suffixes `_count` and `_sum` are used to identify the Prometheus Summary Count and Sum respectively.
 
-Multiple samples with same metric name MUST bemerged together into a single OTLP Summary.
+In text formats where Prometheus Summaries are represented by multiple samples, samples with same [metric family](https://github.com/prometheus/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily) name MUST be merged together into a single OTLP Summary.
 
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the summary's sum MUST be [set to zero.](https://github.com/open-telemetry/opentelemetry-proto/blob/d8729d40f629dba12694b44c4c32c1eab109b00a/opentelemetry/proto/metrics/v1/metrics.proto#L601)
