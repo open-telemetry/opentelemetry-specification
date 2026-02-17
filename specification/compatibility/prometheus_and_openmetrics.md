@@ -188,7 +188,7 @@ Native Histograms with `Schema` outside of the range [-4, 8] MUST be dropped.
 
 Prometheus Summary Quantiles become OTLP Summary Quantiles. Prometheus Summary Count becomes OTLP Summary Count and Prometheus Summary Sum becomes OTLP Summary Sums.
 
-In the text format, samples without suffixes have the `quantile` label to identify the quantile points of the Prometheus Summary. Extra samples with the same metric name but with the suffixes `_count` and `_sum` are used to identify the Prometheus Summary Count and Sum respectively. 
+In the text format, samples without suffixes have the `quantile` label to identify the quantile points of the Prometheus Summary. Extra samples with the same metric name but with the suffixes `_count` and `_sum` are used to identify the Prometheus Summary Count and Sum respectively.
 
 Multiple samples with same metric name MUST bemerged together into a single OTLP Summary.
 
