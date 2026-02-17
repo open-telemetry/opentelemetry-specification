@@ -63,7 +63,7 @@ Libraries which want a simple migration can choose to replace instrumentation in
 
 Starting with a library using OpenCensus Instrumentation:
 
-1. Annouce to users the library's transition from OpenCensus to OpenTelemetry, and recommend users adopt OC bridges.
+1. Announce to users the library's transition from OpenCensus to OpenTelemetry, and recommend users adopt OC bridges.
 2. Change unit tests to use the OC bridges, and use OpenTelemetry unit testing frameworks.
 3. After a notification period, migrate instrumentation line-by-line to OpenTelemetry. The notification period should be long for popular libraries.
 4. Remove the OC bridge from unit tests.
@@ -195,11 +195,11 @@ using the OpenCensus <-> OpenTelemetry bridge.
 
 ## OpenCensus Binary Context Propagation
 
-The shim will provide an OpenCensus `BinaryPropogator` implementation which
-maps [OpenCenus binary trace context format](https://github.com/census-instrumentation/opencensus-specs/blob/master/encodings/BinaryEncoding.md#trace-context) to an OpenTelemetry
+The shim will provide an OpenCensus `BinaryPropagator` implementation which
+maps [OpenCensus binary trace context format](https://github.com/census-instrumentation/opencensus-specs/blob/master/encodings/BinaryEncoding.md#trace-context) to an OpenTelemetry
 [SpanContext](../overview.md#spancontext).
 
-This adapter MUST provide an implementation of OpenCensus `BinaryPropogator` to
+This adapter MUST provide an implementation of OpenCensus `BinaryPropagator` to
 write OpenCensus binary format using OpenTelemetry's context.  This
 implementation may be drawn from OpenCensus if applicable.
 
