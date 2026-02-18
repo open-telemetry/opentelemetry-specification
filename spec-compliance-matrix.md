@@ -188,6 +188,7 @@ formats is required. Implementing more than one format is optional.
 | Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  | - |  | - | - | - |  |
 | Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  |
 | Metric SDK supports per-timeseries cumulative start timestamps |  |  |  |  |  |  |  |  |  |  |  |  |
+| The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter |  | - | - | - | - | - | - | - | - | - | - | - |
 
 ## Logs
 
