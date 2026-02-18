@@ -45,6 +45,11 @@ The header is stored in a memory mapping with the following format:
 
 The `payload` can optionally be placed after the header (with the `payload` pointer field correctly pointing at it) or elsewhere in the process memory.
 
+The `published_at_ns` is used for detecting the context is consistent/during updates and thus:
+
+* `published_at_ns` being zero is reserved to indicate the context is being mutated and is not ready for reading
+* Changes to `published_at_ns` do not need to guarantee monotonicity, but every update must provide a different value for this timestamp
+
 ### Payload Format
 
 The payload uses protobuf with the `ProcessContext` message:
@@ -165,7 +170,9 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 
 4. **Read payload**: Copy `payload_size` bytes from `payload` pointer it into reader-local memory
 
-5. **Re-read header**: If `published_at_ns` has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context. If `published_at_ns` is different from the value read in step 2, restart at 2 (MAY skip signature and version validation after mapping is considered established).
+5. **Re-read header**: If `published_at_ns` has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
+If `published_at_ns` is different from the value read in step 2, restart at 2 (MAY skip signature and version validation after mapping is considered established).
+`published_at_ns` is not guaranteed to be monotonic, and readers should process an update even if the latest `published_at_ns` is smaller than a previous `published_at_ns`.
 
 6. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
 
@@ -186,6 +193,7 @@ When the attributes change, the process context mapping should be updated follow
 4. **Update payload fields**: Update the `payload` pointer and `payload_size` fields to point to the new payload.
 5. **Memory barrier**: Ensure the payload fields are updated before finalizing the timestamp.
 6. **Signal update complete**: Write the new timestamp to `published_at_ns`, this is an aligned word-size write and thus expected to be atomic.
+   This `published_at_ns` does not need to be monotonic but it must be different from the value present before the update started.
 7. **Name mapping**: Re-issue the `prctl(PR_SET_VMA, ...)` call to name the mapping. This step MUST be done unconditionally, although naming mappings is not always supported by the kernel.
 
 As the reader checks `published_at_ns` before and after reading the payload, it will detect concurrent updates and avoid concurrency issues.
