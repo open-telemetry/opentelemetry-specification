@@ -63,9 +63,10 @@ defined using
 the [Augmented Backus-Naur Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
-SUBSTITUTION-REF = "${" ["env:"] ENV-NAME [":-" DEFAULT-VALUE] "}"; valid substitution reference
+SUBSTITUTION-REF = "${" [PREFIX ":"] ENV-NAME [":-" DEFAULT-VALUE] "}"; valid substitution reference
 INVALID-SUBSTITUTION-REF = "${" *(VCHAR-WSP-NO-RBRACE) "}"; invalid substitution reference
 
+PREFIX = ALPHA *(ALPHA / DIGIT / "_"); substitution prefix, e.g. "env" (universal) or language-specific
 ENV-NAME = (ALPHA / "_") *(ALPHA / DIGIT / "_"); the name of the variable to be substituted
 DEFAULT-VALUE = *(VCHAR-WSP-NO-RBRACE); any number of VCHAR-WSP-NO-RBRACE
 VCHAR-WSP-NO-RBRACE = %x21-7C / "~" / WSP; printable chars and whitespace, except }
@@ -77,7 +78,7 @@ DIGIT = %x30-39 ; 0-9
 `SUBSTITUTION-REF` defines a valid environment variable substitution reference:
 
 * Must start with `${`
-* Optionally followed by `env:`
+* Optionally followed by `PREFIX:`, where `PREFIX` is `env` (universal) or a language-specific identifier
 * Must follow with `REF-NAME`, the name of the environment variable to be
   substituted
   * Must start with alphabetic or `_` character
@@ -110,7 +111,7 @@ non-normative.
 
 ```regexp
 // SUBSTITUTION-REF
-\$\{(?:env:)?(?<ENV-NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT-VALUE>[^\n]*))?\}
+\$\{(?:(?<PREFIX>[a-zA-Z][a-zA-Z0-9_]*):)?(?<ENV-NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT-VALUE>[^\n]*))?\}
 
 // INVALID-SUBSTITUTION-REF
 \$\{(?<INVALID_IDENTIFIER>[^}]+)\}
