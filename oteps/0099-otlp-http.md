@@ -26,14 +26,14 @@ gRPC has certain benefits there are also drawbacks:
   usage impossible. For example AWS ALB does not support gRPC connections.
 
 - gRPC is a relatively big dependency, which some clients are not willing to
-  take. Plain HTTP is a smaller dependency and is built in the standard
+  take. Plain HTTP is a smaller dependency and is built-in the standard
   libraries of many programming languages.
 
 ## OTLP/HTTP Protocol Details
 
 This proposal keeps the existing specification of OTLP over gRPC transport
 (OTLP/gRPC for short) and defines an additional way to use OTLP protocol over
-HTTP transport (OTLP/HTTP for short). OTLP/HTTP uses the same ProtoBuf payload
+HTTP transport (OTLP/HTTP for short). OTLP/HTTP uses the same protobuf payload
 that is used by OTLP/gRPC and defines how this payload is communicated over HTTP
 transport.
 

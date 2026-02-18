@@ -116,7 +116,7 @@ OpenTelemetry zero-code distribution (if one exists for the language).
 
 ### Via the Collector
 
-Note: this is a nice-to-have only and not required for any other part
+Note: this is a nice to have only and not required for any other part
 of the Span Event API deprecation plan.
 
 This mechanism MAY be implemented as follows:

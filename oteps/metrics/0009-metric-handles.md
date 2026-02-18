@@ -4,7 +4,7 @@ Specify the behavior of the Metrics API "Handle" type, for efficient repeated-us
 
 ## Motivation
 
-The specification currently names this concept "TimeSeries", the type returned by `GetOrCreateTimeseries`, which supports binding a metric to a pre-defined set of labels for repeated use.  This proposal renames these "Handle" and `GetHandle`, respectively, and adds further detail to the API specification for handles.  
+The specification currently names this concept "TimeSeries", the type returned by `GetOrCreateTimeseries`, which supports binding a metric to a predefined set of labels for repeated use.  This proposal renames these "Handle" and `GetHandle`, respectively, and adds further detail to the API specification for handles.  
 
 ## Explanation
 
@@ -12,7 +12,7 @@ The `TimeSeries` is referred to as a "Handle", as the former name suggests an im
 
 Applications are encouraged to re-use metric handles for efficiency.
 
-Handles are useful to reduce the cost of repeatedly recording a metric instrument (cumulative, gauge, or measure) with a pre-defined set of label values.
+Handles are useful to reduce the cost of repeatedly recording a metric instrument (cumulative, gauge, or measure) with a predefined set of label values.
 
 `GetHandle` gets a new handle given a [`LabelSet`](./0049-metric-label-set.md).
 

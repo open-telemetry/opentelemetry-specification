@@ -19,7 +19,7 @@ Proposal](https://github.com/open-telemetry/oteps) process.
 Smaller changes can follow a shorter process:
 
 - [Create an issue](https://github.com/open-telemetry/opentelemetry-specification/issues/new/choose)
-  in this repo and describe the proposed change.
+  in this repository and describe the proposed change.
 - Follow the [issue workflow](#issue-triaging) and make sure the issue is accepted with
   a "Yes" response. If the response to the issue is not "Yes" then do not create a PR
   that implements the change since it will be rejected.
@@ -49,7 +49,7 @@ issue.
 
 ## Writing specs
 
-Specification is written in markdown format. Please make sure files are rendered
+Specification is written in Markdown format. Please make sure files are rendered
 correctly on GitHub.
 
 Be sure to clearly define the specification requirements using appropriate
@@ -104,7 +104,7 @@ checks directly.
 See:
 
 - [MarkdownStyle](#markdown-style)
-- [Misspell Check](#misspell-check)
+- [Text Correction](#text-correction)
 - Markdown link checking (docs TODO)
 
 ### Autoformatting
@@ -120,7 +120,7 @@ You can also run these fixes individually.
 
 See:
 
-- [Misspell Correction](#misspell-check)
+- [Text Correction](#text-correction)
 - Table Generation (docs TODO)
 
 ### Markdown style
@@ -131,7 +131,7 @@ In this repository we follow the
 with some customizations. See [markdownlint](.markdownlint.yaml) or
 [settings](.vscode/settings.json) for details.
 
-We highly encourage to use line breaks in markdown files at `80` characters
+We highly encourage to use line breaks in Markdown files at `80` characters
 wide. There are tools that can do it for you effectively. Please submit proposal
 to include your editor settings required to enable this behavior so the out of
 the box settings for this repository will be consistent.
@@ -146,26 +146,26 @@ To fix style violations, follow the
 [instruction](https://github.com/DavidAnson/markdownlint#optionsresultversion)
 with the Node version of markdownlint. If you are using Visual Studio Code,
 you can also use the `fixAll` command of the
-[vscode markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint).
+[Visual Studio Code markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint).
 
-### Misspell check
+### Text Correction
 
 In addition, please make sure to clean up typos before you submit the change.
 
-To check for typos, run the following command:
+To check for typos (misspell) and style of writing (textlint), run the following command:
 
 ```bash
-make misspell
+make language-analysis
 ```
 
 > [!NOTE]
 > The `misspell` make target will also fetch and build the tool if
-> necessary. You'll need [Go](https://go.dev) to build the spellchecker.
+> necessary. You'll need [Go](https://go.dev) to build the spell checker.
 
-To quickly fix typos, use
+To quickly fix common misspellings and style, use
 
 ```bash
-make misspell-correction
+make textlint-correction
 ```
 
 ## Updating the Compliance Matrix
@@ -223,7 +223,7 @@ pull requests (PRs).
 
 To [create a new
 PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request),
-fork the project in GitHub and clone the upstream repo:
+fork the project in GitHub and clone the upstream repository:
 
 ```sh
 git clone https://github.com/open-telemetry/opentelemetry-specification.git
@@ -244,7 +244,7 @@ $ git commit
 $ git push fork feature
 ```
 
-Open a pull request against the main `opentelemetry-specification` repo.
+Open a pull request against the main `opentelemetry-specification` repository.
 
 If the PR is not ready for review, please mark it as
 [`draft`](https://github.blog/news-insights/product-news/introducing-draft-pull-requests/).

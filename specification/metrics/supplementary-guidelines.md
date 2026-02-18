@@ -90,11 +90,11 @@ middle. Here are some examples:
 * The server temperature is non-additive. The temperatures in the table below
   add up to `226.2`, but this value has no practical meaning.
 
-  | Host Name | Temperature (F) |
-  | --------- | --------------- |
-  | MachineA  | 58.8            |
-  | MachineB  | 86.1            |
-  | MachineC  | 81.3            |
+  | Hostname | Temperature (F) |
+  | -------- | --------------- |
+  | MachineA | 58.8            |
+  | MachineB | 86.1            |
+  | MachineC | 81.3            |
 
 * The mass of planets is additive, the value `1.18e25` (`3.30e23 + 6.42e23 +
   4.87e24 + 5.97e24`) means the combined mass of terrestrial planets in the

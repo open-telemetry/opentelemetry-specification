@@ -38,7 +38,7 @@ can discover on its own.
 Common scenarios where entity propagation is beneficial include:
 
 - Container orchestration systems where the orchestrator knows container metadata
-- CI/CD pipelines where the build system knows job and environment details  
+- CI/CD pipelines where the build tool knows job and environment details  
 - Batch processing systems where the scheduler knows task context
 - Command-line tools spawned with specific entity context
 
