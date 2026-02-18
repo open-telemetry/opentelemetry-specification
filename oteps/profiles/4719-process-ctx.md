@@ -156,7 +156,7 @@ Note that on legacy kernels and those without `CONFIG_ANON_VMA_NAME` it's still 
 
 External readers (such as the OpenTelemetry eBPF Profiler) discover and read process context as follows:
 
-1. **Locate mapping**: Parse `/proc/<pid>/maps` and search for entries with name starting with `[anon_shmem:OTEL_CTX]` or `/memfd:OTEL_CTX`
+1. **Locate mapping**: Parse `/proc/<pid>/maps` and search for entries with name **starting with** `[anon_shmem:OTEL_CTX]`, `[anon:OTEL_CTX]` or `/memfd:OTEL_CTX`
 
 2. **Validate signature and version**:
    - Read the header and verify first 8 bytes matches `OTEL_CTX`
@@ -182,6 +182,9 @@ Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a 
 
 After the first successful read, if using polling to check for updates, readers can assume that if `published_at_ns` has not changed, then the read payload is still consistent.
 That is, the `published_at_ns` can be thought of as an "cache key" for parsing the payload.
+
+The different names in `/proc/<pid>/maps` are caused by the fallback options the writer goes through to setup and name the mapping: `[anon_shmem:OTEL_CTX]` means both `memfd_create` and `prctl` succeeded; `[anon:OTEL_CTX]` means `memfd_create` failed but `prctl` succeeded; `/memfd:OTEL_CTX` means `memfd_create` succeeded but `prctl` failed.
+The remaining option where both `memfd_create` and `prctl` failed does not establish a valid context and is treated as an error in the writer.
 
 ### Updating Protocol
 
