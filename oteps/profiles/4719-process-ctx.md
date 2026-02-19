@@ -133,7 +133,7 @@ Publishing the context should follow these steps:
 5. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data
 6. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation)
 7. **Write header fields**: Populate `version`, `published_at_ns`, `payload_size`, `payload`
-8. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding
+8. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
 9. **Write signature**: Write `"OTEL_CTX"` to the signature field last
 10. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping. This step should be done unconditionally, although naming mappings is not always supported by the kernel.
 
@@ -170,13 +170,15 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 
 4. **Read payload**: Copy `payload_size` bytes from `payload` pointer it into reader-local memory
 
-5. **Re-read header**: If `published_at_ns` has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
+5. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
+
+6. **Re-read header**: If `published_at_ns` has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
 If `published_at_ns` is different from the value read in step 2, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 `published_at_ns` is not guaranteed to be monotonic, and readers should process an update even if the latest `published_at_ns` is smaller than a previous `published_at_ns`.
 
-6. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
+7. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
 
-7. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process
+8. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process
 
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
 
@@ -192,9 +194,9 @@ When the attributes change, the process context mapping should be updated follow
 
 1. **Prepare new payload**: Serialize the new payload message
 2. **Signal update start**: Write `0` to the `published_at_ns` field. This signals to readers that an update is in progress (readers verify this field is non-zero).
-3. **Memory barrier**: Ensure the write to `published_at_ns` is visible before proceeding.
+3. **Memory barrier**: Ensure the write to `published_at_ns` is visible before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
 4. **Update payload fields**: Update the `payload` pointer and `payload_size` fields to point to the new payload.
-5. **Memory barrier**: Ensure the payload fields are updated before finalizing the timestamp.
+5. **Memory barrier**: Ensure the payload fields are updated before finalizing the timestamp (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
 6. **Signal update complete**: Write the new timestamp to `published_at_ns`, this is an aligned word-size write and thus expected to be atomic.
    This `published_at_ns` does not need to be monotonic but it must be different from the value present before the update started.
 7. **Name mapping**: Re-issue the `prctl(PR_SET_VMA, ...)` call to name the mapping. This step MUST be done unconditionally, although naming mappings is not always supported by the kernel.
