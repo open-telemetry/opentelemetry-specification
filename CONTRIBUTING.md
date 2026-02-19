@@ -284,7 +284,7 @@ on each other), the owner should try to get people aligned by:
   with a summary in the PR conversation.
 * Tagging subdomain experts (by looking at the change history) in the PR asking
   for suggestion.
-* Reaching out to more people on the [CNCF OpenTelemetry Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](http://slack.cncf.io/).
+* Reaching out to more people on the [CNCF OpenTelemetry Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](https://slack.cncf.io/).
 * Stepping back to see if it makes sense to narrow down the scope of the PR or
   split it up.
 
