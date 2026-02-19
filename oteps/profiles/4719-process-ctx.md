@@ -181,6 +181,7 @@ If `published_at_ns` is different from the value read in step 2, restart at 2 (M
 8. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process
 
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
+We recommend the use of APIs such as `process_vm_readv` or equivalent to read data, as they allow gracefully handling of issues inherent to racy cross-process memory access.
 
 After the first successful read, if using polling to check for updates, readers can assume that if `published_at_ns` has not changed, then the read payload is still consistent.
 That is, the `published_at_ns` can be thought of as an "cache key" for parsing the payload.
