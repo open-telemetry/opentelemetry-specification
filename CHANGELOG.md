@@ -34,6 +34,10 @@ release.
 
 ### SDK Configuration
 
+- Declarative configuration: allow language-specific prefixes in environment
+  variable substitution.
+  ([#4891](https://github.com/open-telemetry/opentelemetry-specification/pull/4891))
+
 ### Supplementary Guidelines
 
 ### OTEPs
