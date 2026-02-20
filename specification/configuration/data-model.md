@@ -64,13 +64,12 @@ the [Augmented Backus-Naur Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
 SUBSTITUTION-REF = "${" [PREFIX ":"] GENERIC-SUBSTITUTION "}"; generic substitution reference
-INVALID-SUBSTITUTION-REF = "${" *(VCHAR-WSP-NO-RBRACE) "}"; invalid substitution reference
 
 ; when PREFIX is absent or "env", GENERIC-SUBSTITUTION MUST conform to ENV-SUBSTITUTION:
 ENV-SUBSTITUTION = ENV-NAME [":-" DEFAULT-VALUE]; env var substitution
 
 PREFIX = ALPHA *(ALPHA / DIGIT / "_"); substitution prefix, e.g. "env" (universal) or language-specific
-GENERIC-SUBSTITUTION = 1*(VCHAR-WSP-NO-RBRACE); substitution content, interpretation depends on PREFIX
+GENERIC-SUBSTITUTION = *(VCHAR-WSP-NO-RBRACE); substitution content, interpretation depends on PREFIX
 ENV-NAME = (ALPHA / "_") *(ALPHA / DIGIT / "_"); the name of the environment variable to be substituted
 DEFAULT-VALUE = *(VCHAR-WSP-NO-RBRACE); any number of VCHAR-WSP-NO-RBRACE
 VCHAR-WSP-NO-RBRACE = %x21-7C / "~" / WSP; printable chars and whitespace, except }
@@ -83,7 +82,7 @@ DIGIT = %x30-39 ; 0-9
 
 * Must start with `${`
 * Optionally followed by `PREFIX:`, where `PREFIX` is `env` (universal) or a language-specific identifier
-* Must follow with `GENERIC-SUBSTITUTION`, at least one printable character or whitespace except `}`
+* Must follow with `GENERIC-SUBSTITUTION`, any number of printable characters or whitespace except `}`
 * Must follow with `}`
 
 When `PREFIX` is absent or `env`, `GENERIC-SUBSTITUTION` MUST conform to `ENV-SUBSTITUTION`:
@@ -102,26 +101,16 @@ interpreted according to the `PREFIX` scheme. For example, Java implementations
 may support `sys:` to access system properties: `${sys:otel.service.name}`.
 Language implementations SHOULD document any additional prefixes they support.
 
-`INVALID-SUBSTITUTION-REF` defines an invalid environment variable substitution
-reference:
-
-* Must start with `${`
-* Must follow with any number of printable characters and whitespace except `}`
-* Must follow with `}`
-
-For convenience, `SUBSTITUTION-REF` and `INVALID-SUBSTITUTION-REF` are expressed
-below as a PCRE2 regular expressions. Note that these expressions are
+For convenience, `SUBSTITUTION-REF` and `ENV-SUBSTITUTION` are expressed
+below as PCRE2 regular expressions. Note that these expressions are
 non-normative.
 
 ```regexp
 // SUBSTITUTION-REF
-\$\{(?:(?<PREFIX>[a-zA-Z][a-zA-Z0-9_]*):)?(?<GENERIC_SUBSTITUTION>[^}]+)\}
+\$\{(?:(?<PREFIX>[a-zA-Z][a-zA-Z0-9_]*):)?(?<GENERIC_SUBSTITUTION>[^}]*)\}
 
 // ENV-SUBSTITUTION (applied to GENERIC_SUBSTITUTION when PREFIX is absent or "env")
 (?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?
-
-// INVALID-SUBSTITUTION-REF
-\$\{(?<INVALID_IDENTIFIER>[^}]*)\}
 ```
 
 For example, `${API_KEY}` and `${env:API_KEY}` are valid env var substitutions,
@@ -159,9 +148,10 @@ where `FOO=a, BAR=b, BAZ=c` would resemble:
   against `input.substring(15+2, input.length)="{BAZ}"` => `"{BAZ}"` and append
   to output. Return output: `"${FOO} b ${BAZ}"`.
 
-When parsing a configure file that contains a reference not
-matching `SUBSTITUTION-REF` but matching `INVALID-SUBSTITUTION-REF`, the parser
-must return an empty result (no partial results are allowed) and an error
+When parsing a configuration file that contains a `SUBSTITUTION-REF` where
+`GENERIC-SUBSTITUTION` does not conform to the scheme's validation rules (e.g.,
+does not conform to `ENV-SUBSTITUTION` when `PREFIX` is absent or `env`), the
+parser must return an empty result (no partial results are allowed) and an error
 describing the parse failure to the user.
 
 Node types MUST be interpreted after environment variable substitution takes
