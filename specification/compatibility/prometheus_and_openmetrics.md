@@ -157,28 +157,94 @@ with standard (exponential) schema (i.e. schemas -4 to 8) and which are
 of the integer and counter [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
 MUST be converted to an OTLP Exponential Histogram as follows:
 
+- If the Native Histogram `ResetHint` (or `CounterResetHint`) indicates gauge
+  type, the native histogram is dropped. Otherwise this field is ignored.
 - `Schema` is converted to the Exponential Histogram `Scale`.
 - The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
-  Stale NaN value. Otherwise,
-  - `Count` is converted to Exponential Histogram `Count`.
-  - `Sum` is converted to the Exponential Histogram `Sum`.
+  [Stale NaN value](https://github.com/prometheus/prometheus/blob/main/model/value/value.go).
+  Otherwise,
+  - `Count` is converted to Exponential Histogram `Count`. Note that the `Count`
+    may be greater than the sum of all `Positive`, `Negative` and `Zero` bucket
+    counts in case the Native Histogram observed values outside the IEEE float
+    range, for example `-Inf`, `+Inf`, `NaN`.
+  - `Sum` is converted to the Exponential Histogram `Sum`. Note that the `Sum`
+    may be `NaN` in case the Native Histogram observed the value `NaN` or both
+    `-Inf` and `+Inf`. The `Sum` may also be `-Inf` or `+Inf`.
 - `Timestamp` is converted to the Exponential Histogram `TimeUnixNano` after
   converting milliseconds to nanoseconds.
 - `ZeroCount` is converted directly to the Exponential Histogram `ZeroCount`.
 - `ZeroThreshold`, is converted to the Exponential Histogram `ZeroThreshold`.
-- The sparse bucket layout represented by `PositiveSpans` and `PositiveDeltas` is
-  converted to the Exponential Histogram dense layout represented by `Positive`
-  bucket counts and `Offset`. The same holds for `NegativeSpans` and
-  `NegativeDeltas`. Note that Prometheus Native Histograms buckets are indexed by
-  upper boundary while Exponential Histograms are indexed by lower boundary, the
-  result being that the Offset fields are different-by-one.
+- The [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+  represented by `PositiveSpans` and `PositiveDeltas` is converted to the
+  Exponential Histogram dense layout represented by `Positive` bucket counts and
+  `Offset`.
+
+  - The `PositiveDeltas` are delta encoded bucket counts, where the first value
+    is an absolute bucket count and each subsequent value is a delta to the
+    previous value.
+  - The Exponential Histogram `Positive` `Offset` is set to the first
+    `PositiveSpan`'s `Offset` minus 1 (`PositiveSpans[0].Offset-1`) if there
+    are spans, otherwise left at 0. Note that Prometheus Native Histogram
+    buckets are indexed by upper boundary while Exponential Histograms are
+    indexed by lower boundary, hence the minus one.
+  - The `PositiveSpans` encode the index into the `Positive` bucket counts for
+    each value in the `PositiveDeltas`. The index starts from 0 for the first
+    span, for subsequent spans the span's `Offset` is added to the previous
+    index. The span's `Length` indicates the number of continuous indexes to
+    use.
+  - The Native Histogram may contain overflow buckets. If converted to
+    an Exponential Histogram bucket, the overflow bucket would map to values
+    outside the IEEE float range. The Native Histogram SHOULD be dropped in
+    accordance with [ExponentialHistogram: Consumer Recommendations](../metrics/data-model.md/#exponentialhistogram-consumer-recommendations).
+    If the Native Histogram is not dropped, the overflow bucket itself MUST be
+    dropped.
+
+- The `NegativeSpans` and `NegativeDeltas` are converted the same way as the
+  positive buckets.
 - `Min` and `Max` are not set.
-- `StartTimeUnixNano` is set to the `Created` timestamp, if available.
+- `StartTimeUnixNano` is set to the `Start Timestamp` timestamp, if available.
+- `AggregationTemporality` is set to `cumulative`.
+
+A Native histogram with custom buckets (NHCB) schema (i.e. schema -53) and which
+are of the integer and counter [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
+MUST be converted to an OTLP Histogram as follows:
+
+- If the Native Histogram `ResetHint` (or `CounterResetHint`) indicates gauge
+  type, the native histogram is dropped. Otherwise this field is ignored.
+- The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
+  [Stale NaN value](https://github.com/prometheus/prometheus/blob/main/model/value/value.go).
+  Otherwise,
+  - `Count` is converted to Histogram `Count`. Note that the `Count`
+    is equal to the sum of all bucket counts.
+  - `Sum` is converted to the Histogram `Sum`. Note that the `Sum`
+    may be `NaN` in case the Native Histogram observed the value `NaN` or both
+    `-Inf` and `+Inf`. The `Sum` may also be `-Inf` or `+Inf`.
+- `Timestamp` is converted to the Histogram `TimeUnixNano` after
+  converting milliseconds to nanoseconds.
+- `Min` and `Max` are not set.
+- [`CustomValues`](https://prometheus.io/docs/specs/native_histograms/#custom-values)
+  is converted to bucket boundaries. The `+Inf` bucket is implicit, therefore
+  `N` `CustomValues` represent `N+1` Histogram bucket counts.
+- The [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+  represented by `PositiveSpans` and `PositiveDeltas` is converted to
+  Histogram bucket counts.
+
+  - The `PositiveDeltas` are delta encoded bucket counts, where the first value
+    is an absolute bucket count and each subsequent value is a delta to the
+    previous value.
+  - The `PositiveSpans` encode the index into the bucket counts for each value
+    in the `PositiveDeltas`. The index starts from the `Offset` in the first
+    span and for subsequent spans the span's `Offset` is added to the previous
+    index. The span's `Length` indicates the number of continuous indexes to
+    use.
+
+- `StartTimeUnixNano` is set to the `Start Timestamp`, if available.
 - `AggregationTemporality` is set to `cumulative`.
 
 Native histograms of the float or gauge flavors MUST be dropped.
 
-Native Histograms with `Schema` outside of the range [-4, 8] MUST be dropped.
+Native Histograms with `Schema` outside of the range [-4, 8] and not equal to
+-53 MUST be dropped.
 
 ### Summaries
 

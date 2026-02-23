@@ -32,6 +32,11 @@ release.
 
 ### Compatibility
 
+- Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
+  add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
+  Histogram.
+  ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
