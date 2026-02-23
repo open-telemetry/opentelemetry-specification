@@ -141,7 +141,7 @@ A [Prometheus Unknown](https://prometheus.io/docs/instrumenting/exposition_forma
 
 A [Prometheus Histogram](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#histogram) MUST be converted to an [OTLP Histogram](https://opentelemetry.io/docs/specs/otel/metrics/data-model/#histogram).
 
-Prometheus buckets except the +Inf bucket become OpenTelemetry buckets. The Prometheus Histogram Count becomes the OTLP Histogram Count and Prometheus Histogram Sum becomes OTLP Histogram Sum.
+Prometheus bucket boundaries become OTLP explicit bounds, except the +Inf boundary which is dropped. The sample values associated with the Prometheus bucket boundaries become OTLP bucket counts, including the value associated with the +Inf boundary. The Prometheus Histogram Count becomes the OTLP Histogram Count and Prometheus Histogram Sum becomes OTLP Histogram Sum.
 
 In the text format, Prometheus histograms buckets, count and sum are sent as separate samples and they MUST be merged together when forming an OTLP Histogram. Samples with a `_bucket` suffix will have an `le` label denoting the bucket boundary, whose value is the total count of observations less than the bucket boundary. The count of the OpenTelemetry bucket is computed as the difference between the bucket and the next-lowest bucket, if it exists. Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
 
