@@ -170,7 +170,7 @@ can_merge(current_entity, new_entity) {
 ```
 
 When merging entities, all attributes in description are merged together, with
-one entity acting as "primary" where any conficting attribute values will be
+one entity acting as "primary" where any conflicting attribute values will be
 chosen from the "primary" entity.
 
 Here's an example algorithm that will merge:
