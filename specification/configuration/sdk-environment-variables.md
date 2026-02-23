@@ -49,6 +49,8 @@ Implementations MAY choose to allow configuration via the environment variables 
 If they do, they SHOULD use the names and value parsing behavior specified in this document.
 They SHOULD also follow the [common configuration specification](common.md).
 
+Support for these environment variables varies between SDKs. Check the [spec compliance matrix](#compliance-matrix) for details.
+
 ## Implementation guidelines
 
 Environment variables MAY be handled (implemented) directly by a component, in the SDK, or in a separate component (e.g. environment-based autoconfiguration component).
@@ -110,7 +112,7 @@ a warning and gracefully ignore the setting.
 
 | Name                     | Description                                                                                                                                                 | Default                                                                                                                                                                                            | Type         | Notes                                                                                                                                                                                                                                                                                    |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| OTEL_SDK_DISABLED        | Disable the SDK for all signals                                                                                                                             | false                                                                                                                                                                                              | [Boolean][]  | If "true", a no-op SDK implementation will be used for all telemetry signals. Any other value or absence of the variable will have no effect and the SDK will remain enabled. This setting has no effect on propagators configured through the OTEL_PROPAGATORS variable.                |
+| OTEL_SDK_DISABLED        | Disable the SDK for all signals                                                                                                                             | false                                                                                                                                                                                              | [Boolean][]  | If "true" and supported by the SDK, a no-op SDK implementation will be used for all telemetry signals. Any other value or absence of the variable will have no effect and the SDK will remain enabled. This setting has no effect on propagators configured through the `OTEL_PROPAGATORS` variable.                |
 | OTEL_ENTITIES            | Entity information to be associated with the resource                                                                                                       |                                                                                                                                                                                                    | [String][]   | See [Entities SDK](../entities/entity-propagation.md#specifying-entity-information-via-an-environment-variable) for more details.                                                                                                                                                        |
 | OTEL_RESOURCE_ATTRIBUTES | Key-value pairs to be used as resource attributes                                                                                                           | See [Resource semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for details. | [String][]   | See [Resource SDK](../resource/sdk.md#specifying-resource-information-via-an-environment-variable) for more details.                                                                                                                                                                     |
 | OTEL_SERVICE_NAME        | Sets the value of the [`service.name`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#service) resource attribute |                                                                                                                                                                                                    | [String][]   | If `service.name` is also provided in `OTEL_RESOURCE_ATTRIBUTES`, then `OTEL_SERVICE_NAME` takes precedence.                                                                                                                                                                             |
@@ -244,7 +246,7 @@ We define environment variables for setting one or more exporters per signal.
 | OTEL_METRICS_EXPORTER | Metrics exporter to be used | `otlp`  | [Enum][] |
 | OTEL_LOGS_EXPORTER    | Logs exporter to be used    | `otlp`  | [Enum][] |
 
-The implementation MAY accept a comma-separated list to enable setting multiple exporters.
+The implementation MAY accept a comma-separated list to enable setting multiple exporters. See [compliance matrix](#compliance-matrix).
 
 Known values for `OTEL_TRACES_EXPORTER` are:
 
@@ -369,3 +371,11 @@ OTEL_{LANGUAGE}_{FEATURE}
 [Timeout]: common.md#timeout
 [String]: common.md#string
 [Enum]: common.md#enum
+
+## Compliance matrix
+
+Support for the environment variables in this specification varies between SDKs.
+
+Some SDKs may *silently ignore* unsupported environmnent variables.
+
+SDK support for the environment variables in this section is described in the [spec compliance matrix](https://github.com/open-telemetry/opentelemetry-specification/blob/main/spec-compliance-matrix.md).
