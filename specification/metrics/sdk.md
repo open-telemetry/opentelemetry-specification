@@ -1447,7 +1447,7 @@ a user-configurable time interval, and passes the metrics to the configured
 Configurable parameters:
 
 * `exportIntervalMillis` - the time interval in milliseconds between two
-  consecutive exports. The default value is 60000 (milliseconds).
+  consecutive collections. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
 * **Status**: [Development](../document-status.md) - `maxExportBatchSize` - the
