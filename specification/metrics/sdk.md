@@ -1488,8 +1488,9 @@ from `MetricReader` and start a background task which calls the inherited
 This method provides a way for the periodic exporting MetricReader
 so it can do as much as it could to collect and send the metrics.
 
-`ForceFlush` SHOULD collect metrics, call [`Export(batch)`](#exportbatch)
-and [`ForceFlush()`](#forceflush-2) on the configured
+`ForceFlush` SHOULD collect metrics, split into batches if neccessary, call
+[`Export(batch)`](#exportbatch) on each batch and
+[`ForceFlush()`](#forceflush-2) on the configured
 [Push Metric Exporter](#push-metric-exporter).
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
