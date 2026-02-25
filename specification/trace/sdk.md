@@ -1281,7 +1281,7 @@ specific guarantees and safeties.
 **Tracer Provider** - Tracer creation, `ForceFlush` and `Shutdown` MUST be safe
 to be called concurrently.
 
-**Tracer** - `Enabled` MUST be safe to be called concurrently.
+**Tracer** - Span creation and `Enabled` MUST be safe to be called concurrently.
 
 **Sampler** -  `ShouldSample` and `GetDescription` MUST be safe to be called
 concurrently.
