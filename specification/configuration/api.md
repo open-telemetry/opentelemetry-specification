@@ -80,7 +80,7 @@ This API MUST accept the following parameters:
 Path requirements:
 
 * `path` MUST be an absolute declarative configuration path.
-* `path` matching is exact. Wildcards and prefix matching are not required.
+* `path` matching is exact. Wildcards and prefix matching are not supported.
 * API implementations SHOULD document accepted path syntax in language-specific
   docs and include examples such as `.instrumentation/development.general.http`
   and `.instrumentation/development.java.methods`.
