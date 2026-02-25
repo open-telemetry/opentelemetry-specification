@@ -1457,11 +1457,13 @@ Configurable parameters:
 **Status**: [Development](../document-status.md) - When `maxExportBatchSize` is
 configured, the reader MUST ensure no batch provided to `Export` exceeds the
 `maxExportBatchSize` by splitting the batch of metric data points into smaller
-batches. The reader MUST ensure all metric data points from a single
-`Collect()` are provided to `Export` before metric data points from a
-subsequent `Collect()` so that metric points are sent in-order. The reader MUST
-NOT combine metrics from different `Collect()` calls into the same batch
-provided to `Export`.
+batches. The initial batch of metric data MUST be split into as many "full"
+batches of size `maxExportBatchSize` as possible -- even if this splits up data
+points that belong to the same metric into different batches. The reader MUST
+ensure all metric data points from a single `Collect()` are provided to
+`Export` before metric data points from a subsequent `Collect()` so that metric
+points are sent in-order. The reader MUST NOT combine metrics from different
+`Collect()` calls into the same batch provided to `Export`.
 
 The reader MUST synchronize calls to `MetricExporter`'s `Export`
 to make sure that they are not invoked concurrently.
