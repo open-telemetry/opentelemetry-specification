@@ -112,7 +112,7 @@ Concurrency and lifecycle requirements:
 * Close MUST be idempotent (subsequent calls have no effect).
 * After close returns, implementations SHOULD stop new callback delivery for that
   registration. A callback already in progress MAY complete.
-* Registrations MAY be dropped automatically when the corresponding
+* Registrations SHOULD be dropped automatically when the corresponding
   `ConfigProvider` is shut down or otherwise disposed.
 
 Error handling and unsupported providers:
