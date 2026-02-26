@@ -1491,7 +1491,10 @@ so it can do as much as it could to collect and send the metrics.
 `ForceFlush` SHOULD collect metrics, split into batches if necessary, call
 [`Export(batch)`](#exportbatch) on each batch and
 [`ForceFlush()`](#forceflush-2) on the configured
-[Push Metric Exporter](#push-metric-exporter).
+[Push Metric Exporter](#push-metric-exporter). `ForceFlush` MAY skip
+[`Export(batch)`](#exportbatch) calls if the timeout is already expired, but
+SHOULD still call [`ForceFlush()`](#forceflush-2) on the configured
+[Push Metric Exporter](#push-metric-exporter) even if the timeout has passed.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
