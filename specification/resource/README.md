@@ -23,15 +23,26 @@ path_base_for_github_subdir:
 
 ## Overview
 
-A Resource is a representation of the entity producing telemetry.
+A Resource represents the observed entity for which telemetry is produced.
 Within OpenTelemetry, all signals are associated with a Resource, enabling
 contextual correlation of data from the same source.  For example, if I see
-a high latency in a span I need to check the metrics for the same entity that
-produced that Span during the time when the latency was observed.
+a high latency in a span, I need to check the metrics for the same entity
+during the time when the latency was observed.
+
+> [!NOTE]
+> The entity that *technically emits* telemetry and the entity *described by*
+> a Resource are not always the same. In auto-instrumentation scenarios, such
+> as eBPF-based agents that observe a running process without code changes,
+> the instrumentation agent produces the telemetry on behalf of the observed
+> workload. In these cases, the Resource describes the *observed* entity
+> (e.g., the service or process being instrumented), not the agent itself.
+> Attributes such as `telemetry.sdk.name` and `telemetry.distro.name` that
+> pertain to the instrumentation tooling should be applied according to their
+> own semantic conventions rather than used to identify the observed entity.
 
 Resource provides two important aspects for observability:
 
-- It MUST identify an entity that is producing telemetry.
+- It MUST identify the observed entity for which telemetry is being produced.
 - It SHOULD allow users to determine where that entity resides within their infrastructure.
 
 ### Identity
