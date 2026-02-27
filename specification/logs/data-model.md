@@ -170,7 +170,7 @@ Here is the list of fields in a log record:
 | SeverityText | The severity text (also known as log level). |
 | SeverityNumber | Numerical value of the severity. |
 | Body | The body of the log record. |
-| Resource | Describes the source of the log. |
+| Resource | Describes the observed entity that generated the log. |
 | InstrumentationScope | Describes the scope that emitted the log. |
 | Attributes | Additional information about the event. |
 | EventName | Name that identifies the class / type of event. |
