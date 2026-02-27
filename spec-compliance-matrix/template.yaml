@@ -319,7 +319,7 @@ sections:
       - name: OTEL_METRICS_EXEMPLAR_FILTER
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
-      - name: OTEL_EXPERIMENTAL_CONFIG_FILE
+      - name: OTEL_CONFIG_FILE
     hide_optional_column: true
   - name: Declarative configuration
     features:
