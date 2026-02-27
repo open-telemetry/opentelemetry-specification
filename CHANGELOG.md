@@ -292,6 +292,8 @@ release.
 
 ### OTEPs
 
+- Introduce Policies into the specification. ([#4288](https://github.com/open-telemetry/opentelemetry-specification/pull/4288))
+
 - Extend attributes to support complex values.
   ([#4485](https://github.com/open-telemetry/opentelemetry-specification/pull/4485))
 
