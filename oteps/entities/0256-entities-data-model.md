@@ -9,7 +9,7 @@ transferred, stored and interpreted by an entity observability system.
 - [Motivation](#motivation)
 - [Design Principles](#design-principles)
 - [Data Model](#data-model)
-  * [Minimally Sufficient Id](#minimally-sufficient-id)
+  * [Minimally Sufficient ID](#minimally-sufficient-id)
   * [Examples of Entities](#examples-of-entities)
 - [Entity Events](#entity-events)
   * [EntityState Event](#entitystate-event)
@@ -33,7 +33,7 @@ transferred, stored and interpreted by an entity observability system.
   * [Classes of Entity Types](#classes-of-entity-types)
   * [Multiple Observers](#multiple-observers)
   * [Is Type part of Entity's identity?](#is-type-part-of-entitys-identity)
-  * [Choosing from Multiple Ids](#choosing-from-multiple-ids)
+  * [Choosing from Multiple IDs](#choosing-from-multiple-ids)
 - [Future Work](#future-work)
 - [References](#references)
 
@@ -151,15 +151,15 @@ conventions</a> for attributes.
    </tr>
 </table>
 
-### Minimally Sufficient Id
+### Minimally Sufficient ID
 
 Commonly, a number of attributes of an entity are readily available for the telemetry
-producer to compose an Id from. Of the available attributes the entity Id should
+producer to compose an ID from. Of the available attributes the entity ID should
 include the minimal set of attributes that is sufficient for uniquely identifying
 that entity. For example
 a Process on a host can be uniquely identified by (`process.pid`,`process.start_time`)
-attributes. Adding for example `process.executable.name` attribute to the Id is
-unnecessary and violates the Minimally Sufficient Id rule.
+attributes. Adding for example `process.executable.name` attribute to the ID is
+unnecessary and violates the Minimally Sufficient ID rule.
 
 ### Examples of Entities
 
@@ -239,7 +239,7 @@ container.name
    </tr>
 </table>
 
-See more examples showing nuances of Id field composition in the
+See more examples showing nuances of ID field composition in the
 [Entity Identification](#entity-identification) section.
 
 ## Entity Events
@@ -324,7 +324,7 @@ emit a new EntityState event with a fresh timestamp and full list of
 values of all other fields.
 
 Entity event producers SHOULD periodically emit events even
-if the entity does not change. In this case the Type, Id and Attribute
+if the entity does not change. In this case the Type, ID and Attribute
 fields will remain the same, but a fresh Timestamp will be recorded in
 the event. Producing such events allows the system to be resilient to
 event losses. Even if some events are lost eventually the correct state
@@ -380,13 +380,13 @@ events as a liveliness indicator).
 
 The expiration mechanism is based on the previously reported `Interval` field of
 EntityState event. The recipient can use this value to compute when to expect the next
-EntityState event and if the event does not arrive in a timely manner (plus some slack)
+EntityState event and if the event does not arrive in a timely manner (plus some tolerance)
 it can consider the entity to be gone even if the EntityDelete event was not observed.
 
 ## Entity Identification
 
-The data model defines the structure of the entity Id field. This section explains
-how the Id field is computed.
+The data model defines the structure of the entity ID field. This section explains
+how the ID field is computed.
 
 ### LID, GID and IDCONTEXT
 
@@ -408,7 +408,7 @@ Where `IDCONTEXT(E)` is the identification context in which the LID of entity E 
 The value of `IDCONTEXT(E)` is an entity itself, and thus we can compute the GID value of it too.
 
 In other words, the GID of an entity is a union of its LID and the GID of its
-identification context. Note: GID(E) is a map of key/value attributes.
+identification context. Note: GID(E) is a map of key-value attributes.
 
 The enrichment process often is responsible for determining the value of `IDCONTEXT(E)`
 and for computing the GID according to the formula defined above, although the GID may
@@ -421,7 +421,7 @@ OpenTelemetry semantic conventions will be enhanced to include entity definition
 well-known entities such as Service, Process, Host, etc.
 
 For well-known entity types LID(E) is defined in OTel semantic conventions per
-entity type. The value of LID is a map of key/value attributes. For example,
+entity type. The value of LID is a map of key-value attributes. For example,
 for entity of type "process" the semantic conventions define LID as 2 attributes:
 
 ```json5
@@ -431,7 +431,7 @@ for entity of type "process" the semantic conventions define LID as 2 attributes
 }
 ```
 
-For custom entity types (not defined in OTel semantic conventions) the end-user is
+For custom entity types (not defined in OTel semantic conventions) the end user is
 responsible for defining their custom semantic conventions in a similar way.
 
 The entity information producer is responsible for determining the identification
@@ -489,8 +489,8 @@ and Collector will use "host" as the IDCONTEXT and add host's LID to it:
 }
 ```
 
-If we assume that we have only one data center and host ids are globally
-unique then the above id is globally unique and is the GID of the
+If we assume that we have only one data center and host IDs are globally
+unique then the above ID is globally unique and is the GID of the
 process. If this assumption is not valid in our situation we would
 continue applying additional IDCONTEXT's until the GID is globally
 unique. See for example the
@@ -567,7 +567,7 @@ arrive to it in a different way:
 #### Host in Cloud Account
 
 A host running in a cloud account (e.g. AWS) will have a LID that uses
-the host instance id, unique within a single cloud account, e.g.:
+the host instance ID, unique within a single cloud account, e.g.:
 
 ```json5
 {
@@ -578,7 +578,7 @@ the host instance id, unique within a single cloud account, e.g.:
 
 OTel Collector with
 [resourcedetection](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/resourcedetectionprocessor)
-processor with "aws" detector enabled will add the IDCONTEXT of the
+processor with "AWS" detector enabled will add the IDCONTEXT of the
 cloud account like this:
 
 ```json5
@@ -619,12 +619,12 @@ that implements entity event emitting for `k8scluster` receiver in the Collector
 
 Alternative proposals were made [here](https://docs.google.com/document/d/1PLPSAnWvFWCsm6meAj6OIVDBvxsk983V51WugF0NgVo/edit) and  
 [here](https://docs.google.com/document/d/1bLmkQSv35Fi6Wbe4bAqQ-_JS7XWIXWbvuirVmAkz4a4/edit)
-to use a different structure for entity Id field.
+to use a different structure for entity ID field.
 
-We rejected these proposals in favour of the Id field proposed in this OTEP for the
+We rejected these proposals in favour of the ID field proposed in this OTEP for the
 following reasons:
 
-- The map of key/value attributes is widely used elsewhere in OpenTelemetry as
+- The map of key-value attributes is widely used elsewhere in OpenTelemetry as
   Resource attributes, as Scope attributes, as Metric datapoint attributes, etc. so
   it is conceptually consistent with the rest of OTel.
 
@@ -684,7 +684,7 @@ There are a couple of reasons:
 The data model requires the Attributes field to use the extended
 [any](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/logs/data-model.md#type-any)
 attribute values, that allows more complex data types. This is different from the data
-type used by the Id field, which is more restricted in the shape.
+type used by the ID field, which is more restricted in the shape.
 
 Are we happy with this discrepancy?
 
@@ -723,7 +723,7 @@ an "ObserverId" field. EntityState event will then look like this:
 |Timestamp|nanoseconds|
 |Interval|milliseconds|
 |Type||
-|Id||
+|ID||
 |Attributes||
 |ObserverId|string or bytes|
 
@@ -737,22 +737,22 @@ Here is corresponding
 
 ### Is Type part of Entity's identity?
 
-Is the Type field part of the entity's identity together with the Id field?
+Is the Type field part of the entity's identity together with the ID field?
 
 For example let's assume we have a Host and an OTel Collector running on the Host.
-The Host's Id will contain one attribute: `host.id`, and the Type of the entity will be
+The Host's ID will contain one attribute: `host.id`, and the Type of the entity will be
 "host". The Collector technically speaking can be also identified by one attribute
 `host.id` and the Type of the entity will be "otel.collector". This only works if we
 consider the Type field to be part of the entity's identity.
 
 If the Type field is not part of identity then in the above example we require that the
-entity that describes the Collector has some other attribute in its Id (for example
+entity that describes the Collector has some other attribute in its ID (for example
 `agent.type` attribute [if it gets accepted](https://github.com/open-telemetry/semantic-conventions/pull/950)).
 
 Here is corresponding
 [TODO item](https://github.com/orgs/open-telemetry/projects/85?pane=issue&itemId=57053320).
 
-### Choosing from Multiple Ids
+### Choosing from Multiple IDs
 
 Sometimes the same entity may be identified in more than one way. For example a Pod can
 be identified by its `k8s.pod.uid` but it can be also identified by a pair of

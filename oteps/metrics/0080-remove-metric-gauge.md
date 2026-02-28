@@ -89,7 +89,7 @@ There's a number that rises and falls such as a bank account balance.
 This was being `Set()` at the finish of all transactions.  Replace it
 with a Measure instrument and `Record()` the last value.
 
-Similar cases: report a cpu load, specific temperature, fan speed, or
+Similar cases: report a CPU load, specific temperature, fan speed, or
 altitude measurement associated with a request.
 
 ## Internal details

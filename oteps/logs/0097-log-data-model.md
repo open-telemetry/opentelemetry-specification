@@ -117,7 +117,7 @@ fields:
 
 - Named top-level fields of specific type and meaning.
 
-- Fields stored in the key/value pair lists, which can contain arbitrary values
+- Fields stored in the key-value pair lists, which can contain arbitrary values
   of different types. The keys and values for well-known fields follow semantic
   conventions for key names and possible values that allow all parties that work
   with the field to have the same interpretation of the data. See references to
@@ -133,7 +133,7 @@ The reasons for having these 2 kinds of fields are:
 - Ability to enforce types of named fields, which is very useful for compiled
   languages with type checks.
 
-- Flexibility to represent less frequent data via key/value pair lists. This
+- Flexibility to represent less frequent data via key-value pair lists. This
   includes well-known data that has standardized semantics as well as arbitrary
   custom data that the application may want to include in the logs.
 
@@ -167,8 +167,8 @@ Here is the list of fields in a log record:
 | Field Name     | Description                                  |
 | -------------- | -------------------------------------------- |
 | Timestamp      | Time when the event occurred.                |
-| TraceId        | Request trace id.                            |
-| SpanId         | Request span id.                             |
+| TraceId        | Request trace ID.                            |
+| SpanId         | Request span ID.                             |
 | TraceFlags     | W3C trace flag.                              |
 | SeverityText   | The severity text (also known as log level). |
 | SeverityNumber | Numerical value of the severity.             |
@@ -181,7 +181,7 @@ Below is the detailed description of each field.
 
 ### Field: `Timestamp`
 
-Type: Timestamp, uint64 nanoseconds since Unix epoch.
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
 Description: Time when the event occurred measured by the origin clock. This
 field is optional, it may be missing if the timestamp is unknown.
@@ -192,16 +192,16 @@ field is optional, it may be missing if the timestamp is unknown.
 
 Type: byte sequence.
 
-Description: Request trace id as defined in
+Description: Request trace ID as defined in
 [W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-id). Can be set
-for logs that are part of request processing and have an assigned trace id. This
+for logs that are part of request processing and have an assigned trace ID. This
 field is optional.
 
 #### Field: `SpanId`
 
 Type: byte sequence.
 
-Description: Span id. Can be set for logs that are part of a particular
+Description: Span ID. Can be set for logs that are part of a particular
 processing span. If SpanId is present TraceId SHOULD be also present. This field
 is optional.
 
@@ -401,7 +401,7 @@ occurrence of the event coming from the same source. This field is optional.
 
 ### Field: `Resource`
 
-Type: key/value pair list.
+Type: key-value pair list.
 
 Description: Describes the source of the log, aka
 [resource](../../specification/overview.md#resources).
@@ -418,7 +418,7 @@ This field is optional.
 
 ### Field: `Attributes`
 
-Type: key/value pair list.
+Type: key-value pair list.
 
 Description: Additional information about the specific event occurrence. "key"
 of each pair is a `string` and "value" is of `any` type. Unlike the `Resource`
@@ -552,32 +552,32 @@ drawbacks that do not make Syslog a serious contender for a data model:
 - While it allows structured attributes the body of the message can be only a
   string.
 
-- Severity is hard-coded to 8 possible numeric values, and does not allow custom
+- Severity is hardcoded to 8 possible numeric values, and does not allow custom
   severity texts.
 
 - Structured data does not allow arbitrary nesting and is 2-level only.
 
 - No clear separate place to specify data source (aka resource). There are a
-  couple hard-coded fields that serve this purpose in a limited way (HOSTNAME,
+  couple hardcoded fields that serve this purpose in a limited way (HOSTNAME,
   APP-NAME, FACILITY).
 
 ### Fluentd Forward Protocol Model
 
 [Forward protocol](https://github.com/fluent/fluentd/wiki/Forward-Protocol-Specification-v1)
 defines a log Entry concept as a timestamped record. The record consists of 2
-elements: a tag and a map of arbitrary key/value pairs.
+elements: a tag and a map of arbitrary key-value pairs.
 
 The model is universal enough to represent any log record. However, here are
 some drawbacks:
 
-- All attributes of a record are represented via generic key/value pairs (except
+- All attributes of a record are represented via generic key-value pairs (except
   tag and timestamp). This misses the optimization opportunities (see [Design
   Notes](#design-notes)).
 
 - There is no clear separate place to specify data source (aka resource).
 
 - There is no mention of how exactly keys should be named and what are expected
-  values. This lack of any naming convention or standardization of key/value
+  values. This lack of any naming convention or standardization of key-value
   pairs makes interoperability difficult.
 
 ## Appendix A. Example Mappings
@@ -609,7 +609,7 @@ this data model.
   <tr>
     <td>FACILITY</td>
     <td>enum</td>
-    <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: `mail system`</td>
+    <td>Describes where the event originated. A predefined list of UNIX processes. Part of event source identity. Example: `mail system`</td>
     <td>`Attributes["syslog.facility"]`</td>
   </tr>
   <tr>
@@ -1252,7 +1252,7 @@ It normally contains what the hostname command returns on the host machine.</td>
     <td>string</td>
     <td>Name of the host.
 
-It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
+It may contain what hostname returns on UNIX systems, the fully qualified, or a name specified by the user. </td>
 
 <td>`Resource["host.name"]`</td>
 

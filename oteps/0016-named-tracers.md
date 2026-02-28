@@ -31,7 +31,7 @@ This proposal attempts to solve the stated problems by introducing the concept o
 * _Named Tracers and Meters_ which are associated with the **name** (e.g. _"io.opentelemetry.contrib.mongodb"_) and **version** (e.g._"semver:1.0.0"_) of the library which acquired them.
 * A `TracerProvider` / `MeterProvider` as the only means of acquiring a Tracer or Meter.
 
-Based on the name and version, a Provider could provide a no-op Tracer or Meter to specific instrumentation libraries, or a Sampler could be implemented that discards Spans or Metrics from certain libraries. Also, by providing custom Exporters, Span or Metric data could be sanitized before it gets processed in a back-end system. However, this is beyond the scope of this proposal, which only provides the fundamental mechanisms.
+Based on the name and version, a Provider could provide a no-op Tracer or Meter to specific instrumentation libraries, or a Sampler could be implemented that discards Spans or Metrics from certain libraries. Also, by providing custom Exporters, Span or Metric data could be sanitized before it gets processed in a backend system. However, this is beyond the scope of this proposal, which only provides the fundamental mechanisms.
 
 ## Explanation
 
@@ -50,7 +50,7 @@ Meter meter = OpenTelemetry.getMeterProvider().getMeter("io.opentelemetry.contri
 
 These factories (`TracerProvider` and `MeterProvider`) replace the global `Tracer` / `Meter` singleton objects as ubiquitous points to request Tracer and Meter instances.
 
- The _name_ used to create a Tracer or Meter must identify the _instrumentation_ libraries (also referred to as _integrations_) and not the library being instrumented. These instrumentation libraries could be libraries developed in an OpenTelemetry repository, a 3rd party implementation, or even auto-injected code (see [OpenTelemetry Without Manual Instrumentation OTEP](https://github.com/open-telemetry/oteps/blob/main/text/0001-telemetry-without-manual-instrumentation.md)). See also the examples for identifiers at the end.
+ The _name_ used to create a Tracer or Meter must identify the _instrumentation_ libraries (also referred to as _integrations_) and not the library being instrumented. These instrumentation libraries could be libraries developed in an OpenTelemetry repository, a third-party implementation, or even auto-injected code (see [OpenTelemetry Without Manual Instrumentation OTEP](https://github.com/open-telemetry/oteps/blob/main/text/0001-telemetry-without-manual-instrumentation.md)). See also the examples for identifiers at the end.
 If a library (or application) has instrumentation built-in, it is both the instrumenting and instrumented library and should pass its own name here. In all other cases (and to distinguish them from that case), the distinction between instrumenting and instrumented library is very important. For example, if an HTTP library `com.example.http` is instrumented by either `io.opentelemetry.contrib.examplehttp`, then it is important that the Tracer is not named `com.example.http`, but `io.opentelemetry.contrib.examplehttp` after the actual instrumentation library.
 
 If no name (null or empty string) is specified, following the suggestions in ["error handling proposal"](https://github.com/open-telemetry/opentelemetry-specification/pull/153), a "smart default" will be applied and a default Tracer / Meter implementation is returned.

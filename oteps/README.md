@@ -55,21 +55,21 @@ For example, an OTEP proposing configurable sampling *and* various samplers shou
 
 ### Writing an OTEP
 
-- First, [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) this repo.
+- First, [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) this repository.
 - Copy [`0000-template.md`](./0000-template.md) to `0000-my-OTEP.md`, where `my-OTEP` is a title relevant to your proposal, and `0000` is the OTEP ID.
   Leave the number as is for now. Once a Pull Request is made, update this ID to match the PR ID.
 - Fill in the template. Put care into the details: It is important to present convincing motivation, demonstrate an understanding of the design's impact, and honestly assess the drawbacks and potential alternatives.
 
 ### Submitting the OTEP
 
-- An OTEP is `proposed` by posting it as a PR. Once the PR is created, update the OTEP file name to use the PR ID as the OTEP ID.
+- An OTEP is `proposed` by posting it as a PR. Once the PR is created, update the OTEP filename to use the PR ID as the OTEP ID.
 - An OTEP is `approved` when four reviewers github-approve the PR. The OTEP is then merged.
 - If an OTEP is `rejected` or `withdrawn`, the PR is closed. Note that these OTEPs submissions are still recorded, as GitHub retains both the discussion and the proposal, even if the branch is later deleted.
 - If an OTEP discussion becomes long, and the OTEP then goes through a major revision, the next version of the OTEP can be posted as a new PR, which references the old PR. The old PR is then closed. This makes OTEP review easier to follow and participate in.
 
 ### Integrating the OTEP into the Spec
 
-- Once an OTEP is `approved`, an issue is created in this repo to integrate the OTEP into the actual spec.
+- Once an OTEP is `approved`, an issue is created in this repository to integrate the OTEP into the actual spec.
 - When reviewing the spec PR for the OTEP, focus on whether the spec is written clearly, and reflects the changes approved in the OTEP. Please abstain from relitigating the approved OTEP changes at this stage.
 - An OTEP is `integrated` when four reviewers github-approve the spec PR. The PR is then merged, and the spec is versioned.
 

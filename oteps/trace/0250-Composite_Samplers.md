@@ -1,6 +1,6 @@
 # Composite Samplers Proposal
 
-This proposal addresses head-based sampling as described by the [Open Telemetry SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#sampling).
+This proposal addresses head-based sampling as described by the [OpenTelemetry SDK](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/sdk.md#sampling).
 It introduces additional _composite samplers_.
 Composite samplers use other samplers (_delegates_ or _children_) to make sampling decisions.
 The composite samplers invoke the delegate samplers, but eventually make the final call.
@@ -52,7 +52,7 @@ Unfortunately, some of the valuable ideas flowing at the sampling SIG meetings n
 
 ## The Goal
 
-The goal of this proposal is to help creating advanced sampling configurations using pre-defined building blocks. Let's consider the following example of sampling requirements. It is believed that many users will have requirements following a similar pattern. Most notable elements here are trace classification based on target URL, some spans requiring special handling, and putting a sanity cap on the total volume of exported spans.
+The goal of this proposal is to help creating advanced sampling configurations using predefined building blocks. Let's consider the following example of sampling requirements. It is believed that many users will have requirements following a similar pattern. Most notable elements here are trace classification based on target URL, some spans requiring special handling, and putting a sanity cap on the total volume of exported spans.
 
 Since this is a new part of the sampler specification, it is expected to be an optional component for OpenTelemetry SDKs. However, if an SDK _opts-in_, it SHOULD implement all samplers described herein.
 
@@ -325,7 +325,7 @@ A number of composite samplers are already available as independent contribution
 ([RuleBasedRoutingSampler](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/samplers/src/main/java/io/opentelemetry/contrib/sampler/RuleBasedRoutingSampler.java),
 [Stratified Sampling](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/stratified-sampling-example),
 LinksBasedSampler [for Java](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/samplers/src/main/java/io/opentelemetry/contrib/sampler/LinksBasedSampler.java)
-and [for DOTNET](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/links-based-sampler)).
+and [for .NET](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/links-based-sampler)).
 Also, historically, some Span categorization was introduced by [JaegerRemoteSampler](https://www.jaegertracing.io/docs/2.14/architecture/sampling/#remote-sampling).
 
 This proposal aims at generalizing these ideas, and at providing a bit more formal specification for the behavior of the composite samplers.

@@ -14,7 +14,7 @@ linkTitle: TraceState
 - [Key](#key)
 - [Value](#value)
 - [Setting values](#setting-values)
-- [Pre-defined OpenTelemetry sub-keys](#pre-defined-opentelemetry-sub-keys)
+- [Predefined OpenTelemetry sub-keys](#predefined-opentelemetry-sub-keys)
   * [Sampling threshold value `th`](#sampling-threshold-value-th)
   * [Explicit randomness value `rv`](#explicit-randomness-value-rv)
 
@@ -100,7 +100,7 @@ if ok {
 }
 ```
 
-## Pre-defined OpenTelemetry sub-keys
+## Predefined OpenTelemetry sub-keys
 
 The following values have been defined by OpenTelemetry.
 

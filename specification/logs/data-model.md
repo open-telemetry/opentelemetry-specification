@@ -164,8 +164,8 @@ Here is the list of fields in a log record:
 | ---------- | ----------- |
 | Timestamp | Time when the event occurred. |
 | ObservedTimestamp | Time when the event was observed. |
-| TraceId | Request trace id. |
-| SpanId | Request span id. |
+| TraceId | Request trace ID. |
+| SpanId | Request span ID. |
 | TraceFlags | W3C trace flag. |
 | SeverityText | The severity text (also known as log level). |
 | SeverityNumber | Numerical value of the severity. |
@@ -179,7 +179,7 @@ Below is the detailed description of each field.
 
 ### Field: `Timestamp`
 
-Type: Timestamp, uint64 nanoseconds since Unix epoch.
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
 Description: Time when the event occurred measured by the origin clock, i.e. the
 time at the source. This field is optional, it may be missing if the source
@@ -187,7 +187,7 @@ timestamp is unknown.
 
 ### Field: `ObservedTimestamp`
 
-Type: Timestamp, uint64 nanoseconds since Unix epoch.
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
 Description: Time when the event was observed by the collection system. For
 events that originate in OpenTelemetry (e.g. using OpenTelemetry Logging SDK)
@@ -209,16 +209,16 @@ timestamp internally the following logic is recommended:
 
 Type: byte sequence.
 
-Description: Request trace id as defined in
+Description: Request trace ID as defined in
 [W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-id). Can be set
-for logs that are part of request processing and have an assigned trace id. This
+for logs that are part of request processing and have an assigned trace ID. This
 field is optional.
 
 #### Field: `SpanId`
 
 Type: byte sequence.
 
-Description: Span id. Can be set for logs that are part of a particular
+Description: Span ID. Can be set for logs that are part of a particular
 processing span. If SpanId is present TraceId SHOULD be also present. This field
 is optional.
 

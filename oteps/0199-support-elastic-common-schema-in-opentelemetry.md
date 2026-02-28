@@ -8,7 +8,7 @@ This proposal is to merge the Elastic Common Schema (ECS) with the OpenTelemetry
 
 - Long-term, ECS and OTel SemConv will converge into one open standard that is maintained by OpenTelemetry. To kick off this effort, Elastic will nominate several domain experts to join the OpenTelemetry Semantic Convention Approvers to help with maintaining the new standard.
 - OTel SemConv will adopt ECS in its full scope (except for individual adjustments in detail where inevitable), including the logging, observability and security domain fields, to make the new schema a true successor of ECS and OTel SemConv.
-- Elastic and OpenTelemetry will coordinate and officially announce the direction of the merger (e.g. through official websites, blog posts, etc.)
+- Elastic and OpenTelemetry will coordinate and officially announce the direction of the merger (e.g. through official sites, blog posts, etc.)
 - Migrate ECS and OTel SemConv users to the new common schema over time and provide utilities to allow the migration to be as easy as possible.
 
 ## Scope and Overlap of ECS and OTel SemConv
@@ -28,7 +28,7 @@ ECS and OTel SemConv have some overlap today, but also significant areas of mutu
 
 The process of merging ECS with OTel SemConv will take time and we propose to do it as part of the stabilization effort for OTel SemConv. During that period and also for a significant period after the merger (sunset period), Elastic will continue to support ECS as a schema. However, further evolution of ECS will happen on the basis of the new, common schema. Elastic will nominate ECS experts to help with maintaining the new schema and will require the approver role for the semantic conventions in OpenTelemetry for the new schema.
 
-With the merger there will be different categories of field conflicts between ECS fields and Otel SemConv attributes (as illustrated in the above figure). We expect the areas `A` and `B` to be less controversial and potentially low-hanging fruits for an enriched, new schema.
+With the merger there will be different categories of field conflicts between ECS fields and OTel SemConv attributes (as illustrated in the above figure). We expect the areas `A` and `B` to be less controversial and potentially low-hanging fruits for an enriched, new schema.
 
 For the areas `C` and `D` we propose to resolve conflicts through a close collaboration as part of the stabilization initiative of the OTel SemConv. Where feasible, the goal is to align the OTel SemConv attributes as close as possible with the existing, stable ECS fields. Where alignment is not feasible, the goal is to identify ways to address field conflicts through technical transformations and aliasing, to bridge existing fields and formats into the new schema and vice versa (e.g. through OpenTelemetry Collector Processors).
 
@@ -36,7 +36,7 @@ While realistically truly breaking changes on ECS and OTel SemConv won't be avoi
 
 ## Motivation
 
-Adding the Elastic Common Schema (ECS) to OpenTelemetry (OTel) is a great way to accelerate the integration of vendor-created logging and OTel component logs (i.e. OTel Collector Logs Receivers). The goal is to define vendor neutral semantic conventions for most popular types of systems and support vendor-created or open-source components (for example HTTP access logs, network logs, system access/authentication logs) extending OTel correlation to these new signals.
+Adding the Elastic Common Schema (ECS) to OpenTelemetry (OTel) is a great way to accelerate the integration of vendor-created logging and OTel component logs (i.e. OTel Collector Logs Receivers). The goal is to define vendor neutral semantic conventions for most popular types of systems and support vendor-created or open source components (for example HTTP access logs, network logs, system access/authentication logs) extending OTel correlation to these new signals.
 
 Adding the coverage of ECS to OTel would provide guidance to authors of OpenTelemetry Collector Logs Receivers and help establish the OTel Collector as a de facto standard log collector with a well-defined schema to allow for richer data definition.
 
@@ -44,7 +44,7 @@ In addition to the use case of structured logs, the maturity of ECS for SIEM (Se
 
 Another significant use case is providing first-class support for Kubernetes application logs, system logs, and application introspection events. We would also like to see support for structured events (e.g. [`k8seventsreceiver`](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/k8seventsreceiver)) and using 'content-type' to identify event types.
 
-We'd like to see different categories of structured logs being well-supported in the [OTel Log Data Model](../specification/logs/data-model.md), presumably through [semantic conventions for log attributes](../specification/logs/data-model.md#field-attributes). For example, NGINX access logs and Apache access logs should be processed the same way as structured logs. This would help in trace and metric correlation with such log data as well as it would help grow the ecosystem of curated UIs provided by observability backends and monitoring dashboards (e.g. one single HTTP access log dashboard benefiting Apache httpd, Nginx, and HAProxy).
+We'd like to see different categories of structured logs being well-supported in the [OTel Log Data Model](../specification/logs/data-model.md), presumably through [semantic conventions for log attributes](../specification/logs/data-model.md#field-attributes). For example, NGINX access logs and Apache access logs should be processed the same way as structured logs. This would help in trace and metric correlation with such log data as well as it would help grow the ecosystem of curated UIs provided by observability backends and monitoring dashboards (e.g. one single HTTP access log dashboard benefiting Apache httpd, NGINX, and HAProxy).
 
 ## Customer Motivation
 
@@ -52,7 +52,7 @@ Adoption of OTel logs will accelerate greatly if ECS is leveraged as the common 
 
 Customers will benefit from turnkey logs integrations that will be fully recognized by OTel-compatible observability products and services.
 
-OpenTelemetry logging is today mostly structured when instrumentation libraries are used. However, most of the logs which exist today are generated by software, hardware, and cloud services which the user cannot control. OpenTelemetry provides a limited set of "reference integrations" to structure logs: primarily the [OpenTelemetry Collector Kubernetes Events Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/k8seventsreceiver) and an example of a regexp based parsing of Tomcat access logs with OpenTelemetry Collector File Receiver ([here](https://github.com/open-telemetry/opentelemetry-log-collection/blob/30807b96b2f0771e7d11452ebf98fe5e211ed6d7/examples/tomcat/config.yaml#L20)).
+OpenTelemetry logging is today mostly structured when instrumentation libraries are used. However, most of the logs which exist today are generated by software, hardware, and cloud services which the user cannot control. OpenTelemetry provides a limited set of "reference integrations" to structure logs: primarily the [OpenTelemetry Collector Kubernetes Events Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/k8seventsreceiver) and an example of a regular expression based parsing of Tomcat access logs with OpenTelemetry Collector File Receiver ([here](https://github.com/open-telemetry/opentelemetry-log-collection/blob/30807b96b2f0771e7d11452ebf98fe5e211ed6d7/examples/tomcat/config.yaml#L20)).
 By expanding the OTel semantic conventions with further namespaces already defined in ECS, a broader coverage of such mappings from different sources can be defined and implemented in the OTel collector.
 This, for example, includes logs from network appliances (mapping to the `network` and `interface` namespaces in ECS).
 
@@ -71,7 +71,7 @@ The coverage of ECS is very broad including in depth support for logs, security,
 ECS has the following guiding principles:
 
 * ECS favors human readability in order to enable broader adoption as many fields can be understood without having to read up their meaning in the reference,
-* ECS events include metadata to enable correlations across any dimension (host, data center, docker image, ip address...),
+* ECS events include metadata to enable correlations across any dimension (host, data center, Docker image, ip address...),
   * ECS does not differentiate the metadata fields that are specific to each event of the event source and the metadata that is shared by all the events of the source in the way OTel does, which differentiates between Resource Attributes and Log/Span/Metrics Attributes,
 * ECS groups fields in namespaces in order to:
   * Offer consistency and readability,
@@ -83,7 +83,7 @@ ECS has the following guiding principles:
 
 ### Example of a log message structured with ECS: NGINX access logs
 
-Example of a Nginx Access Log entry structured with ECS
+Example of a NGINX Access Log entry structured with ECS
 
 ```json
 {
@@ -161,7 +161,7 @@ Example of a Nginx Access Log entry structured with ECS
 | Category | <a href="../specification/logs/data-model.md#log-and-event-record-definition">OTel Logs and Event Record</a> (all or a subset of <a href="https://protobuf.dev/programming-guides/proto3/">GRPC data types</a>) | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/field-data-types">ECS Data Types</a> |
 | --- | --- | --- |
 | Text | string | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#text-field-type">text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/text#match-only-text-field-type">match_only_text</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#keyword-field-type">keyword</a> <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#constant-keyword-field-type">constant_keyword</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/keyword#wildcard-field-type">wildcard</a> |
-| Dates | uint64 nanoseconds since Unix epoch | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date">date</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date_nanos">date_nanos</a> |
+| Dates | uint64 nanoseconds since UNIX epoch | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date">date</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/date_nanos">date_nanos</a> |
 | Numbers | number | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">long</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">double</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/number">scaled_float</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/boolean">boolean</a>… |
 | Objects | uint32, uint64… | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/object">object</a> (JSON object), <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/flattened">flattened</a> (An entire JSON object as a single field value) |
 | Structured Objects | No complex semantic data type specified for the moment (e.g. string is being used for ip addresses rather than having an "ip" data structure in OTel). <br/> Note that OTel supports arrays and nested objects. | <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/ip">ip</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/geo-point">geo_point</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/geo-shape">geo_shape</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/version">version</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/range">long_range</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/range">date_range</a>, <a href="https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/range">ip_range</a> |
@@ -185,7 +185,7 @@ As the markdown code of the tables is hard to read and maintain with very long l
    </td>
   </tr>
   <tr>
-   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">Timestamp</a> (uint64 nanoseconds since Unix epoch)
+   <td><a href="../specification/logs/data-model.md#log-and-event-record-definition">Timestamp</a> (uint64 nanoseconds since UNIX epoch)
    </td>
    <td><a href="https://www.elastic.co/docs/reference/ecs/ecs-base#field-timestamp">@timestamp</a> (date)
    </td>
@@ -280,7 +280,7 @@ Prometheus is a de facto standard for observability metrics and OpenTelemetry al
 
 It would be useful to get interoperability between metrics collected by [official Prometheus exporters](https://prometheus.io/docs/instrumenting/exporters/) (e.g. the [Node/system metrics exporter](https://github.com/prometheus/node_exporter) or the [MySQL server exporter](https://github.com/prometheus/mysqld_exporter)) and their equivalent OpenTelemetry Collector receivers (e.g. OTel Collector [Host Metrics Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/hostmetricsreceiver) or [MySQL Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/mysqlreceiver)).
 
-Note that one of the challenges with Prometheus metrics naming conventions is that these are implicit conventions defined by each integration author which doesn't enable correlation due to the lack of consistency across integrations. For example, this inconsistency increases the complexity that an end-user has to deal with when configuring and monitoring alerts.
+Note that one of the challenges with Prometheus metrics naming conventions is that these are implicit conventions defined by each integration author which doesn't enable correlation due to the lack of consistency across integrations. For example, this inconsistency increases the complexity that an end user has to deal with when configuring and monitoring alerts.
 
 Prometheus' conventions are restricted to the style of the name of the metrics (see [Prometheus Metric and label naming](https://prometheus.io/docs/practices/naming/)) but don't specify unified metric names.
 

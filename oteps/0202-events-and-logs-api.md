@@ -6,7 +6,7 @@ We introduce an Events and Logs API that is based on the OpenTelemetry Log signa
 
 In OpenTelemetry's perspective Log Records and Events are different names for the same concept - however, there is a subtle difference in how they are represented using the underlying data model that is described below. We will describe why the existing Logging APIs are not sufficient for the purpose of creating events.  It will then be evident that we will need an API in OpenTelemetry for creating events. Note that the Events here refer to standalone Events and not to be confused with Span Events which occur only in the context of a span.
 
-The Logs part of the API introduced here is supposed to be used only by the Log Appenders and end-users should continue to use the logging APIs available in the languages.
+The Logs part of the API introduced here is supposed to be used only by the Log Appenders and end users should continue to use the logging APIs available in the languages.
 
 ### Subtle differences between Logs and Events
 
@@ -18,7 +18,7 @@ Here are a few situations that require recording of Events, there will be more. 
 
 - RUM events (Client-side instrumentation)
   - Standalone events that occur when there is no span in progress, such as errors, user interaction events and web vitals.
-- Recording kubernetes events
+- Recording Kubernetes events
 - Collector Entity events [link](https://docs.google.com/document/d/1Tg18sIck3Nakxtd3TFFcIjrmRO_0GLMdHXylVqBQmJA/edit)
 - Few other event systems described in [example mappings](../specification/logs/data-model-appendix.md#appendix-a-example-mappings) in the data model.
 
@@ -31,7 +31,7 @@ Here are a few situations that require recording of Events, there will be more. 
 - The current Log APIs do not have a standard way to pass event attributes.
   - It may be possible to use the interpolation string args as the parameter to pass event attributes. However, the logging spec seems to map the human readable message (which is obtained after replacing the args in the interpolated string) to the Body field of LogRecord.
   - Log4j has an EventLogger interface that can be used to create structured messages with arbitrary key-value pairs, but log4j is not commonly used in Android apps as it is not officially supported on Android as per this [Stack Overflow thread](https://stackoverflow.com/a/60407849) by one of log4j’s maintainers.
-  - In Python, logging.LogRecord's extra field is mapped to Otel LogRecord's attributes but this field is a hidden field and not part of the public interface.
+  - In Python, logging.LogRecord's extra field is mapped to OTel LogRecord's attributes but this field is a hidden field and not part of the public interface.
 - The current Log APIs have a message parameter which could map to the Body field of LogRecord. However, this is restricted to String messages and does not allow for structured logs.
 
 For the above reasons we can conclude that we will need an API for creating Events.
@@ -58,11 +58,11 @@ For the Events and Logs API, it will be very similar to the Trace API. There wil
 
 ## Trade-offs and mitigations
 
-There could be confusion on whether the Logs part of the API is end-user callable. While it can eventually be used in the languages that do not have a popular logging library, it is not recommended to be used in the languages where there are other popular logging libraries and APIs and this fact must emphasized in different forums.
+There could be confusion on whether the Logs part of the API is end user callable. While it can eventually be used in the languages that do not have a popular logging library, it is not recommended to be used in the languages where there are other popular logging libraries and APIs and this fact must emphasized in different forums.
 
 ## Prior art and alternatives
 
-For client-side instrumentation, it was suggested initially that we use 0-duration spans to represent Events to get the benefit of Spans providing causality. For example, Splunk's RUM sdk for Android implements Events using [0-duration span](https://github.com/signalfx/splunk-otel-android/blob/3ca8584632f334671fdb6eaa09199ce01961787f/splunk-otel-android/src/main/java/com/splunk/rum/SplunkRum.java#L213). However, 0-duration spans are confusing and not consistent with standalone Events in other domains which are represented using `LogRecord`s.  Hence, for consistency reasons it will be good to use `LogRecord`s for standalone Events everywhere. To address the requirement of modeling causality between Events, we can create wrapper spans linked to the `LogRecord`s.
+For client-side instrumentation, it was suggested initially that we use 0-duration spans to represent Events to get the benefit of Spans providing causality. For example, Splunk's RUM SDK for Android implements Events using [0-duration span](https://github.com/signalfx/splunk-otel-android/blob/3ca8584632f334671fdb6eaa09199ce01961787f/splunk-otel-android/src/main/java/com/splunk/rum/SplunkRum.java#L213). However, 0-duration spans are confusing and not consistent with standalone Events in other domains which are represented using `LogRecord`s.  Hence, for consistency reasons it will be good to use `LogRecord`s for standalone Events everywhere. To address the requirement of modeling causality between Events, we can create wrapper spans linked to the `LogRecord`s.
 
 ## Open questions
 
@@ -70,5 +70,5 @@ None.
 
 ## Future possibilities
 
-1. As noted in the `Trade-offs and mitigation` section, we could allow the API to be used by end-users in the languages that do not have a popular logging library.
+1. As noted in the `Trade-offs and mitigation` section, we could allow the API to be used by end users in the languages that do not have a popular logging library.
 2. There is a possibility that we may want to record the Span Events using `LogRecord`s in future. In this case, they will be correlated wth the Spans using the `TraceId` and `SpanId` fields of the `LogRecord`. If this is desired, we may add a configuration option to the `TracerProvider` to create LogRecords for the Span Events.

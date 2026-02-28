@@ -1,0 +1,188 @@
+# cspell:ignore ebpf matic postgres protable
+plugins:
+filters:
+  allowlist:
+    allow:
+      # Don't check registry .yml file fields for language, repo,URL and tags:
+      - '/^\s*(?:language|repo|name|docs|url|website): .*$/m'
+      - /^(?:tags):(\s*-.+$)*/m
+      # Hugo template syntax:
+      - /{{.*?}}/
+      - /{{%.*?%}}/
+      # Custom header anchors in markdown headings:
+      - /{#.*?}/
+      # src attribute in figure Hugo template:
+      - /src=".*?"/
+      # Other:
+      - /<https?:\/\/.*?>/ # Raw URLs
+      - /\[.+\/\w+\]/ # Paths in square brackets to look like URLs
+rules:
+  common-misspellings:
+    # Misspellings to be ignored (case-insensitive)
+    ignore: []
+  period-in-header: true
+  terminology:
+    defaultTerms: true
+    skip: []
+    exclude:
+      - 'bug[- ]fix(es)?'
+      - 'readme(s)?'
+      - 'to-?do(s)?(?=[ ,.])'
+      - "indexes\\b"
+    terms:
+      - Actix
+      - Ajax
+      - Apache
+      - API
+      - application/json
+      - AWS
+      - Azure
+      - Caml
+      - Cassandra
+      - Clojure
+      - CNCF
+      - eBPF
+      - ECMAScript
+      - Elixir
+      - Erlang
+      - GCP
+      - GitHub
+      - Gitpod
+      - GraphQL
+      - gRPC
+      - Haskell
+      - HTTP
+      - HTTPS
+      - ID
+      - iOS
+      - Istio
+      - Jaeger
+      - JavaScript
+      - JBoss
+      - Jetty
+      - JMX
+      - JSON
+      - Julia
+      - K8s
+      - Kafka
+      - KubeCon
+      - Kubernetes
+      - Laravel
+      - MacBook
+      - macOS
+      - Markdown
+      - MongoDB
+      - mTLS
+      - MySQL
+      - NDJSON
+      - Netlify
+      - NGINX
+      - OCaml
+      - OK
+      - OpAMP
+      - OpenSearch
+      - OpenTelemetry Collector
+      - OTel
+      - OTEP
+      - PDF
+      - Phoenix
+      - PHP
+      - PostgreSQL
+      - protobuf
+      - Python
+      - Quarkus
+      - Rails
+      - README
+      - Redis
+      - Ruby
+      - Rust
+      - SDK
+      - SemVer
+      - SQL
+      - SQLite
+      - Swift
+      - Symfony
+      - Thanos
+      - Traefik
+      - TypeScript
+      - UNIX
+      - URL
+      - WordPress
+      - WSGI
+      - YouTube
+      - Zend
+      - Zipkin
+      #
+      # ADVANCED RULES given as `[pattern, replacement]`, take as arguments to a
+      # search-and-replace of the form /pattern/replacement/.
+      #
+      # If the regex pattern starts with `(?<` or `(?=` or `(?!`, the
+      # terminology linter rule will use the regex AS IS to match strings in
+      # checked files. Otherwise, the pattern is wrapped into a regex with other
+      # constraints, such as requiring that is be at word boundaries. For
+      # details, see
+      # https://github.com/sapegin/textlint-rule-terminology/blob/ca36a645c56d21f27cb9d902b5fb9584030c59e3/index.js#L137-L142.
+      #
+      - ['3rd[- ]party', third-party]
+      - ['auto[- ]c(onfigur)(es?|ations?)', 'autoc$1$2'] # cSpell:disable-line
+      - ['back[- ]end(s)?', 'backend$1']
+      - ['bugfix(es?)', 'bug fix$1']
+      - [byte code, bytecode]
+      - ['(cloud)-(native)', '$1 $2']
+      - [cpp, C++]
+      - # dotnet|.net -> .NET, but NOT for strings like:
+        # - File extension: file.net
+        # - Repo names: opentelemetry-dotnet
+        # - Compound names: System.Net.Http.HttpClient
+        - '(?<=(^|\s))(?:\bdot|\.)net\b'
+        - .NET
+      - [ebpf, eBPF]
+      - [epbf, eBPF]
+      - ['http[ /]?2(?:\.0)?', HTTP/2]
+      - [he(/| or )she, they]
+      - [\(s\)he, they]
+      - ["indices\\b", "indexes"]
+      - ["id['’]?s", IDs]
+      - # Capitalize Java, but NOT for strings like:
+        # - File names: file.java
+        # - Repo names: opentelemetry-java
+        # - Compound names: java.util.List
+        - '(?<![.-])java\b(?![.])'
+        - Java
+      - ['java[- ]?agent', Java agent]
+      - ['java ?doc(s)?', 'Javadoc$1']
+      - ['mac ?os', macOS]
+      - ['meta[- ]data', metadata]
+      - ['nd-?json', NDJSON]
+      - ['node\.?js', Node.js]
+      - [open-source, open source]
+      - # OpenTelemetry
+        # Catch typos like: OpenTelemtry, opentelementry
+        # Exclude occurrences like:
+        # - Compound names: go.opentelemetry.io
+        # - Paths: medium.com/opentelemetry
+        # - Repo names: opentelemetry-cpp or ocaml-opentelemetry
+        # - Repo names: open-telemetry/opentelemetry-cpp
+        # - Slack or social media anchors: #opentelemetry or @opentelemetry
+        # cSpell:ignore teleme
+        - '(?<![-#@./])\bopen[- ]?teleme?n?try\b(?![-./])'
+        - OpenTelemetry
+      - [os x, macOS]
+      - [protable, portable]
+      - [postgres, PostgreSQL]
+      - ['psr[ -]?([0-9]+)', PSR-$1]
+      - ['react[ .]js', React]
+      - ['regexp?(s)?', regular expression$1]
+      - [repo\b, repository]
+      - [repos, repositories]
+      - ['screen[- ]shot(s)?', screenshot$1]
+      - ['time[- ]stamp(s)?', timestamp$1]
+      - ["to-?do(s)?", "TODO$1"]
+      - ["uid['’]?(s)?", UID$1]
+      - ['(walk)-(throughs?)', $1$2] # cSpell:disable-line
+      - ['(work)-(arounds?)', $1$2]
+      # Enable the following to find and replace "instrumentation module/package" with "instrumentation library":
+      # - ["(auto(matic)?[- ])?instrumentation (module|package)", "instrumentation library"]
+      # - ["(auto(matic)?[- ])?instrumentation (modules|packages)", "instrumentation libraries"]
+      - snake_case
+      - location_indices

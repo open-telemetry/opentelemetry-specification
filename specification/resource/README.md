@@ -53,7 +53,7 @@ including more than one entity, like:
 
 - A process
 - A container
-- A kubernetes pod name
+- A Kubernetes pod name
 - A namespace
 - A deployment
 

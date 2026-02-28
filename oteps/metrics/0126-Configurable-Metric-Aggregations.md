@@ -29,12 +29,12 @@ of a "Views" API, but does not intend to implement the full View functionality f
 The basic API has two parts.
 
 * InstrumentSelector - Enables specifying the selection of one or more instruments for the configuration to apply to.
-  - Selection options include: the instrument type (Counter, ValueRecorder, etc), and a regex for instrument name.
+  - Selection options include: the instrument type (Counter, ValueRecorder, etc), and a regular expression for instrument name.
   - If more than one option is provided, they are considered additive.
   - Example: select all ValueRecorders whose name ends with ".duration".
 * View - configures how the batching and aggregation should be done.
   - 3 things can be specified: The aggregation (Sum, MinMaxSumCount, Histogram, etc), the "temporality" of the batching,
-    and a set of pre-defined labels to consider as the subset to be used for aggregations.
+    and a set of predefined labels to consider as the subset to be used for aggregations.
     - Note: "temporality" can be one of "DELTA" and "CUMULATIVE" and specifies whether the values of the aggregation
       are reset after a collection is done or not, respectively.
   - If not all are specified, then the others should be considered to be requesting the default.

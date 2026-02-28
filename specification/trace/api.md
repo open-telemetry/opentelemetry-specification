@@ -73,7 +73,7 @@ The representation of those values is language specific.
 
 #### Timestamp
 
-A timestamp is the time elapsed since the Unix epoch.
+A timestamp is the time elapsed since the UNIX epoch.
 
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
@@ -279,14 +279,14 @@ When extracting a `SpanContext` through the [Propagators API](../context/api-pro
 
 ### TraceState
 
-`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by an immutable list of string key/value pairs and
+`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by an immutable list of string key-value pairs and
 formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 Tracing API MUST provide at least the following operations on `TraceState`:
 
 * Get value for a given key
-* Add a new key/value pair
+* Add a new key-value pair
 * Update an existing value for a given key
-* Delete a key/value pair
+* Delete a key-value pair
 
 These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
 All mutating operations MUST return a new `TraceState` with the modifications applied.
@@ -351,7 +351,7 @@ first sub-operation, and an end time of when the final sub-operation is complete
 This includes:
 
 - receiving the data from the request
-- parsing of the data (e.g. from a binary or json format)
+- parsing of the data (e.g. from a binary or JSON format)
 - any middleware or additional processing logic
 - business logic
 - construction of the response

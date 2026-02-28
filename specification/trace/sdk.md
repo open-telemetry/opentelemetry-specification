@@ -61,7 +61,7 @@ weight: 3
     + [Presumption of TraceID randomness](#presumption-of-traceid-randomness)
     + [IdGenerator randomness](#idgenerator-randomness)
 - [Span Limits](#span-limits)
-- [Id Generators](#id-generators)
+- [ID Generators](#id-generators)
   * [IdGenerator randomness](#idgenerator-randomness-1)
 - [Span processor](#span-processor)
   * [Interface definition](#interface-definition)
@@ -592,7 +592,7 @@ Optional parameters:
 
 [Jaeger remote sampler][jaeger-remote-sampling] allows remotely controlling the sampling configuration for the SDKs. The sampling configuration is periodically loaded from the backend (see [Remote Sampling API][jaeger-remote-sampling-api]), where it can be managed by operators via configuration files or even automatically calculated (see [Adaptive Sampling][jaeger-adaptive-sampling]). The sampling configuration retrieved by the remote sampler can instruct it to  use either a single sampling method for the whole service (e.g., `TraceIdRatioBased`), or different methods for different endpoints (span names), for example, sample `/product` endpoint at 10%, `/admin` endpoint at 100%, and never sample `/metrics` endpoint.
 
-The full Protobuf definition can be found at [jaegertracing/jaeger-idl/api_v2/sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/main/proto/api_v2/sampling.proto).
+The full protobuf definition can be found at [jaegertracing/jaeger-idl/api_v2/sampling.proto](https://github.com/jaegertracing/jaeger-idl/blob/main/proto/api_v2/sampling.proto).
 
 The following configuration properties should be available when creating the sampler:
 
@@ -874,7 +874,7 @@ that an attribute, event, or link was discarded due to such a limit.
 To prevent excessive logging, the message MUST be printed at most once per
 span (i.e., not per discarded attribute, event, or link).
 
-## Id Generators
+## ID Generators
 
 The SDK MUST by default randomly generate both the `TraceId` and the `SpanId`.
 
@@ -882,7 +882,7 @@ The SDK MUST provide a mechanism for customizing the way IDs are generated for
 both the `TraceId` and the `SpanId`.
 
 The SDK MAY provide this functionality by allowing custom implementations of
-an interface like the java example below (name of the interface MAY be
+an interface like the Java example below (name of the interface MAY be
 `IdGenerator`, name of the methods MUST be consistent with
 [SpanContext](./api.md#retrieving-the-traceid-and-spanid)), which provides
 extension points for two methods, one to generate a `SpanId` and one for `TraceId`.
@@ -895,7 +895,7 @@ public interface IdGenerator {
 ```
 
 Additional `IdGenerator` implementing vendor-specific protocols such as AWS
-X-Ray trace id generator MUST NOT be maintained or distributed as part of the
+X-Ray trace ID generator MUST NOT be maintained or distributed as part of the
 Core OpenTelemetry repositories.
 
 ### IdGenerator randomness
