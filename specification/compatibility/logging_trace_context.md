@@ -20,7 +20,7 @@
 ## Overview
 
 OTLP Logs Records have top level fields
-representing [trace context](../logs/data-model.md#trace-context-fields). This
+representing [trace context](../logs/data-model.md#open-telemetry-protocol-data-model). This
 document defines how trace context should be recorded in non-OTLP Log Formats.
 To summarize, the following field names should be used in legacy formats:
 

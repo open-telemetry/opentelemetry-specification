@@ -246,7 +246,7 @@ Semantic Conventions defines the set of fields in the OTLP data model:
       `ExponentialHistogramDataPoint` and `SummaryDataPoint`.
   - The attribute values on any `*DataPoint` that are defined in a list of
     well-known values.
-- [Log Records](logs/data-model.md#log-and-event-record-definition)
+- [Log Records](logs/data-model.md#open-telemetry-protocol-data-model)
   - The attribute keys provided on the LogRecord
   - The attribute values provided on the LogRecord that are defined in a list
     of well-known values.
