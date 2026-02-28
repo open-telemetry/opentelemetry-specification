@@ -9,19 +9,17 @@ release.
 
 ### Context
 
-- Deprecate Jaeger propagator and make propagator implementation optional.
-  ([#4827](https://github.com/open-telemetry/opentelemetry-specification/pull/4827))
-- Deprecate OT Trace propagator and make propagator implementation optional.
-  ([#4851](https://github.com/open-telemetry/opentelemetry-specification/pull/4851))
-
 ### Traces
 
 ### Metrics
 
+- Add additional in-development requirements to metric start timestamps.
+  ([#4807](https://github.com/open-telemetry/opentelemetry-specification/pull/4807))
+
 ### Logs
 
-- Add optional `Exception` parameter to Emit LogRecord.
-  ([#4824](https://github.com/open-telemetry/opentelemetry-specification/pull/4824))
+- Stabilize optional `Exception` parameter to Logger Emit.
+  ([#4858](https://github.com/open-telemetry/opentelemetry-specification/pull/4858))
 
 ### Baggage
 
@@ -29,34 +27,76 @@ release.
 
 ### Resource
 
-- Refine the handling of OTEL_RESOURCE_ATTRIBUTES.
-  ([#4856](https://github.com/open-telemetry/opentelemetry-specification/pull/4856))
-
 ### Entities
 
 ### Common
-
-- Add string representation guidance for complex attribute value types (byte arrays,
-  empty values, arrays, and maps) for non-OTLP protocols.
-  ([#4485](https://github.com/open-telemetry/opentelemetry-specification/pull/4485))
 
 ### OpenTelemetry Protocol
 
 ### Compatibility
 
-- Stabilize Prometheus Counter to OTLP Sum transformation.
-  ([#4862](https://github.com/open-telemetry/opentelemetry-specification/pull/4862))
+- Stabilize Prometheus Summary to OTLP Summary transformation.
+  ([#4872](https://github.com/open-telemetry/opentelemetry-specification/pull/4872))
 
 ### SDK Configuration
 
-- Declarative configuration: rename `ComponentProvider` to
-  `PluginComponentProvider`, `CreatePlugin` to `CreateComponent` in effort to
-  use consistent vocabulary
-  ([#4806](https://github.com/open-telemetry/opentelemetry-specification/pull/4806))
+- Mark significant portions of declarative configuration as stable.
+  ([#4568](https://github.com/open-telemetry/opentelemetry-specification/pull/4568))
 
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.54.0 (2026-02-13)
+
+### Context
+
+- Deprecate Jaeger propagator and make propagator implementation optional.
+  ([#4827](https://github.com/open-telemetry/opentelemetry-specification/pull/4827))
+- Deprecate OT Trace propagator and make propagator implementation optional.
+  ([#4851](https://github.com/open-telemetry/opentelemetry-specification/pull/4851))
+
+### Metrics
+
+- Add normative language to the Metrics API/SDK spec concurrency requirements.
+  ([#4868](https://github.com/open-telemetry/opentelemetry-specification/pull/4868))
+
+### Logs
+
+- Add optional `Exception` parameter to Emit LogRecord.
+  ([#4824](https://github.com/open-telemetry/opentelemetry-specification/pull/4824))
+- Add normative language to the Logging API/SDK spec concurrency requirements.
+  ([#4885](https://github.com/open-telemetry/opentelemetry-specification/pull/4885))
+
+### Resource
+
+- Refine the handling of OTEL_RESOURCE_ATTRIBUTES.
+  ([#4856](https://github.com/open-telemetry/opentelemetry-specification/pull/4856))
+
+### Common
+
+- Add string representation guidance for complex attribute value types (byte arrays,
+  empty values, arrays, and maps) for non-OTLP protocols.
+  ([#4848](https://github.com/open-telemetry/opentelemetry-specification/pull/4848))
+
+### Compatibility
+
+- Stabilize Prometheus Counter to OTLP Sum transformation.
+  ([#4862](https://github.com/open-telemetry/opentelemetry-specification/pull/4862))
+- Stabilize Prometheus Gauge to OTLP Gauge transformation.
+  ([#4871](https://github.com/open-telemetry/opentelemetry-specification/pull/4871))
+
+### SDK Configuration
+
+- Swap Tracer/Meter/LoggerConfig `disabled` for `enabled` to avoid double negatives
+  ([#4823](https://github.com/open-telemetry/opentelemetry-specification/pull/4823))
+- Declarative configuration: rename `ComponentProvider` to
+  `PluginComponentProvider`, `CreatePlugin` to `CreateComponent` in effort to
+  use consistent vocabulary
+  ([#4806](https://github.com/open-telemetry/opentelemetry-specification/pull/4806))
+- Declarative configuration: Update instrumentation config behavior to return
+  empty object when not set
+  ([#4817](https://github.com/open-telemetry/opentelemetry-specification/pull/4817))
 
 ## v1.53.0 (2026-01-09)
 
@@ -83,11 +123,6 @@ release.
   ([#4802](https://github.com/open-telemetry/opentelemetry-specification/pull/4802))
 - Declarative configuration: clarify Registry ComponentProvider `type` parameter
   ([#4799](https://github.com/open-telemetry/opentelemetry-specification/pull/4799))
-- Declarative configuration: Update instrumentation config behavior to return
-  empty object when not set
-  ([#4817](https://github.com/open-telemetry/opentelemetry-specification/pull/4817))
-- Swap Tracer/Meter/LoggerConfig `disabled` for `enabled` to avoid double negatives
-  ([#4823](https://github.com/open-telemetry/opentelemetry-specification/pull/4823))
 
 ### Common
 

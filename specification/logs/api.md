@@ -126,7 +126,7 @@ The API MUST accept the following parameters:
 - [Attributes](./data-model.md#field-attributes) (optional)
 - [Event Name](./data-model.md#field-eventname) (optional)
 
-**Status**: [Development](../document-status.md) - The API MAY accept the following parameter:
+The API MAY accept the following parameter:
 
 - Exception (optional): An exception (or error) associated with the log record.
 
@@ -169,9 +169,11 @@ provide it.
 For languages which support concurrent execution the Logs APIs provide
 specific guarantees and safeties.
 
-**LoggerProvider** - all methods are safe to be called concurrently.
+**LoggerProvider** - all methods MUST be documented that implementations need to
+be safe for concurrent use by default.
 
-**Logger** - all methods are safe to be called concurrently.
+**Logger** - all methods MUST be documented that implementations need to
+be safe for concurrent use by default.
 
 ## Ergonomic API
 

@@ -5,7 +5,7 @@ weight: 1
 
 # Instrumentation Configuration API
 
-**Status**: [Development](../document-status.md)
+**Status**: [Mixed](../document-status.md)
 
 <!-- toc -->
 
@@ -34,6 +34,8 @@ It consists of the following main components:
   configuration mapping node.
 
 ### ConfigProvider
+
+**Status**: [Development](../document-status.md)
 
 `ConfigProvider` provides access to configuration properties relevant to
 instrumentation.
@@ -64,6 +66,8 @@ If the `.instrumentation` node is not set, get instrumentation config SHOULD
 return an empty `ConfigProperties` (as if `.instrumentation: {}` was set).
 
 ### ConfigProperties
+
+**Status**: [Stable](../document-status.md)
 
 `ConfigProperties` is a programmatic representation of a configuration mapping
 node (i.e. a YAML mapping node).

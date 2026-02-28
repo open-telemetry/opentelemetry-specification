@@ -5,7 +5,7 @@ weight: 2
 
 # Configuration Data Model
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <!-- toc -->
 

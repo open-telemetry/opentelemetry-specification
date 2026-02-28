@@ -416,6 +416,8 @@ in OTLP consist of the following:
     - The time interval is inclusive of the end time.
     - Times are specified in Value is UNIX Epoch time in nanoseconds since
       `00:00:00 UTC on 1 January 1970`
+    - The `start` timestamp best represents the first possible moment a
+      measurement for this timeseries could have been recorded.
   - (optional) a set of exemplars (see [Exemplars](#exemplars)).
   - (optional) Data point flags (see [Data point flags](#data-point-flags)).
 
@@ -426,7 +428,8 @@ no overlap in time windows for metric streams, e.g.
 ![Delta Sum](img/model-delta-sum.png)
 
 Contrast with cumulative aggregation temporality where we expect to report the
-full sum since 'start' (where usually start means a process/application start):
+full sum since 'start' (where start is often close to the process/application
+start):
 
 ![Cumulative Sum](img/model-cumulative-sum.png)
 
@@ -450,9 +453,9 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
   - A sampled value (e.g. current CPU temperature)
   - A timestamp when the value was sampled (`time_unix_nano`)
   - (optional) A timestamp (`start_time_unix_nano`) which best represents the
-    first possible moment a measurement could be recorded.  This is commonly
-    set to the timestamp when a metric collection system started.
-  - (optional) a set of exemplars (see [Exemplars](#exemplars)).
+    first possible moment a measurement for this timeseries could have been
+    recorded.
+  - (optional) a set of examplars (see [Exemplars](#exemplars)).
   - (optional) Data point flags (see [Data point flags](#data-point-flags)).
 
 In OTLP, a point within a Gauge stream represents the last-sampled event for a
@@ -490,6 +493,8 @@ Histograms consist of the following:
     - The time interval is inclusive of the end time.
     - Time values are specified as nanoseconds since the UNIX Epoch
       (00:00:00 UTC on 1 January 1970).
+    - The `start` timestamp best represents the first possible moment a
+      measurement for this timeseries could have been recorded.
   - A count (`count`) of the total population of points in the histogram.
   - A sum (`sum`) of all the values in the histogram.
   - (optional) The min (`min`) of all values in the histogram.
@@ -963,8 +968,9 @@ Summary consists of the following:
 - A set of data points, each containing:
   - An independent set of Attribute name-value pairs.
   - A timestamp when the value was sampled (`time_unix_nano`)
-  - (optional) A timestamp (`start_time_unix_nano`) that denotes the start time
-    of observation collection for the summary.
+  - (optional) A timestamp (`start_time_unix_nano`) which best represents the
+    first possible moment a measurement for this timeseries could have been
+    recorded.
   - A count of the number of observations in the population of the data point.
   - A sum of the values in the population.
   - A set of quantile values (in strictly increasing order) consisting of:
@@ -1082,9 +1088,10 @@ temporality.
 Every OTLP metric data point has two associated timestamps.  The
 first, mandatory timestamp is the one associated with the observation,
 the moment when the measurement became current or took effect, and is
-referred to as `TimeUnixNano`.  The second, optional timestamp is used
-to indicate when a sequence of points is unbroken, and is referred to as
-`StartTimeUnixNano`.
+referred to as `TimeUnixNano`. The second, optional timestamp is used
+to indicate when a sequence of points is unbroken and to inidcate when a
+timeseries began accumulating measurements. The second timestamp is referred to
+as `StartTimeUnixNano`.
 
 The second timestamp is strongly recommended for Sum, Histogram, and
 ExponentialHistogram points, as it is necessary to correctly interpret the rate

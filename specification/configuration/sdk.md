@@ -5,7 +5,7 @@ weight: 3
 
 # Configuration SDK
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md) except where otherwise specified
 
 <!-- toc -->
 
@@ -23,7 +23,7 @@ weight: 3
     + [Register PluginComponentProvider](#register-plugincomponentprovider)
   * [Examples](#examples)
     + [Via configuration API](#via-configuration-api)
-    + [Via OTEL_EXPERIMENTAL_CONFIG_FILE](#via-otel_experimental_config_file)
+    + [Via OTEL_CONFIG_FILE](#via-otel_config_file)
   * [References](#references)
 
 <!-- tocstop -->
@@ -61,6 +61,8 @@ idiomatic for their language. If an SDK needs to expose a class or interface,
 the name `Configuration` is RECOMMENDED.
 
 ### ConfigProvider
+
+**Status**: [Development](../document-status.md)
 
 The SDK implementation of [`ConfigProvider`](./api.md#configprovider) MUST be
 created using a [`ConfigProperties`](./api.md#configproperties) representing
@@ -183,8 +185,7 @@ Note: Because these operations are stateless pure functions, they are not
 defined as part of any type, class, interface, etc. SDKs may organize them in
 whatever manner is idiomatic for the language.
 
-TODO: Add operation to update SDK components with new configuration for usage
-with OpAMP
+<!-- TODO: https://github.com/open-telemetry/opentelemetry-specification/issues/3771 -->
 
 #### Parse
 
@@ -251,7 +252,7 @@ Interpret configuration model and return SDK components.
 * [MeterProvider](../metrics/sdk.md#meterprovider)
 * [LoggerProvider](../logs/sdk.md#loggerprovider)
 * [Propagators](../context/api-propagators.md#composite-propagator)
-* [ConfigProvider](#configprovider)
+* **Status**: [Development](../document-status.md) - [ConfigProvider](#configprovider)
 
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
@@ -296,10 +297,11 @@ This SHOULD return an error if it encounters an error in `configuration` (i.e.
 fail fast) in accordance with
 initialization [error handling principles](../error-handling.md#basic-error-handling-principles).
 
-SDK implementations MAY provide options to allow programmatic customization of
-the components initialized by `Create`. This allows configuration of concepts which
-are not yet or may never be representable in the configuration model. For example,
-Java OTLP exporters allow configuration of the [ExecutorService](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html),
+**Status**: [Development](../document-status.md) SDK implementations MAY provide
+options to allow programmatic customization of the components initialized by `Create`.
+This allows configuration of concepts which are not yet or may never be representable
+in the configuration model. For example, Java OTLP exporters allow configuration
+of the [ExecutorService](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html),
 a niche but important option for applications which need strict control of thread pools.
 This programmatic customization might take the form of passing an optional callback to
 `Create`, invoked with each SDK subcomponent (or a subset of SDK component types) as
@@ -319,7 +321,7 @@ Batch SpanProcessor, and a Tracer Provider. This pattern provides the opportunit
 to programmatically configure lower-level without needing to walk to a particular
 component from the resolved top level SDK components.
 
-TODO: define behavior if some portion of configuration model is not supported
+<!-- TODO: https://github.com/open-telemetry/opentelemetry-specification/issues/4804 -->
 
 #### Register PluginComponentProvider
 
@@ -405,10 +407,10 @@ ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```
 
-#### Via OTEL_EXPERIMENTAL_CONFIG_FILE
+#### Via OTEL_CONFIG_FILE
 
 Setting
-the [OTEL_EXPERIMENTAL_CONFIG_FILE](./sdk-environment-variables.md#declarative-configuration)
+the [OTEL_CONFIG_FILE](./sdk-environment-variables.md#declarative-configuration)
 environment variable (for languages that support it) provides users a convenient
 way to initialize OpenTelemetry components without needing to learn
 language-specific configuration details or use a large number of environment
@@ -418,11 +420,11 @@ resemble:
 
 ```shell
 # Set the required env var to the location of the configuration file
-export OTEL_EXPERIMENTAL_CONFIG_FILE="/app/sdk-config.yaml"
+export OTEL_CONFIG_FILE="/app/sdk-config.yaml"
 ```
 
 ```java
-// Initialize SDK using autoconfigure model, which recognizes that OTEL_EXPERIMENTAL_CONFIG_FILE is set and configures the SDK accordingly
+// Initialize SDK using autoconfigure model, which recognizes that OTEL_CONFIG_FILE is set and configures the SDK accordingly
 OpenTelemetry openTelemetry = AutoConfiguredOpenTelemetrySdk.initialize().getOpenTelemetrySdk();
 
 // Access SDK components and install instrumentation
