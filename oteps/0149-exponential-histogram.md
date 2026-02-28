@@ -45,7 +45,7 @@ message ExponentialBucketCounts {
 
 Notes:
 
-* ExponentialBuckets will be added as "oneof" the bucket types in [#272](https://github.com/open-telemetry/opentelemetry-proto/pull/272)
+* ExponentialBuckets will be added as "one-of" the bucket types in [#272](https://github.com/open-telemetry/opentelemetry-proto/pull/272)
 * Per [#257](https://github.com/open-telemetry/opentelemetry-proto/issues/257), only a histogram accepting "double" will be defined.
 * Per [#259](https://github.com/open-telemetry/opentelemetry-proto/issues/259), bucket counts type is "double".
 

@@ -85,5 +85,9 @@ jobs:
     - name: check out code
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-    - name: run misspell
-      run: make misspell
+    - uses: streetsidesoftware/cspell-action@v8
+      with:
+        incremental_files_only: false # check all files, not just changed files
+        config: .cspell.yaml
+        suggestions: true
+        treat_flagged_words_as_errors: true
