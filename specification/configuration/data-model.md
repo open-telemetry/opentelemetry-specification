@@ -69,7 +69,7 @@ SUBSTITUTION-REF = "${" [PREFIX ":"] GENERIC-SUBSTITUTION "}"; generic substitut
 ENV-SUBSTITUTION = ENV-NAME [":-" DEFAULT-VALUE]; env var substitution
 
 PREFIX = ALPHA *(ALPHA / DIGIT / "_"); substitution prefix, e.g. "env" (universal) or language-specific
-GENERIC-SUBSTITUTION = *(VCHAR-WSP-NO-RBRACE); substitution content, interpretation depends on PREFIX
+GENERIC-SUBSTITUTION = 1*(VCHAR-WSP-NO-RBRACE); substitution content, interpretation depends on PREFIX
 ENV-NAME = (ALPHA / "_") *(ALPHA / DIGIT / "_"); the name of the environment variable to be substituted
 DEFAULT-VALUE = *(VCHAR-WSP-NO-RBRACE); any number of VCHAR-WSP-NO-RBRACE
 VCHAR-WSP-NO-RBRACE = %x21-7C / "~" / WSP; printable chars and whitespace, except }
@@ -82,7 +82,7 @@ DIGIT = %x30-39 ; 0-9
 
 * Must start with `${`
 * Optionally followed by `PREFIX:`, where `PREFIX` is `env` (universal) or a language-specific identifier
-* Must follow with `GENERIC-SUBSTITUTION`, any number of printable characters or whitespace except `}`
+* Must follow with `GENERIC-SUBSTITUTION`, at least one printable character or whitespace except `}`
 * Must follow with `}`
 
 When `PREFIX` is absent or `env`, `GENERIC-SUBSTITUTION` MUST conform to `ENV-SUBSTITUTION`:
@@ -107,7 +107,7 @@ non-normative.
 
 ```regexp
 // SUBSTITUTION-REF
-\$\{(?:(?<PREFIX>[a-zA-Z][a-zA-Z0-9_]*):)?(?<GENERIC_SUBSTITUTION>[^}]*)\}
+\$\{(?:(?<PREFIX>[a-zA-Z][a-zA-Z0-9_]*):)?(?<GENERIC_SUBSTITUTION>[^}]+)\}
 
 // ENV-SUBSTITUTION (applied to GENERIC_SUBSTITUTION when PREFIX is absent or "env")
 (?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?
