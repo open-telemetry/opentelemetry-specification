@@ -284,7 +284,7 @@ on each other), the owner should try to get people aligned by:
   with a summary in the PR conversation.
 * Tagging subdomain experts (by looking at the change history) in the PR asking
   for suggestion.
-* Reaching out to more people on the [CNCF OpenTelemetry Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](http://slack.cncf.io/).
+* Reaching out to more people on the [CNCF OpenTelemetry Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](https://slack.cncf.io/).
 * Stepping back to see if it makes sense to narrow down the scope of the PR or
   split it up.
 
@@ -312,7 +312,7 @@ Release Procedure:
    (e.g., in the last released version rather than Unreleased).
 4. Add the changelog entries from `CHANGELOG.md` to the description of the
    [release PR](
-   https://github.com/open-telemetry/opentelemetry-specification/releases) and undraft it.
+   https://github.com/open-telemetry/opentelemetry-specification/releases) and un-draft it.
 5. Once it is approved, confirm the date in the CHANGELOG is up-to-date, and merge it,
    creating a new release tag, e.g. "v1.50.0", containing the CHANGELOG contents.
 

@@ -611,7 +611,7 @@ virtually identical to what this OTEP proposes.
 There is also an implementation of this design in the Collector, see
 [completed issue to add entity events](https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/23565)
 and [the PR](https://github.com/open-telemetry/opentelemetry-collector-contrib/pull/24419)
-that implements entity event emitting for k8scluster receiver in the Collector.
+that implements entity event emitting for `k8scluster` receiver in the Collector.
 
 ## Alternatives
 

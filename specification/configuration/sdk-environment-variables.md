@@ -240,9 +240,9 @@ We define environment variables for setting one or more exporters per signal.
 
 | Name                  | Description                 | Default | Type     |
 |-----------------------|-----------------------------|---------|----------|
-| OTEL_TRACES_EXPORTER  | Trace exporter to be used   | "otlp"  | [Enum][] |
-| OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  | [Enum][] |
-| OTEL_LOGS_EXPORTER    | Logs exporter to be used    | "otlp"  | [Enum][] |
+| OTEL_TRACES_EXPORTER  | Trace exporter to be used   | `otlp`  | [Enum][] |
+| OTEL_METRICS_EXPORTER | Metrics exporter to be used | `otlp`  | [Enum][] |
+| OTEL_LOGS_EXPORTER    | Logs exporter to be used    | `otlp`  | [Enum][] |
 
 The implementation MAY accept a comma-separated list to enable setting multiple exporters.
 
@@ -316,21 +316,20 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 
 ## Declarative configuration
 
-**Status**: [Development](../document-status.md)
-
 Environment variables involved in [declarative configuration](./README.md#declarative-configuration).
 
-| Name                          | Description                                                                                                                                                                   | Default | Type       | Notes     |
-|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|------------|-----------|
-| OTEL_EXPERIMENTAL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | [String][] | See below |
+| Name                            | Description                                                                                                                                                                   | Default | Type       | Notes                                           |
+|---------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|------------|-------------------------------------------------|
+| `OTEL_EXPERIMENTAL_CONFIG_FILE` | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | [String][] | **Deprecated**. Use `OTEL_CONFIG_FILE` instead. |
+| `OTEL_CONFIG_FILE`              | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | [String][] | See below                                       |
 
-If `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, the file at the specified path is used to
+If `OTEL_CONFIG_FILE` is set, the file at the specified path is used to
 call [Parse](./sdk.md#parse). The
 resulting [configuration model](./sdk.md#in-memory-configuration-model) is
 used to call [Create](./sdk.md#create) to produce fully configured
 SDK components.
 
-When `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, all other environment variables
+When `OTEL_CONFIG_FILE` is set, all other environment variables
 besides those referenced in the configuration file
 for [environment variable substitution](./data-model.md#environment-variable-substitution)
 MUST be ignored. Ignoring the environment variables is necessary because
@@ -341,11 +340,11 @@ model returned by `Parse` before `Create` is called. For example, a user may
 call `Parse` on multiple files and define logic from merging the resulting
 configuration models, or overlay values from environment variables on top of a
 configuration model. Implementations MAY provide a mechanism to customize the
-configuration model parsed from `OTEL_EXPERIMENTAL_CONFIG_FILE`.
+configuration model parsed from `OTEL_CONFIG_FILE`.
 
 Users are encouraged to
 use [`otel-sdk-migration-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/otel-sdk-migration-config.yaml)
-as a starting point for `OTEL_EXPERIMENTAL_CONFIG_FILE`. This file represents a
+as a starting point for `OTEL_CONFIG_FILE`. This file represents a
 common SDK configuration scenario, and includes environment variable
 substitution references to environment variables which are otherwise ignored.
 Alternatively, [`otel-sdk-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/otel-sdk-config.yaml)
