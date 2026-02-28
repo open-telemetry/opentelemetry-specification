@@ -13,6 +13,9 @@ release.
 
 ### Metrics
 
+- Add additional in-development requirements to metric start timestamps.
+  ([#4807](https://github.com/open-telemetry/opentelemetry-specification/pull/4807))
+
 ### Logs
 
 - Stabilize optional `Exception` parameter to Logger Emit.
@@ -32,11 +35,16 @@ release.
 
 ### Compatibility
 
+- Stabilize Prometheus Summary to OTLP Summary transformation.
+  ([#4872](https://github.com/open-telemetry/opentelemetry-specification/pull/4872))
+
 ### SDK Configuration
 
 - Declarative configuration: allow language-specific prefixes in environment
   variable substitution.
   ([#4891](https://github.com/open-telemetry/opentelemetry-specification/pull/4891))
+- Mark significant portions of declarative configuration as stable.
+  ([#4568](https://github.com/open-telemetry/opentelemetry-specification/pull/4568))
 
 ### Supplementary Guidelines
 

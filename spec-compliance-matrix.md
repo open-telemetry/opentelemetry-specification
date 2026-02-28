@@ -187,6 +187,7 @@ formats is required. Implementing more than one format is optional.
 | Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits) |  | + | + | + | - |  | - |  | - | + | + |  |
 | Metric SDK supports configuring cardinality limit at MeterReader level |  | - | + | + | - |  | - |  | - | - | - |  |
 | Metric SDK supports configuring cardinality limit per metric (using Views) |  | - | + | + | - |  | - |  | - | - | + |  |
+| Metric SDK supports per-timeseries cumulative start timestamps |  |  |  |  |  |  |  |  |  |  |  |  |
 
 ## Logs
 
@@ -284,7 +285,7 @@ Note: Support for environment variables is optional.
 | OTEL_METRICS_EXEMPLAR_FILTER | + | + |  |  | + |  | + |  | - | + |  |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - |  |  |
-| OTEL_EXPERIMENTAL_CONFIG_FILE | - |  |  |  |  |  | + |  | - |  |  |
+| OTEL_CONFIG_FILE | - |  |  |  |  |  | + |  | - |  |  |
 
 ## Declarative configuration
 
