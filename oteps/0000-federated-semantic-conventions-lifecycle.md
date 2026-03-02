@@ -52,8 +52,9 @@ metrics:
 #### Registry Requirements
 
 - The registry MUST declare a dependency on core semantic conventions.
+- A stable federated registry MUST NOT depend on unstable or experimental core conventions.
 - The registry MUST use a dependabot or rennovate bot to keep dependencies up-to-date.
-- The registry MUST enforce semantic convention policies via github workflow, e.g.
+- The registry MUST enforce semantic convention [policies](https://github.com/open-telemetry/opentelemetry-weaver-packages) via github workflow, e.g.
 
 `.github/workflows/semconv-policy.yaml`:
 ```yaml
@@ -78,9 +79,10 @@ jobs:
 #### Independent Versioning
 - It releases `v2.0.0` of the `jvm` federated registry.
 - This release is **completely independent** of the core `semconv` registry (which might still be at `v1.45.0`) and other registries like `http` or `messaging`.
-- Users who want the new JVM metrics can opt-in by updating their instrumentation to point to the new `schema_url`. 
+- Users who want the new JVM metrics can opt-in by utilizing declarative configuration mechanisms (e.g., `version: 2`, `dual_emit: true`). 
+  This should implicitly update the `schema_url` of telemetry, allowing users to see which version is which and address versioning issues.
 - Existing users of `v1.x.x` are unaffected and continue to see the old OTLP output.
-- **Policy Enforcement**: The federated registry uses a `weaver.yaml` configuration to enforce official OpenTelemetry policies (e.g., naming conventions, stability rules) even while iterating independently.
+- **Policy Enforcement**: The federated registry leverages shared GitHub actions and workflows to enforce official OpenTelemetry policies (e.g., naming conventions, stability rules) even while iterating independently.
 
 ### 2. Instrumentation Stability and OTLP Output
 
@@ -105,7 +107,7 @@ version: 2026.1
 registries:
   - schema_url: https://opentelemetry.io/schemas/semconv/1.42.0
   - schema_url: https://opentelemetry.io/schemas/jvm/2.1.0
-  - schema_url: https://opentelemetry.io/schemas/http/1.15.0
+  - schema_url: https://opentelemetry.io/schemas/gen-ai/1.1.0
 ```
 
 - **Version Conformance**: A user can say "My application conforms to OpenTelemetry Platform Release 2026.1". This is a much simpler statement than listing 15 different federated registry versions.
@@ -115,7 +117,7 @@ registries:
 
 Federated registries follow a standard path toward consolidation to ensure the core specification remains cohesive:
 
-1. **Incubating**: Registry exists outside the core, managed by a specific SIG. It uses a unique namespace, both for schema_url (e.g., `opentelemetry.io/schemas/jvm`) and for signals/attributes (e.g. `jvm`).
+1. **Incubating**: Registry exists outside the core, managed by a specific language-agnostic SIG (e.g., GenAI). It uses a unique namespace, both for schema_url (e.g., `opentelemetry.io/schemas/jvm`) and for signals/attributes (e.g. `jvm`).
 2. **Maturity Progression**: The federated registry progresses through `development` -> `beta` -> `stable` according to its own usage and feedback.
 3. **Criteria for Promotion**: To be merged into core `semconv`, a federated registry MUST:
     - Reach `stable` status, and remain backwards compatible for a full year.
@@ -138,6 +140,8 @@ Federated registries follow a standard path toward consolidation to ensure the c
 The Semantic Conventions SIG maintains the root `opentelemetry.io/schemas/` namespace. Any new "official" federated registry (e.g., `/jvm`, `/http`) must be an approved OpenTelemetry project and will use tooling provided for federated semantic convention SIGs.
 
 For third-party or experimental registries, authors are encouraged to use their own domains (e.g., `acme.com/schemas/`) to avoid collisions. The `weaver` tool will also validate that a registry does not redefine attributes or signals already present in its dependencies, so any opentelemetry registry MUST depend on the core `semantic-conventions` registry.
+
+To aid in discoverability and prevent conflicts, the core `semantic-conventions` repository will maintain a centralized list of all known federated registries. This list can be used by automated tooling to periodically validate all federated registries together, identifying any unintended collisions or running tests against the latest core.
 
 ### 2. What happens if two instrumentation libraries depend on different, incompatible versions of the same federated registry?
 This is a classic "diamond dependency" problem. OpenTelemetry's Schema v2 (OTEP 4815) handles this via the "latest version wins" resolution at the collector or consumer level, provided the changes are backward compatible. For breaking changes (major version bumps), the telemetry remains unambiguous because each library pins its specific `schema_url`. A consumer (e.g., the Collector) can process both signals independently using the metadata provided in the OTLP `Resource` or `Scope`. This is no worse than the same issue today, where we rely on storage to figure out these conflicts
