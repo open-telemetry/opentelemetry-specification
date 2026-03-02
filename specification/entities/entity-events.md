@@ -160,12 +160,6 @@ Each relationship in the `entity.relationships` array is a map containing:
 | `entity.type` | string | The type of the target entity. |
 | `entity.id` | map<string, string> | The identifying attributes of the target entity. |
 
-**Optional Fields**:
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `attributes` | map<string, AnyValue> | Additional relationship-specific attributes that provide context about the relationship. These attributes can change over time as the entire `entity.relationships` array is replaced in subsequent Entity State events. |
-
 **Relationship Direction**:
 
 Relationships have direction: `source --[type]--> target`, where:
