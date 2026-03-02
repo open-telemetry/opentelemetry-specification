@@ -138,6 +138,11 @@ previously reported `report.interval` field. Recipients can use this value to co
 to expect the next Entity State event and, if the event does not arrive in a timely manner
 (plus some slack), consider the entity to be gone even if the Entity Delete event was not observed.
 
+Recipients MUST also be prepared to receive an Entity Delete event out of order, for example,
+before the last Entity State event. In this case, recipients SHOULD apply state updates
+regardless, as each Entity State event represents the full current state of the entity and
+can be used to update a previously deleted entity record.
+
 ## Entity Relationships
 
 Entity relationships describe how entities are connected to each other. Relationships are
