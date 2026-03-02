@@ -231,7 +231,7 @@ Emit a new Entity State event with the relationship removed from the `entity.rel
 
 **Implicit Deletion**:
 When an entity is deleted (Entity Delete event is emitted), all relationships where that
-entity is the source are implicitly deleted. Backends SHOULD handle this accordingly.
+entity is involved are implicitly deleted. Backends SHOULD handle this accordingly.
 
 ## Examples
 
