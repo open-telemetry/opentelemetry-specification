@@ -182,11 +182,15 @@ merge(current_entity, new_entity) {
       if !current_entity.description.contains(attribute.key) {
         current_entity.description.insert(attribute)
       }
-      // Ignore otehrwise.
+      // Ignore otherwise.
     }
   }
 }
 ```
+
+Note: If Entities have different `schema_url`s, they SHOULD be converted to the
+same schema version (if possible) before attempting a merge. The merge algorithm
+defined here assumes the entities are already at the same schema version.
 
 ## Examples of Entities
 

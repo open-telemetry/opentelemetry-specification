@@ -88,3 +88,107 @@ resource.
     is needed.
   - If there is a conflict where two entities use the same attribute key then
     remove the lower priority entity from the Resource.
+
+#### Examples
+
+_These examples demonstrate how conflicts are resolved during a merge._
+
+##### Example 1: Entity replaces loose attribute
+
+The conflict between loose attributes and those belonging to an entity. Here when entity is added it removes previous attributes.
+
+**Initial Resource:**
+- Entities: _None_
+- Attributes:
+  - `host.name`: `"old-name"`
+  - `env`: `"prod"`
+
+**Entities to Merge (by priority):**
+1. `host`
+   - type: `"host"`
+   - identity:
+     - `host.id`: `"H1"`
+   - description:
+     - `host.name`: `"new-name"`
+2. `service`
+   - type: `"service"`
+   - identity:
+     - `service.name`: `"my-svc"`
+
+**Resulting Resource:**
+- Entities:
+  - `host`
+    - type: `"host"`
+    - identity:
+      - `host.id`: `"H1"`
+    - description:
+      - `host.name`: `"new-name"`
+  - `service`
+    - type: `"service"`
+    - identity:
+      - `service.name`: `"my-svc"`
+- Attributes:
+  - `env`: `"prod"`
+
+##### Example 2: Loose attribute replaces entity attribute
+
+The conflict between loose attributes and those belonging to an entity. Here when the loose attribute is added, the entity must be removed due to conflict.
+
+**Initial Resource:**
+- Entities:
+  - `host`
+    - type: `"host"`
+    - identity:
+      - `host.id`: `"H1"`
+    - description:
+      - `host.name`: `"detected-name"`
+- Attributes: _None_
+
+**Resource to Merge:**
+- Entities: _None_
+- Attributes:
+  - `host.id`: `"h2"`
+  - `env`: `"prod"`
+
+**Resulting Resource:**
+- Entities: _None_
+- Attributes:
+  - `host.id`: `"h2"`
+  - `env`: `"prod"`
+
+##### Example 3: Identity & Attribute Conflicts
+
+Reject an entity with a different identity of the same type, and drop a lower priority entity due to an attribute key conflict.
+
+**Initial Resource:**
+- Entities:
+  - `host`
+    - type: `"host"`
+    - identity:
+      - `host.id`: `"H1"`
+    - description:
+      - `env`: `"prod"`
+- Attributes: _None_
+
+**Entities to Merge (by priority):**
+1. `host`
+   - type: `"host"`
+   - identity:
+     - `host.id`: `"H2"`
+2. `service`
+   - type: `"service"`
+   - identity:
+     - `service.name`: `"S1"`
+   - description:
+     - `env`: `"dev"`
+
+**Resulting Resource:**
+- Entities:
+  - `host`
+    - type: `"host"`
+    - identity:
+      - `host.id`: `"H1"`
+    - description:
+      - `env`: `"prod"`
+- Attributes: _None_
+
