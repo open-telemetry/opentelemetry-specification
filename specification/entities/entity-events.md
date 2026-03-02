@@ -169,21 +169,12 @@ Relationships have direction: `source --[type]--> target`, where:
 
 ### Standard Relationship Types
 
-The following are recommended relationship types with their semantic meanings:
+Relationship types form an open enumeration. Standard relationship types SHOULD be defined
+in OpenTelemetry semantic conventions. Custom relationship types MAY be defined to represent
+domain-specific relationships.
 
-| Type | Direction | Meaning | Example |
-| ---- | --------- | ------- | ------- |
-| `runs_on` | Logical → Infrastructure | A logical entity runs on infrastructure | Process → Host |
-| `scheduled_on` | Workload → Infrastructure | A workload is scheduled on infrastructure | Pod → Node |
-| `contains` | Parent → Child | A parent entity contains a child entity | Pod → Container |
-| `part_of` | Child → Parent | A child entity is part of a parent | Container → Pod |
-| `depends_on` | Consumer → Dependency | An entity depends on another for functionality | Service → Database |
-| `manages` | Controller → Controlled | An entity manages the lifecycle of another | Deployment → ReplicaSet |
-| `hosts` | Infrastructure → Workload | Infrastructure hosts a workload (reverse of scheduled_on) | Node → Pod |
-
-Relationship types form an open enumeration. Custom relationship types MAY be defined to
-represent domain-specific relationships. Semantic conventions SHOULD define standard
-relationship types for common entity types.
+For example, a `scheduled_on` relationship type could be used to express that a workload
+is scheduled on infrastructure (e.g., a Kubernetes Pod scheduled on a Node).
 
 ### Relationship Placement
 
