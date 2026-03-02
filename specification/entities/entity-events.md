@@ -81,13 +81,13 @@ change, or periodically to indicate the entity still exists.
 | --------- | ---- | ----------- |
 | `entity.type` | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service", "host", "k8s.pod". |
 | `entity.id` | map<string, string> | Attributes that identify the entity. MUST not change during the lifetime of the entity. The map MUST contain at least one attribute. Keys and values MUST be strings. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attribute names. |
-| `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. These attributes are not part of the entity's identity. Each Entity State event contains the complete current state of the entity's description. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
-| `entity.relationships` | array of maps | Relationships to other entities. Each relationship is a map containing: `type` (string, describes the relationship), `entity.type` (string, the type of the related entity), and `entity.id` (map<string, string>, identifying attributes of the related entity). |
 
 **Optional Attributes**:
 
 | Attribute | Type | Description |
 | --------- | ---- | ----------- |
+| `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. These attributes are not part of the entity's identity. Each Entity State event contains the complete current state of the entity's description. When absent, MUST be treated as an empty map. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| `entity.relationships` | array of maps | Relationships to other entities. Each relationship is a map containing: `type` (string, describes the relationship), `entity.type` (string, the type of the related entity), and `entity.id` (map<string, string>, identifying attributes of the related entity). When absent, MUST be treated as an empty array. |
 | `report.interval` | int64 (seconds) | The reporting interval for this entity. MUST be a non-negative value when present. When absent, the reporting interval is unknown. A value of `0` indicates that no periodic heartbeat events will be sent. A positive value indicates the interval at which periodic state events will be emitted. Can be used by receivers to determine when to expect the next event and infer that an entity is gone if events stop arriving. |
 
 **Timestamp Field**:
