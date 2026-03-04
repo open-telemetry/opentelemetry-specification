@@ -107,7 +107,7 @@ Callbacks must not be called synchronously with application code via
 any OpenTelemetry API.  This prevents the application from potentially
 deadlocking itself by being called synchronously from its own thread.
 Implementations that cannot provide this guarantee should prefer not
-to implement Observer instrsuments.
+to implement Observer instruments.
 
 Callbacks may be called synchronously in the SDK on behalf of an
 exporter, provided it does not contradict the requirement above.
