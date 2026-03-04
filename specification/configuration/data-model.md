@@ -63,10 +63,14 @@ defined using
 the [Augmented Backus-Naur Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
-SUBSTITUTION-REF = "${" ["env:"] ENV-NAME [":-" DEFAULT-VALUE] "}"; valid substitution reference
-INVALID-SUBSTITUTION-REF = "${" *(VCHAR-WSP-NO-RBRACE) "}"; invalid substitution reference
+SUBSTITUTION-REF = "${" [PREFIX ":"] GENERIC-SUBSTITUTION "}"; generic substitution reference
 
-ENV-NAME = (ALPHA / "_") *(ALPHA / DIGIT / "_"); the name of the variable to be substituted
+; when PREFIX is absent or "env", GENERIC-SUBSTITUTION MUST conform to ENV-SUBSTITUTION:
+ENV-SUBSTITUTION = ENV-NAME [":-" DEFAULT-VALUE]; env var substitution
+
+PREFIX = ALPHA *(ALPHA / DIGIT / "_"); substitution prefix, e.g. "env" (universal) or language-specific
+GENERIC-SUBSTITUTION = 1*(VCHAR-WSP-NO-RBRACE); substitution content, interpretation depends on PREFIX
+ENV-NAME = (ALPHA / "_") *(ALPHA / DIGIT / "_"); the name of the environment variable to be substituted
 DEFAULT-VALUE = *(VCHAR-WSP-NO-RBRACE); any number of VCHAR-WSP-NO-RBRACE
 VCHAR-WSP-NO-RBRACE = %x21-7C / "~" / WSP; printable chars and whitespace, except }
 
@@ -74,41 +78,44 @@ ALPHA = %x41-5A / %x61-7A; A-Z / a-z
 DIGIT = %x30-39 ; 0-9
 ```
 
-`SUBSTITUTION-REF` defines a valid environment variable substitution reference:
+`SUBSTITUTION-REF` defines a valid substitution reference:
 
 * Must start with `${`
-* Optionally followed by `env:`
-* Must follow with `REF-NAME`, the name of the environment variable to be
-  substituted
+* Optionally followed by `PREFIX:`, where `PREFIX` is `env` (universal) or a language-specific identifier
+* Must follow with `GENERIC-SUBSTITUTION`, at least one printable character or whitespace except `}`
+* Must follow with `}`
+
+When `PREFIX` is absent or `env`, `GENERIC-SUBSTITUTION` MUST conform to `ENV-SUBSTITUTION`:
+
+* Must start with `ENV-NAME`, the name of the environment variable to be substituted
   * Must start with alphabetic or `_` character
   * Must follow with any number of alphanumeric or `_` characters
 * Optionally followed by default value
   * Must start with `:-`
   * Must follow with `DEFAULT-VALUE`, any number of printable characters and
     whitespace except `}`
-* Must follow with `}`
 
-`INVALID-SUBSTITUTION-REF` defines an invalid environment variable substitution
-reference:
+Language implementations MAY support additional prefixes beyond `env:` to access
+language-specific configuration sources. The `GENERIC-SUBSTITUTION` content is
+interpreted according to the `PREFIX` scheme. For example, Java implementations
+may support `sys:` to access system properties: `${sys:otel.service.name}`.
+Language implementations SHOULD document any additional prefixes they support.
 
-* Must start with `${`
-* Must follow with any number of printable characters and whitespace except `}`
-* Must follow with `}`
-
-For convenience, `SUBSTITUTION-REF` and `INVALID-SUBSTITUTION-REF` are expressed
-below as a PCRE2 regular expressions. Note that these expressions are
+For convenience, `SUBSTITUTION-REF` and `ENV-SUBSTITUTION` are expressed
+below as PCRE2 regular expressions. Note that these expressions are
 non-normative.
 
 ```regexp
 // SUBSTITUTION-REF
-\$\{(?:env:)?(?<ENV-NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT-VALUE>[^\n]*))?\}
+\$\{(?:(?<PREFIX>[a-zA-Z][a-zA-Z0-9_]*):)?(?<GENERIC_SUBSTITUTION>[^}]+)\}
 
-// INVALID-SUBSTITUTION-REF
-\$\{(?<INVALID_IDENTIFIER>[^}]+)\}
+// ENV-SUBSTITUTION (applied to GENERIC_SUBSTITUTION when PREFIX is absent or "env")
+(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?
 ```
 
-For example, `${API_KEY}` and `${env:API_KEY}` are valid, while `${1API_KEY}`
-and `${API_$KEY}` are invalid.
+For example, `${API_KEY}` and `${env:API_KEY}` are valid env var substitutions,
+while `${1API_KEY}` and `${API_$KEY}` are invalid because they do not conform
+to `ENV-SUBSTITUTION`.
 
 Environment variable substitution MUST only apply to scalar values. Mapping keys
 are not candidates for substitution.
@@ -141,9 +148,10 @@ where `FOO=a, BAR=b, BAZ=c` would resemble:
   against `input.substring(15+2, input.length)="{BAZ}"` => `"{BAZ}"` and append
   to output. Return output: `"${FOO} b ${BAZ}"`.
 
-When parsing a configure file that contains a reference not
-matching `SUBSTITUTION-REF` but matching `INVALID-SUBSTITUTION-REF`, the parser
-must return an empty result (no partial results are allowed) and an error
+When parsing a configuration file that contains a `SUBSTITUTION-REF` where
+`GENERIC-SUBSTITUTION` does not conform to the scheme's validation rules (e.g.,
+does not conform to `ENV-SUBSTITUTION` when `PREFIX` is absent or `env`), the
+parser must return an empty result (no partial results are allowed) and an error
 describing the parse failure to the user.
 
 Node types MUST be interpreted after environment variable substitution takes
