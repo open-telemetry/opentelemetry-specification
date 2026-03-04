@@ -347,6 +347,8 @@ sections:
         status: '+'
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
         status: '+'
+      - name: Metric SDK supports per-timeseries cumulative start timestamps
+        status: '?'
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
@@ -499,7 +501,7 @@ sections:
         status: '+'
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '?'
-      - name: OTEL_EXPERIMENTAL_CONFIG_FILE
+      - name: OTEL_CONFIG_FILE
         status: '?'
   - name: Declarative configuration
     features:

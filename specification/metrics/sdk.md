@@ -37,6 +37,7 @@ weight: 3
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
         * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
+  * [Start timestamps](#start-timestamps)
   * [Cardinality limits](#cardinality-limits)
     + [Configuration](#configuration-1)
     + [Overflow attribute](#overflow-attribute)
@@ -776,6 +777,30 @@ The implementation SHOULD NOT produce aggregated metric data for a
 previously-observed attribute set which is not observed during a successful
 callback. See [MetricReader](#metricreader) for more details on the persistence
 of metrics across successive collections.
+
+### Start timestamps
+
+**Status**: [Development](../document-status.md)
+
+The start timestamp for a timeseries is the timestamp which best represents
+the first possible moment a measurement for this timeseries could have been
+recorded.
+
+For delta aggregations, the start timestamp MUST equal the previous collection
+interval's timestamp, or the creation time of the instrument if this is the
+first collection interval for the instrument. This implies that all data points
+with delta temporality aggregation for an instrument MUST share the same start
+timestamp.
+
+Cumulative timeseries MUST use a consistent start timestamp for all collection
+intervals.
+For synchronous instruments, the start timestamp SHOULD be the time of the
+first measurement for the series.
+For asynchronous instrument, the start timestamp SHOULD be:
+  - The creation time of the instrument, if the first series measurement
+    occurred in the first collection interval,
+  - Otherwise, the timestamp of the collection interval prior to the first
+    series measurement.
 
 ### Cardinality limits
 
@@ -1847,15 +1872,15 @@ existing methods without introducing breaking changes, if possible.
 For languages which support concurrent execution the Metrics SDKs provide
 specific guarantees and safeties.
 
-**MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` are safe to be
-called concurrently.
+**MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` MUST be safe
+to be called concurrently.
 
-**ExemplarReservoir** - all methods are safe to be called concurrently.
+**ExemplarReservoir** - all methods MUST be safe to be called concurrently.
 
 **MetricReader** - `Collect`, `ForceFlush` (for periodic exporting MetricReader)
-and `Shutdown` are safe to be called concurrently.
+and `Shutdown` MUST be safe to be called concurrently.
 
-**MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
+**MetricExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
 concurrently.
 
 ## References
