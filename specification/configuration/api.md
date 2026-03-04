@@ -117,7 +117,7 @@ Concurrency and lifecycle requirements:
 
 Error handling and unsupported providers:
 
-* If callback execution throws an exception, implementations SHOULD isolate the
+* If callback execution throws an error, implementations SHOULD isolate the
   failure to that callback and SHOULD continue notifying other callbacks.
 * If a provider does not support change notifications, registration MUST still
   succeed by returning a no-op registration handle, and callbacks MUST NOT be
