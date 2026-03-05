@@ -455,7 +455,7 @@ in OTLP represents a sampled value at a given time.  A Gauge stream consists of:
   - (optional) A timestamp (`start_time_unix_nano`) which best represents the
     first possible moment a measurement for this timeseries could have been
     recorded.
-  - (optional) a set of examplars (see [Exemplars](#exemplars)).
+  - (optional) a set of exemplars (see [Exemplars](#exemplars)).
   - (optional) Data point flags (see [Data point flags](#data-point-flags)).
 
 In OTLP, a point within a Gauge stream represents the last-sampled event for a
@@ -1089,7 +1089,7 @@ Every OTLP metric data point has two associated timestamps.  The
 first, mandatory timestamp is the one associated with the observation,
 the moment when the measurement became current or took effect, and is
 referred to as `TimeUnixNano`. The second, optional timestamp is used
-to indicate when a sequence of points is unbroken and to inidcate when a
+to indicate when a sequence of points is unbroken and to indicate when a
 timeseries began accumulating measurements. The second timestamp is referred to
 as `StartTimeUnixNano`.
 
