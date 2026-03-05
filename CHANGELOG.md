@@ -11,9 +11,6 @@ release.
 
 ### Traces
 
-- Add normative language to the Tracing API/SDK spec concurrency requirements.
-  ([#4887](https://github.com/open-telemetry/opentelemetry-specification/pull/4887))
-
 ### Metrics
 
 ### Logs
@@ -39,6 +36,11 @@ release.
 ### OTEPs
 
 ## v1.55.0 (TODO: update date before merging)
+
+### Traces
+
+- Add normative language to the Tracing API/SDK spec concurrency requirements.
+  ([#4887](https://github.com/open-telemetry/opentelemetry-specification/pull/4887))
 
 ### Metrics
 
