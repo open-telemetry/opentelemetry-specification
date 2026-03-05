@@ -127,7 +127,8 @@ will be the first users of `extra_attributes` section.
 Publishing the context should follow these steps:
 
 1. **Check for existing mapping**: If a previous context was published, follow the "Updating Protocol" instead
-2. **Allocate new memfd and size it**: Create a new memfd using `memfd_create("OTEL_CTX", ...)`, size it with `ftruncate`
+2. **Allocate new memfd and size it**: Create a new memfd using `memfd_create("OTEL_CTX", MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_NOEXEC_SEAL)`, size it with `ftruncate`.
+   Note that `MFD_NOEXEC_SEAL` is a newer Linux feature so if you get a failure creating the memfd, you probably want to try again with just `MFD_CLOEXEC | MFD_ALLOW_SEALING`.
 3. **Allocate a new mmap from the memfd then close the memfd**: Setup an mmap using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE, memfd, 0)`. This makes the memfd show up in `/proc/<pid>/maps`; afterwards the file descriptor can be closed
 4. **If memfd is not available (step 2)**: If system security restrictions disallow memfd, fall back to creating a new anonymous mapping using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)` and use that instead
 5. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data
