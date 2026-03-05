@@ -126,7 +126,7 @@ The API MUST accept the following parameters:
 - [Attributes](./data-model.md#field-attributes) (optional)
 - [Event Name](./data-model.md#field-eventname) (optional)
 
-**Status**: [Development](../document-status.md) - The API MAY accept the following parameter:
+The API MAY accept the following parameter:
 
 - Exception (optional): An exception (or error) associated with the log record.
 

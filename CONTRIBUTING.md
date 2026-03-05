@@ -104,7 +104,7 @@ checks directly.
 See:
 
 - [MarkdownStyle](#markdown-style)
-- [Misspell Check](#misspell-check)
+- [CSpell Check](#cspell-check)
 - Markdown link checking (docs TODO)
 
 ### Autoformatting
@@ -120,7 +120,6 @@ You can also run these fixes individually.
 
 See:
 
-- [Misspell Correction](#misspell-check)
 - Table Generation (docs TODO)
 
 ### Markdown style
@@ -148,24 +147,14 @@ with the Node version of markdownlint. If you are using Visual Studio Code,
 you can also use the `fixAll` command of the
 [vscode markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint).
 
-### Misspell check
+### CSpell check
 
 In addition, please make sure to clean up typos before you submit the change.
 
 To check for typos, run the following command:
 
 ```bash
-make misspell
-```
-
-> [!NOTE]
-> The `misspell` make target will also fetch and build the tool if
-> necessary. You'll need [Go](https://go.dev) to build the spellchecker.
-
-To quickly fix typos, use
-
-```bash
-make misspell-correction
+make cspell
 ```
 
 ## Updating the Compliance Matrix
@@ -284,7 +273,7 @@ on each other), the owner should try to get people aligned by:
   with a summary in the PR conversation.
 * Tagging subdomain experts (by looking at the change history) in the PR asking
   for suggestion.
-* Reaching out to more people on the [CNCF OpenTelemetry Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](http://slack.cncf.io/).
+* Reaching out to more people on the [CNCF OpenTelemetry Slack channel](https://cloud-native.slack.com/archives/C01N7PP1THC). If you are new, you can create a CNCF Slack account [here](https://slack.cncf.io/).
 * Stepping back to see if it makes sense to narrow down the scope of the PR or
   split it up.
 
