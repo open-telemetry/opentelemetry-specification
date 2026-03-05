@@ -31,7 +31,7 @@ language-analysis: textlint cspell
 .PHONY: cspell
 cspell:
 	@if ! npm ls cspell; then npm install; fi
-	npx cspell . --no-progress)
+	npx cspell . --no-progress
 
 .PHONY: textlint
 textlint:
