@@ -158,10 +158,6 @@ To check for typos (misspell) and style of writing (textlint), run the following
 make language-analysis
 ```
 
-> [!NOTE]
-> The `misspell` make target will also fetch and build the tool if
-> necessary. You'll need [Go](https://go.dev) to build the spell checker.
-
 To quickly fix common misspellings and style, use
 
 ```bash

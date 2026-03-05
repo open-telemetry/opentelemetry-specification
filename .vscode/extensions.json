@@ -1,5 +1,7 @@
 {
     "recommendations": [
-        "3w36zj6.textlint"
+        "3w36zj6.textlint",
+        "streetsidesoftware.code-spell-checker",
+        "streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries"
     ]
 }

@@ -1,10 +1,4 @@
-# All documents to be used in spell check.
-ALL_DOCS := $(shell find . -type f -name '*.md' -not -path './.github/*' -not -path './node_modules/*' -not -path '*semantic_conventions*' -not -name 'spec-compliance-matrix.md' | sort)
 PWD := $(shell pwd)
-
-TOOLS_DIR := ./internal/tools
-MISSPELL_BINARY=bin/misspell
-MISSPELL = $(TOOLS_DIR)/$(MISSPELL_BINARY)
 
 # Detect Python and pip commands
 PYTHON := $(shell command -v python3 2>/dev/null || command -v python 2>/dev/null)
@@ -28,18 +22,16 @@ SEMCONVGEN_VERSION=0.17.0
 
 # TODO: add `yamllint` step to `all` after making sure it works on Mac.
 .PHONY: all
-all: install-tools markdownlint textlint markdown-link-check misspell
+all: install-tools markdownlint textlint markdown-link-check cspell
 
 # Perform an analysis of language used which includes spell checking and linting.
 .PHONY: language-analysis
-language-analysis: textlint misspell
-
-$(MISSPELL):
-	cd $(TOOLS_DIR) && go build -o $(MISSPELL_BINARY) github.com/client9/misspell/cmd/misspell
-
-.PHONY: misspell
-misspell:	$(MISSPELL)
-	$(MISSPELL) -error $(ALL_DOCS)
+language-analysis: textlint cspell
+ 
+.PHONY: cspell
+cspell:
+	@if ! npm ls cspell; then npm install; fi
+	npx cspell . --no-progress)
 
 .PHONY: textlint
 textlint:
@@ -119,7 +111,7 @@ yamllint:
 
 # Run all checks in order of speed / likely failure.
 .PHONY: check
-check: misspell textlint markdownlint markdown-link-check
+check: cspell textlint markdownlint markdown-link-check
 	@echo "All checks complete"
 
 # Attempt to fix issues / regenerate tables.
@@ -135,6 +127,6 @@ compliance-matrix: check-python
 	@echo "Compliance matrix generation complete"
 
 .PHONY: install-tools
-install-tools: $(MISSPELL)
+install-tools:
 	npm install
 	@echo "All tools installed"
