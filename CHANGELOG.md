@@ -29,6 +29,9 @@ release.
 
 ### Compatibility
 
+- Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
+  ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
