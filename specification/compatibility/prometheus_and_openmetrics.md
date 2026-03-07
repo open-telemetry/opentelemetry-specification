@@ -221,7 +221,7 @@ OpenTelemetry histograms. Exemplars on counter metric points SHOULD be
 converted to exemplars on OpenTelemetry sums. If present, the timestamp
 MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
 retrieved from the `trace_id` and `span_id` label keys, respectively.  All
-labels not used for the trace and span ids MUST be added to the OpenTelemetry
+labels not used for the trace and span IDs MUST be added to the OpenTelemetry
 exemplar as attributes.
 
 ### Instrumentation Scope
@@ -317,7 +317,7 @@ metric points, the exporter SHOULD warn the user through error logging.
 
 The Name of an OTLP metric MUST be added as the
 [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
-Prometheus naming conventions encourage metric names to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
+Prometheus naming conventions encourage metric names to match the regular expression: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
 in the metric name SHOULD be replaced with the `_` character by default, aiming for compatibility with Prometheus conventions. Multiple
 consecutive `_` characters SHOULD be replaced with a single `_` character.
 
@@ -463,7 +463,7 @@ OpenTelemetry Metric Attributes MUST be converted to
 String Attribute values are converted directly to Metric Attributes, and
 non-string Attribute values MUST be converted to string attributes following
 the [attribute specification](../common/README.md#attribute).  Prometheus
-naming conventions encourage metric names to match the following regex:
+naming conventions encourage metric names to match the following regular expression:
 `[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replace with the `_` character.
 Multiple consecutive `_` characters SHOULD be replaced with a single `_`
 character. This may cause ambiguity in scenarios where multiple similar-named
