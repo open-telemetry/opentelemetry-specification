@@ -206,7 +206,7 @@ It consists of the following parameters:
   affected by this parameter and therefore bypass minimum severity filtering.
 
 * `trace_based`: A boolean indication of whether the logger should
-  only process log records associated with sampled traces.
+  not process log records associated with an unsampled trace.
 
   If not explicitly set, the `trace_based` parameter MUST default to `false`.
 
