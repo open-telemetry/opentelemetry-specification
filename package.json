@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "@cspell/dict-people-names": "1.1.16",
-    "cspell": "9.6.3",
+    "cspell": "9.7.0",
     "markdown-link-check": "3.14.2",
     "markdown-toc": "1.2.0",
     "markdownlint-cli": "0.47.0"
