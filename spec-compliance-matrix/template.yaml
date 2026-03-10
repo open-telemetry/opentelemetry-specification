@@ -155,6 +155,7 @@ sections:
       - name: Instrument descriptions conform to the specified syntax.
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
       - name: Instrument supports the advisory Attributes parameter.
+      - name: Instrument supports the advisory OptIn parameter.
       - name: All methods of `MeterProvider` are safe to be called concurrently.
       - name: All methods of `Meter` are safe to be called concurrently.
       - name: All methods of any instrument are safe to be called concurrently.
