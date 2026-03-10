@@ -245,7 +245,9 @@ For Go as well as modern versions of Java it's possible to create an implementat
 
 This mechanism relies on Linux-specific features (`mmap`, `prctl`, `/proc`).
 
-**Mitigation**: The feature is optional. SDKs on other platforms or environments where these features are unavailable can simply not implement it. In the future, we may explore similar mechanisms for other operating systems.
+**Mitigation**: The feature is optional. SDKs on other platforms or environments where these features are unavailable can simply not implement it. In the future, we may explore similar mechanisms for other operating systems. While this mechanism can be extended to other OS's in the future, our thinking so far was that since the eBPF profiler is Linux-only, the main focus should be on getting Linux support in really amazing shape and then later extend as-needed.
+
+On Windows, we could look into using an [in-memory file](https://github.com/DataDog/libdatadog/pull/1262) and on macOS perhaps `mmap` + `mach_vm_region` could work in a similar way to our Linux mechanism.
 
 ### Protocol Evolution
 
