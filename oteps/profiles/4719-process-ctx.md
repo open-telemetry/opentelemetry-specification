@@ -35,20 +35,20 @@ The process context is split between a header (stored in an anonymous mapping) a
 
 The header is stored in a memory mapping with the following format:
 
-| Field             | Type      | Description                                                          |
-|-------------------|-----------|----------------------------------------------------------------------|
-| `signature`       | `char[8]` | Always set to `"OTEL_CTX"`                                           |
-| `version`         | `uint32`  | Format version. Currently `2` (`1` can be used for development)      |
-| `payload_size`    | `uint32`  | Number of bytes of the encoded payload                               |
-| `published_at_ns` | `uint64`  | Timestamp when the context was published, in nanoseconds since epoch |
-| `payload`         | `uint64`  | Pointer to payload (in the publishing process' address space), in protobuf format, cast to uint64 |
+| Field                       | Type      | Description                                                                                       |
+|-----------------------------|-----------|---------------------------------------------------------------------------------------------------|
+| `signature`                 | `char[8]` | Always set to `"OTEL_CTX"`                                                                        |
+| `version`                   | `uint32`  | Format version. Currently `2` (`1` can be used for development)                                   |
+| `payload_size`              | `uint32`  | Number of bytes of the encoded payload                                                            |
+| `monotonic_published_at_ns` | `uint64`  | Monotonic clock timestamp of when the context was published, in nanoseconds                       |
+| `payload`                   | `uint64`  | Pointer to payload (in the publishing process' address space), in protobuf format, cast to uint64 |
 
 The `payload` can optionally be placed after the header (with the `payload` pointer field correctly pointing at it) or elsewhere in the process memory.
 
-The `published_at_ns` is used for detecting the context is consistent/during updates and thus:
+The `monotonic_published_at_ns` is used for detecting the context is consistent/during updates and thus:
 
-* `published_at_ns` being zero is reserved to indicate the context is being mutated and is not ready for reading
-* Changes to `published_at_ns` do not need to guarantee monotonicity, but every update must provide a different value for this timestamp
+* `monotonic_published_at_ns` being zero is reserved to indicate the context is being mutated and is not yet ready for reading
+* Every update to `monotonic_published_at_ns` must provide a different value for this timestamp
 
 ### Payload Format
 
@@ -133,7 +133,7 @@ Publishing the context should follow these steps:
 4. **If memfd is not available (step 2)**: If system security restrictions disallow memfd, fall back to creating a new anonymous mapping using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)` and use that instead
 5. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data
 6. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation)
-7. **Write header fields**: Populate `version`, `published_at_ns`, `payload_size`, `payload`
+7. **Write header fields**: Populate `version`, `monotonic_published_at_ns`, `payload_size`, `payload`
 8. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
 9. **Write signature**: Write `"OTEL_CTX"` to the signature field last
 10. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping. This step should be done unconditionally, although naming mappings is not always supported by the kernel.
@@ -166,16 +166,15 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
    - If either check fails, skip this mapping.
 
 3. **Verify the rest of the header**:
-   - Verify that `published_at_ns` is non-zero (zero indicates the context is currently being written)
+   - Verify that `monotonic_published_at_ns` is non-zero (zero indicates the context is currently being mutated)
    - If this fails, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
 4. **Read payload**: Copy `payload_size` bytes from `payload` pointer it into reader-local memory
 
 5. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
 
-6. **Re-read header**: If `published_at_ns` has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
-If `published_at_ns` is different from the value read in step 2, restart at 2 (MAY skip signature and version validation after mapping is considered established).
-`published_at_ns` is not guaranteed to be monotonic, and readers should process an update even if the latest `published_at_ns` is smaller than a previous `published_at_ns`.
+6. **Re-read header**: If `monotonic_published_at_ns` has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
+If `monotonic_published_at_ns` is different from the value read in step 2, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
 7. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
 
@@ -184,8 +183,8 @@ If `published_at_ns` is different from the value read in step 2, restart at 2 (M
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
 We recommend the use of APIs such as `process_vm_readv` or equivalent to read data, as they allow gracefully handling of issues inherent to racy cross-process memory access.
 
-After the first successful read, if using polling to check for updates, readers can assume that if `published_at_ns` has not changed, then the read payload is still consistent.
-That is, the `published_at_ns` can be thought of as an "cache key" for parsing the payload.
+After the first successful read, if using polling to check for updates, readers can assume that if `monotonic_published_at_ns` has not changed, then the read payload is still consistent.
+That is, the `monotonic_published_at_ns` can be used as a "cache invalidation key" for parsing the payload.
 
 The different names in `/proc/<pid>/maps` are caused by the fallback options the writer goes through to setup and name the mapping: `[anon_shmem:OTEL_CTX]` means both `memfd_create` and `prctl` succeeded; `[anon:OTEL_CTX]` means `memfd_create` failed but `prctl` succeeded; `/memfd:OTEL_CTX` means `memfd_create` succeeded but `prctl` failed.
 The remaining option where both `memfd_create` and `prctl` failed does not establish a valid context and is treated as an error in the writer.
@@ -195,15 +194,15 @@ The remaining option where both `memfd_create` and `prctl` failed does not estab
 When the attributes change, the process context mapping should be updated following these steps:
 
 1. **Prepare new payload**: Serialize the new payload message
-2. **Signal update start**: Write `0` to the `published_at_ns` field. This signals to readers that an update is in progress (readers verify this field is non-zero).
-3. **Memory barrier**: Ensure the write to `published_at_ns` is visible before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
+2. **Signal update start**: Write `0` to the `monotonic_published_at_ns` field. This signals to readers that an update is in progress (readers verify this field is non-zero).
+3. **Memory barrier**: Ensure the write to `monotonic_published_at_ns` is visible before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
 4. **Update payload fields**: Update the `payload` pointer and `payload_size` fields to point to the new payload.
 5. **Memory barrier**: Ensure the payload fields are updated before finalizing the timestamp (`atomic_thread_fence(memory_order_seq_cst)` or equivalent).
-6. **Signal update complete**: Write the new timestamp to `published_at_ns`, this is an aligned word-size write and thus expected to be atomic.
-   This `published_at_ns` does not need to be monotonic but it must be different from the value present before the update started.
+6. **Signal update complete**: Write the new timestamp to `monotonic_published_at_ns`; this is an aligned word-size write and thus expected to be atomic.
+   The new `monotonic_published_at_ns` must be different (and after) the value present before the update started.
 7. **Name mapping**: Re-issue the `prctl(PR_SET_VMA, ...)` call to name the mapping. This step MUST be done unconditionally, although naming mappings is not always supported by the kernel.
 
-As the reader checks `published_at_ns` before and after reading the payload, it will detect concurrent updates and avoid concurrency issues.
+As the reader checks `monotonic_published_at_ns` before and after reading the payload, it will detect concurrent updates and avoid concurrency issues.
 
 ### Interaction with Existing Functionality
 
