@@ -133,19 +133,19 @@ Publishing the context should follow these steps:
 4. **If memfd is not available (step 2)**: If system security restrictions disallow memfd, fall back to creating a new anonymous mapping using `mmap(..., PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)` and use that instead
 5. **Prevent fork inheritance**: Apply `madvise(..., MADV_DONTFORK)` to prevent child processes from inheriting stale data
 6. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation)
-7. **Write header fields**: Populate `version`, `monotonic_published_at_ns`, `payload_size`, `payload`
+7. **Write header fields**: Populate `signature`, `version`, `payload_size`, `payload` but not yet `monotonic_published_at_ns`
 8. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
-9. **Write signature**: Write `"OTEL_CTX"` to the signature field last
+9. **Write signature**: Write `monotonic_published_at_ns` last
 10. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping. This step should be done unconditionally, although naming mappings is not always supported by the kernel.
 
-The signature MUST be written last to ensure readers never observe incomplete or invalid data. Once the signature is present (and thus all fields are non-zero), the entire mapping is considered valid.
+The `monotonic_published_at_ns` MUST be written last to ensure readers never observe incomplete or invalid data. Once this field is non-zero (and thus all fields are also non-zero), the entire mapping is considered valid.
 
 If attributes are updated during the process lifetime, the "Updating Protocol" should be followed.
 
 If any of the steps above fail (other than naming or allocating a new memfd), publication is considered to have failed, and the process context will not be available.
 Finally, if both `memfd_create` fails (step 2, thus requiring falling back to step 4) and naming the mapping fails (step 10), then the process context will not be available either.
 
-The process context is treated as a singleton: there SHOULD NOT be more than one process context active for the same process.
+The process context is treated as a singleton: there MUST NOT be more than one process context active for the same process.
 
 The context MAY be dropped during SDK shutdown, or kept around until the process itself terminates and the OS takes care of cleaning the process memory.
 
@@ -160,7 +160,7 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 1. **Locate mapping**: Parse `/proc/<pid>/maps` and search for entries with name **starting with** `[anon_shmem:OTEL_CTX]`, `[anon:OTEL_CTX]` or `/memfd:OTEL_CTX`
 
 2. **Validate signature and version**:
-   - Read the header and verify first 8 bytes matches `OTEL_CTX`
+   - Read the entire header and verify first 8 bytes matches `OTEL_CTX`
    - Read the version field and verify it is supported (currently `2`)
    - If both of these checks succeed, the reader SHOULD consider the mapping established and MAY optionally cache the mapping address for that process for subsequent process context reads.
    - If either check fails, skip this mapping.
