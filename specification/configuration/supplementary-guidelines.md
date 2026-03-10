@@ -61,5 +61,5 @@ improving the declarative config data model.
 For example, the fact that configuration of dynamic authentication for OTLP
 exporters is not possible to express with declarative config should not
 encourage the OpenTelemetry community to have better programmatic customization.
-Instead, we should pursue adding authentication as an SDK extension plugin
-interface and modeling this new plugin in declarative config.
+Instead, we should pursue adding authentication as an SDK plugin component and
+modeling in declarative config.

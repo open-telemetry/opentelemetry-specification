@@ -227,6 +227,7 @@ sections:
       - name: Metric SDK implements [cardinality limit](./specification/metrics/sdk.md#cardinality-limits)
       - name: Metric SDK supports configuring cardinality limit at MeterReader level
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
+      - name: Metric SDK supports per-timeseries cumulative start timestamps
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
@@ -234,6 +235,8 @@ sections:
       - name: LoggerProvider.Shutdown
       - name: LoggerProvider.ForceFlush
       - name: Logger.Emit(LogRecord)
+      - name: Logger.Emit(LogRecord) with Exception parameter
+        optional: true
       - name: LogRecord.Set EventName
       - name: Logger.Enabled
         optional: true
@@ -273,7 +276,9 @@ sections:
       - name: TraceContext Propagator
       - name: B3 Propagator
       - name: Jaeger Propagator
+        optional: true
       - name: OT Propagator
+        optional: true
       - name: OpenCensus Binary Propagator
       - name: '[TextMapPropagator](specification/context/api-propagators.md#textmap-propagator)'
       - name: Fields
@@ -314,7 +319,7 @@ sections:
       - name: OTEL_METRICS_EXEMPLAR_FILTER
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
-      - name: OTEL_EXPERIMENTAL_CONFIG_FILE
+      - name: OTEL_CONFIG_FILE
     hide_optional_column: true
   - name: Declarative configuration
     features:
@@ -322,15 +327,15 @@ sections:
       - name: The `Parse` operation accepts the configuration YAML file format
       - name: The `Parse` operation performs environment variable substitution
       - name: The `Parse` operation returns configuration model
-      - name: The `Parse` operation resolves extension component configuration to `properties`
+      - name: The `Parse` operation resolves plugin component configuration to `properties`
       - name: '`Create` SDK components'
       - name: The `Create` operation accepts configuration model
       - name: The `Create` operation returns `TracerProvider`
       - name: The `Create` operation returns `MeterProvider`
       - name: The `Create` operation returns `LoggerProvider`
       - name: The `Create` operation returns `Propagators`
-      - name: The `Create` operation calls `CreatePlugin` of corresponding `ComponentProvider` when encountering extension components
-      - name: Register a `ComponentProvider`
+      - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
+      - name: Register a `PluginComponentProvider`
     hide_optional_column: true
   - name: Exporters
     features:

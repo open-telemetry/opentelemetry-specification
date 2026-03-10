@@ -51,7 +51,7 @@ Declarative configuration consists of the following main components:
   configuration options during initialization.
 * [Configuration SDK](./sdk.md) defines SDK capabilities around file
   configuration, including an In-Memory configuration model, support for
-  referencing custom extension plugin interfaces in configuration files, and
+  referencing custom plugin components in configuration files, and
   operations to parse configuration files and interpret the configuration data
   model.
 

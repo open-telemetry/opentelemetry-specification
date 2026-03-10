@@ -110,7 +110,7 @@ Having a small polling interval (how often we read configs) would mean that conf
 
 ## Prior art and alternatives
 
-Jaegar has the option of a Remote sampler, which allows reading from a central configuration, even dynamically with an Adaptive sampler.
+Jaeger has the option of a Remote sampler, which allows reading from a central configuration, even dynamically with an Adaptive sampler.
 
 The main comparative for remote configuration is a push vs. polling mechanism. The benefits of having a mechanism where the configuration service pushes new configs is that it's less work for the user, with it being not necessary for them to set up a configuration service. There is also no load associated with polling the configuration service in the instrumented application, which would keep the OpenTelemetry SDK more lightweight.
 

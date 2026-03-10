@@ -206,7 +206,7 @@ where `PP` are two bytes of base16 p-value and `RR` are two bytes of
 base16 r-value.  These values are omitted when they are unknown.
 
 This proposal should be taken as a recommendation and will be modified
-to [match whatever format OpenTelemtry specifies for its
+to [match whatever format OpenTelemetry specifies for its
 `tracestate`](https://github.com/open-telemetry/opentelemetry-specification/pull/1852).
 The choice of base16 encoding is therefore just a recommendation,
 chosen because `traceparent` uses base16 encoding.
@@ -362,7 +362,7 @@ probability is unknown:
 
 The inputs are recognized as out-of-range as follows:
 
-| Range invariate | Remedy                           |
+| Range invariant | Remedy                           |
 | --              | --                               |
 | `p < 0`         | drop `p` from tracestate         |
 | `p > 63`        | drop `p` from tracestate         |
