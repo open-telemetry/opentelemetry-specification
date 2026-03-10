@@ -40,12 +40,13 @@ The header is stored in a memory mapping with the following format:
 | `signature`                 | `char[8]` | Always set to `"OTEL_CTX"`                                                                        |
 | `version`                   | `uint32`  | Format version. Currently `2` (`1` can be used for development)                                   |
 | `payload_size`              | `uint32`  | Number of bytes of the encoded payload                                                            |
-| `monotonic_published_at_ns` | `uint64`  | Monotonic clock timestamp of when the context was published, in nanoseconds                       |
+| `monotonic_published_at_ns` | `uint64`  | Monotonic clock timestamp from `CLOCK_BOOTTIME` of when the context was published, in nanoseconds |
 | `payload`                   | `uint64`  | Pointer to payload (in the publishing process' address space), in protobuf format, cast to uint64 |
 
 The `payload` can optionally be placed after the header (with the `payload` pointer field correctly pointing at it) or elsewhere in the process memory.
 
-The `monotonic_published_at_ns` is used for detecting the context is consistent/during updates and thus:
+The `monotonic_published_at_ns` SHOULD use a timestamp from the `CLOCK_BOOTTIME` system clock.
+This timestamp is used for detecting if the context is consistent/during updates and thus:
 
 * `monotonic_published_at_ns` being zero is reserved to indicate the context is being mutated and is not yet ready for reading
 * Every update to `monotonic_published_at_ns` must provide a different value for this timestamp
