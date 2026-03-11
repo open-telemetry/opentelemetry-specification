@@ -106,4 +106,4 @@ tools, known values are utilized.
 - [Profiles Concepts](https://opentelemetry.io/docs/concepts/signals/profiles/)
 - [Profiles Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/general/profiles/)
 - [OTEP0212 OpenTelemetry Profiles Vision](../../oteps/profiles/0212-profiling-vision.md)
-- [OTEP0239 OpenTelemetry Profiles Data Model](../../oteps/profiles/0239-profiles-data-model.md)
+- [OTEP0239 OpenTelemetry Profiles Data Model](../../oteps/profiles/0239-profiles-data-model.md) (See [opentelemetry-proto](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/profiles/) for the latest version of the data model)
