@@ -184,9 +184,9 @@ MUST be converted to an OTLP Exponential Histogram as follows:
     previous value.
   - The Exponential Histogram `Positive` `Offset` is set to the first
     `PositiveSpan`'s `Offset` minus 1 (`PositiveSpans[0].Offset-1`) if there
-    are spans, otherwise left at 0. Note that Prometheus Native Histogram
-    buckets are indexed by upper boundary while Exponential Histograms are
-    indexed by lower boundary, hence the minus one.
+    are spans, otherwise left at 0. The minus one is because Prometheus Native
+    histogram buckets are indexed by their upper boundary while Exponential
+    Histograms are indexed by their lower boundary.
   - The `PositiveSpans` encode the index into the `Positive` bucket counts for
     each value in the `PositiveDeltas`. The index starts from 0 for the first
     span, for subsequent spans the span's `Offset` is added to the previous
