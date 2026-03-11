@@ -6,7 +6,7 @@ path_base_for_github_subdir:
 
 # OpenTelemetry Profiles
 
-**Status**: [Development](/docs/specs/otel/document-status/)
+**Status**: [Development](../document-status.md)
 
 > [!NOTE]
 >
@@ -37,7 +37,7 @@ is the process of collecting such profiles, typically by sampling program state
 at regular intervals.
 
 For a general introduction to OpenTelemetry profiling and how it complements other
-observability signals, see [Profiles concepts](/docs/concepts/signals/profiles).
+observability signals, see [Profiles concepts](https://opentelemetry.io/docs/concepts/signals/profiles/).
 
 ## Design goals
 
@@ -65,8 +65,7 @@ It builds on the [pprof protobuf format](https://github.com/google/pprof/tree/ma
 and extends it with:
 
 - **Resource and scope context**: Each batch of profiles is associated with a
-  [Resource](/docs/specs/otel/resource/) and an
-  [InstrumentationScope](/docs/specs/otel/common/instrumentation-scope/),
+  [Resource](../resource/README.md) and an [InstrumentationScope](../common/instrumentation-scope.md),
   consistent with logs, metrics and traces.
 - **Generalized dictionary**: Deduplicates not only strings but also other messages
   that exhibit redundancy.
@@ -104,7 +103,7 @@ tools, known values are utilized.
 
 ## References
 
-- [Profiles Concepts](/docs/concepts/signals/profiles)
-- [Profiles Semantic Conventions](/docs/specs/semconv/general/profiles)
+- [Profiles Concepts](https://opentelemetry.io/docs/concepts/signals/profiles/)
+- [Profiles Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/general/profiles/)
 - [OTEP0212 OpenTelemetry Profiles Vision](../../oteps/profiles/0212-profiling-vision.md)
 - [OTEP0239 OpenTelemetry Profiles Data Model](../../oteps/profiles/0239-profiles-data-model.md)
