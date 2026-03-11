@@ -228,6 +228,7 @@ sections:
       - name: Metric SDK supports configuring cardinality limit at MeterReader level
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
       - name: Metric SDK supports per-timeseries cumulative start timestamps
+      - name: The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
