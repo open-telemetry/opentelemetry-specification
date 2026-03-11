@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Stabilize `AlwaysRecord` sampler.
+  ([](https://github.com/open-telemetry/opentelemetry-specification/pull/))
+
 ### Metrics
 
 ### Logs
