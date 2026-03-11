@@ -55,8 +55,7 @@ The profiles signal is designed with the following goals in mind:
   export or reinterpretation.
 - **Correlation with other signals**: Profiles MUST be linkable to logs, metrics
   and traces through shared resource context and, where applicable,
-  direct trace/span references. This is the primary differentiator of OpenTelemetry
-  profiles compared to standalone profiling solutions.
+  direct trace/span references.
 
 ## Data model
 
