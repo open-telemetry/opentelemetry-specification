@@ -28,6 +28,9 @@ release.
 
 ### Profiles
 
+- Remove duplicate information from and extend Profiles documentation (README.md, pprof.md).
+  ([#4932](https://github.com/open-telemetry/opentelemetry-specification/pull/4932))
+
 ### Resource
 
 ### Entities
