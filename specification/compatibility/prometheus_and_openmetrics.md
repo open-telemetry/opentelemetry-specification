@@ -163,10 +163,10 @@ MUST be converted to an OTLP Exponential Histogram as follows:
 - The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
   [Stale NaN value](https://github.com/prometheus/prometheus/blob/main/model/value/value.go).
   Otherwise,
-  - `Count` is converted to Exponential Histogram `Count`. Note that the `Count`
-    may be greater than the sum of all `Positive`, `Negative` and `Zero` bucket
-    counts in case the Native Histogram observed values outside the IEEE float
-    range, for example `-Inf`, `+Inf`, `NaN`.
+  - `Count` is made equal to the sum of all valid bucket counts by adding up
+    - the `ZeroCount`,
+    - the bucket counts from the sparse bucket layout described below, except
+      for overflow buckets.
   - `Sum` is converted to the Exponential Histogram `Sum`. Note that the `Sum`
     may be `NaN` in case the Native Histogram observed the value `NaN` or both
     `-Inf` and `+Inf`. The `Sum` may also be `-Inf` or `+Inf`.
@@ -194,10 +194,8 @@ MUST be converted to an OTLP Exponential Histogram as follows:
     use.
   - The Native Histogram may contain overflow buckets. If converted to
     an Exponential Histogram bucket, the overflow bucket would map to values
-    outside the IEEE float range. The Native Histogram SHOULD be dropped in
-    accordance with [ExponentialHistogram: Consumer Recommendations](../metrics/data-model.md/#exponentialhistogram-consumer-recommendations).
-    If the Native Histogram is not dropped, the overflow bucket itself MUST be
-    dropped.
+    outside the IEEE float range. Overflow buckets MUST be dropped and not
+    counted in the overall `Count`.
 
 - The `NegativeSpans` and `NegativeDeltas` are converted the same way as the
   positive buckets.
