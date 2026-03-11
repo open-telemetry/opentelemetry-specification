@@ -96,7 +96,6 @@ tools, known values are utilized.
 | ------------- | ------------ |
 | original_payload_format | [pprof](https://github.com/google/pprof/tree/main/proto), [jfr](https://en.wikipedia.org/wiki/JDK_Flight_Recorder) or [linux_perf](https://perfwiki.github.io/) |
 
-
 ## Specifications
 
 * [Profiles Data Model](./data-model.md)
