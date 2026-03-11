@@ -20,9 +20,6 @@ release.
 
 ### Logs
 
-- Stabilize optional `Exception` parameter to Logger Emit.
-  ([#4858](https://github.com/open-telemetry/opentelemetry-specification/pull/4858))
-
 ### Baggage
 
 ### Profiles
@@ -37,11 +34,45 @@ release.
 
 ### Compatibility
 
+- Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
+  ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
 
 ### OTEPs
+
+## v1.55.0 (TODO: update date before merging)
+
+### Traces
+
+- Add normative language to the Tracing API/SDK spec concurrency requirements.
+  ([#4887](https://github.com/open-telemetry/opentelemetry-specification/pull/4887))
+
+### Metrics
+
+- Add additional in-development requirements to metric start timestamps.
+  ([#4807](https://github.com/open-telemetry/opentelemetry-specification/pull/4807),
+  [#4902](https://github.com/open-telemetry/opentelemetry-specification/pull/4902))
+
+### Logs
+
+- Stabilize optional `Exception` parameter to Logger Emit.
+  ([#4858](https://github.com/open-telemetry/opentelemetry-specification/pull/4858))
+
+### Compatibility
+
+- Stabilize Prometheus Summary to OTLP Summary transformation.
+  ([#4872](https://github.com/open-telemetry/opentelemetry-specification/pull/4872))
+
+### SDK Configuration
+
+- Declarative configuration: allow language-specific prefixes in environment
+  variable substitution.
+  ([#4891](https://github.com/open-telemetry/opentelemetry-specification/pull/4891))
+- Mark significant portions of declarative configuration as stable.
+  ([#4568](https://github.com/open-telemetry/opentelemetry-specification/pull/4568))
 
 ## v1.54.0 (2026-02-13)
 
@@ -206,7 +237,7 @@ release.
 
 ### Common
 
-- OTLP Exporters may allow devs to prepend a product identifier in `User-Agent` header.
+- OTLP Exporters may allow developers to prepend a product identifier in `User-Agent` header.
   ([#4560](https://github.com/open-telemetry/opentelemetry-specification/pull/4560))
 - ⚠️ **IMPORTANT**: Extending the set of standard attribute value types is no longer a breaking change.
   ([#4614](https://github.com/open-telemetry/opentelemetry-specification/pull/4614))
