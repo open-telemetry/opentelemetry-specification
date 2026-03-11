@@ -57,7 +57,7 @@ The profiles signal is designed with the following goals in mind:
   and traces through shared resource context and, where applicable,
   direct trace/span references.
 
-## Data model
+## Data Model
 
 The OpenTelemetry profiles data model is defined [here](./data-model.md).
 It builds on the [pprof protobuf format](https://github.com/google/pprof/tree/main/proto)
