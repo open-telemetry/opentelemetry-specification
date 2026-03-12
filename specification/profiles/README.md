@@ -32,9 +32,9 @@ path_base_for_github_subdir:
 ## Overview
 
 A **profile** is a collection of stack traces with associated values
-representing resource consumption, collected from a running program. Profiling
-is the process of collecting such profiles, typically by sampling program state
-at regular intervals.
+representing resource consumption and code execution, collected from a
+running program. Profiling is the process of collecting such profiles,
+typically by sampling program state at regular intervals.
 
 For a general introduction to OpenTelemetry profiling and how it complements other
 observability signals, see [Profiles concepts](https://opentelemetry.io/docs/concepts/signals/profiles/).
