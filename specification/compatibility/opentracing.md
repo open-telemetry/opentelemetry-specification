@@ -12,7 +12,9 @@ linkTitle: OpenTracing
 > compatibility, but implementing new OpenTracing compatibility is not required
 > by this specification.
 >
-> Future removal criteria and timeline will be discussed separately.
+> OpenTracing compatibility requirements are deprecated as of March 2026.
+> OpenTracing compatibility requirements in this specification will be removed
+> no earlier than March 2027.
 
 <details>
 <summary>Table of Contents</summary>
