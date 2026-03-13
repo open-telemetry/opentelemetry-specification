@@ -77,13 +77,14 @@ configuration options to override the default environment variable.
 
 Environment variable names used for context propagation:
 
-- SHOULD follow [POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html)
-  by using only ASCII uppercase letters, digits, and the underscore (`_`), and
-  MUST NOT begin with a digit.
-- It is RECOMMENDED that the propagation key is normalized to a valid
-  environment variable name by uppercasing ASCII letters, replacing all other
-  disallowed characters with underscore (`_`), and prefixing the name with an
-  underscore (`_`) if it would otherwise start with an ASCII digit.
+- MUST be normalized to a valid environment variable name by uppercasing ASCII
+  letters, replacing all other disallowed characters with underscore (`_`), and
+  prefixing the name with an underscore (`_`) if it would otherwise start with
+  an ASCII digit.
+
+> [!NOTE]
+> This normalization is consistent with the environment variable naming rules
+> defined in [POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html).
 
 #### Value Restrictions
 
