@@ -80,7 +80,7 @@ Environment variable names used for context propagation:
 - MUST be normalized by:
   - uppercasing ASCII letters,
   - replacing every character that is not an ASCII letter, digit, or underscore
-    (`_`) with underscore (`_`),
+    (`_`) with an underscore (`_`),
   - prefixing the name with an underscore (`_`) if it would otherwise start with
     an ASCII digit.
 
