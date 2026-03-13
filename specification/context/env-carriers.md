@@ -77,10 +77,12 @@ configuration options to override the default environment variable.
 
 Environment variable names used for context propagation:
 
-- MUST be normalized by uppercasing ASCII letters, replacing every character
-  that is not an ASCII uppercase letter, digit, or underscore (`_`) with
-  underscore (`_`), and prefixing the name with an underscore (`_`) if it would
-  otherwise start with an ASCII digit.
+- MUST be normalized by:
+  - uppercasing ASCII letters,
+  - replacing every character that is not an ASCII letter, digit, or underscore
+    (`_`) with underscore (`_`),
+  - prefixing the name with an underscore (`_`) if it would otherwise start with
+    an ASCII digit.
 
 > [!NOTE]
 > This normalization is consistent with the environment variable naming rules
