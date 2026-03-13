@@ -148,6 +148,9 @@ Finally, if both `memfd_create` fails (step 2, thus requiring falling back to st
 
 The process context is treated as a singleton: there MUST NOT be more than one process context active for the same process.
 
+In a situation where multiple resources exist as per https://github.com/open-telemetry/opentelemetry-specification/pull/4665, the process context should contain the default SDK resource.
+We expect future work to enable more granular attribution of work to specific resources, e.g. [the thread context sharing specification](https://docs.google.com/document/d/1eatbHpEXXhWZEPrXZpfR58-5RIx-81mUgF69Zpn3Rz4/edit?tab=t.bmgoq3yor67o) will enable identifying which threads are working on what (e.g. in a multi-tenant scenario).
+
 The context MAY be dropped during SDK shutdown, or kept around until the process itself terminates and the OS takes care of cleaning the process memory.
 
 Naming the mapping is only available on Linux 5.17+ when the `CONFIG_ANON_VMA_NAME` feature on the kernel is enabled. Many Linux distributions such as Ubuntu and Arch enable it. On earlier kernel versions or kernels without the feature, the `prctl` call will return an error which should be ignored. The reading protocol specified below is able to work regardless of `CONFIG_ANON_VMA_NAME` being available.
