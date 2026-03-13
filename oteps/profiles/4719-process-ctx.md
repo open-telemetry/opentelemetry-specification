@@ -173,16 +173,16 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
    - Verify that `monotonic_published_at_ns` is non-zero (zero indicates the context is currently being mutated)
    - If this fails, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
-4. **Read payload**: Read the `payload` and `payload_size` fields. Copy `payload_size` bytes from `payload` pointer it into reader-local memory
+5. **Read payload**: Read the `payload` and `payload_size` fields. Copy `payload_size` bytes from `payload` pointer it into reader-local memory
 
-5. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
+6. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
 
-6. **Re-verify header**: Read `monotonic_published_at_ns` again. If it has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
+7. **Re-verify header**: Read `monotonic_published_at_ns` again. If it has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
 If `monotonic_published_at_ns` is different from the value read in step 2, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
-7. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
+8. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
 
-8. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process
+9. **Apply attributes**: Use the decoded resource attributes to enrich telemetry collected from this process
 
 Readers SHOULD gracefully handle missing, incomplete, or invalid mappings. If a process does not publish context or if decoding fails, readers SHOULD fall back to default resource detection mechanisms.
 We recommend the use of APIs such as `process_vm_readv` or equivalent to read data, as they allow gracefully handling of issues inherent to racy cross-process memory access.
