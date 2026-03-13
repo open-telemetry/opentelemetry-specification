@@ -173,6 +173,8 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
    - Verify that `monotonic_published_at_ns` is non-zero (zero indicates the context is currently being mutated)
    - If this fails, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
+4. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
+
 5. **Read payload**: Read the `payload` and `payload_size` fields. Copy `payload_size` bytes from `payload` pointer it into reader-local memory
 
 6. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
