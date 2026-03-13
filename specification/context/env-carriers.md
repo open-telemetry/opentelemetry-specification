@@ -77,12 +77,13 @@ configuration options to override the default environment variable.
 
 Environment variable names used for context propagation:
 
-- SHOULD use uppercase letters, digits, and underscores for maximum
-  cross-platform compatibility
-- MUST NOT include characters forbidden in environment variables per
-  platform-specific restrictions
-- SHOULD follow naming conventions that align with the propagation format
-  specification they're implementing (e.g., `TRACEPARENT` for W3C trace context)
+- SHOULD follow [POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html)
+  by using only ASCII uppercase letters, digits, and the underscore (`_`), and
+  MUST NOT begin with a digit.
+- It is RECOMMENDED that the propagation key is normalized to a valid
+  environment variable name by uppercasing ASCII letters, replacing all other
+  disallowed characters with underscore (`_`), and prefixing the name with an
+  underscore (`_`) if it would otherwise start with an ASCII digit.
 
 #### Value Restrictions
 
