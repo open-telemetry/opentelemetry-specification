@@ -219,12 +219,10 @@ However, the changes MUST be eventually visible.
 
 ### Enabled
 
-**Status**: [Development](../document-status.md)
-
 `Enabled` MUST return `false` when either:
 
 - there are no registered [`SpanProcessors`](#span-processor),
-- `Tracer` is disabled ([`TracerConfig.enabled`](#tracerconfig) is `false`).
+- **Status**: [Development](../document-status.md) - `Tracer` is disabled ([`TracerConfig.enabled`](#tracerconfig) is `false`).
 
 Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.

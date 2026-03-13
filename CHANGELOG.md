@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Stabilize Tracer `enabled` operation
+  ([#4941](https://github.com/open-telemetry/opentelemetry-specification/pull/4941))
+
 ### Metrics
 
 ### Logs
