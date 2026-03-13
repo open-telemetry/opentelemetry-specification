@@ -148,42 +148,6 @@ In the text format, Prometheus histograms buckets, count and sum are sent as sep
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the histogram's sum MUST be unset.
 
-A [Prometheus Native Histogram with Custom Buckets](https://prometheus.io/docs/specs/native_histograms/#custom-values)
-(NHCB) that has schema -53 and which are of the integer and counter [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
-MUST be converted to an OTLP Histogram as follows:
-
-- If the Native Histogram `ResetHint` (or `CounterResetHint`) indicates gauge
-  type, the native histogram MUST be dropped. Otherwise this field is ignored.
-- The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
-  [Stale NaN value](https://github.com/prometheus/prometheus/blob/main/model/value/value.go).
-  Otherwise,
-  - `Count` is converted to Histogram `Count`. Note that the `Count`
-    is equal to the sum of all bucket counts.
-  - `Sum` is converted to the Histogram `Sum`. Note that the `Sum`
-    may be `NaN` in case the Native Histogram observed the value `NaN` or both
-    `-Inf` and `+Inf`. The `Sum` may also be `-Inf` or `+Inf`.
-- `Timestamp` is converted to the Histogram `TimeUnixNano` after
-  converting milliseconds to nanoseconds.
-- `Min` and `Max` are not set.
-- [`CustomValues`](https://prometheus.io/docs/specs/native_histograms/#custom-values)
-  is converted to bucket boundaries. The `+Inf` bucket is implicit, in the same way
-  as in OTLP Histograms.
-- The [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
-  represented by `PositiveSpans` and `PositiveDeltas` is converted to
-  Histogram bucket counts.
-
-  - The `PositiveDeltas` are delta encoded bucket counts, where the first value
-    is an absolute bucket count and each subsequent value is a delta to the
-    previous value.
-  - The `PositiveSpans` encode the index into the bucket counts for each value
-    in the `PositiveDeltas`. The index starts from the `Offset` in the first
-    span and for subsequent spans the span's `Offset` is added to the previous
-    index. The span's `Length` indicates the number of continuous indexes to
-    use.
-
-- `StartTimeUnixNano` is set to the `Start Timestamp`, if available.
-- `AggregationTemporality` is set to `cumulative`.
-
 ### Native Histograms
 
 **Status**: [Development](../document-status.md)
@@ -194,7 +158,7 @@ of the integer and counter [flavor](https://prometheus.io/docs/specs/native_hist
 MUST be converted to an OTLP Exponential Histogram as follows:
 
 - If the Native Histogram `ResetHint` (or `CounterResetHint`) indicates gauge
-  type, the native histogram MUST be dropped. Otherwise this field is ignored.
+  type, the native histogram is dropped. Otherwise this field is ignored.
 - `Schema` is converted to the Exponential Histogram `Scale`.
 - The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
   [Stale NaN value](https://github.com/prometheus/prometheus/blob/main/model/value/value.go).
@@ -237,6 +201,42 @@ MUST be converted to an OTLP Exponential Histogram as follows:
   positive buckets.
 - `Min` and `Max` are not set.
 - `StartTimeUnixNano` is set to the `Start Timestamp` timestamp, if available.
+- `AggregationTemporality` is set to `cumulative`.
+
+A Native histogram with custom buckets (NHCB) schema (i.e. schema -53) and which
+are of the integer and counter [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
+MUST be converted to an OTLP Histogram as follows:
+
+- If the Native Histogram `ResetHint` (or `CounterResetHint`) indicates gauge
+  type, the native histogram is dropped. Otherwise this field is ignored.
+- The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
+  [Stale NaN value](https://github.com/prometheus/prometheus/blob/main/model/value/value.go).
+  Otherwise,
+  - `Count` is converted to Histogram `Count`. Note that the `Count`
+    is equal to the sum of all bucket counts.
+  - `Sum` is converted to the Histogram `Sum`. Note that the `Sum`
+    may be `NaN` in case the Native Histogram observed the value `NaN` or both
+    `-Inf` and `+Inf`. The `Sum` may also be `-Inf` or `+Inf`.
+- `Timestamp` is converted to the Histogram `TimeUnixNano` after
+  converting milliseconds to nanoseconds.
+- `Min` and `Max` are not set.
+- [`CustomValues`](https://prometheus.io/docs/specs/native_histograms/#custom-values)
+  is converted to bucket boundaries. The `+Inf` bucket is implicit, therefore
+  `N` `CustomValues` represent `N+1` Histogram bucket counts.
+- The [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+  represented by `PositiveSpans` and `PositiveDeltas` is converted to
+  Histogram bucket counts.
+
+  - The `PositiveDeltas` are delta encoded bucket counts, where the first value
+    is an absolute bucket count and each subsequent value is a delta to the
+    previous value.
+  - The `PositiveSpans` encode the index into the bucket counts for each value
+    in the `PositiveDeltas`. The index starts from the `Offset` in the first
+    span and for subsequent spans the span's `Offset` is added to the previous
+    index. The span's `Length` indicates the number of continuous indexes to
+    use.
+
+- `StartTimeUnixNano` is set to the `Start Timestamp`, if available.
 - `AggregationTemporality` is set to `cumulative`.
 
 Native histograms of the float or gauge flavors MUST be dropped.
