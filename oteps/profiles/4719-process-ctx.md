@@ -161,7 +161,7 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 1. **Locate mapping**: Parse `/proc/<pid>/maps` and search for entries with name **starting with** `[anon_shmem:OTEL_CTX]`, `[anon:OTEL_CTX]` or `/memfd:OTEL_CTX`
 
 2. **Validate signature and version**:
-   - Read the entire header and verify first 8 bytes matches `OTEL_CTX`
+   - Read the first 8 bytes of the header and verify they match `OTEL_CTX`
    - Read the version field and verify it is supported (currently `2`)
    - If both of these checks succeed, the reader SHOULD consider the mapping established and MAY optionally cache the mapping address for that process for subsequent process context reads.
    - If either check fails, skip this mapping.
@@ -170,11 +170,11 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
    - Verify that `monotonic_published_at_ns` is non-zero (zero indicates the context is currently being mutated)
    - If this fails, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
-4. **Read payload**: Copy `payload_size` bytes from `payload` pointer it into reader-local memory
+4. **Read payload**: Read the `payload` and `payload_size` fields. Copy `payload_size` bytes from `payload` pointer it into reader-local memory
 
 5. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
 
-6. **Re-read header**: If `monotonic_published_at_ns` has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
+6. **Re-verify header**: Read `monotonic_published_at_ns` again. If it has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
 If `monotonic_published_at_ns` is different from the value read in step 2, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
 7. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
