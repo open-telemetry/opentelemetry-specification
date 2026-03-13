@@ -159,7 +159,8 @@ Windows.
 
 ## Supplementary Guidelines
 
-> **IMPORTANT**: This section is non-normative and provides implementation
+> [!IMPORTANT]
+> This section is non-normative and provides implementation
 > guidance only. It does not add requirements to the specification.
 
 Language implementations of OpenTelemetry have flexibility in how they implement

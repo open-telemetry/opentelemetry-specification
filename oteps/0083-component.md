@@ -50,7 +50,7 @@ Application servers) every Application will have it's own `TracerProvider` and
 
 ## Internal details
 
-This proposal affects only the OpenTelemtry protocol, and proposes a way to
+This proposal affects only the OpenTelemetry protocol, and proposes a way to
 represent the telemetry data in a structured way.
 For example, here is the protobuf definition for metrics:
 metrics:

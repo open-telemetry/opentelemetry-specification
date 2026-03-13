@@ -9,7 +9,8 @@ linkTitle: Zipkin
 Zipkin exporter support will be removed from OpenTelemetry specification in December
 2026.
 
-> Note: This document remains here for backwards compatibility and
+> [!NOTE]
+> This document remains here for backwards compatibility and
 > will be removed in a future version. Existing stable Zipkin exporters MUST
 > continue to be supported for at least one year after the artifact is deprecated,
 > following the [SDK stability guarantees](/specification/versioning-and-stability.md#sdk-support).

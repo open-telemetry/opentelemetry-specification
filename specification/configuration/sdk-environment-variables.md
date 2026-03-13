@@ -17,12 +17,9 @@ aliases:
 
 - [Implementation guidelines](#implementation-guidelines)
 - [Parsing empty value](#parsing-empty-value)
-- [Configuration types](#configuration-types)
+- [Type-specific guidance](#type-specific-guidance)
   * [Boolean](#boolean)
   * [Numeric](#numeric)
-    + [Integer](#integer)
-    + [Duration](#duration)
-    + [Timeout](#timeout)
   * [String](#string)
     + [Enum](#enum)
 - [General SDK Configuration](#general-sdk-configuration)
@@ -46,10 +43,11 @@ aliases:
 
 </details>
 
-The goal of this specification is to unify the environment variable names between different OpenTelemetry implementations.
+The goal of this specification is to unify the environment variable names and value parsing between different OpenTelemetry implementations.
 
 Implementations MAY choose to allow configuration via the environment variables in this specification, but are not required to.
-If they do, they SHOULD use the names listed in this document.
+If they do, they SHOULD use the names and value parsing behavior specified in this document.
+They SHOULD also follow the [common configuration specification](common.md).
 
 ## Implementation guidelines
 
@@ -61,7 +59,7 @@ The environment-based configuration MUST have a direct code configuration equiva
 
 The SDK MUST interpret an empty value of an environment variable the same way as when the variable is unset.
 
-## Configuration types
+## Type-specific guidance
 
 ### Boolean
 
@@ -79,13 +77,8 @@ upgrade.
 
 ### Numeric
 
-Variables accepting numeric values are sub-classified into:
-
-* [Integer](#integer)
-* [Duration](#duration)
-* [Timeout](#timeout)
-
-The following guidance applies to all numeric types.
+The following guidance applies to all numeric types and extends the [common
+configuration specification 'Numeric' guidance](common.md#numeric).
 
 > The following paragraph was added after stabilization and the requirements are
 > thus qualified as "SHOULD" to allow implementations to avoid breaking changes.
@@ -93,54 +86,8 @@ The following guidance applies to all numeric types.
 > implementations, these should be treated as MUST requirements.
 
 For variables accepting a numeric value, if the user provides a value the
-implementation cannot parse, or which is outside the valid range for the
-configuration item, the implementation SHOULD generate a warning and gracefully
-ignore the setting, i.e., treat them as not set. In particular, implementations
-SHOULD NOT assign a custom interpretation e.g. to negative values if a negative
-value does not naturally apply to a configuration and does not have an
-explicitly specified meaning, but treat it like any other invalid value.
-
-For example, a value specifying a buffer size must naturally be non-negative.
-Treating a negative value as "buffer everything" would be an example of such a
-discouraged custom interpretation. Instead the default buffer size should be
-used.
-
-Note that this could make a difference even if the custom interpretation is
-identical with the default value, because it might reset a value set from other
-configuration sources with the default.
-
-#### Integer
-
-If an implementation chooses to support an integer-valued environment variable,
-it SHOULD support non-negative values between 0 and 2³¹ − 1 (inclusive).
-Individual SDKs MAY choose to support a larger range of values.
-
-#### Duration
-
-Any value that represents a duration MUST be an integer representing a number of
-milliseconds. The value is non-negative - if a negative value is provided, the
-implementation MUST generate a warning, gracefully ignore the setting and use
-the default value if it is defined.
-
-For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
-
-#### Timeout
-
-Timeout values are similar to [duration](#duration) values, but are treated as a
-separate type because of differences in how they interpret timeout zero values (
-see below).
-
-Any value that represents a timeout MUST be an integer representing a number of
-milliseconds. The value is non-negative - if a negative value is provided, the
-implementation MUST generate a warning, gracefully ignore the setting and use
-the default value if it is defined.
-
-For example, the value `12000` indicates 12000 milliseconds, i.e., 12 seconds.
-
-Implementations SHOULD interpret timeout zero values (i.e. `0` indicating 0
-milliseconds) as no limit (i.e. infinite). In practice, implementations MAY
-treat no limit as "a very long time" and substitute a very large duration (
-e.g. the maximum milliseconds representable by a 32-bit integer).
+implementation cannot parse, the implementation SHOULD generate a warning and gracefully
+ignore the setting, i.e., treat them as not set.
 
 ### String
 
@@ -148,24 +95,16 @@ String values are sub-classified into:
 
 * [Enum][].
 
-Normally, string values include notes describing how they are interpreted by
-implementations.
-
 #### Enum
+
+The following guidance extends the [common configuration specification 'Enum'
+guidance](common.md#enum).
 
 Enum values SHOULD be interpreted in a case-insensitive manner.
 
-For variables which accept a known value out of a set, i.e., an enum value,
-implementations MAY support additional values not listed here.
-
-For variables accepting an enum value, if the user provides a value
+For sources accepting an enum value, if the user provides a value
 the implementation does not recognize, the implementation MUST generate
 a warning and gracefully ignore the setting.
-When reporting configuration errors, implementations SHOULD display the original
-user-provided value to aid debugging.
-
-If a null object (empty, no-op) value is acceptable, then the enum value
-representing it MUST be `"none"`.
 
 ## General SDK Configuration
 
@@ -186,9 +125,9 @@ Known values for `OTEL_PROPAGATORS` are:
 - `"baggage"`: [W3C Baggage](https://www.w3.org/TR/baggage/)
 - `"b3"`: [B3 Single](../context/api-propagators.md#configuration)
 - `"b3multi"`: [B3 Multi](../context/api-propagators.md#configuration)
-- `"jaeger"`: [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format)
+- `"jaeger"`: [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format) - **Status**: [Deprecated](../document-status.md)
 - `"xray"`: [AWS X-Ray](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader) (_third party_)
-- `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_)
+- `"ottrace"`: [OT Trace](https://github.com/opentracing?q=basic&type=&language=) (_third party_) - **Status**: [Deprecated](../document-status.md)
 - `"none"`: No automatically configured propagator.
 
 Known values for `OTEL_TRACES_SAMPLER` are:
@@ -301,9 +240,9 @@ We define environment variables for setting one or more exporters per signal.
 
 | Name                  | Description                 | Default | Type     |
 |-----------------------|-----------------------------|---------|----------|
-| OTEL_TRACES_EXPORTER  | Trace exporter to be used   | "otlp"  | [Enum][] |
-| OTEL_METRICS_EXPORTER | Metrics exporter to be used | "otlp"  | [Enum][] |
-| OTEL_LOGS_EXPORTER    | Logs exporter to be used    | "otlp"  | [Enum][] |
+| OTEL_TRACES_EXPORTER  | Trace exporter to be used   | `otlp`  | [Enum][] |
+| OTEL_METRICS_EXPORTER | Metrics exporter to be used | `otlp`  | [Enum][] |
+| OTEL_LOGS_EXPORTER    | Logs exporter to be used    | `otlp`  | [Enum][] |
 
 The implementation MAY accept a comma-separated list to enable setting multiple exporters.
 
@@ -377,21 +316,20 @@ that use [periodic exporting MetricReader](../metrics/sdk.md#periodic-exporting-
 
 ## Declarative configuration
 
-**Status**: [Development](../document-status.md)
-
 Environment variables involved in [declarative configuration](./README.md#declarative-configuration).
 
-| Name                          | Description                                                                                                                                                                   | Default | Type       | Notes     |
-|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|------------|-----------|
-| OTEL_EXPERIMENTAL_CONFIG_FILE | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | [String][] | See below |
+| Name                            | Description                                                                                                                                                                   | Default | Type       | Notes                                           |
+|---------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|------------|-------------------------------------------------|
+| `OTEL_EXPERIMENTAL_CONFIG_FILE` | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | [String][] | **Deprecated**. Use `OTEL_CONFIG_FILE` instead. |
+| `OTEL_CONFIG_FILE`              | The path of the configuration file used to configure the SDK. If set, the configuration in this file takes precedence over all other SDK configuration environment variables. |         | [String][] | See below                                       |
 
-If `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, the file at the specified path is used to
+If `OTEL_CONFIG_FILE` is set, the file at the specified path is used to
 call [Parse](./sdk.md#parse). The
 resulting [configuration model](./sdk.md#in-memory-configuration-model) is
 used to call [Create](./sdk.md#create) to produce fully configured
 SDK components.
 
-When `OTEL_EXPERIMENTAL_CONFIG_FILE` is set, all other environment variables
+When `OTEL_CONFIG_FILE` is set, all other environment variables
 besides those referenced in the configuration file
 for [environment variable substitution](./data-model.md#environment-variable-substitution)
 MUST be ignored. Ignoring the environment variables is necessary because
@@ -402,14 +340,14 @@ model returned by `Parse` before `Create` is called. For example, a user may
 call `Parse` on multiple files and define logic from merging the resulting
 configuration models, or overlay values from environment variables on top of a
 configuration model. Implementations MAY provide a mechanism to customize the
-configuration model parsed from `OTEL_EXPERIMENTAL_CONFIG_FILE`.
+configuration model parsed from `OTEL_CONFIG_FILE`.
 
 Users are encouraged to
-use [`sdk-migration-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-migration-config.yaml)
-as a starting point for `OTEL_EXPERIMENTAL_CONFIG_FILE`. This file represents a
+use [`otel-sdk-migration-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/otel-sdk-migration-config.yaml)
+as a starting point for `OTEL_CONFIG_FILE`. This file represents a
 common SDK configuration scenario, and includes environment variable
 substitution references to environment variables which are otherwise ignored.
-Alternatively, [`sdk-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/sdk-config.yaml)
+Alternatively, [`otel-sdk-config.yaml`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/examples/otel-sdk-config.yaml)
 offers a common SDK configuration starting point without environment variable
 substitution references.
 
@@ -425,8 +363,8 @@ OTEL_{LANGUAGE}_{FEATURE}
 ```
 
 [Boolean]: #boolean
-[Integer]: #integer
-[Duration]: #duration
-[Timeout]: #timeout
-[String]: #string
-[Enum]: #enum
+[Integer]: common.md#integer
+[Duration]: common.md#duration
+[Timeout]: common.md#timeout
+[String]: common.md#string
+[Enum]: common.md#enum
