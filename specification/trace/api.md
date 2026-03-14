@@ -400,9 +400,20 @@ The API MUST accept the following parameters:
   description](sdk.md#sampling). An empty collection will be assumed if
   not specified.
 
-  The API documentation MUST state that adding attributes at span creation is preferred
-  to calling `SetAttribute` later, as samplers can only consider information
-  already present during span creation.
+  Attributes provided at span creation time are the only attributes available
+  to [`Sampler`s](sdk.md#sampler) when making sampling decisions.
+  The API documentation MUST state that:
+
+  - Providing readily-available, low-cost attributes at span creation time
+    enables head-based samplers that rely on attributes (e.g., custom or
+    rule-based samplers) to make informed sampling decisions.
+  - Collecting attribute values can be expensive (e.g., URL parsing, string
+    formatting). When the configured `Sampler` does not consider attributes —
+    as is the case for all built-in samplers — the cost of eagerly computing
+    them for spans that are ultimately dropped is wasted. Instrumentations
+    MAY defer expensive attribute computation until after span creation,
+    guarded by [`IsRecording`](#isrecording), to avoid unnecessary overhead
+    when spans are not being recorded.
 
 - `Link`s - an ordered sequence of Links, see [API definition](#link).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
@@ -515,7 +526,9 @@ attributes"](https://github.com/open-telemetry/semantic-conventions/blob/main/do
 
 Note that [Samplers](sdk.md#sampler) can only consider information already
 present during span creation. Any changes done later, including new or changed
-attributes, cannot change their decisions.
+attributes, cannot change their decisions. See
+[Span Creation](#span-creation) for guidance on when to provide attributes at
+creation time versus setting them later.
 
 #### Add Events
 
