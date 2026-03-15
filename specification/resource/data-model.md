@@ -44,6 +44,6 @@ Entity includes its own notion of identity. The identity of a resource is
 the set of entities contained within it. Two resources are considered
 different if one contains an entity not found in the other.
 
-Some resources include raw attributes in additon to Entities. Raw attributes are
+Some resources include raw attributes in addition to Entities. Raw attributes are
 considered identifying on a resource. That is, if the key-value pairs of
 raw attributes are different, then you can assume the resource is different.

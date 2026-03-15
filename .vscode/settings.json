@@ -1,4 +1,5 @@
 {
     "editor.rulers": [80],
+    "cSpell.autoFormatConfigFile": true,
     "markdownlint.configFile": ".markdownlint.yaml"
 }

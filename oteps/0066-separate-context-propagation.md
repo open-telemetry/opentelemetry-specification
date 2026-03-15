@@ -96,7 +96,7 @@ When a span is started, a new context is returned, with the new span set as the
 current span.
 
 **`GetSpanPropagator() -> (HTTP_Extractor, HTTP_Injector)`**  
-When a span is extracted, the extracted value is stored in the context seprately
+When a span is extracted, the extracted value is stored in the context separately
 from the current span.
 
 ### Correlations API

@@ -1,6 +1,6 @@
 # Named Tracers and Meters
 
-_Associate Tracers and Meters with the name and version of the instrumentation library which reports telemetry data by parameterizing the API which the library uses to acquire the Tracer or Meter._
+_Associate Tracers and Meters with the name and version of the instrumentation library which reports telemetry data by parameterization of the API which the library uses to acquire the Tracer or Meter._
 
 ## Suggested reading
 
@@ -50,7 +50,7 @@ Meter meter = OpenTelemetry.getMeterProvider().getMeter("io.opentelemetry.contri
 
 These factories (`TracerProvider` and `MeterProvider`) replace the global `Tracer` / `Meter` singleton objects as ubiquitous points to request Tracer and Meter instances.
 
- The _name_ used to create a Tracer or Meter must identify the _instrumentation_ libraries (also referred to as _integrations_) and not the library being instrumented. These instrumentation libraries could be libraries developed in an OpenTelemetry repository, a 3rd party implementation, or even auto-injected code (see [Open Telemetry Without Manual Instrumentation OTEP](https://github.com/open-telemetry/oteps/blob/main/text/0001-telemetry-without-manual-instrumentation.md)). See also the examples for identifiers at the end.
+ The _name_ used to create a Tracer or Meter must identify the _instrumentation_ libraries (also referred to as _integrations_) and not the library being instrumented. These instrumentation libraries could be libraries developed in an OpenTelemetry repository, a 3rd party implementation, or even auto-injected code (see [OpenTelemetry Without Manual Instrumentation OTEP](https://github.com/open-telemetry/oteps/blob/main/text/0001-telemetry-without-manual-instrumentation.md)). See also the examples for identifiers at the end.
 If a library (or application) has instrumentation built-in, it is both the instrumenting and instrumented library and should pass its own name here. In all other cases (and to distinguish them from that case), the distinction between instrumenting and instrumented library is very important. For example, if an HTTP library `com.example.http` is instrumented by either `io.opentelemetry.contrib.examplehttp`, then it is important that the Tracer is not named `com.example.http`, but `io.opentelemetry.contrib.examplehttp` after the actual instrumentation library.
 
 If no name (null or empty string) is specified, following the suggestions in ["error handling proposal"](https://github.com/open-telemetry/opentelemetry-specification/pull/153), a "smart default" will be applied and a default Tracer / Meter implementation is returned.
@@ -68,7 +68,7 @@ Examples (based on existing contribution libraries from OpenTracing and OpenCens
 * `io.opentracing.contrib.asynchttpclient`
 * `io.opencensus.contrib.http.servlet`
 * `io.opencensus.contrib.spring.sleuth.v1x`
-* `io.opencesus.contrib.http.jaxrs`
+* `io.opencensus.contrib.http.jaxrs`
 * `github.com/opentracing-contrib/go-amqp` (Go)
 * `github.com/opentracing-contrib/go-grpc` (Go)
 * `OpenTracing.Contrib.NetCore.AspNetCore` (.NET)
