@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Stabilize `AlwaysRecord` sampler.
+  ([#4934](https://github.com/open-telemetry/opentelemetry-specification/pull/4934))
+
 ### Metrics
 
 ### Logs
@@ -28,6 +31,9 @@ release.
 ### OpenTelemetry Protocol
 
 ### Compatibility
+
+- Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
+  ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
 
 ### SDK Configuration
 

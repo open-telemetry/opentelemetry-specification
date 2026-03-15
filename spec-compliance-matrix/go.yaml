@@ -502,7 +502,7 @@ sections:
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '+'
       - name: OTEL_CONFIG_FILE
-        status: '-'
+        status: '+'
   - name: Declarative configuration
     features:
       - name: '`Parse` a configuration file'

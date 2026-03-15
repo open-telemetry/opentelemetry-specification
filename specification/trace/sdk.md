@@ -607,8 +607,6 @@ The following configuration properties should be available when creating the sam
 
 #### AlwaysRecord
 
-**Status**: [Development](../document-status.md)
-
 `AlwaysRecord` is a sampler decorator that ensures every span is passed to
 the `SpanProcessor`, even those that would normally be dropped. It does this
 by converting `DROP` decisions from the wrapped sampler into `RECORD_ONLY`
