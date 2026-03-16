@@ -120,7 +120,7 @@ message ProcessContext {
 Whenever applicable, attributes should follow [existing semantic conventions](https://opentelemetry.io/docs/specs/semconv/).
 
 We expect that once converted to an OTEP, the `threadlocal.`-prefixed keys from the proposed
-[thread context sharing specification](https://docs.google.com/document/d/1eatbHpEXXhWZEPrXZpfR58-5RIx-81mUgF69Zpn3Rz4/edit?tab=t.bmgoq3yor67o)
+[thread context sharing specification](https://github.com/open-telemetry/opentelemetry-specification/pull/4947)
 will be the first users of `extra_attributes` section.
 
 ### Publication Protocol
@@ -149,7 +149,8 @@ Finally, if both `memfd_create` fails (step 2, thus requiring falling back to st
 The process context is treated as a singleton: there MUST NOT be more than one process context active for the same process.
 
 In a situation where multiple resources exist as per https://github.com/open-telemetry/opentelemetry-specification/pull/4665, the process context should contain the default SDK resource.
-We expect future work to enable more granular attribution of work to specific resources, e.g. [the thread context sharing specification](https://docs.google.com/document/d/1eatbHpEXXhWZEPrXZpfR58-5RIx-81mUgF69Zpn3Rz4/edit?tab=t.bmgoq3yor67o) will enable identifying which threads are working on what (e.g. in a multi-tenant scenario).
+We expect future work to enable more granular attribution of work to specific resources, e.g. [the thread context sharing specification](https://github.com/open-telemetry/opentelemetry-specification/pull/4947)
+will enable identifying which threads are working on what (e.g. in a multi-tenant scenario).
 
 The context MAY be dropped during SDK shutdown, or kept around until the process itself terminates and the OS takes care of cleaning the process memory.
 
@@ -242,7 +243,7 @@ When a process forks, child processes do not inherit the parent's process contex
 
 Creating memory mappings and managing them adds complexity to SDK implementations.
 
-**Mitigation**: We've created a reference implementation in [C/C++](https://github.com/open-telemetry/sig-profiling/tree/main/process-context/c-and-cpp), as well as a [demo OTEL Java SDK extension](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo) and a [Go port as well](https://github.com/DataDog/dd-trace-go/pull/3937).
+**Mitigation**: We've created a reference implementation in [C/C++](https://github.com/open-telemetry/sig-profiling/tree/main/process-context/c-and-cpp), as well as a [demo OTEL Java SDK extension](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo) and a [Go port as well](https://github.com/datadog/dd-trace-go/pull/4456).
 
 For Go as well as modern versions of Java it's possible to create an implementation that doesn't rely on third-party libraries or native code (e.g. by directly calling into the OS or libc). Older versions of Java will need to rely on building the C/C++ code into a Java native library.
 
@@ -280,7 +281,7 @@ Aside from protobuf, msgpack was also trialed; similarly to protobuf, it's possi
 
 The proposed mechanism only supports sharing process-level resource attributes.
 
-In particular, it does not support carrying trace and span ids, which would be required to provide finer-grained correlation. Prior art by Elastic and Polar Signals (see below) provide such thread-level context sharing, and there's a working doc [for supporting thread-level context sharing in the OTEL eBPF Profiler](https://docs.google.com/document/d/1eatbHpEXXhWZEPrXZpfR58-5RIx-81mUgF69Zpn3Rz4/edit?tab=t.0#heading=h.fvztn3xtjxxm) under development for this. We expect that in the future, such correlation would be proposed as a separate OTEP.
+In particular, it does not support carrying trace and span ids, which would be required to provide finer-grained correlation. Prior art by Elastic and Polar Signals (see below) provide such thread-level context sharing, and there's a follow-up OTEP [for supporting thread-level context sharing in the OTEL eBPF Profiler](https://github.com/open-telemetry/opentelemetry-specification/pull/4947) under development for this.
 
 Process-level and thread-level context are complementary: The process-level mechanism proposed in this OTEP can be generically adopted by SDKs, and allows for flexibility in publishing metadata and in parsing it. Thread-level mechanisms, in contrast, may need specific support for individual languages/runtimes, and because they would be updated for every span, will need careful performance work.
 
@@ -398,15 +399,14 @@ The following proof-of-concept implementations demonstrate feasibility across mu
 
 - **[process-context-c-and-cpp](https://github.com/open-telemetry/sig-profiling/tree/main/process-context/c-and-cpp)**: Complete reference implementation in C/C++ with protobuf payload
 - **[otel-java-extension-demo](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo)**: OTEL Java SDK extension for automatic publication
-- **[anonmapping-java](https://github.com/ivoanjo/proc-level-demo/tree/main/anonmapping-java)**: Pure Java implementation using FFM (no dependencies)
 - **[ebpf-program](https://github.com/ivoanjo/proc-level-demo/tree/main/ebpf-program)**: Example eBPF program demonstrating event-driven publishing detection
-- **[OpenTelemetry eBPF Profiler PR](https://github.com/DataDog/dd-otel-host-profiler/pull/210)**: Integration in Datadog's experimental fork
+- **[OpenTelemetry eBPF Profiler PR](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1181)**: Integration into eBPF Profiler
 
 Additional implementations have been tested with:
 
 - [Datadog Java SDK](https://github.com/DataDog/java-profiler/pull/266)
 - [Datadog Ruby SDK](https://github.com/DataDog/dd-trace-rb/pull/4865)
-- [Datadog Go SDK](https://github.com/DataDog/dd-trace-go/pull/3937)
+- [Datadog Go SDK](https://github.com/datadog/dd-trace-go/pull/4456)
 
 These prototypes validate that the approach works across different languages and runtimes.
 
