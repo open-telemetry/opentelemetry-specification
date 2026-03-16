@@ -37,6 +37,10 @@ release.
 
 ### SDK Configuration
 
+- Declarative configuration: add in-development guidance for exposing the
+  effective `Resource` returned by `Create`.
+  ([#4948](https://github.com/open-telemetry/opentelemetry-specification/issues/4948))
+
 ### Supplementary Guidelines
 
 ### OTEPs

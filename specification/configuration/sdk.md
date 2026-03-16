@@ -252,10 +252,33 @@ Interpret configuration model and return SDK components.
 * [MeterProvider](../metrics/sdk.md#meterprovider)
 * [LoggerProvider](../logs/sdk.md#loggerprovider)
 * [Propagators](../context/api-propagators.md#composite-propagator)
+* **Status**: [Development](../document-status.md) -
+  [Resource](../resource/sdk.md) - the effective resource associated with SDK
+  components returned by `Create`
 * **Status**: [Development](../document-status.md) - [ConfigProvider](#configprovider)
 
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
+
+**Status**: [Development](../document-status.md) The effective `Resource` is
+the `Resource` actually associated with the SDK
+components produced by `Create`, after all resource-related configuration,
+resource detection, and merging required during configuration interpretation
+have been applied.
+
+The [TracerProvider](../trace/sdk.md#tracer-provider),
+[MeterProvider](../metrics/sdk.md#meterprovider), and
+[LoggerProvider](../logs/sdk.md#loggerprovider) returned by the same `Create`
+invocation MUST be associated with this effective `Resource`.
+
+If the results of `Create` are returned in a structure encapsulating the top
+level SDK components, that structure MUST provide access to the effective
+`Resource`.
+
+Because [Resources](../resource/sdk.md) are immutable, any `Resource` returned
+by `Create` MUST be read-only from the caller's perspective. Callers MUST NOT
+be able to mutate the returned value in a way that changes the `Resource`
+associated with the created SDK components.
 
 Create requirements around default and null behavior are described below. Note that
 [`defaultBehavior` and `nullBehavior`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#json-schema-source-and-output)
