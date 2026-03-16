@@ -126,11 +126,10 @@ release.
 - Declarative configuration: Update instrumentation config behavior to return
   empty object when not set
   ([#4817](https://github.com/open-telemetry/opentelemetry-specification/pull/4817))
-
-### Supplementary Guidelines
-
 - Add strict YAML parsing guidance to configuration supplementary guidelines.
   ([#4878](https://github.com/open-telemetry/opentelemetry-specification/pull/4878))
+
+### Supplementary Guidelines
 
 ### OTEPs
 
