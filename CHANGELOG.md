@@ -24,6 +24,10 @@ release.
 
 ### Resource
 
+- Clarify that a Resource describes the observed entity, not the component
+  that technically emits telemetry.
+  ([#4905](https://github.com/open-telemetry/opentelemetry-specification/pull/4905))
+
 ### Entities
 
 ### Common
