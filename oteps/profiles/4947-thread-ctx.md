@@ -265,6 +265,7 @@ This proposal attempts to unify the benefits of these two approaches by providin
 
 - **[OpenTelemetry eBPF Profiler PR](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1229)**: Work-in-progress integration adding thread context support to the OpenTelemetry eBPF Profiler
 - **[ctx-sharing-demo](https://github.com/scottgerring/ctx-sharing-demo)**: Sample writers and readers, based on PolarSignals' [custom-labels](https://github.com/polarsignals/custom-labels/tree/master) work
+- **[Datadog java-profiler PR](https://github.com/DataDog/java-profiler/pull/347)**: Adoption of this mechanism by an in-process profiler, demonstrating applicability beyond eBPF-based readers
 
 ## Future possibilities
 
