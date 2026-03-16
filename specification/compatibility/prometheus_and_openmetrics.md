@@ -150,7 +150,7 @@ In the text format, Prometheus histograms buckets, count and sum are sent as sep
 
 ### Native Histograms
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 A [Prometheus Native Histogram](https://prometheus.io/docs/specs/native_histograms/)
 with standard (exponential) schema (i.e. schemas -4 to 8) and which are
