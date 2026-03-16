@@ -23,6 +23,8 @@ languages:
     location: ./dotnet.yaml
   - name: Swift
     location: ./swift.yaml
+  - name: Kotlin
+    location: ./kotlin.yaml
 sections:
   - name: Traces
     features:
