@@ -41,7 +41,7 @@ The following values are stored:
   * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a go application and thus context should be read from [go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
 * `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread local storage itself will then use these key indexes in place of the **attribute names**.
 
-The exact format used will be the protobuf structure standardised in OTEP-4719. A stringified representation of this showing the usage of the elements of that schema along with some example values:
+The exact format used will be the protobuf structure standardized in OTEP-4719. A stringified representation of this showing the usage of the elements of that schema along with some example values:
 
 ```yaml
 key: "threadlocal.schema_version"
@@ -196,7 +196,7 @@ The OpenTelemetry eBPF profiler, by design, has the necessary permissions and op
 
 Creating TLSDESC variables and ensuring they end up in the processes `dynsym` table adds complexity to SDK implementations.
 
-**Mitigation:** We've created an extension of the existing PolarSignals [custom-labels](http://polarsignals/custom-labels) work, providing a reference implementation in C and bindings in Rust.
+**Mitigation:** We've created an extension of the existing PolarSignals [custom-labels](https://github.com/polarsignals/custom-labels) work, providing a reference implementation in C and bindings in Rust.
 
 ### Complexity for End Users building from source
 
@@ -215,8 +215,8 @@ As requirements evolve, we may need to extend the payload format.
 
 By separating frequently changing **Thread Local Context Record** data from static, process-wide **Context Reference Data**, we ensure that:
 
-* Overhead of repeating attribute key names is minimised with indexing scheme
-* Memory overhead of TLS context reads is reduced, minimising the time a thread must be kept suspended, and reducing the impact on the CPU cache
+* Overhead of repeating attribute key names is minimized with indexing scheme
+* Memory overhead of TLS context reads is reduced, minimizing the time a thread must be kept suspended, and reducing the impact on the CPU cache
 
 ### Trace Sampling
 
@@ -232,7 +232,7 @@ So far, we've looked at a number of runtimes/languages and we list below what we
 This section is not intended to constrain implementers of the specification (nor to mandate that SDKs adopt this feature if they have no interest on it), but rather to indicate how likely we currently believe this is to fit with those languages/runtimes:
 
 * **C/C++:** Full support
-* **Rust**:  Full support. Requires linking against a native library in order to ensure the TLS symbol is exposed correctly (see [here](https://github.com/rust-lang/rust/pull/132480Z))
+* **Rust**:  Full support. Requires linking against a native library in order to ensure the TLS symbol is exposed correctly (see [here](https://github.com/rust-lang/rust/pull/132480))
 * **Java**: Full support. Requires calling into native library (e.g. via JNI or equivalent API)
 * **Dotnet:** Full support via FFI bindings to native library
 * **Python:** Full support using native library. Tracers running on Python >= 3.14 can use [PyContext_WatchCallback](https://docs.python.org/3/c-api/contextvars.html#c.PyContext_WatchCallback) to track context activation; older versions must monkey-patch the runtime
@@ -241,7 +241,7 @@ This section is not intended to constrain implementers of the specification (nor
 We believe these two runtimes are not going to be supported by this proposal:
 
 * **Golang:** We foresee golang readers will continue to use the [pprof labels](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/blob/main/design-docs/00002-custom-labels/README.md) due to its fine-grained goroutine based concurrency model and relative cost of calling across an FFI
-* **NodeJS**: We expect nodeJS readers are more likely to read the NodeJS runtime internals directly due to the threading model and performance impact of using an NPAPI/native TLS approach.This adds complexity to the reader but reduces the performance impact, and is already the approached used in [Polarsignal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js).
+* **NodeJS**: We expect nodeJS readers are more likely to read the NodeJS runtime internals directly due to the threading model and performance impact of using a Node-API/native TLS approach.This adds complexity to the reader but reduces the performance impact, and is already the approached used in [Polarsignal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js).
 
 ## Prior art and alternatives
 
