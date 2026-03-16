@@ -1,19 +1,33 @@
 # Context-scoped attributes
 
 Add Context-scoped telemetry attributes which typically apply to all signals
-associated with a trace as it crosses a single service.
+associated with a request as it crosses a single service.
 
 Original author: [Christian Neumüller](https://github.com/Oberon00).
 
 ## Motivation
 
 This OTEP aims to address various related demands that have been brought up
-in the past, where the scope of resource attributes is too broad, but the scope
-of span attributes is too narrow. For example, this happens where there is a
-mismatch between the OpenTelemetry SDK’s (and thus TracerProvider’s, MeterProvider’s)
+in the past, where the scope (and lifetime) of resource attributes is too broad,
+but the scope of span attributes is too narrow. For example, this happens where there is a
+mismatch between the OpenTelemetry SDK’s (and thus TracerProvider’s, MeterProvider’s, LoggerProvider's)
 process-wide initialization and the semantic scope of a (sub)service.
 
-A concrete example is posed in the issue
+A typical use case is supporting multi tenancy, with tenant information existing
+in the request itself (e.g. header key, acess token, request parameter). This tenant information
+could be then propagated via Context-scoped attributes. **Any** telemetry produced during the processing
+of the request would then be automatically associated with the respective request/tenant.
+Other alternatives would be problematic:
+
+* Having an SDK instance per tenant (in order to report tenant-specific information) can be prohibitive
+  as there could be hundreds or thousands of different tenants, and the processing/exporting pipeline
+  would be duplicated N-times.
+* Custom processors for attaching tenant-specific information would work for spans and logs. However,
+  at the time of writing this OTEP there is no processor functionality for metrics.
+* In general, OpenTelemetry should offer out-of-the-box common functionality that is extensively
+  used, instead of asking users to write custom components recurringly.
+
+A related usecase is posed in the issue
 [open-telemetry/opentelemetry-specification#335](https://github.com/open-telemetry/opentelemetry-specification/issues/335)
 “Consider adding a resource (semantic convention) to distinguish
 HTTP applications (http.app attribute)”. If the opentelemetry-java agent
@@ -21,29 +35,21 @@ is injected in a JVM running a classical Java Application Server (such as tomcat
 there will be a single resource for the whole JVM. The application server can
 host multiple independent applications. There is currently no way to distinguish
 between these, other than with the generic HTTP attributes like
-`http.route` or `url.template`. The mentioned issue proposes to add an
-`http.app` attribute but it is unclear where this could be placed.
-The resource cannot be used, since there is only one that is shared between
-multiple subservices. A span attribute on the root span could be used.
-However, logically, the app attribute would apply to all spans within the trace
+`http.route` or `url.template`. 
+Logically, the app attribute would apply to all spans within the trace
 as it crosses the app server, as shown in the diagram below:
 
 ![Diagram showing how two traces cross a single service, having a http.app attribute applied to all spans within that service of each trace](./img/0207-context-scoped-attributes.drawio.png)
 
 This example shows two traces, with two "HTTP GET" root spans, one originating
 from service `frontend` and another from `user-verification-batchjob`.
-Each of these HTTP GET spans calls into a third service `my-teams-tomcat` which
-is a Java Tomcat application server. That service hosts two distinct
-HTTP subservices, and as each of the traces crosses it, all the spans have a
-respective `http.app` associated with it. When the `my-teams-tomcat` service
+Each of these HTTP GET spans calls into a third service `my-teams-tomcat`.
+That service hosts two distinct HTTP subservices, and as each of the traces crosses it,
+all the spans have a respective `http.app` associated with it. When the `my-teams-tomcat` service
 makes a call to another service `authservice`, that attribute does *not* apply
 to the remote child spans.
 
-Using only currently specified mechanisms, the `http.app` attribute could be set,
-e.g., on the `/myapp/users/{userid}` root span, but it logically applies also to
-the `HTTP GET` child span which is executed in the same app.
-
-A similar problem occurs with `faas.name` and `cloud.resource_id`
+A  similar problem occurs with `faas.name` and `cloud.resource_id`
 ([Function as a Service Resource semantic conventions](https://opentelemetry.io/docs/specs/semconv/resource/faas/))
 on Azure Functions. While both are defined as Resource attributes, an Azure
 function app hosts multiple co-deployed functions with different names and IDs.
@@ -52,43 +58,32 @@ this was solved by allowing to set these Resource attributes on the FaaS
 root span instead. This has the drawback that the context of which function a span
 is executed in is lost in any child spans that may occur within the function (app).
 
-There is also the issue
-[open-telemetry/opentelemetry-specification#1089](https://github.com/open-telemetry/opentelemetry-specification/issues/1089)
-“Add BeforeEnd to have a callback where the span is still writeable” which seems
-to be motivated by essentially the same problem, though the motivation is stated
-more on a technical level: “What I tried to implement is a feature called trace field
-in Honeycomb (reference: [AddFieldToTrace](https://godoc.org/github.com/honeycombio/beeline-go#AddFieldToTrace))”.
-The aforementioned feature's documentation reads: "AddFieldToTrace adds the field to both the currently
-active span and all other spans involved in this trace that occur within this process.".
-
-This motivation analogously also applies to other signals (metrics, logs) which
-will have very similar problems. E.g. the `http.app` attribute also looks like
-something you may want to split metrics by or use as a query for logs
-(“I want to see all logs produced by the `http.app=myapp`”).
-
 ## Explanation
 
 The Context-scoped attributes allows you to attach attributes to all telemetry
-signals emitted within a Context (or, following the usual rules of Context values,
-any child Context thereof unless overridden). Context-scoped attributes are normal
+signals emitted within a Context. Context-scoped attributes are standard
 attributes, which means you can use strings, integers, floating point numbers,
-booleans or arrays thereof, just like for span or resource attributes.
-Context-scoped attributes are associated with all telemetry signals emitted while
-the Context containing the Context-scoped attributes is active and are available
-to samplers, processors and exporters. For spans, the context within which the span
-is started applies. Like other telemetry APIs, Context-scoped attributes are
+booleans or arrays thereof, just like for any telemetry item.
+Context-scoped attributes MUST be added to telemetry items that were **emitted**
+while the Context containing the Context-scoped attributes was active, or to
+telemetry items that had this Context explicitly set as parent.
+
+These attributes will then be automatically available to **any** component down the pipeline, i.e.
+to samplers and processors. Like other telemetry APIs, Context-scoped attributes are
 write-only for applications. You cannot query the currently set Context-scoped attributes,
-as they are only available on the SDK level (to samplers, processors and exporters).
+as they are only available on the SDK level (to samplers and processors).
 
 Context-scoped attributes should be thought of equivalent to adding the attribute
 directly to each single telemetry item it applies to.
 
 Context-scoped attributes MUST NOT be propagated cross-service, i.e. no context propagator
 must be implemented for them. This is because they are meant to annotate (a subset of)
-the spans of a single service (see also [the next section](#comp-baggage)).
+the telemetry items related of a single service (see also [the next section](#comp-baggage)).
 
-Context-scoped attributes MUST be disabled by default. They MUST be offered as an opt-in
-in order to reduce the possibility of unexpected behavior for existing users.
+Context-scoped attributes MUST be disabled by default, i.e. they will not be added to
+any telemetry item by default, even if they are set and propagated.
+They MUST be offered as an opt-in in order to reduce the possibility of unexpected
+behavior for existing users.
 
 <a name="comp-baggage"></a>
 
@@ -115,9 +110,9 @@ This also explains the functional & API differences:
 * Baggage is both readable and writable for the application, while Context-scoped
   attributes, like all other telemetry attributes, are write-only.
 * Baggage only supports string values.
-* Baggage is not available to telemetry exporters (although e.g., a SpanProcessor
-  could be used to change that), while that's the whole purpose of Context-scoped
-  attributes.
+* **Related** Baggage (implicitly or explicitly linked to telemetry items) MAY not be available
+  to telemetry exporters (although e.g., a SpanProcessor could be used to change that),
+  while that's the whole purpose of Context-scoped attributes.
 
 ### Comparing Context-scoped attributes to Instrumentation Scope Attributes
 
@@ -133,6 +128,11 @@ While Instrumentation Scope attributes apply to all items emitted by the same
 Tracer, Meter or LogEmitter (i.e., typically the same telemetry-implementing unit
 of code), the scope of Context-scoped attributes is determined at runtime by the
 Context, independently of the used Tracer, Meter or LogEmitter.
+
+Moreover, Tracer, Meter and LogEmitter instances typically have the same
+life span as the application itself, whereas Context-scoped attributes
+lifespan is tied to the Context itself. For example, a Context solely created
+for an incoming request will stop existing once such request is done.
 
 In practice, Instrumentation Scope and Context-scoped attributes will
 [often be completely orthogonal](#scope-and-context):
@@ -158,7 +158,7 @@ set ones, with the following notes:
 
 * If the context already contains any attributes with that name, they MUST be
   overwritten with the attributes of the later call.
-* If an associated telemetry item (e.g. Span) already has an attribute with
+* If an associated telemetry item (e.g. Span or LogRecordItem) already has an attribute with
   a name that is also in the Context-scoped attributes, the telemetry attribute
   MUST take precedence.
 
@@ -186,21 +186,14 @@ Context AddContextScopedAttributes(Context context, Attributes attributes) {
 }
 ```
 
-The Context-scoped attributes must be available for all telemetry items they
-are logically associated with. For example, the `ReadableSpan` should include
-the context attributes in the list of Span attributes, and they must be included
-into the list of attributes that the Sampler receives. This will be an
-implementation-level change without any changes in the API-surface of the SDK
-(i.e., it is not necessary to make Context-scoped attributes distinguishable
+Upon telemetry items creation (e.g. Span, LogRecordItem), the SDK MUST add
+the context-scoped attributes of the logically associated Context,
+skipping attributes with keys already present in the telemetry item.
+This MUST be done before any extension point is invoked, e.g. Sampler or Processor.
+
+This will be an implementation-level change without any changes in the API-surface
+of the SDK (i.e. it is not necessary to make Context-scoped attributes distinguishable
 from “direct” telemetry attributes).
-
-### Exporter changes (none required)
-
-Exporters should set the attributes on all telemetry items they belong to as if
-they were set directly on them. For example, a span with span attribute `foo=bar`
-and Context attribute `x=y` would be exported with span attributes `foo=bar, x=y`.
-This should happen by default as the telemetry items will include the Context-scoped
-attributes among their “direct” attributes.
 
 ## Trade-offs and mitigations
 
@@ -211,14 +204,18 @@ conceptual complexity. Nevertheless, some implications of making the Context-sco
 attributes **distinguishable** are explored in
 [Prior art and alternatives](#prior-art-and-alternatives).
 
-This OTEP relies on the
-[`Context`](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/context/README.md)
-concept that has been in the spec since 1.0. However, at least .NET went 1.0
-before the spec and does not include a conforming Context concept. For .NET,
-an async-local variable that holds the Context-scoped attributes seems to be the
-most useful implementation of this OTEP (similar to how Baggage is implemented there).
-
 ## Prior art and alternatives
+
+### AddBeforeEnd callback and AddFieldToTrace
+
+There is the (slightly related) issue
+[open-telemetry/opentelemetry-specification#1089](https://github.com/open-telemetry/opentelemetry-specification/issues/1089)
+“Add BeforeEnd to have a callback where the span is still writeable” which seems
+to be motivated by essentially the same problem, though the motivation is stated
+more on a technical level: “What I tried to implement is a feature called trace field
+in Honeycomb (reference: [AddFieldToTrace](https://godoc.org/github.com/honeycombio/beeline-go#AddFieldToTrace))”.
+The aforementioned feature's documentation reads: "AddFieldToTrace adds the field to both the currently
+active span and all other spans involved in this trace that occur within this process.".
 
 ### Alternative: Making Context-scoped attributes semantically distinct from other telemetry attributes
 
