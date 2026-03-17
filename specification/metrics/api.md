@@ -276,6 +276,15 @@ Applies to all instrument types.
 `Attributes` (a list of [attribute keys](../common/README.md#attribute)) is
 the recommended set of attribute keys to be used for the resulting metrics.
 
+##### Instrument advisory parameter: `Exclude_Attributes`
+
+**Status**: [Development](../document-status.md)
+
+Applies to all instrument types.
+
+`Exclude_Attributes` (a list of [attribute keys](../common/README.md#attribute)) is
+the recommended set of attribute keys to not be used for the resulting metrics.
+
 #### Synchronous and Asynchronous instruments
 
 Instruments are categorized on whether they are synchronous or

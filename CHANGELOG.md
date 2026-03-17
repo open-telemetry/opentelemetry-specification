@@ -18,6 +18,10 @@ release.
 
 - Add development `maxExportBatchSize` parameter to Periodic exporting MetricReader.
   ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
+- Add development `exclude_attribute_keys` parameter to Stream Configuration.
+  ([]())
+- Add development `Exclude_Attributes` parameter to Instrument Advisory.
+  ([]())
 
 ### Logs
 
