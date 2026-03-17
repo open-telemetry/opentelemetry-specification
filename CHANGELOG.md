@@ -59,6 +59,8 @@ release.
   ([#4952](https://github.com/open-telemetry/opentelemetry-specification/pull/4952))
 - Stabilize OpenTelemetry Attributes to Prometheus labels transformation.
   ([#4963](https://github.com/open-telemetry/opentelemetry-specification/pull/4963))
+- Stabilize Prometheus Metadata transformation.
+  ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
 
 ### SDK Configuration
 
