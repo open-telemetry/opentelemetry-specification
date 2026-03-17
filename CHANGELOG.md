@@ -41,6 +41,8 @@ release.
 
 - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
   ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+- Prometheus `job` and `instance` are now translated to `prometheus.job` and `prometheus.instance`.
+  ([#4956](https://github.com/open-telemetry/opentelemetry-specification/pull/4956))
 
 ### SDK Configuration
 
