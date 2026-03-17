@@ -64,9 +64,10 @@ The Context-scoped attributes allows you to attach attributes to all telemetry
 signals emitted within a Context. Context-scoped attributes are standard
 attributes, which means you can use strings, integers, floating point numbers,
 booleans or arrays thereof, just like for any telemetry item.
-Context-scoped attributes MUST be added to telemetry items that were **emitted**
-while the Context containing the Context-scoped attributes was active, or to
-telemetry items that had this Context explicitly set as parent.
+
+When  Context-scoped attributes are enabled, they MUST be added to telemetry items
+that were **emitted** while the Context containing the Context-scoped attributes
+was active, or to telemetry items that had this Context explicitly set as parent.
 
 These attributes will then be automatically available to **any** component down the pipeline, i.e.
 to samplers and processors. Like other telemetry APIs, Context-scoped attributes are
