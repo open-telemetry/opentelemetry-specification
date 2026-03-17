@@ -41,6 +41,8 @@ release.
 
 - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
   ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+- Stabilize Prometheus Dropped Types transformation.
+  ([#4952](https://github.com/open-telemetry/opentelemetry-specification/pull/4952))
 
 ### SDK Configuration
 
