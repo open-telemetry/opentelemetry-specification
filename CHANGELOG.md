@@ -16,6 +16,9 @@ release.
 
 ### Metrics
 
+- Development: Define `finish` operations for synchronous metric instruments.
+  ([#4702](https://github.com/open-telemetry/opentelemetry-specification/pulls/4702))
+
 ### Logs
 
 ### Baggage
@@ -133,7 +136,6 @@ release.
 
 - Stabilize part of `Enabled` SDK for synchronous instruments.
   ([#4787](https://github.com/open-telemetry/opentelemetry-specification/pull/4787))
-- Development: Define `finish` operations for synchronous metric instruments. [#4702](https://github.com/open-telemetry/opentelemetry-specification/pulls/4702)
 
 ### Logs
 

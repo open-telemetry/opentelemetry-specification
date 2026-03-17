@@ -1046,7 +1046,7 @@ aggregation when no matching views match the instrument.
 
 **Status**: [Development](../document-status.md)
 
-The instrument [Finish](./api.md#finish) SHOULD NOT return a value (it MAY return a dummy value if required by
+The synchronous instrument [Finish](./api.md#finish) SHOULD NOT return a value (it MAY return a dummy value if required by
 certain programming languages or systems, for example `null`, `undefined`).
 
 ## Attribute limits
