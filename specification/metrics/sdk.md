@@ -53,6 +53,7 @@ weight: 3
   * [Instrument advisory parameters](#instrument-advisory-parameters)
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
+    + [Instrument advisory parameter: `ExcludeAttributes`](#instrument-advisory-parameter-excludeattributes)
   * [Instrument enabled](#instrument-enabled)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
@@ -1032,6 +1033,21 @@ If the user has provided attribute keys via View(s), those keys take precedence.
 If no View is configured, or if a matching view does not specify attribute keys,
 the advisory parameter should be used. If neither is provided, all attributes
 must be retained.
+
+#### Instrument advisory parameter: `ExcludeAttributes`
+
+**Status**: [Development](../document-status.md)
+
+This advisory parameter applies to all aggregations.
+
+`ExcludeAttributes` (a list of [attribute keys](../common/README.md#attribute))
+specifies the recommended set of attribute keys not to be used for measurements to
+produce a metric stream.
+
+If the user has provided attribute keys via View(s), those keys take precedence.
+If no View is configured, or if a matching view does not specify exclude attribute keys,
+the advisory parameter should be used. If neither is provided, no attributes
+must be removed.
 
 ### Instrument enabled
 
