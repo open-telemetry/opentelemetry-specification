@@ -84,7 +84,18 @@ the telemetry items related of a single service (see also [the next section](#co
 Context-scoped attributes MUST be disabled by default, i.e. they will not be added to
 any telemetry item by default, even if they are set and propagated.
 They MUST be offered as an opt-in in order to reduce the possibility of unexpected
-behavior for existing users.
+behavior for existing users. A new boolean configuration option will be added, so
+they can be enabled (or disabled) for all signals. Following the existing
+configuration format, this is how it would look like:
+
+```yaml
+disabled: false
+context_scoped_attributes: true
+tracer_provider:
+   ...
+```
+
+See [Open questions](#open-questions) regarding the expected outcome for the configuration part.
 
 <a name="comp-baggage"></a>
 
@@ -455,6 +466,11 @@ with this approach though:
   `Baggage` values to individual telemetry items has been a request from users
   in the past. This is even considered as part of one of the alternatives that
   were considered.
+
+* Configuration could be defined, at least initially, as a single boolean value, similar
+  to how the entire SDK is enabled or disabled via the `disabled` configuration option.
+  However, this OTEP leaves the topic open in case further options are needed, e.g.
+  only enable Context-scoped attributes for some signals.
 
 ## Future possibilities
 
