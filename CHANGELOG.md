@@ -16,6 +16,9 @@ release.
 
 ### Metrics
 
+- Add development `maxExportBatchSize` parameter to Periodic exporting MetricReader.
+  ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
+
 ### Logs
 
 ### Baggage
