@@ -15,16 +15,15 @@ release.
   ([#4825](https://github.com/open-telemetry/opentelemetry-specification/pull/4825))
 - Add normative language to the Tracing API/SDK spec concurrency requirements.
   ([#4887](https://github.com/open-telemetry/opentelemetry-specification/pull/4887))
+- Stabilize `AlwaysRecord` sampler.
+  ([#4934](https://github.com/open-telemetry/opentelemetry-specification/pull/4934))
 
 ### Metrics
 
-- Add additional in-development requirements to metric start timestamps.
-  ([#4807](https://github.com/open-telemetry/opentelemetry-specification/pull/4807))
+- Add development `maxExportBatchSize` parameter to Periodic exporting MetricReader.
+  ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
 
 ### Logs
-
-- Stabilize optional `Exception` parameter to Logger Emit.
-  ([#4858](https://github.com/open-telemetry/opentelemetry-specification/pull/4858))
 
 ### Baggage
 
@@ -32,11 +31,44 @@ release.
 
 ### Resource
 
+- Clarify that a Resource describes the observed entity, not the component
+  that technically emits telemetry.
+  ([#4905](https://github.com/open-telemetry/opentelemetry-specification/pull/4905))
+
 ### Entities
 
 ### Common
 
 ### OpenTelemetry Protocol
+
+### Compatibility
+
+- Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
+  ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.55.0 (TODO: update date before merging)
+
+### Traces
+
+- Add normative language to the Tracing API/SDK spec concurrency requirements.
+  ([#4887](https://github.com/open-telemetry/opentelemetry-specification/pull/4887))
+
+### Metrics
+
+- Add additional in-development requirements to metric start timestamps.
+  ([#4807](https://github.com/open-telemetry/opentelemetry-specification/pull/4807),
+  [#4902](https://github.com/open-telemetry/opentelemetry-specification/pull/4902))
+
+### Logs
+
+- Stabilize optional `Exception` parameter to Logger Emit.
+  ([#4858](https://github.com/open-telemetry/opentelemetry-specification/pull/4858))
 
 ### Compatibility
 
@@ -50,10 +82,6 @@ release.
   ([#4891](https://github.com/open-telemetry/opentelemetry-specification/pull/4891))
 - Mark significant portions of declarative configuration as stable.
   ([#4568](https://github.com/open-telemetry/opentelemetry-specification/pull/4568))
-
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.54.0 (2026-02-13)
 

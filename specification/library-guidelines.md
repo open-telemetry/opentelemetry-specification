@@ -133,4 +133,4 @@ safeties should API implementations provide and how they should be documented:
 
 * [Metrics API](./metrics/api.md#concurrency-requirements)
 * [Metrics SDK](./metrics/sdk.md#concurrency-requirements)
-* [Tracing API](./trace/api.md#concurrency)
+* [Tracing API](./trace/api.md#concurrency-requirements)
