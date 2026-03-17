@@ -45,7 +45,7 @@ message ExponentialBucketCounts {
 
 Notes:
 
-* ExponentialBuckets will be added as "oneof" the bucket types in [#272](https://github.com/open-telemetry/opentelemetry-proto/pull/272)
+* ExponentialBuckets will be added as "one-of" the bucket types in [#272](https://github.com/open-telemetry/opentelemetry-proto/pull/272)
 * Per [#257](https://github.com/open-telemetry/opentelemetry-proto/issues/257), only a histogram accepting "double" will be defined.
 * Per [#259](https://github.com/open-telemetry/opentelemetry-proto/issues/259), bucket counts type is "double".
 
@@ -70,7 +70,7 @@ The followings are restrictions of ExponentialBuckets:
 
 Merging histograms of different types, or even the same type, but with different parameters remains an issue. There are lengthy discussions in [#226](https://github.com/open-telemetry/opentelemetry-proto/pull/226#issuecomment-776526864)
 
-Some merge method may introduce artifacts (information not present in original data). Generally, splitting a bucket introduces artifacts. For example, when using linear interpolation to split a bucket, we are assumming uniform distribution within the bucket. "Uniform distribution" is information not present in original data. Merging buckets on the other hand, does not introduce artifacts. Merging buckets with identical bounds from two histograms is totally artifact free. Merging multiple adjacent buckets in one histogram is also artifact free, but it does reduce the resolution of the histogram. Whether such a merge is "lossy" is arguable. Because of this ambiguity, the term "lossy" is not used in this doc.
+Some merge method may introduce artifacts (information not present in original data). Generally, splitting a bucket introduces artifacts. For example, when using linear interpolation to split a bucket, we are assuming uniform distribution within the bucket. "Uniform distribution" is information not present in original data. Merging buckets on the other hand, does not introduce artifacts. Merging buckets with identical bounds from two histograms is totally artifact free. Merging multiple adjacent buckets in one histogram is also artifact free, but it does reduce the resolution of the histogram. Whether such a merge is "lossy" is arguable. Because of this ambiguity, the term "lossy" is not used in this doc.
 
 For exponential histograms, if base1 = base2 ^ N, where N is an integer, the two histograms can be merged without artifacts. Furthermore, we can introduce a series of bases where
 

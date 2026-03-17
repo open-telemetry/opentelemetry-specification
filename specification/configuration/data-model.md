@@ -5,7 +5,7 @@ weight: 2
 
 # Configuration Data Model
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 <!-- toc -->
 
@@ -63,10 +63,14 @@ defined using
 the [Augmented Backus-Naur Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
-SUBSTITUTION-REF = "${" ["env:"] ENV-NAME [":-" DEFAULT-VALUE] "}"; valid substitution reference
-INVALID-SUBSTITUTION-REF = "${" *(VCHAR-WSP-NO-RBRACE) "}"; invalid substitution reference
+SUBSTITUTION-REF = "${" [PREFIX ":"] GENERIC-SUBSTITUTION "}"; generic substitution reference
 
-ENV-NAME = (ALPHA / "_") *(ALPHA / DIGIT / "_"); the name of the variable to be substituted
+; when PREFIX is absent or "env", GENERIC-SUBSTITUTION MUST conform to ENV-SUBSTITUTION:
+ENV-SUBSTITUTION = ENV-NAME [":-" DEFAULT-VALUE]; env var substitution
+
+PREFIX = ALPHA *(ALPHA / DIGIT / "_"); substitution prefix, e.g. "env" (universal) or language-specific
+GENERIC-SUBSTITUTION = 1*(VCHAR-WSP-NO-RBRACE); substitution content, interpretation depends on PREFIX
+ENV-NAME = (ALPHA / "_") *(ALPHA / DIGIT / "_"); the name of the environment variable to be substituted
 DEFAULT-VALUE = *(VCHAR-WSP-NO-RBRACE); any number of VCHAR-WSP-NO-RBRACE
 VCHAR-WSP-NO-RBRACE = %x21-7C / "~" / WSP; printable chars and whitespace, except }
 
@@ -74,41 +78,44 @@ ALPHA = %x41-5A / %x61-7A; A-Z / a-z
 DIGIT = %x30-39 ; 0-9
 ```
 
-`SUBSTITUTION-REF` defines a valid environment variable substitution reference:
+`SUBSTITUTION-REF` defines a valid substitution reference:
 
 * Must start with `${`
-* Optionally followed by `env:`
-* Must follow with `REF-NAME`, the name of the environment variable to be
-  substituted
+* Optionally followed by `PREFIX:`, where `PREFIX` is `env` (universal) or a language-specific identifier
+* Must follow with `GENERIC-SUBSTITUTION`, at least one printable character or whitespace except `}`
+* Must follow with `}`
+
+When `PREFIX` is absent or `env`, `GENERIC-SUBSTITUTION` MUST conform to `ENV-SUBSTITUTION`:
+
+* Must start with `ENV-NAME`, the name of the environment variable to be substituted
   * Must start with alphabetic or `_` character
   * Must follow with any number of alphanumeric or `_` characters
 * Optionally followed by default value
   * Must start with `:-`
   * Must follow with `DEFAULT-VALUE`, any number of printable characters and
     whitespace except `}`
-* Must follow with `}`
 
-`INVALID-SUBSTITUTION-REF` defines an invalid environment variable substitution
-reference:
+Language implementations MAY support additional prefixes beyond `env:` to access
+language-specific configuration sources. The `GENERIC-SUBSTITUTION` content is
+interpreted according to the `PREFIX` scheme. For example, Java implementations
+may support `sys:` to access system properties: `${sys:otel.service.name}`.
+Language implementations SHOULD document any additional prefixes they support.
 
-* Must start with `${`
-* Must follow with any number of printable characters and whitespace except `}`
-* Must follow with `}`
-
-For convenience, `SUBSTITUTION-REF` and `INVALID-SUBSTITUTION-REF` are expressed
-below as a PCRE2 regular expressions. Note that these expressions are
+For convenience, `SUBSTITUTION-REF` and `ENV-SUBSTITUTION` are expressed
+below as PCRE2 regular expressions. Note that these expressions are
 non-normative.
 
 ```regexp
 // SUBSTITUTION-REF
-\$\{(?:env:)?(?<ENV-NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT-VALUE>[^\n]*))?\}
+\$\{(?:(?<PREFIX>[a-zA-Z][a-zA-Z0-9_]*):)?(?<GENERIC_SUBSTITUTION>[^}]+)\}
 
-// INVALID-SUBSTITUTION-REF
-\$\{(?<INVALID_IDENTIFIER>[^}]+)\}
+// ENV-SUBSTITUTION (applied to GENERIC_SUBSTITUTION when PREFIX is absent or "env")
+(?<ENV_NAME>[a-zA-Z_][a-zA-Z0-9_]*)(:-(?<DEFAULT_VALUE>[^\n]*))?
 ```
 
-For example, `${API_KEY}` and `${env:API_KEY}` are valid, while `${1API_KEY}`
-and `${API_$KEY}` are invalid.
+For example, `${API_KEY}` and `${env:API_KEY}` are valid env var substitutions,
+while `${1API_KEY}` and `${API_$KEY}` are invalid because they do not conform
+to `ENV-SUBSTITUTION`.
 
 Environment variable substitution MUST only apply to scalar values. Mapping keys
 are not candidates for substitution.
@@ -141,9 +148,10 @@ where `FOO=a, BAR=b, BAZ=c` would resemble:
   against `input.substring(15+2, input.length)="{BAZ}"` => `"{BAZ}"` and append
   to output. Return output: `"${FOO} b ${BAZ}"`.
 
-When parsing a configure file that contains a reference not
-matching `SUBSTITUTION-REF` but matching `INVALID-SUBSTITUTION-REF`, the parser
-must return an empty result (no partial results are allowed) and an error
+When parsing a configuration file that contains a `SUBSTITUTION-REF` where
+`GENERIC-SUBSTITUTION` does not conform to the scheme's validation rules (e.g.,
+does not conform to `ENV-SUBSTITUTION` when `PREFIX` is absent or `env`), the
+parser must return an empty result (no partial results are allowed) and an error
 describing the parse failure to the user.
 
 Node types MUST be interpreted after environment variable substitution takes
@@ -171,33 +179,33 @@ export REPLACE_ME='${DO_NOT_REPLACE_ME}'        # A valid replacement text, used
 export VALUE_WITH_ESCAPE='value$$'              # A valid variable substituted without escaping
 ```
 
-| YAML - input                               | YAML - post substitution             | Resolved Tag URI          | Notes                                                                                                                                             |
-|--------------------------------------------|--------------------------------------|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| `key: ${STRING_VALUE}`                     | `key: value`                         | `tag:yaml.org,2002:str`   | YAML parser resolves to string                                                                                                                    |
-| `key: ${BOOL_VALUE}`                       | `key: true`                          | `tag:yaml.org,2002:bool`  | YAML parser resolves to true                                                                                                                      |
-| `key: ${INT_VALUE}`                        | `key: 1`                             | `tag:yaml.org,2002:int`   | YAML parser resolves to int                                                                                                                       |
-| `key: ${FLOAT_VALUE}`                      | `key: 1.1`                           | `tag:yaml.org,2002:float` | YAML parser resolves to float                                                                                                                     |
-| `key: ${HEX_VALUE}`                        | `key: 0xdeadbeef`                    | `tag:yaml.org,2002:int`   | YAML parser resolves to int `3735928559`                                                                                                          |
-| `key: "${STRING_VALUE}"`                   | `key: "value"`                       | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"value"`                                                                                               |
-| `key: "${BOOL_VALUE}"`                     | `key: "true"`                        | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"true"`                                                                                                |
-| `key: "${INT_VALUE}"`                      | `key: "1"`                           | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"1"`                                                                                                   |
-| `key: "${FLOAT_VALUE}"`                    | `key: "1.1"`                         | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"1.1"`                                                                                                 |
-| `key: "${HEX_VALUE}"`                      | `key: "0xdeadbeef"`                  | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"0xdeadbeef"`                                                                                          |
-| `key: ${env:STRING_VALUE}`                 | `key: value`                         | `tag:yaml.org,2002:str`   | Alternative `env:` syntax                                                                                                                         |
-| `key: ${INVALID_MAP_VALUE}`                | `key: value\nkey:value`              | `tag:yaml.org,2002:str`   | Map structure resolves to string and _not_ expanded                                                                                               |
-| `key: foo ${STRING_VALUE} ${FLOAT_VALUE}`  | `key: foo value 1.1`                 | `tag:yaml.org,2002:str`   | Multiple references are injected and resolved to string                                                                                           |
-| `key: ${UNDEFINED_KEY}`                    | `key:`                               | `tag:yaml.org,2002:null`  | Undefined env var is replaced with `""` and resolves to null                                                                                      |
-| `key: ${UNDEFINED_KEY:-fallback}`          | `key: fallback`                      | `tag:yaml.org,2002:str`   | Undefined env var results in substitution of default value `fallback`                                                                             |
-| `${STRING_VALUE}: value`                   | `${STRING_VALUE}: value`             | `tag:yaml.org,2002:str`   | Usage of substitution syntax in keys is ignored                                                                                                   |
-| `key: ${REPLACE_ME}`                       | `key: ${DO_NOT_REPLACE_ME}`          | `tag:yaml.org,2002:str`   | Value of env var `REPLACE_ME` is `${DO_NOT_REPLACE_ME}`, and is _not_ substituted recursively                                                     |
-| `key: ${UNDEFINED_KEY:-${STRING_VALUE}}`   | `${STRING_VALUE}`                    | `tag:yaml.org,2002:str`   | Undefined env var results in substitution of default value `${STRING_VALUE}`, and is _not_ substituted recursively                                |
-| `key: ${STRING_VALUE:?error}`              | n/a                                  | n/a                       | Invalid substitution reference produces parse error                                                                                               |
-| `key: $${STRING_VALUE}`                    | `key: ${STRING_VALUE}`               | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, `{STRING_VALUE}` does not match substitution syntax                                                    |
-| `key: $$${STRING_VALUE}`                   | `key: $value`                        | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, `${STRING_VALUE}` is replaced with `value`                                                             |
-| `key: $$$${STRING_VALUE}`                  | `key: $${STRING_VALUE}`              | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, `$$` escape sequence is replaced with `$`, `{STRING_VALUE}` does not match substitution syntax         |
-| `key: $${STRING_VALUE:-fallback}`          | `${STRING_VALUE:-fallback}`          | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, `{STRING_VALUE:-fallback}` does not match substitution syntax                                          |
-| `key: $${STRING_VALUE:-${STRING_VALUE}}`   | `${STRING_VALUE:-value}`             | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, leaving `{STRING_VALUE:-${STRING_VALUE}}`, `${STRING_VALUE}` is replaced with `value`                  |
-| `key: ${UNDEFINED_KEY:-$${UNDEFINED_KEY}}` | `${UNDEFINED_KEY:-${UNDEFINED_KEY}}` | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, leaving `${UNDEFINED_KEY:-` before and `{UNDEFINED_KEY}}` after which do not match substitution syntax |
-| `key: ${VALUE_WITH_ESCAPE}`                | `value$$`                            | `tag:yaml.org,2002:str`   | Value of env var `VALUE_WITH_ESCAPE` is `value$$`, which is substituted without escaping                                                          |
-| `key: a $$ b`                              | `key: a $ b`                         | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`                                                                                                         |
-| `key: a $ b`                               | `key: a $ b`                         | `tag:yaml.org,2002:str`   | No escape sequence, no substitution references, value is left unchanged                                                                           |
+| YAML - input                               | YAML - post substitution                  | Resolved Tag URI          | Notes                                                                                                                                             |
+|--------------------------------------------|-------------------------------------------|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `key: ${STRING_VALUE}`                     | `key: value`                              | `tag:yaml.org,2002:str`   | YAML parser resolves to string                                                                                                                    |
+| `key: ${BOOL_VALUE}`                       | `key: true`                               | `tag:yaml.org,2002:bool`  | YAML parser resolves to true                                                                                                                      |
+| `key: ${INT_VALUE}`                        | `key: 1`                                  | `tag:yaml.org,2002:int`   | YAML parser resolves to int                                                                                                                       |
+| `key: ${FLOAT_VALUE}`                      | `key: 1.1`                                | `tag:yaml.org,2002:float` | YAML parser resolves to float                                                                                                                     |
+| `key: ${HEX_VALUE}`                        | `key: 0xdeadbeef`                         | `tag:yaml.org,2002:int`   | YAML parser resolves to int `3735928559`                                                                                                          |
+| `key: "${STRING_VALUE}"`                   | `key: "value"`                            | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"value"`                                                                                               |
+| `key: "${BOOL_VALUE}"`                     | `key: "true"`                             | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"true"`                                                                                                |
+| `key: "${INT_VALUE}"`                      | `key: "1"`                                | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"1"`                                                                                                   |
+| `key: "${FLOAT_VALUE}"`                    | `key: "1.1"`                              | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"1.1"`                                                                                                 |
+| `key: "${HEX_VALUE}"`                      | `key: "0xdeadbeef"`                       | `tag:yaml.org,2002:str`   | Double quoted to force coercion to string `"0xdeadbeef"`                                                                                          |
+| `key: ${env:STRING_VALUE}`                 | `key: value`                              | `tag:yaml.org,2002:str`   | Alternative `env:` syntax                                                                                                                         |
+| `key: ${INVALID_MAP_VALUE}`                | `key: value\nkey:value`                   | `tag:yaml.org,2002:str`   | Map structure resolves to string and _not_ expanded                                                                                               |
+| `key: foo ${STRING_VALUE} ${FLOAT_VALUE}`  | `key: foo value 1.1`                      | `tag:yaml.org,2002:str`   | Multiple references are injected and resolved to string                                                                                           |
+| `key: ${UNDEFINED_KEY}`                    | `key:`                                    | `tag:yaml.org,2002:null`  | Undefined env var is replaced with `""` and resolves to null                                                                                      |
+| `key: ${UNDEFINED_KEY:-fallback}`          | `key: fallback`                           | `tag:yaml.org,2002:str`   | Undefined env var results in substitution of default value `fallback`                                                                             |
+| `${STRING_VALUE}: value`                   | `key: ${STRING_VALUE}: value`             | `tag:yaml.org,2002:str`   | Usage of substitution syntax in keys is ignored                                                                                                   |
+| `key: ${REPLACE_ME}`                       | `key: ${DO_NOT_REPLACE_ME}`               | `tag:yaml.org,2002:str`   | Value of env var `REPLACE_ME` is `${DO_NOT_REPLACE_ME}`, and is _not_ substituted recursively                                                     |
+| `key: ${UNDEFINED_KEY:-${STRING_VALUE}}`   | `key: ${STRING_VALUE}`                    | `tag:yaml.org,2002:str`   | Undefined env var results in substitution of default value `${STRING_VALUE}`, and is _not_ substituted recursively                                |
+| `key: ${STRING_VALUE:?error}`              | n/a                                       | n/a                       | Invalid substitution reference produces parse error                                                                                               |
+| `key: $${STRING_VALUE}`                    | `key: ${STRING_VALUE}`                    | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, `{STRING_VALUE}` does not match substitution syntax                                                    |
+| `key: $$${STRING_VALUE}`                   | `key: $value`                             | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, `${STRING_VALUE}` is replaced with `value`                                                             |
+| `key: $$$${STRING_VALUE}`                  | `key: $${STRING_VALUE}`                   | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, `$$` escape sequence is replaced with `$`, `{STRING_VALUE}` does not match substitution syntax         |
+| `key: $${STRING_VALUE:-fallback}`          | `key: ${STRING_VALUE:-fallback}`          | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, `{STRING_VALUE:-fallback}` does not match substitution syntax                                          |
+| `key: $${STRING_VALUE:-${STRING_VALUE}}`   | `key: ${STRING_VALUE:-value}`             | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, leaving `{STRING_VALUE:-${STRING_VALUE}}`, `${STRING_VALUE}` is replaced with `value`                  |
+| `key: ${UNDEFINED_KEY:-$${UNDEFINED_KEY}}` | `key: ${UNDEFINED_KEY:-${UNDEFINED_KEY}}` | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`, leaving `${UNDEFINED_KEY:-` before and `{UNDEFINED_KEY}}` after which do not match substitution syntax |
+| `key: ${VALUE_WITH_ESCAPE}`                | `key: value$$`                            | `tag:yaml.org,2002:str`   | Value of env var `VALUE_WITH_ESCAPE` is `value$$`, which is substituted without escaping                                                          |
+| `key: a $$ b`                              | `key: a $ b`                              | `tag:yaml.org,2002:str`   | `$$` escape sequence is replaced with `$`                                                                                                         |
+| `key: a $ b`                               | `key: a $ b`                              | `tag:yaml.org,2002:str`   | No escape sequence, no substitution references, value is left unchanged                                                                           |

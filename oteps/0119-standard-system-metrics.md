@@ -144,7 +144,7 @@ Runtime environments vary widely in their terminology, implementation, and relat
 
 Runtime level metrics specific to a certain runtime environment should be prefixed with `runtime.{environment}.` and follow the semantic conventions outlined in [Semantic Conventions](#semantic-conventions). For example, Go runtime metrics use `runtime.go.` as a prefix.
 
-Some programming languages have multiple runtime environments that vary significantly in their implementation, for example [Python has many implementations](https://wiki.python.org/moin/PythonImplementations). For these languages, consider using specific `environment` prefixes to avoid ambiguity, like `runtime.cpython.` and `runtime.pypy.`.
+Some programming languages have multiple runtime environments that vary significantly in their implementation, for example [Python has many implementations](https://www.python.org/download/alternatives). For these languages, consider using specific `environment` prefixes to avoid ambiguity, like `runtime.cpython.` and `runtime.pypy.`.
 
 ## Open questions
 

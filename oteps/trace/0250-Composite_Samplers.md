@@ -326,6 +326,6 @@ A number of composite samplers are already available as independent contribution
 [Stratified Sampling](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/stratified-sampling-example),
 LinksBasedSampler [for Java](https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/samplers/src/main/java/io/opentelemetry/contrib/sampler/LinksBasedSampler.java)
 and [for DOTNET](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/trace/links-based-sampler)).
-Also, historically, some Span categorization was introduced by [JaegerRemoteSampler](https://www.jaegertracing.io/docs/1.54/architecture/sampling/#remote-sampling).
+Also, historically, some Span categorization was introduced by [JaegerRemoteSampler](https://www.jaegertracing.io/docs/2.14/architecture/sampling/#remote-sampling).
 
 This proposal aims at generalizing these ideas, and at providing a bit more formal specification for the behavior of the composite samplers.

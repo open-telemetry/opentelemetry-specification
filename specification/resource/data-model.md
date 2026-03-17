@@ -18,13 +18,15 @@ weight: 2
 
 </details>
 
-A Resource is a representation of the entity producing telemetry as Attributes.
-For example, You could have a process producing telemetry that is
-running in a container on Kubernetes, which is associated to a Pod running on a
-Node that is a VM but also is in a namespace and possibly is part of a
+A Resource represents the observed entity for which telemetry is produced.
+It is defined by a set of Attributes that identify the source of the telemetry,
+rather than the component that technically produces it (like an
+auto-instrumentation agent).
+For example, a process running in a container on Kubernetes is associated to a
+Pod running on a Node that is a VM, in a namespace, and possibly part of a
 Deployment. Resource could have attributes to denote information about the
 Container, the Pod, the Node, the VM or the Deployment. All of these help
-identify what produced the telemetry. Note that there are certain attributes
+identify the observed entity. Note that there are certain attributes
 that have prescribed meanings.
 
 A resource is composed of 0 or more [`Entities`](../entities/README.md) and 0
@@ -44,6 +46,6 @@ Entity includes its own notion of identity. The identity of a resource is
 the set of entities contained within it. Two resources are considered
 different if one contains an entity not found in the other.
 
-Some resources include raw attributes in additon to Entities. Raw attributes are
+Some resources include raw attributes in addition to Entities. Raw attributes are
 considered identifying on a resource. That is, if the key-value pairs of
 raw attributes are different, then you can assume the resource is different.
