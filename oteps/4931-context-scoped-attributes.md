@@ -162,29 +162,21 @@ are expected to implement this.
 
 The API would be extended with a variation of the following:
 
-* `Context AddContextScopedAttributes(Context context, Attributes attributes)`
+* `Context SetContextScopedAttributes(Context context, Attributes attributes)`
 
-`AddContextScopedAttributes` takes a set of attributes and a Context and returns
-a new Context that has the given context attributes set in addition to any already
-set ones, with the following notes:
+`SetContextScopedAttributes` takes a set of attributes and a Context and returns
+a new Context that has the given context attributes set. Observe the following notes:
 
-* If the context already contains any attributes with that name, they MUST be
-  overwritten with the attributes of the later call.
 * If an associated telemetry item (e.g. Span or LogRecordItem) already has an attribute with
-  a name that is also in the Context-scoped attributes, the telemetry attribute
+  a name that is also in the Context-scoped attributes, the telemetry item attribute
   MUST take precedence.
 
-Since the typical use case for this function is expected to be just before a local
-root span for the trace is created, no particular care needs to be taken to
-optimize merging of attributes from calls to this function on a Context that
-already has Context-scoped attributes.
-
 As for all APIs, care should be taken to expose it in a way that API-users do
-not bind themselves to a particular SDK implementation, such as the OpenTelemetry
-default SDK (for example, by going through a `GlobalOpenTelemetry.GetInstance()`
-or `GlobalOpenTelemetry.GetInstance().GetContextAttributeWriter()` singleton
-that returns an interface implementation). As this is a write-only API,
-the API-only implementation should do nothing at all.
+not bind themselves to a particular SDK implementation. One possible way to expose this
+would be through a global OpenTelemetry instance (e.g.
+`GlobalOpenTelemetry.GetInstance().GetContextAttributeWriter()` or
+`GlobalOpenTelemetry.GetInstance().SetContextScopedAttributes()`.
+As this is a write-only API, the API-only implementation should be a no-op.
 
 ### SDK changes
 
