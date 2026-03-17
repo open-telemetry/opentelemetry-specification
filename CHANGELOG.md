@@ -108,6 +108,12 @@ release.
   ([#5071](https://github.com/open-telemetry/opentelemetry-specification/pull/5071))
 - Clarify that OTel SDKs should not use unofficial Prometheus clients.
   ([#5082](https://github.com/open-telemetry/opentelemetry-specification/pull/5082))
+- Prometheus `job` and `instance` are now translated to `prometheus.job` and `prometheus.instance`.
+  ([#4956](https://github.com/open-telemetry/opentelemetry-specification/pull/4956))
+
+### SDK Configuration
+
+### Supplementary Guidelines
 
 ### OTEPs
 
