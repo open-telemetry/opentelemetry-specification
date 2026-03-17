@@ -197,7 +197,7 @@ In text formats where Prometheus Summaries are represented by multiple samples, 
 
 ### Dropped Types
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The following Prometheus types MUST be dropped:
 
