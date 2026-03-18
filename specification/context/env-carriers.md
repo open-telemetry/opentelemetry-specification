@@ -51,10 +51,9 @@ Propagators](api-propagators.md) specification.
 When using environment variables as carriers:
 
 - The **environment variable carrier** (or any environment-specific
-  "propagator wrapper") MUST be format-agnostic. It MUST treat keys and values
+  "propagator wrapper") MUST be format-agnostic and MUST treat values
   as opaque strings and MUST NOT apply propagation-format-specific logic such
-  as interpreting or renaming headers, parsing values, or enforcing
-  format-specific constraints.
+  as validating, parsing values, or enforcing other format-specific constraints.
 - The **propagators** that implement specific propagation formats (for example,
   W3C Trace Context or W3C Baggage) remain solely responsible for:
   - choosing the key names they use with the carrier,
