@@ -16,6 +16,9 @@ release.
 
 ### Metrics
 
+- Add development `maxExportBatchSize` parameter to Periodic exporting MetricReader.
+  ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
+
 ### Logs
 
 ### Baggage
@@ -23,6 +26,10 @@ release.
 ### Profiles
 
 ### Resource
+
+- Clarify that a Resource describes the observed entity, not the component
+  that technically emits telemetry.
+  ([#4905](https://github.com/open-telemetry/opentelemetry-specification/pull/4905))
 
 ### Entities
 
@@ -34,6 +41,10 @@ release.
 
 - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
   ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+- Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
+  add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
+  Histogram.
+  ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
 
 ### SDK Configuration
 
