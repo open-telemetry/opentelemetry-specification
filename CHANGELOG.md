@@ -9,6 +9,10 @@ release.
 
 ### Context
 
+- Align environment variable context propagation name restrictions with POSIX.1-2024
+  and define normalization behavior.
+  ([#4914](https://github.com/open-telemetry/opentelemetry-specification/issues/4914))
+
 ### Traces
 
 - Stabilize Tracer `enabled` operation
