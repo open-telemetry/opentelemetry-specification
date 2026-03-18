@@ -387,9 +387,7 @@ The SDK MUST accept the following stream configuration parameters:
   measurements captured in the metric stream.
   The exclude-list contains attribute keys that identify the
   attributes that MUST be excluded, all other attributes MUST be kept. If an
-  attribute key is both included and excluded, the SDK MAY fail fast in
-  accordance with initialization [error handling
-  principles](../error-handling.md#basic-error-handling-principles).
+  attribute key is both included and excluded, the attribute will be excluded.
 
   Users can provide `exclude_attribute_keys`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
@@ -399,9 +397,7 @@ The SDK MUST accept the following stream configuration parameters:
   attribute keys that identify the attributes that MUST be kept in addition to
   the [`Attributes`](./api.md#instrument-advisory-parameters) advisory parameter
   configured on the instrument, all other attributes must be excluded. If an
-  attribute key is both included and excluded, the SDK MAY fail fast in
-  accordance with initialization [error handling
-  principles](../error-handling.md#basic-error-handling-principles).
+  attribute key is both included and excluded, the attribute will be excluded.
 
   Users can provide `include_attribute_keys`, but it is up to their discretion.
   Therefore, the stream configuration parameter needs to be structured to
