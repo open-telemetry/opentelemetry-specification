@@ -58,7 +58,7 @@ When using environment variables as carriers:
   W3C Trace Context or W3C Baggage) remain solely responsible for:
   - choosing the key names they use with the carrier,
   - enforcing naming conventions defined by those propagation formats,
-  - validating and parsing values, and
+  - validating and parsing values,
   - applying any truncation or other format-specific behaviors.
 
 ### Format Restrictions
