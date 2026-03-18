@@ -275,11 +275,6 @@ If the results of `Create` are returned in a structure encapsulating the top
 level SDK components, that structure MUST provide access to the effective
 `Resource`.
 
-Because [Resources](../resource/sdk.md) are immutable, any `Resource` returned
-by `Create` MUST be read-only from the caller's perspective. Callers MUST NOT
-be able to mutate the returned value in a way that changes the `Resource`
-associated with the created SDK components.
-
 Create requirements around default and null behavior are described below. Note that
 [`defaultBehavior` and `nullBehavior`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#json-schema-source-and-output)
 are defined in the configuration data model.
