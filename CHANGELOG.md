@@ -11,6 +11,8 @@ release.
 
 ### Traces
 
+- Stabilize Tracer `enabled` operation
+  ([#4941](https://github.com/open-telemetry/opentelemetry-specification/pull/4941))
 - Stabilize `AlwaysRecord` sampler.
   ([#4934](https://github.com/open-telemetry/opentelemetry-specification/pull/4934))
 
