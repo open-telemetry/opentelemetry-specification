@@ -78,8 +78,8 @@ may have higher version requirements than their OpenTracing counterparts.
 For details, see the [Language version support][] section of [Migrating from
 OpenTracing][].
 
-[Language version support]: https://opentelemetry.io/docs/migration/opentracing/#language-version-support
-[Migrating from OpenTracing]: https://opentelemetry.io/docs/migration/opentracing/
+[Language version support]: https://opentelemetry.io/docs/compatibility/migration/opentracing/#language-version-support
+[Migrating from OpenTracing]: https://opentelemetry.io/docs/compatibility/migration/opentracing/
 
 ## Create an OpenTracing Tracer Shim
 
