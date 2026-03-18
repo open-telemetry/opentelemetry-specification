@@ -26,7 +26,6 @@ weight: 1
     + [Instrument advisory parameters](#instrument-advisory-parameters)
       - [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
       - [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
-      - [Instrument advisory parameter: `ExcludeAttributes`](#instrument-advisory-parameter-excludeattributes)
     + [Synchronous and Asynchronous instruments](#synchronous-and-asynchronous-instruments)
       - [Synchronous Instrument API](#synchronous-instrument-api)
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
@@ -276,15 +275,6 @@ Applies to all instrument types.
 
 `Attributes` (a list of [attribute keys](../common/README.md#attribute)) is
 the recommended set of attribute keys to be used for the resulting metrics.
-
-##### Instrument advisory parameter: `ExcludeAttributes`
-
-**Status**: [Development](../document-status.md)
-
-Applies to all instrument types.
-
-`ExcludeAttributes` (a list of [attribute keys](../common/README.md#attribute)) is
-the recommended set of attribute keys to not be used for the resulting metrics.
 
 #### Synchronous and Asynchronous instruments
 

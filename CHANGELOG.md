@@ -20,7 +20,7 @@ release.
   ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
 - Add development `exclude_attribute_keys` parameter to Stream Configuration.
   ([#4951](https://github.com/open-telemetry/opentelemetry-specification/pull/4951))
-- Add development `Exclude_Attributes` parameter to Instrument Advisory.
+- Add development `include_attribute_keys` parameter to Stream Configuration.
   ([#4951](https://github.com/open-telemetry/opentelemetry-specification/pull/4951))
 
 ### Logs
