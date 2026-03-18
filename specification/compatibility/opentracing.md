@@ -142,7 +142,7 @@ set to `follows_from` or `child_of`.
 If a list of `Span` references is specified, the union of their
 `Baggage` values MUST be used as the initial `Baggage` of the newly created
 `Span`. It is unspecified which `Baggage` value is used in the case of
-repeated keys. If no such lisf of references is specified, the current
+repeated keys. If no such list of references is specified, the current
 `Baggage` MUST be used as the initial value of the newly created `Span`.
 
 If an initial set of tags is specified, the values MUST be set at

@@ -37,6 +37,7 @@ weight: 3
         * [Use the maximum scale for single measurements](#use-the-maximum-scale-for-single-measurements)
         * [Maintain the ideal scale](#maintain-the-ideal-scale)
   * [Observations inside asynchronous callbacks](#observations-inside-asynchronous-callbacks)
+  * [Start timestamps](#start-timestamps)
   * [Cardinality limits](#cardinality-limits)
     + [Configuration](#configuration-1)
     + [Overflow attribute](#overflow-attribute)
@@ -777,6 +778,30 @@ previously-observed attribute set which is not observed during a successful
 callback. See [MetricReader](#metricreader) for more details on the persistence
 of metrics across successive collections.
 
+### Start timestamps
+
+**Status**: [Development](../document-status.md)
+
+The start timestamp for a timeseries is the timestamp which best represents
+the first possible moment a measurement for this timeseries could have been
+recorded.
+
+For delta aggregations, the start timestamp MUST equal the previous collection
+interval's timestamp, or the creation time of the instrument if this is the
+first collection interval for the instrument. This implies that all data points
+with delta temporality aggregation for an instrument MUST share the same start
+timestamp.
+
+Cumulative timeseries MUST use a consistent start timestamp for all collection
+intervals.
+For synchronous instruments, the start timestamp SHOULD be the time of the
+first measurement for the series.
+For asynchronous instrument, the start timestamp SHOULD be:
+  - The creation time of the instrument, if the first series measurement
+    occurred in the first collection interval,
+  - Otherwise, the timestamp of the collection interval prior to the first
+    series measurement.
+
 ### Cardinality limits
 
 **Status**: [Stable](../document-status.md)
@@ -860,15 +885,15 @@ the `Meter` MUST be updated to behave according to the new `MeterConfig`.
 A `MeterConfig` defines various configurable aspects of a `Meter`'s behavior.
 It consists of the following parameters:
 
-* `disabled`: A boolean indication of whether the Meter is enabled.
+* `enabled`: A boolean indication of whether the Meter is enabled.
 
-  If not explicitly set, the `disabled` parameter SHOULD default to `false` (
+  If not explicitly set, the `enabled` parameter SHOULD default to `true` (
   i.e. `Meter`s are enabled by default).
 
   If a `Meter` is disabled, it MUST behave equivalently
   to [No-op Meter](./noop.md#meter).
 
-  The value of `disabled` MUST be used to resolve whether an instrument
+  The value of `enabled` MUST be used to resolve whether an instrument
   is [Enabled](./api.md#enabled). See [Instrument Enabled](#instrument-enabled)
   for details.
 
@@ -1005,7 +1030,7 @@ The synchronous instrument [`Enabled`](./api.md#enabled) MUST return `false`
 when either:
 
 - **Status**: [Development](../document-status.md) - The [MeterConfig](#meterconfig)
-  of the `Meter` used to create the instrument has parameter `disabled=true`.
+  of the `Meter` used to create the instrument has parameter `enabled=false`.
 - All [resolved views](#measurement-processing) for the instrument are
   configured with the [Drop Aggregation](#drop-aggregation).
 
@@ -1013,7 +1038,7 @@ Otherwise, it SHOULD return `true`.
 It MAY return `false` to support additional optimizations and features.
 
 Note: If a user makes no configuration changes, `Enabled` returns `true` since by
-default `MeterConfig.disabled=false` and instruments use the default
+default `MeterConfig.enabled=true` and instruments use the default
 aggregation when no matching views match the instrument.
 
 ## Attribute limits
@@ -1423,9 +1448,23 @@ a user-configurable time interval, and passes the metrics to the configured
 Configurable parameters:
 
 * `exportIntervalMillis` - the time interval in milliseconds between two
-  consecutive exports. The default value is 60000 (milliseconds).
+  consecutive collections. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
+* **Status**: [Development](../document-status.md) - `maxExportBatchSize` - the
+  maximum number of metric data points in a batch that are provided to a single
+  export.
+
+**Status**: [Development](../document-status.md) - When `maxExportBatchSize` is
+configured, the reader MUST ensure no batch provided to `Export` exceeds the
+`maxExportBatchSize` by splitting the batch of metric data points into smaller
+batches. The initial batch of metric data MUST be split into as many "full"
+batches of size `maxExportBatchSize` as possible -- even if this splits up data
+points that belong to the same metric into different batches. The reader MUST
+ensure all metric data points from a single `Collect()` are provided to
+`Export` before metric data points from a subsequent `Collect()` so that metric
+points are sent in-order. The reader MUST NOT combine metrics from different
+`Collect()` calls into the same batch provided to `Export`.
 
 The reader MUST synchronize calls to `MetricExporter`'s `Export`
 to make sure that they are not invoked concurrently.
@@ -1450,9 +1489,13 @@ from `MetricReader` and start a background task which calls the inherited
 This method provides a way for the periodic exporting MetricReader
 so it can do as much as it could to collect and send the metrics.
 
-`ForceFlush` SHOULD collect metrics, call [`Export(batch)`](#exportbatch)
-and [`ForceFlush()`](#forceflush-2) on the configured
-[Push Metric Exporter](#push-metric-exporter).
+`ForceFlush` SHOULD collect metrics, split into batches if necessary, call
+[`Export(batch)`](#exportbatch) on each batch and
+[`ForceFlush()`](#forceflush-2) on the configured
+[Push Metric Exporter](#push-metric-exporter). `ForceFlush` MAY skip
+[`Export(batch)`](#exportbatch) calls if the timeout is already expired, but
+SHOULD still call [`ForceFlush()`](#forceflush-2) on the configured
+[Push Metric Exporter](#push-metric-exporter) even if the timeout has passed.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
@@ -1847,15 +1890,15 @@ existing methods without introducing breaking changes, if possible.
 For languages which support concurrent execution the Metrics SDKs provide
 specific guarantees and safeties.
 
-**MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` are safe to be
-called concurrently.
+**MeterProvider** - Meter creation, `ForceFlush` and `Shutdown` MUST be safe
+to be called concurrently.
 
-**ExemplarReservoir** - all methods are safe to be called concurrently.
+**ExemplarReservoir** - all methods MUST be safe to be called concurrently.
 
 **MetricReader** - `Collect`, `ForceFlush` (for periodic exporting MetricReader)
-and `Shutdown` are safe to be called concurrently.
+and `Shutdown` MUST be safe to be called concurrently.
 
-**MetricExporter** - `ForceFlush` and `Shutdown` are safe to be called
+**MetricExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
 concurrently.
 
 ## References
