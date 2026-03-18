@@ -11,6 +11,10 @@ release.
 
 ### Traces
 
+- Deprecate Record Exception API in favor of using Events.
+  ([#4825](https://github.com/open-telemetry/opentelemetry-specification/pull/4825))
+- Add normative language to the Tracing API/SDK spec concurrency requirements.
+  ([#4887](https://github.com/open-telemetry/opentelemetry-specification/pull/4887))
 - Stabilize `AlwaysRecord` sampler.
   ([#4934](https://github.com/open-telemetry/opentelemetry-specification/pull/4934))
 
