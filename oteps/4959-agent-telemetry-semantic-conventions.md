@@ -3,8 +3,8 @@
 # Agent Telemetry Semantic Conventions
 
 **Status:** proposed  
-**Author:** Jesse Hawkins  
-**Date:** 2026-03-12  
+**Author:** Jesse Williams  
+**Date:** 2026-03-17  
 
 ---
 
