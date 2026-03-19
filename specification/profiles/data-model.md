@@ -42,7 +42,7 @@
 
 ## Overview
 
-The OpenTelemetry data model for profiles consists of a protocol specification
+The OpenTelemetry data model for Profiles consists of a protocol specification
 and [semantic conventions](https://opentelemetry.io/docs/specs/semconv/general/profiles/)
 for encoding and delivery of aggregated stack traces and associated metadata.
 
@@ -98,7 +98,7 @@ Profiles use a two-level referencing scheme instead:
 
 ### Dictionary
 
-The profiles data model uses a top-level dictionary message
+The Profiles data model uses a top-level dictionary message
 ([`ProfilesDictionary`](#message-profilesdictionary)) to deduplicate data
 that is shared across the entire [`ProfilesData`](#message-profilesdata)
 message. Unlike other OpenTelemetry signals where each record is largely
@@ -139,7 +139,7 @@ The data model uses two kinds of attributes:
    (see [next section](#dictionary-use-in-keyvalue)).
 
 2. **[`KeyValueAndUnit`](#message-keyvalueandunit) attributes**:
-   a profiles-specific encoding inherited from pprof (where it is known
+   a Profiles-specific encoding inherited from pprof (where it is known
    as `Label`). These are stored in the [`ProfilesDictionary.attribute_table`](#message-profilesdictionary)
    and referenced by index from [`Profile`](#message-profile),
    [`Sample`](#message-sample), [`Mapping`](#message-mapping) and [`Location`](#message-location)
@@ -150,7 +150,7 @@ The data model uses two kinds of attributes:
 
 ### Dictionary use in KeyValue
 
-To minimize payload size, the profiles data model extends the standard
+To minimize payload size, the data model extends the standard
 OpenTelemetry [`KeyValue`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/common/v1/common.proto)
 and [`AnyValue`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/common/v1/common.proto)
 messages with string reference fields that point into [`ProfilesDictionary.string_table`](#message-profilesdictionary):
@@ -170,7 +170,7 @@ in a single [`ProfilesData`](#message-profilesdata) message (e.g. `service.name`
 ### Message `ProfilesData`
 
 `ProfilesData` is the top-level message and encapsulates data that can be stored
-in persistent storage or embedded by other protocols that transfer OTLP profiles
+in persistent storage or embedded by other protocols that transfer OTLP Profiles
 but do not implement the OTLP protocol.
 
 | Field | Type | Description |
@@ -381,7 +381,7 @@ for keys and allows encoding optional unit information.
 
 ## Relationships with other signals
 
-OpenTelemetry profiles support bi-directional links with other signals across
+OpenTelemetry Profiles support bi-directional links with other signals across
 two dimensions:
 
 * Correlation by resource context
