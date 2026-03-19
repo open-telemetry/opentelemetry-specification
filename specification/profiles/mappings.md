@@ -2,7 +2,7 @@
 
 **Status**: [Development](../document-status.md)
 
-This document defines the required attributes of [`Mapping`](../../oteps/profiles/0239-profiles-data-model.md#message-mapping) messages.
+This document defines the required attributes of [`Mapping`](./data-model.md#message-mapping) messages.
 
 <!-- toc -->
 
