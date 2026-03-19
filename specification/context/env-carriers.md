@@ -11,7 +11,6 @@
 - [Propagator Mechanisms](#propagator-mechanisms)
   * [Format Restrictions](#format-restrictions)
     + [Name Restrictions](#name-restrictions)
-    + [Size Limitations](#size-limitations)
   * [Operational Guidance](#operational-guidance)
     + [Environment Variable Immutability](#environment-variable-immutability)
     + [Process Spawning](#process-spawning)
@@ -76,18 +75,6 @@ Environment variable names used for context propagation:
 > [!NOTE]
 > This normalization is consistent with the environment variable naming rules
 > defined in [POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html).
-
-#### Size Limitations
-
-Implementations MUST follow platform-specific environment variable size
-limitations:
-
-- Windows: Maximum 32,767 characters for name=value pairs according to
-  [Microsoft Documentation](https://learn.microsoft.com/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
-- UNIX: System-dependent limits exist and are typically lower than Windows.
-
-When truncation is required due to size limitations, implementations MUST NOT
-not set the environment variable.
 
 ### Operational Guidance
 
