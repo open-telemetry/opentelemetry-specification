@@ -9,8 +9,7 @@
 
 - [Overview](#overview)
 - [Propagator Mechanisms](#propagator-mechanisms)
-  * [Format Restrictions](#format-restrictions)
-    + [Name Restrictions](#name-restrictions)
+  * [Key Name Normalization](#key-name-normalization)
   * [Operational Guidance](#operational-guidance)
     + [Environment Variable Immutability](#environment-variable-immutability)
     + [Process Spawning](#process-spawning)
@@ -59,9 +58,7 @@ When using environment variables as carriers:
   - validating and parsing values,
   - applying any truncation or other format-specific behaviors.
 
-### Format Restrictions
-
-#### Name Restrictions
+### Key Name Normalization
 
 Environment variable names used for context propagation:
 
