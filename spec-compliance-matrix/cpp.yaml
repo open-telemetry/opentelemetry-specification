@@ -446,7 +446,7 @@ sections:
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
-        status: '-'
+        status: '+'
       - name: OTEL_RESOURCE_ATTRIBUTES
         status: '+'
       - name: OTEL_SERVICE_NAME
@@ -456,9 +456,9 @@ sections:
       - name: OTEL_PROPAGATORS
         status: '-'
       - name: OTEL_BSP_*
-        status: '-'
+        status: '+'
       - name: OTEL_BLRP_*
-        status: '-'
+        status: '+'
       - name: OTEL_EXPORTER_OTLP_*
         status: '+'
       - name: OTEL_EXPORTER_ZIPKIN_*
@@ -494,9 +494,9 @@ sections:
       - name: OTEL_ATTRIBUTE_COUNT_LIMIT
         status: '-'
       - name: OTEL_METRIC_EXPORT_INTERVAL
-        status: '-'
+        status: '+'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
-        status: '-'
+        status: '+'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
         status: '-'
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
@@ -504,7 +504,7 @@ sections:
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '-'
       - name: OTEL_CONFIG_FILE
-        status: '-'
+        status: '+'
   - name: Declarative configuration
     features:
       - name: '`Parse` a configuration file'
