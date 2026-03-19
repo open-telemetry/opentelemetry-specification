@@ -53,10 +53,10 @@ When using environment variables as carriers:
   enforcing other format-specific constraints.
 - The **propagators** that implement specific propagation formats (for example,
   W3C Trace Context or W3C Baggage) remain solely responsible for:
-  - choosing the key names they use with the carrier,
-  - enforcing naming conventions defined by those propagation formats,
-  - validating and parsing values,
-  - applying any truncation or other format-specific behaviors.
+  - choosing the key names they use with the carrier
+  - enforcing naming conventions defined by those propagation formats
+  - validating and parsing values
+  - applying any truncation or other format-specific behaviors
 
 ### Key Name Normalization
 
