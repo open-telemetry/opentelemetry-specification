@@ -142,13 +142,13 @@ providing:
 
 Examples:
 
+- [OpenTelemetry C++ implementation][ci]
 - [OpenTelemetry Go implementation][gi]
 - [OpenTelemetry Python implementation][pi]
-- [OpenTelemetry C++ implementation][ci]
 
+[ci]: https://github.com/open-telemetry/opentelemetry-cpp/blob/main/api/include/opentelemetry/context/propagation/environment_carrier.h
 [gi]: https://github.com/open-telemetry/opentelemetry-go-contrib/tree/main/propagators/envcar
 [pi]: https://github.com/open-telemetry/opentelemetry-python/blob/main/opentelemetry-api/src/opentelemetry/propagators/_envcarrier.py
-[ci]: https://github.com/open-telemetry/opentelemetry-cpp/blob/main/api/include/opentelemetry/context/propagation/environment_carrier.h
 
 ### Common Behaviors
 
