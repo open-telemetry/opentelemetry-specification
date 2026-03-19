@@ -280,8 +280,8 @@ Metric (which belongs to the `target` MetricFamily in OM 1.0).
 `job` and `instance` labels SHOULD be stored as `prometheus.job` and
 `prometheus.instance` resource attributes, respectively.
 
-If present, the `target` info metric MUST be dropped from the batch of metrics,
-and all labels from the `target` info metric MUST be converted to resource
+If present, the `target_info` metric MUST be dropped from the batch of metrics,
+and all labels from the `target_info` metric MUST be converted to resource
 attributes attached to all other metrics which are part of the scrape. By
 default, label keys and values MUST NOT be altered (such as replacing `_` with
 `.` characters in keys).
