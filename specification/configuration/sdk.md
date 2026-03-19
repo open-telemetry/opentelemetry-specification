@@ -260,20 +260,7 @@ Interpret configuration model and return SDK components.
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
 
-**Status**: [Development](../document-status.md) The effective `Resource` is
-the `Resource` actually associated with the SDK
-components produced by `Create`, after all resource-related configuration,
-resource detection, and merging required during configuration interpretation
-have been applied.
-
-The [TracerProvider](../trace/sdk.md#tracer-provider),
-[MeterProvider](../metrics/sdk.md#meterprovider), and
-[LoggerProvider](../logs/sdk.md#loggerprovider) returned by the same `Create`
-invocation MUST be associated with this effective `Resource`.
-
-If the results of `Create` are returned in a structure encapsulating the top
-level SDK components, that structure MUST provide access to the effective
-`Resource`.
+**Status**: [Development](../document-status.md) The resolved `Resource` associated with the `MeterProvider`, `LoggerProvider`, `TracerProvider`.
 
 Create requirements around default and null behavior are described below. Note that
 [`defaultBehavior` and `nullBehavior`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#json-schema-source-and-output)
