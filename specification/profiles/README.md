@@ -6,12 +6,7 @@ path_base_for_github_subdir:
 
 # OpenTelemetry Profiles
 
-**Status**: [Development](../document-status.md)
-
-> [!NOTE]
->
-> The profiles signal is still experimental and under active development.
-> Breaking changes may be introduced in future versions.
+**Status**: [Alpha](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>

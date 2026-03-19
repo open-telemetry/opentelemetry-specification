@@ -1,6 +1,6 @@
 # Pprof
 
-**Status**: [Development](../document-status.md)
+**Status**: [Alpha](../document-status.md)
 
 <!-- toc -->
 
