@@ -9,12 +9,21 @@ release.
 
 ### Context
 
+- Align environment variable context propagation name restrictions with POSIX.1-2024
+  and define normalization behavior.
+  ([#4914](https://github.com/open-telemetry/opentelemetry-specification/issues/4914))
+
 ### Traces
 
+- Stabilize Tracer `enabled` operation
+  ([#4941](https://github.com/open-telemetry/opentelemetry-specification/pull/4941))
 - Stabilize `AlwaysRecord` sampler.
   ([#4934](https://github.com/open-telemetry/opentelemetry-specification/pull/4934))
 
 ### Metrics
+
+- Add development `maxExportBatchSize` parameter to Periodic exporting MetricReader.
+  ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
 
 ### Logs
 
@@ -38,6 +47,10 @@ release.
 
 - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
   ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+- Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
+  add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
+  Histogram.
+  ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
 
 ### SDK Configuration
 
