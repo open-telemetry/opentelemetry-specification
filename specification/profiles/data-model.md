@@ -249,7 +249,7 @@ Measurements represented with this format should follow the following convention
 | duration_nano | uint64 | Duration of the profile in nanoseconds. For instant profiles like live heap snapshot the duration can be zero. However, it may be preferable to set `time_unix_nano` to the process start time and `duration_nano` to the relative time when the profile was gathered so that `Sample.timestamps_unix_nano` values fall within the profile time range. |
 | period_type | [`ValueType`](#message-valuetype) | The kind of events between sampled occurrences. For example `["cpu", "cycles"]` or `["heap", "bytes"]`. |
 | period | int64 | The number of events between sampled occurrences. |
-| profile_id | bytes | A globally unique identifier for the profile (16-byte array) that MAY be used for deduplication and signal correlation. An ID with all zeroes is considered invalid. This field is optional; an ID may be assigned to an ID-less profile in a later step. [optional] |
+| profile_id | bytes | A globally unique identifier for the profile (16-byte array) that MAY be used for deduplication and signal correlation. An ID with all zeroes is considered invalid. This field is optional; an ID may be assigned to an ID-less profile in a later step. |
 | dropped_attributes_count | uint32 | The number of attributes that were discarded. Attributes can be discarded because their keys are too long or because there are too many attributes. If 0, no attributes were dropped. |
 | original_payload_format | string | The original payload format. See [Known values](./README.md#known-values) for allowed formats. It MUST be set together with `original_payload` or both left unset. [optional] |
 | original_payload | bytes | The original payload bytes. It MUST be set together with `original_payload_format` or both left unset. [optional] |
@@ -289,7 +289,7 @@ data recording style.
 | ----- | ---- | ----------- |
 | stack_index | int32 | Reference to a [`Stack`](#message-stack) in [`ProfilesDictionary.stack_table`](#message-profilesdictionary). |
 | attribute_indices | repeated int32 | References to attributes in [`ProfilesDictionary.attribute_table`](#message-profilesdictionary). [optional] |
-| link_index | int32 | Reference to a [`Link`](#message-link) in [`ProfilesDictionary.link_table`](#message-profilesdictionary). 0 means no link exists. [optional] |
+| link_index | int32 | Reference to a [`Link`](#message-link) in [`ProfilesDictionary.link_table`](#message-profilesdictionary). 0 means no link exists. |
 | values | repeated int64 | Measured values. The type and unit of each value is defined by [`Profile.sample_type`](#message-profile). |
 | timestamps_unix_nano | repeated fixed64 | Timestamps (UTC) as nanoseconds since the Unix epoch. The timestamps SHOULD fall within the `[Profile.time_unix_nano, Profile.time_unix_nano + Profile.duration_nano)` interval. |
 
