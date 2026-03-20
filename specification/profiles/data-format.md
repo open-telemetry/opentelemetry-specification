@@ -1,4 +1,4 @@
-# Profiles Data Model
+# Profiles Data Format
 
 **Status**: [Alpha](../document-status.md)
 
@@ -42,7 +42,7 @@
 
 ## Overview
 
-The OpenTelemetry data model for Profiles consists of a protocol specification
+The OpenTelemetry data format for Profiles consists of a protocol specification
 and [semantic conventions](https://opentelemetry.io/docs/specs/semconv/general/profiles/)
 for encoding and delivery of aggregated stack traces and associated metadata.
 
@@ -50,7 +50,7 @@ The protocol specification is defined in the
 [profiles.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/profiles/v1development/profiles.proto)
 protobuf file and is based on the [pprof](https://github.com/google/pprof/tree/main/proto) format.
 This means that pprof and other established profiling formats can, in most cases,
-be unambiguously mapped to this data model. Reverse mapping from this data model is
+be unambiguously mapped to this data format. Reverse mapping from this data format is
 also possible to the extent that the target profiling format has equivalent capabilities.
 
 The following diagram shows the relationships between messages. Solid arrows represent
@@ -98,7 +98,7 @@ Profiles use a two-level referencing scheme instead:
 
 ### Dictionary
 
-The Profiles data model uses a top-level dictionary message
+The Profiles data format uses a top-level dictionary message
 ([`ProfilesDictionary`](#message-profilesdictionary)) to deduplicate data
 that is shared across the entire [`ProfilesData`](#message-profilesdata)
 message. Unlike other OpenTelemetry signals where each record is largely
@@ -128,7 +128,7 @@ The following rules apply to all embedded dictionary tables:
 
 ### Attributes
 
-The data model uses two kinds of attributes:
+The data format uses two kinds of attributes:
 
 1. **Standard `KeyValue` attributes**: the same
    [`KeyValue`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/common/v1/common.proto)
@@ -150,7 +150,7 @@ The data model uses two kinds of attributes:
 
 ### Dictionary use in KeyValue
 
-To minimize payload size, the data model extends the standard
+To minimize payload size, the data format extends the standard
 OpenTelemetry [`KeyValue`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/common/v1/common.proto)
 and [`AnyValue`](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/common/v1/common.proto)
 messages with string reference fields that point into [`ProfilesDictionary.string_table`](#message-profilesdictionary):
@@ -540,5 +540,5 @@ ProfilesData {
 
 ## References
 
-- [Profiles Proto](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/profiles/v1development/profiles.proto): Contains the current version of the data model
+- [Profiles Proto](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/profiles/v1development/profiles.proto): Contains the current version of the data format
 - [Profiles Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/general/profiles/)
