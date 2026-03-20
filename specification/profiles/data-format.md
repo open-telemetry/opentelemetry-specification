@@ -224,7 +224,7 @@ Note that whilst some fields in this message retain the name and field id from p
 (for ease of understanding data migration), it is not intended that pprof:Profile and
 OpenTelemetry:Profile encoding be wire compatible.
 
-Measurements represented with this format should follow the following conventions:
+Measurements encoded in this format should follow the following conventions:
 
 - Consumers should treat unset optional fields as if they had been
   set with their default value.
