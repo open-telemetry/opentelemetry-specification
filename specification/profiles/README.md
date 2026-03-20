@@ -15,7 +15,7 @@ path_base_for_github_subdir:
 
 - [Overview](#overview)
 - [Design goals](#design-goals)
-- [Data Model](#data-model)
+- [Data Format](#data-format)
 - [Known values](#known-values)
 - [Specifications](#specifications)
 - [References](#references)
@@ -42,7 +42,7 @@ The profiles signal is designed with the following goals in mind:
   environments without materially impacting application performance.
 - **Efficient representation**: Reduces volume of data stored and transmitted,
   by using dictionary tables to deduplicate repeated information across samples.
-- **Compatibility with existing formats**: The data model is a superset of
+- **Compatibility with existing formats**: The data format is a superset of
   established profiling formats such as [pprof](https://github.com/google/pprof)
   and in most cases supports lossless conversions to and from these formats.
   If that's not possible (e.g. custom extensions), the `original_payload_format`
@@ -52,9 +52,9 @@ The profiles signal is designed with the following goals in mind:
   and traces through shared resource context and, where applicable,
   direct trace/span references.
 
-## Data Model
+## Data Format
 
-The OpenTelemetry profiles data model is defined [here](./data-model.md).
+The OpenTelemetry profiles data format is [here](./data-format.md).
 It builds on the [pprof protobuf format](https://github.com/google/pprof/tree/main/proto)
 and extends it with:
 
@@ -91,7 +91,7 @@ tools, known values are utilized.
 
 ## Specifications
 
-* [Profiles Data Model](./data-model.md)
+* [Profiles Data Format](./data-format.md)
 * [Profiles Mappings Attributes](./mappings.md)
 * [Profiles Pprof Compatibility](./pprof.md)
 
@@ -100,4 +100,3 @@ tools, known values are utilized.
 - [Profiles Concepts](https://opentelemetry.io/docs/concepts/signals/profiles/)
 - [Profiles Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/general/profiles/)
 - [OTEP0212 OpenTelemetry Profiles Vision](../../oteps/profiles/0212-profiling-vision.md)
-- [OTEP0239 OpenTelemetry Profiles Data Model](../../oteps/profiles/0239-profiles-data-model.md) (See [opentelemetry-proto](https://github.com/open-telemetry/opentelemetry-proto/tree/main/opentelemetry/proto/profiles/) for the latest version of the data model)
