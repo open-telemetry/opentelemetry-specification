@@ -252,10 +252,15 @@ Interpret configuration model and return SDK components.
 * [MeterProvider](../metrics/sdk.md#meterprovider)
 * [LoggerProvider](../logs/sdk.md#loggerprovider)
 * [Propagators](../context/api-propagators.md#composite-propagator)
+* **Status**: [Development](../document-status.md) -
+  [Resource](../resource/sdk.md) - the effective resource associated with SDK
+  components returned by `Create`
 * **Status**: [Development](../document-status.md) - [ConfigProvider](#configprovider)
 
 The multiple responses MAY be returned using a tuple, or some other data
 structure encapsulating the components.
+
+**Status**: [Development](../document-status.md) The resolved `Resource` associated with the `MeterProvider`, `LoggerProvider`, `TracerProvider`.
 
 Create requirements around default and null behavior are described below. Note that
 [`defaultBehavior` and `nullBehavior`](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/CONTRIBUTING.md#json-schema-source-and-output)
