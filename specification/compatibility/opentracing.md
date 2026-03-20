@@ -4,7 +4,17 @@ linkTitle: OpenTracing
 
 # OpenTracing Compatibility
 
-**Status**: [Stable](../document-status.md).
+**Status**: [Deprecated](../document-status.md)
+
+> [!NOTE]
+> OpenTracing compatibility requirements are deprecated.
+> Existing OpenTracing shims MAY continue to be supported for backwards
+> compatibility, but implementing new OpenTracing compatibility is not required
+> by this specification.
+>
+> OpenTracing compatibility requirements are deprecated as of March 2026.
+> OpenTracing compatibility requirements in this specification will be removed
+> no earlier than March 2027.
 
 <details>
 <summary>Table of Contents</summary>
@@ -51,8 +61,9 @@ More specifically, the intention is to allow OpenTracing instrumentation to be
 recorded using OpenTelemetry. This Shim Layer MUST NOT publicly expose any
 upstream OpenTelemetry API.
 
-This functionality MUST be defined in its own OpenTracing Shim Layer, not in the
-OpenTracing nor the OpenTelemetry API or SDK.
+Historically, this functionality was defined in its own OpenTracing Shim Layer,
+not in the OpenTracing nor the OpenTelemetry API or SDK. Since this
+compatibility is deprecated, new implementations are not required.
 
 Semantic convention mapping SHOULD NOT be performed, with the
 exception of error mapping, as described in the [Set Tag](#set-tag) and
@@ -68,6 +79,8 @@ is not recommended for the following scenarios:
   and none in OpenTracing (e.g. Javascript), as it breaks the expected propagation
   semantics and may lead to incorrect `Context` usage and incorrect traces.
   See [Implicit and Explicit support mismatch](#implicit-and-explicit-support-mismatch).
+
+This section remains for migration and backwards compatibility guidance.
 
 ## Language version support
 
