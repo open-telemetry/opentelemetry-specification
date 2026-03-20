@@ -359,29 +359,49 @@ The SDK MUST accept the following stream configuration parameters:
   accept a `description`, but MUST NOT obligate a user to provide one. If the
   user does not provide a `description` value, the description from the
   Instrument a View matches MUST be used by default.
-* `attribute_keys`: This is, at a minimum, an allow-list of attribute keys for
-  measurements captured in the metric stream. The allow-list contains attribute
+* `attribute_keys`: This is, at a minimum, a list of attribute keys for
+  measurements captured in the metric stream. The list contains attribute
   keys that identify the attributes that MUST be kept, and all other attributes
   MUST be ignored.
 
   Implementations MAY accept additional attribute filtering functionality for
   this parameter.
 
-  Users can provide `attribute_keys`, but it is up to their discretion.
-  Therefore, the stream configuration parameter needs to be structured to
-  accept `attribute_keys`, but MUST NOT obligate a user to provide them.
-  If the user does not provide any value, the SDK SHOULD use
-  the [`Attributes`](./api.md#instrument-advisory-parameters) advisory
-  parameter configured on the instrument instead. If the `Attributes`
-  advisory parameter is absent, all attributes MUST be kept.
-
-  Additionally, implementations SHOULD support configuring an exclude-list of
-  attribute keys. The exclude-list contains attribute keys that identify the
-  attributes that MUST be excluded, all other attributes MUST be kept. If an
-  attribute key is both included and excluded, the SDK MAY fail fast in
+  If a user specifies both `attribute_keys` and either `include_attribute_keys`
+  or `exclude_attribute_keys`, the SDK MAY fail fast in
   accordance with initialization [error handling
   principles](../error-handling.md#basic-error-handling-principles).
 
+  Users can provide `attribute_keys`, but it is up to their discretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept `attribute_keys`, but MUST NOT obligate a user to provide them.
+
+  If the user does not provide any value, the SDK SHOULD use
+  the [`Attributes`](./api.md#instrument-advisory-parameters) advisory
+  parameter configured on the instrument instead as well as any attributes
+  specified via `include_attribute_keys`. If the `Attributes`
+  advisory parameter is absent, all attributes MUST be kept.
+  In both cases
+  attributes specified via `exclude_attribute_keys` should not be kept.
+* `exclude_attribute_keys`: This is, an exclude-list of attribute keys for
+  measurements captured in the metric stream.
+  The exclude-list contains attribute keys that identify the
+  attributes that MUST be excluded, all other attributes MUST be kept. If an
+  attribute key is both included and excluded, the attribute will be excluded.
+
+  Users can provide `exclude_attribute_keys`, but it is up to their discretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept `exclude_attribute_keys`, but MUST NOT obligate a user to provide them.
+* `include_attribute_keys`: This is, an include-list of attribute keys for
+  measurements captured in the metric stream. The include-list contains
+  attribute keys that identify the attributes that MUST be kept in addition to
+  the [`Attributes`](./api.md#instrument-advisory-parameters) advisory parameter
+  configured on the instrument, all other attributes must be excluded. If an
+  attribute key is both included and excluded, the attribute will be excluded.
+
+  Users can provide `include_attribute_keys`, but it is up to their discretion.
+  Therefore, the stream configuration parameter needs to be structured to
+  accept `include_attribute_keys`, but MUST NOT obligate a user to provide them.
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
 
