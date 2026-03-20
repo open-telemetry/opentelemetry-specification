@@ -141,9 +141,6 @@ release.
 - Declarative configuration: Update instrumentation config behavior to return
   empty object when not set
   ([#4817](https://github.com/open-telemetry/opentelemetry-specification/pull/4817))
-### Supplementary Guidelines
-
-### OTEPs
 
 ## v1.53.0 (2026-01-09)
 
