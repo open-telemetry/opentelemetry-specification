@@ -21,24 +21,24 @@ formats is required. Implementing more than one format is optional.
 | Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Get a Tracer with schema_url |  | + | + | + | + |  |  | + | + | + |  |  | + |
 | Get a Tracer with scope attributes |  | + |  |  | + |  |  | + | + | + |  |  | + |
-| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + | + |  |  |  |  |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + | + |  |  |  | + |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Trace / Context interaction](specification/trace/api.md#context-interaction) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
-| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
-| Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
+| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | - |
+| Set active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | - |
 | [Tracer](specification/trace/api.md#tracer-operations) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Create a new Span |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Documentation defines adding attributes at span creation as preferred |  | + |  |  | + | + |  | + |  |  | + |  |  |
-| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
-| Mark Span active |  | N/A | + | + | + | + | + | + | + | + | + | + |  |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| Documentation defines adding attributes at span creation as preferred |  | + |  |  | + | + |  | + |  |  | + |  | + |
+| Get active Span |  | N/A | + | + | + | + | + | + | + | + | + | + | - |
+| Mark Span active |  | N/A | + | + | + | + | + | + | + | + | + | + | - |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [SpanContext](specification/trace/api.md#spancontext) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | IsValid |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | IsRemote |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - |  |  |  |  |  |  |  |  |  |  |  |
+| Conforms to the W3C TraceContext spec |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| [Support W3C Trace Context Level 2 randomness](specification/trace/sdk.md#traceid-randomness) |  | - |  |  |  |  |  |  |  |  |  |  | - |
 | [Span](specification/trace/api.md#span) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Create root span |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Create with default parent (active span) |  | N/A | + | + | + | + | + | + | + | + | + | + | + |
@@ -52,14 +52,14 @@ formats is required. Implementing more than one format is optional.
 | IsRecording |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | IsRecording becomes false after End |  | + | + | + | + | + | + | + | + | + | - | + | + |
 | Set status with StatusCode (Unset, Ok, Error) |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| events collection size limit |  | + | + | + | + | + | + | + | + | - | - | + |  |
-| attribute collection size limit |  | + | + | + | + | + | + | + | + | - | - | + |  |
-| links collection size limit |  | + | + | + | + | + | + | + | + | - | - | + |  |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| events collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
+| attribute collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
+| links collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
 | [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | - | - | - | - | - | - | - | - | - | - | + |
 | [Span attributes](specification/trace/api.md#set-attributes) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | SetAttribute |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Set order preserved | X | + | - | + | + | + | + | + | + | + | + | + |  |
+| Set order preserved | X | + | - | + | + | + | + | + | + | + | + | + | - |
 | String type |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Boolean type |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Double floating-point type |  | + | + | + | + | + | + | - | + | + | + | + | + |
@@ -70,23 +70,23 @@ formats is required. Implementing more than one format is optional.
 | [Span linking](specification/trace/api.md#specifying-links) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Links can be recorded on span creation |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | Links can be recorded after span creation |  | + |  | + | + |  |  | + | + | + | + |  | + |
-| Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  |  |
+| Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | [Span events](specification/trace/api.md#add-events) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | AddEvent |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| Add order preserved |  | + | + | + | + | + | + | + | + | + | + | + |  |
-| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + |  |
+| Add order preserved |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Span exceptions](specification/trace/api.md#record-exception) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | RecordException |  | + | + | + | + | + | + | + | - | - | + | - | + |
-| RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - |  |
+| RecordException with extra parameters |  | + | + | + | + | + | + | + | - | - | + | - | + |
 | [Sampling](specification/trace/sdk.md#sampling) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Allow samplers to modify tracestate |  | + | + |  | + | + | + | + | + | + | + | + | - |
-| ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + | - |
+| ShouldSample gets full parent Context |  | + | + | + | + | + | + | + | + | + | - | + | + |
 | Sampler: JaegerRemoteSampler |  | + | + | + |  |  |  | - | + |  |  |  | - |
 | [New Span ID created also for non-recording Spans](specification/trace/sdk.md#sdk-span-creation) |  | + | + |  | + | + | + | + | + | + | - | + | - |
 | [IdGenerators](specification/trace/sdk.md#id-generators) |  | + | + | + | + | + | + | + | + | + |  | + | + |
 | [SpanLimits](specification/trace/sdk.md#span-limits) | X | + | + | + | + | + | + | + | + | - |  | + | + |
-| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  |  |
-| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  |  |
+| [Built-in `SpanProcessor`s implement `ForceFlush` spec](specification/trace/sdk.md#forceflush-1) |  | + | + | + | + | + | + | + | + | + | + |  | + |
+| [Attribute Limits](specification/common/README.md#attribute-limits) | X | + | + | + | + | + | + | + |  |  |  |  | - |
 | Fetch InstrumentationScope from ReadableSpan |  | + | + | + | + |  |  | + |  |  |  |  | + |
 | [TraceIdRatioBased sampler implements OpenTelemetry tracestate `th` field](specification/trace/sdk.md#traceidratiobased) | X | - |  |  |  |  |  |  |  |  |  |  | - |
 | [CompositeSampler and built-in ComposableSamplers](specification/trace/sdk.md#compositesampler) | X | - |  |  |  |  |  |  |  |  |  |  | - |
@@ -202,7 +202,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | LoggerProvider.Shutdown |  | + | + | + | + | + |  | + | + | + | - |  | + |
 | LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + | + | + | - |  | + |
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + | + | + | - |  | + |
-| Logger.Emit(LogRecord) with Exception parameter | X |  |  |  |  |  |  |  |  |  |  |  |  |
+| Logger.Emit(LogRecord) with Exception parameter | X |  |  |  |  |  |  |  |  |  |  |  | + |
 | LogRecord.Set EventName |  | + |  |  |  |  |  |  | + | + |  |  | + |
 | Logger.Enabled | X | + |  |  |  |  |  | + | + | + |  |  | + |
 | Ergonomic API | X |  |  |  |  |  |  |  |  |  |  |  |  |
@@ -214,17 +214,17 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | OTLP/HTTP exporter |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | OTLP File exporter |  | - | - |  | - |  |  |  | - | + | - |  | - |
 | Can plug custom LogRecordExporter |  | + | + | + | + | + |  | + | + | + |  |  | + |
-| Trace Context Injection |  | + | + |  | + | + |  | + | + | + | + |  |  |
+| Trace Context Injection |  | + | + |  | + | + |  | + | + | + | + |  | + |
 
 ## Resource
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
-| Create from Attributes |  | + | + | + | + | + | + | + | + | + | + | + | - |
-| Create empty |  | + | + | + | + | + | + | + | + | + | + | + | - |
+| Create from Attributes |  | + | + | + | + | + | + | + | + | + | + | + | + |
+| Create empty |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Merge (v2)](specification/resource/sdk.md#merge) |  | + | + |  | + | + | + | + | + | + | + |  | + |
 | Retrieve attributes |  | + | + | + | + | + | + | + | + | + | + | + | + |
-| [Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  | - |
+| [Default value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-dedicated-environment-variable) for service.name |  | + | + |  | + | + | + | + |  | + | + |  | + |
 | [Resource detector](specification/resource/sdk.md#detecting-resource-information-from-the-environment) interface/mechanism |  | + | + | + | + | + | + | + | + | + | + | + | - |
 | [Resource detectors populate Schema URL](specification/resource/sdk.md#detecting-resource-information-from-the-environment) |  | + | + |  |  |  | - | + | + |  | - |  | - |
 
