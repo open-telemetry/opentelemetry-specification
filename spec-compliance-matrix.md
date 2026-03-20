@@ -257,13 +257,13 @@ Note: Support for environment variables is optional.
 
 | Feature | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
-| OTEL_SDK_DISABLED | - | + | - | + | + | - | + | - | - | - | - | - |
+| OTEL_SDK_DISABLED | - | + | - | + | + | - | + | - | + | - | - | - |
 | OTEL_RESOURCE_ATTRIBUTES | + | + | + | + | + | + | + | + | + | + | - | - |
 | OTEL_SERVICE_NAME | + | + | + | + | + | + | + | + | + | + |  | - |
 | OTEL_LOG_LEVEL | - | - | + | [-][py1059] | + | - | + |  | - | - | - | - |
 | OTEL_PROPAGATORS | - | + |  | + | + | + | + | - | - | - | - | - |
-| OTEL_BSP_* | + | + | + | + | + | + | + | + | - | + | - | - |
-| OTEL_BLRP_* | + | + |  |  | + |  | + | + | - | + |  | - |
+| OTEL_BSP_* | + | + | + | + | + | + | + | + | + | + | - | - |
+| OTEL_BLRP_* | + | + |  |  | + |  | + | + | + | + |  | - |
 | OTEL_EXPORTER_OTLP_* | + | + |  | + | + | + | + | + | + | + | - | - |
 | OTEL_EXPORTER_ZIPKIN_* | + | + |  | + | + | - | + | - | - | + | - | - |
 | OTEL_TRACES_EXPORTER | - | + | + | + | + | + | + | - | - | - |  | - |
@@ -281,12 +281,12 @@ Note: Support for environment variables is optional.
 | OTEL_TRACES_SAMPLER_ARG | + | + | + | + | + | + | + | + | - | - |  | - |
 | OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT | + | + | + | + | + | - | + |  | - | + |  | - |
 | OTEL_ATTRIBUTE_COUNT_LIMIT | + | + | + | + | + | - | + |  | - | + |  | - |
-| OTEL_METRIC_EXPORT_INTERVAL | + | + |  | + | + |  | + |  | - | + |  | - |
-| OTEL_METRIC_EXPORT_TIMEOUT | + | - |  | + | + |  | + |  | - | + |  | - |
+| OTEL_METRIC_EXPORT_INTERVAL | + | + |  | + | + |  | + |  | + | + |  | - |
+| OTEL_METRIC_EXPORT_TIMEOUT | + | - |  | + | + |  | + |  | + | + |  | - |
 | OTEL_METRICS_EXEMPLAR_FILTER | + | + |  |  | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | + | + | + | + | + |  | + |  | - | + |  | - |
 | OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION | + | + |  | + | + |  |  |  | - |  |  | - |
-| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | - |  |  |  |
+| OTEL_CONFIG_FILE | + | + |  |  |  |  | + |  | + |  |  |  |
 
 ## Declarative configuration
 
