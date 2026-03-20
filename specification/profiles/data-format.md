@@ -54,7 +54,7 @@ be unambiguously mapped to this data format. Reverse mapping from this data form
 also possible to the extent that the target profiling format has equivalent capabilities.
 
 The following diagram shows the relationships between messages. Solid arrows represent
-embedded relationships whilst dashed arrows represent references by index into a dictionary
+embedded relationships. Dashed arrows represent references by index into a dictionary
 table.
 
 ```mermaid
