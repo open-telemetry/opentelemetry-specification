@@ -6,11 +6,11 @@ This OTEP defines goals and acceptance criteria for making OpenTelemetry product
 
 OpenTelemetry has grown into a massive ecosystem supporting four telemetry signals across dozen programming languages. This growth has come with complexity that creates real barriers to production adoption.
 
-Community feedback consistently identifies several pain points. Experimental features break production deployments—users report configuration breaking between minor versions, silent failures in telemetry pipelines, and unexpected performance regressions that only appear at scale. As one practitioner noted: "The silent failure policy of OTEL makes flames shoot out of the top of my head."
+Community feedback consistently identifies several pain points. Experimental features break production deployments—users report configuration breaking between minor versions, silent failures in telemetry pipelines, and unexpected performance regressions that only appear at scale.
 
 Semantic convention changes destroy existing dashboards. When conventions change, users must update instrumentation across their entire infrastructure while simultaneously updating dashboards, alerts, and downstream tooling. Organizations report significant resistance from developers asked to coordinate these changes.
 
-Many instrumentation libraries are stuck on pre-release because they depend on experimental semantic conventions, even when the instrumentation API surface itself is mature and battle-tested. The "batteries not included" philosophy means users must assemble many components before achieving basic functionality. Documentation assumes expertise, and newcomers describe the experience as "overwhelming" with "no discoverability." Auto-instrumentation can add significant resource consumption that only becomes apparent at scale, with reports of "four times the CPU usage" compared to simpler alternatives. Users evaluating OpenTelemetry for production deployment need confidence in CVE response timelines, dependency hygiene, and supply chain security—areas where commitments are not well documented.
+Many instrumentation libraries are stuck on pre-release because they depend on experimental semantic conventions, even when the instrumentation API surface itself is mature and battle-tested. The "batteries not included" philosophy means users must assemble many components before achieving basic functionality. Documentation assumes expertise, and newcomers describe the experience as "overwhelming" with "no discoverability." Auto-instrumentation can add significant resource consumption that only becomes apparent at scale. Users evaluating OpenTelemetry for production deployment need confidence in CVE response timelines, dependency hygiene, and supply chain security—areas where commitments are not well documented.
 
 These all stem from the same problem: OpenTelemetry's default configuration prioritizes feature completeness over production readiness. This OTEP establishes the goals and workstreams needed to address this.
 
@@ -24,7 +24,7 @@ This OTEP aims to achieve six outcomes:
 
 - Stability information should be visible and consistent. Users should be able to easily determine the stability status of any component before adopting it, and this information should be presented consistently across all OpenTelemetry projects.
 
-- Instrumentation should be able to stabilize based on production readiness. The bar for a stable instrumentation library should be whether the instrumentation code itself is production-ready, not whether the semantic conventions it depends on have been finalized. However, once an instrumentation library stabilizes, any breaking change to its telemetry output must be treated as a breaking change requiring a major version bump.
+- Instrumentation should be able to stabilize based on production readiness. The bar for a stable instrumentation library should be whether the instrumentation code itself is production-ready, not whether the semantic conventions it depends on have been finalized. However, once an instrumentation library stabilizes, any breaking change to its telemetry output must be treated as a breaking change requiring a major version bump. This stability guarantee applies to telemetry that the instrumentation library itself produces. When an instrumentation library subscribes to telemetry emitted natively by a third-party library (e.g., auto-instrumentation that captures spans produced by an HTTP client's own OTel integration), the content of that telemetry is governed by the third-party library's release cycle, not the instrumentation library's stability contract.
 
 - Performance characteristics should be known. Users should be able to understand the overhead implications of OpenTelemetry before deploying to production, and maintainers should be able to detect regressions between releases.
 
@@ -44,7 +44,7 @@ There is no consistent mechanism across OpenTelemetry for users to opt into expe
 
 This workstream should result in a consistent pattern for experimental feature opt-in that works across SDKs, the Collector, and instrumentation libraries.
 
-The Configuration SIG is the natural owner for this work.
+A new project will be needed to drive this work.
 
 ### Workstream 2: Federated Schema and Stability
 
@@ -95,6 +95,8 @@ Distributions that currently enable experimental components by default will need
 ### On Instrumentation Libraries
 
 Instrumentation library maintainers will be able to stabilize based on the production readiness of their code, without waiting for all upstream semantic conventions to stabilize. Once stable, they own the stability of their telemetry output—any breaking change to emitted telemetry requires a major version bump. They will need to clearly document which semantic conventions they use and provide migration guidance when conventions evolve.
+
+Note that this stability contract covers telemetry the instrumentation library itself produces. In cases where auto-instrumentation subscribes to telemetry emitted natively by a third-party library—for example, an HTTP client that directly uses OpenTelemetry APIs—the telemetry content is controlled by that library, not by the instrumentation package. The instrumentation library's stability commitment in this case is to its subscription surface (which telemetry sources it captures and how it processes them), not to the content of telemetry it does not control.
 
 ### On Users
 
