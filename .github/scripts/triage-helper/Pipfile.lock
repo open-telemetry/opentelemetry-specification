@@ -322,12 +322,12 @@
         },
         "pygithub": {
             "hashes": [
-                "sha256:23a0a5bca93baef082e03411bf0ce27204c32be8bfa7abc92fe4a3e132936df0",
-                "sha256:341b7c78521cb07324ff670afd1baa2bf5c286f8d9fd302c1798ba594a5400c9"
+                "sha256:5e2b260ce327bffce9b00f447b65953ef7078ffe93e5a5425624a3075483927c",
+                "sha256:a26abda1222febba31238682634cad11d8b966137ed6cc3c5e445b29a11cb0a4"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.8'",
-            "version": "==2.8.1"
+            "markers": "python_version >= '3.9'",
+            "version": "==2.9.0"
         },
         "pyjwt": {
             "extras": [
