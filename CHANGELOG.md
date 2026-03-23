@@ -53,6 +53,8 @@ release.
   add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
   Histogram.
   ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
+- Stabilize Prometheus Exemplar to OpenTelemetry Exemplar transformation.
+  ([#4962](https://github.com/open-telemetry/opentelemetry-specification/pull/4962))
 
 ### SDK Configuration
 
