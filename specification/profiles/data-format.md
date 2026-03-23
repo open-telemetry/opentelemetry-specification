@@ -9,7 +9,7 @@
 
 - [Overview](#overview)
 - [Notable differences compared to other signals](#notable-differences-compared-to-other-signals)
-  * [Message referencing](#message-referencing)
+  * [Message embedding](#message-embedding)
   * [Dictionary](#dictionary)
   * [Attributes](#attributes)
   * [Dictionary use in KeyValue](#dictionary-use-in-keyvalue)
@@ -49,9 +49,9 @@ for encoding and delivery of aggregated stack traces and associated metadata.
 The protocol specification is defined in the
 [profiles.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/profiles/v1development/profiles.proto)
 protobuf file and is based on the [pprof](https://github.com/google/pprof/tree/main/proto) format.
-This means that pprof and other established profiling formats can, in most cases,
-be unambiguously mapped to this data format. Reverse mapping from this data format is
-also possible to the extent that the target profiling format has equivalent capabilities.
+This means that pprof and other established profiling formats can (always for pprof, in most cases
+for other formats) be unambiguously mapped to this data format. Lossless reverse mapping from this
+data format is also possible to the extent that the target profiling format has equivalent capabilities.
 
 The following diagram shows the relationships between messages. Solid arrows represent
 embedded relationships. Dashed arrows represent references by index into a dictionary
@@ -66,30 +66,37 @@ graph TD
     Profile -->|"1-n"| Sample
 
     Sample -. "n-1" .-> Stack
-    Sample -. "1-n" .-> KeyValueAndUnit
+    Sample -. "n-n" .-> KeyValueAndUnit
     Sample -. "n-1" .-> Link
 
-    Stack -. "1-n" .-> Location
+    Stack -. "n-n" .-> Location
 
     Location -->|"1-n"| Line
-    Location -. "1-n" .-> KeyValueAndUnit
+    Location -. "n-n" .-> KeyValueAndUnit
     Location -. "n-1" .-> Mapping
 
     Line -. "1-1" .-> Function
 
-    Mapping -. "1-n" .-> KeyValueAndUnit
+    Mapping -. "n-n" .-> KeyValueAndUnit
 ```
 
 ## Notable differences compared to other signals
 
-### Message referencing
+Profilers generate large amounts of data and users are highly sensitive to
+the overhead that profiling introduces. With that in mind, we designed the
+Profiles data format departing from other OpenTelemetry signals in several
+ways. This was done to keep payload sizes small and processing costs low
+while remaining compatible with [pprof](./pprof.md) and the rest of the
+OpenTelemetry ecosystem.
 
-Most OpenTelemetry signals use direct embedding: a span in a trace embeds
+### Message embedding
+
+Most OpenTelemetry signals use direct ("by value") embedding: a span in a trace embeds
 its events and links. A log record contains its attributes inline.
 
-Profiles use a two-level referencing scheme instead:
+Profiles use both "by value" and "by reference" embedding schemes:
 
-1. **Embedding** is used for the outer hierarchy
+1. **Direct embedding** is used for the outer hierarchy
    (`ProfilesData` &#x2192; `ResourceProfiles` &#x2192; `ScopeProfiles`
    &#x2192; `Profile` &#x2192; `Sample`).
 2. **Index-based referencing** into a shared [dictionary](#message-profilesdictionary)
@@ -220,20 +227,13 @@ Represents a complete profile: sample types, samples, mappings to binaries,
 stacks, locations, functions and associated metadata. It modifies and annotates
 pprof Profile with OpenTelemetry specific fields.
 
-Note that whilst some fields in this message retain the name and field id from pprof
-(for ease of understanding data migration), it is not intended that pprof:Profile and
-OpenTelemetry:Profile encoding be wire compatible.
-
 Measurements encoded in this format should follow the following conventions:
 
 - Consumers should treat unset optional fields as if they had been
-  set with their default value.
-- When possible, measurements should be stored in "unsampled" form
-  that is most useful to humans.  There should be enough
-  information present to determine the original sampled values.
-- The profile is represented as a set of samples, where each sample
-  references a stack trace which is a list of locations, each belonging
-  to a mapping.
+  set with their default value. We discourage using the protobuf presence
+  semantics, even if available in the protobuf generated API.
+- Measurements SHOULD be stored in "unsampled" form that is most useful to humans.
+  There should be enough information present to determine the original sampled values.
 - There is a N&#x2192;1 relationship from [`Stack.location_indices`](#message-stack)
   entries to locations. For every `Stack.location_indices` entry there must be a
   unique [`Location`](#message-location) with that index.
@@ -305,7 +305,10 @@ by unique trace and span IDs.
 
 ### Message `Stack`
 
-A stack trace encoded as a list of locations (leaf first).
+A stack trace encoded as a list of locations (leaf first). For example,
+the stack trace resulting from the call stack `main -> foo -> bar` would
+be encoded into the `location_indices` list `[2, 1, 0]` which references
+the locations in `location_table` as `[Location{"main"}, Location{"foo"}, Location{"bar"}]`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -329,8 +332,8 @@ Details a specific line in source code, linked to a function.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | function_index | int32 | Reference to a [`Function`](#message-function) in [`ProfilesDictionary.function_table`](#message-profilesdictionary). |
-| line | int64 | Line number in source code. 0 means unset. |
-| column | int64 | Column number in source code. 0 means unset. |
+| line | int64 | Line number in source code. 1-based, 0 means unset. |
+| column | int64 | Column number in source code. 1-based, 0 means unset. |
 
 ### Message `Mapping`
 
@@ -409,7 +412,9 @@ with those signals through this shared trace context.
 Other signals can reference a profile using the `profile_id` field on the
 [`Profile`](#message-profile) message. For example, a log record may carry a
 `profile_id` attribute to reference the profile that was collected at the time
-the log record was generated.
+the log record was generated. Note that the `profile_id` field is currently
+optional at the source, but may be populated after collection (e.g. in the
+OpenTelemetry collector processing pipeline).
 
 Moreover, `trace_id` and `span_id` can be used to reference groups of
 [`Sample`](#message-sample) (but not individual) messages in a profile,
