@@ -48,7 +48,7 @@ We proposes these new fundamental concepts in OpenTelemetry:
   resource. We create new `{Signal}Provider` instances by providing a new
   `Entity` on the existing provider.
   - This will construct a new `Resource` specific to that provider.
-  - The new provider will re-use all configuraiton (e.g. export pipeline)
+  - The new provider will re-use all configuration (e.g. export pipeline)
     defined from the base provider.
 
 ## Internal details
@@ -134,7 +134,7 @@ primarily:
   usable as an identity independent of `Entity`.
 - Consumers should now expect SDKs reporting multiple resources in the same
   batch. Theoretically, this SHOULD already be supported due to how OTLP is
-  deisgned to allow aggregation / batching of data at any point.
+  designed to allow aggregation / batching of data at any point.
 
 ## Prior art and alternatives
 
