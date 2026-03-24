@@ -7,12 +7,13 @@ weight: 3
 
 **Status**: [Stable](../document-status.md) except where otherwise specified
 
-A [Resource](../overview.md#resources) is an immutable representation of the entity producing
-telemetry as [Attributes](../common/README.md#attribute).
-For example, a process producing telemetry that is running in a
-container on Kubernetes has a Pod name, it is in a namespace and possibly is
-part of a Deployment which also has a name. All three of these attributes can be
-included in the `Resource`. Note that there are certain
+A [Resource](../overview.md#resources) is an immutable representation of the
+observed entity for which telemetry is being produced, expressed as
+[Attributes](../common/README.md#attribute).
+For example, a process running in a container on Kubernetes has a Pod name, it
+is in a namespace and possibly is part of a Deployment which also has a name.
+All three of these attributes can be included in the `Resource`. Note that there
+are certain
 [attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md)
 that have prescribed meanings.
 
