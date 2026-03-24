@@ -200,8 +200,6 @@ The `Tracer` SHOULD provide functions to:
 
 #### Enabled
 
-**Status**: [Development](../document-status.md)
-
 To help users avoid performing computationally expensive operations when
 creating `Span`s, a `Tracer` SHOULD provide this `Enabled` API.
 

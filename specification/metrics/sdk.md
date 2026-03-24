@@ -1448,9 +1448,23 @@ a user-configurable time interval, and passes the metrics to the configured
 Configurable parameters:
 
 * `exportIntervalMillis` - the time interval in milliseconds between two
-  consecutive exports. The default value is 60000 (milliseconds).
+  consecutive collections. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
+* **Status**: [Development](../document-status.md) - `maxExportBatchSize` - the
+  maximum number of metric data points in a batch that are provided to a single
+  export.
+
+**Status**: [Development](../document-status.md) - When `maxExportBatchSize` is
+configured, the reader MUST ensure no batch provided to `Export` exceeds the
+`maxExportBatchSize` by splitting the batch of metric data points into smaller
+batches. The initial batch of metric data MUST be split into as many "full"
+batches of size `maxExportBatchSize` as possible -- even if this splits up data
+points that belong to the same metric into different batches. The reader MUST
+ensure all metric data points from a single `Collect()` are provided to
+`Export` before metric data points from a subsequent `Collect()` so that metric
+points are sent in-order. The reader MUST NOT combine metrics from different
+`Collect()` calls into the same batch provided to `Export`.
 
 The reader MUST synchronize calls to `MetricExporter`'s `Export`
 to make sure that they are not invoked concurrently.
@@ -1475,9 +1489,13 @@ from `MetricReader` and start a background task which calls the inherited
 This method provides a way for the periodic exporting MetricReader
 so it can do as much as it could to collect and send the metrics.
 
-`ForceFlush` SHOULD collect metrics, call [`Export(batch)`](#exportbatch)
-and [`ForceFlush()`](#forceflush-2) on the configured
-[Push Metric Exporter](#push-metric-exporter).
+`ForceFlush` SHOULD collect metrics, split into batches if necessary, call
+[`Export(batch)`](#exportbatch) on each batch and
+[`ForceFlush()`](#forceflush-2) on the configured
+[Push Metric Exporter](#push-metric-exporter). `ForceFlush` MAY skip
+[`Export(batch)`](#exportbatch) calls if the timeout is already expired, but
+SHOULD still call [`ForceFlush()`](#forceflush-2) on the configured
+[Push Metric Exporter](#push-metric-exporter) even if the timeout has passed.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there
