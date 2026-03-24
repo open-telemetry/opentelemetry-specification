@@ -4,7 +4,7 @@ This OTEP defines goals and acceptance criteria for making OpenTelemetry product
 
 ## Motivation
 
-OpenTelemetry has grown into a massive ecosystem supporting four telemetry signals across dozen programming languages. This growth has come with complexity that creates real barriers to production adoption.
+OpenTelemetry has grown into a massive ecosystem supporting four telemetry signals across a dozen programming languages. This growth has come with complexity that creates real barriers to production adoption.
 
 Community feedback consistently identifies several pain points. Experimental features break production deployments—users report configuration breaking between minor versions, silent failures in telemetry pipelines, and unexpected performance regressions that only appear at scale.
 
