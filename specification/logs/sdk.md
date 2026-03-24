@@ -41,6 +41,7 @@ weight: 3
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
+- [Concurrency requirements](#concurrency-requirements)
 
 <!-- tocstop -->
 
@@ -205,9 +206,12 @@ It consists of the following parameters:
   affected by this parameter and therefore bypass minimum severity filtering.
 
 * `trace_based`: A boolean indication of whether the logger should
-  only process log records associated with sampled traces.
+  drop log records associated with an unsampled trace.
 
   If not explicitly set, the `trace_based` parameter MUST default to `false`.
+
+  If `trace_based` is `false`, log records MUST NOT be affected because of this
+  parameter.
 
   If `trace_based` is `true`, log records associated with unsampled traces MUST
   be dropped by the `Logger`. A log record is considered associated with an unsampled trace
@@ -224,8 +228,7 @@ However, the changes MUST be eventually visible.
 If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
 the implementation SHOULD set it equal to the current time.
 
-**Status**: [Development](../document-status.md) - If an
-[Exception](api.md#emit-a-logrecord) is provided, the SDK MUST by default set attributes
+If an [Exception](api.md#emit-a-logrecord) is provided, the SDK MUST by default set attributes
 from the exception on the `LogRecord` with the conventions outlined in the
 [exception semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
 User-provided attributes MUST take precedence and MUST NOT be overwritten by
@@ -643,3 +646,18 @@ and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
 
 - [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)
+
+## Concurrency requirements
+
+**Status**: [Stable](../document-status.md)
+
+For languages which support concurrent execution the Logging SDKs provide
+specific guarantees and safeties.
+
+**LoggerProvider** - Logger creation, `ForceFlush` and `Shutdown` MUST be safe
+to be called concurrently.
+
+**Logger** - all methods MUST be safe to be called concurrently.
+
+**LogRecordExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
+concurrently.

@@ -6,7 +6,7 @@ This OTEP is largely based on the existing implementation in the OpenTelemetry C
 
 ## Trade-offs and mitigations
 
-When naming a metric instrument, there is a trade off between discoverability and ambiguity. For example, a metric called `system.cpu.load_average` is very discoverable, but the meaning of this metric is ambiguous. [Load average](https://en.wikipedia.org/wiki/Load_(computing)) is well defined on UNIX, but is not a standard metric on Windows. While discoverability is important, names must be unambiguous.
+When naming a metric instrument, there is a trade-off between discoverability and ambiguity. For example, a metric called `system.cpu.load_average` is very discoverable, but the meaning of this metric is ambiguous. [Load average](https://en.wikipedia.org/wiki/Load_(computing)) is well defined on UNIX, but is not a standard metric on Windows. While discoverability is important, names must be unambiguous.
 
 ## Prior art
 
@@ -61,9 +61,9 @@ In the tables below, units of `1` refer to a ratio value that is always in the r
 |Name                  |Units  |Instrument Type  |Value Type|Label Key|Label Values                       |
 |----------------------|-------|-----------------|----------|---------|-----------------------------------|
 |system.cpu.time       |seconds|SumObserver      |Double    |state    |idle, user, system, interrupt, etc.|
-|                      |       |                 |          |cpu      |1 - #cores                         |
+|                      |       |                 |          |CPU      |1 - #cores                         |
 |system.cpu.utilization|1      |UpDownSumObserver|Double    |state    |idle, user, system, interrupt, etc.|
-|                      |       |                 |          |cpu      |1 - #cores                         |
+|                      |       |                 |          |CPU      |1 - #cores                         |
 
 #### `system.memory.`
 
@@ -144,12 +144,12 @@ Runtime environments vary widely in their terminology, implementation, and relat
 
 Runtime level metrics specific to a certain runtime environment should be prefixed with `runtime.{environment}.` and follow the semantic conventions outlined in [Semantic Conventions](#semantic-conventions). For example, Go runtime metrics use `runtime.go.` as a prefix.
 
-Some programming languages have multiple runtime environments that vary significantly in their implementation, for example [Python has many implementations](https://wiki.python.org/moin/PythonImplementations). For these languages, consider using specific `environment` prefixes to avoid ambiguity, like `runtime.cpython.` and `runtime.pypy.`.
+Some programming languages have multiple runtime environments that vary significantly in their implementation, for example [Python has many implementations](https://www.python.org/download/alternatives). For these languages, consider using specific `environment` prefixes to avoid ambiguity, like `runtime.cpython.` and `runtime.pypy.`.
 
 ## Open questions
 
 - Should the individual runtimes have their specific naming conventions in the spec?
-- Is it ok to include instruments specific to an OS (or OS family) under a top-level prefix, as long as they are unambiguous? For example, naming inode related instruments, which of the below is preferred?
+- Is it OK to include instruments specific to an OS (or OS family) under a top-level prefix, as long as they are unambiguous? For example, naming inode related instruments, which of the below is preferred?
   1. Top level: `system.filesystem.inodes.*`
   2. UNIX family level: `system.unix.filesystem.inodes.*`
   3. One for each UNIX OS: `system.linux.filesystem.inodes.*`, `system.freebsd.filesystem.inodes.*`, `system.netbsd.filesystem.inodes.*`, etc.

@@ -8,7 +8,7 @@ Resource information, i.e. attributes associated with the entity producing
 telemetry, can currently be supplied to tracer and meter providers or appended
 in custom exporters. In addition to this, it would be useful to have a mechanism
 to automatically detect resource information from the host (e.g. from an
-environment variable or from aws, gcp, etc metadata) and apply this to all kinds
+environment variable or from AWS, GCP, etc metadata) and apply this to all kinds
 of telemetry. This will in many cases prevent users from having to manually
 configure resource information.
 
@@ -31,7 +31,7 @@ the order the detectors were added.
 
 A default implementation of a detector that reads resource data from the
 `OTEL_RESOURCE` environment variable will be included in the SDK. The
-environment variable will contain of a list of key value pairs, and these are
+environment variable will contain of a list of key-value pairs, and these are
 expected to be represented in a format similar to the [W3C
 Baggage](https://github.com/w3c/baggage/blob/main/baggage/HTTP_HEADER_FORMAT.md#header-content),
 except that additional semi-colon delimited metadata is not supported, i.e.:
@@ -165,7 +165,7 @@ specification](https://github.com/census-instrumentation/opencensus-specs/blob/m
 
 - Does this interfere with any other upcoming specification changes related to
   resources?
-- If custom detectors need to live outside the core repo, what is the
+- If custom detectors need to live outside the core repository, what is the
   expectation regarding where they should be hosted?
 - Also see the [Trade-offs and mitigations](#trade-offs-and-mitigations) section
 
