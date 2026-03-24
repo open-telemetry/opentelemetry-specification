@@ -23,7 +23,7 @@ so it can be used in conjunction with existing Prometheus instrumentation.
 
 Regardless of whether a Prometheus client library is used, the Prometheus
 Exporter MUST support version `0.0.4` of the
-[Text-based format](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md#text-based-format).
+[Text-based format](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md#prometheus-text-format).
 A Prometheus Exporter MAY support Exemplars and Exponential Histograms,
 which are [not currently supported by the Prometheus text format](../../compatibility/prometheus_and_openmetrics.md#differences-between-prometheus-formats),
 by supporting other Protocols, but is not required to implement them.
