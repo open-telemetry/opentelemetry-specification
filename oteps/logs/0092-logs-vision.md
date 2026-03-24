@@ -87,7 +87,7 @@ We will produce guidelines on how legacy applications can emit logs in a
 manner that makes them compatible with OpenTelemetry's approach and enables
 telemetry data correlation. We will also have a reasonable story around
 logs that are emitted by sources over which we may have no control and which
-emit logs in pre-defined formats via pre-defined mediums (e.g. flat file logs,
+emit logs in predefined formats via predefined mediums (e.g. flat file logs,
 Syslog, etc).
 
 We will have technical solutions or guidelines for using popular logging
@@ -120,7 +120,7 @@ legacy applications which may not emit Spans at all.
 ## Legacy Use Cases
 
 Logging technology has a decades-long history. There exists a large number of
-logging libraries, collection agents, network protocols, open-source and
+logging libraries, collection agents, network protocols, open source and
 proprietary backends. We recognize this fact and aim to make our proposals in a
 manner that honours valid legacy use-cases, while at the same time suggests
 better solutions where they are due.

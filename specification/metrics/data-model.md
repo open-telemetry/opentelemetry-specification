@@ -85,7 +85,7 @@ model supports reliability and statelessness controls, through the choice of
 cumulative and delta transport. The model supports cost controls, through
 spatial and temporal reaggregation.
 
-The OpenTelemetry collector is designed to accept metrics data in a number of
+The OpenTelemetry Collector is designed to accept metrics data in a number of
 formats, transport data using the OpenTelemetry data model, and then export into
 existing systems. The data model can be unambiguously translated into the
 Prometheus Remote Write protocol without loss of features or semantics, through
@@ -177,7 +177,7 @@ breadth of OTel metrics usage.
     - With cumulative temporality: stateful collector
 7. OTel SDK exports directly to 3P backend
 
-These are considered the "core" use-cases used to analyze tradeoffs and design
+These are considered the "core" use-cases used to analyze trade-offs and design
 decisions within the metrics data model.
 
 ### Out of Scope Use-cases
@@ -433,7 +433,7 @@ start):
 
 ![Cumulative Sum](img/model-cumulative-sum.png)
 
-There are various tradeoffs between using Delta vs. Cumulative aggregation, in
+There are various trade-offs between using Delta vs. Cumulative aggregation, in
 various use cases, e.g.:
 
 - Detecting process restarts
@@ -441,7 +441,7 @@ various use cases, e.g.:
 - Push vs. Pull based metric reporting
 
 OTLP supports both models, and allows APIs, SDKs and users to determine the
-best tradeoff for their use case.
+best trade-off for their use case.
 
 ### Gauge
 
@@ -679,10 +679,10 @@ which scales can be usefully applied.  Regardless of scale, producers
 SHOULD ensure that the index of any encoded bucket falls within the
 range of a signed 32-bit integer.  This recommendation is applied to
 limit the width of integers used in standard processing pipelines such
-as the OpenTelemetry collector.  The wire-level protocol could be
-extended for 64-bit bucket indices in a future release.
+as the OpenTelemetry Collector.  The wire-level protocol could be
+extended for 64-bit bucket indexes in a future release.
 
-Producers use a mapping function to compute bucket indices.  Producers
+Producers use a mapping function to compute bucket indexes.  Producers
 are presumed to support IEEE double-width floating-point numbers with
 11-bit exponent and 52-bit significand.  The pseudo-code below for
 mapping values to exponents refers to the following constants:
@@ -718,8 +718,8 @@ reference implementations.
 For scale zero, the index of a value equals its normalized base-2
 exponent, meaning the value of *exponent* in the base-2 fractional
 representation `1._significand_ * 2**_exponent_`.  Normal IEEE 754
-double-width floating point values have indices in the range
-`[-1022, +1023]` and subnormal values have indices in the range
+double-width floating point values have indexes in the range
+`[-1022, +1023]` and subnormal values have indexes in the range
 `[-1074, -1023]`.  This may be written as:
 
 ```golang
@@ -792,7 +792,7 @@ func MapToIndexScale0(value float64) int {
 For negative scales, the index of a value equals the normalized
 base-2 exponent (as by `MapToIndexScale0()` above) shifted to the right
 by `-scale`.  Note that because of sign extension, this shift performs
-correct rounding for the negative indices.  This may be written as:
+correct rounding for the negative indexes.  This may be written as:
 
 ```golang
 // MapToIndexNegativeScale computes a bucket index for scales <= 0.
@@ -892,7 +892,7 @@ Implementations are expected to verify that their mapping function and
 inverse mapping function are correct near the lowest and highest IEEE
 floating point values.  A mathematically correct formula may produce
 the wrong result, because of accumulated floating point calculation error
-or underflow/overflow of intermediate results.  In the Golang
+or underflow/overflow of intermediate results.  In the Go
 reference implementation, for example, the above formula computes
 `+Inf` for the maximum-index bucket.  In this case, it is appropriate
 to subtract `1<<scale` from the index and multiply the result by `2`.
@@ -906,7 +906,7 @@ func LowerBoundary(index, scale int) float64 {
 }
 ```
 
-In the Golang reference implementation, for example, the above formula
+In the Go reference implementation, for example, the above formula
 does not accurately compute the lower boundary of the minimum-index
 bucket (it is a subnormal value).  In this case, it is appropriate to
 add `1<<scale` to the index and divide the result by `2`.
@@ -937,14 +937,14 @@ such values counted in the adjacent buckets.
 
 #### ExponentialHistogram: Consumer Recommendations
 
-ExponentialHistogram bucket indices are expected to map into buckets
+ExponentialHistogram bucket indexes are expected to map into buckets
 where both the upper and lower boundaries can be represented
 using IEEE 754 double-width floating point values.  Consumers MAY
 round the unrepresentable boundary of a partially representable bucket
 index to the nearest representable value.
 
 Consumers SHOULD reject ExponentialHistogram data with `scale` and
-bucket indices that overflow or underflow this representation.
+bucket indexes that overflow or underflow this representation.
 Consumers that reject such data SHOULD warn the user through error
 logging that out-of-range data was received.
 

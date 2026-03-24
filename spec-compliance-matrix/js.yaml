@@ -512,7 +512,7 @@ sections:
       - name: The `Parse` operation accepts the configuration YAML file format
         status: '+'
       - name: The `Parse` operation performs environment variable substitution
-        status: '?'
+        status: '+'
       - name: The `Parse` operation returns configuration model
         status: '+'
       - name: The `Parse` operation resolves plugin component configuration to `properties`
@@ -520,15 +520,15 @@ sections:
       - name: '`Create` SDK components'
         status: '?'
       - name: The `Create` operation accepts configuration model
-        status: '?'
+        status: '+'
       - name: The `Create` operation returns `TracerProvider`
         status: '?'
       - name: The `Create` operation returns `MeterProvider`
-        status: '?'
+        status: '+'
       - name: The `Create` operation returns `LoggerProvider`
-        status: '?'
+        status: '+'
       - name: The `Create` operation returns `Propagators`
-        status: '?'
+        status: '+'
       - name: The `Create` operation calls `CreateComponent` of corresponding `PluginComponentProvider` when encountering plugin components
         status: '?'
       - name: Register a `PluginComponentProvider`
