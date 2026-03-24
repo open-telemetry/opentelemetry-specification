@@ -21,7 +21,7 @@ formats is required. Implementing more than one format is optional.
 | Get a Tracer |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Get a Tracer with schema_url |  | + | + | + | + |  |  | + | + | + |  |  | + |
 | Get a Tracer with scope attributes |  | + |  |  | + |  |  | + | + | + |  |  | + |
-| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + | + |  |  |  | + |
+| Associate Tracer with InstrumentationScope |  | + |  | + | + | + |  | + | + | + |  |  | + |
 | Safe for concurrent calls |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Shutdown (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | ForceFlush (SDK only required) |  | + | + | + | + | + | + | + | + | + | + | + | + |
@@ -115,15 +115,15 @@ formats is required. Implementing more than one format is optional.
 | `AsynchronousCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | `Histogram` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | `AsynchronousGauge` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
-| `Gauge` instrument is supported. |  | + | - | + | + | + | - | + | + | - | - |  | - |
+| `Gauge` instrument is supported. |  | + | - | + | + | + | - | + | + | + | - |  | - |
 | `UpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | `AsynchronousUpDownCounter` instrument is supported. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | Instruments have `name` |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | Instruments have kind. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | Instruments have an optional unit of measure. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | Instruments have an optional description. |  | + | + | + | + | + | + | + | + | + | + |  | - |
-| A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`. |  | + | + | + | + | + | + |  |  |  |  |  | - |
-| Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name. |  |  | + |  |  | - | + |  |  |  |  |  | - |
+| A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under the same `Meter` using the same `name`. |  | + | + | + | + | + | + |  |  | + |  |  | - |
+| Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name. |  |  | + |  |  | - | + |  |  | + |  |  | - |
 | It is possible to register two instruments with same `name` under different `Meter`s. |  | + | + | + | + |  | + |  | + | + | + |  | - |
 | Instrument names conform to the specified syntax. |  | + | + | + | + | + | + |  |  | + |  |  | - |
 | Instrument units conform to the specified syntax. |  | - | + |  | + | + | + |  | + | + | + |  | - |
@@ -155,7 +155,7 @@ formats is required. Implementing more than one format is optional.
 | The `Sum` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The `LastValue` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The `ExplicitBucketHistogram` aggregation is available. |  | + | + | + | + | + | + | + | + | + | + |  | - |
-| The `ExponentialBucketHistogram` aggregation is available. |  | + |  | + | + | + |  |  |  |  | + |  | - |
+| The `ExponentialBucketHistogram` aggregation is available. |  | + |  | + | + | + |  |  |  | + | + |  | - |
 | The metrics Reader implementation supports registering metric Exporters |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind. |  | + | + | + | + | + | + |  |  | - | - |  | - |
 | The metrics Reader implementation supports configuring the default temporality on the basis of instrument kind. |  | + | + | + | + | + | + |  | + | + |  |  | - |
