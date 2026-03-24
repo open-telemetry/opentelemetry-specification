@@ -15,7 +15,7 @@ OpenTelemetry needs to address two fundamental problems:
 The first problem is well outlined in (not accepted) [OTEP 4316](https://github.com/open-telemetry/opentelemetry-specification/pull/4316).
 Fundamentally, while we need an immutable identity, the reality is that `Resource`
 in today's OpenTelemetry usage is not strong enough to support key use cases. For example,
-OpenTelemetry JS, in the node.js environment, cannot guarantee that all identifying
+OpenTelemetry JS, in the Node.js environment, cannot guarantee that all identifying
 attributes for Resource are discovered prior to SDK startup, leading to an "eventual identity" situation
 that must be addressed in the Specification. Additionally, our Client/Browser SIG has been
 trying to model the notion of "User Session" which has a much shorter lifespan than the SDK itself, so
@@ -24,7 +24,7 @@ requiring a single identity that is both immutable and matches the SDK lifetime 
 However, [OTEP 4316](https://github.com/open-telemetry/opentelemetry-specification/pull/4316) explores
 relaxing the immutability restriction vs. providing a new mechanism. During prototyping,
 initially this seemed to be easily accomplished, but ran into major complications both in interactions
-with OpAmp (where a stable identity for the SDK is desired), and in designing a Metrics SDK, where
+with OpAMP (where a stable identity for the SDK is desired), and in designing a Metrics SDK, where
 changes in Resource mean a dynamic and divergent storage strategy, without a priori knowledge of whether these resource mutations are
 relevant to the metric or not.
 
@@ -146,7 +146,7 @@ implicit View definition, and we leverage metric advice to allow sending
 attributes than is naturally used when reporting the metric.
 
 As called out in the description, [OTEP 4316](https://github.com/open-telemetry/opentelemetry-specification/pull/4316)
-proposes making resource fully mutable, which comes with its own set of tradeoffs.
+proposes making resource fully mutable, which comes with its own set of trade-offs.
 
 Today, Semantic Conventions already defines `Entity` and uses it to group and
 report `Resource` attributes cohesively. Additionally, Semantic convention only
