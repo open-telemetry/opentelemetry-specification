@@ -146,14 +146,13 @@ The data format uses two kinds of attributes:
    (see [next section](#dictionary-use-in-keyvalue)).
 
 2. **[`KeyValueAndUnit`](#message-keyvalueandunit) attributes**:
-   a Profiles-specific encoding inherited from pprof (where it is known
-   as `Label`). These are stored in the [`ProfilesDictionary.attribute_table`](#message-profilesdictionary)
+   a Profiles-specific encoding of an attribute. These are stored in the [`ProfilesDictionary.attribute_table`](#message-profilesdictionary)
    and referenced by index from [`Profile`](#message-profile),
    [`Sample`](#message-sample), [`Mapping`](#message-mapping) and [`Location`](#message-location)
    messages. In addition to a key and value they carry an optional unit
-   field, allowing attributes such as `"allocation_size": 128 bytes` to
-   express their unit explicitly rather than relying solely on semantic
-   conventions.
+   field, allowing attributes such as `"allocation_size": 128 By`
+   (unit in [UCUM](https://ucum.org/)) to express their unit explicitly
+   rather than relying solely on semantic conventions.
 
 ### Dictionary use in KeyValue
 
@@ -380,7 +379,7 @@ for keys and allows encoding optional unit information.
 | ----- | ---- | ----------- |
 | key_strindex | int32 | Index into [`ProfilesDictionary.string_table`](#message-profilesdictionary). |
 | value | [`AnyValue`](../common/README.md) | The value of the attribute. |
-| unit_strindex | int32 | Index into [`ProfilesDictionary.string_table`](#message-profilesdictionary). 0 indicates implicit (by semantic convention) or undefined unit. |
+| unit_strindex | int32 | Index into [`ProfilesDictionary.string_table`](#message-profilesdictionary). 0 indicates implicit (by semantic convention) or undefined unit. If present, the unit string should be in [UCUM](https://ucum.org) format. |
 
 ## Relationships with other signals
 
