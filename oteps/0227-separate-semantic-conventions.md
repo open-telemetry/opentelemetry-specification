@@ -37,11 +37,11 @@ moved, with documentation denoting the move, but preserving previous contents.
 Additionally, if the semantic conventions eventually move to domain-specific
 directory structure (e.g. `docs/{domain}/README.md`, with trace, metrics, events
 in the same file), then this can be refactored in the new repository, preserving
-git history.
+Git history.
 
 There will also be the following exceptions in the specification:
 
-- Semantic conventions used to implement API/SDK details will be fully specified in the `opentelemetry-specification` repo
+- Semantic conventions used to implement API/SDK details will be fully specified in the `opentelemetry-specification` repository
   and will not be allowed to change in the Semantic Convention directory.
   - Error/Exception handling will remain in the specification.
   - SDK configuration interaction w/ semantic convention will remain in the
@@ -81,7 +81,7 @@ seamlessly moved to their new location. This process lists steps in order:
 - Semantic conventions in the Specification will be marked as moved with
   links to the new location.
   - The semconv YAML files in the specification repository *will be deleted*.
-  - All semconv markdown files will be updated such that:
+  - All semconv Markdown files will be updated such that:
     - They no longer generate from YAML files.
     - They include a header denoting deprecation and move to the new repository.
 - Instrumentation authors will update their code generation to pull from the new

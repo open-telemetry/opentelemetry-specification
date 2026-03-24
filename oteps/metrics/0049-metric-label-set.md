@@ -1,6 +1,6 @@
 # Metric `LabelSet` specification
 
-Introduce a first-class `LabelSet` API type as a handle on a pre-defined set of labels for the Metrics API.
+Introduce a first-class `LabelSet` API type as a handle on a predefined set of labels for the Metrics API.
 
 ## Motivation
 
@@ -12,7 +12,7 @@ The Metrics API supports three calling conventions: the Handle convention, the D
 
 ## Explanation
 
-Metric instrument APIs which presently take labels in the form `{ Key: Value, ... }` will be updated to take an explicit `LabelSet`.  The `Meter.Labels()` API method supports getting a `LabelSet` from the API, allowing the programmer to acquire a pre-defined label set.  Here are several examples of `LabelSet` re-use.  Assume we have two instruments:
+Metric instrument APIs which presently take labels in the form `{ Key: Value, ... }` will be updated to take an explicit `LabelSet`.  The `Meter.Labels()` API method supports getting a `LabelSet` from the API, allowing the programmer to acquire a predefined label set.  Here are several examples of `LabelSet` re-use.  Assume we have two instruments:
 
 ```golang
 var (
@@ -49,7 +49,7 @@ Of course, repeated calls to `Meter.RecordBatch()` could re-use a `LabelSet` as 
 ### Ordered `LabelSet` option
 
 As a language-level decision, APIs may support _ordered_ LabelSet
-construction, in which a pre-defined set of ordered label keys is
+construction, in which a predefined set of ordered label keys is
 defined such that values can be supplied in order.  This allows a
 faster code path to construct the `LabelSet`.  For example,
 
