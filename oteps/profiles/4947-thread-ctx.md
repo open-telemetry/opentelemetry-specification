@@ -75,8 +75,8 @@ This is the attached thread record itself. SDK-side implementations may choose t
 
 | Name            |            | Data type                          | Notes                                                                                                                                                    |
 | :-------------- | :--------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| trace-id        |            | uint8[16]                          | Zeroes can be used to indicate none active. If either of trace-id/span-id are set, both must be set.                                                     |
-| span-id         |            | uint8[8]                           |                                                                                                                                                          |
+| trace-id        |            | uint8[16]                          | In W3C Trace Context format. Zeroes can be used to indicate none active. If either of trace-id/span-id are set, both must be set.                        |
+| span-id         |            | uint8[8]                           | In W3C Trace Context format.                                                                                                                             |
 | valid           |            | uint8                              | This value is set to 1 when the record is valid. Consumers should ignore this record if any other value is set  when they read.                          |
 | _reserved       |            | uint8                              | One spare byte here to align attrs-data-size at two byte boundary.                                                                                       |
 | attrs-data-size |            | uint16                             | Size of `attr-data`. This lets the reader know when it has consumed all `attr-data` records within the TLS buffer.                                       |
