@@ -373,7 +373,7 @@ message Policy {
 }
 ```
 
-Every policy MUST have an id and name. Each policy MAY specify associated labels
+Every policy MUST have an ID and name. Each policy MAY specify associated labels
 and metadata about its creation. Each policy MUST specify only one target
 configuration to promote specificity for users when creating a policy.
 
@@ -635,8 +635,8 @@ Implementations MUST be fail-open:
 
 - If a policy fails to parse, it MUST be skipped. Other policies MUST continue
   to execute.
-- If a policy fails to evaluate (e.g., invalid regex at runtime), the telemetry
-  MUST pass through unmodified by that policy.
+- If a policy fails to evaluate (e.g., invalid regular expression at runtime),
+  the telemetry MUST pass through unmodified by that policy.
 - Policy failures MUST NOT cause telemetry loss.
 
 Implementations SHOULD log policy evaluation errors for debugging.
@@ -680,10 +680,10 @@ misconfigured or ineffective policies. Status SHOULD be scoped to each provider
 responsible for ensuring its policies are not disruptive to the system.
 
 **Resolve duplicate policy IDs by provider priority.** When multiple providers
-supply a policy with the same `id`, the client must decide which one to keep.
-Implementations SHOULD assign each provider a priority — for example, OPAMP (1),
+supply a policy with the same ID, the client must decide which one to keep.
+Implementations SHOULD assign each provider a priority — for example, OpAMP (1),
 HTTP (2), FILE (3), CUSTOM (user-defined) — where a lower number is higher
-priority. When two policies share the same `id`, the policy from the
+priority. When two policies share the same ID, the policy from the
 higher-priority provider wins and the other is dropped. Where a policy from a
 lower-priority provider cannot be merged consistently with the higher-priority
 version, the lower-priority policy SHOULD be dropped in its entirety.
@@ -838,7 +838,7 @@ transforming the data before passing it to the next.
 ### OPA (Open Policy Agent)
 
 OPA provides a general-purpose policy engine using the Rego query language.
-Originally designed for authorization and admission control in cloud-native
+Originally designed for authorization and admission control in cloud native
 environments, OPA can evaluate arbitrary policies against structured data. It is
 widely used in Kubernetes admission control, API authorization, and
 infrastructure policy enforcement.
@@ -897,7 +897,7 @@ configured in YAML as part of the collector pipeline.
 
 - Rules are embedded in pipeline configuration, not standalone.
 - Adding rules requires understanding the full pipeline context.
-- Not portable to SDKs or other runtimes without reimplementation.
+- Not portable to SDKs or other runtimes without another implementation.
 - No native support for dynamic updates without configuration reload.
 - Scale is limited by the sequential processing model.
 - No defined grammar for OTTL, making it impossible to run outside the
@@ -963,11 +963,11 @@ meter_provider:
                 endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://localhost:4318}/v1/metric
 ```
 
-Here, I've created a custom component in java to allow filtering which metrics
+Here, I've created a custom component in Java to allow filtering which metrics
 are read. However, to insert / use this component I need to have all of the
 following:
 
-- Know that this component exists in the java SDK
+- Know that this component exists in the Java SDK
 - Know how to wire it into any existing metric export pipeline (e.g. my reader
   wraps another reader that has the real export config). Note: This likely means
   I need to understand the rest of the exporter configuration or be able to
@@ -1011,7 +1011,7 @@ experiments, or anything else that the future may bring.
     the OpenTelemetry Collector and other Go-based telemetry components.
 - [usetero/policy-rs](https://github.com/usetero/policy-rs)
   - Rust implementation of the policy specification, leveraging Hyperscan for
-    high-performance regex matching.
+    high-performance regular expression matching.
 - [usetero/policy-zig](https://github.com/usetero/policy-zig)
   - Zig implementation of the policy specification, targeting zero heap
     allocations on the hot path and maximum portability.
