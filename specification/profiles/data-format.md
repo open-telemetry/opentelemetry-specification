@@ -384,7 +384,7 @@ for keys and allows encoding optional unit information.
 | ----- | ---- | ----------- |
 | key_strindex | int32 | Index into [`ProfilesDictionary.string_table`](#message-profilesdictionary). |
 | value | [`AnyValue`](../common/README.md) | The value of the attribute. |
-| unit_strindex | int32 | Index into [`ProfilesDictionary.string_table`](#message-profilesdictionary). 0 indicates implicit (by semantic convention) or undefined unit. If present, the unit string should be in [UCUM](https://ucum.org) format. |
+| unit_strindex | int32 | Index into [`ProfilesDictionary.string_table`](#message-profilesdictionary). 0 indicates implicit (by semantic convention) or undefined unit. If present, the unit string SHOULD be in [UCUM](https://ucum.org) format. |
 
 ## Relationships with other signals
 
