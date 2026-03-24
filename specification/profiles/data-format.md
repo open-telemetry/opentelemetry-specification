@@ -254,6 +254,11 @@ Measurements encoded in this format should follow the following conventions:
 | original_payload | bytes | The original payload bytes. It MUST be set together with `original_payload_format` or both left unset. [optional] |
 | attribute_indices | repeated int32 | References to attributes in [`ProfilesDictionary.attribute_table`](#message-profilesdictionary). [optional] |
 
+The `original_payload` field MAY be used when converting from a source format (e.g. JFR)
+that carries information which cannot be losslessly represented in the Profiles format.
+Including the original data allows receivers to store or re-export the data without
+loss. Because the original payload can be large, its inclusion is optional.
+
 ### Message `Sample`
 
 Each `Sample` records values encountered in a program context (typically a
