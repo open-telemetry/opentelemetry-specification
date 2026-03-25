@@ -46,7 +46,7 @@ weight: 1
   * [Wrapping a SpanContext in a Span](#wrapping-a-spancontext-in-a-span)
 - [SpanKind](#spankind)
 - [Link](#link)
-- [Concurrency](#concurrency)
+- [Concurrency requirements](#concurrency-requirements)
 - [Included Propagators](#included-propagators)
 - [Behavior of the API in the absence of an installed SDK](#behavior-of-the-api-in-the-absence-of-an-installed-sdk)
 
@@ -73,7 +73,7 @@ The representation of those values is language specific.
 
 #### Timestamp
 
-A timestamp is the time elapsed since the Unix epoch.
+A timestamp is the time elapsed since the UNIX epoch.
 
 * The minimal precision is milliseconds.
 * The maximal precision is nanoseconds.
@@ -200,8 +200,6 @@ The `Tracer` SHOULD provide functions to:
 
 #### Enabled
 
-**Status**: [Development](../document-status.md)
-
 To help users avoid performing computationally expensive operations when
 creating `Span`s, a `Tracer` SHOULD provide this `Enabled` API.
 
@@ -279,14 +277,14 @@ When extracting a `SpanContext` through the [Propagators API](../context/api-pro
 
 ### TraceState
 
-`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by an immutable list of string key/value pairs and
+`TraceState` is a part of [`SpanContext`](./api.md#spancontext), represented by an immutable list of string key-value pairs and
 formally defined by the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#tracestate-header).
 Tracing API MUST provide at least the following operations on `TraceState`:
 
 * Get value for a given key
-* Add a new key/value pair
+* Add a new key-value pair
 * Update an existing value for a given key
-* Delete a key/value pair
+* Delete a key-value pair
 
 These operations MUST follow the rules described in the [W3C Trace Context specification](https://www.w3.org/TR/trace-context/#mutating-the-tracestate-field).
 All mutating operations MUST return a new `TraceState` with the modifications applied.
@@ -351,7 +349,7 @@ first sub-operation, and an end time of when the final sub-operation is complete
 This includes:
 
 - receiving the data from the request
-- parsing of the data (e.g. from a binary or json format)
+- parsing of the data (e.g. from a binary or JSON format)
 - any middleware or additional processing logic
 - business logic
 - construction of the response
@@ -833,21 +831,24 @@ The API documentation MUST state that adding links at span creation is preferred
 to calling `AddLink` later, for contexts that are available during span creation,
 because head sampling decisions can only consider information present during span creation.
 
-## Concurrency
+## Concurrency requirements
 
 For languages which support concurrent execution the Tracing APIs provide
 specific guarantees and safeties. Not all of API functions are safe to
 be called concurrently.
 
-**TracerProvider** - all methods are safe to be called concurrently.
+**TracerProvider** - all methods MUST be documented that implementations need to
+be safe for concurrent use by default.
 
-**Tracer** - all methods are safe to be called concurrently.
+**Tracer** - all methods MUST be documented that implementations need to be safe
+for concurrent use by default.
 
-**Span** - All methods of Span are safe to be called concurrently.
+**Span** - all methods MUST be documented that implementations need to be safe
+for concurrent use by default.
 
-**Event** - Events are immutable and safe to be used concurrently.
+**Event** - Events are immutable and MUST be safe for concurrent use by default.
 
-**Link** - Links are immutable and safe to be used concurrently.
+**Link** - Links are immutable and SHOULD be safe for concurrent use by default.
 
 ## Included Propagators
 

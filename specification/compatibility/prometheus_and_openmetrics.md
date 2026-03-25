@@ -137,59 +137,125 @@ A [Prometheus Unknown](https://prometheus.io/docs/instrumenting/exposition_forma
 
 ### Histograms
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-A [Prometheus Histogram](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Histogram.
+A [Prometheus Histogram](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#histogram) MUST be converted to an [OTLP Histogram](https://opentelemetry.io/docs/specs/otel/metrics/data-model/#histogram).
 
-Multiple Prometheus histogram metrics MUST be merged together into a single OTLP Histogram:
+Prometheus bucket boundaries become OTLP explicit bounds, except the +Inf boundary which is dropped. The sample values associated with the Prometheus bucket boundaries become OTLP bucket counts, including the value associated with the +Inf boundary. The Prometheus Histogram Count becomes the OTLP Histogram Count and Prometheus Histogram Sum becomes OTLP Histogram Sum.
 
-* The `le` label on the `_bucket`-suffixed metric is used to identify and order histogram bucket boundaries. Each Prometheus line produces one bucket count on the resulting histogram. Each value for the `le` label except `+Inf` produces one bucket boundary.
-* Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
+In the text format, Prometheus histograms buckets, count and sum are sent as separate samples and they MUST be merged together when forming an OTLP Histogram. Samples with a `_bucket` suffix will have an `le` label denoting the bucket boundary, whose value is the total count of observations less than the bucket boundary. The count of the OpenTelemetry bucket is computed as the difference between the bucket and the next-lowest bucket, if it exists. Lines with `_count` and `_sum` suffixes are used to determine the histogram's count and sum.
+
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the histogram's sum MUST be unset.
 
 ### Native Histograms
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 A [Prometheus Native Histogram](https://prometheus.io/docs/specs/native_histograms/)
 with standard (exponential) schema (i.e. schemas -4 to 8) and which are
 of the integer and counter [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
 MUST be converted to an OTLP Exponential Histogram as follows:
 
+- If the Native Histogram `ResetHint` (or `CounterResetHint`) indicates gauge
+  type, the native histogram is dropped. Otherwise this field is ignored.
 - `Schema` is converted to the Exponential Histogram `Scale`.
 - The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
-  Stale NaN value. Otherwise,
-  - `Count` is converted to Exponential Histogram `Count`.
-  - `Sum` is converted to the Exponential Histogram `Sum`.
+  [Stale NaN value](https://github.com/prometheus/prometheus/blob/main/model/value/value.go).
+  Otherwise,
+  - `Count` is made equal to the sum of all valid bucket counts by adding up
+    - the `ZeroCount`,
+    - the bucket counts from the sparse bucket layout described below, except
+      for overflow buckets.
+  - `Sum` is converted to the Exponential Histogram `Sum`. Note that the `Sum`
+    may be `NaN` in case the Native Histogram observed the value `NaN` or both
+    `-Inf` and `+Inf`. The `Sum` may also be `-Inf` or `+Inf`.
 - `Timestamp` is converted to the Exponential Histogram `TimeUnixNano` after
   converting milliseconds to nanoseconds.
 - `ZeroCount` is converted directly to the Exponential Histogram `ZeroCount`.
 - `ZeroThreshold`, is converted to the Exponential Histogram `ZeroThreshold`.
-- The sparse bucket layout represented by `PositiveSpans` and `PositiveDeltas` is
-  converted to the Exponential Histogram dense layout represented by `Positive`
-  bucket counts and `Offset`. The same holds for `NegativeSpans` and
-  `NegativeDeltas`. Note that Prometheus Native Histograms buckets are indexed by
-  upper boundary while Exponential Histograms are indexed by lower boundary, the
-  result being that the Offset fields are different-by-one.
+- The [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+  represented by `PositiveSpans` and `PositiveDeltas` is converted to the
+  Exponential Histogram dense layout represented by `Positive` bucket counts and
+  `Offset`.
+
+  - The `PositiveDeltas` are delta encoded bucket counts, where the first value
+    is an absolute bucket count and each subsequent value is a delta to the
+    previous value.
+  - The Exponential Histogram `Positive` `Offset` is set to the first
+    `PositiveSpan`'s `Offset` minus 1 (`PositiveSpans[0].Offset-1`) if there
+    are spans, otherwise left at 0. The minus one is because Prometheus Native
+    histogram buckets are indexed by their upper boundary while Exponential
+    Histograms are indexed by their lower boundary.
+  - The `PositiveSpans` encode the index into the `Positive` bucket counts for
+    each value in the `PositiveDeltas`. The index starts from 0 for the first
+    span, for subsequent spans the span's `Offset` is added to the previous
+    index. The span's `Length` indicates the number of continuous indexes to
+    use.
+  - The Native Histogram may contain overflow buckets. If converted to
+    an Exponential Histogram bucket, the overflow bucket would map to values
+    outside the IEEE float range. Overflow buckets MUST be dropped and not
+    counted in the overall `Count`.
+
+- The `NegativeSpans` and `NegativeDeltas` are converted the same way as the
+  positive buckets.
 - `Min` and `Max` are not set.
-- `StartTimeUnixNano` is set to the `Created` timestamp, if available.
+- `StartTimeUnixNano` is set to the `Start Timestamp` timestamp, if available.
+- `AggregationTemporality` is set to `cumulative`.
+
+A Native histogram with custom buckets (NHCB) schema (i.e. schema -53) and which
+are of the integer and counter [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
+MUST be converted to an OTLP Histogram as follows:
+
+- If the Native Histogram `ResetHint` (or `CounterResetHint`) indicates gauge
+  type, the native histogram is dropped. Otherwise this field is ignored.
+- The `NoRecordedValue` flag is set to `true` if the `Sum` is equal to the
+  [Stale NaN value](https://github.com/prometheus/prometheus/blob/main/model/value/value.go).
+  Otherwise,
+  - `Count` is converted to Histogram `Count`. Note that the `Count`
+    is equal to the sum of all bucket counts.
+  - `Sum` is converted to the Histogram `Sum`. Note that the `Sum`
+    may be `NaN` in case the Native Histogram observed the value `NaN` or both
+    `-Inf` and `+Inf`. The `Sum` may also be `-Inf` or `+Inf`.
+- `Timestamp` is converted to the Histogram `TimeUnixNano` after
+  converting milliseconds to nanoseconds.
+- `Min` and `Max` are not set.
+- [`CustomValues`](https://prometheus.io/docs/specs/native_histograms/#custom-values)
+  is converted to bucket boundaries. The `+Inf` bucket is implicit, therefore
+  `N` `CustomValues` represent `N+1` Histogram bucket counts.
+- The [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+  represented by `PositiveSpans` and `PositiveDeltas` is converted to
+  Histogram bucket counts.
+
+  - The `PositiveDeltas` are delta encoded bucket counts, where the first value
+    is an absolute bucket count and each subsequent value is a delta to the
+    previous value.
+  - The `PositiveSpans` encode the index into the bucket counts for each value
+    in the `PositiveDeltas`. The index starts from the `Offset` in the first
+    span and for subsequent spans the span's `Offset` is added to the previous
+    index. The span's `Length` indicates the number of continuous indexes to
+    use.
+
+- `StartTimeUnixNano` is set to the `Start Timestamp`, if available.
 - `AggregationTemporality` is set to `cumulative`.
 
 Native histograms of the float or gauge flavors MUST be dropped.
 
-Native Histograms with `Schema` outside of the range [-4, 8] MUST be dropped.
+Native Histograms with `Schema` outside of the range [-4, 8] and not equal to
+-53 MUST be dropped.
 
 ### Summaries
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-[Prometheus Summary](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Summary.
+[Prometheus Summary](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an [OTLP Summary](https://opentelemetry.io/docs/specs/otel/metrics/data-model/#summary-legacy).
 
-Multiple Prometheus metrics are merged together into a single OTLP Summary:
+Prometheus Summary Quantiles become OTLP Summary Quantiles. Prometheus Summary Count becomes OTLP Summary Count and Prometheus Summary Sum becomes OTLP Summary Sum.
 
-* The `quantile` label on non-suffixed metrics is used to identify quantile points in summary metrics. Each Prometheus line produces one quantile on the resulting summary.
-* Lines with `_count` and `_sum` suffixes are used to determine the summary's count and sum.
+In the text format, samples without suffixes have the `quantile` label to identify the quantile points of the Prometheus Summary. Extra samples with the same metric name but with the suffixes `_count` and `_sum` are used to identify the Prometheus Summary Count and Sum respectively.
+
+In text formats where Prometheus Summaries are represented by multiple samples, samples with same [metric family](https://github.com/prometheus/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily) name MUST be merged together into a single OTLP Summary.
+
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the summary's sum MUST be [set to zero.](https://github.com/open-telemetry/opentelemetry-proto/blob/d8729d40f629dba12694b44c4c32c1eab109b00a/opentelemetry/proto/metrics/v1/metrics.proto#L601)
 
@@ -219,7 +285,7 @@ OpenTelemetry histograms. Exemplars on counter metric points SHOULD be
 converted to exemplars on OpenTelemetry sums. If present, the timestamp
 MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
 retrieved from the `trace_id` and `span_id` label keys, respectively.  All
-labels not used for the trace and span ids MUST be added to the OpenTelemetry
+labels not used for the trace and span IDs MUST be added to the OpenTelemetry
 exemplar as attributes.
 
 ### Instrumentation Scope
@@ -315,7 +381,7 @@ metric points, the exporter SHOULD warn the user through error logging.
 
 The Name of an OTLP metric MUST be added as the
 [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
-Prometheus naming conventions encourage metric names to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
+Prometheus naming conventions encourage metric names to match the regular expression: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
 in the metric name SHOULD be replaced with the `_` character by default, aiming for compatibility with Prometheus conventions. Multiple
 consecutive `_` characters SHOULD be replaced with a single `_` character.
 
@@ -461,7 +527,7 @@ OpenTelemetry Metric Attributes MUST be converted to
 String Attribute values are converted directly to Metric Attributes, and
 non-string Attribute values MUST be converted to string attributes following
 the [attribute specification](../common/README.md#attribute).  Prometheus
-naming conventions encourage metric names to match the following regex:
+naming conventions encourage metric names to match the following regular expression:
 `[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replace with the `_` character.
 Multiple consecutive `_` characters SHOULD be replaced with a single `_`
 character. This may cause ambiguity in scenarios where multiple similar-named
