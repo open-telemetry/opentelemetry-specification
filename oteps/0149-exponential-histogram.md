@@ -4,11 +4,11 @@ Add exponential bucketing to histogram protobuf
 
 ## Motivation
 
-Currently, the OTEL protobuf [protocol](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto) only supports explicit bound buckets. Each bucket's bound and count must be explicitly defined. This is inefficient to transport buckets whose bounds have a pattern, such as exponential (ie. log scale) buckets. More importantly, without bucket pattern info, the receiver may not be able to optimize its processing on these buckets. With a protocol that also supports exponential buckets, the bounds can be encoded with just a few parameters, regardless of the number of buckets, and the receiver can optimize processing based on the knowledge that these buckets are exponential.
+Currently, the OTel protobuf [protocol](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/metrics/v1/metrics.proto) only supports explicit bound buckets. Each bucket's bound and count must be explicitly defined. This is inefficient to transport buckets whose bounds have a pattern, such as exponential (ie. log scale) buckets. More importantly, without bucket pattern info, the receiver may not be able to optimize its processing on these buckets. With a protocol that also supports exponential buckets, the bounds can be encoded with just a few parameters, regardless of the number of buckets, and the receiver can optimize processing based on the knowledge that these buckets are exponential.
 
 The explicit bucket type will be kept, as a fallback for arbitrary bucket bounds. For example, Prometheus histograms often come with arbitrary user defined bounds.
 
-Exponential buckets are chosen to be added because they are very good at representing [long tail](https://en.wikipedia.org/wiki/Long_tail) distributions, which are common in the OTEL target application like response time measurement. Exponential buckets (ie. log scale buckets) need far fewer buckets than linear scale buckets to cover the wide range of a long tail distribution. Furthermore, percentiles/quantiles can be computed from exponential buckets with constant relative error across the full range.
+Exponential buckets are chosen to be added because they are very good at representing [long tail](https://en.wikipedia.org/wiki/Long_tail) distributions, which are common in the OTel target application like response time measurement. Exponential buckets (ie. log scale buckets) need far fewer buckets than linear scale buckets to cover the wide range of a long tail distribution. Furthermore, percentiles/quantiles can be computed from exponential buckets with constant relative error across the full range.
 
 ## Explanation
 
@@ -45,7 +45,7 @@ message ExponentialBucketCounts {
 
 Notes:
 
-* ExponentialBuckets will be added as "oneof" the bucket types in [#272](https://github.com/open-telemetry/opentelemetry-proto/pull/272)
+* ExponentialBuckets will be added as "one-of" the bucket types in [#272](https://github.com/open-telemetry/opentelemetry-proto/pull/272)
 * Per [#257](https://github.com/open-telemetry/opentelemetry-proto/issues/257), only a histogram accepting "double" will be defined.
 * Per [#259](https://github.com/open-telemetry/opentelemetry-proto/issues/259), bucket counts type is "double".
 
@@ -70,7 +70,7 @@ The followings are restrictions of ExponentialBuckets:
 
 Merging histograms of different types, or even the same type, but with different parameters remains an issue. There are lengthy discussions in [#226](https://github.com/open-telemetry/opentelemetry-proto/pull/226#issuecomment-776526864)
 
-Some merge method may introduce artifacts (information not present in original data). Generally, splitting a bucket introduces artifacts. For example, when using linear interpolation to split a bucket, we are assumming uniform distribution within the bucket. "Uniform distribution" is information not present in original data. Merging buckets on the other hand, does not introduce artifacts. Merging buckets with identical bounds from two histograms is totally artifact free. Merging multiple adjacent buckets in one histogram is also artifact free, but it does reduce the resolution of the histogram. Whether such a merge is "lossy" is arguable. Because of this ambiguity, the term "lossy" is not used in this doc.
+Some merge method may introduce artifacts (information not present in original data). Generally, splitting a bucket introduces artifacts. For example, when using linear interpolation to split a bucket, we are assuming uniform distribution within the bucket. "Uniform distribution" is information not present in original data. Merging buckets on the other hand, does not introduce artifacts. Merging buckets with identical bounds from two histograms is totally artifact free. Merging multiple adjacent buckets in one histogram is also artifact free, but it does reduce the resolution of the histogram. Whether such a merge is "lossy" is arguable. Because of this ambiguity, the term "lossy" is not used in this doc.
 
 For exponential histograms, if base1 = base2 ^ N, where N is an integer, the two histograms can be merged without artifacts. Furthermore, we can introduce a series of bases where
 
@@ -87,7 +87,7 @@ Such "2 to 1" binary merge has the following benefits:
 
 A histogram producer may implement "auto scale" to control memory cost. With a reasonable default config on target relative error and max number of buckets, the producer could operate in an "automagic" fashion. The producer can start with a base at target resolution, and dynamically change the scale if incoming data's range would make the histogram exceed the memory limit. [New Relic](https://docs.newrelic.com/docs/data-apis/understand-data/metric-data/metric-data-type/) and [Google](https://github.com/open-telemetry/opentelemetry-proto/pull/226#issuecomment-737496026) have implemented such logic for internal use. Open source versions from these companies are in plan.
 
-The main disadvantage of scaled exponential histogram is not supporting arbitrary base. The base can only increase by square, or decrease by square root. Unless a user's target relative error is exactly on the series, they have to choose the next smaller base, which costs more space for the target. But in return, you get universally mergeable histograms, which seems like a reasonable trade off. As shown in discussions below, typically, the user has the choice around 1%, 2%, or 4% errors. Since error target is rarely precise science, choosing from the limited menu does not add much burden to the user.
+The main disadvantage of scaled exponential histogram is not supporting arbitrary base. The base can only increase by square, or decrease by square root. Unless a user's target relative error is exactly on the series, they have to choose the next smaller base, which costs more space for the target. But in return, you get universally mergeable histograms, which seems like a reasonable trade-off. As shown in discussions below, typically, the user has the choice around 1%, 2%, or 4% errors. Since error target is rarely precise science, choosing from the limited menu does not add much burden to the user.
 
 **If we can agree on a "referenceBase", then we have universally mergeable histograms.** In [#226](https://github.com/open-telemetry/opentelemetry-proto/pull/226#issuecomment-777922339), a referenceBase of 2 was proposed. The general form for the series is
 

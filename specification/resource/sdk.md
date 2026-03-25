@@ -7,12 +7,13 @@ weight: 3
 
 **Status**: [Stable](../document-status.md) except where otherwise specified
 
-A [Resource](../overview.md#resources) is an immutable representation of the entity producing
-telemetry as [Attributes](../common/README.md#attribute).
-For example, a process producing telemetry that is running in a
-container on Kubernetes has a Pod name, it is in a namespace and possibly is
-part of a Deployment which also has a name. All three of these attributes can be
-included in the `Resource`. Note that there are certain
+A [Resource](../overview.md#resources) is an immutable representation of the
+observed entity for which telemetry is being produced, expressed as
+[Attributes](../common/README.md#attribute).
+For example, a process running in a container on Kubernetes has a Pod name, it
+is in a namespace and possibly is part of a Deployment which also has a name.
+All three of these attributes can be included in the `Resource`. Note that there
+are certain
 [attributes](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md)
 that have prescribed meanings.
 
@@ -182,11 +183,15 @@ information provided by the user, i.e. the user provided resource information
 has higher priority.
 
 The `OTEL_RESOURCE_ATTRIBUTES` environment variable will contain of a list of
-key value pairs, and these are expected to be represented in a format matching
-to the [W3C Baggage](https://www.w3.org/TR/baggage/#header-content), except that additional
-semi-colon delimited metadata is not supported, i.e.: `key1=value1,key2=value2`.
-All attribute values MUST be considered strings and characters outside the
-`baggage-octet` range MUST be percent-encoded.
+key value pairs, represented as `key1=value1,key2=value2`.
+All attribute values MUST be considered strings. The `,` and `=` characters
+in keys and values MUST be percent encoded. Other characters MAY be
+[percent-encoded](https://datatracker.ietf.org/doc/html/rfc3986#section-2.1),
+e.g. values outside the ANSI characters set.
+
+In case of any error, e.g. failure during the decoding process, the entire environment
+variable value SHOULD be discarded and an error SHOULD be reported following the
+[Error Handling principles](../error-handling.md#basic-error-handling-principles).
 
 ## Resource operations
 

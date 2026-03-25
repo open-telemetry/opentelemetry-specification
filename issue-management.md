@@ -64,7 +64,7 @@ Rejected issues are issues that describe a problem that cannot or will not be so
 
 ## SIG Specific Issues
 
-Many SIGs track work in the specification repo that is outside of the triage process listed above.
+Many SIGs track work in the specification repository that is outside of the triage process listed above.
 These issues, which may be created by a SIG or just assigned to them, should be added to the SIG's project board and given the label `sig-issue`.
 If an issue is labeled as a `sig-issue`, it is the responsibility of the SIG to prioritize
 the issue appropriately, and ensure it is completed or closed as won't fix.
@@ -76,10 +76,10 @@ that block their implementation, or they may want to request a specification cha
 highlight issues of that kind SIG maintainers can request a `maintainer-request` label being added
 to an issue, if the following conditions are met:
 
-* the issue description or a comment by the maintainer points to at least one issue in an implementation repo, of which they are a maintainer.
+* the issue description or a comment by the maintainer points to at least one issue in an implementation repository, of which they are a maintainer.
 * the maintainer summarizes in the issue description or in a comment to an existing issue, what is blocking them and/or what is required from their point of view to make progress.
-* the maintainer tags all other maintainers of the implementation repo in the issue description or their comment (@open-telemetry/<sig>-maintainers). No action from the other maintainers is expected, except they disagree with
+* the maintainer tags all other maintainers of the implementation repository in the issue description or their comment (@open-telemetry/<sig>-maintainers). No action from the other maintainers is expected, except they disagree with
   the request of this issue being tagged as `maintainer-request`.
-* they will share the issue with all other SIGs either via the [Maintainer Meeting](https://github.com/open-telemetry/community?tab=readme-ov-file#cross-cutting-sigs) or via a message to [#otel-maintainers](https://cloud-native.slack.com/archives/C01NJ7V1KRC) on [CNCF slack](https://slack.cncf.io). This way maintainers of other implementation SIGs can comment if they have the same request.
+* they will share the issue with all other SIGs either via the [Maintainer Meeting](https://github.com/open-telemetry/community?tab=readme-ov-file#cross-cutting-sigs) or via a message to [#otel-maintainers](https://cloud-native.slack.com/archives/C01NJ7V1KRC) on [CNCF Slack](https://slack.cncf.io). This way maintainers of other implementation SIGs can comment if they have the same request.
 
 A triager will add the `maintainer-request` label to the issue if those conditions are met.

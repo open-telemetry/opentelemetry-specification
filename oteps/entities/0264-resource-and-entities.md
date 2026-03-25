@@ -29,7 +29,7 @@ It is an expansion on the [previous entity proposal](0256-entities-data-model.md
   * [Resource detectors (soon to be entity detectors) need to be composable / disjoint](#resource-detectors-soon-to-be-entity-detectors-need-to-be-composable--disjoint)
   * [New entities added by extension should not break existing code](#new-entities-added-by-extension-should-not-break-existing-code)
   * [Navigational attributes need to exist and can be used to identify an entity but could be augmented with UUID or other aspects. - Having ONLY a UUID for entity identification is not good enough](#navigational-attributes-need-to-exist-and-can-be-used-to-identify-an-entity-but-could-be-augmented-with-uuid-or-other-aspects---having-only-a-uuid-for-entity-identification-is-not-good-enough)
-  * [Collector augmentation / enrichment (resource, e.g.) - Should be extensible and not hard-coded. We need a general algorithm not specific rulesets](#collector-augmentation--enrichment-resource-eg---should-be-extensible-and-not-hard-coded-we-need-a-general-algorithm-not-specific-rulesets)
+  * [Collector augmentation / enrichment (resource, e.g.) - Should be extensible and not hardcoded. We need a general algorithm not specific rulesets](#collector-augmentation--enrichment-resource-eg---should-be-extensible-and-not-hardcoded-we-need-a-general-algorithm-not-specific-rulesets)
   * [Users are expected to provide / prioritize "detectors" and determine which entity is "producing" or most-important for a signal](#users-are-expected-to-provide--prioritize-detectors-and-determine-which-entity-is-producing-or-most-important-for-a-signal)
   * [For an SDK - ALL telemetry should be associated with the same set of entities (resource labels)](#for-an-sdk---all-telemetry-should-be-associated-with-the-same-set-of-entities-resource-labels)
 - [Open Questions](#open-questions)
@@ -42,9 +42,9 @@ It is an expansion on the [previous entity proposal](0256-entities-data-model.md
   * [What happens if existing Resource translation in the collector remove resource attributes an Entity relies on?](#what-happens-if-existing-resource-translation-in-the-collector-remove-resource-attributes-an-entity-relies-on)
   * [What about advanced entity interaction in the Collector?](#what-about-advanced-entity-interaction-in-the-collector)
 - [Trade-offs and mitigations](#trade-offs-and-mitigations)
-  * [Why don't we download schema url contents?](#why-dont-we-download-schema-url-contents)
+  * [Why don't we download schema URL contents?](#why-dont-we-download-schema-url-contents)
 - [Prior art and alternatives](#prior-art-and-alternatives)
-- [Future Posibilities](#future-posibilities)
+- [Future Possibilities](#future-possibilities)
 - [Use Cases](#use-cases)
   * [SDK - Multiple Detectors of the same Entity type](#sdk---multiple-detectors-of-the-same-entity-type)
   * [SDK and Collector - Simple coordination](#sdk-and-collector---simple-coordination)
@@ -85,7 +85,7 @@ We define the following SDK components:
 
 #### Resource Provider
 
-The SDK Resource Provider is responsible for running all configured Resource and Entity Detectors.  There will be some (user-controlled, otel default) priority order to these.
+The SDK Resource Provider is responsible for running all configured Resource and Entity Detectors.  There will be some (user-controlled, OTel default) priority order to these.
 
 - The Resource Provider will detect conflicts in Entity of the same type being discovered and choose one to use.
 - When using Entity Detectors and Resource detectors together, the following merge rules will be used:
@@ -93,13 +93,13 @@ The SDK Resource Provider is responsible for running all configured Resource and
   - Resource detectors otherwise follow existing merge semantics.
     - The Specification merge rules will be updated to account for violations prevalent in ALL implementation of resource detection.
     - Specifically: This means the [rules around merging Resource across schema-url will be dropped](../../specification/resource/sdk.md#merge).  Instead only conflicting attributes will be dropped.
-    - SchemaURL on Resource will be deprecated with entity-specific schema-url replacing it. SDKs will only fill out SchemaURL on Resource when SchemaURL matches across all entities discovered. Additionally, only existing stable resource attributes can be used in Resource SchemaURL in stable OpenTelemetry components (Specifially `service.*` and `sdk.*` are the only stabilized resource convnetions). Given prevalent concerns of implementations around Resource merge specification, we suspect impact of this deprecation to be minimal, and existing usage was within the "experimental" phase of semantic conventions.
+    - SchemaURL on Resource will be deprecated with entity-specific schema-url replacing it. SDKs will only fill out SchemaURL on Resource when SchemaURL matches across all entities discovered. Additionally, only existing stable resource attributes can be used in Resource SchemaURL in stable OpenTelemetry components (Specifically `service.*` and `sdk.*` are the only stabilized resource conventions). Given prevalent concerns of implementations around Resource merge specification, we suspect impact of this deprecation to be minimal, and existing usage was within the "experimental" phase of semantic conventions.
   - An OOTB ["Env Variable Entity Detector"](#environment-variable-detector) will be specified and provided vs. requiring SDK wide ENV variables for resource detection.
 - *Additionally, Resource Provider would be responsible for understanding Entity lifecycle events, for Entities whose lifetimes do not match or exceed the SDK's own lifetime (e.g. browser session).*
 
 #### Entity Detector
 
-The Entity detector in the SDK is responsible for detecting possible entities that could identify the SDK (called "associated entities"). For Example, if the SDK is running in a kubernetes pod, it may provide an Entity for that pod. SDK Entity Detectors are only required to provide identifying attributes, but may provide descriptive attributes to ensure combined Resource contains similar attributes as today's SDK.
+The Entity detector in the SDK is responsible for detecting possible entities that could identify the SDK (called "associated entities"). For Example, if the SDK is running in a Kubernetes pod, it may provide an Entity for that pod. SDK Entity Detectors are only required to provide identifying attributes, but may provide descriptive attributes to ensure combined Resource contains similar attributes as today's SDK.
 
 An Entity Detector would have an API similar to:
 
@@ -123,7 +123,7 @@ We provide a simple algorithm for this behavior:
   - For each entity detector `D`, detect entities
     - For each entity detected, `d'`
       - If an entity `e'` exists in `E` with same entity type as `d'`, do one of the following:
-        - If the entity identiy and schema_url are the same, merge the descriptive attributes of `d'` into `e'`:
+        - If the entity identity and schema_url are the same, merge the descriptive attributes of `d'` into `e'`:
           - For each descriptive attribute `da'` in `d'`
             - If `da'.key` does not exist in `e'`, then add `da'` to `ei`
             - otherwise, ignore.
@@ -162,7 +162,7 @@ The actual design for this ENV variable interaction would follow the approval of
 
 ### Interactions with OpenTelemetry Collector
 
-The OpenTelemetry collector can be updated to optionally  interact with Entity on Resource. A new entity-focused resource detection process can be created which allows add/override behavior at the entity level, rather than individual attribute level.
+The OpenTelemetry Collector can be updated to optionally  interact with Entity on Resource. A new entity-focused resource detection process can be created which allows add/override behavior at the entity level, rather than individual attribute level.
 
 For example, the existing resource detector looks like this:
 
@@ -187,16 +187,16 @@ processor:
 
 The list of detectors is given in priority order (first wins, in event of a tie, outside of override configuration). The processor may need to be updated to allow the override flag to apply to each individual detector.
 
-The rules for attributes would follow entity merging rules, as defined for the SDK resource proivder.
+The rules for attributes would follow entity merging rules, as defined for the SDK resource provider.
 
-Note: While this proposals shows a new processor replacing the `resourcedetection` processor, the details of whether to modify-in-place the existing `resourcedetection` processor or create a new one would be determined as a follow up to this design. Ideally, we don't want users to need new configuration for resource in the otel collector.
+Note: While this proposals shows a new processor replacing the `resourcedetection` processor, the details of whether to modify-in-place the existing `resourcedetection` processor or create a new one would be determined as a follow up to this design. Ideally, we don't want users to need new configuration for resource in the OTel collector.
 
 ## Datamodel Changes
 
 Given our desired design and algorithms for detecting, merging and manipulating Entities, we need the ability to denote how entity and resource relate. These changes must not break existing usage of Resource, therefore:
 
 - The Entity model must be *layered on top of* the Resource model.  A system does not need to interact with entities for correct behavior.
-- Existing key usage of Resource must remain when using Entities, specifically navigationality (see: [OpenTelemetry Resources: Principles and Characteristics](https://docs.google.com/document/d/1Xd1JP7eNhRpdz1RIBLeA1_4UYPRJaouloAYqldCeNSc/edit))
+- Existing key usage of Resource must remain when using Entities, specifically navigation (see: [OpenTelemetry Resources: Principles and Characteristics](https://docs.google.com/document/d/1Xd1JP7eNhRpdz1RIBLeA1_4UYPRJaouloAYqldCeNSc/edit))
 - Downstream components should be able to engage with the Entity model in Resource.
 
 The following changes are made:
@@ -207,7 +207,7 @@ The following changes are made:
 | ----- | ---- | ----------- | ------- |
 | schema_url | string | The Schema URL, if known. This is the identifier of the Schema that the resource data  is recorded in.  This field is deprecated and should no longer be used. | Will be deprecated |
 | dropped_attributes_count | integer | dropped_attributes_count is the number of dropped attributes. If the value is 0, then no attributes were dropped. | Unchanged |
-| attributes | repeated KeyValue | Set of attributes that describe the resource.<br/><br/>Attribute keys MUST be unique (it is not allowed to have more than one attribute with the same key). | Unchanged |
+| attributes | repeated key-value | Set of attributes that describe the resource.<br/><br/>Attribute keys MUST be unique (it is not allowed to have more than one attribute with the same key). | Unchanged |
 | entities | repeated ResourceEntityRef | Set of entities that participate in this Resource. | Added |
 
 The DataModel would ensure that attributes in Resource are produced from both the identifying and descriptive attributes of Entity.  This does not mean the protocol needs to transmit duplicate data, that design is TBD.
@@ -220,7 +220,7 @@ The entityref data model, would have the following changes from the original [en
 | ----- | ---- | ----------- | ------- |
 | schema_url | string | The Schema URL, if known. This is the identifier of the Schema that the entity data  is recorded in. To learn more about Schema URL ([see docs](https://opentelemetry.io/docs/specs/otel/schemas/#schema-url)) | added |
 | type | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. | unchanged |
-| identifying_attributes_keys | repeated string | Attribute Keys that identify the entity.<br/>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<br/><br/>These keys MUST exists in Resource.attributes.<br/><br/>Follows OpenTelemetry common attribute definition. SHOULD follow OpenTelemetry semantic conventions for attributes. | now a reference |
+| identifying_attributes_keys | repeated string | Attribute Keys that identify the entity.<br/>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<br/><br/>These keys MUST exists in Resource.attributes.<br/><br/>Follows OpenTelemetry common attribute definition. SHOULD follow OpenTelemetry semantic conventions for attributes. | now a reference |
 | descriptive_attributes_keys | repeated string | Descriptive (non-identifying) attribute keys of the entity.<br/>MAY change over the lifetime of the entity. MAY be empty. These attribute keys are not part of entity's identity.<br/><br/>These keys MUST exist in Resource.attributes.<br/><br/>Follows any value definition in the OpenTelemetry spec - it can be a scalar value, byte array, an array or map of values. Arbitrary deep nesting of values for arrays and maps is allowed.<br/><br/>SHOULD follow OpenTelemetry semantic conventions for attributes. | now a reference |
 
 ### Resource Identity
@@ -277,14 +277,14 @@ Users will need to configure a new Entity detector for new entities being modell
 
 Resource will still be composed of identifying and descriptive attributes of Entity, allowing baseline navigational attributes users already expect from resource.
 
-### Collector augmentation / enrichment (resource, e.g.) - Should be extensible and not hard-coded. We need a general algorithm not specific rulesets
+### Collector augmentation / enrichment (resource, e.g.) - Should be extensible and not hardcoded. We need a general algorithm not specific rulesets
 
 The concept of "Entity" is a new definition for Resource.  Where previously, resource was a collection of attributes and users would interact with each
 individually, now there is a "bundle" of attributes called an Entity.  Entities have an identity and descriptions, and the collector is able to
 identify conflicts against the set of attributes that make up an Entity.
 
 The merge rules defined here give precedent for the collector to generically interact with "type", "identifying attributes" and "descriptive attributes"
-rather than hard-coded rules that have to understand the nuance of when `host.id` influences `host.name`, e.g.
+rather than hardcoded rules that have to understand the nuance of when `host.id` influences `host.name`, e.g.
 
 ### Users are expected to provide / prioritize "detectors" and determine which entity is "producing" or most-important for a signal
 
@@ -306,7 +306,7 @@ Going forward, we have set of options:
 
 - Duplicate attributes in `Entity` section of Resource.
 - Reference attributes of Resource in entity.
-- Only identify Entity id and keep attribute<->entity association out of band.
+- Only identify Entity ID and keep attribute<->entity association out of band.
 - Extend Attribute on Resource so that we can track the entity type per Key-Value (across any attribute in OTLP).
 
 The third option prevents generic code from interacting with Resource and Entity without understanding the model of each.  The first keeps all usage of entity simple at the expense of duplicating information and the middle is awkward to interact with from an OTLP usage perspective. The fourth is violates our stability policy for OTLP.
@@ -321,13 +321,13 @@ Today, [Prometheus compatibility](../../specification/compatibility/prometheus_a
 
 Here's a list of requirements for the solution:
 
-- Existing prometheus/OpenTelemetry users should be able to migrate from where they are today.
-- Any solution MUST work with the [info-typed metrics](https://github.com/prometheus/proposals/blob/main/proposals/0037-native-support-for-info-metrics-metadata.md#goals) being added in prometheus.
+- Existing Prometheus/OpenTelemetry users should be able to migrate from where they are today.
+- Any solution MUST work with the [info-typed metrics](https://github.com/prometheus/proposals/blob/main/proposals/0037-native-support-for-info-metrics-metadata.md#goals) being added in Prometheus.
   - Resource descriptive attributes should leverage `info()` or metadata.
   - Resource identifying attributes need more thought/design from OpenTelemetry semconv + entities WG.
-  - Note: Current `info()` design will only work with `target_info` metric by default (other info metrics can be specified per `info` call), and `job/instance` labels for joins.  These labels MUST be generated by the OTLP endpoint in prometheus.
-- (desired) Users should be able to correlate metric timeseries to other signals via Resource attributes showing up as labels in prometheus.
-- (desired) Conversion from `OTLP -> prometheus` can be reversed such that `OTLP -> Prometheus -> OTLP` is non-lossy.
+  - Note: Current `info()` design will only work with `target_info` metric by default (other info metrics can be specified per `info` call), and `job/instance` labels for joins.  These labels MUST be generated by the OTLP endpoint in Prometheus.
+- (desired) Users should be able to correlate metric timeseries to other signals via Resource attributes showing up as labels in Prometheus.
+- (desired) Conversion from `OTLP -> Prometheus` can be reversed such that `OTLP -> Prometheus -> OTLP` is non-lossy.
 
 Here's a few (non-exhaustive) options for what this could look like:
 
@@ -338,26 +338,26 @@ Here's a few (non-exhaustive) options for what this could look like:
   - By default all identifying labels on Resource are promoted to resource attributes.
   - All descriptive labels are placed on `target_info`.
   - (likely) `job`/`instance` will need to be synthesized for resources lacking a `service` entity.
-- Option #3 - Enocde entities into prometheus as info metrics
+- Option #3 - Encode entities into Prometheus as info metrics
   - Create `{entity_type}_entity_info` metrics.
   - Synthesize `job`/`instance` labels for joins between all `*_info` metrics.
   - Expand the scope of info-typed metrics work in Prometheus to work with this encoding.
 - Option #4 - Find solutions leveraging the [metadata design](https://docs.google.com/document/d/1epBslSSwRO2do4armx40fruStJy_PS6thROnPeDifz8/edit#heading=h.5sybau7waq2q)
 
-These designs will be explored and evaluated in light of the requirements. For now, prometheus compatibility will continue with Option #1 as we work together towards building a better future for resource in prometheus.
+These designs will be explored and evaluated in light of the requirements. For now, Prometheus compatibility will continue with Option #1 as we work together towards building a better future for resource in Prometheus.
 
 ### Should entities have a domain?
 
-Is it worth having a `domain` in addition to type for entity?  We could force each entity to exist in one domain and leverage domain generically in resource management.  Entity Detectors would be responsible for an entire domain, selecting only ONE to apply a resource. Domains could be layered, e.g. a Cloud-specific domain may layer on top of a Kubernetes domain, where "GKE cluster entity" identifies *which* kubernetes cluster a kuberntes infra entity is part of.  This layer would be done naively, via automatic join of participating entities or explicit relationships derived from GKE specific hooks.
+Is it worth having a `domain` in addition to type for entity?  We could force each entity to exist in one domain and leverage domain generically in resource management.  Entity Detectors would be responsible for an entire domain, selecting only ONE to apply a resource. Domains could be layered, e.g. a Cloud-specific domain may layer on top of a Kubernetes domain, where "GKE cluster entity" identifies *which* Kubernetes cluster a Kubernetes infra entity is part of.  This layer would be done naively, via automatic join of participating entities or explicit relationships derived from GKE specific hooks.
 
 It's unclear if this is needed initially, and we believe this could be layered in later.
 
 ### Should resources have only one associated entity?
 
-Given the problems leading to the Entities working group, and the needs of existing Resource users today, we think it is infeasible and unscalable to limit resource to only one entity.  This would place restrictions on modeling Entities that would require OpenTelemetry to be the sole source of entity definitions and hurt building an open and extensible ecosystem.  Additionally it would need careful definition of solutions for the following problems/rubrics:
+Given the problems leading to the Entities working group, and the needs of existing Resource users today, we think it is infeasible and un-scalable to limit resource to only one entity.  This would place restrictions on modeling Entities that would require OpenTelemetry to be the sole source of entity definitions and hurt building an open and extensible ecosystem.  Additionally it would need careful definition of solutions for the following problems/rubrics:
 
 - New entities added by extension should not break existing code
-- Collector augmentation / enrichment (resource, e.g.) - Should be extensible and not hard-coded. We need a general algorithm not specific rulesets.
+- Collector augmentation / enrichment (resource, e.g.) - Should be extensible and not hardcoded. We need a general algorithm not specific rulesets.
 
 ### What identity should entities use (LID, UUID / GUID, or other)?
 
@@ -370,12 +370,12 @@ This can be done in follow up design / OTEPs.
 While we expect the collector to be the first component to start engaging with Entities in an architecture, this could lead to data model violations.  We have a few options to deal with this issue:
 
 - Consider this a bug and warn users not to do it.
-- Specify that missing attribute keys are acceptable for descriptive attribtues.
+- Specify that missing attribute keys are acceptable for descriptive attributes.
 - Specify that missing attribute keys denote that entities are unusable for that batch of telemetry, and treat the content as malformed.
 
 ### What about advanced entity interaction in the Collector?
 
-One problem that motivated this design is the issue of "local resource detection" vs. "remote signal collection" in the OpenTelemetry collector.  That is, I have a process running on a machine writing to an OpenTelemetry
+One problem that motivated this design is the issue of "local resource detection" vs. "remote signal collection" in the OpenTelemetry Collector.  That is, I have a process running on a machine writing to an OpenTelemetry
 collector running on a different machine.  The current `resourcedetectionprocessor` in the collector appends attributes to resource based on discovering *where the collector is running*.  However,
 as the collector could determine that telemetry has come from a different machine, it could also avoid adding resource attributes that are not relevant to incoming data.
 
@@ -386,7 +386,7 @@ resource based on more advanced knowledge of the communication protocol used to 
 
 The design proposed here attempts to balance non-breaking (backwards and forwards compatible) changes with the need to improve problematic issues in the Specification.  Given the inability of most SDKs to implement the current Resource merge specification, breaking this should have little effect on actual users.  Instead, the proposed merge specification should allow implementations to match current behavior and expectation, while evolving for users who engage with the new model.
 
-### Why don't we download schema url contents?
+### Why don't we download schema URL contents?
 
 OpenTelemetry needs to work in environments that have no/limited access to the external internet. We entertained, and
 dismissed merging solutions that *require* access to the contents of `schema_url` to work. While the core algorithm
@@ -411,7 +411,7 @@ Below is a brief discussion of some design decisions:
 - **Embed fully Entity in Resource.** This was rejected because it makes it easy/trivial for Resource attributes and Entities to diverge.  This would prevent the backwards/forwards compatibility goals and also require all participating OTLP users to leverage entities. Entity should be an opt-in / additional feature that may or may not be engaged with, depending on user need.
 - **Re-using resource detection as-is** This was rejected as not having a viable compatibility path forward.  Creating a new set of components that can preserve existing behavior while allowing users to adopt the new functionality means that users have better control of when they see / change system behavior, and adoption is more obvious across the ecosystem.
 
-## Future Posibilities
+## Future Possibilities
 
 This proposal opens the door for addressing issues where an Entity's lifetime does not match an SDK's lifetime, in addition to providing a data model where mutable (descriptive) attributes can be changed over the lifetime of a resource without affecting its identity.  We expect a follow-on OTEP which directly handles this issue.
 
@@ -439,14 +439,14 @@ flowchart LR
 
 Here, there is a service running on Google Compute Engine. The user
 has configured a Google Cloud specific set of entity detectors.  Both the
-built in OpenTelemetry detection and the configured Google Cloud detection
+built-in OpenTelemetry detection and the configured Google Cloud detection
 discover a `host` entity.
 
 The following outcome would occur:
 
 - The resulting resource would have all of the following entities: `host`, `process`, `service` and `gcp.gce`
-- The user-configured resource detector would take priority over built in: the `host` defined from the Google Cloud detection would "win" and be included in resource.
-  - This means `host.id` e.g. could be the id discovered for GCE VMs.  Similarly for other cloud provider detection, like Amazon EC2 where VMs are given a unique ID by the Cloud Provider, rather than a generic machine ID, e.g.
+- The user-configured resource detector would take priority over built-in: the `host` defined from the Google Cloud detection would "win" and be included in resource.
+  - This means `host.id` e.g. could be the ID discovered for GCE VMs.  Similarly for other cloud provider detection, like Amazon EC2 where VMs are given a unique ID by the Cloud Provider, rather than a generic machine ID, e.g.
   - This matches existing behavior/expectations today for AWS, GCP, etc. on what `host.id` would mean.
 - Users would be able to configure which host wins, by swapping the priority order of "default" vs. cloud-specific detection.
 
@@ -476,7 +476,7 @@ The resulting OTLP from the collector would contain a resource with all
 of the entities (`process`, `service`, `ec2`, and `host`).  This is because
 the entities are all disjoint.
 
-*Note: this matches today's behavior of existing resource detection and OpenTelmetry collector where all attributes wind up on resource.*
+*Note: this matches today's behavior of existing resource detection and OpenTelemetry Collector where all attributes wind up on resource.*
 
 ### SDK and Collector - Entity coordination with descriptive attributes
 
@@ -589,208 +589,208 @@ Ideally, we'd like a solution where:
 
 - Collector
   - [system](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/system/metadata.yaml)
-    - host.arch
-    - host.name
-    - host.id
-    - host.ip
-    - host.mac
-    - host.cpu.vendor.id
-    - host.cpu.family
-    - host.cpu.model.id
-    - host.cpu.model.name
-    - host.cpu.stepping
-    - host.cpu.cache.l2.size
-    - os.description
-    - os.type
-  - [docker](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/docker/metadata.yaml)
-    - host.name
-    - os.type
+    - `host.arch`
+    - `host.name`
+    - `host.id`
+    - `host.ip`
+    - `host.mac`
+    - `host.cpu.vendor.id`
+    - `host.cpu.family`
+    - `host.cpu.model.id`
+    - `host.cpu.model.name`
+    - `host.cpu.stepping`
+    - `host.cpu.cache.l2.size`
+    - `os.description`
+    - `os.type`
+  - [Docker](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/docker/metadata.yaml)
+    - `host.name`
+    - `os.type`
   - [heroku](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/heroku/metadata.yaml)
-    - cloud.provider
-    - heroku.app.id
-    - heroku.dyno.id
-    - heroku.release.commit
-    - heroku.release.creation_timestamp
-    - service.instance.id
-    - service.name
-    - service.version
-  - [gcp](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/gcp/metadata.yaml)
+    - `cloud.provider`
+    - `heroku.app.id`
+    - `heroku.dyno.id`
+    - `heroku.release.commit`
+    - `heroku.release.creation_timestamp`
+    - `service.instance.id`
+    - `service.name`
+    - `service.version`
+  - [GCP](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/gcp/metadata.yaml)
     - gke
-      - cloud.provider
-      - cloud.platform
-      - cloud.account.id
-      - cloud.region
-      - cloud.availability_zone
-      - k8s.cluster.name
-      - host.id
-      - host.name
+      - `cloud.provider`
+      - `cloud.platform`
+      - `cloud.account.id`
+      - `cloud.region`
+      - `cloud.availability_zone`
+      - `k8s.cluster.name`
+      - `host.id`
+      - `host.name`
     - gce
-      - cloud.provider
-      - cloud.platform
-      - cloud.account.id
-      - cloud.region
-      - cloud.availability_zone
-      - host.id
-      - host.name
-      - host.type
-      - (optional) gcp.gce.instance.hostname
-      - (optional) gcp.gce.instance.name
+      - `cloud.provider`
+      - `cloud.platform`
+      - `cloud.account.id`
+      - `cloud.region`
+      - `cloud.availability_zone`
+      - `host.id`
+      - `host.name`
+      - `host.type`
+      - (optional) `gcp.gce.instance.hostname`
+      - (optional) `gcp.gce.instance.name`
   - AWS
     - [ec2](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/aws/ec2/metadata.yaml)
-      - cloud.provider
-      - cloud.platform
-      - cloud.account.id
-      - cloud.region
-      - cloud.availability_zone
-      - host.id
-      - host.image.id
-      - host.name
-      - host.type
+      - `cloud.provider`
+      - `cloud.platform`
+      - `cloud.account.id`
+      - `cloud.region`
+      - `cloud.availability_zone`
+      - `host.id`
+      - `host.image.id`
+      - `host.name`
+      - `host.type`
     - [ecs](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/aws/ecs/metadata.yaml)
-      - cloud.provider
-      - cloud.platform
-      - cloud.account.id
-      - cloud.region
-      - cloud.availability_zone
-      - aws.ecs.cluster.arn
-      - aws.ecs.task.arn
-      - aws.ecs.task.family
-      - aws.ecs.task.id
-      - aws.ecs.task.revision
-      - aws.ecs.launchtype (V4 only)
-      - aws.log.group.names (V4 only)
-      - aws.log.group.arns (V4 only)
-      - aws.log.stream.names (V4 only)
-      - aws.log.stream.arns (V4 only)
+      - `cloud.provider`
+      - `cloud.platform`
+      - `cloud.account.id`
+      - `cloud.region`
+      - `cloud.availability_zone`
+      - `aws.ecs.cluster.arn`
+      - `aws.ecs.task.arn`
+      - `aws.ecs.task.family`
+      - `aws.ecs.task.id`
+      - `aws.ecs.task.revision`
+      - `aws.ecs.launchtype` (V4 only)
+      - `aws.log.group.names` (V4 only)
+      - `aws.log.group.arns` (V4 only)
+      - `aws.log.stream.names` (V4 only)
+      - `aws.log.stream.arns` (V4 only)
     - [elastic_beanstalk](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/internal/aws/elasticbeanstalk/metadata.yaml)
-      - cloud.provider
-      - cloud.platform
-      - deployment.environment
-      - service.instance.id
-      - service.version
+      - `cloud.provider`
+      - `cloud.platform`
+      - `deployment.environment`
+      - `service.instance.id`
+      - `service.version`
     - eks
-      - cloud.provider
-      - cloud.platform
-      - k8s.cluster.name
+      - `cloud.provider`
+      - `cloud.platform`
+      - `k8s.cluster.name`
     - lambda
-      - cloud.provider
-      - cloud.platform
-      - cloud.region
-      - faas.name
-      - faas.version
-      - faas.instance
-      - faas.max_memory
-      - aws.log.group.names
-      - aws.log.stream.names
+      - `cloud.provider`
+      - `cloud.platform`
+      - `cloud.region`
+      - `faas.name`
+      - `faas.version`
+      - `faas.instance`
+      - `faas.max_memory`
+      - `aws.log.group.names`
+      - `aws.log.stream.names`
   - Azure
-    - cloud.provider
-    - cloud.platform
-    - cloud.region
-    - cloud.account.id
-    - host.id
-    - host.name
-    - azure.vm.name
-    - azure.vm.size
-    - azure.vm.scaleset.name
-    - azure.resourcegroup.name
+    - `cloud.provider`
+    - `cloud.platform`
+    - `cloud.region`
+    - `cloud.account.id`
+    - `host.id`
+    - `host.name`
+    - `azure.vm.name`
+    - `azure.vm.size`
+    - `azure.vm.scaleset.name`
+    - `azure.resourcegroup.name`
   - Azure aks
-    - cloud.provider
-    - cloud.platform
-    - k8s.cluster.name
+    - `cloud.provider`
+    - `cloud.platform`
+    - `k8s.cluster.name`
   - Consul
-    - cloud.region
-    - host.id
-    - host.name
+    - `cloud.region`
+    - `host.id`
+    - `host.name`
     - *exploded consul metadata*
-  - k8s Node
-    - k8s.node.uid
+  - K8s Node
+    - `k8s.node.uid`
   - Openshift
-    - cloud.provider
-    - cloud.platform
-    - cloud.region
-    - k8s.cluster.name
+    - `cloud.provider`
+    - `cloud.platform`
+    - `cloud.region`
+    - `k8s.cluster.name`
 - Java Resource Detection
   - SDK-Default
-    - service.name
-    - telemetry.sdk.version
-    - telemetry.sdk.language
-    - telemetry.sdk.name
+    - `service.name`
+    - `telemetry.sdk.version`
+    - `telemetry.sdk.language`
+    - `telemetry.sdk.name`
   - [process](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/691de74a4b0539c1329222aefb962c232028032b/instrumentation/resources/library/src/main/java/io/opentelemetry/instrumentation/resources/ProcessResource.java#L60)
-    - process.pid
-    - process.command_line
-    - process.command_args
-    - process.executable.path
+    - `process.pid`
+    - `process.command_line`
+    - `process.command_args`
+    - `process.executable.path`
   - [host](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/resources/library/src/main/java/io/opentelemetry/instrumentation/resources/HostResource.java#L31)
-    - host.name
-    - host.arch
+    - `host.name`
+    - `host.arch`
   - [container](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/resources/library/src/main/java/io/opentelemetry/instrumentation/resources/ContainerResource.java)
-    - container.id
+    - `container.id`
   - [os](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/resources/library/src/main/java/io/opentelemetry/instrumentation/resources/OsResource.java)
-    - os.type
+    - `os.type`
   - [AWS](https://github.com/open-telemetry/opentelemetry-java-contrib/tree/main/aws-resources)
     - EC2
-      - host.id
-      - cloud.availability_zone
-      - host.type
-      - host.image.id
-      - cloud.account.id
-      - cloud.region
-      - host.name
+      - `host.id`
+      - `cloud.availability_zone`
+      - `host.type`
+      - `host.image.id`
+      - `cloud.account.id`
+      - `cloud.region`
+      - `host.name`
     - ECS
-      - cloud.provider
-      - cloud.platform
-      - aws.log.group.names
-      - aws.log.stream.names
+      - `cloud.provider`
+      - `cloud.platform`
+      - `aws.log.group.names`
+      - `aws.log.stream.names`
     - EKS
-      - cloud.provider
-      - cloud.platform
-      - k8s.cluster.name
-      - container.id
+      - `cloud.provider`
+      - `cloud.platform`
+      - `k8s.cluster.name`
+      - `container.id`
     - Lambda
-      - cloud.platform
-      - cloud.region
-      - faas.name
-      - faas.version
+      - `cloud.platform`
+      - `cloud.region`
+      - `faas.name`
+      - `faas.version`
   - [GCP](https://github.com/open-telemetry/opentelemetry-java-contrib/tree/main/gcp-resources)
-    - cloud.provider
-    - cloud.platform
-    - cloud.account.id
-    - cloud.availability_zone
-    - cloud.region
-    - host.id
-    - host.name
-    - host.type
-    - k8s.pod.name
-    - k8s.namespace.name
-    - k8s.container.name
-    - k8s.cluster.name
-    - faas.name
-    - faas.instance
+    - `cloud.provider`
+    - `cloud.platform`
+    - `cloud.account.id`
+    - `cloud.availability_zone`
+    - `cloud.region`
+    - `host.id`
+    - `host.name`
+    - `host.type`
+    - `k8s.pod.name`
+    - `k8s.namespace.name`
+    - `k8s.container.name`
+    - `k8s.cluster.name`
+    - `faas.name`
+    - `faas.instance`
   - Go
     - [container](https://github.com/open-telemetry/opentelemetry-go/blob/main/sdk/resource/container.go)
-      - container.id
+      - `container.id`
     - [host](https://github.com/open-telemetry/opentelemetry-go/blob/main/sdk/resource/host_id.go)
-      - host.id
+      - `host.id`
     - [os](https://github.com/open-telemetry/opentelemetry-go/blob/main/sdk/resource/os.go)
-      - os.name
+      - `os.name`
     - [process](https://github.com/open-telemetry/opentelemetry-go/blob/main/sdk/resource/process.go)
-      - process.pid
-      - process.executable.name
-      - process.executable.path
-      - process.command_line
-      - process.command_args
-      - process.owner
-    - [builtin](https://github.com/open-telemetry/opentelemetry-go/blob/main/sdk/resource/builtin.go)
-      - service.instance.id
-      - service.name
-- [OTEL operator](https://github.com/open-telemetry/opentelemetry-operator/blob/a1e8f927909b81eb368c0483940e0b90d7fdb057/pkg/instrumentation/sdk_test.go#L752) injected ENV variables
-  - service.instance.id
-  - service.name
-  - service.version
-  - k8s.namespace.name
-  - k8s.pod.name
-  - k8s.node.name
-  - k8s.container.name
+      - `process.pid`
+      - `process.executable.name`
+      - `process.executable.path`
+      - `process.command_line`
+      - `process.command_args`
+      - `process.owner`
+    - [built-in](https://github.com/open-telemetry/opentelemetry-go/blob/main/sdk/resource/builtin.go)
+      - `service.instance.id`
+      - `service.name`
+- [OTel operator](https://github.com/open-telemetry/opentelemetry-operator/blob/a1e8f927909b81eb368c0483940e0b90d7fdb057/pkg/instrumentation/sdk_test.go#L752) injected ENV variables
+  - `service.instance.id`
+  - `service.name`
+  - `service.version`
+  - `k8s.namespace.name`
+  - `k8s.pod.name`
+  - `k8s.node.name`
+  - `k8s.container.name`
 
 ### Implications
 
@@ -803,7 +803,7 @@ AWS, Azure, GCP, Heroku, etc. all provide the following "bundles" of resource:
 - `host.*`, when relevant
 - `k8s.cluster.*`, when relevant
 - `service.*` when relevant
-- `container.*` for a subset of k8s providers
+- `container.*` for a subset of K8s providers
 
 "system" detection provides the following:
 
@@ -817,7 +817,7 @@ SDK specific detection provides the following:
 - `sdk.*`
 - `service.*`
 
-The OTEL operator for k8s provides the following via ENV variables:
+The OTel operator for K8s provides the following via ENV variables:
 
 - `k8s.namespace.*`
 - `k8s.node.*`
@@ -827,20 +827,20 @@ The OTEL operator for k8s provides the following via ENV variables:
 
 ### What could this mean for choosing entities that belong on resource?
 
-Let's look at an example of a container running in kubernetes, specifically EKS.
+Let's look at an example of a container running in Kubernetes, specifically EKS.
 
-If the OTEL operator, the SDK and the collector are all used, the following
+If the OTel operator, the SDK and the collector are all used, the following
 attributes will wind up on resource:
 
-- `service.*` - from SDK and otel operator
+- `service.*` - from SDK and OTel operator
 - `sdk.*` - from SDK
 - `process.*` - from SDK
 - `host.*` - Note: from system detector on collector
 - `container.*` - from EKS detector on SDK
-- `k8s.namespace.*` - from otel operator
-- `k8s.node.*` - from otel operator
-- `k8s.pod.*` - from otel operator
-- `k8s.container.*` - from otel operator
+- `k8s.namespace.*` - from OTel operator
+- `k8s.node.*` - from OTel operator
+- `k8s.pod.*` - from OTel operator
+- `k8s.container.*` - from OTel operator
 - `k8s.cluster.*` - from EKS detector on SDK or collector
 - `cloud.*` - from EKS detector on SDK or collector
 
@@ -851,7 +851,7 @@ included".
 However, this can be refined.  Resources today provide a [few key features](https://docs.google.com/document/d/1Xd1JP7eNhRpdz1RIBLeA1_4UYPRJaouloAYqldCeNSc/edit):
 
 - They provide identity - Uniquely identifying the origin of the data.
-- They provide "navigationality" - allowing users to find the source of the data within their o11y and infrastructure tools.
+- They provide "navigation" - allowing users to find the source of the data within their o11y and infrastructure tools.
 - They allow aggregation / slicing of data on interesting domains.
 
 A litmus test for what entities to include on resource should be as follows:
