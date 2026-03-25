@@ -13,7 +13,7 @@ weight: 1
   * [ConfigProvider](#configprovider)
     + [ConfigProvider operations](#configprovider-operations)
       - [Get instrumentation config](#get-instrumentation-config)
-      - [Add config change listener](#add-config-change-listener)
+      - [Add change listener](#add-change-listener)
   * [ConfigProperties](#configproperties)
 
 <!-- tocstop -->
@@ -52,7 +52,7 @@ default `ConfigProvider`, and set/register it.
 The `ConfigProvider` MUST provide the following functions:
 
 * [Get instrumentation config](#get-instrumentation-config)
-* [Add config change listener](#add-config-change-listener)
+* [Add change listener](#add-change-listener)
 
 TODO: decide if additional operations are needed to improve API ergonomics
 
@@ -67,7 +67,7 @@ configuration mapping node.
 If the `.instrumentation` node is not set, get instrumentation config SHOULD
 return an empty `ConfigProperties` (as if `.instrumentation: {}` was set).
 
-##### Add config change listener
+##### Add change listener
 
 Register a listener to be notified when configuration at a specific watched path
 changes.
