@@ -72,19 +72,16 @@ The payload uses protobuf with the `ProcessContext` message:
 
 syntax = "proto3";
 
-// TODO: Is this in the right namespace? Since this is not only for profiling,
-// `opentelemetry.proto.profiles` doesn't seem the right place, but perhaps common ain't
-// it either? Feedback very welcome!
-package opentelemetry.proto.common.v1;
+package opentelemetry.proto.processcontext.v1development;
 
 import "opentelemetry/proto/common/v1/common.proto";
 import "opentelemetry/proto/resource/v1/resource.proto";
 
-option csharp_namespace = "OpenTelemetry.Proto.Common.V1";
+option csharp_namespace = "OpenTelemetry.Proto.ProcessContext.V1Development";
 option java_multiple_files = true;
-option java_package = "io.opentelemetry.proto.common.v1";
+option java_package = "io.opentelemetry.proto.processcontext.v1development";
 option java_outer_classname = "ProcessContextProto";
-option go_package = "go.opentelemetry.io/proto/otlp/common/v1";
+option go_package = "go.opentelemetry.io/proto/otlp/processcontext/v1development";
 
 // ProcessContext represents the payload for the process context sharing mechanism.
 //
@@ -92,6 +89,8 @@ option go_package = "go.opentelemetry.io/proto/otlp/common/v1";
 // region, allowing external readers (such as the OpenTelemetry eBPF Profiler) to
 // discover and read resource attributes from instrumented processes without requiring
 // direct integration or process activity.
+//
+// Status: [Development]
 message ProcessContext {
   // The resource attributes describing this process.
   //
