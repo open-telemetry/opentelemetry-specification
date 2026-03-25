@@ -244,7 +244,7 @@ Measurements encoded in this format should follow the following conventions:
 | ----- | ---- | ----------- |
 | sample_type | [`ValueType`](#message-valuetype) | The type and unit of all [`Sample.values`](#message-sample) in this profile. For example, `["cpu", "nanoseconds"]` for a CPU profile or `["allocated_space", "bytes"]` for a heap profile. |
 | samples | repeated [`Sample`](#message-sample) | The set of samples recorded in this profile. |
-| time_unix_nano | fixed64 | Time of collection (UTC) as nanoseconds since the Unix epoch. |
+| time_unix_nano | fixed64 | Time of collection (UTC) as nanoseconds since the UNIX epoch. |
 | duration_nano | uint64 | Duration of the profile in nanoseconds. For instant profiles like live heap snapshot the duration can be zero. However, it may be preferable to set `time_unix_nano` to the process start time and `duration_nano` to the relative time when the profile was gathered so that `Sample.timestamps_unix_nano` values fall within the profile time range. |
 | period_type | [`ValueType`](#message-valuetype) | The kind of events between sampled occurrences. For example `["cpu", "cycles"]` or `["heap", "bytes"]`. |
 | period | int64 | The number of events between sampled occurrences. |
@@ -256,7 +256,7 @@ Measurements encoded in this format should follow the following conventions:
 
 The `original_payload` field MAY be used when converting from a source format (e.g. JFR)
 that carries information which cannot be losslessly represented in the Profiles format.
-Including the original data allows receivers to store or re-export the data without
+Including the original data allows receivers to store or reexport the data without
 loss. Because the original payload can be large, its inclusion is optional.
 
 ### Message `Sample`
@@ -295,7 +295,7 @@ data recording style.
 | attribute_indices | repeated int32 | References to attributes in [`ProfilesDictionary.attribute_table`](#message-profilesdictionary). [optional] |
 | link_index | int32 | Reference to a [`Link`](#message-link) in [`ProfilesDictionary.link_table`](#message-profilesdictionary). 0 means no link exists. |
 | values | repeated int64 | Measured values. The type and unit of each value is defined by [`Profile.sample_type`](#message-profile). |
-| timestamps_unix_nano | repeated fixed64 | Timestamps (UTC) as nanoseconds since the Unix epoch. The timestamps SHOULD fall within the `[Profile.time_unix_nano, Profile.time_unix_nano + Profile.duration_nano)` interval. |
+| timestamps_unix_nano | repeated fixed64 | Timestamps (UTC) as nanoseconds since the UNIX epoch. The timestamps SHOULD fall within the `[Profile.time_unix_nano, Profile.time_unix_nano + Profile.duration_nano)` interval. |
 
 ### Message `Link`
 
@@ -418,7 +418,7 @@ Other signals can reference a profile using the `profile_id` field on the
 `profile_id` attribute to reference the profile that was collected at the time
 the log record was generated. Note that the `profile_id` field is currently
 optional at the source, but may be populated after collection (e.g. in the
-OpenTelemetry collector processing pipeline).
+OpenTelemetry Collector processing pipeline).
 
 Moreover, `trace_id` and `span_id` can be used to reference groups of
 [`Sample`](#message-sample) (but not individual) messages in a profile,
