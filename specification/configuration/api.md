@@ -77,7 +77,7 @@ This API MUST accept the following parameters:
 * `path`: declarative configuration path to watch.
 * `listener`: callback invoked on changes.
 
-**Returns:** A registration handle with a close operation.
+**Returns:** A registration handle. The handle MUST provide a close (or language-equivalent) operation that unregisters the listener.
 
 Path requirements:
 
