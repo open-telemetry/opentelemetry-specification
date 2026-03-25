@@ -364,7 +364,7 @@ file and starting line number. At least one of
 | name_strindex | int32 | The function name. Empty string if not available. Index into [`ProfilesDictionary.string_table`](#message-profilesdictionary). |
 | system_name_strindex | int32 | Function name as identified by the system (e.g. a C++ mangled name). Empty string if not available. Index into [`ProfilesDictionary.string_table`](#message-profilesdictionary). |
 | filename_strindex | int32 | Source file containing the function. Empty string if not available. Index into [`ProfilesDictionary.string_table`](#message-profilesdictionary). |
-| start_line | int64 | Line number in source file. 0 means unset. |
+| start_line | int64 | Line number in source file. 1-based, 0 means unset. |
 
 ### Message `ValueType`
 
