@@ -228,10 +228,10 @@ time with OpenTelemetry Collector's schema translation processor).
 
 ## Schema Version Number
 
-Version number follows the MAJOR.MINOR.PATCH format, similar to semver 2.0.
+Version number follows the MAJOR.MINOR.PATCH format, similar to SemVer 2.0.
 
 Version numbers use the [ordering rules](https://semver.org/#spec-item-11)
-defined by semver 2.0 specification. See how ordering is used in the
+defined by SemVer 2.0 specification. See how ordering is used in the
 [Order of Transformations](file_format_v1.1.0.md#order-of-transformations). Other than the ordering
 rules the schema version numbers do not carry any other semantic meaning.
 

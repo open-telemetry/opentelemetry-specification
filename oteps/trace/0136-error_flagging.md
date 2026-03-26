@@ -16,7 +16,7 @@ While generic instrumentation can only provide a generic schema, end users are c
 
 ## Explanation
 
-The following changes add several missing features required for proper error reporting, and are completely backwards compatible with OpenTelemetry today.
+The following changes add several missing features required for proper error reporting, and are completely backward compatible with OpenTelemetry today.
 
 ### Status Codes
 
@@ -56,7 +56,7 @@ Note that these convenience methods simply wire together multiple API calls. The
 
 ## Internal details
 
-This proposal is mostly backwards compatible with existing code, protocols, and the OpenTracing bridge. The only potential exception is the removal of status code enums from the current OTLP protocol, and the rewriting of the small number of instrumentation that were making use of them.
+This proposal is mostly backward compatible with existing code, protocols, and the OpenTracing bridge. The only potential exception is the removal of status code enums from the current OTLP protocol, and the rewriting of the small number of instrumentation that were making use of them.
 
 ## BUT ERRORS ARE SUBJECTIVE!! HOW CAN WE KNOW WHAT IS AN ERROR? WHO ARE WE TO DEFINE THIS?
 
