@@ -38,7 +38,7 @@ This is immutable, process-wide data that the TLS data will reference. It will b
 The following values are stored:
 
 * `threadlocal.schema_version` - type and version of the schema - initially "tlsdesc\_v1\_dev" for experimentation (to be changed to "tlsdesc\_v1" once the OTEP gets merged)
-  * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a go application and thus context should be read from [go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
+  * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a go application and thus context should be read from [go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [Node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
 * `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread local storage itself will then use these key indexes in place of the **attribute names**.
 
 The exact format used will be the protobuf structure standardized in OTEP-4719. A stringified representation of this showing the usage of the elements of that schema along with some example values:
@@ -59,7 +59,7 @@ key: "threadlocal.attribute_key_map"
 
 **Why:** this mechanism separates static, process-scoped data from the TLS storage, so that a reader can read it once and not every time it samples a thread.
 This reduces the cost of both writing and reading thread samples, while retaining flexibility to store an arbitrary set of extra attributes on samples as required.
-By leveraging OTEP 4719 we are also co-locating with another feature that is likely to be used by many of the same readers.
+By leveraging OTEP 4719 we are also collocating with another feature that is likely to be used by many of the same readers.
 
 ### Thread Local Variable Resolution
 
@@ -238,26 +238,26 @@ This section is not intended to constrain implementers of the specification (nor
 * **C/C++:** Full support
 * **Rust**:  Full support. Requires linking against a native library in order to ensure the TLS symbol is exposed correctly (see [here](https://github.com/rust-lang/rust/pull/132480))
 * **Java**: Full support. Requires calling into native library (e.g. via JNI or equivalent API)
-* **Dotnet:** Full support via FFI bindings to native library
+* **.NET:** Full support via FFI bindings to native library
 * **Python:** Full support using native library. Tracers running on Python >= 3.14 can use [PyContext_WatchCallback](https://docs.python.org/3/c-api/contextvars.html#c.PyContext_WatchCallback) to track context activation; older versions must monkey-patch the runtime
 * **Ruby:** Full support via native extension. [ruby-profiler gem](https://github.com/socketry/ruby-profiler) shows an example of a very similar approach to doing this in Ruby (from Shopify)
 
 We believe these two runtimes are not going to be supported by this proposal:
 
-* **Golang:** We foresee golang readers will continue to use the [pprof labels](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/blob/main/design-docs/00002-custom-labels/README.md) due to its fine-grained goroutine based concurrency model and relative cost of calling across an FFI
-* **NodeJS**: We expect nodeJS readers are more likely to read the NodeJS runtime internals directly due to the threading model and performance impact of using a Node-API/native TLS approach.This adds complexity to the reader but reduces the performance impact, and is already the approached used in [Polarsignal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js).
+* **Go:** We foresee Go readers will continue to use the [pprof labels](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/blob/main/design-docs/00002-custom-labels/README.md) due to its fine-grained goroutine based concurrency model and relative cost of calling across an FFI
+* **Node.js**: We expect Node.js readers are more likely to read the Node.js runtime internals directly due to the threading model and performance impact of using a Node-API/native TLS approach.This adds complexity to the reader but reduces the performance impact, and is already the approached used in [Polarsignal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js).
 
 ## Prior art and alternatives
 
 There are two existing TLS mechanisms we are aware of for sharing similar information that we took inspiration from. In both cases the same mechanism is used for TLS discovery and access as described here, the differences are only in the storage format:
 
-[**Elastic Universal Profiling Integration**](https://github.com/elastic/apm/blob/149cd3e39a77a58002344270ed2ad35357bdd02d/specs/agents/universal-profiling-integration.md#process-storage-layout)**:** Uses a simple, flat memory, fixed-length layout behind a single TLS capturing core trace information (parent, flags, id, span ID, transaction ID) only. This is simple to implement and fast to read and write.
+[**Elastic Universal Profiling Integration**](https://github.com/elastic/apm/blob/149cd3e39a77a58002344270ed2ad35357bdd02d/specs/agents/universal-profiling-integration.md#process-storage-layout)**:** Uses a simple, flat memory, fixed-length layout behind a single TLS capturing core trace information (parent, flags, ID, span ID, transaction ID) only. This is simple to implement and fast to read and write.
 
-[**Polar Signals Custom Labels**](https://github.com/polarsignals/custom-labels/blob/master/custom-labels-v1.md#custom_labels_current_set)**:** An alternative to the elastic model, additionally supporting custom key/value pairs.
+[**Polar Signals Custom Labels**](https://github.com/polarsignals/custom-labels/blob/master/custom-labels-v1.md#custom_labels_current_set)**:** An alternative to the elastic model, additionally supporting custom key-value pairs.
 
 This proposal attempts to unify the benefits of these two approaches by providing the flexibility of the **polar signals** format with the static allocation and read time performance of the **elastic** format.
 
-**TLS Value Storage**: If we assume that the value of the attributes attached to profiles is from a fixed, but unknown-at-startup set, we could also choose to store these in a shared hashmap outside of the Thread Local Context Record itself, further reducing the size of the record and the cost associated with reading/writing it. This would be the case if we stored attributes for things like `http_method`, and `http_route`, and not things like `uuid()`. It would also require a process wide hash table implementation with lock-free reads. There is prior art in Datadog's [java-profiler's context sharing mechanism](https://github.com/DataDog/java-profiler/blob/main/ddprof-lib/src/main/java/com/datadoghq/profiler/ContextSetter.java).
+**TLS Value Storage**: If we assume that the value of the attributes attached to profiles is from a fixed, but unknown-at-startup set, we could also choose to store these in a shared hashmap outside of the Thread Local Context Record itself, further reducing the size of the record and the cost associated with reading/writing it. This would be the case if we stored attributes for things like `http_method`, and `http_route`, and not things like `uuid()`. It would also require a process wide hash table implementation with lock-free reads. There is prior art in Datadog's [Java profiler's context sharing mechanism](https://github.com/DataDog/java-profiler/blob/main/ddprof-lib/src/main/java/com/datadoghq/profiler/ContextSetter.java).
 
 ## Open questions
 
@@ -269,7 +269,7 @@ This proposal attempts to unify the benefits of these two approaches by providin
 
 - **[OpenTelemetry eBPF Profiler PR](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1229)**: Work-in-progress integration adding thread context support to the OpenTelemetry eBPF Profiler
 - **[ctx-sharing-demo](https://github.com/scottgerring/ctx-sharing-demo)**: Sample writers and readers, based on PolarSignals' [custom-labels](https://github.com/polarsignals/custom-labels/tree/master) work
-- **[Datadog java-profiler PR](https://github.com/DataDog/java-profiler/pull/347)**: Adoption of this mechanism by an in-process profiler, demonstrating applicability beyond eBPF-based readers
+- **[Datadog Java Profiler PR](https://github.com/DataDog/java-profiler/pull/347)**: Adoption of this mechanism by an in-process profiler, demonstrating applicability beyond eBPF-based readers
 
 ## Future possibilities
 
