@@ -118,7 +118,7 @@ When a request context is attached to a thread, the SDK:
 4. Sets the `valid` field to indicate the record is complete
 5. Updates the TLS pointer to reference the new record
 
-All pointer and validity updates are protected by memory barriers to ensure readers in other processes observe consistent state.
+All pointer and validity updates use compiler fences (`atomic_signal_fence` or equivalent) and volatile writes to prevent instruction reordering by the compiler.
 
 Note: the SDK is free to re-use existing buffers to save allocations in this path.
 
@@ -136,7 +136,11 @@ When a request context is no longer active on a thread, the SDK:
 
 **Allocation:** Implementations may choose to preallocate storage for some fixed set of **Thread Local Reference Data** instances. This removes the need to allocate in the hot path.
 
-**Memory barriers**: Updates to the TLS pointer and `valid` field must use appropriate memory ordering to ensure visibility to readers accessing thread memory from another process.
+**Concurrency model**: Unlike the process context (OTEP 4719), where the writer races asynchronously with the reader and CPU memory barriers (`atomic_thread_fence` with `seq_cst`) are required, thread context assumes signal handler-like semantics.
+In practice, context reads are expected to behave as if the thread whose context is being read is stopped or otherwise interrupted, and thus there can't be any concurrency hazards between reads and writes.
+This means CPU memory ordering is not a concern.
+Writers need only use compiler fences (`atomic_signal_fence` or equivalent) and/or volatile writes to prevent compilers from reordering writes to the context with those to `valid` or the TLS pointer.
+These fences are expected to carry no runtime cost.
 
 ### Reading Protocol
 
