@@ -1,4 +1,4 @@
-# Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler
+# Thread Context: Sharing Thread-Level Information with External Readers
 
 Introduce a standard mechanism for OpenTelemetry SDKs to publish thread-level attributes for out-of-process readers such as the OpenTelemetry eBPF profilers.
 It is related to [OTEP 4719: Process Context](https://github.com/open-telemetry/opentelemetry-specification/pull/4719).
@@ -9,9 +9,9 @@ Our work-in-progress implementation of this on the OTel eBPF Profiler side is at
 
 ## Motivation
 
-External readers like the OpenTelemetry eBPF Profiler operate outside the instrumented process and cannot collect information about active OpenTelemetry traces running within the process they are sampling. This creates two main problems:
+External readers such as the OpenTelemetry eBPF Profiler operate outside the instrumented process and cannot collect information about active OpenTelemetry traces running within the processes they are observing. This creates two main problems:
 
-* **Inability to correlate samples with context metadata** - For instance, the OpenTelemetry eBPF profiler collects stack samples from observed processes; without visibility into context information - for instance, the span active on each sample - a user cannot attribute the performance characteristics of their service to particular HTTP endpoints or other request characteristics
+* **Inability to correlate observations with context metadata** - Without visibility into context information such as the active span, an external reader cannot attribute its observations to particular HTTP endpoints or other request characteristics
 * **Lack of request metadata for samples collected on threads with un-sampled traces** - in many cases, the active span observed by the external process *may not* be sampled by the OpenTelemetry SDK. In these cases it is useful to make extra metadata available directly to the external process, so that its samples maintain useful context even in the face of sampling on the tracer side.
 
 ## Explanation
@@ -20,7 +20,7 @@ We propose a mechanism for OpenTelemetry SDKs to publish thread-level informatio
 
 Because this mechanism relies on having a native component and knowing when a runtime switches contexts, we consider it optional for SDKs to support, as some runtimes (or even runtime versions) may not be able to feasibly/efficiently implement it.
 
-When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID in the format described in this document to the appropriate thread local. When an external reader such as the OpenTelemetry eBPF profiler samples this thread it checks to see if any such TLS data has been attached, and if so, includes it in its sample.
+When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID in the format described in this document to the appropriate thread local. When an external reader observes this thread it checks to see if any such TLS data has been attached, and if so, includes it in its telemetry.
 
 This mechanism is designed to achieve the following goals:
 
@@ -190,7 +190,7 @@ The **Thread Local Reference Data** is to be added to the **Process Context Prop
 
 This mechanism requires that the external reader (such as an eBPF profiler) is running on the same host as the instrumented process and has sufficient privileges to access the memory mappings exposed by the process and read target process memory.
 
-The OpenTelemetry eBPF profiler, by design, has the necessary permissions and operates on the same machine to read this metadata. This approach does not support remote or cross-host correlation of process context, and attempts to access the process context mappings without appropriate permissions (e.g., from an unprivileged user) will fail.
+External readers such as the OpenTelemetry eBPF Profiler will typically already have these permissions by design. This approach does not support remote or cross-host correlation of process context, and attempts to access the process context mappings without appropriate permissions (e.g., from an unprivileged user) will fail.
 
 ### Complexity for SDK Implementers
 
@@ -269,5 +269,5 @@ This proposal attempts to unify the benefits of these two approaches by providin
 
 ## Future possibilities
 
-Like OTEP 4719 and the OTel eBPF Profiler before it, this PR proposes a Linux-only mechanism.
+Like OTEP 4719 and the OTel eBPF Profiler before it, this proposal specifies a Linux-only mechanism.
 In the future, we may explore similar mechanisms for other operating systems.
