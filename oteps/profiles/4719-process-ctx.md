@@ -242,7 +242,7 @@ When a process forks, child processes do not inherit the parent's process contex
 
 Creating memory mappings and managing them adds complexity to SDK implementations.
 
-**Mitigation**: We've created a reference implementation in [C/C++](https://github.com/open-telemetry/sig-profiling/tree/main/process-context/c-and-cpp), as well as a [demo OTEL Java SDK extension](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo) and a [Go port as well](https://github.com/datadog/dd-trace-go/pull/4456).
+**Mitigation**: We've created a reference implementation in [C/C++](https://github.com/open-telemetry/sig-profiling/tree/main/process-context/c-and-cpp), as well as a [demo OTel Java SDK extension](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo) and a [Go port as well](https://github.com/datadog/dd-trace-go/pull/4456).
 
 For Go as well as modern versions of Java it's possible to create an implementation that doesn't rely on third-party libraries or native code (e.g. by directly calling into the OS or libc). Older versions of Java will need to rely on building the C/C++ code into a Java native library.
 
@@ -280,7 +280,7 @@ Aside from protobuf, msgpack was also trialed; similarly to protobuf, it's possi
 
 The proposed mechanism only supports sharing process-level resource attributes.
 
-In particular, it does not support carrying trace and span ids, which would be required to provide finer-grained correlation. Prior art by Elastic and Polar Signals (see below) provide such thread-level context sharing, and there's a follow-up OTEP [for supporting thread-level context sharing in the OTEL eBPF Profiler](https://github.com/open-telemetry/opentelemetry-specification/pull/4947) under development for this.
+In particular, it does not support carrying trace and span ids, which would be required to provide finer-grained correlation. Prior art by Elastic and Polar Signals (see below) provide such thread-level context sharing, and there's a follow-up OTEP [for supporting thread-level context sharing in the OTel eBPF Profiler](https://github.com/open-telemetry/opentelemetry-specification/pull/4947) under development for this.
 
 Process-level and thread-level context are complementary: The process-level mechanism proposed in this OTEP can be generically adopted by SDKs, and allows for flexibility in publishing metadata and in parsing it. Thread-level mechanisms, in contrast, may need specific support for individual languages/runtimes, and because they would be updated for every span, will need careful performance work.
 
@@ -290,7 +290,7 @@ The [OpenTelemetry eBPF Instrumentation (OBI)](https://github.com/open-telemetry
 
 The protocol proposed by this specification requires the ability to, inside the target application, allocate (small amounts of) memory, as well as invoking system calls to set up the naming and the inheritance permissions. This is not something that can currently be done with an eBPF-based approach and thus this spec can't currently be implemented using OBI.
 
-**Mitigation**: For OBI-to-OTEL eBPF Profiler communication, we can separately introduce an out-of-band channel using the existing kernel eBPF primitives, given both tools operate in kernel space.
+**Mitigation**: For OBI-to-OTel eBPF Profiler communication, we can separately introduce an out-of-band channel using the existing kernel eBPF primitives, given both tools operate in kernel space.
 
 ## Prior art and alternatives
 
@@ -304,7 +304,7 @@ Both approaches demonstrate the need for process-level data sharing and validate
 
 ### Alternatives Considered and Rejected
 
-1. Global Variables (Current Approach in OTEL eBPF Profiler)
+1. Global Variables (Current Approach in OTel eBPF Profiler)
 
    Use global variables with well-known symbol names to store process context.
 
@@ -344,7 +344,7 @@ Both approaches demonstrate the need for process-level data sharing and validate
    - Conflicts with the Collector's stateless design philosophy
    - Would require tracking resource attributes for each signal and correlating by process/container IDs
 
-   **Why rejected**: Wide impact on collector for all OTEL signals.
+   **Why rejected**: Wide impact on collector for all OTel signals.
 
 4. Custom ELF Sections
 
@@ -397,7 +397,7 @@ Both approaches demonstrate the need for process-level data sharing and validate
 The following proof-of-concept implementations demonstrate feasibility across multiple languages:
 
 - **[process-context-c-and-cpp](https://github.com/open-telemetry/sig-profiling/tree/main/process-context/c-and-cpp)**: Complete reference implementation in C/C++ with protobuf payload
-- **[otel-java-extension-demo](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo)**: OTEL Java SDK extension for automatic publication
+- **[otel-java-extension-demo](https://github.com/ivoanjo/proc-level-demo/tree/main/otel-java-extension-demo)**: OTel Java SDK extension for automatic publication
 - **[ebpf-program](https://github.com/ivoanjo/proc-level-demo/tree/main/ebpf-program)**: Example eBPF program demonstrating event-driven publishing detection
 - **[OpenTelemetry eBPF Profiler PR](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1181)**: Integration into eBPF Profiler
 
