@@ -48,15 +48,15 @@ The `payload` can optionally be placed after the header (with the `payload` poin
 The `monotonic_published_at_ns` SHOULD use a timestamp from the `CLOCK_BOOTTIME` system clock.
 This timestamp is used for detecting if the context is consistent/during updates and thus:
 
-* `monotonic_published_at_ns` being zero is reserved to indicate the context is being mutated and is not yet ready for reading
-* Every update to `monotonic_published_at_ns` must provide a different value for this timestamp
+* `monotonic_published_at_ns` being zero is reserved to indicate the context is being mutated and is not yet ready for reading.
+* Every update to `monotonic_published_at_ns` must provide a different value for this timestamp.
 
 ### Payload Format
 
 The payload uses protobuf with the `ProcessContext` message:
 
 ```protobuf
-// Copyright 2019, OpenTelemetry Authors
+// Copyright The OpenTelemetry Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
