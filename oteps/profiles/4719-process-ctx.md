@@ -292,6 +292,29 @@ The protocol proposed by this specification requires the ability to, inside the 
 
 **Mitigation**: For OBI-to-OTel eBPF Profiler communication, we can separately introduce an out-of-band channel using the existing kernel eBPF primitives, given both tools operate in kernel space.
 
+### Applications with many entries in proc
+
+Some processes can have a very large number of entries in `/proc/<pid>/maps` (pathological cases with millions of entries
+[have been observed](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/issues/1255)), which could cause a lot of overhead
+in parsing these mappings during the discovery step of the Reading Protocol.
+
+**Mitigation**: Several strategies can reduce discovery cost for consumers affected by this:
+
+- **Caching**: Once a mapping is found, readers can cache its address and only re-scan `/proc/<pid>/maps` when needed (the Reading Protocol already recommends this).
+- **eBPF-assisted discovery**: Readers with eBPF capabilities can hook `prctl` calls to detect new mappings being published (as described in the Publication Protocol),
+   avoiding `/proc/<pid>/maps` parsing entirely. This works as long as the hook is present by the time the application publishes or updates the context.
+- **Consumer-side limits**: Readers can set a threshold on the number of mappings they are willing to scan per process, skipping discovery for processes that exceed it.
+
+If the above are not enough, two spec extensions could be to:
+
+- **Deterministic address placement**: Publishers could place the mapping (`MAP_FIXED`) at a deterministic address, allowing readers to probe directly without scanning.
+- **`/proc/<pid>/fd` discovery**: If `memfd_create` is used and the file descriptor is kept open, the mapping will also appear under `/proc/<pid>/fd`, which may provide
+  a fallback alternative.
+- **Environment variable hint**: A process could set an environment variable at startup to declare that it may publish a process context, allowing readers to skip
+  `/proc/<pid>/maps` scanning for processes that hit some size limit and don't include this variable.
+
+These are not currently required by the specification, but are available as options if this becomes a practical problem for specific consumers.
+
 ## Prior art and alternatives
 
 ### Prior Art
@@ -391,6 +414,9 @@ Both approaches demonstrate the need for process-level data sharing and validate
 1. **Protobuf vs. msgpack vs. other**: Should the payload use protobuf or msgpack, or something else entirely (such as [Type, Length, Value](https://docs.google.com/document/d/1Ij6SYfv0lHOhTNsXNGVFpra3ZCfz-WC7QBXdB_OaoYc/edit?tab=t.0#heading=h.llbgke6lmlbd))? In our experiments, they all work well, the choice is primarily about ease of implementation in the ecosystem and standardization.
 
 2. **SDK implementation requirements**: Should SDKs publish this information by default whenever possible, or be opt-in?
+
+3. **Discovery cost for processes with many mappings**: Should the specification recommend an alternative discovery mechanism to reduce overhead for consumers scanning processes
+with very large numbers of `/proc/<pid>/maps` entries? See the [trade-off discussion](#applications-with-many-entries-in-proc) for details.
 
 ## Prototypes
 
