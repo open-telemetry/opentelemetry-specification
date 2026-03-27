@@ -17,6 +17,7 @@ the respective exporter documentation if exact details are required.
   * [Apache HTTP Server access log](#apache-http-server-access-log)
   * [CloudTrail Log Event](#cloudtrail-log-event)
   * [Google Cloud Logging](#google-cloud-logging)
+  * [systemd-journald](#systemd-journald)
   * [Elastic Common Schema](#elastic-common-schema)
 - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
 - [References](#references)
@@ -498,6 +499,33 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 | http_request | HttpRequest | The HTTP request associated with the log entry, if any. | `Attributes["gcp.http_request"]` |
 | trace_sampled | boolean | The sampling decision of the trace associated with the log entry. | TraceFlags.SAMPLED |
 | All other fields | | | `Attributes["gcp.*"]` |
+
+### systemd-journald
+
+| Field | Type | Description | Maps to Unified Model Field |
+| ----- | ---- | ----------- | --------------------------- |
+| `_SOURCE_REALTIME_TIMESTAMP` | uint64 | The earliest trusted timestamp of the message, if known, as CLOCK_REALTIME in microseconds since the Unix epoch. Optional. | Timestamp |
+| `__REALTIME_TIMESTAMP` | uint64 | The wallclock time at the point in time the entry was received by the journal, in microseconds since the Unix epoch. This is an address field used during serialization, not a stored journal field. Always present. | ObservedTimestamp |
+| `PRIORITY` | number | Syslog-compatible priority value (0=Emergency … 7=Debug). | Severity |
+| `_HOSTNAME` | string | The name of the originating host. | `Resource["host.name"]` |
+| `_MACHINE_ID` | string | The machine ID of the originating host as configured in machine-id(5). | `Resource["host.id"]` |
+| `_SYSTEMD_UNIT` | string | The systemd unit name of the service that generated the log entry (e.g. `nginx.service`). | `Resource["service.name"]` |
+| `SYSLOG_IDENTIFIER` | string | The syslog identifier string of the process that generated the log entry. Used as service name when `_SYSTEMD_UNIT` is not present. | `Resource["service.name"]` |
+| `SYSLOG_FACILITY` | number | The syslog facility identifier. | `Attributes["syslog.facility"]` |
+| `MESSAGE_ID` | string | A 128-bit UUID identifying the type of message. Used to recognize well-known message types. | `Attributes["journald.message_id"]` |
+| `MESSAGE` | string | The human-readable log message. | Body |
+| `TID` | number | The numeric thread ID the log message originates from. | `Attributes["thread.id"]` |
+| `_PID` | number | The process identifier (PID) of the process that generated the log entry. | `Attributes["process.pid"]` |
+| `_UID` | number | The user identifier (UID) of the process that generated the log entry. | `Attributes["process.user.id"]` |
+| `_GID` | number | The group identifier (GID) of the process that generated the log entry. | `Attributes["process.group.id"]` |
+| `_COMM` | string | The name of the executable (as found in /proc/\<pid\>/comm). | `Attributes["process.executable.name"]` |
+| `_EXE` | string | The path to the executable. | `Attributes["process.executable.path"]` |
+| `_CMDLINE` | string | The command line of the process. | `Attributes["process.command_line"]` |
+| `_BOOT_ID` | string | The kernel boot ID. | `Attributes["host.boot.id"]` |
+| `CODE_FILE` | string | The source code file generating this message. | `Attributes["code.filepath"]` |
+| `CODE_LINE` | number | The source code line generating this message. | `Attributes["code.lineno"]` |
+| `CODE_FUNC` | string | The source code function generating this message. | `Attributes["code.function"]` |
+| All other fields | any | All other journal fields. | `Attributes["journald.*"]` |
 
 ### Elastic Common Schema
 
