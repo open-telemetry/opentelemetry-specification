@@ -414,3 +414,7 @@ These prototypes validate that the approach works across different languages and
 Supporting thread-level context sharing, to enable correlation of outside activity (e.g. profiles) with traces/spans is highly desired.
 
 The process context could also be used for entity detection as detailed in [OTEP 264](https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/entities/0264-resource-and-entities.md).
+
+Extending the mechanism to other operating systems, such as Windows and macOS, is a natural area for future work.
+The header and payload format in use are platform-agnostic and could be reused; what would need to be figured out per-OS is an equivalent mechanism for publishing and discovering the payload.
+This would also unlock support for tools similar to the OTel eBPF Profiler on those platforms.
