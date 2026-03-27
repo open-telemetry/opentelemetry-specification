@@ -14,7 +14,7 @@ External readers like the OpenTelemetry eBPF Profiler operate outside the instru
 
 ## Explanation
 
-We propose a mechanism for OpenTelemetry SDKs to publish process-level resource attributes, through a standard format based on Linux memory mappings.
+We propose a standard header and protobuf-based payload format, published via a Linux-specific mechanism (`mmap`, `prctl`, `/proc`), for OpenTelemetry SDKs to share process-level resource attributes with external readers.
 
 When an SDK initializes (or updates its attributes) it publishes this information to a small memory region that external processes can discover and read.
 
