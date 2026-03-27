@@ -49,6 +49,8 @@ release.
   ([#4849](https://github.com/open-telemetry/opentelemetry-specification/issues/4849))
 - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
   ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+- Stabilize Prometheus Timestamp and Start timestamp transformation.
+  ([#4953](https://github.com/open-telemetry/opentelemetry-specification/pull/4953))
 - Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
   add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
   Histogram.

@@ -17,6 +17,7 @@ aliases:
 - [Differences between Prometheus formats](#differences-between-prometheus-formats)
 - [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
   * [Metric Metadata](#metric-metadata)
+  * [Timestamps](#timestamps)
   * [Counters](#counters)
   * [Gauges](#gauges)
   * [Info](#info)
@@ -26,7 +27,6 @@ aliases:
   * [Native Histograms](#native-histograms)
   * [Summaries](#summaries)
   * [Dropped Types](#dropped-types)
-  * [Start Time](#start-time)
   * [Exemplars](#exemplars)
   * [Instrumentation Scope](#instrumentation-scope)
   * [Resource Attributes](#resource-attributes)
@@ -104,6 +104,14 @@ type-specific conversion rules listed below. Metric families without type
 metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
 The TYPE metadata MUST also be added to the OTLP [metric.metadata][metricMetadata]
 under the `prometheus.type` key (e.g. `prometheus.type="unknown"`).
+
+### Timestamps
+
+**Status**: [Stable](../document-status.md)
+
+If present, the Prometheus Metric Sample's Start timestamp (also referred to as the Created timestamp) MUST be converted to the Start timestamp of the OTLP data point. If no start timestamp is present, the start time of the OTLP data point SHOULD be left unset.
+
+If present, the Prometheus Metric Sample's Timestamp MUST be converted to the Timestamp of the OTLP data point. For metrics scraped from a Prometheus endpoint without an explicit timestamp, the timestamp of the OTLP data point MUST be set to the time of the scrape.
 
 ### Counters
 
@@ -267,12 +275,6 @@ The following Prometheus types MUST be dropped:
 
 * [Prometheus GaugeHistogram](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#gaugehistogram)
 * [Prometheus Native GaugeHistogram](https://prometheus.io/docs/specs/native_histograms/#gauge-histograms-vs-counter-histograms)
-
-### Start Time
-
-**Status**: [Development](../document-status.md)
-
-Prometheus Cumulative metrics can include the start time using the [`_created` sample series](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#counter-1). When converting Prometheus Counters to OTLP, conversion SHOULD use `_created` where available. When no `_created` metric is available, conversion MUST follow [Cumulative streams: handling unknown start time](../metrics/data-model.md#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
 
 ### Exemplars
 
