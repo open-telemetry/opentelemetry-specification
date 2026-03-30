@@ -67,7 +67,7 @@ TLS are stored in the **dynamic symbols** table of the process binary itself or 
 
 ### Thread Local Variable
 
-We introduce a single thread local - `custom_labels_current_set_v2` (working name). This is a pointer to the active **Thread Local Context Record** associated with the given thread.
+We introduce a single thread local - `otel_thread_ctx_v1`. This is a pointer to the active **Thread Local Context Record** associated with the given thread.
 
 ### Thread Local Context Record
 
