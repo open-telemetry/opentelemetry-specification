@@ -20,7 +20,7 @@ sections:
           - name: Get a Tracer with scope attributes
             status: '+'
           - name: Associate Tracer with InstrumentationScope
-            status: '?'
+            status: '+'
           - name: Safe for concurrent calls
             status: '+'
           - name: Shutdown (SDK only required)
@@ -192,7 +192,7 @@ sections:
       - name: '`AsynchronousGauge` instrument is supported.'
         status: '+'
       - name: '`Gauge` instrument is supported.'
-        status: '-'
+        status: '+'
       - name: '`UpDownCounter` instrument is supported.'
         status: '+'
       - name: '`AsynchronousUpDownCounter` instrument is supported.'
@@ -208,9 +208,9 @@ sections:
       - name:
           A valid instrument MUST be created and warning SHOULD be emitted when multiple instruments are registered under
           the same `Meter` using the same `name`.
-        status: '?'
+        status: '+'
       - name: Duplicate instrument registration name conflicts are resolved by using the first-seen for the stream name.
-        status: '?'
+        status: '+'
       - name: It is possible to register two instruments with same `name` under different `Meter`s.
         status: '+'
       - name: Instrument names conform to the specified syntax.
@@ -278,7 +278,7 @@ sections:
       - name: The `ExplicitBucketHistogram` aggregation is available.
         status: '+'
       - name: The `ExponentialBucketHistogram` aggregation is available.
-        status: '?'
+        status: '+'
       - name: The metrics Reader implementation supports registering metric Exporters
         status: '+'
       - name: The metrics Reader implementation supports configuring the default aggregation on the basis of instrument kind.
@@ -349,6 +349,8 @@ sections:
         status: '-'
       - name: Metric SDK supports per-timeseries cumulative start timestamps
         status: '?'
+      - name: The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter
+        status: '-'
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
@@ -444,7 +446,7 @@ sections:
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
-        status: '-'
+        status: '+'
       - name: OTEL_RESOURCE_ATTRIBUTES
         status: '+'
       - name: OTEL_SERVICE_NAME
@@ -454,9 +456,9 @@ sections:
       - name: OTEL_PROPAGATORS
         status: '-'
       - name: OTEL_BSP_*
-        status: '-'
+        status: '+'
       - name: OTEL_BLRP_*
-        status: '-'
+        status: '+'
       - name: OTEL_EXPORTER_OTLP_*
         status: '+'
       - name: OTEL_EXPORTER_ZIPKIN_*
@@ -492,9 +494,9 @@ sections:
       - name: OTEL_ATTRIBUTE_COUNT_LIMIT
         status: '-'
       - name: OTEL_METRIC_EXPORT_INTERVAL
-        status: '-'
+        status: '+'
       - name: OTEL_METRIC_EXPORT_TIMEOUT
-        status: '-'
+        status: '+'
       - name: OTEL_METRICS_EXEMPLAR_FILTER
         status: '-'
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
@@ -502,7 +504,7 @@ sections:
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '-'
       - name: OTEL_CONFIG_FILE
-        status: '-'
+        status: '+'
   - name: Declarative configuration
     features:
       - name: '`Parse` a configuration file'

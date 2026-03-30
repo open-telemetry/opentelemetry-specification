@@ -77,12 +77,12 @@ backwards incompatible compared to adding a new API.
 
 Examples: HBase, Envoy developers.
 
-* They are shipping self-contained binaries that may accept YAML or similar run-time configuration,
+* They are shipping self-contained binaries that may accept YAML or similar runtime configuration,
  but are not expected to support extensibility/plugins beyond the default OpenTelemetry SDK,
  OpenTelemetry SDKTracer, and OpenTelemetry wire format exporter.
 * They may have their own recommendations for sampling rates, but don't run the binaries in
  production, only provide packaged binaries. So their sampling rate configs, and sampling strategies
- need to be a finite "built in" set from OpenTelemetry's SDK.
+ need to be a finite "built-in" set from OpenTelemetry's SDK.
 * They need to deal with upstream sampling decisions made by services that call them.
 
 **Solution:**
@@ -169,7 +169,7 @@ OpenTelemetry API has two flags/properties:
   * Users can use this property to determine if expensive trace events can be avoided.
 * `SampledFlag`
   * This flag is propagated via the `TraceOptions` to the child Spans (e.g.
-   `TraceOptions.isSampled()`). For more details see the w3c definition [here][trace-flags].
+   `TraceOptions.isSampled()`). For more details see the W3C definition [here][trace-flags].
   * In Dapper based systems this is equivalent to `Span` being `sampled` and exported.
 
 The flag combination `SampledFlag == false` and `RecordEvents == true` means that the current `Span`
@@ -299,7 +299,7 @@ The SDK must call the `Sampler` every time a `Span` is created during the start 
      when the logical `Span` operation should start.
   * Cons:
     * The most common case would have required an extra API call.
-    * Error prone, users may forget to call the extra API.
+    * Error-prone, users may forget to call the extra API.
     * Unexpected and hard to find errors if user tries to create a child `Span` before calling
      MakeSamplingDecision().
 * We considered allowing the sampling decision to be arbitrarily delayed, but guaranteed before
