@@ -34,6 +34,9 @@ release.
 
 ### SDK Configuration
 
+- Require spec changes to consider declarative config schema
+  ([#4916](https://github.com/open-telemetry/opentelemetry-specification/pull/4916))
+
 ### Supplementary Guidelines
 
 ### OTEPs
