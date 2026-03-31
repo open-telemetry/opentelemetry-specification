@@ -119,8 +119,6 @@ This also explains the functional & API differences:
   Context-scoped attributes would be implementable, it would break the intended
   meaning by extending the scope of attributes to called services and would also
   raise many security concerns.
-* Baggage is both readable and writable for the application, while Context-scoped
-  attributes, like all other telemetry attributes, are write-only.
 * Baggage only supports string values.
 * **Related** Baggage (implicitly or explicitly linked to telemetry items) MAY not be available
   to telemetry exporters (although e.g., a SpanProcessor could be used to change that),
@@ -160,35 +158,31 @@ are expected to implement this.
 
 ### API changes
 
-The API would be extended with a variation of the following:
+The API would be extended with an implementation of the following:
 
 * `Context SetContextScopedAttributes(Context context, Attributes attributes)`
+* `Attributes GetContextScopedAttributes(Context context)`
 
 `SetContextScopedAttributes` takes a set of attributes and a Context and returns
-a new Context that has the given context attributes set. Observe the following notes:
+a new Context that has the given context attributes set.
 
-* If an associated telemetry item (e.g. Span or LogRecordItem) already has an attribute with
-  a name that is also in the Context-scoped attributes, the telemetry item attribute
-  MUST take precedence.
+`GetContextScopedAttributes` takes a Context and returns the context-scoped
+Attributes, or an empty set if none exists.
 
-As for all APIs, care should be taken to expose it in a way that API-users do
-not bind themselves to a particular SDK implementation. One possible way to expose this
-would be through a global OpenTelemetry instance (e.g.
-`GlobalOpenTelemetry.GetInstance().GetContextAttributeWriter()` or
+One possible way to expose this would be through a (global) OpenTelemetry instance (e.g.
 `GlobalOpenTelemetry.GetInstance().SetContextScopedAttributes()`.
-As this is a write-only API, the API-only implementation should be a no-op.
 
-### SDK changes
-
-The SDK-implementation could look like this:
+The implementation could look like this:
 
 ```C#
-Context AddContextScopedAttributes(Context context, Attributes attributes) {
+Context SetContextScopedAttributes(Context context, Attributes attributes) {
     return context.WithValue(
         _CTX_KEY_SCOPED_ATTRS,
-        MergeAttributes(context.GetValue(_CTX_KEY_SCOPED_ATTRS), attributes));
+        attributes);
 }
 ```
+
+### SDK changes
 
 Upon telemetry items creation (e.g. Span, LogRecordItem), the SDK MUST add
 the context-scoped attributes of the logically associated Context,
@@ -198,6 +192,34 @@ This MUST be done before any extension point is invoked, e.g. Sampler or Process
 This will be an implementation-level change without any changes in the API-surface
 of the SDK (i.e. it is not necessary to make Context-scoped attributes distinguishable
 from “direct” telemetry attributes).
+
+The snippet below shows what the expected behavior looks like:
+
+```java
+public Span startSpan(...) {
+  // Implicit (currently active) or explicit parent.
+  Context context = getParentContext();
+
+  // Attributes specified by the user upon creation time.
+  Attributes initialAttributes = getInitialAttributes();
+
+  // Merge the Context attributes, which have lesser priority
+  // than the attributes explicitly specified at telemetry item
+  // creation.
+  getContextScopedAttributes(context).forEach((key, value) -> {
+    if (!initialAttributes.containsKey(key)) {
+      initialAttributes.put(key, value);
+    }
+  });
+
+  // Pass the updated attributes to the sampling layer.
+  SamplingDecision samplingDecision = sampler.ShouldSample(
+      context,
+      initialAttributes, ...);
+
+  return new Span(initialAttributes, ...);
+}
+```
 
 ## Trade-offs and mitigations
 
@@ -229,13 +251,9 @@ the main text, because it seems to add more effort and complexity than value.
 #### SDK-changes for semantically distinct Context-scoped attributes
 
 The Context-scoped attributes would not be automatically included with the other
-telemetry attributes. Instead, there would be separate getters for the Context-scoped
+telemetry attributes. Instead, extension components (e.g. samplers and processors) would
+explicitly invoke `GetContextScopedAttributes()` to get and set any Context-scoped
 attributes on all telemetry items.
-
-Additionally, at the SDK-level, the following could be provided, mainly for access
-from Samplers:
-
-* `Attributes GetContextScopedAttributes(Context context)`
 
 **Alternatively**, a new argument could be added to the sampler input (languages
 that implement the sampler arguments with a single object with multiple properties
@@ -331,7 +349,7 @@ in the main OTEP.
 implements “trace-fields” (trace attributes) and seems to be based on a shared
 mutable set of Attributes created together with the root span instead of having
 an immutable set per (child) Context. If we wanted these semantics, that would
-probably warrant a modified API replacing AddContextScopedAttributes:
+probably warrant a modified API replacing SetContextScopedAttributes:
 
 * `Context CreateContextScopedRoot(Context)`
 * `void SetAttributes(Context context, Attributes newAttributes)`
@@ -429,8 +447,6 @@ attributes are meant to solve. This would require:
   (this point would be more or less the same as what is required for the proposed
   OTEP, e.g. a span processor could be added that enumerates the baggage, filters
   for attributes).
-* Ideally, protecting Baggage entries that are meant for telemetry-usage instead
-  of app-usage from being read back by the application.
 
 Using Baggage as a vehicle for implementing Context-scoped attributes seems like
 a valid approach, the decision could be left up to the language. Whether this
@@ -461,8 +477,8 @@ with this approach though:
 
 * Configuration could be defined, at least initially, as a single boolean value, similar
   to how the entire SDK is enabled or disabled via the `disabled` configuration option.
-  However, this OTEP leaves the topic open in case further options are needed, e.g.
-  only enable Context-scoped attributes for some signals.
+  However, this OTEP leaves the topic open in case further options
+  are needed, e.g. only enable Context-scoped attributes for some signals.
 
 ## Future possibilities
 
