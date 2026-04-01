@@ -70,7 +70,7 @@ and extends it with:
   which it was captured.
 
 For details on the required attributes for `Mapping` messages and the custom
-hashing scheme for build id generation, see [Mappings](./mappings.md).
+hashing scheme for build ID generation, see [Mappings](./mappings.md).
 
 For more information on compatibility with [pprof](https://github.com/google/pprof),
 see [pprof](./pprof.md).
