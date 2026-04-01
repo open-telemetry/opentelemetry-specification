@@ -57,6 +57,8 @@ release.
   ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
 - Stabilize Prometheus Dropped Types transformation.
   ([#4952](https://github.com/open-telemetry/opentelemetry-specification/pull/4952))
+- Stabilize translation of labels prefixed with `otel_scope_` to OTLP Instrumentation Scope.
+  ([#5004](https://github.com/open-telemetry/opentelemetry-specification/pull/5004))
 
 ### SDK Configuration
 
