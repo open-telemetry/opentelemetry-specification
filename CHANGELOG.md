@@ -12,6 +12,8 @@ release.
 - Align environment variable context propagation name restrictions with POSIX.1-2024
   and define normalization behavior.
   ([#4914](https://github.com/open-telemetry/opentelemetry-specification/issues/4914))
+- Decouple the responsibilities of the environment variable propagation carrier.
+  ([#4961](https://github.com/open-telemetry/opentelemetry-specification/issues/4961))
 
 ### Traces
 
