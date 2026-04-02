@@ -529,7 +529,7 @@ naming conventions encourage metric names to match the following regular express
 `[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replaced with the
 `_` character. Multiple consecutive `_` characters SHOULD be replaced with a
 single `_` character. This conversion, or other labels (e.g. `otel_scope_name`)
-added by this specificaiton, may cause different OpenTelemetry keys to map to
+added by this specification, may cause different OpenTelemetry keys to map to
 the same Prometheus key. In such cases, the values MUST be concatenated together,
 separated by `;`, and ordered by the lexicographical order of the original keys.
 
