@@ -524,7 +524,7 @@ OpenTelemetry Metric Attributes MUST be converted to
 [Prometheus labels](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).
 String Attribute values are converted directly to Metric Attributes, and
 non-string Attribute values MUST be converted to string attributes following
-the [attribute specification](../common/README.md#attribute). Prometheus
+the [attribute specification](../common/README.md#anyvalue-representation-for-non-otlp-protocols). Prometheus
 naming conventions encourage metric names to match the following regular expression:
 `[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replace with the
 `_` character. Multiple consecutive `_` characters SHOULD be replaced with a
