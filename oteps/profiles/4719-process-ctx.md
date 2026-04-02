@@ -180,7 +180,7 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 6. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
 
 7. **Re-verify header**: Read `monotonic_published_at_ns` again. If it has not changed, the read of header + payload is consistent. This ensures there were no concurrent changes to the process context.
-If `monotonic_published_at_ns` is different from the value read in step 2, restart at 2 (MAY skip signature and version validation after mapping is considered established).
+If `monotonic_published_at_ns` is different from the value read in step 3, restart at 2 (MAY skip signature and version validation after mapping is considered established).
 
 8. **Decode payload**: Deserialize the bytes as a Protocol Buffer payload message
 
