@@ -280,7 +280,7 @@ Aside from protobuf, msgpack was also trialed; similarly to protobuf, it's possi
 
 The proposed mechanism only supports sharing process-level resource attributes.
 
-In particular, it does not support carrying trace and span ids, which would be required to provide finer-grained correlation. Prior art by Elastic and Polar Signals (see below) provide such thread-level context sharing, and there's a follow-up OTEP [for supporting thread-level context sharing in the OTel eBPF Profiler](https://github.com/open-telemetry/opentelemetry-specification/pull/4947) under development for this.
+In particular, it does not support carrying trace and span IDs, which would be required to provide finer-grained correlation. Prior art by Elastic and Polar Signals (see below) provide such thread-level context sharing, and there's a follow-up OTEP [for supporting thread-level context sharing in the OTel eBPF Profiler](https://github.com/open-telemetry/opentelemetry-specification/pull/4947) under development for this.
 
 Process-level and thread-level context are complementary: The process-level mechanism proposed in this OTEP can be generically adopted by SDKs, and allows for flexibility in publishing metadata and in parsing it. Thread-level mechanisms, in contrast, may need specific support for individual languages/runtimes, and because they would be updated for every span, will need careful performance work.
 
