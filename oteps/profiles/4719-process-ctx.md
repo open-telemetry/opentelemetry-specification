@@ -135,7 +135,7 @@ Publishing the context should follow these steps:
 6. **Encode payload**: Serialize the payload message using protobuf (storing it either following the header OR in a separate memory allocation)
 7. **Write header fields**: Populate `signature`, `version`, `payload_size`, `payload` but not yet `monotonic_published_at_ns`
 8. **Memory barrier**: Use language/compiler-specific techniques to ensure all previous writes complete before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
-9. **Write signature**: Write `monotonic_published_at_ns` last
+9. **Write timestamp**: Write `monotonic_published_at_ns` last. This field is used to detect that the context is ready for use by the reader.
 10. **Name mapping**: Use `prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ..., "OTEL_CTX")` to name the mapping. This step should be done unconditionally, although naming mappings is not always supported by the kernel.
 
 The `monotonic_published_at_ns` MUST be written last to ensure readers never observe incomplete or invalid data. Once this field is non-zero (and thus all fields are also non-zero), the entire mapping is considered valid.
