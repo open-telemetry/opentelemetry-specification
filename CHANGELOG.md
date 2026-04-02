@@ -29,6 +29,9 @@ release.
 
 ### Logs
 
+- Add event to span event bridge.
+  ([#5006](https://github.com/open-telemetry/opentelemetry-specification/pull/5006))
+
 ### Baggage
 
 ### Profiles
