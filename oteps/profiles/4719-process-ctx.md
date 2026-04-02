@@ -37,7 +37,7 @@ The header is stored in a memory mapping with the following format:
 
 | Field                       | Type      | Description                                                                                       |
 |-----------------------------|-----------|---------------------------------------------------------------------------------------------------|
-| `signature`                 | `char[8]` | Always set to `"OTEL_CTX"`                                                                        |
+| `signature`                 | `char[8]` | Always set to the 8-byte sequence `"OTEL_CTX"` (not NUL-terminated; readers MUST compare exactly 8 bytes) |
 | `version`                   | `uint32`  | Format version. Currently `2` (`1` can be used for development)                                   |
 | `payload_size`              | `uint32`  | Number of bytes of the encoded payload                                                            |
 | `monotonic_published_at_ns` | `uint64`  | Monotonic clock timestamp from `CLOCK_BOOTTIME` of when the context was published, in nanoseconds |
@@ -175,7 +175,7 @@ External readers (such as the OpenTelemetry eBPF Profiler) discover and read pro
 
 4. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
 
-5. **Read payload**: Read the `payload` and `payload_size` fields. Copy `payload_size` bytes from `payload` pointer it into reader-local memory
+5. **Read payload**: Read the `payload` and `payload_size` fields. Copy `payload_size` bytes from the `payload` pointer into reader-local memory
 
 6. **Memory barrier**: Ensure previous reads terminate before proceeding (`atomic_thread_fence(memory_order_seq_cst)` or equivalent)
 
