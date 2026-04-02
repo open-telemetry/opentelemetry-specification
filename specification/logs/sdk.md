@@ -589,7 +589,7 @@ with the following mapping:
 * if the `LogRecord` has an
   [ObservedTimestamp](./data-model.md#field-observedtimestamp), the processor
   MUST add a span event attribute named `log.record.observed_time_unix_nano`
-  containing that value as Unix nanoseconds.
+  containing that value as UNIX nanoseconds.
 * if the `LogRecord` has a specified
   [SeverityNumber](./data-model.md#field-severitynumber) (i.e. not `0`), the
   processor MUST add a span event attribute named
