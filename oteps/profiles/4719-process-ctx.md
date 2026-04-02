@@ -111,7 +111,7 @@ message ProcessContext {
   //
   // Consider adding any keys here to the profiles semantic conventions in
   // https://opentelemetry.io/docs/specs/semconv/general/profiles/
-  repeated opentelemetry.proto.common.v1.KeyValue extra_attributes = 2;
+  repeated opentelemetry.proto.common.v1.KeyValue attributes = 2;
 }
 
 ```
