@@ -19,7 +19,7 @@ The definition of a `version` is a key-value attribute pair of `string` to `stri
 available to hint at the type of a version, such as the following:
 
 `version=semver:1.2.3` (a semantic version)
-`version=git:8ae73a` (a git sha hash)
+`version=git:8ae73a` (a Git sha hash)
 `version=0.0.4.2.20190921` (a untyped version)
 
 ## Internal details

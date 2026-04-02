@@ -22,12 +22,31 @@ SEMCONVGEN_VERSION=0.17.0
 
 # TODO: add `yamllint` step to `all` after making sure it works on Mac.
 .PHONY: all
-all: install-tools markdownlint markdown-link-check cspell
+all: install-tools markdownlint textlint markdown-link-check cspell
 
+# Perform an analysis of language used which includes spell checking and linting.
+.PHONY: language-analysis
+language-analysis: textlint cspell
+ 
 .PHONY: cspell
 cspell:
 	@if ! npm ls cspell; then npm install; fi
 	npx cspell . --no-progress
+
+.PHONY: textlint
+textlint:
+	@if ! npm ls textlint; then npm install; fi
+
+	@if [ "$(format)" = "github" ]; then \
+		npx textlint --format github .; \
+	else \
+		npx textlint .; \
+	fi
+
+.PHONY: textlint-correction
+textlint-correction:
+	@if ! npm ls textlint; then npm install; fi
+	npx textlint --fix .
 
 .PHONY: markdown-link-check
 markdown-link-check:
@@ -92,8 +111,13 @@ yamllint:
 
 # Run all checks in order of speed / likely failure.
 .PHONY: check
-check: cspell markdownlint markdown-link-check
+check: cspell textlint markdownlint markdown-link-check
 	@echo "All checks complete"
+
+# Attempt to fix issues / regenerate tables.
+.PHONY: fix
+fix: textlint-correction
+	@echo "All autofixes complete"
 
 # Generate spec compliance matrix from YAML source
 .PHONY: compliance-matrix
