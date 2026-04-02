@@ -231,7 +231,7 @@ The OpenTelemetry eBPF profiler, by design, has the necessary permissions and op
 
 When a process forks, child processes do not inherit the parent's process context mapping. This is accomplished through the `madvise(MADV_DONTFORK)` flag, which explicitly marks the memory region as non-inheritable across `fork()`.
 
-**Why this matters**: Without this protection, child processes would inherit stale resource attributes from the parent. For example, if a parent process has `service.instance.id=uuid-parent` and forks a child that initializes its own OpenTelemetry SDK with `service.instance.id=uuid-child`, the child would initially expose the parent's UUID until it publishes its own context. This could lead to misattribution of telemetry in backend systems.
+**Why this matters**: Without this protection, child processes would inherit stale resource attributes from the parent. For example, if a parent process has `service.instance.id=uuid-parent` and forks a child that initializes its own OpenTelemetry SDK with `service.instance.id=uuid-child`, the child would initially expose the parent's UUID until it publishes its own context. This could lead to incorrect attribution of telemetry in backend systems.
 
 **Behavior**:
 
@@ -319,7 +319,7 @@ These are not currently required by the specification, but are available as opti
 
 ### Prior Art
 
-**Elastic apmint**: Elastic's apmint, described in <https://www.elastic.co/observability-labs/blog/continuous-profiling-distributed-tracing-correlation> and <https://github.com/elastic/apm/blob/main/specs/agents/universal-profiling-integration.md> uses global variables to share process-level data. This is currently used by the Elastic Java trace agent.
+**Elastic Universal Profiling**: Elastic's universal profiling integration, described in <https://www.elastic.co/observability-labs/blog/continuous-profiling-distributed-tracing-correlation> and <https://github.com/elastic/apm/blob/main/specs/agents/universal-profiling-integration.md> uses global variables to share process-level data. This is currently used by the Elastic Java trace agent.
 
 **Polar Signals Custom Labels**: Parca uses a [global variable](https://github.com/polarsignals/custom-labels/blob/master/custom-labels-v1.md#custom_labels_abi_version) to share ABI version information.
 
