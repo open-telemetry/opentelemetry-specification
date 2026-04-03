@@ -463,10 +463,8 @@ An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulati
 - Histograms with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
 
 `Exemplars` are converted as described in the [Exemplars](#exemplars-1) section.
-If the Prometheus protocol supports a single exemplar per-bucket:
-- The largest exemplar that falls into each bucket MUST be converted.
-- If no exemplars exist on a bucket, the highest exemplar from a lower bucket
-  MUST be used, even though it is duplicated.
+If the Prometheus protocol supports a single exemplar per-bucket, the latest
+exemplar that falls into each bucket MUST be converted.
 
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
 
@@ -555,8 +553,7 @@ supports them as follows:
 * If present, the OpenTelemetry Exemplar's Trace ID and Span ID MUST be added as
   Exemplar labels using the `trace_id` and `span_id` keys, respectively. These
   labels MUST take precedence over labels from `filtered_attributes` in cases
-  where there is a key collision. `trace_id` and `span_id` SHOULD be preserved
-  over labels from `filtered_attributes` when exemplar label limits are exceeded.
+  where there is a key collision.
 * Timestamps MUST be added as timestamps on the Prometheus exemplar.
 * `filtered_attributes` MUST be added as labels on the Prometheus exemplar,
   unless they would exceed the Prometheus protocol's exemplar limits. For
