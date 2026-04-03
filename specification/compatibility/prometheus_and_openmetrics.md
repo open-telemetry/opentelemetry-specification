@@ -88,12 +88,37 @@ The [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition
 MUST be added as the Name of the OTLP metric. The name SHOULD NOT be altered.
 
 [Prometheus UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily),
-if present, MUST be converted to the unit of the OTLP metric. The unit SHOULD
-be translated from Prometheus conventions to OpenTelemetry conventions by:
+if present, MUST be converted to the unit of the OTLP metric. The unit MUST
+be translated from words to the UCUM abbreviation if it is in the following set
+of commonly-used units:
 
-* Converting from full words to abbreviations (e.g. "milliseconds" to "ms").
-* Special case: Converting "ratio" to "1".
-* Converting "foo_per_bar" to "foo/bar".
+| Prometheus Unit | UCUM Abbreviation |
+| :--- | :--- |
+| `days` | `d` |
+| `hours` | `h` |
+| `minutes` | `min` |
+| `seconds` | `s` |
+| `milliseconds` | `ms` |
+| `microseconds` | `us` |
+| `nanoseconds` | `ns` |
+| `bytes` | `By` |
+| `kibibytes` | `KiBy` |
+| `mebibytes` | `MiBy` |
+| `gibibytes` | `GiBy` |
+| `tibibytes` | `TiBy` |
+| `kilobytes` | `KBy` |
+| `megabytes` | `MBy` |
+| `gigabytes` | `GBy` |
+| `terabytes` | `TBy` |
+| `meters` | `m` |
+| `volts` | `V` |
+| `amperes` | `A` |
+| `joules` | `J` |
+| `watts` | `W` |
+| `grams` | `g` |
+| `celsius` | `Cel` |
+| `hertz` | `Hz` |
+| `percent` | `%` |
 
 [Prometheus HELP metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information),
 if present, MUST be added as the description of the OTLP metric.
