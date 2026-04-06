@@ -447,7 +447,7 @@ to a Prometheus Gauge.
 If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` SHOULD be added by default, otherwise the name MUST remain unchanged. Exporters SHOULD provide a configuration option to disable the addition of `_total` suffixes.
 Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_created` metric as well.
 
-`Exemplars` are converted as described in the [Exemplars](#exemplars-1) section.
+`Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
 If the Prometheus protocol only supports a single exemplar on the Sum, a random
 exemplar SHOULD be converted.
 
@@ -462,8 +462,8 @@ An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulati
 - A series of `{name}_bucket` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up to the boundary reported in the `le` label. These points will include a single exemplar that falls within `le` label and no other `le` labelled point.  The final bucket metric MUST have an `+Inf` threshold.
 - Histograms with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
 
-`Exemplars` are converted as described in the [Exemplars](#exemplars-1) section.
-If the Prometheus protocol supports a single exemplar per-bucket, the latest
+`Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
+If the Prometheus protocol only supports a single exemplar per-bucket, the latest
 exemplar that falls into each bucket MUST be converted.
 
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
@@ -501,7 +501,7 @@ Histogram as follows:
   result being that the Offset fields are different-by-one.
 - `Min` and `Max` are not used.
 - `StartTimeUnixNano` is not used.
-- `Exemplars` are converted as described in the [Exemplars](#exemplars-1) section.
+- `Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
 
 [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram)
 metrics with the delta aggregation temporality are dropped.
@@ -542,7 +542,7 @@ added by this specification, may cause different OpenTelemetry keys to map to
 the same Prometheus key. In such cases, the values MUST be concatenated together,
 separated by `;`, and ordered by the lexicographical order of the original keys.
 
-### Exemplars
+### Exemplar Conversion
 
 **Status**: [Stable](../document-status.md)
 
