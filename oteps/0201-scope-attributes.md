@@ -47,7 +47,7 @@ The following is the summary of proposed changes:
   with emitted telemetry.
 ```
 
-Since the attributes are optional this is a backwards compatible change.
+Since the attributes are optional this is a backward compatible change.
 
 We will modify the following clause:
 
@@ -69,7 +69,7 @@ It is unspecified whether or under which conditions the same or different
 ```
 
 Since we are defining more precisely previously undefined behavior this is a
-backwards compatible change.
+backward compatible change.
 
 #### Meter
 
@@ -130,7 +130,7 @@ message InstrumentationScope {
 }
 ```
 
-This change is backwards compatible from OTLP's interoperability perspective. Recipients
+This change is backward compatible from OTLP's interoperability perspective. Recipients
 of old OTLP versions will not see the Scope attributes and will ignore them, which we
 consider acceptable from interoperability perspective. This is aligned with our general
 stance on what happens when telemetry sources _add_ new data which old recipients

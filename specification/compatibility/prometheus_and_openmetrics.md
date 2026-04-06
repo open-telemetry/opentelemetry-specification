@@ -269,7 +269,7 @@ In text formats where Prometheus Summaries are represented by multiple samples, 
 
 ### Dropped Types
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The following Prometheus types MUST be dropped:
 
@@ -287,7 +287,7 @@ OpenTelemetry histograms. Exemplars on counter metric points SHOULD be
 converted to exemplars on OpenTelemetry sums. If present, the timestamp
 MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
 retrieved from the `trace_id` and `span_id` label keys, respectively.  All
-labels not used for the trace and span ids MUST be added to the OpenTelemetry
+labels not used for the trace and span IDs MUST be added to the OpenTelemetry
 exemplar as attributes.
 
 ### Instrumentation Scope
@@ -367,8 +367,6 @@ in keys).
 
 ## OTLP Metric points to Prometheus
 
-**Status**: [Development](../document-status.md)
-
 ### Metric Metadata
 
 **Status**: [Development](../document-status.md)
@@ -383,7 +381,7 @@ metric points, the exporter SHOULD warn the user through error logging.
 
 The Name of an OTLP metric MUST be added as the
 [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
-Prometheus naming conventions encourage metric names to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
+Prometheus naming conventions encourage metric names to match the regular expression: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
 in the metric name SHOULD be replaced with the `_` character by default, aiming for compatibility with Prometheus conventions. Multiple
 consecutive `_` characters SHOULD be replaced with a single `_` character.
 
@@ -522,21 +520,20 @@ An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be conv
 
 ### Metric Attributes
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 OpenTelemetry Metric Attributes MUST be converted to
 [Prometheus labels](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).
 String Attribute values are converted directly to Metric Attributes, and
 non-string Attribute values MUST be converted to string attributes following
-the [attribute specification](../common/README.md#attribute).  Prometheus
-naming conventions encourage metric names to match the following regex:
-`[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replace with the `_` character.
-Multiple consecutive `_` characters SHOULD be replaced with a single `_`
-character. This may cause ambiguity in scenarios where multiple similar-named
-attributes share invalid characters at the same location.  In such unlikely
-cases, if multiple key-value pairs are converted to have the same Prometheus
-key, the values MUST be concatenated together, separated by `;`, and ordered by
-the lexicographical order of the original keys.
+the [attribute specification](../common/README.md#anyvalue-representation-for-non-otlp-protocols). Prometheus
+naming conventions encourage metric names to match the following regular expression:
+`[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replaced with the
+`_` character. Multiple consecutive `_` characters SHOULD be replaced with a
+single `_` character. This conversion, or other labels (e.g. `otel_scope_name`)
+added by this specification, may cause different OpenTelemetry keys to map to
+the same Prometheus key. In such cases, the values MUST be concatenated together,
+separated by `;`, and ordered by the lexicographical order of the original keys.
 
 ### Exemplars
 
