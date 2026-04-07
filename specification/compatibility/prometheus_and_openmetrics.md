@@ -441,8 +441,8 @@ equivalent unit word in Prometheus if it is included in the table below:
 | `KiBy` | `kibibytes` |
 | `MiBy` | `mebibytes` |
 | `GiBy` | `gibibytes` |
-| `TiBy` | `tibibytes` |
-| `KBy` | `kilobytes` |
+| `TiBy` | `tebibytes` |
+| `kBy` | `kilobytes` |
 | `MBy` | `megabytes` |
 | `GBy` | `gigabytes` |
 | `TBy` | `terabytes` |
