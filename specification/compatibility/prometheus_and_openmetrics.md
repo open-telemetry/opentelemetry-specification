@@ -39,7 +39,7 @@ aliases:
   * [Exponential Histograms](#exponential-histograms)
   * [Summaries](#summaries-1)
   * [Metric Attributes](#metric-attributes)
-  * [Exemplars](#exemplars-1)
+  * [Exemplar Conversion](#exemplar-conversion)
   * [Resource Attributes](#resource-attributes-1)
 
 <!-- tocstop -->
