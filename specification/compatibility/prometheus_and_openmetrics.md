@@ -105,8 +105,8 @@ of commonly-used units:
 | `kibibytes` | `KiBy` |
 | `mebibytes` | `MiBy` |
 | `gibibytes` | `GiBy` |
-| `tibibytes` | `TiBy` |
-| `kilobytes` | `KBy` |
+| `tebibytes` | `TiBy` |
+| `kilobytes` | `kBy` |
 | `megabytes` | `MBy` |
 | `gigabytes` | `GBy` |
 | `terabytes` | `TBy` |
