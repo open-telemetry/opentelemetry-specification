@@ -427,6 +427,8 @@ a Prometheus Unknown-typed metric if the `prometheus.type` key of
 [metric.metadata][metricMetadata] is `unknown`. Otherwise, it MUST be converted
 to a Prometheus Gauge.
 
+Exemplars on OpenTelemetry Gauges SHOULD be dropped.
+
 ### Sums
 
 **Status**: [Development](../document-status.md)
@@ -447,9 +449,11 @@ to a Prometheus Gauge.
 If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` SHOULD be added by default, otherwise the name MUST remain unchanged. Exporters SHOULD provide a configuration option to disable the addition of `_total` suffixes.
 Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_created` metric as well.
 
-`Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
-If the Prometheus protocol only supports a single exemplar on the Sum, a random
-exemplar SHOULD be converted.
+If Sum is converted to a Prometheus Counter, then `Exemplars` MUST be converted
+as described in the [Exemplar Conversion](#exemplar-conversion) section.
+Otherwise, `Exemplars` SHOULD be dropped. If the Prometheus protocol only
+supports a single exemplar on the Counter sample, a random exemplar SHOULD be
+converted.
 
 ### Histograms
 
@@ -524,6 +528,8 @@ An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be conv
   starting from lowest to highest, and all being non-negative.  The value of
   each point is the computed value of the quantile point.
 - Summaries with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
+
+Exemplars on OpenTelemetry Summaries SHOULD be dropped.
 
 ### Metric Attributes
 
