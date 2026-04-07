@@ -70,6 +70,9 @@ release.
 
 ### OTEPs
 
+- Process Context: Sharing Resource Attributes with External Readers.
+  ([#4719](https://github.com/open-telemetry/opentelemetry-specification/pull/4719))
+
 ## v1.55.0 (TODO: update date before merging)
 
 ### Traces
