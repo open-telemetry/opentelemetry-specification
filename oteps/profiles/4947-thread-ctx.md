@@ -1,7 +1,7 @@
 # Thread Context: Sharing Thread-Level Information with External Readers
 
 Introduce a standard mechanism for OpenTelemetry SDKs to publish thread-level attributes for out-of-process readers such as the OpenTelemetry eBPF profilers.
-It is related to [OTEP 4719: Process Context](https://github.com/open-telemetry/opentelemetry-specification/pull/4719).
+It is related to [OTEP 4719: Process Context](4719-process-ctx.md).
 
 There is a complete example of the spec as well as example readers and writers in <https://github.com/scottgerring/ctx-sharing-demo>(possibly to be moved to [open-telemetry/sig-profiling](https://github.com/open-telemetry/sig-profiling)?).
 
@@ -24,7 +24,7 @@ When a request context is attached or detached from a thread, the SDK publishes 
 
 This mechanism is designed to achieve the following goals:
 
-* **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external process with sufficient system permissions to read `/proc/<pid>/maps` to identify loaded libraries, as well as sufficient permission to read from process memory should be able to use this mechanism  (nb: OTEP-4719 also requires access to this resource)
+* **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external process with sufficient system permissions to read `/proc/<pid>/maps` to identify loaded libraries, as well as sufficient permission to read from process memory should be able to use this mechanism  (nb: [OTEP-4719](4719-process-ctx.md) also requires access to this resource)
 * **Runtime compatibility:** This mechanism is an optional extension to an OpenTelemetry SDK for languages that are able to use TLSDESC and have an appropriate threading model. We have tested it with C/C++, Rust, and Java, and intend this to work with other runtimes as well, see "What does this mean in practice for runtimes supported by OTel SDKs?" section below.
 * **Low, opt-in overhead**: Context attach/detach is a performance critical path in an OpenTelemetry SDK, and this mechanism is designed to provide fixed, low overhead when serializing thread context
 * **Simplicity:** Limit the implementation complexity on both writer and reader sides.
@@ -33,7 +33,7 @@ This mechanism is designed to achieve the following goals:
 
 ### Process Context: Thread Local Reference Data
 
-This is immutable, process-wide data that the TLS data will reference. It will be stored in the [Process Context introduced by OTEP 4719](https://github.com/open-telemetry/opentelemetry-specification/pull/4719) under two resources which will be set once at process startup and are subsequently considered immutable.
+This is immutable, process-wide data that the TLS data will reference. It will be stored in the [Process Context introduced by OTEP 4719](4719-process-ctx.md) as entries in the `ProcessContext.attributes` field, which will be set once at process startup and are subsequently considered immutable.
 
 The following values are stored:
 
@@ -41,7 +41,7 @@ The following values are stored:
   * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a go application and thus context should be read from [go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [Node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
 * `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread local storage itself will then use these key indexes in place of the **attribute names**.
 
-The exact format used will be the protobuf structure standardized in OTEP-4719. A stringified representation of this showing the usage of the elements of that schema along with some example values:
+The exact format used will be the `repeated KeyValue` protobuf structure from the `ProcessContext.attributes` field standardized in OTEP-4719. A stringified representation of this showing the usage of the elements of that schema along with some example values:
 
 ```yaml
 key: "threadlocal.schema_version"
@@ -181,7 +181,7 @@ This buffer can then be parsed according to the specification above at the reade
 
 This mechanism is additive and does not modify existing OpenTelemetry SDK behaviour.
 
-#### OpenTelemetry - Process Context Proposal
+#### OpenTelemetry - Process Context
 
 The **Thread Local Reference Data** is to be added to the **Process Context Proposal**:
 
