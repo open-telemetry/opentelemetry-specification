@@ -136,6 +136,10 @@ under the `prometheus.type` key (e.g. `prometheus.type="unknown"`).
 
 A [Prometheus Counter](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
 
+Exemplars on the Prometheus Counter Sample MUST be converted to OpenTelemetry
+Exemplars on the OpenTelemetry Sum data point following the rules in
+[Exemplars](#exemplars).
+
 ### Gauges
 
 **Status**: [Stable](../document-status.md)
@@ -172,6 +176,10 @@ In the text format, Prometheus histograms buckets, count and sum are sent as sep
 
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the histogram's sum MUST be unset.
+
+Exemplars on the Prometheus Histogram Sample MUST be converted to OpenTelemetry
+Exemplars on the OpenTelemetry Histogram data point following the rules in
+[Exemplars](#exemplars).
 
 ### Native Histograms
 
@@ -269,6 +277,10 @@ Native histograms of the float or gauge flavors MUST be dropped.
 Native Histograms with `Schema` outside of the range [-4, 8] and not equal to
 -53 MUST be dropped.
 
+Exemplars on the Prometheus Native Histogram Sample MUST be converted to
+OpenTelemetry Exemplars on the OpenTelemetry Exponential Histogram data point
+following the rules in [Exemplars](#exemplars).
+
 ### Summaries
 
 **Status**: [Stable](../document-status.md)
@@ -301,17 +313,18 @@ Prometheus Cumulative metrics can include the start time using the [`_created` s
 
 ### Exemplars
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 [Prometheus Exemplars](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars)
-can be attached to Prometheus Histogram bucket metric points and counter metric
-points. Exemplars on histogram buckets SHOULD be converted to exemplars on
-OpenTelemetry histograms. Exemplars on counter metric points SHOULD be
-converted to exemplars on OpenTelemetry sums. If present, the timestamp
-MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
-retrieved from the `trace_id` and `span_id` label keys, respectively.  All
-labels not used for the trace and span IDs MUST be added to the OpenTelemetry
-exemplar as attributes.
+MUST be converted to OpenTelemetry Exemplars as follows:
+
+* If present, the timestamp MUST be used as the OpenTelemetry exemplar's
+  timestamp.
+* If present, and if the values are valid Trace and Span IDs, the `trace_id` and
+  `span_id` labels MUST be converted to the OpenTelemetry Exemplar's Trace ID and
+  Span ID, respectively.
+* All labels other than `trace_id` and `span_id` MUST be added to the OpenTelemetry
+  exemplar as filtered attributes.
 
 ### Instrumentation Scope
 

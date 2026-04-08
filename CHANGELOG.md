@@ -59,6 +59,8 @@ release.
   ([#4952](https://github.com/open-telemetry/opentelemetry-specification/pull/4952))
 - Stabilize OpenTelemetry Attributes to Prometheus labels transformation.
   ([#4963](https://github.com/open-telemetry/opentelemetry-specification/pull/4963))
+- Stabilize Prometheus Exemplar to OpenTelemetry Exemplar transformation.
+  ([#4962](https://github.com/open-telemetry/opentelemetry-specification/pull/4962))
 - Stabilize Prometheus Metadata transformation.
   ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
 
@@ -67,6 +69,8 @@ release.
 - Declarative configuration: add in-development guidance for exposing the
   effective `Resource` returned by `Create`.
   ([#4948](https://github.com/open-telemetry/opentelemetry-specification/issues/4948))
+- Require spec changes to consider declarative config schema
+  ([#4916](https://github.com/open-telemetry/opentelemetry-specification/pull/4916))
 
 ### Supplementary Guidelines
 
