@@ -586,19 +586,6 @@ with the following mapping:
 * all `LogRecord`
   [Attributes](./data-model.md#field-attributes) MUST be copied to the span
   event as span event attributes.
-* if the `LogRecord` has an
-  [ObservedTimestamp](./data-model.md#field-observedtimestamp), the processor
-  MUST add a span event attribute named `log.record.observed_time_unix_nano`
-  containing that value as UNIX nanoseconds.
-* if the `LogRecord` has a specified
-  [SeverityNumber](./data-model.md#field-severitynumber) (i.e. not `0`), the
-  processor MUST add a span event attribute named
-  `log.record.severity_number` containing that value.
-* if the `LogRecord` has a [Body](./data-model.md#field-body), the processor
-  MUST add a span event attribute named `log.record.body` containing that value.
-* if the `LogRecord` has dropped attributes, the processor MUST add a span
-  event attribute named `log.record.dropped_attributes_count` containing that
-  count.
 
 Note that bridging a `LogRecord` to a span event MUST NOT prevent that
 `LogRecord` from continuing through the normal log processing pipeline.
