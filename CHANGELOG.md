@@ -68,10 +68,15 @@ release.
 - Declarative configuration: add in-development guidance for exposing the
   effective `Resource` returned by `Create`.
   ([#4948](https://github.com/open-telemetry/opentelemetry-specification/issues/4948))
+- Require spec changes to consider declarative config schema
+  ([#4916](https://github.com/open-telemetry/opentelemetry-specification/pull/4916))
 
 ### Supplementary Guidelines
 
 ### OTEPs
+
+- Process Context: Sharing Resource Attributes with External Readers.
+  ([#4719](https://github.com/open-telemetry/opentelemetry-specification/pull/4719))
 
 ## v1.55.0 (TODO: update date before merging)
 
