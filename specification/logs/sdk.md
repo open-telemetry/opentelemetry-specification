@@ -581,8 +581,10 @@ with the following mapping:
 
 * the span event name MUST be the `LogRecord`'s
   [Event Name](./data-model.md#field-eventname).
-* if the `LogRecord` has a [Timestamp](./data-model.md#field-timestamp), it
-  MUST be used as the span event timestamp.
+* if the `LogRecord` has a [Timestamp](./data-model.md#field-timestamp) set, it
+  MUST be used as the span event timestamp. Otherwise, if the `LogRecord` has
+  an [ObservedTimestamp](./data-model.md#field-observedtimestamp) set, it MUST
+  be used as the span event timestamp.
 * all `LogRecord`
   [Attributes](./data-model.md#field-attributes) MUST be copied to the span
   event as span event attributes.
