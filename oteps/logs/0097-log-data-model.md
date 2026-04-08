@@ -46,7 +46,6 @@ Introduce Data Model for Log Records as it is understood by OpenTelemetry.
   * [Google Cloud Logging](#google-cloud-logging)
 * [Elastic Common Schema](#elastic-common-schema)
 * [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
-* [References](#references)
 
 ## Motivation
 
