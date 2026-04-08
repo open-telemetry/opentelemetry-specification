@@ -564,7 +564,7 @@ supports them as follows:
 * `filtered_attributes` MUST be added as labels on the Prometheus exemplar,
   unless they would exceed the Prometheus protocol's exemplar limits. For
   example, OpenMetrics 1.0 imposes a
-  [128 character limit](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplar).
+  [128 character limit](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars).
 
 ### Resource Attributes
 
