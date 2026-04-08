@@ -534,7 +534,7 @@ treatment of security logs in the context of the data model proposal.
 
 ## Alternate Design
 
-An alternate design that used an envelop approach was considered but I did not
+An alternate design that used an envelope approach was considered but I did not
 find it to be overall better than this one.
 
 ## Prior Art
