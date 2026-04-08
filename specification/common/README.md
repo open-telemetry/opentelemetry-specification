@@ -68,7 +68,7 @@ However, if it is impossible to make sure that no `null` values are accepted
 processors / exporters as `null`). If exporters do not support exporting `null`
 values, they MAY replace those values by 0, `false`, or empty strings.
 This is required for map/dictionary structures represented as two arrays with
-indices that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
+indexes that are kept in sync (e.g., two attributes `header_keys` and `header_values`,
 both containing an array of strings to represent a mapping
 `header_keys[i] -> header_values[i]`).
 
