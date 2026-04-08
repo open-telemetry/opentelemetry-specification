@@ -426,39 +426,13 @@ compatibility with Prometheus conventions. Multiple consecutive `_` characters
 SHOULD be replaced with a single `_` character.
 
 The Unit of an OTLP metric point MUST be converted from the UCUM unit to the
-equivalent unit word in Prometheus if it is included in the table below:
-
-| UCUM Abbreviation | Prometheus Unit |
-| :--- | :--- |
-| `d` | `days` |
-| `h` | `hours` |
-| `min` | `minutes` |
-| `s` | `seconds` |
-| `ms` | `milliseconds` |
-| `us` | `microseconds` |
-| `ns` | `nanoseconds` |
-| `By` | `bytes` |
-| `KiBy` | `kibibytes` |
-| `MiBy` | `mebibytes` |
-| `GiBy` | `gibibytes` |
-| `TiBy` | `tebibytes` |
-| `kBy` | `kilobytes` |
-| `MBy` | `megabytes` |
-| `GBy` | `gigabytes` |
-| `TBy` | `terabytes` |
-| `m` | `meters` |
-| `V` | `volts` |
-| `A` | `amperes` |
-| `J` | `joules` |
-| `W` | `watts` |
-| `g` | `grams` |
-| `Cel` | `celsius` |
-| `Hz` | `hertz` |
-| `%` | `percent` |
+equivalent unit word in Prometheus if it is included in the
+table in [Metric Metadata above](#metric-metadata).
 
 Portions of the Unit within brackets (e.g. {packet}) MUST be dropped.
 
-Units defined as rates over time e.g. "m/s" MUST be converted to "meters_per_second".
+Units defined as rates over time (e.g. "m/s") MUST be converted to words (e.g.
+"meters_per_second").
 
 The resulting unit SHOULD be added to the metric as
 [UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily).
