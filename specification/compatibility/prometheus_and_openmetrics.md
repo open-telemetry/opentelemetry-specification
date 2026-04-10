@@ -82,18 +82,43 @@ at the time of writing:
 
 ### Metric Metadata
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information)
-MUST be added as the Name of the OTLP metric. By default, the name SHOULD NOT be altered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
+MUST be added as the Name of the OTLP metric. The name SHOULD NOT be altered.
 
 [Prometheus UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily),
-if present, MUST be converted to the unit of the OTLP metric. The unit SHOULD
-be translated from Prometheus conventions to OpenTelemetry conventions by:
+if present, MUST be converted to the unit of the OTLP metric. The unit MUST
+be translated from words to the UCUM abbreviation if it is in the following set
+of commonly-used units:
 
-* Converting from full words to abbreviations (e.g. "milliseconds" to "ms").
-* Special case: Converting "ratio" to "1".
-* Converting "foo_per_bar" to "foo/bar".
+| Prometheus Unit | UCUM Abbreviation |
+| :--- | :--- |
+| `days` | `d` |
+| `hours` | `h` |
+| `minutes` | `min` |
+| `seconds` | `s` |
+| `milliseconds` | `ms` |
+| `microseconds` | `us` |
+| `nanoseconds` | `ns` |
+| `bytes` | `By` |
+| `kibibytes` | `KiBy` |
+| `mebibytes` | `MiBy` |
+| `gibibytes` | `GiBy` |
+| `tebibytes` | `TiBy` |
+| `kilobytes` | `kBy` |
+| `megabytes` | `MBy` |
+| `gigabytes` | `GBy` |
+| `terabytes` | `TBy` |
+| `meters` | `m` |
+| `volts` | `V` |
+| `amperes` | `A` |
+| `joules` | `J` |
+| `watts` | `W` |
+| `grams` | `g` |
+| `celsius` | `Cel` |
+| `hertz` | `Hz` |
+| `percent` | `%` |
 
 [Prometheus HELP metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information),
 if present, MUST be added as the description of the OTLP metric.
@@ -110,6 +135,10 @@ under the `prometheus.type` key (e.g. `prometheus.type="unknown"`).
 **Status**: [Stable](../document-status.md)
 
 A [Prometheus Counter](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
+
+Exemplars on the Prometheus Counter Sample MUST be converted to OpenTelemetry
+Exemplars on the OpenTelemetry Sum data point following the rules in
+[Exemplars](#exemplars).
 
 ### Gauges
 
@@ -147,6 +176,10 @@ In the text format, Prometheus histograms buckets, count and sum are sent as sep
 
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the histogram's sum MUST be unset.
+
+Exemplars on the Prometheus Histogram Sample MUST be converted to OpenTelemetry
+Exemplars on the OpenTelemetry Histogram data point following the rules in
+[Exemplars](#exemplars).
 
 ### Native Histograms
 
@@ -244,6 +277,10 @@ Native histograms of the float or gauge flavors MUST be dropped.
 Native Histograms with `Schema` outside of the range [-4, 8] and not equal to
 -53 MUST be dropped.
 
+Exemplars on the Prometheus Native Histogram Sample MUST be converted to
+OpenTelemetry Exemplars on the OpenTelemetry Exponential Histogram data point
+following the rules in [Exemplars](#exemplars).
+
 ### Summaries
 
 **Status**: [Stable](../document-status.md)
@@ -276,17 +313,18 @@ Prometheus Cumulative metrics can include the start time using the [`_created` s
 
 ### Exemplars
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 [Prometheus Exemplars](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars)
-can be attached to Prometheus Histogram bucket metric points and counter metric
-points. Exemplars on histogram buckets SHOULD be converted to exemplars on
-OpenTelemetry histograms. Exemplars on counter metric points SHOULD be
-converted to exemplars on OpenTelemetry sums. If present, the timestamp
-MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
-retrieved from the `trace_id` and `span_id` label keys, respectively.  All
-labels not used for the trace and span IDs MUST be added to the OpenTelemetry
-exemplar as attributes.
+MUST be converted to OpenTelemetry Exemplars as follows:
+
+* If present, the timestamp MUST be used as the OpenTelemetry exemplar's
+  timestamp.
+* If present, and if the values are valid Trace and Span IDs, the `trace_id` and
+  `span_id` labels MUST be converted to the OpenTelemetry Exemplar's Trace ID and
+  Span ID, respectively.
+* All labels other than `trace_id` and `span_id` MUST be added to the OpenTelemetry
+  exemplar as filtered attributes.
 
 ### Instrumentation Scope
 
@@ -373,28 +411,34 @@ semantic conventions where possible.
 
 ### Metric Metadata
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-Prometheus Pull exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
-comments for the same metric name to be returned in a single scrape of the
-Prometheus endpoint. Exporters MUST drop entire metrics to prevent conflicting
-TYPE comments, but SHOULD NOT drop metric points as a result of conflicting
-UNIT or HELP comments. Instead, all but one of the conflicting UNIT and HELP
-comments (but not metric points) SHOULD be dropped. If dropping a comment or
-metric points, the exporter SHOULD warn the user through error logging.
+Prometheus Pull exporters for OpenTelemetry metric data MUST NOT allow duplicate
+UNIT, HELP, or TYPE comments for the same metric name to be returned in a single
+scrape of the Prometheus endpoint. Exporters MUST drop entire metrics to prevent
+conflicting TYPE comments, but SHOULD NOT drop metric points as a result of
+conflicting UNIT or HELP comments. Instead, all but one of the conflicting UNIT
+and HELP comments (but not metric points) SHOULD be dropped. If dropping a
+comment or metric points, the exporter SHOULD warn the user through error
+logging. Note that SDKs are required to [warn the user over duplicate instrument
+registration, indicative of the same problem](https://opentelemetry.io/docs/specs/otel/metrics/sdk/#duplicate-instrument-registration).
 
 The Name of an OTLP metric MUST be added as the
 [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
-Prometheus naming conventions encourage metric names to match the regular expression: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
-in the metric name SHOULD be replaced with the `_` character by default, aiming for compatibility with Prometheus conventions. Multiple
-consecutive `_` characters SHOULD be replaced with a single `_` character.
+Prometheus naming conventions encourage metric names to match the regular
+expression: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters in the metric
+name SHOULD be replaced with the `_` character by default, aiming for
+compatibility with Prometheus conventions. Multiple consecutive `_` characters
+SHOULD be replaced with a single `_` character.
 
-The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible. This includes:
+The Unit of an OTLP metric point MUST be converted from the UCUM unit to the
+equivalent unit word in Prometheus if it is included in the
+table in [Metric Metadata above](#metric-metadata).
 
-* Converting from abbreviations to full words (e.g. "ms" to "milliseconds").
-* Dropping the portions of the Unit within brackets (e.g. {packet}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
-* Special case: Converting "1" to "ratio".
-* Converting "foo/bar" to "foo_per_bar".
+Portions of the Unit within brackets (e.g. {packet}) MUST be dropped.
+
+Units defined as rates over time (e.g. "m/s") MUST be converted to words (e.g.
+"meters_per_second").
 
 The resulting unit SHOULD be added to the metric as
 [UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily).

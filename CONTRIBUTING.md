@@ -42,6 +42,13 @@ Smaller changes can follow a shorter process:
   support of that SIG's maintainers. For example, this may be an unmerged
   PR with an indication of maintainers' intent to merge in the event the
   corresponding specification PR is merged.
+- If the change adds or modifies the configuration surface area of SDK
+  components, the PR description must provide links to corresponding proposed
+  changes to
+  the [declarative configuration schema](https://github.com/open-telemetry/opentelemetry-configuration).
+  Approval and merging of such PRs should result in merging the corresponding
+  schema PR. This ensures that proposals are evaluated holistically and that the
+  schema stays in sync with the specification.
 
 Trivial changes, such as clarifications, wording changes, spelling/grammar
 corrections, etc. can be made directly via pull requests and do not require an associated
