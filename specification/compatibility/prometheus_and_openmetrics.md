@@ -491,7 +491,8 @@ If Sum is converted to a Prometheus Counter, then `Exemplars` MUST be converted
 as described in the [Exemplar Conversion](#exemplar-conversion) section.
 Otherwise, `Exemplars` SHOULD be dropped. If the Prometheus protocol only
 supports a single exemplar on the Counter sample, a random exemplar SHOULD be
-converted.
+converted. This matches the behavior of prometheus client libraries, which is to keep the
+latest exemplar for counter instruments.
 
 ### Histograms
 
