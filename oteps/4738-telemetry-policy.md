@@ -75,7 +75,7 @@ specification from a user of OpenTelemetry.
 
 - **Typed**: A policy self-identifies its "type" through its target signal. In
   the proto schema, this is enforced by the `oneof target` field — a policy
-  targets exactly one signal (e.g. log, metric, trace). Policies of different
+  targets exactly one signal (e.g. log, metric, profile, trace). Policies of different
   types cannot be merged, but policies of the same type MUST be merged together.
 - **Clearly specified behavior**: A policy type enforces a specific behavior for
   a clear use case, e.g. trace sampling, metric aggregation, attribute
