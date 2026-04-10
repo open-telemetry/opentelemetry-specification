@@ -57,6 +57,12 @@ release.
   ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
 - Stabilize Prometheus Dropped Types transformation.
   ([#4952](https://github.com/open-telemetry/opentelemetry-specification/pull/4952))
+- Stabilize OpenTelemetry Attributes to Prometheus labels transformation.
+  ([#4963](https://github.com/open-telemetry/opentelemetry-specification/pull/4963))
+- Stabilize Prometheus Exemplar to OpenTelemetry Exemplar transformation.
+  ([#4962](https://github.com/open-telemetry/opentelemetry-specification/pull/4962))
+- Stabilize Prometheus Metadata transformation.
+  ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
 - Stabilize translation of labels prefixed with `otel_scope_` to OTLP Instrumentation Scope.
   ([#5004](https://github.com/open-telemetry/opentelemetry-specification/pull/5004))
 
@@ -65,10 +71,15 @@ release.
 - Declarative configuration: add in-development guidance for exposing the
   effective `Resource` returned by `Create`.
   ([#4948](https://github.com/open-telemetry/opentelemetry-specification/issues/4948))
+- Require spec changes to consider declarative config schema
+  ([#4916](https://github.com/open-telemetry/opentelemetry-specification/pull/4916))
 
 ### Supplementary Guidelines
 
 ### OTEPs
+
+- Process Context: Sharing Resource Attributes with External Readers.
+  ([#4719](https://github.com/open-telemetry/opentelemetry-specification/pull/4719))
 
 ## v1.55.0 (TODO: update date before merging)
 
