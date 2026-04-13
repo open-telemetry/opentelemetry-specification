@@ -79,7 +79,7 @@ This is the attached thread record itself. SDK-side implementations may choose t
 | span-id         |            | uint8[8]                           | In W3C Trace Context format.                                                                                                                             |
 | valid           |            | uint8                              | This value is set to 1 when the record is valid. Consumers should ignore this record if any other value is set  when they read.                          |
 | _reserved       |            | uint8                              | One spare byte here to align attrs-data-size at two byte boundary.                                                                                       |
-| attrs-data-size |            | uint16                             | Size of `attr-data`. This lets the reader know when it has consumed all `attr-data` records within the TLS buffer.                                       |
+| attrs-data-size |            | uint16                             | Size of `attrs-data`. This lets the reader know when it has consumed all `attrs-data` records within the TLS buffer.                                       |
 | attrs-data      |            | uint8[]                            | A byte buffer containing the attributes themselves. Its total length can be derived from max-record-size of the parent minus the lead in of this record. |
 |                 | [x].key    | uint8 (*See below for alternative) | Index into the key table                                                                                                                                 |
 |                 | [x].length | uint8 (*See below for alternative) | Length of val string                                                                                                                                     |
@@ -245,7 +245,7 @@ This section is not intended to constrain implementers of the specification (nor
 We believe these two runtimes are not going to be supported by this proposal:
 
 * **Go:** We foresee Go readers will continue to use the [pprof labels](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/blob/main/design-docs/00002-custom-labels/README.md) due to its fine-grained goroutine based concurrency model and relative cost of calling across an FFI
-* **Node.js**: We expect Node.js readers are more likely to read the Node.js runtime internals directly due to the threading model and performance impact of using a Node-API/native TLS approach.This adds complexity to the reader but reduces the performance impact, and is already the approached used in [Polarsignal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js).
+* **Node.js**: We expect Node.js readers are more likely to read the Node.js runtime internals directly due to the threading model and performance impact of using a Node-API/native TLS approach.This adds complexity to the reader but reduces the performance impact, and is already the approach used in [Polarsignal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js).
 
 ## Prior art and alternatives
 
