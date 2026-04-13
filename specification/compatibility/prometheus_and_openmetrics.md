@@ -405,28 +405,34 @@ in keys).
 
 ### Metric Metadata
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-Prometheus Pull exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
-comments for the same metric name to be returned in a single scrape of the
-Prometheus endpoint. Exporters MUST drop entire metrics to prevent conflicting
-TYPE comments, but SHOULD NOT drop metric points as a result of conflicting
-UNIT or HELP comments. Instead, all but one of the conflicting UNIT and HELP
-comments (but not metric points) SHOULD be dropped. If dropping a comment or
-metric points, the exporter SHOULD warn the user through error logging.
+Prometheus Pull exporters for OpenTelemetry metric data MUST NOT allow duplicate
+UNIT, HELP, or TYPE comments for the same metric name to be returned in a single
+scrape of the Prometheus endpoint. Exporters MUST drop entire metrics to prevent
+conflicting TYPE comments, but SHOULD NOT drop metric points as a result of
+conflicting UNIT or HELP comments. Instead, all but one of the conflicting UNIT
+and HELP comments (but not metric points) SHOULD be dropped. If dropping a
+comment or metric points, the exporter SHOULD warn the user through error
+logging. Note that SDKs are required to [warn the user over duplicate instrument
+registration, indicative of the same problem](https://opentelemetry.io/docs/specs/otel/metrics/sdk/#duplicate-instrument-registration).
 
 The Name of an OTLP metric MUST be added as the
 [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
-Prometheus naming conventions encourage metric names to match the regular expression: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
-in the metric name SHOULD be replaced with the `_` character by default, aiming for compatibility with Prometheus conventions. Multiple
-consecutive `_` characters SHOULD be replaced with a single `_` character.
+Prometheus naming conventions encourage metric names to match the regular
+expression: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters in the metric
+name SHOULD be replaced with the `_` character by default, aiming for
+compatibility with Prometheus conventions. Multiple consecutive `_` characters
+SHOULD be replaced with a single `_` character.
 
-The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible. This includes:
+The Unit of an OTLP metric point MUST be converted from the UCUM unit to the
+equivalent unit word in Prometheus if it is included in the
+table in [Metric Metadata above](#metric-metadata).
 
-* Converting from abbreviations to full words (e.g. "ms" to "milliseconds").
-* Dropping the portions of the Unit within brackets (e.g. {packet}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
-* Special case: Converting "1" to "ratio".
-* Converting "foo/bar" to "foo_per_bar".
+Portions of the Unit within brackets (e.g. {packet}) MUST be dropped.
+
+Units defined as rates over time (e.g. "m/s") MUST be converted to words (e.g.
+"meters_per_second").
 
 The resulting unit SHOULD be added to the metric as
 [UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily).
