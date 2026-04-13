@@ -14,6 +14,8 @@ release.
   ([#4914](https://github.com/open-telemetry/opentelemetry-specification/issues/4914))
 - Decouple the responsibilities of the environment variable propagation carrier.
   ([#4961](https://github.com/open-telemetry/opentelemetry-specification/issues/4961))
+- Remove misleading implementation approach the environment variable propagation.
+  ([#5003](https://github.com/open-telemetry/opentelemetry-specification/issues/5003))
 
 ### Traces
 
@@ -54,6 +56,8 @@ release.
   ([#4849](https://github.com/open-telemetry/opentelemetry-specification/issues/4849))
 - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
   ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+- Stabilize Prometheus Timestamp and Start timestamp transformation.
+  ([#4953](https://github.com/open-telemetry/opentelemetry-specification/pull/4953))
 - Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
   add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
   Histogram.
