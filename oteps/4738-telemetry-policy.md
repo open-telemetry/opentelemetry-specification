@@ -99,7 +99,7 @@ Every policy is defined with the following:
 - A specification denoting behavior the policy enforces
   - A specification makes clear the protobuf structure
   - The behavior that is expected for an implementation
-  - A set of examples and testcases to verify the behavior
+  - A set of examples and test cases to verify the behavior
 
 Policies MUST NOT:
 
