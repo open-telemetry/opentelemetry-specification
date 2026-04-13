@@ -443,6 +443,8 @@ sections:
         status: '+'
       - name: Getter argument returning Keys
         status: '+'
+      - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
+        status: '+'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
