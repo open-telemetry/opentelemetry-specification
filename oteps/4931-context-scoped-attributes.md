@@ -23,7 +23,7 @@ Other alternatives would be problematic:
   as there could be hundreds or thousands of different tenants, and the processing/exporting pipeline
   would be duplicated N-times.
 * Custom processors for attaching tenant-specific information would work for spans and logs. However,
-  at the time of writing this OTEP there is no processor functionality for metrics.
+  at the time of writing this OTEP there is no specified processor functionality for metrics.
 * In general, OpenTelemetry should offer out-of-the-box common functionality that is extensively
   used, instead of asking users to write custom components recurringly.
 
