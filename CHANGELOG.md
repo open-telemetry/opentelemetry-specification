@@ -16,7 +16,7 @@ release.
   ([#4961](https://github.com/open-telemetry/opentelemetry-specification/issues/4961))
 - Remove misleading implementation approach the environment variable propagation.
   ([#5003](https://github.com/open-telemetry/opentelemetry-specification/issues/5003))
-- Change environment variable context propagation carriers  document status to Beta.
+- Change environment variable context propagation carriers document status to Beta.
   ([#5020](https://github.com/open-telemetry/opentelemetry-specification/issues/5020))
 
 ### Traces
