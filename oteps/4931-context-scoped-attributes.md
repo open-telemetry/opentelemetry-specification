@@ -81,11 +81,11 @@ Context-scoped attributes MUST NOT be propagated cross-service, i.e. no context 
 must be implemented for them. This is because they are meant to annotate (a subset of)
 the telemetry items related of a single service (see also [the next section](#comp-baggage)).
 
-Instrumentation libraries MUST NOT set Context-scoped attributes. Only end users are
+Instrumentation libraries SHOULD NOT set Context-scoped attributes. Only end users are
 expected to use this feature. Explicit documentation and guidance MUST be provided
-to make sure this rule is followed.
+to make sure authors understand this. See [Future possibilities](#future-possibilities).
 
-Context-scoped attributes MUST be enabled by default, i.e. they will be added to
+Context-scoped attributes default values, i.e. they will be added to
 any telemetry item by default. Configuration for disabling them on a per-signal
 basis MUST be offered at the very least.
 
@@ -155,8 +155,7 @@ a HTTP client instrumentation, as a downstream service is called).
 
 ## Internal details
 
-This section explains the API-level, SDK-level and exporter-level changes that
-are expected to implement this.
+This section explains the API and SDK level changes that are expected to support this.
 
 ### API changes
 
@@ -175,10 +174,11 @@ the specified attributes.
 
 ### SDK changes
 
-Upon telemetry items creation (e.g. Span, LogRecordItem), the SDK MUST add
-the context-scoped attributes of the logically associated Context,
-skipping attributes with keys already present in the telemetry item.
-This MUST be done before any extension point is invoked, e.g. Sampler or Processor.
+Upon telemetry items creation (e.g. Span, LogRecord), the SDK MUST get
+the context-scoped attributes of the logically associated Context, and
+add them to the newly created telemetry item, skipping attributes with
+keys already present in the telemetry item. This MUST be done before any
+extension point is invoked, e.g. Sampler or Processor.
 
 This will be an implementation-level change without any changes in the API-surface
 of the SDK (i.e. it is not necessary to make Context-scoped attributes distinguishable
@@ -214,12 +214,7 @@ public Span startSpan(...) {
 
 ## Trade-offs and mitigations
 
-This OTEP suggests making Context-scoped attributes **indistinguishable** from
-attributes set directly on the telemetry items. This should ease implementation
-on both backends and OpenTelemetry client libraries, and hopefully also reduces
-conceptual complexity. Nevertheless, some implications of making the Context-scoped
-attributes **distinguishable** are explored in
-[Prior art and alternatives](#prior-art-and-alternatives).
+None at this moment.
 
 ## Prior art and alternatives
 
@@ -233,158 +228,6 @@ more on a technical level: “What I tried to implement is a feature called trac
 in Honeycomb (reference: [AddFieldToTrace](https://godoc.org/github.com/honeycombio/beeline-go#AddFieldToTrace))”.
 The aforementioned feature's documentation reads: "AddFieldToTrace adds the field to both the currently
 active span and all other spans involved in this trace that occur within this process.".
-
-### Alternative: Making Context-scoped attributes semantically distinct from other telemetry attributes
-
-As explained in trace-offs and mitigations, this alternative was not selected for
-the main text, because it seems to add more effort and complexity than value.
-
-#### SDK-changes for semantically distinct Context-scoped attributes
-
-The Context-scoped attributes would not be automatically included with the other
-telemetry attributes. Instead, extension components (e.g. samplers and processors) would
-explicitly invoke `GetContextScopedAttributes()` to get and set any Context-scoped
-attributes on all telemetry items.
-
-**Alternatively**, a new argument could be added to the sampler input (languages
-that implement the sampler arguments with a single object with multiple properties
-can implement this in a backwards-compatible way).
-
-While in theory, applications and instrumentations could take a dependency on the
-SDK, and call this function from anywhere, this is **strongly discouraged** and not
-guaranteed to work. Languages may even opt for an unorthodox way to expose this
-functionality.
-
-#### Exporter changes for semantically distinct Context-scoped attributes
-
-Exporters would need to explicitly handle these attributes. As most protocols won’t
-have support for this concept, the output should probably end up the same as with
-the direct attributes.
-
-#### OTLP protocol changes for semantically distinct Context-scoped attributes (optional)
-
-With the implementation suggested in the main section of the OTEP, there is no
-need to change the OTLP protocol for this feature, as the Context attributes
-should semantically be equivalent to adding the attribute to every associated
-telemetry item.
-
-If Context attributes were distinguishable, the OTLP protocol could be extended
-with special support for Context-scoped attributes. The scope of Context-scoped
-attributes is orthogonal to the existing hierarchy of Resource -> (Emitter)Scope -> item.
-Thus, each single telemetry item needs to get a new field with its Context-scoped
-attributes. This could be just a repeated opentelemetry.proto.common.v1.KeyValue contextAttributes
-
-If a more deduplicated representation is desired, it could alternatively be an
-index into a list of Context-scoped attributes that is sent once in the root
-message to be shared among multiple telemetry items.
-
-```protobuf
-message TracesData {
-    // ...
-    repeated opentelemetry.proto.common.v1.KeyValueList contexts = 12345;
-}
-```
-
-As mentioned in the API-changes, it is expected that no particular care has to
-be taken to optimize for merging attributes, so a repeated KeyValueList
-seems to fit the bill. If a need for such optimization is found, a representation
-of a tree-structure of these Contexts might be needed, e.g., by storing a
-dedicated submessage that also contains a parent index. This could become complex
-to implement in the exporter though, and generic compression (e.g. gzip) may be
-more effective.
-
-<a name="scope-and-context"></a>
-
-Yet another alternative that would also have implications for semantics, would
-be to merge Context-scoped attributes with the Resource of all associated
-telemetry items, or with the Instrumentation Scope, instead of their own attributes.
-This would mean that every distinct set of Context-scoped attributes gets sent
-within a distinct ResourceSpans/ScopeSpans message, duplicating the resource and
-instrumentation scope attributes that many times (a cross-product, if you will).
-This approach seems semantically interesting, but could lead to larger export
-messages, especially if we assume that very often there will only be one span of
-the same instrumentation-scope per Context-scope (e.g., you typically will only
-have one single Span produced by the HTTP server instrumentation as the trace
-crosses a single service).
-
-### Alternative: Associating Context-scoped attributes with the span on end and setting attributes on parent Contexts
-
-This alternative seems to be a valid option which is just as easy to implement
-as the approach in the main Context, but it feels a bit less natural.
-
-For spec-conforming implementations of tracing (which excludes .NET in this case),
-ending/starting a span is independent from setting it as active in a Context.
-This allows ending a span in a different context from the one it was started in.
-One use case this could enable is pushing attributes up to a parent span.
-For example, an incoming web request might have a low-level HTTP span as root,
-which might then be dispatched to a HTTP handler method that logically is a
-Function as a Service span. In this case, one might want to associate the HTTP
-parent span with the FaaS function (faas.id, faas.name, …) as well. This could
-be implemented by leaving the Context with these Context-scoped attributes active
-after returning from the handler method.
-
-This approach would be more similar to what is suggested in
-[open-telemetry/opentelemetry-specification#1089](https://github.com/open-telemetry/opentelemetry-specification/issues/1089),
-i.e. have a writable Span passed to a callback before it ends, such as OnEnding().
-However, the approach used in the motivation for that issue seems to go even further
-and makes pushing attributes up to the local root span the default. See the
-[next alternative](#alternative-with-prior-art-bubbling-attributes-up-to-the-root-span).
-
-### Alternative with prior art: Bubbling attributes up to the root span
-
-This alternative is explored because it came up in a spec issue before, but it
-seems to be quite complex and not clearly any more useful than the semantics
-in the main OTEP.
-
-[open-telemetry/opentelemetry-specification#1089](https://github.com/open-telemetry/opentelemetry-specification/issues/1089)
-implements “trace-fields” (trace attributes) and seems to be based on a shared
-mutable set of Attributes created together with the root span instead of having
-an immutable set per (child) Context. If we wanted these semantics, that would
-probably warrant a modified API replacing SetContextScopedAttributes:
-
-* `Context CreateContextScopedRoot(Context)`
-* `void SetAttributes(Context context, Attributes newAttributes)`
-
-CreateContextScopedRoot() would return a new Context with an empty set of mutable
-attributes. Child contexts would inherit a reference to the same mutable set.
-Additionally, it would seem appropriate that setting a span as active in a Context
-that has neither an active span, nor a mutable attribute set, would implicitly
-also CreateContextScopedRoot.
-
-These semantics seem to be more complex and prone to surprises though.
-A typical “failure mode” when trying to associate attributes with the whole trace
-(or rather whole local part of the trace within a service) including parent spans
-would be when some in-process parent span has already ended (e.g. asynchronous
-fire-and-forget invocation), or if the parent span has created another child
-span that already ended at the time SetAttributes() is called.
-
-One also needs to define what happens when attributes are added after a span has
-ended (or a metric was recorded) but before it is exported. Probably you would
-want to have a snapshot of the mutable attributes at time of emitting the
-telemetry item (ending the span).
-
-Another difficult question would be what to do if SetAttributes() is called
-with a Context that does not have mutable attributes yet. Should this case be
-prevented by having every child of the root context eagerly create mutable
-attributes? Should mutable attributes be created in-place, modifying the Context
-(deliberately made impossible with the current Context API, where setting a key
-always returns a new Context). Should it always return (new) Context then?
-Should it be a no-op?
-
-Do note that with the `CreateContextScopedRoot()` API, it would be possible to
-use this approach even independently of the tracing signal, just as the main OTEP.
-
-### Alternative: Associating attributes indirectly through spans
-
-This does not seem particularly useful, but the existence of this alternative
-should serve as a reminder that the trace structure might be different from the
-(child) Context structure.
-
-If going for the
-[“Making context-scoped attributes semantically distinct from other telemetry attributes” alternative](#alternative-making-context-scoped-attributes-semantically-distinct-from-other-telemetry-attributes),
-a possibility would pop up to store Context-scoped attributes not on the Context, but on spans (in a dedicated property).
-Other telemetry signals could still go through the active span to associate subtrace-scoped attributes.
-The (subtle?) difference would be that these attributes follow the trace tree instead of the context tree.
 
 ### Alternative: An implementation for traces on the Backend
 
@@ -472,9 +315,14 @@ with this approach though:
   black list specific attributes on a per-signal basis.
 * Support for profiling should be (eventually) added, but this has to be discussed
   and confirmed with the profiling SIG. Potentially, this support could be disabled by default
-  if needed.a
+  if needed.
 
 ## Future possibilities
 
 With the changes implemented in this OTEP, we will hopefully unblock some
 long-standing specification issues. See [Motivation](#motivation).
+
+* Instrumentation libraries should not use this feature, i.e. use `Set Context Attributes`,
+  but there may be cases where this would be beneficial to the telemetry output. We should
+  write documentation and guidelines exploring the side effects and how they play along
+  the enabled/disabled defaults for different signals.
