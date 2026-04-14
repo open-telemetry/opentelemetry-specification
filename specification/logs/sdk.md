@@ -515,7 +515,7 @@ Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
 
-Additional processors defined in this document MAY be provided by SDK or Contrib
+Additional processors defined in this document SHOULD be provided by SDK
 packages.
 
 #### Simple processor
@@ -557,10 +557,10 @@ to make sure that they are not invoked concurrently.
 
 **Status**: [Development](../document-status.md)
 
-This is an optional implementation of `LogRecordProcessor` which converts
+This is an implementation of `LogRecordProcessor` which converts
 [Events](./data-model.md#events) to span events on the current span.
 
-This processor MAY be provided by SDK or by a Contrib package.
+This processor SHOULD be provided by SDK.
 
 The processor MUST bridge a `LogRecord` to a span event if and only if all of
 the following conditions are met:
