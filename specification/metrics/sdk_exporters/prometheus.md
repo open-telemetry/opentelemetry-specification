@@ -92,7 +92,7 @@ Prometheus exporter.
 
 ### Temporality
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter MUST set
 the [MetricReader](../sdk.md#metricreader) `temporality` as a function of

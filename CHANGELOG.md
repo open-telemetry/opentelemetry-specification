@@ -69,6 +69,8 @@ release.
   ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
 - Stabilize OpenTelemetry Metric Metadata to Prometheus metric metadata.
   ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
+- Stabilize Prometheus SDK Exporter temporality.
+  ([#4983](https://github.com/open-telemetry/opentelemetry-specification/issues/4983))
 
 ### SDK Configuration
 
