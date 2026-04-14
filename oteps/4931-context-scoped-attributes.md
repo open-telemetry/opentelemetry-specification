@@ -139,7 +139,7 @@ Tracer, Meter or LogEmitter (i.e., typically the same telemetry-implementing uni
 of code), the scope of Context-scoped attributes is determined at runtime by the
 Context, independently of the used Tracer, Meter or LogEmitter.
 
-Moreover, Tracer, Meter and LogEmitter instances typically have the same
+Moreover, Tracer, Meter and Logger instances typically have the same
 life span as the application itself, whereas Context-scoped attributes
 lifespan is tied to the Context itself. For example, a Context solely created
 for an incoming request will stop existing once such request is done.
