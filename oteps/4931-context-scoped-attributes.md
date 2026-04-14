@@ -63,7 +63,7 @@ is executed in is lost in any child spans that may occur within the function (ap
 The Context-scoped attributes allows you to attach attributes to all telemetry
 signals emitted within a Context. Context-scoped attributes are standard
 attributes, which means you can use strings, integers, floating point numbers,
-booleans or arrays thereof, just like for any telemetry item.
+booleans, arrays, or complex types, just like for any telemetry item.
 
 When Context-scoped attributes are enabled, they MUST be added to telemetry items
 that were **emitted** while the Context containing the Context-scoped attributes
@@ -81,18 +81,20 @@ Context-scoped attributes MUST NOT be propagated cross-service, i.e. no context 
 must be implemented for them. This is because they are meant to annotate (a subset of)
 the telemetry items related of a single service (see also [the next section](#comp-baggage)).
 
-Context-scoped attributes MUST be disabled by default, i.e. they will not be added to
-any telemetry item by default, even if they are set and propagated.
-They MUST be offered as an opt-in in order to reduce the possibility of unexpected
-behavior for existing users. A new boolean configuration option will be added, so
-they can be enabled (or disabled) for all signals. Following the existing
-configuration format, this is how it would look like:
+Instrumentation libraries MUST NOT set Context-scoped attributes. Only end users are
+expected to use this feature. Explicit documentation and guidance MUST be provided
+to make sure this rule is followed.
+
+Context-scoped attributes MUST be enabled by default, i.e. they will be added to
+any telemetry item by default. Configuration for disabling them on a per-signal
+basis MUST be offered at the very least.
 
 ```yaml
 disabled: false
-context_scoped_attributes: true
 tracer_provider:
-   ...
+  context_scoped_attributes: true
+meter_provider:
+  context_scoped_attributes: false
 ```
 
 See [Open questions](#open-questions) regarding the expected outcome for the configuration part.
@@ -158,29 +160,18 @@ are expected to implement this.
 
 ### API changes
 
-The API would be extended with an implementation of the following:
+The API would be extended with two operations to get and set Context-scoped
+attributes:
 
-* `Context SetContextScopedAttributes(Context context, Attributes attributes)`
-* `Attributes GetContextScopedAttributes(Context context)`
+* **Set Context Attributes**, e.g. `Context SetContextScopedAttributes(Context context, Attributes attributes)`
+  or `Context.setAttributes()`.
+* **Get Context Attributes**, e.g. `Attributes GetContextScopedAttributes(Context context)` or
+  `Context.getAttributes()`.
 
-`SetContextScopedAttributes` takes a set of attributes and a Context and returns
-a new Context that has the given context attributes set.
+`Set Context Attributes` takes a set of attributes and returns a new Context that contains
+the specified attributes.
 
-`GetContextScopedAttributes` takes a Context and returns the context-scoped
-Attributes, or an empty set if none exists.
-
-One possible way to expose this would be through a (global) OpenTelemetry instance (e.g.
-`GlobalOpenTelemetry.GetInstance().SetContextScopedAttributes()`.
-
-The implementation could look like this:
-
-```C#
-Context SetContextScopedAttributes(Context context, Attributes attributes) {
-    return context.WithValue(
-        _CTX_KEY_SCOPED_ATTRS,
-        attributes);
-}
-```
+`Get Context Attributes` returns the context-scoped Attributes, or an empty set if none exists.
 
 ### SDK changes
 
@@ -474,11 +465,14 @@ with this approach though:
   `Baggage` values to individual telemetry items has been a request from users
   in the past. This is even considered as part of one of the alternatives that
   were considered.
-
-* Configuration could be defined, at least initially, as a single boolean value, similar
-  to how the entire SDK is enabled or disabled via the `disabled` configuration option.
-  However, this OTEP leaves the topic open in case further options
-  are needed, e.g. only enable Context-scoped attributes for some signals.
+* Configuration could be defined, at least initially, as a single boolean setting for EACH
+  signal, similar to how the entire SDK is enabled or disabled via the `disabled` configuration
+  option, e.g. enable this for traces and logs but disable it for metrics.
+  However, this OTEP leaves the topic open in case further options are needed, e.g. white or
+  black list specific attributes on a per-signal basis.
+* Support for profiling should be (eventually) added, but this has to be discussed
+  and confirmed with the profiling SIG. Potentially, this support could be disabled by default
+  if needed.a
 
 ## Future possibilities
 
