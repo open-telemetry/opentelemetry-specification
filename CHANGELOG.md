@@ -80,6 +80,8 @@ release.
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize host configuration.
     ([#4984](https://github.com/open-telemetry/opentelemetry-specification/issues/4984))
+  - Stabilize port configuration.
+    ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
 
 ### SDK Configuration
 
