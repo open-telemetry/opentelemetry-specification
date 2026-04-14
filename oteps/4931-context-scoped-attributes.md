@@ -49,7 +49,7 @@ all the spans have a respective `http.app` associated with it. When the `my-team
 makes a call to another service `authservice`, that attribute does *not* apply
 to the remote child spans.
 
-A  similar problem occurs with `faas.name` and `cloud.resource_id`
+A similar problem occurs with `faas.name` and `cloud.resource_id`
 ([Function as a Service Resource semantic conventions](https://opentelemetry.io/docs/specs/semconv/resource/faas/))
 on Azure Functions. While both are defined as Resource attributes, an Azure
 function app hosts multiple co-deployed functions with different names and IDs.
