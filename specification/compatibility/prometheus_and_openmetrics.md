@@ -17,6 +17,7 @@ aliases:
 - [Differences between Prometheus formats](#differences-between-prometheus-formats)
 - [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)
   * [Metric Metadata](#metric-metadata)
+  * [Timestamps](#timestamps)
   * [Counters](#counters)
   * [Gauges](#gauges)
   * [Info](#info)
@@ -26,7 +27,6 @@ aliases:
   * [Native Histograms](#native-histograms)
   * [Summaries](#summaries)
   * [Dropped Types](#dropped-types)
-  * [Start Time](#start-time)
   * [Exemplars](#exemplars)
   * [Instrumentation Scope](#instrumentation-scope)
   * [Resource Attributes](#resource-attributes)
@@ -82,18 +82,43 @@ at the time of writing:
 
 ### Metric Metadata
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information)
-MUST be added as the Name of the OTLP metric. By default, the name SHOULD NOT be altered, but translation SHOULD provide configuration which, when enabled, removes type (e.g. `_total`) and unit (e.g. `_seconds`) suffixes.
+MUST be added as the Name of the OTLP metric. The name SHOULD NOT be altered.
 
 [Prometheus UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily),
-if present, MUST be converted to the unit of the OTLP metric. The unit SHOULD
-be translated from Prometheus conventions to OpenTelemetry conventions by:
+if present, MUST be converted to the unit of the OTLP metric. The unit MUST
+be translated from words to the UCUM abbreviation if it is in the following set
+of commonly-used units:
 
-* Converting from full words to abbreviations (e.g. "milliseconds" to "ms").
-* Special case: Converting "ratio" to "1".
-* Converting "foo_per_bar" to "foo/bar".
+| Prometheus Unit | UCUM Abbreviation |
+| :--- | :--- |
+| `days` | `d` |
+| `hours` | `h` |
+| `minutes` | `min` |
+| `seconds` | `s` |
+| `milliseconds` | `ms` |
+| `microseconds` | `us` |
+| `nanoseconds` | `ns` |
+| `bytes` | `By` |
+| `kibibytes` | `KiBy` |
+| `mebibytes` | `MiBy` |
+| `gibibytes` | `GiBy` |
+| `tebibytes` | `TiBy` |
+| `kilobytes` | `kBy` |
+| `megabytes` | `MBy` |
+| `gigabytes` | `GBy` |
+| `terabytes` | `TBy` |
+| `meters` | `m` |
+| `volts` | `V` |
+| `amperes` | `A` |
+| `joules` | `J` |
+| `watts` | `W` |
+| `grams` | `g` |
+| `celsius` | `Cel` |
+| `hertz` | `Hz` |
+| `percent` | `%` |
 
 [Prometheus HELP metadata](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information),
 if present, MUST be added as the description of the OTLP metric.
@@ -105,11 +130,23 @@ metadata follow rules for [unknown-typed](#unknown-typed) metrics below.
 The TYPE metadata MUST also be added to the OTLP [metric.metadata][metricMetadata]
 under the `prometheus.type` key (e.g. `prometheus.type="unknown"`).
 
+### Timestamps
+
+**Status**: [Stable](../document-status.md)
+
+If present, the Prometheus Metric Sample's Start timestamp (also referred to as the Created timestamp) MUST be converted to the Start timestamp of the OTLP data point. If no start timestamp is present, the start time of the OTLP data point SHOULD be left unset.
+
+If present, the Prometheus Metric Sample's Timestamp MUST be converted to the Timestamp of the OTLP data point. For metrics scraped from a Prometheus endpoint without an explicit timestamp, the timestamp of the OTLP data point MUST be set to the time of the scrape.
+
 ### Counters
 
 **Status**: [Stable](../document-status.md)
 
 A [Prometheus Counter](https://prometheus.io/docs/instrumenting/exposition_formats/#basic-info) MUST be converted to an OTLP Sum with `is_monotonic` equal to `true`.
+
+Exemplars on the Prometheus Counter Sample MUST be converted to OpenTelemetry
+Exemplars on the OpenTelemetry Sum data point following the rules in
+[Exemplars](#exemplars).
 
 ### Gauges
 
@@ -147,6 +184,10 @@ In the text format, Prometheus histograms buckets, count and sum are sent as sep
 
 * If `_count` is not present, the metric MUST be dropped.
 * If `_sum` is not present, the histogram's sum MUST be unset.
+
+Exemplars on the Prometheus Histogram Sample MUST be converted to OpenTelemetry
+Exemplars on the OpenTelemetry Histogram data point following the rules in
+[Exemplars](#exemplars).
 
 ### Native Histograms
 
@@ -244,6 +285,10 @@ Native histograms of the float or gauge flavors MUST be dropped.
 Native Histograms with `Schema` outside of the range [-4, 8] and not equal to
 -53 MUST be dropped.
 
+Exemplars on the Prometheus Native Histogram Sample MUST be converted to
+OpenTelemetry Exemplars on the OpenTelemetry Exponential Histogram data point
+following the rules in [Exemplars](#exemplars).
+
 ### Summaries
 
 **Status**: [Stable](../document-status.md)
@@ -261,32 +306,27 @@ In text formats where Prometheus Summaries are represented by multiple samples, 
 
 ### Dropped Types
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 The following Prometheus types MUST be dropped:
 
 * [Prometheus GaugeHistogram](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#gaugehistogram)
 * [Prometheus Native GaugeHistogram](https://prometheus.io/docs/specs/native_histograms/#gauge-histograms-vs-counter-histograms)
 
-### Start Time
-
-**Status**: [Development](../document-status.md)
-
-Prometheus Cumulative metrics can include the start time using the [`_created` sample series](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#counter-1). When converting Prometheus Counters to OTLP, conversion SHOULD use `_created` where available. When no `_created` metric is available, conversion MUST follow [Cumulative streams: handling unknown start time](../metrics/data-model.md#cumulative-streams-handling-unknown-start-time) by default. Conversion MAY offer configuration, disabled by default, which allows using the `process_start_time_seconds` metric to provide the start time. Using `process_start_time_seconds` is only correct when all counters on the target start after the process and are not reset while the process is running.
-
 ### Exemplars
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 [Prometheus Exemplars](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars)
-can be attached to Prometheus Histogram bucket metric points and counter metric
-points. Exemplars on histogram buckets SHOULD be converted to exemplars on
-OpenTelemetry histograms. Exemplars on counter metric points SHOULD be
-converted to exemplars on OpenTelemetry sums. If present, the timestamp
-MUST be added to the OpenTelemetry exemplar. The Trace ID and Span ID SHOULD be
-retrieved from the `trace_id` and `span_id` label keys, respectively.  All
-labels not used for the trace and span ids MUST be added to the OpenTelemetry
-exemplar as attributes.
+MUST be converted to OpenTelemetry Exemplars as follows:
+
+* If present, the timestamp MUST be used as the OpenTelemetry exemplar's
+  timestamp.
+* If present, and if the values are valid Trace and Span IDs, the `trace_id` and
+  `span_id` labels MUST be converted to the OpenTelemetry Exemplar's Trace ID and
+  Span ID, respectively.
+* All labels other than `trace_id` and `span_id` MUST be added to the OpenTelemetry
+  exemplar as filtered attributes.
 
 ### Instrumentation Scope
 
@@ -365,32 +405,36 @@ in keys).
 
 ## OTLP Metric points to Prometheus
 
-**Status**: [Development](../document-status.md)
-
 ### Metric Metadata
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-Prometheus Pull exporters MUST NOT allow duplicate UNIT, HELP, or TYPE
-comments for the same metric name to be returned in a single scrape of the
-Prometheus endpoint. Exporters MUST drop entire metrics to prevent conflicting
-TYPE comments, but SHOULD NOT drop metric points as a result of conflicting
-UNIT or HELP comments. Instead, all but one of the conflicting UNIT and HELP
-comments (but not metric points) SHOULD be dropped. If dropping a comment or
-metric points, the exporter SHOULD warn the user through error logging.
+Prometheus Pull exporters for OpenTelemetry metric data MUST NOT allow duplicate
+UNIT, HELP, or TYPE comments for the same metric name to be returned in a single
+scrape of the Prometheus endpoint. Exporters MUST drop entire metrics to prevent
+conflicting TYPE comments, but SHOULD NOT drop metric points as a result of
+conflicting UNIT or HELP comments. Instead, all but one of the conflicting UNIT
+and HELP comments (but not metric points) SHOULD be dropped. If dropping a
+comment or metric points, the exporter SHOULD warn the user through error
+logging. Note that SDKs are required to [warn the user over duplicate instrument
+registration, indicative of the same problem](https://opentelemetry.io/docs/specs/otel/metrics/sdk/#duplicate-instrument-registration).
 
 The Name of an OTLP metric MUST be added as the
 [Prometheus Metric Name](https://prometheus.io/docs/instrumenting/exposition_formats/#comments-help-text-and-type-information).
-Prometheus naming conventions encourage metric names to match the regex: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters
-in the metric name SHOULD be replaced with the `_` character by default, aiming for compatibility with Prometheus conventions. Multiple
-consecutive `_` characters SHOULD be replaced with a single `_` character.
+Prometheus naming conventions encourage metric names to match the regular
+expression: `[a-zA-Z_:]([a-zA-Z0-9_:])*`. Discouraged characters in the metric
+name SHOULD be replaced with the `_` character by default, aiming for
+compatibility with Prometheus conventions. Multiple consecutive `_` characters
+SHOULD be replaced with a single `_` character.
 
-The Unit of an OTLP metric point SHOULD be converted to the equivalent unit in Prometheus when possible. This includes:
+The Unit of an OTLP metric point MUST be converted from the UCUM unit to the
+equivalent unit word in Prometheus if it is included in the
+table in [Metric Metadata above](#metric-metadata).
 
-* Converting from abbreviations to full words (e.g. "ms" to "milliseconds").
-* Dropping the portions of the Unit within brackets (e.g. {packet}). Brackets MUST NOT be included in the resulting unit. A "count of foo" is considered unitless in Prometheus.
-* Special case: Converting "1" to "ratio".
-* Converting "foo/bar" to "foo_per_bar".
+Portions of the Unit within brackets (e.g. {packet}) MUST be dropped.
+
+Units defined as rates over time (e.g. "m/s") MUST be converted to words (e.g.
+"meters_per_second").
 
 The resulting unit SHOULD be added to the metric as
 [UNIT metadata](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metricfamily).
@@ -520,21 +564,20 @@ An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be conv
 
 ### Metric Attributes
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 OpenTelemetry Metric Attributes MUST be converted to
 [Prometheus labels](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).
 String Attribute values are converted directly to Metric Attributes, and
 non-string Attribute values MUST be converted to string attributes following
-the [attribute specification](../common/README.md#attribute).  Prometheus
-naming conventions encourage metric names to match the following regex:
-`[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replace with the `_` character.
-Multiple consecutive `_` characters SHOULD be replaced with a single `_`
-character. This may cause ambiguity in scenarios where multiple similar-named
-attributes share invalid characters at the same location.  In such unlikely
-cases, if multiple key-value pairs are converted to have the same Prometheus
-key, the values MUST be concatenated together, separated by `;`, and ordered by
-the lexicographical order of the original keys.
+the [attribute specification](../common/README.md#anyvalue-representation-for-non-otlp-protocols). Prometheus
+naming conventions encourage metric names to match the following regular expression:
+`[a-zA-Z_]([a-zA-Z0-9_])*`. Discouraged characters SHOULD be replaced with the
+`_` character. Multiple consecutive `_` characters SHOULD be replaced with a
+single `_` character. This conversion, or other labels (e.g. `otel_scope_name`)
+added by this specification, may cause different OpenTelemetry keys to map to
+the same Prometheus key. In such cases, the values MUST be concatenated together,
+separated by `;`, and ordered by the lexicographical order of the original keys.
 
 ### Exemplars
 
