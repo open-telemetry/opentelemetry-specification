@@ -69,6 +69,8 @@ release.
   ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
 - Stabilize OpenTelemetry Metric Metadata to Prometheus metric metadata.
   ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
+- Stabilize translation of labels prefixed with `otel_scope_` to OTLP Instrumentation Scope.
+  ([#5004](https://github.com/open-telemetry/opentelemetry-specification/pull/5004))
 
 ### SDK Configuration
 
