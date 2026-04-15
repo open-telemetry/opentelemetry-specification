@@ -47,6 +47,7 @@ release.
 
 - Add in-development guidance recommending a JSON object as the string
   representation for an attribute in non-OTLP or debugging contexts.
+  ([#8205](https://github.com/open-telemetry/opentelemetry-specification/pull/8205))
 
 ### OpenTelemetry Protocol
 
