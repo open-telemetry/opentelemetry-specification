@@ -504,22 +504,18 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 
 | Field | Type | Description | Maps to Unified Model Field |
 | ----- | ---- | ----------- | --------------------------- |
-| `_SOURCE_REALTIME_TIMESTAMP` or `__REALTIME_TIMESTAMP` | uint64 | Use `_SOURCE_REALTIME_TIMESTAMP` (the earliest trusted timestamp of the message) if present; otherwise fall back to `__REALTIME_TIMESTAMP` (the wallclock time at which the entry was received by the journal). Both are CLOCK_REALTIME in microseconds since the UNIX epoch. `_SOURCE_REALTIME_TIMESTAMP` is optional and only present when the source timestamp differs from journal reception time; `__REALTIME_TIMESTAMP` is always present. | Timestamp |
+| `__REALTIME_TIMESTAMP` | uint64 | The wallclock time at which the entry was received by the journal, as CLOCK_REALTIME in microseconds since the UNIX epoch. Always present. | Timestamp |
 | `PRIORITY` | number | Syslog-compatible priority value (0=Emergency … 7=Debug). | Severity |
 | `_HOSTNAME` | string | The name of the originating host. | `Resource["host.name"]` |
-| `_MACHINE_ID` | string | The machine ID of the originating host as configured in machine-id(5). | `Resource["host.id"]` |
-| `_SYSTEMD_UNIT` | string | The systemd unit name of the service that generated the log entry (e.g. `nginx.service`). | `Resource["service.name"]` |
-| `SYSLOG_FACILITY` | number | Syslog compatibility field: the syslog facility (formatted as decimal string). See [RFC5424 FACILITY](#rfc5424-syslog). | `Attributes["syslog.facility"]` |
-| `SYSLOG_IDENTIFIER` | string | Syslog compatibility field: the identifier string (i.e. "tag"). Equivalent to the RFC5424 APP-NAME. Used as service name when `_SYSTEMD_UNIT` is not present. | `Resource["service.name"]` |
-| `SYSLOG_PID` | number | Syslog compatibility field: the client PID from the original syslog datagram. See [RFC5424 PROCID](#rfc5424-syslog). | `Attributes["syslog.procid"]` |
+| `SYSLOG_FACILITY` | number | Syslog compatibility field: the syslog facility (formatted as decimal string). See [RFC5424 FACILITY](#rfc5424-syslog). | `Attributes["syslog.facility.code"]` |
+| `SYSLOG_IDENTIFIER` | string | Syslog compatibility field: the identifier string (i.e. "tag"). Equivalent to the RFC5424 APP-NAME. | `Attributes["syslog.msg.id"]` |
+| `SYSLOG_PID` | number | Syslog compatibility field: the client PID from the original syslog datagram. See [RFC5424 PROCID](#rfc5424-syslog). | `Attributes["syslog.pid"]` |
 | `MESSAGE` | string | The human-readable log message. | Body |
 | `TID` | number | The numeric thread ID the log message originates from. | `Attributes["thread.id"]` |
 | `_PID` | number | The process identifier (PID) of the process that generated the log entry. | `Resource["process.pid"]` |
-| `_UID` | number | The user identifier (UID) of the process that generated the log entry. | `Resource["process.user.id"]` |
 | `_COMM` | string | The name of the executable (as found in /proc/\<pid\>/comm). | `Resource["process.executable.name"]` |
 | `_EXE` | string | The path to the executable. | `Resource["process.executable.path"]` |
 | `_CMDLINE` | string | The command line of the process. | `Resource["process.command_line"]` |
-| `_SYSTEMD_CGROUP` | string | The control group path in the systemd hierarchy of the process. | `Resource["process.linux.cgroup"]` |
 | `CODE_FILE` | string | The source code file generating this message. | `Attributes["code.file.path"]` |
 | `CODE_LINE` | number | The source code line generating this message. | `Attributes["code.line.number"]` |
 | `CODE_FUNC` | string | The source code function generating this message. | `Attributes["code.function.name"]` |
