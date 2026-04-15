@@ -45,6 +45,9 @@ release.
 
 ### Common
 
+- Add in-development guidance recommending a JSON object as the string
+  representation for an attribute in non-OTLP or debugging contexts.
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
