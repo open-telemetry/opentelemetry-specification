@@ -69,6 +69,8 @@ release.
   ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
 - Stabilize OpenTelemetry Metric Metadata to Prometheus metric metadata.
   ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
+- Prometheus `job` and `instance` are now translated to `prometheus.job` and `prometheus.instance`.
+  ([#4956](https://github.com/open-telemetry/opentelemetry-specification/pull/4956))
 
 ### SDK Configuration
 
