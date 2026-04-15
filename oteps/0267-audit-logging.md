@@ -155,6 +155,48 @@ standard `/v1/logs` endpoint), tentatively `/v1/audit`. This allows:
 The payload is the standard `ExportLogsServiceRequest` proto with an additional
 `audit` boolean flag in the `ResourceLogs` message.
 
+#### No partial success
+
+The OTLP receiver MUST NOT respond with a `partial_success` for an audit log
+export request. If the receiver cannot process one or more audit records in a
+batch, it MUST reject the **entire** batch and return an error. The exporter
+MUST treat any `partial_success` response as a hard failure, retain all
+records, and retry the full batch.
+
+This constraint ensures that no audit record can be silently lost by a receiver
+that processes only part of a batch and acknowledges the rest.
+
+#### Instrumentation Scope is not applicable
+
+The `InstrumentationScope` field present in the standard `ScopeLogs` message
+has no meaning for audit logging. Audit records are not emitted by
+instrumentation libraries – they are emitted by application or system code
+acting on behalf of an actor. Exporters MUST leave the `InstrumentationScope`
+field empty (or populated with only the SDK name/version as a technical marker)
+and receivers MUST NOT use it for routing, filtering, or processing audit
+records.
+
+The three OTLP envelope layers that **do** apply to audit logging are:
+
+| OTLP layer         | Role in audit logging                                          |
+|--------------------|----------------------------------------------------------------|
+| `Resource`         | Identifies the emitting service/host – reused without change.  |
+| `LogRecord` (body) | Carries the `AuditRecord` payload.                             |
+| `Attributes`       | Key-value context (user ID, IP, outcome, …) – reused as-is.    |
+
+#### Durability at the sink is out of scope
+
+This OTEP does not prescribe how the audit sink (e.g. OpenSearch, Splunk,
+S3 WORM, a SIEM) stores, retains, or protects records once they have been
+successfully acknowledged. Requirements such as write-once/read-many storage,
+retention periods, or geographic replication are deployment concerns that depend
+on the specific sink technology and the applicable compliance framework.
+
+The boundary of the OTel audit signal ends at the moment the sink acknowledges
+receipt (and, optionally, returns an `AuditReceipt`). Everything beyond that
+point – including long-term durability, tamper-proof storage, and retention
+enforcement – is outside the scope of this specification.
+
 ## Internal details
 
 ### No sampling, no dropping
