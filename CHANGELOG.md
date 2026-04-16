@@ -73,6 +73,8 @@ release.
   ([#4984](https://github.com/open-telemetry/opentelemetry-specification/issues/4984))
 - Stabilize OpenTelemetry Exemplar to Prometheus Exemplar transformation.
   ([#4964](https://github.com/open-telemetry/opentelemetry-specification/pull/4964))
+- Stabilize Prometheus SDK Exporter port configuration.
+  ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
 
 ### SDK Configuration
 
