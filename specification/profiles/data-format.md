@@ -74,7 +74,7 @@ graph TD
     Location -. "n-n" .-> KeyValueAndUnit
     Location -. "n-1" .-> Mapping
 
-    Line -. "1-1" .-> Function
+    Line -. "n-1" .-> Function
 
     Mapping -. "n-n" .-> KeyValueAndUnit
 ```
