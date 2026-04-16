@@ -657,7 +657,7 @@ sections:
             status: '+'
           - name: '[Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
             status: '+'
-          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)'
+          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplar-conversion)'
             status: '-'
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
             status: '+'

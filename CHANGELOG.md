@@ -71,6 +71,10 @@ release.
   ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
 - Stabilize OpenTelemetry Metric Metadata to Prometheus metric metadata.
   ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
+- Stabilize Prometheus SDK Exporter host configuration.
+  ([#4984](https://github.com/open-telemetry/opentelemetry-specification/issues/4984))
+- Stabilize OpenTelemetry Exemplar to Prometheus Exemplar transformation.
+  ([#4964](https://github.com/open-telemetry/opentelemetry-specification/pull/4964))
 
 ### SDK Configuration
 
@@ -79,6 +83,8 @@ release.
   ([#4948](https://github.com/open-telemetry/opentelemetry-specification/issues/4948))
 - Require spec changes to consider declarative config schema
   ([#4916](https://github.com/open-telemetry/opentelemetry-specification/pull/4916))
+- Add strict YAML parsing guidance to configuration supplementary guidelines.
+  ([#4878](https://github.com/open-telemetry/opentelemetry-specification/pull/4878))
 
 ### Supplementary Guidelines
 

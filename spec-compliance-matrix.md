@@ -373,7 +373,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | [Delta Histograms become Cumulative Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1) | X | - | - | - | - | - | - | - | - | - | - | - | - |
 | [Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | + | + | - | - | - | + | + | + | + | - |
 | [Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | - | - | - | - | - | + | - | - | - | - |
-| [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1) | X | + | - | - | - | - | - | - | - | - | - | - | - |
+| [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplar-conversion) | X | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1) | X | + | + | + | + | - | - | - | + | - | - | - | - |
 
 ## OpenCensus Compatibility
