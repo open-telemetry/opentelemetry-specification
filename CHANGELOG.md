@@ -14,6 +14,8 @@ release.
   ([#4914](https://github.com/open-telemetry/opentelemetry-specification/issues/4914))
 - Decouple the responsibilities of the environment variable propagation carrier.
   ([#4961](https://github.com/open-telemetry/opentelemetry-specification/issues/4961))
+- Remove misleading implementation approach the environment variable propagation.
+  ([#5003](https://github.com/open-telemetry/opentelemetry-specification/issues/5003))
 
 ### Traces
 
@@ -51,6 +53,8 @@ release.
   ([#4849](https://github.com/open-telemetry/opentelemetry-specification/issues/4849))
 - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
   ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+- Stabilize Prometheus Timestamp and Start timestamp transformation.
+  ([#4953](https://github.com/open-telemetry/opentelemetry-specification/pull/4953))
 - Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
   add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
   Histogram.
@@ -65,6 +69,8 @@ release.
   ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
 - Stabilize OpenTelemetry Metric Metadata to Prometheus metric metadata.
   ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
+- Stabilize Prometheus SDK Exporter host configuration.
+  ([#4984](https://github.com/open-telemetry/opentelemetry-specification/issues/4984))
 - Stabilize OpenTelemetry Exemplar to Prometheus Exemplar transformation.
   ([#4964](https://github.com/open-telemetry/opentelemetry-specification/pull/4964))
 
@@ -75,6 +81,8 @@ release.
   ([#4948](https://github.com/open-telemetry/opentelemetry-specification/issues/4948))
 - Require spec changes to consider declarative config schema
   ([#4916](https://github.com/open-telemetry/opentelemetry-specification/pull/4916))
+- Add strict YAML parsing guidance to configuration supplementary guidelines.
+  ([#4878](https://github.com/open-telemetry/opentelemetry-specification/pull/4878))
 
 ### Supplementary Guidelines
 
