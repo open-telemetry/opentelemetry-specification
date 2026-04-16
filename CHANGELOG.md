@@ -71,6 +71,8 @@ release.
   ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
 - Stabilize Prometheus SDK Exporter host configuration.
   ([#4984](https://github.com/open-telemetry/opentelemetry-specification/issues/4984))
+- Stabilize OpenTelemetry Exemplar to Prometheus Exemplar transformation.
+  ([#4964](https://github.com/open-telemetry/opentelemetry-specification/pull/4964))
 
 ### SDK Configuration
 
