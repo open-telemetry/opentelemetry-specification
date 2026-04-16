@@ -95,9 +95,9 @@ its events and links. A log record contains its attributes inline.
 
 Profiles use both "by value" and "by reference" embedding schemes:
 
-1. **Direct embedding** is used for the outer hierarchy
+1. **Direct embedding** is used for the outer hierarchies
    (`ProfilesData` &#x2192; `ResourceProfiles` &#x2192; `ScopeProfiles`
-   &#x2192; `Profile` &#x2192; `Sample`).
+   &#x2192; `Profile` &#x2192; `Sample`) and (`Location`  &#x2192; `Line`).
 2. **Index-based referencing** into a shared [dictionary](#message-profilesdictionary)
    is used for all other relationships. Samples reference stacks, attributes and links
    by index rather than embedding them directly.
