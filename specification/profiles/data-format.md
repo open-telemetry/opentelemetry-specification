@@ -526,8 +526,8 @@ ProfilesData {
   resource_profiles: [ResourceProfiles {
     resource: Resource {
       attributes: [
-        { key_strindex: 9, string_value_strindex: 11 }, // "service.name", "my-service"
-        { key_strindex: 10, string_value_strindex: 12 }, // "process.executable.name", "my-service.bin"
+        { key_strindex: 9, value: { string_value_strindex: 11 } }, // "service.name", "my-service"
+        { key_strindex: 10, value: { string_value_strindex: 12 } }, // "process.executable.name", "my-service.bin"
       ]
     }
     scope_profiles: [ScopeProfiles {
