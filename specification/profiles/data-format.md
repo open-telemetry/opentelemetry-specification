@@ -428,7 +428,7 @@ since samples are linked to traces using [`Link`](#message-link) messages.
 
 ### Simple CPU profile
 
-The following example shows an On-CPU profile collected by a sampling profiler
+The following example shows an on-CPU profile collected by a sampling profiler
 running at 20Hz (one sample every 50ms of actual CPU execution time). Two
 unique stack traces were observed: One (seen 3 times) has the call stack
 `main -> foo -> bar` and the other (seen 2 times) has the call stack `main -> baz`.
