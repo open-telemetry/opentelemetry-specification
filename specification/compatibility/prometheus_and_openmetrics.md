@@ -602,7 +602,7 @@ separated by `;`, and ordered by the lexicographical order of the original keys.
 When an exemplar is converted per the metric-type-specific sections above,
 the [OpenTelemetry Exemplar](../metrics/data-model.md#exemplars) MUST be converted
 to a Prometheus exemplar if the Prometheus (push or pull) protocol being used
-supports them as follows:
+supports them, as follows:
 
 * If present, the OpenTelemetry Exemplar's Trace ID and Span ID MUST be added as
   Exemplar labels using the `trace_id` and `span_id` keys, respectively. These
