@@ -49,8 +49,7 @@ for encoding and delivery of aggregated stack traces and associated metadata.
 The protocol specification is defined in the
 [profiles.proto](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/profiles/v1development/profiles.proto)
 protobuf file and is based on the [pprof](https://github.com/google/pprof/tree/main/proto) format.
-This means that pprof and other established profiling formats can (always for pprof, in most cases
-for other formats) be unambiguously mapped to this data format. Lossless reverse mapping from this
+This means that pprof can be unambiguously mapped to this data format. Lossless reverse mapping from this
 data format is also possible to the extent that the target profiling format has equivalent capabilities.
 
 The following diagram shows the relationships between messages. Solid arrows represent
