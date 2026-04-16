@@ -55,7 +55,7 @@ this data model.
     <td>FACILITY</td>
     <td>enum</td>
     <td>Describes where the event originated. A predefined list of UNIX processes. Part of event source identity. Example: <code>mail system</code></td>
-    <td>`Attributes["syslog.facility"]`</td>
+    <td>`Attributes["syslog.facility.code"]`</td>
   </tr>
   <tr>
     <td>VERSION</td>
@@ -73,7 +73,7 @@ this data model.
     <td>APP-NAME</td>
     <td>string</td>
     <td>User-defined app name. Part of event source identity.</td>
-    <td>`Resource["service.name"]`</td>
+    <td>`Attributes["syslog.identifier"]`</td>
   </tr>
   <tr>
     <td>PROCID</td>
@@ -85,7 +85,7 @@ this data model.
     <td>MSGID</td>
     <td>string</td>
     <td>Defines the type of the event. Part of event source identity. Example: `"TCPIN"`</td>
-    <td>`Attributes["syslog.msgid"]`</td>
+    <td>`Attributes["syslog.msg.id"]`</td>
   </tr>
   <tr>
     <td>STRUCTURED-DATA</td>
@@ -509,8 +509,9 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 | `PRIORITY` | number | Syslog-compatible priority value (0=Emergency … 7=Debug). | Severity |
 | `_HOSTNAME` | string | The name of the originating host. | `Resource["host.name"]` |
 | `SYSLOG_FACILITY` | number | Syslog compatibility field: the syslog facility (formatted as decimal string). See [RFC5424 FACILITY](#rfc5424-syslog). | `Attributes["syslog.facility.code"]` |
-| `SYSLOG_IDENTIFIER` | string | Syslog compatibility field: the identifier string (i.e. "tag"). Equivalent to the RFC5424 APP-NAME. | `Resource["service.name"]` |
-| `SYSLOG_PID` | number | Syslog compatibility field: the client PID from the original syslog datagram. See [RFC5424 PROCID](#rfc5424-syslog). | `Attributes["syslog.pid"]` |
+| `SYSLOG_IDENTIFIER` | string | Syslog compatibility field: the client-supplied identifier string (i.e. "tag"). | `Attributes["syslog.identifier"]` |
+| `SYSLOG_PID` | number | Syslog compatibility field: the client-supplied PID. Unlike the trusted `_PID` field, journald does not validate this value. | `Attributes["syslog.pid"]` |
+| `SYSLOG_TIMESTAMP` | string | Syslog compatibility field: the timestamp from the original syslog datagram. | `Attributes["syslog.timestamp"]` |
 | `MESSAGE` | string | The human-readable log message. | Body |
 | `_PID` | number | The process identifier (PID) of the process that generated the log entry. | `Resource["process.pid"]` |
 | `_COMM` | string | The name of the executable (as found in /proc/\<pid\>/comm). | `Resource["process.executable.name"]` |
@@ -520,6 +521,10 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 | `CODE_LINE` | number | The source code line generating this message. | `Attributes["code.line.number"]` |
 | `CODE_FUNC` | string | The source code function generating this message. | `Attributes["code.function.name"]` |
 | All other fields | any | All other journal fields. | `Attributes["journald.*"]` |
+
+`SYSLOG_PID` maps to `syslog.pid` rather than the RFC5424 `syslog.procid`
+because journald defines it as a numeric client PID, while RFC5424 `PROCID` is
+an implementation-defined string that is not necessarily a process ID.
 
 See [systemd.journal-fields](https://www.freedesktop.org/software/systemd/man/latest/systemd.journal-fields.html) for detailed description of the journald fields.
 
