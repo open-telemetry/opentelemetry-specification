@@ -291,6 +291,7 @@ sections:
         optional: true
       - name: Getter argument returning Keys
         optional: true
+      - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED

@@ -1,6 +1,6 @@
 # Environment Variables as Context Propagation Carriers
 
-**Status**: [Alpha](../document-status.md)
+**Status**: [Beta](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
