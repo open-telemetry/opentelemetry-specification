@@ -11,6 +11,7 @@ requirements to the existing specifications.
 
 - [Configuration interface prioritization and `create`](#configuration-interface-prioritization-and-create)
 - [Programmatic customization and `create`](#programmatic-customization-and-create)
+- [Strict YAML parsing](#strict-yaml-parsing)
 
 <!-- tocstop -->
 
@@ -63,3 +64,27 @@ exporters is not possible to express with declarative config should not
 encourage the OpenTelemetry community to have better programmatic customization.
 Instead, we should pursue adding authentication as an SDK plugin component and
 modeling in declarative config.
+
+## Strict YAML parsing
+
+The practices described below are derived from the
+[YAML 1.2 Core Schema](https://yaml.org/spec/1.2.2/#103-core-schema)
+as specified in the [data model](./data-model.md#yaml-file-format) and common
+security best practices for YAML processing.
+
+Configuration file authors are encouraged to constrain themselves to the
+Core Schema's minimal type system (strings, integers, floats, booleans, null)
+to maximize portability across languages and avoid common YAML pitfalls such
+as:
+
+* Unintended type coercion (e.g., `NO` being parsed as boolean `false` instead
+  of the string `"NO"` in YAML 1.1)
+* Security vulnerabilities from language-specific object deserialization
+  features that allow arbitrary code execution (e.g., Python's `!!python/object`
+  tags, Ruby's `!ruby/object` tags)
+* Unexpected behavior from complex YAML features like anchors and aliases in
+  untrusted input
+
+When an implementation's YAML library offers a "safe" or "strict" parser mode
+(e.g., `yaml.safe_load()` in Python, safe mode in Ruby's Psych), using it is a
+good way to enforce these constraints automatically.

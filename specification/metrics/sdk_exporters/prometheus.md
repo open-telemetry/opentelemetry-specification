@@ -102,7 +102,7 @@ instrument kind to be `cumulative` for all instrument kinds.
 
 ### Host
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter SHOULD support a configuration option to set the host
 that metrics are served on. The option MAY be named `host`, and MUST be `localhost`

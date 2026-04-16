@@ -39,7 +39,7 @@ aliases:
   * [Exponential Histograms](#exponential-histograms)
   * [Summaries](#summaries-1)
   * [Metric Attributes](#metric-attributes)
-  * [Exemplars](#exemplars-1)
+  * [Exemplar Conversion](#exemplar-conversion)
   * [Resource Attributes](#resource-attributes-1)
 
 <!-- tocstop -->
@@ -473,6 +473,8 @@ a Prometheus Unknown-typed metric if the `prometheus.type` key of
 [metric.metadata][metricMetadata] is `unknown`. Otherwise, it MUST be converted
 to a Prometheus Gauge.
 
+Exemplars on OpenTelemetry Gauges SHOULD be dropped.
+
 ### Sums
 
 **Status**: [Development](../document-status.md)
@@ -493,6 +495,13 @@ to a Prometheus Gauge.
 If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` SHOULD be added by default, otherwise the name MUST remain unchanged. Exporters SHOULD provide a configuration option to disable the addition of `_total` suffixes.
 Monotonic Sum metric points with `StartTimeUnixNano` should export the `{name}_created` metric as well.
 
+If Sum is converted to a Prometheus Counter, then `Exemplars` MUST be converted
+as described in the [Exemplar Conversion](#exemplar-conversion) section.
+Otherwise, `Exemplars` SHOULD be dropped. If the Prometheus protocol only
+supports a single exemplar on the Counter sample, the latest exemplar SHOULD be
+converted. This matches the behavior of Prometheus client libraries, which is to keep the
+latest exemplar for counter instruments.
+
 ### Histograms
 
 **Status**: [Development](../document-status.md)
@@ -501,8 +510,12 @@ An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulati
 
 - A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
 - `{name}_sum` metric denoting the sum field of the histogram, reported only if the sum is positive and monotonic. The sum is positive and monotonic when all buckets are positive. All attributes of the histogram point are converted to Prometheus labels.
-- A series of `{name}_bucket` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up to the boundary reported in the `le` label. These points will include a single exemplar that falls within `le` label and no other `le` labelled point.  The final bucket metric MUST have an `+Inf` threshold.
+- A series of `{name}_bucket` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up to the boundary reported in the `le` label.  The final bucket metric MUST have an `+Inf` threshold.
 - Histograms with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
+
+`Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
+If the Prometheus protocol only supports a single exemplar per-bucket, the latest
+exemplar that falls into each bucket SHOULD be converted.
 
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
 
@@ -539,6 +552,7 @@ Histogram as follows:
   result being that the Offset fields are different-by-one.
 - `Min` and `Max` are not used.
 - `StartTimeUnixNano` is not used.
+- `Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
 
 [OpenTelemetry Exponential Histogram](../metrics/data-model.md#exponentialhistogram)
 metrics with the delta aggregation temporality are dropped.
@@ -562,6 +576,8 @@ An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be conv
   each point is the computed value of the quantile point.
 - Summaries with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
 
+Exemplars on OpenTelemetry Summaries SHOULD be dropped.
+
 ### Metric Attributes
 
 **Status**: [Stable](../document-status.md)
@@ -579,23 +595,24 @@ added by this specification, may cause different OpenTelemetry keys to map to
 the same Prometheus key. In such cases, the values MUST be concatenated together,
 separated by `;`, and ordered by the lexicographical order of the original keys.
 
-### Exemplars
+### Exemplar Conversion
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-[Exemplars](../metrics/data-model.md#exemplars) on OpenTelemetry Histograms and Monotonic Sums SHOULD
-be converted to Prometheus exemplars. Exemplars on other OpenTelemetry data
-points MUST be dropped. For Prometheus Remote Write exporters, multiple exemplars are
-able to be added to each bucket, so all exemplars SHOULD be converted. For
-Prometheus pull endpoints, only a single exemplar is able to be added to each
-bucket, so the largest exemplar from each bucket MUST be used, if attaching
-exemplars. If no exemplars exist on a bucket, the highest exemplar from a lower
-bucket MUST be used, even though it is a duplicate of another bucket's exemplar.
-Prometheus Exemplars MUST use the `trace_id` and `span_id` keys for the trace
-and span IDs, respectively. Timestamps MUST be added as timestamps on the
-Prometheus exemplar, and `filtered_attributes` MUST be added as labels on the
-Prometheus exemplar unless they would exceed the
-[limit on characters](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars).
+When an exemplar is converted per the metric-type-specific sections above,
+the [OpenTelemetry Exemplar](../metrics/data-model.md#exemplars) MUST be converted
+to a Prometheus exemplar if the Prometheus (push or pull) protocol being used
+supports them, as follows:
+
+* If present, the OpenTelemetry Exemplar's Trace ID and Span ID MUST be added as
+  Exemplar labels using the `trace_id` and `span_id` keys, respectively. These
+  labels MUST take precedence over labels from `filtered_attributes` in cases
+  where there is a key collision.
+* Timestamps MUST be added as timestamps on the Prometheus exemplar.
+* `filtered_attributes` MUST be added as labels on the Prometheus exemplar,
+  unless they would exceed the Prometheus protocol's exemplar limits. For
+  example, OpenMetrics 1.0 imposes a
+  [128 character limit](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#exemplars).
 
 ### Resource Attributes
 
