@@ -513,7 +513,7 @@ An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulati
 
 `Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
 If the Prometheus protocol only supports a single exemplar per-bucket, the latest
-exemplar that falls into each bucket MUST be converted.
+exemplar that falls into each bucket SHOULD be converted.
 
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
 
@@ -597,8 +597,9 @@ separated by `;`, and ordered by the lexicographical order of the original keys.
 
 **Status**: [Stable](../document-status.md)
 
-[OpenTelemetry Exemplars](../metrics/data-model.md#exemplars) MUST be converted
-to Prometheus exemplars if the Prometheus (push or pull) protocol being used
+When an exemplar is converted per the metric-type-specific sections above,
+the [OpenTelemetry Exemplar](../metrics/data-model.md#exemplars) MUST be converted
+to a Prometheus exemplar if the Prometheus (push or pull) protocol being used
 supports them as follows:
 
 * If present, the OpenTelemetry Exemplar's Trace ID and Span ID MUST be added as
