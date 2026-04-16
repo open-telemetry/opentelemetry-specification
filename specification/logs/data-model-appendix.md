@@ -55,7 +55,7 @@ this data model.
     <td>FACILITY</td>
     <td>enum</td>
     <td>Describes where the event originated. A predefined list of UNIX processes. Part of event source identity. Example: <code>mail system</code></td>
-    <td>`Attributes["syslog.facility"]`</td>
+    <td>`Attributes["syslog.facility.code"]`</td>
   </tr>
   <tr>
     <td>VERSION</td>
@@ -79,13 +79,13 @@ this data model.
     <td>PROCID</td>
     <td>string</td>
     <td>Not well defined. May be used as a meta field for protocol operation purposes or may be part of event source identity.</td>
-    <td>`Attributes["syslog.procid"]`</td>
+    <td>`Attributes["syslog.pid"]`</td>
   </tr>
   <tr>
     <td>MSGID</td>
     <td>string</td>
     <td>Defines the type of the event. Part of event source identity. Example: `"TCPIN"`</td>
-    <td>`Attributes["syslog.msgid"]`</td>
+    <td>`Attributes["syslog.msg.id"]`</td>
   </tr>
   <tr>
     <td>STRUCTURED-DATA</td>
