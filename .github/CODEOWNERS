@@ -14,3 +14,7 @@
 
 # Global owners, will be the owners for everything in the repo. Membership is tracked via https://github.com/open-telemetry/community/blob/main/community-members.md 
 *   @open-telemetry/technical-committee @open-telemetry/spec-sponsors
+
+# Prometheus-specific specifications
+/specification/compatibility/prometheus_and_openmetrics.md @open-telemetry/technical-committee @open-telemetry/spec-sponsors @open-telemetry/prometheus-interoperability
+/specification/metrics/sdk_exporters/prometheus.md @open-telemetry/technical-committee @open-telemetry/spec-sponsors @open-telemetry/prometheus-interoperability
