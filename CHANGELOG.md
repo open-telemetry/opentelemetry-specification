@@ -105,7 +105,7 @@ release.
 - Support multiple Resources within an SDK.
   ([#4665](https://github.com/open-telemetry/opentelemetry-specification/pull/4665))
 
-## v1.55.0
+## v1.55.0 (2025-03-05)
 
 ### Traces
 
