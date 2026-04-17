@@ -45,6 +45,9 @@ release.
 
 ### Entities
 
+- Define merge algorithm.
+  ([4768](https://github.com/open-telemetry/opentelemetry-specification/pull/4768))
+
 ### Common
 
 ### OpenTelemetry Protocol
