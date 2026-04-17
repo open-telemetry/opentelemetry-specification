@@ -471,9 +471,9 @@ to avoid conflicts with the already existing `otel_scope_name`, `otel_scope_vers
 An [OpenTelemetry Gauge](../metrics/data-model#gauge) MUST be converted following 
 a hint present in [metric.metadata][metricMetadata]:
 - If the `prometheus.type` key is absent, or its value is equal to `gauge`, the datapoint MUST be transformed to a Prometheus Gauge.
-- If the `prometheus.type` key has value equal to `info`, the datapoint MUST be transformed to a Prometheus Info.
-- If the `prometheus.type` key has value equal to `stateset`, the datapoint MUST be transformed to a Prometheus Stateset.
 - If the `prometheus.type` key has value equal to `unkown`, the datapoint MUST be transformed to a Prometheus Unkown.
+- If the `prometheus.type` key has value equal to `info`, the datapoint SHOULD be transformed to a Prometheus Info.
+- If the `prometheus.type` key has value equal to `stateset`, the datapoint SHOULD be transformed to a Prometheus Stateset.
 
 ### Sums
 
@@ -483,10 +483,7 @@ An [OpenTelemetry Sums](../metrics/data-model.md#sums) MUST be converted followi
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it should follow the same rules as described for [OpenTelemetry Gauge](#gauges-1)
-- If the aggregation temporality is delta and the sum is monotonic, it SHOULD be converted to a cumulative temporality and become a Prometheus Counter. The following behaviors are expected:
-  - The new data point type must be the same as the accumulated data point type.
-  - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues](../metrics/data-model.md#sums-detecting-alignment-issues).
-- Otherwise, it MUST be dropped.
+- If the aggregation temporality is delta the datapoint MUST be dropped. 
 
 If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` SHOULD be added by default, otherwise the name MUST remain unchanged.
 
