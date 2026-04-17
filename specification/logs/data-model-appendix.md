@@ -17,6 +17,7 @@ the respective exporter documentation if exact details are required.
   * [Apache HTTP Server access log](#apache-http-server-access-log)
   * [CloudTrail Log Event](#cloudtrail-log-event)
   * [Google Cloud Logging](#google-cloud-logging)
+  * [systemd-journald](#systemd-journald)
   * [Elastic Common Schema](#elastic-common-schema)
 - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
 - [References](#references)
@@ -498,6 +499,27 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 | http_request | HttpRequest | The HTTP request associated with the log entry, if any. | `Attributes["gcp.http_request"]` |
 | trace_sampled | boolean | The sampling decision of the trace associated with the log entry. | TraceFlags.SAMPLED |
 | All other fields | | | `Attributes["gcp.*"]` |
+
+### systemd-journald
+
+| Field | Type | Description | Maps to Unified Model Field |
+| ----- | ---- | ----------- | --------------------------- |
+| `__REALTIME_TIMESTAMP` | uint64 | The wallclock time at which the entry was received by the journal, as CLOCK_REALTIME in microseconds since the UNIX epoch. Always present. | Timestamp |
+| `PRIORITY` | number | Syslog-compatible priority value (0=Emergency … 7=Debug). | Severity |
+| `_HOSTNAME` | string | The name of the originating host. | `Resource["host.name"]` |
+| `SYSLOG_FACILITY` | number | Syslog compatibility field: the syslog facility (formatted as decimal string). See [RFC5424 FACILITY](#rfc5424-syslog). | `Attributes["syslog.facility.code"]` |
+| `SYSLOG_IDENTIFIER` | string | Syslog compatibility field: the identifier string (i.e. "tag"). Equivalent to the RFC5424 APP-NAME. | `Attributes["syslog.msg.id"]` |
+| `SYSLOG_PID` | number | Syslog compatibility field: the client PID from the original syslog datagram. See [RFC5424 PROCID](#rfc5424-syslog). | `Attributes["syslog.pid"]` |
+| `MESSAGE` | string | The human-readable log message. | Body |
+| `TID` | number | The numeric thread ID the log message originates from. | `Attributes["thread.id"]` |
+| `_PID` | number | The process identifier (PID) of the process that generated the log entry. | `Resource["process.pid"]` |
+| `_COMM` | string | The name of the executable (as found in /proc/\<pid\>/comm). | `Resource["process.executable.name"]` |
+| `_EXE` | string | The path to the executable. | `Resource["process.executable.path"]` |
+| `_CMDLINE` | string | The command line of the process. | `Resource["process.command_line"]` |
+| `CODE_FILE` | string | The source code file generating this message. | `Attributes["code.file.path"]` |
+| `CODE_LINE` | number | The source code line generating this message. | `Attributes["code.line.number"]` |
+| `CODE_FUNC` | string | The source code function generating this message. | `Attributes["code.function.name"]` |
+| All other fields | any | All other journal fields. | `Attributes["journald.*"]` |
 
 ### Elastic Common Schema
 
