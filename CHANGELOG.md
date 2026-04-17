@@ -9,6 +9,36 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.56.0
+
+### Context
+
 - Align environment variable context propagation name restrictions with POSIX.1-2024
   and define normalization behavior.
   ([#4914](https://github.com/open-telemetry/opentelemetry-specification/issues/4914))
@@ -31,28 +61,16 @@ release.
 - Add development `maxExportBatchSize` parameter to Periodic exporting MetricReader.
   ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
 
-### Logs
-
-### Baggage
-
-### Profiles
-
 ### Resource
 
 - Clarify that a Resource describes the observed entity, not the component
   that technically emits telemetry.
   ([#4905](https://github.com/open-telemetry/opentelemetry-specification/pull/4905))
 
-### Entities
-
-### Common
-
-### OpenTelemetry Protocol
-
 ### Compatibility
 
 - Deprecate OpenTracing compatibility requirements in the specification.
-  ([#4849](https://github.com/open-telemetry/opentelemetry-specification/issues/4849))
+  ([#4938](https://github.com/open-telemetry/opentelemetry-specification/issues/4938))
 - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
   ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
 - Stabilize Prometheus Timestamp and Start timestamp transformation.
@@ -80,20 +98,20 @@ release.
 
 - Declarative configuration: add in-development guidance for exposing the
   effective `Resource` returned by `Create`.
-  ([#4948](https://github.com/open-telemetry/opentelemetry-specification/issues/4948))
+  ([#4949](https://github.com/open-telemetry/opentelemetry-specification/issues/4949))
 - Require spec changes to consider declarative config schema
   ([#4916](https://github.com/open-telemetry/opentelemetry-specification/pull/4916))
 - Add strict YAML parsing guidance to configuration supplementary guidelines.
   ([#4878](https://github.com/open-telemetry/opentelemetry-specification/pull/4878))
 
-### Supplementary Guidelines
-
 ### OTEPs
 
 - Process Context: Sharing Resource Attributes with External Readers.
   ([#4719](https://github.com/open-telemetry/opentelemetry-specification/pull/4719))
+- Support multiple Resources within an SDK.
+  ([#4665](https://github.com/open-telemetry/opentelemetry-specification/pull/4665))
 
-## v1.55.0 (TODO: update date before merging)
+## v1.55.0 (2025-03-05)
 
 ### Traces
 
@@ -205,9 +223,6 @@ release.
 
 - Stabilize complex `AnyValue` attribute value types and related attribute limits.
   ([#4794](https://github.com/open-telemetry/opentelemetry-specification/issues/4794))
-
-- Support multiple Resources within an SDK.
-  ([#4665](https://github.com/open-telemetry/opentelemetry-specification/pull/4665))
 
 ## v1.52.0 (2025-12-12)
 
