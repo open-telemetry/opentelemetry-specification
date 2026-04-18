@@ -40,6 +40,9 @@ release.
 
 ### Profiles
 
+- Add Profiles data model (data-model.md).
+  ([#4965](https://github.com/open-telemetry/opentelemetry-specification/pull/4965))
+
 ### Resource
 
 - Clarify that a Resource describes the observed entity, not the component
