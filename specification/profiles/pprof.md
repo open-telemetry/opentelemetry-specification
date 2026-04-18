@@ -1,6 +1,6 @@
 # Pprof
 
-**Status**: [Development](../document-status.md)
+**Status**: [Alpha](../document-status.md)
 
 <!-- toc -->
 
@@ -10,10 +10,11 @@
 
 ## Compatibility
 
-Original [pprof](https://github.com/google/pprof/tree/main/proto) is forward
-compatible with OpenTelemetry Profiles in a sense that it can be transformed into
-OpenTelemetry Profiles and again into [pprof](https://github.com/google/pprof/tree/main/proto)
-without data loss.
+Original [pprof](https://github.com/google/pprof/tree/main/proto) is compatible
+with OpenTelemetry Profiles in that it can be transformed into OpenTelemetry Profiles
+and back again into [pprof](https://github.com/google/pprof/tree/main/proto) without
+data loss (convertibility but not wire compatibility).
 
-For this compatibility OpenTelemetry also provides a `pprof` namespace in
-Semantic Conventions.
+To enable this compatibility through explicit conversion, OpenTelemetry provides pprof-specific [guidelines](https://opentelemetry.io/docs/specs/semconv/general/profiles/#compatibility-with-pprof)
+in [Semantic Conventions](https://opentelemetry.io/docs/specs/semconv).
+
