@@ -27,6 +27,7 @@ path_base_for_github_subdir:
     + [Arrays](#arrays)
     + [Maps](#maps)
 - [Attribute](#attribute)
+  * [Attribute representation for non-OTLP](#attribute-representation-for-non-otlp)
   * [Attribute Collections](#attribute-collections)
 - [Attribute Limits](#attribute-limits)
   * [Configurable Parameters](#configurable-parameters)
@@ -194,6 +195,39 @@ See [Requirement Level](https://github.com/open-telemetry/semantic-conventions/b
 
 See [this document](attribute-type-mapping.md) to find out how to map values obtained
 outside OpenTelemetry into OpenTelemetry attribute values.
+
+### Attribute representation for non-OTLP
+
+**Status**: [Development](../document-status.md)
+
+For non-OTLP protocols or other debugging-oriented contexts that need to
+represent a single `Attribute` as a string, the RECOMMENDED form is a JSON
+object containing a single key-value pair.
+
+> [!NOTE]
+> This string representation is lossy. Type information is lost as all
+> values are converted to strings, and precision loss may occur for numeric values
+> (particularly for floating point numbers and large integers that exceed the
+> precision capabilities of the receiving system's string-to-number conversion).
+
+The `key` portion SHOULD be represented as a
+[JSON string](https://datatracker.ietf.org/doc/html/rfc8259#section-7) member
+name.
+
+The `value` portion SHOULD use the JSON representation that corresponds to the
+attribute value:
+
+- strings as JSON strings,
+- booleans as JSON booleans,
+- integers and floating point numbers as JSON numbers, except that `NaN`,
+  `Infinity`, and `-Infinity` SHOULD be represented as JSON strings,
+- byte arrays as [Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4)
+  JSON strings,
+- arrays as JSON arrays,
+- maps as JSON objects,
+- empty values as JSON null.
+
+Examples: `{"http.request.method": "GET"}`, `{"retries": 3}`, `{"payload": {"nested": true}}`
 
 ### Attribute Collections
 
