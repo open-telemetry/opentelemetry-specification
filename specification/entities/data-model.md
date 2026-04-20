@@ -179,10 +179,8 @@ Here's an example algorithm that will merge:
 merge(current_entity, new_entity) {
   if can_merge(current_entity, new_entity) {
     for attribute in new_entity.description {
-      if !current_entity.description.contains(attribute.key) {
-        current_entity.description.insert(attribute)
-      }
-      // Ignore otherwise.
+      // New entity descriptions take precedence.
+      current_entity.description.insert(attribute)
     }
   }
 }

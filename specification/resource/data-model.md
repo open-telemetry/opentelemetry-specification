@@ -91,6 +91,10 @@ resource.
   - If there is a conflict where two entities use the same attribute key then
     remove the lower priority entity from the Resource.
 
+__Note__: Priority of entity merging is generally chosen implicitly by user
+configuration, e.g. the order of Resource Detectors configured for an SDK
+implicitly create an order of priority for merging entities.
+
 #### Examples
 
 _These examples demonstrate how conflicts are resolved during a merge._
@@ -144,6 +148,10 @@ The conflict between loose attributes and those belonging to an entity. Here whe
       - `host.id`: `"H1"`
     - description:
       - `host.name`: `"detected-name"`
+  - `process`
+    - type: `"process"`
+    - identity:
+      - `process.pid`: `12345`
 - Attributes: _None_
 
 **Resource to Merge:**
@@ -153,7 +161,11 @@ The conflict between loose attributes and those belonging to an entity. Here whe
   - `env`: `"prod"`
 
 **Resulting Resource:**
-- Entities: _None_
+- Entities:
+  - `process`
+    - type: `"process"`
+    - identity:
+      - `process.pid`: `12345`
 - Attributes:
   - `host.id`: `"h2"`
   - `env`: `"prod"`
