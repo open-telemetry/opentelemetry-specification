@@ -11,6 +11,9 @@ release.
 
 ### Traces
 
+- Revise `ProbabilitySampler` specification to avoid or erase the `ot.th` key
+  when trace ID randomness and an explicit `rv` value are not available. ([#5039](https://github.com/open-telemetry/opentelemetry-specification/pull/5039))
+
 ### Metrics
 
 ### Logs
