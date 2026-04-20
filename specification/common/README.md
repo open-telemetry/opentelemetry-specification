@@ -227,7 +227,9 @@ attribute value:
 - maps as JSON objects,
 - empty values as JSON null.
 
-Examples: `{"http.request.method": "GET"}`, `{"retries": 3}`, `{"payload": {"nested": true}}`
+Examples: `{"http.request.method": "GET"}`, `{"retries": 3}`,
+`{"payload": "aGVsbG8gd29ybGQ="}`, `{"session.id": null}`,
+`{"colors": ["red", "blue"]}`, `{"context": {"nested": true}}`
 
 ### Attribute Collections
 
