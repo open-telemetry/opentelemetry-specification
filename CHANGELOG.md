@@ -180,6 +180,10 @@ release.
   empty object when not set
   ([#4817](https://github.com/open-telemetry/opentelemetry-specification/pull/4817))
 
+- Add OTEP for Semantic Convention Schema v2 with support for multiple convention
+  registries and resolved schema format
+  ([#4815](https://github.com/open-telemetry/opentelemetry-specification/pull/4815))
+
 ## v1.53.0 (2026-01-09)
 
 ### Metrics
