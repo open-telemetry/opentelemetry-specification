@@ -304,37 +304,37 @@ sections:
       - name: The metrics Exporter `shutdown` function do not block indefinitely.
         status: '?'
       - name: The metrics SDK samples `Exemplar`s from measurements.
-        status: '?'
+        status: '+'
       - name: Exemplar sampling can be disabled.
-        status: '?'
+        status: '+'
       - name: The metrics SDK supports SDK-wide exemplar filter configuration
-        status: '?'
+        status: '+'
       - name: The metrics SDK supports `TraceBased` exemplar filter
-        status: '?'
+        status: '+'
       - name: The metrics SDK supports `AlwaysOn` exemplar filter
-        status: '?'
+        status: '+'
       - name: The metrics SDK supports `AlwaysOff` exemplar filter
-        status: '?'
+        status: '+'
       - name: Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.
-        status: '?'
+        status: '+'
       - name:
           Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was
           taken.
-        status: '?'
+        status: '+'
       - name: Exemplars contain the timestamp when the measurement was taken.
-        status: '?'
+        status: '+'
       - name: The metrics SDK provides an `ExemplarReservoir` interface or extension point.
-        status: '?'
+        status: '+'
       - name: An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.
-        status: '?'
+        status: '+'
       - name:
           The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except
           `ExplicitBucketHistogram`.
-        status: '?'
+        status: '+'
       - name:
           The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram`
           aggregation.
-        status: '?'
+        status: '+'
       - name: A metric Producer accepts an optional metric Filter
         status: '?'
       - name: The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers
@@ -443,6 +443,8 @@ sections:
         status: '+'
       - name: Getter argument returning Keys
         status: '+'
+      - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
+        status: '?'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
@@ -655,7 +657,7 @@ sections:
             status: '-'
           - name: '[Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
             status: '-'
-          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)'
+          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplar-conversion)'
             status: '-'
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
             status: '-'
