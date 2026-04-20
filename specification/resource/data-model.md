@@ -91,25 +91,27 @@ resource.
   - If there is a conflict where two entities use the same attribute key then
     remove the lower priority entity from the Resource.
 
-__Note__: Priority of entity merging is generally chosen implicitly by user
+**Note**: Priority of entity merging is generally chosen implicitly by user
 configuration, e.g. the order of Resource Detectors configured for an SDK
 implicitly create an order of priority for merging entities.
 
 #### Examples
 
-_These examples demonstrate how conflicts are resolved during a merge._
+*These examples demonstrate how conflicts are resolved during a merge.*
 
 ##### Example 1: Entity replaces loose attribute
 
 The conflict between loose attributes and those belonging to an entity. Here when entity is added it removes previous attributes.
 
 **Initial Resource:**
-- Entities: _None_
+
+- Entities: *None*
 - Attributes:
   - `host.name`: `"old-name"`
   - `env`: `"prod"`
 
 **Entities to Merge (by priority):**
+
 1. `host`
    - type: `"host"`
    - identity:
@@ -122,6 +124,7 @@ The conflict between loose attributes and those belonging to an entity. Here whe
      - `service.name`: `"my-svc"`
 
 **Resulting Resource:**
+
 - Entities:
   - `host`
     - type: `"host"`
@@ -141,6 +144,7 @@ The conflict between loose attributes and those belonging to an entity. Here whe
 The conflict between loose attributes and those belonging to an entity. Here when the loose attribute is added, the entity must be removed due to conflict.
 
 **Initial Resource:**
+
 - Entities:
   - `host`
     - type: `"host"`
@@ -152,15 +156,17 @@ The conflict between loose attributes and those belonging to an entity. Here whe
     - type: `"process"`
     - identity:
       - `process.pid`: `12345`
-- Attributes: _None_
+- Attributes: *None*
 
 **Resource to Merge:**
-- Entities: _None_
+
+- Entities: *None*
 - Attributes:
   - `host.id`: `"h2"`
   - `env`: `"prod"`
 
 **Resulting Resource:**
+
 - Entities:
   - `process`
     - type: `"process"`
@@ -175,6 +181,7 @@ The conflict between loose attributes and those belonging to an entity. Here whe
 Reject an entity with a different identity of the same type, and drop a lower priority entity due to an attribute key conflict.
 
 **Initial Resource:**
+
 - Entities:
   - `host`
     - type: `"host"`
@@ -182,9 +189,10 @@ Reject an entity with a different identity of the same type, and drop a lower pr
       - `host.id`: `"H1"`
     - description:
       - `env`: `"prod"`
-- Attributes: _None_
+- Attributes: *None*
 
 **Entities to Merge (by priority):**
+
 1. `host`
    - type: `"host"`
    - identity:
@@ -197,6 +205,7 @@ Reject an entity with a different identity of the same type, and drop a lower pr
      - `env`: `"dev"`
 
 **Resulting Resource:**
+
 - Entities:
   - `host`
     - type: `"host"`
@@ -204,5 +213,4 @@ Reject an entity with a different identity of the same type, and drop a lower pr
       - `host.id`: `"H1"`
     - description:
       - `env`: `"prod"`
-- Attributes: _None_
-
+- Attributes: *None*
