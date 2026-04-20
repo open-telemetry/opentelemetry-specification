@@ -46,6 +46,7 @@ Introduce Data Model for Log Records as it is understood by OpenTelemetry.
   * [Google Cloud Logging](#google-cloud-logging)
 * [Elastic Common Schema](#elastic-common-schema)
 * [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
+* [References](#references)
 
 ## Motivation
 
@@ -1342,3 +1343,7 @@ for an exhaustive list.
 | Critical | Critical | | Dpanic | | ERROR2 |
 | Emergency | | | Panic | | ERROR3 |
 | Alert | | FATAL | Fatal | | FATAL |
+
+## References
+
+- [Draft discussion of Data Model](https://docs.google.com/document/d/1ASjqT4eV0JKm-a15J508HEJ2-gbqdcM1Abud_Ek86Tc/edit?tab=t.0)
