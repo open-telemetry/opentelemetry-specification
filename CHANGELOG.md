@@ -46,6 +46,8 @@ release.
   ([#4961](https://github.com/open-telemetry/opentelemetry-specification/issues/4961))
 - Remove misleading implementation approach the environment variable propagation.
   ([#5003](https://github.com/open-telemetry/opentelemetry-specification/issues/5003))
+- Change Environment Variables as Context Propagation Carriers document status to Beta.
+  ([#5020](https://github.com/open-telemetry/opentelemetry-specification/issues/5020))
 
 ### Traces
 
@@ -59,6 +61,11 @@ release.
 - Add development `maxExportBatchSize` parameter to Periodic exporting MetricReader.
   ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
 
+### Logs
+
+- Add event to span event bridge.
+  ([#5006](https://github.com/open-telemetry/opentelemetry-specification/pull/5006))
+
 ### Resource
 
 - Clarify that a Resource describes the observed entity, not the component
@@ -68,25 +75,31 @@ release.
 ### Compatibility
 
 - Deprecate OpenTracing compatibility requirements in the specification.
-  ([#4938](https://github.com/open-telemetry/opentelemetry-specification/issues/4938))
-- Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
-  ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
-- Stabilize Prometheus Timestamp and Start timestamp transformation.
-  ([#4953](https://github.com/open-telemetry/opentelemetry-specification/pull/4953))
-- Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
-  add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
-  Histogram.
-  ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
-- Stabilize Prometheus Dropped Types transformation.
-  ([#4952](https://github.com/open-telemetry/opentelemetry-specification/pull/4952))
-- Stabilize OpenTelemetry Attributes to Prometheus labels transformation.
-  ([#4963](https://github.com/open-telemetry/opentelemetry-specification/pull/4963))
-- Stabilize Prometheus Exemplar to OpenTelemetry Exemplar transformation.
-  ([#4962](https://github.com/open-telemetry/opentelemetry-specification/pull/4962))
-- Stabilize Prometheus Metadata transformation.
-  ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
-- Stabilize OpenTelemetry Metric Metadata to Prometheus metric metadata.
-  ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
+  ([#4938](https://github.com/open-telemetry/opentelemetry-specification/pull/4938))
+- Stabilize sections of Prometheus and OpenMetrics Compatibility.
+  - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
+    ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+  - Stabilize Prometheus Timestamp and Start timestamp transformation.
+    ([#4953](https://github.com/open-telemetry/opentelemetry-specification/pull/4953))
+  - Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
+    add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
+    Histogram.
+    ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
+  - Stabilize Prometheus Dropped Types transformation.
+    ([#4952](https://github.com/open-telemetry/opentelemetry-specification/pull/4952))
+  - Stabilize OpenTelemetry Attributes to Prometheus labels transformation.
+    ([#4963](https://github.com/open-telemetry/opentelemetry-specification/pull/4963))
+  - Stabilize Prometheus Exemplar to OpenTelemetry Exemplar transformation.
+    ([#4962](https://github.com/open-telemetry/opentelemetry-specification/pull/4962))
+  - Stabilize Prometheus Metadata transformation.
+    ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
+  - Stabilize OpenTelemetry Metric Metadata to Prometheus metric metadata.
+    ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
+  - Stabilize OpenTelemetry Exemplar to Prometheus Exemplar transformation.
+    ([#4964](https://github.com/open-telemetry/opentelemetry-specification/pull/4964))
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize host configuration.
+    ([#5025](https://github.com/open-telemetry/opentelemetry-specification/pull/5025))
 
 ### SDK Configuration
 
