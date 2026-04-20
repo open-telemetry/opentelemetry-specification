@@ -88,7 +88,7 @@ change, or periodically to indicate the entity still exists.
 | --------- | ---- | ----------- |
 | `entity.description` | map<string, AnyValue> | Descriptive (non-identifying) attributes of the entity. These attributes are not part of the entity's identity. Each Entity State event contains the complete current state of the entity's description. When absent, MUST be treated as an empty map. Follows [AnyValue](../common/README.md#anyvalue) definition: can contain scalar values, arrays, or nested maps. SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | `entity.relationships` | array of maps | Relationships to other entities. Each relationship is a map containing: `type` (string, describes the relationship), `entity.type` (string, the type of the related entity), and `entity.id` (map<string, string>, identifying attributes of the related entity). When absent, MUST be treated as an empty array. |
-| `report.interval` | int64 (seconds) | The reporting interval for this entity. MUST be a non-negative value when present. When absent, the reporting interval is unknown. A value of `0` indicates that no periodic heartbeat events will be sent. A positive value indicates the interval at which periodic state events will be emitted. Can be used by receivers to determine when to expect the next event and infer that an entity is gone if events stop arriving. |
+| `entity.report.interval` | int64 (seconds) | The reporting period for this entity. MUST be a non-negative value when present. When absent, the reporting period is unknown. A value of `0` indicates that no periodic state events will be sent. A positive value indicates the interval at which periodic state events will be emitted. Can be used by receivers to determine when to expect the next event and infer that an entity is gone if events stop arriving. |
 
 **Timestamp Field**:
 
@@ -97,7 +97,7 @@ The `Timestamp` field of the LogRecord represents the time when this event was g
 **Event Emission**:
 
 Implementations SHOULD emit Entity State events whenever entity descriptive attributes change,
-and periodically based on the `report.interval` value to indicate the entity still exists.
+and periodically based on the `entity.report.interval` value to indicate the entity still exists.
 Implementations SHOULD also emit Entity Delete events when entities are removed.
 
 **Future Considerations**:
@@ -134,7 +134,7 @@ The `Timestamp` field of the LogRecord represents the time when the entity was d
 Transmitting Entity Delete events is not guaranteed when an entity is gone. Recipients of
 entity signals MUST be prepared to handle this situation by expiring entities that are no
 longer seeing Entity State events reported. The expiration mechanism is based on the
-previously reported `report.interval` field. Recipients can use this value to compute when
+previously reported `entity.report.interval` field. Recipients can use this value to compute when
 to expect the next Entity State event and, if the event does not arrive in a timely manner
 (plus some slack), consider the entity to be gone even if the Entity Delete event was not observed.
 
@@ -251,7 +251,7 @@ LogRecord:
         version: "1.21"
         tier: frontend
       k8s.pod.phase: Running
-    report.interval: 60
+    entity.report.interval: 60
     entity.relationships:
       - relationship.type: scheduled_on
         entity.type: k8s.node
@@ -261,6 +261,82 @@ LogRecord:
         entity.type: k8s.replicaset
         entity.id:
           k8s.replicaset.uid: rs-456
+```
+
+### Service and Process Relationship
+
+A host-level OTel Collector with process scraping (e.g. `hostmetricsreceiver`) emits a
+`process` entity state event. It reads process metadata from the OS (via `/proc` on Linux).
+
+```
+LogRecord:
+  Timestamp: 2026-01-12T11:00:00.000000000Z
+  EventName: entity.state
+  Resource:
+    host.id: host-abc-123
+    host.name: prod-host-01
+  Attributes:
+    entity.type: process
+    entity.id:
+      process.pid: 4821
+      process.start_time: 1736928900
+    entity.description:
+      process.executable.name: payment-service
+      process.executable.path: /usr/bin/payment-service
+      process.command_line: /usr/bin/payment-service --port 8080
+    entity.report.interval: 300
+```
+
+The `service.instance` entity is emitted by an OTel SDK, which is the authoritative source:
+it knows both its own service identity and the process it runs in. `service.instance` owns
+the `runs_on` relationship to `process`. It also owns the `part_of` relationship to `service`,
+since service instances are shorter-lived than the logical service they belong to.
+
+```
+LogRecord:
+  Timestamp: 2026-01-12T11:00:00.000000000Z
+  EventName: entity.state
+  Resource:
+    host.id: host-abc-123
+    host.name: prod-host-01
+  Attributes:
+    entity.type: service.instance
+    entity.id:
+      service.name: payment-service
+      service.namespace: prod
+      service.instance.id: payment-service-prod-abc123
+    entity.description:
+      service.version: "2.3.1"
+    entity.report.interval: 300
+    entity.relationships:
+      - relationship.type: runs_on
+        entity.type: process
+        entity.id:
+          process.pid: 4821
+          process.start_time: 1736928900
+      - relationship.type: part_of
+        entity.type: service
+        entity.id:
+          service.name: payment-service
+          service.namespace: prod
+```
+
+The `service` entity represents the logical service. It is also emitted by the OTel SDK 
+alongside the `service.instance` entity event.
+
+```
+LogRecord:
+  Timestamp: 2026-01-12T11:00:00.000000000Z
+  EventName: entity.state
+  Resource:
+    host.id: host-abc-123
+    host.name: prod-host-01
+  Attributes:
+    entity.type: service
+    entity.id:
+      service.name: payment-service
+      service.namespace: prod
+    entity.report.interval: 300
 ```
 
 ### Entity Delete
