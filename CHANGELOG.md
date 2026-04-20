@@ -72,6 +72,11 @@ release.
   that technically emits telemetry.
   ([#4905](https://github.com/open-telemetry/opentelemetry-specification/pull/4905))
 
+### Entities
+
+- Define merge algorithm.
+  ([4768](https://github.com/open-telemetry/opentelemetry-specification/pull/4768))
+
 ### Compatibility
 
 - Deprecate OpenTracing compatibility requirements in the specification.

@@ -301,7 +301,6 @@
                 "sha256:fdd1736fed309b4300346f88f74cd120c27c56852c3838cab416e7a166f67298",
                 "sha256:ffca7aa1d00cf7d6469b988c581598f2259e46215e0140af408966a24cf086ce"
             ],
-            "index": "pypi",
             "markers": "python_version >= '3.8' and python_full_version not in '3.9.0, 3.9.1'",
             "version": "==46.0.7"
         },
@@ -323,12 +322,12 @@
         },
         "pygithub": {
             "hashes": [
-                "sha256:5e2b260ce327bffce9b00f447b65953ef7078ffe93e5a5425624a3075483927c",
-                "sha256:a26abda1222febba31238682634cad11d8b966137ed6cc3c5e445b29a11cb0a4"
+                "sha256:2ec78fca30092d51a42d76f4ddb02131b6f0c666a35dfdf364cf302cdda115b9",
+                "sha256:59771d7ff63d54d427be2e7d0dad2208dfffc2b0a045fec959263787739b611c"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==2.9.0"
+            "version": "==2.9.1"
         },
         "pyjwt": {
             "extras": [
