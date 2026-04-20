@@ -164,13 +164,13 @@ Here is the list of fields in a log record:
 | ---------- | ----------- |
 | Timestamp | Time when the event occurred. |
 | ObservedTimestamp | Time when the event was observed. |
-| TraceId | Request trace id. |
-| SpanId | Request span id. |
+| TraceId | Request trace ID. |
+| SpanId | Request span ID. |
 | TraceFlags | W3C trace flag. |
 | SeverityText | The severity text (also known as log level). |
 | SeverityNumber | Numerical value of the severity. |
 | Body | The body of the log record. |
-| Resource | Describes the source of the log. |
+| Resource | Describes the observed entity that generated the log. |
 | InstrumentationScope | Describes the scope that emitted the log. |
 | Attributes | Additional information about the event. |
 | EventName | Name that identifies the class / type of event. |
@@ -179,7 +179,7 @@ Below is the detailed description of each field.
 
 ### Field: `Timestamp`
 
-Type: Timestamp, uint64 nanoseconds since Unix epoch.
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
 Description: Time when the event occurred measured by the origin clock, i.e. the
 time at the source. This field is optional, it may be missing if the source
@@ -187,7 +187,7 @@ timestamp is unknown.
 
 ### Field: `ObservedTimestamp`
 
-Type: Timestamp, uint64 nanoseconds since Unix epoch.
+Type: Timestamp, uint64 nanoseconds since UNIX epoch.
 
 Description: Time when the event was observed by the collection system. For
 events that originate in OpenTelemetry (e.g. using OpenTelemetry Logging SDK)
@@ -209,16 +209,16 @@ timestamp internally the following logic is recommended:
 
 Type: byte sequence.
 
-Description: Request trace id as defined in
+Description: Request trace ID as defined in
 [W3C Trace Context](https://www.w3.org/TR/trace-context/#trace-id). Can be set
-for logs that are part of request processing and have an assigned trace id. This
+for logs that are part of request processing and have an assigned trace ID. This
 field is optional.
 
 #### Field: `SpanId`
 
 Type: byte sequence.
 
-Description: Span id. Can be set for logs that are part of a particular
+Description: Span ID. Can be set for logs that are part of a particular
 processing span. If SpanId is present TraceId SHOULD be also present. This field
 is optional.
 
@@ -463,7 +463,3 @@ For example log format mappings, see the
 ## References
 
 - Log Data Model [OTEP 0097](../../oteps/logs/0097-log-data-model.md)
-
-- [Draft discussion of Data Model](https://docs.google.com/document/d/1ix9_4TQO3o-qyeyNhcOmqAc1MTyr-wnXxxsdWgCMn9c/edit#)
-
-- [Discussion of Severity field](https://docs.google.com/document/d/1WQDz1jF0yKBXe3OibXWfy3g6lor9SvjZ4xT-8uuDCiA/edit#)

@@ -1,6 +1,6 @@
 # Environment Variables as Context Propagation Carriers
 
-**Status**: [Alpha](../document-status.md)
+**Status**: [Beta](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -9,20 +9,12 @@
 
 - [Overview](#overview)
 - [Propagator Mechanisms](#propagator-mechanisms)
-  * [Environment Variable Names](#environment-variable-names)
-  * [Format Restrictions](#format-restrictions)
-    + [Name Restrictions](#name-restrictions)
-    + [Value Restrictions](#value-restrictions)
-    + [Size Limitations](#size-limitations)
+  * [Key Name Normalization](#key-name-normalization)
   * [Operational Guidance](#operational-guidance)
     + [Environment Variable Immutability](#environment-variable-immutability)
     + [Process Spawning](#process-spawning)
     + [Security](#security)
-    + [Case Sensitivity](#case-sensitivity)
 - [Supplementary Guidelines](#supplementary-guidelines)
-  * [Approach 1: Providing a dedicated `EnvironmentContextPropagator`](#approach-1-providing-a-dedicated-environmentcontextpropagator)
-  * [Approach 2: Using the carriers directly through `Setters` and `Getters`](#approach-2-using-the-carriers-directly-through-setters-and-getters)
-  * [Common Behaviors](#common-behaviors)
 
 <!-- tocstop -->
 
@@ -49,67 +41,34 @@ include:
 Propagating context via environment variables involves reading and writing to
 environment variables. A `TextMapPropagator` SHOULD be used alongside its
 normal `Get`, `Set`, `Extract`, and `Inject` functionality as described in the [API
-Propagators](../context/api-propagators.md) specification.
+Propagators](api-propagators.md) specification.
 
-### Environment Variable Names
+When using environment variables as carriers:
 
-It is RECOMMENDED to use the [W3C Trace
-Context](https://www.w3.org/TR/trace-context/) and [W3C
-Baggage](https://www.w3.org/TR/baggage/) specifications mapped to environment
-variable names for consistent context propagation.
+- The **environment variable carrier** (or propagator wrapper) MUST be
+  format-agnostic and MUST treat values as opaque strings and MUST NOT apply propagation-format-specific logic such as validating, parsing values, or
+  enforcing other format-specific constraints.
+- The **propagators** that implement specific propagation formats (for example,
+  W3C Trace Context or W3C Baggage) remain solely responsible for:
+  - choosing the key names they use with the carrier
+  - enforcing naming conventions defined by those propagation formats
+  - validating and parsing values
+  - applying any truncation or other format-specific behaviors
 
-When using the W3C Trace Context and Baggage propagators with environment
-variables, the following translated standard environment variable names SHOULD
-be used:
-
-| Context Information | Environment Variable | W3C Header Equivalent |
-|---------------------|----------------------|-----------------------|
-| Trace Context       | `TRACEPARENT`        | `traceparent`         |
-| Trace State         | `TRACESTATE`         | `tracestate`          |
-| Baggage             | `BAGGAGE`            | `baggage`             |
-
-Implementations MAY support additional propagation formats and SHOULD provide
-configuration options to override the default environment variable.
-
-### Format Restrictions
-
-#### Name Restrictions
+### Key Name Normalization
 
 Environment variable names used for context propagation:
 
-- SHOULD use uppercase letters, digits, and underscores for maximum
-  cross-platform compatibility
-- MUST NOT include characters forbidden in environment variables per
-  platform-specific restrictions
-- SHOULD follow naming conventions that align with the propagation format
-  specification they're implementing (e.g., `TRACEPARENT` for W3C trace context)
+- MUST be normalized by:
+  - uppercasing ASCII letters,
+  - replacing every character that is not an ASCII letter, digit, or underscore
+    (`_`) with an underscore (`_`),
+  - prefixing the name with an underscore (`_`) if it would otherwise start with
+    an ASCII digit.
 
-#### Value Restrictions
-
-Environment variable values used for context propagation:
-
-- MUST only use characters that are valid in HTTP header fields per [RFC
-  9110](https://datatracker.ietf.org/doc/html/rfc9110)
-- MUST follow the format requirements of the specific propagation protocol
-  (e.g., W3C Trace Context specification for `TRACEPARENT` values)
-- SHOULD NOT contain sensitive information
-
-#### Size Limitations
-
-Implementations SHOULD follow platform-specific environment variable size
-limitations:
-
-- Windows: Maximum 32,767 characters for name=value pairs according to
-  [Microsoft Documentation](https://learn.microsoft.com/windows/win32/api/winbase/nf-winbase-setenvironmentvariable)
-- UNIX: System-dependent limits exist and are typically lower than Windows.
-
-When truncation is required due to size limitations, implementations MUST
-truncate whole entries. Truncation SHOULD start at the end of the entry list.
-Implementers MUST document how graceful truncation is handled and SHOULD
-provide the link to the corresponding specification (e.g., [W3C tracestate
-Truncation guidance][w3c-truncation]).
-
-[w3c-truncation]: https://www.w3.org/TR/trace-context/#tracestate-limits
+> [!NOTE]
+> This normalization is consistent with the environment variable naming rules
+> defined in [POSIX.1-2024](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html).
 
 ### Operational Guidance
 
@@ -148,15 +107,6 @@ process and with the correct permissions, can be accessed from other processes.
   environment variables may be visible to other processes or users with
   appropriate permissions.
 
-#### Case Sensitivity
-
-Environment variable names are case-sensitive on UNIX and case-insensitive on
-Windows.
-
-- For maximum compatibility, implementations MUST:
-  - Use uppercase names consistently (`TRACEPARENT` not `TraceParent`).
-  - Use the canonical case when setting environment variables.
-
 ## Supplementary Guidelines
 
 > [!IMPORTANT]
@@ -164,21 +114,9 @@ Windows.
 > guidance only. It does not add requirements to the specification.
 
 Language implementations of OpenTelemetry have flexibility in how they implement
-environment variable context propagation. Two main approaches have been
-identified as viable.
-
-### Approach 1: Providing a dedicated `EnvironmentContextPropagator`
-
-SDKs can create a dedicated propagator for environment variables. For example,
-the [OTel Swift][swift] implements a custom `EnvironmentContextPropagator` that
-handles the environment-specific logic internally, in essence decorating the
-`TextMapPropagator`.
-
-### Approach 2: Using the carriers directly through `Setters` and `Getters`
-
-Language implementations can use the existing `TextMapPropagator` interface directly with
-environment-specific carriers. Go and Python SDKs follow this pattern by
-providing:
+environment variable context propagation. Language implementations can use the
+existing `TextMapPropagator` directly with environment-specific carriers.
+Typically implementations follow this pattern by providing:
 
 - `EnvironmentGetter` - creates an in-memory copy of the current environment
   variables and reads context from that copy.
@@ -187,22 +125,12 @@ providing:
 
 Examples:
 
-- [OpenTelemetry Prototype Go Implementation][gi]
-- [OpenTelemetry Prototype Python Implementation][pi]
+- [OpenTelemetry C++ implementation][ci]
+- [OpenTelemetry Go implementation][gi]
+- [OpenTelemetry Java implementation][ji]
+- [OpenTelemetry Python implementation][pi]
 
-[gi]: https://github.com/open-telemetry/opentelemetry-go/pull/6778
-[pi]: https://github.com/open-telemetry/opentelemetry-python/pull/4609
-
-### Common Behaviors
-
-Both approaches achieve the same outcome while offering different developer
-experiences. Language implementations may choose either approach based on their
-language's idioms and ecosystem conventions. The behaviors in both approaches
-are the same in that they:
-
-1. **Extract context**: Read from environment variables and delegate to the
-   configured `TextMapPropagator` (e.g. W3C, B3) for parsing
-2. **Inject context**: Return a dictionary/map of environment variables that
-   application owners can pass to their process spawning libraries
-
-[swift]: https://github.com/open-telemetry/opentelemetry-swift-core/blob/c84cdc1760e20fc3a448c4e8aaae490f7d48ac67/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
+[ci]: https://github.com/open-telemetry/opentelemetry-cpp/blob/main/api/include/opentelemetry/context/propagation/environment_carrier.h
+[gi]: https://github.com/open-telemetry/opentelemetry-go-contrib/tree/main/propagators/envcar
+[ji]: https://github.com/open-telemetry/opentelemetry-java/tree/main/api/incubator/src/main/java/io/opentelemetry/api/incubator/propagation
+[pi]: https://github.com/open-telemetry/opentelemetry-python/blob/main/opentelemetry-api/src/opentelemetry/propagators/_envcarrier.py
