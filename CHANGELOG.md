@@ -29,6 +29,10 @@ release.
 
 ### Compatibility
 
+- Stabilize sections of Prometheus and OpenMetrics Compatibility.
+  - Stabilize OpenTelemetry Gauge and Sum to Prometheus transformations.
+    ([#5034](https://github.com/open-telemetry/opentelemetry-specification/pull/5034))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
