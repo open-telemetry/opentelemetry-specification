@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize port configuration.
+    ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
+
 ### Logs
 
 ### Baggage
@@ -60,6 +64,12 @@ release.
 
 - Add development `maxExportBatchSize` parameter to Periodic exporting MetricReader.
   ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize temporality.
+    ([#4983](https://github.com/open-telemetry/opentelemetry-specification/issues/4983))
+  - Stabilize host configuration.
+    ([#4984](https://github.com/open-telemetry/opentelemetry-specification/issues/4984))
+    ([#5025](https://github.com/open-telemetry/opentelemetry-specification/pull/5025))
 
 ### Logs
 
@@ -102,9 +112,6 @@ release.
     ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
   - Stabilize OpenTelemetry Exemplar to Prometheus Exemplar transformation.
     ([#4964](https://github.com/open-telemetry/opentelemetry-specification/pull/4964))
-- Stabilize sections of Prometheus Metrics Exporter.
-  - Stabilize host configuration.
-    ([#5025](https://github.com/open-telemetry/opentelemetry-specification/pull/5025))
 
 ### SDK Configuration
 
