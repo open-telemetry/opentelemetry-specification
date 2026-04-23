@@ -12,6 +12,7 @@ weight: 1
 - [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
   * [API](#api)
   * [SDK](#sdk)
+  * [Core Repositories](#core-repositories)
   * [Semantic Conventions](#semantic-conventions)
   * [Contrib Packages](#contrib-packages)
   * [Versioning and Stability](#versioning-and-stability)
@@ -66,6 +67,19 @@ The SDK is the implementation of the API provided by the OpenTelemetry project. 
 Note that the SDK includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as [constructors](glossary.md#constructors) and [plugin interfaces](glossary.md#sdk-plugins).
 Application owners use the SDK constructors; [plugin authors](glossary.md#plugin-author) use the SDK plugin interfaces.
 [Instrumentation authors](glossary.md#instrumentation-author) MUST NOT directly reference any SDK package of any kind, only the API.
+
+### Core Repositories
+
+A **Core repository** is a primary OpenTelemetry implementation repository
+maintained by an OpenTelemetry SIG, such as a language implementation repository
+containing the API and SDK for that language.
+
+The term refers to repository ownership and placement. When this specification
+requires a component to be maintained or distributed as part of Core
+OpenTelemetry repositories, the component belongs in the SIG's primary
+implementation repository rather than a Contrib repository. This does not
+prescribe a specific package, module, artifact, or release bundle layout inside
+that repository.
 
 ### Semantic Conventions
 

@@ -25,6 +25,8 @@ release.
 
 ### Common
 
+- Define the Core repository term.
+
 ### OpenTelemetry Protocol
 
 ### Compatibility
