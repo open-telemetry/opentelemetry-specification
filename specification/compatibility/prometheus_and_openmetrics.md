@@ -485,7 +485,9 @@ An [OpenTelemetry Sums](../metrics/data-model.md#sums) MUST be converted followi
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it should follow the same rules as described for [OpenTelemetry Gauge](#gauges-1)
-- If the aggregation temporality is delta the datapoint MUST be dropped. 
+- If the aggregation temporality is delta and the sum is monotonic, it MAY be converted to a cumulative temporality and become a Prometheus Counter. The following behaviors are expected:
+  - The new data point type must be the same as the accumulated data point type.
+  - The new data point's start time must match the time of the accumulated data point. If not, see [detecting alignment issues](../metrics/data-model.md#sums-detecting-alignment-issues).
 
 If the metric name for monotonic Sum metric points does not end in a suffix of `_total` a suffix of `_total` SHOULD be added by default, otherwise the name MUST remain unchanged.
 
