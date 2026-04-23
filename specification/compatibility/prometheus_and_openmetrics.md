@@ -471,7 +471,7 @@ to avoid conflicts with the already existing `otel_scope_name`, `otel_scope_vers
 An [OpenTelemetry Gauge](../metrics/data-model#gauge) MUST be converted following 
 a hint present in [metric.metadata][metricMetadata]:
 - If the `prometheus.type` key is absent, or its value is equal to `gauge`, the datapoint MUST be transformed to a Prometheus Gauge.
-- If the `prometheus.type` key has value equal to `unkown`, the datapoint MUST be transformed to a Prometheus Unkown.
+- If the `prometheus.type` key has value equal to `unkown`, the datapoint MUST be transformed to a Prometheus Unknown.
 - If the `prometheus.type` key has value equal to `info`, the datapoint SHOULD be transformed to a Prometheus Info.
 - If the `prometheus.type` key has value equal to `stateset`, the datapoint SHOULD be transformed to a Prometheus Stateset.
 
