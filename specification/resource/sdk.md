@@ -35,12 +35,18 @@ When associated with a [`MeterProvider`](../metrics/api.md#meterprovider),
 all metrics produced by any `Meter` from the provider will be
 associated with this `Resource`.
 
+Similarly, when used with logs,
+a resource can be associated with a `LoggerProvider`.
+When associated with a [`LoggerProvider`](../logs/api.md#loggerprovider),
+all log records produced by any `Logger` from the provider will be
+associated with this `Resource`.
+
 ## SDK-provided resource attributes
 
 The SDK MUST provide access to a Resource with at least the attributes listed at
 [Semantic Attributes with SDK-provided Default Value](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/resource/README.md#semantic-attributes-with-sdk-provided-default-value).
-This resource MUST be associated with a `TracerProvider` or `MeterProvider`
-if another resource was not explicitly specified.
+This resource MUST be associated with a `TracerProvider`, `MeterProvider`,
+or `LoggerProvider` if another resource was not explicitly specified.
 
 Note: This means that it is possible to create and associate a resource that
 does not have all or any of the SDK-provided attributes present. However, that
@@ -109,8 +115,8 @@ or vendor specific environments (e.g. EKS, AKS, GKE) MUST be implemented as
 packages separate from the SDK.
 
 Resource detector packages MUST provide a method that returns a resource. This
-can then be associated with `TracerProvider` or `MeterProvider` instances as
-described above.
+can then be associated with `TracerProvider`, `MeterProvider`, or
+`LoggerProvider` instances as described above.
 
 Resource detector packages MAY detect resource information from multiple
 possible sources and merge the result using the `Merge` operation described
