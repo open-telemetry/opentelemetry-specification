@@ -103,6 +103,8 @@ release.
   - Stabilize OpenTelemetry Exemplar to Prometheus Exemplar transformation.
     ([#4964](https://github.com/open-telemetry/opentelemetry-specification/pull/4964))
 - Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize temporality.
+    ([#4983](https://github.com/open-telemetry/opentelemetry-specification/issues/4983))
   - Stabilize host configuration.
     ([#5025](https://github.com/open-telemetry/opentelemetry-specification/pull/5025))
 
