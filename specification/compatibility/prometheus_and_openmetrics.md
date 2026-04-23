@@ -481,7 +481,7 @@ Exemplars on OpenTelemetry Gauges SHOULD be dropped.
 
 **Status**: [Stable](../document-status.md)
 
-An [OpenTelemetry Sums](../metrics/data-model.md#sums) MUST be converted following the rules below:
+An [OpenTelemetry Sum](../metrics/data-model.md#sums) MUST be converted following the rules below:
 
 - If the aggregation temporality is cumulative and the sum is monotonic, it MUST be converted to a Prometheus Counter.
 - If the aggregation temporality is cumulative and the sum is non-monotonic, it should follow the same rules as described for [OpenTelemetry Gauge](#gauges-1)
