@@ -25,7 +25,7 @@ release.
 
 ### Common
 
-- Define the Core repository term.
+- Define the Core packages term.
   ([#5046](https://github.com/open-telemetry/opentelemetry-specification/pull/5046))
 
 ### OpenTelemetry Protocol

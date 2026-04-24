@@ -10,9 +10,9 @@ weight: 1
 <!-- toc -->
 
 - [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
+  * [Core Packages](#core-packages)
   * [API](#api)
   * [SDK](#sdk)
-  * [Core Repositories](#core-repositories)
   * [Semantic Conventions](#semantic-conventions)
   * [Contrib Packages](#contrib-packages)
   * [Versioning and Stability](#versioning-and-stability)
@@ -57,6 +57,17 @@ This makes OpenTelemetry a [**cross-cutting concern**](https://en.wikipedia.org/
 OpenTelemetry clients are designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions which can be managed independently. OpenTelemetry clients are also designed to be an extensible framework.
 To accomplish these goals, each signal consists of four types of packages: API, SDK, Semantic Conventions, and Contrib.
 
+### Core Packages
+
+**Core packages** are OpenTelemetry client packages that implement
+specification-defined components, such as **API** packages, **SDK** packages,
+and plugin packages (like exporters, propagators).
+
+Core packages are maintained by an OpenTelemetry SIG and are distinct from
+Contrib packages, which are optional. The term describes specification-defined
+deliverables; it does not prescribe a specific repository, package, module,
+artifact, or release bundle layout for a language implementation.
+
 ### API
 
 API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into third-party libraries and application code is considered part of the API.
@@ -67,19 +78,6 @@ The SDK is the implementation of the API provided by the OpenTelemetry project. 
 Note that the SDK includes additional public interfaces which are not considered part of the API package, as they are not cross-cutting concerns. These public interfaces are defined as [constructors](glossary.md#constructors) and [plugin interfaces](glossary.md#sdk-plugins).
 Application owners use the SDK constructors; [plugin authors](glossary.md#plugin-author) use the SDK plugin interfaces.
 [Instrumentation authors](glossary.md#instrumentation-author) MUST NOT directly reference any SDK package of any kind, only the API.
-
-### Core Repositories
-
-A **Core repository** is a primary OpenTelemetry implementation repository
-maintained by an OpenTelemetry SIG, such as a language implementation repository
-containing the API and SDK for that language.
-
-The term refers to repository ownership and placement. When this specification
-requires a component to be maintained or distributed as part of Core
-OpenTelemetry repositories, the component belongs in the SIG's primary
-implementation repository rather than a Contrib repository. This does not
-prescribe a specific package, module, artifact, or release bundle layout inside
-that repository.
 
 ### Semantic Conventions
 
@@ -106,7 +104,9 @@ The OpenTelemetry project maintains integrations with popular OSS projects which
 Example API integrations include instrumentation for web frameworks, database clients, and message queues.
 Example SDK integrations include plugins for exporting telemetry to popular analysis tools and telemetry storage systems.
 
-Some plugins, such as OTLP Exporters and TraceContext Propagators, are required by the OpenTelemetry specification. These required plugins are included as part of the SDK.
+Note that some plugins, such as OTLP Exporters and TraceContext Propagators,
+are defined by the OpenTelemetry specification. These plugins are referred as
+**Core** packages.
 
 Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages.
 **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
