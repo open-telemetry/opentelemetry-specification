@@ -45,6 +45,9 @@ release.
 
 ### OTEPs
 
+- Context-scoped Attributes.
+  ([#4931](https://github.com/open-telemetry/opentelemetry-specification/pull/4931))
+
 ## v1.56.0 (2025-04-20)
 
 ### Context
