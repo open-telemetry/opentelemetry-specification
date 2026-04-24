@@ -893,7 +893,7 @@ public interface IdGenerator {
 
 Additional `IdGenerator` implementing vendor-specific protocols such as AWS
 X-Ray trace ID generator MUST NOT be maintained or distributed as part of the
-Core OpenTelemetry repositories.
+OpenTelemetry [Core packages](../overview.md#core-packages).
 
 ### IdGenerator randomness
 
