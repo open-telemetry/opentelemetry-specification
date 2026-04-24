@@ -31,10 +31,12 @@ weight: 1
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
   * [General operations](#general-operations)
     + [Enabled](#enabled)
+    + [Bind](#bind)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
       - [Add](#add)
+      - [Bound Add](#bound-add)
   * [Asynchronous Counter](#asynchronous-counter)
     + [Asynchronous Counter creation](#asynchronous-counter-creation)
     + [Asynchronous Counter operations](#asynchronous-counter-operations)
@@ -42,10 +44,12 @@ weight: 1
     + [Histogram creation](#histogram-creation)
     + [Histogram operations](#histogram-operations)
       - [Record](#record)
+      - [Bound Record](#bound-record)
   * [Gauge](#gauge)
     + [Gauge creation](#gauge-creation)
     + [Gauge operations](#gauge-operations)
       - [Record](#record-1)
+      - [Bound Record](#bound-record-1)
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
@@ -53,6 +57,7 @@ weight: 1
     + [UpDownCounter creation](#updowncounter-creation)
     + [UpDownCounter operations](#updowncounter-operations)
       - [Add](#add-1)
+      - [Bound Add](#bound-add-1)
   * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
     + [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
@@ -475,6 +480,7 @@ or something else).
 All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functions to:
 
 * [Report if instrument is `Enabled`](#enabled)
+* [Bind to a set of attributes](#bind)
 
 #### Enabled
 
@@ -493,6 +499,56 @@ value of `false` means the instrument is disabled for the provided arguments.
 The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they record a measurement to ensure they have the most up-to-date response.
+
+#### Bind
+
+**Status**: [Development](../document-status.md)
+
+The `Bind` API associates a fixed set of [Attributes](../common/README.md#attribute) with every
+measurement recorded on the returned bound instrument. Because attributes are resolved at bind
+time rather than at each recording, implementations can avoid per-recording attribute processing
+and lookup overhead.
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to associate with every measurement recorded on
+  the returned bound instrument.
+
+  Users can provide attributes to associate with the bound instrument, but it is up
+  to their discretion. Therefore, this API MUST be structured to accept a variable
+  number of attributes, including none.
+
+This API MUST return a language-idiomatic type representing the instrument bound to those
+attributes.
+
+The returned bound instrument MUST support the instrument's core recording operation without
+accepting [Attributes](../common/README.md#attribute) as a parameter. The instrument kind
+determines the recording operation on the bound instrument:
+
+* [Counter](#counter): [Bound Add](#bound-add)
+* [Histogram](#histogram): [Bound Record](#bound-record)
+* [Gauge](#gauge): [Bound Record](#bound-record-1)
+* [UpDownCounter](#updowncounter): [Bound Add](#bound-add-1)
+
+Measurements recorded on the bound instrument can be associated with the
+[Context](../context/README.md).
+
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors might consider:
+
+```java
+// Java
+
+LongCounter rolls = meter.counterBuilder("dice.rolls")
+    .setDescription("The number of times each side of the die was rolled")
+    .setUnit("{roll}")
+    .build();
+
+var face1 = rolls.bind(Attributes.of(AttributeKey.longKey("roll.value"), 1L));
+var face6 = rolls.bind(Attributes.of(AttributeKey.longKey("roll.value"), 6L));
+
+face1.add(1);
+face6.add(1);
+```
 
 ### Counter
 
@@ -595,6 +651,14 @@ counterExceptions.Add(1, ("exception_type", "FileLoadException"), ("handled_by_u
 counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
+
+##### Bound Add
+
+**Status**: [Development](../document-status.md)
+
+The bound counterpart to [Add](#add), obtained via [Bind](#bind). All semantics are
+identical to [Add](#add) except [Attributes](../common/README.md#attribute) are not
+accepted as a parameter.
 
 ### Asynchronous Counter
 
@@ -825,6 +889,14 @@ httpServerDuration.Record(50, ("http.request.method", "POST"), ("url.scheme", "h
 httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
 ```
 
+##### Bound Record
+
+**Status**: [Development](../document-status.md)
+
+The bound counterpart to [Record](#record), obtained via [Bind](#bind). All semantics are
+identical to [Record](#record) except [Attributes](../common/README.md#attribute) are not
+accepted as a parameter.
+
 ### Gauge
 
 `Gauge` is a [synchronous Instrument](#synchronous-instrument-api) which can be
@@ -913,6 +985,14 @@ Attributes roomB = Attributes.builder().put("room.id", "Rack B");
 backgroundNoiseLevel.record(4.3, roomA);
 backgroundNoiseLevel.record(2.5, roomB);
 ```
+
+##### Bound Record
+
+**Status**: [Development](../document-status.md)
+
+The bound counterpart to [Record](#record-1), obtained via [Bind](#bind). All semantics are
+identical to [Record](#record-1) except [Attributes](../common/README.md#attribute) are not
+accepted as a parameter.
 
 ### Asynchronous Gauge
 
@@ -1154,6 +1234,14 @@ customers_in_store.add(-1, account_type="residential")
 customersInStore.Add(1, ("account.type", "commercial"));
 customersInStore.Add(-1, new Account { Type = "residential" });
 ```
+
+##### Bound Add
+
+**Status**: [Development](../document-status.md)
+
+The bound counterpart to [Add](#add-1), obtained via [Bind](#bind). All semantics are
+identical to [Add](#add-1) except [Attributes](../common/README.md#attribute) are not
+accepted as a parameter.
 
 ### Asynchronous UpDownCounter
 
