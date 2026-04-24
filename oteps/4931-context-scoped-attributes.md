@@ -309,8 +309,8 @@ with this approach though:
 * Configuration could be defined, at least initially, as a single boolean setting for EACH
   signal, similar to how the entire SDK is enabled or disabled via the `disabled` configuration
   option, e.g. enable this for traces and logs but disable it for metrics.
-  However, this OTEP leaves the topic open in case further options are needed, e.g. white or
-  black list specific attributes on a per-signal basis.
+  However, this OTEP leaves the topic open in case further options are needed, e.g. allow list or
+  deny list specific attributes on a per-signal basis.
 * Support for profiling should be (eventually) added, but this has to be discussed
   and confirmed with the profiling SIG. Potentially, this support could be disabled by default
   if needed.
