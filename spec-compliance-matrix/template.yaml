@@ -178,7 +178,6 @@ sections:
       - name: The `View` instrument selection criteria supports wildcards.
         optional: true
       - name: The `View` instrument selection criteria supports the match-all wildcard.
-      - name: The name of the `View` can be specified.
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
@@ -230,6 +229,7 @@ sections:
       - name: Metric SDK supports configuring cardinality limit at MeterReader level
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
       - name: Metric SDK supports per-timeseries cumulative start timestamps
+      - name: The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
@@ -290,6 +290,7 @@ sections:
         optional: true
       - name: Getter argument returning Keys
         optional: true
+      - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
@@ -426,7 +427,7 @@ sections:
             optional: true
           - name: '[Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
           - name: '[Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
-          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)'
+          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplar-conversion)'
             optional: true
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
             optional: true
