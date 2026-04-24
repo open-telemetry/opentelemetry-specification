@@ -92,7 +92,7 @@ Prometheus exporter.
 
 ### Temporality
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter MUST set
 the [MetricReader](../sdk.md#metricreader) `temporality` as a function of
@@ -102,7 +102,7 @@ instrument kind to be `cumulative` for all instrument kinds.
 
 ### Host
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter SHOULD support a configuration option to set the host
 that metrics are served on. The option MAY be named `host`, and MUST be `localhost`
@@ -110,7 +110,7 @@ by default.
 
 ### Port
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter SHOULD support a configuration option to set the port
 that metrics are served on. The option MAY be named `port`, and MUST be `9464` by

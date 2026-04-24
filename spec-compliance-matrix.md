@@ -144,7 +144,6 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria is as specified. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The `View` instrument selection criteria supports wildcards. | X | + | + | + | + | + | - |  | + | + | + |  | - |
 | The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  | - |
-| The name of the `View` can be specified. |  | - | + | + | + | + | + | + |  | + | + |  | - |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  | - |
 | The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  | + |  |  | - |  |  |  |  |  | - |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  | - |
@@ -250,6 +249,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Setter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + | - |
+| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + |  |  |  |  |  |  |  |  |  |  |
 
 ## Environment Variables
 
@@ -372,7 +372,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | [Delta Histograms become Cumulative Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1) | X | - | - | - | - | - | - | - | - | - | - | - | - |
 | [Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | + | + | - | - | - | + | + | + | + | - |
 | [Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | - | - | - | - | - | + | - | - | - | - |
-| [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1) | X | + | - | - | - | - | - | - | - | - | - | - | - |
+| [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplar-conversion) | X | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1) | X | + | + | + | + | - | - | - | + | - | - | - | - |
 
 ## OpenCensus Compatibility
