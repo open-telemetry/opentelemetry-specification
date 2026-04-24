@@ -480,6 +480,9 @@ or something else).
 All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functions to:
 
 * [Report if instrument is `Enabled`](#enabled)
+
+All [synchronous instruments](#synchronous-instrument-api) MAY provide:
+
 * [Bind to a set of attributes](#bind)
 
 #### Enabled
