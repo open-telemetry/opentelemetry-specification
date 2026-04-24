@@ -14,7 +14,7 @@ mismatch between the OpenTelemetry SDK’s (and thus TracerProvider’s, MeterPr
 process-wide initialization and the semantic scope of a (sub)service.
 
 A typical use case is supporting multi tenancy, with tenant information existing
-in the request itself (e.g. header key, acess token, request parameter). This tenant information
+in the request itself (e.g. header key, access token, request parameter). This tenant information
 could be then propagated via Context-scoped attributes. **Any** telemetry produced during the processing
 of the request would then be automatically associated with the respective request/tenant.
 Other alternatives would be problematic:
@@ -25,7 +25,7 @@ Other alternatives would be problematic:
 * Custom processors for attaching tenant-specific information would work for spans and logs. However,
   at the time of writing this OTEP there is no specified processor functionality for metrics.
 * In general, OpenTelemetry should offer out-of-the-box common functionality that is extensively
-  used, instead of asking users to write custom components recurringly.
+  used, instead of asking users to write custom components recurrently.
 
 A related usecase is posed in the issue
 [open-telemetry/opentelemetry-specification#335](https://github.com/open-telemetry/opentelemetry-specification/issues/335)
@@ -145,7 +145,7 @@ lifespan is tied to the Context itself. For example, a Context solely created
 for an incoming request will stop existing once such request is done.
 
 In practice, Instrumentation Scope and Context-scoped attributes will
-[often be completely orthogonal](#scope-and-context):
+often be completely orthogonal:
 When the Context is flows in-process through a single
 service, there will often be exactly one span per Tracer (e.g. one span from
 the HTTP server instrumentation as the request arrives, and another one from
