@@ -35,6 +35,10 @@ release.
 
 ### Compatibility
 
+- Stabilize sections of Prometheus and OpenMetrics Compatibility.
+  - Stabilize translation of labels prefixed with `otel_scope_` to OTLP Instrumentation Scope.
+    ([#5004](https://github.com/open-telemetry/opentelemetry-specification/pull/5004))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
