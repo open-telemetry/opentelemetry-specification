@@ -468,7 +468,7 @@ to avoid conflicts with the already existing `otel_scope_name`, `otel_scope_vers
 
 **Status**: [Stable](../document-status.md)
 
-An [OpenTelemetry Gauge](../metrics/data-model#gauge) MUST be converted following 
+An [OpenTelemetry Gauge](../metrics/data-model.md#gauge) MUST be converted following 
 a hint present in [metric.metadata][metricMetadata]:
 - If the `prometheus.type` key is absent, or its value is equal to `gauge`, the datapoint MUST be transformed to a Prometheus Gauge.
 - If the `prometheus.type` key has value equal to `unkown`, the datapoint MUST be transformed to a Prometheus Unknown.
