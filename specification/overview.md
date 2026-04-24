@@ -59,9 +59,10 @@ To accomplish these goals, each signal consists of four types of packages: API, 
 
 ### Core Packages
 
-**Core packages** are OpenTelemetry client packages that implement
-specification-defined components, such as **API** packages, **SDK** packages,
-and plugin packages (like exporters, propagators).
+**Core packages** are not an additional package type. Instead, the term refers
+to OpenTelemetry client packages that implement specification-defined
+components across those categories, such as **API** packages, **SDK**
+packages, and plugin packages (like exporters, propagators).
 
 Core packages are maintained by an OpenTelemetry SIG and are distinct from
 Contrib packages, which are optional. The term describes specification-defined
