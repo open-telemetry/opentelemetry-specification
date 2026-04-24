@@ -13,6 +13,8 @@ release.
 
 ### Metrics
 
+- Add in-development `Bind` API to synchronous instruments.
+  ([#5050](https://github.com/open-telemetry/opentelemetry-specification/pull/5050))
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize temporality.
     ([#5024](https://github.com/open-telemetry/opentelemetry-specification/issues/5024))

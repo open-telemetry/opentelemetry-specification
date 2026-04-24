@@ -54,6 +54,7 @@ weight: 3
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
   * [Instrument enabled](#instrument-enabled)
+  * [Instrument bind](#instrument-bind)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -1040,6 +1041,18 @@ It MAY return `false` to support additional optimizations and features.
 Note: If a user makes no configuration changes, `Enabled` returns `true` since by
 default `MeterConfig.enabled=true` and instruments use the default
 aggregation when no matching views match the instrument.
+
+### Instrument bind
+
+**Status**: [Development](../document-status.md)
+
+A bound instrument MUST behave identically to calling the equivalent unbound recording
+operation with the pre-bound [Attributes](../common/README.md#attribute) on each
+measurement.
+
+The SDK SHOULD optimize by pre-resolving the underlying aggregator state at bind time,
+such that subsequent recordings bypass per-recording attribute processing and map
+lookup.
 
 ## Attribute limits
 
