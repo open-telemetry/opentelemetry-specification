@@ -76,6 +76,9 @@ release.
 - Add event to span event bridge.
   ([#5006](https://github.com/open-telemetry/opentelemetry-specification/pull/5006))
 
+- Remove duplicate information from and extend Profiles documentation (README.md, pprof.md).
+  ([#4932](https://github.com/open-telemetry/opentelemetry-specification/pull/4932))
+
 ### Resource
 
 - Clarify that a Resource describes the observed entity, not the component
