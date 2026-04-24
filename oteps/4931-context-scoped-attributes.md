@@ -69,35 +69,33 @@ When Context-scoped attributes are enabled, they MUST be added to telemetry item
 that were **emitted** while the Context containing the Context-scoped attributes
 was active, or to telemetry items that had this Context explicitly set as parent.
 
-These attributes will then be automatically available to **any** component down the pipeline, i.e.
-to samplers and processors. Like other telemetry APIs, Context-scoped attributes are
-write-only for applications. You cannot query the currently set Context-scoped attributes,
-as they are only available on the SDK level (to samplers and processors).
-
 Context-scoped attributes should be thought of equivalent to adding the attribute
-directly to each single telemetry item it applies to.
+directly to each single telemetry item it applies to. These attributes will then be
+automatically available to **any** component down the pipeline, e.g.
+to samplers and processors.
 
 Context-scoped attributes MUST NOT be propagated cross-service, i.e. no context propagator
 must be implemented for them. This is because they are meant to annotate (a subset of)
 the telemetry items related of a single service (see also [the next section](#comp-baggage)).
 
-Instrumentation libraries SHOULD NOT set Context-scoped attributes. Only end users are
-expected to use this feature. Explicit documentation and guidance MUST be provided
-to make sure authors understand this. See [Future possibilities](#future-possibilities).
+Instrumentation libraries desiring to set Context-scoped attributes MUST offer this as an opt-in
+behavior, which will be disabled by default (i.e. libraries will not set Context-scoped attributes).
+Comprehensive documentation on the used attributes SHOULD be provided to end users.
+This SHOULD include details on whether these attributes have high or low cardinality values.
 
-Context-scoped attributes default values, i.e. they will be added to
-any telemetry item by default. Configuration for disabling them on a per-signal
-basis MUST be offered at the very least.
+SDKs MUST disable Context-scoped attributes support by default, in order to reduce the possibility
+of unexpected side effects, as well as any performance hit due to additional allocations. The user
+MUST explicitly enable this functionality on a per-signal basis:
 
 ```yaml
 disabled: false
 tracer_provider:
   context_scoped_attributes: true
-meter_provider:
-  context_scoped_attributes: false
+logger_provider:
+  context_scoped_attributes: true
 ```
 
-See [Open questions](#open-questions) regarding the expected outcome for the configuration part.
+See [Open questions](#open-questions) on details on details regarding the implementation.
 
 <a name="comp-baggage"></a>
 
@@ -175,7 +173,7 @@ the specified attributes.
 ### SDK changes
 
 Upon telemetry items creation (e.g. Span, LogRecord), the SDK MUST get
-the context-scoped attributes of the logically associated Context, and
+the Context-scoped attributes of the logically associated Context, and
 add them to the newly created telemetry item, skipping attributes with
 keys already present in the telemetry item. This MUST be done before any
 extension point is invoked, e.g. Sampler or Processor.
