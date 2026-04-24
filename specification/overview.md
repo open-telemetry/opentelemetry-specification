@@ -10,10 +10,10 @@ weight: 1
 <!-- toc -->
 
 - [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
-  * [Core Packages](#core-packages)
   * [API](#api)
   * [SDK](#sdk)
   * [Semantic Conventions](#semantic-conventions)
+  * [Core Packages](#core-packages)
   * [Contrib Packages](#contrib-packages)
   * [Versioning and Stability](#versioning-and-stability)
 - [Tracing Signal](#tracing-signal)
@@ -57,18 +57,6 @@ This makes OpenTelemetry a [**cross-cutting concern**](https://en.wikipedia.org/
 OpenTelemetry clients are designed to separate the portion of each signal which must be imported as cross-cutting concerns from the portions which can be managed independently. OpenTelemetry clients are also designed to be an extensible framework.
 To accomplish these goals, each signal consists of four types of packages: API, SDK, Semantic Conventions, and Contrib.
 
-### Core Packages
-
-**Core packages** are not an additional package type. Instead, the term refers
-to OpenTelemetry client packages that implement specification-defined
-components across those categories, such as **API** packages, **SDK**
-packages, and plugin packages (like exporters, propagators).
-
-Core packages are maintained by an OpenTelemetry SIG and are distinct from
-Contrib packages, which are optional. The term describes specification-defined
-deliverables; it does not prescribe a specific repository, package, module,
-artifact, or release bundle layout for a language implementation.
-
 ### API
 
 API packages consist of the cross-cutting public interfaces used for instrumentation. Any portion of an OpenTelemetry client which is imported into third-party libraries and application code is considered part of the API.
@@ -98,6 +86,18 @@ provide language-specific support to the
 
 Additionally, attributes required by the specification will be listed
 [here](semantic-conventions.md).
+
+### Core Packages
+
+**Core packages** are not an additional package type. Instead, the term refers
+to OpenTelemetry client packages that implement specification-defined
+components across those categories, such as **API** packages, **SDK**
+packages, and plugin packages (like exporters, propagators).
+
+Core packages are maintained by an OpenTelemetry SIG and are distinct from
+Contrib packages, which are optional. The term describes specification-defined
+deliverables; it does not prescribe a specific repository, package, module,
+artifact, or release bundle layout for a language implementation.
 
 ### Contrib Packages
 
