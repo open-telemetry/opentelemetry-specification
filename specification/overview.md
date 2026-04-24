@@ -107,7 +107,7 @@ Example SDK integrations include plugins for exporting telemetry to popular anal
 
 Note that some plugins, such as OTLP Exporters and TraceContext Propagators,
 are defined by the OpenTelemetry specification. These plugins are referred to as
-**Core** packages.
+**Core packages**.
 
 Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages.
 **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
