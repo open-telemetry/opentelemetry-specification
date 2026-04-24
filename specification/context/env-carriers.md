@@ -56,6 +56,9 @@ When using environment variables as carriers:
   - validating and parsing values
   - applying any truncation or other format-specific behaviors
 
+Environment variable carrier implementation MUST be maintained and distributed
+as part of the Core OpenTelemetry repositories.
+
 ### Key Name Normalization
 
 Environment variable names used for context propagation:

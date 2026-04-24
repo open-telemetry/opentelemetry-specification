@@ -9,6 +9,10 @@ release.
 
 ### Context
 
+- Clarify that environment variable carrier implementations MUST be maintained
+  and distributed as part of Core OpenTelemetry repositories.
+  ([#5042](https://github.com/open-telemetry/opentelemetry-specification/pull/5042))
+
 ### Traces
 
 ### Metrics
