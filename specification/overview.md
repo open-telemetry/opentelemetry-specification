@@ -105,7 +105,7 @@ Example API integrations include instrumentation for web frameworks, database cl
 Example SDK integrations include plugins for exporting telemetry to popular analysis tools and telemetry storage systems.
 
 Note that some plugins, such as OTLP Exporters and TraceContext Propagators,
-are defined by the OpenTelemetry specification. These plugins are referred as
+are defined by the OpenTelemetry specification. These plugins are referred to as
 **Core** packages.
 
 Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages.
