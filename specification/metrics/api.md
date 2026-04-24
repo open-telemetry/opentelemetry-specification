@@ -483,7 +483,7 @@ All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functi
 
 All [synchronous instruments](#synchronous-instrument-api) MAY provide:
 
-* [Bind to a set of attributes](#bind)
+* (**Development**) [Bind to a set of attributes](#bind)
 
 #### Enabled
 
