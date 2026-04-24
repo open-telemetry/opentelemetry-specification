@@ -359,7 +359,7 @@ organization and MUST be distributed as OpenTelemetry extension packages:
 * [B3](https://github.com/openzipkin/b3-propagation).
 
 This is a list of additional propagators that MAY be maintained and distributed
-as OpenTelemetry extension packages:
+as OpenTelemetry Core packages:
 
 * [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format).
   **Status**: [Deprecated](../document-status.md), use the
@@ -376,7 +376,7 @@ as OpenTelemetry extension packages:
 
 Additional `Propagator`s implementing vendor-specific protocols such as AWS
 X-Ray trace header protocol MUST NOT be maintained or distributed as part of
-the Core OpenTelemetry repositories.
+the OpenTelemetry Core packages.
 
 ### W3C Trace Context Requirements
 
