@@ -1046,8 +1046,6 @@ aggregation when no matching views match the instrument.
 
 **Status**: [Development](../document-status.md)
 
-The SDK MAY implement the [Bind](./api.md#bind) API for synchronous instruments.
-
 A bound instrument MUST behave identically to calling the equivalent unbound recording
 operation with the pre-bound [Attributes](../common/README.md#attribute) on each
 measurement.
