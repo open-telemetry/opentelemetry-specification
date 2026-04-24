@@ -350,7 +350,8 @@ Required parameters:
 ## Propagators Distribution
 
 The official list of propagators that MUST be maintained by the OpenTelemetry
-organization and MUST be distributed as OpenTelemetry Core packages:
+organization and MUST be distributed as OpenTelemetry
+[Core packages](../overview.md#core-packages):
 
 * [W3C TraceContext](https://www.w3.org/TR/trace-context/). MAY alternatively
   be distributed as part of the OpenTelemetry API.
