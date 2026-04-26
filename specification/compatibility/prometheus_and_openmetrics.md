@@ -451,7 +451,7 @@ It also dictates type-specific conversion rules listed below.
 
 ### Instrumentation Scope
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Prometheus exporters MUST by default add
 the scope name as the `otel_scope_name` label,
