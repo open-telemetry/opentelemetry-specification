@@ -58,13 +58,13 @@ But this approach is not without challenges:
 * **Performance overheads**: A significant downside of generic telemetry
   instrumentation is the various overheads it generally introduces due to inherent
   layers of abstraction. For example, the collection of attributes is typically
-  represented as a list of key/value pairs or as hashmaps, resulting in memory
-  overhead. A simple struct or a set of well-typed function arguments will be more
+  represented as a list of key-value pairs or as hashmaps, resulting in memory
+  overhead. A simple struct or a set of well-typed function parameters will be more
   efficient and less error-prone for representing this list of attributes. In the
   same way, it is possible to use a dictionary encoding for values whose domain is
   specified in the form of an enumeration in the schema definition.
 
-Databases and RPC systems (e.g., Protobuf & gRPC) have already addressed some of
+Databases and RPC systems (e.g., protobuf & gRPC) have already addressed some of
 these issues with a schema-first approach. There is nothing to prevent adopting
 a similar approach in the context of telemetry. **This document discusses how to
 apply a schema-first approach in the OpenTelemetry project and its implications
@@ -383,5 +383,5 @@ of the Resolved Telemetry Schema.
 ## Links
 
 - [Positional Paper: Schema-First Application Telemetry](https://research.facebook.com/publications/positional-paper-schema-first-application-telemetry/)
-- [A benchmark to understand the role of knowledge graphs on Large Language Model's accuracy for question answering on enterprise sql databases](https://arxiv.org/pdf/2311.07509#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
+- [A benchmark to understand the role of knowledge graphs on Large Language Model's accuracy for question answering on enterprise SQL databases](https://arxiv.org/pdf/2311.07509#:~:text=The%20results%20of%20the%20benchmark%20provide%20evidence%20that%20supports%20our,LLM%20without%20a%20Knowledge%20Graph)
 - [MetricFlow framework](https://docs.getdbt.com/docs/build/about-metricflow)

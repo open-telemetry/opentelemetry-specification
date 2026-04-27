@@ -471,7 +471,7 @@ each OpenTelemetry SDK.
 The `ConsistentProbabilityBased` Sampler MUST set `r` when it makes a
 root sampling decision.
 
-##### Requirement: ConsistentProbabilityBased sampler unsets p when not sampled
+##### Requirement: ConsistentProbabilityBased sampler un-sets p when not sampled
 
 The `ConsistentProbabilityBased` Sampler MUST unset `p` from the
 `tracestate` when it decides not to sample.

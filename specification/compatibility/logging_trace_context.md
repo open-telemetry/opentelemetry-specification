@@ -34,7 +34,7 @@ which combination of fields is considered valid).
 
 ### Syslog RFC5424
 
-Trace id, span id and traceflags SHOULD be recorded via SD-ID "opentelemetry".
+Trace ID, span ID and traceflags SHOULD be recorded via SD-ID "OpenTelemetry".
 
 For example:
 
