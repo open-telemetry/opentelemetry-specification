@@ -31,9 +31,9 @@ release.
 
 ### Common
 
-- Clarify non-OTLP representation guidance nested `AnyValue` values in arrays
+- Clarify non-OTLP representation guidance for nested `AnyValue` values in arrays
   and maps.
-  ([#5053](https://github.com/open-telemetry/opentelemetry-specification/pull/#5053))
+  ([#5053](https://github.com/open-telemetry/opentelemetry-specification/pull/5053))
 
 ### OpenTelemetry Protocol
 
