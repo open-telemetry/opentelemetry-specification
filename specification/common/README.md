@@ -154,25 +154,34 @@ They SHOULD NOT be encoded as a JSON string (with explicit surrounding quotes).
 
 #### Arrays
 
-Arrays, except for byte arrays, SHOULD be represented as JSON arrays.
+Arrays, except for [byte arrays](#byte-arrays), SHOULD be represented as
+[JSON arrays](https://datatracker.ietf.org/doc/html/rfc8259#section-5).
 
-Nested byte arrays SHOULD be represented as
-[Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4) JSON strings.
-Nested empty values SHOULD be represented as JSON null.
-The special floating point values NaN and Infinity SHOULD be represented as
-JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
+Array elements SHOULD be represented as JSON values using the following rules:
+
+- [Strings](#strings) as [JSON strings](https://datatracker.ietf.org/doc/html/rfc8259#section-7),
+- [Booleans](#booleans) as [JSON booleans](https://datatracker.ietf.org/doc/html/rfc8259#section-3) (`true` or `false`),
+- [Integers](#integers) and [floating point numbers](#floating-point-numbers)
+  as [JSON numbers](https://datatracker.ietf.org/doc/html/rfc8259#section-6),
+  except that the special floating point values NaN and Infinity SHOULD be
+  represented as JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`,
+- [Byte arrays](#byte-arrays) as
+  [Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4)
+  JSON strings,
+- [Empty values](#empty-values) as [JSON `null`](https://datatracker.ietf.org/doc/html/rfc8259#section-6),
+- [Arrays](#arrays) as [JSON arrays](https://datatracker.ietf.org/doc/html/rfc8259#section-5),
+- [Maps](#maps) as [JSON objects](https://datatracker.ietf.org/doc/html/rfc8259#section-4).
 
 Examples: `[]`, `[1, "-Infinity", "a", true, {"nested": "aGVsbG8gd29ybGQ="}]`
 
 #### Maps
 
-Maps SHOULD be represented as JSON objects.
+Maps SHOULD be represented as [JSON objects](https://datatracker.ietf.org/doc/html/rfc8259#section-4).
 
-Nested byte arrays SHOULD be represented as
-[Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4) JSON strings.
-Nested empty values SHOULD be represented as JSON null.
-The special floating point values NaN and Infinity SHOULD be represented as
-JSON strings `"NaN"`, `"Infinity"`, and `"-Infinity"`.
+Map keys SHOULD be represented as JSON string member names.
+
+Map values SHOULD be represented using the same rules as
+[array elements](#arrays).
 
 Examples: `{}`, `{"a": "-Infinity", "b": 2, "c": [3, null]}`
 
