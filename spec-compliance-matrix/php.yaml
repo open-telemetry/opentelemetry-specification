@@ -255,8 +255,6 @@ sections:
         status: '?'
       - name: The `View` instrument selection criteria supports the match-all wildcard.
         status: '?'
-      - name: The name of the `View` can be specified.
-        status: '+'
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
         status: '+'
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.

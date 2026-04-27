@@ -178,7 +178,6 @@ sections:
       - name: The `View` instrument selection criteria supports wildcards.
         optional: true
       - name: The `View` instrument selection criteria supports the match-all wildcard.
-      - name: The name of the `View` can be specified.
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
