@@ -214,18 +214,9 @@ The `key` portion SHOULD be represented as a
 [JSON string](https://datatracker.ietf.org/doc/html/rfc8259#section-7) member
 name.
 
-The `value` portion SHOULD use the JSON representation that corresponds to the
-attribute value:
-
-- strings as JSON strings,
-- booleans as JSON booleans,
-- integers and floating point numbers as JSON numbers, except that `NaN`,
-  `Infinity`, and `-Infinity` SHOULD be represented as JSON strings,
-- byte arrays as [Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4)
-  JSON strings,
-- arrays as JSON arrays,
-- maps as JSON objects,
-- empty values as JSON null.
+The `value` portion SHOULD follow the encoding rules defined in
+[AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols),
+as it would be represented as a value in a [map](#maps).
 
 Examples: `{"http.request.method": "GET"}`, `{"retries": 3}`,
 `{"payload": "aGVsbG8gd29ybGQ="}`, `{"session.id": null}`,
