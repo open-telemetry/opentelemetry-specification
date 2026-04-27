@@ -41,7 +41,7 @@ Standardizing this behavior in OpenTelemetry gives:
 ## Explanation
 
 This proposal defines a policy-driven trace continuation model for trust and
-propagation boundaries. Instead of a single hard-coded choice between "continue"
+propagation boundaries. Instead of a single hardcoded choice between "continue"
 and "restart", extraction evaluates a trace continuation policy and records the
 result in context for later span creation.
 
