@@ -112,11 +112,10 @@ The service hosting the Schema URL MUST support gzip compression that the caller
 MAY control with [`Accept-Encoding`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding)
 header (this is already supported by `opentelemetry.io`).
 
-The manifest format can evolve in a non-breaking manner. For example, we may start
-publishing diffs against previous versions. The corresponding URL would be added
-as a new property with a minor `file_format` version bump, without changing existing
-features. Consumers can download only the parts they need, and we may provide
-a single archive with all files for convenience.
+New properties MAY be added to the manifest with a minor `file_format` version
+bump — for example, a URL pointing to diffs against previous versions, so
+consumers can download only the parts they need. A future major version bump
+follows [versioning and stability policies](/specification/versioning-and-stability.md).
 
 See [File format versioning](#file-format-versioning) for the rules that apply
 to `manifest`, `resolved`, and `definition` format identifiers.
@@ -165,17 +164,21 @@ The service hosting the Schema URL SHOULD also support listing available version
 [Schema URL format](/specification/schemas/README.md#schema-url) is defined as `http[s]://server[:port]/path/<version>`,
 so the service SHOULD return a list of available Schema URLs on `http[s]://server[:port]/path/`.
 
-For example, `https://opentelemetry.io/schemas` would return
+For example, `https://opentelemetry.io/schemas/semconv` would return
 
 ```yaml
-- "https://opentelemetry.io/schemas/1.42.0",
-- "https://opentelemetry.io/schemas/1.42.0-dev"
+- "https://opentelemetry.io/schemas/semconv/1.{N}.0",
+- "https://opentelemetry.io/schemas/semconv/1.{N-1}.0",
 - ...
-- "https://opentelemetry.io/schemas/1.39.0"
 ```
 
 The format and content type will be formally documented in a way that could support
 paging in a non-breaking manner.
+
+This requirement applies only to the full path above the version segment —
+`https://opentelemetry.io/schemas/semconv` in this example. Listing at ancestor
+path segments (e.g. `https://opentelemetry.io/schemas`) is out of scope of this
+OTEP.
 
 ### Semantic Conventions Schemas
 
@@ -218,7 +221,7 @@ distribution and in-memory representation.
 ```yaml
 # resolved registry
 file_format: resolved/2.0  # versioned independently of manifest format
-schema_url: https://acme.com/schemas/1.0.0
+schema_url: https://acme.com/schemas/1.0.0  # URL where the owning manifest is (or will be) published
 attribute_catalog:
 ...
 - key: my.operation.name
@@ -287,23 +290,18 @@ Any organization, project, or application MAY define its own semantic convention
 versioned registry, and expose them via Schema URL using the same manifest and resolved registry formats
 described above.
 
-Weaver will provide `weaver registry package --schema_url <url>` to read, resolve, and produce publication
+Weaver will provide `weaver registry package --resolved-registry-uri <url>` to read, resolve, and produce publication
 artifacts (manifest, resolved registry, and any future additions). The command consumes
 a *definition* manifest and local semconv definitions, then outputs the resolved registry
 and the publication manifest.
 
-**Local registry repository:**
+**Definitions:**
 
-- semconv definitions (attributes, entities, signals)
+- semconv registry definition files (attributes, entities, signals)
 - `manifest.yaml` (definition manifest, includes information about dependencies)
 
 The *definition manifest* contains information about the registry that's available
 at development time and is used to create the publication manifest.
-
-**Publication artifacts:**
-
-- `manifest.yaml` (publication manifest, `file_format: manifest/2.0`). To be published at the Schema URL.
-- `resolved-registry.yaml`. To be published at the URL specified in the manifest.
 
 Here's an example of a definition manifest:
 
@@ -312,6 +310,25 @@ schema_url: https://acme.com/schemas/1.0.0
 description: This registry contains semantic conventions for Acme Corp.
 stability: stable
 ```
+
+**Publication artifacts:**
+
+- `manifest.yaml` (publication manifest, `file_format: manifest/2.0`). To be published at the Schema URL.
+- `resolved-registry.yaml`. To be published at the URL specified in the manifest.
+
+Here's an example of a publication manifest produced from the definition above:
+
+```yaml
+file_format: manifest/2.0
+schema_url: https://acme.com/schemas/1.0.0
+resolved_registry_uri: https://acme.com/schemas/1.0.0/resolved.yaml
+stability: stable
+description: This registry contains semantic conventions for Acme Corp.
+```
+
+`resolved_registry_uri` is set by `weaver registry package` based on a publication
+location passed to it. It points to an arbitrary
+location.
 
 #### Creating a registry that depends on OpenTelemetry semantic conventions
 
@@ -544,7 +561,7 @@ In the future, based on the feedback and demand, we can return to publishing dif
 At that point, we could update `weaver registry package` to allow diff-generation:
 
 ```bash
-weaver registry package --include-diff --schema_url <url>
+weaver registry package --include-diff --resolved-registry-uri <url>
 ```
 
 and consider extending the publication manifest file format to include
