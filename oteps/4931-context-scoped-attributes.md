@@ -88,7 +88,6 @@ of unexpected side effects, as well as any performance hit due to additional all
 MUST explicitly enable this functionality on a per-signal basis:
 
 ```yaml
-disabled: false
 tracer_provider:
   context_scoped_attributes: true
 logger_provider:
