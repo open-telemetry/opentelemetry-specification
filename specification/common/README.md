@@ -201,26 +201,28 @@ outside OpenTelemetry into OpenTelemetry attribute values.
 **Status**: [Development](../document-status.md)
 
 For non-OTLP protocols or other debugging-oriented contexts that need to
-represent a single `Attribute` as a string, the RECOMMENDED form is a JSON
-object containing a single key-value pair.
+represent a single `Attribute` as a string, the RECOMMENDED form is a
+[JSON object](https://datatracker.ietf.org/doc/html/rfc8259#section-4)
+containing a single name/value pair (member).
+
+The attribute key SHOULD be represented as a JSON object member
+name.
+
+The attribute value SHOULD be represented as a JSON object member value and
+follow the encoding rules defined in
+[AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols),
+as it would be represented as an element in an [array](#arrays) and a value in
+a [map](#maps).
+
+Examples: `{"http.request.method": "GET"}`, `{"retries": 3}`,
+`{"payload": "aGVsbG8gd29ybGQ="}`, `{"session.id": null}`,
+`{"colors": ["red", "blue"]}`, `{"context": {"nested": true}}`
 
 > [!NOTE]
 > This string representation is lossy. Type information is lost as all
 > values are converted to strings, and precision loss may occur for numeric values
 > (particularly for floating point numbers and large integers that exceed the
 > precision capabilities of the receiving system's string-to-number conversion).
-
-The `key` portion SHOULD be represented as a
-[JSON string](https://datatracker.ietf.org/doc/html/rfc8259#section-7) member
-name.
-
-The `value` portion SHOULD follow the encoding rules defined in
-[AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols),
-as it would be represented as a value in a [map](#maps).
-
-Examples: `{"http.request.method": "GET"}`, `{"retries": 3}`,
-`{"payload": "aGVsbG8gd29ybGQ="}`, `{"session.id": null}`,
-`{"colors": ["red", "blue"]}`, `{"context": {"nested": true}}`
 
 ### Attribute Collections
 
