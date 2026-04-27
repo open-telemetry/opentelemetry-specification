@@ -135,8 +135,8 @@ Transmitting Entity Delete events is not guaranteed when an entity is gone. Reci
 entity signals MUST be prepared to handle this situation by expiring entities that are no
 longer seeing Entity State events reported. The expiration mechanism is based on the
 previously reported `entity.report.interval` field. Recipients can use this value to compute when
-to expect the next Entity State event and, if the event does not arrive in a timely manner
-(plus some slack), consider the entity to be gone even if the Entity Delete event was not observed.
+to expect the next Entity State event and, if the event does not arrive in a timely manner,
+consider the entity to be gone even if the Entity Delete event was not observed.
 
 Recipients MUST also be prepared to receive an Entity Delete event out of order, for example,
 before the last Entity State event. In this case, recipients SHOULD apply state updates
