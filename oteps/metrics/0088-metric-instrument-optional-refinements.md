@@ -68,7 +68,7 @@ there are generally two relevant modes of aggregation:
 
 1. Within one collection interval, for one label set, the SDK's
 `Aggregator.Add()` interface method incorporates one new measurement
-value into the current aggregation value.  This happens at run time,
+value into the current aggregation value.  This happens at runtime,
 therefore is referred to as _temporal aggregation_.  This mode applies
 only to Measure instruments.
 2. Within one collection interval, when combining label sets, the

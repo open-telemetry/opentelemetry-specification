@@ -17,7 +17,7 @@ Quite often, the community is faced with the question of the quality and maturit
 Deliverables of a SIG MUST have a declared maturity level, established by SIG maintainers (SIGs), likely with the input of the code owners. While the main deliverable can have a specific maturity level, individual components might have a different one. Examples:
 
 * the Collector core distribution might declare itself stable and include a receiver that is not stable. In that case, the receiver has to be clearly marked as such
-* the Java Agent might be declared stable, while individual instrumentation packages are not
+* the Java agent might be declared stable, while individual instrumentation packages are not
 
 Components SHOULD NOT be marked as stable if their user-visible interfaces are not stable. For instance, if the Collector's component `otlpreceiver` declares a dependency on the OpenTelemetry Collector API "config" package which is marked with a maturity level of "beta", the `otlpreceiver` should be at most "beta". Maintainers are free to deviate from this recommendation if they believe users are not going to be affected by future changes.
 
@@ -59,7 +59,7 @@ This OTEP allows SIG maintainers to declare the maturity of the SIG's deliverabl
 
 * The specification status has a ["Component Lifecycle"](https://opentelemetry.io/docs/specs/status/) description, with definitions that might overlap with some of the levels listed in this OTEP.
 * The same page lists the status of the different parts of the spec
-* The ["Versioning and stability for OpenTelemetry clients"](https://opentelemetry.io/docs/specs/otel/versioning-and-stability/#signal-lifecycle) page has a detailed view on the lifecycle of a signal and which general stability guarantees should be expected by OpenTelemetry clients. Notably, it lacks information about maturity of the Collector. This OTEP could be seen as clashing with the last section of that page, "OpenTelemetry GA". But while that page established a point where both OpenTracing and OpenCensus would be considered deprecated, this OTEP here defines the criteria for calling OpenTelemetry "stable" and making that a requirement for a future graduation. This would also make it clear to end-users which parts of the project they can rely on.
+* The ["Versioning and stability for OpenTelemetry clients"](https://opentelemetry.io/docs/specs/otel/versioning-and-stability/#signal-lifecycle) page has a detailed view on the lifecycle of a signal and which general stability guarantees should be expected by OpenTelemetry clients. Notably, it lacks information about maturity of the Collector. This OTEP could be seen as clashing with the last section of that page, "OpenTelemetry GA". But while that page established a point where both OpenTracing and OpenCensus would be considered deprecated, this OTEP here defines the criteria for calling OpenTelemetry "stable" and making that a requirement for a future graduation. This would also make it clear to end users which parts of the project they can rely on.
 * The OpenTelemetry Collector has its own [stability levels](https://github.com/open-telemetry/opentelemetry-collector#stability-levels), which served as inspiration to the ones here.
 * [Definition of documentation states](https://opentelemetry.io/docs/specs/otel/document-status/)
 * [Telemetry stability](https://opentelemetry.io/docs/specs/otel/telemetry-stability/) (uses unstable instead of experimental)
@@ -67,7 +67,7 @@ This OTEP allows SIG maintainers to declare the maturity of the SIG's deliverabl
 ## Open questions
 
 * Should SDKs be required to fully implement the specification before they can be marked as stable? See [open-telemetry/community#2097](https://github.com/open-telemetry/community/issues/2097)
-* Should this OTEP define a file name to be adopted by all repositories to declare their deliverables and their maturity levels?
+* Should this OTEP define a filename to be adopted by all repositories to declare their deliverables and their maturity levels?
 
 ## Future possibilities
 

@@ -255,8 +255,6 @@ sections:
         status: '?'
       - name: The `View` instrument selection criteria supports the match-all wildcard.
         status: '?'
-      - name: The name of the `View` can be specified.
-        status: '?'
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
         status: '?'
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
@@ -347,6 +345,10 @@ sections:
         status: '?'
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
         status: '?'
+      - name: Metric SDK supports per-timeseries cumulative start timestamps
+        status: '?'
+      - name: The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter
+        status: '-'
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
@@ -439,6 +441,8 @@ sections:
         status: '+'
       - name: Getter argument returning Keys
         status: '+'
+      - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
+        status: '?'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
@@ -499,7 +503,7 @@ sections:
         status: '?'
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
         status: '?'
-      - name: OTEL_EXPERIMENTAL_CONFIG_FILE
+      - name: OTEL_CONFIG_FILE
         status: '?'
   - name: Declarative configuration
     features:
@@ -651,7 +655,7 @@ sections:
             status: '+'
           - name: '[Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
             status: '-'
-          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)'
+          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplar-conversion)'
             status: '-'
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
             status: '-'

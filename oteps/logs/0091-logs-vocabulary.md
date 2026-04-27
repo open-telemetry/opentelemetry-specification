@@ -40,7 +40,7 @@ object, in the [Events](../../specification/trace/api.md#add-events) list.
 
 ### Log Attributes
 
-Key/value pairs contained in a `Log Record`.
+Key-value pairs contained in a `Log Record`.
 
 ### Structured Logs
 

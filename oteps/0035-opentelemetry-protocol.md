@@ -193,7 +193,7 @@ When the client receives this signal it SHOULD follow the recommendations outlin
 // reached.
 ```
 
-The value of `retry_delay` is determined by the server and is implementation dependant. The server SHOULD choose a `retry_delay` value that is big enough to give the server time to recover, yet is not too big to cause the client to drop data while it is throttled.
+The value of `retry_delay` is determined by the server and is implementation dependent. The server SHOULD choose a `retry_delay` value that is big enough to give the server time to recover, yet is not too big to cause the client to drop data while it is throttled.
 
 #### gRPC Service Definition
 
@@ -232,7 +232,7 @@ This ensures that all destination servers receive the data regardless of their s
 
 #### Duplicate Data
 
-In edge cases (e.g. on reconnections, network interruptions, etc) the client has no way of knowing if recently sent data was delivered if no acknowledgement was received yet. The client will typically choose to re-send such data to guarantee delivery, which may result in duplicate data on the server side. This is a deliberate choice and is considered to be the right tradeoff for telemetry data.
+In edge cases (e.g. on reconnections, network interruptions, etc) the client has no way of knowing if recently sent data was delivered if no acknowledgement was received yet. The client will typically choose to re-send such data to guarantee delivery, which may result in duplicate data on the server-side. This is a deliberate choice and is considered to be the right trade-off for telemetry data.
 
 ### Partial Success
 
@@ -248,7 +248,7 @@ OTLP does not use explicit protocol version numbering. OTLP's interoperability o
 
 1. OTLP (current and future versions) defines a set of capabilities, some of which are mandatory, others are optional. Clients and servers must implement mandatory capabilities and can choose implement only a subset of optional capabilities.
 
-2. For minor changes to the protocol future versions and extension of OTLP are encouraged to use the ability of Protocol Buffers to evolve message schema in backwards compatible manner. Newer versions of OTLP may add new fields to messages that will be ignored by clients and servers that do not understand these fields. In many cases careful design of such schema changes and correct choice of default values for new fields is enough to ensure interoperability of different versions without nodes explicitly detecting that their peer node has different capabilities.
+2. For minor changes to the protocol future versions and extension of OTLP are encouraged to use the ability of Protocol Buffers to evolve message schema in backward compatible manner. Newer versions of OTLP may add new fields to messages that will be ignored by clients and servers that do not understand these fields. In many cases careful design of such schema changes and correct choice of default values for new fields is enough to ensure interoperability of different versions without nodes explicitly detecting that their peer node has different capabilities.
 
 3. More significant changes must be explicitly defined as new optional capabilities in future RFCs. Such capabilities SHOULD be discovered by client and server implementations after establishing the underlying transport. The exact discovery mechanism SHOULD be described in future RFCs which define the new capabilities and typically can be implemented by making a discovery request/response message exchange from the client to server. The mandatory capabilities defined by this specification are implied and do not require a discovery. The implementation which supports a new, optional capability MUST adjust its behavior to match the expectation of a peer that does not support a particular capability.
 
@@ -256,7 +256,7 @@ The current version of OTLP is the initial version that describes mandatory capa
 
 ## Prior Art, Alternatives and Future Possibilities
 
-We have considered using gRPC streaming instead of Unary RPC calls. This would require implementations to manually perform stream closing and opening periodically to be L7 Load Balancer friendly. Reference implementation using gRPC Streaming has shown that it results in significantly more complex and error prone code without significant benefits. Because of this Unary RPC was chosen.
+We have considered using gRPC streaming instead of Unary RPC calls. This would require implementations to manually perform stream closing and opening periodically to be L7 Load Balancer friendly. Reference implementation using gRPC Streaming has shown that it results in significantly more complex and error-prone code without significant benefits. Because of this Unary RPC was chosen.
 
 OTLP is an evolution of OpenCensus protocol based on the research and testing of its modifications in production at Omnition. The modifications include changes to data formats (see RFC0059), use of Unary PRC and backpressure signaling capability.
 

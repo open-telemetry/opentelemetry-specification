@@ -21,8 +21,8 @@ All other configuration mechanisms SHOULD be built on top of this interface.
 An example of this programmatic interface is accepting a well-defined
 struct on an SDK builder class. From that, one could build a CLI that accepts a
 file (YAML, JSON, TOML, ...) and then transforms into that well-defined struct
-consumable by the programmatic interface (
-see [declarative configuration](#declarative-configuration)).
+consumable by the programmatic interface. See 
+[declarative configuration](#declarative-configuration).
 
 ### Environment variables
 

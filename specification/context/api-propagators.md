@@ -68,7 +68,7 @@ and is bound to a data type, in order to propagate in-band context data across p
 The Propagators API currently defines one `Propagator` type:
 
 - `TextMapPropagator` is a type that injects values into and extracts values
-  from carriers as string key/value pairs.
+  from carriers as string key-value pairs.
 
 ### Carrier
 
@@ -119,7 +119,7 @@ value as string key/values pairs into carriers that travel in-band across proces
 The carrier of propagated data on both the client (injector) and server (extractor) side is
 usually an HTTP request.
 
-In order to increase compatibility, the key/value pairs MUST only consist of US-ASCII characters
+In order to increase compatibility, the key-value pairs MUST only consist of US-ASCII characters
 that make up valid HTTP header fields as per [RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110/#name-fields).
 
 `Getter` and `Setter` are optional helper components used for extraction and injection respectively,
@@ -159,7 +159,7 @@ the base [Inject](#inject) operation.
 
 Optional arguments:
 
-- A `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
+- A `Setter` to set a propagation key-value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
   This is an additional argument that languages are free to define to help inject data into the carrier.
 
 #### Setter argument
@@ -303,7 +303,7 @@ Required arguments:
 
 If the `TextMapPropagator`'s `Inject` implementation accepts the optional `Setter` argument, the following arguments are REQUIRED, otherwise they are OPTIONAL:
 
-- The `Setter` to set a propagation key/value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
+- The `Setter` to set a propagation key-value pair. Propagators MAY invoke it multiple times in order to set multiple pairs.
 
 ## Global Propagators
 
@@ -393,7 +393,7 @@ When injecting and extracting trace context to or from a carrier, the following 
 
 B3 has both single and multi-header encodings. It also has semantics that do not
 map directly to OpenTelemetry such as a debug trace flag, and allowing spans
-from both sides of request to share the same id. To maximize compatibility
+from both sides of request to share the same ID. To maximize compatibility
 between OpenTelemetry and Zipkin implementations, the following guidelines have
 been established for B3 context propagation.
 
@@ -407,7 +407,7 @@ When extracting B3, propagators:
 * MUST preserve a debug trace flag, if received, and propagate
   it with subsequent requests. Additionally, an OpenTelemetry implementation
   MUST set the sampled trace flag when the debug flag is set.
-* MUST NOT reuse `X-B3-SpanId` as the id for the server-side span.
+* MUST NOT reuse `X-B3-SpanId` as the ID for the server-side span.
 
 #### B3 Inject
 
@@ -417,7 +417,7 @@ When injecting B3, propagators:
 * MUST provide configuration to change the default injection format to B3
   multi-header
 * MUST NOT propagate `X-B3-ParentSpanId` as OpenTelemetry does not support
-  reusing the same id for both sides of a request.
+  reusing the same ID for both sides of a request.
 
 #### Fields
 

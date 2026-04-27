@@ -36,11 +36,13 @@ weight: 3
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
+    + [Event to span event bridge](#event-to-span-event-bridge)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
     + [ForceFlush](#forceflush-2)
     + [Shutdown](#shutdown-1)
+- [Concurrency requirements](#concurrency-requirements)
 
 <!-- tocstop -->
 
@@ -205,9 +207,12 @@ It consists of the following parameters:
   affected by this parameter and therefore bypass minimum severity filtering.
 
 * `trace_based`: A boolean indication of whether the logger should
-  only process log records associated with sampled traces.
+  drop log records associated with an unsampled trace.
 
   If not explicitly set, the `trace_based` parameter MUST default to `false`.
+
+  If `trace_based` is `false`, log records MUST NOT be affected because of this
+  parameter.
 
   If `trace_based` is `true`, log records associated with unsampled traces MUST
   be dropped by the `Logger`. A log record is considered associated with an unsampled trace
@@ -224,8 +229,7 @@ However, the changes MUST be eventually visible.
 If [Observed Timestamp](./data-model.md#field-observedtimestamp) is unspecified,
 the implementation SHOULD set it equal to the current time.
 
-**Status**: [Development](../document-status.md) - If an
-[Exception](api.md#emit-a-logrecord) is provided, the SDK MUST by default set attributes
+If an [Exception](api.md#emit-a-logrecord) is provided, the SDK MUST by default set attributes
 from the exception on the `LogRecord` with the conventions outlined in the
 [exception semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/exceptions/exceptions-logs.md).
 User-provided attributes MUST take precedence and MUST NOT be overwritten by
@@ -511,6 +515,9 @@ Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
 
+Additional processors defined in this document SHOULD be provided by SDK
+packages.
+
 #### Simple processor
 
 This is an implementation of `LogRecordProcessor` which passes finished logs and
@@ -545,6 +552,47 @@ to make sure that they are not invoked concurrently.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
+
+#### Event to span event bridge
+
+**Status**: [Development](../document-status.md)
+
+This is an implementation of `LogRecordProcessor` which converts
+[Events](./data-model.md#events) to span events on the current span.
+
+This processor SHOULD be provided by SDK.
+
+The processor MUST bridge a `LogRecord` to a span event if and only if all of
+the following conditions are met:
+
+* the `LogRecord` has a non-empty [Event Name](data-model.md#field-eventname).
+* the `LogRecord` has a valid
+  [TraceId](data-model.md#field-traceid) and
+  [SpanId](data-model.md#field-spanid).
+* the resolved [Context](../context/README.md) contains a current span whose
+  `IsRecording` is `true`.
+* the `LogRecord`'s `TraceId` and `SpanId` are equal to the `TraceId` and
+  `SpanId` of the current span in the resolved `Context`.
+
+If any of these conditions is not met, the processor MUST do nothing.
+
+When a `LogRecord` is bridged, the processor MUST add exactly one span event
+with the following mapping:
+
+* the span event name MUST be the `LogRecord`'s
+  [Event Name](./data-model.md#field-eventname).
+* if the `LogRecord` has a [Timestamp](./data-model.md#field-timestamp) set, it
+  MUST be used as the span event timestamp. Otherwise, if the `LogRecord` has
+  an [ObservedTimestamp](./data-model.md#field-observedtimestamp) set, it MUST
+  be used as the span event timestamp.
+* all `LogRecord`
+  [Attributes](./data-model.md#field-attributes) MUST be copied to the span
+  event as span event attributes.
+
+Note that bridging a `LogRecord` to a span event MUST NOT prevent that
+`LogRecord` from continuing through the normal log processing pipeline.
+
+**Configurable parameters:** none.
 
 ## LogRecordExporter
 
@@ -643,3 +691,18 @@ and the destination is unavailable). [OpenTelemetry SDK](../overview.md#sdk)
 authors MAY decide if they want to make the shutdown timeout configurable.
 
 - [OTEP0150 Logging Library SDK Prototype Specification](../../oteps/logs/0150-logging-library-sdk.md)
+
+## Concurrency requirements
+
+**Status**: [Stable](../document-status.md)
+
+For languages which support concurrent execution the Logging SDKs provide
+specific guarantees and safeties.
+
+**LoggerProvider** - Logger creation, `ForceFlush` and `Shutdown` MUST be safe
+to be called concurrently.
+
+**Logger** - all methods MUST be safe to be called concurrently.
+
+**LogRecordExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
+concurrently.
