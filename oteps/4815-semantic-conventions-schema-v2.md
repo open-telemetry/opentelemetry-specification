@@ -16,7 +16,7 @@
     - [Schema URL for OTel schemas](#schema-url-for-otel-schemas)
   - [Trade-offs and mitigations](#trade-offs-and-mitigations)
     - [Schema Transformations](#schema-transformations)
-      - [Migration option 1: upgrades based on resolved schema only](#migration-option-1-upgrades-based-on-resolved-schema-only)
+      - [Migration option 1: upgrades based on resolved registry only](#migration-option-1-upgrades-based-on-resolved-registry-only)
       - [Migration option 2: generate diff on demand](#migration-option-2-generate-diff-on-demand)
       - [Migration option 3: publish diff in the future](#migration-option-3-publish-diff-in-the-future)
     - [Documentation and code generation](#documentation-and-code-generation)
@@ -48,7 +48,7 @@ Instrumentations that are not hosted by OTel should be able to document and publ
 their own conventions that may take a dependency on the OTel ones.
 
 Consumers of telemetry should be able to access the full schema to validate, upgrade,
-or sanitize the telemetry. The fully resolved schema, discoverable using
+or sanitize the telemetry. The fully resolved registry, discoverable using
 Schema URL, serves as an additional channel for metadata about telemetry. This approach
 does not increase telemetry volume and associated costs.
 
@@ -84,7 +84,7 @@ file_format: manifest/2.0
 # registry name (everything before version) must be unique
 schema_url: https://opentelemetry.io/schemas/semconv/1.40.0-dev
 # MAY point to a file under schema_url or to an arbitrary location.
-resolved_schema_uri: https://opentelemetry.io/schemas/semconv/1.40.0-dev/resolved.yaml
+resolved_registry_uri: https://opentelemetry.io/schemas/semconv/1.40.0-dev/resolved.yaml
 
 stability: development
 
@@ -100,8 +100,8 @@ The manifest contains information about the semantic convention registry includi
 
 - `schema_url` (required) - identifies the registry and its version. MUST follow
   [Schema URL format](/specification/schemas/README.md#schema-url).
-- `resolved_schema_uri` (required) - Points to a YAML file with the
-  [*resolved* schema](#semantic-conventions-schemas).
+- `resolved_registry_uri` (required) - Points to a YAML file with the
+  [*resolved* registry](#semantic-conventions-schemas).
   MUST be a valid URL.
 - `stability` (required) - Registry stability. MUST be one of the
   [Maturity levels](/specification/document-status.md#maturity-levels).
@@ -122,7 +122,7 @@ See [File format versioning](#file-format-versioning) for the rules that apply
 to `manifest`, `resolved`, and `definition` format identifiers.
 
 All artifacts for a given release MUST be immutable. Consumers SHOULD cache manifests
-and resolved schemas, or any parts of them, when used on the hot path.
+and resolved registries, or any parts of them, when used on the hot path.
 
 The manifest schema and REST API to obtain it using Schema URL will be formally
 documented for public, unauthenticated access.
@@ -180,7 +180,7 @@ paging in a non-breaking manner.
 ### Semantic Conventions Schemas
 
 The [*definition* schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-syntax.v2.md)
-used to write semantic conventions is not the same as the *resolved* schema.
+used to write semantic conventions is not the same as the *resolved* registry.
 
 For example, a metric could be defined in the following way in the *definition* schema:
 
@@ -209,14 +209,14 @@ Attributes are defined separately from metrics and referenced by them.
 This approach optimizes for reusability and consistency. Defaults and inherited properties are
 omitted. Definitions can be spread across an arbitrary set of files.
 
-The *resolved* schema is a single file produced from a set of definitions. It contains
+The *resolved* registry is a single file produced from a set of definitions. It contains
 all attributes along with signal definitions and refinements. It is optimized for
 distribution and in-memory representation.
 
-*Resolved* schema for this metric looks like:
+*Resolved* registry for this metric looks like:
 
 ```yaml
-# resolved schema
+# resolved registry
 file_format: resolved/2.0  # versioned independently of manifest format
 schema_url: https://acme.com/schemas/1.0.0
 attribute_catalog:
@@ -245,15 +245,15 @@ registry:
       ...
 ```
 
-The resolved schema file is immutable once published for a given version.
-The manifest and resolved schema are versioned together, and each release MUST use a unique `schema_url`.
+The resolved registry file is immutable once published for a given version.
+The manifest and resolved registry are versioned together, and each release MUST use a unique `schema_url`.
 
-If the resolved schema needs to change, a new version of both the manifest and the resolved schema MUST be released.
+If the resolved registry needs to change, a new version of both the manifest and the resolved registry MUST be released.
 
-Resolved schema is formally documented as a [JSON schema](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv.resolved.v2.json),
+Resolved registry is formally documented as a [JSON schema](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv.resolved.v2.json),
 see [overview](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv-schemas.md#resolved-schema).
 
-As a data point on volume: the resolved schema for [OTel Semantic Conventions v1.38.0](https://github.com/open-telemetry/semantic-conventions/releases/tag/v1.38.0)
+As a data point on volume: the resolved registry for [OTel Semantic Conventions v1.38.0](https://github.com/open-telemetry/semantic-conventions/releases/tag/v1.38.0)
 is approximately 1.2MB uncompressed and 200KB compressed.
 
 ### Differentiating between stable and not stable schemas
@@ -284,12 +284,12 @@ SHOULD specify a `-dev` Schema URL.
 ### Building and publishing arbitrary semantic convention registries
 
 Any organization, project, or application MAY define its own semantic conventions, publish them as a
-versioned registry, and expose them via Schema URL using the same manifest and resolved schema formats
+versioned registry, and expose them via Schema URL using the same manifest and resolved registry formats
 described above.
 
 Weaver will provide `weaver registry package --schema_url <url>` to read, resolve, and produce publication
-artifacts (manifest, resolved schema, and any future additions). The command consumes
-a *definition* manifest and local semconv definitions, then outputs the resolved schema
+artifacts (manifest, resolved registry, and any future additions). The command consumes
+a *definition* manifest and local semconv definitions, then outputs the resolved registry
 and the publication manifest.
 
 **Local registry repository:**
@@ -303,8 +303,7 @@ at development time and is used to create the publication manifest.
 **Publication artifacts:**
 
 - `manifest.yaml` (publication manifest, `file_format: manifest/2.0`). To be published at the Schema URL.
-- `resolved-schema.yaml`. To be published at the URL specified in the manifest.
-
+- `resolved-registry.yaml`. To be published at the URL specified in the manifest.
 
 Here's an example of a definition manifest:
 
@@ -370,7 +369,7 @@ imports:
 
 ```
 
-The *resolved* schema contains:
+The *resolved* registry contains:
 
 - everything defined in the registry
 - definitions and refinements (from dependencies) for signals and attributes imported or referenced explicitly
@@ -429,7 +428,7 @@ For example:
 
 Schema transformations (diffs) will **not** be published due to the following reasons:
 
-- The resolved schema already includes information about deprecated (renamed) attributes
+- The resolved registry already includes information about deprecated (renamed) attributes
   and signals that can be used to apply rename transformations when upgrading versions.
 - Ability to generate diffs on demand.
 - Limited adoption and functionality not covering many existing transformation needs.
@@ -455,7 +454,7 @@ schema files.
 
 Possible migration options are listed below.
 
-We recommend starting with [Option 1: upgrades based on resolved schema](#migration-option-1-upgrades-based-on-resolved-schema-only).
+We recommend starting with [Option 1: upgrades based on resolved registry](#migration-option-1-upgrades-based-on-resolved-registry-only).
 
 For users or vendors that have implemented an approach similar to `schemaprocessor`
 (that relies on the list of transformations), an alternative migration option
@@ -464,14 +463,14 @@ would be [Option 2: generate diff on demand](#migration-option-2-generate-diff-o
 As schema transformations evolve and provide more capabilities, OpenTelemetry
 could consider providing tooling and support for [Option 3: publish diff](#migration-option-3-publish-diff-in-the-future).
 
-#### Migration option 1: upgrades based on resolved schema only
+#### Migration option 1: upgrades based on resolved registry only
 
 OpenTelemetry Semantic Conventions do not allow removing attributes, metrics,
 and other identifiable signals from the registry.
 
 When an attribute or signal is no longer recommended, it is deprecated. Backward compatibility checks enforce this policy.
 
-Here's an example of deprecation in the resolved schema:
+Here's an example of deprecation in the resolved registry:
 
 ```yaml
 attributes:
@@ -534,7 +533,7 @@ Assuming data is already available locally, it takes approximately 100ms to run 
 and approximately 1 second via `docker` on a modern laptop.
 
 This currently includes time to unpack, read, validate, and resolve the source schema,
-and can be optimized further by leveraging the resolved schema.
+and can be optimized further by leveraging the resolved registry.
 
 </details>
 
@@ -549,7 +548,7 @@ weaver registry package --include-diff --schema_url <url>
 ```
 
 and consider extending the publication manifest file format to include
-a `diff_url` field.
+a `diff_uri` field.
 
 This can be done in a non-breaking manner.
 
