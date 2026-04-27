@@ -223,7 +223,8 @@ semantics. The entity merging algorithm is as follows:
 - For each entity detector, detect entities.
   - For each detected entity:
     - If an entity with the same type already exists in `E`:
-      - If the identity and `schema_url` are the same, merge the descriptive
+      - If the entities [can be merged](../entities/data-model.md#merging-of-entities),
+        [merge](../entities/data-model.md#merging-of-entities) the descriptive
         attributes (existing values take precedence).
       - Otherwise, drop the new entity.
     - Otherwise, add the entity to `E`.
