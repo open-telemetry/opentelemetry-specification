@@ -1,5 +1,9 @@
 # Trace Continuation Strategy
 
+Make it possible to configure propagators behavior depending on rules.
+Introduce a location in the context for forwarding of restarted traces as links
+that is understood by the SDK.
+
 ## Motivation
 
 OpenTelemetry currently defaults to continuing remote parent context when
