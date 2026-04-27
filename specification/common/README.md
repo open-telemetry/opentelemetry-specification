@@ -168,7 +168,7 @@ Array elements SHOULD be represented as JSON values using the following rules:
 - [Byte arrays](#byte-arrays) as
   [Base64-encoded](https://datatracker.ietf.org/doc/html/rfc4648#section-4)
   JSON strings,
-- [Empty values](#empty-values) as [JSON `null`](https://datatracker.ietf.org/doc/html/rfc8259#section-6),
+- [Empty values](#empty-values) as [JSON `null`](https://datatracker.ietf.org/doc/html/rfc8259#section-3),
 - [Arrays](#arrays) as [JSON arrays](https://datatracker.ietf.org/doc/html/rfc8259#section-5),
 - [Maps](#maps) as [JSON objects](https://datatracker.ietf.org/doc/html/rfc8259#section-4).
 
