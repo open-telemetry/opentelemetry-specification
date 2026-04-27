@@ -24,6 +24,10 @@ release.
 
 ### Traces
 
+- Make it possible to configure propagators behavior depending on rules.
+  Introduce contract for forwarding of restarted traces as links between propagators and SDK
+  ([#5055](https://github.com/open-telemetry/opentelemetry-specification/issues/5055))
+
 ### Metrics
 
 ### Logs
