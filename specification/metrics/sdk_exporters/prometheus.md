@@ -4,13 +4,55 @@ linkTitle: Prometheus
 
 # Metrics Exporter - Prometheus
 
+**Status**: [Mixed](../../document-status.md)
+
+<details>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
+
+- [Prometheus Exporter Model](#prometheus-exporter-model)
+  * [Pull Metric Exporter](#pull-metric-exporter)
+  * [Metric Conversion](#metric-conversion)
+  * [Client Libraries](#client-libraries)
+  * [Version and Format](#version-and-format)
+- [SDK Metric Output](#sdk-metric-output)
+  * [Target](#target)
+  * [Temporality](#temporality)
+- [Configuration](#configuration)
+  * [Host](#host)
+  * [Port](#port)
+  * [Default Aggregation](#default-aggregation)
+  * [Resource Attributes as Metric Attributes](#resource-attributes-as-metric-attributes)
+  * [Translation Strategy](#translation-strategy)
+  * [Scope Info](#scope-info)
+  * [Target Info](#target-info)
+- [Content Negotiation](#content-negotiation)
+  * [Interaction with Translation Strategy](#interaction-with-translation-strategy)
+
+<!-- tocstop -->
+
+</details>
+
+## Prometheus Exporter Model
+
+### Pull Metric Exporter
+
 **Status**: [Development](../../document-status.md)
 
 A Prometheus Exporter MUST be a [Pull Metric Exporter](../sdk.md#pull-metric-exporter)
 which responds to HTTP requests with Prometheus metrics in the appropriate format.
 
+### Metric Conversion
+
+**Status**: [Development](../../document-status.md)
+
 OpenTelemetry metrics MUST be converted to Prometheus metrics according to the
 [Prometheus Compatibility specification](../../compatibility/prometheus_and_openmetrics.md).
+
+### Client Libraries
+
+**Status**: [Development](../../document-status.md)
 
 A Prometheus Exporter SHOULD use
 [Prometheus client libraries](https://prometheus.io/docs/instrumenting/clientlibs/)
@@ -20,6 +62,10 @@ of the response using the `Content-Type` header. If a Prometheus client library
 is used, the OpenTelemetry Prometheus Exporter SHOULD be modeled as a
 [custom Collector](https://prometheus.io/docs/instrumenting/writing_clientlibs/#overall-structure)
 so it can be used in conjunction with existing Prometheus instrumentation.
+
+### Version and Format
+
+**Status**: [Development](../../document-status.md)
 
 Regardless of whether a Prometheus client library is used, the Prometheus
 Exporter MUST support version `0.0.4` of the
@@ -35,8 +81,18 @@ or [OpenMetrics protobuf format](https://github.com/prometheus/OpenMetrics/blob/
 A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT add
 [explicit timestamps on Metric points](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metric).
 
+## SDK Metric Output
+
+### Target
+
+**Status**: [Development](../../document-status.md)
+
 There MUST be at most one `target` info metric exposed by an SDK
 Prometheus exporter.
+
+### Temporality
+
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter MUST set
 the [MetricReader](../sdk.md#metricreader) `temporality` as a function of
@@ -44,24 +100,44 @@ instrument kind to be `cumulative` for all instrument kinds.
 
 ## Configuration
 
+### Host
+
+**Status**: [Stable](../../document-status.md)
+
 A Prometheus Exporter SHOULD support a configuration option to set the host
 that metrics are served on. The option MAY be named `host`, and MUST be `localhost`
 by default.
 
+### Port
+
+**Status**: [Stable](../../document-status.md)
+
 A Prometheus Exporter SHOULD support a configuration option to set the port
 that metrics are served on. The option MAY be named `port`, and MUST be `9464` by
 default.
+
+### Default Aggregation
+
+**Status**: [Development](../../document-status.md)
 
 A Prometheus Exporter SHOULD support a configuration option to set
 the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
 of instrument kind. This option MAY be named `default_aggregation`, and MUST use
 the [default aggregation](../sdk.md#default-aggregation) by default.
 
+### Resource Attributes as Metric Attributes
+
+**Status**: [Development](../../document-status.md)
+
 A Prometheus Exporter MAY offer configuration to add resource attributes as metric attributes.
 By default, it MUST NOT add any resource attributes as metric attributes.
 The configuration SHOULD allow the user to select which resource attributes to copy (e.g.
 include / exclude or regular expression based). Copied Resource attributes MUST NOT be
 excluded from the `target` info metric. The option MAY be named `with_resource_constant_labels`.
+
+### Translation Strategy
+
+**Status**: [Development](../../document-status.md)
 
 A Prometheus Exporter MAY support a configuration option that controls the translation of metric names from OpenTelemetry Naming Conventions to [Prometheus Naming conventions](https://prometheus.io/docs/practices/naming/).
 If the Prometheus exporter supports such configuration it MUST be named to something that resembles Prometheus configuration option `translation_strategy`, and the translation options MUST be:
@@ -71,19 +147,31 @@ If the Prometheus exporter supports such configuration it MUST be named to somet
 - `NoUTF8EscapingWithSuffixes` will disable changing special characters to `_`. Special suffixes like units and `_total` for counters will be attached.
 - `NoTranslation`. This strategy bypasses all metric and label name translation, passing them through unaltered.
 
+### Scope Info
+
+**Status**: [Development](../../document-status.md)
+
 A Prometheus Exporter MAY support a configuration option to produce metrics without [scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
 The option MAY be named `without_scope_info`, and MUST be `false` by default.
+
+### Target Info
+
+**Status**: [Development](../../document-status.md)
 
 A Prometheus Exporter MAY support a configuration option to produce metrics without a [target info](../../compatibility/prometheus_and_openmetrics.md#resource-attributes-1)
 metric. The option MAY be named `without_target_info`, and MUST be `false` by default.
 
 ## Content Negotiation
 
+**Status**: [Development](../../document-status.md)
+
 A Prometheus Exporter MUST support content negotiation to allow clients to request
 metrics in different formats based on the `Accept` header in HTTP requests. Content
 negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prometheus.io/docs/instrumenting/content_negotiation/).
 
 ### Interaction with Translation Strategy
+
+**Status**: [Development](../../document-status.md)
 
 Although a Prometheus Exporter MAY be configured with a `translation_strategy` for internal metric processing, the final output format and character escaping MUST follow what the content negotiation process determines based on the client's `Accept` header. The content negotiation requirements MUST take precedence over the configured translation strategy when determining the final output format.
 

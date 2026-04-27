@@ -210,7 +210,7 @@ Environment variable names used by the utilities in the Shell and Utilities
 (underscore) from the characters defined in Portable Character Set. Other
 characters may be permitted by an implementation; applications must tolerate
 the presence of such names. Upper-case and lower-case letters retain their
-unique identities and are not folded together. The name space of environment
+unique identities and are not folded together. The namespace of environment
 variable names containing lower-case letters is reserved for applications.
 Applications can define any environment variables with names from this name
 space without modifying the behaviour of the standard utilities.
@@ -232,7 +232,7 @@ this [documentation][cpython-doc] was added to clarify the behavior.
 ### Allowed characters
 
 To ensure compatibility, specification for Environment Variables SHOULD adhere
-to the current specification for `TextMapPropagator` where key/value pairs MUST
+to the current specification for `TextMapPropagator` where key-value pairs MUST
 only consist of US-ASCII characters that make up valid HTTP header fields as
 per RFC 7230.
 

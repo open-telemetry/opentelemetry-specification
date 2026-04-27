@@ -23,7 +23,7 @@ api
    └── logs
 ```
 
-> Use of lowercase, CamelCase or Snake Case (stylized as snake_case) names depends on the language.
+> Use of lowercase, camelCase or snake_case names depends on the language.
 
 ### `/api/context`
 
@@ -74,7 +74,7 @@ sdk
    └── logs
 ```
 
-> Use of lowercase, CamelCase or Snake Case (stylized as snake_case) names depends on the language.
+> Use of lowercase, camelCase or snake_case names depends on the language.
 
 ### `/sdk/context`
 

@@ -52,7 +52,7 @@ this data model.
   <tr>
     <td>FACILITY</td>
     <td>enum</td>
-    <td>Describes where the event originated. A predefined list of Unix processes. Part of event source identity. Example: <code>mail system</code></td>
+    <td>Describes where the event originated. A predefined list of UNIX processes. Part of event source identity. Example: <code>mail system</code></td>
     <td>`Attributes["syslog.facility"]`</td>
   </tr>
   <tr>
@@ -733,7 +733,7 @@ When mapping from the unified model to HEC, we apply this additional mapping:
   <tr>
     <td>host.name</td>
     <td>string</td>
-    <td>Name of the host.<br>It may contain what hostname returns on Unix systems, the fully qualified, or a name specified by the user. </td>
+    <td>Name of the host.<br>It may contain what hostname returns on UNIX systems, the fully qualified, or a name specified by the user. </td>
     <td>`Resource["host.name"]`</td>
   </tr>
   <tr>
@@ -803,19 +803,19 @@ for an exhaustive list.
 
 ## Appendix B: `SeverityNumber` example mappings
 
-|Syslog       |WinEvtLog  |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
-|-------------|-----------|------|------|-----------------|-----------------------------------|--------------|
-|             |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE         |
-|Debug        |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG         |
-|             |           |      |      | FINE            |                                   |DEBUG2        |
-|             |           |      |      | CONFIG          |                                   |DEBUG3        |
-|Informational|Information|INFO  |Info  | INFO            |LogLevel.Information               |INFO          |
-|Notice       |           |      |      |                 |                                   |INFO2         |
-|Warning      |Warning    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN          |
-|Error        |Error      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR         |
-|Critical     |Critical   |      |Dpanic|                 |                                   |ERROR2        |
-|Alert        |           |      |Panic |                 |                                   |ERROR3        |
-|Emergency    |           |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL         |
+|Syslog              |WinEvtLog  |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
+|---------------------|-----------|------|------|-----------------|-----------------------------------|--------------|
+|                     |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE (1)     |
+|Debug (7)            |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG (5)     |
+|                     |           |      |      | FINE            |                                   |DEBUG2 (6)    |
+|                     |           |      |      | CONFIG          |                                   |DEBUG3 (7)    |
+|Informational (6)    |Information|INFO  |Info  | INFO            |LogLevel.Information               |INFO (9)      |
+|Notice (5)           |           |      |      |                 |                                   |INFO2 (10)    |
+|Warning (4)          |Warning    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN (13)     |
+|Error (3)            |Error      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR (17)    |
+|Critical (2)         |Critical   |      |Dpanic|                 |                                   |ERROR2 (18)   |
+|Alert (1)            |           |      |Panic |                 |                                   |ERROR3 (19)   |
+|Emergency (0)        |           |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL (21)    |
 
 ## References
 

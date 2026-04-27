@@ -9,7 +9,7 @@ including integrations with various libraries and frameworks in all languages su
 We cannot possibly expect that all these integrations will be provided by the core maintainers of OpenTelemetry.
 We hope that wider community will integrate their projects with OpenTelemetry.
 We have to encourage that by providing great documentation, examples and tooling to integration authors,
-while still providing our end-users with some way to discover all available OpenTelemetry components together with some visibility into their quality.
+while still providing our end users with some way to discover all available OpenTelemetry components together with some visibility into their quality.
 
 ## Explanation
 
@@ -45,8 +45,8 @@ All instances of core instrumentation must be included into the OpenTelemetry Re
 
 ### Contrib components
 
-Any language SIG may have one or more “contrib” repos containing components contributed by developers with an interest in specific parts of the instrumentation ecosystem.
-These repositories may have a separate set of approvers/maintainers than the core API/SDK repo.
+Any language SIG may have one or more “contrib” repositories containing components contributed by developers with an interest in specific parts of the instrumentation ecosystem.
+These repositories may have a separate set of approvers/maintainers than the core API/SDK repository.
 Contrib repositories are as important for the project success as core repository, but may not require the same level of expertise.
 In fact, these repositories often calls for other set of skills and customer's understanding.
 On contrib repository creation, new set of approvers and maintainers can be added as we do for any new repository, without time/contribution requirements.
@@ -54,13 +54,13 @@ Repository maintainers are also encouraged to promote contributors to approver/m
 based on targeted contributions and expertise of the contrib repository rather than overall SIG scope.
 It is important to keep the process fair and inclusive by following the formal guidance published [here](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#maintainer).
 A contrib repository may leverage the CODEOWNERS functionality of GitHub to assign maintainers to individual packages
-even if this means granting write permissions to the whole repo.
+even if this means granting write permissions to the whole repository.
 The goal should be to distribute the load of reviewing PRs and accepting changes as much as possible, while keeping reliability and overall quality of components and fair governance.
 
 All components in a contrib repository are expected to be included into the OpenTelemetry Registry following the usual process described above.
 
 We should welcome all contributions and make the inclusion process (including following all our requirements) as easy as possible.
-The goal is to encourage all contributors to include their components into a contrib repo as opposed to hosting them separately.
+The goal is to encourage all contributors to include their components into a contrib repository as opposed to hosting them separately.
 This way they can reuse existing infrastructure for testing, publishing, security scanning etc.
 This will also greatly simplify responsibility transfer between different maintainers if their priorities change.
 It also promotes the development and maintenance of a single instrumentation package for each instrumentation source,
@@ -85,7 +85,7 @@ Their submission for inclusion into OpenTelemetry Registry is still welcomed, su
 ### Distribution
 
 Whenever OpenTelemetry components are published to any repository other than the OpenTelemetry Registry (such as npm registry or Maven Central),
-only core and contrib components can be published under "opentelemetry" namespace.
+only core and contrib components can be published under "OpenTelemetry" namespace.
 Native and external components are to be published under their own namespace.
 
 In case the OpenTelemetry SIG provides any kind of "all-in-one" instrumentation distribution (e.g. as Java and .NET do)
@@ -97,7 +97,7 @@ This may mean a separate language-specific component API that all components are
 
 ## Trade-offs and mitigations
 
-* How easy it is to get merge permission in contrib repo?
+* How easy it is to get merge permission in contrib repository?
 The harder it is, the larger is the maintenance burden on the core team.
 The easier it is, the more uncertainty there is about the quality of contributions.
 Can every language SIG decide this for themselves or should we decide together?

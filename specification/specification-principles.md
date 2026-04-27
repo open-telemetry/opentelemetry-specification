@@ -47,7 +47,7 @@ The specification is useless without the ecosystem it enables. Changes should
 focus on real world use cases, and real user needs. Additionally, changes should
 be implementable across the entire OpenTelemetry ecosystem.
 
-This means proposals should think "end to end" not "add this one little thing".
+This means proposals should think "end-to-end" not "add this one little thing".
 
 Projects and proposals should provide prototypes or implementations
 before changes are made to the Specification.
