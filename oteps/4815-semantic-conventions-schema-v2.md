@@ -6,6 +6,7 @@
   - [Motivation](#motivation)
   - [Details](#details)
     - [Difference with `file_format: 1.1.0`](#difference-with-file_format-110)
+    - [File format versioning](#file-format-versioning)
     - [Listing available schema versions](#listing-available-schema-versions)
     - [Semantic Conventions Schemas](#semantic-conventions-schemas)
     - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
@@ -78,7 +79,7 @@ Schema URL SHOULD return a valid *manifest* in response.
 Here's an example of the *manifest*:
 
 ```yaml
-file_format: 2.0.0
+file_format: manifest/2.0
 # schema_url serves as the primary source of registry name and version
 # registry name (everything before version) must be unique
 schema_url: https://opentelemetry.io/schemas/semconv/1.40.0-dev
@@ -117,6 +118,9 @@ as a new property with a minor `file_format` version bump, without changing exis
 features. Consumers can download only the parts they need, and we may provide
 a single archive with all files for convenience.
 
+See [File format versioning](#file-format-versioning) for the rules that apply
+to `manifest`, `resolved`, and `definition` format identifiers.
+
 All artifacts for a given release MUST be immutable. Consumers SHOULD cache manifests
 and resolved schemas, or any parts of them, when used on the hot path.
 
@@ -136,6 +140,23 @@ a list of transformations to be applied to upgrade `vX` to `vX + 1`.
 
 This functionality is now covered by other means. See [Listing available schema versions](#listing-available-schema-versions)
 and [Schema Transformations](#schema-transformations) for the details.
+
+### File format versioning
+
+The file formats referenced in this proposal — `manifest`, `resolved`, and
+`definition` — all follow `<major>.<minor>` versioning. Patch versions are not
+part of the format identifier.
+
+The same compatibility rules apply to all three formats:
+
+- **Newer minor version, same major**: backward compatible. New optional fields
+  may be added within a major version. Consumers SHOULD continue to parse the
+  file, ignore unknown fields, and SHOULD log a warning indicating that the
+  file uses a newer minor version than the consumer supports.
+- **Major version mismatch**: breaking change. Consumers MUST check the major
+  version before parsing and MUST refuse to process files with an unsupported
+  major version. Migration tooling and documentation will be provided for major
+  version transitions.
 
 ### Listing available schema versions
 
@@ -165,7 +186,7 @@ For example, a metric could be defined in the following way in the *definition* 
 
 ```yaml
 # definition schema
-file_format: definition/2
+file_format: definition/2.0
 attributes:
 - key: my.operation.name
   type: string
@@ -196,7 +217,7 @@ distribution and in-memory representation.
 
 ```yaml
 # resolved schema
-file_format: resolved/2.0.0  # this could be versioned independently of manifest format
+file_format: resolved/2.0  # versioned independently of manifest format
 schema_url: https://acme.com/schemas/1.0.0
 attribute_catalog:
 ...
@@ -281,7 +302,7 @@ at development time and is used to create the publication manifest.
 
 **Publication artifacts:**
 
-- `manifest.yaml` (publication manifest, `file_format: 2.0.0`). To be published at the Schema URL.
+- `manifest.yaml` (publication manifest, `file_format: manifest/2.0`). To be published at the Schema URL.
 - `resolved-schema.yaml`. To be published at the URL specified in the manifest.
 
 
@@ -323,7 +344,7 @@ specific conventions in this registry and publish one Schema URL for all of them
 Here's how the definition might look:
 
 ```yaml
-file_format: definition/2
+file_format: definition/2.0
 # new attributes defined in this registry
 attributes:
   - key: activemq.broker.name
@@ -490,7 +511,6 @@ weaver registry diff \
 It produces a machine-readable summary of changes between versions similar to:
 
 ```yaml
-file_format: "diff/2.0.0"
 schema_url: https://opentelemetry.io/schemas/1.39.0
 registry:
   attribute_changes:
