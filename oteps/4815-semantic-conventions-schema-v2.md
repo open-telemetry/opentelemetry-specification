@@ -216,7 +216,7 @@ The *resolved* registry is a single file produced from a set of definitions. It 
 all attributes along with signal definitions and refinements. It is optimized for
 distribution and in-memory representation.
 
-*Resolved* registry for this metric looks like:
+The *resolved* registry for this metric looks like:
 
 ```yaml
 # resolved registry
@@ -248,13 +248,16 @@ registry:
       ...
 ```
 
+These examples are for illustration only — see the [JSON schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv.resolved.v2.json)
+for the full structure.
+
 The resolved registry file is immutable once published for a given version.
 The manifest and resolved registry are versioned together, and each release MUST use a unique `schema_url`.
 
 If the resolved registry needs to change, a new version of both the manifest and the resolved registry MUST be released.
 
-Resolved registry is formally documented as a [JSON schema](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv.resolved.v2.json),
-see [overview](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv-schemas.md#resolved-schema).
+The resolved registry is formally documented as a [JSON schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv.resolved.v2.json),
+see [overview](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-schemas.md#resolved-schema).
 
 As a data point on volume: the resolved registry for [OTel Semantic Conventions v1.38.0](https://github.com/open-telemetry/semantic-conventions/releases/tag/v1.38.0)
 is approximately 1.2MB uncompressed and 200KB compressed.
@@ -345,12 +348,14 @@ version: 1.0.0-dev
 repository_url: https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/jmx-metrics/library/activemq.md
 stability: development
 dependencies:
+  # schema_url is expected to point to the publication manifest of the dependency.
+  # It's a unique identifier containing registry name and version.
   - schema_url: https://opentelemetry.io/schemas/semconv/1.39.0-dev
-    # schema_url is the primary distribution mechanism and a source of
-    # unique registry name and version.
-    # To support v1 registries and for local development needs, it's possible to
-    # provide an alternative location via registry_path property
-    # which may be a local folder or a link to the registry on GitHub
+    # in some cases (when registry_path is provided) schema_url is ONLY used as
+    # a unique identifier containing registry name and version.
+    # The actual registry artifacts come from `registry_path` property.
+    # This allows supporting v1 registries and simplifying local development.
+    # `registry_path` may be a local folder or a link to the registry on GitHub
     registry_path: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/v1.39.0.zip[model]
 ```
 
@@ -394,16 +399,13 @@ The *resolved* registry contains:
 Attributes and signals from dependencies that are not used by the registry are not
 included by default.
 
-Check out [full example](https://github.com/open-telemetry/opentelemetry-weaver-examples/pull/33).
+Check out the [full example](https://github.com/open-telemetry/opentelemetry-weaver-examples/pull/33).
 
 ### Dependency resolution mechanism
 
-The number of direct dependencies is initially limited to one. This will change in the future.
-Details to be fleshed out.
-
 Principles:
 
-- **Latest version wins:** When a registry depends (transiently) on multiple versions
+- **Latest version wins:** When a registry depends (transitively) on multiple versions
   of the same registry, only the latest version of that dependency is used during
   the resolution process.
   - If an object is referenced but only exists in an older version that was not selected,
@@ -416,6 +418,8 @@ Principles:
   This rule applies within a single registry and across all its dependencies.
 - **Source tracking:** Attributes and signal definitions, including their refinements,
   include provenance metadata that identifies the source registry and its version.
+- **Extensibility:** The manifest format is designed to be
+  extensible so that additional conflict-resolution hints can be added in the future in a non-breaking manner.
 
 ### Schema URL for OTel schemas
 
@@ -538,8 +542,8 @@ registry:
 ...
 ```
 
-The diff schema is formally documented as a JSON schema; see [overview](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv-schemas.md#diff-schema)
-and [full schema](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv.diff.v2.json).
+The diff schema is formally documented as a JSON schema; see [overview](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-schemas.md#diff-schema)
+and [full schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv.diff.v2.json).
 
 <details>
 
@@ -576,7 +580,7 @@ Weaver will continue to support this format while the majority of OTel code-gene
 scripts still use it.
 
 In addition, Weaver allows opting into schema v2. Code and documentation
-generation then receives [materialized resolved schema v2](https://github.com/lmolkova/weaver/blob/c6116c6c8918dc610ebd1aaf5c5da3b936cc64cf/schemas/semconv-schemas.md#materialized-resolved-schema).
+generation then receives [materialized resolved schema v2](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-schemas.md#materialized-resolved-schema).
 
 Migration to v2 involves minor changes to Jinja2 templates and Weaver config files.
 Migration steps and recipes will be documented. There should be no impact on the
