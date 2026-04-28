@@ -179,7 +179,7 @@ the current instance of the SDK. For example, an entity detector may detect a
 service entity for the current SDK, or the process or host it is running on.
 
 An entity detector MUST implement a `Detect` method. `Detect` accepts no
-arguments and returns a single [Entity](#entities).
+arguments and returns one or more [Entities](#entities) with distinct types.
 
 Entity detectors MUST detect identifying attributes synchronously. Entity
 detectors MAY detect descriptive attributes asynchronously (e.g. via a future
