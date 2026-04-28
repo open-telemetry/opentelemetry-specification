@@ -1,7 +1,7 @@
 # Thread Context: Sharing Thread-Level Information with External Readers
 
 Introduce a standard mechanism for OpenTelemetry SDKs to publish thread-level attributes for out-of-process readers such as the OpenTelemetry eBPF profilers.
-It is related to [OTEP 4719: Process Context](4719-process-ctx.md).
+It is related to [OTEP 4719: Process Context](4719-process-ctx.md), which it uses to share initial configuration information with readers.
 
 There is a complete example of the spec as well as example readers and writers in <https://github.com/scottgerring/ctx-sharing-demo>(possibly to be moved to [open-telemetry/sig-profiling](https://github.com/open-telemetry/sig-profiling)?).
 
@@ -16,7 +16,7 @@ External readers such as the OpenTelemetry eBPF Profiler operate outside the ins
 
 ## Explanation
 
-We propose a mechanism for OpenTelemetry SDKs to publish thread-level information reflecting the context of the active request, if any, through a standard format based on the ELF Thread Local Storage (TLS) TLSDESC dialect.
+We propose a mechanism for OpenTelemetry SDKs to publish thread-level information reflecting the context of the active request, if any, through a standard format based on the Linux-specific ELF Thread Local Storage (TLS) TLSDESC dialect.
 
 Because this mechanism relies on having a native component and knowing when a runtime switches contexts, we consider it optional for SDKs to support, as some runtimes (or even runtime versions) may not be able to feasibly/efficiently implement it.
 
