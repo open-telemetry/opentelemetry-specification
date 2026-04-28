@@ -6,14 +6,14 @@
   - [Motivation](#motivation)
   - [Details](#details)
     - [Difference with `file_format: 1.1.0`](#difference-with-file_format-110)
-    - [File format versioning](#file-format-versioning)
-    - [Listing available schema versions](#listing-available-schema-versions)
+    - [Schema URL structure](#schema-url-structure)
+      - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
+      - [Listing available schema versions](#listing-available-schema-versions)
     - [Semantic Conventions schemas](#semantic-conventions-schemas)
-    - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
+      - [File format versioning](#file-format-versioning)
     - [Building and publishing arbitrary semantic convention registries](#building-and-publishing-arbitrary-semantic-convention-registries)
       - [Creating a registry that depends on OpenTelemetry semantic conventions](#creating-a-registry-that-depends-on-opentelemetry-semantic-conventions)
     - [Dependency resolution mechanism](#dependency-resolution-mechanism)
-    - [Schema URL structure](#schema-url-structure)
   - [Trade-offs and mitigations](#trade-offs-and-mitigations)
     - [Schema Transformations](#schema-transformations)
       - [Migration option 1: upgrades based on resolved registry only](#migration-option-1-upgrades-based-on-resolved-registry-only)
@@ -144,23 +144,6 @@ a list of transformations to be applied to upgrade `vX` to `vX + 1`.
 This functionality is now covered by other means. See [Listing available schema versions](#listing-available-schema-versions)
 and [Schema Transformations](#schema-transformations) for the details.
 
-### File format versioning
-
-The file formats referenced in this proposal - `manifest`, `resolved`, and
-`definition` - all follow `<major>.<minor>` versioning. Patch versions are not
-part of the format identifier.
-
-The same compatibility rules apply to all three formats:
-
-- **Newer minor version, same major**: backward compatible. New optional fields
-  may be added within a major version. Consumers SHOULD continue to parse the
-  file, ignore unknown fields, and SHOULD log a warning indicating that the
-  file uses a newer minor version than the consumer supports.
-- **Major version mismatch**: breaking change. Consumers MUST check the major
-  version before parsing and MUST refuse to process files with an unsupported
-  major version. Migration tooling and documentation will be provided for major
-  version transitions.
-
 ### Schema URL structure
 
 The Schema URL pattern today does not provide per-registry or per-stability
@@ -210,6 +193,40 @@ Examples:
   Collector and Collector Contrib
 - `opentelemetry.io/schemas/java-instrumentation/{version}` - conventions for
   Java instrumentation
+
+#### Differentiating between stable and not stable schemas
+
+Currently, Schema URL includes the semantic convention version but does not include any
+indication of stability.
+
+OpenTelemetry Semantic Conventions will publish two schemas with each release:
+
+- stable (e.g. `https://opentelemetry.io/schemas/semconv/1.40.0`) which includes
+  only the stable subset of semantic conventions registry.
+- development (e.g. `https://opentelemetry.io/schemas/semconv-dev/1.40.0`) which
+  includes all semantic conventions defined in the registry regardless of their
+  stability.
+
+Both registries are produced from the same release and share the same version
+number. They have distinct schema families, each with its own listing endpoint
+and its own manifest.
+
+Additional intermediate maturity levels (`-rc`, `-beta`, `-alpha`) MAY be
+published. A registry published at a given maturity SHOULD include all
+conventions at that maturity or higher (e.g. an `-alpha` registry includes
+alpha, beta, RC, and stable conventions). In practice, publishing intermediate
+levels is impractical and usually unnecessary - the stable and
+development pair is expected to cover most if not all use cases.
+
+The manifest file MUST include the actual stability level.
+
+OpenTelemetry instrumentation SHOULD provide a Schema URL that reflects the version
+of conventions it follows.
+
+For example, when HTTP instrumentation supports experimental features on top of
+HTTP conventions and the user has enabled these experimental features, the
+instrumentation SHOULD use a development Schema URL
+(e.g. `https://opentelemetry.io/schemas/semconv-dev/1.40.0`).
 
 #### Listing available schema versions
 
@@ -316,43 +333,22 @@ see [overview](https://github.com/open-telemetry/weaver/blob/main/schemas/semcon
 As a data point on volume: the resolved registry for [OTel Semantic Conventions v1.38.0](https://github.com/open-telemetry/semantic-conventions/releases/tag/v1.38.0)
 is approximately 1.2MB uncompressed and 200KB compressed.
 
-### Differentiating between stable and not stable schemas
+#### File format versioning
 
-Currently, Schema URL includes the semantic convention version but does not include any
-indication of stability.
+The file formats referenced in this proposal - `manifest`, `resolved`, and
+`definition` - all follow `<major>.<minor>` versioning. Patch versions are not
+part of the format identifier.
 
-We propose differentiating registries of different maturity levels by adding a
-maturity suffix on the schema family. See [Schema URL structure](#schema-url-structure)
-for the full URL pattern and the list of allowed suffixes.
+The same compatibility rules apply to all three formats:
 
-OpenTelemetry Semantic Conventions will publish two schemas with each release:
-
-- stable (e.g. `https://opentelemetry.io/schemas/semconv/1.40.0`) which includes
-  only the stable subset of semantic conventions registry.
-- development (e.g. `https://opentelemetry.io/schemas/semconv-dev/1.40.0`) which
-  includes all semantic conventions defined in the registry regardless of their
-  stability.
-
-Both registries are produced from the same release and share the same version
-number. They have distinct schema families, each with its own listing endpoint
-and its own manifest.
-
-Additional intermediate maturity levels (`-rc`, `-beta`, `-alpha`) MAY be
-published. A registry published at a given maturity SHOULD include all
-conventions at that maturity or higher (e.g. an `-alpha` registry includes
-alpha, beta, RC, and stable conventions). In practice, publishing intermediate
-levels is impractical and usually unnecessary - the stable and
-development pair is expected to cover most if not all use cases.
-
-The manifest file MUST include the actual stability level.
-
-OpenTelemetry instrumentation SHOULD provide a Schema URL that reflects the version
-of conventions it follows.
-
-For example, when HTTP instrumentation supports experimental features on top of
-HTTP conventions and the user has enabled these experimental features, the
-instrumentation SHOULD use a development Schema URL
-(e.g. `https://opentelemetry.io/schemas/semconv-dev/1.40.0`).
+- **Newer minor version, same major**: backward compatible. New optional fields
+  may be added within a major version. Consumers SHOULD continue to parse the
+  file, ignore unknown fields, and SHOULD log a warning indicating that the
+  file uses a newer minor version than the consumer supports.
+- **Major version mismatch**: breaking change. Consumers MUST check the major
+  version before parsing and MUST refuse to process files with an unsupported
+  major version. Migration tooling and documentation will be provided for major
+  version transitions.
 
 ### Building and publishing arbitrary semantic convention registries
 
