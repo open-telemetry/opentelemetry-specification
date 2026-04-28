@@ -200,7 +200,7 @@ outside OpenTelemetry into OpenTelemetry attribute values.
 
 **Status**: [Development](../document-status.md)
 
-For non-OTLP protocols or other debugging-oriented contexts that need to
+For non-OTLP protocols that need to
 represent a single `Attribute` as a string, the RECOMMENDED form is a
 [JSON object](https://datatracker.ietf.org/doc/html/rfc8259#section-4)
 containing a single name/value pair (member).
