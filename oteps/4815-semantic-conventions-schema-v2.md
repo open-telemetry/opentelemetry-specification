@@ -9,7 +9,7 @@
     - [Schema URL structure](#schema-url-structure)
       - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
       - [Listing available schema versions](#listing-available-schema-versions)
-    - [Semantic Conventions schemas](#semantic-conventions-schemas)
+    - [Definition and resolved schemas](#definition-and-resolved-schemas)
       - [File format versioning](#file-format-versioning)
     - [Building and publishing arbitrary semantic convention registries](#building-and-publishing-arbitrary-semantic-convention-registries)
       - [Creating a registry that depends on OpenTelemetry semantic conventions](#creating-a-registry-that-depends-on-opentelemetry-semantic-conventions)
@@ -103,7 +103,7 @@ The manifest contains information about the semantic convention registry includi
   the URL preceding the version is the *Schema Family*, as defined in the
   existing [Schema URL](/specification/schemas/README.md#schema-url) spec.
 - `resolved_registry_uri` (required) - Points to a YAML file with the
-  [*resolved* registry](#semantic-conventions-schemas).
+  [*resolved* registry](#definition-and-resolved-schemas).
   MUST be a valid URL.
 - `stability` (required) - Registry stability. MUST be one of the
   [Maturity levels](/specification/document-status.md#maturity-levels).
@@ -251,7 +251,7 @@ This requirement applies only to the full path above the version segment -
 path segments (e.g. `https://opentelemetry.io/schemas`) is out of scope of this
 OTEP.
 
-### Semantic Conventions schemas
+### Definition and resolved schemas
 
 The [*definition* schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-syntax.v2.md)
 used to write semantic conventions is not the same as the *resolved* registry.
