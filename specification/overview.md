@@ -13,6 +13,7 @@ weight: 1
   * [API](#api)
   * [SDK](#sdk)
   * [Semantic Conventions](#semantic-conventions)
+  * [Core Packages](#core-packages)
   * [Contrib Packages](#contrib-packages)
   * [Versioning and Stability](#versioning-and-stability)
 - [Tracing Signal](#tracing-signal)
@@ -86,13 +87,27 @@ provide language-specific support to the
 Additionally, attributes required by the specification will be listed
 [here](semantic-conventions.md).
 
+### Core Packages
+
+**Core packages** are not an additional package type. Instead, the term refers
+to OpenTelemetry client packages that implement specification-defined
+components across those categories, such as **API** packages, **SDK**
+packages, and plugin packages (like exporters, propagators).
+
+Core packages are maintained by an OpenTelemetry SIG and are distinct from
+Contrib packages, which are optional. The term describes specification-defined
+deliverables; it does not prescribe a specific repository, package, module,
+artifact, or release bundle layout for a language implementation.
+
 ### Contrib Packages
 
 The OpenTelemetry project maintains integrations with popular OSS projects which have been identified as important for observing modern web services.
 Example API integrations include instrumentation for web frameworks, database clients, and message queues.
 Example SDK integrations include plugins for exporting telemetry to popular analysis tools and telemetry storage systems.
 
-Some plugins, such as OTLP Exporters and TraceContext Propagators, are required by the OpenTelemetry specification. These required plugins are included as part of the SDK.
+Note that some plugins, such as OTLP Exporters and TraceContext Propagators,
+are defined by the OpenTelemetry specification. These plugins are referred to as
+**Core packages**.
 
 Plugins and instrumentation packages which are optional and separate from the SDK are referred to as **Contrib** packages.
 **API Contrib** refers to packages which depend solely upon the API; **SDK Contrib** refers to packages which also depend upon the SDK.
