@@ -330,7 +330,7 @@ MUST be converted to OpenTelemetry Exemplars as follows:
 
 ### Instrumentation Scope
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Labels with `otel_scope_` prefix MUST be dropped from all metric points
 and used as the Instrumentation Scope name (`otel_scope_name`),
