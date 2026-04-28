@@ -159,7 +159,7 @@ opentelemetry.io/schemas/{component}[-{maturity}]/{version}
 - `{component}` identifies the registry - for example, `semconv` for the
   central `semantic-conventions` repo, or `collector` for OTel Collector
   conventions.
-- `{maturity}` (otopnal) selects a view of the registry at a given
+- `{maturity}` (optional) selects a view of the registry at a given
   stability level. When omitted, the URL points to the stable view. Allowed
   suffixes correspond to the [maturity levels](/specification/document-status.md#maturity-levels)
   defined in this repository:
@@ -176,7 +176,7 @@ opentelemetry.io/schemas/{component}[-{maturity}]/{version}
   maturity-suffixed and unsuffixed versions under one schema family complicates
   ordering which is essential for [dependency conflict resolution](#dependency-resolution-mechanism).
 - `{version}` is the [Schema Version Number](/specification/schemas/README.md#schema-version-number)
-  and follows SemVer 2.0 **without** a pre-release component.
+  and follows SemVer 2.0 **without** a prerelease component.
 
 A registry MAY publish multiple maturity-suffixed views of the same release.
 Each view has a distinct schema family with its own listing SchemaURL and its
