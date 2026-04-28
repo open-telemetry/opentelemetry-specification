@@ -8,12 +8,12 @@
     - [Difference with `file_format: 1.1.0`](#difference-with-file_format-110)
     - [File format versioning](#file-format-versioning)
     - [Listing available schema versions](#listing-available-schema-versions)
-    - [Semantic Conventions Schemas](#semantic-conventions-schemas)
+    - [Semantic Conventions schemas](#semantic-conventions-schemas)
     - [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
     - [Building and publishing arbitrary semantic convention registries](#building-and-publishing-arbitrary-semantic-convention-registries)
       - [Creating a registry that depends on OpenTelemetry semantic conventions](#creating-a-registry-that-depends-on-opentelemetry-semantic-conventions)
     - [Dependency resolution mechanism](#dependency-resolution-mechanism)
-    - [Schema URL for OTel schemas](#schema-url-for-otel-schemas)
+    - [Schema URL structure](#schema-url-structure)
   - [Trade-offs and mitigations](#trade-offs-and-mitigations)
     - [Schema Transformations](#schema-transformations)
       - [Migration option 1: upgrades based on resolved registry only](#migration-option-1-upgrades-based-on-resolved-registry-only)
@@ -80,11 +80,11 @@ Here's an example of the *manifest*:
 
 ```yaml
 file_format: manifest/2.0
-# schema_url serves as the primary source of registry name and version
-# registry name (everything before version) must be unique
-schema_url: https://opentelemetry.io/schemas/semconv/1.40.0-dev
+# schema_url serves as the primary source of schema family and version
+# schema family (everything before version) must be unique
+schema_url: https://opentelemetry.io/schemas/semconv-dev/1.40.0
 # MAY point to a file under schema_url or to an arbitrary location.
-resolved_registry_uri: https://opentelemetry.io/schemas/semconv/1.40.0-dev/resolved.yaml
+resolved_registry_uri: https://opentelemetry.io/schemas/semconv-dev/1.40.0/resolved.yaml
 
 stability: development
 
@@ -99,7 +99,9 @@ description: OpenTelemetry Semantic Conventions
 The manifest contains information about the semantic convention registry including:
 
 - `schema_url` (required) - identifies the registry and its version. MUST follow
-  [Schema URL format](/specification/schemas/README.md#schema-url).
+  [Schema URL format](/specification/schemas/README.md#schema-url). The part of
+  the URL preceding the version is the *Schema Family*, as defined in the
+  existing [Schema URL](/specification/schemas/README.md#schema-url) spec.
 - `resolved_registry_uri` (required) - Points to a YAML file with the
   [*resolved* registry](#semantic-conventions-schemas).
   MUST be a valid URL.
@@ -113,7 +115,7 @@ MAY control with [`Accept-Encoding`](https://developer.mozilla.org/en-US/docs/We
 header (this is already supported by `opentelemetry.io`).
 
 New properties MAY be added to the manifest with a minor `file_format` version
-bump — for example, a URL pointing to diffs against previous versions, so
+bump - for example, a URL pointing to diffs against previous versions, so
 consumers can download only the parts they need. A future major version bump
 follows [versioning and stability policies](/specification/versioning-and-stability.md).
 
@@ -126,8 +128,10 @@ and resolved registries, or any parts of them, when used on the hot path.
 The manifest schema and REST API to obtain it using Schema URL will be formally
 documented for public, unauthenticated access.
 
-See [Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
-for details on the `-dev` suffix.
+See [Schema URL structure](#schema-url-structure) and
+[Differentiating between stable and not stable schemas](#differentiating-between-stable-and-not-stable-schemas)
+for details on the `schema_url` format and how the schema family encodes
+maturity (e.g. `semconv-dev`).
 
 ### Difference with `file_format: 1.1.0`
 
@@ -142,8 +146,8 @@ and [Schema Transformations](#schema-transformations) for the details.
 
 ### File format versioning
 
-The file formats referenced in this proposal — `manifest`, `resolved`, and
-`definition` — all follow `<major>.<minor>` versioning. Patch versions are not
+The file formats referenced in this proposal - `manifest`, `resolved`, and
+`definition` - all follow `<major>.<minor>` versioning. Patch versions are not
 part of the format identifier.
 
 The same compatibility rules apply to all three formats:
@@ -157,7 +161,57 @@ The same compatibility rules apply to all three formats:
   major version. Migration tooling and documentation will be provided for major
   version transitions.
 
-### Listing available schema versions
+### Schema URL structure
+
+The Schema URL pattern today does not provide per-registry or per-stability
+differentiation - `opentelemetry.io/schemas/{version}`.
+
+OTel components that want to publish their conventions SHOULD follow a new
+pattern:
+
+```text
+opentelemetry.io/schemas/{component}[-{maturity}]/{version}
+```
+
+- `{component}` identifies the registry - for example, `semconv` for the
+  central `semantic-conventions` repo, or `collector` for OTel Collector
+  conventions.
+- `{maturity}` (otopnal) selects a view of the registry at a given
+  stability level. When omitted, the URL points to the stable view. Allowed
+  suffixes correspond to the [maturity levels](/specification/document-status.md#maturity-levels)
+  defined in this repository:
+
+  | Maturity level    | Suffix    |
+  | ----------------- | --------- |
+  | Stable            | *(none)*  |
+  | Release Candidate | `-rc`     |
+  | Beta              | `-beta`   |
+  | Alpha             | `-alpha`  |
+  | Development       | `-dev`    |
+
+  The suffix appears in the schema family, not in the version. Mixing
+  maturity-suffixed and unsuffixed versions under one schema family complicates
+  ordering which is essential for [dependency conflict resolution](#dependency-resolution-mechanism).
+- `{version}` is the [Schema Version Number](/specification/schemas/README.md#schema-version-number)
+  and follows SemVer 2.0 **without** a pre-release component.
+
+A registry MAY publish multiple maturity-suffixed views of the same release.
+Each view has a distinct schema family with its own listing SchemaURL and its
+own manifest. Versions are aligned across maturity views - the same version
+number identifies the same release across all views.
+
+Examples:
+
+- `opentelemetry.io/schemas/semconv/{version}` - stable conventions from the
+  semantic-conventions repo
+- `opentelemetry.io/schemas/semconv-dev/{version}` - development conventions
+  from the semantic-conventions repo
+- `opentelemetry.io/schemas/collector/{version}` - conventions for the
+  Collector and Collector Contrib
+- `opentelemetry.io/schemas/java-instrumentation/{version}` - conventions for
+  Java instrumentation
+
+#### Listing available schema versions
 
 The service hosting the Schema URL SHOULD also support listing available versions.
 
@@ -175,12 +229,12 @@ For example, `https://opentelemetry.io/schemas/semconv` would return
 The format and content type will be formally documented in a way that could support
 paging in a non-breaking manner.
 
-This requirement applies only to the full path above the version segment —
+This requirement applies only to the full path above the version segment -
 `https://opentelemetry.io/schemas/semconv` in this example. Listing at ancestor
 path segments (e.g. `https://opentelemetry.io/schemas`) is out of scope of this
 OTEP.
 
-### Semantic Conventions Schemas
+### Semantic Conventions schemas
 
 The [*definition* schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-syntax.v2.md)
 used to write semantic conventions is not the same as the *resolved* registry.
@@ -248,7 +302,7 @@ registry:
       ...
 ```
 
-These examples are for illustration only — see the [JSON schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv.resolved.v2.json)
+These examples are for illustration only - see the [JSON schema](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv.resolved.v2.json)
 for the full structure.
 
 The resolved registry file is immutable once published for a given version.
@@ -267,16 +321,28 @@ is approximately 1.2MB uncompressed and 200KB compressed.
 Currently, Schema URL includes the semantic convention version but does not include any
 indication of stability.
 
-In addition to the version, we will leverage [SemVer pre-release](https://semver.org)
-syntax to communicate the stability of the conventions and telemetry.
+We propose differentiating registries of different maturity levels by adding a
+maturity suffix on the schema family. See [Schema URL structure](#schema-url-structure)
+for the full URL pattern and the list of allowed suffixes.
 
-OpenTelemetry Semantic Conventions will publish two versions with each release:
+OpenTelemetry Semantic Conventions will publish two schemas with each release:
 
-- stable (e.g. `https://opentelemetry.io/schemas/1.39.0`) which will include only
-  a stable subset of semantic conventions
-- development (e.g. `https://opentelemetry.io/schemas/1.39.0-dev`) which will
-  include all semantic conventions defined in the registry regardless of their
+- stable (e.g. `https://opentelemetry.io/schemas/semconv/1.40.0`) which includes
+  only the stable subset of semantic conventions registry.
+- development (e.g. `https://opentelemetry.io/schemas/semconv-dev/1.40.0`) which
+  includes all semantic conventions defined in the registry regardless of their
   stability.
+
+Both registries are produced from the same release and share the same version
+number. They have distinct schema families, each with its own listing endpoint
+and its own manifest.
+
+Additional intermediate maturity levels (`-rc`, `-beta`, `-alpha`) MAY be
+published. A registry published at a given maturity SHOULD include all
+conventions at that maturity or higher (e.g. an `-alpha` registry includes
+alpha, beta, RC, and stable conventions). In practice, publishing intermediate
+levels is impractical and usually unnecessary - the stable and
+development pair is expected to cover most if not all use cases.
 
 The manifest file MUST include the actual stability level.
 
@@ -284,8 +350,9 @@ OpenTelemetry instrumentation SHOULD provide a Schema URL that reflects the vers
 of conventions it follows.
 
 For example, when HTTP instrumentation supports experimental features on top of
-HTTP conventions and the user has enabled these experimental features, the instrumentation
-SHOULD specify a `-dev` Schema URL.
+HTTP conventions and the user has enabled these experimental features, the
+instrumentation SHOULD use a development Schema URL
+(e.g. `https://opentelemetry.io/schemas/semconv-dev/1.40.0`).
 
 ### Building and publishing arbitrary semantic convention registries
 
@@ -344,22 +411,22 @@ Here's an example of a definition manifest that includes a dependency on OTel co
 ```yaml
 name: activemq-jmx-instrumentation
 description: This registry contains semantic conventions for ActiveMQ JMX instrumentation.
-version: 1.0.0-dev
+version: 1.0.0
 repository_url: https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/instrumentation/jmx-metrics/library/activemq.md
 stability: development
 dependencies:
   # schema_url is expected to point to the publication manifest of the dependency.
-  # It's a unique identifier containing registry name and version.
-  - schema_url: https://opentelemetry.io/schemas/semconv/1.39.0-dev
+  # It's a unique identifier containing schema family and version.
+  - schema_url: https://opentelemetry.io/schemas/semconv-dev/1.39.0
     # in some cases (when registry_path is provided) schema_url is ONLY used as
-    # a unique identifier containing registry name and version.
+    # a unique identifier containing schema family and version.
     # The actual registry artifacts come from `registry_path` property.
     # This allows supporting v1 registries and simplifying local development.
     # `registry_path` may be a local folder or a link to the registry on GitHub
     registry_path: https://github.com/open-telemetry/semantic-conventions/archive/refs/tags/v1.39.0.zip[model]
 ```
 
-This example is simplified — in practice, we would likely include all Java-instrumentation-
+This example is simplified - in practice, we would likely include all Java-instrumentation-
 specific conventions in this registry and publish one Schema URL for all of them.
 
 Here's how the definition might look:
@@ -420,20 +487,6 @@ Principles:
   include provenance metadata that identifies the source registry and its version.
 - **Extensibility:** The manifest format is designed to be
   extensible so that additional conflict-resolution hints can be added in the future in a non-breaking manner.
-
-### Schema URL for OTel schemas
-
-The Schema URL pattern today does not provide per-registry differentiation —
-`opentelemetry.io/schemas/{version}`.
-
-OTel components that want to publish their conventions SHOULD follow a new
-pattern `opentelemetry.io/schemas/{component}/{version}`.
-
-For example:
-
-- `opentelemetry.io/schemas/semconv/{version}` for semantic-conventions repo
-- `opentelemetry.io/schemas/collector/{version}` for collector and collector contrib
-- `opentelemetry.io/schemas/java-instrumentation/{version}` for Java instrumentation
 
 ## Trade-offs and mitigations
 
@@ -521,8 +574,8 @@ for the versions they want to support (e.g., vN → vTarget, vN+1 → vTarget):
 
 ```bash
 weaver registry diff \
-  --registry ./schema-v1.38.0-dev \
-  --baseline-registry ./schema-v1.28.0-dev \
+  --registry ./semconv-dev-1.38.0 \
+  --baseline-registry ./semconv-dev-1.28.0 \
   --diff-format yaml \
   --output diff_v1.28.0_v1.38.0 \
   --v2
@@ -531,7 +584,7 @@ weaver registry diff \
 It produces a machine-readable summary of changes between versions similar to:
 
 ```yaml
-schema_url: https://opentelemetry.io/schemas/1.39.0
+schema_url: https://opentelemetry.io/schemas/semconv/1.39.0
 registry:
   attribute_changes:
   - name: system.memory.linux.slab.state
@@ -673,7 +726,9 @@ Generating [OTel Collector transformprocessor config to run schema transformatio
 
 ## Future possibilities
 
-1. When releasing, publish a `latest` version at `https://opentelemetry.io/schemas/latest/`.
+1. When releasing, publish a `latest` version under each schema family -
+   for example `https://opentelemetry.io/schemas/semconv/latest` and
+   `https://opentelemetry.io/schemas/semconv-dev/latest`.
    It should not be used by instrumentation/application code, but consumers can
    leverage it to learn about the latest schema (version and content).
 
