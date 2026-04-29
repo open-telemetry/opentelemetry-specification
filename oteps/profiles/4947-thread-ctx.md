@@ -1,11 +1,11 @@
 # Thread Context: Sharing Thread-Level Information with External Readers
 
-Introduce a standard mechanism for OpenTelemetry SDKs to publish thread-level attributes for out-of-process readers such as the OpenTelemetry eBPF profilers.
+Introduce a standard mechanism for OpenTelemetry SDKs to publish thread-level attributes for out-of-process readers such as the OpenTelemetry eBPF profiler.
 It is related to [OTEP 4719: Process Context](4719-process-ctx.md), which it uses to share initial configuration information with readers.
 
 There is a complete example of the spec as well as example readers and writers in <https://github.com/scottgerring/ctx-sharing-demo>(possibly to be moved to [open-telemetry/sig-profiling](https://github.com/open-telemetry/sig-profiling)?).
 
-Our work-in-progress implementation of this on the OTel eBPF Profiler side is at [https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1229](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1229).
+Our work-in-progress implementation of this on the OTel eBPF Profiler side is at <https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1229>.
 
 ## Motivation
 
@@ -37,7 +37,7 @@ This is immutable, process-wide data that the TLS data will reference. It will b
 
 The following values are stored:
 
-* `threadlocal.schema_version` - type and version of the schema - initially "tlsdesc\_v1\_dev" for experimentation (to be changed to "tlsdesc\_v1" once the OTEP gets merged)
+* `threadlocal.schema_version` - type and version of the schema - initially `tlsdesc_v1_dev` for experimentation (to be changed to `tlsdesc_v1` once the OTEP gets merged)
   * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a go application and thus context should be read from [go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [Node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
 * `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread local storage itself will then use these key indexes in place of the **attribute names**.
 
@@ -113,7 +113,7 @@ When a request context is attached to a thread, the SDK:
 1. Sets the TLS pointer to 0 to ensure readers see no record during construction
 2. Obtains a contiguous buffer large enough to store the anticipated record size
 3. Constructs a new **Thread Local Context Record**  within the buffer containing:
-   - Trace context (trace ID, span ID, root span ID)
+   - Trace context (trace ID, span ID)
    - Any configured attributes, encoded per the record format
 4. Sets the `valid` field to indicate the record is complete
 5. Updates the TLS pointer to reference the new record
