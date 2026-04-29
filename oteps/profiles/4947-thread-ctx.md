@@ -13,6 +13,7 @@ External readers such as the OpenTelemetry eBPF Profiler operate outside the ins
 
 * **Inability to correlate observations with context metadata** - Without visibility into context information such as the active span, an external reader cannot attribute its observations to particular HTTP endpoints or other request characteristics
 * **Lack of request metadata for samples collected on threads with un-sampled traces** - in many cases, the active span observed by the external process *may not* be sampled by the OpenTelemetry SDK. In these cases it is useful to make extra metadata available directly to the external process, so that its samples maintain useful context even in the face of sampling on the tracer side.
+* **Avoiding duplication** - other out-of-process readers such as [OTel OBI](https://opentelemetry.io/docs/zero-code/obi/) could avoid redundant instrumentation efforts in cases where the OTel SDK is already sharing necessary thread context information, simplifying the user experience and conserving resources.
 
 ## Explanation
 
@@ -118,9 +119,18 @@ When a request context is attached to a thread, the SDK:
 4. Sets the `valid` field to indicate the record is complete
 5. Updates the TLS pointer to reference the new record
 
-All pointer and validity updates use compiler fences (`atomic_signal_fence` or equivalent) and volatile writes to prevent instruction reordering by the compiler.
-
 Note: the SDK is free to re-use existing buffers to save allocations in this path.
+
+Alternatively, a SDK may choose to leave the TLS pointer pointing to a fix record, and instead manipulate the `valid`
+flag during updates. Assuming the TLS pointer is set once per-thread to point to a fix record, the update process becomes:
+
+1. Sets the `valid` flag to `false`
+2. Updates the **Thread Local Context Record** for the thread as required
+3. Sets the `valid` field to `true` to indicate the record is complete
+
+A SDK should choose to either set/unset the TLS pointer itself, or the `valid` flag, but not both. 
+
+In both cases, all pointer and validity updates use compiler fences (`atomic_signal_fence` or equivalent) and volatile writes to prevent instruction reordering by the compiler. This design assumes signal handler-like semantics, therefore it is unecessary to guard against CPU reordering.
 
 #### 3. Context Detachment
 
