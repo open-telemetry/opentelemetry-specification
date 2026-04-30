@@ -139,6 +139,8 @@ When a request context is no longer active on a thread, the SDK:
 
 1. Sets the TLS pointer to `NULL`
 
+For SDKs using the fixed-record mode, detachment instead sets the `valid` flag to `false`.
+
 #### Design Considerations
 
 **Consistency during updates**: By setting the TLS pointer to `NULL` before constructing a new record, the SDK ensures readers never observe partially-written data. Readers that sample a thread during this window simply see no active context.
@@ -152,10 +154,11 @@ In practice, context reads are expected to behave as if the thread whose context
 This means CPU memory ordering is not a concern.
 Writers need only use compiler fences (`atomic_signal_fence` or equivalent) and/or volatile writes to prevent compilers from reordering writes to the context with those to `valid` or the TLS pointer.
 These fences are expected to carry no runtime cost.
+Readers conforming to this specification MUST only read thread context while the target thread is stopped or interrupted (e.g. via eBPF perf events, ptrace-stop, or equivalent mechanisms).
 
 ### Reading Protocol
 
-External readers (such as the OpenTelemetry eBPF profiler) discover and read thread local context as follows:
+External readers (such as the OpenTelemetry eBPF profiler) discover and read thread local context as follows. The reading protocol assumes the reader observes each thread while it is stopped or interrupted.
 
 #### 1. Process Initialization
 
@@ -174,7 +177,9 @@ The external reader discovers a new process to observe. It:
   * If it does, collect them
 * Note down the TL offset for **Thread Local Reference Data** discovered
 
-At this point the reader has everything it needs to begin sampling threads.
+If the `threadlocal.*` keys are not present in the process context at this point, the reader should defer TLS symbol discovery and re-run step 1.2 when the process context is next updated. Readers can detect process context updates using the polling or prctl-hook mechanisms described in OTEP-4719.
+
+Once the `threadlocal.*` keys are present and TLS symbols have been discovered, the reader has everything it needs to begin sampling threads.
 
 #### 2. Thread Sampling
 
