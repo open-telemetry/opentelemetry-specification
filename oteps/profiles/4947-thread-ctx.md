@@ -121,14 +121,15 @@ When a request context is attached to a thread, the SDK:
 
 Note: the SDK is free to re-use existing buffers to save allocations in this path.
 
-Alternatively, a SDK may choose to leave the TLS pointer pointing to a fix record, and instead manipulate the `valid`
-flag during updates. Assuming the TLS pointer is set once per-thread to point to a fix record, the update process becomes:
+Alternatively, a SDK may choose to leave the TLS pointer pointing to a fixed record, and instead mutate the `valid`
+flag during updates only. Assuming the TLS pointer is set once per-thread to point to a fixed record, the update process becomes:
 
 1. Sets the `valid` flag to `false`
 2. Updates the **Thread Local Context Record** for the thread as required
 3. Sets the `valid` field to `true` to indicate the record is complete
 
-A SDK should choose to either set/unset the TLS pointer itself, or the `valid` flag, but not both. 
+A SDK should choose to either set/unset the TLS pointer itself, or the `valid` flag, but not both.
+The intention of this design is to enable flexibility for the writers. We envision that some writers may choose to keep a fixed record for a given thread and can thus mutate it in-place, and that other writers may instead keep the record associated with some other high-level concept (coroutine, request, etc) and swap out the pointer as needed when they become active on any given thread.
 
 In both cases, all pointer and validity updates use compiler fences (`atomic_signal_fence` or equivalent) and volatile writes to prevent instruction reordering by the compiler. This design assumes signal handler-like semantics, therefore it is unecessary to guard against CPU reordering.
 
