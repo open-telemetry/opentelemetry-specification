@@ -21,6 +21,8 @@ We propose a mechanism for OpenTelemetry SDKs to publish thread-level informatio
 
 Because this mechanism relies on having a native component and knowing when a runtime switches contexts, we consider it optional for SDKs to support, as some runtimes (or even runtime versions) may not be able to feasibly/efficiently implement it.
 
+The TLSDESC-based publication mechanism and the in-memory **Thread Local Context Record** format are intentionally separable. Runtimes that cannot efficiently expose context through TLSDESC are not required to implement this mechanism. However, we highly recommend reusing the same in-memory record format when publishing equivalent context through a runtime-specific discovery mechanism, rather than defining a runtime-specific payload format. Such mechanisms are out of scope for this OTEP, but reusing the record layout where practical allows readers to share parsing logic across runtimes.
+
 When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID in the format described in this document to the appropriate thread local. When an external reader observes this thread it checks to see if any such TLS data has been attached, and if so, includes it in its telemetry.
 
 This mechanism is designed to achieve the following goals:
@@ -261,7 +263,7 @@ This section is not intended to constrain implementers of the specification (nor
 We believe these two runtimes are not going to be supported by this proposal:
 
 * **Go:** We foresee Go readers will continue to use the [pprof labels](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/blob/main/design-docs/00002-custom-labels/README.md) due to its fine-grained goroutine based concurrency model and relative cost of calling across an FFI
-* **Node.js**: We expect Node.js readers are more likely to read the Node.js runtime internals directly due to the threading model and performance impact of using a Node-API/native TLS approach.This adds complexity to the reader but reduces the performance impact, and is already the approach used in [Polarsignal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js).
+* **Node.js**: We do not expect Node.js to use the TLSDESC publication mechanism directly, due to the threading model and the performance impact of crossing a Node-API/native FFI boundary on context attach/detach. Node.js readers are more likely to discover context through Node.js-specific runtime internals, as in [Polar Signal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). However, a separate Node.js-specific proposal is expected to reuse the **Thread Local Context Record** in-memory format, with only the discovery mechanism being Node.js-specific.
 
 ## Prior art and alternatives
 
