@@ -36,7 +36,6 @@ weight: 1
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
       - [Add](#add)
-      - [Bound Add](#bound-add)
   * [Asynchronous Counter](#asynchronous-counter)
     + [Asynchronous Counter creation](#asynchronous-counter-creation)
     + [Asynchronous Counter operations](#asynchronous-counter-operations)
@@ -44,12 +43,10 @@ weight: 1
     + [Histogram creation](#histogram-creation)
     + [Histogram operations](#histogram-operations)
       - [Record](#record)
-      - [Bound Record](#bound-record)
   * [Gauge](#gauge)
     + [Gauge creation](#gauge-creation)
     + [Gauge operations](#gauge-operations)
       - [Record](#record-1)
-      - [Bound Record](#bound-record-1)
   * [Asynchronous Gauge](#asynchronous-gauge)
     + [Asynchronous Gauge creation](#asynchronous-gauge-creation)
     + [Asynchronous Gauge operations](#asynchronous-gauge-operations)
@@ -57,7 +54,6 @@ weight: 1
     + [UpDownCounter creation](#updowncounter-creation)
     + [UpDownCounter operations](#updowncounter-operations)
       - [Add](#add-1)
-      - [Bound Add](#bound-add-1)
   * [Asynchronous UpDownCounter](#asynchronous-updowncounter)
     + [Asynchronous UpDownCounter creation](#asynchronous-updowncounter-creation)
     + [Asynchronous UpDownCounter operations](#asynchronous-updowncounter-operations)
@@ -524,14 +520,19 @@ This API MUST accept the following parameter:
 This API MUST return a language-idiomatic type representing the instrument bound to those
 attributes.
 
-The returned bound instrument MUST support the instrument's core recording operation without
-accepting [Attributes](../common/README.md#attribute) as a parameter. The instrument kind
-determines the recording operation on the bound instrument:
+The returned bound instrument MUST support the instrument's core recording operation.
+The instrument kind determines the recording operation on the bound instrument:
 
-* [Counter](#counter): [Bound Add](#bound-add)
-* [Histogram](#histogram): [Bound Record](#bound-record)
-* [Gauge](#gauge): [Bound Record](#bound-record-1)
-* [UpDownCounter](#updowncounter): [Bound Add](#bound-add-1)
+* [Counter](#counter): [Add](#add)
+* [Histogram](#histogram): [Record](#record)
+* [Gauge](#gauge): [Record](#record-1)
+* [UpDownCounter](#updowncounter): [Add](#add-1)
+
+This MAY be achieved by introducing a dedicated bound instrument type, or by reusing
+the existing instrument interface. If the existing instrument interface is reused, the
+`Bind` API MUST be documented to communicate to users that invoking attribute-bearing
+recording operations on the returned bound instrument negates the performance benefits
+of binding.
 
 Measurements recorded on the bound instrument can be associated with the
 [Context](../context/README.md).
@@ -654,14 +655,6 @@ counterExceptions.Add(1, ("exception_type", "FileLoadException"), ("handled_by_u
 counterPowerUsed.Add(13.5, new PowerConsumption { customer = "Tom" });
 counterPowerUsed.Add(200, new PowerConsumption { customer = "Jerry" }, ("is_green_energy", true));
 ```
-
-##### Bound Add
-
-**Status**: [Development](../document-status.md)
-
-The bound counterpart to [Add](#add), obtained via [Bind](#bind). All semantics are
-identical to [Add](#add) except [Attributes](../common/README.md#attribute) are not
-accepted as a parameter.
 
 ### Asynchronous Counter
 
@@ -892,14 +885,6 @@ httpServerDuration.Record(50, ("http.request.method", "POST"), ("url.scheme", "h
 httpServerDuration.Record(100, new HttpRequestAttributes { method = "GET", scheme = "http" });
 ```
 
-##### Bound Record
-
-**Status**: [Development](../document-status.md)
-
-The bound counterpart to [Record](#record), obtained via [Bind](#bind). All semantics are
-identical to [Record](#record) except [Attributes](../common/README.md#attribute) are not
-accepted as a parameter.
-
 ### Gauge
 
 `Gauge` is a [synchronous Instrument](#synchronous-instrument-api) which can be
@@ -988,14 +973,6 @@ Attributes roomB = Attributes.builder().put("room.id", "Rack B");
 backgroundNoiseLevel.record(4.3, roomA);
 backgroundNoiseLevel.record(2.5, roomB);
 ```
-
-##### Bound Record
-
-**Status**: [Development](../document-status.md)
-
-The bound counterpart to [Record](#record-1), obtained via [Bind](#bind). All semantics are
-identical to [Record](#record-1) except [Attributes](../common/README.md#attribute) are not
-accepted as a parameter.
 
 ### Asynchronous Gauge
 
@@ -1237,14 +1214,6 @@ customers_in_store.add(-1, account_type="residential")
 customersInStore.Add(1, ("account.type", "commercial"));
 customersInStore.Add(-1, new Account { Type = "residential" });
 ```
-
-##### Bound Add
-
-**Status**: [Development](../document-status.md)
-
-The bound counterpart to [Add](#add-1), obtained via [Bind](#bind). All semantics are
-identical to [Add](#add-1) except [Attributes](../common/README.md#attribute) are not
-accepted as a parameter.
 
 ### Asynchronous UpDownCounter
 

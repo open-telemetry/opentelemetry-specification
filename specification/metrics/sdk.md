@@ -1050,9 +1050,12 @@ A bound instrument MUST behave identically to calling the equivalent unbound rec
 operation with the pre-bound [Attributes](../common/README.md#attribute) on each
 measurement.
 
-The SDK SHOULD optimize by pre-resolving the underlying aggregator state at bind time,
-such that subsequent recordings bypass per-recording attribute processing and map
-lookup.
+[Attribute processing](#measurement-processing) and [cardinality limit](#cardinality-limits)
+evaluation MUST be performed at bind time. The resolved aggregator is fixed for the
+lifetime of the bound instrument and does not change across collection cycles.
+
+The SDK MUST ensure subsequent recordings on a bound instrument bypass per-recording
+map lookup.
 
 ## Attribute limits
 
