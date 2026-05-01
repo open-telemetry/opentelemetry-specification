@@ -1054,7 +1054,7 @@ measurement.
 evaluation MUST be performed at bind time. The resolved aggregator is fixed for the
 lifetime of the bound instrument and does not change across collection cycles.
 
-The SDK MUST ensure subsequent recordings on a bound instrument bypass per-recording
+The SDK MUST ensure attribute-free recordings on a bound instrument bypass per-recording
 map lookup.
 
 ## Attribute limits
