@@ -174,8 +174,7 @@ Scope kinds:
 
 - **global**: the ID is universally unique. Any two observers anywhere
   that report the same entity will produce the same ID. Examples:
-  `k8s.pod.uid` (a Kubernetes-issued UUID), `host.id` when treated as
-  globally unique.
+  `k8s.pod.uid` (a Kubernetes-issued UUID), `host.id`.
 - **local**: the ID is unique only within a context entity. Examples:
   `process` is identified by (`process.pid`, `process.creation.time`),
   unique only within a single host (or container, in some setups);
@@ -215,12 +214,21 @@ on a Resource.
 For `global` entities, the ID Context Type field MUST be empty.
 
 For `local` entities, the emitter SHOULD set the ID Context Type to
-the type of the context entity on the Resource. The emitter MAY leave
-it empty when the whole system operates in a single context and global
-identity is not needed — for example, a single-host agent where every
-emitted `process` is implicitly in the same host context. In that case
-the entity's identity is meaningful only within the producing
-Resource.
+the type of the context entity on the Resource whenever it knows that
+context. This allows receivers to compose a Global Identity for the
+entity.
+
+An emitter MAY leave the ID Context Type empty when it does not know
+the context entity — for example, a process detector that runs
+independently of any host or container detector. In this case the
+emitter records only the entity's Local Identity. A downstream
+component (a sibling detector on the same Resource, or a processor
+with broader topology knowledge) MAY later add the missing context
+entity to the Resource and set the ID Context Type, completing the
+Global Identity.
+
+If no component ever sets the ID Context Type, the entity's identity
+is meaningful only within the producing Resource.
 
 ### Global Identity Composition
 
