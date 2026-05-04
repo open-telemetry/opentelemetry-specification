@@ -1058,7 +1058,9 @@ Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
 aggregated metric data and the original API calls where measurements are
 recorded. Exemplars work for trace-metric correlation across any metric, not
-just those that can also be derived from `Span`s.
+just those that can also be derived from `Span`s. Exemplars also preserve
+attributes that are dropped during aggregation (e.g. by View configuration),
+regardless of instrument type (including asynchronous instruments).
 
 An [Exemplar](./data-model.md#exemplars) is a recorded
 [Measurement](./api.md#measurement) that exposes the following pieces of
@@ -1068,7 +1070,7 @@ information:
 - The `time` the API call was made to record a `Measurement`.
 - The set of [Attributes](../common/README.md#attribute) associated with the
   `Measurement` not already included in a metric data point.
-- The associated [trace ID and span
+- For synchronous instruments, the associated [trace ID and span
   ID](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
   within Context](../trace/api.md#determining-the-parent-span-from-a-context) of
   the `Measurement` at API call time.
