@@ -373,31 +373,41 @@ Prometheus receiver).
 Prometheus identifies the origin of metrics by [`job` and `instance` labels](https://prometheus.io/docs/concepts/jobs_instances/).
 These labels are added when the metrics are scraped from the Prometheus endpoint,
 where the `job` is set based on the scrape configuration, and the `instance` is
-set to the target's address. Even though these are added at scrape time, they
-are considered identifying for metrics regardless of whether they are scraped or
-pushed (using Prometheus Remote Write).
+set to the target's address.
+
+`job` and `instance` labels are considered identifying for the purpose of
+grouping Prometheus metrics into OpenTelemetry resources. For each
+combination of `job` and `instance` labels on metrics in the incoming batch of
+Prometheus metrics (e.g., a single scrape of a Prometheus endpoint or a single
+Prometheus Remote Write request), there is one OpenTelemetry Resource that
+contains all metrics with that `job` and `instance`. `job` and `instance` are
+dropped from all metrics, and are added as the `prometheus.job` and
+`prometheus.instance` resource attributes, respectively.
 
 Prometheus also stores metadata associated with scraped targets in the
 [target_info](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 Metric (which belongs to the `target` MetricFamily in OM 1.0).
 
-`job` and `instance` labels SHOULD be stored as `prometheus.job` and
-`prometheus.instance` resource attributes, respectively.
+If present, all `target_info` metrics MUST be dropped and their labels
+processed as follows: All labels from each `target_info` metric, except `job`
+and `instance`, MUST be converted to resource attributes on the resource
+associated with that `job` and `instance`. By default, all other label keys and
+values MUST NOT be altered (such as replacing `_` with `.` characters in keys).
+If not included as labels on `target_info`, `service.name` and
+`service.instance.id` default to the `job` and `instance` values, respectively.
 
-If present, the `target_info` metric MUST be dropped from the batch of metrics,
-and all labels from the `target_info` metric MUST be converted to resource
-attributes attached to all other metrics which are part of the scrape. By
-default, label keys and values MUST NOT be altered (such as replacing `_` with
-`.` characters in keys).
-
-If `service.name` or `service.instance.id` are not provided by `target_info`,
-they MUST be defaulted to the `job` and `instance` labels, respectively.
+| OTLP Resource Attribute | Description |
+| ----------------------- | ----------- |
+| `service.name` | The value of the `service.name` label on `target_info`. Otherwise, defaults to `job`. |
+| `service.instance.id` | The value of the `service.instance.id` label on `target_info`. Otherwise, defaults to `instance`. |
+| `prometheus.job` | The value of the `job` label from Prometheus. |
+| `prometheus.instance` | The value of the `instance` label from Prometheus. |
 
 #### Resource Attributes for Scraped Targets
 
-When Prometheus metrics are scraped from a Prometheus endpoint, the following
-attributes SHOULD be associated with scraped metrics as resource attributes,
-and MUST NOT be added as metric attributes:
+In addition to the attributes above, when Prometheus metrics are scraped from a
+Prometheus endpoint, the following attributes SHOULD be associated with scraped
+metrics as resource attributes, and MUST NOT be added as metric attributes:
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
