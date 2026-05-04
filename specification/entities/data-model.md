@@ -195,6 +195,10 @@ within its context entity. **Global Identity** is the union of the
 entity's Local Identity with the Global Identity of its context
 entity.
 
+If a `local` entity has no context entity set, its Local Identity
+functions as its effective identity within the producing Resource.
+This means the context is irrelevant to whoever is looking at it.
+
 ### ID Context Type
 
 For entities whose scope kind is `local`, the OpenTelemetry semantic
