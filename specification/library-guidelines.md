@@ -77,6 +77,39 @@ SDK defines an [Exporter interface](trace/sdk.md#span-exporter). Protocol-specif
 
 SDK also includes optional helper exporters that can be composed for additional functionality if needed.
 
+#### Batching By Items Or Bytes
+
+SDK batching functionality MAY support configuring batch size using either
+`items` or `bytes`.
+
+If an SDK supports batch sizing by `items`, the size MUST be measured in the
+smallest independently splittable unit of telemetry:
+
+* traces: `Span`s;
+* logs: `LogRecord`s;
+* metrics: metric points.
+
+If an SDK supports batch sizing by `bytes`, the size MUST be measured as the
+serialized size of the batch. The SDK MUST document which serialized
+representation is measured. The measured size MAY include container overhead
+required to represent resources, scopes, and other structural fields.
+
+If an SDK allows configuring a maximum export batch size in either `items` or
+`bytes`, it MUST ensure that no batch provided to `Export` exceeds the
+configured maximum in the selected unit.
+
+If splitting is required to satisfy a configured maximum batch size, the SDK
+MUST split telemetry on the smallest independently splittable unit for the
+signal.
+
+For metrics, splitting MAY place metric points that belong to the same metric
+into different batches.
+
+If an individual item is larger than the configured maximum batch size, the SDK
+MUST drop that item and report the condition as an error through the SDK's
+normal error reporting mechanisms. The SDK SHOULD continue exporting the
+remaining items.
+
 Library designers need to define the language-specific `Exporter` interface based on [this generic specification](trace/sdk.md#span-exporter).
 
 #### Protocol Exporters

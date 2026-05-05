@@ -90,6 +90,8 @@ follows:
 tracer_provider:
   processors:
     - batch:
+        batch_size_unit: bytes
+        max_export_batch_size: 65536
         exporter:
           my-exporter:
             config-parameter: value
@@ -97,7 +99,8 @@ tracer_provider:
 
 Here we specify that the tracer provider has a batch span processor
 paired with a custom span exporter named `my-exporter`, which is configured
-with `config-parameter: value`. For this configuration to succeed,
+with `config-parameter: value`. The batch processor is configured to interpret
+`max_export_batch_size` in `bytes`. For this configuration to succeed,
 a [`PluginComponentProvider`](#plugincomponentprovider) must
 be [registered](#register-plugincomponentprovider) with `type: SpanExporter`,
 and `name: my-exporter`. When [parse](#parse) is called, the implementation will
@@ -105,7 +108,7 @@ encounter `my-exporter` and translate the corresponding configuration to an
 equivalent [`ConfigProperties`](./api.md#configproperties) representation (
 i.e. `properties: {config-parameter: value}`). When [create](#create) is called,
 the implementation will encounter `my-exporter` and
-invoke [create component](#create-component) on the registered `PluginComponentProvider`with
+invoke [create component](#create-component) on the registered `PluginComponentProvider` with
 the `ConfigProperties` determined during `parse`.
 
 Given the inherent differences across languages, the details of extension
@@ -285,6 +288,23 @@ configuring [`HttpTls`](https://github.com/open-telemetry/opentelemetry-configur
 and `ca_file` is not an absolute file path as defined in the property
 description, return an error.
 
+If the configuration model supports configuring built-in batching components in
+terms of `items` or `bytes`, it SHOULD do so with an enum property named
+`batch_size_unit`.
+
+The `batch_size_unit` property SHOULD support the following values:
+
+* `items`: interpret batch size in the smallest independently splittable unit
+  of telemetry (`Span`s, `LogRecord`s, or metric points).
+* `bytes`: interpret batch size as the serialized size of the batch.
+
+If `batch_size_unit` is present on a built-in batching component,
+`max_export_batch_size` SHOULD be interpreted in that unit.
+
+If `batch_size_unit=bytes`, the SDK MUST document which serialized
+representation is measured. The measured size MAY include container overhead
+required to represent resources, scopes, and other structural fields.
+
 When encountering a reference to
 an [SDK plugin component](#sdk-extension-components) which is not built-in to
 the SDK, Create MUST resolve the component using [Create Component](#create-component)
@@ -314,6 +334,8 @@ file_format: 1.0
 tracer_provider:
   processors:
     - batch:
+        batch_size_unit: items
+        max_export_batch_size: 512
         exporter:
           otlp_http:
 ```
