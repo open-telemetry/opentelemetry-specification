@@ -65,11 +65,12 @@ The trace continuation rules are composed of:
 - a predicate taking the `tracestate` header value
 - a policy as described before
 
-The rule-based W3C baggage propagator works as a filter for the baggage context.
+The rule-based W3C baggage propagator works as a filter for the baggage context
+in both extraction and injection.
 It introduces two explicit outcomes:
 
-1. **KEEP**: keep the baggage entry in the extracted baggage context.
-2. **DROP**: suppress the baggage entry from the extracted baggage context.
+1. **KEEP**: keep the baggage entry in the baggage context.
+2. **DROP**: suppress the baggage entry from the baggage context.
 
 The baggage filtering rules are composed of:
 - a predicate taking the name and the value of a valid baggage entry
@@ -123,7 +124,7 @@ be possible to express equivalent behavior.
 ### Policy evaluation for rule based W3C baggage propagator
 
 The `opentelemetry-python` prototype evaluates ordered rules for each valid
-incoming baggage entry. The first matching rule wins, and if no rule matches the
+incoming and outgoing baggage entry. The first matching rule wins, and if no rule matches the
 default behavior is `KEEP`.
 
 That prototype shape is useful because it:
@@ -211,7 +212,16 @@ propagator:
               key: ot.synthetic
             policy: restart_without_link
     - baggage_rule_based/development:
-        rules:
+        inject_rules:
+          - baggage_patterns:
+              key: tenant.id
+            action: drop
+          - baggage_values:
+              key: debug
+              values:
+                - "true"
+            action: keep
+        extract_rules:
           - baggage_patterns:
               key: tenant.id
             action: drop
@@ -335,8 +345,8 @@ exact helper names to exist in every language API.
 This proposal introduces a standardized baggage rule schema at the behavioral
 level:
 
-- baggage rules are evaluated independently for each valid extracted baggage
-  entry,
+- baggage rules are evaluated independently for each valid extracted and injected
+  baggage entry,
 - each baggage rule consists of a predicate and one baggage outcome,
 - the standardized baggage outcomes are `KEEP` and `DROP`,
 - language implementations MAY represent those outcomes internally using enums,
@@ -345,7 +355,7 @@ level:
 
 ### Required behavior for rule based W3C baggage propagator
 
-When baggage extraction logic is evaluated for an incoming baggage header:
+When baggage entries are evaluated:
 
 1. Implementations MUST parse and validate baggage entries according to existing
    W3C baggage propagator behavior before applying rule evaluation.
@@ -357,18 +367,12 @@ When baggage extraction logic is evaluated for an incoming baggage header:
 
 When a baggage rule outcome is `KEEP`:
 
-1. The baggage entry MUST be added to the extracted baggage context according to
-   existing baggage extraction behavior.
+1. The baggage entry MUST be added to the baggage context on extraction and kept
+   on injection according to existing baggage extraction behavior.
 
 When a baggage rule outcome is `DROP`:
 
-1. The baggage entry MUST NOT be added to the extracted baggage context.
-
-When baggage injection logic runs:
-
-1. Injection behavior MUST remain unchanged by this proposal unless a future
-   specification explicitly defines outbound baggage filtering semantics.
-2. This proposal standardizes filtering during extraction only.
+1. The baggage entry MUST NOT be added to the extracted or injected baggage context.
 
 ### Interaction with existing functionality
 
@@ -388,7 +392,7 @@ When baggage injection logic runs:
 
 The `opentelemetry-python` prototype also adds a rule-based baggage propagator.
 It evaluates ordered rules per baggage entry and can selectively suppress
-entries during extraction while leaving injection behavior unchanged.
+entries during extraction and injection.
 
 This is important because many real boundary scenarios want both:
 
@@ -581,7 +585,7 @@ demonstrates the full end-to-end behavior:
   restarted root span,
 - root span creation preserves user-supplied links and appends the pending link,
 - child spans do not inherit the pending link,
-- baggage extraction can separately apply ordered keep/drop rules to baggage
+- baggage extraction and injection can separately apply ordered keep/drop rules to baggage
   entries.
 
 The prototype includes tests for:
