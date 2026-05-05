@@ -159,15 +159,16 @@ This section explains the API and SDK level changes that are expected to support
 The API would be extended with two operations to get and set Context-scoped
 attributes:
 
-* **Set Context Attributes**, e.g. `Context SetContextScopedAttributes(Context context, Attributes attributes)`
-  or `Context.setAttributes()`.
+* **Add Context Attributes**, e.g. `Context AddContextScopedAttributes(Context context, Attributes attributes)`
+  or `Context.addAttributes()`.
 * **Get Context Attributes**, e.g. `Attributes GetContextScopedAttributes(Context context)` or
   `Context.getAttributes()`.
 
-`Set Context Attributes` takes a set of attributes and returns a new Context that contains
-the specified attributes.
+`Add Context Attributes` adds a set of attributes to the specified Context. These attributes
+are added to previously set Context-scoped attributes, overriding entries with the same name.
+A new Context object is returned, contained the updated value set.
 
-`Get Context Attributes` returns the context-scoped Attributes, or an empty set if none exists.
+`Get Context Attributes` returns the Context-scoped Attributes, or an empty set if none exists.
 
 ### SDK changes
 
@@ -319,7 +320,7 @@ with this approach though:
 With the changes implemented in this OTEP, we will hopefully unblock some
 long-standing specification issues. See [Motivation](#motivation).
 
-* Instrumentation libraries should not use this feature, i.e. use `Set Context Attributes`,
+* Instrumentation libraries should not use this feature, i.e. use `Add Context Attributes`,
   but there may be cases where this would be beneficial to the telemetry output. We should
   write documentation and guidelines exploring the side effects and how they play along
   the enabled/disabled defaults for different signals.
