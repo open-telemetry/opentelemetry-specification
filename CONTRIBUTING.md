@@ -88,7 +88,7 @@ for more information.
 
 ## Tooling
 
-Install the latest LTS release of [Node](https://nodejs.org/) and run
+Install the latest LTS release of [Node.js](https://nodejs.org/) and run
 `npm install` before using any of the targets below. For example, using
 [nvm][] under Linux:
 
@@ -106,7 +106,8 @@ Run all checks (spell, lint, style, links):
 make check
 ```
 
-> Note: Link checking requires Docker and can take a long time. Run it before
+> [!NOTE]
+> Link checking requires Docker and can take a long time. Run it before
 > submitting a PR.
 
 Run checks individually:
