@@ -133,7 +133,7 @@ A Prometheus Exporter MAY offer configuration to add resource attributes as metr
 By default, it MUST NOT add any resource attributes as metric attributes.
 The configuration SHOULD allow the user to select which resource attributes to copy (e.g.
 include / exclude or regular expression based). Copied Resource attributes MUST NOT be
-excluded from the `target` info metric. The option MAY be named `with_resource_constant_labels`.
+excluded from the `target` info metric. The option MAY be named `resource_constant_labels`.
 
 ### Translation Strategy
 
@@ -151,15 +151,17 @@ If the Prometheus exporter supports such configuration it MUST be named to somet
 
 **Status**: [Development](../../document-status.md)
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without [scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
-The option MAY be named `without_scope_info`, and MUST be `false` by default.
+A Prometheus Exporter MAY support configuration to specify whether metrics include
+[scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
+The option MAY be named `scope_info_enabled`, and MUST be `true` by default.
 
 ### Target Info
 
 **Status**: [Development](../../document-status.md)
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without a [target info](../../compatibility/prometheus_and_openmetrics.md#resource-attributes-1)
-metric. The option MAY be named `without_target_info`, and MUST be `false` by default.
+A Prometheus Exporter MAY support a configuration to specify whether to produce a
+[target info](../../compatibility/prometheus_and_openmetrics.md#resource-attributes-1) metric.
+The option MAY be named `target_info_enabled`, and MUST be `true` by default.
 
 ## Content Negotiation
 
