@@ -1108,6 +1108,10 @@ While the metric data point for the counter would carry the attributes `X` and
 > `ExemplarFilter` / `ExemplarReservoir` can be configured to control
 > which measurements are sampled as Exemplars.
 
+SDK documentation SHOULD inform users that attributes dropped by a View
+may still be exported on Exemplars as filtered attributes, and describe
+how to disable or otherwise configure Exemplar sampling.
+
 A Metric SDK MUST provide a mechanism to sample `Exemplar`s from measurements
 via the `ExemplarFilter` and `ExemplarReservoir` hooks.
 
