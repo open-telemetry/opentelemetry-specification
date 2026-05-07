@@ -116,7 +116,7 @@ sections:
           - name: Links can be recorded on span creation
             status: '+'
           - name: Links can be recorded after span creation
-            status: '?'
+            status: '+'
           - name: Links order is preserved
             status: '+'
       - heading: '[Span events](specification/trace/api.md#add-events)'
