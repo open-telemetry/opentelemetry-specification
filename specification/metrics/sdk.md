@@ -1099,7 +1099,8 @@ Then an exemplar output in OTLP would consist of:
 While the metric data point for the counter would carry the attributes `X` and
 `Y`.
 
-> **Note:** A user who drops an attribute key via a View (for example, to
+> [!NOTE]
+> A user who drops an attribute key via a View (for example, to
 > remove an attribute containing sensitive data from the metric stream)
 > may still see that attribute exported on Exemplars as a *filtered
 > attribute*. If this is not desired, Exemplars can be disabled by
