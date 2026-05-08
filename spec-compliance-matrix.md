@@ -249,7 +249,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Setter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + | - |
-| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + |  |  |  |  |  |  |  |  |  |  |
+| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + |  |  |  |  |  |  |  | + |  |  |
 
 ## Environment Variables
 
