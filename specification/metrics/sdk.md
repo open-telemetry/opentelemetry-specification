@@ -383,6 +383,20 @@ The SDK MUST accept the following stream configuration parameters:
   accordance with initialization [error handling
   principles](../error-handling.md#basic-error-handling-principles).
 
+  > [!NOTE]
+  > An attribute key removed from the metric stream by View configuration
+  > (for example, to remove an attribute containing sensitive data) may
+  > still be exported on Exemplars as a *filtered attribute*. If this is
+  > not desired, Exemplars can be disabled by configuring the `AlwaysOff`
+  > `ExemplarFilter`, or a custom `ExemplarFilter` / `ExemplarReservoir`
+  > can be configured to control which measurements are sampled as
+  > Exemplars.
+
+  SDK documentation SHOULD inform users that attributes excluded from a
+  metric stream by View configuration may still be exported on Exemplars
+  as filtered attributes, and describe how to disable or otherwise
+  configure Exemplar sampling.
+
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
 
