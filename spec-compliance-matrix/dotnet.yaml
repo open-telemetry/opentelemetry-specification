@@ -223,6 +223,8 @@ sections:
         status: '?'
       - name: Instrument supports the advisory Attributes parameter.
         status: '?'
+      - name: Synchronous instruments support Bind to pre-associate attributes.
+        status: '-'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
         status: '+'
       - name: All methods of `Meter` are safe to be called concurrently.
@@ -442,7 +444,7 @@ sections:
       - name: Getter argument returning Keys
         status: '-'
       - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
-        status: '?'
+        status: '+'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
