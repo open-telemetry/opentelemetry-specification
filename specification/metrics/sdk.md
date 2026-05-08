@@ -54,6 +54,7 @@ weight: 3
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
   * [Instrument enabled](#instrument-enabled)
+  * [Instrument bind](#instrument-bind)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -1040,6 +1041,30 @@ It MAY return `false` to support additional optimizations and features.
 Note: If a user makes no configuration changes, `Enabled` returns `true` since by
 default `MeterConfig.enabled=true` and instruments use the default
 aggregation when no matching views match the instrument.
+
+### Instrument bind
+
+**Status**: [Development](../document-status.md)
+
+A bound instrument MUST behave identically to calling the equivalent unbound recording
+operation with the pre-bound [Attributes](../common/README.md#attribute) on each
+measurement.
+
+[Attribute processing](#measurement-processing) and [cardinality limit](#cardinality-limits)
+evaluation MUST be performed at bind time. Each call to `Bind` MUST be independently
+evaluated against the cardinality state at that moment. As a consequence, separate calls
+to `Bind` with identical attributes may resolve to different aggregators (e.g. one to a
+concrete series, another to the [overflow series](#overflow-attribute)) based on the
+cardinality state at the time of each call. The resolved aggregator MUST be fixed and
+not change across collection cycles.
+
+Measurements recorded on a bound instrument MUST be candidates for [Exemplar](#exemplar)
+sampling. The [Context](../context/README.md) associated with each recording, whether
+implicit or explicit, MUST be used for exemplar [TraceBased](#tracebased) filtering and
+passed to the [ExemplarReservoir](#exemplarreservoir) offer method.
+
+The SDK MUST ensure attribute-free recordings on a bound instrument bypass per-recording
+map lookup.
 
 ## Attribute limits
 
