@@ -126,11 +126,13 @@ Typically implementations follow this pattern by providing:
 
 Examples:
 
+- [OpenTelemetry .NET implementation][di]
 - [OpenTelemetry C++ implementation][ci]
 - [OpenTelemetry Go implementation][gi]
 - [OpenTelemetry Java implementation][ji]
 - [OpenTelemetry Python implementation][pi]
 
+[di]: https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Api/Context/Propagation/EnvironmentVariableCarrier.cs
 [ci]: https://github.com/open-telemetry/opentelemetry-cpp/blob/main/api/include/opentelemetry/context/propagation/environment_carrier.h
 [gi]: https://github.com/open-telemetry/opentelemetry-go-contrib/tree/main/propagators/envcar
 [ji]: https://github.com/open-telemetry/opentelemetry-java/tree/main/api/incubator/src/main/java/io/opentelemetry/api/incubator/propagation

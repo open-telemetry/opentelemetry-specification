@@ -69,7 +69,7 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Span linking](specification/trace/api.md#specifying-links) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Links can be recorded on span creation |  | + | + | + | + | + | + | + | + | + | + |  | + |
-| Links can be recorded after span creation |  | + |  | + | + |  |  | + | + | + | + |  | + |
+| Links can be recorded after span creation |  | + |  | + | + | + |  | + | + | + | + |  | + |
 | Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | [Span events](specification/trace/api.md#add-events) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | AddEvent |  | + | + | + | + | + | + | + | + | + | + | + | + |
@@ -130,6 +130,7 @@ formats is required. Implementing more than one format is optional.
 | Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | + |  |  | - | + |  | - |
 | Instrument supports the advisory ExplicitBucketBoundaries parameter. |  | + | + |  |  |  | + |  |  |  |  |  | - |
 | Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  |  |  | - |
+| Synchronous instruments support Bind to pre-associate attributes. | X | - | - | - | - | - | - | - | - | - | - | - | - |
 | All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  | - |
 | All methods of `Meter` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  | - |
 | All methods of any instrument are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  | - |
@@ -249,7 +250,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Setter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + | - |
-| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + |  |  |  |  |  |  |  |  |  |  |
+| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + |  |  |  |  |  |  |  | + |  |  |
 
 ## Environment Variables
 
