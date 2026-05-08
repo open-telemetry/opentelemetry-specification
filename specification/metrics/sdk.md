@@ -601,6 +601,12 @@ parameters (as noted in the "Selected Aggregation" column).
 | [Asynchronous Gauge](./api.md#asynchronous-gauge)                 | [Last Value Aggregation](./sdk.md#last-value-aggregation)                                                                                                                                              |
 | [Histogram](./api.md#histogram)                                   | [Explicit Bucket Histogram Aggregation](./sdk.md#explicit-bucket-histogram-aggregation), with the `ExplicitBucketBoundaries` [advisory parameter](./api.md#instrument-advisory-parameters) if provided |
 
+The [`Attributes`](#instrument-advisory-parameter-attributes) advisory
+parameter (**Status**: [Development](../document-status.md)), when
+provided and not overridden by a matching [View](#view), determines the
+attribute keys retained for the resulting metric stream regardless of
+instrument kind.
+
 This Aggregation does not have any configuration parameters.
 
 #### Sum Aggregation
