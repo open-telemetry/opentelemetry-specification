@@ -175,6 +175,7 @@ formats is required. Implementing more than one format is optional.
 | The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + | - | - | + | + |  |  |  | + |  | - |
 | The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + | - | - | + | + |  |  |  | + |  | - |
 | Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| Documentation notes that View-filtered attributes may still appear on Exemplars. |  | - | - | - | - | - | - | - | - | - | + | - | - |
 | Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + | - | - | + | + |  |  |  | + |  | - |
 | Exemplars contain the timestamp when the measurement was taken. |  | + | + | - | - | + | + |  |  |  | + |  | - |
 | The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | - | + | + | + |  |  | - |  | - |
