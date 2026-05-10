@@ -209,11 +209,10 @@ deployments. For example:
 - A `process` typically has a `host` context, but in a multi-process
   container setup it may have a `container` context instead.
 
-The emitter chooses the context entity at emission time and records
-its type in the **ID Context Type** field of the entity. The
-referenced context entity MUST be present on the same Resource. This
-is unambiguous because at most one entity of a given type may appear
-on a Resource.
+The context entity type is recorded in the **ID Context Type** field
+of the entity. The referenced context entity MUST be present on the
+same Resource. This is unambiguous because at most one entity of a
+given type may appear on a Resource.
 
 For `global` entities, the ID Context Type field MUST be empty.
 
@@ -260,7 +259,8 @@ entities from other Resources.
 > relationship — the entity within which this entity's ID is unique.
 > It is intentionally narrow. Other kinds of relationships between
 > entities (membership, deployment, runs-on, etc.) are out of scope
-> for this section and may be addressed by a future general entity
+> for this section and are expected to be modeled in a separate
+> channel (such as entity events) by a future general entity
 > relationship model, which would be additive and would not redefine
 > the meaning of ID Context Type.
 
