@@ -384,7 +384,7 @@ contains all metrics with that `job` and `instance`. `job` and `instance` are
 dropped from all metrics, and are added as the `prometheus.job` and
 `prometheus.instance` resource attributes, respectively.
 
-Prometheus also stores metadata associated with scraped targets in the
+Prometheus exporters also expose metadata associated with their target using the
 [target_info](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
 Metric (which belongs to the `target` MetricFamily in OM 1.0).
 
