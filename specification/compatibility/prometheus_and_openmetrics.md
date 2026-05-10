@@ -663,7 +663,7 @@ exporter.
 
 If `prometheus.job` or `prometheus.instance` are present in the OpenTelemetry
 resource attributes, they MUST be used as the `job` and `instance` labels,
-respectively, and MUST NOT be included on target_info as `prometheus.job` and
+respectively, and MUST NOT be included on `target_info` as `prometheus.job` and
 `prometheus.instance`. If `prometheus.job` is not present, the `service.name`
 and `service.namespace` attributes MUST be combined as
 `<service.namespace>/<service.name>`, or `<service.name>` if namespace is empty,
@@ -672,7 +672,7 @@ the `service.instance.id` attribute, if present, MUST be converted to the
 `instance` label; otherwise, `instance` should be added with an empty value.
 
 The resulting `job` and `instance` labels MUST be added to all OpenTelemetry
-metrics that associated with the Resource, including the `target_info` metric,
+metrics associated with the Resource, including the `target_info` metric,
 if present.
 
 [metricMetadata]: https://github.com/open-telemetry/opentelemetry-proto/blob/c451441d7b73f702d1647574c730daf7786f188c/opentelemetry/proto/metrics/v1/metrics.proto#L199
