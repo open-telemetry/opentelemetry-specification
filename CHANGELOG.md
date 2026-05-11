@@ -40,6 +40,8 @@ release.
 
 ### Common
 
+- Add an in-development "SDK Self-Observability Metrics" section to the [Semantic Conventions](specification/semantic-conventions.md) document, referencing the semantic conventions as the source of truth for SDK self-observability metric names, attributes, and values.
+  ([#5086](https://github.com/open-telemetry/opentelemetry-specification/issues/5086))
 - Define the Core packages term.
   ([#5046](https://github.com/open-telemetry/opentelemetry-specification/pull/5046))
 
