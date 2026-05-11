@@ -25,6 +25,14 @@ The TLSDESC-based publication mechanism and the in-memory **Thread Local Context
 
 When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID in the format described in this document to the appropriate thread local. When an external reader observes this thread it checks to see if any such TLS data has been attached, and if so, includes it in its telemetry.
 
+### Interaction with other context sources
+
+A valid thread-local context record represents the publishing SDK's view of the active OpenTelemetry context for the observed thread. Readers SHOULD treat this context as authoritative for the OpenTelemetry context fields it provides.
+
+Other context sources, such as OBI-derived information, may still be used to enrich observations or as a fallback when SDK-published thread context is unavailable. If a reader chooses to override or merge conflicting SDK-published context with another source, it SHOULD document that policy explicitly.
+
+### Goals
+
 This mechanism is designed to achieve the following goals:
 
 * **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external process with sufficient system permissions to read `/proc/<pid>/maps` to identify loaded libraries, as well as sufficient permission to read from process memory should be able to use this mechanism  (nb: [OTEP-4719](4719-process-ctx.md) also requires access to this resource)
@@ -66,7 +74,11 @@ By leveraging OTEP 4719 we are also collocating with another feature that is lik
 
 ### Thread Local Variable Resolution
 
-TLS are stored in the **dynamic symbols** table of the process binary itself or of any shared library loaded by the process using the TLSDESC dialect. [TLSDESC](https://www.fsfla.org/~lxoliva/writeups/TLS/RFC-TLSDESC-x86.txt) was created to allow for highly efficient thread local accesses, significantly reducing overhead compared to traditional TLS models.
+This OTEP uses "TLSDESC dialect" to refer to the ELF TLS strategy used by compilers and linkers when requested, for example with `-mtls-dialect=gnu2` in GCC or Clang.
+
+This does not require the compiler and linker to emit the specific TLSDESC access model in all build/linkage configurations. Even when the TLSDESC dialect is enabled, linkers may relax TLS references to traditional models such as local-exec or initial-exec when the variable is known locally or at load time.
+
+For this OTEP, `otel_thread_ctx_v1` must be an exported ELF TLS symbol, typically provided by a shared library built with the TLSDESC dialect.
 
 ### Thread Local Variable
 
