@@ -638,7 +638,8 @@ OpenTelemetry Resource attributes SHOULD be converted to a
 if the resource is not [empty](../resource/sdk.md#the-empty-resource).
 The Resource attributes MUST NOT be copied to labels of exported metric families
 by default. The `target_info` Metric MUST be an info-typed metric whose labels
-MUST include the resource attributes, and MUST NOT include any other labels.
+MUST include the resource attributes, and MUST NOT include any other labels
+other than `job` and `instance`.
 
 If info-typed metric families are not yet supported by the language Prometheus
 client library, a gauge-typed metric family named `target_info` with a constant
@@ -671,8 +672,8 @@ to form the `job` metric label. If `prometheus.instance` is not present,
 the `service.instance.id` attribute, if present, MUST be converted to the
 `instance` label; otherwise, `instance` should be added with an empty value.
 
-The resulting `job` and `instance` labels MUST be added to all OpenTelemetry
-metrics associated with the Resource, including the `target_info` metric,
-if present.
+The resulting `job` and `instance` labels MUST be added to all Prometheus
+metrics produced from this OpenTelemetry Resource and associated Metrics,
+including the `target_info` metric, if present.
 
 [metricMetadata]: https://github.com/open-telemetry/opentelemetry-proto/blob/c451441d7b73f702d1647574c730daf7786f188c/opentelemetry/proto/metrics/v1/metrics.proto#L199
