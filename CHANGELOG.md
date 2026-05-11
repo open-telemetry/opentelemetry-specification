@@ -14,6 +14,9 @@ release.
 
 ### Traces
 
+- Add an in-development requirement that SDKs emitting self-observability metrics MUST count spans dropped due to a full queue or processor shutdown via the [SDK self-observability metrics](specification/semantic-conventions.md#sdk-self-observability-metrics).
+  ([#5086](https://github.com/open-telemetry/opentelemetry-specification/issues/5086))
+
 ### Metrics
 
 - Add in-development `Bind` API to synchronous instruments.
@@ -29,6 +32,9 @@ release.
   ([#5071](https://github.com/open-telemetry/opentelemetry-specification/issues/5071))
 
 ### Logs
+
+- Add an in-development requirement that SDKs emitting self-observability metrics MUST count log records dropped due to a full queue or processor shutdown via the [SDK self-observability metrics](specification/semantic-conventions.md#sdk-self-observability-metrics).
+  ([#5086](https://github.com/open-telemetry/opentelemetry-specification/issues/5086))
 
 ### Baggage
 

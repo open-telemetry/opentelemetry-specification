@@ -466,6 +466,9 @@ opportunity for the processor to do any cleanup required.
 `Shutdown` SHOULD be called only once for each `LogRecordProcessor` instance.
 After the call to `Shutdown`, subsequent calls to `OnEmit` are not allowed. SDKs
 SHOULD ignore these calls gracefully, if possible.
+**Status**: [Development](../document-status.md) - SDKs that emit
+[self-observability metrics](../semantic-conventions.md#sdk-self-observability-metrics)
+MUST count log records dropped because the processor has been shut down.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
@@ -546,6 +549,9 @@ to make sure that they are not invoked concurrently.
 * `exporter` - the exporter where the `LogRecord`s are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached logs are
   dropped. The default value is `2048`.
+  **Status**: [Development](../document-status.md) - SDKs that emit
+  [self-observability metrics](../semantic-conventions.md#sdk-self-observability-metrics)
+  MUST count log records dropped due to a full queue.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
   consecutive exports. The default value is `1000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
