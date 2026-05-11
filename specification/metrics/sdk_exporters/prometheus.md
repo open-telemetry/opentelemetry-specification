@@ -52,7 +52,7 @@ OpenTelemetry metrics MUST be converted to Prometheus metrics according to the
 
 ### Client Libraries
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter SHOULD use
 [Prometheus client libraries](https://prometheus.io/docs/instrumenting/clientlibs/)

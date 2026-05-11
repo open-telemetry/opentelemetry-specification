@@ -21,6 +21,8 @@ release.
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize temporality.
     ([#5024](https://github.com/open-telemetry/opentelemetry-specification/issues/5024))
+  - Stabilize client libraries.
+    ([#4980](https://github.com/open-telemetry/opentelemetry-specification/issues/4980))
   - Stabilize port configuration.
     ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
 - Change Prometheus Metric Exporter config property recommended names
