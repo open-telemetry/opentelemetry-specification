@@ -34,7 +34,7 @@ release.
   Instrumentation Scope attributes to identify themselves, distinct from the
   producer of the log call (which is reported as the instrumentation scope
   name).
-  ([#XXXX](https://github.com/open-telemetry/opentelemetry-specification/pull/XXXX))
+  ([#5089](https://github.com/open-telemetry/opentelemetry-specification/pull/5089))
 
 ### Baggage
 
