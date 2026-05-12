@@ -52,11 +52,12 @@ OpenTelemetry metrics MUST be converted to Prometheus metrics according to the
 
 ### Client Libraries
 
-**Status**: [Stable](../../document-status.md)
+**Status**: [Development](../../document-status.md)
 
-A Prometheus Exporter SHOULD use
-[Prometheus client libraries](https://prometheus.io/docs/instrumenting/clientlibs/)
-for serving Prometheus metrics. This allows the Prometheus client to negotiate
+A Prometheus Exporter SHOULD use an official [Prometheus client library](https://prometheus.io/docs/instrumenting/clientlibs/)
+when one exists for the implementation language for serving Prometheus metrics;
+it SHOULD NOT use an unofficial Prometheus client library.
+This allows the Prometheus client to negotiate
 the [format](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md)
 of the response using the `Content-Type` header. If a Prometheus client library
 is used, the OpenTelemetry Prometheus Exporter SHOULD be modeled as a
