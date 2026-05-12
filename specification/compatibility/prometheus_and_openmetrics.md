@@ -503,18 +503,65 @@ latest exemplar for counter instruments.
 
 ### Histograms
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus metric family with the following metrics:
+An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus Histogram by default, but users may opt-in to converting an OpenTelemetry Histogram to a Prometheus Native histogram with custom buckets (NHCB) for protocols that support NHCB.
+
+When converting to a Prometheus Histogram, the following metrics MUST be created:
 
 - A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
 - `{name}_sum` metric denoting the sum field of the histogram, reported only if the sum is positive and monotonic. The sum is positive and monotonic when all buckets are positive. All attributes of the histogram point are converted to Prometheus labels.
 - A series of `{name}_bucket` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up to the boundary reported in the `le` label.  The final bucket metric MUST have an `+Inf` threshold.
-- Histograms with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
+- `Min` and `Max` are not used.
+- `Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section. If the Prometheus protocol only supports a single exemplar per-bucket, the latest exemplar that falls into each bucket SHOULD be converted.
+- If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
+  following the appropriate format used by each Prometheus protocol.
 
-`Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
-If the Prometheus protocol only supports a single exemplar per-bucket, the latest
-exemplar that falls into each bucket SHOULD be converted.
+When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
+
+- The [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
+  of the NHCB MUST be integer counter.
+- The `ResetHint` in the NHCB MUST be set to `UNKNOWN`. OpenTelemetry does not
+  carry an explicit reset flag, so `UNKNOWN` lets Prometheus auto-detect resets
+  from the values and avoids any semantic divergence with OpenTelemetry's reset
+  model.
+- The `Schema` in the NHCB MUST be set to -53.
+- `Count` is converted to Native Histogram `Count` if the `NoRecordedValue`
+  flag is set to `false`, otherwise, Native Histogram `Count` is set to zero.
+- `Sum` is converted to the Native Histogram `Sum` if `Sum` is set and the
+  `NoRecordedValue` flag is set to `false`, otherwise, Native Histogram `Sum` is
+  set to the Stale NaN value.
+- `TimeUnixNano` is converted to the Native Histogram `Timestamp` after
+  converting nanoseconds to milliseconds.
+- If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
+  following the appropriate format used by each Prometheus protocol.
+- The bucket boundaries are written into the Native Histogram `CustomValues` in
+  ascending order. The implicit `+Inf` upper bound of the final OTel bucket MUST
+  NOT be written into `CustomValues`; it is represented by the overflow bucket
+  at index `len(CustomValues)`.
+- The dense `BucketCounts` are converted into the [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+  in `PositiveSpans` and `PositiveDeltas`.
+  - Non-zero bucket counts MUST be encoded into `PositiveDeltas`. Zero-count
+    buckets MAY be encoded (as a zero delta inside an enclosing span) to reduce
+    the number of `PositiveSpans`; otherwise they appear as gaps between spans.
+  - Note: buckets with negative boundary are also encoded into `PositiveSpans`
+    and `PositiveDeltas`.
+  - Bucket counts that need to be converted are converted into `PositiveDeltas`,
+    which is delta encoded. The first converted value is written as is, the rest
+    as delta to the previous value. Unlike the classic histogram conversion
+    above, no cumulative summation across buckets is required — OTel
+    bucket counts are already per-bucket.
+  - The `PositiveSpans` encode the index into the `CustomValues` for each value
+    in the `PositiveDeltas`. The first span's `Offset` is the index of the first
+    populated bucket (zero-based into `CustomValues`). For subsequent spans,
+    `Offset` is the number of unpopulated (zero-count) buckets between the end
+    of the previous span and the start of this one. `Length` is the number of
+    consecutive populated buckets in the span.
+- Other fields of the NHCB MUST be set to their zero value, such as zero
+  threshold, zero count, negative spans, negative deltas, etc.
+- `Min` and `Max` are not used.
+- `Exemplars` are converted into the Native Histogram's flat `Exemplars` list,
+   as described in the [Exemplar Conversion](#exemplar-conversion) section.
 
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
 
