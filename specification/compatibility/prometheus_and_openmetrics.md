@@ -505,7 +505,7 @@ latest exemplar for counter instruments.
 
 **Status**: [Stable](../document-status.md)
 
-An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus Histogram by default, but users may opt-in to converting an OpenTelemetry Histogram to a Prometheus Native histogram with custom buckets (NHCB) for protocols that support NHCB.
+An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus Histogram by default, but users may opt-in to converting an OpenTelemetry Histogram to a Prometheus Native histogram with custom buckets (NHCB) when converting to the Prometheus Remote Write 2.0 or later protocol.
 
 When converting to a Prometheus Histogram, the following metrics MUST be created:
 
