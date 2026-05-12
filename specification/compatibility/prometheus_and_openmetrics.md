@@ -558,7 +558,7 @@ metrics with the delta aggregation temporality are dropped.
 
 ### Summaries
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be converted to a Prometheus metric family with the following metrics:
 

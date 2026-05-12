@@ -50,6 +50,8 @@ release.
     ([#5034](https://github.com/open-telemetry/opentelemetry-specification/pull/5034))
   - Stabilize OpenTelemetry Instrumentation Scope to Prometheus labels transformation.
     ([#5052](https://github.com/open-telemetry/opentelemetry-specification/pull/5052))
+  - Stabilize the conversion of OTLP Summaries into Prometheus Summaries.
+    ([#4923](https://github.com/open-telemetry/opentelemetry-specification/issues/4923))
 
 ### SDK Configuration
 
