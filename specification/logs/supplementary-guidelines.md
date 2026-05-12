@@ -90,7 +90,7 @@ itself, not the producer of the log call, so different appenders setting
 different values is the intended behavior — it correctly produces distinct
 Loggers per appender.
 
-[semconv-log-bridge]: https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/log-bridge.md
+[semconv-log-bridge]: https://github.com/open-telemetry/semantic-conventions/pull/3716
 
 ### Context
 
