@@ -22,7 +22,7 @@ release.
   - Stabilize temporality.
     ([#5024](https://github.com/open-telemetry/opentelemetry-specification/issues/5024))
   - Stabilize version and format.
-    ([#4981](https://github.com/open-telemetry/opentelemetry-specification/issues/4981))
+    ([#5083](https://github.com/open-telemetry/opentelemetry-specification/issues/5083))
   - Stabilize port configuration.
     ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
 
