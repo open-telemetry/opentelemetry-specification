@@ -467,7 +467,7 @@ opportunity for the processor to do any cleanup required.
 After the call to `Shutdown`, subsequent calls to `OnEmit` are not allowed. SDKs
 SHOULD ignore these calls gracefully, if possible.
 **Status**: [Development](../document-status.md) - SDKs that emit
-[self-observability metrics](../semantic-conventions.md#sdk-self-observability-metrics)
+[self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
 MUST count log records dropped because the processor has been shut down.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
@@ -550,7 +550,7 @@ to make sure that they are not invoked concurrently.
 * `maxQueueSize` - the maximum queue size. After the size is reached logs are
   dropped. The default value is `2048`.
   **Status**: [Development](../document-status.md) - SDKs that emit
-  [self-observability metrics](../semantic-conventions.md#sdk-self-observability-metrics)
+  [self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
   MUST count log records dropped due to a full queue.
 * `scheduledDelayMillis` - the delay interval in milliseconds between two
   consecutive exports. The default value is `1000`.

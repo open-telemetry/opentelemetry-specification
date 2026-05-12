@@ -14,7 +14,7 @@ release.
 
 ### Traces
 
-- Add an in-development requirement that SDKs emitting self-observability metrics MUST count spans dropped due to a full queue or processor shutdown via the [SDK self-observability metrics](specification/semantic-conventions.md#sdk-self-observability-metrics).
+- Add an in-development requirement that SDKs emitting self-observability metrics MUST count spans dropped due to a full queue or processor shutdown via the [SDK self-observability metrics](specification/self-observability.md#sdk-self-observability-metrics).
   ([#5086](https://github.com/open-telemetry/opentelemetry-specification/issues/5086))
 
 ### Metrics
@@ -33,7 +33,7 @@ release.
 
 ### Logs
 
-- Add an in-development requirement that SDKs emitting self-observability metrics MUST count log records dropped due to a full queue or processor shutdown via the [SDK self-observability metrics](specification/semantic-conventions.md#sdk-self-observability-metrics).
+- Add an in-development requirement that SDKs emitting self-observability metrics MUST count log records dropped due to a full queue or processor shutdown via the [SDK self-observability metrics](specification/self-observability.md#sdk-self-observability-metrics).
   ([#5086](https://github.com/open-telemetry/opentelemetry-specification/issues/5086))
 
 ### Baggage
@@ -46,7 +46,7 @@ release.
 
 ### Common
 
-- Add an in-development "SDK Self-Observability Metrics" section to the [Semantic Conventions](specification/semantic-conventions.md) document, referencing the semantic conventions as the source of truth for SDK self-observability metric names, attributes, and values.
+- Add an in-development [Self-Observability](specification/self-observability.md) document, referencing the semantic conventions as the source of truth for SDK self-observability metric names, attributes, and values.
   ([#5086](https://github.com/open-telemetry/opentelemetry-specification/issues/5086))
 - Define the Core packages term.
   ([#5046](https://github.com/open-telemetry/opentelemetry-specification/pull/5046))

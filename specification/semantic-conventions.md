@@ -37,13 +37,3 @@ Semantic conventions MUST provide the following attributes:
 
 The `otel.*` namespace is reserved for defining compatibility with
 non-OpenTelemetry technologies.
-
-## SDK Self-Observability Metrics
-
-**Status**: [Development](document-status.md)
-
-OpenTelemetry SDKs MAY emit self-observability ("internal") telemetry about their own behavior — for example, metrics about processors, exporters, and metric readers — to help operators monitor the health of the OpenTelemetry pipeline itself.
-
-The names, attributes, and values used for SDK self-observability metrics are defined in the OpenTelemetry semantic conventions: [SDK Metrics](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/otel/sdk-metrics.md). SDKs that implement self-observability metrics SHOULD follow these conventions.
-
-Issues, gaps, or proposed changes related to the contents of these metrics SHOULD be raised against the [semantic-conventions](https://github.com/open-telemetry/semantic-conventions) repository.

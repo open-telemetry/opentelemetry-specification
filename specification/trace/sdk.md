@@ -1021,7 +1021,7 @@ for processor to do any cleanup required.
 the call to `Shutdown`, subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
 are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
 **Status**: [Development](../document-status.md) - SDKs that emit
-[self-observability metrics](../semantic-conventions.md#sdk-self-observability-metrics)
+[self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
 MUST count spans dropped because the processor has been shut down.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
@@ -1108,7 +1108,7 @@ an empty batch OR skip the export and consider it to be completed immediately.
 * `maxQueueSize` - the maximum queue size. After the size is reached, spans are
   dropped. The default value is `2048`.
   **Status**: [Development](../document-status.md) - SDKs that emit
-  [self-observability metrics](../semantic-conventions.md#sdk-self-observability-metrics)
+  [self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
   MUST count spans dropped due to a full queue.
 * `scheduledDelayMillis` - the maximum delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
