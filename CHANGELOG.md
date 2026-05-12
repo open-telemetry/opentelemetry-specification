@@ -21,7 +21,7 @@ release.
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize temporality.
     ([#5024](https://github.com/open-telemetry/opentelemetry-specification/issues/5024))
-  - Reword client libraries.
+  - Clarify that OTel SDKs should not use unofficial Prometheus clients.
     ([#4980](https://github.com/open-telemetry/opentelemetry-specification/issues/4980))
   - Stabilize port configuration.
     ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
