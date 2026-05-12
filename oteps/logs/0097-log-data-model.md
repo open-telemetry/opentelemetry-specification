@@ -535,10 +535,8 @@ treatment of security logs in the context of the data model proposal.
 
 ## Alternate Design
 
-An
-[alternate design](https://docs.google.com/document/d/1ix9_4TQO3o-qyeyNhcOmqAc1MTyr-wnXxxsdWgCMn9c/edit?ts=5e990fe2#heading=h.cw69q2ga62p6)
-that used an envelop approach was considered but I did not find it to be overall
-better than this one.
+An alternate design that used an envelope approach was considered but I did not
+find it to be overall better than this one.
 
 ## Prior Art
 
@@ -1348,6 +1346,4 @@ for an exhaustive list.
 
 ## References
 
-- [Draft discussion of Data Model](https://docs.google.com/document/d/1ix9_4TQO3o-qyeyNhcOmqAc1MTyr-wnXxxsdWgCMn9c/edit#)
-
-- [Discussion of Severity field](https://docs.google.com/document/d/1WQDz1jF0yKBXe3OibXWfy3g6lor9SvjZ4xT-8uuDCiA/edit#)
+- [Draft discussion of Data Model](https://docs.google.com/document/d/1ASjqT4eV0JKm-a15J508HEJ2-gbqdcM1Abud_Ek86Tc/edit?tab=t.0)

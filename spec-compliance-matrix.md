@@ -69,7 +69,7 @@ formats is required. Implementing more than one format is optional.
 | Unicode support for keys and string values |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | [Span linking](specification/trace/api.md#specifying-links) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | Links can be recorded on span creation |  | + | + | + | + | + | + | + | + | + | + |  | + |
-| Links can be recorded after span creation |  | + |  | + | + |  |  | + | + | + | + |  | + |
+| Links can be recorded after span creation |  | + |  | + | + | + |  | + | + | + | + |  | + |
 | Links order is preserved |  | + | + | + | + | + | + | + | + | + | + |  | + |
 | [Span events](specification/trace/api.md#add-events) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | AddEvent |  | + | + | + | + | + | + | + | + | + | + | + | + |
@@ -130,6 +130,7 @@ formats is required. Implementing more than one format is optional.
 | Instrument descriptions conform to the specified syntax. |  | - | + |  | - | + | + |  |  | - | + |  | - |
 | Instrument supports the advisory ExplicitBucketBoundaries parameter. |  | + | + |  |  |  | + |  |  |  |  |  | - |
 | Instrument supports the advisory Attributes parameter. |  | - | + |  |  |  | + |  |  |  |  |  | - |
+| Synchronous instruments support Bind to pre-associate attributes. | X | - | - | - | - | - | - | - | - | - | - | - | - |
 | All methods of `MeterProvider` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  | - |
 | All methods of `Meter` are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  | - |
 | All methods of any instrument are safe to be called concurrently. |  | + | + | + | - |  | + |  |  | + | + |  | - |
@@ -144,7 +145,6 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria is as specified. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The `View` instrument selection criteria supports wildcards. | X | + | + | + | + | + | - |  | + | + | + |  | - |
 | The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  | - |
-| The name of the `View` can be specified. |  | - | + | + | + | + | + | + |  | + | + |  | - |
 | The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  | - |
 | The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + |  | + |  |  | - |  |  |  |  |  | - |
 | The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  | - |
@@ -168,19 +168,20 @@ formats is required. Implementing more than one format is optional.
 | The metrics Exporter `ForceFlush` can inform the caller whether it succeeded, failed or timed out. |  | + | + | + | + | + | + | + |  | + | + |  | - |
 | The metrics Exporter provides a `shutdown` function. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The metrics Exporter `shutdown` function do not block indefinitely. |  | + | + | + | - |  | + |  |  | + | + |  | - |
-| The metrics SDK samples `Exemplar`s from measurements. |  | + | + | - | - |  | + |  |  |  | + |  | - |
-| Exemplar sampling can be disabled. |  | + | - | - | - |  | + |  |  |  | + |  | - |
-| The metrics SDK supports SDK-wide exemplar filter configuration |  | + | + | - | - |  | + |  |  |  | + |  | - |
-| The metrics SDK supports `TraceBased` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  | - |
-| The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  | - |
-| The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + | - | - |  | + |  |  |  | + |  | - |
-| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + | - | - |  | + |  |  |  | + |  | - |
-| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + | - | - |  | + |  |  |  | + |  | - |
-| Exemplars contain the timestamp when the measurement was taken. |  | + | + | - | - |  | + |  |  |  | + |  | - |
-| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | - |  | + | + |  |  | - |  | - |
-| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - | - | - |  | + | + |  |  | - |  | - |
-| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + | - | - |  | + | + |  |  | - |  | - |
-| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + | - | - |  | + |  |  |  | - |  | - |
+| The metrics SDK samples `Exemplar`s from measurements. |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| Exemplar sampling can be disabled. |  | + | - | - | - | + | + |  |  |  | + |  | - |
+| The metrics SDK supports SDK-wide exemplar filter configuration |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| The metrics SDK supports `TraceBased` exemplar filter |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| The metrics SDK supports `AlwaysOn` exemplar filter |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| The metrics SDK supports `AlwaysOff` exemplar filter |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration. |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| Documentation notes that View-filtered attributes may still appear on Exemplars. |  | - | - | - | - | - | - | - | - | - | + | - | - |
+| Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| Exemplars contain the timestamp when the measurement was taken. |  | + | + | - | - | + | + |  |  |  | + |  | - |
+| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | - | + | + | + |  |  | - |  | - |
+| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - | - | - | + | + | + |  |  | - |  | - |
+| The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + | - | - | + | + | + |  |  | - |  | - |
+| The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + | - | - | + | + |  |  |  | - |  | - |
 | A metric Producer accepts an optional metric Filter |  | - |  |  |  |  | - |  |  |  |  |  | - |
 | The metric Reader implementation supports registering metric Filter and passing them  its registered metric Producers |  | - |  |  |  |  | - |  |  |  |  |  | - |
 | The metric SDK's metric Producer implementations uses the metric Filter |  | - |  |  |  |  | - |  |  |  |  |  | - |
@@ -250,6 +251,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Setter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + | - |
+| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + |  |  |  |  |  |  |  | + |  |  |
 
 ## Environment Variables
 
@@ -372,7 +374,7 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | [Delta Histograms become Cumulative Prometheus Histograms](specification/compatibility/prometheus_and_openmetrics.md#histograms-1) | X | - | - | - | - | - | - | - | - | - | - | - | - |
 | [Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | + | + | - | - | - | + | + | + | + | - |
 | [Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes) |  | + | + | - | - | - | - | - | + | - | - | - | - |
-| [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1) | X | + | - | - | - | - | - | - | - | - | - | - | - |
+| [Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplar-conversion) | X | + | - | - | - | - | - | - | - | - | - | - | - |
 | [`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1) | X | + | + | + | + | - | - | - | + | - | - | - | - |
 
 ## OpenCensus Compatibility
