@@ -91,6 +91,14 @@ parameters:
 * `attributes` (optional): Specifies the instrumentation scope attributes to
   associate with emitted telemetry. This API MUST be structured to accept a
   variable number of attributes, including none.
+  Log Bridges (components that bridge a logging library to OpenTelemetry)
+  SHOULD set the `log_bridge.name` and `log_bridge.version` attributes
+  (defined in the [Semantic Conventions for Log Bridges][semconv-log-bridge])
+  on the `Logger`(s) they create, to identify the bridge itself,
+  distinct from the producer of the log call which is reported as the
+  instrumentation scope `name`.
+
+[semconv-log-bridge]: https://github.com/open-telemetry/semantic-conventions/blob/main/docs/registry/attributes/log-bridge.md
 
 The term *identical* applied to `Logger`s describes instances where all
 parameters are equal. The term *distinct* applied to `Logger`s describes

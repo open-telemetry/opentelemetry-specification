@@ -30,6 +30,12 @@ release.
 
 ### Logs
 
+- Recommend that Log Bridges set `log_bridge.name` and `log_bridge.version`
+  Instrumentation Scope attributes to identify themselves, distinct from the
+  producer of the log call (which is reported as the instrumentation scope
+  name).
+  ([#XXXX](https://github.com/open-telemetry/opentelemetry-specification/pull/XXXX))
+
 ### Baggage
 
 ### Profiles
