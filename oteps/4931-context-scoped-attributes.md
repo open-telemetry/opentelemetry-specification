@@ -172,12 +172,19 @@ A new Context object is returned, contained the updated value set.
 
 ### SDK changes
 
-Upon telemetry items creation (e.g. Span, LogRecord, Meter Instrument), the SDK MUST get
+Upon Span and LogRecord instances creation, the SDK MUST get
 the Context-scoped attributes of the logically associated Context, and
 add them to the newly created telemetry item, skipping attributes with
 keys already present in the telemetry item. This MUST be done before any
-extension point is invoked, e.g. Sampler or Processor. In the case of metrics,
-this MUST also be done prior to applying views or advisories.
+extension point is invoked, e.g. Sampler or Processor.
+
+For metrics, the SDK MUST get the Context-scoped attributes of the logical
+associated Context, and attach them upon measurements being recorded (rather
+than doing this when instruments are created), in order to have access to the
+actual attribute set being used. This MUST be done before any downstream processing
+happens, e.g. views, advisoriess or cardinality limits. The
+[measurement processing](../specification/metrics/sdk.md#measurement-processing)
+section of the Metrics SDK will be updated to clearly reflect details on this step.
 
 This will be an implementation-level change without any changes in the API-surface
 of the SDK (i.e. it is not necessary to make Context-scoped attributes distinguishable
