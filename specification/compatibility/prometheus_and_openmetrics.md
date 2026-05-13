@@ -427,12 +427,6 @@ name SHOULD be replaced with the `_` character by default, aiming for
 compatibility with Prometheus conventions. Multiple consecutive `_` characters
 SHOULD be replaced with a single `_` character.
 
-Note that even with [Prometheus's UTF-8 metric name support](https://prometheus.io/docs/guides/utf8/)
-enabled, Prometheus does not currently accept metric names that begin with a
-non-alphanumeric character; such leading characters are silently dropped on
-the Prometheus side. Producers emitting such names should account for this
-when targeting Prometheus.
-
 The Unit of an OTLP metric point MUST be converted from the UCUM unit to the
 equivalent unit word in Prometheus if it is included in the
 table in [Metric Metadata above](#metric-metadata).
