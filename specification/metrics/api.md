@@ -202,7 +202,7 @@ identifying fields are equal.
 #### Instrument name syntax
 
 * They are non-empty strings.
-* They MUST NOT consist solely of whitespace characters.
+* They MUST NOT consist solely of ASCII whitespace characters (e.g., space, tab, newline).
 * They MUST support [BMP (Unicode Plane
   0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
   which is basically only the first three bytes of UTF-8 (or `utf8mb3`).
