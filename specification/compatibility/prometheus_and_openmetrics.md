@@ -573,7 +573,13 @@ An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be conv
   be the stringified floating point value of quantiles (between 0.0 and 1.0),
   starting from lowest to highest, and all being non-negative.  The value of
   each point is the computed value of the quantile point.
-- Summaries with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
+An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be converted to a Prometheus Summary as follows:
+
+- The count is converted to the Summary's count.
+- The sum is converted to the Summary's sum.
+- Quantiles are converted to the Summary's quantiles.
+- If it is a push protocol (e.g. PRW), `time_unix_nano` is converted to the Summary's timestamp. Explicit timestamps are strongly discouraged for pull protocols, such as the Prometheus text exposition format.
+- The `start_time_unix_nano` is converted to the Summary's start timestamp, if supported.
 
 Exemplars on OpenTelemetry Summaries SHOULD be dropped.
 
