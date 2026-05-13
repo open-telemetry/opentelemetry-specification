@@ -65,7 +65,7 @@ so it can be used in conjunction with existing Prometheus instrumentation.
 
 ### Version and Format
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 Regardless of whether a Prometheus client library is used, the Prometheus
 Exporter MUST support version `0.0.4` of the
@@ -78,7 +78,7 @@ A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT use
 [Prometheus Remote Write format](https://github.com/prometheus/prometheus/blob/main/prompb/remote.proto)
 or [OpenMetrics protobuf format](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#protobuf-format).
 
-A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT add
+A Prometheus Exporter for an OpenTelemetry metrics SDK SHOULD NOT add
 [explicit timestamps on Metric points](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metric).
 
 ## SDK Metric Output
