@@ -1102,6 +1102,12 @@ previous export call has returned:
 If the queue is empty when an export is triggered, the processor MAY export
 an empty batch OR skip the export and consider it to be completed immediately.
 
+**Status**: [Development](../document-status.md) - The Batching `SpanProcessor`
+SHOULD support emitting the
+[SDK self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
+defined for batching span processors in the
+[OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the spans are pushed.

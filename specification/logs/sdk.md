@@ -544,6 +544,12 @@ representations to the configured `LogRecordExporter`.
 The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
 to make sure that they are not invoked concurrently.
 
+**Status**: [Development](../document-status.md) - The Batching `LogRecordProcessor`
+SHOULD support emitting the
+[SDK self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
+defined for batching log record processors in the
+[OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).
+
 **Configurable parameters:**
 
 * `exporter` - the exporter where the `LogRecord`s are pushed.
