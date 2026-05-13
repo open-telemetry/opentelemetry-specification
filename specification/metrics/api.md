@@ -201,7 +201,13 @@ identifying fields are equal.
 
 #### Instrument name syntax
 
-* They are any valid, non-empty UTF-8 strings.
+* They are non-empty strings.
+* They MUST NOT consist solely of whitespace characters.
+* They MUST support [BMP (Unicode Plane
+  0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
+  which is basically only the first three bytes of UTF-8 (or `utf8mb3`).
+  [OpenTelemetry API](../overview.md#api) authors MAY decide if they want to
+  support more Unicode [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
 * They are case-insensitive.
 * They can have a maximum length of 255 characters.
 
