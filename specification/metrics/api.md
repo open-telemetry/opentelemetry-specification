@@ -201,22 +201,17 @@ identifying fields are equal.
 
 #### Instrument name syntax
 
-The instrument name syntax is defined below using the [Augmented Backus-Naur
-Form](https://datatracker.ietf.org/doc/html/rfc5234):
-
-```abnf
-instrument-name = ALPHA 0*254 ("_" / "." / "-" / "/" / ALPHA / DIGIT)
-
-ALPHA = %x41-5A / %x61-7A; A-Z / a-z
-DIGIT = %x30-39 ; 0-9
-```
-
-* They are not null or empty strings.
-* They are case-insensitive, ASCII strings.
-* The first character must be an alphabetic character.
-* Subsequent characters must belong to the alphanumeric characters, '_', '.', '-',
-  and '/'.
+* They are any valid, non-empty UTF-8 strings.
+* They are case-insensitive.
 * They can have a maximum length of 255 characters.
+
+The API documentation MUST state that instrument names matching the regular
+expression `[A-Za-z][A-Za-z0-9_./-]{0,254}` are interoperable with the
+broadest set of backends. Names outside this pattern are valid, but some
+exporters (notably the
+[Prometheus](../compatibility/prometheus_and_openmetrics.md#metric-metadata-1)
+exporter) may need to transform them to conform to backend-specific
+conventions.
 
 #### Instrument unit
 
