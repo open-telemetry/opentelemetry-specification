@@ -17,11 +17,12 @@ release.
 ### Metrics
 
 - Expand the metric instrument name allowed character set to include `:`,
-  `\`, `(`, `)`, `%`, `*`, and space (with space restricted to non-leading,
-  non-trailing positions), and drop the requirement that the first character
-  be alphabetic. This enables Windows performance counter style names (e.g.
-  `\Processor(_Total)\% Processor Time`). ASCII, case-insensitivity, and the
-  255-character maximum are unchanged.
+  `\`, `(`, `)`, `%`, `*`, `#`, and space (with space restricted to
+  non-leading, non-trailing positions), and drop the requirement that the
+  first character be alphabetic. This enables Windows performance counter
+  style names (e.g. `\Processor(_Total)\% Processor Time`,
+  `\.NET CLR Memory(*)\# Bytes in all Heaps`). ASCII, case-insensitivity, and
+  the 255-character maximum are unchanged.
   ([#4371](https://github.com/open-telemetry/opentelemetry-specification/issues/4371),
   [#4736](https://github.com/open-telemetry/opentelemetry-specification/issues/4736))
 - Add in-development `Bind` API to synchronous instruments.

@@ -207,7 +207,7 @@ Form](https://datatracker.ietf.org/doc/html/rfc5234):
 ```abnf
 instrument-name = NAME-CHAR [0*253(NAME-CHAR / " ") NAME-CHAR]
 
-NAME-CHAR = ALPHA / DIGIT / "_" / "." / "-" / "/" / ":" / "\" / "(" / ")" / "%" / "*"
+NAME-CHAR = ALPHA / DIGIT / "_" / "." / "-" / "/" / ":" / "\" / "(" / ")" / "%" / "*" / "#"
 ALPHA     = %x41-5A / %x61-7A; A-Z / a-z
 DIGIT     = %x30-39 ; 0-9
 ```
@@ -215,8 +215,8 @@ DIGIT     = %x30-39 ; 0-9
 * They are not null or empty strings.
 * They are case-insensitive, ASCII strings.
 * Characters must be ASCII alphanumeric or one of: `_`, `.`, `-`, `/`, `:`,
-  `\`, `(`, `)`, `%`, `*`, or space. The first and last characters MUST NOT
-  be a space.
+  `\`, `(`, `)`, `%`, `*`, `#`, or space. The first and last characters MUST
+  NOT be a space.
 * They can have a maximum length of 255 characters.
 
 #### Instrument unit
