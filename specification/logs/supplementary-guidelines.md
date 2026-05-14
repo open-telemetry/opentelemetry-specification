@@ -83,7 +83,7 @@ obtained with the same identity of the [Logger](./api.md#get-a-logger),
 which, according to the specification, is an error.
 
 Appenders SHOULD however identify themselves by setting the
-`log_bridge.name` and `log_bridge.version` Instrumentation Scope attributes
+`log.bridge.name` and `log.bridge.version` Instrumentation Scope attributes
 (defined in the [Semantic Conventions for Log Bridges][semconv-log-bridge])
 on the `Logger`(s) they create. These attributes describe the appender
 itself, not the producer of the log call, so different appenders setting
