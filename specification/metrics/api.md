@@ -201,23 +201,21 @@ identifying fields are equal.
 
 #### Instrument name syntax
 
-* They are non-empty strings.
-* They MUST NOT consist solely of ASCII whitespace characters (e.g., space, tab, newline).
-* They MUST support [BMP (Unicode Plane
-  0)](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane),
-  which is basically only the first three bytes of UTF-8 (or `utf8mb3`).
-  [OpenTelemetry API](../overview.md#api) authors MAY decide if they want to
-  support more Unicode [Planes](https://en.wikipedia.org/wiki/Plane_(Unicode)).
-* They are case-insensitive.
-* They can have a maximum length of 255 characters.
+The instrument name syntax is defined below using the [Augmented Backus-Naur
+Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
-The API documentation MUST state that instrument names matching the regular
-expression `[A-Za-z][A-Za-z0-9_./-]{0,254}` are interoperable with the
-broadest set of backends. Names outside this pattern are valid, but some
-exporters (notably the
-[Prometheus](../compatibility/prometheus_and_openmetrics.md#metric-metadata-1)
-exporter) may need to transform them to conform to backend-specific
-conventions.
+```abnf
+instrument-name = 1*255 ("_" / "." / "-" / "/" / ":" / "\" / ALPHA / DIGIT)
+
+ALPHA = %x41-5A / %x61-7A; A-Z / a-z
+DIGIT = %x30-39 ; 0-9
+```
+
+* They are not null or empty strings.
+* They are case-insensitive, ASCII strings.
+* Characters must belong to the alphanumeric characters, '_', '.', '-', '/',
+  ':', and '\\'.
+* They can have a maximum length of 255 characters.
 
 #### Instrument unit
 

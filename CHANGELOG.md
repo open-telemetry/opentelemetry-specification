@@ -16,13 +16,11 @@ release.
 
 ### Metrics
 
-- Relax the metric instrument name syntax to allow any valid, non-empty UTF-8
-  string. The previous restriction (ASCII-only, must start with an alphabetic
-  character, limited character set) is replaced; the maximum length of 255
-  characters and case-insensitivity are unchanged.
+- Expand the metric instrument name allowed character set to include `:` and
+  `\`, and drop the requirement that the first character be alphabetic. ASCII,
+  case-insensitivity, and the 255-character maximum are unchanged.
   ([#4371](https://github.com/open-telemetry/opentelemetry-specification/issues/4371),
-  [#4736](https://github.com/open-telemetry/opentelemetry-specification/issues/4736),
-  [#3422](https://github.com/open-telemetry/opentelemetry-specification/issues/3422))
+  [#4736](https://github.com/open-telemetry/opentelemetry-specification/issues/4736))
 - Add in-development `Bind` API to synchronous instruments.
   ([#5050](https://github.com/open-telemetry/opentelemetry-specification/pull/5050))
 - Stabilize sections of Prometheus Metrics Exporter.
