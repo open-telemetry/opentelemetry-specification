@@ -205,7 +205,7 @@ The instrument name syntax is defined below using the [Augmented Backus-Naur
 Form](https://datatracker.ietf.org/doc/html/rfc5234):
 
 ```abnf
-instrument-name = 1*255 ("_" / "." / "-" / "/" / ":" / "\" / ALPHA / DIGIT)
+instrument-name = 1*255 ("_" / "." / "-" / "/" / ":" / "\" / "(" / ")" / "%" / "*" / " " / ALPHA / DIGIT)
 
 ALPHA = %x41-5A / %x61-7A; A-Z / a-z
 DIGIT = %x30-39 ; 0-9
@@ -213,8 +213,8 @@ DIGIT = %x30-39 ; 0-9
 
 * They are not null or empty strings.
 * They are case-insensitive, ASCII strings.
-* Characters must belong to the alphanumeric characters, '_', '.', '-', '/',
-  ':', and '\\'.
+* Characters must be ASCII alphanumeric or one of: `_`, `.`, `-`, `/`, `:`,
+  `\`, `(`, `)`, `%`, `*`, or space.
 * They can have a maximum length of 255 characters.
 
 #### Instrument unit
