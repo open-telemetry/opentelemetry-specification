@@ -33,6 +33,7 @@ weight: 3
     + [Enabled](#enabled-1)
     + [ShutDown](#shutdown)
     + [ForceFlush](#forceflush-1)
+  * [Self-observability](#self-observability)
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
@@ -509,8 +510,11 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry SDK authors can decide if they want to
 make the flush timeout configurable.
 
-**Status**: [Development](../document-status.md) - `LogRecordProcessor`
-implementations SHOULD support emitting the
+### Self-observability
+
+**Status**: [Development](../document-status.md)
+
+`LogRecordProcessor` implementations SHOULD support emitting the
 [SDK self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
 defined for log record processors in the
 [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).

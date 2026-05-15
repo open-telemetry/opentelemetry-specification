@@ -70,6 +70,7 @@ weight: 3
     + [OnEnd(Span)](#onendspan)
     + [Shutdown()](#shutdown)
     + [ForceFlush()](#forceflush)
+  * [Self-observability](#self-observability)
   * [Built-in span processors](#built-in-span-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
@@ -1060,8 +1061,11 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the flush timeout configurable.
 
-**Status**: [Development](../document-status.md) - `SpanProcessor` implementations
-SHOULD support emitting the
+### Self-observability
+
+**Status**: [Development](../document-status.md)
+
+`SpanProcessor` implementations SHOULD support emitting the
 [SDK self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
 defined for span processors in the
 [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).
