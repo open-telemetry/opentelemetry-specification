@@ -16,6 +16,9 @@ release.
 
 ### Metrics
 
+- Clarify that View-provided metric stream `name` is not subject to instrument
+  name syntax validation.
+  ([#XXXX](https://github.com/open-telemetry/opentelemetry-specification/pull/XXXX))
 - Add in-development `Bind` API to synchronous instruments.
   ([#5050](https://github.com/open-telemetry/opentelemetry-specification/pull/5050))
 - Stabilize sections of Prometheus Metrics Exporter.
