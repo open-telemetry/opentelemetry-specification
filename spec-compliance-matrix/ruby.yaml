@@ -368,7 +368,7 @@ sections:
       - name: Logger.Emit(LogRecord) with Exception parameter
         status: '?'
       - name: LogRecord.Set EventName
-        status: '?'
+        status: '+'
       - name: Logger.Enabled
         status: '?'
       - name: SimpleLogRecordProcessor
