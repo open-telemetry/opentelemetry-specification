@@ -1060,6 +1060,12 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the flush timeout configurable.
 
+**Status**: [Development](../document-status.md) - `SpanProcessor` implementations
+SHOULD support emitting the
+[SDK self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
+defined for span processors in the
+[OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).
+
 ### Built-in span processors
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
@@ -1101,12 +1107,6 @@ previous export call has returned:
 
 If the queue is empty when an export is triggered, the processor MAY export
 an empty batch OR skip the export and consider it to be completed immediately.
-
-**Status**: [Development](../document-status.md) - The Batching `SpanProcessor`
-SHOULD support emitting the
-[SDK self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
-defined for batching span processors in the
-[OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).
 
 **Configurable parameters:**
 

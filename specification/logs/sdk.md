@@ -509,6 +509,12 @@ implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry SDK authors can decide if they want to
 make the flush timeout configurable.
 
+**Status**: [Development](../document-status.md) - `LogRecordProcessor`
+implementations SHOULD support emitting the
+[SDK self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
+defined for log record processors in the
+[OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).
+
 ### Built-in processors
 
 The standard OpenTelemetry SDK MUST implement both simple and batch processors,
@@ -543,12 +549,6 @@ representations to the configured `LogRecordExporter`.
 
 The processor MUST synchronize calls to `LogRecordExporter`'s `Export`
 to make sure that they are not invoked concurrently.
-
-**Status**: [Development](../document-status.md) - The Batching `LogRecordProcessor`
-SHOULD support emitting the
-[SDK self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
-defined for batching log record processors in the
-[OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).
 
 **Configurable parameters:**
 
