@@ -30,6 +30,8 @@ release.
     ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
   - Stabilize `scope_info_enabled` configuration.
     ([#5056](https://github.com/open-telemetry/opentelemetry-specification/pull/5056))
+  - Clarify that OTel SDKs should not use unofficial Prometheus clients.
+    ([#4980](https://github.com/open-telemetry/opentelemetry-specification/issues/4980))
 - Change Prometheus Metric Exporter config property recommended names
   (`without_scope_info` -> `scope_info_enabled`, `without_target_info` -> `target_info_enabled`,
   `with_resource_constant_labels` -> `resource_constant_labels`)
