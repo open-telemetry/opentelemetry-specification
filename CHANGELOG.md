@@ -12,8 +12,8 @@ release.
 
 ### Context
 
-- Clarify that environment variable propagation carriers normalize both
-  requested keys and carrier keys when extracting context.
+- Clarify that environment variable propagation carriers normalize requested
+  keys, carrier keys, and returned keys.
 
 ### Traces
 
