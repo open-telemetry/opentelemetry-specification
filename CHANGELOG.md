@@ -60,6 +60,8 @@ release.
     ([#5034](https://github.com/open-telemetry/opentelemetry-specification/pull/5034))
   - Stabilize OpenTelemetry Instrumentation Scope to Prometheus labels transformation.
     ([#5052](https://github.com/open-telemetry/opentelemetry-specification/pull/5052))
+  - Prometheus `job` and `instance` are now translated to `prometheus.job` and `prometheus.instance`.
+    ([#4956](https://github.com/open-telemetry/opentelemetry-specification/pull/4956))
 
 ### SDK Configuration
 
