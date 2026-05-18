@@ -526,42 +526,51 @@ When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
   from the values and avoids any semantic divergence with OpenTelemetry's reset
   model.
 - The `Schema` in the NHCB MUST be set to -53.
-- `Count` is converted to Native Histogram `Count` if the `NoRecordedValue`
-  flag is set to `false`, otherwise, Native Histogram `Count` is set to zero.
-- `Sum` is converted to the Native Histogram `Sum` if `Sum` is set and the
-  `NoRecordedValue` flag is set to `false`, otherwise, Native Histogram `Sum` is
-  set to the Stale NaN value.
-- `TimeUnixNano` is converted to the Native Histogram `Timestamp` after
+- `TimeUnixNano` is converted to the Prometheus `Timestamp` after
   converting nanoseconds to milliseconds.
 - If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
   following the appropriate format used by each Prometheus protocol.
-- The bucket boundaries are written into the Native Histogram `CustomValues` in
-  ascending order. The implicit `+Inf` upper bound of the final OTel bucket MUST
-  NOT be written into `CustomValues`; it is represented by the overflow bucket
-  at index `len(CustomValues)`.
-- The dense `BucketCounts` are converted into the [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
-  in `PositiveSpans` and `PositiveDeltas`.
-  - Non-zero bucket counts MUST be encoded into `PositiveDeltas`. Zero-count
-    buckets MAY be encoded (as a zero delta inside an enclosing span) to reduce
-    the number of `PositiveSpans`; otherwise they appear as gaps between spans.
-  - Note: buckets with negative boundary are also encoded into `PositiveSpans`
-    and `PositiveDeltas`.
-  - Bucket counts that need to be converted are converted into `PositiveDeltas`,
-    which is delta encoded. The first converted value is written as is, the rest
-    as delta to the previous value. Unlike the classic histogram conversion
-    above, no cumulative summation across buckets is required — OTel
-    bucket counts are already per-bucket.
-  - The `PositiveSpans` encode the index into the `CustomValues` for each value
-    in the `PositiveDeltas`. The first span's `Offset` is the index of the first
-    populated bucket (zero-based into `CustomValues`). For subsequent spans,
-    `Offset` is the number of unpopulated (zero-count) buckets between the end
-    of the previous span and the start of this one. `Length` is the number of
-    consecutive populated buckets in the span.
-- Other fields of the NHCB MUST be set to their zero value, such as zero
-  threshold, zero count, negative spans, negative deltas, etc.
+- The bucket boundaries are written into the NHCB `CustomValues` in ascending
+  order. The implicit `+Inf` upper bound MUST NOT be written into `CustomValues`;
+  it is represented by the overflow bucket at index `len(CustomValues)`.
+- All fields of the NHCB that are not explicitly referenced here MUST be set to
+  their zero value, such as zero threshold, zero count, negative spans, negative
+  deltas, etc.
 - `Min` and `Max` are not used.
 - `Exemplars` are converted into the Native Histogram's flat `Exemplars` list,
    as described in the [Exemplar Conversion](#exemplar-conversion) section.
+- If the `NoRecordedValue` flag is set to `true`, the NHCB MUST be marked as
+  [stale](https://prometheus.io/docs/specs/native_histograms/#staleness-markers):
+  - The Native Histogram `Sum` MUST be set to the Stale NaN value.
+  - The Native Histogram `Count` MUST be set to zero. `PositiveSpans` and `PositiveDeltas`
+    MUST be left empty.
+- If the `NoRecordedValue` flag is set to `false`:
+  - `Count` is converted to Native Histogram `Count`.
+  - `Sum` is converted to the Native Histogram `Sum`.
+  - The dense `BucketCounts` are converted into the [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+    in `PositiveSpans` and `PositiveDeltas` (even for buckets with negative boundaries).
+    - Non-zero bucket counts MUST be converted into `PositiveDeltas`. Zero-count
+      buckets MAY also be included in `PositiveDeltas` to extend an enclosing
+      span (rather than creating a gap between spans) and reduce the number of
+      `PositiveSpans`.
+    - Bucket counts that need to be converted are converted into `PositiveDeltas`,
+      which is delta encoded. The first converted value is written as is, the
+      rest as delta to the previous converted value. Unlike the classic
+      histogram conversion above, no cumulative summation across buckets is
+      required — OpenTelemetry and Native Histogram bucket counts are already
+      per-bucket.
+    - The `PositiveSpans` encode the index into the `CustomValues` for each
+      value in the `PositiveDeltas`. The first span's `Offset` is the index of
+      the upper bound of the first converted bucket (zero-based into
+      `CustomValues`). For subsequent spans, `Offset` is the number of buckets
+      that were not converted between the end of the previous span and the start
+      of this one. `Length` is the number of consecutive converted buckets in
+      the span.
+    - For example: if the bucket boundaries are `-2, -1, 0, 1, 2, +Inf` and
+      bucket counts are `10, 0, 0, 20, 5, 2`, then the `CustomValues` will be
+      `-2, -1, 0, 1, 2`. If only the non-zero bucket counts `10, 20, 5, 2` are
+      converted, then the `PositiveSpans` will be `{Offset: 0, Length: 1}, {Offset: 2, Length: 3}`
+      and `PositiveDeltas` will be `10, 10, -15, -3`.
 
 OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
 
