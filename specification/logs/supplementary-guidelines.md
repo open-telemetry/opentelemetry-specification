@@ -75,11 +75,22 @@ This is for example applicable to:
 - Logger name in [Log4J](https://javadoc.io/doc/org.apache.logging.log4j/log4j-api/latest/org.apache.logging.log4j/org/apache/logging/log4j/Logger.html)
 - Channel name in [Monolog](https://github.com/Seldaek/monolog/blob/3.4.0/doc/01-usage.md#leveraging-channels)
 
-Appenders should avoid setting any attributes of the Instrumentation Scope.
-Doing so may result in different appenders setting different attributes on the
-same Instrumentation Scope, obtained with the same identity of the
-[Logger](./api.md#get-a-logger), which, according to the specification,
-is an error.
+Appenders should avoid setting Instrumentation Scope attributes that
+describe the producer of the log call (e.g. attributes derived from the
+underlying logging library's logger), as doing so may result in different
+appenders setting different attributes on the same Instrumentation Scope,
+obtained with the same identity of the [Logger](./api.md#get-a-logger),
+which, according to the specification, is an error.
+
+Appenders SHOULD however identify themselves by setting the
+`log.bridge.name` and `log.bridge.version` Instrumentation Scope attributes
+(defined in the [Semantic Conventions for Log Bridges][semconv-log-bridge])
+on the `Logger`(s) they create. These attributes describe the appender
+itself, not the producer of the log call, so different appenders setting
+different values is the intended behavior — it correctly produces distinct
+Loggers per appender.
+
+[semconv-log-bridge]: https://github.com/open-telemetry/semantic-conventions/pull/3716
 
 ### Context
 
