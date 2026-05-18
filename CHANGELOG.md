@@ -46,6 +46,9 @@ release.
 
 ### Common
 
+- Add in-development guidance recommending a JSON object as the string
+  representation for an attribute in non-OTLP protocols.
+  ([#5028](https://github.com/open-telemetry/opentelemetry-specification/pull/5028))
 - Define the Core packages term.
   ([#5046](https://github.com/open-telemetry/opentelemetry-specification/pull/5046))
 
