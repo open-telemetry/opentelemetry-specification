@@ -18,6 +18,7 @@ weight: 2
 - [Resource and Entities](#resource-and-entities)
   * [Attribute Referencing Model](#attribute-referencing-model)
   * [Placement of Shared Descriptive Attributes](#placement-of-shared-descriptive-attributes)
+- [Merging of Entities](#merging-of-entities)
 - [Examples of Entities](#examples-of-entities)
 
 <!-- tocstop -->
@@ -49,16 +50,16 @@ physical format and encoding of how entity data is recorded).
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | Type | string | Defines the type of the entity. MUST not change during the lifetime of the entity. For example: "service" or "host". This field is required and MUST not be empty for valid entities. |
-| Id | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The Id must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
+| ID | map<string, attribute value> | Attributes that identify the entity.<p>MUST not change during the lifetime of the entity. The ID must contain at least one attribute.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions) for attributes. |
 | Description | map<string, attribute value> | Descriptive (non-identifying) attributes of the entity.<p>MAY change over the lifetime of the entity. MAY be empty. These attributes are not part of entity's identity.<p>Follows OpenTelemetry [attribute definition](../common/README.md#attribute). SHOULD follow OpenTelemetry [semantic conventions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/README.md) for attributes. |
 
 ## Minimally Sufficient Identity
 
 Commonly, a number of attributes of an entity are readily available for the telemetry
-producer to compose an Id from. Of the available attributes the entity Id should
+producer to compose an ID from. Of the available attributes the entity ID should
 include the minimal set of attributes that is sufficient for uniquely identifying
 that entity. For example a Process on a host can be uniquely identified by
-(`process.pid`,`process.start_time`) attributes. Adding for example `process.executable.name` attribute to the Id is unnecessary and violates the
+(`process.pid`,`process.start_time`) attributes. Adding for example `process.executable.name` attribute to the ID is unnecessary and violates the
 Minimally Sufficient Identity rule.
 
 ## Repeatable Identity
@@ -150,6 +151,44 @@ different values, then **only** the `k8s.node` entity can reference this key
 
 Other entities (e.g., `k8s.cluster`) can report this attribute in a separate
 telemetry channel (e.g., entity events) where full ownership context is known.
+
+## Merging of Entities
+
+Entities MAY be merged if and only if their types are the same, their
+identity attributes are exactly the same AND their schema_url is the same.
+This means both Entities MUST have the same identity attribute keys and
+for each key, the values of the key MUST be the same.
+
+Here's an example algorithm that will check compatibility:
+
+```
+can_merge(current_entity, new_entity) {
+  current_entity.type == new_entity.type &&
+  current_entity.schema_url == new_entity.schema_url &&
+  has_same_attributes(current_entity.identity, new_entity.identity)
+}
+```
+
+When merging entities, all attributes in description are merged together, with
+one entity acting as "primary" where any conflicting attribute values will be
+chosen from the "primary" entity.
+
+Here's an example algorithm that will merge:
+
+```
+merge(current_entity, new_entity) {
+  if can_merge(current_entity, new_entity) {
+    for attribute in new_entity.description {
+      // New entity descriptions take precedence.
+      current_entity.description.insert(attribute)
+    }
+  }
+}
+```
+
+Note: If Entities have different `schema_url`s, they SHOULD be converted to the
+same schema version (if possible) before attempting a merge. The merge algorithm
+defined here assumes the entities are already at the same schema version.
 
 ## Examples of Entities
 

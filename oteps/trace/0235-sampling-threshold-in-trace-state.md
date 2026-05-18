@@ -40,7 +40,7 @@ C (being a parent based sampler) samples a span purely based on its parent (B in
 
 This design requires that as a given span progresses along its collection path, `th` is non-decreasing (and, in particular, must be increased at stages that apply lower sampling probabilities).
 It does not, however, restrict a span's initial `th` in any way (e.g., relating it to that of its parent, if it has one).
-It is acceptable for B to have a lesser initial `th` than A has. It would not be ok if some later-stage sampler decreased A's `th`.
+It is acceptable for B to have a lesser initial `th` than A has. It would not be OK if some later-stage sampler decreased A's `th`.
 
 The system has the following invariant:
 

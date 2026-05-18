@@ -54,6 +54,7 @@ weight: 3
     + [Instrument advisory parameter: `ExplicitBucketBoundaries`](#instrument-advisory-parameter-explicitbucketboundaries)
     + [Instrument advisory parameter: `Attributes`](#instrument-advisory-parameter-attributes)
   * [Instrument enabled](#instrument-enabled)
+  * [Instrument bind](#instrument-bind)
 - [Attribute limits](#attribute-limits)
 - [Exemplar](#exemplar)
   * [ExemplarFilter](#exemplarfilter)
@@ -381,6 +382,20 @@ The SDK MUST accept the following stream configuration parameters:
   attribute key is both included and excluded, the SDK MAY fail fast in
   accordance with initialization [error handling
   principles](../error-handling.md#basic-error-handling-principles).
+
+  > [!NOTE]
+  > An attribute key removed from the metric stream by View configuration
+  > (for example, to remove an attribute containing sensitive data) may
+  > still be exported on Exemplars as a *filtered attribute*. If this is
+  > not desired, Exemplars can be disabled by configuring the `AlwaysOff`
+  > `ExemplarFilter`, or a custom `ExemplarFilter` / `ExemplarReservoir`
+  > can be configured to control which measurements are sampled as
+  > Exemplars.
+
+  SDK documentation SHOULD inform users that attributes excluded from a
+  metric stream by View configuration may still be exported on Exemplars
+  as filtered attributes, and describe how to disable or otherwise
+  configure Exemplar sampling.
 
 * `aggregation`: The name of an [aggregation](#aggregation) function to use in
   aggregating the metric stream data.
@@ -1041,6 +1056,30 @@ Note: If a user makes no configuration changes, `Enabled` returns `true` since b
 default `MeterConfig.enabled=true` and instruments use the default
 aggregation when no matching views match the instrument.
 
+### Instrument bind
+
+**Status**: [Development](../document-status.md)
+
+A bound instrument MUST behave identically to calling the equivalent unbound recording
+operation with the pre-bound [Attributes](../common/README.md#attribute) on each
+measurement.
+
+[Attribute processing](#measurement-processing) and [cardinality limit](#cardinality-limits)
+evaluation MUST be performed at bind time. Each call to `Bind` MUST be independently
+evaluated against the cardinality state at that moment. As a consequence, separate calls
+to `Bind` with identical attributes may resolve to different aggregators (e.g. one to a
+concrete series, another to the [overflow series](#overflow-attribute)) based on the
+cardinality state at the time of each call. The resolved aggregator MUST be fixed and
+not change across collection cycles.
+
+Measurements recorded on a bound instrument MUST be candidates for [Exemplar](#exemplar)
+sampling. The [Context](../context/README.md) associated with each recording, whether
+implicit or explicit, MUST be used for exemplar [TraceBased](#tracebased) filtering and
+passed to the [ExemplarReservoir](#exemplarreservoir) offer method.
+
+The SDK MUST ensure attribute-free recordings on a bound instrument bypass per-recording
+map lookup.
+
 ## Attribute limits
 
 **Status**: [Stable](../document-status.md)
@@ -1058,7 +1097,9 @@ Exemplars are example data points for aggregated data. They provide specific
 context to otherwise general aggregations. Exemplars allow correlation between
 aggregated metric data and the original API calls where measurements are
 recorded. Exemplars work for trace-metric correlation across any metric, not
-just those that can also be derived from `Span`s.
+just those that can also be derived from `Span`s. Exemplars also preserve
+attributes that are dropped during aggregation (e.g. by View configuration),
+regardless of instrument type (including asynchronous instruments).
 
 An [Exemplar](./data-model.md#exemplars) is a recorded
 [Measurement](./api.md#measurement) that exposes the following pieces of
@@ -1068,8 +1109,8 @@ information:
 - The `time` the API call was made to record a `Measurement`.
 - The set of [Attributes](../common/README.md#attribute) associated with the
   `Measurement` not already included in a metric data point.
-- The associated [trace id and span
-  id](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
+- For synchronous instruments, the associated [trace ID and span
+  ID](../trace/api.md#retrieving-the-traceid-and-spanid) of the active [Span
   within Context](../trace/api.md#determining-the-parent-span-from-a-context) of
   the `Measurement` at API call time.
 
@@ -1092,7 +1133,7 @@ Then an exemplar output in OTLP would consist of:
 - The `time` when the `add` method was called.
 - The `Attributes` of `{"Z": "z-value"}`, as these are not preserved in the
   resulting metric point.
-- The trace/span id for the `makeRequest` span.
+- The trace/span ID for the `makeRequest` span.
 
 While the metric data point for the counter would carry the attributes `X` and
 `Y`.
@@ -1448,9 +1489,23 @@ a user-configurable time interval, and passes the metrics to the configured
 Configurable parameters:
 
 * `exportIntervalMillis` - the time interval in milliseconds between two
-  consecutive exports. The default value is 60000 (milliseconds).
+  consecutive collections. The default value is 60000 (milliseconds).
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
   The default value is 30000 (milliseconds).
+* **Status**: [Development](../document-status.md) - `maxExportBatchSize` - the
+  maximum number of metric data points in a batch that are provided to a single
+  export.
+
+**Status**: [Development](../document-status.md) - When `maxExportBatchSize` is
+configured, the reader MUST ensure no batch provided to `Export` exceeds the
+`maxExportBatchSize` by splitting the batch of metric data points into smaller
+batches. The initial batch of metric data MUST be split into as many "full"
+batches of size `maxExportBatchSize` as possible -- even if this splits up data
+points that belong to the same metric into different batches. The reader MUST
+ensure all metric data points from a single `Collect()` are provided to
+`Export` before metric data points from a subsequent `Collect()` so that metric
+points are sent in-order. The reader MUST NOT combine metrics from different
+`Collect()` calls into the same batch provided to `Export`.
 
 The reader MUST synchronize calls to `MetricExporter`'s `Export`
 to make sure that they are not invoked concurrently.
@@ -1475,9 +1530,13 @@ from `MetricReader` and start a background task which calls the inherited
 This method provides a way for the periodic exporting MetricReader
 so it can do as much as it could to collect and send the metrics.
 
-`ForceFlush` SHOULD collect metrics, call [`Export(batch)`](#exportbatch)
-and [`ForceFlush()`](#forceflush-2) on the configured
-[Push Metric Exporter](#push-metric-exporter).
+`ForceFlush` SHOULD collect metrics, split into batches if necessary, call
+[`Export(batch)`](#exportbatch) on each batch and
+[`ForceFlush()`](#forceflush-2) on the configured
+[Push Metric Exporter](#push-metric-exporter). `ForceFlush` MAY skip
+[`Export(batch)`](#exportbatch) calls if the timeout is already expired, but
+SHOULD still call [`ForceFlush()`](#forceflush-2) on the configured
+[Push Metric Exporter](#push-metric-exporter) even if the timeout has passed.
 
 `ForceFlush` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out. `ForceFlush` SHOULD return some **ERROR** status if there

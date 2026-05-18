@@ -23,6 +23,8 @@ languages:
     location: ./dotnet.yaml
   - name: Swift
     location: ./swift.yaml
+  - name: Kotlin
+    location: ./kotlin.yaml
 sections:
   - name: Traces
     features:
@@ -155,6 +157,8 @@ sections:
       - name: Instrument descriptions conform to the specified syntax.
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
       - name: Instrument supports the advisory Attributes parameter.
+      - name: Synchronous instruments support Bind to pre-associate attributes.
+        optional: true
       - name: All methods of `MeterProvider` are safe to be called concurrently.
       - name: All methods of `Meter` are safe to be called concurrently.
       - name: All methods of any instrument are safe to be called concurrently.
@@ -176,7 +180,6 @@ sections:
       - name: The `View` instrument selection criteria supports wildcards.
         optional: true
       - name: The `View` instrument selection criteria supports the match-all wildcard.
-      - name: The name of the `View` can be specified.
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
@@ -209,6 +212,7 @@ sections:
       - name: The metrics SDK supports `AlwaysOn` exemplar filter
       - name: The metrics SDK supports `AlwaysOff` exemplar filter
       - name: Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.
+      - name: Documentation notes that View-filtered attributes may still appear on Exemplars.
       - name:
           Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was
           taken.
@@ -228,6 +232,7 @@ sections:
       - name: Metric SDK supports configuring cardinality limit at MeterReader level
       - name: Metric SDK supports configuring cardinality limit per metric (using Views)
       - name: Metric SDK supports per-timeseries cumulative start timestamps
+      - name: The metric SDK's periodic Reader implementation supports the `maxExportBatchSize` parameter
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
@@ -288,6 +293,7 @@ sections:
         optional: true
       - name: Getter argument returning Keys
         optional: true
+      - name: '[Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md)'
   - name: Environment Variables
     features:
       - name: OTEL_SDK_DISABLED
@@ -319,7 +325,7 @@ sections:
       - name: OTEL_METRICS_EXEMPLAR_FILTER
       - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - name: OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION
-      - name: OTEL_EXPERIMENTAL_CONFIG_FILE
+      - name: OTEL_CONFIG_FILE
     hide_optional_column: true
   - name: Declarative configuration
     features:
@@ -424,7 +430,7 @@ sections:
             optional: true
           - name: '[Attributes Keys are Sanitized](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
           - name: '[Colliding sanitized attribute keys are merged](specification/compatibility/prometheus_and_openmetrics.md#metric-attributes)'
-          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplars-1)'
+          - name: '[Exemplars for Histograms and Monotonic sums](specification/compatibility/prometheus_and_openmetrics.md#exemplar-conversion)'
             optional: true
           - name: '[`target_info` metric from Resource](specification/compatibility/prometheus_and_openmetrics.md#resource-attributes-1)'
             optional: true

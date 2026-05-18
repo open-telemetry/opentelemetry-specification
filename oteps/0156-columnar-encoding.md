@@ -86,7 +86,7 @@ OpenTelemetry protocol this compatible extension has the following improvements:
   aggregation, and filtering.
 
 These improvements not only address the aforementioned needs but also answer the [open questions](0035-opentelemetry-protocol.md#open-questions)
-cited in OTEP 035 (i.e. cpu usage, memory pressure, compression optimization).
+cited in OTEP 035 (i.e. CPU usage, memory pressure, compression optimization).
 
 **It is important to understand that this proposal is complementary to the existing protocol. The row-oriented version
 is still suitable for some scenarios. Telemetry sources that generate a small amount of telemetry data should continue
@@ -184,7 +184,7 @@ format.
 
 This first step is intended to address the specific use cases of **traffic reduction** and native support of
 **multivariate time-series**. Based on community feedback, many companies want to reduce the cost of transferring
-telemetry data over the Internet. By adding a collector that acts as a point of integration and traffic conversion at
+telemetry data over the internet. By adding a collector that acts as a point of integration and traffic conversion at
 the edge of a client environment, we can take advantage of the columnar format to eliminate redundant data and optimize
 the compression ratio. This is illustrated in the following diagram.
 
@@ -303,7 +303,7 @@ message BatchArrowRecords {
 ```
 
 The `batch_id` attribute is a unique identifier for the batch inside the scope of the current stream. It is used to
-uniquely identify the batch in the server message `BatchStatus` stream. See the [Batch Id generation](#batch-id-generation)
+uniquely identify the batch in the server message `BatchStatus` stream. See the [Batch ID generation](#batch-id-generation)
 section for more information on the implementation of this identifier.
 
 The `arrow_payloads` attribute is a list of `ArrowPayload` messages. Each `ArrowPayload` message represents
@@ -381,8 +381,8 @@ message ArrowPayload {
 ```
 
 The `schema_id` attribute is a unique identifier representing the schema of the Arrow Record present in the
-`ArrowPayload`. This id will be used receiver side to keep track of the schema and dictionaries for a
-specific type of Arrow Records. See the [Schema Id generation](#schema-id-generation) section for more information
+`ArrowPayload`. This ID will be used receiver side to keep track of the schema and dictionaries for a
+specific type of Arrow Records. See the [Schema ID generation](#schema-id-generation) section for more information
 on the implementation of this identifier.
 
 The `ArrowPayloadType` enum specifies the `type` of the payload.
@@ -622,7 +622,7 @@ in both.  With every collector release we merge the OTel Arrow changes
 with the mainline components to maintain this promise of
 compatibility.
 
-OTel Arrow supports conveying the gRPC metadata (i.e., http2 headers) using a dedicated `bytes` field.  Metadata is
+OTel Arrow supports conveying the gRPC metadata (i.e., HTTP/2 headers) using a dedicated `bytes` field.  Metadata is
 encoded using [hpack](https://datatracker.ietf.org/doc/rfc7541/) like a typical unary gRPC request.
 
 Specifically:
@@ -661,7 +661,7 @@ The `batch_id` attribute is used by the message delivery mechanism. Each `BatchA
 unique `batch_id`. Uniqueness must be ensured in the scope of the stream opened by the call to the `ArrowStreamService`.
 This `batch_id` will be used in the `BatchStatus` object to acknowledge receipt and processing of the corresponding
 batch.
-A numeric counter is used to implement this batch_id, the goal being to use the most concise id possible.
+A numeric counter is used to implement this batch_id, the goal being to use the most concise ID possible.
 
 ### Schema ID Generation
 
@@ -669,7 +669,7 @@ Within the collector, batching, filtering, exporting, ... operations require to 
 compatible schema. A synthetic identifier (or `schema_id`) must be computed for each `ArrowPayload` to perform this
 grouping.
 
-We recommend calculating the schema id in the following way:
+We recommend calculating the schema ID in the following way:
 
 * for each Arrow Schema create a list of triples (name, type, metadata) for each column.
 * sort these triples according to a lexicographic order.
@@ -680,8 +680,8 @@ We recommend calculating the schema id in the following way:
 
 To mitigate the usual pitfalls of a stream-oriented protocol, protocol implementers are advised to:
 
-* client side: create several streams in parallel (e.g. create a new stream every 10 event types),
-* server side: close streams that have been open for a long time (e.g. close stream every 1 hour).
+* client-side: create several streams in parallel (e.g. create a new stream every 10 event types),
+* server-side: close streams that have been open for a long time (e.g. close stream every 1 hour).
 
 These parameters must be exposed in a configuration file and be tuned according to the application.
 
@@ -738,8 +738,8 @@ specification reuses the authentication mechanisms already in place in the colle
 
 In edge cases (e.g. on reconnections, network interruptions, etc) the client has no way of knowing if recently sent data
 was delivered if no acknowledgement was received yet. The client will typically choose to re-send such data to guarantee
-delivery, which may result in duplicate data on the server side. This is a deliberate choice and is considered to be the
-right tradeoff for telemetry data. This can be mitigated by using an idempotent insertion mechanism at the data backend
+delivery, which may result in duplicate data on the server-side. This is a deliberate choice and is considered to be the
+right trade-off for telemetry data. This can be mitigated by using an idempotent insertion mechanism at the data backend
 level.
 
 ### Incompatible Backends
@@ -1010,7 +1010,7 @@ updated.
 A multivariate time series has more than one time-dependent variable. Each variable depends not only on
 its past values but also has some dependency on other variables. A 3 axis accelerometer reporting 3 metrics
 simultaneously; a mouse move that simultaneously reports the values of x and y, a meteorological weather station
-reporting temperature, cloud cover, dew point, humidity and wind speed; an http transaction characterized by many
+reporting temperature, cloud cover, dew point, humidity and wind speed; an HTTP transaction characterized by many
 interrelated metrics sharing the same attributes are all common examples of multivariate time-series.
 
 ## Acknowledgements

@@ -158,7 +158,7 @@ duration, even if they violate the divisibility suggestion.
 ### Go SDK
 
 A prototype implementation of metric configuration is available for the Go SDK,
-currently hosted on the [contrib repo](https://github.com/vmingchen/opentelemetry-go-contrib). It provides an
+currently hosted on the [contrib repository](https://github.com/vmingchen/opentelemetry-go-contrib). It provides an
 alternative push controller component with the ability to configure collection
 periods on a per-metric basis. When used in conjunction with the Collector
 extension (see below), the controller exports metrics based on configuration
@@ -176,7 +176,7 @@ this feature.
 ### Collector Extension
 
 An example configuration backend is implemented as an extension for the
-Collector, currently hosted on the [contrib repo](https://github.com/vmingchen/opentelemetry-collector-contrib). When this extension is enabled, the Collector
+Collector, currently hosted on the [contrib repository](https://github.com/vmingchen/opentelemetry-collector-contrib). When this extension is enabled, the Collector
 functions as a potential endpoint for Agent/SDKs to retrieve configuration data.
 The following schematic illustrates the Collector’s position in the overall
 architecture, as well as how the configuration information flows.

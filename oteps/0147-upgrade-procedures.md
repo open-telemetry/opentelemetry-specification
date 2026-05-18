@@ -26,7 +26,7 @@ Before we get into the design requirements, here’s how upgrading actually work
 
 ### API changes
 
-When new functionality is added to the OpenTelemetry API, a new minor version of the API is released. These API changes are always additive and backwards compatible from the perspective of existing Instrumentation packages which import and call prior versions. Instrumentation written against all prior minor versions of the API continues to work, and may be composed together into the same application without creating a dependency conflict.
+When new functionality is added to the OpenTelemetry API, a new minor version of the API is released. These API changes are always additive and backward compatible from the perspective of existing Instrumentation packages which import and call prior versions. Instrumentation written against all prior minor versions of the API continues to work, and may be composed together into the same application without creating a dependency conflict.
 
 API implementations are expected to always target the latest version of the API. When a new version of the API is released, a version of the SDK which supports the API is released in tandem. New versions of the API are not expected to support older versions of the SDK.
 

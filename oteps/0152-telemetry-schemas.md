@@ -232,10 +232,10 @@ time with OpenTelemetry Collector's schema translation processor).
 
 ## Schema Version Number
 
-Version number follows the MAJOR.MINOR.PATCH format, similar to semver 2.0.
+Version number follows the MAJOR.MINOR.PATCH format, similar to SemVer 2.0.
 
 Version numbers use the [ordering rules](https://semver.org/#spec-item-11)
-defined by semver 2.0 specification. See how ordering is used in the
+defined by SemVer 2.0 specification. See how ordering is used in the
 [Order of Transformations](#order-of-transformations). Other than the ordering
 rules the schema version numbers do not carry any other semantic meaning.
 
@@ -320,7 +320,7 @@ previous version to this version.
 The "changes" section is a sequence of transformations. Only one transformation
 is supported for section "all": "rename_attributes" transformation.
 
-"rename_attributes" transformation requires a map of key/value pairs, where the
+"rename_attributes" transformation requires a map of key-value pairs, where the
 key is the old name of the attribute used in the previous version, the value is
 the new name of the attribute starting from this version. Here is the structure:
 
@@ -552,7 +552,7 @@ individual transformation also performing the reverse conversion.
 ### Schema File Format Number
 
 The "file_format" setting in the schema file specifies the format version of the
-file. The format version follows the MAJOR.MINOR.PATCH format, similar to semver
+file. The format version follows the MAJOR.MINOR.PATCH format, similar to SemVer
 2.0.
 
 The "file_format" setting is used by consumers of the file to know if they are
@@ -747,7 +747,7 @@ Depending on the language the following approaches are possible:
   likely breaks the ABI.
 
 - Add a method overload that allows passing 3 parameters (instrumentation
-  library name, version and schema url) to obtain a Tracer/Meter/LogEmitter.
+  library name, version and schema URL) to obtain a Tracer/Meter/LogEmitter.
   This is likely the preferred approach for languages where method overloads are
   possible.
 
@@ -775,7 +775,7 @@ convention helpers the library uses (e.g. constants that define the semantic
 conventions) match exactly that same schema version? One possible solution is to
 introduce helper packages per schema version that the libraries can use, e.g.
 constants that define the semantic conventions and the corresponding schema
-version url. This should be likely the topic for a follow-up OTEP.
+version URL. This should be likely the topic for a follow-up OTEP.
 
 ### Application-wide Schema URL
 
@@ -788,8 +788,8 @@ If the user does not set an application-wide Schema URL then the current Schema
 URL MUST be populated by OTLP Exporter in the messages, where "current" means
 the version of OpenTelemetry Schema against which the SDK is coded.
 
-Note that if there is a schema url associated with instrumentation library it
-overrides the application-wide schema url as described [here](#otlp-changes).
+Note that if there is a schema URL associated with instrumentation library it
+overrides the application-wide schema URL as described [here](#otlp-changes).
 
 ## OpenTelemetry Schema
 
@@ -836,8 +836,8 @@ version to another is performed using a Go implementation.
 The benchmark does the following:
 
 - Compares the CPU time necessary for schema conversion to the time necessary
-  for Protobuf decoding. This is a useful comparison because telemetry consumers
-  have to perform Protobuf decoding so it is the minimum baseline work against
+  for protobuf decoding. This is a useful comparison because telemetry consumers
+  have to perform protobuf decoding so it is the minimum baseline work against
   which we can measure the impact of the additional conversion work.
 
 - Uses a hypothetical schema version change where 20 attributes in semantic
@@ -869,7 +869,7 @@ consumers do).
 
 ## Open Questions
 
-- Do we need to support a concept of "pre-release" semantic conventions that can
+- Do we need to support a concept of "prerelease" semantic conventions that can
   be broken freely and are not part of strict schema checks? Supposedly, this is
   already possible simply by avoiding introducing a new schema version when such
   semantic conventions change.
@@ -879,7 +879,7 @@ consumers do).
   helpers the library uses (e.g. constants that define the semantic conventions)
   match exactly that same schema version? One possible solution is to introduce
   helper packages per schema version that the libraries can use, e.g. constants
-  that define the semantic conventions and the corresponding schema version url.
+  that define the semantic conventions and the corresponding schema version URL.
   This should be likely the topic for a follow-up OTEP.
 
 - Should we make it possible to include the entire Schema File in OTLP requests
@@ -924,7 +924,7 @@ open up a few interesting possibilities:
 
 - OpenTelemetry semantic conventions document can be automatically generated
   from this formal schema file. This will remove the need to have semantic
-  conventions codified and generated from yaml files in the specification.
+  conventions codified and generated from YAML files in the specification.
 
 - Consumers of telemetry can use this information to interpret the received
   telemetry.
@@ -1047,7 +1047,7 @@ The downsides are:
 
 ## Prior Art
 
-- [OpenTelemetry Log Data Model: Body Meta-Data](https://docs.google.com/document/d/1ZExye1lW43owwaxcbjOvl0P2qER-UaYd_MyxItc2h0k/edit#)
+- [OpenTelemetry Log Data Model: Body Metadata](https://docs.google.com/document/d/1ZExye1lW43owwaxcbjOvl0P2qER-UaYd_MyxItc2h0k/edit#)
   by Christian Beedgen.
 
 - [Generic event encoding schemas](https://docs.google.com/document/d/11ccT_zBbiCfwKyi6TMuy2sA3nUdElNQsDJOQ79icVKs/edit#)
