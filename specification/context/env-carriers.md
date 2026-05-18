@@ -66,6 +66,19 @@ Environment variable names used for context propagation:
     (`_`) with an underscore (`_`),
   - prefixing the name with an underscore (`_`) if it would otherwise start with
     an ASCII digit.
+- MUST be normalized consistently by `Get`, `Set`, and `Keys` operations:
+  - when injecting context, the carrier `Set` operation MUST write values using
+    the normalized form of the key provided by the propagator,
+  - when extracting context, the carrier `Get` operation MUST normalize the key
+    requested by the propagator and the key names present in the carrier before
+    matching them,
+  - when listing keys, the carrier `Keys` function MUST return normalized key
+    names.
+
+For example, if a propagator requests the key `x-b3-traceid`, the environment
+variable carrier MUST match it to the carrier key `X_B3_TRACEID`. It MUST also
+match it to a carrier key such as `x-b3-traceid`, because both key names
+normalize to `X_B3_TRACEID`.
 
 > [!NOTE]
 > This normalization is consistent with the environment variable naming rules
