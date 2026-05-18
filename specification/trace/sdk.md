@@ -976,6 +976,24 @@ are invoked in the order they have been registered.
 
 **Returns:** `Void`
 
+#### OnAddLink
+
+**Status**: [Development](../document-status.md)
+
+`OnAddLink` is called after a link has been added to a span. This method
+MUST NOT be called in case the cardinality limits prevented the link from being
+added. This method is called synchronously on the thread that added the link,
+therefore it should not block or throw exceptions.
+
+**Parameters:**
+
+* `span` - a [readable span object](#additional-span-interfaces) on which
+  the link was just added.
+* `spanContext` - the span context of the linked span.
+* `attributes` - the attributes describing the link.
+
+**Returns:** `Void`
+
 #### OnNameUpdate
 
 **Status**: [Development](../document-status.md)
@@ -1007,24 +1025,6 @@ therefore it should not block or throw exceptions.
   the attribute was just set.
 * `attributeKey` - the key of the attribute.
 * `attributeValue` - the value of the attribute.
-
-**Returns:** `Void`
-
-#### OnAddLink
-
-**Status**: [Development](../document-status.md)
-
-`OnAddLink` is called after a link has been added to a span. This method
-MUST NOT be called in case the cardinality limits prevented the link from being
-added. This method is called synchronously on the thread that added the link,
-therefore it should not block or throw exceptions.
-
-**Parameters:**
-
-* `span` - a [readable span object](#additional-span-interfaces) on which
-  the link was just added.
-* `spanContext` - the span context of the linked span.
-* `attributes` - the attributes describing the link.
 
 **Returns:** `Void`
 
