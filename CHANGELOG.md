@@ -60,6 +60,8 @@ release.
     ([#5034](https://github.com/open-telemetry/opentelemetry-specification/pull/5034))
   - Stabilize OpenTelemetry Instrumentation Scope to Prometheus labels transformation.
     ([#5052](https://github.com/open-telemetry/opentelemetry-specification/pull/5052))
+  - Stabilize translation of OpenTelemetry Histogram to Prometheus Histogram or Native histogram with custom buckets.
+    ([#4605](https://github.com/open-telemetry/opentelemetry-specification/issues/4605))
 
 ### SDK Configuration
 
