@@ -223,6 +223,8 @@ sections:
         status: '+'
       - name: Instrument supports the advisory Attributes parameter.
         status: '+'
+      - name: Synchronous instruments support Bind to pre-associate attributes.
+        status: '-'
       - name: All methods of `MeterProvider` are safe to be called concurrently.
         status: '+'
       - name: All methods of `Meter` are safe to be called concurrently.
@@ -315,6 +317,8 @@ sections:
         status: '+'
       - name: Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.
         status: '+'
+      - name: Documentation notes that View-filtered attributes may still appear on Exemplars.
+        status: '-'
       - name:
           Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was
           taken.
