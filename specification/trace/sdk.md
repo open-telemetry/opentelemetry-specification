@@ -70,6 +70,7 @@ weight: 3
     + [OnEnd(Span)](#onendspan)
     + [Shutdown()](#shutdown)
     + [ForceFlush()](#forceflush)
+  * [Self-observability](#self-observability)
   * [Built-in span processors](#built-in-span-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
@@ -1020,6 +1021,9 @@ for processor to do any cleanup required.
 `Shutdown` SHOULD be called only once for each `SpanProcessor` instance. After
 the call to `Shutdown`, subsequent calls to `OnStart`, `OnEnd`, or `ForceFlush`
 are not allowed. SDKs SHOULD ignore these calls gracefully, if possible.
+**Status**: [Development](../document-status.md) - SDKs that emit
+[self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
+MUST count spans dropped because the processor has been shut down.
 
 `Shutdown` SHOULD provide a way to let the caller know whether it succeeded,
 failed or timed out.
@@ -1056,6 +1060,15 @@ invocation, but before the `SpanProcessor` exports the completed spans.
 implemented as a blocking API or an asynchronous API which notifies the caller
 via a callback or an event. OpenTelemetry client authors can decide if they want to
 make the flush timeout configurable.
+
+### Self-observability
+
+**Status**: [Development](../document-status.md)
+
+`SpanProcessor` implementations SHOULD support emitting the
+[SDK self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
+defined for span processors in the
+[OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/).
 
 ### Built-in span processors
 
@@ -1104,6 +1117,9 @@ an empty batch OR skip the export and consider it to be completed immediately.
 * `exporter` - the exporter where the spans are pushed.
 * `maxQueueSize` - the maximum queue size. After the size is reached, spans are
   dropped. The default value is `2048`.
+  **Status**: [Development](../document-status.md) - SDKs that emit
+  [self-observability metrics](../self-observability.md#sdk-self-observability-metrics)
+  MUST count spans dropped due to a full queue.
 * `scheduledDelayMillis` - the maximum delay interval in milliseconds between two
   consecutive exports. The default value is `5000`.
 * `exportTimeoutMillis` - how long the export can run before it is cancelled.
