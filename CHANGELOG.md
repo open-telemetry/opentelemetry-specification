@@ -12,6 +12,9 @@ release.
 
 ### Context
 
+- Clarify that environment variable propagation carriers normalize both
+  requested keys and carrier keys when extracting context.
+
 ### Traces
 
 ### Metrics
