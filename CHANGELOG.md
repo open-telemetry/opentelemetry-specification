@@ -60,7 +60,7 @@ release.
     ([#5052](https://github.com/open-telemetry/opentelemetry-specification/pull/5052))
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize temporality.
-    ([#5024](https://github.com/open-telemetry/opentelemetry-specification/issues/5024))
+    ([#5024](https://github.com/open-telemetry/opentelemetry-specification/pull/5024))
   - Stabilize version and format.
     ([#5083](https://github.com/open-telemetry/opentelemetry-specification/pull/5083))
   - Stabilize port configuration.
