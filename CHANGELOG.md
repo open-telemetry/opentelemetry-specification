@@ -36,6 +36,10 @@ release.
 
 ### Compatibility
 
+- Stabilize sections of Prometheus and OpenMetrics Compatibility.
+  - Stabilize the conversion of OTLP Summaries into Prometheus Summaries.
+    ([#5107](https://github.com/open-telemetry/opentelemetry-specification/issues/5107))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
