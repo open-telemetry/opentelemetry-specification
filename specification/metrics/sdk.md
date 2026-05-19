@@ -353,6 +353,10 @@ The SDK MUST accept the following stream configuration parameters:
   MUST NOT obligate a user to provide one. If the user does not provide a
   `name` value, name from the Instrument the View matches MUST be used by
   default.
+
+  The `name` provided via stream configuration is NOT REQUIRED to conform to
+  the [instrument name syntax](./api.md#instrument-name-syntax), and the SDK
+  MUST NOT validate it against that syntax.
 * `description`: The metric stream description that SHOULD be used.
   
   Users can provide a `description`, but it is up to their discretion.
