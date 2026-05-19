@@ -119,7 +119,7 @@ bump - for example, a URL pointing to diffs against previous versions, so
 consumers can download only the parts they need. A future major version bump
 follows [versioning and stability policies](/specification/versioning-and-stability.md).
 
-See [File format versioning](#file-format-versioning) for the rules that apply
+See [File format and versioning](#file-format-and-versioning) for the rules that apply
 to `manifest`, `resolved`, and `definition` format identifiers.
 
 All artifacts for a given release MUST be immutable. Consumers SHOULD cache manifests
