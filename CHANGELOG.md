@@ -41,6 +41,9 @@ release.
 
 - Add in-development `Bind` API to synchronous instruments.
   ([#5050](https://github.com/open-telemetry/opentelemetry-specification/pull/5050))
+- Clarify that View-provided metric stream `name` is not subject to instrument
+  name syntax validation.
+  ([#5094](https://github.com/open-telemetry/opentelemetry-specification/pull/5094))
 
 ### Common
 
@@ -71,6 +74,10 @@ release.
   (`without_scope_info` -> `scope_info_enabled`, `without_target_info` -> `target_info_enabled`,
   `with_resource_constant_labels` -> `resource_constant_labels`)
   ([#5071](https://github.com/open-telemetry/opentelemetry-specification/issues/5071))
+
+- Add OTEP for Semantic Convention Schema v2 with support for multiple convention
+  registries and resolved schema format
+  ([#4815](https://github.com/open-telemetry/opentelemetry-specification/pull/4815))
 
 ## v1.56.0 (2025-04-20)
 
