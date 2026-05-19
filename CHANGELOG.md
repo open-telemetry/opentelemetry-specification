@@ -64,7 +64,7 @@ release.
   - Stabilize version and format.
     ([#5083](https://github.com/open-telemetry/opentelemetry-specification/issues/5083))
   - Stabilize port configuration.
-    ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
+    ([#5026](https://github.com/open-telemetry/opentelemetry-specification/pull/5026))
   - Stabilize `scope_info_enabled` configuration.
     ([#5056](https://github.com/open-telemetry/opentelemetry-specification/pull/5056))
 - Change Prometheus Metric Exporter config property recommended names
