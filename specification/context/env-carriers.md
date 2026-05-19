@@ -71,7 +71,9 @@ Environment variable names used for context propagation:
     the normalized form of the key provided by the propagator,
   - when extracting context, the carrier `Get` operation MUST normalize the key
     requested by the propagator and the key names present in the carrier before
-    matching them,
+    matching them. If multiple carrier key names normalize to the same key name,
+    the carrier is ambiguous and in that case, the value returned by `Get` is
+    unspecified,
   - when listing keys, the carrier `Keys` function MUST return normalized key
     names.
 
