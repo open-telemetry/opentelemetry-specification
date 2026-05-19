@@ -73,7 +73,11 @@ release.
 - Change Prometheus Metric Exporter config property recommended names
   (`without_scope_info` -> `scope_info_enabled`, `without_target_info` -> `target_info_enabled`,
   `with_resource_constant_labels` -> `resource_constant_labels`)
-  ([#5071](https://github.com/open-telemetry/opentelemetry-specification/issues/5071))
+  ([#5071](https://github.com/open-telemetry/opentelemetry-specification/pull/5071))
+- Clarify that OTel SDKs should not use unofficial Prometheus clients.
+  ([#5082](https://github.com/open-telemetry/opentelemetry-specification/pull/5082))
+
+### OTEPs
 
 - Add OTEP for Semantic Convention Schema v2 with support for multiple convention
   registries and resolved schema format
