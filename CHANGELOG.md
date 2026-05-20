@@ -16,13 +16,22 @@ release.
 
 ### Metrics
 
+- Clarify that View-provided metric stream `name` is not subject to instrument
+  name syntax validation.
+  ([#5094](https://github.com/open-telemetry/opentelemetry-specification/pull/5094))
 - Add in-development `Bind` API to synchronous instruments.
   ([#5050](https://github.com/open-telemetry/opentelemetry-specification/pull/5050))
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize temporality.
     ([#5024](https://github.com/open-telemetry/opentelemetry-specification/issues/5024))
+  - Stabilize version and format.
+    ([#5083](https://github.com/open-telemetry/opentelemetry-specification/issues/5083))
   - Stabilize port configuration.
     ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
+  - Stabilize `scope_info_enabled` configuration.
+    ([#5056](https://github.com/open-telemetry/opentelemetry-specification/pull/5056))
+  - Clarify that OTel SDKs should not use unofficial Prometheus clients.
+    ([#4980](https://github.com/open-telemetry/opentelemetry-specification/issues/4980))
 - Change Prometheus Metric Exporter config property recommended names
   (`without_scope_info` -> `scope_info_enabled`, `without_target_info` -> `target_info_enabled`,
   `with_resource_constant_labels` -> `resource_constant_labels`)
@@ -64,6 +73,10 @@ release.
 ### Supplementary Guidelines
 
 ### OTEPs
+
+- Add OTEP for Semantic Convention Schema v2 with support for multiple convention
+  registries and resolved schema format
+  ([#4815](https://github.com/open-telemetry/opentelemetry-specification/pull/4815))
 
 ## v1.56.0 (2025-04-20)
 
