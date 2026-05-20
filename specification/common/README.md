@@ -28,7 +28,8 @@ path_base_for_github_subdir:
     + [Maps](#maps)
 - [Attribute](#attribute)
   * [Attribute representation for non-OTLP](#attribute-representation-for-non-otlp)
-  * [Attribute Collections](#attribute-collections)
+- [Attribute Collections](#attribute-collections)
+  * [Attribute Collection representation for non-OTLP](#attribute-collection-representation-for-non-otlp)
 - [Attribute Limits](#attribute-limits)
   * [Configurable Parameters](#configurable-parameters)
   * [Exempt Entities](#exempt-entities)
@@ -233,7 +234,7 @@ Examples: `{"http.request.method": "GET"}`, `{"retries": 3}`,
 > (particularly for floating point numbers and large integers that exceed the
 > precision capabilities of the receiving system's string-to-number conversion).
 
-### Attribute Collections
+## Attribute Collections
 
 [Resources](../resource/sdk.md),
 [Instrumentation Scopes](instrumentation-scope.md),
@@ -283,6 +284,30 @@ responsibility to ensure keys are not duplicate.
 Collection of attributes are equal when they contain the same attributes,
 irrespective of the order in which those elements appear
 (unordered collection equality).
+
+### Attribute Collection representation for non-OTLP
+
+**Status**: [Development](../document-status.md)
+
+For non-OTLP protocols that need to represent an Attribute Collection as a
+string, the RECOMMENDED form is a
+[JSON object](https://datatracker.ietf.org/doc/html/rfc8259#section-4).
+
+Each attribute key SHOULD be represented as a JSON object member name.
+
+Each attribute value SHOULD be represented as the corresponding JSON object
+member value and follow the encoding rules defined in
+[AnyValue representation for non-OTLP protocols](#anyvalue-representation-for-non-otlp-protocols),
+as it would be represented as an element in an [array](#arrays) and a value in
+a [map](#maps).
+
+This representation follows the same JSON object form as [maps](#maps), but
+applies to top-level Attribute Collections rather than nested
+[`map<string, AnyValue>`](#mapstring-anyvalue) values.
+
+Examples: `{}`, `{"http.request.method": "GET", "retries": 3}`,
+`{"payload": "aGVsbG8gd29ybGQ=", "session.id": null}`,
+`{"colors": ["red", "blue"], "context": {"nested": true}}`
 
 ## Attribute Limits
 
