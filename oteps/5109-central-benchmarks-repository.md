@@ -83,10 +83,6 @@ S1 is chosen as the first scenario because:
    OpenTelemetry instrumentation: the per-call cost when no SDK is
    configured.
 3. It measures the per-event operation in any instrumented library.
-4. Metrics, not spans, was chosen first because
-   [`performance-benchmark.md`](../specification/performance-benchmark.md)
-   already documents a span methodology; the metrics and logs APIs are
-   the unaddressed gap.
 
 ### Initial languages
 
@@ -213,10 +209,6 @@ Alternatives considered:
   quo and is what the [Motivation](#motivation) argues against: no shared
   evidence for normative requirements, no cross-language release-over-
   release trend visibility.
-- Hosting harnesses inside `opentelemetry-specification` or `community`.
-  Rejected because harnesses are runnable code and per-release CI
-  workflows, not spec text or community documentation; co-locating them
-  would bloat those repositories and complicate their review surface.
 - A larger up-front taxonomy of scenarios. Rejected so this OTEP can
   focus on the logistics of standing up the repository, workflow, and
   dashboard rather than on scenario coverage. Additional scenarios can
