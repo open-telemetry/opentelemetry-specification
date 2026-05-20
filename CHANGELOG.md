@@ -25,6 +25,9 @@ release.
 
 ### Common
 
+- Clarify non-OTLP representation guidance for nested `AnyValue` values in
+  arrays and maps.
+  ([#5053](https://github.com/open-telemetry/opentelemetry-specification/pull/5053))
 - Add in-development guidance recommending a JSON object as the string
   representation for an attribute in non-OTLP protocols.
   ([#5028](https://github.com/open-telemetry/opentelemetry-specification/pull/5028))
