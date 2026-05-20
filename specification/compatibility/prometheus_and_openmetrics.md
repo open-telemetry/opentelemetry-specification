@@ -36,6 +36,8 @@ aliases:
   * [Gauges](#gauges-1)
   * [Sums](#sums)
   * [Histograms](#histograms-1)
+    + [Histograms as Prometheus Histograms](#histograms-as-prometheus-histograms)
+    + [Histograms as Prometheus NHCB](#histograms-as-prometheus-nhcb)
   * [Exponential Histograms](#exponential-histograms)
   * [Summaries](#summaries-1)
   * [Metric Attributes](#metric-attributes)
@@ -505,7 +507,13 @@ latest exemplar for counter instruments.
 
 **Status**: [Stable](../document-status.md)
 
-An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus Histogram by default, but users may opt-in to converting an OpenTelemetry Histogram to a Prometheus Native histogram with custom buckets (NHCB) when converting to the Prometheus Remote Write 2.0 or later protocol.
+An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus Histogram by default, but users may opt-in to converting an OpenTelemetry Histogram to a [Prometheus Native Histogram with Custom Buckets](#histograms-as-prometheus-nhcb) (NHCB) instead when allowed by the Prometheus Protocol.
+
+OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic below, or MUST be dropped.
+
+#### Histograms as Prometheus Histograms
+
+**Status**: [Stable](../document-status.md)
 
 When converting to a Prometheus Histogram, the following metrics MUST be created:
 
@@ -516,6 +524,13 @@ When converting to a Prometheus Histogram, the following metrics MUST be created
 - `Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section. If the Prometheus protocol only supports a single exemplar per-bucket, the latest exemplar that falls into each bucket SHOULD be converted.
 - If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
   following the appropriate format used by each Prometheus protocol.
+
+#### Histograms as Prometheus NHCB
+
+**Status**: [Development](../document-status.md)
+
+NHCB output is currently only supported by the [Prometheus Remote-Write 2.0
+or later](https://prometheus.io/docs/specs/prw/remote_write_spec_2_0/) protocol.
 
 When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
 
@@ -555,10 +570,10 @@ When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
       `PositiveSpans`.
     - Bucket counts that need to be converted are converted into `PositiveDeltas`,
       which is delta encoded. The first converted value is written as is, the
-      rest as delta to the previous converted value. Unlike the classic
-      histogram conversion above, no cumulative summation across buckets is
-      required — OpenTelemetry and Native Histogram bucket counts are already
-      per-bucket.
+      rest as delta to the previous converted value. Unlike the conversion to
+      [Prometheus Histograms](#histograms-as-prometheus-histograms), no
+      cumulative summation across buckets is required — OpenTelemetry and Native
+      Histogram bucket counts are already per-bucket.
     - The `PositiveSpans` encode the index into the `CustomValues` for each
       value in the `PositiveDeltas`. The first span's `Offset` is the index of
       the upper bound of the first converted bucket (zero-based into
@@ -571,8 +586,6 @@ When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
       `-2, -1, 0, 1, 2`. If only the non-zero bucket counts `10, 20, 5, 2` are
       converted, then the `PositiveSpans` will be `{Offset: 0, Length: 1}, {Offset: 2, Length: 3}`
       and `PositiveDeltas` will be `10, 10, -15, -3`.
-
-OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
 
 ### Exponential Histograms
 
