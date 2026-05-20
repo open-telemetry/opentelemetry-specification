@@ -53,12 +53,8 @@ release.
 
 - Define the Core packages term.
   ([#5046](https://github.com/open-telemetry/opentelemetry-specification/pull/5046))
-
-### OpenTelemetry Protocol
-
 - Rework contributing guide to reflect current process.
   ([#5072](https://github.com/open-telemetry/opentelemetry-specification/pull/5072))
-
 
 ### Compatibility
 
