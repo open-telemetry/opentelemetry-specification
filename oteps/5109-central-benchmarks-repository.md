@@ -61,8 +61,7 @@ Scenario S1: HTTP request counter increment, API-only.
   on a single thread with the same attribute set on every call,
   modeling a library that records one HTTP request per call. The
   attribute set is three stable string attributes drawn from HTTP
-  semantic conventions (three is enough to exercise attribute-set
-  construction without making cardinality the dominant cost):
+  semantic conventions:
   - `http.request.method` = `"GET"`
   - `url.scheme` = `"https"`
   - `server.address` = `"example.com"`
@@ -71,7 +70,7 @@ Scenario S1: HTTP request counter increment, API-only.
   avoids concurrency-model differences across languages becoming part of
   the initial rollout's scope.
 - Reported metrics per run:
-  - `ns/op` (median, P99)
+  - `ns/op` (median)
   - `allocations/op`, where the language exposes this; optional
     otherwise.
 
