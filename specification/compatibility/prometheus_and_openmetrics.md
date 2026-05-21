@@ -566,16 +566,15 @@ converted to a Prometheus Summary as follows:
 - Attributes are converted as described in the
   [`Metric Attributes`](#metric-attributes) section.
 - The count is converted to the Summary's count.
-- The sum is converted to the Summary's sum, reported only if the sum is
-  positive and monotonic.
+- The sum is converted to the Summary's sum.
 - Quantiles are converted to the Summary's quantiles. The `quantile` label
   value MUST be the stringified floating point value of each quantile (between
   0.0 and 1.0), starting from lowest to highest, and all being non-negative.
   The value of each quantile is the computed value of the quantile point.
 - When using a push protocol, such as Prometheus Remote Write,
   `time_unix_nano` is converted to the Summary's timestamp. Explicit timestamps
-  are strongly discouraged for pull protocols, such as the Prometheus text
-  exposition format.
+  SHOULD NOT be used for pull protocols, such as the Prometheus text exposition
+  format, where Prometheus assigns the scrape timestamp.
 - The `start_time_unix_nano` is converted to the Summary's start timestamp, if
   supported.
 
