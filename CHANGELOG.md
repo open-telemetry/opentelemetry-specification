@@ -7,32 +7,11 @@ release.
 
 ## Unreleased
 
-- Rework contributing guide to reflect current process..
-  ([#5072](https://github.com/open-telemetry/opentelemetry-specification/pull/5072))
-
 ### Context
 
 ### Traces
 
 ### Metrics
-
-- Add in-development `Bind` API to synchronous instruments.
-  ([#5050](https://github.com/open-telemetry/opentelemetry-specification/pull/5050))
-- Stabilize sections of Prometheus Metrics Exporter.
-  - Stabilize temporality.
-    ([#5024](https://github.com/open-telemetry/opentelemetry-specification/issues/5024))
-  - Stabilize version and format.
-    ([#5083](https://github.com/open-telemetry/opentelemetry-specification/issues/5083))
-  - Stabilize port configuration.
-    ([#4985](https://github.com/open-telemetry/opentelemetry-specification/issues/4985))
-  - Stabilize `scope_info_enabled` configuration.
-    ([#5056](https://github.com/open-telemetry/opentelemetry-specification/pull/5056))
-  - Clarify that OTel SDKs should not use unofficial Prometheus clients.
-    ([#4980](https://github.com/open-telemetry/opentelemetry-specification/issues/4980))
-- Change Prometheus Metric Exporter config property recommended names
-  (`without_scope_info` -> `scope_info_enabled`, `without_target_info` -> `target_info_enabled`,
-  `with_resource_constant_labels` -> `resource_constant_labels`)
-  ([#5071](https://github.com/open-telemetry/opentelemetry-specification/issues/5071))
 
 ### Logs
 
@@ -46,10 +25,39 @@ release.
 
 ### Common
 
-- Define the Core packages term.
-  ([#5046](https://github.com/open-telemetry/opentelemetry-specification/pull/5046))
+- Clarify non-OTLP representation guidance for nested `AnyValue` values in
+  arrays and maps.
+  ([#5053](https://github.com/open-telemetry/opentelemetry-specification/pull/5053))
+- Add in-development guidance recommending a JSON object as the string
+  representation for an attribute in non-OTLP protocols.
+  ([#5028](https://github.com/open-telemetry/opentelemetry-specification/pull/5028))
 
 ### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.57.0 (2025-05-19)
+
+### Metrics
+
+- Add in-development `Bind` API to synchronous instruments.
+  ([#5050](https://github.com/open-telemetry/opentelemetry-specification/pull/5050))
+- Clarify that View-provided metric stream `name` is not subject to instrument
+  name syntax validation.
+  ([#5094](https://github.com/open-telemetry/opentelemetry-specification/pull/5094))
+
+### Common
+
+- Define the Core packages term.
+  ([#5046](https://github.com/open-telemetry/opentelemetry-specification/pull/5046))
+- Rework contributing guide to reflect current process.
+  ([#5072](https://github.com/open-telemetry/opentelemetry-specification/pull/5072))
 
 ### Compatibility
 
@@ -60,10 +68,21 @@ release.
     ([#5034](https://github.com/open-telemetry/opentelemetry-specification/pull/5034))
   - Stabilize OpenTelemetry Instrumentation Scope to Prometheus labels transformation.
     ([#5052](https://github.com/open-telemetry/opentelemetry-specification/pull/5052))
-
-### SDK Configuration
-
-### Supplementary Guidelines
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize temporality.
+    ([#5024](https://github.com/open-telemetry/opentelemetry-specification/pull/5024))
+  - Stabilize version and format.
+    ([#5083](https://github.com/open-telemetry/opentelemetry-specification/pull/5083))
+  - Stabilize port configuration.
+    ([#5026](https://github.com/open-telemetry/opentelemetry-specification/pull/5026))
+  - Stabilize `scope_info_enabled` configuration.
+    ([#5056](https://github.com/open-telemetry/opentelemetry-specification/pull/5056))
+- Change Prometheus Metric Exporter config property recommended names
+  (`without_scope_info` -> `scope_info_enabled`, `without_target_info` -> `target_info_enabled`,
+  `with_resource_constant_labels` -> `resource_constant_labels`)
+  ([#5071](https://github.com/open-telemetry/opentelemetry-specification/pull/5071))
+- Clarify that OTel SDKs should not use unofficial Prometheus clients.
+  ([#5082](https://github.com/open-telemetry/opentelemetry-specification/pull/5082))
 
 ### OTEPs
 

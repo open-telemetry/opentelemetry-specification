@@ -238,7 +238,7 @@ aggregations and a [set of attributes](common/README.md#attribute).
 Using the OpenTelemetry API to record raw measurements gives end users the
 flexibility to choose the aggregation algorithm for a given metric. This functionality
 is particularly useful in client libraries such as gRPC, where it enables the
-recording of raw measurements like "server_latency" or "received_bytes." end users
+recording of raw measurements like "server_latency" or "received_bytes". End users
 then have the autonomy to decide on the aggregation method for these raw measurements,
 options for which range from straightforward averages to more complex histogram calculations.
 
