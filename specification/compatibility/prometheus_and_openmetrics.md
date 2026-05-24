@@ -509,7 +509,7 @@ latest exemplar for counter instruments.
 
 An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus Histogram by default, but users may opt-in to converting an OpenTelemetry Histogram to a [Prometheus Native Histogram with Custom Buckets](#histograms-as-prometheus-nhcb) (NHCB) instead when allowed by the Prometheus Protocol.
 
-OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic below, or MUST be dropped.
+OpenTelemetry Histograms with Delta aggregation temporality MAY be aggregated into a Cumulative aggregation temporality and follow the logic below, or MUST be dropped.
 
 #### Histograms as Prometheus Histograms
 
