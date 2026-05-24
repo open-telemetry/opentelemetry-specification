@@ -545,35 +545,39 @@ When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
   converting nanoseconds to milliseconds.
 - If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
   following the appropriate format used by each Prometheus protocol.
-- The bucket boundaries are written into the NHCB `CustomValues` in ascending
-  order. The implicit `+Inf` upper bound MUST NOT be written into `CustomValues`;
-  it is represented by the overflow bucket at index `len(CustomValues)`.
+- The bucket boundaries in `ExplicitBounds` are written into the NHCB
+  `CustomValues` in ascending order. The implicit `+Inf` upper bound MUST NOT be
+  written into `CustomValues`; it is represented by the overflow bucket at index
+  `len(CustomValues)`.
 - All fields of the NHCB that are not explicitly referenced here MUST be set to
   their zero value, such as zero threshold, zero count, negative spans, negative
   deltas, etc.
 - `Min` and `Max` are not used.
 - `Exemplars` are converted into the Native Histogram's flat `Exemplars` list,
-   as described in the [Exemplar Conversion](#exemplar-conversion) section.
+  as described in the [Exemplar Conversion](#exemplar-conversion) section.
 - If the `NoRecordedValue` flag is set to `true`, the NHCB MUST be marked as
   [stale](https://prometheus.io/docs/specs/native_histograms/#staleness-markers):
   - The Native Histogram `Sum` MUST be set to the Stale NaN value.
-  - The Native Histogram `Count` MUST be set to zero. `PositiveSpans` and `PositiveDeltas`
-    MUST be left empty.
+  - The Native Histogram `Count` MUST be set to zero. `PositiveSpans` and
+    `PositiveDeltas` MUST be left empty.
 - If the `NoRecordedValue` flag is set to `false`:
   - `Count` is converted to Native Histogram `Count`.
   - `Sum` is converted to the Native Histogram `Sum`.
-  - The dense `BucketCounts` are converted into the [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
-    in `PositiveSpans` and `PositiveDeltas` (even for buckets with negative boundaries).
+  - The dense `BucketCounts` are converted into the
+    [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+    in `PositiveSpans` and `PositiveDeltas` (even for buckets with negative
+    boundaries).
     - Non-zero bucket counts MUST be converted into `PositiveDeltas`. Zero-count
       buckets MAY also be included in `PositiveDeltas` to extend an enclosing
       span (rather than creating a gap between spans) and reduce the number of
       `PositiveSpans`.
-    - Bucket counts that need to be converted are converted into `PositiveDeltas`,
-      which is delta encoded. The first converted value is written as is, the
-      rest as delta to the previous converted value. Unlike the conversion to
+    - Bucket counts that need to be converted are converted into
+      `PositiveDeltas`, which is delta encoded. The first converted value is
+      written as is, the rest as delta to the previous converted value. Unlike
+      the conversion to
       [Prometheus Histograms](#histograms-as-prometheus-histograms), no
-      cumulative summation across buckets is required — OpenTelemetry and Native
-      Histogram bucket counts are already per-bucket.
+      cumulative summation across buckets is required — OpenTelemetry and
+      Native Histogram bucket counts are already per-bucket.
     - The `PositiveSpans` encode the index into the `CustomValues` for each
       value in the `PositiveDeltas`. The first span's `Offset` is the index of
       the upper bound of the first converted bucket (zero-based into
@@ -584,8 +588,9 @@ When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
     - For example: if the bucket boundaries are `-2, -1, 0, 1, 2, +Inf` and
       bucket counts are `10, 0, 0, 20, 5, 2`, then the `CustomValues` will be
       `-2, -1, 0, 1, 2`. If only the non-zero bucket counts `10, 20, 5, 2` are
-      converted, then the `PositiveSpans` will be `{Offset: 0, Length: 1}, {Offset: 2, Length: 3}`
-      and `PositiveDeltas` will be `10, 10, -15, -3`.
+      converted, then the `PositiveSpans` will be
+      `{Offset: 0, Length: 1}, {Offset: 2, Length: 3}` and `PositiveDeltas`
+      will be `10, 10, -15, -3`.
 
 ### Exponential Histograms
 
