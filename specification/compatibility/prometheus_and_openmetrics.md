@@ -515,15 +515,24 @@ OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated
 
 **Status**: [Stable](../document-status.md)
 
-When converting to a Prometheus Histogram, the following metrics MUST be created:
+When converting to a Prometheus Histogram, an OpenTelemetry Histogram MUST
+be converted following the rules below:
 
-- A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
-- `{name}_sum` metric denoting the sum field of the histogram, reported only if the sum is positive and monotonic. The sum is positive and monotonic when all buckets are positive. All attributes of the histogram point are converted to Prometheus labels.
-- A series of `{name}_bucket` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up to the boundary reported in the `le` label.  The final bucket metric MUST have an `+Inf` threshold.
-- `Min` and `Max` are not used.
-- `Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section. If the Prometheus protocol only supports a single exemplar per-bucket, the latest exemplar that falls into each bucket SHOULD be converted.
+- `Count` is converted to the Histogram `Count`.
+- `Sum` is converted to the Histogram `Sum`. The sum is positive and monotonic
+  when all observations in the histogram are positive or zero.
+- The bucket boundaries in `ExplicitBounds` plus the implicit `+Inf` boundary
+  and the `BucketCounts` are converted to Histogram `Buckets` in ascending order
+  of the `ExplicitBounds` value. For each bucket the explicit bound is
+  converted to the upper bound and the sum of all bucket counts up to
+  and including the current bucket is converted to the cumulative count.
 - If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
   following the appropriate format used by each Prometheus protocol.
+- `Min` and `Max` are not used.
+- `Exemplars` are converted as described in the
+  [Exemplar Conversion](#exemplar-conversion) section. If the Prometheus
+  protocol only supports a single exemplar per-bucket, the latest
+  exemplar that falls into each bucket SHOULD be converted.
 
 #### Histograms as Prometheus NHCB
 
