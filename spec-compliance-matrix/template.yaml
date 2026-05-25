@@ -157,6 +157,8 @@ sections:
       - name: Instrument descriptions conform to the specified syntax.
       - name: Instrument supports the advisory ExplicitBucketBoundaries parameter.
       - name: Instrument supports the advisory Attributes parameter.
+      - name: Synchronous instruments support Bind to pre-associate attributes.
+        optional: true
       - name: All methods of `MeterProvider` are safe to be called concurrently.
       - name: All methods of `Meter` are safe to be called concurrently.
       - name: All methods of any instrument are safe to be called concurrently.
@@ -210,6 +212,7 @@ sections:
       - name: The metrics SDK supports `AlwaysOn` exemplar filter
       - name: The metrics SDK supports `AlwaysOff` exemplar filter
       - name: Exemplars retain any attributes available in the measurement that are not preserved by aggregation or view configuration.
+      - name: Documentation notes that View-filtered attributes may still appear on Exemplars.
       - name:
           Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was
           taken.

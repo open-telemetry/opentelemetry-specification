@@ -330,7 +330,7 @@ MUST be converted to OpenTelemetry Exemplars as follows:
 
 ### Instrumentation Scope
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Labels with `otel_scope_` prefix MUST be dropped from all metric points
 and used as the Instrumentation Scope name (`otel_scope_name`),
@@ -451,7 +451,7 @@ It also dictates type-specific conversion rules listed below.
 
 ### Instrumentation Scope
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Prometheus exporters MUST by default add
 the scope name as the `otel_scope_name` label,
@@ -460,9 +460,10 @@ the scope schema URL as the `otel_scope_schema_url` label,
 the scope attributes as labels with `otel_scope_` prefix and following the rules
 described in the [`Metric Attributes`](#metric-attributes) section below,
 on all metric points, based on the scope the original data point was nested in.
-Scope attributes with names 'name', 'version', or 'schema_url' MUST be dropped
-to avoid conflicts with the already existing `otel_scope_name`, `otel_scope_version`, and
-`otel_scope_schema_url` labels.
+Scope attributes that, after adding the `otel_scope_` prefix and applying the
+label-name conversion described in [`Metric Attributes`](#metric-attributes),
+would conflict with `otel_scope_name`, `otel_scope_version`, or
+`otel_scope_schema_url` MUST be dropped.
 
 ### Gauges
 
