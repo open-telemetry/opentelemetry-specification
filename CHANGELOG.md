@@ -46,6 +46,10 @@ release.
 
 ### OTEPs
 
+- Add OTEP to extend Process Context with registered auto-instrumentation
+  libraries.
+  ([#5116](https://github.com/open-telemetry/opentelemetry-specification/pull/5116))
+
 ## v1.57.0 (2025-05-19)
 
 ### Metrics

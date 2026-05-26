@@ -26,7 +26,7 @@ With this change OBI can read the list of registered auto-instrumentation librar
 it starts up, and disable only the overlapping modules, allowing it to add non-overlapping telemetry without
 duplication.
 
-Other external readers (e.g., ebpf-profiler, monitoring agents) can also use this information for richer context about
+Other external readers (e.g., eBPF profiler, monitoring agents) can also use this information for richer context about
 the process, or to coordinate their own instrumentation with the SDK's.
 
 ## Explanation
@@ -109,7 +109,7 @@ message InstrumentationRecord {
 }
 ```
 
-This change is **backwards compatible at the wire level**: so version headers remain `2`,
+This change is **backward compatible at the wire level**: so version headers remain `2`,
 
 ### Registration API contract
 
