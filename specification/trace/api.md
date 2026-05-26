@@ -681,7 +681,9 @@ in the scope of this requirement and recommendation.
 
 #### Record Exception
 
-**Status**: [Deprecated](../document-status.md)
+**Status**: [Deprecated](../document-status.md), follow the
+[semantic conventions for recording exceptions](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/general/recording-errors.md#recording-exceptions)
+instead.
 
 To facilitate recording an exception languages SHOULD provide a
 `RecordException` method if the language uses exceptions.
