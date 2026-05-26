@@ -46,8 +46,7 @@ release.
 
 ### OTEPs
 
-- Add OTEP to extend Process Context with registered auto-instrumentation
-  libraries.
+- Process Context: Sharing Registered Instrumentations with External Readers.
   ([#5116](https://github.com/open-telemetry/opentelemetry-specification/pull/5116))
 
 ## v1.57.0 (2025-05-19)
