@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize client libs section.
+    ([#5106](https://github.com/open-telemetry/opentelemetry-specification/pull/5106))
+
 ### Logs
 
 ### Baggage
