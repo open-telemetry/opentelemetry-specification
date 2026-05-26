@@ -1,28 +1,28 @@
 # Process Context: Sharing Registered Instrumentations with External Readers
 
 Extend the [Process Context](./profiles/4719-process-ctx.md) mechanism to publish the list of registered
-auto-instrumentation libraries running inside an OpenTelemetry SDK, so external readers can coordinate with in-process
+instrumentation libraries running inside an OpenTelemetry SDK, so external readers can coordinate with in-process
 instrumentation.
 
 ## Motivation
 
 [OTEP 4719: Process Context](./profiles/4719-process-ctx.md) introduced a mechanism for OpenTelemetry SDKs to publish
 process-level resource attributes via a memory-mapped region readable by external processes. This OTEP extends that
-mechanism to also publish the list of **registered auto-instrumentation libraries** active in the process.
+mechanism to also publish the list of **registered instrumentation libraries** active in the process.
 
 The primary motivating consumer is [OpenTelemetry eBPF Instrumentation (OBI)](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation),
 OBI can detect if an application is already instrumented based on
-heuristics [specified in OBI devdocs](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/blob/main/devdocs/exclude-otel-instrumented-services.md)
+heuristics [specified in OBI devdocs](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/blob/e2f806535af8505d09b074a78153c52170e40683/devdocs/exclude-otel-instrumented-services.md)
 but this comes with 2 big known limitations.
 
 1. Duplicate telemetry may be emitted at the beginning of the process lifecycle before OBI can detect if the service is
    instrumented.
 2. OBI instrumentation disabling works as "all or nothing", so if OBI detects any telemetry exported by the service, it
-   disables all of its instrumentation modules, even those that do not overlap with the SDK's auto-instrumentation (
-   e.g., if the SDK has HTTP auto-instrumentation but not Kafka, OBI disables both HTTP and Kafka modules,
+   disables all of its instrumentation modules, even those that do not overlap with the SDK's instrumentation libraries
+   (e.g., if the SDK has HTTP instrumentation but not Kafka, OBI disables both HTTP and Kafka modules,
    even though it can add this telemetry and not have duplication).
 
-With this change OBI can read the list of registered auto-instrumentation libraries from the process context as soon as
+With this change OBI can read the list of registered instrumentation libraries from the process context as soon as
 it starts up, and disable only the overlapping modules, allowing it to add non-overlapping telemetry without
 duplication.
 
@@ -31,9 +31,9 @@ the process, or to coordinate their own instrumentation with the SDK's.
 
 ## Explanation
 
-When an auto-instrumentation library activates inside an OpenTelemetry SDK, the component responsible for activating it
-(the SDK itself, an auto-instrumentation agent, an instrumentor base class, or the contrib package's own initialization
-— whichever is appropriate for the language) calls a new SDK API:
+When an instrumentation library activates inside an OpenTelemetry SDK, the component responsible for activating it
+(the SDK itself, an automatic instrumentation agent, an instrumentor base class, or the contrib package's own
+initialization — whichever is appropriate for the language) calls a new SDK API:
 
 ```text
 process_context.register_instrumentation(scope)
@@ -43,7 +43,7 @@ The SDK records the registration in a process-global registry and publishes (or 
 mapping per the [Process Context Publication / Updating Protocols](./profiles/4719-process-ctx.md#publication-protocol).
 If no mapping has been created yet — for example because the SDK has not yet (or will never) publish a resource — the
 first `register_instrumentation` call creates the mapping with an empty `Resource` and the registration under
-`instrumentations`. This ensures auto-instrumentation libraries are visible to external readers even when no resource is
+`instrumentations`. This ensures instrumentation libraries are visible to external readers even when no resource is
 ever published by the SDK.
 
 The registered instrumentations appear as an additional field on the `ProcessContext` message:
@@ -62,9 +62,9 @@ ProcessContext {
 
 ### Manual instrumentations are not registered
 
-Only auto-instrumentation libraries call `register_instrumentation`. User application code that calls
+Only instrumentation libraries call `register_instrumentation`. User application code that calls
 `tracer.start_span()` directly is **not** registered and does not appear in the published list. The list is, by
-construction, the set of auto-instrumentations active in the process.
+construction, the set of instrumentation libraries active in the process.
 
 ### Decoupled from tracer/meter/logger acquisition
 
@@ -92,7 +92,7 @@ message ProcessContext {
   opentelemetry.proto.resource.v1.Resource resource = 1;
   repeated opentelemetry.proto.common.v1.KeyValue attributes = 2;
 
-  // NEW: List of auto-instrumentation libraries registered in this process.
+  // NEW: List of instrumentation libraries registered in this process.
   // [Optional] Empty list (or absent field) means no instrumentations have
   // been registered, or the SDK does not implement this mechanism.
   repeated InstrumentationRecord instrumentations = 3;
@@ -100,7 +100,7 @@ message ProcessContext {
 
 // Status: [Development]
 message InstrumentationRecord {
-  // The instrumentation scope identifying this auto-instrumentation library.
+  // The instrumentation scope identifying this instrumentation library.
   // Uniqueness is determined by the tuple (name, version, schema_url).
   opentelemetry.proto.common.v1.InstrumentationScope scope = 1;
 
@@ -133,8 +133,8 @@ The API MUST satisfy:
    Symmetrically, when the SDK publishes a resource per OTEP 4719, it MUST include whatever registrations have already
    accumulated in the process-global registry, regardless of whether they arrived before or after the resource.
 
-   This guarantees that auto-instrumentation libraries loaded in processes where the SDK never publishes a resource
-   (e.g., a library bundles auto-instrumentation but the user does not configure resource attributes) are still visible
+   This guarantees that instrumentation libraries loaded in processes where the SDK never publishes a resource
+   (e.g., a library bundles instrumentation but the user does not configure resource attributes) are still visible
    to external readers.
 
 3. **Eventually-consistent publication.** Each registration marks the process context dirty. The SDK MAY coalesce
@@ -149,7 +149,7 @@ The API MUST satisfy:
 ### When and by whom the API is called (non-normative)
 
 The OTEP does not prescribe *when* or *by whom* `register_instrumentation` is called — that is a per-language SIG
-decision driven by the language's idioms for activating auto-instrumentation. In most languages, an
+decision driven by the language's idioms for activating instrumentation libraries. In most languages, an
 **activation orchestrator** (rather than each library) is the natural caller. Sketches:
 
 - **JavaScript** — `NodeSDK.start()` iterates its `instrumentations: [...]` array and registers each. Individual
@@ -182,7 +182,7 @@ ships without this dependency.
 
 Beyond the existing OTEP 4719 threat model, this OTEP exposes:
 
-- Names and versions of auto-instrumentation libraries (could be used for stack fingerprinting).
+- Names and versions of instrumentation libraries (could be used for stack fingerprinting).
 - Scope-level attributes set by the instrumentation library.
 
 **Mitigations:**
