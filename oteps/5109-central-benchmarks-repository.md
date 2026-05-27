@@ -223,10 +223,15 @@ Alternatives considered:
 
 - Top-level repository ownership. Per-language harness subfolders are
   owned by that language implementation's approvers (as in
-  `opentelemetry.io`); the open question is which group owns the
-  shared content and the repository itself. Candidates include a new
-  Performance SIG, the Spec SIG, the TC, or an interim group of
-  interested maintainers until a SIG is formed.
+  `opentelemetry.io`); proposed interim maintainers for shared content
+  and repository ownership are Cijo Thomas (@cijothomas, Microsoft) and
+  Martin Costello (@martincostello, Grafana Labs), until a long-term owner is chosen (for example a new
+  Performance SIG, the Spec Sponsors, or the TC).
+
+## Prototypes
+
+None yet. The initial harnesses (Rust and .NET) will be developed in
+parallel with this OTEP's review.
 
 ## Future possibilities
 
