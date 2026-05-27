@@ -398,8 +398,8 @@ If not included as labels on `target_info`, `service.name` and
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
-| `service.name` | The value of the `service.name` label on `target_info`. Otherwise, defaults to `job`. |
-| `service.instance.id` | The value of the `service.instance.id` label on `target_info`. Otherwise, defaults to `instance`. |
+| `service.name` | The value of the `service.name` label on `target_info`. Otherwise, MAY default to `job`. |
+| `service.instance.id` | The value of the `service.instance.id` label on `target_info`. Otherwise, MAY default to `instance`. |
 | `prometheus.job` | The value of the `job` label from Prometheus. |
 | `prometheus.instance` | The value of the `instance` label from Prometheus. |
 
