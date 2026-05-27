@@ -59,8 +59,8 @@ Scenario S1: counter increment with a stable attribute set, API-only.
 - Depends only on the OTel API package; no SDK package is referenced or
   loaded.
 - The benchmark increments a `Counter` instrument by 1 in a tight loop
-  with the same attribute set on every call. The attribute set is
-  these three string attributes:
+  with the same attribute values on every call. The attribute set uses
+  three string attributes, for example:
   - `http.request.method` = `"GET"`
   - `url.scheme` = `"https"`
   - `server.address` = `"example.com"`
