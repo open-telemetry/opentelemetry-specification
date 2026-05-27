@@ -10,9 +10,9 @@ instrumentation.
 process-level resource attributes via a memory-mapped region readable by external processes. This OTEP extends that
 mechanism to also publish the list of **registered instrumentation libraries** active in the process.
 
-The primary motivating consumer is [OpenTelemetry eBPF Instrumentation (OBI)](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation),
+The primary motivating consumer is [OpenTelemetry eBPF Instrumentation (OBI)](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation).
 OBI can detect if an application is already instrumented based on
-heuristics [specified in OBI devdocs](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/blob/e2f806535af8505d09b074a78153c52170e40683/devdocs/exclude-otel-instrumented-services.md)
+heuristics [specified in OBI devdocs](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/blob/e2f806535af8505d09b074a78153c52170e40683/devdocs/exclude-otel-instrumented-services.md),
 but this comes with 2 big known limitations.
 
 1. Duplicate telemetry may be emitted at the beginning of the process lifecycle before OBI can detect if the service is
