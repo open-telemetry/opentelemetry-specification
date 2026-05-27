@@ -380,9 +380,8 @@ grouping Prometheus metrics into OpenTelemetry resources. For each
 combination of `job` and `instance` labels on metrics in the incoming batch of
 Prometheus metrics (e.g., a single scrape of a Prometheus endpoint or a single
 Prometheus Remote Write request), there is one OpenTelemetry Resource that
-contains all metrics with that `job` and `instance`. `job` and `instance` are
-dropped from all metrics, and are added as the `prometheus.job` and
-`prometheus.instance` resource attributes, respectively.
+contains all metrics with that `job` and `instance`. `job` and `instance` labels
+are are added as resource attributes, and not as metric attributes.
 
 Prometheus also stores metadata associated with scraped targets in the
 [target_info](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
@@ -400,8 +399,6 @@ If not included as labels on `target_info`, `service.name` and
 | ----------------------- | ----------- |
 | `service.name` | The value of the `service.name` label on `target_info`. Otherwise, MAY default to `job`. |
 | `service.instance.id` | The value of the `service.instance.id` label on `target_info`. Otherwise, MAY default to `instance`. |
-| `prometheus.job` | The value of the `job` label from Prometheus. |
-| `prometheus.instance` | The value of the `instance` label from Prometheus. |
 
 #### Resource Attributes for Scraped Targets
 
@@ -664,13 +661,10 @@ push metric exporters, such as the Collector's
 [Prometheus Remote Write](https://prometheus.io/docs/specs/prw/remote_write_spec_2_0/)
 exporter.
 
-If `prometheus.job` or `prometheus.instance` are present in the OpenTelemetry
-resource attributes, they MUST be used as the `job` and `instance` labels,
-respectively, and MUST NOT be included on target_info as `prometheus.job` and
-`prometheus.instance`. If `prometheus.job` is not present, the `service.name`
+If `job` is not present, the `service.name`
 and `service.namespace` attributes MUST be combined as
 `<service.namespace>/<service.name>`, or `<service.name>` if namespace is empty,
-to form the `job` metric label. If `prometheus.instance` is not present,
+to form the `job` metric label. If `instance` is not present,
 the `service.instance.id` attribute, if present, MUST be converted to the
 `instance` label; otherwise, `instance` should be added with an empty value.
 
