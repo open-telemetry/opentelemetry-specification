@@ -101,7 +101,7 @@ message ProcessContext {
 // Status: [Development]
 message InstrumentationRecord {
   // The instrumentation scope identifying this instrumentation library.
-  // Uniqueness is determined by the tuple (name, version, schema_url).
+  // Uniqueness is determined by the tuple (name, version).
   opentelemetry.proto.common.v1.InstrumentationScope scope = 1;
 
   // Future fields are reserved for additive evolution
@@ -123,7 +123,7 @@ process_context.register_instrumentation(scope: InstrumentationScope)
 
 The API MUST satisfy:
 
-1. **Idempotency.** Two registrations with the same `(scope.name, scope.version, scope.schema_url)` tuple are equivalent
+1. **Idempotency.** Two registrations with the same `(scope.name, scope.version)` tuple are equivalent
    to one. Subsequent calls have no observable effect on the published payload.
 
 2. **Self-sufficient publication.** `register_instrumentation` MUST be sufficient on its own to publish the process
