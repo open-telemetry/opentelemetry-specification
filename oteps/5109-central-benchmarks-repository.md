@@ -230,8 +230,17 @@ Alternatives considered:
 
 ## Prototypes
 
-None yet. The initial harnesses (Rust and .NET) will be developed in
-parallel with this OTEP's review.
+A working prototype of the model described in this OTEP is available at
+<https://github.com/cijothomas/otel-benchmarks>, with a live dashboard
+at <https://cijothomas.github.io/otel-benchmarks/>. It exercises
+Scenario S1 across .NET, Rust, and Java using each language's native
+benchmarking framework (BenchmarkDotNet, Criterion, JMH), publishes
+results through a unified schema, and records per-data-point
+environment metadata (runner image, runtime version, CPU model, kernel
+version, benchmark framework version). The prototype is hosted under a
+personal account, runs on shared GitHub-hosted CI runners, and is
+intended only to demonstrate the end-to-end shape of the proposed
+model — not to publish authoritative performance numbers.
 
 ## Future possibilities
 
