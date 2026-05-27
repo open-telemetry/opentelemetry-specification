@@ -9,11 +9,104 @@ release.
 
 ### Context
 
+### Traces
+
+### Metrics
+
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize client libs section.
+    ([#5106](https://github.com/open-telemetry/opentelemetry-specification/pull/5106))
+
+### Logs
+
+### Baggage
+
+### Profiles
+
+### Resource
+
+### Entities
+
+### Common
+
+- Clarify non-OTLP representation guidance for nested `AnyValue` values in
+  arrays and maps.
+  ([#5053](https://github.com/open-telemetry/opentelemetry-specification/pull/5053))
+- Add in-development guidance recommending a JSON object as the string
+  representation for an attribute in non-OTLP protocols.
+  ([#5028](https://github.com/open-telemetry/opentelemetry-specification/pull/5028))
+
+### OpenTelemetry Protocol
+
+### Compatibility
+
+### SDK Configuration
+
+### Supplementary Guidelines
+
+### OTEPs
+
+## v1.57.0 (2025-05-19)
+
+### Metrics
+
+- Add in-development `Bind` API to synchronous instruments.
+  ([#5050](https://github.com/open-telemetry/opentelemetry-specification/pull/5050))
+- Clarify that View-provided metric stream `name` is not subject to instrument
+  name syntax validation.
+  ([#5094](https://github.com/open-telemetry/opentelemetry-specification/pull/5094))
+
+### Common
+
+- Define the Core packages term.
+  ([#5046](https://github.com/open-telemetry/opentelemetry-specification/pull/5046))
+- Rework contributing guide to reflect current process.
+  ([#5072](https://github.com/open-telemetry/opentelemetry-specification/pull/5072))
+
+### Compatibility
+
+- Stabilize sections of Prometheus and OpenMetrics Compatibility.
+  - Stabilize translation of labels prefixed with `otel_scope_` to OTLP Instrumentation Scope.
+    ([#5004](https://github.com/open-telemetry/opentelemetry-specification/pull/5004))
+  - Stabilize OpenTelemetry Gauge and Sum to Prometheus transformations.
+    ([#5034](https://github.com/open-telemetry/opentelemetry-specification/pull/5034))
+  - Stabilize OpenTelemetry Instrumentation Scope to Prometheus labels transformation.
+    ([#5052](https://github.com/open-telemetry/opentelemetry-specification/pull/5052))
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize temporality.
+    ([#5024](https://github.com/open-telemetry/opentelemetry-specification/pull/5024))
+  - Stabilize version and format.
+    ([#5083](https://github.com/open-telemetry/opentelemetry-specification/pull/5083))
+  - Stabilize port configuration.
+    ([#5026](https://github.com/open-telemetry/opentelemetry-specification/pull/5026))
+  - Stabilize `scope_info_enabled` configuration.
+    ([#5056](https://github.com/open-telemetry/opentelemetry-specification/pull/5056))
+- Change Prometheus Metric Exporter config property recommended names
+  (`without_scope_info` -> `scope_info_enabled`, `without_target_info` -> `target_info_enabled`,
+  `with_resource_constant_labels` -> `resource_constant_labels`)
+  ([#5071](https://github.com/open-telemetry/opentelemetry-specification/pull/5071))
+- Clarify that OTel SDKs should not use unofficial Prometheus clients.
+  ([#5082](https://github.com/open-telemetry/opentelemetry-specification/pull/5082))
+
+### OTEPs
+
+- Add OTEP for Semantic Convention Schema v2 with support for multiple convention
+  registries and resolved schema format
+  ([#4815](https://github.com/open-telemetry/opentelemetry-specification/pull/4815))
+
+## v1.56.0 (2025-04-20)
+
+### Context
+
 - Align environment variable context propagation name restrictions with POSIX.1-2024
   and define normalization behavior.
-  ([#4914](https://github.com/open-telemetry/opentelemetry-specification/issues/4914))
+  ([#4944](https://github.com/open-telemetry/opentelemetry-specification/pull/4944))
 - Decouple the responsibilities of the environment variable propagation carrier.
-  ([#4961](https://github.com/open-telemetry/opentelemetry-specification/issues/4961))
+  ([#4961](https://github.com/open-telemetry/opentelemetry-specification/pull/4961))
+- Remove misleading implementation approach the environment variable propagation.
+  ([#5003](https://github.com/open-telemetry/opentelemetry-specification/pull/5003))
+- Change Environment Variables as Context Propagation Carriers document status to Beta.
+  ([#5020](https://github.com/open-telemetry/opentelemetry-specification/pull/5020))
 
 ### Traces
 
@@ -26,12 +119,18 @@ release.
 
 - Add development `maxExportBatchSize` parameter to Periodic exporting MetricReader.
   ([#4895](https://github.com/open-telemetry/opentelemetry-specification/pull/4895))
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize host configuration.
+    ([#4984](https://github.com/open-telemetry/opentelemetry-specification/issues/4984))
+    ([#5025](https://github.com/open-telemetry/opentelemetry-specification/pull/5025))
 
 ### Logs
 
-### Baggage
+- Add event to span event bridge.
+  ([#5006](https://github.com/open-telemetry/opentelemetry-specification/pull/5006))
 
-### Profiles
+- Remove duplicate information from and extend Profiles documentation (README.md, pprof.md).
+  ([#4932](https://github.com/open-telemetry/opentelemetry-specification/pull/4932))
 
 ### Resource
 
@@ -41,43 +140,57 @@ release.
 
 ### Entities
 
-### Common
-
-### OpenTelemetry Protocol
+- Define merge algorithm.
+  ([4768](https://github.com/open-telemetry/opentelemetry-specification/pull/4768))
 
 ### Compatibility
 
 - Deprecate OpenTracing compatibility requirements in the specification.
-  ([#4849](https://github.com/open-telemetry/opentelemetry-specification/issues/4849))
-- Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
-  ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
-- Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
-  add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
-  Histogram.
-  ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
-- Stabilize Prometheus Dropped Types transformation.
-  ([#4952](https://github.com/open-telemetry/opentelemetry-specification/pull/4952))
-- Stabilize OpenTelemetry Attributes to Prometheus labels transformation.
-  ([#4963](https://github.com/open-telemetry/opentelemetry-specification/pull/4963))
+  ([#4938](https://github.com/open-telemetry/opentelemetry-specification/pull/4938))
+- Stabilize sections of Prometheus and OpenMetrics Compatibility.
+  - Stabilize Prometheus Classic Histogram to OTLP Explicit Histogram transformation.
+    ([#4874](https://github.com/open-telemetry/opentelemetry-specification/pull/4874))
+  - Stabilize Prometheus Timestamp and Start timestamp transformation.
+    ([#4953](https://github.com/open-telemetry/opentelemetry-specification/pull/4953))
+  - Clarify Prometheus Native Histogram to OTLP Exponential Histogram conversion,
+    add conversion rules for Native Histograms with Custom Buckets (NHCB) to OTLP
+    Histogram.
+    ([#4898](https://github.com/open-telemetry/opentelemetry-specification/pull/4898))
+  - Stabilize Prometheus Dropped Types transformation.
+    ([#4952](https://github.com/open-telemetry/opentelemetry-specification/pull/4952))
+  - Stabilize OpenTelemetry Attributes to Prometheus labels transformation.
+    ([#4963](https://github.com/open-telemetry/opentelemetry-specification/pull/4963))
+  - Stabilize Prometheus Exemplar to OpenTelemetry Exemplar transformation.
+    ([#4962](https://github.com/open-telemetry/opentelemetry-specification/pull/4962))
+  - Stabilize Prometheus Metadata transformation.
+    ([#4954](https://github.com/open-telemetry/opentelemetry-specification/pull/4954))
+  - Stabilize OpenTelemetry Metric Metadata to Prometheus metric metadata.
+    ([#4966](https://github.com/open-telemetry/opentelemetry-specification/pull/4966))
+  - Stabilize OpenTelemetry Exemplar to Prometheus Exemplar transformation.
+    ([#4964](https://github.com/open-telemetry/opentelemetry-specification/pull/4964))
 
 ### SDK Configuration
 
 - Declarative configuration: add in-development guidance for exposing the
   effective `Resource` returned by `Create`.
-  ([#4948](https://github.com/open-telemetry/opentelemetry-specification/issues/4948))
+  ([#4949](https://github.com/open-telemetry/opentelemetry-specification/pull/4949))
 - Require spec changes to consider declarative config schema
   ([#4916](https://github.com/open-telemetry/opentelemetry-specification/pull/4916))
-
-### Supplementary Guidelines
+- Add strict YAML parsing guidance to configuration supplementary guidelines.
+  ([#4878](https://github.com/open-telemetry/opentelemetry-specification/pull/4878))
 
 ### OTEPs
 
 - Process Context: Sharing Resource Attributes with External Readers.
   ([#4719](https://github.com/open-telemetry/opentelemetry-specification/pull/4719))
+- Process Context: Sharing Resource Attributes with External Readers.
+  ([#4719](https://github.com/open-telemetry/opentelemetry-specification/pull/4719))
 - OTEP: Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
   ([#4947](https://github.com/open-telemetry/opentelemetry-specification/pull/4947))
-  
-## v1.55.0 (TODO: update date before merging)
+- Support multiple Resources within an SDK.
+  ([#4665](https://github.com/open-telemetry/opentelemetry-specification/pull/4665))
+
+## v1.55.0 (2025-03-05)
 
 ### Traces
 
@@ -189,9 +302,6 @@ release.
 
 - Stabilize complex `AnyValue` attribute value types and related attribute limits.
   ([#4794](https://github.com/open-telemetry/opentelemetry-specification/issues/4794))
-
-- Support multiple Resources within an SDK.
-  ([#4665](https://github.com/open-telemetry/opentelemetry-specification/pull/4665))
 
 ## v1.52.0 (2025-12-12)
 

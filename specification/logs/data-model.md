@@ -463,7 +463,3 @@ For example log format mappings, see the
 ## References
 
 - Log Data Model [OTEP 0097](../../oteps/logs/0097-log-data-model.md)
-
-- [Draft discussion of Data Model](https://docs.google.com/document/d/1ix9_4TQO3o-qyeyNhcOmqAc1MTyr-wnXxxsdWgCMn9c/edit#)
-
-- [Discussion of Severity field](https://docs.google.com/document/d/1WQDz1jF0yKBXe3OibXWfy3g6lor9SvjZ4xT-8uuDCiA/edit#)

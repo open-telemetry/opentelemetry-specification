@@ -36,6 +36,7 @@ weight: 3
   * [Built-in processors](#built-in-processors)
     + [Simple processor](#simple-processor)
     + [Batching processor](#batching-processor)
+    + [Event to span event bridge](#event-to-span-event-bridge)
 - [LogRecordExporter](#logrecordexporter)
   * [LogRecordExporter operations](#logrecordexporter-operations)
     + [Export](#export)
@@ -514,6 +515,9 @@ Other common processing scenarios SHOULD be first considered
 for implementation out-of-process
 in [OpenTelemetry Collector](../overview.md#collector).
 
+Additional processors defined in this document SHOULD be provided by SDK
+packages.
+
 #### Simple processor
 
 This is an implementation of `LogRecordProcessor` which passes finished logs and
@@ -548,6 +552,47 @@ to make sure that they are not invoked concurrently.
   The default value is `30000`.
 * `maxExportBatchSize` - the maximum batch size of every export. It must be
   smaller or equal to `maxQueueSize`. The default value is `512`.
+
+#### Event to span event bridge
+
+**Status**: [Development](../document-status.md)
+
+This is an implementation of `LogRecordProcessor` which converts
+[Events](./data-model.md#events) to span events on the current span.
+
+This processor SHOULD be provided by SDK.
+
+The processor MUST bridge a `LogRecord` to a span event if and only if all of
+the following conditions are met:
+
+* the `LogRecord` has a non-empty [Event Name](data-model.md#field-eventname).
+* the `LogRecord` has a valid
+  [TraceId](data-model.md#field-traceid) and
+  [SpanId](data-model.md#field-spanid).
+* the resolved [Context](../context/README.md) contains a current span whose
+  `IsRecording` is `true`.
+* the `LogRecord`'s `TraceId` and `SpanId` are equal to the `TraceId` and
+  `SpanId` of the current span in the resolved `Context`.
+
+If any of these conditions is not met, the processor MUST do nothing.
+
+When a `LogRecord` is bridged, the processor MUST add exactly one span event
+with the following mapping:
+
+* the span event name MUST be the `LogRecord`'s
+  [Event Name](./data-model.md#field-eventname).
+* if the `LogRecord` has a [Timestamp](./data-model.md#field-timestamp) set, it
+  MUST be used as the span event timestamp. Otherwise, if the `LogRecord` has
+  an [ObservedTimestamp](./data-model.md#field-observedtimestamp) set, it MUST
+  be used as the span event timestamp.
+* all `LogRecord`
+  [Attributes](./data-model.md#field-attributes) MUST be copied to the span
+  event as span event attributes.
+
+Note that bridging a `LogRecord` to a span event MUST NOT prevent that
+`LogRecord` from continuing through the normal log processing pipeline.
+
+**Configurable parameters:** none.
 
 ## LogRecordExporter
 
