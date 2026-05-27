@@ -53,26 +53,23 @@ visibility, not gating individual changes.
 
 ### The initial scenario
 
-Scenario S1: HTTP request counter increment, API-only.
+Scenario S1: counter increment with a stable attribute set, API-only.
 
 - Depends only on the OTel API package; no SDK package is referenced or
   loaded.
 - The benchmark increments a `Counter` instrument by 1 in a tight loop
-  on a single thread with the same attribute set on every call,
-  modeling a library that records one HTTP request per call. The
-  attribute set is three stable string attributes drawn from HTTP
-  semantic conventions:
+  with the same attribute set on every call. The attribute set is
+  these three string attributes:
   - `http.request.method` = `"GET"`
   - `url.scheme` = `"https"`
   - `server.address` = `"example.com"`
-- The scenario is single-threaded by definition. Multi-threaded and
-  contended-instrument variants are deferred to follow-up scenarios; this
-  avoids concurrency-model differences across languages becoming part of
-  the initial rollout's scope.
+- Single-threaded (one OS thread); async or coroutine-style code is
+  fine where idiomatic. Multi-threaded and contended variants are
+  deferred to follow-up scenarios.
 - Reported metrics per run:
-  - `ns/op` (median)
-  - `allocations/op`, where the language exposes this; optional
-    otherwise.
+  - `ns/op` (median).
+  - `allocations/op` (heap allocations per operation), where the
+    language exposes it; bytes/op optional.
 
 S1 is chosen as the first scenario because:
 
@@ -119,6 +116,10 @@ same model the
 [spec compliance matrix](../spec-compliance-matrix.md) already uses for
 conformance reporting.
 
+When onboarding, an implementation SHOULD backfill at least two prior
+tracked releases so the dashboard starts with a trend rather than a
+single point.
+
 ### Execution environment
 
 Benchmark runs use the OpenTelemetry project's existing shared
@@ -127,6 +128,10 @@ workflows and documented in
 [`open-telemetry/community/docs/how-to-provision-bare-metal-runner.md`](https://github.com/open-telemetry/community/blob/main/docs/how-to-provision-bare-metal-runner.md).
 The benchmarks repository needs to be added to the set of repositories
 authorized to use it. No new infrastructure is required.
+
+Each data point records environment metadata (runner, runtime, OS,
+benchmark tool versions) so shifts caused by environment rather than
+the implementation can be identified.
 
 ### Tooling choice
 
