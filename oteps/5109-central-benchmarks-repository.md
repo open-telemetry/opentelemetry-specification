@@ -23,8 +23,9 @@ that benchmarks itself does so in its own repository, with its own
 methodology, in its own format. There is no equivalent of the
 [spec compliance matrix](../spec-compliance-matrix.md) for performance.
 
-As a result, the specification already makes performance claims that
-have no project-wide verification. Both
+The project's own [engineering values](https://opentelemetry.io/community/mission/)
+state that "high performance is a requirement for OpenTelemetry", yet
+there is no project-wide mechanism to track it. Both
 [`metrics/api.md`](../specification/metrics/api.md) and
 [`trace/api.md`](../specification/trace/api.md) require the API to be a
 no-op when no SDK is configured, but the project has no shared evidence
@@ -76,10 +77,11 @@ S1 is chosen as the first scenario because:
 1. It exercises an existing normative requirement (the
    [API no-op requirement](../specification/metrics/noop.md)), so no new
    specification language is needed to justify it.
-2. It produces a number library maintainers can cite when adding native
-   OpenTelemetry instrumentation: the per-call cost when no SDK is
-   configured.
-3. It measures the per-event operation in any instrumented library.
+2. OpenTelemetry's goal is native instrumentation in every library and
+   framework. The first question a library owner will ask is "what does
+   this cost when no SDK is configured?" — a high no-op cost directly
+   slows down the library itself. A publicly tracked, per-release
+   answer to that question removes a key adoption blocker.
 
 ### Initial languages
 
@@ -96,7 +98,7 @@ languages can be added later without their own OTEP.
 open-telemetry/benchmarks/
 ├── README.md
 ├── scenarios/
-│   └── S1-http-request-counter-api-only.md
+│   └── S1-counter-increment-api-only.md
 ├── harnesses/
 │   └── <language>/
 ├── .github/workflows/
@@ -116,7 +118,7 @@ same model the
 [spec compliance matrix](../spec-compliance-matrix.md) already uses for
 conformance reporting.
 
-When onboarding, an implementation SHOULD backfill at least two prior
+When onboarding, an implementation should backfill at least two prior
 tracked releases so the dashboard starts with a trend rather than a
 single point.
 
@@ -210,14 +212,11 @@ Each of the above is reasonable follow-up work and is sketched in
 
 Alternatives considered:
 
-- Continue with per-implementation benchmarking only. This is the status
-  quo and is what the [Motivation](#motivation) argues against: no shared
-  evidence for normative requirements, no cross-language release-over-
-  release trend visibility.
-- A larger up-front taxonomy of scenarios. Rejected so this OTEP can
-  focus on the logistics of standing up the repository, workflow, and
-  dashboard rather than on scenario coverage. Additional scenarios can
-  land incrementally once the repository is in place.
+- Federated model: each language repo runs the shared scenarios itself
+  and pushes results to a central dashboard, with no central harness
+  code. Not chosen because maintaining consistent CI configurations
+  across N repositories has more overhead than hosting everything in
+  one place.
 
 ## Open questions
 
@@ -247,20 +246,11 @@ model — not to publish authoritative performance numbers.
 The following items are deliberately not part of this OTEP and are listed
 here as a non-binding sketch of plausible follow-up work:
 
-- API-only scenarios for span creation and log emission, equivalent to
-  S1 for the other two signals.
-- Multi-threaded and contended-instrument variants of S1 (and the
-  span/log equivalents), once the single-threaded baseline is in place.
-- SDK-configured fast-path scenarios, such as sampled-out span end and
-  pre-aggregated counter increment.
-- SDK component efficiency scenarios, such as BatchProcessor and
-  Exporter throughput, sampler overhead, and metric aggregation behavior under
-  load.
-- Onboarding additional languages beyond those contributed during the
+- Expand scenarios to cover additional signals (spans, logs), SDK
+  fast-path operations (sampling, aggregation), and multi-threaded or
+  contended workloads.
+- Onboard additional languages beyond those contributed during the
   initial rollout.
 - Automated release-triggered updates (for example via
   `repository_dispatch` from each implementation's release workflow),
   replacing the manual per-release PR flow used in the initial rollout.
-- Release-over-release delta reporting and regression thresholds on the
-  dashboard itself, once enough history has accumulated for such numbers
-  to be credible.
