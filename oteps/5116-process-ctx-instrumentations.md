@@ -109,7 +109,9 @@ message InstrumentationRecord {
 }
 ```
 
-This change is **backward compatible at the wire level**: so version headers remain `2`,
+This change is **backward compatible at the wire level**: the payload change is protobuf-forward-compatible, so version
+headers remain `2`, and existing readers do not require any header or parsing behavior changes beyond ignoring the new
+`instrumentations` field if they do not understand it.
 
 ### Registration API contract
 
