@@ -104,7 +104,7 @@ message InstrumentationRecord {
   // Uniqueness is determined by the tuple (name, version).
   opentelemetry.proto.common.v1.InstrumentationScope scope = 1;
 
-  // Future fields are reserved for additive evolution
+  // Future fields may be added for additive evolution
   // (see "Future possibilities").
 }
 ```
