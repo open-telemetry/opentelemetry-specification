@@ -60,12 +60,12 @@ value:
   string_value: "tlsdesc_v1_dev"
 
 key: "threadlocal.attribute_key_map"
-  value:
-    array_value:
-      values:
-        - string_value: "http_route"   # index 0
-        - string_value: "http_method"  # index 1
-        - string_value: "user_id"      # index 2
+value:
+  array_value:
+    values:
+      - string_value: "http_route"   # index 0
+      - string_value: "http_method"  # index 1
+      - string_value: "user_id"      # index 2
 ```
 
 **Why:** this mechanism separates static, process-scoped data from the TLS storage, so that a reader can read it once and not every time it samples a thread.
@@ -106,7 +106,7 @@ This format usually relies on two reads - one to read the required fields up to 
 
 **Cache Impact:** Likewise, a frugal writer may aim to keep the entire record under 64 bytes (the typical size of a cache line) in which case we might expect the entire record is in cache after the first read.  This format takes 28 bytes for the lead in, then an overhead of 2 bytes per key-value pair.  For a single pair, we'd have 28 bytes for the value; for two, 26 bytes total. If we expected to track attributes such as `path` and `method`, this means we'd realistically expect to fit in a single cache line of 64 bytes. We recommend keeping at or under 640 bytes for the total record [to match the limit](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels#proposed-solution) on the OTel eBPF Profiler.
 
-***Possible alternative/request for comments:** Switch one or both of `[x].key` and `[x].length` to being a [protobuf-style variable-length integer](https://protobuf.dev/programming-guides/encoding/#varints). This would allow more than 256 keys or longer value lengths than 256 bytes, if needed. Do we want this?*
+***Possible alternative/request for comments:** Switch one or both of `[x].key` and `[x].length` to being a [protobuf-style variable-length integer](https://protobuf.dev/programming-guides/encoding/#varints). This would allow more than 255 keys or longer value lengths than 255 bytes, if needed. Do we want this?*
 
 ### Publication Protocol
 
@@ -145,7 +145,7 @@ flag during updates only. Assuming the TLS pointer is set once per-thread to poi
 A SDK should choose to either set/unset the TLS pointer itself, or the `valid` flag, but not both.
 The intention of this design is to enable flexibility for the writers. We envision that some writers may choose to keep a fixed record for a given thread and can thus mutate it in-place, and that other writers may instead keep the record associated with some other high-level concept (coroutine, request, etc) and swap out the pointer as needed when they become active on any given thread.
 
-In both cases, all pointer and validity updates use compiler fences (`atomic_signal_fence` or equivalent) and volatile writes to prevent instruction reordering by the compiler. This design assumes signal handler-like semantics, therefore it is unecessary to guard against CPU reordering.
+In both cases, all pointer and validity updates use compiler fences (`atomic_signal_fence` or equivalent) and volatile writes to prevent instruction reordering by the compiler. This design assumes signal handler-like semantics, therefore it is unnecessary to guard against CPU reordering.
 
 #### 3. Context Detachment
 

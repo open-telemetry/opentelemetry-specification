@@ -183,9 +183,7 @@ release.
 
 - Process Context: Sharing Resource Attributes with External Readers.
   ([#4719](https://github.com/open-telemetry/opentelemetry-specification/pull/4719))
-- Process Context: Sharing Resource Attributes with External Readers.
-  ([#4719](https://github.com/open-telemetry/opentelemetry-specification/pull/4719))
-- OTEP: Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
+- Thread Context: Sharing Thread-Level Information with the OpenTelemetry eBPF Profiler.
   ([#4947](https://github.com/open-telemetry/opentelemetry-specification/pull/4947))
 - Support multiple Resources within an SDK.
   ([#4665](https://github.com/open-telemetry/opentelemetry-specification/pull/4665))
