@@ -13,6 +13,10 @@ release.
 
 ### Metrics
 
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Stabilize client libs section.
+    ([#5106](https://github.com/open-telemetry/opentelemetry-specification/pull/5106))
+
 ### Logs
 
 ### Baggage
@@ -127,6 +131,9 @@ release.
 
 - Add event to span event bridge.
   ([#5006](https://github.com/open-telemetry/opentelemetry-specification/pull/5006))
+
+- Remove duplicate information from and extend Profiles documentation (README.md, pprof.md).
+  ([#4932](https://github.com/open-telemetry/opentelemetry-specification/pull/4932))
 
 ### Resource
 
