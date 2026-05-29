@@ -52,11 +52,13 @@ OpenTelemetry metrics MUST be converted to Prometheus metrics according to the
 
 ### Client Libraries
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
-A Prometheus Exporter SHOULD use
-[Prometheus client libraries](https://prometheus.io/docs/instrumenting/clientlibs/)
-for serving Prometheus metrics. This allows the Prometheus client to negotiate
+A Prometheus Exporter SHOULD use an official [Prometheus client library](https://prometheus.io/docs/instrumenting/clientlibs/)
+when one exists for the implementation language and it is practical to do so
+(e.g., dependency concerns) for serving Prometheus metrics; it SHOULD NOT use an
+unofficial Prometheus client library.
+This allows the Prometheus client to negotiate
 the [format](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md)
 of the response using the `Content-Type` header. If a Prometheus client library
 is used, the OpenTelemetry Prometheus Exporter SHOULD be modeled as a
@@ -65,7 +67,7 @@ so it can be used in conjunction with existing Prometheus instrumentation.
 
 ### Version and Format
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 Regardless of whether a Prometheus client library is used, the Prometheus
 Exporter MUST support version `0.0.4` of the
@@ -78,7 +80,7 @@ A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT use
 [Prometheus Remote Write format](https://github.com/prometheus/prometheus/blob/main/prompb/remote.proto)
 or [OpenMetrics protobuf format](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#protobuf-format).
 
-A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT add
+A Prometheus Exporter for an OpenTelemetry metrics SDK SHOULD NOT add
 [explicit timestamps on Metric points](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metric).
 
 ## SDK Metric Output
@@ -149,7 +151,7 @@ If the Prometheus exporter supports such configuration it MUST be named to somet
 
 ### Scope Info
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter MAY support configuration to specify whether metrics include
 [scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
