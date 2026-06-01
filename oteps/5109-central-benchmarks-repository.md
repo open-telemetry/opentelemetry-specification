@@ -148,7 +148,7 @@ the implementation can be identified.
 ### Tooling choice
 
 [`benchmark-action/github-action-benchmark`](https://github.com/benchmark-action/github-action-benchmark)
-is one viable option, already used by `opentelemetry-rust`, `otel-arrow`,
+is one viable option, already used by `opentelemetry-rust`, `opentelemetry-java`, `otel-arrow`,
 and the OpenTelemetry Collector to publish benchmark trends. This OTEP
 does not commit to a specific tool; the exit criteria below require a
 public dashboard with historical results, not a particular
