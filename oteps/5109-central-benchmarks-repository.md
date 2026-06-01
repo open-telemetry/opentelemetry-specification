@@ -37,7 +37,7 @@ visibility into how the cost of that path evolves over time.
 A new repository, `open-telemetry/benchmarks`, is created under the
 project organization. It contains:
 
-1. Scenario definitions any language implementation can implement.
+1. Scenario definitions any language implementation can implement in a consistent manner.
 2. A GitHub Actions workflow that runs language-specific harnesses (one
    per scenario, per language) and publishes results.
 3. A historical record of results per scenario, per language, per
