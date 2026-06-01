@@ -17,13 +17,13 @@ External readers such as the OpenTelemetry eBPF Profiler operate outside the ins
 
 ## Explanation
 
-We propose a mechanism for OpenTelemetry SDKs to publish thread-level information reflecting the context of the active request, if any, through a standard format based on the Linux-specific ELF Thread Local Storage (TLS) TLSDESC dialect.
+We propose a mechanism for OpenTelemetry SDKs to publish thread-level information reflecting the context of the active request, if any, through a standard format based on the Linux-specific ELF Thread-Local Storage (TLS) TLSDESC dialect.
 
 Because this mechanism relies on having a native component and knowing when a runtime switches contexts, we consider it optional for SDKs to support, as some runtimes (or even runtime versions) may not be able to feasibly/efficiently implement it.
 
-The TLSDESC-based publication mechanism and the in-memory **Thread Local Context Record** format are intentionally separable. Runtimes that cannot efficiently expose context through TLSDESC are not required to implement this mechanism. However, we highly recommend reusing the same in-memory record format when publishing equivalent context through a runtime-specific discovery mechanism, rather than defining a runtime-specific payload format. Such mechanisms are out of scope for this OTEP, but reusing the record layout where practical allows readers to share parsing logic across runtimes.
+The TLSDESC-based publication mechanism and the in-memory **Thread-Local Context Record** format are intentionally separable. Runtimes that cannot efficiently expose context through TLSDESC are not required to implement this mechanism. However, we highly recommend reusing the same in-memory record format when publishing equivalent context through a runtime-specific discovery mechanism, rather than defining a runtime-specific payload format. Such mechanisms are out of scope for this OTEP, but reusing the record layout where practical allows readers to share parsing logic across runtimes.
 
-When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID in the format described in this document to the appropriate thread local. When an external reader observes this thread it checks to see if any such TLS data has been attached, and if so, includes it in its telemetry.
+When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID in the format described in this document to the appropriate thread-local. When an external reader observes this thread it checks to see if any such TLS data has been attached, and if so, includes it in its telemetry.
 
 ### Interaction with other context sources
 
@@ -35,14 +35,14 @@ Other context sources, such as OBI-derived information, may still be used to enr
 
 This mechanism is designed to achieve the following goals:
 
-* **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external process with sufficient system permissions to read `/proc/<pid>/maps` to identify loaded libraries, as well as sufficient permission to read from process memory should be able to use this mechanism  (nb: [OTEP-4719](4719-process-ctx.md) also requires access to this resource)
+* **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external reader with sufficient permissions to inspect `/proc/<pid>/maps` for library discovery and to read target process memory should be able to use this mechanism  (nb: [OTEP-4719](4719-process-ctx.md) also requires access to this resource)
 * **Runtime compatibility:** This mechanism is an optional extension to an OpenTelemetry SDK for languages that are able to use TLSDESC and have an appropriate threading model. We have tested it with C/C++, Rust, and Java, and intend this to work with other runtimes as well, see "What does this mean in practice for runtimes supported by OTel SDKs?" section below.
 * **Low, opt-in overhead**: Context attach/detach is a performance critical path in an OpenTelemetry SDK, and this mechanism is designed to provide fixed, low overhead when serializing thread context
 * **Simplicity:** Limit the implementation complexity on both writer and reader sides.
 
 ## Internal details
 
-### Process Context: Thread Local Reference Data
+### Process Context: Thread-Local Reference Data
 
 This is immutable, process-wide data that the TLS data will reference. It will be stored in the [Process Context introduced by OTEP 4719](4719-process-ctx.md) as entries in the `ProcessContext.attributes` field, which will be set once at process startup and are subsequently considered immutable.
 
@@ -50,7 +50,7 @@ The following values are stored:
 
 * `threadlocal.schema_version` - type and version of the schema - initially `tlsdesc_v1_dev` for experimentation (to be changed to `tlsdesc_v1` once the OTEP gets merged)
   * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a Go application and thus context should be read from [Go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [Node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
-* `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread local storage itself will then use these key indexes in place of the **attribute names**.
+* `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread-local storage itself will then use these key indexes in place of the **attribute names**.
 
 The exact format used will be the `repeated KeyValue` protobuf structure from the `ProcessContext.attributes` field standardized in OTEP-4719. A stringified representation of this showing the usage of the elements of that schema along with some example values:
 
@@ -72,7 +72,7 @@ value:
 This reduces the cost of both writing and reading thread samples, while retaining flexibility to store an arbitrary set of extra attributes on samples as required.
 By leveraging OTEP 4719 we are also collocating with another feature that is likely to be used by many of the same readers.
 
-### Thread Local Variable Resolution
+### Thread-Local Variable Resolution
 
 This OTEP uses "TLSDESC dialect" to refer to the ELF TLS strategy used by compilers and linkers when requested, for example with `-mtls-dialect=gnu2` in GCC or Clang.
 
@@ -80,13 +80,13 @@ This does not require the compiler and linker to emit the specific TLSDESC acces
 
 For this OTEP, `otel_thread_ctx_v1` must be an exported ELF TLS symbol, typically provided by a shared library built with the TLSDESC dialect.
 
-### Thread Local Variable
+### Thread-Local Variable
 
-We introduce a single thread local - `otel_thread_ctx_v1`. This is a pointer to the active **Thread Local Context Record** associated with the given thread.
+We introduce a single thread-local - `otel_thread_ctx_v1`. This is a pointer to the active **Thread-Local Context Record** associated with the given thread.
 
-### Thread Local Context Record
+### Thread-Local Context Record
 
-This is the attached thread record itself. SDK-side implementations may choose to hold multiple instances of this for active spans, and attach/detach them by setting the TLS to point to the appropriate entry. We err on the side of simplicity and support stringy (utf-8 bytes) attributes only.
+This is the attached thread record itself. SDK-side implementations may choose to hold multiple instances of this for active spans, and attach/detach them by setting the TLS to point to the appropriate entry. We err on the side of simplicity and support string (utf-8 bytes) attributes only.
 
 | Name            |            | Data type                          | Notes                                                                                                                                                    |
 | :-------------- | :--------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -110,13 +110,13 @@ This format usually relies on two reads - one to read the required fields up to 
 
 ### Publication Protocol
 
-The publishing SDK makes thread local context available to external readers through the following sequence:
+The publishing SDK makes thread-local context available to external readers through the following sequence:
 
 #### 1. Process Initialization
 
 At process startup, the SDK:
 
-* Publishes the **Thread Local Reference Data** to the **Process Context** (per OTEP-4719):
+* Publishes the **Thread-Local Reference Data** to the **Process Context** (per OTEP-4719):
   * `threadlocal.schema_version`: version of the schema for compatibility checking
   * `threadlocal.attribute_key_map`: mapping from key indexes (uint8) to attribute names
 * The SDK takes note of the `attribute_key_map` as this is used to prepare the TLS data itself.
@@ -127,7 +127,7 @@ When a request context is attached to a thread, the SDK:
 
 1. Sets the TLS pointer to 0 to ensure readers see no record during construction
 2. Obtains a contiguous buffer large enough to store the anticipated record size
-3. Constructs a new **Thread Local Context Record**  within the buffer containing:
+3. Constructs a new **Thread-Local Context Record**  within the buffer containing:
    - Trace context (trace ID, span ID)
    - Any configured attributes, encoded per the record format
 4. Sets the `valid` field to indicate the record is complete
@@ -139,7 +139,7 @@ Alternatively, a SDK may choose to leave the TLS pointer pointing to a fixed rec
 flag during updates only. Assuming the TLS pointer is set once per-thread to point to a fixed record, the update process becomes:
 
 1. Sets the `valid` flag to `false`
-2. Updates the **Thread Local Context Record** for the thread as required
+2. Updates the **Thread-Local Context Record** for the thread as required
 3. Sets the `valid` field to `true` to indicate the record is complete
 
 A SDK should choose to either set/unset the TLS pointer itself, or the `valid` flag, but not both.
@@ -157,7 +157,7 @@ When a request context is no longer active on a thread, the SDK either sets the 
 
 **Record reuse**: SDKs may implement caching strategies where records for frequently-reattached contexts (e.g., a parent span that is repeatedly entered and exited) are retained rather than reconstructed. The `valid` field can alternatively be used to mark a record as under modification without detaching it entirely.
 
-**Allocation:** Implementations may choose to preallocate storage for some fixed set of **Thread Local Reference Data** instances. This removes the need to allocate in the hot path.
+**Allocation:** Implementations may choose to preallocate storage for some fixed set of **Thread-Local Reference Data** instances. This removes the need to allocate in the hot path.
 
 **Concurrency model**: Unlike the process context (OTEP 4719), where the writer races asynchronously with the reader and CPU memory barriers (`atomic_thread_fence` with `seq_cst`) are required, thread context assumes signal handler-like semantics.
 In practice, context reads are expected to behave as if the thread whose context is being read is stopped or otherwise interrupted, and thus there can't be any concurrency hazards between reads and writes.
@@ -168,7 +168,7 @@ Readers conforming to this specification MUST only read thread context while the
 
 ### Reading Protocol
 
-External readers (such as the OpenTelemetry eBPF profiler) discover and read thread local context as follows. The reading protocol assumes the reader observes each thread while it is stopped or interrupted.
+External readers (such as the OpenTelemetry eBPF profiler) discover and read thread-local context as follows. The reading protocol assumes the reader observes each thread while it is stopped or interrupted.
 
 #### 1. Process Initialization
 
@@ -176,7 +176,7 @@ The external reader discovers a new process to observe. It:
 
 1.1 **Locates the process context**
 
-* The reading protocol from OTEP-4719 is followed to obtain the **Thread Local Reference Data** resources from the **Process Context**
+* The reading protocol from OTEP-4719 is followed to obtain the **Thread-Local Reference Data** resources from the **Process Context**
 * The reader may choose to retain the information read from the process mappings at this point, as they are immediately needed for TLS resolution
 
 1.2. **Check binary and loaded libraries for TLS dynsym**
@@ -185,7 +185,7 @@ The external reader discovers a new process to observe. It:
 * For each of the process itself and its dynamically loaded libraries:
   * Check if the `dynsym` table contains the TLS symbols listed above
   * If it does, collect them
-* Note down the TL offset for **Thread Local Reference Data** discovered
+* Note down the TL offset for **Thread-Local Reference Data** discovered
 
 If the `threadlocal.*` keys are not present in the process context at this point, the reader should defer TLS symbol discovery and re-run step 1.2 when the process context is next updated. Readers can detect process context updates using the polling or prctl-hook mechanisms described in OTEP-4719.
 
@@ -193,7 +193,7 @@ Once the `threadlocal.*` keys are present and TLS symbols have been discovered, 
 
 #### 2. Thread Sampling
 
-The external reader reads the **Thread Local Reference Data** TLS record for the targeted thread, obtaining a pointer to an instance of a **Thread Local Context Record.**
+The external reader reads the **Thread-Local Reference Data** TLS record for the targeted thread, obtaining a pointer to an instance of a **Thread-Local Context Record.**
 
 If the pointer is null, no context record is attached and the reader is done.
 
@@ -209,7 +209,7 @@ This mechanism is additive and does not modify existing OpenTelemetry SDK behavi
 
 #### OpenTelemetry - Process Context
 
-The **Thread Local Reference Data** is to be added to the **Process Context Proposal**:
+The **Thread-Local Reference Data** is to be added to the **Process Context Proposal**:
 
 * The lifecycle of the **Context Reference Data** is more accurately tied to the process not the thread
 * The consumers of the **Process Context** are likely to substantially overlap the consumers of the **Thread Level Context**
@@ -238,12 +238,12 @@ As requirements evolve, we may need to extend the payload format.
 
 **Mitigation**: The design includes both versioning as well as allowing extension points
 
-1. **Open-ended custom attributes set**: Can be configured by the SDK, user, or both, to expose relevant attributes to thread local storage. Can also be configured to the empty set to reduce overhead.
+1. **Open-ended custom attributes set**: Can be configured by the SDK, user, or both, to expose relevant attributes to thread-local storage. Can also be configured to the empty set to reduce overhead.
 2. **Version number**: for incompatible changes (not expected to change frequently)
 
 ### Memory Overhead
 
-By separating frequently changing **Thread Local Context Record** data from static, process-wide **Context Reference Data**, we ensure that:
+By separating frequently changing **Thread-Local Context Record** data from static, process-wide **Context Reference Data**, we ensure that:
 
 * Overhead of repeating attribute key names is minimized with indexing scheme
 * Memory overhead of TLS context reads is reduced, minimizing the time a thread must be kept suspended, and reducing the impact on the CPU cache
@@ -252,7 +252,7 @@ By separating frequently changing **Thread Local Context Record** data from stat
 
 An out of process reader has no ability to influence the sampling decisions of the in-process tracer; samples collected may therefore reference trace data that was not exported by the SDK, and cannot be used to enrich the sample with request metadata such as `route`. This limits the use of any samples captured under these conditions.
 
-**Mitigation:** by allowing the optional addition of custom key-value pairs to the **Thread Local Context Record,** an SDK can be configured to ensure core attribute information is shared with the external reader directly. This could be used for instance to attach `route` to each sample.
+**Mitigation:** by allowing the optional addition of custom key-value pairs to the **Thread-Local Context Record,** an SDK can be configured to ensure core attribute information is shared with the external reader directly. This could be used for instance to attach `route` to each sample.
 
 ## What does this mean in practice for runtimes supported by OTel SDKs?
 
@@ -271,7 +271,7 @@ This section is not intended to constrain implementers of the specification (nor
 We believe these two runtimes are not going to be supported by this proposal:
 
 * **Go:** We foresee Go readers will continue to use the [pprof labels](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/blob/main/design-docs/00002-custom-labels/README.md) due to its fine-grained goroutine based concurrency model and relative cost of calling across an FFI
-* **Node.js**: We do not expect Node.js to use the TLSDESC publication mechanism directly, due to the threading model and the performance impact of crossing a Node-API/native FFI boundary on context attach/detach. Node.js readers are more likely to discover context through Node.js-specific runtime internals, as in [Polar Signal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). However, a separate Node.js-specific proposal is expected to reuse the **Thread Local Context Record** in-memory format, with only the discovery mechanism being Node.js-specific.
+* **Node.js**: We do not expect Node.js to use the TLSDESC publication mechanism directly, due to the threading model and the performance impact of crossing a Node-API/native FFI boundary on context attach/detach. Node.js readers are more likely to discover context through Node.js-specific runtime internals, as in [Polar Signal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). However, a separate Node.js-specific proposal is expected to reuse the **Thread-Local Context Record** in-memory format, with only the discovery mechanism being Node.js-specific.
 
 ## Prior art and alternatives
 
@@ -283,7 +283,7 @@ There are two existing TLS mechanisms we are aware of for sharing similar inform
 
 This proposal attempts to unify the benefits of these two approaches by providing the flexibility of the **Polar Signals** format with the static allocation and read time performance of the **Elastic** format.
 
-**TLS Value Storage**: If we assume that the value of the attributes attached to profiles is from a fixed, but unknown-at-startup set, we could also choose to store these in a shared hashmap outside of the Thread Local Context Record itself, further reducing the size of the record and the cost associated with reading/writing it. This would be the case if we stored attributes for things like `http_method`, and `http_route`, and not things like `uuid()`. It would also require a process wide hash table implementation with lock-free reads. There is prior art in Datadog's [Java profiler's context sharing mechanism](https://github.com/DataDog/java-profiler/blob/main/ddprof-lib/src/main/java/com/datadoghq/profiler/ContextSetter.java).
+**TLS Value Storage**: If we assume that the value of the attributes attached to profiles is from a fixed, but unknown-at-startup set, we could also choose to store these in a shared hashmap outside of the Thread-Local Context Record itself, further reducing the size of the record and the cost associated with reading/writing it. This would be the case if we stored attributes for things like `http_method`, and `http_route`, and not things like `uuid()`. It would also require a process wide hash table implementation with lock-free reads. There is prior art in Datadog's [Java profiler's context sharing mechanism](https://github.com/DataDog/java-profiler/blob/main/ddprof-lib/src/main/java/com/datadoghq/profiler/ContextSetter.java).
 
 ## Open questions
 
