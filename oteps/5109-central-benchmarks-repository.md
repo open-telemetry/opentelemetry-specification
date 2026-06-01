@@ -108,15 +108,22 @@ open-telemetry/benchmarks/
 
 ### Update cadence
 
-For the initial rollout, the dashboard is updated by hand on each
-tracked release (a tagged release of the language implementation's core
-packages, chosen by its maintainers) of a participating language
-implementation. A maintainer of that implementation triggers the
-benchmarks workflow (supplying the language and released version) and
-opens a pull request adding the resulting data point. This follows the
-same model the
-[spec compliance matrix](../spec-compliance-matrix.md) already uses for
-conformance reporting.
+Each language harness pins the SDK package version it benchmarks in its
+own manifest (`csproj`, `Cargo.toml`, `build.gradle`, etc.), checked
+into the repository. A bot such as
+[Dependabot](https://docs.github.com/en/code-security/dependabot) or
+[Renovate](https://docs.renovatebot.com/) watches the corresponding
+package registry and opens a pull request whenever the tracked SDK
+publishes a new release. Merging that pull request triggers the
+benchmarks workflow on the bare-metal runner and appends the resulting
+data point to the dashboard. No cross-repository permissions are
+needed; the trigger lives entirely inside the benchmarks repository.
+
+`workflow_dispatch` remains supported as an escape hatch for ad-hoc
+runs (backfill, comparing the same SDK on two runtime versions,
+re-running a stale point). If a release alters the API the harness
+uses, the bump pull request needs manual maintainer attention; this is
+expected to be rare since scenarios target stable APIs.
 
 When onboarding, an implementation should backfill at least two prior
 tracked releases so the dashboard starts with a trend rather than a
@@ -251,6 +258,3 @@ here as a non-binding sketch of plausible follow-up work:
   contended workloads.
 - Onboard additional languages beyond those contributed during the
   initial rollout.
-- Automated release-triggered updates (for example via
-  `repository_dispatch` from each implementation's release workflow),
-  replacing the manual per-release PR flow used in the initial rollout.
