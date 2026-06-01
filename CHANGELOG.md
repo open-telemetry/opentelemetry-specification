@@ -40,6 +40,10 @@ release.
 
 ### Compatibility
 
+- Stabilize OpenTelemetry Exponential Histogram to Prometheus Native Histogram
+  with standard (exponential) schema transformation.
+  ([#4922](https://github.com/open-telemetry/opentelemetry-specification/issues/4922))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
