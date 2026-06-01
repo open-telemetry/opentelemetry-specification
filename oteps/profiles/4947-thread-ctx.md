@@ -49,7 +49,7 @@ This is immutable, process-wide data that the TLS data will reference. It will b
 The following values are stored:
 
 * `threadlocal.schema_version` - type and version of the schema - initially `tlsdesc_v1_dev` for experimentation (to be changed to `tlsdesc_v1` once the OTEP gets merged)
-  * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a go application and thus context should be read from [go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [Node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
+  * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a Go application and thus context should be read from [Go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [Node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
 * `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread local storage itself will then use these key indexes in place of the **attribute names**.
 
 The exact format used will be the `repeated KeyValue` protobuf structure from the `ProcessContext.attributes` field standardized in OTEP-4719. A stringified representation of this showing the usage of the elements of that schema along with some example values:
@@ -149,11 +149,7 @@ In both cases, all pointer and validity updates use compiler fences (`atomic_sig
 
 #### 3. Context Detachment
 
-When a request context is no longer active on a thread, the SDK:
-
-1. Sets the TLS pointer to `NULL`
-
-For SDKs using the fixed-record mode, detachment instead sets the `valid` flag to `false`.
+When a request context is no longer active on a thread, the SDK either sets the TLS pointer to `NULL`, or sets the `valid` flag to `false`.
 
 #### Design Considerations
 
@@ -285,7 +281,7 @@ There are two existing TLS mechanisms we are aware of for sharing similar inform
 
 [**Polar Signals Custom Labels**](https://github.com/polarsignals/custom-labels/blob/master/custom-labels-v1.md#custom_labels_current_set)**:** An alternative to the elastic model, additionally supporting custom key-value pairs.
 
-This proposal attempts to unify the benefits of these two approaches by providing the flexibility of the **polar signals** format with the static allocation and read time performance of the **elastic** format.
+This proposal attempts to unify the benefits of these two approaches by providing the flexibility of the **Polar Signals** format with the static allocation and read time performance of the **Elastic** format.
 
 **TLS Value Storage**: If we assume that the value of the attributes attached to profiles is from a fixed, but unknown-at-startup set, we could also choose to store these in a shared hashmap outside of the Thread Local Context Record itself, further reducing the size of the record and the cost associated with reading/writing it. This would be the case if we stored attributes for things like `http_method`, and `http_route`, and not things like `uuid()`. It would also require a process wide hash table implementation with lock-free reads. There is prior art in Datadog's [Java profiler's context sharing mechanism](https://github.com/DataDog/java-profiler/blob/main/ddprof-lib/src/main/java/com/datadoghq/profiler/ContextSetter.java).
 
