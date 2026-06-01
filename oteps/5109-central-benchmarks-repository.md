@@ -136,7 +136,10 @@ self-hosted bare-metal runner, already used by other OTel benchmark
 workflows and documented in
 [`open-telemetry/community/docs/how-to-provision-bare-metal-runner.md`](https://github.com/open-telemetry/community/blob/main/docs/how-to-provision-bare-metal-runner.md).
 The benchmarks repository needs to be added to the set of repositories
-authorized to use it. No new infrastructure is required.
+authorized to use it, following the process in
+[`how-to-use-bare-metal-runner.md`](https://github.com/open-telemetry/community/blob/main/docs/how-to-use-bare-metal-runner.md#request-access)
+(open an issue in `open-telemetry/community` requesting access). No new
+infrastructure is required.
 
 Each data point records environment metadata (runner, runtime, OS,
 benchmark tool versions) so shifts caused by environment rather than
