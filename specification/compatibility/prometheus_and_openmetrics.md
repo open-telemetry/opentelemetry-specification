@@ -559,12 +559,38 @@ Native Histogram with standard (exponential) schema as follows:
   - `Sum`, if set, is converted to the Native Histogram `Sum`.
   - `ZeroCount` is converted directly to the Native Histogram `ZeroCount`.
   - The dense bucket layout represented by `Positive` bucket counts and
-    `Offset` is converted to the Native Histogram sparse layout represented by
-    `PositiveSpans` and `PositiveDeltas`. The same holds for the `Negative`
-    bucket counts and `Offset`, converted to `NegativeSpans` and
-    `NegativeDeltas`. Note that Prometheus Native Histogram buckets are indexed
-    by upper boundary while Exponential Histogram buckets are indexed by lower
-    boundary, the result being that the `Offset` fields are different-by-one.
+    `Offset` is converted into the Native Histogram
+    [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+    in `PositiveSpans` and `PositiveDeltas`. The same conversion is applied
+    separately to `Negative` bucket counts and `Offset`, producing
+    `NegativeSpans` and `NegativeDeltas`. Note that Prometheus Native
+    Histogram buckets are indexed by their upper boundary while Exponential
+    Histogram buckets are indexed by their lower boundary, so the Native
+    Histogram bucket index of the Exponential Histogram bucket at array
+    position `i` (zero-based) is `Offset + i + 1`.
+    - Non-zero bucket counts MUST be converted into `PositiveDeltas` (or
+      `NegativeDeltas`). Zero-count buckets MAY also be included to extend
+      an enclosing span (rather than creating a gap between spans) and
+      reduce the number of `PositiveSpans` (or `NegativeSpans`).
+    - Bucket counts that need to be converted are converted into
+      `PositiveDeltas` (or `NegativeDeltas`), which is delta encoded. The
+      first converted value is written as is, the rest as delta to the
+      previous converted value. No cumulative summation across buckets is
+      required — OpenTelemetry and Native Histogram bucket counts are
+      already per-bucket.
+    - `PositiveSpans` (or `NegativeSpans`) encode where the converted
+      buckets sit in the Native Histogram bucket index. The first span's
+      `Offset` is the Native Histogram bucket index of the first converted
+      bucket. For subsequent spans, `Offset` is the number of buckets that
+      were not converted between the end of the previous span and the
+      start of this one. `Length` is the number of consecutive converted
+      buckets in the span.
+    - For example: if `Positive.Offset` is `3` and `Positive.BucketCounts`
+      is `10, 0, 0, 20, 5, 2`, those buckets sit at Native Histogram bucket
+      indexes `4, 5, 6, 7, 8, 9`. If only the non-zero bucket counts
+      `10, 20, 5, 2` are converted, then `PositiveSpans` will be
+      `{Offset: 4, Length: 1}, {Offset: 2, Length: 3}` and `PositiveDeltas`
+      will be `10, 10, -15, -3`.
 
 [OpenTelemetry Exponential Histograms](../metrics/data-model.md#exponentialhistogram)
 with a delta aggregation temporality MAY be aggregated into a cumulative
