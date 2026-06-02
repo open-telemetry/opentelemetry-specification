@@ -982,7 +982,7 @@ are invoked in the order they have been registered.
 
 `OnAddLink` MUST be called after a link has been added to a span. This method
 MUST NOT be called in case the cardinality limits prevented the link from being
-added. This method is called synchronously on the thread that added the link,
+added. This method MUST be called synchronously on the thread that added the link,
 therefore it should not block or throw exceptions.
 
 **Parameters:**
