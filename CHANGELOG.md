@@ -33,6 +33,9 @@ release.
 
 ### Common
 
+- Add an in-development [SDK self-observability](specification/self-observability.md)
+  section, referenced from the Tracing, Metrics, and Logs SDK specs.
+  ([#5087](https://github.com/open-telemetry/opentelemetry-specification/pull/5087))
 - Clarify non-OTLP representation guidance for nested `AnyValue` values in
   arrays and maps.
   ([#5053](https://github.com/open-telemetry/opentelemetry-specification/pull/5053))
