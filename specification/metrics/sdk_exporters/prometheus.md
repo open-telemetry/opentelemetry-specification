@@ -23,7 +23,7 @@ linkTitle: Prometheus
   * [Host](#host)
   * [Port](#port)
   * [Default Aggregation](#default-aggregation)
-  * [Resource Attributes as Metric Attributes](#resource-attributes-as-metric-attributes)
+  * [Resource Attributes as Metric Labels](#resource-attributes-as-metric-labels)
   * [Translation Strategy](#translation-strategy)
   * [Scope Info](#scope-info)
   * [Target Info](#target-info)
@@ -127,15 +127,14 @@ the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
 of instrument kind. This option MAY be named `default_aggregation`, and MUST use
 the [default aggregation](../sdk.md#default-aggregation) by default.
 
-### Resource Attributes as Metric Attributes
+### Resource Attributes as Metric Labels
 
 **Status**: [Development](../../document-status.md)
 
-A Prometheus Exporter MAY offer configuration to add resource attributes as metric attributes.
-By default, it MUST NOT add any resource attributes as metric attributes.
-The configuration SHOULD allow the user to select which resource attributes to copy (e.g.
-include / exclude or regular expression based). Copied Resource attributes MUST NOT be
-excluded from the `target` info metric. The option MAY be named `resource_constant_labels`.
+A Prometheus Exporter MAY offer configuration to add resource attributes as metric labels.
+By default, it MUST NOT add any resource attributes as metric labels.
+The configuration SHOULD allow the user to select resource attributes to include or exclude. Copied Resource attributes MUST NOT be
+excluded from the `target_info` metric. The option SHOULD be named `resource_constant_labels`.
 
 ### Translation Strategy
 

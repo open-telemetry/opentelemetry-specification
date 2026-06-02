@@ -50,6 +50,10 @@ release.
 
 ### Compatibility
 
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Clarify resource attributes configuration.
+    ([#5084](https://github.com/open-telemetry/opentelemetry-specification/pull/5084))
+
 ### SDK Configuration
 
 ### Supplementary Guidelines
