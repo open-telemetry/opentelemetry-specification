@@ -120,7 +120,7 @@ default.
 
 ### Default Aggregation
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter SHOULD support a configuration option to set
 the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
