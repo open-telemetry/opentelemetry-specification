@@ -83,6 +83,7 @@ weight: 3
       - [Go SpanExporter Interface](#go-spanexporter-interface)
       - [Java SpanExporter Interface](#java-spanexporter-interface)
 - [Concurrency requirements](#concurrency-requirements)
+- [Self-observability](#self-observability)
 
 <!-- tocstop -->
 
@@ -1284,3 +1285,9 @@ concurrently.
 
 **Span Exporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
 concurrently.
+
+## Self-observability
+
+**Status**: [Development](../document-status.md)
+
+The Tracing SDK SHOULD support [SDK self-observability](../self-observability.md).

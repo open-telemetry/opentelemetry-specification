@@ -90,6 +90,7 @@ weight: 3
 - [Numerical limits handling](#numerical-limits-handling)
 - [Compatibility requirements](#compatibility-requirements)
 - [Concurrency requirements](#concurrency-requirements)
+- [Self-observability](#self-observability)
 - [References](#references)
 
 <!-- tocstop -->
@@ -1945,6 +1946,12 @@ and `Shutdown` MUST be safe to be called concurrently.
 
 **MetricExporter** - `ForceFlush` and `Shutdown` MUST be safe to be called
 concurrently.
+
+## Self-observability
+
+**Status**: [Development](../document-status.md)
+
+The Metrics SDK SHOULD support [SDK self-observability](../self-observability.md).
 
 ## References
 
