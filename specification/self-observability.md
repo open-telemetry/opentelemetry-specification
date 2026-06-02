@@ -2,7 +2,7 @@
 
 **Status**: [Development](document-status.md)
 
-OpenTelemetry SDKs MAY emit self-observability ("internal") telemetry about
+OpenTelemetry SDKs SHOULD emit self-observability ("internal") telemetry about
 their own behavior (for example, metrics, logs, and other signals describing
 the state of processors, exporters, and metric readers) to help operators
 monitor the health of the OpenTelemetry pipeline itself.
