@@ -53,6 +53,8 @@ release.
 - Stabilize sections of Prometheus Metrics Exporter.
   - Clarify resource attributes configuration.
     ([#5084](https://github.com/open-telemetry/opentelemetry-specification/pull/5084))
+  - Stabilize the conversion of OTLP Summaries into Prometheus Summaries.
+    ([#5107](https://github.com/open-telemetry/opentelemetry-specification/issues/5107))
 
 ### SDK Configuration
 

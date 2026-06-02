@@ -558,22 +558,25 @@ metrics with the delta aggregation temporality are dropped.
 
 ### Summaries
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be converted to a Prometheus metric family with the following metrics:
+An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be
+converted to a Prometheus Summary as follows:
 
-- A single `{name}_count` metric denoting the count field of the summary.
-  All attributes of the summary point are converted to Prometheus labels.
-- `{name}_sum` metric denoting the sum field of the summary, reported
-  only if the sum is positive and monotonic. All attributes of the summary
-  point are converted to Prometheus labels.
-- A series of `{name}` metric points that contain all attributes of the
-  summary point recorded as labels.  Additionally, a label, denoted as
-  `quantile` is added denoting a reported quantile point, and having its value
-  be the stringified floating point value of quantiles (between 0.0 and 1.0),
-  starting from lowest to highest, and all being non-negative.  The value of
-  each point is the computed value of the quantile point.
-- Summaries with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
+- Attributes are converted as described in the
+  [`Metric Attributes`](#metric-attributes) section.
+- The count is converted to the Summary's count.
+- The sum is converted to the Summary's sum.
+- Quantiles are converted to the Summary's quantiles. The `quantile` label
+  value MUST be the stringified floating point value of each quantile (between
+  0.0 and 1.0), starting from lowest to highest, and all being non-negative.
+  The value of each quantile is the computed value of the quantile point.
+- When using a push protocol, such as Prometheus Remote Write,
+  `time_unix_nano` is converted to the Summary's timestamp. Explicit timestamps
+  SHOULD NOT be used for pull protocols, such as the Prometheus text exposition
+  format, where Prometheus assigns the scrape timestamp.
+- The `start_time_unix_nano` is converted to the Summary's start timestamp, if
+  supported.
 
 Exemplars on OpenTelemetry Summaries SHOULD be dropped.
 
