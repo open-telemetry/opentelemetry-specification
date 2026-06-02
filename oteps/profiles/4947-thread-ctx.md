@@ -21,7 +21,7 @@ We propose a mechanism for OpenTelemetry SDKs to publish thread-level informatio
 
 Because this mechanism relies on having a native component and knowing when a runtime switches contexts, we consider it optional for SDKs to support, as some runtimes (or even runtime versions) may not be able to feasibly/efficiently implement it.
 
-The TLSDESC-based publication mechanism and the in-memory **Thread-Local Context Record** format are intentionally separable. Runtimes that cannot efficiently expose context through TLSDESC are not required to implement this mechanism. However, we highly recommend reusing the same in-memory record format when publishing equivalent context through a runtime-specific discovery mechanism, rather than defining a runtime-specific payload format. Such mechanisms are out of scope for this OTEP, but reusing the record layout where practical allows readers to share parsing logic across runtimes.
+The TLSDESC-based publication mechanism and the in-memory **Thread-Local Context Record** format are intentionally separable. Runtimes that cannot efficiently expose context through TLSDESC, or for which OS-thread-local context is not the appropriate execution-context model, are not required to implement this mechanism. However, we highly recommend reusing the same in-memory record format when publishing equivalent context through a runtime-specific discovery mechanism, rather than defining a runtime-specific payload format. Such mechanisms are out of scope for this OTEP, but reusing the record layout where practical allows readers to share parsing logic across runtimes.
 
 When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID in the format described in this document to the appropriate thread-local. When an external reader observes this thread it checks to see if any such TLS data has been attached, and if so, includes it in its telemetry.
 
@@ -100,6 +100,8 @@ This is the attached thread record itself. SDK-side implementations may choose t
 |                 | [x].length | uint8 (*See below for alternative) | Length of val string                                                                                                                                     |
 |                 | [x].val    | uint8[length] (utf-8 bytes)        | Inline array of the string value itself. Exactly 'length' bytes appear here, before the next record begins.                                              |
 
+The record MUST start at an address aligned to at least a 2-byte boundary.
+
 This format usually relies on two reads - one to read the required fields up to and including `attrs-data-size` (first 28 bytes), and a second to read any custom attributes.
 
 **Why this layout**: It is scalable; if a writer is configured to publish only the required attributes and no custom fields, it can set `attrs-data-size` to 0; having read the first portion of the structure, the reader stops without having to read the rest.
@@ -153,14 +155,12 @@ When a request context is no longer active on a thread, the SDK either sets the 
 
 #### Design Considerations
 
-**Consistency during updates**: By setting the TLS pointer to `NULL` before constructing a new record, the SDK ensures readers never observe partially-written data. Readers that sample a thread during this window simply see no active context.
-
 **Record reuse**: SDKs may implement caching strategies where records for frequently-reattached contexts (e.g., a parent span that is repeatedly entered and exited) are retained rather than reconstructed. The `valid` field can alternatively be used to mark a record as under modification without detaching it entirely.
 
 **Allocation:** Implementations may choose to preallocate storage for some fixed set of **Thread-Local Reference Data** instances. This removes the need to allocate in the hot path.
 
 **Concurrency model**: Unlike the process context (OTEP 4719), where the writer races asynchronously with the reader and CPU memory barriers (`atomic_thread_fence` with `seq_cst`) are required, thread context assumes signal handler-like semantics.
-In practice, context reads are expected to behave as if the thread whose context is being read is stopped or otherwise interrupted, and thus there can't be any concurrency hazards between reads and writes.
+In practice, context reads are expected to behave as if the thread whose context is being read is stopped or otherwise interrupted. Since this protocol requires a thread's context record to be updated only by that same thread, there can't be any concurrency hazards between reads and writes.
 This means CPU memory ordering is not a concern.
 Writers need only use compiler fences (`atomic_signal_fence` or equivalent) and/or volatile writes to prevent compilers from reordering writes to the context with those to `valid` or the TLS pointer.
 These fences are expected to carry no runtime cost.
