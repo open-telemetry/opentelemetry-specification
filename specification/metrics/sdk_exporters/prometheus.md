@@ -129,7 +129,7 @@ the [default aggregation](../sdk.md#default-aggregation) by default.
 
 ### Resource Attributes as Metric Labels
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter MAY offer configuration to add resource attributes as metric labels.
 By default, it MUST NOT add any resource attributes as metric labels.
