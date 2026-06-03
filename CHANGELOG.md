@@ -77,6 +77,8 @@ release.
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize Target section.
     ([#5221](https://github.com/open-telemetry/opentelemetry-specification/pull/5221))
+  - Stabilize `resource_constant_labels` configuration.
+    ([#5130](https://github.com/open-telemetry/opentelemetry-specification/pull/5130))
 
 ### SDK Configuration
 
