@@ -261,3 +261,8 @@ here as a non-binding sketch of plausible follow-up work:
   contended workloads.
 - Onboard additional languages beyond those contributed during the
   initial rollout.
+- Publish the dashboard on the official
+  [`opentelemetry.io`](https://opentelemetry.io) site once the data,
+  layout, and process have stabilized. The initial home remains a
+  GitHub Pages site hosted from the `open-telemetry/benchmarks`
+  repository.
