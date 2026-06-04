@@ -9,6 +9,10 @@ release.
 
 ### Context
 
+- Clarify that environment variable propagation carriers normalize requested
+  keys, carrier keys, and returned keys.
+  ([#5102](https://github.com/open-telemetry/opentelemetry-specification/pull/5102))
+
 ### Traces
 
 ### Metrics
@@ -16,6 +20,8 @@ release.
 - Stabilize sections of Prometheus Metrics Exporter.
   - Stabilize client libs section.
     ([#5106](https://github.com/open-telemetry/opentelemetry-specification/pull/5106))
+  - Stabilize Prometheus Metrics Exporter default aggregation configuration.
+    ([#5113](https://github.com/open-telemetry/opentelemetry-specification/pull/5113))
 
 ### Logs
 
@@ -29,16 +35,28 @@ release.
 
 ### Common
 
+- Add an in-development [SDK self-observability](specification/self-observability.md)
+  section, referenced from the Tracing, Metrics, and Logs SDK specs.
+  ([#5087](https://github.com/open-telemetry/opentelemetry-specification/pull/5087))
 - Clarify non-OTLP representation guidance for nested `AnyValue` values in
   arrays and maps.
   ([#5053](https://github.com/open-telemetry/opentelemetry-specification/pull/5053))
 - Add in-development guidance recommending a JSON object as the string
   representation for an attribute in non-OTLP protocols.
   ([#5028](https://github.com/open-telemetry/opentelemetry-specification/pull/5028))
+- Add in-development guidance recommending a JSON object as the string
+  representation for an attribute collection in non-OTLP protocols.
+  ([#5110](https://github.com/open-telemetry/opentelemetry-specification/pull/5110))
 
 ### OpenTelemetry Protocol
 
 ### Compatibility
+
+- Stabilize sections of Prometheus Metrics Exporter.
+  - Clarify resource attributes configuration.
+    ([#5084](https://github.com/open-telemetry/opentelemetry-specification/pull/5084))
+  - Stabilize the conversion of OTLP Summaries into Prometheus Summaries.
+    ([#5107](https://github.com/open-telemetry/opentelemetry-specification/issues/5107))
 
 ### SDK Configuration
 
@@ -142,6 +160,8 @@ release.
 
 - Define merge algorithm.
   ([4768](https://github.com/open-telemetry/opentelemetry-specification/pull/4768))
+- Add specification for communicating entity information as structured log events.
+  ([#4836](https://github.com/open-telemetry/opentelemetry-specification/pull/4836))
 
 ### Compatibility
 
