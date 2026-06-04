@@ -52,6 +52,8 @@ The following values are stored:
   * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a Go application and thus context should be read from [Go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [Node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
 * `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread-local storage itself will then use these key indexes in place of the **attribute names**.
 
+> **Note:** The `threadlocal.*` keys are defined inline here rather than as a separate semantic convention because they are an internal detail of the contract between the publishing SDK and out-of-process readers, and are not emitted in OTLP.
+
 The exact format used will be the `repeated KeyValue` protobuf structure from the `ProcessContext.attributes` field standardized in OTEP-4719. A stringified representation of this showing the usage of the elements of that schema along with some example values:
 
 ```yaml
