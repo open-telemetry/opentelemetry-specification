@@ -10,6 +10,7 @@ extra requirements to the existing specifications.
 <!-- toc -->
 
 - [Scope of signals and lifecycle ordering](#scope-of-signals-and-lifecycle-ordering)
+- [Obtaining the Meter / Logger for self-observability](#obtaining-the-meter--logger-for-self-observability)
 - [Avoiding telemetry-induced-telemetry loops](#avoiding-telemetry-induced-telemetry-loops)
 - [Treat self-observability like any other SDK feature for stability](#treat-self-observability-like-any-other-sdk-feature-for-stability)
 
@@ -56,6 +57,29 @@ Rust), or in the simplest case direct writes to stdout/stderr — that path is a
 natural fit for events emitted before `LoggerProvider` is installed or after it
 has been shut down. It is typically available throughout the process lifetime
 and has few external dependencies that can fail.
+
+## Obtaining the Meter / Logger for self-observability
+
+An SDK has two broadly different ways to acquire the `Meter` / `Logger` it
+uses to emit self-observability telemetry:
+
+* From the global provider (e.g., `GlobalMeterProvider.Get(...)`).
+  Self-observability data then flows through the same pipeline as the rest
+  of the user's telemetry. This is the simplest to ship and requires no
+  additional configuration. The trade-off is that the user cannot route
+  SDK self-observability separately, and the
+  [telemetry-induced-telemetry concern](#avoiding-telemetry-induced-telemetry-loops)
+  becomes more relevant since the SDK is emitting into its own pipeline.
+* From a `MeterProvider` / `LoggerProvider` supplied explicitly by the user
+  (typically via a dedicated configuration option). This makes the
+  [separate pipeline](#avoiding-telemetry-induced-telemetry-loops) pattern
+  viable and lets operators send SDK self-observability to a different
+  backend or apply different retention/sampling. The trade-off is an
+  additional configuration surface, and a fallback decision when no
+  provider is supplied (e.g., fall back to global, or emit nothing).
+
+Both choices are valid and depend on the SDK's audience and how strongly it
+wants to enable separate routing.
 
 ## Avoiding telemetry-induced-telemetry loops
 
