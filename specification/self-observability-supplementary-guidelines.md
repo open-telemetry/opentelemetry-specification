@@ -1,0 +1,103 @@
+# Self-Observability Supplementary Guidelines
+
+Note: this document is NOT a spec, it is provided to support the
+[Self-Observability](self-observability.md) specification, it does NOT add any
+extra requirements to the existing specifications.
+
+<details>
+<summary>Table of Contents</summary>
+
+<!-- toc -->
+
+- [Scope of signals and lifecycle ordering](#scope-of-signals-and-lifecycle-ordering)
+- [Avoiding telemetry-induced-telemetry loops](#avoiding-telemetry-induced-telemetry-loops)
+- [Treat self-observability like any other SDK feature for stability](#treat-self-observability-like-any-other-sdk-feature-for-stability)
+
+<!-- tocstop -->
+
+</details>
+
+## Scope of signals and lifecycle ordering
+
+SDK self-observability is currently expressed primarily as metrics, defined in
+the [SDK self-observability metrics semantic conventions][semconv-sdk-metrics].
+The design is not inherently metrics-only - events/logs or spans describing SDK
+internals may be added by future semantic conventions, so SDK implementers
+should not assume the surface will remain metric-shaped.
+
+[semconv-sdk-metrics]:
+    https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/
+
+Once more than one signal is involved, lifecycle ordering becomes a problem. The
+recording providers (`MeterProvider`, `LoggerProvider`, and potentially
+`TracerProvider`) are constructed and shut down independently, so the second one
+to be constructed cannot accept telemetry produced during the setup of the first
+— and similarly, once a provider is shut down it can no longer accept telemetry
+produced while the others are still tearing down.
+
+For example, during startup:
+
+* If `MeterProvider` is constructed first, self-observability *events* produced
+  during its setup cannot yet flow through `LoggerProvider`, since
+  `LoggerProvider` does not yet exist.
+* If `LoggerProvider` is constructed first, self-observability *metrics*
+  produced during its setup cannot yet flow through `MeterProvider`.
+
+No ordering avoids this entirely — whichever provider comes up "second" loses
+the window before it exists, and whichever is shut down "first" loses the window
+after it is gone. Self-observability telemetry at the edges of the SDK lifecycle
+is therefore inherently best-effort; the strategy for handling it is left to the
+SDK.
+
+For self-observability logs/events specifically, if the SDK already emits
+diagnostics through a non-OpenTelemetry path — the language's native logging
+facility, a commonly-used ecosystem logging library (e.g., `tokio-tracing` in
+Rust), or in the simplest case direct writes to stdout/stderr — that path is a
+natural fit for events emitted before `LoggerProvider` is installed or after it
+has been shut down. It is typically available throughout the process lifetime
+and has few external dependencies that can fail.
+
+## Avoiding telemetry-induced-telemetry loops
+
+When the SDK emits self-observability data through its own telemetry pipeline,
+there is a risk of infinite recursion — an exporter that records a metric on
+every export triggers another export, which records another metric, and so on.
+
+Patterns SDKs can use to prevent such loops:
+
+* Use a dedicated `MeterProvider` (or `LoggerProvider`) for self-observability
+  that is isolated from the user's pipeline, so self-observability telemetry
+  does not feed back into it.
+* Use the OpenTelemetry `Context` to carry a flag marking code as running inside
+  the SDK's own pipeline, and skip self-observability recording when the flag is
+  set. There is no standardized spec for this today (tracked in
+  [open-telemetry/opentelemetry-specification#530](https://github.com/open-telemetry/opentelemetry-specification/issues/530));
+  in the meantime, several SDKs implement it independently:
+  * .NET:
+    [`SuppressInstrumentationScope`](https://github.com/open-telemetry/opentelemetry-dotnet/blob/core-1.15.3/src/OpenTelemetry/SuppressInstrumentationScope.cs#L12)
+  * Rust:
+    [`Context::enter_telemetry_suppressed_scope`](https://github.com/open-telemetry/opentelemetry-rust/blob/opentelemetry-0.32.0/opentelemetry/src/context.rs#L410)
+  * Python:
+    [`_SUPPRESS_INSTRUMENTATION_KEY`](https://github.com/open-telemetry/opentelemetry-python/blob/v1.42.1/opentelemetry-api/src/opentelemetry/context/__init__.py#L152)
+
+## Treat self-observability like any other SDK feature for stability
+
+SDK self-observability is an SDK feature and is subject to the SDK's normal
+[stability guarantees](versioning-and-stability.md) — no weaker, no different.
+
+This has three consequences:
+
+1. Any in-development or experimental metric, attribute, or semantic must be
+   opt-in.
+2. When part of the surface is stable and part is experimental, only the stable
+   part should be on by default; the experimental part stays opt-in.
+3. Self-observability is not exempt from these rules on the grounds that it is
+   "just diagnostic data" — SDK feature stability rules apply uniformly, and a
+   breaking change is a breaking change.
+
+How the opt-in is exposed is left to each SDK. Examples from existing SDKs:
+
+* An environment variable using the SDK's experimental-feature naming convention
+  (e.g., OpenTelemetry Go's `OTEL_GO_X_OBSERVABILITY`).
+* A build-time feature flag (e.g., an experimental Cargo feature in
+  OpenTelemetry Rust).
