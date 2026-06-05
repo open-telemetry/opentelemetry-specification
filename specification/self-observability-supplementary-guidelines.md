@@ -64,12 +64,12 @@ An SDK has two broadly different ways to acquire the `Meter` / `Logger` it
 uses to emit self-observability telemetry:
 
 * From the global provider (e.g., `GlobalMeterProvider.Get(...)`).
-  Self-observability data then flows through the same pipeline as the rest
-  of the user's telemetry. This is the simplest to ship and requires no
-  additional configuration. The trade-off is that the user cannot route
-  SDK self-observability separately, and the
-  [telemetry-induced-telemetry concern](#avoiding-telemetry-induced-telemetry-loops)
-  becomes more relevant since the SDK is emitting into its own pipeline.
+  Self-observability data then flows through the same pipeline as the rest of
+  the user's telemetry. This is the simplest to ship and requires no additional
+  configuration. The trade-off is that the user cannot easily route SDK
+  self-observability separately, and the [telemetry-induced-telemetry
+  concern](#avoiding-telemetry-induced-telemetry-loops) becomes more relevant
+  since the SDK is emitting into its own pipeline.
 * From a `MeterProvider` / `LoggerProvider` supplied explicitly by the user
   (typically via a dedicated configuration option). This makes the
   [separate pipeline](#avoiding-telemetry-induced-telemetry-loops) pattern
