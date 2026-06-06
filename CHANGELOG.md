@@ -60,6 +60,9 @@ release.
 
 ### SDK Configuration
 
+- Add link to declarative config IdGenerator type
+  ([#5133](https://github.com/open-telemetry/opentelemetry-specification/pull/5133))
+
 ### Supplementary Guidelines
 
 - Add non-normative [supplementary guidelines for SDK self-observability](specification/self-observability-supplementary-guidelines.md).
