@@ -81,15 +81,24 @@ uses to emit self-observability telemetry:
 Both choices are valid and depend on the SDK's audience and how strongly it
 wants to enable separate routing.
 
+These two approaches can also be combined: an SDK can accept an explicit
+`MeterProvider` / `LoggerProvider` and fall back to the global when none is
+supplied. This is a common pattern in instrumentation libraries and gives
+operators the option to route SDK self-observability separately without
+forcing additional configuration on users who do not need it.
+
 ## Avoiding telemetry-induced-telemetry loops
 
 When the SDK emits self-observability data through its own telemetry pipeline,
-there is a risk of infinite recursion — an exporter that records a metric on
-every export triggers another export, which records another metric, and so on.
+the data it emits can in turn be processed by that same pipeline, creating a
+feedback loop. This is primarily a concern for logs and traces: each log or
+span the SDK produces while handling a log or span can itself cause more logs
+or spans to be produced, leading to unbounded recursion. Metrics are less
+affected in practice.
 
 Patterns SDKs can use to prevent such loops:
 
-* Use a dedicated `MeterProvider` (or `LoggerProvider`) for self-observability
+* Use a dedicated `LoggerProvider` (or `TracerProvider`) for self-observability
   that is isolated from the user's pipeline, so self-observability telemetry
   does not feed back into it.
 * Use the OpenTelemetry `Context` to carry a flag marking code as running inside
