@@ -62,13 +62,29 @@ By contributing to OpenTelemetry Specification repository, you agree that your c
 
 ## Maintainers
 
+The maintainers of the specification are a superset of the Technical Committee.
+
 - [OpenTelemetry Technical Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#technical-committee)
 
 For more information about the maintainer role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#maintainer).
 
 ## Approvers
 
-- [OpenTelemetry Specification Sponsors](https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto)
+[Specification sponsors](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#specification-sponsor) represent the approver role for the specification, along with additional responsibilities and privileges.
+
+- [Alex Boten](https://github.com/codeboten), Honeycomb
+- [Christian Neumüller](https://github.com/Oberon00), Dynatrace
+- [Cijo Thomas](https://github.com/cijothomas), Microsoft
+- [Daniel Dyla](https://github.com/dyladan), Dynatrace
+- [Josh Suereth](https://github.com/jsuereth), Google
+- [Juraci Paixão Kröhling](https://github.com/jpkrohling), OllyGarden
+- [Leighton Chen](https://github.com/lzchen), Microsoft
+- [Marc Alff](https://github.com/marcalff), Oracle
+- [Robert Pająk](https://github.com/pellared), Splunk
+- [Severin Neumann](https://github.com/svrnm), Independent
+- [Ted Young](https://github.com/tedsuo), Grafana Labs
+- [Tristan Sloughter](https://github.com/tsloughter), MyDecisiveAI
+- [Tyler Yahn](https://github.com/MrAlias), Splunk
 
 For more information about the approver role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#approver).
 
@@ -77,3 +93,10 @@ For more information about the approver role, see the [community repository](htt
 - [OpenTelemetry Governance Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#governance-committee)
 
 For more information about the triager role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#triager).
+
+## Emeritus
+
+- [Christian Beedgen](https://github.com/kumoroku), Approver
+- [Daniel Jaglowski](https://github.com/djaglowski), Approver
+- [David Poncelow](https://github.com/zenmoto), Approver
+- [Nikita Salnikov-Tarnovski](https://github.com/iNikem), Approver
