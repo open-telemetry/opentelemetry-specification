@@ -381,7 +381,7 @@ combination of `job` and `instance` labels on metrics in the incoming batch of
 Prometheus metrics (e.g., a single scrape of a Prometheus endpoint or a single
 Prometheus Remote Write request), there is one OpenTelemetry Resource that
 contains all metrics with that `job` and `instance`. `job` and `instance` labels
-are added as resource attributes, and not as metric attributes.
+MUST be added as resource attributes, and not as metric attributes.
 
 Prometheus also stores metadata associated with scraped targets in the
 [target_info](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#supporting-target-metadata-in-both-push-based-and-pull-based-systems)
@@ -392,8 +392,10 @@ processed as follows: All labels from each `target_info` metric, except `job`
 and `instance`, MUST be converted to resource attributes on the resource
 associated with that `job` and `instance`. By default, all other label keys and
 values MUST NOT be altered (such as replacing `_` with `.` characters in keys).
-If not included as labels on `target_info`, `service.name` and
-`service.instance.id` MAY default to the `job` and `instance` values, respectively.
+If `service.name` and `service.instance.id` are not included as labels on
+`target_info`, they MAY default to the `job` and `instance` values,
+respectively, if they are present. If they are defaulted to `job` and `instance`,
+implementations MUST provide a configuration option to disable this behavior.
 
 | OTLP Resource Attribute | Description |
 | ----------------------- | ----------- |
@@ -663,12 +665,13 @@ push metric exporters, such as the Collector's
 [Prometheus Remote Write](https://prometheus.io/docs/specs/prw/remote_write_spec_2_0/)
 exporter.
 
-If `job` is not present, the `service.name`
-and `service.namespace` attributes MUST be combined as
-`<service.namespace>/<service.name>`, or `<service.name>` if namespace is empty,
-to form the `job` metric label. If `instance` is not present,
-the `service.instance.id` attribute, if present, MUST be converted to the
-`instance` label; otherwise, `instance` should be added with an empty value.
+If `job` is not present as a resource attribute and `service.name` is present,
+the `service.name` and `service.namespace` resource attributes MUST be combined
+as `<service.namespace>/<service.name>`, or `<service.name>` if namespace is
+empty, to form the `job` metric label; otherwise, `job` SHOULD be added with an
+empty value. If `instance` is not present as a resource attribute and
+`service.instance.id` is present, `service.instance.id` MUST be converted to the
+`instance` label; otherwise, `instance` SHOULD be added with an empty value.
 
 The resulting `job` and `instance` labels MUST be added to all OpenTelemetry
 metrics that are associated with the Resource, including the `target_info` metric,
