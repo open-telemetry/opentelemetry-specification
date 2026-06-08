@@ -65,6 +65,8 @@ By contributing to OpenTelemetry Specification repository, you agree that your c
 The maintainers of the specification are a superset of the Technical Committee.
 
 - [OpenTelemetry Technical Committee](https://github.com/open-telemetry/community/blob/main/community-members.md#technical-committee)
+- [Josh Suereth](https://github.com/jsuereth), Google
+- [Robert Pająk](https://github.com/pellared), Splunk
 
 For more information about the maintainer role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#maintainer).
 
@@ -80,7 +82,6 @@ For more information about the maintainer role, see the [community repository](h
 - [Juraci Paixão Kröhling](https://github.com/jpkrohling), OllyGarden
 - [Leighton Chen](https://github.com/lzchen), Microsoft
 - [Marc Alff](https://github.com/marcalff), Oracle
-- [Robert Pająk](https://github.com/pellared), Splunk
 - [Severin Neumann](https://github.com/svrnm), Independent
 - [Ted Young](https://github.com/tedsuo), Grafana Labs
 - [Tristan Sloughter](https://github.com/tsloughter), MyDecisiveAI
