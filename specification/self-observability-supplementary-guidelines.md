@@ -112,6 +112,8 @@ Patterns SDKs can use to prevent such loops:
     [`Context::enter_telemetry_suppressed_scope`](https://github.com/open-telemetry/opentelemetry-rust/blob/opentelemetry-0.32.0/opentelemetry/src/context.rs#L410)
   * Python:
     [`_SUPPRESS_INSTRUMENTATION_KEY`](https://github.com/open-telemetry/opentelemetry-python/blob/v1.42.1/opentelemetry-api/src/opentelemetry/context/__init__.py#L152)
+  * Java:
+    [`InstrumentationUtil.suppressInstrumentation`](https://github.com/open-telemetry/opentelemetry-java/blob/v1.63.0/api/all/src/main/java/io/opentelemetry/api/impl/InstrumentationUtil.java#L23-L24)
 
 ## Treat self-observability like any other SDK feature for stability
 
