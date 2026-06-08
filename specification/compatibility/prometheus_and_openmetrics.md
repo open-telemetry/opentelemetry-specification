@@ -527,7 +527,7 @@ with a cumulative aggregation temporality MUST be converted to a Prometheus
 Native Histogram with standard (exponential) schema as follows:
 
 - The [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
-  of the Native Histogram MUST be integer counter.
+  of the Native Histogram MUST be of the integer and counter flavor.
 - The `ResetHint` (or `CounterResetHint`) in the Native Histogram MUST be set
   to `UNKNOWN`. OpenTelemetry does not carry an explicit reset flag, so
   `UNKNOWN` lets Prometheus auto-detect resets from the values and avoids any
@@ -535,7 +535,8 @@ Native Histogram with standard (exponential) schema as follows:
 - `Scale` is converted to the Native Histogram `Schema`. Valid values for
   `Schema` are in the range [-4, 8]. If `Scale` is > 8 then Exponential
   Histogram data points SHOULD be downscaled to a scale accepted by Prometheus.
-  Any data point unable to be rescaled to an acceptable range MUST be dropped.
+  If `Scale` is < -4, the data point MUST be dropped. Any data point unable to
+  be rescaled to an acceptable range MUST be dropped.
 - `TimeUnixNano` is converted to the Native Histogram `Timestamp` after
   converting nanoseconds to milliseconds.
 - If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
