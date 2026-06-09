@@ -65,7 +65,9 @@ signals emitted within a Context. Context-scoped attributes are standard
 attributes, which means you can use strings, integers, floating point numbers,
 booleans, arrays, or complex types, just like for any telemetry item.
 
-Context-scoped attributes MUST be added to telemetry items of signals for which the feature is enabled, when those items are emitted while the Context containing the Context-scoped attributes is active, or when that Context is explicitly set as their parent.
+Context-scoped attributes MUST be added to telemetry items of signals for which the
+feature is enabled, when those items are emitted while the Context containing the
+Context-scoped attributes is active, or when that Context is explicitly set as their parent.
 that were **emitted** while the Context containing the Context-scoped attributes
 was active, or to telemetry items that had this Context explicitly set as parent.
 
