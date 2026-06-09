@@ -170,5 +170,5 @@ If a PR is stuck, the owner should:
 If still stuck after two weeks, bring it to the [OpenTelemetry Specification SIG
 meeting](https://github.com/open-telemetry/community/blob/main/README.md#specification-sigs).
 
-[spec-maintainers]: https://github.com/open-telemetry/community/blob/main/community-members.md#specifications-and-proto
+[spec-maintainers]: README.md#maintainers
 [code-owners]: ./.github/CODEOWNERS
