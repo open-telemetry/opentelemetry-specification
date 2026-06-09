@@ -80,14 +80,10 @@ Context-scoped attributes MUST NOT be propagated cross-service, i.e. no context 
 must be implemented for them. This is because they are meant to annotate (a subset of)
 the telemetry items related of a single service (see also [the next section](#comp-baggage)).
 
-Instrumentation libraries desiring to set Context-scoped attributes MUST offer this as an opt-in
-behavior (i.e. libraries will not set Context-scoped attributes by default).
-Comprehensive documentation on the used attributes SHOULD be provided to end users.
-This SHOULD include details on whether these attributes have high or low cardinality values.
-
-SDKs MUST disable Context-scoped attributes support by default, in order to reduce the possibility
-of unexpected side effects, as well as any performance hit due to additional allocations. The user
-MUST explicitly enable this functionality on a per-signal basis:
+SDKs MUST offer Context-scoped attributes as per-signal opt-in feature.
+This is done in order to reduce the possibility of unexpected side effects,
+as well as any performance hit due to additional allocations. The user
+MUST explicitly enable this functionality:
 
 ```yaml
 tracer_provider:
@@ -95,6 +91,11 @@ tracer_provider:
 logger_provider:
   context_scoped_attributes: true
 ```
+
+Instrumentation libraries desiring to set Context-scoped attributes SHOULD offer this as an opt-in
+behavior (i.e. libraries will not set Context-scoped attributes by default).
+Comprehensive documentation on the used attributes SHOULD be provided to end users.
+This SHOULD include details on whether these attributes have high or low cardinality values.
 
 See [Open questions](#open-questions) on details on details regarding the implementation.
 
@@ -324,13 +325,14 @@ with this approach though:
 * Support for profiling should be (eventually) added, but this has to be discussed
   and confirmed with the profiling SIG. Potentially, this support could be disabled by default
   if needed.
+* Instrumentatio libraries should not in general rely on this feature, but when they do
+  they should expose this as an opt-in. However, there are cases when enabling this by default
+  would add incredible value. Should we allow it? What details should be taken into consideration
+  in order to recommend libraries how to proceed?
 
 ## Future possibilities
 
 With the changes implemented in this OTEP, we will hopefully unblock some
 long-standing specification issues. See [Motivation](#motivation).
 
-* Instrumentation libraries should not use this feature, i.e. use `Add Context Attributes`,
-  but there may be cases where this would be beneficial to the telemetry output. We should
-  write documentation and guidelines exploring the side effects and how they play along
-  the enabled/disabled defaults for different signals.
+
