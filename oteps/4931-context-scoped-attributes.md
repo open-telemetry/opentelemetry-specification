@@ -119,9 +119,6 @@ This also explains the functional & API differences:
   meaning by extending the scope of attributes to called services and would also
   raise many security concerns.
 * Baggage only supports string values.
-* **Related** Baggage (implicitly or explicitly linked to telemetry items) MAY not be available
-  to telemetry exporters (although e.g., a SpanProcessor could be used to change that),
-  while that's the whole purpose of Context-scoped attributes.
 
 ### Comparing Context-scoped attributes to Instrumentation Scope Attributes
 
