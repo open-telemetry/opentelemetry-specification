@@ -52,7 +52,7 @@ The following values are stored:
   * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a Go application and thus context should be read from [Go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [Node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
 * `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread-local storage itself will then use these key indexes in place of the **attribute names**.
 
-> **Note:** The `threadlocal.*` keys are defined inline here rather than as a separate semantic convention because they are an internal detail of the contract between the publishing SDK and out-of-process readers, and are not emitted in OTLP.
+> **Note:** The `threadlocal.*` keys are defined here rather than as semantic conventions because they are inter-process coordination metadata, not telemetry attributes, and are not expected to appear in OTLP exports.
 
 The exact format used will be the `repeated KeyValue` protobuf structure from the `ProcessContext.attributes` field standardized in OTEP-4719. A stringified representation of this showing the usage of the elements of that schema along with some example values:
 
@@ -90,17 +90,22 @@ We introduce a single thread-local - `otel_thread_ctx_v1`. This is a pointer to 
 
 This is the attached thread record itself. SDK-side implementations may choose to hold multiple instances of this for active spans, and attach/detach them by setting the TLS to point to the appropriate entry. We err on the side of simplicity and support string (utf-8 bytes) attributes only.
 
+The record layout is byte-packed exactly as shown, with no implicit compiler padding between fields.
+
 | Name            |            | Data type                          | Notes                                                                                                                                                    |
 | :-------------- | :--------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | trace-id        |            | uint8[16]                          | In W3C Trace Context format. Zeroes can be used to indicate none active. If either of trace-id/span-id are set, both must be set.                        |
 | span-id         |            | uint8[8]                           | In W3C Trace Context format.                                                                                                                             |
 | valid           |            | uint8                              | This value is set to 1 when the record is valid. Consumers should ignore this record if any other value is set  when they read.                          |
 | _reserved       |            | uint8                              | One spare byte here to align attrs-data-size at two byte boundary.                                                                                       |
-| attrs-data-size |            | uint16                             | Size of `attrs-data`. This lets the reader know when it has consumed all `attrs-data` records within the TLS buffer.                                       |
+| attrs-data-size |            | uint16                             | Size of `attrs-data`. This lets the reader know when it has consumed all `attrs-data` records within the TLS buffer. The total record is recommended to stay at or under 640 bytes. |
 | attrs-data      |            | uint8[]                            | A byte buffer containing the attributes themselves. Its total length is given by `attrs-data-size`.                                                      |
-|                 | [x].key    | uint8 (*See below for alternative) | Index into the key table                                                                                                                                 |
+|                 | [x].key    | uint8 (*See below for alternative) | Index into the key table. Readers MUST ignore entries whose key index is outside `threadlocal.attribute_key_map`.                                         |
 |                 | [x].length | uint8 (*See below for alternative) | Length of val string                                                                                                                                     |
-|                 | [x].val    | uint8[length] (utf-8 bytes)        | Inline array of the string value itself. Exactly 'length' bytes appear here, before the next record begins.                                              |
+|                 | [x].val    | uint8[length] (utf-8 bytes)        | Inline array of the string value itself. Exactly `length` bytes appear here, before the next attribute entry begins.                                      |
+
+Entries in `attrs-data` are packed consecutively with no padding between entries.
+Readers MUST stop parsing `attrs-data` if the remaining buffer cannot hold a complete entry.
 
 The record MUST start at an address aligned to at least a 2-byte boundary.
 
@@ -129,13 +134,14 @@ At process startup, the SDK:
 
 When a request context is attached to a thread, the SDK:
 
-1. Sets the TLS pointer to 0 to ensure readers see no record during construction
-2. Obtains a contiguous buffer large enough to store the anticipated record size
-3. Constructs a new **Thread-Local Context Record**  within the buffer containing:
+1. Obtains a contiguous buffer large enough to store the anticipated record size
+2. Constructs a new **Thread-Local Context Record**  within the buffer containing:
    - Trace context (trace ID, span ID)
    - Any configured attributes, encoded per the record format
-4. Sets the `valid` field to indicate the record is complete
-5. Updates the TLS pointer to reference the new record
+3. Sets the `valid` field to indicate the record is complete
+4. Updates the TLS pointer to reference the new record
+
+If reusing storage that may already be visible to readers, the SDK MAY first set the TLS pointer to `NULL` to ensure readers see no record during construction.
 
 Note: the SDK is free to re-use existing buffers to save allocations in this path.
 
