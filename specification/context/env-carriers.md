@@ -69,7 +69,7 @@ propagation. To normalize a key name, carriers MUST:
 
 A normalized environment variable name is an environment variable name that is
 unchanged by applying this normalization. Equivalently, a normalized environment
-variable name matches the regular expression `[A-Z_][A-Z0-9_]*`.
+variable name matches the regular expression `^[A-Z_][A-Z0-9_]*$`.
 
 Environment variable names that do not match this pattern are non-normalized.
 
