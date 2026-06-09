@@ -15,7 +15,7 @@ process-wide initialization and the semantic scope of a (sub)service.
 
 A typical use case is supporting multi tenancy, with tenant information existing
 in the request itself (e.g. header key, access token, request parameter). This tenant information
-could be then propagated via Context-scoped attributes. **Any** telemetry produced during the processing
+could be then propagated in-proc via Context-scoped attributes. **Any** telemetry produced during the processing
 of the request would then be automatically associated with the respective request/tenant.
 Other alternatives would be problematic:
 
