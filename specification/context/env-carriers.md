@@ -58,29 +58,35 @@ When using environment variables as carriers:
 
 ### Key Name Normalization
 
-Environment variable names used for context propagation:
+Environment variable carriers MUST normalize key names used for context
+propagation. To normalize a key name, carriers MUST:
 
-- MUST be normalized by:
-  - uppercasing ASCII letters,
-  - replacing every character that is not an ASCII letter, digit, or underscore
-    (`_`) with an underscore (`_`),
-  - prefixing the name with an underscore (`_`) if it would otherwise start with
-    an ASCII digit.
-- MUST be normalized consistently by `Get`, `Set`, and `Keys` operations:
-  - when injecting context, the carrier `Set` operation MUST write values using
-    the normalized form of the key provided by the propagator,
-  - when extracting context, the carrier `Get` operation MUST normalize the key
-    requested by the propagator and the key names present in the carrier before
-    matching them. If multiple carrier key names normalize to the same key name,
-    the carrier is ambiguous and in that case, the value returned by `Get` is
-    unspecified,
-  - when listing keys, the carrier `Keys` function MUST return normalized key
-    names.
+- uppercase ASCII letters,
+- replace every character that is not an ASCII letter, digit, or underscore
+  (`_`) with an underscore (`_`),
+- prefix the name with an underscore (`_`) if it would otherwise start with an
+  ASCII digit.
+
+A normalized environment variable name is an environment variable name that is
+unchanged by applying this normalization. Equivalently, a normalized environment
+variable name matches the regular expression `[A-Z_][A-Z0-9_]*`.
+
+Environment variable names that do not match this pattern are non-normalized.
+
+Carriers MUST use normalized key names consistently in `Get`, `Set`, and
+`Keys` operations:
+
+- `Set` MUST write values using the normalized form of the key provided by the
+  propagator.
+- `Get` MUST normalize the key requested by the propagator and MUST use the
+  normalized key name to read from the carrier.
+- `Keys` MUST return only key names that are already normalized.
 
 For example, if a propagator requests the key `x-b3-traceid`, the environment
-variable carrier MUST match it to the carrier key `X_B3_TRACEID`. It MUST also
-match it to a carrier key such as `x-b3-traceid`, because both key names
-normalize to `X_B3_TRACEID`.
+variable carrier MUST normalize the requested key to `X_B3_TRACEID` and read
+the `X_B3_TRACEID` environment variable. It MUST NOT read a non-normalized
+environment variable named `x-b3-traceid`, even though that name normalizes to
+`X_B3_TRACEID`.
 
 > [!NOTE]
 > This normalization is consistent with the environment variable naming rules
