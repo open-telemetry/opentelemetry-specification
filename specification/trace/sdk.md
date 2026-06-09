@@ -977,6 +977,58 @@ are invoked in the order they have been registered.
 
 **Returns:** `Void`
 
+#### OnAddLink
+
+**Status**: [Development](../document-status.md)
+
+`OnAddLink` MUST be called after a link has been added to a span. This method
+MUST NOT be called in case the cardinality limits prevented the link from being
+added. This method MUST be called synchronously on the thread that added the link,
+therefore the implementation should not block or throw exceptions.
+
+**Parameters:**
+
+* `span` - a [readable span object](#additional-span-interfaces) on which
+  the link was just added.
+* `spanContext` - the span context of the linked span.
+* `attributes` - the attributes describing the link.
+
+**Returns:** `Void`
+
+#### OnNameUpdate
+
+**Status**: [Development](../document-status.md)
+
+`OnNameUpdate` is called after the span name has been updated. This method is
+called synchronously on the thread that updated the span name, therefore it
+should not block or throw exceptions.
+
+**Parameters:**
+
+* `span` - a [readable span object](#additional-span-interfaces) with the
+  updated name.
+
+**Returns:** `Void`
+
+#### OnSetAttribute
+
+**Status**: [Development](../document-status.md)
+
+`OnSetAttribute` is called after an attribute has been set on a span.
+This includes an existing attribute being updated. This method MUST NOT be
+called in case the cardinality limits prevented the attribute from being set.
+This method is called synchronously on the thread that set the attribute,
+therefore it should not block or throw exceptions.
+
+**Parameters:**
+
+* `span` - a [readable span object](#additional-span-interfaces) on which
+  the attribute was just set.
+* `attributeKey` - the key of the attribute.
+* `attributeValue` - the value of the attribute.
+
+**Returns:** `Void`
+
 #### OnEnding
 
 **Status**: [Development](../document-status.md)
