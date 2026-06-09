@@ -108,7 +108,7 @@ This format usually relies on two reads - one to read the required fields up to 
 
 **Why this layout**: It is scalable; if a writer is configured to publish only the required attributes and no custom fields, it can set `attrs-data-size` to 0; having read the first portion of the structure, the reader stops without having to read the rest.
 
-**Cache Impact:** Likewise, a frugal writer may aim to keep the entire record under 64 bytes (the typical size of a cache line) in which case we might expect the entire record is in cache after the first read.  This format takes 28 bytes for the lead in, then an overhead of 2 bytes per key-value pair.  For a single pair, we'd have 28 bytes for the value; for two, 26 bytes total. If we expected to track attributes such as `path` and `method`, this means we'd realistically expect to fit in a single cache line of 64 bytes. We recommend keeping at or under 640 bytes for the total record [to match the limit](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels#proposed-solution) on the OTel eBPF Profiler.
+**Cache Impact:** Likewise, a frugal writer may aim to keep the entire record under 64 bytes (the typical size of a cache line) in which case we might expect the entire record to be in cache after the first read.  This format takes 28 bytes for the lead in, then an overhead of 2 bytes per key-value pair.  For a single pair, we'd have 28 bytes for the value; for two, 26 bytes total. If we expected to track attributes such as `path` and `method`, this means we'd realistically expect to fit in a single cache line of 64 bytes. We recommend keeping at or under 640 bytes for the total record [to match the limit](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels#proposed-solution) on the OTel eBPF Profiler.
 
 ***Possible alternative/request for comments:** Switch one or both of `[x].key` and `[x].length` to being a [protobuf-style variable-length integer](https://protobuf.dev/programming-guides/encoding/#varints). This would allow more than 255 keys or longer value lengths than 255 bytes, if needed. Do we want this?*
 
@@ -161,7 +161,7 @@ When a request context is no longer active on a thread, the SDK either sets the 
 
 **Allocation:** Implementations may choose to preallocate storage for some fixed set of **Thread-Local Reference Data** instances. This removes the need to allocate in the hot path.
 
-**Concurrency model**: Unlike the process context (OTEP 4719), where the writer races asynchronously with the reader and CPU memory barriers (`atomic_thread_fence` with `seq_cst`) are required, thread context assumes signal handler-like semantics.
+**Concurrency model**: Unlike the process context (OTEP 4719), where the writer races asynchronously with the reader and CPU memory barriers are mandated, thread context assumes signal handler-like semantics.
 In practice, context reads are expected to behave as if the thread whose context is being read is stopped or otherwise interrupted. Since this protocol requires a thread's context record to be updated only by that same thread, there can't be any concurrency hazards between reads and writes.
 This means CPU memory ordering is not a concern.
 Writers need only use compiler fences (`atomic_signal_fence` or equivalent) and/or volatile writes to prevent compilers from reordering writes to the context with those to `valid` or the TLS pointer.
@@ -187,7 +187,7 @@ The external reader discovers a new process to observe. It:
 * For each of the process itself and its dynamically loaded libraries:
   * Check if the `dynsym` table contains the TLS symbols listed above
   * If it does, collect them
-* Note down the TL offset for **Thread-Local Reference Data** discovered
+* Note down the TLS offset for **Thread-Local Reference Data** discovered
 
 If the `threadlocal.*` keys are not present in the process context at this point, the reader should defer TLS symbol discovery and re-run step 1.2 when the process context is next updated. Readers can detect process context updates using the polling or prctl-hook mechanisms described in OTEP-4719.
 
@@ -261,7 +261,7 @@ An out of process reader has no ability to influence the sampling decisions of t
 As mentioned above in the document, this mechanism is intended to be optional as not all runtimes and runtime versions are able to feasibly/efficiently implement it.
 
 So far, we've looked at a number of runtimes/languages and we list below what we've learned of their feasibility.
-This section is not intended to constrain implementers of the specification (nor to mandate that SDKs adopt this feature if they have no interest on it), but rather to indicate how likely we currently believe this is to fit with those languages/runtimes:
+This section is not intended to constrain implementers of the specification (nor to mandate that SDKs adopt this feature if they have no interest in it), but rather to indicate how likely we currently believe this is to fit with those languages/runtimes:
 
 * **C/C++:** Full support
 * **Rust**:  Full support. Requires linking against a native library in order to ensure the TLS symbol is exposed correctly (see [here](https://github.com/rust-lang/rust/pull/132480))
