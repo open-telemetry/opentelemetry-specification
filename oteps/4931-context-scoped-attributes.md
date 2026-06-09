@@ -175,14 +175,16 @@ A new Context object is returned, contained the updated value set.
 Upon Span and LogRecord instances creation, the SDK MUST get
 the Context-scoped attributes of the logically associated Context, and
 add them to the newly created telemetry item, skipping attributes with
-keys already present in the telemetry item. This MUST be done before any
-extension point is invoked, e.g. Sampler or Processor.
+keys already present in the telemetry items (as Context-scoped attributes have
+lower priority). This MUST be done before any extension point is invoked,
+e.g. Sampler or Processor. For Span instances, these attributes can later be
+overriden manually by the user.
 
 For metrics, the SDK MUST get the Context-scoped attributes of the logical
 associated Context, and attach them upon measurements being recorded (rather
 than doing this when instruments are created), in order to have access to the
 actual attribute set being used. This MUST be done before any downstream processing
-happens, e.g. views, advisoriess or cardinality limits. The
+happens, e.g. views, advisories or cardinality limits. The
 [measurement processing](../specification/metrics/sdk.md#measurement-processing)
 section of the Metrics SDK will be updated to clearly reflect details on this step.
 
@@ -190,7 +192,8 @@ This will be an implementation-level change without any changes in the API-surfa
 of the SDK (i.e. it is not necessary to make Context-scoped attributes distinguishable
 from “direct” telemetry attributes).
 
-The snippet below shows what the expected behavior looks like:
+The snippet below shows what the expected behavior looks like for spans, including
+its interaction with the sampling layer:
 
 ```java
 public Span startSpan(...) {
