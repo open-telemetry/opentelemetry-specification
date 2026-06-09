@@ -14,6 +14,7 @@ release.
   ([#5102](https://github.com/open-telemetry/opentelemetry-specification/pull/5102))
 - Mark "Environment Variables as Context Propagation Carriers" as Release
   Candidate.
+  ([#5142](https://github.com/open-telemetry/opentelemetry-specification/pull/5142))
 
 ### Traces
 
