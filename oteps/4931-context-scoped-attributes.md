@@ -79,7 +79,7 @@ must be implemented for them. This is because they are meant to annotate (a subs
 the telemetry items related of a single service (see also [the next section](#comp-baggage)).
 
 Instrumentation libraries desiring to set Context-scoped attributes MUST offer this as an opt-in
-behavior, which will be disabled by default (i.e. libraries will not set Context-scoped attributes).
+behavior (i.e. libraries will not set Context-scoped attributes by default).
 Comprehensive documentation on the used attributes SHOULD be provided to end users.
 This SHOULD include details on whether these attributes have high or low cardinality values.
 
