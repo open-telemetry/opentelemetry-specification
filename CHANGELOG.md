@@ -12,6 +12,8 @@ release.
 - Clarify that environment variable propagation carriers normalize requested
   keys, carrier keys, and returned keys.
   ([#5102](https://github.com/open-telemetry/opentelemetry-specification/pull/5102))
+- Mark "Environment Variables as Context Propagation Carriers" as Release
+  Candidate.
 
 ### Traces
 
