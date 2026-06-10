@@ -49,7 +49,7 @@ after it is gone. Self-observability telemetry at the edges of the SDK lifecycle
 is therefore inherently best-effort; the strategy for handling it is left to the
 SDK.
 
-For self-observability logs/events specifically, if the SDK already emits
+For self-observability events specifically, if the SDK already emits
 diagnostics through a non-OpenTelemetry path — the language's native logging
 facility, a commonly-used ecosystem logging library (e.g., Tokio's `tracing`
 crate in Rust), or in the simplest case direct writes to stdout/stderr — that
