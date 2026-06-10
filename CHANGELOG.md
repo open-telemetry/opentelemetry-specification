@@ -72,6 +72,10 @@ release.
 
 ### OTEPs
 
+- Proposal for full federation of Semantic Convention repositories and how
+  they will be managed and released.
+  ([#4906](https://github.com/open-telemetry/opentelemetry-specification/pull/4906))
+
 ## v1.57.0 (2025-05-19)
 
 ### Metrics
