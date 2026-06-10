@@ -987,6 +987,8 @@ release.
 
 ### Common
 
+- Stabilize Attribute and Attribute Collection representation for non-OTLP.
+
 ### Supplementary Guidelines
 
 ## v1.32.0 (2024-04-11)
