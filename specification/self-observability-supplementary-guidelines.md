@@ -26,8 +26,7 @@ The design is not inherently metrics-only - events/logs or spans describing SDK
 internals may be added by future semantic conventions, so SDK implementers
 should not assume the surface will remain metric-shaped.
 
-[semconv-sdk-metrics]:
-    https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/
+[semconv-sdk-metrics]: https://opentelemetry.io/docs/specs/semconv/otel/sdk-metrics/
 
 Once more than one signal is involved, lifecycle ordering becomes a problem. The
 recording providers (`MeterProvider`, `LoggerProvider`, and potentially
@@ -52,11 +51,11 @@ SDK.
 
 For self-observability logs/events specifically, if the SDK already emits
 diagnostics through a non-OpenTelemetry path — the language's native logging
-facility, a commonly-used ecosystem logging library (e.g., `tokio-tracing` in
-Rust), or in the simplest case direct writes to stdout/stderr — that path is a
-natural fit for events emitted before `LoggerProvider` is installed or after it
-has been shut down. It is typically available throughout the process lifetime
-and has few external dependencies that can fail.
+facility, a commonly-used ecosystem logging library (e.g., Tokio's `tracing`
+crate in Rust), or in the simplest case direct writes to stdout/stderr — that
+path is a natural fit for events emitted before `LoggerProvider` is installed
+or after it has been shut down. It is typically available throughout the
+process lifetime and has few external dependencies that can fail.
 
 ## Obtaining the Meter / Logger for self-observability
 
