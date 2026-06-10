@@ -135,15 +135,25 @@ process and with the correct permissions, can be accessed from other processes.
 > This section is non-normative and provides implementation
 > guidance only. It does not add requirements to the specification.
 
-Language implementations of OpenTelemetry have flexibility in how they implement
-environment variable context propagation. Language implementations can use the
-existing `TextMapPropagator` directly with environment-specific carriers.
-Typically implementations follow this pattern by providing:
+Language implementations of OpenTelemetry have flexibility in how they expose
+environment variable context propagation. The existing `TextMapPropagator` can
+be used with environment-specific carriers, environment-specific
+[`Getter`](api-propagators.md#getter-argument) and
+[`Setter`](api-propagators.md#setter-argument) implementations, or carrier types
+that implement these operations themselves. Whichever component performs `Get`,
+`Set`, or `Keys` for environment variables is responsible for the normalization
+behavior described above. Language-specific helper components are only expected
+to operate on the carrier shapes supported by that language implementation.
+Implementations commonly provide one or more of the following:
 
-- `EnvironmentGetter` - creates an in-memory copy of the current environment
-  variables and reads context from that copy.
-- `EnvironmentSetter` - writes context to a dictionary/map and provides the
-  dictionary/map to the application owner for them to use when spawning processes.
+- `EnvironmentGetter` or equivalent - creates an in-memory copy of the current
+  environment variables and reads context from that copy.
+- `EnvironmentSetter` or equivalent - writes context to a dictionary/map and
+  provides the dictionary/map to the application owner for them to use when
+  spawning processes.
+- An environment-specific carrier type - implements environment variable `Get`,
+  `Set`, or `Keys` operations directly when the language combines carrier and
+  accessor APIs.
 
 Examples:
 
