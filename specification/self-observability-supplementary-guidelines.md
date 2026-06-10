@@ -90,8 +90,8 @@ forcing additional configuration on users who do not need it.
 
 When the SDK emits self-observability data through its own telemetry pipeline,
 the data it emits can in turn be processed by that same pipeline, creating a
-feedback loop. This is primarily a concern for logs and traces: each log or
-span the SDK produces while handling a log or span can itself cause more logs
+feedback loop. This is primarily a concern for events and traces: each event or
+span the SDK produces while handling a event or span can itself cause more events
 or spans to be produced, leading to unbounded recursion. Metrics are less
 affected in practice.
 
