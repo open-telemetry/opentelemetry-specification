@@ -62,6 +62,8 @@ release.
     ([#4605](https://github.com/open-telemetry/opentelemetry-specification/issues/4605))
 - Add optional OpenTelemetry Histogram to Prometheus Native Histogram with Custom Buckets transformation.
   ([#4605](https://github.com/open-telemetry/opentelemetry-specification/issues/4605))
+- Prometheus `job` and `instance` labels are preserved as resource attributes when converting to OTLP.
+  ([#4956](https://github.com/open-telemetry/opentelemetry-specification/pull/4956))
 
 ### SDK Configuration
 
@@ -113,6 +115,10 @@ release.
   ([#5071](https://github.com/open-telemetry/opentelemetry-specification/pull/5071))
 - Clarify that OTel SDKs should not use unofficial Prometheus clients.
   ([#5082](https://github.com/open-telemetry/opentelemetry-specification/pull/5082))
+
+### SDK Configuration
+
+### Supplementary Guidelines
 
 ### OTEPs
 
