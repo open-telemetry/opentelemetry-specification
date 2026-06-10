@@ -147,11 +147,10 @@ behavior described above. Language-specific helper components are only expected
 to operate on the carrier shapes supported by that language implementation.
 Implementations commonly provide one or more of the following:
 
-- `EnvironmentGetter` or equivalent - creates an in-memory copy of the current
-  environment variables and reads context from that copy.
-- `EnvironmentSetter` or equivalent - writes context to a dictionary/map and
-  provides the dictionary/map to the application owner for them to use when
-  spawning processes.
+- `Getter` - creates an in-memory copy of the current environment variables and
+  reads context from that copy.
+- `Setter` - writes context to a dictionary/map and provides the dictionary/map
+  to the application owner for them to use when spawning processes.
 - An environment-specific carrier type - implements environment variable `Get`,
   `Set`, or `Keys` operations directly when the language combines carrier and
   accessor APIs.
