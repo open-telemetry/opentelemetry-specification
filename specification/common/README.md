@@ -8,7 +8,7 @@ path_base_for_github_subdir:
 
 # Common specification concepts
 
-**Status**: [Stable](../document-status.md), except where otherwise specified
+**Status**: [Stable](../document-status.md)
 
 <details>
 <summary>Table of Contents</summary>
@@ -208,8 +208,6 @@ outside OpenTelemetry into OpenTelemetry attribute values.
 
 ### Attribute representation for non-OTLP
 
-**Status**: [Development](../document-status.md)
-
 For non-OTLP protocols that need to
 represent a single `Attribute` as a string, the RECOMMENDED form is a
 [JSON object](https://datatracker.ietf.org/doc/html/rfc8259#section-4)
@@ -286,8 +284,6 @@ irrespective of the order in which those elements appear
 (unordered collection equality).
 
 ### Attribute Collection representation for non-OTLP
-
-**Status**: [Development](../document-status.md)
 
 For non-OTLP protocols that need to represent an Attribute Collection as a
 string, the RECOMMENDED form is a
