@@ -32,7 +32,7 @@ Once more than one signal is involved, lifecycle ordering becomes a problem. The
 recording providers (`MeterProvider`, `LoggerProvider`, and potentially
 `TracerProvider`) are constructed and shut down independently, so the second one
 to be constructed cannot accept telemetry produced during the setup of the first
-— and similarly, once a provider is shut down it can no longer accept telemetry
+Similarly, once a provider is shut down it can no longer accept telemetry
 produced while the others are still tearing down.
 
 For example, during startup:
