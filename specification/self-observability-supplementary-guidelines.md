@@ -22,7 +22,7 @@ extra requirements to the existing specifications.
 
 SDK self-observability is currently expressed primarily as metrics, defined in
 the [SDK self-observability metrics semantic conventions][semconv-sdk-metrics].
-The design is not inherently metrics-only - events/logs or spans describing SDK
+The design is not inherently metrics-only. Events or spans describing SDK
 internals may be added by future semantic conventions, so SDK implementers
 should not assume the surface will remain metric-shaped.
 
