@@ -97,7 +97,7 @@ behavior (i.e. libraries will not set Context-scoped attributes by default).
 Comprehensive documentation on the used attributes SHOULD be provided to end users.
 This SHOULD include details on whether these attributes have high or low cardinality values.
 
-See [Open questions](#open-questions) on details on details regarding the implementation.
+See [Open questions](#open-questions) on details on further details regarding the implementation.
 
 <a name="comp-baggage"></a>
 
@@ -223,7 +223,13 @@ public Span startSpan(...) {
 
 ## Trade-offs and mitigations
 
-None at this moment.
+* Usage of Context-scoped attributes can result in unexpected side effects, such as
+  additional memory allocations or metrics cardinality explosion. For this
+  reason, this feature must be explictly opted-in by the user on a per-signal basis.
+* Although we plan to recommend that instrumentation libraries do not set Context-scoped
+  attributes, there may be very specific libraries that may benefit from leveraging this
+  feature. We plan to discuss that when this OTEP lands in the Specification. See
+  [open questions](#open-questions).
 
 ## Prior art and alternatives
 
@@ -327,8 +333,8 @@ with this approach though:
   if needed.
 * Instrumentatio libraries should not in general rely on this feature, but when they do
   they should expose this as an opt-in. However, there are cases when enabling this by default
-  would add incredible value. Should we allow it? What details should be taken into consideration
-  in order to recommend libraries how to proceed?
+  would add incredible value. Discussion needs to happen around what conditions such instrumentation
+  must meet in order to use this feature.
 
 ## Future possibilities
 
