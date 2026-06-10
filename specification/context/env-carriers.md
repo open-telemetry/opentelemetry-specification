@@ -58,8 +58,9 @@ When using environment variables as carriers:
 
 ### Key Name Normalization
 
-Environment variable carriers MUST normalize key names used for context
-propagation. To normalize a key name, carriers MUST:
+Language implementations MUST ensure that environment variable `Get`, `Set`,
+and `Keys` operations use normalized key names for context propagation. To
+normalize a key name, implementations MUST:
 
 - uppercase ASCII letters,
 - replace every character that is not an ASCII letter, digit, or underscore
@@ -73,8 +74,8 @@ variable name matches the regular expression `^[A-Z_][A-Z0-9_]*$`.
 
 Environment variable names that do not match this pattern are non-normalized.
 
-Carriers MUST use normalized key names consistently in `Get`, `Set`, and
-`Keys` operations:
+These requirements apply to whichever component implements the operation in a
+language, such as a carrier, `Getter`, `Setter`, or other language-specific API:
 
 - `Set` MUST write values using the normalized form of the key provided by the
   propagator.
@@ -82,11 +83,11 @@ Carriers MUST use normalized key names consistently in `Get`, `Set`, and
   normalized key name to read from the carrier.
 - `Keys` MUST return only key names that are already normalized.
 
-For example, if a propagator requests the key `x-b3-traceid`, the environment
-variable carrier MUST normalize the requested key to `X_B3_TRACEID` and read
-the `X_B3_TRACEID` environment variable. It MUST NOT read a non-normalized
-environment variable named `x-b3-traceid`, even though that name normalizes to
-`X_B3_TRACEID`.
+For example, if a propagator requests the key `x-b3-traceid`, the
+environment-specific `Get` operation MUST normalize the requested key to
+`X_B3_TRACEID` and read the `X_B3_TRACEID` environment variable. It MUST NOT
+read a non-normalized environment variable named `x-b3-traceid`, even though
+that name normalizes to `X_B3_TRACEID`.
 
 > [!NOTE]
 > This normalization is consistent with the environment variable naming rules
