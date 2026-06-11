@@ -140,7 +140,7 @@ The following table lists the current status of all SDK plugin components in the
 | [span exporter](../trace/sdk.md#span-exporter)                                              | [SpanExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanexporter-)                                   |
 | [span processor](../trace/sdk.md#span-processor)                                            | [SpanProcessor](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#spanprocessor-)                                 |
 | [sampler](../trace/sdk.md#sampler)                                                          | [Sampler](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#sampler-)                                             |
-| [ID generator](../trace/sdk.md#id-generators)                                               | not yet available [#70](https://github.com/open-telemetry/opentelemetry-configuration/issues/70)                                                       |
+| [ID generator](../trace/sdk.md#id-generators)                                               | [IdGenerator](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#idgenerator-)                                     |
 | [pull metric reader](../metrics/sdk.md#metricreader)                                        | [PullMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pullmetricexporter-)                       |
 | [push metric exporter](../metrics/sdk.md#metricexporter)                                    | [PushMetricExporter](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#pushmetricexporter-)                       |
 | [metric producer](../metrics/sdk.md#metricproducer)                                         | [MetricProducer](https://github.com/open-telemetry/opentelemetry-configuration/blob/main/schema-docs.md#metricproducer-)                               |
@@ -376,7 +376,7 @@ try {
 // Access SDK components and install instrumentation
 TracerProvider tracerProvider = openTelemetry.getTracerProvider();
 MeterProvider meterProvider = openTelemetry.getMeterProvider();
-LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+LoggerProvider loggerProvider = openTelemetry.getLoggerProvider();
 ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```
@@ -404,7 +404,7 @@ try {
 // Access SDK components and install instrumentation
 TracerProvider tracerProvider = openTelemetry.getTracerProvider();
 MeterProvider meterProvider = openTelemetry.getMeterProvider();
-LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+LoggerProvider loggerProvider = openTelemetry.getLoggerProvider();
 ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```
@@ -432,7 +432,7 @@ OpenTelemetry openTelemetry = AutoConfiguredOpenTelemetrySdk.initialize().getOpe
 // Access SDK components and install instrumentation
 TracerProvider tracerProvider = openTelemetry.getTracerProvider();
 MeterProvider meterProvider = openTelemetry.getMeterProvider();
-LoggerProvider loggerProvider = openTelemetry.getLogsBridge();
+LoggerProvider loggerProvider = openTelemetry.getLoggerProvider();
 ContextPropagators propagators = openTelemetry.getPropagators();
 ConfigProvider configProvider = openTelemetry.getConfigProvider();
 ```

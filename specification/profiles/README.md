@@ -6,13 +6,19 @@ path_base_for_github_subdir:
 
 # OpenTelemetry Profiles
 
+**Status**: [Alpha](../document-status.md)
+
 <details>
 <summary>Table of Contents</summary>
 
 <!-- toc -->
 
 - [Overview](#overview)
+- [Design goals](#design-goals)
+- [Data Format](#data-format)
 - [Known values](#known-values)
+- [Specifications](#specifications)
+- [References](#references)
 
 <!-- tocstop -->
 
@@ -20,33 +26,54 @@ path_base_for_github_subdir:
 
 ## Overview
 
-Profiles are emerging as the fourth essential signal of observability, alongside
-logs, metrics, and traces. They offer unparalleled insights into system and
-application behavior, often uncovering performance bottlenecks overlooked by
-other signals.
+A **profile** is a collection of stack traces with associated values
+representing resource consumption and code execution, collected from a
+running program. Profiling is the process of collecting such profiles,
+typically by sampling program state at regular intervals.
 
-Profiles provide granular, time-based views of resource consumption and
-code execution, encompassing:
+For a general introduction to OpenTelemetry profiling and how it complements other
+observability signals, see [Profiles concepts](https://opentelemetry.io/docs/concepts/signals/profiles/).
 
-* **Application-level profiling**: Reveals how software functions consume CPU,
-memory, and other resources, highlighting slow or inefficient code.
+## Design goals
 
-* **System-level profiling**: Offers a holistic view of the infrastructure,
-pinpointing issues in operating system calls, kernel operations, and I/O.
+The profiles signal is designed with the following goals in mind:
 
-This performance picture can lead to:
+- **Low overhead**: Enable profiling agents to operate continuously in production
+  environments without materially impacting application performance.
+- **Efficient representation**: Reduces volume of data stored and transmitted,
+  by using dictionary tables to deduplicate repeated information across samples.
+- **Compatibility with existing formats**: The data format is a superset of
+  established profiling formats such as [pprof](https://github.com/google/pprof)
+  and in most cases supports lossless conversions to and from these formats.
+  If that's not possible (e.g. custom extensions), the `original_payload_format`
+  field can be used to transmit the original information for future lossless
+  export or reinterpretation.
+- **Correlation with other signals**: Profiles MUST be linkable to logs, metrics
+  and traces through shared resource context and, where applicable,
+  direct trace/span references.
 
-* **Faster Root Cause Analysis**: Quickly identifies the exact cause of
-performance degradation.
-* **Proactive Optimization**: Identifies potential issues before user impact.
-* **Improved Resource Utilization**: Optimizes infrastructure for cost savings
-and efficiency.
-* **Enhanced Developer Productivity**: Helps developers validate code performance
-and prevent regressions.
+## Data Format
 
-In essence, while logs, metrics, and traces show "what" and "how much/where"
-profiles explain "why" and "how efficiently" making them indispensable in modern
-observability.
+The OpenTelemetry profiles data format is [here](./data-format.md).
+It builds on the [pprof protobuf format](https://github.com/google/pprof/tree/main/proto)
+and extends it with:
+
+- **Resource and scope context**: Each batch of profiles is associated with a
+  [Resource](../resource/README.md) and an [InstrumentationScope](../common/instrumentation-scope.md),
+  consistent with logs, metrics and traces.
+- **Generalized dictionary**: Deduplicates not only strings but also other messages
+  that exhibit redundancy.
+- **Generalized attributes**: Most messages can carry attributes following the
+  same conventions as other signals, augmented with Unit information (`KeyValueAndUnit`).
+- **Span context references**: Samples MAY include a `Link` (span ID and trace ID),
+  enabling direct linking between a profile sample and the trace/span during
+  which it was captured.
+
+For details on the required attributes for `Mapping` messages and the custom
+hashing scheme for build ID generation, see [Mappings](./mappings.md).
+
+For more information on compatibility with [pprof](https://github.com/google/pprof),
+see [pprof](./pprof.md).
 
 ## Known values
 
@@ -61,3 +88,15 @@ tools, known values are utilized.
 | Profile field | Known values |
 | ------------- | ------------ |
 | original_payload_format | [pprof](https://github.com/google/pprof/tree/main/proto), [jfr](https://en.wikipedia.org/wiki/JDK_Flight_Recorder) or [linux_perf](https://perfwiki.github.io/) |
+
+## Specifications
+
+* [Profiles Data Format](./data-format.md)
+* [Profiles Mappings Attributes](./mappings.md)
+* [Profiles Pprof Compatibility](./pprof.md)
+
+## References
+
+- [Profiles Concepts](https://opentelemetry.io/docs/concepts/signals/profiles/)
+- [Profiles Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/general/profiles/)
+- [OTEP0212 OpenTelemetry Profiles Vision](../../oteps/profiles/0212-profiling-vision.md)
