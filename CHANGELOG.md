@@ -57,7 +57,12 @@ release.
     ([#5084](https://github.com/open-telemetry/opentelemetry-specification/pull/5084))
   - Stabilize the conversion of OTLP Summaries into Prometheus Summaries.
     ([#5107](https://github.com/open-telemetry/opentelemetry-specification/issues/5107))
-- Stabilize OpenTelemetry Exponential Histogram to Prometheus Native Histogram
+- Stabilize sections of Prometheus and OpenMetrics Compatibility.
+  - Stabilize OpenTelemetry Histogram to Prometheus Histogram transformation.
+    ([#4605](https://github.com/open-telemetry/opentelemetry-specification/issues/4605))
+- Add optional OpenTelemetry Histogram to Prometheus Native Histogram with Custom Buckets transformation.
+  ([#4605](https://github.com/open-telemetry/opentelemetry-specification/issues/4605))
+- Update the OpenTelemetry Exponential Histogram to Prometheus Native Histogram
   with standard (exponential) schema transformation.
   ([#4922](https://github.com/open-telemetry/opentelemetry-specification/issues/4922))
 
