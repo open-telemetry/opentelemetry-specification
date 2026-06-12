@@ -55,6 +55,8 @@ release.
 
 ### Compatibility
 
+- Deprecate OpenCensus compatibility requirements in the specification.
+  ([#5109](https://github.com/open-telemetry/opentelemetry-specification/issues/5109))
 - Stabilize sections of Prometheus Metrics Exporter.
   - Clarify resource attributes configuration.
     ([#5084](https://github.com/open-telemetry/opentelemetry-specification/pull/5084))
