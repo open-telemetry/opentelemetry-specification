@@ -75,6 +75,9 @@ release.
 
 ### Supplementary Guidelines
 
+- Add non-normative [supplementary guidelines for SDK self-observability](specification/self-observability-supplementary-guidelines.md).
+  ([#5128](https://github.com/open-telemetry/opentelemetry-specification/issues/5128))
+
 ### OTEPs
 
 ## v1.57.0 (2025-05-19)
