@@ -36,6 +36,11 @@ release.
 
 ### Entities
 
+- Define Local vs Global Identity for entities, introduce `global` and
+  `local` identity scope kinds, add the ID Context Type field, and
+  specify the global identity composition algorithm.
+  ([#5038](https://github.com/open-telemetry/opentelemetry-specification/issues/5038))
+
 ### Common
 
 - Add an in-development [SDK self-observability](specification/self-observability.md)
