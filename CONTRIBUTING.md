@@ -163,8 +163,9 @@ If a PR is stuck, the owner should:
 
 - Post a summary of open perspectives in the PR description.
 - Tag relevant subdomain experts (check the change history).
-- Raise it in the [CNCF OpenTelemetry Slack](https://cloud-native.slack.com/archives/C01N7PP1THC)
-  ([join here](https://slack.cncf.io/)).
+- Raise it in the [#otel-specification](https://cloud-native.slack.com/archives/C01N7PP1THC)
+  channel on CNCF Slack. If you are new to the CNCF Slack community,
+  you can [create an account](https://slack.cncf.io/).
 - Consider narrowing the scope or splitting the PR.
 
 If still stuck after two weeks, bring it to the [OpenTelemetry Specification SIG
