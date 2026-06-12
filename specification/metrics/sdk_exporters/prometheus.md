@@ -176,9 +176,11 @@ negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prom
 
 **Status**: [Development](../../document-status.md)
 
-Although a Prometheus Exporter MAY be configured with a `translation_strategy` for internal metric processing, the final output format and character escaping MUST follow what the content negotiation process determines based on the client's `Accept` header. The content negotiation requirements MUST take precedence over the configured translation strategy when determining the final output format.
+When a Prometheus Exporter is configured with a permissive `translation_strategy`,
+such as `NoTranslation`, the final output format and character escaping MUST
+comply with the content negotiation's restrictions based on the `Accept` header.
 
 Examples:
 
 - If configured with `NoTranslation` but the client requests `escaping=underscores`, the exporter MUST apply underscore escaping.
-- If configured with `UnderscoreEscapingWithSuffixes` but the client requests `escaping=allow-utf8`, there's no need to revert what has been translated since the exporter will continue to be compliant.
+- If configured with `UnderscoreEscapingWithSuffixes` but the client requests `escaping=allow-utf-8`, there's no need to revert what has been translated since the exporter will continue to be compliant.
