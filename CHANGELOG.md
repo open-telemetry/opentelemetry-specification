@@ -12,6 +12,9 @@ release.
 - Clarify that environment variable propagation carriers normalize requested
   keys, carrier keys, and returned keys.
   ([#5102](https://github.com/open-telemetry/opentelemetry-specification/pull/5102))
+- Specify that environment variable propagation carriers only read and return
+  normalized environment variable names.
+  ([#5144](https://github.com/open-telemetry/opentelemetry-specification/pull/5144))
 
 ### Traces
 
