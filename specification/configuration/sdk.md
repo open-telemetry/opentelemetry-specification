@@ -7,7 +7,7 @@ weight: 3
 
 **Status**: [Stable](../document-status.md) except where otherwise specified
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [In-Memory configuration model](#in-memory-configuration-model)

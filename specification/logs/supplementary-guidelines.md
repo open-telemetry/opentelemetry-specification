@@ -9,7 +9,7 @@ extra requirements to the existing specifications.
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Usage](#usage)
   * [How to Create a Log4J Log Appender](#how-to-create-a-log4j-log-appender)

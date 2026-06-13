@@ -4,7 +4,7 @@
 
 This document defines how to record exceptions and their attributes.
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Recording an Exception](#recording-an-exception)
 - [Attributes](#attributes)

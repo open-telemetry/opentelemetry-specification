@@ -1,6 +1,6 @@
 # Semantic Convention Schema v2
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Semantic Convention Schema v2](#semantic-convention-schema-v2)
   - [Motivation](#motivation)

@@ -1,6 +1,6 @@
 # Probability sampling of telemetry events
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Motivation](#motivation)
 - [Examples](#examples)

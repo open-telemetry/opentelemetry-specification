@@ -13,7 +13,7 @@ path_base_for_github_subdir:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Motivation](#motivation)
 - [How Schemas Work](#how-schemas-work)

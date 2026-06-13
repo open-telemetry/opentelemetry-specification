@@ -13,7 +13,7 @@ aliases:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Type-specific guidance](#type-specific-guidance)
   * [Numeric](#numeric)

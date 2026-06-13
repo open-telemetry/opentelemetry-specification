@@ -6,7 +6,7 @@ current resource specification.
 
 It is an expansion on the [previous entity proposal](0256-entities-data-model.md).
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Motivation](#motivation)
 - [Design](#design)

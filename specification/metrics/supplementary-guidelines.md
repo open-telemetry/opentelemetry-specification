@@ -7,7 +7,7 @@ requirements to the existing specifications.
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Guidelines for instrumentation library authors](#guidelines-for-instrumentation-library-authors)
   * [Instrument selection](#instrument-selection)

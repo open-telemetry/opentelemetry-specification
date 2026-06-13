@@ -5,7 +5,7 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Unstable Instrumentations](#unstable-instrumentations)
 - [Stable Instrumentations](#stable-instrumentations)
