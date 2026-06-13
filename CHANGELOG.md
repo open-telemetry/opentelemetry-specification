@@ -77,6 +77,9 @@ release.
 
 ### OTEPs
 
+- Add OTEP proposing a central OpenTelemetry benchmarks repository.
+  ([#5118](https://github.com/open-telemetry/opentelemetry-specification/pull/5118))
+
 ## v1.57.0 (2025-05-19)
 
 ### Metrics
