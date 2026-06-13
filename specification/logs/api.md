@@ -13,7 +13,7 @@ aliases: [bridge-api]
 
 <!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider operations](#loggerprovider-operations)

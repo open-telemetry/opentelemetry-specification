@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider Creation](#loggerprovider-creation)

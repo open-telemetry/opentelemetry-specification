@@ -2,7 +2,7 @@
 
 **Status**: [Alpha](../document-status.md)
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Compatibility](#compatibility)
 

@@ -7,7 +7,7 @@ weight: 1
 
 **Status**: [Mixed](../document-status.md)
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [ConfigProvider](#configprovider)

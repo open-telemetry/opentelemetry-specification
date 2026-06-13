@@ -9,7 +9,7 @@ path_base_for_github_subdir:
  <details>
  <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [Identity](#identity)

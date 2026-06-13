@@ -9,7 +9,7 @@ linkTitle: No-Op
 <details>
 <summary> Table of Contents </summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [MeterProvider](#meterprovider)
   * [Meter Creation](#meter-creation)

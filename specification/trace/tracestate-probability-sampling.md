@@ -10,7 +10,7 @@ aliases: [tracestate-probability-sampling-experimental]
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
 - [Definitions](#definitions)

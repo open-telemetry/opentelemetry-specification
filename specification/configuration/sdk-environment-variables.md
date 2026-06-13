@@ -13,7 +13,7 @@ aliases:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Implementation guidelines](#implementation-guidelines)
 - [Parsing empty value](#parsing-empty-value)

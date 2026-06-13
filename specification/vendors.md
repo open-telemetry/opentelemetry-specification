@@ -3,7 +3,7 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Abstract](#abstract)
 - [Supports OpenTelemetry](#supports-opentelemetry)

@@ -5,7 +5,7 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
   * [Syslog RFC5424](#syslog-rfc5424)

@@ -9,7 +9,7 @@ linkTitle: Prometheus
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Prometheus Exporter Model](#prometheus-exporter-model)
   * [Pull Metric Exporter](#pull-metric-exporter)

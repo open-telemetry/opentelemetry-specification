@@ -12,7 +12,7 @@ aliases:
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Differences between Prometheus formats](#differences-between-prometheus-formats)
 - [Prometheus Metric points to OTLP](#prometheus-metric-points-to-otlp)

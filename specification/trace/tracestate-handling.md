@@ -9,7 +9,7 @@ linkTitle: TraceState
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Key](#key)
 - [Value](#value)

@@ -1,6 +1,6 @@
 # Extending attributes to support complex values
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Glossary](#glossary)
 - [Why?](#why)

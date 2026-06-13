@@ -10,7 +10,7 @@ weight: 2
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Design Notes](#design-notes)
   * [Requirements](#requirements)

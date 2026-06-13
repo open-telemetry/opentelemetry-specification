@@ -7,7 +7,7 @@ weight: 1
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [OpenTelemetry Client Architecture](#opentelemetry-client-architecture)
   * [API](#api)

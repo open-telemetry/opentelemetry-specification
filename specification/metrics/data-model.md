@@ -11,7 +11,7 @@ weight: 2
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Overview](#overview)
 - [Events => Data Stream => Timeseries](#events--data-stream--timeseries)
