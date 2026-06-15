@@ -12,7 +12,7 @@
   * [Fixed Schema Telemetry Producers](#fixed-schema-telemetry-producers)
   * [Schema-File Driven Telemetry Producers](#schema-file-driven-telemetry-producers)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

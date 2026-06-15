@@ -20,7 +20,7 @@ path_base_for_github_subdir:
 - [Specifications](#specifications)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

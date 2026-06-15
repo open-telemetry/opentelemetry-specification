@@ -25,7 +25,7 @@
 - [Backend research](#backend-research)
 - [Appendix](#appendix)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Glossary
 

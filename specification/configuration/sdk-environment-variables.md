@@ -39,7 +39,7 @@ aliases:
 - [Declarative configuration](#declarative-configuration)
 - [Language Specific Environment Variables](#language-specific-environment-variables)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

@@ -31,7 +31,7 @@
   * [Contrib Support](#contrib-support)
 - [OpenTelemetry GA](#opentelemetry-ga)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

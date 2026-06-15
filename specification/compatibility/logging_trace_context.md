@@ -13,7 +13,7 @@
   * [JSON Formats](#json-formats)
   * [Other Structured Formats](#other-structured-formats)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

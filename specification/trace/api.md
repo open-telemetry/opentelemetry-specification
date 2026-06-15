@@ -50,7 +50,7 @@ weight: 1
 - [Included Propagators](#included-propagators)
 - [Behavior of the API in the absence of an installed SDK](#behavior-of-the-api-in-the-absence-of-an-installed-sdk)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

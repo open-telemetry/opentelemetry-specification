@@ -55,7 +55,7 @@ It is an expansion on the [previous entity proposal](0256-entities-data-model.md
   * [Implications](#implications)
   * [What could this mean for choosing entities that belong on resource?](#what-could-this-mean-for-choosing-entities-that-belong-on-resource)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Motivation
 

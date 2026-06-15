@@ -13,7 +13,7 @@ requirements to the existing specifications.
 - [Programmatic customization and `create`](#programmatic-customization-and-create)
 - [Strict YAML parsing](#strict-yaml-parsing)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

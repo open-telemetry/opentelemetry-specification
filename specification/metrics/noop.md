@@ -35,7 +35,7 @@ linkTitle: No-Op
   * [Asynchronous Gauge Observations](#asynchronous-gauge-observations)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

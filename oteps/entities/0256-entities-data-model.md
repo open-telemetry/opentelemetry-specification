@@ -37,7 +37,7 @@ transferred, stored and interpreted by an entity observability system.
 - [Future Work](#future-work)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Motivation
 

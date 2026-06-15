@@ -35,7 +35,7 @@ weight: 1
 - [Collector](#collector)
 - [Instrumentation Libraries](#instrumentation-libraries)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

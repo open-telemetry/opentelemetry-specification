@@ -30,7 +30,7 @@ linkTitle: Prometheus
 - [Content Negotiation](#content-negotiation)
   * [Interaction with Translation Strategy](#interaction-with-translation-strategy)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

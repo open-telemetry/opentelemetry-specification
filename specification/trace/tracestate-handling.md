@@ -18,7 +18,7 @@ linkTitle: TraceState
   * [Sampling threshold value `th`](#sampling-threshold-value-th)
   * [Explicit randomness value `rv`](#explicit-randomness-value-rv)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

@@ -10,7 +10,7 @@
 - [Implements OpenTelemetry](#implements-opentelemetry)
 - [Qualifications](#qualifications)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

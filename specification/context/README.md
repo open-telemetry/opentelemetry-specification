@@ -23,7 +23,7 @@ path_base_for_github_subdir:
   * [Attach Context](#attach-context)
   * [Detach Context](#detach-context)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

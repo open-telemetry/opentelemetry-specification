@@ -44,7 +44,7 @@ aliases:
   * [Exemplar Conversion](#exemplar-conversion)
   * [Resource Attributes](#resource-attributes-1)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

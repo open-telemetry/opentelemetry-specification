@@ -28,7 +28,7 @@
   - [Prototypes](#prototypes)
   - [Future possibilities](#future-possibilities)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 In this OTEP, we propose a new telemetry schema format that supports multiple convention registries
 and provides full access to metadata.

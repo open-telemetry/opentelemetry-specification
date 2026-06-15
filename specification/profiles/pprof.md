@@ -6,7 +6,7 @@
 
 - [Compatibility](#compatibility)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Compatibility
 

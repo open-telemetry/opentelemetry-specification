@@ -26,7 +26,7 @@ aliases: [bridge-api]
 - [Ergonomic API](#ergonomic-api)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

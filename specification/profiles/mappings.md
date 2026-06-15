@@ -9,7 +9,7 @@ This document defines the required attributes of [`Mapping`](../../oteps/profile
 - [Attributes](#attributes)
   * [Algorithm for `process.executable.build_id.htlhash`](#algorithm-for-processexecutablebuild_idhtlhash)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Attributes
 

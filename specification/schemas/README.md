@@ -27,7 +27,7 @@ path_base_for_github_subdir:
 - [API Support](#api-support)
 - [OpenTelemetry Schema](#opentelemetry-schema)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

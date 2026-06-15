@@ -28,7 +28,7 @@ requirements to the existing specifications.
       - [Asynchronous example: attribute removal in a view](#asynchronous-example-attribute-removal-in-a-view)
   * [Memory management](#memory-management)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

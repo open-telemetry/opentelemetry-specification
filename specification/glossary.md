@@ -43,7 +43,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Profile](#profile)
   * [Profiling](#profiling)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

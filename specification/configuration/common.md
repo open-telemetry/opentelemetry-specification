@@ -23,7 +23,7 @@ aliases:
   * [String](#string)
     + [Enum](#enum)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

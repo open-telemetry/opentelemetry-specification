@@ -17,7 +17,7 @@ path_base_for_github_subdir:
   * [Telescoping](#telescoping)
 - [Specifications](#specifications)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

@@ -26,7 +26,7 @@ weight: 3
     + [Via OTEL_CONFIG_FILE](#via-otel_config_file)
   * [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Overview
 

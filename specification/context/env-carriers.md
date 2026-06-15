@@ -16,7 +16,7 @@
     + [Security](#security)
 - [Supplementary Guidelines](#supplementary-guidelines)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

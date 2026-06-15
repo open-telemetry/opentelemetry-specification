@@ -23,7 +23,7 @@ weight: 1
 - [Propagation](#propagation)
 - [Conflict Resolution](#conflict-resolution)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

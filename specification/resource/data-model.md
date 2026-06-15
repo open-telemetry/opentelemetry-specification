@@ -16,7 +16,7 @@ weight: 2
 - [Merging Resources](#merging-resources)
   * [Merging Entities into a Resource](#merging-entities-into-a-resource)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

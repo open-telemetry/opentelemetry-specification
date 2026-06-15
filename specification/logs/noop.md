@@ -17,7 +17,7 @@ linkTitle: No-Op
   * [Emit LogRecord](#emit-logrecord)
   * [Enabled](#enabled)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

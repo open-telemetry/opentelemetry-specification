@@ -21,7 +21,7 @@ weight: 2
 - [Merging of Entities](#merging-of-entities)
 - [Examples of Entities](#examples-of-entities)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

@@ -14,7 +14,7 @@ path_base_for_github_subdir:
 - [Overview](#overview)
 - [Specifications](#specifications)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
