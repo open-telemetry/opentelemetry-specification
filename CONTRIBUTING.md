@@ -130,7 +130,7 @@ make markdown-toc # regenerate tables of contents
 To fix markdownlint violations, use the
 [Visual Studio Code markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint)
 `fixAll` command, or follow the
-[markdownlint instructions](https://github.com/DavidAnson/markdownlint#optionsresultversion).
+[markdownlint instructions](https://github.com/igorshubovych/markdownlint-cli#fixing-issues).
 
 ### Compliance Matrix
 
