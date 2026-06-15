@@ -36,6 +36,9 @@ release.
 
 ### Entities
 
+- Add in-development entity-resource startup specification.
+  ([#5057](https://github.com/open-telemetry/opentelemetry-specification/pull/5057))
+
 ### Common
 
 - Add an in-development [SDK self-observability](specification/self-observability.md)
