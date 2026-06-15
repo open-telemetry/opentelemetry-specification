@@ -31,6 +31,7 @@ weight: 1
       - [Asynchronous Instrument API](#asynchronous-instrument-api)
   * [General operations](#general-operations)
     + [Enabled](#enabled)
+    + [Bind](#bind)
   * [Counter](#counter)
     + [Counter creation](#counter-creation)
     + [Counter operations](#counter-operations)
@@ -476,6 +477,10 @@ All [synchronous instruments](#synchronous-instrument-api) SHOULD provide functi
 
 * [Report if instrument is `Enabled`](#enabled)
 
+All [synchronous instruments](#synchronous-instrument-api) MAY provide:
+
+* (**Development**) [Bind to a set of attributes](#bind)
+
 #### Enabled
 
 To help users avoid performing computationally expensive operations when
@@ -493,6 +498,61 @@ value of `false` means the instrument is disabled for the provided arguments.
 The returned value is not always static, it can change over time. The API
 SHOULD be documented that instrumentation authors needs to call this API each
 time they record a measurement to ensure they have the most up-to-date response.
+
+#### Bind
+
+**Status**: [Development](../document-status.md)
+
+The `Bind` API associates a fixed set of [Attributes](../common/README.md#attribute) with every
+measurement recorded on the returned bound instrument. Because attributes are resolved at bind
+time rather than at each recording, implementations can avoid per-recording attribute processing
+and lookup overhead.
+
+This API MUST accept the following parameter:
+
+* [Attributes](../common/README.md#attribute) to associate with every measurement recorded on
+  the returned bound instrument.
+
+  Users can provide attributes to associate with the bound instrument, but it is up
+  to their discretion. Therefore, this API MUST be structured to accept a variable
+  number of attributes, including none.
+
+This API MUST return a language-idiomatic type representing the instrument bound to those
+attributes.
+
+The returned bound instrument MUST support the instrument's core recording operation.
+The instrument kind determines the recording operation on the bound instrument:
+
+* [Counter](#counter): [Add](#add)
+* [Histogram](#histogram): [Record](#record)
+* [Gauge](#gauge): [Record](#record-1)
+* [UpDownCounter](#updowncounter): [Add](#add-1)
+
+This MAY be achieved by introducing a dedicated bound instrument type, or by reusing
+the existing instrument interface. If the existing instrument interface is reused, the
+`Bind` API MUST be documented to communicate to users that invoking attribute-bearing
+recording operations on the returned bound instrument negates the performance benefits
+of binding.
+
+Measurements recorded on the bound instrument can be associated with the
+[Context](../context/README.md).
+
+Here are some examples that [OpenTelemetry API](../overview.md#api) authors might consider:
+
+```java
+// Java
+
+LongCounter rolls = meter.counterBuilder("dice.rolls")
+    .setDescription("The number of times each side of the die was rolled")
+    .setUnit("{roll}")
+    .build();
+
+var face1 = rolls.bind(Attributes.of(AttributeKey.longKey("roll.value"), 1L));
+var face6 = rolls.bind(Attributes.of(AttributeKey.longKey("roll.value"), 6L));
+
+face1.add(1);
+face6.add(1);
+```
 
 ### Counter
 

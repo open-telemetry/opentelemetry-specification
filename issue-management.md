@@ -9,7 +9,7 @@
     they work with the Reviewer to get feedback implemented and complete the work. They
     are responsible for making sure issue status labels are up to date.
 - Reviewer:
-  - Person whose Approval is needed to merge the PR.
+  - Person whose Approval is needed to merge the PR. See [approvers](README.md#approvers).
 - Sponsor:
   - The [specification sponsors](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#specification-sponsor), identified as the assignee of the issue, is responsible for the completion of the issue.
 - Triager:
@@ -32,14 +32,14 @@ These labels are applied to issues when it is unclear yet if they are something 
 
 * `triage:deciding:community-feedback` - This issue is open to community discussion. If the community can provide sufficient reasoning, it may be accepted by the project.
 * `triage:deciding:needs-info` - This issue does not provide enough information for the project to accept it. It is left open to provide the author with time to add more details.
-* `triage:deciding:tc-inbox` - This issue needs attention from the TC in order to move forward. It may need TC input for triage, or to unblock a discussion that is deadlocked.
+* `triage:deciding:tc-inbox` - This issue needs attention from the maintainers in order to move forward. It may need maintainer input for triage, or to unblock a discussion that is deadlocked. (NOTE: historically, the TC were the maintainers of the specification. Now maintainers are a superset of TC and others. For simplicity, we keep the `*:tc-inbox`).
 
 ### `triage:accepted:*`
 
 These labels are applied to issues that describe a problem that is in scope and that we would like to tackle.
 Just because an issue is accepted does not mean that a solution suggested by the issue will be the solution applied.
 
-* `triage:accepted:ready` - This issue is ready to be implemented. It is either small enough in scope or uncontroversial enough to be implemented without a TC sponsor.
+* `triage:accepted:ready` - This issue is ready to be implemented. It is either small enough in scope or uncontroversial enough to be implemented without a specification sponsor.
 * `triage:accepted:ready-with-sponsor` - This issue is ready to be implemented and has a specification sponsor assigned.
 * `triage:accepted:needs-sponsor` - This issue is ready to be implemented, but does not yet have a specification sponsor. A pull request without a specification sponsor may not be reviewed in a timely manner.
 
