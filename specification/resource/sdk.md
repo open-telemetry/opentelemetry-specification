@@ -53,7 +53,7 @@ entities. An Entity has:
   `"host"`). MUST NOT change during the lifetime of the entity.
 - **Identifying attributes**: Attributes that uniquely identify the entity.
   MUST NOT change during the lifetime of the entity. MUST contain at least one
-  attribute. MUST be detected synchronously during
+  attribute. SHOULD be detected synchronously during
   SDK initialization.
 - **Descriptive attributes**: Non-identifying attributes of the entity. MAY
   change over the lifetime of the entity. MAY be empty.
@@ -181,12 +181,13 @@ service entity for the current SDK, or the process or host it is running on.
 An entity detector MUST implement a `Detect` method. `Detect` accepts no
 arguments and returns one or more [Entities](#entities) with distinct types.
 
-Entity detectors MUST detect identifying attributes synchronously. Entity
+Entity detectors SHOULD detect identifying attributes synchronously. Entity
 detectors MAY detect descriptive attributes asynchronously (e.g. via a future
-or promise that resolves after initialization). When descriptive attributes are
-detected asynchronously, the entity MUST be returned with its identifying
-attributes immediately, and the descriptive attributes MUST be merged into the
-Resource when they become available.
+or promise that resolves after initialization). When identifying attributes
+are detected synchronously but descriptive attributes are detected
+asynchronously, the entity MUST be returned with its identifying attributes
+immediately, and the descriptive attributes MUST be merged into the Resource
+when they become available.
 
 Entity detectors SHOULD follow the same naming conventions as
 [resource detectors](#resource-detector-name).
