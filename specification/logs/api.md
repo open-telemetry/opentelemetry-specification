@@ -11,8 +11,6 @@ aliases: [bridge-api]
 <details>
 <summary>Table of Contents</summary>
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-
 <!-- START DOCTOC -->
 
 - [LoggerProvider](#loggerprovider)

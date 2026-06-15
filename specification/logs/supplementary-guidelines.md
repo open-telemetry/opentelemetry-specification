@@ -7,8 +7,6 @@ extra requirements to the existing specifications.
 <details>
 <summary>Table of Contents</summary>
 
-<!-- Re-generate TOC with `markdown-toc --no-first-h1 -i` -->
-
 <!-- START DOCTOC -->
 
 - [Usage](#usage)
