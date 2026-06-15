@@ -336,7 +336,7 @@ See `Future Possibilities` for more.
 ### Typed Schema
 
 Below is a sample for the schema of a policy, defined in the protobuf format. We
-make an effort to adhere to OpenTelemetry Semantic Conventions and previous
+make an effort to adhere to OpenTelemetry Protobuf conventions and previous
 specifications. Note: these proto definitions are subject to changes after this
 OTEP is accepted.
 
