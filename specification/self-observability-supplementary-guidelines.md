@@ -31,7 +31,7 @@ should not assume the surface will remain metric-shaped.
 Once more than one signal is involved, lifecycle ordering becomes a problem. The
 recording providers (`MeterProvider`, `LoggerProvider`, and potentially
 `TracerProvider`) are constructed and shut down independently, so the second one
-to be constructed cannot accept telemetry produced during the setup of the first
+to be constructed cannot accept telemetry produced during the setup of the first.
 Similarly, once a provider is shut down it can no longer accept telemetry
 produced while the others are still tearing down.
 
