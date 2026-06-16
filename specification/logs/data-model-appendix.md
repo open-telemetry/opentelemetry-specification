@@ -825,19 +825,24 @@ preserved in `Attributes["etw.level"]`, so the mapping remains reversible.
 
 ## Appendix B: `SeverityNumber` example mappings
 
-|Syslog              |WinEvtLog  |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
-|---------------------|-----------|------|------|-----------------|-----------------------------------|--------------|
-|                     |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE (1)     |
-|Debug (7)            |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG (5)     |
-|                     |           |      |      | FINE            |                                   |DEBUG2 (6)    |
-|                     |           |      |      | CONFIG          |                                   |DEBUG3 (7)    |
-|Informational (6)    |Information|INFO  |Info  | INFO            |LogLevel.Information               |INFO (9)      |
-|Notice (5)           |           |      |      |                 |                                   |INFO2 (10)    |
-|Warning (4)          |Warning    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN (13)     |
-|Error (3)            |Error      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR (17)    |
-|Critical (2)         |Critical   |      |Dpanic|                 |                                   |ERROR2 (18)   |
-|Alert (1)            |           |      |Panic |                 |                                   |ERROR3 (19)   |
-|Emergency (0)        |           |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL (21)    |
+|Syslog              |WinEvtLog  |ETW        |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
+|---------------------|-----------|-----------|------|------|-----------------|-----------------------------------|--------------|
+|                     |           |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE (1)     |
+|Debug (7)            |Verbose    |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG (5)     |
+|                     |           |           |      |      | FINE            |                                   |DEBUG2 (6)    |
+|                     |           |           |      |      | CONFIG          |                                   |DEBUG3 (7)    |
+|Informational (6)    |Information|Information|INFO  |Info  | INFO            |LogLevel.Information               |INFO (9)      |
+|Notice (5)           |           |           |      |      |                 |                                   |INFO2 (10)    |
+|Warning (4)          |Warning    |Warning    |WARN  |Warn  | WARNING         |LogLevel.Warning                   |WARN (13)     |
+|Error (3)            |Error      |Error      |ERROR |Error | SEVERE          |LogLevel.Error                     |ERROR (17)    |
+|Critical (2)         |Critical   |           |      |Dpanic|                 |                                   |ERROR2 (18)   |
+|Alert (1)            |           |           |      |Panic |                 |                                   |ERROR3 (19)   |
+|Emergency (0)        |           |Critical   |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL (21)    |
+
+> **Note:** ETW `Level 0` (`LogAlways`) and custom/reserved levels (6–255) are
+> not severities and map to `UNSPECIFIED (0)`; see
+> [ETW (Event Tracing for Windows)](#etw-event-tracing-for-windows) in
+> Appendix A.
 
 ## References
 
