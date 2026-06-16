@@ -176,9 +176,9 @@ negotiation MUST follow [Prometheus Content Negotiation guidelines](https://prom
 
 **Status**: [Development](../../document-status.md)
 
-When a Prometheus Exporter is configured with a permissive `translation_strategy`,
-such as `NoTranslation`, the final output format and character escaping MUST
-comply with the content negotiation's restrictions based on the `Accept` header.
+Regardless of the configured `translation_strategy`, the final output format and
+character escaping MUST comply with the content negotiation's restrictions based
+on the `Accept` header.
 
 First, `translation_strategy` MUST be applied to construct metric names. Then,
 the Prometheus Exporter MUST apply content negotiation, which may include a
