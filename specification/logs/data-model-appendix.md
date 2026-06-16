@@ -18,6 +18,7 @@ the respective exporter documentation if exact details are required.
   * [CloudTrail Log Event](#cloudtrail-log-event)
   * [Google Cloud Logging](#google-cloud-logging)
   * [Elastic Common Schema](#elastic-common-schema)
+  * [ETW (Event Tracing for Windows)](#etw-event-tracing-for-windows)
 - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
 - [References](#references)
 
@@ -800,6 +801,27 @@ When mapping from the unified model to HEC, we apply this additional mapping:
 This is a selection of the most relevant fields. See
 [for the full reference](https://www.elastic.co/docs/reference/ecs/ecs-field-reference)
 for an exhaustive list.
+
+### ETW (Event Tracing for Windows)
+
+| ETW Level | ETW Name        | SeverityNumber  | SeverityText |
+| --------- | --------------- | --------------- | ------------ |
+| 0         | LogAlways       | 0 (UNSPECIFIED) | (none)       |
+| 1         | Critical        | 21 (FATAL)      | FATAL        |
+| 2         | Error           | 17 (ERROR)      | ERROR        |
+| 3         | Warning         | 13 (WARN)       | WARN         |
+| 4         | Information     | 9 (INFO)        | INFO         |
+| 5         | Verbose         | 5 (DEBUG)       | DEBUG        |
+| 6–15      | provider-defined| 0 (UNSPECIFIED) | (none)       |
+| 16–255    | reserved        | 0 (UNSPECIFIED) | (none)       |
+
+`Level 0` (`LogAlways`) is **not** a severity — it is a filtering directive.
+Because ETW delivers an event when `event.level <= session.level`, a level-0
+event is always delivered regardless of the configured session level. It carries
+no severity information, so it maps to `UNSPECIFIED (0)` rather than inventing a
+specific severity. Levels 6–255 (custom/reserved) similarly carry no standardized
+severity and map to `UNSPECIFIED (0)`. In all cases the raw ETW level is
+preserved in `Attributes["etw.level"]`, so the mapping remains reversible.
 
 ## Appendix B: `SeverityNumber` example mappings
 
