@@ -839,11 +839,6 @@ preserved in `Attributes["etw.level"]`, so the mapping remains reversible.
 |Alert (1)            |           |           |      |Panic |                 |                                   |ERROR3 (19)   |
 |Emergency (0)        |           |Critical   |FATAL |Fatal |                 |LogLevel.Critical                  |FATAL (21)    |
 
-> **Note:** ETW `Level 0` (`LogAlways`) and custom/reserved levels (6–255) are
-> not severities and map to `UNSPECIFIED (0)`; see
-> [ETW (Event Tracing for Windows)](#etw-event-tracing-for-windows) in
-> Appendix A.
-
 ## References
 
 - [OTEP0097 Log Data Model, Appendix A. Example Mappings](../../oteps/logs/0097-log-data-model.md#appendix-a-example-mappings)
