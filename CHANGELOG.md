@@ -15,6 +15,9 @@ release.
 - Mark "Environment Variables as Context Propagation Carriers" as Release
   Candidate.
   ([#5142](https://github.com/open-telemetry/opentelemetry-specification/pull/5142))
+- Specify that environment variable propagation carriers only read and return
+  normalized environment variable names.
+  ([#5144](https://github.com/open-telemetry/opentelemetry-specification/pull/5144))
 
 ### Traces
 
@@ -55,11 +58,18 @@ release.
 
 ### Compatibility
 
+- Deprecate OpenCensus compatibility requirements in the specification.
+  ([#5109](https://github.com/open-telemetry/opentelemetry-specification/issues/5109))
 - Stabilize sections of Prometheus Metrics Exporter.
   - Clarify resource attributes configuration.
     ([#5084](https://github.com/open-telemetry/opentelemetry-specification/pull/5084))
   - Stabilize the conversion of OTLP Summaries into Prometheus Summaries.
     ([#5107](https://github.com/open-telemetry/opentelemetry-specification/issues/5107))
+- Stabilize sections of Prometheus and OpenMetrics Compatibility.
+  - Stabilize OpenTelemetry Histogram to Prometheus Histogram transformation.
+    ([#4605](https://github.com/open-telemetry/opentelemetry-specification/issues/4605))
+- Add optional OpenTelemetry Histogram to Prometheus Native Histogram with Custom Buckets transformation.
+  ([#4605](https://github.com/open-telemetry/opentelemetry-specification/issues/4605))
 
 ### SDK Configuration
 
