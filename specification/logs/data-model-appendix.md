@@ -865,6 +865,11 @@ symbol, e.g. `Informational`) is used for both. `SeverityNumber` (the normalized
 field, e.g. `INFO (9)`) is the reliable value to key off; `SeverityText` is
 best-effort and informational.
 
+An example implementation of this mapping is the
+[ETW receiver](https://github.com/open-telemetry/otel-arrow/tree/main/rust/otap-dataflow/crates/contrib-nodes/src/receivers/etw_receiver)
+in the OpenTelemetry otel-arrow project. This reference is illustrative and
+non-normative; the mapping above is not tied to any specific implementation.
+
 ## Appendix B: `SeverityNumber` example mappings
 
 |Syslog               |WinEvtLog  |ETW        |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
