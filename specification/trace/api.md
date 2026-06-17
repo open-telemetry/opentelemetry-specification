@@ -400,12 +400,11 @@ The API MUST accept the following parameters:
 
   The API documentation MUST state that only attributes provided at span
   creation time are available to [`Sampler`s](sdk.md#sampler) for making
-  sampling decisions. Instrumentations SHOULD provide attributes at span
-  creation when they are known and inexpensive to obtain, or when applicable
-  [semantic conventions](https://github.com/open-telemetry/semantic-conventions)
-  require them at span start. Instrumentations SHOULD avoid eagerly computing
-  expensive derived attributes solely to make them available for sampling,
-  as the work is wasted for spans that are ultimately dropped.
+  sampling decisions. Providing attributes at span creation enables
+  attribute-based sampling but has a performance cost: the work of computing
+  and collecting those attributes is wasted for spans that are ultimately
+  dropped by the sampler. Instrumentations should balance these concerns based
+  on the cost of obtaining each attribute and its usefulness for sampling.
 
 - `Link`s - an ordered sequence of Links, see [API definition](#link).
 - `Start timestamp`, default to current time. This argument SHOULD only be set
