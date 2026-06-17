@@ -58,12 +58,12 @@ Scenario S1: counter increment with a stable attribute set, API-only.
 
 - Depends only on the OTel API package; no SDK package is referenced or
   loaded.
-- The benchmark increments a `Counter` instrument by 1 in a tight loop
-  with the same attribute values on every call. The attribute set uses
-  three string attributes, for example:
-  - `http.request.method` = `"GET"`
-  - `url.scheme` = `"https"`
-  - `server.address` = `"example.com"`
+- The benchmark increments a `Counter` instrument (`house.energy.consumed`) by 1
+  in a tight loop with the same attribute values on every call. The attribute set
+  uses three string attributes, for example:
+  - `house.room` = `"living_room"`
+  - `house.device` = `"thermostat"`
+  - `house.action` = `"set_temperature"`
 - Single-threaded (one OS thread); async or coroutine-style code is
   fine where idiomatic. Multi-threaded and contended variants are
   deferred to follow-up scenarios.
