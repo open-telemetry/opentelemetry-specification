@@ -828,24 +828,42 @@ field name.
 The ETW `Level` maps to severity as follows. `SeverityText` carries the original
 ETW level name as it is known at the source.
 
-| ETW Level | ETW Name         | SeverityNumber  | SeverityText |
-| --------- | ---------------- | --------------- | ------------ |
-| 0         | LogAlways        | 0 (UNSPECIFIED) | (none)       |
-| 1         | Critical         | 21 (FATAL)      | Critical     |
-| 2         | Error            | 17 (ERROR)      | Error        |
-| 3         | Warning          | 13 (WARN)       | Warning      |
-| 4         | Information      | 9 (INFO)        | Information  |
-| 5         | Verbose          | 5 (DEBUG)       | Verbose      |
-| 6–15      | provider-defined | 0 (UNSPECIFIED) | (none)       |
-| 16–255    | reserved         | 0 (UNSPECIFIED) | (none)       |
+| ETW Level | ETW Name         | SeverityNumber  | SeverityText              |
+| --------- | ---------------- | --------------- | ------------------------- |
+| 0         | LogAlways        | 0 (UNSPECIFIED) | LogAlways                 |
+| 1         | Critical         | 21 (FATAL)      | Critical                  |
+| 2         | Error            | 17 (ERROR)      | Error                     |
+| 3         | Warning          | 13 (WARN)       | Warning                   |
+| 4         | Informational    | 9 (INFO)        | Informational             |
+| 5         | Verbose          | 5 (DEBUG)       | Verbose                   |
+| 6–15      | unused           | 0 (UNSPECIFIED) | (none)                    |
+| 16–255    | provider-defined | 0 (UNSPECIFIED) | provider-defined (if any) |
 
 `Level 0` (`LogAlways`) is **not** a severity — it is a filtering directive.
 Because ETW delivers an event when `event.level <= session.level`, a level-0
 event is always delivered regardless of the configured session level. It carries
-no severity information, so it maps to `UNSPECIFIED (0)` rather than inventing a
-specific severity. Levels 6–255 (custom/reserved) similarly carry no standardized
-severity and map to `UNSPECIFIED (0)`. In all cases the raw ETW level is
-preserved in `Attributes["etw.level"]`, so the mapping remains reversible.
+no severity information, so `SeverityNumber` maps to `UNSPECIFIED (0)` rather than
+inventing a specific severity; the original source name is still recorded in
+`SeverityText` as `LogAlways`. Levels 6–15 are not used by the predefined Winmeta
+set and are not available for custom definitions, so they carry no name. Levels
+16–255 are
+[provider-defined custom levels](https://learn.microsoft.com/windows/win32/wes/defining-severity-levels);
+each provider's manifest may assign a name (e.g. `NotValid`), but there is no
+name standardized across providers, so `SeverityText` is whatever the provider
+defines for that level, if any. Both ranges carry no standardized severity and
+map to `UNSPECIFIED (0)`. In all cases the raw ETW level is preserved
+in `Attributes["etw.level"]`, so the mapping remains reversible.
+
+The `ETW Name` / `SeverityText` values above are the Winmeta symbolic names
+(e.g. `Informational` for level 4). The level name is surfaced differently
+depending on the event model: manifest-based events may expose the localized
+Winmeta *message* string via TDH's `LevelName` (e.g. `Information` for level 4),
+whereas TraceLogging events carry no manifest and provide only the numeric
+level, from which a name must be synthesized. To keep `SeverityText` stable for
+a given level regardless of event model, a single canonical name (the Winmeta
+symbol, e.g. `Informational`) is used for both. `SeverityNumber` (the normalized
+field, e.g. `INFO (9)`) is the reliable value to key off; `SeverityText` is
+best-effort and informational.
 
 ## Appendix B: `SeverityNumber` example mappings
 
