@@ -28,7 +28,7 @@ release.
 
 ### Logs
 
-- Add ETW (Event Tracing for Windows) receiver example mapping to the logs data
+- Add ETW (Event Tracing for Windows) example mapping to the logs data
   model appendix, including the ETW level to `SeverityNumber` mapping.
   ([#5159](https://github.com/open-telemetry/opentelemetry-specification/pull/5159))
 
