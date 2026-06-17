@@ -7,6 +7,9 @@ release.
 
 ## Unreleased
 
+- Amend the description of Composite/Composable samplers.
+  ([#5161](https://github.com/open-telemetry/opentelemetry-specification/pull/5161))
+
 ### Context
 
 - Clarify that environment variable propagation carriers normalize requested
