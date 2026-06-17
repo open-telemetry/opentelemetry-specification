@@ -804,16 +804,40 @@ for an exhaustive list.
 
 ### ETW (Event Tracing for Windows)
 
-| ETW Level | ETW Name        | SeverityNumber  | SeverityText |
-| --------- | --------------- | --------------- | ------------ |
-| 0         | LogAlways       | 0 (UNSPECIFIED) | (none)       |
-| 1         | Critical        | 21 (FATAL)      | FATAL        |
-| 2         | Error           | 17 (ERROR)      | ERROR        |
-| 3         | Warning         | 13 (WARN)       | WARN         |
-| 4         | Information     | 9 (INFO)        | INFO         |
-| 5         | Verbose         | 5 (DEBUG)       | DEBUG        |
-| 6–15      | provider-defined| 0 (UNSPECIFIED) | (none)       |
-| 16–255    | reserved        | 0 (UNSPECIFIED) | (none)       |
+The following table shows how the fields of an ETW event map to the log data
+model. ETW header metadata is preserved under `etw.*` attributes, and
+TDH-decoded TraceLogging payload fields are added as attributes keyed by their
+field name.
+
+| ETW Field              | Type      | Description                                                                  | Maps to Unified Model Field                                            |
+| ---------------------- | --------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| TimeStamp              | Timestamp | `EVENT_HEADER.TimeStamp` (QPC ticks) converted to UNIX epoch nanoseconds    | Timestamp                                                             |
+| Level                  | uint8     | Event severity/verbosity level                                              | Severity (`SeverityNumber` + `SeverityText`) and `Attributes["etw.level"]` |
+| Event name             | string    | TraceLogging event name (via TDH); falls back to `etw.<event_id>`           | `EventName`                                                          |
+| Payload                | any       | ETW has no single message field; decoded fields go to `Attributes`          | Body (empty)                                                         |
+| ProviderId             | GUID      | Provider GUID, formatted as a hyphenated hex string                         | `Attributes["etw.provider_id"]`                                      |
+| EventId                | uint16    | Event identifier from the event descriptor                                  | `Attributes["etw.event_id"]`                                        |
+| Opcode                 | uint8     | Opcode from the event descriptor                                            | `Attributes["etw.opcode"]`                                          |
+| Version                | uint8     | Version from the event descriptor                                           | `Attributes["etw.version"]`                                         |
+| Keywords               | uint64    | Keywords bitmask from the event descriptor                                  | `Attributes["etw.keywords"]`                                        |
+| ProcessId              | uint32    | Emitting process ID from the event header                                   | `Attributes["etw.process_id"]`                                      |
+| ThreadId               | uint32    | Emitting thread ID from the event header                                    | `Attributes["etw.thread_id"]`                                       |
+| ActivityId             | GUID      | Correlation ID; emitted only when non-zero                                  | `Attributes["etw.activity_id"]`                                     |
+| Decoded payload fields | any       | TDH-decoded TraceLogging fields, keyed by field name                        | `Attributes[<field name>]`                                          |
+
+The ETW `Level` maps to severity as follows. `SeverityText` carries the original
+ETW level name as it is known at the source.
+
+| ETW Level | ETW Name         | SeverityNumber  | SeverityText |
+| --------- | ---------------- | --------------- | ------------ |
+| 0         | LogAlways        | 0 (UNSPECIFIED) | (none)       |
+| 1         | Critical         | 21 (FATAL)      | Critical     |
+| 2         | Error            | 17 (ERROR)      | Error        |
+| 3         | Warning          | 13 (WARN)       | Warning      |
+| 4         | Information      | 9 (INFO)        | Information  |
+| 5         | Verbose          | 5 (DEBUG)       | Verbose      |
+| 6–15      | provider-defined | 0 (UNSPECIFIED) | (none)       |
+| 16–255    | reserved         | 0 (UNSPECIFIED) | (none)       |
 
 `Level 0` (`LogAlways`) is **not** a severity — it is a filtering directive.
 Because ETW delivers an event when `event.level <= session.level`, a level-0
