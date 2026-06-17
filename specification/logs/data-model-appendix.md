@@ -825,7 +825,7 @@ preserved in `Attributes["etw.level"]`, so the mapping remains reversible.
 
 ## Appendix B: `SeverityNumber` example mappings
 
-|Syslog              |WinEvtLog  |ETW        |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
+|Syslog               |WinEvtLog  |ETW        |Log4j |Zap   |java.util.logging|.NET (Microsoft.Extensions.Logging)|SeverityNumber|
 |---------------------|-----------|-----------|------|------|-----------------|-----------------------------------|--------------|
 |                     |           |           |TRACE |      | FINEST          |LogLevel.Trace                     |TRACE (1)     |
 |Debug (7)            |Verbose    |Verbose    |DEBUG |Debug | FINER           |LogLevel.Debug                     |DEBUG (5)     |
