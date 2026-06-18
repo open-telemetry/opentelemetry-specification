@@ -57,9 +57,8 @@ When using environment variables as carriers:
   - applying any truncation or other format-specific behaviors
 
 Language implementations SHOULD document
-[operational guidance](#operational-guidance) for environment variable context
-propagation, including initialization-time extraction, child process environment
-handling, and security considerations.
+[operational guidance](#operational-guidance), including initialization-time
+extraction, child process environment handling, and security considerations.
 
 ### Key Name Normalization
 
