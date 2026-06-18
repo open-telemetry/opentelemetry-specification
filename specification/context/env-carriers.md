@@ -109,8 +109,8 @@ Context-related environment variables are best treated as process-startup input:
 
 - Applications should read context-related environment variables during
   initialization.
-- Applications should not modify context-related environment variables
-  of the environment in which the parent process exists.
+- Applications should not modify context-related environment variables in the
+  environment in which the parent process exists.
 
 #### Process Spawning
 
