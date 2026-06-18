@@ -86,6 +86,8 @@ MUST explicitly enable this functionality:
 ```yaml
 tracer_provider:
   context_scoped_attributes: true
+metrics_provider:
+  context_scoped_attributes: true
 logger_provider:
   context_scoped_attributes: true
 ```
