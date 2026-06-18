@@ -118,7 +118,7 @@ When spawning child processes:
 - Child processes should extract context from environment variables at
   startup.
 - When spawning multiple child processes with different contexts or baggage,
-  each child should receives its own copy of the environment variables with
+  each child should receive its own copy of the environment variables with
   appropriate information.
 - Application code remains responsible for receiving context from the SDK and
   passing it to the application's process spawning mechanism.
