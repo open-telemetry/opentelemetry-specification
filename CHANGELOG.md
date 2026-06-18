@@ -17,7 +17,7 @@ release.
   ([#5144](https://github.com/open-telemetry/opentelemetry-specification/pull/5144))
 - Specify that empty environment variable propagation name is non-normalized
   and normalize it to `_`.
-  ([#5169](https://github.com/open-telemetry/opentelemetry-specification/pull/5169))
+  ([#5163](https://github.com/open-telemetry/opentelemetry-specification/pull/5163))
 
 ### Traces
 
