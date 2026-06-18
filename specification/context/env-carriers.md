@@ -131,9 +131,9 @@ with appropriate permissions.
 
 - Context propagation via environment variables is not appropriate for sensitive
   information.
-- Applications running in multi-tenant environments should account for environment
-  variables being visible to other processes or users with appropriate
-  permissions.
+- Applications running in multi-tenant environments should account for
+  environment variables being visible to other processes or users with
+  appropriate permissions.
 
 ## Supplementary Guidelines
 
