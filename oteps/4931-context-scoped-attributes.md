@@ -180,13 +180,17 @@ lower priority). This MUST be done before any extension point is invoked,
 e.g. Sampler or Processor. For Span instances, these attributes can later be
 overriden manually by the user.
 
-For metrics, the SDK MUST get the Context-scoped attributes of the logical
+For metrics being reported synchronously, the SDK MUST get the Context-scoped attributes of the logical
 associated Context, and attach them upon measurements being recorded (rather
 than doing this when instruments are created), in order to have access to the
 actual attribute set being used. This MUST be done before any downstream processing
 happens, e.g. views, advisories or cardinality limits. The
 [measurement processing](../specification/metrics/sdk.md#measurement-processing)
 section of the Metrics SDK will be updated to clearly reflect details on this step.
+
+For metrics being reported asynchronously, no support for Context-scoped attributes
+will be initially defined. Future iterations may add support for this, but this is
+out of the scope of the present OTEP.
 
 This will be an implementation-level change without any changes in the API-surface
 of the SDK (i.e. it is not necessary to make Context-scoped attributes distinguishable
@@ -341,4 +345,6 @@ with this approach though:
 With the changes implemented in this OTEP, we will hopefully unblock some
 long-standing specification issues. See [Motivation](#motivation).
 
+* Metrics being reported asynchronously do not support this feature. Support can be
+  later added as needed.
 
