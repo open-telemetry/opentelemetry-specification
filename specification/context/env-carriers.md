@@ -95,40 +95,45 @@ that name normalizes to `X_B3_TRACEID`.
 
 ### Operational Guidance
 
+Language implementations SHOULD document operational guidance for environment
+variable context propagation, including initialization-time extraction, child
+process environment handling, and security considerations.
+
 #### Environment Variable Immutability
 
-Once set for a process, environment variables SHOULD be treated as immutable
-within that process:
+Context-related environment variables are best treated as process-startup input:
 
-- Applications SHOULD read context-related environment variables during
+- Applications should read context-related environment variables during
   initialization.
-- Applications SHOULD NOT modify context-related environment variables of the
-  environment in which the parent process exists.
+- Applications should not modify context-related environment variables
+  of the environment in which the parent process exists.
 
 #### Process Spawning
 
 When spawning child processes:
 
-- Parent processes SHOULD copy the current environment variables (if
-  applicable), modify, and inject context when spawning child processes.
-- Child processes SHOULD extract context from environment variables at startup.
+- Parent processes should copy the current environment variables (if
+  applicable), modify that copy, and inject context into the copy when spawning
+  child processes.
+- Child processes should extract context from environment variables at
+  startup.
 - When spawning multiple child processes with different contexts or baggage,
-  each child SHOULD receive its own copy of the environment variables with
+  each child should receives its own copy of the environment variables with
   appropriate information.
-- The onus is on the application owner for receiving the set context from the
-  SDK and passing it to its own process spawning mechanism. The language
-  implementations MUST NOT handle spawning processes.
+- Application code remains responsible for receiving context from the SDK and
+  passing it to the application's process spawning mechanism.
 
 #### Security
 
 Environment variables are generally accessible to all code running within a
-process and with the correct permissions, can be accessed from other processes.
+process. On many systems, they can also be accessed by other processes or users
+with appropriate permissions.
 
-- Implementations SHOULD NOT store sensitive information in environment
-  variables.
-- Applications running in multi-tenant environments SHOULD be aware that
-  environment variables may be visible to other processes or users with
-  appropriate permissions.
+- Context propagation via environment variables is not appropriate for sensitive
+  information.
+- Applications running in multi-tenant environments account for environment
+  variables being visible to other processes or users with appropriate
+  permissions.
 
 ## Supplementary Guidelines
 

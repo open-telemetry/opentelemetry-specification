@@ -15,6 +15,8 @@ release.
 - Specify that environment variable propagation carriers only read and return
   normalized environment variable names.
   ([#5144](https://github.com/open-telemetry/opentelemetry-specification/pull/5144))
+- Clarify that environment variable propagation operational guidance is
+  non-normative and should be documented by language implementations.
 
 ### Traces
 
