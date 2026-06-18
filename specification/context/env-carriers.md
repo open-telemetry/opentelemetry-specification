@@ -56,6 +56,11 @@ When using environment variables as carriers:
   - validating and parsing values
   - applying any truncation or other format-specific behaviors
 
+Language implementations SHOULD document
+[operational guidance](#operational-guidance) for environment variable context
+propagation, including initialization-time extraction, child process environment
+handling, and security considerations.
+
 ### Key Name Normalization
 
 Language implementations MUST ensure that environment variable `Get`, `Set`,
@@ -95,9 +100,9 @@ that name normalizes to `X_B3_TRACEID`.
 
 ### Operational Guidance
 
-Language implementations SHOULD document operational guidance for environment
-variable context propagation, including initialization-time extraction, child
-process environment handling, and security considerations.
+> [!IMPORTANT]
+> This section is non-normative and provides usage guidance only. It does not
+> add requirements to the specification.
 
 #### Environment Variable Immutability
 
