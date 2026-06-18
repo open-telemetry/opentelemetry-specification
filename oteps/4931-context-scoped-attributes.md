@@ -68,8 +68,6 @@ booleans, arrays, or complex types, just like for any telemetry item.
 Context-scoped attributes MUST be added to telemetry items of signals for which the
 feature is enabled, when those items are emitted while the Context containing the
 Context-scoped attributes is active, or when that Context is explicitly set as their parent.
-that were **emitted** while the Context containing the Context-scoped attributes
-was active, or to telemetry items that had this Context explicitly set as parent.
 
 Context-scoped attributes should be thought of equivalent to adding the attribute
 directly to each single telemetry item it applies to. These attributes will then be
