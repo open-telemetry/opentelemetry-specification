@@ -15,8 +15,8 @@ release.
 - Specify that environment variable propagation carriers only read and return
   normalized environment variable names.
   ([#5144](https://github.com/open-telemetry/opentelemetry-specification/pull/5144))
-- Specify that empty environment variable propagation name is non-normalized
-  and normalize it to `_`.
+- Specify that an empty environment variable propagation name is non-normalized
+  and normalizes to `_`.
   ([#5163](https://github.com/open-telemetry/opentelemetry-specification/pull/5163))
 
 ### Traces
