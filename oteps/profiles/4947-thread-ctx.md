@@ -17,11 +17,11 @@ External readers such as the OpenTelemetry eBPF Profiler operate outside the ins
 
 ## Explanation
 
-We propose a mechanism for OpenTelemetry SDKs to publish thread-level information reflecting the context of the active request, if any, through a standard format based on the Linux-specific ELF Thread-Local Storage (TLS) TLSDESC dialect.
+We propose a mechanism for OpenTelemetry SDKs to publish thread-level information reflecting the context of the active request, if any, through a standard format using a Linux-specific ELF Thread-Local Storage (TLS) variable.
 
 Because this mechanism relies on having a native component and knowing when a runtime switches contexts, we consider it optional for SDKs to support, as some runtimes (or even runtime versions) may not be able to feasibly/efficiently implement it.
 
-The TLSDESC-based publication mechanism and the in-memory **Thread-Local Context Record** format are intentionally separable. Runtimes that cannot efficiently expose context through TLSDESC, or for which OS-thread-local context is not the appropriate execution-context model, are not required to implement this mechanism. However, we highly recommend reusing the same in-memory record format when publishing equivalent context through a runtime-specific discovery mechanism, rather than defining a runtime-specific payload format. Such mechanisms are out of scope for this OTEP, but reusing the record layout where practical allows readers to share parsing logic across runtimes.
+The TLS-based publication mechanism and the in-memory **Thread-Local Context Record** format are intentionally separable. Runtimes that cannot efficiently expose context through TLS, or for which OS-thread-local context is not the appropriate execution-context model, are not required to implement this mechanism. However, we highly recommend reusing the same in-memory record format when publishing equivalent context through a runtime-specific discovery mechanism, rather than defining a runtime-specific payload format. Such mechanisms are out of scope for this OTEP, but reusing the record layout where practical allows readers to share parsing logic across runtimes.
 
 When a request context is attached or detached from a thread, the SDK publishes select information including trace ID, span ID in the format described in this document to the appropriate thread-local. When an external reader observes this thread it checks to see if any such TLS data has been attached, and if so, includes it in its telemetry.
 
@@ -36,7 +36,7 @@ Other context sources, such as OBI-derived information, may still be used to enr
 This mechanism is designed to achieve the following goals:
 
 * **Reader flexibility**: Readers are not limited to eBPF-based implementations; any external reader with sufficient permissions to inspect `/proc/<pid>/maps` for library discovery and to read target process memory should be able to use this mechanism  (nb: [OTEP-4719](4719-process-ctx.md) also requires access to this resource)
-* **Runtime compatibility:** This mechanism is an optional extension to an OpenTelemetry SDK for languages that are able to use TLSDESC and have an appropriate threading model. We have tested it with C/C++, Rust, and Java, and intend this to work with other runtimes as well, see "What does this mean in practice for runtimes supported by OTel SDKs?" section below.
+* **Runtime compatibility:** This mechanism is an optional extension to an OpenTelemetry SDK for languages that are able to use ELF TLS and have an appropriate threading model. We have tested it with C/C++, Rust, and Java, and intend this to work with other runtimes as well, see "What does this mean in practice for runtimes supported by OTel SDKs?" section below.
 * **Low, opt-in overhead**: Context attach/detach is a performance critical path in an OpenTelemetry SDK, and this mechanism is designed to provide fixed, low overhead when serializing thread context
 * **Simplicity:** Limit the implementation complexity on both writer and reader sides.
 
@@ -48,7 +48,7 @@ This is immutable, process-wide data that the TLS data will reference. It will b
 
 The following values are stored:
 
-* `threadlocal.schema_version` - type and version of the schema - initially `tlsdesc_v1_dev` for experimentation (to be changed to `tlsdesc_v1` once the OTEP gets merged)
+* `threadlocal.schema_version` - type and version of the schema - initially `tlsdesc_v1_dev` for experimentation (to be changed to `tls_v1` once the OTEP gets merged)
   * Note: Beyond evolution of the format, having the type of the schema allows the application to e.g. signal that it's a Go application and thus context should be read from [Go pprof labels and not the thread-local](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/tree/main/design-docs/00002-custom-labels) or from a different offset for [Node.js](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). (Such alternative schemas would be subject of separate documents)
 * `threadlocal.attribute_key_map` - provides a mapping from **key indexes** (uint8 maximum) to **attribute names** (string). The thread-local storage itself will then use these key indexes in place of the **attribute names**.
 
@@ -76,11 +76,15 @@ By leveraging OTEP 4719 we are also collocating with another feature that is lik
 
 ### Thread-Local Variable Resolution
 
-This OTEP uses "TLSDESC dialect" to refer to the ELF TLS strategy used by compilers and linkers when requested, for example with `-mtls-dialect=gnu2` in GCC or Clang.
+`otel_thread_ctx_v1` must be an exported ELF TLS symbol. The following TLS access models are supported:
 
-This does not require the compiler and linker to emit the specific TLSDESC access model in all build/linkage configurations. Even when the TLSDESC dialect is enabled, linkers may relax TLS references to traditional models such as local-exec or initial-exec when the variable is known locally or at load time.
+- **Global Dynamic / TLSDESC** (recommended): the symbol uses the TLSDESC dialect (e.g. `-mtls-dialect=gnu2` in GCC or Clang), producing TLSDESC relocations in shared libraries. This is the preferred model as it offers the best runtime performance for the writer.
+- **Global Dynamic / legacy GNU**: the symbol uses traditional GNU TLS General Dynamic relocations. This is supported but not preferred.
+- **Static access (initial-exec or local-exec)**: linkers may relax a Global Dynamic reference to initial-exec or local-exec when the variable's module is known at link time, for example when `otel_thread_ctx_v1` is defined in a main executable. This relaxation is outside the writer's control and readers MUST handle it.
 
-For this OTEP, `otel_thread_ctx_v1` must be an exported ELF TLS symbol, typically provided by a shared library built with the TLSDESC dialect.
+The Local Dynamic model is not supported.
+
+Writers SHOULD use the TLSDESC dialect where practical, as it offers better write-path performance. Readers MUST support all three models above.
 
 ### Thread-Local Variable
 
@@ -232,13 +236,13 @@ External readers such as the OpenTelemetry eBPF Profiler will typically already 
 
 ### Complexity for SDK Implementers
 
-Creating TLSDESC variables and ensuring they end up in the processes `dynsym` table adds complexity to SDK implementations.
+Exporting a TLS symbol and ensuring it ends up in the process's `dynsym` table adds complexity to SDK implementations.
 
 **Mitigation:** We've created an extension of the existing PolarSignals [custom-labels](https://github.com/polarsignals/custom-labels) work, providing a reference implementation in C and bindings in Rust.
 
 ### Complexity for End Users building from source
 
-Ensuring that TLSDESC variables published by the SDK end up in an application's `dynsym` table, when building native binaries from source (e.g. for Rust) requires some language configuration of the build tools by the end user themselves.
+Ensuring that TLS symbols published by the SDK end up in an application's `dynsym` table, when building native binaries from source (e.g. for Rust) requires some language configuration of the build tools by the end user themselves.
 
 ### Protocol Evolution
 
