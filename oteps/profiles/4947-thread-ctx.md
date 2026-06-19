@@ -338,6 +338,19 @@ This proposal attempts to unify the benefits of these two approaches by providin
 
 **TLS Value Storage**: If we assume that the value of the attributes attached to profiles is from a fixed, but unknown-at-startup set, we could also choose to store these in a shared hashmap outside of the Thread-Local Context Record itself, further reducing the size of the record and the cost associated with reading/writing it. This would be the case if we stored attributes for things like `http_method`, and `http_route`, and not things like `uuid()`. It would also require a process wide hash table implementation with lock-free reads. There is prior art in Datadog's [Java profiler's context sharing mechanism](https://github.com/DataDog/java-profiler/blob/main/ddprof-lib/src/main/java/com/datadoghq/profiler/ContextSetter.java).
 
+### macOS and Windows support
+
+We decided to keep this OTEP Linux-specific as:
+
+* We expect the first consumers of this to be the
+  [eBPF Profiler](https://github.com/open-telemetry/opentelemetry-ebpf-profiler) and
+  [OBI](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation) both of which are Linux-specific due to their current heavy use of eBPF hooks
+* While all modern operating systems provide thread-locals, there is a very different security model across them (especially on macOS),
+  and because of that it's not clear that this option would be the best one there
+* The proposed mechanism is quite low-level and with very tight efficiency goals.
+  We believe it's better to later evaluate how exactly they would map to other operating systems with more care,
+  rather than going "everyone has thread locals so this should be fine"
+
 ## Open questions
 
 1. Are the current limits on key and value count and length acceptable/the right trade-off?
