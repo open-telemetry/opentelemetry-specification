@@ -95,7 +95,8 @@ The uint8 key index caps the map at 256 entries. This is a conscious trade-off f
 
 The Local Dynamic model is not supported.
 
-Writers SHOULD use the TLSDESC dialect where practical, as it offers better write-path performance. Readers MUST support all three models above.
+Writers SHOULD use the TLSDESC dialect where practical, as it offers better write-path performance.
+Readers MUST support all three models above, see "Reading Protocol" section for details.
 
 ### Thread-Local Variable
 
@@ -215,6 +216,8 @@ Readers can detect process context updates using the polling or prctl-hook mecha
 * Note down the TLS offset for **Thread-Local Reference Data** discovered
 
 Once the `threadlocal.*` keys are present and TLS symbols have been discovered, the reader has everything it needs to begin sampling threads.
+
+For more details omn how to find the offsets of the TLS see [this google doc](https://docs.google.com/document/d/1eatbHpEXXhWZEPrXZpfR58-5RIx-81mUgF69Zpn3Rz4/edit?tab=t.v43rcsc1d6p9).
 
 #### 2. Thread Sampling
 
