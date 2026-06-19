@@ -15,7 +15,7 @@ release.
 - Specify that environment variable propagation carriers only read and return
   normalized environment variable names.
   ([#5144](https://github.com/open-telemetry/opentelemetry-specification/pull/5144))
-- Cleanup implementation guidelines for environment variable propagation
+- Clean up implementation guidelines for environment variable propagation
   carriers.
   ([#5166](https://github.com/open-telemetry/opentelemetry-specification/pull/5166))
 
