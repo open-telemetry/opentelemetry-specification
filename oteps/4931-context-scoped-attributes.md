@@ -229,7 +229,7 @@ public Span startSpan(...) {
 
 * Usage of Context-scoped attributes can result in unexpected side effects, such as
   additional memory allocations or metrics cardinality explosion. For this
-  reason, this feature must be explictly opted-in by the user on a per-signal basis.
+  reason, this feature must be explicitly opted-in by the user on a per-signal basis.
 * Although we plan to recommend that instrumentation libraries do not set Context-scoped
   attributes, there may be very specific libraries that may benefit from leveraging this
   feature. We plan to discuss that when this OTEP lands in the Specification. See
@@ -335,7 +335,7 @@ with this approach though:
 * Support for profiling should be (eventually) added, but this has to be discussed
   and confirmed with the profiling SIG. Potentially, this support could be disabled by default
   if needed.
-* Instrumentatio libraries should not in general rely on this feature, but when they do
+* Instrumentation libraries should not in general rely on this feature, but when they do
   they should expose this as an opt-in. However, there are cases when enabling this by default
   would add incredible value. Discussion needs to happen around what conditions such instrumentation
   must meet in order to use this feature.
