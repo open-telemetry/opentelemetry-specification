@@ -36,6 +36,8 @@ aliases:
   * [Gauges](#gauges-1)
   * [Sums](#sums)
   * [Histograms](#histograms-1)
+    + [Histograms as Prometheus Histograms](#histograms-as-prometheus-histograms)
+    + [Histograms as Prometheus NHCB](#histograms-as-prometheus-nhcb)
   * [Exponential Histograms](#exponential-histograms)
   * [Summaries](#summaries-1)
   * [Metric Attributes](#metric-attributes)
@@ -451,7 +453,7 @@ It also dictates type-specific conversion rules listed below.
 
 ### Instrumentation Scope
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
 Prometheus exporters MUST by default add
 the scope name as the `otel_scope_name` label,
@@ -460,9 +462,10 @@ the scope schema URL as the `otel_scope_schema_url` label,
 the scope attributes as labels with `otel_scope_` prefix and following the rules
 described in the [`Metric Attributes`](#metric-attributes) section below,
 on all metric points, based on the scope the original data point was nested in.
-Scope attributes with names 'name', 'version', or 'schema_url' MUST be dropped
-to avoid conflicts with the already existing `otel_scope_name`, `otel_scope_version`, and
-`otel_scope_schema_url` labels.
+Scope attributes that, after adding the `otel_scope_` prefix and applying the
+label-name conversion described in [`Metric Attributes`](#metric-attributes),
+would conflict with `otel_scope_name`, `otel_scope_version`, or
+`otel_scope_schema_url` MUST be dropped.
 
 ### Gauges
 
@@ -502,20 +505,103 @@ latest exemplar for counter instruments.
 
 ### Histograms
 
+**Status**: [Stable](../document-status.md), except where otherwise specified.
+
+An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus Histogram by default.
+
+[Development](../document-status.md): Users may opt-in to converting an OpenTelemetry Histogram to a [Prometheus Native Histogram with Custom Buckets](#histograms-as-prometheus-nhcb) (NHCB) instead when allowed by the Prometheus Protocol.
+
+OpenTelemetry Histograms with Delta aggregation temporality MAY be aggregated into a Cumulative aggregation temporality and follow the logic below, or MUST be dropped.
+
+#### Histograms as Prometheus Histograms
+
+**Status**: [Stable](../document-status.md)
+
+When converting to a Prometheus Histogram, an OpenTelemetry Histogram MUST
+be converted following the rules below:
+
+- `Count` is converted to the Histogram `Count`.
+- `Sum` is converted to the Histogram `Sum`. The sum is positive and monotonic
+  when all observations in the histogram are positive or zero.
+- The bucket boundaries in `ExplicitBounds` plus the implicit `+Inf` boundary
+  and the `BucketCounts` are converted to Histogram `Buckets` in ascending order
+  of the `ExplicitBounds` value. For each bucket the explicit bound is
+  converted to the upper bound and the sum of all bucket counts up to
+  and including the current bucket is converted to the cumulative count.
+- If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
+  following the appropriate format used by each Prometheus protocol.
+- `Min` and `Max` are not used.
+- `Exemplars` are converted as described in the
+  [Exemplar Conversion](#exemplar-conversion) section. If the Prometheus
+  protocol only supports a single exemplar per-bucket, the latest
+  exemplar that falls into each bucket SHOULD be converted.
+
+#### Histograms as Prometheus NHCB
+
 **Status**: [Development](../document-status.md)
 
-An [OpenTelemetry Histogram](../metrics/data-model.md#histogram) with a cumulative aggregation temporality MUST be converted to a Prometheus metric family with the following metrics:
+NHCB output is currently only supported by the [Prometheus Remote-Write 2.0
+or later](https://prometheus.io/docs/specs/prw/remote_write_spec_2_0/) protocol.
 
-- A single `{name}_count` metric denoting the count field of the histogram. All attributes of the histogram point are converted to Prometheus labels.
-- `{name}_sum` metric denoting the sum field of the histogram, reported only if the sum is positive and monotonic. The sum is positive and monotonic when all buckets are positive. All attributes of the histogram point are converted to Prometheus labels.
-- A series of `{name}_bucket` metric points that contain all attributes of the histogram point recorded as labels.  Additionally, a label, denoted as `le` is added denoting the bucket boundary. The label's value is the stringified floating point value of bucket boundaries, ordered from lowest to highest. The value of each point is the sum of the count of all histogram buckets up to the boundary reported in the `le` label.  The final bucket metric MUST have an `+Inf` threshold.
-- Histograms with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
+When converting to a Prometheus NHCB, only a single NHCB metric MUST be created:
 
-`Exemplars` are converted as described in the [Exemplar Conversion](#exemplar-conversion) section.
-If the Prometheus protocol only supports a single exemplar per-bucket, the latest
-exemplar that falls into each bucket SHOULD be converted.
-
-OpenTelemetry Histograms with Delta aggregation temporality SHOULD be aggregated into a Cumulative aggregation temporality and follow the logic above, or MUST be dropped.
+- The [flavor](https://prometheus.io/docs/specs/native_histograms/#flavors)
+  of the NHCB MUST be integer counter.
+- The `ResetHint` in the NHCB MUST be set to `UNKNOWN`. OpenTelemetry does not
+  carry an explicit reset flag, so `UNKNOWN` lets Prometheus auto-detect resets
+  from the values and avoids any semantic divergence with OpenTelemetry's reset
+  model.
+- The `Schema` in the NHCB MUST be set to -53.
+- `TimeUnixNano` is converted to the Prometheus `Timestamp` after
+  converting nanoseconds to milliseconds.
+- If set, `StartTimeUnixNano` SHOULD be transformed into Prometheus `StartTime`,
+  following the appropriate format used by each Prometheus protocol.
+- The bucket boundaries in `ExplicitBounds` are written into the NHCB
+  `CustomValues` in ascending order. The implicit `+Inf` upper bound MUST NOT be
+  written into `CustomValues`; it is represented by the overflow bucket at index
+  `len(CustomValues)`.
+- All fields of the NHCB that are not explicitly referenced here MUST be set to
+  their zero value, such as zero threshold, zero count, negative spans, negative
+  deltas, etc.
+- `Min` and `Max` are not used.
+- `Exemplars` are converted into the Native Histogram's flat `Exemplars` list,
+  as described in the [Exemplar Conversion](#exemplar-conversion) section.
+- If the `NoRecordedValue` flag is set to `true`, the NHCB MUST be marked as
+  [stale](https://prometheus.io/docs/specs/native_histograms/#staleness-markers):
+  - The Native Histogram `Sum` MUST be set to the Stale NaN value.
+  - The Native Histogram `Count` MUST be set to zero. `PositiveSpans` and
+    `PositiveDeltas` MUST be left empty.
+- If the `NoRecordedValue` flag is set to `false`:
+  - `Count` is converted to Native Histogram `Count`.
+  - `Sum` is converted to the Native Histogram `Sum`.
+  - The dense `BucketCounts` are converted into the
+    [sparse bucket layout](https://prometheus.io/docs/specs/native_histograms/#buckets)
+    in `PositiveSpans` and `PositiveDeltas` (even for buckets with negative
+    boundaries).
+    - Non-zero bucket counts MUST be converted into `PositiveDeltas`. Zero-count
+      buckets MAY also be included in `PositiveDeltas` to extend an enclosing
+      span (rather than creating a gap between spans) and reduce the number of
+      `PositiveSpans`.
+    - Bucket counts that need to be converted are converted into
+      `PositiveDeltas`, which is delta encoded. The first converted value is
+      written as is, the rest as delta to the previous converted value. Unlike
+      the conversion to
+      [Prometheus Histograms](#histograms-as-prometheus-histograms), no
+      cumulative summation across buckets is required — OpenTelemetry and
+      Native Histogram bucket counts are already per-bucket.
+    - The `PositiveSpans` encode the index into the `CustomValues` for each
+      value in the `PositiveDeltas`. The first span's `Offset` is the index of
+      the upper bound of the first converted bucket (zero-based into
+      `CustomValues`). For subsequent spans, `Offset` is the number of buckets
+      that were not converted between the end of the previous span and the start
+      of this one. `Length` is the number of consecutive converted buckets in
+      the span.
+    - For example: if the bucket boundaries are `-2, -1, 0, 1, 2, +Inf` and
+      bucket counts are `10, 0, 0, 20, 5, 2`, then the `CustomValues` will be
+      `-2, -1, 0, 1, 2`. If only the non-zero bucket counts `10, 20, 5, 2` are
+      converted, then the `PositiveSpans` will be
+      `{Offset: 0, Length: 1}, {Offset: 2, Length: 3}` and `PositiveDeltas`
+      will be `10, 10, -15, -3`.
 
 ### Exponential Histograms
 
@@ -557,22 +643,25 @@ metrics with the delta aggregation temporality are dropped.
 
 ### Summaries
 
-**Status**: [Development](../document-status.md)
+**Status**: [Stable](../document-status.md)
 
-An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be converted to a Prometheus metric family with the following metrics:
+An [OpenTelemetry Summary](../metrics/data-model.md#summary-legacy) MUST be
+converted to a Prometheus Summary as follows:
 
-- A single `{name}_count` metric denoting the count field of the summary.
-  All attributes of the summary point are converted to Prometheus labels.
-- `{name}_sum` metric denoting the sum field of the summary, reported
-  only if the sum is positive and monotonic. All attributes of the summary
-  point are converted to Prometheus labels.
-- A series of `{name}` metric points that contain all attributes of the
-  summary point recorded as labels.  Additionally, a label, denoted as
-  `quantile` is added denoting a reported quantile point, and having its value
-  be the stringified floating point value of quantiles (between 0.0 and 1.0),
-  starting from lowest to highest, and all being non-negative.  The value of
-  each point is the computed value of the quantile point.
-- Summaries with `StartTimeUnixNano` set should export the `{name}_created` metric as well.
+- Attributes are converted as described in the
+  [`Metric Attributes`](#metric-attributes) section.
+- The count is converted to the Summary's count.
+- The sum is converted to the Summary's sum.
+- Quantiles are converted to the Summary's quantiles. The `quantile` label
+  value MUST be the stringified floating point value of each quantile (between
+  0.0 and 1.0), starting from lowest to highest, and all being non-negative.
+  The value of each quantile is the computed value of the quantile point.
+- When using a push protocol, such as Prometheus Remote Write,
+  `time_unix_nano` is converted to the Summary's timestamp. Explicit timestamps
+  SHOULD NOT be used for pull protocols, such as the Prometheus text exposition
+  format, where Prometheus assigns the scrape timestamp.
+- The `start_time_unix_nano` is converted to the Summary's start timestamp, if
+  supported.
 
 Exemplars on OpenTelemetry Summaries SHOULD be dropped.
 

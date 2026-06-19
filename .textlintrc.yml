@@ -29,6 +29,7 @@ rules:
       - 'readme(s)?'
       - 'to-?do(s)?(?=[ ,.])'
       - "indexes\\b"
+      - "repo\\b"
     terms:
       - Actix
       - Ajax
@@ -173,8 +174,6 @@ rules:
       - ['psr[ -]?([0-9]+)', PSR-$1]
       - ['react[ .]js', React]
       - ['regexp?(s)?', regular expression$1]
-      - [repo\b, repository]
-      - [repos, repositories]
       - ['screen[- ]shot(s)?', screenshot$1]
       - ['time[- ]stamp(s)?', timestamp$1]
       - ["to-?do(s)?", "TODO$1"]

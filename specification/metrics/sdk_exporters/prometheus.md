@@ -23,7 +23,7 @@ linkTitle: Prometheus
   * [Host](#host)
   * [Port](#port)
   * [Default Aggregation](#default-aggregation)
-  * [Resource Attributes as Metric Attributes](#resource-attributes-as-metric-attributes)
+  * [Resource Attributes as Metric Labels](#resource-attributes-as-metric-labels)
   * [Translation Strategy](#translation-strategy)
   * [Scope Info](#scope-info)
   * [Target Info](#target-info)
@@ -52,11 +52,13 @@ OpenTelemetry metrics MUST be converted to Prometheus metrics according to the
 
 ### Client Libraries
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
-A Prometheus Exporter SHOULD use
-[Prometheus client libraries](https://prometheus.io/docs/instrumenting/clientlibs/)
-for serving Prometheus metrics. This allows the Prometheus client to negotiate
+A Prometheus Exporter SHOULD use an official [Prometheus client library](https://prometheus.io/docs/instrumenting/clientlibs/)
+when one exists for the implementation language and it is practical to do so
+(e.g., dependency concerns) for serving Prometheus metrics; it SHOULD NOT use an
+unofficial Prometheus client library.
+This allows the Prometheus client to negotiate
 the [format](https://github.com/prometheus/docs/blob/main/docs/instrumenting/exposition_formats.md)
 of the response using the `Content-Type` header. If a Prometheus client library
 is used, the OpenTelemetry Prometheus Exporter SHOULD be modeled as a
@@ -65,7 +67,7 @@ so it can be used in conjunction with existing Prometheus instrumentation.
 
 ### Version and Format
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 Regardless of whether a Prometheus client library is used, the Prometheus
 Exporter MUST support version `0.0.4` of the
@@ -78,7 +80,7 @@ A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT use
 [Prometheus Remote Write format](https://github.com/prometheus/prometheus/blob/main/prompb/remote.proto)
 or [OpenMetrics protobuf format](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#protobuf-format).
 
-A Prometheus Exporter for an OpenTelemetry metrics SDK MUST NOT add
+A Prometheus Exporter for an OpenTelemetry metrics SDK SHOULD NOT add
 [explicit timestamps on Metric points](https://github.com/prometheus/OpenMetrics/blob/v1.0.0/specification/OpenMetrics.md#metric).
 
 ## SDK Metric Output
@@ -118,22 +120,21 @@ default.
 
 ### Default Aggregation
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
 A Prometheus Exporter SHOULD support a configuration option to set
 the [MetricReader](../sdk.md#metricreader) default `aggregation` as a function
 of instrument kind. This option MAY be named `default_aggregation`, and MUST use
 the [default aggregation](../sdk.md#default-aggregation) by default.
 
-### Resource Attributes as Metric Attributes
+### Resource Attributes as Metric Labels
 
 **Status**: [Development](../../document-status.md)
 
-A Prometheus Exporter MAY offer configuration to add resource attributes as metric attributes.
-By default, it MUST NOT add any resource attributes as metric attributes.
-The configuration SHOULD allow the user to select which resource attributes to copy (e.g.
-include / exclude or regular expression based). Copied Resource attributes MUST NOT be
-excluded from the `target` info metric. The option MAY be named `with_resource_constant_labels`.
+A Prometheus Exporter MAY offer configuration to add resource attributes as metric labels.
+By default, it MUST NOT add any resource attributes as metric labels.
+The configuration SHOULD allow the user to select resource attributes to include or exclude. Copied Resource attributes MUST NOT be
+excluded from the `target_info` metric. The option SHOULD be named `resource_constant_labels`.
 
 ### Translation Strategy
 
@@ -149,17 +150,19 @@ If the Prometheus exporter supports such configuration it MUST be named to somet
 
 ### Scope Info
 
-**Status**: [Development](../../document-status.md)
+**Status**: [Stable](../../document-status.md)
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without [scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
-The option MAY be named `without_scope_info`, and MUST be `false` by default.
+A Prometheus Exporter MAY support configuration to specify whether metrics include
+[scope labels](../../compatibility/prometheus_and_openmetrics.md#instrumentation-scope-1).
+The option MAY be named `scope_info_enabled`, and MUST be `true` by default.
 
 ### Target Info
 
 **Status**: [Development](../../document-status.md)
 
-A Prometheus Exporter MAY support a configuration option to produce metrics without a [target info](../../compatibility/prometheus_and_openmetrics.md#resource-attributes-1)
-metric. The option MAY be named `without_target_info`, and MUST be `false` by default.
+A Prometheus Exporter MAY support a configuration to specify whether to produce a
+[target info](../../compatibility/prometheus_and_openmetrics.md#resource-attributes-1) metric.
+The option MAY be named `target_info_enabled`, and MUST be `true` by default.
 
 ## Content Negotiation
 
