@@ -3,7 +3,8 @@
 Introduce a standard mechanism for OpenTelemetry SDKs to publish thread-level attributes for out-of-process readers such as the OpenTelemetry eBPF profiler.
 It is related to [OTEP 4719: Process Context](4719-process-ctx.md), which it uses to share initial configuration information with readers.
 
-There is a complete example of the spec as well as example readers and writers in <https://github.com/scottgerring/ctx-sharing-demo>(possibly to be moved to [open-telemetry/sig-profiling](https://github.com/open-telemetry/sig-profiling)?).
+There is a complete example of the spec as well as example readers and writers in <https://github.com/scottgerring/ctx-sharing-demo>
+(possibly to be moved to [open-telemetry/sig-profiling](https://github.com/open-telemetry/sig-profiling)?).
 
 Our work-in-progress implementation of this on the OTel eBPF Profiler side is at <https://github.com/open-telemetry/opentelemetry-ebpf-profiler/pull/1229>.
 
@@ -11,9 +12,9 @@ Our work-in-progress implementation of this on the OTel eBPF Profiler side is at
 
 External readers such as the OpenTelemetry eBPF Profiler operate outside the instrumented process and cannot collect information about active OpenTelemetry traces running within the processes they are observing. This creates two main problems:
 
-* **Inability to correlate observations with context metadata** - Without visibility into context information such as the active span, an external reader cannot attribute its observations to particular HTTP endpoints or other request characteristics
+* **Inability to correlate observations with context metadata** - Without visibility into context information such as the active span, an external reader cannot attribute its observations to particular HTTP endpoints or other request characteristics.
 * **Lack of request metadata for samples collected on threads with un-sampled traces** - in many cases, the active span observed by the external process *may not* be sampled by the OpenTelemetry SDK. In these cases it is useful to make extra metadata available directly to the external process, so that its samples maintain useful context even in the face of sampling on the tracer side.
-* **Avoiding duplication** - other out-of-process readers such as [OTel OBI](https://opentelemetry.io/docs/zero-code/obi/) could avoid redundant instrumentation efforts in cases where the OTel SDK is already sharing necessary thread context information, simplifying the user experience and conserving resources.
+* **Avoiding duplication** - other out-of-process readers such as [OTel OBI](https://opentelemetry.io/docs/zero-code/obi/) can avoid redundant instrumentation efforts in cases where the OTel SDK is already sharing necessary thread context information, simplifying the user experience and conserving resources.
 
 ## Explanation
 
@@ -114,9 +115,9 @@ The record layout is byte-packed exactly as shown, with no implicit compiler pad
 | _reserved       |            | uint8                              | One spare byte here to align attrs-data-size at two byte boundary.                                                                                       |
 | attrs-data-size |            | uint16                             | Size of `attrs-data`. This lets the reader know when it has consumed all `attrs-data` records within the TLS buffer. The total record is recommended to stay at or under 640 bytes. |
 | attrs-data      |            | uint8[]                            | A byte buffer containing the attributes themselves. Its total length is given by `attrs-data-size`.                                                      |
-|                 | [x].key    | uint8 (*See below for alternative) | Index into the key table. Readers MUST ignore entries whose key index is outside `threadlocal.attribute_key_map`.                                         |
+|                 | [x].key    | uint8 (*See below for alternative) | Index into the key table. Readers MUST ignore entries whose key index is outside `threadlocal.attribute_key_map`.                                        |
 |                 | [x].length | uint8 (*See below for alternative) | Length of val string                                                                                                                                     |
-|                 | [x].val    | uint8[length] (utf-8 bytes)        | Inline array of the string value itself. Exactly `length` bytes appear here, before the next attribute entry begins.                                      |
+|                 | [x].val    | uint8[length] (utf-8 bytes)        | Inline array of the string value itself. Exactly `length` bytes appear here, before the next attribute entry begins.                                     |
 
 Entries in `attrs-data` are packed consecutively with no padding between entries.
 Readers MUST stop parsing `attrs-data` if the remaining buffer cannot hold a complete entry.
@@ -149,7 +150,7 @@ At process startup, the SDK:
 When a request context is attached to a thread, the SDK:
 
 1. Obtains a contiguous buffer large enough to store the anticipated record size
-2. Constructs a new **Thread-Local Context Record**  within the buffer containing:
+2. Constructs a new **Thread-Local Context Record** within the buffer containing:
    - Trace context (trace ID, span ID)
    - Any configured attributes, encoded per the record format
 3. Sets the `valid` field to indicate the record is complete
@@ -200,16 +201,18 @@ The external reader discovers a new process to observe. It:
 
 * The reading protocol from OTEP-4719 is followed to obtain the **Thread-Local Reference Data** resources from the **Process Context**
 * The reader may choose to retain the information read from the process mappings at this point, as they are immediately needed for TLS resolution
+* Note that OTEP-4719 allows for updates to the **Process Context** an thus the **Thread-Local Reference Data** may show up during one of these updates and is not guaranteed to exist from the first published context
 
 1.2. **Check binary and loaded libraries for TLS dynsym**
+
+If the `threadlocal.*` keys are not present in the process context at this point, the reader should defer TLS symbol discovery and re-run step 1.2 when the process context is next updated.
+Readers can detect process context updates using the polling or prctl-hook mechanisms described in OTEP-4719.
 
 * Generate a list of dynamic libraries loaded by the process from the process mappings in `/proc/<pid>/maps`
 * For each of the process itself and its dynamically loaded libraries:
   * Check if the `dynsym` table contains the TLS symbols listed above
   * If it does, collect them
 * Note down the TLS offset for **Thread-Local Reference Data** discovered
-
-If the `threadlocal.*` keys are not present in the process context at this point, the reader should defer TLS symbol discovery and re-run step 1.2 when the process context is next updated. Readers can detect process context updates using the polling or prctl-hook mechanisms described in OTEP-4719.
 
 Once the `threadlocal.*` keys are present and TLS symbols have been discovered, the reader has everything it needs to begin sampling threads.
 
