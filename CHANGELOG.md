@@ -17,7 +17,7 @@ release.
   ([#5144](https://github.com/open-telemetry/opentelemetry-specification/pull/5144))
 - Cleanup implementation guidelines for environment variable propagation
   carriers.
-  ([#TODO](https://github.com/open-telemetry/opentelemetry-specification/pull/TODO))
+  ([#5166](https://github.com/open-telemetry/opentelemetry-specification/pull/5166))
 
 ### Traces
 
