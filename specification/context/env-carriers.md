@@ -14,7 +14,7 @@
     + [Environment Variable Immutability](#environment-variable-immutability)
     + [Process Spawning](#process-spawning)
     + [Security](#security)
-- [Supplementary Guidelines](#supplementary-guidelines)
+- [Implementation Guidelines](#implementation-guidelines)
 
 <!-- tocstop -->
 
@@ -130,11 +130,11 @@ process and with the correct permissions, can be accessed from other processes.
   environment variables may be visible to other processes or users with
   appropriate permissions.
 
-## Supplementary Guidelines
+## Implementation Guidelines
 
 > [!IMPORTANT]
-> This section is non-normative and provides implementation
-> guidance only. It does not add requirements to the specification.
+> This section is non-normative and provides implementation guidance only. It
+> does not add requirements to the specification.
 
 Language implementations of OpenTelemetry have flexibility in how they expose
 environment variable context propagation. The existing `TextMapPropagator` can
@@ -145,17 +145,8 @@ that implement these operations themselves. Whichever component performs `Get`,
 `Set`, or `Keys` for environment variables is responsible for the normalization
 behavior described above. Language-specific helper components are only expected
 to operate on the carrier shapes supported by that language implementation.
-Implementations commonly provide one or more of the following:
 
-- `Getter` - creates an in-memory copy of the current environment variables and
-  reads context from that copy.
-- `Setter` - writes context to a dictionary/map and provides the dictionary/map
-  to the application owner for them to use when spawning processes.
-- An environment-specific carrier type - implements environment variable `Get`,
-  `Set`, or `Keys` operations directly when the language combines carrier and
-  accessor APIs.
-
-Examples:
+Example implementations:
 
 - [OpenTelemetry .NET implementation][di]
 - [OpenTelemetry C++ implementation][ci]
