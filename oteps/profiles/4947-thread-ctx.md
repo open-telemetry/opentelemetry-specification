@@ -293,10 +293,35 @@ This section is not intended to constrain implementers of the specification (nor
 * **Python:** Full support using native library. Tracers running on Python >= 3.14 can use [PyContext_WatchCallback](https://docs.python.org/3/c-api/contextvars.html#c.PyContext_WatchCallback) to track context activation; older versions must monkey-patch the runtime
 * **Ruby:** Full support via native extension. [ruby-profiler gem](https://github.com/socketry/ruby-profiler) shows an example of a very similar approach to doing this in Ruby (from Shopify)
 
-We believe these two runtimes are not going to be supported by this proposal:
+We believe these two runtimes are not going to be supported by this proposal for the forseeable future (details below):
 
-* **Go:** We foresee Go readers will continue to use the [pprof labels](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/blob/main/design-docs/00002-custom-labels/README.md) due to its fine-grained goroutine based concurrency model and relative cost of calling across an FFI
-* **Node.js**: We do not expect Node.js to use the TLSDESC publication mechanism directly, due to the threading model and the performance impact of crossing a Node-API/native FFI boundary on context attach/detach. Node.js readers are more likely to discover context through Node.js-specific runtime internals, as in [Polar Signal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js). However, a separate Node.js-specific proposal is expected to reuse the **Thread-Local Context Record** in-memory format, with only the discovery mechanism being Node.js-specific.
+* **Go:**
+* **Node.js**:
+
+### Alternative for Go support
+
+Because of its fine-grained goroutine based concurrency model and relative cost of calling across an FFI, we foresee Go readers will directly read
+[pprof labels](https://github.com/open-telemetry/opentelemetry-ebpf-profiler/blob/main/design-docs/00002-custom-labels/README.md).
+
+Go SDKs should publish a **Context Reference Data** with
+
+```yaml
+key: "threadlocal.schema_version"
+value:
+  string_value: "go_pprof_labels_v1"
+```
+
+and no (or empty) `threadlocal.attribute_key_map`.
+
+### Alternative for Node.js support
+
+We do not expect Node.js to use the TLS publication mechanism directly, due to the threading model and the performance impact of crossing a Node-API/native FFI boundary on context attach/detach.
+
+Node.js readers are more likely to discover context through Node.js-specific runtime internals, as in
+[Polar Signal's profiler](https://www.polarsignals.com/blog/posts/2025/11/19/custom-labels-for-node-js).
+However, a separate Node.js-specific proposal is expected to reuse the **Thread-Local Context Record** in-memory format, with only the discovery mechanism being Node.js-specific.
+
+An upcoming proposal will define the details of discovery and the expected `threadlocal.schema_version` that Node.js should use.
 
 ## Prior art and alternatives
 
