@@ -44,7 +44,7 @@ This mechanism is designed to achieve the following goals:
 
 ### Process Context: Thread-Local Reference Data
 
-This is immutable, process-wide data that the TLS data will reference. It will be stored in the [Process Context introduced by OTEP 4719](4719-process-ctx.md) as entries in the `ProcessContext.attributes` field, which will be set once at process startup and are subsequently considered immutable.
+This is process-wide data that the TLS data will reference. It will be stored in the [Process Context introduced by OTEP 4719](4719-process-ctx.md) as entries in the `ProcessContext.attributes` field.
 
 The following values are stored:
 
@@ -73,6 +73,16 @@ value:
 **Why:** this mechanism separates static, process-scoped data from the TLS storage, so that a reader can read it once and not every time it samples a thread.
 This reduces the cost of both writing and reading thread samples, while retaining flexibility to store an arbitrary set of extra attributes on samples as required.
 By leveraging OTEP 4719 we are also collocating with another feature that is likely to be used by many of the same readers.
+
+#### `attribute_key_map` dictionary semantics
+
+The key map is intended to attach a minimal set of contextual attributes to profiles, so that samples remain useful even when trace data is unavailable. The `attribute_key_map` is append-only: entries are added but never removed or reordered. Existing key indexes remain stable once assigned, so readers can treat previously-seen indexes as valid without re-reading the full map.
+
+Keys do not need to be registered at process startup. New keys may be appended over time as the SDK encounters new attribute names. Updates are expected to be infrequent; in practice, the key set is typically established early in the process lifetime. Prior implementations have shown that a small number of keys is sufficient for the common case.
+
+When a key is appended, the SDK must update the `attribute_key_map` entry in the Process Context. This spec does not define how threads coordinate on this update; implementors may use a mutex or any mechanism that satisfies the update protocol described in OTEP 4719.
+
+The uint8 key index caps the map at 256 entries. This is a conscious trade-off for v1; if it proves limiting, future versions may extend the dictionary or allow inline keys for high-cardinality use cases.
 
 ### Thread-Local Variable Resolution
 
