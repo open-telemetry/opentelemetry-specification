@@ -233,7 +233,7 @@ This mechanism is additive and does not modify existing OpenTelemetry SDK behavi
 
 The **Thread-Local Reference Data** is to be added to the **Process Context Proposal**:
 
-* The lifecycle of the **Context Reference Data** is more accurately tied to the process not the thread
+* The lifecycle of the **Thread-Local Reference Data** is more accurately tied to the process not the thread
 * The consumers of the **Process Context** are likely to substantially overlap the consumers of the **Thread Level Context**
 
 ## Trade-offs and mitigations
@@ -265,7 +265,7 @@ As requirements evolve, we may need to extend the payload format.
 
 ### Memory Overhead
 
-By separating frequently changing **Thread-Local Context Record** data from static, process-wide **Context Reference Data**, we ensure that:
+By separating frequently changing **Thread-Local Context Record** data from static, process-wide **Thread-Local Reference Data**, we ensure that:
 
 * Overhead of repeating attribute key names is minimized with indexing scheme
 * Memory overhead of TLS context reads is reduced, minimizing the time a thread must be kept suspended, and reducing the impact on the CPU cache
