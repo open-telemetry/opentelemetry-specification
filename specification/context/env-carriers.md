@@ -146,6 +146,12 @@ that implement these operations themselves. Whichever component performs `Get`,
 behavior described above. Language-specific helper components are only expected
 to operate on the carrier shapes supported by that language implementation.
 
+Implementations may consider a caching behavior that fits their API shape. For example, an implementation can:
+
+- Load environment variables whose names are already normalized into a cache
+  during initialization or on first use.
+- Cache the results of individual `Get` lookups by normalized key.
+
 Example implementations:
 
 - [OpenTelemetry .NET implementation][di]
