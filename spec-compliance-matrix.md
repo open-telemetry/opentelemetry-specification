@@ -56,7 +56,7 @@ formats is required. Implementing more than one format is optional.
 | events collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
 | attribute collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
 | links collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
-| [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | + | - | - | - | - | - | - | - | - | - | + |
+| [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | + | - | - | - | - | - | - | - | N/A | - | + |
 | [Span attributes](specification/trace/api.md#set-attributes) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | SetAttribute |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Set order preserved | X | + | - | + | + | + | + | + | + | + | + | + | - |
