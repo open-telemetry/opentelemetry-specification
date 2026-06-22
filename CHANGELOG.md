@@ -35,7 +35,7 @@ release.
 
 ### OTEPs
 
-## v1.58.0 (2025-06-19)
+## v1.58.0 (2025-06-22)
 
 ### Context
 
@@ -46,20 +46,10 @@ release.
   normalized environment variable names.
   ([#5144](https://github.com/open-telemetry/opentelemetry-specification/pull/5144))
 
-### Traces
-
-### Metrics
-
-### Logs
-
-### Baggage
-
 ### Profiles
 
 - Remove duplicate information from and extend Profiles documentation (README.md, pprof.md).
   ([#4932](https://github.com/open-telemetry/opentelemetry-specification/pull/4932))
-
-### Resource
 
 ### Entities
 
@@ -80,8 +70,6 @@ release.
 - Add in-development guidance recommending a JSON object as the string
   representation for an attribute collection in non-OTLP protocols.
   ([#5110](https://github.com/open-telemetry/opentelemetry-specification/pull/5110))
-
-### OpenTelemetry Protocol
 
 ### Compatibility
 
@@ -106,8 +94,6 @@ release.
 
 - Add link to declarative config IdGenerator type
   ([#5133](https://github.com/open-telemetry/opentelemetry-specification/pull/5133))
-
-### Supplementary Guidelines
 
 ### OTEPs
 
