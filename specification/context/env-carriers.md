@@ -60,6 +60,9 @@ Language implementations SHOULD document
 [operational guidance](#operational-guidance), including initialization-time
 extraction, child process environment handling, and security considerations.
 
+Language implementations MUST NOT spawn child processes as part of environment
+variable context propagation.
+
 ### Key Name Normalization
 
 Language implementations MUST ensure that environment variable `Get`, `Set`,
