@@ -632,7 +632,7 @@ sample/drop decision that AlwaysRecord modifies.
 
 CompositeSampler implements the standard `Sampler` interface but uses a composition of samplers to make its decisions.
 
-The CompositeSampler takes a ComposableSampler as input and uses it as a delegate to help making the final sampling decision. See [Probability Sampling in TraceState](./tracestate-probability-sampling.md) for basics of Consistent Probability Sampling.
+The CompositeSampler takes a ComposableSampler as input and uses it as a delegate to help make the final sampling decision. See [Probability Sampling in TraceState](./tracestate-probability-sampling.md) for basics of Consistent Probability Sampling.
 
 The process of constructing the final SamplingResult in response to a call to ShouldSample consists of the following steps.
 
