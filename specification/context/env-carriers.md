@@ -66,15 +66,17 @@ Language implementations MUST ensure that environment variable `Get`, `Set`,
 and `Keys` operations use normalized key names for context propagation. To
 normalize a key name, implementations MUST:
 
+- replace an empty key name with a single underscore (`_`),
 - uppercase ASCII letters,
 - replace every character that is not an ASCII letter, digit, or underscore
   (`_`) with an underscore (`_`),
 - prefix the name with an underscore (`_`) if it would otherwise start with an
   ASCII digit.
 
-A normalized environment variable name is an environment variable name that is
-unchanged by applying this normalization. Equivalently, a normalized environment
-variable name matches the regular expression `^[A-Z_][A-Z0-9_]*$`.
+A normalized environment variable name is a non-empty environment variable name
+that is unchanged by applying this normalization. Equivalently, a normalized
+environment variable name matches the regular expression `^[A-Z_][A-Z0-9_]*$`.
+An empty environment variable name is non-normalized and normalizes to `_`.
 
 Environment variable names that do not match this pattern are non-normalized.
 
