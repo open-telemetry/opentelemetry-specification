@@ -21,3 +21,6 @@ SDKs that implement self-observability metrics SHOULD follow these conventions.
 Self-observability telemetry emitted during SDK startup and shutdown is
 best-effort, because the SDK that records this telemetry may not yet be
 initialized or may have already been shut down.
+
+For non-normative implementation advice, see the
+[Self-Observability Supplementary Guidelines](self-observability-supplementary-guidelines.md).
