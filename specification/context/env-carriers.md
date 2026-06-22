@@ -112,23 +112,23 @@ that name normalizes to `X_B3_TRACEID`.
 
 Context-related environment variables are best treated as process-startup input:
 
-- Applications should read context-related environment variables during
+- Applications typically read context-related environment variables during
   initialization.
-- Applications should not modify context-related environment variables in the
+- Applications avoid modifying context-related environment variables in the
   environment in which the parent process exists.
 
 #### Process Spawning
 
 When spawning child processes:
 
-- Parent processes should copy the current environment variables (if
-  applicable), modify that copy, and inject context into the copy when spawning
-  child processes.
-- Child processes should extract context from environment variables at
-  startup.
-- When spawning multiple child processes with different contexts or baggage,
-  each child should receive its own copy of the environment variables with
-  appropriate information.
+- A typical parent process flow copies the current environment variables (if
+  applicable), modifies that copy, and injects context into the copy when
+  spawning child processes.
+- Child-process startup is the point where context is extracted from
+  environment variables.
+- For multiple child processes with different contexts or baggage, separate
+  environment variable copies keep the appropriate information isolated per
+  child process.
 - Application code remains responsible for receiving context from the SDK and
   passing it to the application's process spawning mechanism.
 
@@ -140,9 +140,8 @@ with appropriate permissions.
 
 - Context propagation via environment variables is not appropriate for sensitive
   information.
-- Applications running in multi-tenant environments should account for
-  environment variables being visible to other processes or users with
-  appropriate permissions.
+- Multi-tenant environments have extra exposure risk when environment variables
+  are visible to other processes or users with appropriate permissions.
 
 ## Supplementary Guidelines
 
