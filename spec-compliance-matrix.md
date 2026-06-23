@@ -56,7 +56,7 @@ formats is required. Implementing more than one format is optional.
 | events collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
 | attribute collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
 | links collection size limit |  | + | + | + | + | + | + | + | + | - | - | + | + |
-| [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | + | - | - | - | - | - | - | - | - | - | + |
+| [SpanProcessor.OnEnding](specification/trace/sdk.md#onending) | X | - | + | - | - | - | - | - | - | - | N/A | - | + |
 | [Span attributes](specification/trace/api.md#set-attributes) | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | SetAttribute |  | + | + | + | + | + | + | + | + | + | + | + | + |
 | Set order preserved | X | + | - | + | + | + | + | + | + | + | + | + | - |
@@ -251,7 +251,7 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 | Setter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument | X | N/A | + | + | + | + | + | + | N/A | + | + | + | - |
 | Getter argument returning Keys | X | N/A | + | + | + | + | + | + | N/A | + | - | + | - |
-| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + |  | + |  |  |  |  |  | + | + |  |
+| [Environment Variables as Context Propagation Carriers](specification/context/env-carriers.md) |  | + | + | + | + |  |  |  |  | + | + | + |  |
 
 ## Environment Variables
 

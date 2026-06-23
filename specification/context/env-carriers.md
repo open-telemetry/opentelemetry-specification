@@ -58,29 +58,38 @@ When using environment variables as carriers:
 
 ### Key Name Normalization
 
-Environment variable names used for context propagation:
+Language implementations MUST ensure that environment variable `Get`, `Set`,
+and `Keys` operations use normalized key names for context propagation. To
+normalize a key name, implementations MUST:
 
-- MUST be normalized by:
-  - uppercasing ASCII letters,
-  - replacing every character that is not an ASCII letter, digit, or underscore
-    (`_`) with an underscore (`_`),
-  - prefixing the name with an underscore (`_`) if it would otherwise start with
-    an ASCII digit.
-- MUST be normalized consistently by `Get`, `Set`, and `Keys` operations:
-  - when injecting context, the carrier `Set` operation MUST write values using
-    the normalized form of the key provided by the propagator,
-  - when extracting context, the carrier `Get` operation MUST normalize the key
-    requested by the propagator and the key names present in the carrier before
-    matching them. If multiple carrier key names normalize to the same key name,
-    the carrier is ambiguous and in that case, the value returned by `Get` is
-    unspecified,
-  - when listing keys, the carrier `Keys` function MUST return normalized key
-    names.
+- replace an empty key name with a single underscore (`_`),
+- uppercase ASCII letters,
+- replace every character that is not an ASCII letter, digit, or underscore
+  (`_`) with an underscore (`_`),
+- prefix the name with an underscore (`_`) if it would otherwise start with an
+  ASCII digit.
 
-For example, if a propagator requests the key `x-b3-traceid`, the environment
-variable carrier MUST match it to the carrier key `X_B3_TRACEID`. It MUST also
-match it to a carrier key such as `x-b3-traceid`, because both key names
-normalize to `X_B3_TRACEID`.
+A normalized environment variable name is a non-empty environment variable name
+that is unchanged by applying this normalization. Equivalently, a normalized
+environment variable name matches the regular expression `^[A-Z_][A-Z0-9_]*$`.
+An empty environment variable name is non-normalized and normalizes to `_`.
+
+Environment variable names that do not match this pattern are non-normalized.
+
+These requirements apply to whichever component implements the operation in a
+language, such as a carrier, `Getter`, `Setter`, or other language-specific API:
+
+- `Set` MUST write values using the normalized form of the key provided by the
+  propagator.
+- `Get` MUST normalize the key requested by the propagator and MUST use the
+  normalized key name to read from the carrier.
+- `Keys` MUST return only key names that are already normalized.
+
+For example, if a propagator requests the key `x-b3-traceid`, the
+environment-specific `Get` operation MUST normalize the requested key to
+`X_B3_TRACEID` and read the `X_B3_TRACEID` environment variable. It MUST NOT
+read a non-normalized environment variable named `x-b3-traceid`, even though
+that name normalizes to `X_B3_TRACEID`.
 
 > [!NOTE]
 > This normalization is consistent with the environment variable naming rules
@@ -129,15 +138,24 @@ process and with the correct permissions, can be accessed from other processes.
 > This section is non-normative and provides implementation
 > guidance only. It does not add requirements to the specification.
 
-Language implementations of OpenTelemetry have flexibility in how they implement
-environment variable context propagation. Language implementations can use the
-existing `TextMapPropagator` directly with environment-specific carriers.
-Typically implementations follow this pattern by providing:
+Language implementations of OpenTelemetry have flexibility in how they expose
+environment variable context propagation. The existing `TextMapPropagator` can
+be used with environment-specific carriers, environment-specific
+[`Getter`](api-propagators.md#getter-argument) and
+[`Setter`](api-propagators.md#setter-argument) implementations, or carrier types
+that implement these operations themselves. Whichever component performs `Get`,
+`Set`, or `Keys` for environment variables is responsible for the normalization
+behavior described above. Language-specific helper components are only expected
+to operate on the carrier shapes supported by that language implementation.
+Implementations commonly provide one or more of the following:
 
-- `EnvironmentGetter` - creates an in-memory copy of the current environment
-  variables and reads context from that copy.
-- `EnvironmentSetter` - writes context to a dictionary/map and provides the
-  dictionary/map to the application owner for them to use when spawning processes.
+- `Getter` - creates an in-memory copy of the current environment variables and
+  reads context from that copy.
+- `Setter` - writes context to a dictionary/map and provides the dictionary/map
+  to the application owner for them to use when spawning processes.
+- An environment-specific carrier type - implements environment variable `Get`,
+  `Set`, or `Keys` operations directly when the language combines carrier and
+  accessor APIs.
 
 Examples:
 

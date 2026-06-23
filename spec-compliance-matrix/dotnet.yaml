@@ -90,7 +90,7 @@ sections:
           - name: links collection size limit
             status: '-'
           - name: '[SpanProcessor.OnEnding](specification/trace/sdk.md#onending)'
-            status: '-'
+            status: 'N/A'
       - heading: '[Span attributes](specification/trace/api.md#set-attributes)'
         features:
           - name: SetAttribute
