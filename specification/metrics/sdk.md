@@ -143,7 +143,8 @@ a `Meter` whose behavior conforms to that `MeterConfig`.
 
 Configuration (
 i.e. [MetricExporters](#metricexporter), [MetricReaders](#metricreader), [Views](#view),
-and (**Development**) [MeterConfigurator](#meterconfigurator)) MUST be
+and (**Development**) [MeterConfigurator](#meterconfigurator) and
+`view_matching_mode`) MUST be
 owned by the `MeterProvider`. The configuration MAY be applied at the time
 of `MeterProvider` creation if appropriate.
 
@@ -154,6 +155,17 @@ matter whether a `Meter` was obtained from the `MeterProvider` before or after
 the configuration change). Note: Implementation-wise, this could mean that
 `Meter` instances have a reference to their `MeterProvider` and access
 configuration only via this reference.
+
+#### View matching mode
+
+**Status**: [Development](../document-status.md)
+
+A `MeterProvider` MAY accept a `view_matching_mode` parameter which controls how multiple matching [Views](#view) are applied to an [Instrument](./api.md#instrument).
+
+Acceptable values are:
+
+* `independent`: (Default) Each matching View creates a separate metric stream independently of any other Views registered for the same matching Instrument.
+* `composable`: Matching Views are combined (merged) to modify metric streams. See [Measurement processing](#measurement-processing) for details.
 
 #### MeterConfigurator
 
@@ -447,7 +459,7 @@ made with an Instrument:
     [Instrument advisory parameters](#instrument-advisory-parameters), if any,
     MUST be honored.
 * If the `MeterProvider` has one or more `View`(s) registered:
-  * If the Instrument could match the instrument selection criteria, for each
+  * If `view_matching_mode` is `independent` (or unspecified), and the Instrument could match the instrument selection criteria, for each
     View:
     * Try to apply the View's stream configuration independently of any other
       Views registered for the same matching Instrument (i.e. Views are not
@@ -456,14 +468,16 @@ made with an Instrument:
       one View setting `aggregation` and another View setting `attribute_keys`,
       both leaving the stream `name` as the default configured by the
       Instrument). If applying the View results in conflicting metric identities
-      the implementation SHOULD apply the View and emit a warning. If it is not
-      possible to apply the View without producing semantic errors (e.g. the
-      View sets an asynchronous instrument to use the [Explicit bucket
-      histogram aggregation](#explicit-bucket-histogram-aggregation)) the
-      implementation SHOULD emit a warning and proceed as if the View did not
-      If both a View and [Instrument advisory parameters](#instrument-advisory-parameters)
-      specify the same aspect of the [Stream configuration](#stream-configuration),
-      the setting defined by the View MUST take precedence over the advisory parameters.
+      the implementation SHOULD apply the View and emit a warning.
+  * (**Development**) If `view_matching_mode` is `composable`, and the Instrument could match the instrument selection criteria of one or more Views:
+    * Group the matching Views by their configured stream `name`.
+      * If a matching View does not configure a stream `name`, leaving `name` as null or unspecified, it applies to all streams created for that matching Instrument.
+      * Each distinct configured stream `name` creates a separate stream. If no matching View configures a stream `name`, a single stream is created using the Instrument's default name.
+    * For each resulting stream, apply the matching Views in order. For all aspects of the [Stream configuration](#stream-configuration) other than `attribute_keys` (`name`, `description`, `aggregation`, `exemplar_reservoir`, `aggregation_cardinality_limit`), the first matching View in the list that specifies that aspect wins using first-wins precedence. Note that complex configurations like `aggregation` (including any internal properties such as bucket boundaries or max buckets) are treated as a single atomic unit and are not merged across Views.
+    * For `attribute_keys`, matching Views are merged by combining their attribute filters using logical AND: an attribute key is preserved if it is included in all specified allow-lists (if any) and not excluded by any specified exclude-lists.
+  * For each resulting stream configured by matching View(s):
+    * If applying the resolved stream configuration results in semantic errors (e.g. setting an asynchronous instrument to use the [Explicit bucket histogram aggregation](#explicit-bucket-histogram-aggregation)), the implementation SHOULD emit a warning and ignore the invalid setting. When `view_matching_mode` is `independent`, the implementation falls back to the Instrument default. When `view_matching_mode` is `composable`, the implementation falls back to the next valid setting from subsequent matching Views (or the Instrument default if no subsequent Views specify a valid setting).
+    * If both matching View(s) and [Instrument advisory parameters](#instrument-advisory-parameters) specify the same aspect of the [Stream configuration](#stream-configuration), the setting defined by the View(s) MUST take precedence over the advisory parameters.
   * If the Instrument could not match with any of the registered `View`(s), the
     SDK SHOULD enable the instrument using the default aggregation and temporality.
     Users can configure match-all Views using [Drop aggregation](#drop-aggregation)

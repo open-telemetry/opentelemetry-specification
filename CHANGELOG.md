@@ -70,6 +70,9 @@ release.
 - Amend the description of Composite/Composable samplers.
   ([#5161](https://github.com/open-telemetry/opentelemetry-specification/pull/5161))
 
+- Add `view_matching_mode` parameter to `MeterProvider` to support composable View matching.
+  ([#5173](https://github.com/open-telemetry/opentelemetry-specification/pull/5173))
+
 ### Logs
 
 - Add ETW (Event Tracing for Windows) example mapping to the logs data
