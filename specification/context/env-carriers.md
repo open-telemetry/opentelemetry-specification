@@ -14,7 +14,7 @@
     + [Environment Variable Immutability](#environment-variable-immutability)
     + [Process Spawning](#process-spawning)
     + [Security](#security)
-- [Supplementary Guidelines](#supplementary-guidelines)
+- [Implementation Guidelines](#implementation-guidelines)
 
 <!-- tocstop -->
 
@@ -143,11 +143,11 @@ with appropriate permissions.
 - Multi-tenant environments have extra exposure risk when environment variables
   are visible to other processes or users with appropriate permissions.
 
-## Supplementary Guidelines
+## Implementation Guidelines
 
 > [!IMPORTANT]
-> This section is non-normative and provides implementation
-> guidance only. It does not add requirements to the specification.
+> This section is non-normative and provides implementation guidance only. It
+> does not add requirements to the specification.
 
 Language implementations of OpenTelemetry have flexibility in how they expose
 environment variable context propagation. The existing `TextMapPropagator` can
@@ -158,22 +158,21 @@ that implement these operations themselves. Whichever component performs `Get`,
 `Set`, or `Keys` for environment variables is responsible for the normalization
 behavior described above. Language-specific helper components are only expected
 to operate on the carrier shapes supported by that language implementation.
-Implementations commonly provide one or more of the following:
 
-- `Getter` - creates an in-memory copy of the current environment variables and
-  reads context from that copy.
-- `Setter` - writes context to a dictionary/map and provides the dictionary/map
-  to the application owner for them to use when spawning processes.
-- An environment-specific carrier type - implements environment variable `Get`,
-  `Set`, or `Keys` operations directly when the language combines carrier and
-  accessor APIs.
+Implementations can consider a caching behavior that fits their API shape. For
+example, an implementation can:
 
-Examples:
+- Load environment variables whose names are already normalized into a cache
+  during initialization or on first use.
+- Cache the results of individual `Get` lookups by normalized key.
+
+Example implementations:
 
 - [OpenTelemetry .NET implementation][di]
 - [OpenTelemetry C++ implementation][ci]
 - [OpenTelemetry Go implementation][gi]
 - [OpenTelemetry Java implementation][ji]
+- [OpenTelemetry JavaScript implementation][jsi]
 - [OpenTelemetry Python implementation][pi]
 - [OpenTelemetry Swift implementation][si]
 
@@ -181,5 +180,6 @@ Examples:
 [ci]: https://github.com/open-telemetry/opentelemetry-cpp/blob/main/api/include/opentelemetry/context/propagation/environment_carrier.h
 [gi]: https://github.com/open-telemetry/opentelemetry-go-contrib/tree/main/propagators/envcar
 [ji]: https://github.com/open-telemetry/opentelemetry-java/tree/main/api/incubator/src/main/java/io/opentelemetry/api/incubator/propagation
+[jsi]: https://github.com/open-telemetry/opentelemetry-js/tree/main/experimental/packages/opentelemetry-propagator-env-carrier
 [pi]: https://github.com/open-telemetry/opentelemetry-python/blob/main/opentelemetry-api/src/opentelemetry/propagators/_envcarrier.py
 [si]: https://github.com/open-telemetry/opentelemetry-swift-core/blob/main/Sources/OpenTelemetrySdk/Trace/Propagation/EnvironmentContextPropagator.swift
