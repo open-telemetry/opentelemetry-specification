@@ -813,16 +813,16 @@ field name.
 | ---------------------- | --------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | TimeStamp              | Timestamp | `EVENT_HEADER.TimeStamp` (QPC ticks) converted to UNIX epoch nanoseconds    | Timestamp                                                             |
 | Level                  | uint8     | Event severity/verbosity level                                              | Severity (`SeverityNumber` + `SeverityText`) and `Attributes["etw.level"]` |
-| Event name             | string    | TraceLogging event name (via TDH); falls back to `etw.<event_id>`           | `EventName`                                                          |
+| Event name             | string    | TraceLogging event name (via TDH); falls back to `etw.<event.id>`           | `EventName`                                                          |
 | Payload                | any       | ETW has no single message field; decoded fields go to `Attributes`          | Body (empty)                                                         |
-| ProviderId             | GUID      | Provider GUID, formatted as a hyphenated hex string                         | `Attributes["etw.provider_id"]`                                      |
-| EventId                | uint16    | Event identifier from the event descriptor                                  | `Attributes["etw.event_id"]`                                        |
+| ProviderId             | GUID      | Provider GUID, formatted as a hyphenated hex string                         | `Attributes["etw.provider.id"]`                                      |
+| EventId                | uint16    | Event identifier from the event descriptor                                  | `Attributes["etw.event.id"]`                                        |
 | Opcode                 | uint8     | Opcode from the event descriptor                                            | `Attributes["etw.opcode"]`                                          |
 | Version                | uint8     | Version from the event descriptor                                           | `Attributes["etw.version"]`                                         |
 | Keywords               | uint64    | Keywords bitmask from the event descriptor                                  | `Attributes["etw.keywords"]`                                        |
-| ProcessId              | uint32    | Emitting process ID from the event header                                   | `Attributes["etw.process_id"]`                                      |
-| ThreadId               | uint32    | Emitting thread ID from the event header                                    | `Attributes["etw.thread_id"]`                                       |
-| ActivityId             | GUID      | Correlation ID; emitted only when non-zero                                  | `Attributes["etw.activity_id"]`                                     |
+| ProcessId              | uint32    | Emitting process ID from the event header                                   | `Attributes["etw.process.id"]`                                      |
+| ThreadId               | uint32    | Emitting thread ID from the event header                                    | `Attributes["etw.thread.id"]`                                       |
+| ActivityId             | GUID      | Correlation ID; emitted only when non-zero                                  | `Attributes["etw.activity.id"]`                                     |
 | Decoded payload fields | any       | TDH-decoded TraceLogging fields, keyed by field name                        | `Attributes[<field name>]`                                          |
 
 The ETW `Level` is an 8-bit value whose meaning is defined by the
