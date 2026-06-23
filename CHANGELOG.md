@@ -51,6 +51,9 @@ release.
 - Specify that an empty environment variable propagation name is non-normalized
   and normalizes to `_`.
   ([#5163](https://github.com/open-telemetry/opentelemetry-specification/pull/5163))
+- Clarify that environment variable propagation operational guidance is
+  non-normative and should be documented by language implementations.
+  ([#5165](https://github.com/open-telemetry/opentelemetry-specification/pull/5165))
 
 ### Profiles
 
