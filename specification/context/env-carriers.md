@@ -56,6 +56,13 @@ When using environment variables as carriers:
   - validating and parsing values
   - applying any truncation or other format-specific behaviors
 
+Language implementations SHOULD document
+[operational guidance](#operational-guidance), including initialization-time
+extraction, child process environment handling, and security considerations.
+
+Language implementations MUST NOT spawn child processes as part of environment
+variable context propagation.
+
 ### Key Name Normalization
 
 Language implementations MUST ensure that environment variable `Get`, `Set`,
@@ -97,40 +104,44 @@ that name normalizes to `X_B3_TRACEID`.
 
 ### Operational Guidance
 
+> [!IMPORTANT]
+> This section is non-normative and provides usage guidance only. It does not
+> add requirements to the specification.
+
 #### Environment Variable Immutability
 
-Once set for a process, environment variables SHOULD be treated as immutable
-within that process:
+Context-related environment variables are best treated as process-startup input:
 
-- Applications SHOULD read context-related environment variables during
+- Applications typically read context-related environment variables during
   initialization.
-- Applications SHOULD NOT modify context-related environment variables of the
+- Applications avoid modifying context-related environment variables in the
   environment in which the parent process exists.
 
 #### Process Spawning
 
 When spawning child processes:
 
-- Parent processes SHOULD copy the current environment variables (if
-  applicable), modify, and inject context when spawning child processes.
-- Child processes SHOULD extract context from environment variables at startup.
-- When spawning multiple child processes with different contexts or baggage,
-  each child SHOULD receive its own copy of the environment variables with
-  appropriate information.
-- The onus is on the application owner for receiving the set context from the
-  SDK and passing it to its own process spawning mechanism. The language
-  implementations MUST NOT handle spawning processes.
+- A typical parent process flow copies the current environment variables (if
+  applicable), modifies that copy, and injects context into the copy when
+  spawning child processes.
+- Child-process startup is the point where context is extracted from
+  environment variables.
+- For multiple child processes with different contexts or baggage, separate
+  environment variable copies keep the appropriate information isolated per
+  child process.
+- Application code remains responsible for receiving context from the SDK and
+  passing it to the application's process spawning mechanism.
 
 #### Security
 
 Environment variables are generally accessible to all code running within a
-process and with the correct permissions, can be accessed from other processes.
+process. On many systems, they can also be accessed by other processes or users
+with appropriate permissions.
 
-- Implementations SHOULD NOT store sensitive information in environment
-  variables.
-- Applications running in multi-tenant environments SHOULD be aware that
-  environment variables may be visible to other processes or users with
-  appropriate permissions.
+- Context propagation via environment variables is not appropriate for sensitive
+  information.
+- Multi-tenant environments have extra exposure risk when environment variables
+  are visible to other processes or users with appropriate permissions.
 
 ## Implementation Guidelines
 
