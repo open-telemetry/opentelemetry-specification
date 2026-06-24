@@ -5,7 +5,7 @@ Note: this document is NOT a spec, it is provided to support the Logs
 for demonstrative purposes and are not exhaustive or canonical; please refer to
 the respective exporter documentation if exact details are required.
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Appendix A. Example Mappings](#appendix-a-example-mappings)
   * [RFC5424 Syslog](#rfc5424-syslog)
@@ -22,7 +22,7 @@ the respective exporter documentation if exact details are required.
 - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
 - [References](#references)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Appendix A. Example Mappings
 
