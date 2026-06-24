@@ -31,14 +31,14 @@ interoperability, and OpenTelemetry project values.
   "should", and "may". Suggest neutral descriptive wording such as "can",
   "typically", or direct phrasing.
 - If a change adds, removes, or tightens normative requirements, verify that the
-  affected document or section is marked `Development`; otherwise, flag it
-  unless the PR explains an approved stability exception.
+  affected document or section is marked `**Status**: [Development]` (per
+  [document status](../specification/document-status.md)); otherwise, flag it unless the PR explains an approved stability exception.
 - For notes, examples, operational guidance, and supplementary guidance, flag
   wording that reads like a hidden requirement.
 
 ## Specification process and validation
 
-- For non-trivial changes, check for accepted issue or OTEP links, required
+- For non-trivial changes, check for an accepted issue or OTEP link, required
   prototypes, changelog impact, compliance matrix impact, and declarative
   configuration schema impact.
 - Prefer focused diffs that stay implementable across languages and avoid
