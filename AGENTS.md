@@ -1,24 +1,28 @@
 # AGENTS.md
 
-## Purpose
+## Purpose and Scope
 
-This repository contains the OpenTelemetry specification. Agents should protect
-specification consistency, clear normative language, stability,
-interoperability, and OpenTelemetry project values.
+This repository contains the OpenTelemetry specification. Agent work should
+protect specification consistency, interoperability, stability, clear normative
+language, and OpenTelemetry project values.
 
-Treat this file as a concise routing guide. When details differ, follow the
-canonical repository documents linked here, especially [CONTRIBUTING.md],
-[Specification Principles], [Notation Conventions and Compliance], and
-[Document Statuses].
+Treat this file as a concise routing guide for the whole repository. If details
+differ, follow the canonical repository documents linked here, especially
+[CONTRIBUTING.md], [Specification Principles],
+[Notation Conventions and Compliance], and [Document Statuses].
 
-## Repository Guidance
+## Baseline Editing Guidance
 
 - Specification content is written in Markdown and should render correctly on
   GitHub. Prefer line breaks at 80 characters.
 - Use the project name "OpenTelemetry" and acronym "OTel" as described in
   [Project Naming].
-- Keep changes focused and implementable across languages. Avoid unnecessary
-  implementation details in specification text.
+- Keep changes focused, vendor-neutral, and implementable across languages.
+- Prefer specification text that describes what must interoperate, not how each
+  language or implementation must be built.
+- Preserve existing headings, anchors, status markers, reference links, and
+  table-of-contents markers unless the change explicitly requires updating
+  them.
 
 ## Review Priorities
 
@@ -36,32 +40,40 @@ canonical repository documents linked here, especially [CONTRIBUTING.md],
   prototypes, changelog impact, compliance matrix impact, and declarative
   configuration schema impact.
 
-## Contribution Process Checks
+## Process Checks
 
 - New features at Development maturity require a prototype in a spec-bound
-  implementation with SIG maintainer support. Stabilization requires prototypes
-  in multiple languages; three is typical.
+  implementation with SIG maintainer support.
+- Stabilization requires prototypes in multiple languages. Three languages is
+  typical, with coverage across typed object-oriented, dynamically typed, and
+  structural ecosystems when relevant.
+- Protocol changes should be prototyped on both the client and server sides.
 - If SDK component configuration is added or changed, check for a corresponding
-  proposed change to the declarative configuration schema.
-- Non-trivial pull requests should update the `Unreleased` section of
-  [CHANGELOG.md] under the appropriate subsection.
+  proposed change to the [declarative configuration schema][config schema].
+- If compliance matrix source YAML changes, update the generated matrix and do
+  not require a changelog entry for that matrix-only update.
 
 ## Normative Language and Status
 
 - For `specification/`, treat `MUST`, `MUST NOT`, `REQUIRED`, `SHOULD`,
   `SHOULD NOT`, `RECOMMENDED`, `NOT RECOMMENDED`, `MAY`, and `OPTIONAL` as
   BCP 14 terms only when they appear in all capitals.
-- Recommend uppercase BCP 14 keywords only for implementation requirements.
-- For non-normative text, flag lowercase modal wording such as "must",
-  "should", and "may". Suggest neutral descriptive wording such as "can",
-  "typically", or direct phrasing.
-- If a change adds, removes, or tightens normative requirements, verify the
-  affected document or section status. Status is commonly marked with a
-  `**Status**: [...]` line or bold inline marker, not a literal code span.
-  Flag changes that exceed the maturity level unless the pull request explains
-  an approved stability exception.
+- Recommend uppercase BCP 14 keywords only for implementation requirements
+  needed for interoperability or to avoid harm.
+- Treat lowercase modal wording such as "must", "should", and "may" as
+  suspect in specification prose. For non-normative text, suggest neutral
+  wording such as "can", "typically", or direct phrasing. Do not mechanically
+  rewrite quotations or external standard language.
 - For notes, examples, operational guidance, and supplementary guidance, flag
   wording that reads like a hidden requirement.
+- If a change adds, removes, or tightens normative requirements, verify the
+  affected document or section status. Status is commonly marked with a
+  `**Status**: ...` line or bold inline marker. No explicit status is
+  equivalent to Alpha; `Mixed` means individual sections can have different
+  statuses.
+- Flag changes that exceed the affected maturity level unless the PR explains
+  an approved stability exception. Stable and Release Candidate content should
+  avoid breaking changes except under special circumstances.
 
 ## Validation Commands
 
@@ -79,7 +91,9 @@ canonical repository documents linked here, especially [CONTRIBUTING.md],
 [CHANGELOG.md]: CHANGELOG.md
 [CONTRIBUTING.md]: CONTRIBUTING.md
 [Document Statuses]: specification/document-status.md
+[config schema]: https://github.com/open-telemetry/opentelemetry-configuration
 [Mission and Values]: specification/specification-principles.md
 [Notation Conventions and Compliance]: specification/README.md
+[OTEP process]: oteps/README.md
 [Project Naming]: specification/README.md
 [Specification Principles]: specification/specification-principles.md
