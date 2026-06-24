@@ -148,9 +148,10 @@ The use cases of this are:
 
 Returns list of fields that will be used by the `TextMapPropagator`.
 
-Observe that some `Propagator`s may define, besides the returned values, additional fields with
-variable names. To get a full list of fields for a specific carrier object, use the
-[Keys](#keys) operation.
+Observe that some `Propagator`s may define, besides the returned values,
+additional fields with variable names. Historically, `Getter` implementations
+could provide the [Keys](#keys) operation to enumerate carrier keys. This
+operation is deprecated.
 
 ### TextMap Inject
 
@@ -200,13 +201,21 @@ Getter is an argument in `Extract` that gets value(s) from given field.
 
 `Getter` allows a `TextMapPropagator` to read propagated fields from a carrier.
 
-One of the ways to implement it is `Getter` class with methods `Get`, `Keys`, and `GetAll`
-as described below. Languages may decide on alternative implementations and
-expose corresponding methods as delegates or other ways.
+One of the ways to implement it is a `Getter` class with methods `Get`, `GetAll`,
+and, for backwards compatibility, `Keys` as described below. Languages may
+decide on alternative implementations and expose corresponding methods as
+delegates or other ways.
 
 ##### Keys
 
-The `Keys` function MUST return the list of all the keys in the carrier.
+**Status**: [Deprecated](../document-status.md)
+
+The `Keys` function is deprecated. Language implementations SHOULD NOT require
+new `Getter` implementations to provide `Keys`. Existing implementations MAY
+continue to expose it for backwards compatibility.
+
+When implemented, the `Keys` function MUST return the list of all the keys in
+the carrier.
 
 Required arguments:
 

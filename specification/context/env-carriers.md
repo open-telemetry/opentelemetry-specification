@@ -66,8 +66,8 @@ variable context propagation.
 ### Key Name Normalization
 
 Language implementations MUST ensure that environment variable `Get`, `Set`,
-and `Keys` operations use normalized key names for context propagation. To
-normalize a key name, implementations MUST:
+and, if provided, `Keys` operations use normalized key names for context
+propagation. To normalize a key name, implementations MUST:
 
 - replace an empty key name with a single underscore (`_`),
 - uppercase ASCII letters,
@@ -90,7 +90,7 @@ language, such as a carrier, `Getter`, `Setter`, or other language-specific API:
   propagator.
 - `Get` MUST normalize the key requested by the propagator and MUST use the
   normalized key name to read from the carrier.
-- `Keys` MUST return only key names that are already normalized.
+- If provided, `Keys` MUST return only key names that are already normalized.
 
 For example, if a propagator requests the key `x-b3-traceid`, the
 environment-specific `Get` operation MUST normalize the requested key to
@@ -155,9 +155,10 @@ be used with environment-specific carriers, environment-specific
 [`Getter`](api-propagators.md#getter-argument) and
 [`Setter`](api-propagators.md#setter-argument) implementations, or carrier types
 that implement these operations themselves. Whichever component performs `Get`,
-`Set`, or `Keys` for environment variables is responsible for the normalization
-behavior described above. Language-specific helper components are only expected
-to operate on the carrier shapes supported by that language implementation.
+`Set`, or, if provided, `Keys` for environment variables is responsible for the
+normalization behavior described above. Language-specific helper components are
+only expected to operate on the carrier shapes supported by that language
+implementation.
 
 Implementations can consider a caching behavior that fits their API shape. For
 example, an implementation can:
