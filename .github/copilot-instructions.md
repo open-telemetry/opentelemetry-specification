@@ -9,11 +9,15 @@ interoperability, and OpenTelemetry project values.
 - Check specification changes against related sections and documents. Flag
   conflicts with existing requirements, terminology, data model behavior, or
   compliance matrix entries.
-- Evaluate changes against the Specification Principles: user driven, general,
-  stable, consistent, and simple.
-- Evaluate changes against the OpenTelemetry mission and engineering values:
-  portable telemetry, vendor neutrality, loose coupling, compatibility,
-  stability, resilience, and performance.
+- Evaluate changes against the canonical
+  [Specification Principles](../specification/specification-principles.md):
+  Be User Driven, Be General, Be Stable, Be Consistent, and Be Simple.
+- Evaluate changes against OpenTelemetry
+  [Mission and Values](../specification/specification-principles.md):
+  Telemetry should be easy, Telemetry should be universal,
+  Telemetry should be vendor-neutral, Telemetry should be loosely-coupled,
+  Telemetry should be built-in, Compatibility, Stability, Resilience, and
+  Performance.
 - Prefer precise comments that cite the conflicting file, section, or existing
   rule. Avoid comments for issues already covered by automation.
 
