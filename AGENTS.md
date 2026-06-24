@@ -31,18 +31,19 @@ differ, follow the canonical repository documents linked here, especially
   compliance matrix entries.
 - Evaluate changes against the canonical [Specification Principles]:
   Be User Driven, Be General, Be Stable, Be Consistent, and Be Simple.
-- Evaluate changes against OpenTelemetry [Mission and Values]:
-  Telemetry should be easy, Telemetry should be universal,
-  Telemetry should be vendor-neutral, Telemetry should be loosely-coupled,
-  Telemetry should be built-in, Compatibility, Stability, Resilience, and
-  Performance.
-- For non-trivial changes, check for an accepted issue or OTEP covered by the
-  [OTEP process], required prototypes, whether [CHANGELOG.md] or compliance
-  matrix entries need updates, and declarative configuration schema impact.
+- Evaluate changes against OpenTelemetry [Mission and Values], especially ease
+  of use, universality, vendor neutrality, loose coupling, built-in telemetry,
+  compatibility, stability, resilience, and performance.
+- For changes that add features, change behavior, or affect stability, verify
+  that the PR is covered by an accepted issue or by an OTEP following the
+  [OTEP process].
+- For those changes, also check whether prototypes are required, whether
+  [CHANGELOG.md] or compliance matrix entries need updates, and whether the
+  declarative configuration schema is affected.
 
 ## Process Checks
 
-- New features at Development maturity require a prototype in a spec-bound
+- New features at Development maturity require a prototype in an OpenTelemetry
   implementation with SIG maintainer support.
 - Stabilization requires prototypes in multiple languages. Three languages is
   typical, with coverage across typed object-oriented, dynamically typed, and
