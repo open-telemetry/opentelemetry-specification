@@ -106,7 +106,7 @@ Policies MUST NOT:
 
 - Specify configuration relating to the underlying policy applier
   implementation.
-  - A policy cannot know where the policy is going to be run.
+  - A policy cannot know what implementation will enforce the policy.
 - Specify its transport methodology.
 - Interfere with telemetry upon failure.
   - Policies MUST be fail-open.
