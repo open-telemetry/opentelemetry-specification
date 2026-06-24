@@ -3,14 +3,14 @@
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Abstract](#abstract)
 - [Supports OpenTelemetry](#supports-opentelemetry)
 - [Implements OpenTelemetry](#implements-opentelemetry)
 - [Qualifications](#qualifications)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 

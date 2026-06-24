@@ -130,7 +130,7 @@ make markdown-toc # regenerate tables of contents
 To fix markdownlint violations, use the
 [Visual Studio Code markdownlint extension](https://github.com/DavidAnson/vscode-markdownlint)
 `fixAll` command, or follow the
-[markdownlint instructions](https://github.com/DavidAnson/markdownlint#fixing).
+[markdownlint instructions](https://github.com/igorshubovych/markdownlint-cli#fixing-issues).
 
 ### Compliance Matrix
 
@@ -141,6 +141,9 @@ and regenerate:
 ```bash
 make compliance-matrix
 ```
+
+Compliance matrix updates do not require a CHANGELOG entry. Use a `chore:`
+prefix in the PR title (e.g., `chore: Update .NET compliance matrix`).
 
 ## Pull Requests
 
@@ -163,8 +166,9 @@ If a PR is stuck, the owner should:
 
 - Post a summary of open perspectives in the PR description.
 - Tag relevant subdomain experts (check the change history).
-- Raise it in the [CNCF OpenTelemetry Slack](https://cloud-native.slack.com/archives/C01N7PP1THC)
-  ([join here](https://slack.cncf.io/)).
+- Raise it in the [#otel-specification](https://cloud-native.slack.com/archives/C01N7PP1THC)
+  channel on CNCF Slack. If you are new to the CNCF Slack community,
+  you can [create an account](https://slack.cncf.io/).
 - Consider narrowing the scope or splitting the PR.
 
 If still stuck after two weeks, bring it to the [OpenTelemetry Specification SIG

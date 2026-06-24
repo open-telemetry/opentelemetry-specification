@@ -10,7 +10,7 @@ weight: 3
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [LoggerProvider](#loggerprovider)
   * [LoggerProvider Creation](#loggerprovider-creation)
@@ -45,7 +45,7 @@ weight: 3
 - [Concurrency requirements](#concurrency-requirements)
 - [Self-observability](#self-observability)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
