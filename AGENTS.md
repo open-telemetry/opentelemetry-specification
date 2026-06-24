@@ -37,14 +37,15 @@ differ, follow the canonical repository documents linked here, especially
 - For changes that add features, change behavior, or affect stability, verify
   that the PR is covered by an accepted issue or by an OTEP following the
   [OTEP process].
-- For those changes, also check whether prototypes are required, whether
-  [CHANGELOG.md] or compliance matrix entries need updates, and whether the
-  declarative configuration schema is affected.
+- For feature, behavior, or stability changes, also check whether prototypes
+  are required, whether [CHANGELOG.md] or compliance matrix entries need
+  updates, and whether the declarative configuration schema is affected.
 
 ## Process Checks
 
-- New features at Development maturity require a prototype in an OpenTelemetry
-  implementation with SIG maintainer support.
+- New features at Development maturity, as defined in [Document Statuses],
+  require a prototype in an OpenTelemetry implementation with SIG maintainer
+  support.
 - Stabilization requires prototypes in multiple languages. Three languages is
   typical, with coverage across typed object-oriented, dynamically typed, and
   structural ecosystems when relevant.
@@ -59,8 +60,8 @@ differ, follow the canonical repository documents linked here, especially
 - For `specification/`, treat `MUST`, `MUST NOT`, `REQUIRED`, `SHOULD`,
   `SHOULD NOT`, `RECOMMENDED`, `NOT RECOMMENDED`, `MAY`, and `OPTIONAL` as
   BCP 14 terms only when they appear in all capitals.
-- Recommend uppercase BCP 14 keywords only for implementation requirements
-  needed for interoperability or to avoid harm.
+- Use or recommend uppercase BCP 14 keywords only for implementation
+  requirements needed for interoperability or to avoid harm.
 - Treat lowercase modal wording such as "must", "should", and "may" as
   suspect in specification prose. For non-normative text, suggest neutral
   wording such as "can", "typically", or direct phrasing. Do not mechanically
