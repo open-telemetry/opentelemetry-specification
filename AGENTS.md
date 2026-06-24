@@ -36,9 +36,9 @@ differ, follow the canonical repository documents linked here, especially
   Telemetry should be vendor-neutral, Telemetry should be loosely-coupled,
   Telemetry should be built-in, Compatibility, Stability, Resilience, and
   Performance.
-- For non-trivial changes, check for an accepted issue or OTEP link, required
-  prototypes, changelog impact, compliance matrix impact, and declarative
-  configuration schema impact.
+- For non-trivial changes, check for an accepted issue or OTEP covered by the
+  [OTEP process], required prototypes, whether [CHANGELOG.md] or compliance
+  matrix entries need updates, and declarative configuration schema impact.
 
 ## Process Checks
 
