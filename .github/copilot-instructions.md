@@ -32,8 +32,9 @@ interoperability, and OpenTelemetry project values.
   "typically", or direct phrasing.
 - If a change adds, removes, or tightens normative requirements, verify that the
   affected document or section has a pre-stable `**Status**: [...]` header
-  (Development/Alpha/Beta; no explicit Status is equivalent to Alpha per
-  [document status](../specification/document-status.md)); otherwise, flag it unless the PR explains an approved stability exception.
+  (Development/Alpha/Beta; per [document status](../specification/document-status.md));
+  otherwise, flag it unless the PR the description explains an approved stability
+  exception.
 - For notes, examples, operational guidance, and supplementary guidance, flag
   wording that reads like a hidden requirement.
 
