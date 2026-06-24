@@ -811,7 +811,7 @@ field name.
 
 | ETW Field              | Type      | Description                                                                  | Maps to Unified Model Field                                            |
 | ---------------------- | --------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| TimeStamp              | Timestamp | `EVENT_HEADER.TimeStamp` (QPC ticks) converted to UNIX epoch nanoseconds    | Timestamp                                                             |
+| TimeStamp              | Timestamp | `EVENT_HEADER.TimeStamp` converted to UNIX epoch nanoseconds according to the trace/session timestamp metadata (e.g. QPC, system time, or CPU cycle counter) | Timestamp                                                             |
 | Level                  | uint8     | Event severity/verbosity level                                              | Severity (`SeverityNumber` + `SeverityText`) and `Attributes["etw.level"]` |
 | Event name             | string    | TraceLogging event name (via TDH); falls back to `etw.<event.id>`           | `EventName`                                                          |
 | Payload                | any       | ETW has no single message field; decoded fields go to `Attributes`          | Body (empty)                                                         |
