@@ -4,12 +4,12 @@
 
 This document defines the required attributes of [`Mapping`](../../oteps/profiles/0239-profiles-data-model.md#message-mapping) messages.
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [Attributes](#attributes)
   * [Algorithm for `process.executable.build_id.htlhash`](#algorithm-for-processexecutablebuild_idhtlhash)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 ## Attributes
 
