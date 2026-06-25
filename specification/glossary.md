@@ -7,7 +7,7 @@ Some other fundamental terms are documented in the [overview document](overview.
 <details>
 <summary>Table of Contents</summary>
 
-<!-- toc -->
+<!-- START DOCTOC -->
 
 - [User Roles](#user-roles)
   * [Application Owner](#application-owner)
@@ -43,7 +43,7 @@ Some other fundamental terms are documented in the [overview document](overview.
   * [Profile](#profile)
   * [Profiling](#profiling)
 
-<!-- tocstop -->
+<!-- END DOCTOC -->
 
 </details>
 
