@@ -145,9 +145,9 @@ formats is required. Implementing more than one format is optional.
 | The `View` instrument selection criteria is as specified. |  | + | + | + | + | + | + | + | + | + | + |  | - |
 | The `View` instrument selection criteria supports wildcards. | X | + | + | + | + | + | - |  | + | + | + |  | - |
 | The `View` instrument selection criteria supports the match-all wildcard. |  | + | + | + | + | + | + |  | + | + | + |  | - |
-| The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | + |  | - |
+| The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream. |  | + | + | + | + |  | + | + | + | + | - |  | - |
 | The `View` allows configuring excluded attribute keys of resulting metric stream. |  | + | + | + |  |  | - |  |  |  |  |  | - |
-| The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | + |  | - |
+| The `View` allows configuring the exemplar reservoir of resulting metric stream. | X | + | - | - | - |  | - |  |  |  | - |  | - |
 | The SDK allows more than one `View` to be specified per instrument. | X | + | + | + | + | + | + |  | + | + | + |  | - |
 | The `Drop` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  | - |
 | The `Default` aggregation is available. |  | + | + | + | + | + | + |  | + | + | + |  | - |
@@ -178,8 +178,8 @@ formats is required. Implementing more than one format is optional.
 | Documentation notes that View-filtered attributes may still appear on Exemplars. |  | - | - | - | - | - | - | - | - | - | + | - | - |
 | Exemplars contain the associated trace id and span id of the active span in the Context when the measurement was taken. |  | + | + | - | - | + | + |  |  |  | + |  | - |
 | Exemplars contain the timestamp when the measurement was taken. |  | + | + | - | - | + | + |  |  |  | + |  | - |
-| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | - | + | + | + |  |  | + |  | - |
-| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - | - | - | + | + | + |  |  | + |  | - |
+| The metrics SDK provides an `ExemplarReservoir` interface or extension point. |  | + | - | - | - | + | + | + |  |  | - |  | - |
+| An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp. |  | + | - | - | - | + | + | + |  |  | - |  | - |
 | The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except `ExplicitBucketHistogram`. |  | + | + | - | - | + | + | + |  |  | + |  | - |
 | The metrics SDK provides an `AlignedHistogramBucketExemplarReservoir` that is used by default for `ExplicitBucketHistogram` aggregation. |  | + | + | - | - | + | + |  |  |  | + |  | - |
 | A metric Producer accepts an optional metric Filter |  | - | - |  |  |  | - |  |  |  |  |  | - |
@@ -198,13 +198,13 @@ Disclaimer: this list of features is still a work in progress, please refer to t
 
 | Feature | Optional | Go | Java | JS | Python | Ruby | Erlang | PHP | Rust | C++ | .NET | Swift | Kotlin |
 | ------- | -------- | -- | ---- | -- | ------ | ---- | ------ | --- | ---- | --- | ---- | ----- | ------ |
-| LoggerProvider.Get Logger |  | + | + | + | + | + |  | + | + | + | + |  | + |
+| LoggerProvider.Get Logger |  | + | + | + | + | + |  | + | + | + | - |  | + |
 | LoggerProvider.Get Logger accepts attributes |  | + | - |  | + |  |  | + | + | + | - |  | + |
 | LoggerProvider.Shutdown |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | LoggerProvider.ForceFlush |  | + | + | + | + | + |  | + | + | + | + |  | + |
 | Logger.Emit(LogRecord) |  | + | + | + | + | + |  | + | + | + | - |  | + |
 | Logger.Emit(LogRecord) with Exception parameter | X |  | + |  |  |  |  |  |  |  | - |  | + |
-| LogRecord.Set EventName |  | + | + |  |  | + |  |  | + | + | + |  | + |
+| LogRecord.Set EventName |  | + | + |  |  | + |  |  | + | + |  |  | + |
 | Logger.Enabled | X | + | + |  |  |  |  | + | + | + | - |  | + |
 | Ergonomic API | X |  |  |  |  |  |  |  |  |  | + |  |  |
 | SimpleLogRecordProcessor |  | + | + | + | + | + |  | + | + | + | + |  | + |
@@ -326,9 +326,9 @@ Disclaimer: Declarative configuration is currently in Development status - work 
 | OTLP/HTTP JSON Protobuf Exporter |  | + | - | + | [-][py1003] |  | - | + |  | + | - | - | - |
 | OTLP/HTTP gzip Content-Encoding support | X | + | + | + | + | + | - | + |  | - | + | - | + |
 | Concurrent sending |  | + | + | + | [-][py1108] |  | - | - | + | - | - | - |  |
-| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | + | - |  |
-| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | + | - |  |
-| Honors throttling response | X | + | - | - | + | + | - |  |  | - | + | - |  |
+| Honors retryable responses with backoff | X | + | + | + | + | + | - | + |  | - | - | - |  |
+| Honors non-retryable responses | X | + | + | - | + | + | - | + |  | - | - | - |  |
+| Honors throttling response | X | + | - | - | + | + | - |  |  | - | - | - |  |
 | Multi-destination spec compliance | X | + | - |  | [-][py1109] |  | - |  |  | - | - | - |  |
 | SchemaURL in ResourceSpans and ScopeSpans |  | + | + |  | + |  | + | + |  |  | - |  |  |
 | SchemaURL in ResourceMetrics and ScopeMetrics |  | + | + |  | + |  | - | + |  |  | - |  |  |

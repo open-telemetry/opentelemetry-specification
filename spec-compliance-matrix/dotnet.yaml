@@ -258,11 +258,11 @@ sections:
       - name: The `View` instrument selection criteria supports the match-all wildcard.
         status: '+'
       - name: The `View` allows configuring the name, description, attributes keys and aggregation of the resulting metric stream.
-        status: '+'
+        status: '-'
       - name: The `View` allows configuring excluded attribute keys of resulting metric stream.
         status: '?'
       - name: The `View` allows configuring the exemplar reservoir of resulting metric stream.
-        status: '+'
+        status: '-'
       - name: The SDK allows more than one `View` to be specified per instrument.
         status: '+'
       - name: The `Drop` aggregation is available.
@@ -326,9 +326,9 @@ sections:
       - name: Exemplars contain the timestamp when the measurement was taken.
         status: '+'
       - name: The metrics SDK provides an `ExemplarReservoir` interface or extension point.
-        status: '+'
+        status: '-'
       - name: An `ExemplarReservoir` has an `offer` method with access to the measurement value, attributes, `Context` and timestamp.
-        status: '+'
+        status: '-'
       - name:
           The metrics SDK provides a `SimpleFixedSizeExemplarReservoir` that is used by default for all aggregations except
           `ExplicitBucketHistogram`.
@@ -356,7 +356,7 @@ sections:
   - name: Logs
     features:
       - name: LoggerProvider.Get Logger
-        status: '+'
+        status: '-'
       - name: LoggerProvider.Get Logger accepts attributes
         status: '-'
       - name: LoggerProvider.Shutdown
@@ -368,7 +368,7 @@ sections:
       - name: Logger.Emit(LogRecord) with Exception parameter
         status: '-'
       - name: LogRecord.Set EventName
-        status: '+'
+        status: '?'
       - name: Logger.Enabled
         status: '-'
       - name: Ergonomic API
@@ -562,11 +562,11 @@ sections:
           - name: Concurrent sending
             status: '-'
           - name: Honors retryable responses with backoff
-            status: '+'
+            status: '-'
           - name: Honors non-retryable responses
-            status: '+'
+            status: '-'
           - name: Honors throttling response
-            status: '+'
+            status: '-'
           - name: Multi-destination spec compliance
             status: '-'
           - name: SchemaURL in ResourceSpans and ScopeSpans
