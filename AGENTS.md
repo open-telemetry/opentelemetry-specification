@@ -1,7 +1,5 @@
 # AGENTS.md
 
-## Purpose
-
 This repository contains the OpenTelemetry specification. This file is a short
 routing guide for agents.
 
